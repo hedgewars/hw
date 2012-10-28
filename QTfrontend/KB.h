@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ const ulong KBmsgsCount = 1;
 const QString KBMessages[KBmsgsCount] =
 {
     QT_TRANSLATE_NOOP("KB", "SDL_ttf returned error while rendering text, "
-                            "most propably it is related to the bug "
-                            "in freetype2. It's recommended to update your "
-                            "freetype lib.")
+    "most propably it is related to the bug "
+    "in freetype2. It's recommended to update your "
+    "freetype lib.")
 };
 
 #endif // KB_H

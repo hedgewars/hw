@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,16 +14,63 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 12/11/2010.
  */
 
 
 #import "CreationChamber.h"
-#import "hwconsts.h"
 
 
 @implementation CreationChamber
+
+#pragma mark Checking status
++(void) createFirstLaunch {
+    DLog(@"Creating necessary files");
+    NSInteger index;
+
+    // SAVES - just delete and overwrite
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
+        [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
+    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY()
+                              withIntermediateDirectories:NO
+                                               attributes:nil
+                                                    error:NULL];
+
+    // SCREENSHOTS - just create it the first time
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
+        [[NSFileManager defaultManager] createDirectoryAtPath:SCREENSHOTS_DIRECTORY()
+                                  withIntermediateDirectories:NO
+                                                   attributes:nil
+                                                        error:NULL];
+
+    // SETTINGS - nsuserdefaults ftw
+    [self createSettings];
+
+    // TEAMS - update exisiting teams with new format
+    NSArray *teamNames = [[NSArray alloc] initWithObjects:@"Edit Me!",@"Ninjas",@"Pirates",@"Robots",nil];
+    index = 0;
+    for (NSString *name in teamNames)
+        [self createTeamNamed:name ofType:index++ controlledByAI:[name isEqualToString:@"Robots"]];
+    [teamNames release];
+
+    // SCHEMES - always overwrite and delete custom ones
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
+        [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
+    NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
+                            @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
+                            @"Thinking with Portals",@"King Mode",nil];
+    index = 0;
+    for (NSString *name in schemeNames)
+        [self createSchemeNamed:name ofType:index++];
+    [schemeNames release];
+
+    // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
+    NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
+                            @"Minefield",@"Thinking with Portals",nil];
+    index = 0;
+    for (NSString *name in weaponNames)
+        [self createWeaponNamed:name ofType:index++];
+    [weaponNames release];
+}
 
 #pragma mark Settings
 +(void) createSettings {
@@ -31,7 +78,6 @@
     [settings setObject:[NSNumber numberWithBool:NO] forKey:@"alternate"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"music"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sound"];
-    [settings setObject:[NSNumber numberWithBool:NO] forKey:@"classic_menu"];
     [settings setObject:[NSNumber numberWithBool:YES] forKey:@"sync_ws"];
 
     // don't overwrite these two strings when present
@@ -45,11 +91,11 @@
 
 #pragma mark Teams
 +(void) createTeamNamed:(NSString *)nameWithoutExt {
-    [CreationChamber createTeamNamed:nameWithoutExt ofType:0 controlledByAI:NO];
+    [self createTeamNamed:nameWithoutExt ofType:0 controlledByAI:NO];
 }
 
 +(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
-    [CreationChamber createTeamNamed:nameWithoutExt ofType:type controlledByAI:NO];
+    [self createTeamNamed:nameWithoutExt ofType:type controlledByAI:NO];
 }
 
 +(void) createTeamNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type controlledByAI:(BOOL) shouldAITakeOver {
@@ -137,7 +183,7 @@
 
 #pragma mark Weapons
 +(void) createWeaponNamed:(NSString *)nameWithoutExt {
-    [CreationChamber createWeaponNamed:nameWithoutExt ofType:0];
+    [self createWeaponNamed:nameWithoutExt ofType:0];
 }
 
 +(void) createWeaponNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
@@ -212,7 +258,7 @@
 
 #pragma mark Schemes
 +(void) createSchemeNamed:(NSString *)nameWithoutExt {
-    [CreationChamber createSchemeNamed:nameWithoutExt ofType:0];
+    [self createSchemeNamed:nameWithoutExt ofType:0];
 }
 
 +(void) createSchemeNamed:(NSString *)nameWithoutExt ofType:(NSInteger) type {
@@ -234,7 +280,7 @@
 
     NSArray *mods = [[NSArray alloc] initWithContentsOfFile:GAMEMODS_FILE()];
     NSMutableArray *gamemodArray= [[NSMutableArray alloc] initWithCapacity:[mods count]];
-    for (int i = 0; i < [mods count]; i++)
+    for (NSUInteger i = 0; i < [mods count]; i++)
         [gamemodArray addObject:[NSNumber numberWithBool:NO]];
     [mods release];
 

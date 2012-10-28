@@ -60,7 +60,7 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
         CheckAccount clId clUid clNick _ -> do
             let cacheEntry = clNick `Map.lookup` accountsCache
             currentTime <- getCurrentTime
-            if (isNothing cacheEntry) || (currentTime `diffUTCTime` (fst . fromJust) cacheEntry > 2 * 24 * 60 * 60) then
+            if (isNothing cacheEntry) || (currentTime `diffUTCTime` (fst . fromJust) cacheEntry > 10 * 60) then
                 do
                     SIO.hPutStrLn hIn $ show q
                     hFlush hIn

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,12 +27,16 @@
 #include <QByteArray>
 #include <QLineEdit>
 
+#include "DataManager.h"
+
 #include "hwmap.h"
 #include "drawmapscene.h"
+#include "MapModel.h"
 
 class QPushButton;
 class IconedGroupBox;
 class QListView;
+class SeparatorPainter;
 
 class MapFileErrorException
 {
@@ -40,89 +44,97 @@ class MapFileErrorException
 
 class HWMapContainer : public QWidget
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  HWMapContainer(QWidget * parent=0);
-  QString getCurrentSeed() const;
-  QString getCurrentMap() const;
-  QString getCurrentTheme() const;
-  int     getCurrentHHLimit() const;
-  QString getCurrentScheme() const;
-  QString getCurrentWeapons() const;
-  quint32 getTemplateFilter() const;
-  MapGenerator get_mapgen(void) const;
-  int getMazeSize(void) const;
-  bool getCurrentIsMission() const;
-  QByteArray getDrawnMapData();
-  DrawMapScene * getDrawMapScene();
-  void mapDrawingFinished();
-  QLineEdit* seedEdit;
+    public:
+        HWMapContainer(QWidget * parent=0);
+        QString getCurrentSeed() const;
+        QString getCurrentMap() const;
+        QString getCurrentTheme() const;
+        int     getCurrentHHLimit() const;
+        QString getCurrentScheme() const;
+        QString getCurrentWeapons() const;
+        quint32 getTemplateFilter() const;
+        MapGenerator get_mapgen(void) const;
+        int getMazeSize(void) const;
+        bool getCurrentIsMission() const;
+        QByteArray getDrawnMapData();
+        DrawMapScene * getDrawMapScene();
+        void mapDrawingFinished();
+        QLineEdit* seedEdit;
 
- public slots:
-  void askForGeneratedPreview();
-  void setSeed(const QString & seed);
-  void setMap(const QString & map);
-  void setTheme(const QString & theme);
-  void setTemplateFilter(int);
-  void setMapgen(MapGenerator m);
-  void setMazeSize(int size);
-  void setDrawnMapData(const QByteArray & ar);
-  void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+    public slots:
+        void askForGeneratedPreview();
+        void setSeed(const QString & seed);
+        void setMap(const QString & map);
+        void setTheme(const QString & theme);
+        void setTemplateFilter(int);
+        void setMapgen(MapGenerator m);
+        void setMazeSize(int size);
+        void setDrawnMapData(const QByteArray & ar);
+        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void updateModelViews();
+        void onPreviewMapDestroyed(QObject * map);
 
- signals:
-  void seedChanged(const QString & seed);
-  void mapChanged(const QString & map);
-  void themeChanged(const QString & theme);
-  void newTemplateFilter(int filter);
-  void mapgenChanged(MapGenerator m);
-  void mazeSizeChanged(int s);
-  void drawMapRequested();
-  void drawnMapChanged(const QByteArray & data);
+    signals:
+        void seedChanged(const QString & seed);
+        void mapChanged(const QString & map);
+        void themeChanged(const QString & theme);
+        void newTemplateFilter(int filter);
+        void mapgenChanged(MapGenerator m);
+        void mazeSizeChanged(int s);
+        void drawMapRequested();
+        void drawnMapChanged(const QByteArray & data);
 
- private slots:
-  void setImage(const QImage newImage);
-  void setHHLimit(int hhLimit);
-  void mapChanged(int index);
-  void setRandomSeed();
-  void setRandomTheme();
-  void setRandomMap();
-  void setRandomStatic();
-  void setRandomMission();
-  void themeSelected(const QModelIndex & current, const QModelIndex &);
-  void addInfoToPreview(QPixmap image);
-  void seedEdited();
+    private slots:
+        void setImage(const QImage newImage);
+        void setHHLimit(int hhLimit);
+        void mapChanged(int index);
+        void setRandomSeed();
+        void setRandomTheme();
+        void setRandomMap();
+        void themeSelected(const QModelIndex & current, const QModelIndex &);
+        void addInfoToPreview(QPixmap image);
+        void seedEdited();
 
- protected:
-  virtual void resizeEvent ( QResizeEvent * event );
+    protected:
+        virtual void resizeEvent ( QResizeEvent * event );
 
- private:
-  QGridLayout mainLayout;
-  QPushButton* imageButt;
-  QComboBox* chooseMap;
-  IconedGroupBox* gbThemes;
-  QListView* lvThemes;
-  HWMap* pMap;
-  QString m_seed;
-  QPushButton* seedSet;
-  QLabel* seedLabel;
-  int hhLimit;
-  int templateFilter;
-  QPixmap hhSmall;
-  QLabel* lblFilter;
-  QComboBox* cbTemplateFilter;
-  QLabel *maze_size_label;
-  QComboBox *cbMazeSize;
-  MapGenerator mapgen;
-  int numMissions;
-  DrawMapScene drawMapScene;
+    private:
+        QGridLayout mainLayout;
+        QPushButton* imageButt;
+        QComboBox* chooseMap;
+        MapModel * m_mapModel;
+        IconedGroupBox* gbThemes;
+        QListView* lvThemes;
+        ThemeModel * m_themeModel;
+        HWMap* pMap;
+        QString m_seed;
+        QPushButton* seedSet;
+        QLabel* seedLabel;
+        int hhLimit;
+        int templateFilter;
+        QPixmap hhSmall;
+        QLabel* lblFilter;
+        QComboBox* cbTemplateFilter;
+        QLabel *maze_size_label;
+        QComboBox *cbMazeSize;
+        MapGenerator mapgen;
+        DrawMapScene drawMapScene;
 
-  void intSetSeed(const QString & seed);
-  void intSetMap(const QString & map);
-  void intSetMapgen(MapGenerator m);
-  void intSetTemplateFilter(int);
-  void intSetMazeSize(int size);
-  void updatePreview();
+        void intSetSeed(const QString & seed);
+        void intSetMap(const QString & map);
+        void intSetMapgen(MapGenerator m);
+        void intSetTemplateFilter(int);
+        void intSetMazeSize(int size);
+        void updatePreview();
+
+        MapModel::MapInfo m_mapInfo;
+        QString m_theme;
+        QString m_curMap;
+
+        QLinearGradient linearGrad; ///< for preview background
+        QSize m_previewSize;
 };
 
 #endif // _HWMAP_CONTAINER_INCLUDED

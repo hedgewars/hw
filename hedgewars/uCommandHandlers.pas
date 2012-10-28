@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,21 +26,24 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions;
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+     {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
+
+var prevGState: TGameState = gsConfirm;
 
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-     'R': if ReadyTimeLeft > 1 then 
-          begin
-          ReadyTimeLeft:= 1;
-          if not CurrentTeam^.ExtDriven then SendIPC('c'+s);
-          end
+    'R': if ReadyTimeLeft > 1 then 
+        begin
+        ReadyTimeLeft:= 1;
+        if not isExternalSource then
+            SendIPC('c'+s);
+        end
     end
 end;
 
 procedure chQuit(var s: shortstring);
-const prevGState: TGameState = gsConfirm;
 begin
     s:= s; // avoid compiler hint
     if (GameState = gsGame) or (GameState = gsChat) then
@@ -48,7 +51,8 @@ begin
         prevGState:= GameState;
         GameState:= gsConfirm;
         SDL_ShowCursor(1)
-        end else
+        end
+    else
         if GameState = gsConfirm then
             begin
             GameState:= prevGState;
@@ -67,18 +71,18 @@ procedure chConfirm(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     if GameState = gsConfirm then
-    begin
-        SendIPC('Q');
+        begin
+        SendIPC(_S'Q');
         GameState:= gsExit
-    end
-else
-    ParseCommand('chat team', true);
+        end
+    else
+        ParseCommand('chat team', true);
 end;
 
 procedure chHalt (var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    SendIPC('H');
+    SendIPC(_S'H');
     GameState:= gsExit
 end;
 
@@ -88,48 +92,60 @@ begin
     if isDeveloperMode then
         begin
         val(s, i, c);
-        if (c <> 0) or (i = 0) then exit;
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
-    end
+        end
 end;
 
 procedure chTeamLocal(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not isDeveloperMode then exit;
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/rdriven"', true);
+if not isDeveloperMode then
+    exit;
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/rdriven"', true);
 CurrentTeam^.ExtDriven:= true
 end;
 
 procedure chGrave(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/grave"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/grave"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.GraveName:= s
 end;
 
 procedure chFort(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/fort"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/fort"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.FortName:= s
 end;
 
 procedure chFlag(var s: shortstring);
 begin
-if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/flag"', true);
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if CurrentTeam = nil then
+    OutError(errmsgIncorrectUse + ' "/flag"', true);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 CurrentTeam^.flag:= s
 end;
 
 procedure chScript(var s: shortstring);
 begin
-if s[1]='"' then Delete(s, 1, 1);
-if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+if s[1]='"' then
+    Delete(s, 1, 1);
+if s[byte(s[0])]='"' then
+    Delete(s, byte(s[0]), 1);
 cScriptName:= s;
 ScriptLoad(s)
 end;
@@ -140,9 +156,9 @@ if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
 with CurrentTeam^ do
     begin
     if not CurrentHedgehog^.King then
-    if (s = '') or
-        (((GameFlags and gfKing) <> 0) and (s = 'crown')) or
-        ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
+    if (s = '')
+    or (((GameFlags and gfKing) <> 0) and (s = 'crown'))
+    or ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
         CurrentHedgehog^.Hat:= 'NoHat'
     else
         CurrentHedgehog^.Hat:= s
@@ -200,8 +216,10 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('L');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'L');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLeft and InputMask);
@@ -211,18 +229,22 @@ end;
 procedure chLeft_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('l');
+if CheckNoTeamOrHH then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'l');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmLeft and InputMask);
+    Message:= Message and (not (gmLeft and InputMask));
     ScriptCall('onLeftUp');
 end;
 
 procedure chRight_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('R');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'R');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmRight and InputMask);
@@ -232,18 +254,22 @@ end;
 procedure chRight_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('r');
+if CheckNoTeamOrHH then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'r');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmRight and InputMask);
+    Message:= Message and (not (gmRight and InputMask));
     ScriptCall('onRightUp');
 end;
 
 procedure chUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('U');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'U');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmUp and InputMask);
@@ -253,18 +279,22 @@ end;
 procedure chUp_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('u');
+if CheckNoTeamOrHH then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'u');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmUp and InputMask);
+    Message:= Message and (not (gmUp and InputMask));
     ScriptCall('onUpUp');
 end;
 
 procedure chDown_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('D');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'D');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmDown and InputMask);
@@ -274,18 +304,22 @@ end;
 procedure chDown_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('d');
+if CheckNoTeamOrHH then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'd');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmDown and InputMask);
+    Message:= Message and (not (gmDown and InputMask));
     ScriptCall('onDownUp');
 end;
 
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('Z');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'Z');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmPrecise and InputMask);
@@ -295,18 +329,22 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('z');
+if CheckNoTeamOrHH then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'z');
 with CurrentHedgehog^.Gear^ do
-    Message:= Message and not (gmPrecise and InputMask);
+    Message:= Message and (not (gmPrecise and InputMask));
     ScriptCall('onPreciseUp');
 end;
 
 procedure chLJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('j');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'j');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmLJump and InputMask);
@@ -316,8 +354,10 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('J');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'J');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmHJump and InputMask);
@@ -327,7 +367,8 @@ end;
 procedure chAttack_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
@@ -335,7 +376,8 @@ with CurrentHedgehog^.Gear^ do
     if ((State and gstHHDriven) <> 0) then
         begin
         FollowGear:= CurrentHedgehog^.Gear;
-        if not CurrentTeam^.ExtDriven then SendIPC('A');
+        if not isExternalSource then
+            SendIPC(_S'A');
         Message:= Message or (gmAttack and InputMask);
         ScriptCall('onAttack');
         end
@@ -345,12 +387,14 @@ end;
 procedure chAttack_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH then
+    exit;
 with CurrentHedgehog^.Gear^ do
     begin
-    if not CurrentTeam^.ExtDriven and
-        ((Message and gmAttack) <> 0) then SendIPC('a');
-    Message:= Message and not (gmAttack and InputMask);
+    if not isExternalSource and
+        ((Message and gmAttack) <> 0) then
+            SendIPC(_S'a');
+    Message:= Message and (not (gmAttack and InputMask));
     ScriptCall('onAttackUp');
     end
 end;
@@ -358,8 +402,10 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
-if not CurrentTeam^.ExtDriven then SendIPC('S');
+if CheckNoTeamOrHH or isPaused then
+    exit;
+if not isExternalSource then
+    SendIPC(_S'S');
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     Message:= Message or (gmSwitch and InputMask);
@@ -367,73 +413,110 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chNextTurn(var s: shortstring);
+var gi: PGear;
 begin
     s:= s; // avoid compiler hint
+
     TryDo(AllInactive, '/nextturn called when not all gears are inactive', true);
 
-    if not CurrentTeam^.ExtDriven then SendIPC('N');
-    AddFileLog('Doing SwitchHedgehog: time '+inttostr(GameTicks));
+    CheckSum:= CheckSum xor GameTicks;
+    gi := GearsList;
+    while gi <> nil do
+        begin
+        with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
+        AddRandomness(CheckSum);
+        gi := gi^.NextGear
+        end;
+
+    if not isExternalSource then
+        begin
+        s[0]:= #5;
+        s[1]:= 'N';
+        SDLNet_Write32(CheckSum, @s[2]);
+        SendIPC(s)
+        end
+    else
+        TryDo(CurrentTeam^.hasGone or (CheckSum = lastTurnChecksum), 'Desync detected', true);
+
+    AddFileLog('Next turn: time '+inttostr(GameTicks));
 end;
 
 procedure chTimer(var s: shortstring);
 begin
-if (s[0] <> #1) or (s[1] < '1') or (s[1] > '5') or CheckNoTeamOrHH then exit;
+if CheckNoTeamOrHH then
+    exit;
 
-if not CurrentTeam^.ExtDriven then SendIPC(s);
+TryDo((s[0] = #1) and (s[1] >= '1') and (s[1] <= '5'), 'Malformed /timer', true);
+
+if not isExternalSource then
+    SendIPC(s);
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmTimer and InputMask);
     MsgParam:= byte(s[1]) - ord('0');
-    ScriptCall('onTimer');
+    ScriptCall('onTimer', MsgParam);
     end
 end;
 
 procedure chSlot(var s: shortstring);
 var slot: LongWord;
+    ss: shortstring;
 begin
-if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+if (s[0] <> #1) or CheckNoTeamOrHH then
+    exit;
 slot:= byte(s[1]) - 49;
-if slot > cMaxSlotIndex then exit;
-if not CurrentTeam^.ExtDriven then SendIPC(char(byte(s[1]) + 79));
+if slot > cMaxSlotIndex then
+    exit;
+if not isExternalSource then
+    begin
+    ss[0]:= #1;
+    ss[1]:= char(byte(s[1]) + 79);
+    SendIPC(ss);
+    end;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmSlot and InputMask);
     MsgParam:= slot; 
-    ScriptCall('onSlot');
+    ScriptCall('onSlot', MsgParam);
     end
 end;
 
 procedure chSetWeapon(var s: shortstring);
 begin
-    if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+    if CheckNoTeamOrHH then
+        exit;
 
-    if TAmmoType(s[1]) > High(TAmmoType) then exit;
+    TryDo((s[0] = #1) and (s[1] <= char(High(TAmmoType))), 'Malformed /setweap', true);
 
-    if not CurrentTeam^.ExtDriven then SendIPC('w' + s);
+    if not isExternalSource then
+        SendIPC('w' + s);
 
     with CurrentHedgehog^.Gear^ do
-    begin
+        begin
         Message:= Message or (gmWeapon and InputMask);
         MsgParam:= byte(s[1]);
-    ScriptCall('onSetWeapon');
-    end;
+        ScriptCall('onSetWeapon', MsgParam);
+        end;
 end;
 
 procedure chTaunt(var s: shortstring);
 begin
-if (s[0] <> #1) or CheckNoTeamOrHH then exit;
+if (s[0] <> #1) or CheckNoTeamOrHH then
+    exit;
 
-if TWave(s[1]) > High(TWave) then exit;
+if TWave(s[1]) > High(TWave) then
+    exit;
 
-if not CurrentTeam^.ExtDriven then SendIPC('t' + s);
+if not isExternalSource then
+    SendIPC('t' + s);
 
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmAnimate and InputMask);
     MsgParam:= byte(s[1]) ; 
-    ScriptCall('onTaunt');
+    ScriptCall('onTaunt', MsgParam);
     end
 end;
 
@@ -449,38 +532,57 @@ s:= s; // avoid compiler hint
 flagMakeCapture:= true
 end;
 
+procedure chRecord(var s: shortstring);
+begin
+s:= s; // avoid compiler hint
+{$IFDEF USE_VIDEO_RECORDING}
+if flagPrerecording then
+    StopPreRecording()
+else
+    BeginPreRecording();
+{$ENDIF}
+end;
+
 procedure chSetMap(var s: shortstring);
 begin
 if isDeveloperMode then
     begin
-    UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
-    Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+    if s = '' then
+        begin
+        UserPathz[ptMapCurrent]:= s;
+        Pathz[ptMapCurrent]:= s;
+        end
+    else
+        begin
+        UserPathz[ptMapCurrent]:= UserPathz[ptMaps] + '/' + s;
+        Pathz[ptMapCurrent]:= Pathz[ptMaps] + '/' + s;
+        end;
     InitStepsFlags:= InitStepsFlags or cifMap
     end;
-
+cMapName:= s;
 ScriptLoad('Maps/' + s + '/map.lua')
 end;
 
 procedure chSetTheme(var s: shortstring);
 begin
 if isDeveloperMode then
-begin
-UserPathz[ptCurrTheme]:= UserPathz[ptThemes] + '/' + s;
-Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
-Theme:= s;
-InitStepsFlags:= InitStepsFlags or cifTheme
-end
+    begin
+    UserPathz[ptCurrTheme]:= UserPathz[ptThemes] + '/' + s;
+    Pathz[ptCurrTheme]:= Pathz[ptThemes] + '/' + s;
+    Theme:= s;
+    InitStepsFlags:= InitStepsFlags or cifTheme
+    end
 end;
 
 procedure chSetSeed(var s: shortstring);
 begin
 if isDeveloperMode then
-begin
-SetRandomSeed(s);
-cSeed:= s;
-InitStepsFlags:= InitStepsFlags or cifRandomize
-end
-end;
+    begin
+    SetRandomSeed(s);
+    cSeed:= s;
+    InitStepsFlags:= InitStepsFlags or cifRandomize
+    end
+    end;
 
 procedure chAmmoMenu(var s: shortstring);
 begin
@@ -494,10 +596,15 @@ else
             begin
             bSelected:= false;
 
-            if bShowAmmoMenu then bShowAmmoMenu:= false
-            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0) or
-                    ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0)) or
-                    ((Gear^.State and gstHHDriven) = 0) then else bShowAmmoMenu:= true
+            if bShowAmmoMenu then
+                bShowAmmoMenu:= false
+            else if ((Gear^.State and (gstAttacking or gstAttacked)) <> 0)
+            or ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0))
+            or ((Gear^.State and gstHHDriven) = 0) then
+                begin
+                end
+            else
+                bShowAmmoMenu:= true
             end;
     end
 end;
@@ -517,17 +624,21 @@ end;
 procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 
-if FollowGear <> nil then
+if autoCameraOn then
     begin
+    FollowGear:= nil;
     AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
-    else begin
+else
+    begin
     AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
     bShowFinger:= true;
-    if not CurrentHedgehog^.Unplaced then FollowGear:= CurrentHedgehog^.Gear;
+    if not CurrentHedgehog^.Unplaced then
+        FollowGear:= CurrentHedgehog^.Gear;
     autoCameraOn:= true
     end
 end;
@@ -547,12 +658,16 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if ((GameFlags and gfInvulnerable) = 0) then cTagsMask:= cTagsMasks[cTagsMask] else cTagsMask:= cTagsMasksNoHealth[cTagsMask];
+if ((GameFlags and gfInvulnerable) = 0) then
+    cTagsMask:= cTagsMasks[cTagsMask]
+else
+    cTagsMask:= cTagsMasksNoHealth[cTagsMask];
 end;
 
 procedure chSpeedup_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+SpeedStart:= RealTicks;
 isSpeed:= true
 end;
 
@@ -582,90 +697,197 @@ begin
     ZoomValue:= cDefaultZoomLevel;
 end;
 
+procedure chMapGen(var s: shortstring);
+begin
+cMapGen:= StrToInt(s)
+end;
+
+procedure chTemplateFilter(var s: shortstring);
+begin
+cTemplateFilter:= StrToInt(s)
+end;
+
+procedure chInactDelay(var s: shortstring);
+begin
+cInactDelay:= StrToInt(s)
+end;
+
+procedure chReadyDelay(var s: shortstring);
+begin
+cReadyDelay:= StrToInt(s)
+end;
+
+procedure chCaseFactor(var s: shortstring);
+begin
+cCaseFactor:= StrToInt(s)
+end;
+
+procedure chHealthCaseProb(var s: shortstring);
+begin
+cHealthCaseProb:= StrToInt(s)
+end;
+
+procedure chHealthCaseAmount(var s: shortstring);
+begin
+cHealthCaseAmount:= StrToInt(s)
+end;
+
+procedure chSuddenDTurns(var s: shortstring);
+begin
+cSuddenDTurns:= StrToInt(s)
+end;
+
+procedure chWaterRise(var s: shortstring);
+begin
+cWaterRise:= StrToInt(s)
+end;
+
+procedure chHealthDecrease(var s: shortstring);
+begin
+cHealthDecrease:= StrToInt(s)
+end;
+
+procedure chDamagePercent(var s: shortstring);
+begin
+cDamagePercent:= StrToInt(s)
+end;
+
+procedure chRopePercent(var s: shortstring);
+begin
+cRopePercent:= StrToInt(s)
+end;
+
+procedure chGetAwayTime(var s: shortstring);
+begin
+cGetAwayTime:= StrToInt(s)
+end;
+
+procedure chMineDudPercent(var s: shortstring);
+begin
+cMineDudPercent:= StrToInt(s)
+end;
+
+procedure chLandMines(var s: shortstring);
+begin
+cLandMines:= StrToInt(s)
+end;
+
+procedure chExplosives(var s: shortstring);
+begin
+cExplosives:= StrToInt(s)
+end;
+
+procedure chGameFlags(var s: shortstring);
+begin
+GameFlags:= StrToInt(s);
+if GameFlags and gfSharedAmmo <> 0 then GameFlags:= GameFlags and (not gfPerHogAmmo)
+end;
+
+procedure chHedgehogTurnTime(var s: shortstring);
+begin
+cHedgehogTurnTime:= StrToInt(s)
+end;
+
+procedure chMinesTime(var s: shortstring);
+begin
+cMinesTime:= StrToInt(s)
+end;
+
+procedure chFastUntilLag(var s: shortstring);
+begin
+fastUntilLag:= StrToInt(s) <> 0
+end;
+
+procedure chCampVar(var s:shortstring);
+begin
+  CampaignVariable := s;
+end;
 
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
-    RegisterVariable('+right'  , vtCommand, @chRight_p      , false);
-    RegisterVariable('-right'  , vtCommand, @chRight_m      , false);
-    RegisterVariable('+up'     , vtCommand, @chUp_p         , false);
-    RegisterVariable('-up'     , vtCommand, @chUp_m         , false);
-    RegisterVariable('+left'   , vtCommand, @chLeft_p       , false);
-    RegisterVariable('-left'   , vtCommand, @chLeft_m       , false);
-    RegisterVariable('+attack' , vtCommand, @chAttack_p     , false);
-    RegisterVariable('+down'   , vtCommand, @chDown_p       , false);
-    RegisterVariable('-down'   , vtCommand, @chDown_m       , false);
-    RegisterVariable('hjump'   , vtCommand, @chHJump        , false);
-    RegisterVariable('ljump'   , vtCommand, @chLJump        , false);
-    RegisterVariable('nextturn', vtCommand, @chNextTurn     , false);
-    RegisterVariable('-attack' , vtCommand, @chAttack_m     , false);
-    RegisterVariable('slot'    , vtCommand, @chSlot         , false);
-    RegisterVariable('setweap' , vtCommand, @chSetWeapon    , false);
+    RegisterVariable('+right'  , @chRight_p      , false, true);
+    RegisterVariable('-right'  , @chRight_m      , false, true);
+    RegisterVariable('+up'     , @chUp_p         , false, true);
+    RegisterVariable('-up'     , @chUp_m         , false, true);
+    RegisterVariable('+left'   , @chLeft_p       , false, true);
+    RegisterVariable('-left'   , @chLeft_m       , false, true);
+    RegisterVariable('+attack' , @chAttack_p     , false);
+    RegisterVariable('+down'   , @chDown_p       , false, true);
+    RegisterVariable('-down'   , @chDown_m       , false, true);
+    RegisterVariable('hjump'   , @chHJump        , false, true);
+    RegisterVariable('ljump'   , @chLJump        , false, true);
+    RegisterVariable('nextturn', @chNextTurn     , false);
+    RegisterVariable('-attack' , @chAttack_m     , false);
+    RegisterVariable('slot'    , @chSlot         , false);
+    RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis
-    RegisterVariable('gencmd'  , vtCommand, @chGenCmd       , false);
-    RegisterVariable('flag'    , vtCommand, @chFlag         , false);
-    RegisterVariable('script'  , vtCommand, @chScript       , false);
-    RegisterVariable('proto'   , vtCommand, @chCheckProto   , true );
-    RegisterVariable('spectate', vtBoolean, @fastUntilLag   , false);
-    RegisterVariable('capture' , vtCommand, @chCapture      , true );
-    RegisterVariable('rotmask' , vtCommand, @chRotateMask   , true );
-    RegisterVariable('rdriven' , vtCommand, @chTeamLocal    , false);
-    RegisterVariable('map'     , vtCommand, @chSetMap       , false);
-    RegisterVariable('theme'   , vtCommand, @chSetTheme     , false);
-    RegisterVariable('seed'    , vtCommand, @chSetSeed      , false);
-    RegisterVariable('template_filter', vtLongInt, @cTemplateFilter, false);
-    RegisterVariable('mapgen'  , vtLongInt, @cMapGen        , false);
-    RegisterVariable('maze_size',vtLongInt, @cTemplateFilter, false);
-    RegisterVariable('delay'   , vtLongInt, @cInactDelay    , false);
-    RegisterVariable('ready'   , vtLongInt, @cReadyDelay    , false);
-    RegisterVariable('casefreq', vtLongInt, @cCaseFactor    , false);
-    RegisterVariable('healthprob', vtLongInt, @cHealthCaseProb, false);
-    RegisterVariable('hcaseamount', vtLongInt, @cHealthCaseAmount, false);
-    RegisterVariable('sd_turns', vtLongInt, @cSuddenDTurns  , false);
-    RegisterVariable('waterrise', vtLongInt, @cWaterRise    , false);
-    RegisterVariable('healthdec', vtLongInt, @cHealthDecrease, false);
-    RegisterVariable('damagepct',vtLongInt, @cDamagePercent , false);
-    RegisterVariable('ropepct' , vtLongInt, @cRopePercent   , false);
-    RegisterVariable('getawaytime' , vtLongInt, @cGetAwayTime , false);
-    RegisterVariable('minedudpct',vtLongInt,@cMineDudPercent, false);
-    RegisterVariable('minesnum', vtLongInt, @cLandMines     , false);
-    RegisterVariable('explosives',vtLongInt,@cExplosives    , false);
-    RegisterVariable('gmflags' , vtLongInt, @GameFlags      , false);
-    RegisterVariable('turntime', vtLongInt, @cHedgehogTurnTime, false);
-    RegisterVariable('minestime',vtLongInt, @cMinesTime     , false);
-    RegisterVariable('fort'    , vtCommand, @chFort         , false);
-    RegisterVariable('grave'   , vtCommand, @chGrave        , false);
-    RegisterVariable('hat'     , vtCommand, @chSetHat       , false);
-    RegisterVariable('quit'    , vtCommand, @chQuit         , true );
-    RegisterVariable('forcequit', vtCommand, @chForceQuit   , true );
-    RegisterVariable('confirm' , vtCommand, @chConfirm      , true );
-    RegisterVariable('halt',     vtCommand, @chHalt         , true );
-    RegisterVariable('+speedup', vtCommand, @chSpeedup_p    , true );
-    RegisterVariable('-speedup', vtCommand, @chSpeedup_m    , true );
-    RegisterVariable('zoomin'  , vtCommand, @chZoomIn       , true );
-    RegisterVariable('zoomout' , vtCommand, @chZoomOut      , true );
-    RegisterVariable('zoomreset',vtCommand, @chZoomReset    , true );
-    RegisterVariable('ammomenu', vtCommand, @chAmmoMenu     , true);
-    RegisterVariable('+precise', vtCommand, @chPrecise_p    , false);
-    RegisterVariable('-precise', vtCommand, @chPrecise_m    , false);
-    RegisterVariable('switch'  , vtCommand, @chSwitch       , false);
-    RegisterVariable('timer'   , vtCommand, @chTimer        , false);
-    RegisterVariable('taunt'   , vtCommand, @chTaunt        , false);
-    RegisterVariable('put'     , vtCommand, @chPut          , false);
-    RegisterVariable('+volup'  , vtCommand, @chVol_p        , true );
-    RegisterVariable('-volup'  , vtCommand, @chVol_m        , true );
-    RegisterVariable('+voldown', vtCommand, @chVol_m        , true );
-    RegisterVariable('-voldown', vtCommand, @chVol_p        , true );
-    RegisterVariable('findhh'  , vtCommand, @chFindhh       , true );
-    RegisterVariable('pause'   , vtCommand, @chPause        , true );
-    RegisterVariable('+cur_u'  , vtCommand, @chCurU_p       , true );
-    RegisterVariable('-cur_u'  , vtCommand, @chCurU_m       , true );
-    RegisterVariable('+cur_d'  , vtCommand, @chCurD_p       , true );
-    RegisterVariable('-cur_d'  , vtCommand, @chCurD_m       , true );
-    RegisterVariable('+cur_l'  , vtCommand, @chCurL_p       , true );
-    RegisterVariable('-cur_l'  , vtCommand, @chCurL_m       , true );
-    RegisterVariable('+cur_r'  , vtCommand, @chCurR_p       , true );
-    RegisterVariable('-cur_r'  , vtCommand, @chCurR_m       , true );
+    RegisterVariable('gencmd'  , @chGenCmd       , false);
+    RegisterVariable('flag'    , @chFlag         , false);
+    RegisterVariable('script'  , @chScript       , false);
+    RegisterVariable('proto'   , @chCheckProto   , true );
+    RegisterVariable('spectate', @chFastUntilLag   , false);
+    RegisterVariable('capture' , @chCapture      , true );
+    RegisterVariable('rotmask' , @chRotateMask   , true );
+    RegisterVariable('rdriven' , @chTeamLocal    , false);
+    RegisterVariable('map'     , @chSetMap       , false);
+    RegisterVariable('theme'   , @chSetTheme     , false);
+    RegisterVariable('seed'    , @chSetSeed      , false);
+    RegisterVariable('template_filter', @chTemplateFilter, false);
+    RegisterVariable('mapgen'  , @chMapGen        , false);
+    RegisterVariable('maze_size',@chTemplateFilter, false);
+    RegisterVariable('delay'   , @chInactDelay    , false);
+    RegisterVariable('ready'   , @chReadyDelay    , false);
+    RegisterVariable('casefreq', @chCaseFactor    , false);
+    RegisterVariable('healthprob', @chHealthCaseProb, false);
+    RegisterVariable('hcaseamount', @chHealthCaseAmount, false);
+    RegisterVariable('sd_turns', @chSuddenDTurns  , false);
+    RegisterVariable('waterrise', @chWaterRise    , false);
+    RegisterVariable('healthdec', @chHealthDecrease, false);
+    RegisterVariable('damagepct',@chDamagePercent , false);
+    RegisterVariable('ropepct' , @chRopePercent   , false);
+    RegisterVariable('getawaytime' , @chGetAwayTime , false);
+    RegisterVariable('minedudpct',@chMineDudPercent, false);
+    RegisterVariable('minesnum', @chLandMines     , false);
+    RegisterVariable('explosives',@chExplosives    , false);
+    RegisterVariable('gmflags' , @chGameFlags      , false);
+    RegisterVariable('turntime', @chHedgehogTurnTime, false);
+    RegisterVariable('minestime',@chMinesTime     , false);
+    RegisterVariable('fort'    , @chFort         , false);
+    RegisterVariable('grave'   , @chGrave        , false);
+    RegisterVariable('hat'     , @chSetHat       , false);
+    RegisterVariable('quit'    , @chQuit         , true );
+    RegisterVariable('forcequit', @chForceQuit   , true );
+    RegisterVariable('confirm' , @chConfirm      , true );
+    RegisterVariable('halt',     @chHalt         , true );
+    RegisterVariable('+speedup', @chSpeedup_p    , true );
+    RegisterVariable('-speedup', @chSpeedup_m    , true );
+    RegisterVariable('zoomin'  , @chZoomIn       , true );
+    RegisterVariable('zoomout' , @chZoomOut      , true );
+    RegisterVariable('zoomreset',@chZoomReset    , true );
+    RegisterVariable('ammomenu', @chAmmoMenu     , true);
+    RegisterVariable('+precise', @chPrecise_p    , false, true);
+    RegisterVariable('-precise', @chPrecise_m    , false, true);
+    RegisterVariable('switch'  , @chSwitch       , false);
+    RegisterVariable('timer'   , @chTimer        , false, true);
+    RegisterVariable('taunt'   , @chTaunt        , false);
+    RegisterVariable('put'     , @chPut          , false);
+    RegisterVariable('+volup'  , @chVol_p        , true );
+    RegisterVariable('-volup'  , @chVol_m        , true );
+    RegisterVariable('+voldown', @chVol_m        , true );
+    RegisterVariable('-voldown', @chVol_p        , true );
+    RegisterVariable('findhh'  , @chFindhh       , true );
+    RegisterVariable('pause'   , @chPause        , true );
+    RegisterVariable('+cur_u'  , @chCurU_p       , true );
+    RegisterVariable('-cur_u'  , @chCurU_m       , true );
+    RegisterVariable('+cur_d'  , @chCurD_p       , true );
+    RegisterVariable('-cur_d'  , @chCurD_m       , true );
+    RegisterVariable('+cur_l'  , @chCurL_p       , true );
+    RegisterVariable('-cur_l'  , @chCurL_m       , true );
+    RegisterVariable('+cur_r'  , @chCurR_p       , true );
+    RegisterVariable('-cur_r'  , @chCurR_m       , true );
+    RegisterVariable('campvar' , @chCampVar      , true );
+    RegisterVariable('record'  , @chRecord       , true );
 end;
 
 procedure freeModule;

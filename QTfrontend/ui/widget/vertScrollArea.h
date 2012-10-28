@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,13 +24,13 @@
 
 class VertScrArea : public QScrollArea
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    VertScrArea(QColor frameColor, QWidget * parent = 0);
+    public:
+        VertScrArea(QColor frameColor, QWidget * parent = 0);
 
-protected:
-    virtual void resizeEvent(QResizeEvent * event);
+    protected:
+        virtual void resizeEvent(QResizeEvent * event);
 };
 
 #endif // _VERT_SCROLL_AREA_INCLUDED

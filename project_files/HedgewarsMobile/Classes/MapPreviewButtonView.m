@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,14 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 26/09/2010.
  */
 
 
 #import "MapPreviewButtonView.h"
-#import "MapConfigViewController.h"
-#import "UIImageExtra.h"
 #import <pthread.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -64,10 +60,10 @@
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
 }
 
--(const uint8_t *)engineProtocol {
+-(void) engineProtocol:(uint8_t *)unpackedMap {
     IPaddress ip;
     BOOL serverQuit = NO;
-    static uint8_t map[128*32];
+    uint8_t packedMap[128*32];
     int port = [HWUtils randomPort];
 
     if (SDLNet_Init() < 0) {
@@ -89,7 +85,7 @@
 
     // launch the preview here so that we're sure the tcp channel is open
     pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *)GenLandPreview, (void *)port);
+    pthread_create(&thread_id, NULL, (void *(*)(void *))GenLandPreview, (void *)port);
     pthread_detach(thread_id);
 
     DLog(@"Waiting for a client on port %d", port);
@@ -107,49 +103,45 @@
             [self sendToEngine:[dictForEngine objectForKey:@"mazeSizeCommand"]];
             [self sendToEngine:@"!"];
 
-            memset(map, 0, 128*32);
-            SDLNet_TCP_Recv(csd, map, 128*32);
+            memset(packedMap, 0, 128*32);
+            SDLNet_TCP_Recv(csd, packedMap, 128*32);
             SDLNet_TCP_Recv(csd, &maxHogs, sizeof(uint8_t));
 
             SDLNet_TCP_Close(csd);
             serverQuit = YES;
         }
     }
-
+    [HWUtils freePort:port];
     SDLNet_TCP_Close(sd);
     SDLNet_Quit();
-    return map;
+
+    // spread the packed bits in an array of bytes (one pixel per element, 0= transparent 1= color)
+    int k = 0;
+    memset(unpackedMap, 255, 128*32*8);     // 255 is white
+    for (int i = 0; i < 32*128; i++) {
+        for (int j = 7; j >= 0; j--) {
+            if (((packedMap[i] >> j) & 0x01) != 0)
+                unpackedMap[k] = 170;       // level of gray [0-255]
+            k++;
+        }
+    }
+    return;
 }
 
 -(void) drawingThread {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    const uint8_t *map = [self engineProtocol];
-    uint8_t mapExp[128*32*8];
+    uint8_t unpackedMap[128*32*8];
+    [self engineProtocol:unpackedMap];
 
-    // draw the buffer (1 pixel per component, 0= transparent 1= color)
-    int k = 0;
-    for (int i = 0; i < 32*128; i++) {
-        unsigned char byte = map[i];
-        for (int j = 0; j < 8; j++) {
-            // select the color based on the leftmost bit
-            if ((byte & 0x80) != 0)
-                mapExp[k] = 100;
-            else
-                mapExp[k] = 255;
-            // shift to next bit
-            byte <<= 1;
-            k++;
-        }
-    }
+    // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
-    CGContextRef bitmapImage = CGBitmapContextCreate(mapExp, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
+    CGContextRef bitmapImage = CGBitmapContextCreate(unpackedMap, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
     CGColorSpaceRelease(colorspace);
 
     CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
     CGContextRelease(bitmapImage);
     UIImage *previewImage = [[UIImage alloc] initWithCGImage:previewCGImage];
     CGImageRelease(previewCGImage);
-    previewCGImage = nil;
 
     // all these are performed on the main thread to prevent a leak
     [self performSelectorOnMainThread:@selector(setImageRounded:)
@@ -167,18 +159,6 @@
                         waitUntilDone:NO];
     
     [pool release];
-
-    /*
-    // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
-    UIGraphicsBeginImageContext(CGSizeMake(256,128));
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    UIGraphicsPushContext(context);
-    CGContextSetRGBFillColor(context, 0.5, 0.5, 0.7, 1.0);
-    CGContextFillRect(context,CGRectMake(xc,yc,1,1));
-    UIGraphicsPopContext();
-    UIImage *previewImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    */
 }
 
 -(void) updatePreviewWithSeed:(NSString *)seed {

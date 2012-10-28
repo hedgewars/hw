@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1045,7 +1045,7 @@ const SinTable: array[0..1024] of QWord = (
      $FFFF4E59,
      $FFFFB10B,
      $FFFFEC43,
-    $100000000
+     $100000000
      );
 
 implementation

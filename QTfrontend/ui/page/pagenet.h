@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,33 +23,33 @@
 
 class PageNet : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageNet(QWidget* parent = 0);
+    public:
+        PageNet(QWidget* parent = 0);
 
-    QPushButton* BtnUpdateSList;
-    QTableView * tvServersList;
-    QPushButton * BtnNetConnect;
-    QPushButton * BtnNetSvrStart;
-    QPushButton * BtnSpecifyServer;
+        QPushButton* BtnUpdateSList;
+        QTableView * tvServersList;
+        QPushButton * BtnNetConnect;
+        QPushButton * BtnNetSvrStart;
+        QPushButton * BtnSpecifyServer;
 
-public slots:
-    void updateServersList();
+    public slots:
+        void updateServersList();
 
-signals:
-    void connectClicked(const QString & host, quint16 port);
+    signals:
+        void connectClicked(const QString & host, quint16 port);
 
-private:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    private:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-    QGroupBox * ConnGroupBox;
-    QGridLayout * GBClayout;
+        QGroupBox * ConnGroupBox;
+        QGridLayout * GBClayout;
 
-private slots:
-    void slotConnect();
+    private slots:
+        void slotConnect();
 };
 
 #endif

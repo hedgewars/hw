@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,25 +23,25 @@
 
 class PageNetServer : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageNetServer(QWidget* parent = 0);
+    public:
+        PageNetServer(QWidget* parent = 0);
 
-    QPushButton *BtnStart;
-    QPushButton *BtnDefault;
-    QLabel *labelSD;
-    QLineEdit *leServerDescr;
-    QLabel *labelPort;
-    QSpinBox *sbPort;
+        QPushButton *BtnStart;
+        QPushButton *BtnDefault;
+        QLabel *labelSD;
+        QLineEdit *leServerDescr;
+        QLabel *labelPort;
+        QSpinBox *sbPort;
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    QLayout * footerLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
+        void connectSignals();
 
-private slots:
-    void setDefaultPort();
+    private slots:
+        void setDefaultPort();
 };
 
 #endif

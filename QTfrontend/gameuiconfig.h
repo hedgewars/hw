@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,52 +29,63 @@ class QSettings;
 
 class GameUIConfig : public QSettings
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    HWForm * Form;
-    GameUIConfig(HWForm * FormWidgets, const QString & fileName);
-    QStringList GetTeamsList();
-    QRect vid_Resolution();
-    bool vid_Fullscreen();
-    quint32 translateQuality();
-    bool isSoundEnabled();
-    bool isFrontendSoundEnabled();
-    QString language();
-    bool isMusicEnabled();
-    bool isFrontendMusicEnabled();
-    bool isShowFPSEnabled();
-    bool isAltDamageEnabled();
-    bool appendDateTimeToRecordName();
-    quint8 volume();
-    quint8 timerInterval();
-    quint8 bitDepth();
-    QString netNick();
-    QByteArray netPasswordHash();
-    int netPasswordLength();
-    void setNetPasswordLength(int passwordLength);
-    bool isReducedQuality() const;
-    bool isFrontendEffects() const;
-    bool isFrontendFullscreen() const;
-    void resizeToConfigValues();
-    quint32 stereoMode() const;
+    public:
+        HWForm * Form;
+        GameUIConfig(HWForm * FormWidgets, const QString & fileName);
+        QStringList GetTeamsList();
+        QRect vid_Resolution();
+        bool vid_Fullscreen();
+        quint32 translateQuality();
+        bool isSoundEnabled();
+        bool isFrontendSoundEnabled();
+        QString language();
+        bool isMusicEnabled();
+        bool isFrontendMusicEnabled();
+        bool isShowFPSEnabled();
+        bool isAltDamageEnabled();
+        bool appendDateTimeToRecordName();
+        quint8 volume();
+        quint8 timerInterval();
+        quint8 bitDepth();
+        QString netNick();
+        QByteArray netPasswordHash();
+        int netPasswordLength();
+        void setNetPasswordLength(int passwordLength);
+        bool isReducedQuality() const;
+        bool isFrontendEffects() const;
+        bool isFrontendFullscreen() const;
+        void resizeToConfigValues();
+        quint32 stereoMode() const;
+
+        QString AVFormat();
+        QString videoCodec();
+        QString audioCodec();
+        QRect rec_Resolution();
+        int rec_Framerate();
+        int rec_Bitrate();
+        bool recordAudio();
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
-    bool isAutoUpdateEnabled();
+        bool isAutoUpdateEnabled();
 #endif
 #endif
+        void reloadValues();
+        void reloadVideosValues();
 
- signals:
-    void frontendFullscreen(bool value);
+    signals:
+        void frontendFullscreen(bool value);
 
-public slots:
-    void SaveOptions();
-    void updNetNick();
-private:
-    bool netPasswordIsValid();
-    bool eventFilter(QObject *object, QEvent *event);
-    quint8 depth;
+    public slots:
+        void SaveOptions();
+        void SaveVideosOptions();
+        void updNetNick();
+    private:
+        bool netPasswordIsValid();
+        bool eventFilter(QObject *object, QEvent *event);
+        quint8 depth;
 };
 
 #endif

@@ -1,0 +1,31 @@
+Hedgewars, é um Estrondo!
+
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+O Hedgewars está disponível na Mac App Store! Pesquisa Hedgewars no teu MacBook e obtém a tua cópia GRATUITA hoje!
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+
+A versão para iOS tem algumas funcionalidades exclusivas, como
+* Saída VGA no iPad: liga-o a um ecrã externo e joga em resolução completa;
+* Suporte para Retina Display: joga numa resolução mais alta durante todo o jogo;
+* Multitarefa: pausa o jogo a qualquer altura;
+* Restaurar o jogo: vais ser sempre capaz de completar o teu jogo.
+
+Descrição:
+Este é o mais divertido e viciante jogo que alguma vez vais jogar - diversão hilariante a qual podes aproveitar onde estives, quando quiseres. Hedgewars é um jogo de estratégia por turnos, mas o que é ainda mais espetacular, é ver a destruição causada pelos pequenos ouriços e o seu fantásticas arsenal!
+
+Por outras palavras, Hedgewars é um jogo de estratégia por turnos, artilharia, ação e comédia, patrocinado pelas palhaçadas dos pequenos ouriços cor-de-rosa cheios de atitude, enquanto lutam das profundezas do inferno ás do espaço.
+
+Como comandante, é o teu trabalho reunir uma equipa de ouriços especialistas e levar a guerra ao teu inimigo.
+
+Cada jogador controla uma equipa de vários ouriços. Durante o decorrer do jogo, os jogadores controlam alternadamente um dos seus ouriços. Depois utilizam qualquer ferramenta ou arma disponível para atacar e destruir os ouriços oponentes, ganhando assim o jogo. Os ouriços podem deslocar-se pelo terreno de variadíssimas maneiras, normalmente a andar e a saltar, mas também utilizando ferramentas como a "Corda" ou o "Paraquedas", para chegarem a áreas de outro modo inacessíveis. Cada turno tem tempo limitado para garantir que os jogadores não passam demasiado tempo a pensar ou a movimentar-se. Uma grande variedade de ferramentas e armas estão disponíveis durante o jogo: Granada, Bomba de Fragmentos, Bazuca, Disco Voador, Caçadeira, Desert Eagle, Shoryuken, Taco de Basebol, Dinamite, Mina, Corda, Martelo Pneumático, Paraquedas. A maioria das armas, quando utilizadas, causam explosões que deformam o terreno, removendo pedaços circulares. A paisagem é simplesmente uma ilha a flutuar numa massa de água, ou uma caverna com água no fundo. Um ouriço morre quando entra na água (caindo da ilha, ou através de um buraco), é atirado para fora da arena ou quando a sua vida é reduzida, tipicamente quando entra em contacto com explosões, a zero (o dano causado ao ouriço ou ouriços atacados, após o turno de um jogador ou CPU, é apenas mostrado quando todo o movimento no campo de batalha tiver acabado).
+
+* Hilariante e devastador jogo de combate por turnos para até 6 jogadores
+* Modo local e multijogador por rede, com oponentes IA opcionais
+* Batalha num número ilimitado de mapas gerados aleatoriamente, e em mais de 20 ambientes diferentes
+* Utiliza 48 (e a aumentar) impressionantes armas! Incluindo o ataque piano e o bolo robótico explosivo
+* Joga o jogo à tua maneira, com mais de 20 modificadores de jogo diferentes, muda quase todos os aspectos do jogo
+* Personaliza a tua equipa, com mais de 120 chapéus, 30 sepulturas, 12 fortes, 100s de bandeiras e packs de voz únicos
+* Enormes batalhas com até 64 ouriços
+

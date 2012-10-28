@@ -32,8 +32,8 @@ selection-color: #00351d;
 
 a { color:#c8c8ff; }
 
-QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox,
-QComboBox QAbstractItemView, QMenu::item {
+QLineEdit, QListWidget, QListView, QTableView, QTextBrowser, QSpinBox, QComboBox,
+QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item {
 background-color: rgba(13, 5, 68, 70%);
 }
 
@@ -41,8 +41,8 @@ QComboBox::separator {
 border: solid; border-width: 3px; border-color: #ffcc00;
 }
 
-QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView,
-QTextBrowser, QSpinBox, QToolBox, QComboBox,
+QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
+QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget,
 QTabWidget::pane, QTabBar::tab {
@@ -51,20 +51,20 @@ border-width: 3px;
 border-color: #ffcc00;
 }
 
-QPushButton:hover, QLineEdit:hover, QListWidget:hover,
+QPushButton:hover, QLineEdit:hover, QListWidget:hover, QListView:hover,
 QSpinBox:hover, QToolBox:hover, QComboBox:hover {
 border-color: yellow;
 }
 
-QLineEdit, QListWidget,QTableView, QTextBrowser,
-QSpinBox, QToolBox {
+QLineEdit, QListWidget, QListView, QTableView, QTextBrowser,
+QSpinBox, QToolBox, QPlainTextEdit {
 border-radius: 10px;
 }
 
-QLineEdit, QLabel, QHeaderView, QListWidget, QTableView,
+QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
 QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget,
-SelWeaponWidget, QCheckBox, QRadioButton, QPushButton {
+SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
 font: bold 13px;
 }
 SelWeaponWidget QTabWidget::pane, SelWeaponWidget QTabBar::tab:selected {
@@ -116,17 +116,18 @@ QTableView {
 alternate-background-color: #2f213a;
 gridline-color: transparent;
 }
-
+QTabWidget::pane { top: -2px; }
 QTabBar::tab {
-border-bottom-width: 0;
 border-radius: 0;
 border-top-left-radius: 6px;
 border-top-right-radius: 6px;
 padding: 3px;
+background-color: #00351d;
+color: #ffcc00;
 }
-QTabBar::tab:!selected {
-color: #0d0544;
-background-color: #ffcc00;
+QTabBar::tab:selected {
+border-bottom-color: #0d0544;
+border-bottom-width: 0;
 }
 QSpinBox::up-button{
 background: transparent;

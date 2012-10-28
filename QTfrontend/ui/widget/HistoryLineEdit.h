@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,72 +38,72 @@ class QLineEdit;
 /**
  * @brief <code>QLineEdit</code> that features a history of previous contents,
  *        re-selectable using the arrow keys.
- * 
+ *
  * @author sheepluva
  * @since 0.9.17
  */
 class HistoryLineEdit : public QLineEdit
 {
- Q_OBJECT
+        Q_OBJECT
 
-public:
-    /**
-    * @brief Class constructor.
-    * @param parent parent QWidget.
-    * @param maxHistorySize maximum amount of history entries kept.
-    */
-    HistoryLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
+    public:
+        /**
+        * @brief Class constructor.
+        * @param parent parent QWidget.
+        * @param maxHistorySize maximum amount of history entries kept.
+        */
+        HistoryLineEdit(QWidget * parent = 0, int maxHistorySize = 64);
 
-    /**
-    * @brief Class destructor.
-    */
-    ~HistoryLineEdit();
+        /**
+        * @brief Class destructor.
+        */
+        ~HistoryLineEdit();
 
-    /**
-     * @brief Appends current text to history (if not only whitespaces);
-     */
-    void rememberCurrentText();
+        /**
+         * @brief Appends current text to history (if not only whitespaces);
+         */
+        void rememberCurrentText();
 
-    /**
-     * @brief Forget all history.
-     */
-    void reset();
-
-
-public slots:
-    /**
-     * @brief Clears the contents.
-     */
-    void clear();
+        /**
+         * @brief Forget all history.
+         */
+        void reset();
 
 
-protected:
-    /**
-     * @brief Overrides method of parent class.
-     * Arrow keys are used for navigating the history.
-     *
-     * All other keys are forwarded to the parent's method.
-     * 
-     * @param event the key event.
-     */
-    virtual void keyPressEvent(QKeyEvent * event);
+    public slots:
+        /**
+         * @brief Clears the contents.
+         */
+        void clear();
 
 
-private:
-    int m_maxHistorySize; ///< the maximum allowed size for the history
-    int m_curHistEntryIdx; ///< the index of the displayed used entry
+    protected:
+        /**
+         * @brief Overrides method of parent class.
+         * Arrow keys are used for navigating the history.
+         *
+         * All other keys are forwarded to the parent's method.
+         *
+         * @param event the key event.
+         */
+        virtual void keyPressEvent(QKeyEvent * event);
 
-    QStringList * m_history; ///< history of previous inputs
 
-    /**
-     * @brief Navigates content history in the desired direction.
-     *
-     * Note: no wrap-around on purpose (so that holding down/up will get the
-     * the user to the respective end rather than into an endless cycle :P)
-     * 
-     * @param isGoingUp true: next older entry, false: next more recent entry.
-     */
-    void navigateHistory(bool isGoingUp);
+    private:
+        int m_maxHistorySize; ///< the maximum allowed size for the history
+        int m_curHistEntryIdx; ///< the index of the displayed used entry
+
+        QStringList * m_history; ///< history of previous inputs
+
+        /**
+         * @brief Navigates content history in the desired direction.
+         *
+         * Note: no wrap-around on purpose (so that holding down/up will get the
+         * the user to the respective end rather than into an endless cycle :P)
+         *
+         * @param isGoingUp true: next older entry, false: next more recent entry.
+         */
+        void navigateHistory(bool isGoingUp);
 };
 
 

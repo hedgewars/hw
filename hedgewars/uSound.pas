@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,25 +33,26 @@ unit uSound;
  *                   The channel id can be used to stop a specific sound loop.
  *)
 interface
-uses SDLh, uConsts, uTypes, sysutils;
-
-var MusicFN: shortstring; // music file name
+uses SDLh, uConsts, uTypes, SysUtils;
 
 procedure initModule;
 procedure freeModule;
 
-procedure InitSound; // Initiates sound-system if isSoundEnabled.
-procedure ReleaseSound; // Releases sound-system and used resources.
-procedure SoundLoad; // Preloads some sounds for performance reasons.
-
+procedure InitSound;                            // Initiates sound-system if isSoundEnabled.
+procedure ReleaseSound(complete: boolean);      // Releases sound-system and used resources.
+procedure ResetSound;                           // Reset sound state to the previous state.
+procedure SetSound(enabled: boolean);           // Enable/disable sound-system and backup status.
 
 // MUSIC
 
-// Obvious music commands for music track specified in MusicFN.
-procedure PlayMusic;
-procedure PauseMusic;
-procedure ResumeMusic;
-procedure ChangeMusic; // Replaces music track with current MusicFN and plays it.
+// Obvious music commands for music track
+procedure SetMusic(enabled: boolean);           // Enable/disable music.
+procedure SetMusicName(musicname: shortstring); // Set name of the file to play.
+procedure PlayMusic;                            // Play music from the start.
+procedure PauseMusic;                           // Pause music.
+procedure ResumeMusic;                          // Resume music from pause point.
+procedure ChangeMusic(musicname: shortstring);  // Replaces music track with musicname and plays it.
+procedure StopMusic;                            // Stops and releases the current track.
 
 
 // SOUNDS
@@ -61,27 +62,40 @@ procedure ChangeMusic; // Replaces music track with current MusicFN and plays it
 // then the sound's playback won't be interrupted if asked to play again.
 procedure PlaySound(snd: TSound);
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
-procedure PlaySound(snd: TSound; voicepack: PVoicepack);
-procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 
 // Plays sound snd [of voicepack] in a loop, but starts with fadems milliseconds of fade-in.
 // Returns sound channel of the looped sound.
 function  LoopSound(snd: TSound): LongInt;
 function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
-function  LoopSound(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
-function  LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 
 // Stops the normal/looped sound of the given type/in the given channel
 // [with a fade-out effect for fadems milliseconds].
 procedure StopSound(snd: TSound);
-procedure StopSound(chn: LongInt);
-procedure StopSound(chn, fadems: LongInt);
+procedure StopSoundChan(chn: LongInt);
+procedure StopSoundChan(chn, fadems: LongInt);
 
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 procedure PlayNextVoice;
 
 
+// GLOBAL FUNCTIONS
+
+// Drastically lower the volume when we lose focus (and restore the previous value).
+procedure DampenAudio;
+procedure UndampenAudio;
+
+// Mute/Unmute audio
+procedure MuteAudio;
+
+
 // MISC
+
+// Set the initial volume
+procedure SetVolume(vol: LongInt);
 
 // Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
@@ -95,10 +109,17 @@ uses uVariables, uConsole, uUtils, uCommands, uDebug;
 
 const chanTPU = 32;
 var Volume: LongInt;
+    cInitVolume: LongInt;
+    previousVolume: LongInt; // cached volume value
     lastChan: array [TSound] of LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
     defVoicepack: PVoicepack;
-    Mus: PMixMusic = nil;
+    Mus: PMixMusic; // music pointer
+    MusicFN: shortstring; // music file name
+    isMusicEnabled: boolean;
+    isSoundEnabled: boolean;
+    isSEBackup: boolean;
+
 
 function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
@@ -110,20 +131,25 @@ i:= 0;
         begin
         locName:= name+'_'+cLocale;
         path:= UserPathz[ptVoices] + '/' + locName;
-        if DirectoryExists(path) then name:= locName
+        if DirectoryExists(path) then
+            name:= locName
         else
             begin
             path:= Pathz[ptVoices] + '/' + locName;
-            if DirectoryExists(path) then name:= locName
-            else if Length(cLocale) > 2 then
+            if DirectoryExists(path) then
+                name:= locName
+            else if Length(cLocale) > 2
+                then
                 begin
                 locName:= name+'_'+Copy(cLocale,1,2);
                 path:= UserPathz[ptVoices] + '/' + locName;
-                if DirectoryExists(path) then name:= locName
+                if DirectoryExists(path) then
+                    name:= locName
                 else
                     begin
                     path:= Pathz[ptVoices] + '/' + locName;
-                    if DirectoryExists(path) then name:= locName
+                    if DirectoryExists(path) then
+                        name:= locName
                     end
                 end
             end
@@ -141,110 +167,93 @@ i:= 0;
 end;
 
 procedure InitSound;
-var i: TSound;
-    channels: LongInt;
+const channels: LongInt = {$IFDEF MOBILE}1{$ELSE}2{$ENDIF};
 begin
-    if not isSoundEnabled then exit;
+    if not isSoundEnabled then
+        exit;
     WriteToConsole('Init sound...');
     isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
-{$IFDEF MOBILE}
-    channels:= 1;
-{$ELSE}
-    channels:= 2;
-{$ENDIF}
-
     if isSoundEnabled then
         isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
-
-    WriteToConsole('Init SDL_mixer... ');
-    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
-    WriteLnToConsole(msgOK);
 
     if isSoundEnabled then
         WriteLnToConsole(msgOK)
     else
         WriteLnToConsole(msgFailed);
 
-    Mix_AllocateChannels(Succ(chanTPU));
-    if isMusicEnabled then
-        Mix_VolumeMusic(50);
-    for i:= Low(TSound) to High(TSound) do
-        lastChan[i]:= -1;
+    WriteToConsole('Init SDL_mixer... ');
+    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
+    WriteLnToConsole(msgOK);
 
-    Volume:= 0;
-    ChangeVolume(cInitVolume)
+    Mix_AllocateChannels(Succ(chanTPU));
+    ChangeVolume(cInitVolume);	
 end;
 
-procedure ReleaseSound;
+procedure ResetSound;
+begin
+    isSoundEnabled:= isSEBackup;
+end;
+
+procedure SetSound(enabled: boolean);
+begin
+    isSEBackup:= isSoundEnabled;
+    isSoundEnabled:= enabled;
+end;
+
+// when complete is false, this procedure just releases some of the chucks on inactive channels
+// in this way music is not stopped, nor are chucks currently being played
+procedure ReleaseSound(complete: boolean);
 var i: TSound;
     t: Longword;
 begin
+    // release and nil all sounds
     for t:= 0 to cMaxTeams do
         if voicepacks[t].name <> '' then
             for i:= Low(TSound) to High(TSound) do
                 if voicepacks[t].chunks[i] <> nil then
-                    Mix_FreeChunk(voicepacks[t].chunks[i]);
+                    if complete or (Mix_Playing(lastChan[i]) = 0) then
+                        begin
+                        Mix_HaltChannel(lastChan[i]);
+                        lastChan[i]:= -1;
+                        Mix_FreeChunk(voicepacks[t].chunks[i]);
+                        voicepacks[t].chunks[i]:= nil;
+                        end;
 
-    if Mus <> nil then
-        Mix_FreeMusic(Mus);
-
-    // make sure all instances of sdl_mixer are unloaded before continuing
-    while Mix_Init(0) <> 0 do
-        Mix_Quit();
-
-    Mix_CloseAudio();
-end;
-
-procedure SoundLoad;
-var i: TSound;
-    t: Longword;
-    s:shortstring;
-begin
-    if not isSoundEnabled then exit;
-
-    defVoicepack:= AskForVoicepack('Default');
-
-    for t:= 0 to cMaxTeams do
-        if voicepacks[t].name <> '' then
-            for i:= Low(TSound) to High(TSound) do
-                voicepacks[t].chunks[i]:= nil;
-
-    for i:= Low(TSound) to High(TSound) do
-    begin
-        defVoicepack^.chunks[i]:= nil;
-        // preload all the big sound files (>32k) that would otherwise lockup the game
-        if (i in [sndBeeWater, sndBee, sndCake, sndHellishImpact1, sndHellish, sndHomerun,
-                  sndMolotov, sndMortar, sndRideOfTheValkyries, sndYoohoo])
-            and (Soundz[i].Path <> ptVoices) and (Soundz[i].FileName <> '') then
+    // stop music
+    if complete then
         begin
-            s:= UserPathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-            if not FileExists(s) then s:= Pathz[Soundz[i].Path] + '/' + Soundz[i].FileName;
-            WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[i]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[i] <> nil, msgFailed, true);
-            WriteLnToConsole(msgOK);
-        end;
-    end;
+        if Mus <> nil then
+            begin
+            Mix_HaltMusic();
+            Mix_FreeMusic(Mus);
+            Mus:= nil;
+            end;
 
+        // make sure all instances of sdl_mixer are unloaded before continuing
+        while Mix_Init(0) <> 0 do
+            Mix_Quit();
+
+        Mix_CloseAudio();
+        end;
 end;
 
 procedure PlaySound(snd: TSound);
 begin
-    PlaySound(snd, nil, false);
+    PlaySoundV(snd, nil, false);
 end;
 
 procedure PlaySound(snd: TSound; keepPlaying: boolean);
 begin
-    PlaySound(snd, nil, keepPlaying);
+    PlaySoundV(snd, nil, keepPlaying);
 end;
 
-procedure PlaySound(snd: TSound; voicepack: PVoicepack);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack);
 begin
-    PlaySound(snd, voicepack, false);
+    PlaySoundV(snd, voicepack, false);
 end;
 
-procedure PlaySound(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
+procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 var s:shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
@@ -258,9 +267,10 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then
+                s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
                 WriteLnToConsole(msgFailed)
             else
@@ -273,10 +283,11 @@ begin
         if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= UserPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
-            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then
+                s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
             end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
@@ -286,12 +297,23 @@ end;
 procedure AddVoice(snd: TSound; voicepack: PVoicepack);
 var i : LongInt;
 begin
-    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then exit;
+    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd = snd) and  (LastVoice.voicepack = voicepack)) then
+        exit;
+    if (snd = sndVictory) or (snd = sndFlawless) then
+        begin
+        Mix_FadeOutChannel(-1, 800);
+        for i:= 0 to 7 do
+            VoiceList[i].snd:= sndNone;
+        LastVoice.snd:= sndNone;
+        end;
+
     i:= 0;
-    while (i<8) and (VoiceList[i].snd <> sndNone) do inc(i);
+    while (i<8) and (VoiceList[i].snd <> sndNone) do
+        inc(i);
 
     // skip playing same sound for same hog twice
-    if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then exit;
+    if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then
+        exit;
     VoiceList[i].snd:= snd;
     VoiceList[i].voicepack:= voicepack;
 end;
@@ -299,100 +321,107 @@ end;
 procedure PlayNextVoice;
 var i : LongInt;
 begin
-    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then exit;
+    if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then
+        exit;
     i:= 0;
-    while (i<8) and (VoiceList[i].snd = sndNone) do inc(i);
+    while (i<8) and (VoiceList[i].snd = sndNone) do
+        inc(i);
     
     if (VoiceList[i].snd <> sndNone) then
         begin
         LastVoice.snd:= VoiceList[i].snd;
         LastVoice.voicepack:= VoiceList[i].voicepack;
         VoiceList[i].snd:= sndNone;
-        PlaySound(LastVoice.snd, LastVoice.voicepack)
+        PlaySoundV(LastVoice.snd, LastVoice.voicepack)
         end
     else LastVoice.snd:= sndNone;
 end;
 
 function LoopSound(snd: TSound): LongInt;
 begin
-    LoopSound:= LoopSound(snd, nil)
+    LoopSound:= LoopSoundV(snd, nil)
 end;
 
 function LoopSound(snd: TSound; fadems: LongInt): LongInt;
 begin
-    LoopSound:= LoopSound(snd, nil, fadems)
+    LoopSound:= LoopSoundV(snd, nil, fadems)
 end;
 
-function LoopSound(snd: TSound; voicepack: PVoicepack): LongInt;
+function LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt;
 begin
     voicepack:= voicepack;    // avoid compiler hint
-    LoopSound:= LoopSound(snd, nil, 0)
+    LoopSoundV:= LoopSoundV(snd, nil, 0)
 end;
 
-function LoopSound(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
+function LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 var s: shortstring;
 begin
     if (not isSoundEnabled) or fastUntilLag then
-    begin
-        LoopSound:= -1;
+        begin
+        LoopSoundV:= -1;
         exit
-    end;
+        end;
 
     if (voicepack <> nil) then
-    begin
-        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
         begin
+        if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
+           begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then
+                s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
+            voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
                 WriteLnToConsole(msgFailed)
             else
                 WriteLnToConsole(msgOK)
-        end;
-        LoopSound:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
-    end
+            end;
+        LoopSoundV:= Mix_PlayChannelTimed(-1, voicepack^.chunks[snd], -1, -1)
+        end
     else
-    begin
-        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
         begin
+        if (defVoicepack^.chunks[snd] = nil) and (Soundz[snd].Path <> ptVoices) and (Soundz[snd].FileName <> '') then
+            begin
             s:= UserPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
-            if not FileExists(s) then s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
+            if not FileExists(s) then
+                s:= Pathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
-            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), 'rb'), 1);
-            TryDo(defVoicepack^.chunks[snd] <> nil, msgFailed, true);
+            defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
             WriteLnToConsole(msgOK);
-        end;
+            end;
         if fadems > 0 then
-            LoopSound:= Mix_FadeInChannelTimed(-1, defVoicepack^.chunks[snd], -1, fadems, -1)
+            LoopSoundV:= Mix_FadeInChannelTimed(-1, defVoicepack^.chunks[snd], -1, fadems, -1)
         else
-            LoopSound:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
-    end;
+            LoopSoundV:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], -1, -1);
+        end;
 end;
 
 procedure StopSound(snd: TSound);
 begin
-    if not isSoundEnabled then exit;
+    if not isSoundEnabled then
+        exit;
 
     if (lastChan[snd] <> -1) and (Mix_Playing(lastChan[snd]) <> 0) then
-    begin
+        begin
         Mix_HaltChannel(lastChan[snd]);
         lastChan[snd]:= -1;
-    end;
+        end;
 end;
 
-procedure StopSound(chn: LongInt);
+procedure StopSoundChan(chn: LongInt);
 begin
-    if not isSoundEnabled then exit;
+    if not isSoundEnabled then
+        exit;
 
     if (chn <> -1) and (Mix_Playing(chn) <> 0) then
         Mix_HaltChannel(chn);
 end;
 
-procedure StopSound(chn, fadems: LongInt);
+procedure StopSoundChan(chn, fadems: LongInt);
 begin
-    if not isSoundEnabled then exit;
+    if not isSoundEnabled then
+        exit;
 
     if (chn <> -1) and (Mix_Playing(chn) <> 0) then
         Mix_FadeOutChannel(chn, fadems);
@@ -405,27 +434,91 @@ begin
         exit;
 
     s:= UserPathPrefix + '/Data/Music/' + MusicFN;
-    if not FileExists(s) then s:= PathPrefix + '/Music/' + MusicFN;
+    if not FileExists(s) then
+        s:= PathPrefix + '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS(Str2PChar(s));
-    TryDo(Mus <> nil, msgFailed, false);
+    SDLTry(Mus <> nil, false);
     WriteLnToConsole(msgOK);
 
     SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
 end;
 
+procedure SetVolume(vol: LongInt);
+begin
+    cInitVolume:= vol;
+end;
+
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
-    if not isSoundEnabled then
-        exit(0);
+    ChangeVolume:= 0;
+    if (not isSoundEnabled) or ((voldelta = 0) and not (cInitVolume = 0)) then
+        exit;
 
     inc(Volume, voldelta);
-    if Volume < 0 then Volume:= 0;
+    if Volume < 0 then
+        Volume:= 0;
+    // apply Volume to all channels
     Mix_Volume(-1, Volume);
+    // get assigned Volume
     Volume:= Mix_Volume(-1, -1);
-    if isMusicEnabled then Mix_VolumeMusic(Volume * 4 div 8);
-    ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME
+    if isMusicEnabled then
+        Mix_VolumeMusic(Volume * 4 div 8);
+    ChangeVolume:= Volume * 100 div MIX_MAX_VOLUME;
+
+    if (isMusicEnabled) then
+        if (Volume = 0) then
+            PauseMusic
+            else
+            ResumeMusic;
+
+    isAudioMuted:= (Volume = 0);
+end;
+
+procedure DampenAudio;
+begin
+    if (isAudioMuted) then
+        exit;
+    previousVolume:= Volume;
+    ChangeVolume(-Volume * 7 div 9);
+end;
+
+procedure UndampenAudio;
+begin
+     if (isAudioMuted) then
+        exit;
+    ChangeVolume(previousVolume - Volume);
+end;
+
+procedure MuteAudio;
+begin
+    if (not isSoundEnabled) then
+        exit;
+
+    if (isAudioMuted) then
+    begin
+        ResumeMusic;
+        ChangeVolume(previousVolume);
+    end
+    else
+    begin
+        PauseMusic;
+        previousVolume:= Volume;
+        ChangeVolume(-Volume);
+    end;
+
+    // isAudioMuted is updated in ChangeVolume
+end;
+
+procedure SetMusic(enabled: boolean);
+begin
+    isMusicEnabled:= enabled;
+end;
+
+procedure SetMusicName(musicname: shortstring);
+begin
+    MusicFN:= musicname;
 end;
 
 procedure PauseMusic;
@@ -433,7 +526,8 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    Mix_PauseMusic(Mus);
+    if Mus <> nil then
+        Mix_PauseMusic(Mus);
 end;
 
 procedure ResumeMusic;
@@ -441,39 +535,85 @@ begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    Mix_ResumeMusic(Mus);
+    if Mus <> nil then
+        Mix_ResumeMusic(Mus);
 end;
 
-procedure ChangeMusic;
+procedure ChangeMusic(musicname: shortstring);
+begin
+    MusicFN:= musicname;
+    if (MusicFN = '') or (not isMusicEnabled) then
+        exit;
+
+    StopMusic;
+    PlayMusic;
+end;
+
+procedure StopMusic;
 begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    // get rid of current music
     if Mus <> nil then
+        begin
         Mix_FreeMusic(Mus);
-
-    PlayMusic;
+        Mus:= nil;
+        end
 end;
 
 procedure chVoicepack(var s: shortstring);
 begin
-    if CurrentTeam = nil then OutError(errmsgIncorrectUse + ' "/voicepack"', true);
+    if CurrentTeam = nil then
+        OutError(errmsgIncorrectUse + ' "/voicepack"', true);
     if s[1]='"' then Delete(s, 1, 1);
-    if s[byte(s[0])]='"' then Delete(s, byte(s[0]), 1);
+    if s[byte(s[0])]='"' then
+        Delete(s, byte(s[0]), 1);
     CurrentTeam^.voicepack:= AskForVoicepack(s)
 end;
 
-procedure initModule;
+procedure chMute(var s: shortstring);
 begin
-    RegisterVariable('voicepack', vtCommand, @chVoicepack, false);
+    s:= s; // avoid compiler hint
+    MuteAudio;
+end;
+
+procedure initModule;
+var t: LongInt;
+    i: TSound;
+begin
+    RegisterVariable('voicepack', @chVoicepack, false);
+    RegisterVariable('mute'     , @chMute     , true );
+
     MusicFN:='';
+    Mus:= nil;
+    isMusicEnabled:= true;
+    isSoundEnabled:= true;
+    isAudioMuted:= false;
+    isSEBackup:= isSoundEnabled;
+    Volume:= 0;
+    cInitVolume:= 100;
+    defVoicepack:= AskForVoicepack('Default');
+
+    for i:= Low(TSound) to High(TSound) do
+        lastChan[i]:= -1;
+
+    // initialize all voices to nil so that they can be loaded lazily
+    for t:= 0 to cMaxTeams do
+        if voicepacks[t].name <> '' then
+            for i:= Low(TSound) to High(TSound) do
+                voicepacks[t].chunks[i]:= nil;
+
+    (* on MOBILE SDL_mixer has to be compiled against Tremor (USE_OGG_TREMOR)
+       or sound files bigger than 32k will lockup the game *)
+    for i:= Low(TSound) to High(TSound) do
+        defVoicepack^.chunks[i]:= nil;
+
 end;
 
 procedure freeModule;
 begin
     if isSoundEnabled then
-        ReleaseSound();
+        ReleaseSound(true);
 end;
 
 end.

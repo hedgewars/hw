@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,7 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-char sdlkeys[1024][2][128] = {
+char sdlkeys[1024][2][128] =
+{
     {"mousel", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Left button")},
     {"mousem", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Middle button")},
     {"mouser", QT_TRANSLATE_NOOP("binds (keys)", "Mouse: Right button")},
@@ -145,11 +146,12 @@ char sdlkeys[1024][2][128] = {
     {"left_alt", QT_TRANSLATE_NOOP("binds (keys)", "Left alt")},
     {"right_meta", QT_TRANSLATE_NOOP("binds (keys)", "Right meta")},
     {"left_meta", QT_TRANSLATE_NOOP("binds (keys)", "Left meta")}
-    };
+};
 
 // button name definitions for Microsoft's XBox360 controller
 // don't modify button order!
-char xb360buttons[][128] = {
+char xb360buttons[][128] =
+{
     QT_TRANSLATE_NOOP("binds (keys)", "A button"),
     QT_TRANSLATE_NOOP("binds (keys)", "B button"),
     QT_TRANSLATE_NOOP("binds (keys)", "X button"),
@@ -164,7 +166,8 @@ char xb360buttons[][128] = {
 
 // axis name definitions for Microsoft's XBox360 controller
 // don't modify axis order!
-char xbox360axes[][128] = {
+char xbox360axes[][128] =
+{
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Right)"),
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Left)"),
     QT_TRANSLATE_NOOP("binds (keys)", "Left stick (Down)"),

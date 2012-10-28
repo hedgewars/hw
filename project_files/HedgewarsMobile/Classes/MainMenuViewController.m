@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 08/01/2010.
  */
 
 
 #import "MainMenuViewController.h"
-#import "CreationChamber.h"
+#import <QuartzCore/QuartzCore.h>
 #import "GameConfigViewController.h"
 #import "SettingsContainerViewController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
 #import "MissionTrainingViewController.h"
-#import "GameInterfaceBridge.h"
 #import "Appirater.h"
 #import "ServerProtocolNetwork.h"
+#import "GameInterfaceBridge.h"
 
 
 @implementation MainMenuViewController
@@ -40,58 +38,9 @@
     return rotationManager(interfaceOrientation);
 }
 
-// check if some configuration files are already set; if they are present it means that the current copy must be updated
--(void) createNecessaryFiles {
-    DLog(@"Creating necessary files");
-    NSInteger index;
-    
-    // SAVES - just delete and overwrite
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SAVES_DIRECTORY()])
-        [[NSFileManager defaultManager] removeItemAtPath:SAVES_DIRECTORY() error:NULL];
-    [[NSFileManager defaultManager] createDirectoryAtPath:SAVES_DIRECTORY()
-                              withIntermediateDirectories:NO
-                                               attributes:nil
-                                                    error:NULL];
-
-    // SCREENSHOTS - just create it the first time
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCREENSHOTS_DIRECTORY()] == NO)
-        [[NSFileManager defaultManager] createDirectoryAtPath:SCREENSHOTS_DIRECTORY()
-                                  withIntermediateDirectories:NO
-                                                   attributes:nil
-                                                        error:NULL];
-
-    // SETTINGS - nsuserdefaults ftw
-    [CreationChamber createSettings];
-
-    // TEAMS - update exisiting teams with new format
-    NSArray *teamNames = [[NSArray alloc] initWithObjects:@"Edit Me!",@"Ninjas",@"Pirates",@"Robots",nil];
-    index = 0;
-    for (NSString *name in teamNames)
-        [CreationChamber createTeamNamed:name ofType:index++ controlledByAI:[name isEqualToString:@"Robots"]];
-    [teamNames release];
-
-    // SCHEMES - always overwrite and delete custom ones
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SCHEMES_DIRECTORY()] == YES)
-        [[NSFileManager defaultManager] removeItemAtPath:SCHEMES_DIRECTORY() error:NULL];
-    NSArray *schemeNames = [[NSArray alloc] initWithObjects:@"Default",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Barrel Mayhem",@"Tunnel Hogs",@"Fort Mode",@"Timeless",
-                            @"Thinking with Portals",@"King Mode",nil];
-    index = 0;
-    for (NSString *name in schemeNames)
-        [CreationChamber createSchemeNamed:name ofType:index++];
-    [schemeNames release];
-
-    // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
-    NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Thinking with Portals",nil];
-    index = 0;
-    for (NSString *name in weaponNames)
-        [CreationChamber createWeaponNamed:name ofType:index++];
-    [weaponNames release];
-}
-
 #pragma mark -
 -(void) viewDidLoad {
+    self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
 
     // get the app's version
@@ -106,15 +55,14 @@
         [userDefaults setObject:@"" forKey:@"savedGamePath"];
         // update the tracking version with the new one
         [userDefaults setObject:version forKey:@"HedgeVersion"];
-
         [userDefaults synchronize];
-        [self createNecessaryFiles];
+
+        [CreationChamber createFirstLaunch];
     }
 
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
-    if (saveString != nil && [saveString isEqualToString:@""] == NO) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(launchRestoredGame) name:@"launchRestoredGame" object:nil];
+    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
         if (self.restoreViewController == nil) {
             NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
             RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
@@ -135,7 +83,7 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    [AudioManagerController playBackgroundMusic];
+    [[AudioManagerController mainManager] playBackgroundMusic];
     [super viewWillAppear:animated];
 }
 
@@ -146,7 +94,7 @@
     NSString *xib = nil;
     NSString *debugStr = nil;
 
-    [AudioManagerController playClickSound];
+    [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
         case 0:
             if (nil == self.gameConfigViewController) {
@@ -178,13 +126,29 @@
             scroll.text = debugStr;
             [debugStr release];
             scroll.editable = NO;
+            scroll.alpha = 0;
 
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+            [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
+            btn.frame = CGRectMake(self.view.frame.size.height-58, -6, 64, 64);
             btn.backgroundColor = [UIColor blackColor];
-            btn.frame = CGRectMake(self.view.frame.size.height-70, 0, 70, 70);
-            [scroll addSubview:btn];
+            btn.titleLabel.textColor = [UIColor whiteColor];
+            btn.titleLabel.textAlignment = UITextAlignmentCenter;
+            btn.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
+            [btn setTitle:@"Close" forState:UIControlStateNormal];
+            btn.alpha = 0;
+            [btn.layer setCornerRadius:10.0f];
+            [btn.layer setMasksToBounds:YES];
+
             [self.view addSubview:scroll];
+            [self.view addSubview:btn];
+
+            [UIView beginAnimations:@"fadein" context:NULL];
+            [UIView setAnimationDuration:0.25f];
+            btn.alpha = 1;
+            scroll.alpha = 1;
+            [UIView commitAnimations];
             [scroll release];
 #else
             debugStr = debugStr; // prevent compiler warning
@@ -222,6 +186,10 @@
             }
             [self presentModalViewController:self.missionsViewController animated:YES];
             break;
+        case 6:
+            [GameInterfaceBridge registerCallingController:self];
+            [GameInterfaceBridge startSimpleGame];
+            break;
         default:
             alert = [[UIAlertView alloc] initWithTitle:@"Not Yet Implemented"
                                                message:@"Sorry, this feature is not yet implemented"
@@ -232,12 +200,6 @@
             [alert release];
             break;
     }
-}
-
-#pragma mark -
--(void) launchRestoredGame {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
 }
 
 #pragma mark -

@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,39 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 10/01/2010.
  */
 
 
 #import "EngineProtocolNetwork.h"
-#import "OverlayViewController.h"
 
 
 #define BUFFER_SIZE 255     // like in original frontend
 
-static NSInteger activeEnginePort;
-
 @implementation EngineProtocolNetwork
 @synthesize delegate, stream, csd, enginePort;
 
--(id) init {
-    if (self = [super init]) {
+-(id) initWithPort:(NSInteger) port {
+    if ((self = [super init])) {
         self.delegate = nil;
-
         self.csd = NULL;
         self.stream = nil;
-        self.enginePort = [HWUtils randomPort];
+        self.enginePort = port;
     }
-    activeEnginePort = self.enginePort;
     return self;
 }
 
--(void) gameHasEndedWithStats:(NSArray *)stats {
-    if (self.delegate != nil && [self.delegate respondsToSelector:@selector(gameHasEndedWithStats:)])
-        [self.delegate gameHasEndedWithStats:stats];
-    else
-        DLog(@"Error! delegate == nil");
+-(id) init {
+    return [self initWithPort:[HWUtils randomPort]];
 }
 
 -(void) dealloc {
@@ -57,20 +47,14 @@ static NSInteger activeEnginePort;
 
 #pragma mark -
 #pragma mark Spawner functions
-+(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
-    EngineProtocolNetwork *proto = [[EngineProtocolNetwork alloc] init];
-    proto.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
-    [proto.stream open];
+-(void) spawnThread:(NSString *)onSaveFile withOptions:(NSDictionary *)dictionary {
+    self.stream = (onSaveFile) ? [[NSOutputStream alloc] initToFileAtPath:onSaveFile append:YES] : nil;
+    [self.stream open];
 
     // +detachNewThreadSelector retain/release self automatically
     [NSThread detachNewThreadSelector:@selector(engineProtocol:)
-                             toTarget:proto
+                             toTarget:self
                            withObject:dictionary];
-    [proto release];
-}
-
-+(NSInteger) activeEnginePort {
-    return activeEnginePort;
 }
 
 #pragma mark -
@@ -134,7 +118,7 @@ static NSInteger activeEnginePort;
     // if we're loading an older version of ammos fill the engine message with 0s
     int diff = HW_getNumberOfWeapons() - [[ammoData objectForKey:@"ammostore_initialqt"] length];
     NSString *update = @"";
-    while ([update length] < diff)
+    while ((int)[update length] < diff)
         update = [update stringByAppendingString:@"0"];
 
     NSString *ammloadt = [[NSString alloc] initWithFormat:@"eammloadt %@%@", [ammoData objectForKey:@"ammostore_initialqt"], update];
@@ -186,7 +170,7 @@ static NSInteger activeEnginePort;
     result = [[basicArray objectAtIndex:0] intValue];
     NSArray *basic = [[NSArray alloc] initWithContentsOfFile:BASICFLAGS_FILE()];
 
-    for (int i = 1; i < [basicArray count]; i++) {
+    for (NSUInteger i = 1; i < [basicArray count]; i++) {
         NSDictionary *dict = [basic objectAtIndex:i];
         NSString *command = [dict objectForKey:@"command"];
         NSInteger value = [[basicArray objectAtIndex:i] intValue];
@@ -365,7 +349,7 @@ static NSInteger activeEnginePort;
                         [statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
-                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kills in a turn", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kill(s) in a turn", &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
                         [statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
@@ -393,12 +377,17 @@ static NSInteger activeEnginePort;
                 }
                 break;
             case 'q':
-                // game ended, can remove the savefile and present the statistics of the match
+                // game ended and match finished, statsArray is full of delicious statistics
+                if (self.delegate != nil && [self.delegate respondsToSelector:@selector(gameEndedWithStatistics:)])
+                    [self.delegate gameEndedWithStatistics:statsArray];
+                [statsArray release];
                 [HWUtils setGameStatus:gsEnded];
-                [self gameHasEndedWithStats:statsArray];
+                // closing connection here would trigger a "IPC connection lost" error, so we have to wait until recv fails
                 break;
             case 'Q':
-                // game exited but not completed, nothing to do (just don't save the message)
+                // game exited but not completed, skip this message in the savefile
+                [HWUtils setGameStatus:gsInterrupted];
+                // same here, don't set clientQuit to YES
                 break;
             default:
                 [self dumpRawData:buffer ofSize:msgSize];
@@ -406,11 +395,12 @@ static NSInteger activeEnginePort;
         }
     }
     DLog(@"Engine exited, ending thread");
+
     [self.stream close];
     [self.stream release];
-    [statsArray release];
 
     // Close the client socket
+    [HWUtils freePort:self.enginePort];
     SDLNet_TCP_Close(csd);
     SDLNet_Quit();
 

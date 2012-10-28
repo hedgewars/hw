@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,51 +18,71 @@
 
 {$INCLUDE "options.inc"}
 
+(*
+ * This unit contains a lot of useful functions when hw is running on mobile
+ * Unlike HwLibrary when you declare functions that you will call from your code,
+ * here you need to provide functions that Pascall code will call.
+ *)
+
 unit uMobile;
 interface
 
-{$IFDEF IPHONEOS}
-(*  iOS calls written in ObjcExports.m  *)
-procedure clearView; cdecl; external;
-procedure startLoadingIndicator; cdecl; external;
-procedure stopLoadingIndicator; cdecl; external;
-procedure saveFinishedSynching; cdecl; external;
-procedure updateVisualsNewTurn; cdecl; external;
-function  isApplePhone: Boolean; cdecl; external;
-procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
-{$ENDIF}
 function  isPhone: Boolean; inline;
+function  getScreenDPI: Double; inline;
 procedure performRumble; inline;
 
 procedure GameLoading; inline;
 procedure GameLoaded; inline;
-procedure AmmoUpdate; // do not inline
-procedure NewTurnBeginning; inline;
 procedure SaveLoadingEnded; inline;
 
 implementation
-uses uVariables;
+uses uVariables, uConsole, SDLh;
+
+// add here any external call that you need
+{$IFDEF IPHONEOS}
+(*  iOS calls written in ObjcExports.m  *)
+procedure startLoadingIndicator; cdecl; external;
+procedure stopLoadingIndicator; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
+function  isApplePhone: Boolean; cdecl; external;
+procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
+{$ENDIF}
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
 begin
+    isPhone:= false;
 {$IFDEF IPHONEOS}
-    exit(isApplePhone());
+    isPhone:= isApplePhone();
 {$ENDIF}
-    exit(false);
+{$IFDEF ANDROID}
+    //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
+    if (cScreenWidth < 1000) and (cScreenHeight < 500) then
+        isPhone:= true;
+{$ENDIF}
+end;
+
+function getScreenDPI: Double; inline;
+begin
+{$IFDEF ANDROID}
+//    getScreenDPI:= Android_JNI_getDensity();
+    getScreenDPI:= 1;
+{$ELSE}
+    getScreenDPI:= 1;
+{$ENDIF}
 end;
 
 // this function should make the device vibrate in some way
-procedure performRumble; inline;
-const kSystemSoundID_Vibrate = $00000FFF;
+procedure PerformRumble; inline;
+{$IFDEF IPHONEOS}const kSystemSoundID_Vibrate = $00000FFF;{$ENDIF}
 begin
     // do not vibrate while synchronising a demo/save
     if not fastUntilLag then
-        begin
+    begin
 {$IFDEF IPHONEOS}
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 {$ENDIF}
-        end;
+    end;
 end;
 
 procedure GameLoading; inline;
@@ -77,25 +97,6 @@ begin
 {$IFDEF IPHONEOS}
     stopLoadingIndicator();
 {$ENDIF}
-end;
-
-procedure AmmoUpdate; // do not inline
-begin
-{$IFDEF IPHONEOS}
-    if (CurrentTeam = nil) or
-       (CurrentTeam^.ExtDriven) or
-       (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-        exit(); // the other way around throws a compiler error
-    updateVisualsNewTurn();
-{$ENDIF}
-end;
-
-procedure NewTurnBeginning; inline;
-begin
-{$IFDEF IPHONEOS}
-    clearView();
-{$ENDIF}
-    AmmoUpdate();
 end;
 
 procedure SaveLoadingEnded; inline;

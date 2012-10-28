@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,53 +28,56 @@
 #include "teamselect.h"
 #include "hedgehogerWidget.h"
 
+class ColorWidget;
+
 class TeamLabel : public QLabel
 {
- Q_OBJECT
+        Q_OBJECT
 
- public:
- TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
+    public:
+        TeamLabel(const QString& inp_str) : QLabel(inp_str) {};
 
- signals:
- void teamActivated(QString team_name);
+    signals:
+        void teamActivated(QString team_name);
 
- public slots:
- void teamButtonClicked();
+    public slots:
+        void teamButtonClicked();
 
 };
 
 class TeamShowWidget : public QWidget
 {
- Q_OBJECT
+        Q_OBJECT
 
- public slots:
- void changeTeamColor(QColor color=QColor());
- void hhNumChanged();
+    public slots:
+        void changeTeamColor(int color = 0);
+        void hhNumChanged();
 
- private slots:
- void activateTeam();
+    private slots:
+        void activateTeam();
+        void onColorChanged(int color);
 
- public:
- TeamShowWidget(HWTeam team, bool isPlaying, QWidget * parent);
- void setPlaying(bool isPlaying);
- void setHHNum(unsigned int num);
- void setInteractivity(bool interactive);
- HWTeam getTeam() const;
+    public:
+        TeamShowWidget(const HWTeam &team, bool isPlaying, FrameTeams * parent);
+        void setPlaying(bool isPlaying);
+        void setHHNum(unsigned int num);
+        void setInteractivity(bool interactive);
+        HWTeam getTeam() const;
 
- private:
- TeamShowWidget();
- QHBoxLayout mainLayout;
- HWTeam m_team;
- bool m_isPlaying;
- CHedgehogerWidget* phhoger;
- QPushButton* colorButt;
- QPushButton* butt;
-// QPushButton* bText;
+    private:
+        TeamShowWidget();
+        QHBoxLayout mainLayout;
+        HWTeam m_team;
+        bool m_isPlaying;
+        CHedgehogerWidget* phhoger;
+        ColorWidget* colorWidget;
+        QPushButton* butt;
+        FrameTeams * m_parentFrameTeams;
 
- signals:
- void teamStatusChanged(HWTeam team);
- void hhNmChanged(const HWTeam&);
- void teamColorChanged(const HWTeam&);
+    signals:
+        void teamStatusChanged(HWTeam team);
+        void hhNmChanged(const HWTeam&);
+        void teamColorChanged(const HWTeam&);
 };
 
 #endif // _TEAMSEL_HELPER_INCLUDED

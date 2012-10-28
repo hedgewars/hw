@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 #include "pagedata.h"
 #include "databrowser.h"
 #include "hwconsts.h"
+#include "DataManager.h"
 
 #include "quazip.h"
 #include "quazipfile.h"
@@ -52,6 +53,7 @@ QLayout * PageDataDownload::bodyLayoutDefinition()
 void PageDataDownload::connectSignals()
 {
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
+    connect(this, SIGNAL(goBack()), this, SLOT(onPageLeave()));
 }
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
@@ -59,7 +61,9 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
     initPage();
 
     web->setOpenLinks(false);
-    fetchList();
+//    fetchList();
+
+    m_contentDownloaded = false;
 }
 
 void PageDataDownload::request(const QUrl &url)
@@ -86,7 +90,8 @@ void PageDataDownload::request(const QUrl &url)
         QProgressBar *progressBar = new QProgressBar(this);
         progressBarsLayout->addWidget(progressBar);
         progressBars.insert(reply, progressBar);
-    } else
+    }
+    else
     {
         qWarning() << "Page Request" << url.toString();
 
@@ -166,8 +171,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
     zip.setIoDevice(&buffer);
     if(!zip.open(QuaZip::mdUnzip))
     {
-      qWarning("testRead(): zip.open(): %d", zip.getZipError());
-      return false;
+        qWarning("testRead(): zip.open(): %d", zip.getZipError());
+        return false;
     }
 
     QuaZipFile file(&zip);
@@ -190,7 +195,8 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
         {
             QFileInfo fi(filePath);
             QDir().mkpath(fi.filePath());
-        } else
+        }
+        else
         {
             qDebug() << "Extracting" << filePath;
             QFile out(filePath);
@@ -204,20 +210,25 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
 
             out.close();
 
-            if(file.getZipError() != UNZ_OK) {
+            if(file.getZipError() != UNZ_OK)
+            {
                 qWarning("file.getFileName(): %d", file.getZipError());
                 return false;
             }
 
-            if(!file.atEnd()) {
+            if(!file.atEnd())
+            {
                 qWarning("read all but not EOF");
                 return false;
             }
+
+            m_contentDownloaded = true;
         }
 
         file.close();
 
-        if(file.getZipError()!=UNZ_OK) {
+        if(file.getZipError()!=UNZ_OK)
+        {
             qWarning("file.close(): %d", file.getZipError());
             return false;
         }
@@ -226,4 +237,14 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
     zip.close();
 
     return true;
+}
+
+
+void PageDataDownload::onPageLeave()
+{
+    if (m_contentDownloaded)
+    {
+        m_contentDownloaded = false;
+        //DataManager::instance().reload();
+    }
 }

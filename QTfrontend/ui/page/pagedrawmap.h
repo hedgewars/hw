@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,26 +25,27 @@ class DrawMapWidget;
 
 class PageDrawMap : public AbstractPage
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    PageDrawMap(QWidget* parent = 0);
+    public:
+        PageDrawMap(QWidget* parent = 0);
 
-    DrawMapWidget * drawMapWidget;
+        DrawMapWidget * drawMapWidget;
 
-protected:
-    QLayout * bodyLayoutDefinition();
-    void connectSignals();
+    protected:
+        QLayout * bodyLayoutDefinition();
+        void connectSignals();
 
-private:
-    QPushButton * pbUndo;
-    QPushButton * pbClear;
-    QPushButton * pbLoad;
-    QPushButton * pbSave;
+    private:
+        QPushButton * pbUndo;
+        QPushButton * pbClear;
+        QPushButton * pbLoad;
+        QPushButton * pbSave;
+        QCheckBox * cbEraser;
 
-private slots:
-    void load();
-    void save();
+    private slots:
+        void load();
+        void save();
 };
 
 #endif

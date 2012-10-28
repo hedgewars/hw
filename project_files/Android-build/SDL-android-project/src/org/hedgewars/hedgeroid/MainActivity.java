@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,15 @@
 package org.hedgewars.hedgeroid;
 
 import org.hedgewars.hedgeroid.Downloader.DownloadAssets;
-import org.hedgewars.hedgeroid.Downloader.DownloadFragment;
 import org.hedgewars.hedgeroid.Downloader.DownloadListActivity;
-import org.hedgewars.hedgeroid.Downloader.DownloadService;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -48,18 +51,47 @@ public class MainActivity extends FragmentActivity {
 		downloader.setOnClickListener(downloadClicker);
 		startGame.setOnClickListener(startGameClicker);
 
-		boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("assetscopied", false);
 
-		if(!assetsCopied){
-			DownloadAssets assetsAsyncTask = new DownloadAssets(this);
-			assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
-			assetsAsyncTask.execute((Object[])null);
+		String cacheDir = Utils.getCachePath(this);
+		if(cacheDir == null){
+			showDialog(0);
+		}else{
+			int versionCode = 0;
+			try {
+				versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+
+			}
+			boolean assetsCopied = PreferenceManager.getDefaultSharedPreferences(this).getInt("latestAssets", 0) >= versionCode;
+
+			if(!assetsCopied){
+				DownloadAssets assetsAsyncTask = new DownloadAssets(this);
+				assetsDialog = ProgressDialog.show(this, "Please wait a moment", "Moving assets...");
+				assetsAsyncTask.execute((Object[])null);
+			}
 		}
+	}
+
+	public Dialog onCreateDialog(int id, Bundle args){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.sdcard_not_mounted_title);
+		builder.setMessage(R.string.sdcard_not_mounted);
+		builder.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener(){
+			public void onClick(DialogInterface dialog, int which) {
+				finish();				
+			}
+		});
+
+		return builder.create();
 	}
 
 	public void onAssetsDownloaded(boolean result){
 		if(result){
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean("assetscopied", true).commit();
+			try {
+				int versionCode = this.getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
+				PreferenceManager.getDefaultSharedPreferences(this).edit().putInt("latestAssets", versionCode).commit();
+			} catch (NameNotFoundException e) {}
+			
 		}else{
 			Toast.makeText(this, R.string.download_failed, Toast.LENGTH_LONG);
 		}

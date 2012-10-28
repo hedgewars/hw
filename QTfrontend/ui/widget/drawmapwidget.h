@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,33 +23,61 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QGraphicsView>
+#include <QLabel>
 
 #include "qaspectratiolayout.h"
 #include "drawmapscene.h"
 
-namespace Ui {
+
+class DrawMapView : public QGraphicsView
+{
+    Q_OBJECT
+
+public:
+    explicit DrawMapView(QWidget *parent = 0);
+    ~DrawMapView();
+
+    void setScene(DrawMapScene *scene);
+
+protected:
+    void enterEvent(QEvent * event);
+    void leaveEvent(QEvent * event);
+    bool viewportEvent(QEvent * event);
+
+private:
+    DrawMapScene * m_scene;
+};
+
+namespace Ui
+{
     class Ui_DrawMapWidget
     {
-    public:
-        QGraphicsView *graphicsView;
+        public:
+            DrawMapView *graphicsView;
+            QLabel * lblPoints;
 
-        void setupUi(QWidget *drawMapWidget)
-        {
-            QAspectRatioLayout * arLayout = new QAspectRatioLayout(drawMapWidget);
-            arLayout->setMargin(0);
+            void setupUi(QWidget *drawMapWidget)
+            {
+                QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
+                vbox->setMargin(0);
+                lblPoints = new QLabel("0", drawMapWidget);
+                vbox->addWidget(lblPoints);
+                QAspectRatioLayout * arLayout = new QAspectRatioLayout();
+                arLayout->setMargin(0);
+                vbox->addLayout(arLayout);
 
-            graphicsView = new QGraphicsView(drawMapWidget);
-            arLayout->addWidget(graphicsView);
+                graphicsView = new DrawMapView(drawMapWidget);
+                arLayout->addWidget(graphicsView);
 
-            retranslateUi(drawMapWidget);
+                retranslateUi(drawMapWidget);
 
-            QMetaObject::connectSlotsByName(drawMapWidget);
-        } // setupUi
+                QMetaObject::connectSlotsByName(drawMapWidget);
+            } // setupUi
 
-        void retranslateUi(QWidget *drawMapWidget)
-        {
-            Q_UNUSED(drawMapWidget);
-        } // retranslateUi
+            void retranslateUi(QWidget *drawMapWidget)
+            {
+                Q_UNUSED(drawMapWidget);
+            } // retranslateUi
 
     };
 
@@ -58,29 +86,33 @@ namespace Ui {
 
 class DrawMapWidget : public QWidget
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    explicit DrawMapWidget(QWidget *parent = 0);
-    ~DrawMapWidget();
+    public:
+        explicit DrawMapWidget(QWidget *parent = 0);
+        ~DrawMapWidget();
 
-    void setScene(DrawMapScene * scene);
+        void setScene(DrawMapScene * scene);
 
-public slots:
-    void undo();
-    void clear();
-    void save(const QString & fileName);
-    void load(const QString & fileName);
+    public slots:
+        void undo();
+        void clear();
+        void setErasing(bool erasing);
+        void save(const QString & fileName);
+        void load(const QString & fileName);
 
-protected:
-    void changeEvent(QEvent *e);
-    virtual void resizeEvent(QResizeEvent * event);
-    virtual void showEvent(QShowEvent * event);
+    protected:
+        void changeEvent(QEvent *e);
+        virtual void resizeEvent(QResizeEvent * event);
+        virtual void showEvent(QShowEvent * event);
 
-private:
-    Ui::DrawMapWidget *ui;
+    private:
+        Ui::DrawMapWidget *ui;
 
-    DrawMapScene * m_scene;
+        DrawMapScene * m_scene;
+
+    private slots:
+        void pathChanged();
 };
 
 #endif // DRAWMAPWIDGET_H

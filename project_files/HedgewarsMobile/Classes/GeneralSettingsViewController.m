@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 08/01/2010.
  */
 
 
@@ -45,7 +43,7 @@
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults synchronize];
     if ([[userDefaults objectForKey:@"music"] boolValue] == NO)
-        [AudioManagerController stopBackgroundMusic];
+        [[AudioManagerController mainManager] stopBackgroundMusic];
 
     [super viewWillDisappear:animated];
 }
@@ -65,7 +63,7 @@
             [theOtherSwitch setOn:NO animated:YES];
 
             // since switching sound on won't turn music on anyways, we can always turn off music
-            [AudioManagerController pauseBackgroundMusic];
+            [[AudioManagerController mainManager]pauseBackgroundMusic];
             [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             break;
         case 20:    //musicSwitch
@@ -78,18 +76,15 @@
                 [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
 
             if (theSwitch.on)
-                [AudioManagerController playBackgroundMusic];
+                [[AudioManagerController mainManager] playBackgroundMusic];
             else
-                [AudioManagerController pauseBackgroundMusic];
+                [[AudioManagerController mainManager] pauseBackgroundMusic];
             break;
         case 30:    //alternateSwitch
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"alternate"];
             break;
         case 90:    //synched weapons/scheme
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sync_ws"];
-            break;
-        case 60:    //classic menu
-            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"classic_menu"];
             break;
         default:
             DLog(@"Wrong tag");
@@ -121,7 +116,7 @@
             return 2;
             break;
         case 2:     // other options
-            return 3;
+            return 2;
             break;
         default:
             DLog(@"Nope");
@@ -134,13 +129,13 @@
     NSString *sectionTitle = nil;
     switch (section) {
         case 0:
-            sectionTitle = NSLocalizedString(@"Main Configuration", @"");
+            sectionTitle = NSLocalizedString(@"Main Configuration", @"from the settings table");
             break;
         case 1:
-            sectionTitle = NSLocalizedString(@"Audio Preferences", @"");
+            sectionTitle = NSLocalizedString(@"Audio Preferences", @"from the settings table");
             break;
         case 2:
-            sectionTitle = NSLocalizedString(@"Other Settings", @"");
+            sectionTitle = NSLocalizedString(@"Other Settings", @"from the settings table");
             break;
         default:
             DLog(@"Nope");
@@ -173,13 +168,13 @@
             
             if (row == 0) {
                 editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
-                editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"from the settings table");
                 editableCell.textField.text = [settings objectForKey:@"username"];
                 editableCell.textField.secureTextEntry = NO;
                 editableCell.tag = 40;
             } else {
                 editableCell.titleLabel.text = NSLocalizedString(@"Password","from the settings table");
-                editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"");
+                editableCell.textField.placeholder = NSLocalizedString(@"Insert your password",@"from the settings table");
                 editableCell.textField.text = [settings objectForKey:@"password"];
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
@@ -200,11 +195,11 @@
             
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound", @"");
+                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
-                cell.textLabel.text = NSLocalizedString(@"Music", @"");
+                cell.textLabel.text = NSLocalizedString(@"Music", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"music"] boolValue];
                 switchContent.tag = 20;
             }
@@ -223,22 +218,16 @@
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             switch (row) {
                 case 0:
-                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"");
+                    cell.textLabel.text = NSLocalizedString(@"Alternate Damage", @"from the settings table");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Damage popups will notify you on every single hit", @"from the settings table");
                     switchContent.on = [[settings objectForKey:@"alternate"] boolValue];
                     switchContent.tag = 30;
                     break;
                 case 1:
                     cell.textLabel.text = NSLocalizedString(@"Sync Schemes and Weapons", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"");
+                    cell.detailTextLabel.text = NSLocalizedString(@"Choosing a Scheme will select its associated Weapon", @"from the settings table");
                     switchContent.on = [[settings objectForKey:@"sync_ws"] boolValue];
                     switchContent.tag = 90;
-                    break;
-                case 2:
-                    cell.textLabel.text = NSLocalizedString(@"Classic Ammo Menu", @"");
-                    cell.detailTextLabel.text = NSLocalizedString(@"Select which style of ammo menu you prefer",@"");
-                    switchContent.on = [[settings objectForKey:@"classic_menu"] boolValue];
-                    switchContent.tag = 60;
                     break;
                 default:
                     DLog(@"Nope");

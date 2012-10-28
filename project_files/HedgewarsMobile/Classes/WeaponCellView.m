@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 07/03/2010.
  */
 
 
@@ -105,6 +103,7 @@
         helpLabel.textColor = [UIColor darkGrayColor];
         helpLabel.textAlignment = UITextAlignmentRight;
         helpLabel.font = [UIFont italicSystemFontOfSize:[UIFont systemFontSize]];
+        helpLabel.adjustsFontSizeToFitWidth = YES;
 
         [self.contentView addSubview:weaponName];
         [self.contentView addSubview:weaponIcon];
@@ -132,42 +131,58 @@
 -(void) layoutSubviews {
     [super layoutSubviews];
 
-    CGRect contentRect = self.contentView.bounds;
-    CGFloat shiftSliders = contentRect.origin.x;
-    CGFloat shiftLabel = 0;
+    CGFloat hOffset = 80;
+    CGFloat hOffsetWhenLandscape = 234;
+    CGFloat vOffset = 40;
+    CGFloat vOffsetWhenPortrait = 0;
+    CGFloat helpLabelOffset = 0;
+    CGFloat helpLabelLength = 0;
+    CGFloat sliderLength = 150;
 
     if (IS_IPAD()) {
-        shiftSliders += 65;
-        shiftLabel += 165;
-    } else
-        shiftSliders -= 13;
+        if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+            sliderLength = 190;
+            hOffsetWhenLandscape = 0;
+            vOffsetWhenPortrait = 80;
+            hOffset = 120;
+            helpLabelOffset = -35;
+            helpLabelLength = 200;
+        } else {
+            hOffset = 145;
+            helpLabelOffset = 35;
+            helpLabelLength = 350;
+        }
+    } else {
+        helpLabelLength = 250;
+        hOffset = 67;
+    }
 
     weaponIcon.frame = CGRectMake(5, 5, 32, 32);
     weaponName.frame = CGRectMake(45, 8, 200, 25);
     
-    helpLabel.frame = CGRectMake(shiftLabel + 200, 8, 250, 15);
+    helpLabel.frame = CGRectMake(200 + helpLabelOffset, 11, helpLabelLength, 20);
 
     // second line
-    initialImg.frame = CGRectMake(shiftSliders + 20, 40, 32, 32);
-    initialLab.frame = CGRectMake(shiftSliders + 56, 40, 20, 32);
+    initialImg.frame = CGRectMake(hOffset - 60, vOffset, 32, 32);
+    initialLab.frame = CGRectMake(hOffset - 23, vOffset, 20, 32);
     initialLab.text = ((int)initialSli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)initialSli.value];
-    initialSli.frame = CGRectMake(shiftSliders + 80, 40, 150, 32);
+    initialSli.frame = CGRectMake(hOffset, vOffset, sliderLength, 32);
 
-    probabilityImg.frame = CGRectMake(shiftSliders + 255, 40, 32, 32);
-    probabilityLab.frame = CGRectMake(shiftSliders + 291, 40, 20, 32);
+    probabilityImg.frame = CGRectMake(hOffset + hOffsetWhenLandscape - 60, vOffset + vOffsetWhenPortrait, 32, 32);
+    probabilityLab.frame = CGRectMake(hOffset + hOffsetWhenLandscape - 23, vOffset + vOffsetWhenPortrait, 20, 32);
     probabilityLab.text = ((int)probabilitySli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)probabilitySli.value];
-    probabilitySli.frame = CGRectMake(shiftSliders + 314, 40, 150, 32);
+    probabilitySli.frame = CGRectMake(hOffset + hOffsetWhenLandscape, vOffset + vOffsetWhenPortrait, sliderLength, 32);
 
     // third line
-    delayImg.frame = CGRectMake(shiftSliders + 20, 80, 32, 32);
-    delayLab.frame = CGRectMake(shiftSliders + 56, 80, 20, 32);
+    delayImg.frame = CGRectMake(hOffset - 60, vOffset + 40, 32, 32);
+    delayLab.frame = CGRectMake(hOffset - 23, vOffset + 40, 20, 32);
     delayLab.text = ((int)delaySli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)delaySli.value];
-    delaySli.frame = CGRectMake(shiftSliders + 80, 80, 150, 32);
+    delaySli.frame = CGRectMake(hOffset, vOffset + 40, sliderLength, 32);
 
-    crateImg.frame = CGRectMake(shiftSliders + 255, 80, 32, 32);
-    crateLab.frame = CGRectMake(shiftSliders + 291, 80, 20, 32);
+    crateImg.frame = CGRectMake(hOffset + hOffsetWhenLandscape - 60, vOffset + 40 + vOffsetWhenPortrait, 32, 32);
+    crateLab.frame = CGRectMake(hOffset + hOffsetWhenLandscape - 23, vOffset + 40 + vOffsetWhenPortrait, 20, 32);
     crateLab.text = ((int)crateSli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)crateSli.value];
-    crateSli.frame = CGRectMake(shiftSliders + 314, 80, 150, 32);
+    crateSli.frame = CGRectMake(hOffset + hOffsetWhenLandscape, vOffset + 40 + vOffsetWhenPortrait, sliderLength, 32);
 }
 
 /*
@@ -200,16 +215,25 @@
     
     switch (slider.tag) {
         case 100:
-            str = NSLocalizedString(@"Initial quantity ",@"ammo selection");
+            str = NSLocalizedString(@"Initial quantity",@"ammo selection");
             break;
         case 200:
-            str = NSLocalizedString(@"Presence probability in crates ",@"ammo selection");
+            if (IS_ON_PORTRAIT())
+                str = NSLocalizedString(@"Probability in crates",@"ammo selection");
+            else
+                str = NSLocalizedString(@"Presence probability in crates",@"ammo selection");
             break;
         case 300:
-            str = NSLocalizedString(@"Number of turns before you can use this weapon ",@"ammo selection");
+            if (IS_ON_PORTRAIT())
+                str = NSLocalizedString(@"Weapon delay",@"ammo selection");
+            else
+                str = NSLocalizedString(@"Turns before this weapon becomes usable",@"ammo selection");
             break;
         case 400:
-            str = NSLocalizedString(@"Quantity that you will find in a crate ",@"ammo selection");
+            if (IS_ON_PORTRAIT())
+                str = NSLocalizedString(@"Quantity per crate",@"ammo selection");
+            else
+                str = NSLocalizedString(@"Quantity you will find in a crate",@"ammo selection");
             break;
         default:
             DLog(@"Nope");

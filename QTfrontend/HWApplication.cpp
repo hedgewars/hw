@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +22,17 @@
 #include "hwform.h"
 
 HWApplication::HWApplication(int &argc,  char **argv):
-     QApplication(argc, argv)
+    QApplication(argc, argv)
 {
 
 }
 
-bool HWApplication::event(QEvent *event) {
+bool HWApplication::event(QEvent *event)
+{
     QFileOpenEvent *openEvent;
 
-    switch (event->type()) {
+    switch (event->type())
+    {
         case QEvent::FileOpen:
             openEvent = (QFileOpenEvent *)event;
             if (form) form->PlayDemoQuick(openEvent->file());

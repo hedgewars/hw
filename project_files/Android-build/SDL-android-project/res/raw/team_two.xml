@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
 <team>
   <name>Team 2</name>
-  <flag>hedgewars</flag>
+  <flag>cm_binary</flag>
   <fort>Lego</fort>
   <grave>Bone</grave>
   <voice>Classic</voice>
@@ -9,41 +9,41 @@
   <hog>
     <name>Paris</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Knut</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Ash</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Woad</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Bob</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Corky</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Bea</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
   <hog>
     <name>Silvia</name>
     <hat>NoHat</hat>
-    <level>0</level>
+    <level>2</level>
   </hog>
 </team>

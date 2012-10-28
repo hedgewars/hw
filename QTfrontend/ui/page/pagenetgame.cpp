@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,8 +38,8 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 
     // chatwidget
     pChatWidget = new HWChatWidget(this, m_gameSettings, true);
-    pChatWidget->setShowReady(true); // show status bulbs by default
     pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
+    pChatWidget->setIgnoreListKick(true); // kick ignored players automatically
     pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
     pageLayout->setRowStretch(2, 100);
@@ -67,13 +67,13 @@ QLayout * PageNetGame::footerLayoutDefinition()
     leRoomName->setMinimumWidth(200);
     leRoomName->setMaximumWidth(400);
 
+    //Button to signify whether the player is ready to start playing
     BtnGo = new QPushButton(this);
     BtnGo->setToolTip(QPushButton::tr("Ready"));
     BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
     BtnGo->setIconSize(QSize(25, 34));
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
-
 
     bottomLayout->addWidget(leRoomName);
     BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1);
@@ -152,10 +152,12 @@ void PageNetGame::onUpdateClick()
     else
     {
         leRoomName->clear();
-        QMessageBox::critical(this,
-                tr("Error"),
-                tr("Please enter room name"),
-                tr("OK"));
+        QMessageBox roomMsg(this);
+        roomMsg.setIcon(QMessageBox::Warning);
+        roomMsg.setWindowTitle(QMessageBox::tr("Netgame - Error"));
+        roomMsg.setText(QMessageBox::tr("Please enter room name"));
+        roomMsg.setWindowModality(Qt::WindowModal);
+        roomMsg.exec();
     }
 }
 

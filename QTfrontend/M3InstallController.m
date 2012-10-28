@@ -36,7 +36,7 @@
 @implementation M3InstallController
 
 - (id) init {
-	if (self = [super init]) {
+        if ((self = [super init])) {
 		NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
 		NSString *title = [NSString stringWithFormat:NSLocalizedString(@"%@ is currently running from a disk image", @"AppName is currently running from a disk image"), appName];
 		NSString *body = [NSString stringWithFormat:NSLocalizedString(@"Would you like to install %@ in your applications folder before quitting?", @"Would you like to install App Name in your applications folder before quitting?"), appName];

@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns, GeneralizedNewtypeDeriving #-}
+
 module RoomsAndClients(
     RoomIndex(),
     ClientIndex(),
@@ -34,24 +36,25 @@ module RoomsAndClients(
 
 import Store
 import Control.Monad
+import Control.DeepSeq
 
 
 data Room r = Room {
-    roomClients' :: [ClientIndex],
-    room' :: r
+    roomClients' :: ![ClientIndex],
+    room' :: !r
     }
 
 
 data Client c = Client {
-    clientRoom' :: RoomIndex,
-    client' :: c
+    clientRoom' :: !RoomIndex,
+    client' :: !c
     }
 
 
 newtype RoomIndex = RoomIndex ElemIndex
-    deriving (Eq)
+    deriving (Eq, NFData)
 newtype ClientIndex = ClientIndex ElemIndex
-    deriving (Eq, Show, Read, Ord)
+    deriving (Eq, Show, Read, Ord, NFData)
 
 instance Show RoomIndex where
     show (RoomIndex i) = 'r' : show i
@@ -82,10 +85,10 @@ newRoomsAndClients r = do
 
 
 roomAddClient :: ClientIndex -> Room r -> Room r
-roomAddClient cl rm = let cls = cl : roomClients' rm; nr = rm{roomClients' = cls} in cls `seq` nr
+roomAddClient cl rm = let cls = cl : roomClients' rm; nr = rm{roomClients' = cls} in cls `deepseq` nr
 
 roomRemoveClient :: ClientIndex -> Room r -> Room r
-roomRemoveClient cl rm = let cls = filter (/= cl) $ roomClients' rm; nr = rm{roomClients' = cls} in cls `seq` nr
+roomRemoveClient cl rm = let cls = filter (/= cl) $ roomClients' rm; nr = rm{roomClients' = cls} in cls `deepseq` nr
 
 
 addRoom :: MRoomsAndClients r c -> r -> IO RoomIndex

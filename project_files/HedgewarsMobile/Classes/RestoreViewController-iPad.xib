@@ -42,6 +42,18 @@
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
+					<object class="IBUIImageView" id="138553579">
+						<reference key="NSNextResponder" ref="191373211"/>
+						<int key="NSvFlags">319</int>
+						<string key="NSFrameSize">{540, 640}</string>
+						<reference key="NSSuperview" ref="191373211"/>
+						<bool key="IBUIUserInteractionEnabled">NO</bool>
+						<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+						<object class="NSCustomResource" key="IBUIImage">
+							<string key="NSClassName">NSImage</string>
+							<string key="NSResourceName">smallerBackground~ipad.png</string>
+						</object>
+					</object>
 					<object class="IBUIButton" id="155385540">
 						<reference key="NSNextResponder" ref="191373211"/>
 						<int key="NSvFlags">302</int>
@@ -90,7 +102,7 @@
 					</object>
 					<object class="IBUILabel" id="655269955">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">315</int>
+						<int key="NSvFlags">295</int>
 						<string key="NSFrame">{{216, 35}, {108, 29}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -115,7 +127,7 @@
 					</object>
 					<object class="IBUILabel" id="19933541">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">307</int>
+						<int key="NSvFlags">282</int>
 						<string key="NSFrame">{{80, 375}, {380, 96}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -141,7 +153,7 @@
 					</object>
 					<object class="IBUILabel" id="151967545">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">307</int>
+						<int key="NSvFlags">306</int>
 						<string key="NSFrame">{{80, 87}, {380, 96}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIOpaque">NO</bool>
@@ -163,7 +175,7 @@
 					</object>
 					<object class="IBUIImageView" id="129485928">
 						<reference key="NSNextResponder" ref="191373211"/>
-						<int key="NSvFlags">300</int>
+						<int key="NSvFlags">301</int>
 						<string key="NSFrame">{{150, 191}, {240, 160}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -234,6 +246,7 @@
 							<reference ref="19933541"/>
 							<reference ref="151967545"/>
 							<reference ref="129485928"/>
+							<reference ref="138553579"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -278,6 +291,11 @@
 						<reference key="object" ref="151967545"/>
 						<reference key="parent" ref="191373211"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">24</int>
+						<reference key="object" ref="138553579"/>
+						<reference key="parent" ref="191373211"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -300,12 +318,14 @@
 					<string>20.IBViewBoundsToFrameTransform</string>
 					<string>23.IBPluginDependency</string>
 					<string>23.IBViewBoundsToFrameTransform</string>
+					<string>24.IBPluginDependency</string>
+					<string>24.IBViewBoundsToFrameTransform</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>RestoreViewController</string>
 					<string>UIResponder</string>
-					<string>{{566, 244}, {540, 640}}</string>
+					<string>{{650, 289}, {540, 640}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -331,6 +351,8 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABCoAAAw9uAAA</bytes>
 					</object>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform"/>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -349,7 +371,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">23</int>
+			<int key="maxID">24</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -371,6 +393,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Classes/RestoreViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UILabel</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/ExtraCategories.h</string>
 					</object>
 				</object>
 			</object>
@@ -608,8 +637,17 @@
 		<string key="IBDocument.LastKnownRelativeProjectPath">../Hedgewars.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">denied.png</string>
-			<string key="NS.object.0">{240, 160}</string>
+			<bool key="EncodedWithXMLCoder">YES</bool>
+			<object class="NSArray" key="dict.sortedKeys">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>denied.png</string>
+				<string>smallerBackground~ipad.png</string>
+			</object>
+			<object class="NSMutableArray" key="dict.values">
+				<bool key="EncodedWithXMLCoder">YES</bool>
+				<string>{240, 160}</string>
+				<string>{540, 640}</string>
+			</object>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">132</string>
 	</data>

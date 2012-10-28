@@ -16,7 +16,10 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 ###################################################################################
 
-find_program(ANT ant)
+find_program(ANT ant DOC "Path to the java package creator: ant")
+if(NOT EXISTS ${ANT})
+    MESSAGE(FATAL_ERROR "Couldn't detect the Ant build tool")
+endif()
 
 if(NOT ANDROID_NDK)
     find_path(ANDROID_NDK ndk-build)
@@ -28,8 +31,22 @@ else ()
     MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK directory")
 endif()
 
+if(NOT ANDROID_NDK_TOOLCHAINDIR)
+    set(toolchainbase "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt")
+    find_path(ANDROID_NDK_TOOLCHAINDIR arm-linux-androideabi
+                "${toolchainbase}/linux-x86"
+                "${toolchainbase}/windows")
+endif()
+
+if(IS_DIRECTORY "${ANDROID_NDK_TOOLCHAINDIR}")
+    MESSAGE(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}") 
+else ()
+    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory: ${ANDROID_NDK_TOOLCHAINDIR}")
+endif()
+
 if(NOT ANDROID_SDK)#Check if its defined at the cmdline
-    find_path(ANDROID_SDK adb ) #assume they've added platform-tools to their path
+    find_program(ANDROID_SDK adb) #assume they've added platform-tools to their path
+    get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     get_filename_component(ANDROID_SDK "${ANDROID_SDK}" PATH)
     set(ANDROID_SDK "${ANDROID_SDK}" CACHE PATH "Path to the android sdk" FORCE)
 endif()
@@ -41,9 +58,11 @@ else ()
 endif()
 
 if( NOT FPC_DIR)
-    find_path(FPC_DIR ppcrossarm)
+    find_program(FPC_DIR ppcrossarm)
     get_filename_component(FPC_DIR "${FPC_DIR}" PATH)
-    set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
+    if(IS_DIRECTORY "${FPC_DIR}") 
+    	set(FPC_DIR "${FPC_DIR}" CACHE PATH "Path to fpc dir used in the android port" FORCE)
+    endif()
 endif()
 
 if( IS_DIRECTORY "${FPC_DIR}")
@@ -55,48 +74,44 @@ endif()
 set(SDL_DIR /home/richard/Downloads/android-project)
 
 
-set(ANDROID_SDK_API_LVL 8)
+set(ANDROID_SDK_API_LVL 14)
 set(ANDROID_NDK_API_LVL 5)
 
-MESSAGE(STATUS "Creating android scripts and configuration files")
+MESSAGE(STATUS "Creating Makefile.android...")
 
-configure_file(Templates/complete_build.sh .)
-configure_file(Templates/default.properties SDL-android-project/)
-configure_file(Templates/local.properties SDL-android-project/)
 configure_file(Templates/Makefile.android .)
-configure_file(Templates/pushToDevice.sh .)
 
-if(SDL_DIR_TEMP_DISABLE)
-    MESSAGE("Moving Android port of SDL to the proper directories")
-    set(DirsToCopy
-        SDL
-        SDL_image
-        SDL_mixer
-        SDL_ttf
-	jpeg
-	png
-         mikmod
-        ) 
-    foreach(DIR ${DirsToCopy})
-        exec_program( 
-            ${CMAKE_COMMAND} 
-            ARGS -E copy_directory 
-            ${SDL_DIR}/jni/${DIR}
-            ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/${DIR}
-        )
-        MESSAGE(STATUS "Moved ${DIR}")
-    endforeach(DIR)
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
-	)
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
-	)
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.c
-        )
+find_program(ANDROID_EXEC NAMES android android.bat PATHS "${ANDROID_SDK}/platform-tools" "${ANDROID_SDK}/tools")
+if(ANDROID_EXEC)
+    exec_program(${ANDROID_EXEC}
+                 ARGS "update project"
+                 "--path ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project"
+                 "--target android-${ANDROID_SDK_API_LVL}"
+                 OUTPUT_VARIABLE androidoutput
+                )
+    MESSAGE(STATUS "Updating android project config...\n" ${androidoutput})
+else()
+    MESSAGE(FATAL_ERROR "Couldn't find the android executable in ${ANDROID_SDK}/platform-tools or ${ANDROID_SDK}/tools.")
+endif()
 
-    exec_program(${HGCOMMAND}
-        ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/video/android/SDL_androidtouch.h
-	)
-endif(SDL_DIR_TEMP_DISABLE)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/file/SDL_rwops.c
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_mixer/Android.mk
+    OUTPUT_VARIABLE dontcare
+)
+exec_program(${HGCOMMAND}
+    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_ttf/Android.mk
+    OUTPUT_VARIABLE dontcare
+)
+

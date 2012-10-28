@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
+procedure InitIPC;
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -34,8 +35,6 @@ procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
-procedure InitIPC;
-procedure CloseIPC;
 procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
@@ -56,6 +55,7 @@ type PCmd = ^TCmd;
 var IPCSock: PTCPSocket;
     fds: PSDLNet_SocketSet;
     isPonged: boolean;
+    SocketString: shortstring;
 
     headcmd: PCmd;
     lastcmd: PCmd;
@@ -71,14 +71,15 @@ command^.loTime:= Time;
 command^.str:= str;
 if command^.cmd <> 'F' then dec(command^.len, 2); // cut timestamp
 if headcmd = nil then
-   begin
-   headcmd:= command;
-   lastcmd:= command
-   end else
-   begin
-   lastcmd^.Next:= command;
-   lastcmd:= command
-   end;
+    begin
+    headcmd:= command;
+    lastcmd:= command
+    end
+else
+    begin
+    lastcmd^.Next:= command;
+    lastcmd:= command
+    end;
 AddCmd:= command;
 end;
 
@@ -88,7 +89,8 @@ begin
 TryDo(headcmd <> nil, 'Engine bug: headcmd = nil', true);
 tmp:= headcmd;
 headcmd:= headcmd^.Next;
-if headcmd = nil then lastcmd:= nil;
+if headcmd = nil then
+    lastcmd:= nil;
 dispose(tmp)
 end;
 
@@ -102,18 +104,11 @@ begin
     WriteLnToConsole(msgOK);
     WriteToConsole('Establishing IPC connection to tcp 127.0.0.1:' + IntToStr(ipcPort) + ' ');
     {$HINTS OFF}
-    SDLTry(SDLNet_ResolveHost(ipaddr, '127.0.0.1', ipcPort) = 0, true);
+    SDLTry(SDLNet_ResolveHost(ipaddr, PChar('127.0.0.1'), ipcPort) = 0, true);
     {$HINTS ON}
     IPCSock:= SDLNet_TCP_Open(ipaddr);
     SDLTry(IPCSock <> nil, true);
     WriteLnToConsole(msgOK)
-end;
-
-procedure CloseIPC;
-begin
-    SDLNet_FreeSocketSet(fds);
-    SDLNet_TCP_Close(IPCSock);
-    SDLNet_Quit();
 end;
 
 procedure ParseIPCCommand(s: shortstring);
@@ -121,7 +116,7 @@ var loTicks: Word;
 begin
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
-     '?': SendIPC('!');
+     '?': SendIPC(_S'!');
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
@@ -131,7 +126,12 @@ case s[1] of
                'D': GameType:= gmtDemo;
                'N': GameType:= gmtNet;
                'S': GameType:= gmtSave;
+               'V': GameType:= gmtRecord;
                else OutError(errmsgIncorrectUse + ' IPC "T" :' + s[2], true) end;
+     'V': begin
+              if s[2] = '.' then
+                  ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
+          end
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
@@ -140,30 +140,30 @@ case s[1] of
 end;
 
 procedure IPCCheckSock;
-const ss: shortstring = '';
 var i: LongInt;
-    buf: array[0..255] of byte;
-    s: shortstring absolute buf;
+    s: shortstring;
 begin
-if IPCSock = nil then
-   exit;
+    if IPCSock = nil then
+        exit;
 
-fds^.numsockets:= 0;
-SDLNet_AddSocket(fds, IPCSock);
+    fds^.numsockets:= 0;
+    SDLNet_AddSocket(fds, IPCSock);
 
-while SDLNet_CheckSockets(fds, 0) > 0 do
+    while SDLNet_CheckSockets(fds, 0) > 0 do
     begin
-    i:= SDLNet_TCP_Recv(IPCSock, @buf[1], 255 - Length(ss));
-    if i > 0 then
+        i:= SDLNet_TCP_Recv(IPCSock, @s[1], 255 - Length(SocketString));
+        if i > 0 then
         begin
-        buf[0]:= i;
-        ss:= ss + s;
-        while (Length(ss) > 1) and (Length(ss) > byte(ss[1])) do
+            s[0]:= char(i);
+            SocketString:= SocketString + s;
+            while (Length(SocketString) > 1) and (Length(SocketString) > byte(SocketString[1])) do
             begin
-            ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+                ParseIPCCommand(copy(SocketString, 2, byte(SocketString[1])));
+                Delete(SocketString, 1, Succ(byte(SocketString[1])))
             end
-        end else OutError('IPC connection lost', true)
+        end
+    else
+        OutError('IPC connection lost', true)
     end;
 end;
 
@@ -171,8 +171,7 @@ procedure LoadRecordFromFile(fileName: shortstring);
 var f: file;
     ss: shortstring = '';
     i: LongInt;
-    buf: array[0..255] of byte;
-    s: shortstring absolute buf;
+    s: shortstring;
 begin
 
 // set RDNLY on file open
@@ -184,12 +183,12 @@ reset(f, 1);
 tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
-buf[0]:= 0;
+s[0]:= #0;
 repeat
-    BlockRead(f, buf[1], 255 - Length(ss), i);
+    BlockRead(f, s[1], 255 - Length(ss), i);
     if i > 0 then
         begin
-        buf[0]:= i;
+        s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
@@ -204,7 +203,7 @@ close(f)
 end;
 
 procedure SendStat(sit: TStatInfoType; s: shortstring);
-const stc: array [TStatInfoType] of char = 'rDkKHTPsSB';
+const stc: array [TStatInfoType] of char = ('r', 'D', 'k', 'K', 'H', 'T', 'P', 's', 'S', 'B');
 var buf: shortstring;
 begin
 buf:= 'i' + stc[sit] + s;
@@ -217,7 +216,9 @@ begin
 if IPCSock <> nil then
     begin
     SendEmptyPacketTicks:= 0;
-    if s[0]>#251 then s[0]:= #251;
+    if s[0]>#251 then
+        s[0]:= #251;
+        
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
     AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
@@ -228,9 +229,9 @@ end;
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
 if IPCSock <> nil then
-   begin
-   SDLNet_TCP_Send(IPCSock, p, len)
-   end
+    begin
+    SDLNet_TCP_Send(IPCSock, p, len)
+    end
 end;
 
 procedure SendIPCXY(cmd: char; X, Y: SmallInt);
@@ -247,15 +248,15 @@ procedure IPCWaitPongEvent;
 begin
 isPonged:= false;
 repeat
-   IPCCheckSock;
-   SDL_Delay(1)
+    IPCCheckSock;
+    SDL_Delay(1)
 until isPonged
 end;
 
 procedure SendIPCAndWaitReply(s: shortstring);
 begin
 SendIPC(s);
-SendIPC('?');
+SendIPC(_S'?');
 IPCWaitPongEvent
 end;
 
@@ -263,7 +264,7 @@ procedure SendKeepAliveMessage(Lag: Longword);
 begin
 inc(SendEmptyPacketTicks, Lag);
 if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPC('+')
+    SendIPC(_S'+')
 end;
 
 procedure NetGetNextCmd;
@@ -307,28 +308,29 @@ while (headcmd <> nil)
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
-            end;
+             end;
         's': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('chatmsg ' + s, true);
             WriteLnToConsole(s)
-            end;
+             end;
         'b': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg '#4 + s, true);
+            ParseCommand('chatmsg ' + #4 + s, true);
             WriteLnToConsole(s)
-            end;
+             end;
 // TODO: deprecate 'F'
         'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
+            lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
-            end;
+             end;
         'p': begin
             x16:= SDLNet_Read16(@(headcmd^.X));
             y16:= SDLNet_Read16(@(headcmd^.Y));
             doPut(x16, y16, false)
-            end;
+             end;
         'P': begin
             // these are equations solved for CursorPoint
             // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
@@ -338,14 +340,16 @@ while (headcmd <> nil)
                CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
                CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy
                end
-            end;
+             end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
         't': ParseCommand('taunt ' + headcmd^.str[2], true);
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
-        #128..char(128 + cMaxSlotIndex): ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
         else
-            OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
+            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
+                ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
+                else
+                OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
         end;
     RemoveCmd
     end;
@@ -369,7 +373,8 @@ end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 begin
-if CheckNoTeamOrHH or isPaused then exit;
+if CheckNoTeamOrHH or isPaused then
+    exit;
 bShowFinger:= false;
 if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
     begin
@@ -388,7 +393,8 @@ with CurrentHedgehog^.Gear^,
                 begin
                 TargetPoint.X:= putX;
                 TargetPoint.Y:= putY
-                end else
+                end
+            else
                 begin
                 TargetPoint.X:= CursorPoint.X - WorldDx;
                 TargetPoint.Y:= cScreenHeight - CursorPoint.Y - WorldDy;
@@ -401,7 +407,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and not gstHHChooseTarget;
+        State:= State and (not gstHHChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end
@@ -412,21 +418,25 @@ end;
 
 procedure initModule;
 begin
-    RegisterVariable('fatal', vtCommand, @chFatalError, true );
+    RegisterVariable('fatal', @chFatalError, true );
 
     IPCSock:= nil;
 
     headcmd:= nil;
     lastcmd:= nil;
-    isPonged:= false;   // was const
-
+    isPonged:= false;
+    SocketString:= '';
+    
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
 end;
 
 procedure freeModule;
 begin
-while headcmd <> nil do RemoveCmd
+    while headcmd <> nil do RemoveCmd;
+    SDLNet_FreeSocketSet(fds);
+    SDLNet_TCP_Close(IPCSock);
+    SDLNet_Quit();
 end;
 
 end.

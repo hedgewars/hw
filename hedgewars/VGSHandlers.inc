@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
+    moved: boolean;
 begin
 if vobCount = 0 then exit;
 
@@ -38,19 +39,21 @@ with Gear^ do
         begin
         dec(FrameTicks, vobFrameTicks);
         inc(Frame);
-        if Frame = vobFramesCount then Frame:= 0
+        if Frame = vobFramesCount then
+            Frame:= 0
         end
     else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
         begin
         dec(FrameTicks, vobSDFrameTicks);
         inc(Frame);
-        if Frame = vobSDFramesCount then Frame:= 0
+        if Frame = vobSDFramesCount then
+            Frame:= 0
         end;
-    X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps;
+    X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps * Gear^.Scale;
     if SuddenDeathDmg then
-        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale
     else
-        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps;
+        Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps * Gear^.Scale;
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360
@@ -59,28 +62,61 @@ with Gear^ do
             Angle:= Angle + 360;
     
   
-    if (round(X) >= cLeftScreenBorder) and
-       (round(X) <= cRightScreenBorder) and
-       (round(Y) - 75 <= LAND_HEIGHT) and
-       (Timer > 0) and (Timer-Steps > 0) then
+    if (round(X) >= cLeftScreenBorder)
+    and (round(X) <= cRightScreenBorder)
+    and (round(Y) - 75 <= LAND_HEIGHT)
+    and (Timer > 0) and (Timer-Steps > 0) then
         begin
-        if tdX > 0 then sign := 1
-        else sign:= -1;
+        if tdX > 0 then
+            sign := 1
+        else
+            sign:= -1;
         tdX:= tdX - 0.005*Steps*sign;
-        if ((sign < 0) and (tdX > 0)) or ((sign > 0) and (tdX < 0)) then tdX:= 0;
-        if tdX > 0 then sign := 1
-        else sign:= -1;
+        if ((sign < 0) and (tdX > 0)) or ((sign > 0) and (tdX < 0)) then
+            tdX:= 0;
+        if tdX > 0 then
+            sign := 1
+        else
+            sign:= -1;
         tdY:= tdY - 0.005*Steps*sign;
-        if ((sign < 0) and (tdY > 0)) or ((sign > 0) and (tdY < 0)) then tdY:= 0;
+        if ((sign < 0) and (tdY > 0)) or ((sign > 0) and (tdY < 0)) then
+            tdY:= 0;
         dec(Timer, Steps)
         end
     else
         begin
-        if round(X) < cLeftScreenBorder then X:= X + cScreenSpace else
-        if round(X) > cRightScreenBorder then X:= X - cScreenSpace;
-        // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-        if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then Y:= Y - (1024 + 300) // TODO - configure in theme (jellies for example could use limited range)
-        else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then Y:= Y - (1024 + 25);
+        moved:= false;
+        if round(X) < cLeftScreenBorder then
+            begin
+            X:= X + cScreenSpace;
+            moved:= true
+            end
+        else
+            if round(X) > cRightScreenBorder then
+                begin
+                X:= X - cScreenSpace;
+                moved:= true
+                end;
+            // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
+        if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            Y:= Y - (1024 + 250 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
+            moved:= true
+            end
+        else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            Y:= Y - (1024 + random(25));
+            moved:= true
+            end;
+        if moved then
+            begin
+            Angle:= random(360);
+            dx:= 0.0000038654705 * random(10000);
+            dy:= 0.000003506096 * random(7000);
+            if random(2) = 0 then dx := -dx
+            end;
         Timer:= 0;
         tdX:= 0;
         tdY:= 0
@@ -103,29 +139,35 @@ procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
 var s: Longword;
     t: real;
 begin
-Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX) * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf * 750 * Gear^.dX * Gear^.Scale) * Steps;
 
 // up-and-down-bounce magic
 s := (GameTicks + Gear^.Timer) mod 4096;
-t := 8 * hwFloat2Float(AngleSin(s mod 2048));
+t := 8 * Gear^.Scale * hwFloat2Float(AngleSin(s mod 2048));
 if (s < 2048) then t := -t;
 
 Gear^.Y := LAND_HEIGHT - 1184 + LongInt(Gear^.Timer mod 8) + t;
 
-if round(Gear^.X) < cLeftScreenBorder then Gear^.X:= Gear^.X + cScreenSpace else
-if round(Gear^.X) > cRightScreenBorder then Gear^.X:= Gear^.X - cScreenSpace
+if round(Gear^.X) < cLeftScreenBorder then
+    Gear^.X:= Gear^.X + cScreenSpace
+else
+    if round(Gear^.X) > cRightScreenBorder then
+        Gear^.X:= Gear^.X - cScreenSpace
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
+var s: LongInt;
 begin
-Gear^.X:= Gear^.X + Gear^.dX * Steps;
+s:= min(Steps, cExplFrameTicks);
 
-Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.X:= Gear^.X + Gear^.dX * s;
+Gear^.Y:= Gear^.Y + Gear^.dY * s;
 //Gear^.dY:= Gear^.dY + cGravityf;
 
 if Gear^.FrameTicks <= Steps then
-    if Gear^.Frame = 0 then DeleteVisualGear(Gear)
+    if Gear^.Frame = 0 then
+        DeleteVisualGear(Gear)
     else
         begin
         dec(Gear^.Frame);
@@ -243,102 +285,108 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + Gear^.dX * Steps;
-    Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
-    Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+Gear^.dX := Gear^.dX / (1.001 * Steps);
+Gear^.dY := Gear^.dY / (1.001 * Steps);
 
-    Gear^.dX := Gear^.dX / (1.001 * Steps);
-    Gear^.dY := Gear^.dY / (1.001 * Steps);
-
-    if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
-        DeleteVisualGear(Gear)
-    else
-        dec(Gear^.FrameTicks, Steps)
+if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
-    Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
+Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 
-    if Gear^.FrameTicks <= Steps then
-        if Gear^.Frame = 0 then DeleteVisualGear(Gear)
-        else
-            begin
-            if Random(2) = 0 then dec(Gear^.Frame);
-            Gear^.FrameTicks:= cExplFrameTicks
-            end
-        else dec(Gear^.FrameTicks, Steps)
+if Gear^.FrameTicks <= Steps then
+    if Gear^.Frame = 0 then
+        DeleteVisualGear(Gear)
+    else
+        begin
+        if Random(2) = 0 then
+            dec(Gear^.Frame);
+        Gear^.FrameTicks:= cExplFrameTicks
+        end
+else dec(Gear^.FrameTicks, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepAmmo(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
+Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 
-    Gear^.scale:= Gear^.scale + 0.0025 * Steps;
-    Gear^.alpha:= Gear^.alpha - 0.0015 * Steps;
+Gear^.scale:= Gear^.scale + 0.0025 * Steps;
+Gear^.alpha:= Gear^.alpha - 0.0015 * Steps;
 
-    if Gear^.alpha < 0 then DeleteVisualGear(Gear)
+if Gear^.alpha < 0 then
+    DeleteVisualGear(Gear)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSmoke(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + (cWindSpeedf + Gear^.dX) * Steps;
-    Gear^.Y:= Gear^.Y - (cDrownSpeedf + Gear^.dY) * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf + Gear^.dX) * Steps;
+Gear^.Y:= Gear^.Y - (cDrownSpeedf + Gear^.dY) * Steps;
 
-    Gear^.dX := Gear^.dX + (cWindSpeedf * 0.3 * Steps);
-    //Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.995);
+Gear^.dX := Gear^.dX + (cWindSpeedf * 0.3 * Steps);
+//Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.995);
 
-    if Gear^.FrameTicks <= Steps then
-        if Gear^.Frame = 0 then DeleteVisualGear(Gear)
-        else
-            begin
-            if Random(2) = 0 then dec(Gear^.Frame);
-            Gear^.FrameTicks:= cExplFrameTicks
-            end
-        else dec(Gear^.FrameTicks, Steps)
+if Gear^.FrameTicks <= Steps then
+    if Gear^.Frame = 0 then
+        DeleteVisualGear(Gear)
+    else
+        begin
+        if Random(2) = 0 then
+            dec(Gear^.Frame);
+        Gear^.FrameTicks:= cExplFrameTicks
+        end
+    else dec(Gear^.FrameTicks, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDust(Gear: PVisualGear; Steps: Longword);
 begin
-    Gear^.X:= Gear^.X + (cWindSpeedf + (cWindSpeedf * 0.03 * Steps) + Gear^.dX) * Steps;
-    Gear^.Y:= Gear^.Y - (Gear^.dY) * Steps;
+Gear^.X:= Gear^.X + (cWindSpeedf + (cWindSpeedf * 0.03 * Steps) + Gear^.dX) * Steps;
+Gear^.Y:= Gear^.Y - (Gear^.dY) * Steps;
 
-    Gear^.dX := Gear^.dX - (Gear^.dX * 0.005 * Steps);
-    Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.001 * Steps);
+Gear^.dX := Gear^.dX - (Gear^.dX * 0.005 * Steps);
+Gear^.dY := Gear^.dY - (cDrownSpeedf * 0.001 * Steps);
 
-    if Gear^.FrameTicks <= Steps then
-        if Gear^.Frame = 0 then DeleteVisualGear(Gear)
-        else
-            begin
-            dec(Gear^.Frame);
-            Gear^.FrameTicks:= cExplFrameTicks
-            end
-        else dec(Gear^.FrameTicks, Steps)
+if Gear^.FrameTicks <= Steps then
+    if Gear^.Frame = 0 then
+            DeleteVisualGear(Gear)
+    else
+        begin
+        dec(Gear^.Frame);
+        Gear^.FrameTicks:= cExplFrameTicks
+        end
+    else dec(Gear^.FrameTicks, Steps)
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSplash(Gear: PVisualGear; Steps: Longword);
 begin
-  if Gear^.FrameTicks <= Steps then
-      DeleteVisualGear(Gear)
-  else
-      dec(Gear^.FrameTicks, Steps);
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDroplet(Gear: PVisualGear; Steps: Longword);
 begin
-  Gear^.X:= Gear^.X + Gear^.dX * Steps;
+Gear^.X:= Gear^.X + Gear^.dX * Steps;
 
-  Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
-  Gear^.dY:= Gear^.dY + cGravityf * Steps;
+Gear^.Y:= Gear^.Y + Gear^.dY * Steps;
+Gear^.dY:= Gear^.dY + cGravityf * Steps;
 
-  if round(Gear^.Y) > cWaterLine then begin
+if round(Gear^.Y) > cWaterLine then
+    begin
     DeleteVisualGear(Gear);
     PlaySound(TSound(ord(sndDroplet1) + Random(3)));
     end;
@@ -348,12 +396,14 @@ end;
 procedure doStepSmokeRing(Gear: PVisualGear; Steps: Longword);
 begin
 inc(Gear^.Timer, Steps);
-if Gear^.Timer >= Gear^.FrameTicks then DeleteVisualGear(Gear)
+if Gear^.Timer >= Gear^.FrameTicks then
+    DeleteVisualGear(Gear)
 else
     begin
     Gear^.scale := 1.25 * (-power(2, -10 * Int(Gear^.Timer)/Gear^.FrameTicks) + 1) + 0.4;
     Gear^.alpha := 1 - power(Gear^.Timer / 350, 4);
-    if Gear^.alpha < 0 then Gear^.alpha:= 0;
+    if Gear^.alpha < 0 then
+        Gear^.alpha:= 0;
     end;
 end;
 
@@ -386,7 +436,7 @@ var thexchar: array[0..cMaxTeams] of
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
 var i, t: LongInt;
 begin
-for t:= 1 to Steps do
+for t:= 1 to min(Steps, Gear^.Timer) do
     begin
     dec(Gear^.Timer);
     if (Gear^.Timer and 15) = 0 then
@@ -394,17 +444,18 @@ for t:= 1 to Steps do
             with thexchar[i] do
                 begin
                 {$WARNINGS OFF}
-                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div 640;
+                team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div cSorterWorkTime;
                 team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer) div cSorterWorkTime;
                 {$WARNINGS ON}
                 end;
+    end;
 
-    if (Gear^.Timer = 0) or (currsorter <> Gear) then
-        begin
-        if currsorter = Gear then currsorter:= nil;
-        DeleteVisualGear(Gear);
-        exit
-        end
+if (Gear^.Timer = 0) or (currsorter <> Gear) then
+    begin
+    if currsorter = Gear then
+        currsorter:= nil;
+    DeleteVisualGear(Gear);
+    exit
     end
 end;
 
@@ -414,15 +465,21 @@ var i: Longword;
     t: LongInt;
 begin
 Steps:= Steps; // avoid compiler hint
+
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
         begin
-        dy:= TeamsArray[t]^.DrawHealthY;
-        dw:= TeamsArray[t]^.TeamHealthBarWidth - TeamsArray[t]^.NewTeamHealthBarWidth;
         team:= TeamsArray[t];
-        SortFactor:= TeamsArray[t]^.Clan^.ClanHealth;
-        SortFactor:= (SortFactor shl  3) + TeamsArray[t]^.Clan^.ClanIndex;
-        SortFactor:= (SortFactor shl 30) + TeamsArray[t]^.TeamHealth;
+        dy:= team^.DrawHealthY;
+        dw:= team^.TeamHealthBarWidth - team^.NewTeamHealthBarWidth;
+        if team^.TeamHealth > 0 then
+            begin
+            SortFactor:= team^.Clan^.ClanHealth;
+            SortFactor:= (SortFactor shl  3) + team^.Clan^.ClanIndex;
+            SortFactor:= (SortFactor shl 30) + team^.TeamHealth;
+            end
+        else
+            SortFactor:= 0;
         end;
 
 if TeamsCount > 1 then
@@ -440,12 +497,13 @@ if TeamsCount > 1 then
 
 t:= - 4;
 for i:= 0 to Pred(TeamsCount) do
-    with thexchar[i] do
-        begin
-        dec(t, team^.HealthTex^.h + 2);
-        ny:= t;
-        dy:= dy - ny
-        end;
+        with thexchar[i] do
+          if team^.TeamHealth > 0 then
+            begin
+            dec(t, team^.HealthTex^.h + 2);
+            ny:= t;
+            dy:= dy - ny
+            end;
 
 Gear^.Timer:= cSorterWorkTime;
 Gear^.doStep:= @doStepTeamHealthSorterWork;
@@ -477,7 +535,8 @@ begin
 Steps:= Steps; // avoid compiler hint
 
 with Gear^.Hedgehog^ do
-    if SpeechGear <> nil then SpeechGear^.Timer:= 0;
+    if SpeechGear <> nil then
+        SpeechGear^.Timer:= 0;
 
 Gear^.Hedgehog^.SpeechGear:= Gear;
 
@@ -536,7 +595,8 @@ if (round(Gear^.Y) > cWaterLine) and (Gear^.Frame = 0)  then
 
 Gear^.Y:= Gear^.Y - Gear^.Tex^.h;
 
-if Steps > 1 then Gear^.doStep(Gear, Steps-1);
+if Steps > 1 then
+    Gear^.doStep(Gear, Steps-1);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -546,10 +606,10 @@ inc(Gear^.Timer, Steps );
 if Gear^.Timer > 64 then
     begin
     if Gear^.State = 0 then
-      begin
-      DeleteVisualGear(Gear);
-      exit;
-      end;
+        begin
+        DeleteVisualGear(Gear);
+        exit;
+        end;
     dec(Gear^.State, Gear^.Timer div 65);
     Gear^.Timer:= Gear^.Timer mod 65;
     end;
@@ -565,7 +625,8 @@ if Gear^.Timer > 75 then
     begin
     inc(Gear^.State, Gear^.Timer div 76);
     Gear^.Timer:= Gear^.Timer mod 76;
-    if Gear^.State > 5 then DeleteVisualGear(Gear);
+    if Gear^.State > 5 then
+        DeleteVisualGear(Gear);
     end;
 end;
 
@@ -588,7 +649,8 @@ for i:= 0 to 31 do
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart);
 for i:= 0 to  8 do AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepExplosionWork;
-if Steps > 1 then Gear^.doStep(Gear, Steps-1);
+if Steps > 1 then
+    Gear^.doStep(Gear, Steps-1);
 end;
 
 
@@ -604,7 +666,8 @@ if (Gear^.Timer and 5) = 0 then
     ShakeCamera(maxMovement);
     end;
 
-if Gear^.Timer > 250 then DeleteVisualGear(Gear);
+if Gear^.Timer > 250 then
+    DeleteVisualGear(Gear);
 end;
 
 procedure doStepBigExplosion(Gear: PVisualGear; Steps: Longword);
@@ -627,10 +690,13 @@ for i:= 0 to 46 do
         inc(vg^.FrameTicks, vg^.FrameTicks)
         end
     end;
-for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart);
-for i:= 0 to 15 do AddVisualGear(gX, gY, vgtExplPart2);
+for i:= 0 to 15 do
+    AddVisualGear(gX, gY, vgtExplPart);
+for i:= 0 to 15 do
+    AddVisualGear(gX, gY, vgtExplPart2);
 Gear^.doStep:= @doStepBigExplosionWork;
-if Steps > 1 then Gear^.doStep(Gear, Steps-1);
+if Steps > 1 then
+    Gear^.doStep(Gear, Steps-1);
 performRumble();
 end;
 
@@ -653,10 +719,10 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepBulletHit(Gear: PVisualGear; Steps: Longword);
 begin
-  if Gear^.FrameTicks <= Steps then
-      DeleteVisualGear(Gear)
-  else
-      dec(Gear^.FrameTicks, Steps);
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    dec(Gear^.FrameTicks, Steps);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -672,12 +738,18 @@ with Gear^ do
             if (FrameTicks mod Frame) = 0 then
                 begin
                 tmp:= Gear^.Tint and $FF;
-                if tdY >= 0 then inc(tmp)
-                else dec(tmp);
-                if tmp < round(dX) then tdY:= 1;
-                if tmp > round(dY) then tdY:= -1;
-                if tmp > 255 then tmp := 255;
-                if tmp < 0 then tmp := 0;
+                if tdY >= 0 then
+                    inc(tmp)
+                else
+                    dec(tmp);
+                if tmp < round(dX) then
+                    tdY:= 1;
+                if tmp > round(dY) then
+                    tdY:= -1;
+                if tmp > 255 then
+                    tmp := 255;
+                if tmp < 0 then
+                    tmp := 0;
                 Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or Longword(tmp)
                 end
             end
@@ -686,16 +758,28 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 begin
-    inc(Gear^.Timer, Steps);
+inc(Gear^.Timer, Steps);
     
-    while Gear^.Timer >= 10 do
-        begin
-        dec(Gear^.Timer, 10);
-        if WindBarWidth < Gear^.Tag then inc(WindBarWidth)
-        else if WindBarWidth > Gear^.Tag then dec(WindBarWidth);
-        end;
+while Gear^.Timer >= 10 do
+    begin
+    dec(Gear^.Timer, 10);
+    if WindBarWidth < Gear^.Tag then
+        inc(WindBarWidth)
+    else if WindBarWidth > Gear^.Tag then
+        dec(WindBarWidth);
+    end;
+if cWindspeedf > Gear^.dAngle then
+    begin
+    cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
+    if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+    end
+else if cWindspeedf < Gear^.dAngle then
+    begin
+    cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
+    if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+    end;
         
-if WindBarWidth = Gear^.Tag then 
+if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then 
     DeleteVisualGear(Gear)
 end;
 ////////////////////////////////////////////////////////////////////////////////

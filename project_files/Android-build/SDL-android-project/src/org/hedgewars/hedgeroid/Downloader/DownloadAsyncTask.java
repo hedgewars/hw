@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,12 +41,19 @@ import android.os.AsyncTask;
  * @author Xeli
  *
  */
-public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> {
+public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Integer> {
 
 	//private final static String URL_WITHOUT_SUFFIX = "http://www.xelification.com/tmp/firebutton.";
 	private final static String URL_ZIP_SUFFIX = ".zip";
 	private final static String URL_HASH_SUFFIX = ".hash";
-	
+
+	public static final int EXIT_SUCCESS = 0;
+	public static final int EXIT_URLFAIL = 1;
+	public static final int EXIT_CONNERROR = 2;
+	public static final int EXIT_FNF = 3;
+	public static final int EXIT_MD5 = 4;
+	public static final int EXIT_CANCELLED = 5;
+
 	private DownloadTask task;
 	private long lastUpdateMillis = 0;
 
@@ -58,22 +65,22 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 	 * 
 	 * @param params - A {@link}DownloadTask which gives information about where to download from and store the files to 
 	 */
-	protected Long doInBackground(DownloadPackage...packages) {
+	protected Integer doInBackground(DownloadPackage...packages) {
 		DownloadPackage pack = packages[0];//just use one task per execute call for now
-		
+
 		HttpURLConnection conn = null;
 		MessageDigest digester = null;
 		String rootZipDest = pack.getPathToStore();
 
 		File rootDest = new File(rootZipDest);//TODO check for nullpointer, it hints to the absence of an sdcard
-		rootDest.mkdir();
+		rootDest.mkdirs();
 
 		try {
 			URL url = new URL(pack.getURL() + URL_ZIP_SUFFIX);
 			conn = (HttpURLConnection)url.openConnection();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return -1l;
+			return EXIT_URLFAIL;
 		}
 
 		String contentType = conn.getContentType();
@@ -82,6 +89,7 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 			int bytesDecompressed = 0;
 			ZipEntry entry = null;
 			ZipInputStream input = null;
+			FileOutputStream output = null;
 			int kbytesToProcess = conn.getContentLength()/1024;
 
 			byte[] buffer = new byte[1024];
@@ -100,25 +108,26 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 			}catch(IOException e){
 				e.printStackTrace();
 				if(conn != null) conn.disconnect();
-				return -2l;
+				return EXIT_CONNERROR;
 			}
 
+
+
 			while(entry != null){
+
 				if(isCancelled()) break;
 
-				String fileName = entry.getName();
-				File f = new File(rootZipDest + fileName);
-				bytesDecompressed += entry.getCompressedSize();
+				try {
+					String fileName = entry.getName();
+					File f = new File(rootZipDest + fileName);
+					bytesDecompressed += entry.getCompressedSize();
 
-				if(entry.isDirectory()){
-					f.mkdir();
-				}else{
-					if(f.exists()){
-						f.delete();
-					}
-
-					FileOutputStream output = null;
-					try {
+					if(entry.isDirectory()){
+						f.mkdir();
+					}else{
+						if(f.exists()){
+							f.delete();
+						}
 						f.createNewFile();
 						output = new FileOutputStream(f);
 
@@ -133,47 +142,47 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 						}
 						output.flush();
 						input.closeEntry();
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-						if(conn != null) conn.disconnect();
-						return -3l;
-					} catch (IOException e) {
-						e.printStackTrace();
-						if(conn != null) conn.disconnect();
-						return -4l;
-					}finally{
-						try {
-							if( output != null) output.close();
-						} catch (IOException e) {}
-					}
-				}
-				try{
+					}//if isDir 
 					entry = input.getNextEntry();
-				}catch(IOException e){
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 					if(conn != null) conn.disconnect();
-					return -1l;
+					return EXIT_FNF;
+				} catch (IOException e) {
+					e.printStackTrace();
+					if(conn != null) conn.disconnect();
+					return EXIT_CONNERROR;
+				}finally{
+					try {
+						if( output != null) output.close();
+
+					} catch (IOException e) {}
 				}
 			}//end while(entry != null)
-
-			try {
-				input.close();
-			} catch (IOException e) {}
-		}//end if contentType == "zip"
-
+			if( input != null)
+				try {
+					input.close();
+				} catch (IOException e) {}
+		}else{//end if contentType == "zip"
+			return EXIT_URLFAIL;
+		}
 		if(conn != null) conn.disconnect();
 
-		if(checkMD5(digester, pack))return 0l;
-		else return -1l;
+		if(checkMD5(digester, pack))return EXIT_SUCCESS;
+		else return EXIT_MD5;
 	}
 
 	//TODO proper result handling
-	protected void onPostExecute(Long result){
-		task.done(result > -1l);
+	protected void onPostExecute(Integer result){
+		task.done(result);
 	}
 
 	protected void onProgressUpdate(Object...objects){
 		task.update((Integer)objects[0], (Integer)objects[1], (String)objects[2]);
+	}
+
+	protected void onCancelled(){
+		onPostExecute(EXIT_CANCELLED);
 	}
 
 	private boolean checkMD5(MessageDigest digester, DownloadPackage task){
@@ -187,26 +196,26 @@ public class DownloadAsyncTask extends AsyncTask<DownloadPackage, Object, Long> 
 				byte[] buffer = new byte[1024];//size is large enough to hold the entire hash
 				BufferedInputStream bis = new BufferedInputStream(conn.getInputStream());
 				int bytesRead = bis.read(buffer);
+				String hash = null;
 				if(bytesRead > -1){
-					String hash = new String(buffer, 0, bytesRead);
-					StringBuffer sb = new StringBuffer();
-					Integer tmp = 0;
-					for(int i = 0; i < messageDigest.length; i++){
-						tmp = 0xFF & messageDigest[i];
-						if(tmp < 0xF) sb.append('0');
-						sb.append(Integer.toHexString(tmp));
-					}
-					sb.append('\n');//add newline to become identical with the hash file
-					
-					return hash.equals(sb.toString());
+					hash = new String(buffer, 0, bytesRead);
 				}
-				return false;
+				StringBuffer sb = new StringBuffer();
+				Integer tmp = 0;
+				for(int i = 0; i < messageDigest.length; i++){
+					tmp = 0xFF & messageDigest[i];
+					if(tmp < 0xF) sb.append('0');
+					sb.append(Integer.toHexString(tmp));
+				}
+				sb.append('\n');//add newline to become identical with the hash file
+
+				return hash.equals(sb.toString());
 			} catch (IOException e) {
 				e.printStackTrace();
-				return false;
+				return true;
 			}
 		}else{
-			return false;	
+			return true;	
 		}
 
 	}

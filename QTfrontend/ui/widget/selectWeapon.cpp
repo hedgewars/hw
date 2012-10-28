@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ void SelWeaponItem::setEnabled(bool value)
 }
 
 SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
-  QFrame(parent),
-  m_numItems(numItems)
+    QFrame(parent),
+    m_numItems(numItems)
 {
     wconf = new QSettings(cfgdir->absolutePath() + "/weapons.ini", QSettings::IniFormat, this);
 
@@ -127,9 +127,9 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
 
     int j = -1;
     int i = 0, k = 0;
-    for(; i < m_numItems; ++i) {
+    for(; i < m_numItems; ++i)
+    {
         if (i == 6) continue;
-        if (i == 52) continue; // Disable structures for now
         if (k % 4 == 0) ++j;
         SelWeaponItem * swi = new SelWeaponItem(true, i, currentState[i].digitValue(), QImage(":/res/ammopic.png"), QImage(":/res/ammopicgrey.png"), this);
         weaponItems[i].append(swi);
@@ -159,10 +159,12 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 {
     bool enable = true;
     for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+        if (!cDefaultAmmos[i].first.compare(m_name->text()))
+        {
             enable = false;
         }
-    for(int i = 0; i < m_numItems; ++i) {
+    for(int i = 0; i < m_numItems; ++i)
+    {
         twi::iterator it = weaponItems.find(i);
         if (it == weaponItems.end()) continue;
         it.value()[0]->setItemsNum(ammo[i].digitValue());
@@ -180,7 +182,8 @@ void SelWeaponWidget::setWeapons(const QString& ammo)
 void SelWeaponWidget::setDefault()
 {
     for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
+        if (!cDefaultAmmos[i].first.compare(m_name->text()))
+        {
             return;
         }
     setWeapons(*cDefaultAmmoStore);
@@ -188,20 +191,18 @@ void SelWeaponWidget::setDefault()
 
 void SelWeaponWidget::save()
 {
-    for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
-            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
-            return;
-        }
-
+    // TODO make this return if success or not, so that the page can react
+    // properly and not goBack if saving failed
     if (m_name->text() == "") return;
 
     QString state1;
     QString state2;
     QString state3;
     QString state4;
+    QString stateFull;
 
-    for(int i = 0; i < m_numItems; ++i) {
+    for(int i = 0; i < m_numItems; ++i)
+    {
         twi::const_iterator it = weaponItems.find(i);
         int num = it == weaponItems.end() ? 9 : it.value()[0]->getItemsNum(); // 9 is for 'skip turn'
         state1.append(QString::number(num));
@@ -212,11 +213,33 @@ void SelWeaponWidget::save()
         int am = it == weaponItems.end() ? 0 : it.value()[3]->getItemsNum();
         state4.append(QString::number(am));
     }
-    if (curWeaponsName != "") {
+
+    stateFull = state1 + state2 + state3 + state4;
+
+    for(int i = 0; i < cDefaultAmmos.size(); i++)
+    {
+        if (cDefaultAmmos[i].first.compare(m_name->text()) == 0)
+        {
+            // don't show warning if no change
+            if (cDefaultAmmos[i].second.compare(stateFull) == 0)
+                return;
+
+            QMessageBox deniedMsg(this);
+            deniedMsg.setIcon(QMessageBox::Warning);
+            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
+            deniedMsg.setText(QMessageBox::tr("Cannot overwrite default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
+            return;
+        }
+    }
+
+    if (curWeaponsName != "")
+    {
         // remove old entry
         wconf->remove(curWeaponsName);
     }
-    wconf->setValue(m_name->text(), state1 + state2 + state3 + state4);
+    wconf->setValue(m_name->text(), stateFull);
     emit weaponsChanged();
 }
 
@@ -236,14 +259,26 @@ void SelWeaponWidget::deleteWeaponsName()
     if (curWeaponsName == "") return;
 
     for(int i = 0; i < cDefaultAmmos.size(); i++)
-        if (!cDefaultAmmos[i].first.compare(m_name->text())) {
-            QMessageBox::warning(0, QMessageBox::tr("Weapons"), QMessageBox::tr("Can not delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+        if (!cDefaultAmmos[i].first.compare(m_name->text()))
+        {
+            QMessageBox deniedMsg(this);
+            deniedMsg.setIcon(QMessageBox::Warning);
+            deniedMsg.setWindowTitle(QMessageBox::tr("Weapons - Warning"));
+            deniedMsg.setText(QMessageBox::tr("Cannot delete default weapon set '%1'!").arg(cDefaultAmmos[i].first));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
             return;
         }
 
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Weapons"), QMessageBox::tr("Really delete this weapon set?"), QMessageBox::Ok | QMessageBox::Cancel);
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Weapons - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the weapon set '%1'?").arg(curWeaponsName));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok) {
+    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
+    {
         wconf->remove(curWeaponsName);
         emit weaponsDeleted();
     }
@@ -252,10 +287,11 @@ void SelWeaponWidget::deleteWeaponsName()
 void SelWeaponWidget::newWeaponsName()
 {
     QString newName = tr("new");
-    if(wconf->contains(newName)) {
+    if(wconf->contains(newName))
+    {
         //name already used -> look for an appropriate name:
         int i=2;
-        while(wconf->contains(newName = tr("new")+QString::number(i++)));
+        while(wconf->contains(newName = tr("new")+QString::number(i++))) ;
     }
     setWeaponsName(newName);
 }
@@ -266,9 +302,12 @@ void SelWeaponWidget::setWeaponsName(const QString& name)
 
     curWeaponsName = name;
 
-    if(name != "" && wconf->contains(name)) {
+    if(name != "" && wconf->contains(name))
+    {
         setWeapons(wconf->value(name).toString());
-    } else {
+    }
+    else
+    {
         setWeapons(*cDefaultAmmoStore);
     }
 }
@@ -280,13 +319,15 @@ QStringList SelWeaponWidget::getWeaponNames() const
 
 void SelWeaponWidget::copy()
 {
-    if(wconf->contains(curWeaponsName)) {
+    if(wconf->contains(curWeaponsName))
+    {
         QString ammo = getWeaponsString(curWeaponsName);
         QString newName = tr("copy of") + " " + curWeaponsName;
-        if(wconf->contains(newName)) {
+        if(wconf->contains(newName))
+        {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++)));
+            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++))) ;
         }
         setWeaponsName(newName);
         setWeapons(ammo);

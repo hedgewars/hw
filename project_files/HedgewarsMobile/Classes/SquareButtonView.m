@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 20/04/2010.
  */
 
 
@@ -24,12 +22,12 @@
 
 
 @implementation SquareButtonView
-@synthesize colorArray, selectedColor, ownerDictionary;
+@synthesize ownerDictionary, colorIndex, selectedColor, colorArray;
 
 -(id) initWithFrame:(CGRect)frame {
     if ((self = [super initWithFrame:frame])) {
-        colorIndex = -1;
-        selectedColor = 0;
+        self.colorIndex = 0;
+        self.selectedColor = 0;
 
         self.colorArray = [HWUtils teamColors];
 
@@ -49,24 +47,21 @@
 }
 
 -(void) nextColor {
-    colorIndex++;
+    self.colorIndex++;
 
-    if (colorIndex >= [colorArray count])
-        colorIndex = 0;
+    if (self.colorIndex >= [self.colorArray count])
+        self.colorIndex = 0;
 
-    NSUInteger color = [[self.colorArray objectAtIndex:colorIndex] unsignedIntValue];
-    self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
-                                           green:((color & 0x0000FF00) >> 8)/255.0f
-                                            blue: (color & 0x000000FF)/255.0f
-                                           alpha:1.0f];
-
-    [ownerDictionary setObject:[NSNumber numberWithInt:color] forKey:@"color"];
+    NSNumber *colorNumber = [self.colorArray objectAtIndex:colorIndex];
+    [self.ownerDictionary setObject:colorNumber forKey:@"color"];
+    NSUInteger color = [colorNumber unsignedIntValue];
+    [self selectColor:color];
 }
 
 -(void) selectColor:(NSUInteger) color {
-    if (color != selectedColor) {
-        selectedColor = color;
-        colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
+    if (color != self.selectedColor) {
+        self.selectedColor = color;
+        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
 
         self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
                                                green:((color & 0x0000FF00) >> 8)/255.0f

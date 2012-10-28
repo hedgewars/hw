@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,13 +26,13 @@
 #include <QGroupBox>
 #include <QToolBox>
 #include <QMessageBox>
-
-#include "sdlkeys.h"
+#include <QStandardItemModel>
+#include <QDebug>
 #include "SquareLabel.h"
-#include "hats.h"
 #include "HWApplication.h"
 
-#include "HWDataManager.h"
+#include "DataManager.h"
+#include "HatModel.h"
 
 #include "pageeditteam.h"
 
@@ -61,11 +61,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    HatsModel * hatsModel = new HatsModel(GBoxHedgehogs);
+    HatModel * hatModel = DataManager::instance().hatModel();
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         HHHats[i] = new QComboBox(GBoxHedgehogs);
-        HHHats[i]->setModel(hatsModel);
+        HHHats[i]->setModel(hatModel);
         HHHats[i]->setIconSize(QSize(32, 37));
         //HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
         //HHHats[i]->setModelColumn(1);
@@ -114,9 +115,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     CBTeamLvl->addItem(QIcon(":/res/botlevels/0.png"), QComboBox::tr("Human"));
     for(int i = 5; i > 0; i--)
         CBTeamLvl->addItem(
-                QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
-                QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
-                );
+            QIcon(QString(":/res/botlevels/%1.png").arg(6 - i)),
+            QString("%1 %2").arg(QComboBox::tr("Level")).arg(i)
+        );
     GBTLayout->addWidget(CBTeamLvl, 1, 1);
 
     CBGrave = new QComboBox(GBoxTeam);
@@ -133,7 +134,7 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     CBVoicepack = new QComboBox(GBoxTeam);
 
     hbox->addWidget(CBVoicepack, 100);
-    btnTestSound = addButton(":/res/PlaySound.png", hbox, 1, true);
+    btnTestSound = addSoundlessButton(":/res/PlaySound.png", hbox, 1, true);
     hbox->setStretchFactor(btnTestSound, 1);
 
     GBTLayout->addLayout(hbox, 4, 1);
@@ -170,7 +171,8 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     QWidget * curW = NULL;
     QGridLayout * pagelayout = NULL;
     QLabel* l = NULL;
-    while (i < BINDS_NUMBER) {
+    while (i < BINDS_NUMBER)
+    {
         if(cbinds[i].category != NULL)
         {
             if(curW != NULL)
@@ -195,9 +197,9 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
         l->setText(HWApplication::translate("binds", cbinds[i].name));
         l->setAlignment(Qt::AlignRight);
         pagelayout->addWidget(l, num, 0);
+
         CBBind[i] = new QComboBox(curW);
-        for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
-            CBBind[i]->addItem(HWApplication::translate("binds (keys)", sdlkeys[j][1]).contains(": ") ? HWApplication::translate("binds (keys)", sdlkeys[j][1]) : HWApplication::translate("binds (keys)", "Keyboard") + QString(": ") + HWApplication::translate("binds (keys)", sdlkeys[j][1]), sdlkeys[j][0]);
+        CBBind[i]->setModel(DataManager::instance().bindsModel());
         pagelayout->addWidget(CBBind[i++], num++, 1);
     }
 
@@ -206,18 +208,12 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
 QLayout * PageEditTeam::footerLayoutDefinition()
 {
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);;
-    btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
-
-    return bottomLayout;
+    return NULL;
 }
 
 void PageEditTeam::connectSignals()
 {
-    connect(btnSave, SIGNAL(clicked()), this, SLOT(saveTeam()));
+    connect(this, SIGNAL(goBack()), this, SLOT(saveTeam()));
 
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);
@@ -228,21 +224,21 @@ void PageEditTeam::connectSignals()
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         connect(HHNameEdit[i], SIGNAL(editingFinished()), signalMapper1, SLOT(map()));
-            signalMapper1->setMapping(HHNameEdit[i], i);
+        signalMapper1->setMapping(HHNameEdit[i], i);
 
         connect(btnRandomHogName[i], SIGNAL(clicked()), signalMapper2, SLOT(map()));
-            signalMapper2->setMapping(btnRandomHogName[i], i);
+        signalMapper2->setMapping(btnRandomHogName[i], i);
     }
 
     connect(btnRandomTeam, SIGNAL(clicked()), this, SLOT(setRandomNames()));
-    
+
     connect(btnTestSound, SIGNAL(clicked()), this, SLOT(testSound()));
 
     connect(CBFort, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(CBFort_activated(const QString &)));
 }
 
 PageEditTeam::PageEditTeam(QWidget* parent) :
-  AbstractPage(parent)
+    AbstractPage(parent)
 {
     initPage();
 
@@ -250,13 +246,13 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
     m_playerHash = "0000000000000000000000000000000000000000";
 
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QStringList list;
 
 
     // voicepacks
-    list = dataMgr.entryList("Sounds/voices", 
+    list = dataMgr.entryList("Sounds/voices",
                              QDir::AllDirs | QDir::NoDotAndDotDot);
 
     CBVoicepack->addItems(list);
@@ -291,6 +287,9 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
     // skip cpu and hedgewars flags
     int idx = list.indexOf("cpu.png");
+    if (idx >= 0)
+        list.removeAt(idx);
+    idx = list.indexOf("cpu_plain.png");
     if (idx >= 0)
         list.removeAt(idx);
     idx = list.indexOf("hedgewars.png");
@@ -338,32 +337,32 @@ void PageEditTeam::fixHHname(int idx)
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
     QPixmap pix(dataMgr.findFileForRead("Forts/" + fortname + "L.png"));
     FortPreview->setPixmap(pix);
 }
 
 void PageEditTeam::testSound()
 {
-    HWDataManager & dataMgr = HWDataManager::instance();
+    DataManager & dataMgr = DataManager::instance();
 
     QString voiceDir = QString("Sounds/voices/") + CBVoicepack->currentText();
 
     QStringList list = dataMgr.entryList(
-            voiceDir,
-            QDir::Files,
-            QStringList() <<
-                "Illgetyou.ogg" <<
-                "Incoming.ogg" <<
-                "Stupid.ogg" <<
-                "Coward.ogg" <<
-                "Firstblood.ogg"
-            );
+                           voiceDir,
+                           QDir::Files,
+                           QStringList() <<
+                           "Illgetyou.ogg" <<
+                           "Incoming.ogg" <<
+                           "Stupid.ogg" <<
+                           "Coward.ogg" <<
+                           "Firstblood.ogg"
+                       );
 
     if (!list.isEmpty())
         SDLInteraction::instance().playSoundFile(
             dataMgr.findFileForRead(voiceDir + "/" +
-                list[rand() % list.size()])
+                                    list[rand() % list.size()])
         );
 }
 
@@ -384,9 +383,14 @@ void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
 
 void PageEditTeam::deleteTeam(const QString & name)
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Teams"), QMessageBox::tr("Really delete this team?"), QMessageBox::Ok | QMessageBox::Cancel, this);
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(name));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
 
-    if (reallyDelete.exec() == QMessageBox::Ok)
+    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
         HWTeam(name).deleteFile();
 }
 
@@ -427,9 +431,15 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     CBFort->setCurrentIndex(CBFort->findText(team.fort()));
     CBVoicepack->setCurrentIndex(CBVoicepack->findText(team.voicepack()));
 
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        CBBind[i]->setCurrentIndex(CBBind[i]->findData(team.keyBind(i)));
+        QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, team.keyBind(i), 1, Qt::MatchExactly);
+
+        if(mdl.size() == 1)
+            CBBind[i]->setCurrentIndex(mdl[0].row());
+        else
+            qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
 }
 
@@ -455,9 +465,10 @@ HWTeam PageEditTeam::data()
     team.setVoicepack(CBVoicepack->currentText());
     team.setFlag(CBFlag->itemData(CBFlag->currentIndex()).toString());
 
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        team.bindKey(i,CBBind[i]->itemData(CBBind[i]->currentIndex()).toString());
+        team.bindKey(i, binds->index(CBBind[i]->currentIndex(), 0).data(Qt::UserRole + 1).toString());
     }
 
     return team;
@@ -466,5 +477,4 @@ HWTeam PageEditTeam::data()
 void PageEditTeam::saveTeam()
 {
     data().saveToFile();
-    emit teamEdited();
 }

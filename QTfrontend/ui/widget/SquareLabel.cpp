@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@
 SquareLabel::SquareLabel(QWidget * parent) :
     QWidget(parent)
 {
-    if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
+    //if(frontendEffects) setAttribute(Qt::WA_PaintOnScreen, true);
 }
 
 void SquareLabel::paintEvent(QPaintEvent * event)
@@ -33,10 +33,13 @@ void SquareLabel::paintEvent(QPaintEvent * event)
 
     QPainter painter(this);
     int pixsize;
-    if (width() > height()) {
+    if (width() > height())
+    {
         pixsize = height();
         painter.translate((width() - pixsize) / 2, 0);
-    } else {
+    }
+    else
+    {
         pixsize = width();
         painter.translate(0, (height() - pixsize) / 2);
     }

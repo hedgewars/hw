@@ -18,9 +18,9 @@ For server:
 $ cmake .
 or
 $ cmake -DCMAKE_BUILD_TYPE="Release" -DCMAKE_INSTALL_PREFIX="install_prefix" \
--DDATA_INSTALL_DIR="data_dir" .
+-DDATA_INSTALL_DIR="data_dir" -DNOSERVER=1 .
 
-add -DWITH_SERVER=1 to compile net server; if you have Qt installed but it is
+add -DNOSERVER=0 to compile net server; if you have Qt installed but it is
 not found you can set it up with -DQT_QMAKE_EXECUTABLE="path_to_qmake"
 
 2. Compile:

@@ -11,7 +11,9 @@ set(QT_USE_QTOPENGL FALSE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
-include(${QT_USE_FILE})
+if (NOT CROSSAPPLE)
+    include(${QT_USE_FILE})
+endif()
 
 # Check if we need zlib
 check_library_exists("${QT_QTCORE_LIBRARY}" inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
@@ -26,6 +28,9 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
+if(NOT NOVIDEOREC)
+    find_package(FFMPEG)
+endif()
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -37,6 +42,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
+include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -47,7 +53,7 @@ endif(UNIX)
 if(WIN32 AND NOT UNIX)
     set(HEDGEWARS_BINDIR ".")
     set(HEDGEWARS_DATADIR "../share/")
-        add_definitions(-DUSE_XFIRE)
+    add_definitions(-DUSE_XFIRE)
 else()
     set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
     if(DEFINED DATA_INSTALL_DIR)
@@ -69,6 +75,10 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
+if(${FFMPEG_FOUND})
+    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
+endif()
+
 set(hwfr_src
     ${ModelCpp}
     ${NetCpp}
@@ -83,6 +93,7 @@ set(hwfr_src
     hwform.cpp
     main.cpp
     team.cpp
+    campaign.cpp
     ui_hwform.cpp
     ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp
     )
@@ -119,6 +130,8 @@ set(hwfr_moc_hdrs
     HWApplication.h
     hwform.h
     team.h
+    util/DataManager.h
+    util/libav_iteraction.h
     )
 
 set(hwfr_hdrs
@@ -130,6 +143,7 @@ set(hwfr_hdrs
     KB.h
     hwconsts.h
     sdlkeys.h
+    campaign.h
     )
 
 set(hwfr_rez hedgewars.qrc)
@@ -139,7 +153,7 @@ qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
-if(APPLE)
+if(APPLE OR CROSSAPPLE)
     set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
     set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
 
@@ -167,6 +181,7 @@ set(HW_LINK_LIBS
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
+    ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )
 
@@ -185,7 +200,11 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 
-target_link_libraries(hedgewars ${HW_LINK_LIBS})
+if (CROSSAPPLE)
+    add_dependencies(hedgewars quazip)
+else()
+    target_link_libraries(hedgewars ${HW_LINK_LIBS})
+endif()
 
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})

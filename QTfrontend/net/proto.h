@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,15 @@
 
 class HWProto : public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 
-public:
-    HWProto();
-    static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
-    static QByteArray & addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg);
-    static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
-    static QString formatChatMsg(const QString & nick, const QString & msg);
-    static QString formatChatMsgForFrontend(const QString & msg);
+    public:
+        HWProto();
+        static QByteArray & addStringToBuffer(QByteArray & buf, const QString & string);
+        static QByteArray & addByteArrayToBuffer(QByteArray & buf, const QByteArray & msg);
+        static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
+        static QString formatChatMsg(const QString & nick, const QString & msg);
+        static QString formatChatMsgForFrontend(const QString & msg);
 };
 
 #endif // _PROTO_H

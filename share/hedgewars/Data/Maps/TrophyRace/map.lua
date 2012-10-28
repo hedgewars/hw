@@ -70,19 +70,22 @@ function onAmmoStoreInit()
 	SetAmmo(amRope, 9, 2, 0)
 end
 
-function onGameTick()
-	if TurnTimeLeft == 1 and CurrentHedgehog ~= nil then
+function onGameTick20()
+	if CurrentHedgehog ~= nil and TurnTimeLeft <= 20 and TurnTimeLeft > 0 then
 		SetHealth(CurrentHedgehog, 0)
 		x, y = GetGearPosition(CurrentHedgehog)
-		AddGear(x, y, gtAmmo_Grenade, 0, 0, 0, 0)
+		AddGear(x, y, gtShell, 0, 0, 0, 0)
 		worsttime = 99999
 		worsthog = nil
-	elseif TurnTimeLeft == maxtime - 1 and CurrentHedgehog ~= nil then
+	elseif TurnTimeLeft > maxtime - 25 and CurrentHedgehog ~= nil then
 		if lasthog ~= nil then 
 		SetGearPosition(lasthog, p , 0)
 		end
 		reached = false
+        SetGearVelocity(CurrentHedgehog, 1, 0)
 		SetGearPosition(CurrentHedgehog, start_area[1] + start_area[3] / 2, start_area[2] + start_area[4] / 2)
+        ParseCommand("setweap " .. string.char(amRope))
+		lasthog = CurrentHedgehog
 	elseif CurrentHedgehog ~= nil then
 		x, y = GetGearPosition(CurrentHedgehog)
 		if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
@@ -148,15 +151,14 @@ function onGearAdd(gear)
 		hhs[numhhs] = gear
 		times[numhhs] = 0
 		numhhs = numhhs + 1
-	elseif GetGearType(gear) == gtRope then -- rope is shot
-		
 	end
+--	elseif GetGearType(gear) == gtRope then -- rope is shot
 end
 
-function onGearDelete(gear)
-	if GetGearType(gear) == gtRope then -- rope deletion - hog didn't manage to rerope
-		--TurnTimeLeft = 0 -- end turn or not? hm...
-		lasthog = CurrentHedgehog
-		
-	end
-end
+--function onGearDelete(gear)
+--	if GetGearType(gear) == gtRope then -- rope deletion - hog didn't manage to rerope
+--		--TurnTimeLeft = 0 -- end turn or not? hm...
+--		lasthog = CurrentHedgehog
+--		
+--	end
+--end

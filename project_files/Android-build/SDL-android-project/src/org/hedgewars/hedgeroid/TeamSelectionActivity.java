@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,9 +22,10 @@ package org.hedgewars.hedgeroid;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
-import org.hedgewars.hedgeroid.EngineProtocol.Team;
+import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Team;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -45,13 +46,13 @@ import android.widget.SimpleAdapter;
 import android.widget.SimpleAdapter.ViewBinder;
 import android.widget.TextView;
 
-public class TeamSelectionActivity extends Activity{
+public class TeamSelectionActivity extends Activity implements Runnable{
 
 	private static final int ACTIVITY_TEAMCREATION = 0;
 
 	private ImageButton addTeam, back;
 	private ListView availableTeams, selectedTeams;
-	private ArrayList<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
+	private List<HashMap<String, Object>> availableTeamsList, selectedTeamsList;
 	private TextView txtInfo;
 
 	public void onCreate(Bundle savedInstanceState){
@@ -62,37 +63,50 @@ public class TeamSelectionActivity extends Activity{
 		addTeam = (ImageButton) findViewById(R.id.btnAdd);
 		back = (ImageButton) findViewById(R.id.btnBack);
 		txtInfo = (TextView) findViewById(R.id.txtInfo);
-
+		selectedTeams = (ListView) findViewById(R.id.selectedTeams);
+		availableTeams = (ListView) findViewById(R.id.availableTeams);
 		addTeam.setOnClickListener(addTeamClicker);
 		back.setOnClickListener(backClicker);
 
-		availableTeams = (ListView) findViewById(R.id.availableTeams);
-		availableTeamsList = FrontendDataUtils.getTeams(this);
+		availableTeamsList = new ArrayList<HashMap<String, Object>>();
 		SimpleAdapter adapter = new SimpleAdapter(this, availableTeamsList, R.layout.team_selection_entry_simple, new String[]{"txt", "img"}, new int[]{R.id.txtName, R.id.imgDifficulty});
 		availableTeams.setAdapter(adapter);
-		registerForContextMenu(availableTeams);
 		availableTeams.setOnItemClickListener(availableClicker);
+		registerForContextMenu(availableTeams);
 
-		selectedTeams = (ListView) findViewById(R.id.selectedTeams);
 		selectedTeamsList = new ArrayList<HashMap<String, Object>>();
-		ArrayList<HashMap<String, ?>> toBeRemoved = new ArrayList<HashMap<String, ?>>();
-		ArrayList<Team> teamsStartGame = getIntent().getParcelableArrayListExtra("teams");
-		for(HashMap<String, Object> hashmap : availableTeamsList){
-			for(Team t : teamsStartGame){
-				if(((Team)hashmap.get("team")).equals(t)){
-					toBeRemoved.add(hashmap);
-					selectedTeamsList.add(FrontendDataUtils.teamToHashMap(t));//create a new hashmap to ensure all variables are entered into the map
-				}
-			}
-		}
-		for(HashMap<String, ?> hashmap : toBeRemoved) availableTeamsList.remove(hashmap);
-
 		adapter = new SimpleAdapter(this, selectedTeamsList, R.layout.team_selection_entry, new String[]{"txt", "img", "color", "count"}, new int[]{R.id.txtName, R.id.imgDifficulty, R.id.teamColor, R.id.teamCount});
 		adapter.setViewBinder(viewBinder);
 		selectedTeams.setAdapter(adapter);
 		selectedTeams.setOnItemClickListener(selectedClicker);
 
 		txtInfo.setText(String.format(getResources().getString(R.string.teams_info_template), selectedTeams.getChildCount()));
+
+		new Thread(this).start();//load the teams from xml async
+	}
+
+	public void run(){
+		List<HashMap<String, Object>> teamsList = FrontendDataUtils.getTeams(this);//teams from xml
+		ArrayList<Team> teamsStartGame = getIntent().getParcelableArrayListExtra("teams");//possible selected teams
+
+		for(HashMap<String, Object> hashmap : teamsList){
+			boolean added = false;
+			for(Team t : teamsStartGame){
+				if(((Team)hashmap.get("team")).equals(t)){//add to available or add to selected
+					selectedTeamsList.add(FrontendDataUtils.teamToMap(t));//create a new hashmap to ensure all variables are entered into the map
+					added = true;
+					break;
+				}
+			}
+			if(!added) availableTeamsList.add(hashmap);
+		}
+
+		this.runOnUiThread(new Runnable(){
+			public void run() {
+				((SimpleAdapter)selectedTeams.getAdapter()).notifyDataSetChanged();
+				((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();		
+			}
+		});
 	}
 
 	private ViewBinder viewBinder = new ViewBinder(){
@@ -120,6 +134,9 @@ public class TeamSelectionActivity extends Activity{
 		}
 	}
 
+	/*
+	 * Updates the list view when TeamCreationActivity is shutdown and the user returns to this point
+	 */
 	private void updateListViews(){
 		unregisterForContextMenu(availableTeams);
 		availableTeamsList = FrontendDataUtils.getTeams(this);
@@ -241,7 +258,8 @@ public class TeamSelectionActivity extends Activity{
 			selectAvailableTeamsItem(position);
 			return true;
 		case 1://delete
-			File f = new File(String.format("%s/%s/%s.xml", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, availableTeamsList.get(position).get("txt")));
+			Team team = (Team)availableTeamsList.get(position).get("team");
+			File f = new File(String.format("%s/%s/%s", TeamSelectionActivity.this.getFilesDir(), Team.DIRECTORY_TEAMS, team.file));
 			f.delete();
 			availableTeamsList.remove(position);
 			((SimpleAdapter)availableTeams.getAdapter()).notifyDataSetChanged();

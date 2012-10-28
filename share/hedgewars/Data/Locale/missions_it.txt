@@ -1,0 +1,47 @@
+Basic_Training_-_Bazooka.name=Addestramento base sull'utilizzo del Bazooka
+Basic_Training_-_Bazooka.desc="Utilizzare il vento a proprio vantaggio costituisce la soluzione ad ogni problema!"
+
+Basic_Training_-_Grenade.name=Addestramento base sull'utilizzo delle Granate
+Basic_Training_-_Grenade.desc="Ricorda, toglierai PRIMA la sicura e POI lancerai la granata!"
+
+Basic_Training_-_Cluster_Bomb.name=ddestramento base sull'utilizzo delle Granate a Grappolo
+Basic_Training_-_Cluster_Bomb.desc="Qualcuno ha bisogno di una doccia (molto) calda!"
+
+Basic_Training_-_Shotgun.name=Addestramento base sull'utilizzo del Fucile a Pompa
+Basic_Training_-_Shotgun.desc="Prima spara, poi poniti delle domande!"
+
+Basic_Training_-_Sniper_Rifle.name=Addestramento base sull'utilizzo del Fucile di Precisione
+Basic_Training_-_Sniper_Rifle.desc="Sii preciso come non mai con il fucile di precisione! E attenzione a non sbagliare troppi colpi!"
+
+Basic_Training_-_Rope.name=Addestramento base sull'utilizzo della Corda
+Basic_Training_-_Rope.desc="Preparati ad arrivare ovunque grazie alla migliore delle corde esistenti sul mercato!"
+
+User_Mission_-_Dangerous_Ducklings.name=Missione: Anatroccoli Pericolosi
+User_Mission_-_Dangerous_Ducklings.desc="Sii pronto, recluta! E' tempo di mettere a frutto quanto imparato durante l'addestramento base!"
+
+User_Mission_-_Diver.name=Missione: Operazione Sub
+User_Mission_-_Diver.desc="Questo 'assalto anfibio' è più difficile di quanto sembri..."
+
+User_Mission_-_Teamwork.name=Missione: Lavoro di Squadra
+User_Mission_-_Teamwork.desc="Talvolta, l'amore fa male!"
+
+User_Mission_-_Spooky_Tree.name=Missione: Albero Stregato
+User_Mission_-_Spooky_Tree.desc="Ci sono tantissimi barili qui! Speriamo vivamente che quegli uccellacci non siano affamati!"
+
+User_Mission_-_Bamboo_Thicket.name=Missione: Boschetto di Bambù
+User_Mission_-_Bamboo_Thicket.desc="La morte arriva dall'alto."
+
+User_Mission_-_That_Sinking_Feeling.name=Missione: Quella Sensazione di Affogare...
+User_Mission_-_That_Sinking_Feeling.desc="L'acqua sale molto rapidamente ed il tempo è fortemente limitato. Molti hanno provato e hanno fallito. Riuscirai a salvare tutti i ricci sfortunati?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Missione: Newton e l'Amaca
+User_Mission_-_Newton_and_the_Hammock.desc="Ricordate ricci: la velocità di un corpo rimane costante a meno che non intervenga una forza esterna ad esso!"
+
+User_Mission_-_The_Great_Escape.name=Missione: La Grande Fuga
+User_Mission_-_The_Great_Escape.desc="Pensi ancora di potermi imprigionare!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Sfida: A Colpi di Corda
+User_Mission_-_Rope_Knock_Challenge.desc="Guarda sempre dietro di te!"
+
+User_Mission_-_RCPlane_Challenge.name=Sfida: Aereo Radiocomandato
+User_Mission_-_RCPlane_Challenge.desc="Ti senti abbastanza sicuro, eh, aviatore?"

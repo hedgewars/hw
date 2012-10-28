@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,22 +24,23 @@ interface
 
 procedure initModule;
 procedure freeModule;
+procedure ReloadLines;
 
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
 
 implementation
-uses SDLh, uKeys, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 
 type TChatLine = record
-        Tex: PTexture;
-        Time: Longword;
-        Width: LongInt;
-        s: shortstring;
-        end;
+    Tex: PTexture;
+    Time: Longword;
+    Width: LongInt;
+    s: shortstring;
+    end;
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -51,7 +52,8 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatReady: boolean;
     showAll: boolean;
 
-const colors: array[#1..#6] of TSDL_Color = (
+const colors: array[#0..#6] of TSDL_Color = (
+    (r:$FF; g:$FF; b:$FF; unused:$FF), // unused, feel free to take it for anything
     (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
     (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
     (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
@@ -72,15 +74,15 @@ if cl.Tex <> nil then
 cl.s:= str;
 
 if isInput then
-begin
+    begin
     color:= colors[#6];
     str:= UserNick + '> ' + str + '_'
-end
+    end
 else
-begin
+    begin
     color:= colors[str[1]];
     delete(str, 1, 1)
-end;
+    end;
 
 font:= CheckCJKFont(str, fnt16);
 w:= 0; h:= 0; // avoid compiler hints
@@ -97,6 +99,21 @@ cl.Time:= RealTicks + 12500;
 cl.Tex:= Surface2Tex(resSurface, false);
 
 SDL_FreeSurface(resSurface)
+end;
+
+// For uStore texture recreation
+procedure ReloadLines;
+var i, t: LongWord;
+begin
+    if InputStr.s <> '' then
+        SetLine(InputStr, InputStr.s, true);
+    for i:= 0 to MaxStrIndex do
+        if Strs[i].s <> '' then
+            begin
+            t:= Strs[i].Time;
+            SetLine(Strs[i], Strs[i].s, false);
+            Strs[i].Time:= t
+            end;
 end;
 
 procedure AddChatString(s: shortstring);
@@ -137,8 +154,7 @@ r.x:= 6 - cScreenWidth div 2;
 r.y:= (visibleCount - t) * 16 + 10;
 r.h:= 16;
 
-if (GameState = gsChat)
-    and (InputStr.Tex <> nil) then
+if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
     r.w:= InputStr.Width;
     DrawFillRect(r);
@@ -150,9 +166,8 @@ if (GameState = gsChat)
 
 dec(r.y, 16);
 
-while (((t < 7) and (Strs[i].Time > RealTicks)) or
-       ((t < MaxStrIndex) and showAll)) and
-      (Strs[i].Tex <> nil) do
+while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
+and (Strs[i].Tex <> nil) do
     begin
     r.w:= Strs[i].Width;
     DrawFillRect(r);
@@ -162,7 +177,11 @@ while (((t < 7) and (Strs[i].Time > RealTicks)) or
     DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
     dec(r.y, 16);
 
-    if i = 0 then i:= MaxStrIndex else dec(i);
+    if i = 0 then
+        i:= MaxStrIndex
+    else
+        dec(i);
+        
     inc(cnt);
     inc(t)
     end;
@@ -183,12 +202,19 @@ var i: TWave;
 begin
 t:= LocalTeam;
 x:= 0;
-if (s[1] = '"') and (s[Length(s)] = '"') then x:= 1
-else if (s[1] = '''') and (s[Length(s)] = '''') then x:= 2
-else if (s[1] = '-') and (s[Length(s)] = '-') then x:= 3;
+if (s[1] = '"') and (s[Length(s)] = '"')
+    then x:= 1
+    
+else if (s[1] = '''') and (s[Length(s)] = '''') then
+    x:= 2
+    
+else if (s[1] = '-') and (s[Length(s)] = '-') then
+    x:= 3;
+    
 if not CurrentTeam^.ExtDriven and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
-        if (TeamsArray[c] = CurrentTeam) then t:= c;
+        if (TeamsArray[c] = CurrentTeam) then
+            t:= c;
 
 if x <> 0 then
     begin
@@ -247,11 +273,10 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
 end;
 
 procedure KeyPressChat(Key: Longword);
-const firstByteMark: array[1..4] of byte = (0, $C0, $E0, $F0);
+const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
     utf8: shortstring;
 begin
-
 if Key <> 0 then
     case Key of
         {Backspace}
@@ -267,6 +292,7 @@ if Key <> 0 then
                 FreezeEnterKey;
                 SDL_EnableKeyRepeat(0,0);
                 GameState:= gsGame;
+                ResetKbd;
                 end;
         {Return}
         3, 13, 271: begin
@@ -278,12 +304,17 @@ if Key <> 0 then
             FreezeEnterKey;
             SDL_EnableKeyRepeat(0,0);
             GameState:= gsGame;
+            ResetKbd;
             end;
     else
-    if (Key < $80) then btw:= 1
-    else if (Key < $800) then btw:= 2
-    else if (Key < $10000) then btw:= 3
-    else btw:= 4;
+        if (Key < $80) then
+            btw:= 1
+        else if (Key < $800) then
+            btw:= 2
+        else if (Key < $10000) then
+            btw:= 3
+        else
+            btw:= 4;
 
     utf8:= '';
 
@@ -293,9 +324,10 @@ if Key <> 0 then
         Key:= Key shr 6
         end;
 
-    utf8:= char(Key or firstByteMark[btw]) + utf8;
+    utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-    if byte(InputStr.s[0]) + btw > 240 then exit;
+    if byte(InputStr.s[0]) + btw > 240 then
+        exit;
 
     InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
     SetLine(InputStr, InputStr.s + utf8, true)
@@ -312,7 +344,7 @@ begin
     SendIPC('s' + s);
 
     if copy(s, 1, 4) = '/me ' then
-        s:= #2'* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
+        s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
         s:= #1 + UserNick + ': ' + s;
 
@@ -331,7 +363,7 @@ end;
 procedure chHistory(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
-    uChat.showAll:= not uChat.showAll
+    showAll:= not showAll
 end;
 
 procedure chChat(var s: shortstring);
@@ -344,6 +376,7 @@ begin
     else
         begin
         // err, does anyone have any documentation on this sequence?
+        // ^^ isn't it obvious? 27 is esc, 32 is space, inbetween is "/team"
         KeyPressChat(27);
         KeyPressChat(47);
         KeyPressChat(116);
@@ -357,11 +390,11 @@ end;
 procedure initModule;
 var i: ShortInt;
 begin
-    RegisterVariable('chatmsg', vtCommand, @chChatMessage, true);
-    RegisterVariable('say', vtCommand, @chSay, true);
-    RegisterVariable('team', vtCommand, @chTeamSay, true);
-    RegisterVariable('history', vtCommand, @chHistory, true );
-    RegisterVariable('chat', vtCommand, @chChat, true );
+    RegisterVariable('chatmsg', @chChatMessage, true);
+    RegisterVariable('say', @chSay, true);
+    RegisterVariable('team', @chTeamSay, true);
+    RegisterVariable('history', @chHistory, true );
+    RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
     visibleCount:= 0;
@@ -371,9 +404,7 @@ begin
 
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
-    begin
         Strs[i].Tex := nil;
-    end;
 end;
 
 procedure freeModule;
@@ -381,9 +412,7 @@ var i: ShortInt;
 begin
     FreeTexture(InputStr.Tex);
     for i:= 0 to MaxStrIndex do
-    begin
         FreeTexture(Strs[i].Tex);
-    end;
 end;
 
 end.

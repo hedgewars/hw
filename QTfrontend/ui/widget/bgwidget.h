@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2009 Kristian Lehmann <email@thexception.net>
- * Copyright (c) 2009-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,44 +34,46 @@
 
 class SpritePosition
 {
-public:
-    SpritePosition(QWidget * parent, int sw, int sh);
-    ~SpritePosition();
-private:
-    float fX;
-    float fY;
-    float fXMov;
-    float fYMov;
-    int iAngle;
-    QWidget * wParent;
-    int iSpriteHeight;
-    int iSpriteWidth;
-public:
-    void move();
-    void reset();
-    QPoint pos();
-    int getAngle();
-    void init();
+    public:
+        SpritePosition(QWidget * parent, int sw, int sh);
+        ~SpritePosition();
+    private:
+        float fX;
+        float fY;
+        float fXMov;
+        float fYMov;
+        int iAngle;
+        QWidget * wParent;
+        int iSpriteHeight;
+        int iSpriteWidth;
+    public:
+        void move();
+        void reset();
+        QPoint pos();
+        int getAngle();
+        void init();
 };
 
 class BGWidget : public QWidget
 {
-    Q_OBJECT
-public:
-    BGWidget(QWidget * parent);
-    ~BGWidget();
-    void startAnimation();
-    void stopAnimation();
-    void init();
-private:
-    QImage sprite;
-    QTimer * timerAnimation;
-    SpritePosition * spritePositions[SPRITE_MAX];
-    QImage * rotatedSprites[360];
-protected:
-    void paintEvent(QPaintEvent * event);
-private slots:
-    void animate();
+        Q_OBJECT
+    public:
+        BGWidget(QWidget * parent);
+        ~BGWidget();
+        void startAnimation();
+        void stopAnimation();
+        void init();
+        bool enabled;
+
+    private:
+        QImage sprite;
+        QTimer * timerAnimation;
+        SpritePosition * spritePositions[SPRITE_MAX];
+        QImage * rotatedSprites[360];
+    protected:
+        void paintEvent(QPaintEvent * event);
+    private slots:
+        void animate();
 };
 
 #endif // BGWIDGET_H

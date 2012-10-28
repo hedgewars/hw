@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 13/03/2011.
  */
 
 
 #import "HedgewarsAppDelegate.h"
 #import "MainMenuViewController.h"
-#import "ObjcExports.h"
-#include <unistd.h>
 
 
 @implementation SDLUIKitDelegate (customDelegate)
 
+// hijack the the SDL_UIKitAppDelegate to use the UIApplicationDelegate we implement here
 +(NSString *)getAppDelegateClassName {
     return @"HedgewarsAppDelegate";
 }
@@ -34,20 +31,14 @@
 @end
 
 @implementation HedgewarsAppDelegate
-@synthesize mainViewController, uiwindow, secondWindow;
-
-// convenience method
-+(HedgewarsAppDelegate *)sharedAppDelegate {
-    return (HedgewarsAppDelegate *)[[UIApplication sharedApplication] delegate];
-}
+@synthesize mainViewController, uiwindow;
 
 #pragma mark -
 #pragma mark AppDelegate methods
 -(id) init {
-    if (self = [super init]){
+    if ((self = [super init])) {
         mainViewController = nil;
         uiwindow = nil;
-        secondWindow = nil;
     }
     return self;
 }
@@ -55,7 +46,6 @@
 -(void) dealloc {
     [mainViewController release];
     [uiwindow release];
-    [secondWindow release];
     [super dealloc];
 }
 
@@ -64,44 +54,31 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.uiwindow.backgroundColor = [UIColor blackColor];
 
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
-
     [self.uiwindow addSubview:self.mainViewController.view];
     [self.mainViewController release];
-    self.uiwindow.backgroundColor = [UIColor blackColor];
-    [self.uiwindow makeKeyAndVisible];
 
-    // check for dual monitor support
-    if (IS_DUALHEAD()) {
-        DLog(@"Dualhead mode");
-        self.secondWindow = [[UIWindow alloc] initWithFrame:[[[UIScreen screens] objectAtIndex:1] bounds]];
-        self.secondWindow.backgroundColor = [UIColor blackColor];
-        self.secondWindow.screen = [[UIScreen screens] objectAtIndex:1];
-        UIImage *titleImage = [UIImage imageWithContentsOfFile:@"title.png"];
-        UIImageView *titleView = [[UIImageView alloc] initWithImage:titleImage];
-        titleView.center = self.secondWindow.center;
-        [self.secondWindow addSubview:titleView];
-        [titleView release];
-        [self.secondWindow makeKeyAndVisible];
-    }
+    [self.uiwindow makeKeyAndVisible];
 }
 
 -(void) applicationDidReceiveMemoryWarning:(UIApplication *)application {
     [HWUtils releaseCache];
     // don't stop music if it is playing
     if ([HWUtils isGameLaunched]) {
-        [AudioManagerController releaseCache];
+        [[AudioManagerController mainManager] didReceiveMemoryWarning];
+        HW_memoryWarningCallback();
     }
     MSG_MEMCLEAN();
     // don't clean mainMenuViewController here!!!
 }
 
-// true multitasking with sdl works only on 4.2 and above; we close the game to avoid a black screen at return
+// true multitasking with SDL works only on 4.2 and above; we close the game to avoid a black screen at return
 -(void) applicationWillResignActive:(UIApplication *)application {
     if ([HWUtils isGameLaunched] && [[[UIDevice currentDevice] systemVersion] floatValue] < 4.2f)
-         HW_terminate(NO);
+        HW_terminate(NO);
 
     [super applicationWillResignActive:application];
 }

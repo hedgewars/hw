@@ -24,7 +24,8 @@ begin
         CursorPoint.X:= CursorPoint.X + x - cScreenWidth div 2;
         CursorPoint.Y:= CursorPoint.Y - y + cScreenHeight div 2;
 
-        if cHasFocus then SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
+        if cHasFocus then
+            SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
         end
 end;
 

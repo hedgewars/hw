@@ -3,7 +3,6 @@ module NetRoutines where
 
 import Network.Socket
 import Control.Concurrent.Chan
-import qualified Control.Exception as Exception
 import Data.Time
 import Control.Monad
 import Data.Unique
@@ -38,6 +37,7 @@ acceptLoop servSock chan = forever $
                     0
                     lobbyId
                     0
+                    False
                     False
                     False
                     False

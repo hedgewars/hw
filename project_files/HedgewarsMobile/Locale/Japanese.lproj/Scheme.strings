@@ -1,0 +1,194 @@
+﻿/* game mod description */
+"Land can not be destroyed" = "土地は破壊することができません";
+
+/* game mod title */
+"Solid Land" = "固形の土地";
+
+/* game mod description */
+"Add an indestructable border around the terrain" = "地形の周りに破壊できないボーダーを追加する";
+
+/* game mod title */
+"Add Border" = "ボーダーを追加する";
+
+/* game mod description */
+"Teams will start on opposite sides of the terrain" = "チームは地形の反対側からスタート思案す";
+
+/* game mod title */
+"Divide Team (max 2 teams)" = "チームを分ける (最大二チーム)";
+
+/* game mod description */
+"Lower gravity" = "低い重力";
+
+/* game mod title */
+"Low Gravity" = "低重力";
+
+/* game mod description */
+"Assisted aiming with laser sight" = "レーザーサイトで狙いの補助";
+
+/* game mod title */
+"Laser Sight" = "レーザーサイト";
+
+/* game mod description */
+"All hogs have a personal forcefield" = "全てのハリネズミは自分の力場を持っています";
+
+/* game mod title */
+"Invulnerable" = "無敵";
+
+/* game mod description */
+"All (living) hedgehogs are fully restored at the end of turn" = "全ての (生きている) ハリネズミの体力はターン終了時に完全に復元されます";
+
+/* game mod title */
+"Reset Health" = "体力をリセット";
+
+/* game mod description */
+"Gain 80% of the damage you do back in health" = "ダメージの80% を体力としてもらう";
+
+/* game mod title */
+"Vampirism Mode" = "吸血モード";
+
+/* game mod description */
+"Share your opponents pain, share their damage" = "相手の痛みを共有し、 ダメージを共有する";
+
+/* game mod title */
+"Karma Mode" = "カルマモード";
+
+/* game mod description */
+"Your hogs are unable to move, test your aim" = "あなたのハリネズミは動けない, 狙いを試せ";
+
+/* game mod title */
+"Artillery Mode" = "砲兵モード";
+
+/* game mod description */
+"Defend your fort and destroy the opponents" = "砦を守って相手を潰せ";
+
+/* game mod title */
+"Fort Mode" = "砦モード";
+
+/* game mod description */
+"Order of play is random instead of in room order" = "プレー順はルーム順ではなくランダムです";
+
+/* game mod title */
+"Random Order" = "ランダムオーダー";
+
+/* game mod description */
+"Play with a King; when he dies, your side loses" = "キングとプレーする; キングが死ぬと、あなたの負けです";
+
+/* game mod title */
+"King Mode" = "キングモード";
+
+/* game mod description */
+"Take turns placing your hedgehogs pre-game" = "ゲームの前にターンを取ってハリネズミを置く";
+
+/* game mod title */
+"Place Hedgehogs" = "ハリネズミを置く";
+
+/* game mod description */
+"Ammo is shared between all clan teams" = "弾薬は全ての一族チームの間で共有されます";
+
+/* game mod title */
+"Clan Shares Ammo" = "一族は弾薬を共有します";
+
+/* game mod description */
+"Disable girders when generating random maps" = "ランダムマップを作成するときはガードを無効にする";
+
+/* game mod title */
+"Disable Girders" = "ガードを無効にする";
+
+/* game mod description */
+"Disable land objects when generating maps" = "マップ作成中は土地のオブジェクトを無効にする";
+
+/* game mod title */
+"Disable Land Objects" = "土地のオブジェクトを無効にする";
+
+/* game mod description */
+"AI-controlled hogs respawn on death" = "AIがコントロールするハリネズミは死ぬと再出現します";
+
+/* game mod title */
+"AI Survival Mode" = "AI サバイバルモード";
+
+/* game mod description */
+"Attacking does not end your turn" = "攻撃してもターンは終了しません";
+
+/* game mod title */
+"Unlimited Attacks" = "無限攻撃";
+
+/* game mod description */
+"Weapons are reset to starting values each turn" = "武器は毎ターン初期値にリセットされます";
+
+/* game mod title */
+"Reset Weapons" = "武器をリセット";
+
+/* game mod description */
+"Each hedgehog has its own ammo" = "各ハリネズミが自分の弾薬を持っています";
+
+/* game mod title */
+"Per Hedgehog Ammo" = "ハリネズミあたりの弾薬";
+
+/* game mod description */
+"You will not have to worry about wind any more" = "風のことは気にせずに良くなります";
+
+/* game mod title */
+"Disable Wind" = "風を無効にする";
+
+/* game mod description */
+"Wind will affect almost everything" = "風はほとんどのものに影響します";
+
+/* game mod title */
+"More Wind" = "より強い風";
+
+/* game mod description */
+"Clan teams take turns sharing their time" = "一族のチームはタイムを共有してターンを取ります";
+
+/* game mod title */
+"Tag Team" = "タッグチーム";
+
+/* game mod description */
+"Add an indestructible border along the bottom" = "破壊できないボーダーを下に追加する";
+
+/* game mod title */
+"Bottom Border" = "ボトムボーダー";
+
+
+/* flag description */
+"Initial Health" = "初期体力";
+
+/* flag description */
+"Damage Modifier" = "ダメージ変更";
+
+/* flag description */
+"Turn Time" = "ターンタイム";
+/* flag description */
+"Sudden Death Timeout" = "サデン・デス タイムアウト";
+
+/* flag description */
+"Water Rise Amount" = "水位上昇量";
+
+/* flag description */
+"Health Decrease" = "体力の減少";
+
+/* flag description */
+"Rope Length (%)" = "ロープの長さ (%)";
+
+/* flag description */
+"Crate Drop Turns" = "クレートドロップターン";
+
+/* flag description */
+"Health Kit Probability (%)" = "体力キットの確率 (%)";
+
+/* flag description */
+"Health Amount in Kit" = "キットの体力量";
+
+/* flag description */
+"Mines Time" = "地雷タイム";
+
+/* flag description */
+"Mines Number" = "地雷ナンバー";
+
+/* flag description */
+"Dud Mines Probability (%)" = "不発地雷の確率(%)";
+
+/* flag description */
+"Explosives" = "爆発物";
+
+/* flag description */
+"Get Away Time (%)" = "脱出タイム (%)";

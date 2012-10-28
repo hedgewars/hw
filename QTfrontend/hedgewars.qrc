@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file alias="Ammos.png">../share/hedgewars/Data/Graphics/AmmoMenu/Ammos.png</file>
-		  <file>res/css/qt.css</file>
-		  <file>res/css/chat.css</file>
+        <file>res/css/qt.css</file>
+        <file>res/css/chat.css</file>
+        <file>res/css/christmas.css</file>
+        <file>res/css/easter.css</file>
+        <file>res/css/birthday.css</file>
         <file>res/hh25x25.png</file>
         <file>res/hh25x25grey.png</file>
         <file>res/ammopic.png</file>
@@ -34,6 +37,9 @@
         <file>res/Multiplayer.png</file>
         <file>res/Trainings.png</file>
         <file>res/Background.png</file>
+        <file>res/BackgroundChristmas.png</file>
+        <file>res/BackgroundEaster.png</file>
+        <file>res/BackgroundBirthday.png</file>
         <file>res/Exit.png</file>
         <file>res/HedgewarsTitle.png</file>
         <file>res/LocalPlay.png</file>
@@ -50,6 +56,7 @@
         <file>res/Load.png</file>
         <file>res/Save.png</file>
         <file>res/Record.png</file>
+        <file>res/Videos.png</file>
         <file>res/weaponsicon.png</file>
         <file>res/teamicon.png</file>
         <file>res/panelbg.png</file>
@@ -95,17 +102,11 @@
         <file>res/iconRope.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
+        <file>res/Flake.png</file>
+        <file>res/Egg.png</file>
+        <file>res/Confetti.png</file>
         <file>res/file_save.png</file>
         <file>res/file_demo.png</file>
-        <file>res/chat_default.png</file>
-        <file>res/chat_ignore.png</file>
-        <file>res/chat_friend.png</file>
-        <file>res/chat_default_on.png</file>
-        <file>res/chat_ignore_on.png</file>
-        <file>res/chat_friend_on.png</file>
-        <file>res/chat_default_off.png</file>
-        <file>res/chat_ignore_off.png</file>
-        <file>res/chat_friend_off.png</file>
         <file>res/addfriend.png</file>
         <file>res/remfriend.png</file>
         <file>res/ignore.png</file>
@@ -133,5 +134,16 @@
         <file>res/mapMissing.png</file>
         <file>res/mapCustom.png</file>
         <file>res/mapMission.png</file>
+        <file>res/chat/friend.png</file>
+        <file>res/chat/ignore.png</file>
+        <file>res/chat/lamp.png</file>
+        <file>res/chat/hedgehog.png</file>
+        <file>res/chat/hedgehog_gray.png</file>
+        <file>res/chat/roomadmin.png</file>
+        <file>res/chat/roomadmin_gray.png</file>
+        <file>res/chat/serveradmin.png</file>
+        <file>res/chat/serveradmin_gray.png</file>
+        <file>res/chat/lamp_off.png</file>
+        <file>res/chat/ingame.png</file>
     </qresource>
 </RCC>

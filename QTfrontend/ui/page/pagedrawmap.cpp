@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include <QFileDialog>
+#include <QCheckBox>
 
 #include "pagedrawmap.h"
 #include "drawmapwidget.h"
@@ -28,19 +29,22 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
 
-    pbUndo = addButton(tr("Undo"), pageLayout, 0, 0);
-    pbClear = addButton(tr("Clear"), pageLayout, 1, 0);
-    pbLoad = addButton(tr("Load"), pageLayout, 2, 0);
-    pbSave = addButton(tr("Save"), pageLayout, 3, 0);
+    cbEraser = new QCheckBox(tr("Eraser"), this);
+    pageLayout->addWidget(cbEraser, 0, 0);
+    pbUndo = addButton(tr("Undo"), pageLayout, 1, 0);
+    pbClear = addButton(tr("Clear"), pageLayout, 2, 0);
+    pbLoad = addButton(tr("Load"), pageLayout, 3, 0);
+    pbSave = addButton(tr("Save"), pageLayout, 4, 0);
 
     drawMapWidget = new DrawMapWidget(this);
-    pageLayout->addWidget(drawMapWidget, 0, 1, 5, 1);
+    pageLayout->addWidget(drawMapWidget, 0, 1, 6, 1);
 
     return pageLayout;
 }
 
 void PageDrawMap::connectSignals()
 {
+    connect(cbEraser, SIGNAL(toggled(bool)), drawMapWidget, SLOT(setErasing(bool)));
     connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
     connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
     connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
@@ -62,7 +66,7 @@ void PageDrawMap::load()
 
 void PageDrawMap::save()
 {
-    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), ".", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
+    QString fileName = QFileDialog::getSaveFileName(NULL, tr("Save drawn map"), "./map.hwmap", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(!fileName.isEmpty())
         drawMapWidget->save(fileName);

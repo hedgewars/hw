@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 
 #include <QMessageBox>
 #include <QList>
-
+#include <QApplication>
 #include <QImage>
 
 #include "hwconsts.h"
@@ -31,99 +31,124 @@ QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
+    if (IPCSocket)
+        IPCSocket->deleteLater();
 }
 
 TCPBase::TCPBase(bool demoMode) :
-  m_isDemoMode(demoMode),
-  IPCSocket(0)
+    m_isDemoMode(demoMode),
+    IPCSocket(0)
 {
-  if(!IPCServer) {
-    IPCServer = new QTcpServer(0);
-    IPCServer->setMaxPendingConnections(1);
-    if (!IPCServer->listen(QHostAddress::LocalHost)) {
-      QMessageBox::critical(0, tr("Error"),
-                tr("Unable to start the server: %1.")
-                .arg(IPCServer->errorString()));
-      exit(0); // FIXME - should be graceful exit here
+    if(!IPCServer)
+    {
+        IPCServer = new QTcpServer(0);
+        IPCServer->setMaxPendingConnections(1);
+        if (!IPCServer->listen(QHostAddress::LocalHost))
+        {
+            QMessageBox deniedMsg(QApplication::activeWindow());
+            deniedMsg.setIcon(QMessageBox::Critical);
+            deniedMsg.setWindowTitle(QMessageBox::tr("TCP - Error"));
+            deniedMsg.setText(QMessageBox::tr("Unable to start the server: %1.").arg(IPCServer->errorString()));
+            deniedMsg.setWindowModality(Qt::WindowModal);
+            deniedMsg.exec();
+
+            exit(0); // FIXME - should be graceful exit here (lower Critical -> Warning above when implemented)
+        }
     }
-  }
-  ipc_port=IPCServer->serverPort();
+    ipc_port=IPCServer->serverPort();
 }
 
 void TCPBase::NewConnection()
 {
-  if(IPCSocket) {
-    // connection should be already finished
-    return;
-  }
-  disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-  IPCSocket = IPCServer->nextPendingConnection();
-  if(!IPCSocket) return;
-  connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
-  connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-  SendToClientFirst();
+    if(IPCSocket)
+    {
+        // connection should be already finished
+        return;
+    }
+    disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+    IPCSocket = IPCServer->nextPendingConnection();
+    if(!IPCSocket) return;
+    connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
+    connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+    SendToClientFirst();
+
+    if(srvsList.size()==1) srvsList.pop_front();
+    emit isReadyNow();
 }
 
 void TCPBase::RealStart()
 {
-  connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
-  IPCSocket = 0;
+    connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
+    IPCSocket = 0;
 
-  QProcess * process;
-  process = new QProcess;
-  connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
-  QStringList arguments=getArguments();
+    QProcess * process;
+    process = new QProcess;
+    connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
+    QStringList arguments=getArguments();
 
-  // redirect everything written on stdout/stderr
-  if(isDevBuild)
-    process->setProcessChannelMode(QProcess::ForwardedChannels);
-  process->start(bindir->absolutePath() + "/hwengine", arguments);
+    // redirect everything written on stdout/stderr
+    if(isDevBuild)
+        process->setProcessChannelMode(QProcess::ForwardedChannels);
+    process->start(bindir->absolutePath() + "/hwengine", arguments);
 }
 
 void TCPBase::ClientDisconnect()
 {
-  disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
-  onClientDisconnect();
+    disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
+    onClientDisconnect();
 
-  if(srvsList.size()==1) srvsList.pop_front();
-  emit isReadyNow();
-  IPCSocket->deleteLater();
-  deleteLater();
+ /*   if(srvsList.size()==1) srvsList.pop_front();
+    emit isReadyNow();*/
+    IPCSocket->deleteLater();
+
+    // make sure this object is not in the server list anymore
+    srvsList.removeOne(this);
+
+    deleteLater();
 }
 
 void TCPBase::ClientRead()
 {
-  QByteArray readed=IPCSocket->readAll();
-  if(readed.isEmpty()) return;
-  readbuffer.append(readed);
-  onClientRead();
+    QByteArray readed=IPCSocket->readAll();
+    if(readed.isEmpty()) return;
+    readbuffer.append(readed);
+    onClientRead();
 }
 
 void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
-  QMessageBox::critical(0, tr("Error"),
-            tr("Unable to run engine: %1 (")
-            .arg(error) + bindir->absolutePath() + "/hwengine)");
+    QMessageBox deniedMsg(QApplication::activeWindow());
+    deniedMsg.setIcon(QMessageBox::Critical);
+    deniedMsg.setWindowTitle(QMessageBox::tr("TCP - Error"));
+    deniedMsg.setText(QMessageBox::tr("Unable to run engine at ") + bindir->absolutePath() + "/hwengine\n" +
+                      QMessageBox::tr("Error code: %1").arg(error));
+    deniedMsg.setWindowModality(Qt::WindowModal);
+    deniedMsg.exec();
+
+    ClientDisconnect();
 }
 
 void TCPBase::tcpServerReady()
 {
-  disconnect(srvsList.takeFirst(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+    disconnect(srvsList.takeFirst(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
 
-  RealStart();
+    RealStart();
 }
 
 void TCPBase::Start()
 {
-  if(srvsList.isEmpty()) {
-    srvsList.push_back(this);
-  } else {
-    connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
-    srvsList.push_back(this);
-    return;
-  }
+    if(srvsList.isEmpty())
+    {
+        srvsList.push_back(this);
+    }
+    else
+    {
+        connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+        srvsList.push_back(this);
+        return;
+    }
 
-  RealStart();
+    RealStart();
 }
 
 void TCPBase::onClientRead()
@@ -150,7 +175,8 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
     if (!IPCSocket)
     {
         toSendBuf += buf;
-    } else
+    }
+    else
     {
         if (toSendBuf.size() > 0)
         {
@@ -158,9 +184,10 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
             if(m_isDemoMode) demo.append(toSendBuf);
             toSendBuf.clear();
         }
-        if(!buf.isEmpty()) {
-          IPCSocket->write(buf);
-          if(m_isDemoMode) demo.append(buf);
+        if(!buf.isEmpty())
+        {
+            IPCSocket->write(buf);
+            if(m_isDemoMode) demo.append(buf);
         }
     }
 }

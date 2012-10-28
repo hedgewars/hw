@@ -1,6 +1,6 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
- * Copyright (c) 2011 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,13 @@
 
 package org.hedgewars.hedgeroid;
 
-import org.hedgewars.hedgeroid.EngineProtocol.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.FrontendDataUtils;
+import org.hedgewars.hedgeroid.Datastructures.Map;
+import org.hedgewars.hedgeroid.Datastructures.Map.MapType;
+import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Team;
+import org.hedgewars.hedgeroid.Datastructures.Weapon;
 import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
-import org.hedgewars.hedgeroid.EngineProtocol.Map;
-import org.hedgewars.hedgeroid.EngineProtocol.Scheme;
-import org.hedgewars.hedgeroid.EngineProtocol.Team;
-import org.hedgewars.hedgeroid.EngineProtocol.Weapon;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -55,17 +56,6 @@ public class StartGameActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		boolean firstTime = sharedPref.getBoolean("firstTime", true);
-		//Copy all the xml files to the device TODO only do first time launch of the app...
-		if(firstTime){
-			sharedPref.edit().putBoolean("firstTime", false).commit();
-			
-			Utils.resRawToFilesDir(this,R.array.schemes, Scheme.DIRECTORY_SCHEME);
-			Utils.resRawToFilesDir(this, R.array.weapons, Weapon.DIRECTORY_WEAPON);
-			Utils.resRawToFilesDir(this, R.array.teams, Team.DIRECTORY_TEAMS);
-		}
-
 		Scheme.parseBasicFlags(this);
 		config = new GameConfig();
 
@@ -93,27 +83,53 @@ public class StartGameActivity extends Activity {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		maps.setAdapter(adapter);
 		maps.setOnItemSelectedListener(mapsClicker);
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Map)adapter.getItem(i)).getType() == MapType.TYPE_DEFAULT){
+				maps.setSelection(i, false);
+				break;
+			}
+		}
 
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getGameplay(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gameplay.setAdapter(adapter);
 		gameplay.setOnItemSelectedListener(gameplayClicker);
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((String)adapter.getItem(i)).equals("None")){
+				gameplay.setSelection(i, false);
+				break;
+			}
+		}
 
 		adapter = new ArrayAdapter<Scheme>(this, R.layout.listview_item, FrontendDataUtils.getSchemes(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		gamescheme.setAdapter(adapter);
 		gamescheme.setOnItemSelectedListener(schemeClicker);
-
+		//set to first nonmap
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Scheme)adapter.getItem(i)).toString().equals("Default")){
+				gamescheme.setSelection(i, false);
+				break;
+			}
+		}
+		
+		
 		adapter = new ArrayAdapter<Weapon>(this, R.layout.listview_item, FrontendDataUtils.getWeapons(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		weapons.setAdapter(adapter);
 		weapons.setOnItemSelectedListener(weaponClicker);
-
+		for(int i = 0; i < adapter.getCount(); i++){
+			if(((Weapon)adapter.getItem(i)).toString().equals("Crazy")){
+				weapons.setSelection(i, false);
+				break;
+			}
+		}
 		adapter = new ArrayAdapter<String>(this, R.layout.listview_item, FrontendDataUtils.getThemes(this));
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
 		themes.setOnItemSelectedListener(themesClicker);
-
 	}
 
 	private void startTeamsActivity(){

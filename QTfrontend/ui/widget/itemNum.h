@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Igor Ulyanov <iulyanov@gmail.com>
+ * Copyright (c) 2006-2012 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,38 +24,37 @@
 
 class ItemNum : public QFrame
 {
-  Q_OBJECT
+        Q_OBJECT
 
-  public:
-    void setInfinityState(bool value);
-    void setEnabled(bool value);
-    unsigned char getItemsNum() const;
-    void setItemsNum(const unsigned char num);
+    public:
+        void setInfinityState(bool value);
+        void setEnabled(bool value);
+        unsigned char getItemsNum() const;
+        void setItemsNum(const unsigned char num);
 
-  private:
-    QImage m_im;
-    QImage m_img;
-    bool infinityState;
-    bool enabled;
+    protected:
+        QImage m_im;
+        QImage m_img;
+        bool infinityState;
+        bool enabled;
 
-  protected:
-    ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min=2, unsigned char max=8);
-    virtual QSize sizeHint () const;
-    virtual ~ItemNum()=0;
+        ItemNum(const QImage& im, const QImage& img, QWidget * parent, unsigned char min=2, unsigned char max=8);
+        virtual QSize sizeHint () const;
+        virtual ~ItemNum()=0;
 
-    bool nonInteractive;
-    unsigned char minItems;
-    unsigned char maxItems;
-    unsigned char numItems;
+        bool nonInteractive;
+        unsigned char minItems;
+        unsigned char maxItems;
+        unsigned char numItems;
 
-    // from QWidget
-    virtual void mousePressEvent ( QMouseEvent * event );
-    virtual void wheelEvent ( QWheelEvent * event );
-    virtual void paintEvent(QPaintEvent* event);
+        // from QWidget
+        virtual void mousePressEvent ( QMouseEvent * event );
+        virtual void wheelEvent ( QWheelEvent * event );
+        virtual void paintEvent(QPaintEvent* event);
 
-    // to be implemented in child
-    virtual void incItems()=0;
-    virtual void decItems()=0;
+        // to be implemented in child
+        virtual void incItems()=0;
+        virtual void decItems()=0;
 };
 
 #endif // _ITEM_NUM_INCLUDED

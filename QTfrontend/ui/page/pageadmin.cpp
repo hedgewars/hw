@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 
     // 0
     pbAsk = addButton(tr("Fetch data"), pageLayout, 0, 0, 1, 3);
-    
+
     // 1
     QLabel * lblSMN = new QLabel(this);
     lblSMN->setText(tr("Server message for latest version:"));
@@ -66,10 +66,10 @@ QLayout * PageAdmin::bodyLayoutDefinition()
     tb->setOpenExternalLinks(true);
     tb->document()->setDefaultStyleSheet(HWChatWidget::styleSheet());
     pageLayout->addWidget(tb, 4, 1, 1, 2);
-    
+
     // 5
     pbClearAccountsCache = addButton(tr("Clear Accounts Cache"), pageLayout, 5, 0);
-    
+
     // 6
     pbSetSM = addButton(tr("Set data"), pageLayout, 6, 0, 1, 3);
 
@@ -79,8 +79,8 @@ QLayout * PageAdmin::bodyLayoutDefinition()
 void PageAdmin::connectSignals()
 {
     connect(pbAsk, SIGNAL(clicked()), this, SIGNAL(askServerVars()));
-    connect(leServerMessageNew, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
-    connect(leServerMessageOld, SIGNAL(textEdited(const QString &)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageNew, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
+    connect(leServerMessageOld, SIGNAL(textChanged(QString)), tb, SLOT(setHtml(const QString &)));
     connect(pbClearAccountsCache, SIGNAL(clicked()), this, SIGNAL(clearAccountsCache()));
     connect(pbSetSM, SIGNAL(clicked()), this, SLOT(smChanged()));
 }

@@ -1,0 +1,31 @@
+Hedgewars, c'est génial!
+
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+Hedgewars est disponible sur le Mac Appstore ! Cherchez Hedgewars sur votre Mac et obtenez une copie gratuite aujourd'hui !
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+
+Le portage vers iOS a quelques fonctionnalités exclusives, comme :
+* Sortie VGA de l'iPad: connectez un affichage externe et jouez à la résolution maximale;
+* Support de l'Affichage Rétinien: jouez le jeu entier à une résolution supérieure;
+* Multitâche: mettez le jeu en pause à n'importe-quel moment;
+* Restoration de Jeu: vous aurez toujours la possibilité de finir votre match, quoiqu'il arrive.
+
+Description :
+C'est le jeu le plus amusant et le plus addictif auquel vous ne jouerez jamais - de l'amusement que vous pouvez apprécier partout, tout le temps. Hedgewars est un jeu de stratégie au tour par tout mais le vrai intérêt est de regarder la dévastation causée par ces satanés hérissons avec ces armes fantastiques - sournois petits gars au mauvais comportement!
+
+En d'autres mots Hedgewars est un jeu au tour par tour basé sur la stratégie, l'artillerie, l'action et la comédie, présentant les pitreries des hérissons roses pendant qu'ils combattent des profondeurs de l'enfer aux profondeurs de l'espace.
+
+En tant que commandant, c'est votre devoir de rassembler votre folle équipe de soldats hérissons et de partir en guerre contre l'ennemi.
+
+Chaque joueur contrôle une équipe de plusieurs hérissons. Pendant le déroulement du jeu, les joueurs prennent leur tour avec un de leurs hérissons. Ils peuvent utiliser n'importe-quels outils ou armes disponibles pour attaquer et tuer les hérissons des opposants, et ainsi gagner la partie. Les hérissons peuvent bouger autour du terrain de diverses façons, généralement en marchant et sautant mais aussi en utilisant des outils particuliers comme la "Corbe" ou le "Parachute", pour atteindre des zones inaccessibles en d'autres circonstances. Chaque tour est limité en temps afin d'être sûr que les joueurs ne mettent pas le jeu en suspens en pensant ou bougeant à excès. Une grande diversité d'outils et d'armes sont disponibles pour les joueurs pendant le jeu : la Grenade, la Grenade à Fragmentation, le Bazooka, l'OVNI, le fusil à pompes, le Desert Eagle, le Poing de Feu, la Batte de Baseball, la Dynamite, la Mine, la Corbe, le Ramassage Pneumatique, le Parachute. La plupart des armes, lorsqu'elles sont utilisées, causent des explosions qui déforment le terrain, en enlevant des morceaux circulaires. Le paysage est une île flottant sur un plan d'eau. Un hérisson meure quand il entre dans de l'eau (soit en tombant en dehors de l'île, soit à travers un trou situé au fond de celle-ci), quand il est éjecté de n'importe-quel côté de l'arène ou quand sa santé est réduite, généralement au contact des explosions, à zéro (les dégâts infligés à l'hérisson ou aux hérissons attaqués après le tour d'un joueur ou d'un ordinateur est seulement montré quand tous les mouvements sur le champ de bataille ont cessé).
+
+* des combats tordants et dévastateurs basés sur le tour par tour jusqu'à 6 joueurs
+* multijoueur à la fois local et en réseau, avec d'optionnels opposants IA
+* Combattez sur un nombre infini de cartes générées aléatoirement, avec plus de 20 environnements
+* Utilisez 48 (et plus) d'armes écrasantes! Y compris la frappe de piano et le gateau explostif robotique
+* Jouez au jeu à votre façon, avec plus de 20 modificateurs de jeux différents, déformez presque chaque aspect du match
+* Personnalisez votre équipe, avec plus de 120 costumes, 30 tombes, 12 forts, 100s de drapeaux et d'uniques packs de voix
+* D'énormes batailles avec jusqu'à 64 hérissons
+

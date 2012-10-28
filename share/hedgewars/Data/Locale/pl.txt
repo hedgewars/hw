@@ -12,7 +12,7 @@
 00:09=Desert Eagle
 00:10=Dynamit
 00:11=Kij bejsbolowy
-00:12=Shoryuken
+00:12=Ognista pięść
 00:13=sek
 00:14=Spadochron
 00:15=Nalot
@@ -56,6 +56,8 @@
 00:53=TARDIS
 00:54=Budynek
 00:55=Miotacz błota
+00:56=Zamrażarka
+00:57=Tasak
 
 01:00=Walczmy!
 01:01=Remis
@@ -78,6 +80,7 @@
 01:18=Duże
 01:19=Ekstremalne
 01:20=%1 odbicie
+01:21=Dźwięk wyciszony
 
 ; Event messages
 ; Hog (%1) died
@@ -185,7 +188,7 @@
 02:01=%1 podnosi poziom oceanu
 02:01=%1 nie zapisał się do marynarki.
 02:01=%1 robi za śniętą rybę...
-02:01=Przynajmmniej nie utonąłeś w muszli klozetowej, %1
+02:01=Przynajmniej nie utonąłeś w muszli klozetowej, %1
 02:01=%1 nie pobił Sonica w pływaniu
 02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
@@ -223,16 +226,16 @@
 02:02=Rozpoczynajmy walkę!
 02:02=Jedziemy z koksem!
 02:02=Rozpoczynamy tą imprezę!
-02:02=Ostani żywy jeż wygrywa!
+02:02=Ostatni żywy jeż wygrywa!
 02:02=Jazda!
 02:02=Rozkręćmy tą imprezę!
 02:02=To jest dopiero początek...
 02:02=To jest początek czegoś naprawdę wielkiego!
 02:02=Witamy w Hedgewars.
 02:02=Witaj na linii frontu!
-02:02=Zgnieć swoich przeciników!
+02:02=Zgnieć swoich przeciwników!
 02:02=Niech wygra lepszy!
-02:02=Zwycięztwo albo śmierć!
+02:02=Zwycięstwo albo śmierć!
 02:02=Zwycięzca zdobywa łup!
 02:02=Przegrana nie wchodzi w rachubę.
 02:02=Hedgewars, stworzone przez Hedgewars.org
@@ -295,7 +298,7 @@
 02:05=Najwięcej witaminy mają paczki od rodziny!
 02:05=Czy ktoś wzywał doktor Zosię?
 02:05=Oby to nie był Pavulon!
-02:05=Codziena dawka Panadolu!
+02:05=Codzienna dawka Panadolu!
 02:05=Chyba Goździkowa maczała w tym palce...
 02:05=Gdzie jest Doktor Queen?
 02:05=U mnie to jak u lekarza!
@@ -355,7 +358,7 @@
 02:07=Keczup prosto od MacGyvera!
 02:07=Zestaw Małego Majsterkowicza
 02:07=Darmowa paczka narzędzi!
-02:07=Zasobniki prosto z Ameryki!
+02:07=Zasobniki od wujka z Ameryki!
 02:07=Zapasy materiałów eksploatacyjnych!
 02:07=Dorwij przeciwnika szybciej z nowymi narzędziami
 
@@ -471,7 +474,7 @@
 02:10=Iiii Leciiii...
 02:10=Bzziuuuuu!
 02:10=Niezły rzut!
-02:10=Chyba padnie rekord Guinessa w rzucie jeżem!
+02:10=Chyba padnie rekord Guinnessa w rzucie jeżem!
 02:10=To było odlotowe!
 
 ; Hog (%1) has to leave (team is gone)
@@ -544,12 +547,12 @@
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
 04:01=Atakuj przeciwników granatem odłamkowym.|Rozpadnie się on na kilka odłamków gdy zapalnik|skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
 04:02=Atakuj przeciwników pociskiem balistycznym,|który jest podatny na wiatr.|Atak: Przytrzymaj by strzelić z większą siłą
-04:03=Wypuść zdenerwowaną pszczołe, która "użądli"|zaznaczony cel. By zwiększyć precyzję nie|strzelaj pełną mocą|Kursor: Wybierz cel|Atak: Przytrzymaj by strzelić z większą siłą
+04:03=Wypuść zdenerwowaną Pszczołę, która "użądli"|zaznaczony cel. By zwiększyć precyzję nie|strzelaj pełną mocą|Kursor: Wybierz cel|Atak: Przytrzymaj by strzelić z większą siłą
 04:04=Atakuj przeciwników strzelbą z dwoma strzałami.|Działa obszarowo, więc nie musisz dokładnie|celować by zranić przeciwników.|Atak: Strzel (kilka razy)
-04:05=Schowaj się pod ziemię! Użyj młota pneumatycznego|do wywiercenia dziury w podłożu i dostania się do|innych miejsc.|Attack: Zacznij/Zakończ kopać 
+04:05=Schowaj się pod ziemię! Użyj młota pneumatycznego|do wywiercenia dziury w podłożu i dostania się do|innych miejsc.|Atak: Zacznij/Zakończ kopać 
 04:06=Znudzony? Brak motywacji do ataku? Oszczędzasz broń?|No problemo! Po prostu pomiń turę, tchórzu!|Atak: Pomiń turę bez walki
 04:07=Skróć wielkie odległości używając liny. Rozpędź się|by wślizgnąć się w inne jeże lub upuścić na nich|granat albo inną broń.|Atak: Rozwiń albo odłącz linę|Długi skok: Upuść granat lub podobną broń      
-04:08=Trzymaj przeciwników na dystans przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. I nie|zapomnij ucieć zanim się włączy!|Atak: Upuść minę obok siebie
+04:08=Trzymaj przeciwników na dystans przez upuszczenie|miny w wąskim przejściu lub zaraz obok ich stóp. I nie|zapomnij uciec zanim się włączy!|Atak: Upuść minę obok siebie
 04:09=Niepewny co do umiejętności w celowaniu?|Weź pistolet i powystrzelaj ich jak kaczki.|Atak: Strzel (kilka razy)
 04:10=Brutalna siła zawsze jest rozwiązaniem. Upuść ten|wybuchową laskę dynamitu obok przeciwnika i|uciekaj gdzie pieprz rośnie.|Atak: Upuść dynamit obok siebie
 04:11=Uwolnij się od przeciwników poprzez spałowanie|ich poza mapę albo do wody. A co powiesz o|strąceniu min w swoich wrogów?|Atak: Spałuj wszystko co jest przed tobą
@@ -563,26 +566,26 @@
 04:19=Teleport użyty w odpowiednim momencie, staje|się potężniejszy niż każda inna broń,|ponieważ potrafi wyzwolić jeża z tarapatów|w przeciągu sekund.|Kursor: Wybierz region
 04:20=Pozwala w tej turze zagrać innym jeżem.|Atak: Uaktywnij wybieranie jeża
 04:21=Odpal moździerz, który po uderzeniu|wypuści kilka bomb.|Atak: Strzel z całą mocą      
-04:22=Nie tylko dla Indiana Jones! Ten bicz może|być użyteczny w wielu wypadkach. Szczególnie|kiedy chcesz kogoś zrzucić z urwiska.|Atak: Zbiczuj wszystko co jest przed tobą
+04:22=Nie tylko dla Indiana Jones! Ten bicz może|być użyteczny w wielu wypadkach. Szczególnie|kiedy chcesz kogoś zrzucić z urwiska.|Atak: Ubiczuj wszystko co jest przed tobą
 04:23=Jeśli nie masz nic do stracenia, ten atak może być|całkiem użyteczny. Poświęć swojego jeża i poślij|go w odpowiednim kierunku, raniąc wszystkich po|drodze i eksplodując na końcu.|Atak: Odpal tę niszczycielską i zabójczą technikę
 04:24=Sto lat! Uruchom ciasto i pozwól mu pójść w stronę|twoich przeciwników urządzając im wybuchowe przyjęcie.|Może chodzić prawie po wszystkim, ale wtedy|wcześniej eksploduje.|Atak: Odpal ciasto albo zatrzymaj je, by wybuchło
 04:25=Użyj kostiumu by sprawić, żeby twój wróg zakochał się|w Tobie (i spadł w przepaść lub dziurę).|Atak: Użyj kostiumu i uwiedź jeża
 04:26=Rzuć tego smacznego arbuza w przeciwników. Kiedy jego|zapalnik wskaże zero, podzieli się na mniejsze kawałki.|1-5: Ustawia zapalnik arbuza|Atak: Przytrzymaj by rzucić z większą siłą
 04:27=Niech ognie piekielne ogarną twoich przeciwników!|Nie podchodź zbyt blisko po wybuchu, gdyż ogień|pali się przez dłuższy czas|Atak: Przytrzymaj by rzucić z większą siłą
 04:28=Krótko po wystrzeleniu, rakieta zacznie wiercić tunel w ziemi|i eksploduje gdy zapalnik zostanie uruchomiony lub|jeśli pojawi się po drugiej stronie terenu.|Atak: Przytrzymaj by strzelić z większą siłą   
-04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwujetony małych|kolorowych kulek wypełnionych materiałem wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie      
+04:29=Tego nie powinny używać dzieci!|Pistolet na kulki wystrzeliwuje tony małych|kolorowych kulek wypełnionych materiałem wybuchowym.|Atak: Strzel kulkami|Góra/Dół: Kontynuuj celowanie      
 04:30=Wezwij samolot, żeby zrzucić dużą ilość|napalmu. Dzięki dobremu celowi ten atak|może zlikwidować dużą część mapy, w tym|znajdujące się tam nieszczęsne jeże.|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz region
 04:31=Zaatakuj odległych przeciwników, bądź zbierz|skrzynki! Nie zapomnij o zrzuceniu bomb!|Góra/Dół: Steruj samolotem|Atak: Zrzuć bombę (3x) |Długi skok: Niech walkirie wkroczą na pole bitwy!
 04:32=Niska grawitacja jest lepsza od diety! Skacz|wyżej i dalej albo pozwól przeciwnikom fruwać.|Atak: Aktywuj
 04:33=Czasami potrzebujesz dodatkowego kopa|żeby zadawać większe obrażenia.|Atak: Aktywuj
 04:34=Nie dotkniesz mnie!|Atak: Aktywuj
 04:35=Czasami bywa, że czas pędzi za szybko. Zyskaj kilka|dodatkowych sekund by dokończyć swój atak.|Atak: Aktywuj
-04:36=Czasami z celowaniem u ciebie jest kiepsko.|Zrób użytek ze zdobyczy współczesnej technologii.|Attack: Aktywuj
+04:36=Czasami z celowaniem u ciebie jest kiepsko.|Zrób użytek ze zdobyczy współczesnej technologii.|Atak: Aktywuj
 04:37=Nie bój się słońca. To potrwa tylko jedną turę,|ale pozwoli pochłonąć część obrażeń, które|zadałeś innym.|Atak: Aktywuj
 04:38=Karabin snajperski może stać się najbardziej niszczycielską|bronią w twoim arsenale. Jednakże jest bardzo nieskuteczny|na krótkie dystanse.| Im dalej od celu tym więcej HP zabierzesz.|Atak: Strzel (dwa strzały)
-04:39=Leć do innych części mapy uzywjąc spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
+04:39=Leć do innych części mapy używając spodka.|To ciężkie do opanowania narzędzie, może przenieść Ciebie|w prawie każdą pozycje na polu bitwy.|Atak: Aktywuj|Góra/Lewo/Prawo: Wyznacz lot w odpowiednim kierunku
 04:40=Wznieć ogień używając koktajlu z łatwopalnym płynem.|Atak: Przytrzymaj by rzucić z większą siłą
-04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Atywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
+04:41=Natura może być na równi z technologią!|Ptaszek uniesie Ciebie ponad ziemię oraz|zrzuci jajka w przeciwników|Atak: Aktywacja ptaka i zrzucanie jajek|Góra/Lewo/Prawo: Leć w wybranym kierunku
 04:42=To urządzenie umożliwia natychmiastowe|przetransportowanie Ciebie, Twoich|wrogów bądź uzbrojenia pomiędzy dwoma|miejscami na mapie|Użyj tego z głową a Twoja|misja zakończy się... WIELKIM SUKCESEM|Atak: Wystrzel portal|Zmiana (Tab): Zmień kolor portalu
 04:43=Niech twój debiut będzie WYBUCHOWY!|Zrzuć pianino z nieba, ale uważaj!|Ktoś musi na nim grać więc prawdopodobnie będziesz|musiał poświęcić swojego jeża|Kursor: Wybierz cel|F1-F9: Graj na pianinie
 04:44=To nie jest zwykły ser. To broń biologiczna!|Wybuch z pewnością nie będzie potężny, ale gdy|licznik dojdzie do zera, chmura gazu zatruje|każdego nieszczęśnika który będzie w pobliżu|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -592,11 +595,11 @@
 04:48=Czyż walenie jeży po głowach nie|jest zabawne? Dobre uderzenie|z młotka zabierze 1/3 życia|przeciwnika i wkopie go w podłoże|Atak: Uderz
 04:49=Wskrześ swoich przyjaciół!|Jednakże uważaj byś nie pomógł swojemu wrogowi.|Atak: Przytrzymaj by powoli przywracać życie|Góra: Przyspiesz wskrzeszanie
 04:50=Wezwij szwadron śmiercionośnych wierteł|by wykurzyć kogoś z kryjówki. Po użyciu|zostanie zrzuconych 6 wiertniczych bomb|wkręcających się w podłoże|Lewo/Prawo: Określ kierunek ataku|Kursor: Wybierz miejsce zrzutu
-04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale może gogoś zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
+04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale może Gogol zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
 04:52=UNUSED
-04:53=Wybierz się na podróż w czasie i przestrzeni|zostawiając innne jeże na polu walki.|Bądź przygotowany na powrót w dowolnym momencie.|Gdy rozpocznie się|Nagła Śmierć lub większość jeży zostanie wybita.|Uwaga. Nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam, lub jeśli jesteś Królem.
+04:53=Wybierz się na podróż w czasie i przestrzeni|zostawiając inne jeże na polu walki.|Bądź przygotowany na powrót w dowolnym momencie.|Gdy rozpocznie się|Nagła Śmierć lub większość jeży zostanie wybita.|Uwaga. Nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam lub jeśli jesteś Królem.
 04:54=INCOMPLETE                                                                                                                                     
-04:55=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, ztykaj tunele.|Uważaj by nie zasypać samego siebie!
+04:55=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
 
 ; Game goal strings
 05:00=Ustawienia gry
@@ -606,7 +609,7 @@
 05:04=Niezniszczalność: Jeże są (prawie) niezniszczalne
 05:05=Wampiryzm: Jeże dostają życie za zadane obrażenia
 05:06=Karma: Jeże doznają obrażeń za uszkodzenia zadane innym
-05:07=Broń Króla: Nie pozwój królowi umrzeć!|Umieść Króla: Wybierz pozycję startową dla króla
+05:07=Broń Króla: Nie pozwól królowi umrzeć!|Umieść Króla: Wybierz pozycję startową dla króla
 05:08=Umieść jeże: Umieść jeże przed rozpoczęciem gry.
 05:09=Artyleria: Jeże nie mogą się poruszać
 05:10=Niezniszczalny teren: Większość broni nie niszczy terenu.

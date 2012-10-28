@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,8 @@
 #include "achievements.h"
 
 // TODO: use some structs instead?
-const char achievements[][6][256] = {
+const char achievements[][6][256] =
+{
     // 6 array members each: id, caption, description, image, required number, attributes
     /*
     {"rounds1",  QT_TRANSLATE_NOOP("achievements", "No complete Newbie!"),  QT_TRANSLATE_NOOP("achievements", "Manage to survive %1 games playing on the official server, no matter if it's a draw or win."), "nonewb",     "1", ""},

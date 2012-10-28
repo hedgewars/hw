@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,22 +29,26 @@ unit uRandom;
  *)
 interface
 uses uFloat;
-{$INCLUDE "config.inc"}
-
-procedure initModule;
-procedure freeModule;
 
 procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
-function  GetRandom: hwFloat; overload; // Returns a pseudo-random hwFloat.
-function  GetRandom(m: LongWord): LongWord; overload; // Returns a positive pseudo-random integer smaller than m.
+function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
+function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
+procedure AddRandomness(r: LongWord); inline;
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
+
 
 implementation
 
 var cirbuf: array[0..63] of Longword;
     n: byte;
 
-function GetNext: Longword;
+procedure AddRandomness(r: LongWord); inline;
+begin
+n:= (n + 1) and $3F;
+cirbuf[n]:= cirbuf[n] xor r
+end;
+
+function GetNext: Longword; inline;
 begin
 n:= (n + 1) and $3F;
 cirbuf[n]:=
@@ -60,7 +64,8 @@ var i: Longword;
 begin
 n:= 54;
 
-if Length(Seed) > 54 then Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
+if Length(Seed) > 54 then
+    Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
 
 for i:= 0 to Pred(Length(Seed)) do
     cirbuf[i]:= byte(Seed[i + 1]);
@@ -68,17 +73,18 @@ for i:= 0 to Pred(Length(Seed)) do
 for i:= Length(Seed) to 54 do
     cirbuf[i]:= $A98765 + 68; // odd number
 
-for i:= 0 to 1023 do GetNext
+for i:= 0 to 1023 do
+    GetNext
 end;
 
-function GetRandom: hwFloat;
+function GetRandomf: hwFloat;
 begin
 GetNext;
-GetRandom.isNegative:= false;
-GetRandom.QWordValue:= GetNext
+GetRandomf.isNegative:= false;
+GetRandomf.QWordValue:= GetNext
 end;
 
-function GetRandom(m: LongWord): LongWord;
+function GetRandom(m: LongWord): LongWord; inline;
 begin
 GetNext;
 GetRandom:= GetNext mod m
@@ -88,17 +94,6 @@ function rndSign(num: hwFloat): hwFloat;
 begin
 num.isNegative:= odd(GetNext);
 rndSign:= num
-end;
-
-procedure initModule;
-begin
-    n:= 54;
-    FillChar(cirbuf, 64*sizeof(Longword), 0);
-end;
-
-procedure freeModule;
-begin
-
 end;
 
 end.

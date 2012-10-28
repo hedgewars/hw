@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 08/04/2010.
  */
 
 
@@ -41,7 +39,7 @@
     NSArray *directoryContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FORTS_DIRECTORY() error:NULL];
     NSMutableArray *filteredContents = [[NSMutableArray alloc] initWithCapacity:([directoryContents count] / IMGNUM_PER_FORT)];
     // we need to remove the double entries and the L.png suffix
-    for (int i = 0; i < [directoryContents count]; i++) {
+    for (NSUInteger i = 0; i < [directoryContents count]; i++) {
         if (i % IMGNUM_PER_FORT == IMGNUM_PER_FORT-1) {
             NSString *currentName = [directoryContents objectAtIndex:i];
             NSString *correctName = [currentName substringToIndex:([currentName length] - 5)];

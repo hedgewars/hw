@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2008-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,21 +24,21 @@
 
 class WeaponItem : public ItemNum
 {
-  Q_OBJECT
+        Q_OBJECT
 
- public:
-  WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
-  virtual ~WeaponItem();
+    public:
+        WeaponItem(const QImage& im, const QImage& img, QWidget * parent);
+        virtual ~WeaponItem();
 
- signals:
-  void hedgehogsNumChanged();
+    signals:
+        void hedgehogsNumChanged();
 
- protected:
-  virtual void incItems();
-  virtual void decItems();
+    protected:
+        virtual void incItems();
+        virtual void decItems();
 
- private:
-  WeaponItem();
+    private:
+        WeaponItem();
 };
 
 #endif // _WEAPON_ITEM

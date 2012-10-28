@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,88 +19,26 @@
 
 #include <QDesktopServices>
 #include <QTextBrowser>
-#include <QLineEdit>
 #include <QAction>
-#include <QTextDocument>
 #include <QFile>
-#include <QList>
-#include <QSettings>
 #include <QTextStream>
 #include <QMenu>
 #include <QCursor>
-#include <QScrollBar>
 #include <QItemSelectionModel>
-#include <QStringList>
 #include <QDateTime>
 #include <QTime>
+#include <QListView>
+#include <QModelIndexList>
+#include <QSortFilterProxyModel>
+#include <QMenu>
 
-#include <QMessageBox>
-
-
-#include "HWDataManager.h"
+#include "DataManager.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
+#include "playerslistmodel.h"
 
 #include "chatwidget.h"
 
-ListWidgetNickItem::ListWidgetNickItem(const QString& nick, bool isFriend, bool isIgnored) : QListWidgetItem(nick)
-{
-    this->aFriend = isFriend;
-    this->isIgnored = isIgnored;
-}
-
-void ListWidgetNickItem::setFriend(bool isFriend)
-{
-    this->aFriend = isFriend;
-}
-
-void ListWidgetNickItem::setIgnored(bool isIgnored)
-{
-    this->isIgnored = isIgnored;
-}
-
-bool ListWidgetNickItem::isFriend()
-{
-    return aFriend;
-}
-
-bool ListWidgetNickItem::ignored()
-{
-    return isIgnored;
-}
-
-bool ListWidgetNickItem::operator< (const QListWidgetItem & other) const
-{
-    // case in-sensitive comparison of the associated strings
-    // chars that are no letters are sorted at the end of the list
-
-    ListWidgetNickItem otherNick = const_cast<ListWidgetNickItem &>(dynamic_cast<const ListWidgetNickItem &>(other));
-
-    // ignored always down
-    if (isIgnored != otherNick.ignored())
-        return !isIgnored;
-
-    // friends always up
-    if (aFriend != otherNick.isFriend())
-        return aFriend;
-
-    QString txt1 = text().toLower();
-    QString txt2 = other.text().toLower();
-
-    bool firstIsShorter = (txt1.size() < txt2.size());
-    int len = firstIsShorter?txt1.size():txt2.size();
-
-    for (int i = 0; i < len; i++)
-    {
-        if (txt1[i] == txt2[i])
-            continue;
-        if (txt1[i].isLetter() != txt2[i].isLetter())
-            return txt1[i].isLetter();
-        return (txt1[i] < txt2[i]);
-    }
-
-    return firstIsShorter;
-}
 
 QString * HWChatWidget::s_styleSheet = NULL;
 QStringList * HWChatWidget::s_displayNone = NULL;
@@ -126,7 +64,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     if (orgStyleSheet.isEmpty())
     {
         // load external stylesheet if there is any
-        QFile extFile(HWDataManager::instance().findFileForRead("css/chat.css"));
+        QFile extFile(DataManager::instance().findFileForRead("css/chat.css"));
 
         QFile resFile(":/res/css/chat.css");
 
@@ -175,11 +113,11 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     QRegExp nohierarchy("^.[^ .]+$");
 
     QStringList victims = QString(style).
-                                remove(displayed). // remove visible stuff
-                                trimmed().
-                                split(split). // get a list of the names
-                                filter(nohierarchy). // only direct class names
-                                replaceInStrings(QRegExp("^."),""); // crop .
+                          remove(displayed). // remove visible stuff
+                          trimmed().
+                          split(split). // get a list of the names
+                          filter(nohierarchy). // only direct class names
+                          replaceInStrings(QRegExp("^."),""); // crop .
 
 
     if (victims.contains("timestamp"))
@@ -240,21 +178,29 @@ void HWChatWidget::displayWarning(const QString & message)
 
 
 HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
-  QWidget(parent),
-  mainLayout(this)
+    QWidget(parent),
+    mainLayout(this)
 {
     this->gameSettings = gameSettings;
     this->notify = notify;
+
+    m_isAdmin = false;
+    m_autoKickEnabled = false;
+
     if(gameSettings->value("frontend/sound", true).toBool())
     {
-        if (notify)
-            m_helloSound = HWDataManager::instance().findFileForRead(
-                            "Sounds/voices/Classic/Hello.ogg");
+        QStringList vpList =
+             QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
 
-        m_hilightSound = HWDataManager::instance().findFileForRead(
-                        "Sounds/beep.ogg");
+        foreach (QString vp, vpList)
+        {
+            m_helloSounds.append(DataManager::instance().findFileForRead(
+                               QString("Sounds/voices/%1/Hello.ogg").arg(vp)));
+        }
 
-        //m_hilightSound = m_helloSound;//"Sounds/beep.ogg";
+        m_hilightSound = DataManager::instance().findFileForRead(
+                             "Sounds/beep.ogg");
+
     }
 
     mainLayout.setSpacing(1);
@@ -278,19 +224,22 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
-        this, SLOT(linkClicked(const QUrl&)));
+            this, SLOT(linkClicked(const QUrl&)));
     mainLayout.addWidget(chatText, 0, 0, 2, 1);
 
-    chatNicks = new QListWidget(this);
+    chatNicks = new QListView(this);
+    chatNicks->setIconSize(QSize(24, 16));
+    chatNicks->setSelectionMode(QAbstractItemView::SingleSelection);
+    chatNicks->setEditTriggers(QAbstractItemView::NoEditTriggers);
     chatNicks->setMinimumHeight(10);
     chatNicks->setMinimumWidth(10);
-    chatNicks->setSortingEnabled(true);
     chatNicks->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    chatNicks->setContextMenuPolicy(Qt::ActionsContextMenu);
-    connect(chatNicks, SIGNAL(itemDoubleClicked(QListWidgetItem *)),
-        this, SLOT(chatNickDoubleClicked(QListWidgetItem *)));
-    connect(chatNicks, SIGNAL(currentRowChanged(int)),
-        this, SLOT(chatNickSelected(int)));
+    chatNicks->setContextMenuPolicy(Qt::CustomContextMenu);
+
+    connect(chatNicks, SIGNAL(doubleClicked(QModelIndex)),
+            this, SLOT(chatNickDoubleClicked(QModelIndex)));
+
+    connect(chatNicks, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(nicksContextMenuRequested(QPoint)));
 
     mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
 
@@ -325,10 +274,12 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     chatNicks->insertAction(0, acInfo);
     chatNicks->insertAction(0, acIgnore);
 
-    showReady = false;
     setShowFollow(true);
 
     setAcceptDrops(true);
+
+    m_nicksMenu = new QMenu(this);
+
     clear();
 }
 
@@ -341,149 +292,41 @@ void HWChatWidget::linkClicked(const QUrl & link)
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
-        QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
+        QModelIndexList mil = chatNicks->model()->match(chatNicks->model()->index(0, 0), Qt::DisplayRole, nick);
 
-        bool isOffline = (items.size() < 1);
-
-        QMenu * popup = new QMenu(this);
+        bool isOffline = (mil.size() < 1);
 
         if (isOffline)
         {
             m_clickedNick = nick;
-            chatNickSelected(0); // update friend and ignore entry
-            chatNicks->setCurrentItem(NULL, QItemSelectionModel::Clear);
+            chatNicks->selectionModel()->clearSelection();
         }
         else
         {
-            // selecting an item will automatically scroll there, so let's save old position
-            QScrollBar * scrollBar = chatNicks->verticalScrollBar();
-            int oldScrollPos = scrollBar->sliderPosition();
-            // select the nick which we want to see the actions for
-            chatNicks->setCurrentItem(items[0], QItemSelectionModel::Clear);
-            // selecting an item will automatically scroll there, so let's save old position
-            scrollBar->setSliderPosition(oldScrollPos);
+            chatNicks->selectionModel()->select(mil[0], QItemSelectionModel::ClearAndSelect);
         }
 
-        // load actions
-        QList<QAction *> actions = chatNicks->actions();
-
-        foreach(QAction * action, actions)
-        {
-            if ((!isOffline) || (action->data().toBool()))
-                popup->addAction(action);
-        }
-
-        // display menu popup at mouse cursor position
-        popup->popup(QCursor::pos());
+        nicksContextMenuRequested(chatNicks->mapFromGlobal(QCursor::pos()));
     }
 }
 
 void HWChatWidget::setShowFollow(bool enabled)
 {
-    if (enabled) {
+    if (enabled)
+    {
         if (!(chatNicks->actions().contains(acFollow)))
             chatNicks->insertAction(acFriend, acFollow);
     }
-    else {
+    else
+    {
         if (chatNicks->actions().contains(acFollow))
             chatNicks->removeAction(acFollow);
     }
 }
 
-void HWChatWidget::loadList(QStringList & list, const QString & file)
+void HWChatWidget::setIgnoreListKick(bool enabled)
 {
-    list.clear();
-    QFile txt(cfgdir->absolutePath() + "/" + file);
-    if(!txt.open(QIODevice::ReadOnly))
-        return;
-    QTextStream stream(&txt);
-    stream.setCodec("UTF-8");
-
-    while(!stream.atEnd())
-    {
-        QString str = stream.readLine();
-        if(str.startsWith(";") || str.length() == 0)
-            continue;
-        list << str.trimmed();
-    }
-    //readd once we require newer Qt than 4.4
-    //list.removeDuplicates();
-    txt.close();
-}
-
-void HWChatWidget::saveList(QStringList & list, const QString & file)
-{
-    QFile txt(cfgdir->absolutePath() + "/" + file);
-
-    // list empty? => rather have no file for the list than an empty one
-    if (list.isEmpty())
-    {
-        if (txt.exists())
-        {
-            // try to remove file, if successful we're done here.
-            if (txt.remove())
-                return;
-        }
-        else
-            // there is no file
-            return;
-    }
-
-    if(!txt.open(QIODevice::WriteOnly | QIODevice::Truncate))
-        return;
-    QTextStream stream(&txt);
-    stream.setCodec("UTF-8");
-
-    stream << "; this list is used by Hedgewars - do not edit it unless you know what you're doing!" << endl;
-    for(int i = 0; i < list.size(); i++)
-        stream << list[i] << endl;
-    txt.close();
-}
-
-void HWChatWidget::updateNickItem(QListWidgetItem *nickItem)
-{
-    QString nick = nickItem->text();
-    ListWidgetNickItem * item = dynamic_cast<ListWidgetNickItem*>(nickItem);
-
-    item->setFriend(friendsList.contains(nick, Qt::CaseInsensitive));
-    item->setIgnored(ignoreList.contains(nick, Qt::CaseInsensitive));
-
-    if(item->ignored())
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_ignore_on.png" : ":/res/chat_ignore_off.png") : ":/res/chat_ignore.png"));
-        item->setForeground(Qt::gray);
-    }
-    else if(item->isFriend())
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_friend_on.png" : ":/res/chat_friend_off.png") : ":/res/chat_friend.png"));
-        item->setForeground(Qt::green);
-    }
-    else
-    {
-        item->setIcon(QIcon(showReady ? (item->data(Qt::UserRole).toBool() ? ":/res/chat_default_on.png" : ":/res/chat_default_off.png") : ":/res/chat_default.png"));
-        item->setForeground(QBrush(QColor(0xff, 0xcc, 0x00)));
-    }
-}
-
-void HWChatWidget::updateNickItems()
-{
-    for(int i = 0; i < chatNicks->count(); i++)
-        updateNickItem(chatNicks->item(i));
-
-    chatNicks->sortItems();
-}
-
-void HWChatWidget::loadLists(const QString & nick)
-{
-    loadList(ignoreList, nick.toLower() + "_ignore.txt");
-    loadList(friendsList, nick.toLower() + "_friends.txt");
-    updateNickItems();
-}
-
-void HWChatWidget::saveLists(const QString & nick)
-{
-    saveList(ignoreList, nick.toLower() + "_ignore.txt");
-    saveList(friendsList, nick.toLower() + "_friends.txt");
+    m_autoKickEnabled = enabled;
 }
 
 
@@ -510,7 +353,7 @@ QString HWChatWidget::linkedNick(const QString & nickname)
 {
     if (nickname != m_userNick)
         return QString("<a href=\"hwnick://?%1\" class=\"nick\">%2</a>").arg(
-               QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
+                   QString(nickname.toUtf8().toBase64())).arg(Qt::escape(nickname));
 
     // unlinked nick (if own one)
     return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
@@ -526,15 +369,23 @@ const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http://)?(www\\.)?(hedgewars\\
 
 void HWChatWidget::onChatString(const QString& nick, const QString& str)
 {
-    bool isFriend = false;
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
 
-    if (!nick.isEmpty()) {
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    if (!nick.isEmpty())
+    {
         // don't show chat lines that are from ignored nicks
-        if (ignoreList.contains(nick, Qt::CaseInsensitive))
+        if (players->isFlagSet(nick, PlayersListModel::Ignore))
             return;
-        // friends will get special treatment, of course
-        isFriend = friendsList.contains(nick, Qt::CaseInsensitive);
     }
+
+    bool isFriend = (!nick.isEmpty()) && players->isFlagSet(nick, PlayersListModel::Friend);
 
     QString formattedStr = Qt::escape(str.mid(1));
     // make hedgewars.org urls actual links
@@ -564,7 +415,7 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     bool isHL = false;
 
     if ((c != 3) && (!nick.isEmpty()) &&
-        (nick != m_userNick) && (!m_userNick.isEmpty()))
+            (nick != m_userNick) && (!m_userNick.isEmpty()))
     {
         QString lcStr = str.toLower();
 
@@ -623,20 +474,35 @@ void HWChatWidget::onServerMessage(const QString& str)
     chatText->moveCursor(QTextCursor::End);
 }
 
+
 void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 {
-    bool isIgnored = ignoreList.contains(nick, Qt::CaseInsensitive);
-    QListWidgetItem * item = new ListWidgetNickItem(nick, friendsList.contains(nick, Qt::CaseInsensitive), isIgnored);
-    updateNickItem(item);
-    chatNicks->addItem(item);
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    bool isIgnored = players->isFlagSet(nick, PlayersListModel::Ignore);
+
+    if (isIgnored && m_isAdmin && m_autoKickEnabled)
+    {
+        emit kick(nick);
+        return;
+    }
 
     if ((!isIgnored) && (nick != m_userNick)) // don't auto-complete own name
         chatEditLine->addNickname(nick);
 
-    emit nickCountUpdate(chatNicks->count());
+    emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool()) {
-       SDLInteraction::instance().playSoundFile(m_helloSound);
+    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
+    {
+        SDLInteraction::instance().playSoundFile(
+                            m_helloSounds.at(rand() % m_helloSounds.size()));
     }
 }
 
@@ -644,10 +510,7 @@ void HWChatWidget::nickRemoved(const QString& nick)
 {
     chatEditLine->removeNickname(nick);
 
-    foreach(QListWidgetItem * item, chatNicks->findItems(nick, Qt::MatchExactly))
-        chatNicks->takeItem(chatNicks->row(item));
-
-    emit nickCountUpdate(chatNicks->count());
+    emit nickCountUpdate(chatNicks->model()->rowCount());
 }
 
 void HWChatWidget::clear()
@@ -661,7 +524,7 @@ void HWChatWidget::clear()
 
     chatText->clear();
     chatStrings.clear();
-    chatNicks->clear();
+    //chatNicks->clear();
 
     // clear and re compile regexp for highlighting
     m_highlights.clear();
@@ -683,7 +546,7 @@ void HWChatWidget::clear()
             foreach (QString word, list)
             {
                 m_highlights.append(QRegExp(
-                                hlRegExp.arg(QRegExp::escape(word.toLower()))));
+                                        hlRegExp.arg(QRegExp::escape(word.toLower()))));
             }
         }
 
@@ -708,184 +571,135 @@ void HWChatWidget::clear()
 
 void HWChatWidget::onKick()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-    {
-        displayNotice(tr("Kicking %1 ...").arg(Qt::escape(curritem->text())));
-        emit kick(curritem->text());
-    }
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit kick(mil[0].data().toString());
 }
 
 void HWChatWidget::onBan()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit ban(curritem->text());
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit ban(mil[0].data().toString());
 }
 
 void HWChatWidget::onInfo()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit info(curritem->text());
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit info(mil[0].data().toString());
 }
 
 void HWChatWidget::onFollow()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    if (curritem)
-        emit follow(curritem->text());
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    if(mil.size())
+        emit follow(mil[0].data().toString());
 }
 
 void HWChatWidget::onIgnore()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    QString nick = "";
-    if(curritem != NULL)
-        nick = curritem->text();
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+    if(mil.size())
+        nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
 
-    if(ignoreList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    if(players->isFlagSet(nick, PlayersListModel::Ignore))
     {
-        ignoreList.removeAll(nick.toLower());
+        players->setFlag(nick, PlayersListModel::Ignore, false);
         chatEditLine->addNickname(nick);
         displayNotice(tr("%1 has been removed from your ignore list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
         // don't consider ignored people friends
-        if(friendsList.contains(nick, Qt::CaseInsensitive))
+        if(players->isFlagSet(nick, PlayersListModel::Friend))
             emit onFriend();
 
-        // scroll down on first ignore added so that people see where that nick went to
-        if (ignoreList.isEmpty())
-            chatNicks->scrollToBottom();
-
-        ignoreList << nick.toLower();
+        players->setFlag(nick, PlayersListModel::Ignore, true);
         chatEditLine->removeNickname(nick);
         displayNotice(tr("%1 has been added to your ignore list").arg(linkedNick(nick)));
     }
 
-    if(curritem != NULL)
-    {
-        updateNickItem(curritem); // update icon/sort order/etc
-        chatNicks->sortItems();
-        chatNickSelected(0); // update context menu
-    }
+    if(mil.size())
+        chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
 }
 
 void HWChatWidget::onFriend()
 {
-    QListWidgetItem * curritem = chatNicks->currentItem();
-    QString nick = "";
-    if(curritem != NULL)
-        nick = curritem->text();
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+    if(mil.size())
+        nick = mil[0].data().toString();
     else
         nick = m_clickedNick;
 
-    if(friendsList.contains(nick, Qt::CaseInsensitive)) // already on list - remove him
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    if(players->isFlagSet(nick, PlayersListModel::Friend))
     {
-        friendsList.removeAll(nick.toLower());
+        players->setFlag(nick, PlayersListModel::Friend, false);
+        chatEditLine->removeNickname(nick);
         displayNotice(tr("%1 has been removed from your friends list").arg(linkedNick(nick)));
     }
     else // not on list - add
     {
-        // don't ignore the new friend
-        if(ignoreList.contains(nick, Qt::CaseInsensitive))
+        if(players->isFlagSet(nick, PlayersListModel::Ignore))
             emit onIgnore();
 
-        // scroll up on first friend added so that people see where that nick went to
-        if (friendsList.isEmpty())
-            chatNicks->scrollToTop();
-
-        friendsList << nick.toLower();
+        players->setFlag(nick, PlayersListModel::Friend, true);
+        chatEditLine->addNickname(nick);
         displayNotice(tr("%1 has been added to your friends list").arg(linkedNick(nick)));
     }
 
-    if(curritem != NULL)
-    {
-        updateNickItem(curritem); // update icon/sort order/etc
-        chatNicks->sortItems();
-        chatNickSelected(0); // update context menu
-    }
+    if(mil.size())
+        chatNicks->scrollTo(chatNicks->selectionModel()->selectedRows()[0]);
 }
 
-void HWChatWidget::chatNickDoubleClicked(QListWidgetItem * item)
+void HWChatWidget::chatNickDoubleClicked(const QModelIndex &index)
 {
-    if (item != NULL)
-        m_clickedNick = item->text();
-    else
-        m_clickedNick = "";
+    m_clickedNick = index.data().toString();
+
     QList<QAction *> actions = chatNicks->actions();
     actions.first()->activate(QAction::Trigger);
 }
 
-void HWChatWidget::chatNickSelected(int index)
-{
-    Q_UNUSED(index);
-
-    QListWidgetItem* item = chatNicks->currentItem();
-    QString nick = "";
-    if (item != NULL)
-        nick = item->text();
-    else
-        nick = m_clickedNick;
-
-    // update context menu labels according to possible action
-    if(ignoreList.contains(nick, Qt::CaseInsensitive))
-    {
-        acIgnore->setText(QAction::tr("Unignore"));
-        acIgnore->setIcon(QIcon(":/res/unignore.png"));
-    }
-    else
-    {
-        acIgnore->setText(QAction::tr("Ignore"));
-        acIgnore->setIcon(QIcon(":/res/ignore.png"));
-    }
-
-    if(friendsList.contains(nick, Qt::CaseInsensitive))
-    {
-        acFriend->setText(QAction::tr("Remove friend"));
-        acFriend->setIcon(QIcon(":/res/remfriend.png"));
-    }
-    else
-    {
-        acFriend->setText(QAction::tr("Add friend"));
-        acFriend->setIcon(QIcon(":/res/addfriend.png"));
-    }
-}
-
-void HWChatWidget::setShowReady(bool s)
-{
-    showReady = s;
-}
-
-void HWChatWidget::setReadyStatus(const QString & nick, bool isReady)
-{
-    QList<QListWidgetItem *> items = chatNicks->findItems(nick, Qt::MatchExactly);
-    if (items.size() != 1)
-    {
-        qWarning("Bug: cannot find user in chat");
-        return;
-    }
-
-    items[0]->setData(Qt::UserRole, isReady); // bulb status
-    updateNickItem(items[0]);
-
-    // ensure we're still showing the status bulbs
-    showReady = true;
-}
 
 void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
     chatNicks->removeAction(acBan);
 
+    m_isAdmin = b;
+
     if(b)
     {
         chatNicks->insertAction(0, acKick);
-//      chatNicks->insertAction(0, acBan);
+        chatNicks->insertAction(0, acBan);
     }
 }
 
@@ -949,7 +763,7 @@ void HWChatWidget::discardStyleSheet()
 void HWChatWidget::saveStyleSheet()
 {
     QString dest =
-        HWDataManager::instance().findFileForWrite("css/chat.css");
+        DataManager::instance().findFileForWrite("css/chat.css");
 
     QFile file(dest);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -1005,4 +819,76 @@ void HWChatWidget::setUser(const QString & nickname)
     m_userNick = nickname;
     nickRemoved(nickname);
     clear();
+}
+
+
+void HWChatWidget::setUsersModel(QAbstractItemModel *model)
+{
+    chatNicks->selectionModel()->deleteLater();
+
+    chatNicks->setModel(model);
+    chatNicks->setModelColumn(0);
+}
+
+void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
+{
+    QModelIndexList mil = chatNicks->selectionModel()->selectedRows();
+
+    QString nick;
+
+    if(mil.size())
+        nick = mil[0].data().toString();
+    else
+        nick = m_clickedNick;
+
+    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
+    if(!playersSortFilterModel)
+        return;
+
+    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+
+    if(!players)
+        return;
+
+    bool isSelf = (nick == m_userNick);
+
+    acFollow->setVisible(!isSelf);
+
+    // update context menu labels according to possible action
+    if(players->isFlagSet(nick, PlayersListModel::Ignore))
+    {
+        acIgnore->setText(QAction::tr("Unignore"));
+        acIgnore->setIcon(QIcon(":/res/unignore.png"));
+    }
+    else
+    {
+        acIgnore->setText(QAction::tr("Ignore"));
+        acIgnore->setIcon(QIcon(":/res/ignore.png"));
+        acIgnore->setVisible(!isSelf);
+    }
+
+    if(players->isFlagSet(nick, PlayersListModel::Friend))
+    {
+        acFriend->setText(QAction::tr("Remove friend"));
+        acFriend->setIcon(QIcon(":/res/remfriend.png"));
+    }
+    else
+    {
+        acFriend->setText(QAction::tr("Add friend"));
+        acFriend->setIcon(QIcon(":/res/addfriend.png"));
+        acFriend->setVisible(!isSelf);
+    }
+
+    if (m_isAdmin)
+    {
+        acKick->setVisible(!isSelf);
+        acBan->setVisible(!isSelf);
+    }
+
+    m_nicksMenu->clear();
+
+    foreach(QAction * action, chatNicks->actions())
+        m_nicksMenu->addAction(action);
+
+    m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
 }

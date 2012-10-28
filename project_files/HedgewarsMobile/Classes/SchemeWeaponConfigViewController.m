@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 13/06/2010.
  */
 
 
@@ -24,11 +22,10 @@
 
 
 #define LABEL_TAG 57423
-
-static SchemeWeaponConfigViewController *controllerInstance;
+#define TABLE_TAG 45657
 
 @implementation SchemeWeaponConfigViewController
-@synthesize tableView, listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
+@synthesize listOfSchemes, listOfWeapons, listOfScripts, lastIndexPath_sc, lastIndexPath_we, lastIndexPath_lu,
             selectedScheme, selectedWeapon, selectedScript, scriptCommand, topControl, sectionsHidden;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -75,7 +72,8 @@ static SchemeWeaponConfigViewController *controllerInstance;
 
 -(NSArray *)listOfScripts {
     if (listOfScripts == nil)
-        self.listOfScripts = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL];
+        self.listOfScripts = [[[NSFileManager defaultManager] contentsOfDirectoryAtPath:SCRIPTS_DIRECTORY() error:NULL]
+                              filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF ENDSWITH '.lua'"]];
     return listOfScripts;
 }
 
@@ -91,7 +89,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
         controller.tintColor = [UIColor lightGrayColor];
         controller.selectedSegmentIndex = 0;
         self.topControl = controller;
-        [controller addTarget:self.tableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
         [controller release];
     }
     return topControl;
@@ -102,16 +99,29 @@ static SchemeWeaponConfigViewController *controllerInstance;
 -(void) viewDidLoad {
     self.sectionsHidden = NO;
 
-    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+    NSInteger topOffset = IS_IPAD() ? 45 : 0;
+    NSInteger bottomOffset = IS_IPAD() ? 3 : 0;
+    UITableView *aTableView = [[UITableView alloc] initWithFrame:CGRectMake(0,
+                                                                            topOffset,
+                                                                            self.view.frame.size.width,
+                                                                            self.view.frame.size.height - topOffset - bottomOffset)
                                                            style:UITableViewStyleGrouped];
     aTableView.delegate = self;
     aTableView.dataSource = self;
     if (IS_IPAD()) {
-        [aTableView setBackgroundColorForAnyTable:[UIColor darkBlueColorTransparent]];
-        aTableView.layer.borderColor = [[UIColor darkYellowColor] CGColor];
-        aTableView.layer.borderWidth = 2.7f;
-        aTableView.layer.cornerRadius = 8;
-        aTableView.contentInset = UIEdgeInsetsMake(5, 0, 5, 0);
+        [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
+        UILabel *background = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)
+                                                    andTitle:nil
+                                             withBorderWidth:2.7f];
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [self.view insertSubview:background atIndex:0];
+        [background release];
+
+        self.topControl.frame = CGRectMake(0, 4, self.view.frame.size.width * 80/100, 30);
+        self.topControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+        self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
+        [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
+        [self.view addSubview:self.topControl];
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
@@ -121,20 +131,30 @@ static SchemeWeaponConfigViewController *controllerInstance;
         [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
     }
 
+    aTableView.tag = TABLE_TAG;
     aTableView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
     aTableView.separatorColor = [UIColor whiteColor];
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView = aTableView;
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:aTableView];
     [aTableView release];
-    [self.view addSubview:self.tableView];
 
     [super viewDidLoad];
-    controllerInstance = self;
+
+    // display or hide the lists, driven by MapConfigViewController
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(fillSections)
+                                                 name:@"fillsections"
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(emptySections)
+                                                 name:@"emptysections"
+                                               object:nil];
 }
 
 #pragma mark -
 #pragma mark Table view data source
--(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {
+-(NSInteger) numberOfSectionsInTableView:(UITableView *)aTableView {
     return (self.sectionsHidden ? 0 : 1);
 }
 
@@ -183,11 +203,9 @@ static SchemeWeaponConfigViewController *controllerInstance;
             self.lastIndexPath_we = indexPath;
         }
     } else {
-        cell.textLabel.text = [[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension];
-        NSString *str = [NSString stringWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),[self.listOfScripts objectAtIndex:row]];
-        NSDictionary *dict = [[NSDictionary alloc] initWithContentsOfFile:str];
-        cell.detailTextLabel.text = [dict objectForKey:@"description"];
-        [dict release];
+        cell.textLabel.text = [[[self.listOfScripts objectAtIndex:row] stringByDeletingPathExtension]
+                               stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        //cell.detailTextLabel.text = ;
         if ([[self.listOfScripts objectAtIndex:row] isEqualToString:self.selectedScript]) {
             UIImageView *checkbox = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:@"checkbox.png"]];
             cell.accessoryView = checkbox;
@@ -204,16 +222,46 @@ static SchemeWeaponConfigViewController *controllerInstance;
     return cell;
 }
 
--(CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50.0;
+-(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger) section {
+    return IS_IPAD() ? 0 : 50;
 }
 
--(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    UIView *theView = [[[UIView alloc] init] autorelease];
+-(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger) section {
+    if (IS_IPAD())
+        return nil;
+    UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
+    theView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.topControl.frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 30);
     self.topControl.center = CGPointMake(self.view.frame.size.width/2, 24);
+    [self.topControl addTarget:aTableView action:@selector(reloadData) forControlEvents:UIControlEventValueChanged];
     [theView addSubview:self.topControl];
-    return theView;
+    return [theView autorelease];
+}
+
+-(CGFloat) tableView:(UITableView *)aTableView heightForFooterInSection:(NSInteger) section {
+    return 40;
+}
+
+-(UIView *)tableView:(UITableView *)aTableView viewForFooterInSection:(NSInteger) section {
+    NSInteger height = 40;
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width, height)];
+    footer.backgroundColor = [UIColor clearColor];
+    footer.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, aTableView.frame.size.width*80/100, height)];
+    label.center = CGPointMake(aTableView.frame.size.width/2, height/2);
+    label.textAlignment = UITextAlignmentCenter;
+    label.font = [UIFont italicSystemFontOfSize:12];
+    label.textColor = [UIColor whiteColor];
+    label.numberOfLines = 2;
+    label.backgroundColor = [UIColor clearColor];
+    label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+
+    label.text = NSLocalizedString(@"Setting a Style might force a particular Scheme or Weapon configuration.",@"");
+
+    [footer addSubview:label];
+    [label release];
+    return [footer autorelease];
 }
 
 #pragma mark -
@@ -249,9 +297,9 @@ static SchemeWeaponConfigViewController *controllerInstance;
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int index = [self.listOfSchemes indexOfObject:str];
+                        int row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
-                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:index inSection:1];
+                        self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
                     }
                 }
@@ -264,29 +312,30 @@ static SchemeWeaponConfigViewController *controllerInstance;
             self.selectedScript = [self.listOfScripts objectAtIndex:newRow];
 
             // some styles disable or force the choice of a particular scheme/weaponset
-            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@",SCRIPTS_DIRECTORY(),self.selectedScript];
-            NSDictionary *scriptDict = [[NSDictionary alloc] initWithContentsOfFile:path];
+            NSString *path = [[NSString alloc] initWithFormat:@"%@/%@.cfg",SCRIPTS_DIRECTORY(),[self.selectedScript stringByDeletingPathExtension]];
+            NSString *configFile = [[NSString alloc] initWithContentsOfFile:path];
             [path release];
-            self.scriptCommand = [scriptDict objectForKey:@"command"];
-            NSString *scheme = [scriptDict objectForKey:@"scheme"];
-            if ([scheme isEqualToString:@""]) {
+            NSArray *scriptOptions = [configFile componentsSeparatedByString:@"\n"];
+            [configFile release];
+
+            self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
+            NSString *scheme = [scriptOptions objectAtIndex:0];
+            if ([scheme isEqualToString:@"locked"]) {
                 self.selectedScheme = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:0];
             } else {
-                self.selectedScheme = scheme;
+                self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
             }
 
-            NSString *weapon = [scriptDict objectForKey:@"weapon"];
-            if ([weapon isEqualToString:@""]) {
+            NSString *weapon = [scriptOptions objectAtIndex:1];
+            if ([weapon isEqualToString:@"locked"]) {
                 self.selectedWeapon = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:1];
             } else {
-                self.selectedWeapon = weapon;
+                self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
-
-            [scriptDict release];
         }
 
         [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -295,33 +344,37 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 #pragma mark -
-#pragma mark called externally to empty or fill the sections completely
-+(void) fillInstanceSections {
-    if (controllerInstance.sectionsHidden == YES) {
-        controllerInstance.sectionsHidden = NO;
+#pragma mark called by an NSNotification to empty or fill the sections completely
+-(void) fillSections {
+    if (self.sectionsHidden == YES) {
+        self.sectionsHidden = NO;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        [controllerInstance.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        controllerInstance.tableView.scrollEnabled = YES;
-
-        [[controllerInstance.view viewWithTag:LABEL_TAG] removeFromSuperview];
+        UITableView *aTableView = (UITableView *)[self.view viewWithTag:TABLE_TAG];
+        [aTableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        aTableView.scrollEnabled = YES;
+        [[self.view viewWithTag:LABEL_TAG] removeFromSuperview];
     }
 }
 
-+(void) emptyInstanceSections {
-    if (controllerInstance.sectionsHidden == NO) {
-        controllerInstance.sectionsHidden = YES;
+-(void) emptySections {
+    if (self.sectionsHidden == NO) {
+        self.sectionsHidden = YES;
         NSIndexSet *sections = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 1)];
-        [controllerInstance.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        controllerInstance.tableView.scrollEnabled = NO;
+        UITableView *aTableView = (UITableView *)[self.view viewWithTag:TABLE_TAG];
+        [aTableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
+        aTableView.scrollEnabled = NO;
 
-        CGRect frame = CGRectMake(0, 0, controllerInstance.view.frame.size.width * 80/100, 60);
+        CGRect frame = CGRectMake(0, 0, self.view.frame.size.width * 80/100, 60);
         UILabel *theLabel = [[UILabel alloc] initWithFrame:frame
                                                   andTitle:NSLocalizedString(@"Missions don't need further configuration",@"")];
-        theLabel.center = CGPointMake(controllerInstance.view.frame.size.width/2, controllerInstance.view.frame.size.height/2);
+        theLabel.center = CGPointMake(self.view.frame.size.width/2, self.view.frame.size.height/2);
         theLabel.numberOfLines = 2;
         theLabel.tag = LABEL_TAG;
+        theLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth |
+                                    UIViewAutoresizingFlexibleTopMargin |
+                                    UIViewAutoresizingFlexibleBottomMargin;
 
-        [controllerInstance.view addSubview:theLabel];
+        [self.view addSubview:theLabel];
         [theLabel release];
     }
 }
@@ -330,7 +383,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     if ([HWUtils isGameLaunched]) {
-        self.tableView = nil;
         self.lastIndexPath_sc = nil;
         self.lastIndexPath_we = nil;
         self.lastIndexPath_lu = nil;
@@ -348,7 +400,7 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 -(void) viewDidUnload {
-    self.tableView = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
@@ -365,7 +417,6 @@ static SchemeWeaponConfigViewController *controllerInstance;
 }
 
 -(void) dealloc {
-    releaseAndNil(tableView);
     releaseAndNil(listOfSchemes);
     releaseAndNil(listOfWeapons);
     releaseAndNil(listOfScripts);

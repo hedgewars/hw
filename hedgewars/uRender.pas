@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,51 +24,58 @@ interface
 
 uses SDLh, uTypes, GLunit, uConsts;
 
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
-procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat = 1.0);
-procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
-procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-procedure DrawFillRect(r: TSDL_Rect);
-procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
-procedure DrawCircle(X, Y, Radius, Width: LongInt);
-procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
-procedure Tint(r, g, b, a: Byte); inline;
-procedure Tint(c: Longword); inline;
+procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
+procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
+procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 
-var
-    HHTexture: PTexture;
+procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
+procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
+procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureCentered   (X, Top: LongInt; Source: PTexture);
+procedure DrawTextureF          (Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
+procedure DrawTextureRotated    (Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
+procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+
+procedure DrawCircle            (X, Y, Radius, Width: LongInt);
+procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
+
+procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+procedure DrawFillRect          (r: TSDL_Rect);
+procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
+procedure DrawScreenWidget      (widget: POnScreenWidget);
+
+procedure Tint                  (r, g, b, a: Byte); inline;
+procedure Tint                  (c: Longword); inline;
+
 
 implementation
 uses uVariables;
+
+var LastTint: LongWord = 0;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
-DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
+DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 begin
-DrawFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
+DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
 end;
 
-procedure DrawFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then exit;
+if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
+    exit;
 
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
@@ -106,12 +113,15 @@ TextureBuffer[2].Y:= _b;
 TextureBuffer[3].X:= _l;
 TextureBuffer[3].Y:= _b;
 
-
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
+procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
+begin
+    DrawTexture(X, Y, Texture, 1.0);
+end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
@@ -131,10 +141,10 @@ end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 begin
-    DrawRotatedTextureF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
+    DrawTextureRotatedF(Texture, Scale, 0, 0, X, Y, Frame, Dir, w, h, 0)
 end;
 
-procedure DrawRotatedTextureF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
+procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 var ft, fb, fl, fr: GLfloat;
     hw, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
@@ -194,31 +204,32 @@ glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 glPopMatrix
 end;
 
-procedure DrawRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 begin
-    DrawRotatedTex(SpritesData[Sprite].Texture,
+    DrawTextureRotated(SpritesData[Sprite].Texture,
         SpritesData[Sprite].Width,
         SpritesData[Sprite].Height,
         X, Y, Dir, Angle)
 end;
 
-procedure DrawRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
+procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 glPushMatrix;
 glTranslatef(X, Y, 0);
 
 if Dir < 0 then
-   glRotatef(Angle, 0, 0, -1)
+    glRotatef(Angle, 0, 0, -1)
 else
-   glRotatef(Angle, 0, 0,  1);
-if Dir < 0 then glScalef(-1.0, 1.0, 1.0);
+    glRotatef(Angle, 0, 0,  1);
+if Dir < 0 then
+    glScalef(-1.0, 1.0, 1.0);
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
 glPopMatrix
 end;
 
-procedure DrawRotatedTex(Tex: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
+procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
@@ -231,14 +242,15 @@ glPushMatrix;
 glTranslatef(X, Y, 0);
 
 if Dir < 0 then
-   begin
-   hw:= - hw;
-   glRotatef(Angle, 0, 0, -1);
-   end else
-   glRotatef(Angle, 0, 0,  1);
+    begin
+    hw:= - hw;
+    glRotatef(Angle, 0, 0, -1);
+    end
+else
+    glRotatef(Angle, 0, 0,  1);
 
 
-glBindTexture(GL_TEXTURE_2D, Tex^.id);
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
 VertexBuffer[0].X:= -hw;
 VertexBuffer[0].Y:= -hh;
@@ -250,20 +262,31 @@ VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @Tex^.tb);
+glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 glPopMatrix
 end;
 
-procedure DrawSprite (Sprite: TSprite; X, Y, Frame: LongInt);
+procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
 var row, col, numFramesFirstCol: LongInt;
 begin
-if SpritesData[Sprite].imageHeight = 0 then exit;
-numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
-row:= Frame mod numFramesFirstCol;
-col:= Frame div numFramesFirstCol;
-DrawSprite2 (Sprite, X, Y, col, row);
+    if SpritesData[Sprite].imageHeight = 0 then
+        exit;
+    numFramesFirstCol:= SpritesData[Sprite].imageHeight div SpritesData[Sprite].Height;
+    row:= Frame mod numFramesFirstCol;
+    col:= Frame div numFramesFirstCol;
+    DrawSprite(Sprite, X, Y, col, row);
+end;
+
+procedure DrawSprite(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
+var r: TSDL_Rect;
+begin
+    r.x:= FrameX * SpritesData[Sprite].Width;
+    r.w:= SpritesData[Sprite].Width;
+    r.y:= FrameY * SpritesData[Sprite].Height;
+    r.h:= SpritesData[Sprite].Height;
+    DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
 procedure DrawSpriteClipped(Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
@@ -287,20 +310,10 @@ if (X + SpritesData[Sprite].Width > RightX) then
 dec(r.h, r.y);
 dec(r.w, r.x);
 
-DrawFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
+DrawTextureFromRect(X + r.x, Y + r.y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawSprite2(Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-var r: TSDL_Rect;
-begin
-    r.x:= FrameX * SpritesData[Sprite].Width;
-    r.w:= SpritesData[Sprite].Width;
-    r.y:= FrameY * SpritesData[Sprite].Height;
-    r.h:= SpritesData[Sprite].Height;
-    DrawFromRect(X, Y, @r, SpritesData[Sprite].Texture)
-end;
-
-procedure DrawCentered(X, Top: LongInt; Source: PTexture);
+procedure DrawTextureCentered(X, Top: LongInt; Source: PTexture);
 var scale: GLfloat;
 begin
     if (Source^.w + 20) > cScreenWidth then
@@ -395,10 +408,10 @@ end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 const VertexBuffer: array [0..3] of TVertex2f = (
-        (x: -16; y: -16),
-        (x:  16; y: -16),
-        (x:  16; y:  16),
-        (x: -16; y:  16));
+        (X: -16; Y: -16),
+        (X:  16; Y: -16),
+        (X:  16; Y:  16),
+        (X: -16; Y:  16));
 var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
@@ -412,13 +425,14 @@ begin
     b:= (Pos + 1) * 32 / HHTexture^.h;
 
     if Dir = -1 then
-    begin
-    l:= (Step + 1) * 32 / HHTexture^.w;
-    r:= Step * 32 / HHTexture^.w
-    end else
-    begin
-    l:= Step * 32 / HHTexture^.w;
-    r:= (Step + 1) * 32 / HHTexture^.w
+        begin
+        l:= (Step + 1) * 32 / HHTexture^.w;
+        r:= Step * 32 / HHTexture^.w
+        end
+    else
+        begin
+        l:= Step * 32 / HHTexture^.w;
+        r:= (Step + 1) * 32 / HHTexture^.w
     end;
 
 
@@ -444,34 +458,78 @@ begin
     glPopMatrix
 end;
 
+procedure DrawScreenWidget(widget: POnScreenWidget);
+{$IFDEF USE_TOUCH_INTERFACE}
+var alpha: byte = $FF;
+begin
+with widget^ do
+    begin
+    if (fadeAnimStart <> 0) then
+        begin
+        if RealTicks > (fadeAnimStart + FADE_ANIM_TIME) then
+            fadeAnimStart:= 0
+        else
+            if show then 
+                alpha:= Byte(trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF))
+            else 
+                alpha:= Byte($FF - trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF));
+        end;
+
+    with moveAnim do
+        if animate then
+            if RealTicks > (startTime + MOVE_ANIM_TIME) then
+                begin
+                startTime:= 0;
+                animate:= false;
+                frame.x:= target.x;
+                frame.y:= target.y;
+                active.x:= active.x + (target.x - source.x);
+                active.y:= active.y + (target.y - source.y);
+                end
+            else
+                begin
+                frame.x:= source.x + Round((target.x - source.x) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                frame.y:= source.y + Round((target.y - source.y) * ((RealTicks - startTime) / MOVE_ANIM_TIME));
+                end;
+
+    if show or (fadeAnimStart <> 0) then
+        begin
+        Tint($FF, $FF, $FF, alpha);
+        DrawTexture(frame.x, frame.y, spritesData[sprite].Texture, buttonScale);
+        Tint($FF, $FF, $FF, $FF);
+        end;
+    end;
+{$ELSE}
+begin
+widget:= widget; // avoid hint
+{$ENDIF}
+end;
 
 procedure Tint(r, g, b, a: Byte); inline;
-const 
-    lastTint: Longword = 0;
-var 
-    nc, tw: Longword;
+var nc, tw: Longword;
 begin
-nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
 
-if nc = lastTint then
-    exit;
+    if nc = lastTint then
+        exit;
 
-if cGrayScale then
-    begin
-    tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
-    if tw > 255 then tw:= 255;
-    r:= tw;
-    g:= tw;
-    b:= tw
-    end;
+    if GrayScale then
+        begin
+        tw:= round(r * RGB_LUMINANCE_RED + g * RGB_LUMINANCE_GREEN + b * RGB_LUMINANCE_BLUE);
+        if tw > 255 then
+            tw:= 255;
+        r:= tw;
+        g:= tw;
+        b:= tw
+        end;
 
-glColor4ub(r, g, b, a);
-lastTint:= nc;
+    glColor4ub(r, g, b, a);
+    lastTint:= nc;
 end;
 
 procedure Tint(c: Longword); inline;
 begin
-Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
+    Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
 end.

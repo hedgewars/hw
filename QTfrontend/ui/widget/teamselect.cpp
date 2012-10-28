@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2007-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,28 +32,34 @@
 
 void TeamSelWidget::addTeam(HWTeam team)
 {
-  if(team.isNetTeam()) {
-    framePlaying->addTeam(team, true);
-    curPlayingTeams.push_back(team);
-    connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-             this, SLOT(netTeamStatusChanged(const HWTeam&)));
-    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
+    if(team.isNetTeam())
+    {
+        framePlaying->addTeam(team, true);
+        curPlayingTeams.push_back(team);
+        connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+                this, SLOT(netTeamStatusChanged(const HWTeam&)));
+        connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
-    dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
-    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
+        dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
-  } else {
-    frameDontPlaying->addTeam(team, false);
-    m_curNotPlayingTeams.push_back(team);
-    if(m_acceptOuter) {
-      connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-          this, SLOT(pre_changeTeamStatus(HWTeam)));
-    } else {
-      connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-          this, SLOT(changeTeamStatus(HWTeam)));
     }
-  }
-  emit setEnabledGameStart(curPlayingTeams.size()>1);
+    else
+    {
+        frameDontPlaying->addTeam(team, false);
+        m_curNotPlayingTeams.push_back(team);
+        if(m_acceptOuter)
+        {
+            connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+                    this, SLOT(pre_changeTeamStatus(HWTeam)));
+        }
+        else
+        {
+            connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+                    this, SLOT(changeTeamStatus(HWTeam)));
+        }
+    }
+    emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::setInteractivity(bool interactive)
@@ -87,15 +93,15 @@ void TeamSelWidget::proxyTeamColorChanged(const HWTeam& team)
 
 void TeamSelWidget::changeHHNum(const HWTeam& team)
 {
-  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
     if(itPlay==curPlayingTeams.end())
     {
         qWarning() << QString("changeHHNum: team '%1' not found").arg(team.name());
         return;
     }
-  itPlay->setNumHedgehogs(team.numHedgehogs());
+    itPlay->setNumHedgehogs(team.numHedgehogs());
 
-  framePlaying->setHHNum(team);
+    framePlaying->setHHNum(team);
 }
 
 void TeamSelWidget::changeTeamColor(const HWTeam& team)
@@ -114,17 +120,24 @@ void TeamSelWidget::changeTeamColor(const HWTeam& team)
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
     //qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
-    for(;;) {
+    for(;;)
+    {
         QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
         if(itPlay==curPlayingTeams.end())
         {
             qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
             break;
         }
-        if(itPlay->isNetTeam()) {
+        if(itPlay->isNetTeam())
+        {
             QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
             framePlaying->removeTeam(team);
             curPlayingTeams.erase(itPlay);
+            break;
+        }
+        else
+        {
+            qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
             break;
         }
     }
@@ -133,74 +146,85 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
 
 void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
 {
-  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
 }
 
 //void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
 //{
-  //curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
+//curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
 //}
 
 void TeamSelWidget::changeTeamStatus(HWTeam team)
 {
-  QList<HWTeam>::iterator itDontPlay=std::find(m_curNotPlayingTeams.begin(), m_curNotPlayingTeams.end(), team);
-  QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    QList<HWTeam>::iterator itDontPlay=std::find(m_curNotPlayingTeams.begin(), m_curNotPlayingTeams.end(), team);
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
 
-  bool willBePlaying=itDontPlay!=m_curNotPlayingTeams.end();
+    bool willBePlaying=itDontPlay!=m_curNotPlayingTeams.end();
 
-  if(!willBePlaying) {
-    // playing team => dont playing
-    m_curNotPlayingTeams.push_back(*itPlay);
-    emit teamNotPlaying(*itPlay);
-    curPlayingTeams.erase(itPlay);
-  } else {
-    // return if max playing teams reached
-    if(framePlaying->isFullTeams()) return;
-    // dont playing team => playing
-    team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
-    itDontPlay->setColor(framePlaying->getNextColor());
-    curPlayingTeams.push_back(*itDontPlay);
-    if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
-    m_curNotPlayingTeams.erase(itDontPlay);
-  }
+    if(!willBePlaying)
+    {
+        // playing team => dont playing
+        m_curNotPlayingTeams.push_back(*itPlay);
+        emit teamNotPlaying(*itPlay);
+        curPlayingTeams.erase(itPlay);
+    }
+    else
+    {
+        // return if max playing teams reached
+        if(framePlaying->isFullTeams()) return;
+        // dont playing team => playing
+        itDontPlay->setColor(framePlaying->getNextColor());
+        team=*itDontPlay; // for net team info saving in framePlaying (we have only name with netID from network)
+        curPlayingTeams.push_back(*itDontPlay);
+        if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
+        m_curNotPlayingTeams.erase(itDontPlay);
+    }
 
-  FrameTeams* pRemoveTeams;
-  FrameTeams* pAddTeams;
-  if(!willBePlaying) {
-    pRemoveTeams=framePlaying;
-    pAddTeams=frameDontPlaying;
-  } else {
-    pRemoveTeams=frameDontPlaying;
-    pAddTeams=framePlaying;
-  }
+    FrameTeams* pRemoveTeams;
+    FrameTeams* pAddTeams;
+    if(!willBePlaying)
+    {
+        pRemoveTeams=framePlaying;
+        pAddTeams=frameDontPlaying;
+    }
+    else
+    {
+        pRemoveTeams=frameDontPlaying;
+        pAddTeams=framePlaying;
+    }
 
-  pAddTeams->addTeam(team, willBePlaying);
-  pRemoveTeams->removeTeam(team);
-  if(!team.isNetTeam() && m_acceptOuter && !willBePlaying) {
-    connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-        this, SLOT(pre_changeTeamStatus(HWTeam)));
-  } else {
-    connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-        this, SLOT(changeTeamStatus(HWTeam)));
-  }
-  if(willBePlaying) {
-    connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
-        this, SLOT(hhNumChanged(const HWTeam&)));
-    dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
-    connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
-        this, SLOT(proxyTeamColorChanged(const HWTeam&)));
-    emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
-  }
+    pAddTeams->addTeam(team, willBePlaying);
+    pRemoveTeams->removeTeam(team);
+    if(!team.isNetTeam() && m_acceptOuter && !willBePlaying)
+    {
+        connect(frameDontPlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+                this, SLOT(pre_changeTeamStatus(HWTeam)));
+    }
+    else
+    {
+        connect(pAddTeams->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
+                this, SLOT(changeTeamStatus(HWTeam)));
+    }
+    if(willBePlaying)
+    {
+        connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
+                this, SLOT(hhNumChanged(const HWTeam&)));
+        dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
+                this, SLOT(proxyTeamColorChanged(const HWTeam&)));
+        emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
+    }
 
-  QSize szh=pAddTeams->sizeHint();
-  QSize szh1=pRemoveTeams->sizeHint();
-  if(szh.isValid() && szh1.isValid()) {
-    pAddTeams->resize(pAddTeams->size().width(), szh.height());
-    pRemoveTeams->resize(pRemoveTeams->size().width(), szh1.height());
-  }
+    QSize szh=pAddTeams->sizeHint();
+    QSize szh1=pRemoveTeams->sizeHint();
+    if(szh.isValid() && szh1.isValid())
+    {
+        pAddTeams->resize(pAddTeams->size().width(), szh.height());
+        pRemoveTeams->resize(pRemoveTeams->size().width(), szh1.height());
+    }
 
-  emit setEnabledGameStart(curPlayingTeams.size()>1);
+    emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
 void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeight)
@@ -213,18 +237,18 @@ void TeamSelWidget::addScrArea(FrameTeams* pfteams, QColor color, int fixedHeigh
         area->setMinimumHeight(fixedHeight);
         area->setMaximumHeight(fixedHeight);
         area->setStyleSheet(
-                "FrameTeams{"
-                    "border: solid;"
-                    "border-width: 1px;"
-                    "border-radius: 16px;"
-                    "border-color: #ffcc00;"
-                    "}"
+            "FrameTeams{"
+            "border: solid;"
+            "border-width: 1px;"
+            "border-radius: 16px;"
+            "border-color: #ffcc00;"
+            "}"
         );
     }
 }
 
 TeamSelWidget::TeamSelWidget(QWidget* parent) :
-  QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
+    QGroupBox(parent), mainLayout(this), m_acceptOuter(false)
 {
     setTitle(QGroupBox::tr("Playing teams"));
     framePlaying = new FrameTeams();
@@ -238,44 +262,44 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)
 {
-  m_acceptOuter=acceptOuter;
+    m_acceptOuter=acceptOuter;
 }
 
 void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
 {
-  //for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
-  //framePlaying->removeTeam(*it);
-  //}
-  framePlaying->resetTeams();
-  framePlaying->resetColors();
-  curPlayingTeams.clear();
-  //for(it=curDontPlayingTeams.begin(); it!=curDontPlayingTeams.end(); it++) {
-  //frameDontPlaying->removeTeam(*it);
-  //}
-  frameDontPlaying->resetTeams();
-  m_curNotPlayingTeams.clear();
+    //for(it=curPlayingTeams.begin(); it!=curPlayingTeams.end(); it++) {
+    //framePlaying->removeTeam(*it);
+    //}
+    framePlaying->resetTeams();
+    framePlaying->resetColors();
+    curPlayingTeams.clear();
+    //for(it=curDontPlayingTeams.begin(); it!=curDontPlayingTeams.end(); it++) {
+    //frameDontPlaying->removeTeam(*it);
+    //}
+    frameDontPlaying->resetTeams();
+    m_curNotPlayingTeams.clear();
 
-  foreach(HWTeam team, teamslist)
+    foreach(HWTeam team, teamslist)
     addTeam(team);
 }
 
-bool TeamSelWidget::isPlaying(HWTeam team) const
+bool TeamSelWidget::isPlaying(const HWTeam &team) const
 {
-  return std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team)!=curPlayingTeams.end();
+    return curPlayingTeams.contains(team);
 }
 
 QList<HWTeam> TeamSelWidget::getPlayingTeams() const
 {
-  return curPlayingTeams;
+    return curPlayingTeams;
 }
 
 QList<HWTeam> TeamSelWidget::getNotPlayingTeams() const
 {
-  return m_curNotPlayingTeams;
+    return m_curNotPlayingTeams;
 }
 
-void TeamSelWidget::pre_changeTeamStatus(HWTeam team)
+void TeamSelWidget::pre_changeTeamStatus(const HWTeam & team)
 {
-  team.setColor(framePlaying->getNextColor());
-  emit acceptRequested(team);
+    //team.setColor(framePlaying->getNextColor());
+    emit acceptRequested(team);
 }

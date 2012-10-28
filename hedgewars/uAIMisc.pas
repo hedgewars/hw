@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2005-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,59 +24,78 @@ uses SDLh, uConsts, uFloat, uTypes;
 
 const MAXBONUS = 1024;
 
+      afTrackFall  = $00000001;
+      afErasesLand = $00000002;
+      afSetSkip    = $00000004;
+
+
 type TTarget = record
-               Point: TPoint;
-               Score: LongInt;
-               end;
-     TTargets = record
-                Count: Longword;
-                ar: array[0..Pred(cMaxHHs)] of TTarget;
-                end;
-     TJumpType = (jmpNone, jmpHJump, jmpLJump);
-     TGoInfo = record
-               Ticks: Longword;
-               FallPix: Longword;
-               JumpType: TJumpType;
-               end;
-     TBonus = record
-              X, Y: LongInt;
-              Radius: LongInt;
-              Score: LongInt;
-              end;
+    Point: TPoint;
+    Score: LongInt;
+    skip: boolean;
+    end;
+TTargets = record
+    Count: Longword;
+    ar: array[0..Pred(cMaxHHs)] of TTarget;
+    end;
+TJumpType = (jmpNone, jmpHJump, jmpLJump);
+TGoInfo = record
+    Ticks: Longword;
+    FallPix: Longword;
+    JumpType: TJumpType;
+    end;
+TBonus = record
+    X, Y: LongInt;
+    Radius: LongInt;
+    Score: LongInt;
+    end;
 
 procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
-procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType = []);
-procedure AwareOfExplosion(x, y, r: LongInt);
-function RatePlace(Gear: PGear): LongInt;
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
-function TestColl(x, y, r: LongInt): boolean;
-function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
-function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
-function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
-function RateHammer(Me: PGear): LongInt;
-function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-function AIrndSign(num: LongInt): LongInt;
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+procedure FillBonuses(isAfterAttack: boolean);
+procedure AwareOfExplosion(x, y, r: LongInt); inline;
+
+function  RatePlace(Gear: PGear): LongInt;
+function  TestColl(x, y, r: LongInt): boolean; inline;
+function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
+function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
+function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
+
+function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
+function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
+function  RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
+function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+function  RateHammer(Me: PGear): LongInt;
+
+function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
+function  AIrndSign(num: LongInt): LongInt;
 
 var ThinkingHH: PGear;
     Targets: TTargets;
 
     bonuses: record
-             Count: Longword;
-             ar: array[0..Pred(MAXBONUS)] of TBonus;
-             end;
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS)] of TBonus;
+        end;
 
-implementation
-uses uCollisions, uVariables, uUtils, uDebug;
+    walkbonuses: record
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
+        end;
 
 const KillScore = 200;
-
 var friendlyfactor: LongInt = 300;
+
+implementation
+uses uCollisions, uVariables, uUtils, uLandTexture, uGearsUtils;
+
+var 
     KnownExplosion: record
-                    X, Y, Radius: LongInt
-                    end = (X: 0; Y: 0; Radius: 0);
+        X, Y, Radius: LongInt
+        end = (X: 0; Y: 0; Radius: 0);
 
 procedure FillTargets;
 var i, t: Longword;
@@ -91,19 +110,22 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             for i:= 0 to cMaxHHIndex do
                 if (Hedgehogs[i].Gear <> nil)
-                and (Hedgehogs[i].Gear <> ThinkingHH) then
+                and (Hedgehogs[i].Gear <> ThinkingHH) 
+                and (Hedgehogs[i].Gear^.Health > Hedgehogs[i].Gear^.Damage) 
+                    then
                     begin
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
+                        skip:= false;
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
                         if Clan <> CurrentTeam^.Clan then
                             begin
-                            Score:=  Gear^.Health;
+                            Score:= Gear^.Health - Gear^.Damage;
                             inc(e)
                             end else
                             begin
-                            Score:= -Gear^.Health;
+                            Score:= Gear^.Damage - Gear^.Health;
                             inc(f)
                             end
                         end;
@@ -115,186 +137,427 @@ if e > f then friendlyfactor:= 300 + (e - f) * 30
 else friendlyfactor:= max(30, 300 - f * 80 div max(1,e))
 end;
 
-procedure FillBonuses(isAfterAttack: boolean; filter: TGearsType);
-var Gear: PGear;
-    MyClan: PClan;
-
-    procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt);
+procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+begin
+if(bonuses.Count < MAXBONUS) then
     begin
     bonuses.ar[bonuses.Count].x:= x;
     bonuses.ar[bonuses.Count].y:= y;
     bonuses.ar[bonuses.Count].Radius:= r;
     bonuses.ar[bonuses.Count].Score:= s;
     inc(bonuses.Count);
-    TryDo(bonuses.Count <= MAXBONUS, 'Bonuses overflow', true)
     end;
+end;
 
+procedure AddWalkBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
+begin
+if(walkbonuses.Count < MAXBONUS div 8) then
+    begin
+    walkbonuses.ar[walkbonuses.Count].x:= x;
+    walkbonuses.ar[walkbonuses.Count].y:= y;
+    walkbonuses.ar[walkbonuses.Count].Radius:= r;
+    walkbonuses.ar[walkbonuses.Count].Score:= s;
+    inc(walkbonuses.Count);
+    end;
+end;
+
+procedure FillBonuses(isAfterAttack: boolean);
+var Gear: PGear;
+    MyClan: PClan;
+    i: Longint;
 begin
 bonuses.Count:= 0;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
-    if (filter = []) or (Gear^.Kind in filter) then
-      case Gear^.Kind of
-          gtCase: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 33, 25);
-          gtFlame: if (Gear^.State and gsttmpFlag) <> 0 then
-                  AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
+        case Gear^.Kind of
+            gtCase:
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
+            gtFlame:
+                if (Gear^.State and gsttmpFlag) <> 0 then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
 // avoid mines unless they are very likely to be duds, or are duds. also avoid if they are about to blow 
-          gtMine:  if ((Gear^.State and gstAttacking) = 0) and 
-                      (((cMineDudPercent < 90) and (Gear^.Health <> 0)) or
-                       ((Gear^.Health = 0) and (Gear^.Damage > 30))) then
-                          AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
-                      else if (Gear^.State and gstAttacking) <> 0 then
-                          AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
-          gtSMine:    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
-          gtDynamite: AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
-          gtHedgehog: begin
-                      if Gear^.Damage >= Gear^.Health then
-                          AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
-                      else
-                          if isAfterAttack and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog) then
-                              if (ClansCount > 2) or (MyClan = Gear^.Hedgehog^.Team^.Clan) then
-                                  AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
-                              else
-                                  AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
-                      end;
-          end;
+            gtMine:
+                if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) and (Gear^.Health <> 0))
+                or (isAfterAttack and (Gear^.Health = 0) and (Gear^.Damage > 30))) then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
+                else if (Gear^.State and gstAttacking) <> 0 then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+                    
+            gtExplosives:
+            if isAfterAttack then
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
+                
+            gtSMine:
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
+                
+            gtDynamite:
+                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
+                
+            gtHedgehog:
+                begin
+                if Gear^.Damage >= Gear^.Health then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
+                else
+                    if isAfterAttack
+                      and (ThinkingHH^.Hedgehog <> Gear^.Hedgehog)
+                      and ((hwAbs(Gear^.dX) + hwAbs(Gear^.dY)) < _0_1) then
+                        if (ClansCount > 2) or (MyClan = Gear^.Hedgehog^.Team^.Clan) then
+                            AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -3) // hedgehog-friend
+                        else
+                            AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, 3)
+                end;
+            end;
     Gear:= Gear^.NextGear
     end;
 if isAfterAttack and (KnownExplosion.Radius > 0) then
-   with KnownExplosion do
+    with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);
+if isAfterAttack then
+    begin
+    for i:= 0 to Pred(walkbonuses.Count) do
+        with walkbonuses.ar[i] do
+            AddBonus(X, Y, Radius, Score);
+    walkbonuses.Count:= 0
+    end;
 end;
 
-procedure AwareOfExplosion(x, y, r: LongInt);
+procedure AwareOfExplosion(x, y, r: LongInt); inline;
 begin
-KnownExplosion.X:= x;
-KnownExplosion.Y:= y;
-KnownExplosion.Radius:= r
+    KnownExplosion.X:= x;
+    KnownExplosion.Y:= y;
+    KnownExplosion.Radius:= r
 end;
 
 function RatePlace(Gear: PGear): LongInt;
 var i, r: LongInt;
     rate: LongInt;
+    gX, gY: real;
 begin
+gX:= hwFloat2Float(Gear^.X);
+gY:= hwFloat2Float(Gear^.Y);
 rate:= 0;
 for i:= 0 to Pred(bonuses.Count) do
     with bonuses.ar[i] do
         begin
-        r:= hwRound(Distance(Gear^.X - int2hwFloat(X), Gear^.Y - int2hwFloat(Y)));
-        if r < Radius then
-            inc(rate, Score * (Radius - r))
+        r:= Radius;
+        if abs(gX-X)+abs(gY-Y) < Radius then
+            r:= trunc(sqrt(sqr(gX - X)+sqr(gY - Y)));
+        if r < 20 then
+                inc(rate, Score * Radius)
+        else if r < Radius then
+                inc(rate, Score * (Radius - r))
         end;
     RatePlace:= rate;
 end;
 
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
-function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean;
+function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 var MeX, MeY: LongInt;
 begin
     if ((x and LAND_WIDTH_MASK) = 0) and ((y and LAND_HEIGHT_MASK) = 0) then
-        begin
+    begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and
-           ((Land[y, x] and $FF00) = 0) then exit(false);
-        end;
-    exit(TestColl(x, y, r))
+        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and ((Land[y, x] and $FF00) = 0) then
+            exit(false);
+    end;
+    TestCollExcludingMe:= TestColl(x, y, r)
 end;
 
-function TestColl(x, y, r: LongInt): boolean;
+function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-b:= (((x-r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] <> 0);
-if b then exit(true);
-b:=(((x-r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] <> 0);
-if b then exit(true);
-b:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] <> 0);
-if b then exit(true);
-TestColl:=(((x+r) and LAND_WIDTH_MASK) = 0)and(((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] <> 0)
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF00 <> 0);
+    if b then
+        exit(true);
+    
+    TestCollExcludingObjects:= false;
+end;
+
+function TestColl(x, y, r: LongInt): boolean; inline;
+var b: boolean;
+begin
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF7F <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF7F <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF7F <> 0);
+    if b then
+        exit(true);
+    
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF7F <> 0);
+    if b then
+        exit(true);
+    
+    TestColl:= false;
+end;
+
+function TestCollWithLand(x, y, r: LongInt): boolean; inline;
+var b: boolean;
+begin
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > 255);
+    if b then
+        exit(true);
+        
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > 255);
+    if b then
+        exit(true);
+        
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > 255);
+    if b then
+        exit(true);
+        
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255);
+    if b then
+        exit(true);
+
+    TestCollWithLand:= false;
+end;
+
+function TraceFall(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): LongInt;
+var skipLandCheck: boolean;
+    rCorner: real;
+    dmg: LongInt;
+begin
+    skipLandCheck:= true;
+    if x - eX < 0 then dX:= -dX;
+    if y - eY < 0 then dY:= -dY;
+    // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
+    rCorner:= r * 0.75;
+    while true do
+    begin
+        x:= x + dX;
+        y:= y + dY;
+        dY:= dY + cGravityf;
+        skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
+        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
+        begin
+            if 0.4 < dY then
+            begin
+                dmg := 1 + trunc((abs(dY) - 0.4) * 70);
+                if dmg >= 1 then
+                    exit(dmg);
+            end;
+            exit(0)
+        end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then
+            exit(-1);
+    end;
+end;
+
+function TraceShoveFall(x, y, dX, dY: Real): LongInt;
+var dmg: LongInt;
+begin
+//v:= random($FFFFFFFF);
+    while true do
+    begin
+        x:= x + dX;
+        y:= y + dY;
+        dY:= dY + cGravityf;
+
+{        if ((trunc(y) and LAND_HEIGHT_MASK) = 0) and ((trunc(x) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[trunc(y), trunc(x)]:= v;
+            UpdateLandTexture(trunc(X), 1, trunc(Y), 1, true);
+            end;}
+
+
+        // consider adding dX/dY calc here for fall damage
+        if TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
+        begin
+            if 0.4 < dY then
+            begin
+                dmg := 1 + trunc((abs(dY) - 0.4) * 70);
+                if dmg >= 1 then
+                    exit(dmg);
+            end;
+            exit(0)
+        end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then
+            // returning -1 for drowning so it can be considered in the Rate routine
+            exit(-1)
+    end;
 end;
 
 function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
-var i, dmg, rate: LongInt;
 begin
+    RateExplosion:= RateExplosion(Me, x, y, r, 0);
+end;
+
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
+var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
+    dX, dY, dmgMod: real;
+begin
+fallDmg:= 0;
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
-     begin
-     Point.x:= hwRound(Me^.X);
-     Point.y:= hwRound(Me^.Y);
-     Score:= - ThinkingHH^.Health
-     end;
+    begin
+    Point.x:= hwRound(Me^.X);
+    Point.y:= hwRound(Me^.Y);
+    Score:= - ThinkingHH^.Health
+    end;
 // rate explosion
+dmgBase:= r + cHHRadius div 2;
+if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
+else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
-         begin
-         dmg:= hwRound(_0_01 * cDamageModifier
-            * min((r + cHHRadius div 2 - LongInt(DistanceI(Point.x - x, Point.y - y).Round)) div 2, r) * cDamagePercent);
+        begin
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
+            dmg:= trunc(dmgMod * min((dmgBase - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)))) div 2, r));
 
-         if dmg > 0 then
+        if dmg > 0 then
             begin
-            if dmg >= abs(Score) then
-               if Score > 0 then inc(rate, KillScore)
-                            else dec(rate, KillScore * friendlyfactor div 100)
+            if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
+                begin
+                dX:= 0.005 * dmg + 0.01;
+                dY:= dX;
+                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                     fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+                else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod)
+                end;
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                if Score > 0 then
+                    inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
+                else
+                    dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
+            else if (dmg+fallDmg) >= abs(Score) then
+                if Score > 0 then
+                    inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
+                else
+                    dec(rate, KillScore * friendlyfactor div 100 * 1024)
             else
-               if Score > 0 then inc(rate, dmg)
-                            else dec(rate, dmg * friendlyfactor div 100)
+                if Score > 0 then
+                    inc(rate, (dmg + fallDmg) * 1024)
+                else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
             end;
-         end;
-RateExplosion:= rate * 1024;
+        end;
+RateExplosion:= rate;
 end;
 
-function RateShove(Me: PGear; x, y, r, power: LongInt): LongInt;
-var i, dmg, rate: LongInt;
+function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
+var i, fallDmg, dmg, rate: LongInt;
+    dX, dY, dmgMod: real;
 begin
-Me:= Me; // avoid compiler hint
+fallDmg:= 0;
+dX:= gdX * 0.01 * kick;
+dY:= gdY * 0.01 * kick;
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
-         begin
-         dmg:= r - hwRound(DistanceI(Point.x - x, Point.y - y));
-         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
-         if dmg > 0 then
+      if skip then 
+        if (Flags and afSetSkip = 0) then skip:= false else {still skip}
+      else  
+        begin
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < r then
+            dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
+
+        if dmg > 0 then
             begin
-            if power >= abs(Score) then
-               if Score > 0 then inc(rate, KillScore)
-                            else dec(rate, KillScore * friendlyfactor div 100)
+            if (Flags and afSetSkip <> 0) then skip:= true;
+            if (Flags and afTrackFall <> 0) and (Score > 0) then 
+                fallDmg:= trunc(TraceShoveFall(Point.x, Point.y - 2, dX, dY) * dmgMod);
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                if Score > 0 then
+                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                else
+                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+            else if power+fallDmg >= abs(Score) then
+                if Score > 0 then
+                    inc(rate, KillScore)
+                else
+                    dec(rate, KillScore * friendlyfactor div 100)
             else
-               if Score > 0 then inc(rate, power)
-                            else dec(rate, power * friendlyfactor div 100)
+                if Score > 0 then
+                    inc(rate, power+fallDmg)
+                else
+                    dec(rate, (power+fallDmg) * friendlyfactor div 100)
             end;
-         end;
+        end;
 RateShove:= rate * 1024
 end;
 
-function RateShotgun(Me: PGear; x, y: LongInt): LongInt;
-var i, dmg, rate: LongInt;
+function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
+    dX, dY, dmgMod: real;
 begin
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
+gdX:= gdX * 0.01;
+gdY:= gdX * 0.01;
 // add our virtual position
 with Targets.ar[Targets.Count] do
-     begin
-     Point.x:= hwRound(Me^.X);
-     Point.y:= hwRound(Me^.Y);
-     Score:= - ThinkingHH^.Health
-     end;
+    begin
+    Point.x:= hwRound(Me^.X);
+    Point.y:= hwRound(Me^.Y);
+    Score:= - ThinkingHH^.Health
+    end;
 // rate shot
+baseDmg:= cHHRadius + cShotgunRadius + 4;
+if GameFlags and gfSolidLand = 0 then erasure:= cShotgunRadius
+else erasure:= 0;
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
-         begin
-         dmg:= min(cHHRadius + cShotgunRadius + 4 - hwRound(DistanceI(Point.x - x, Point.y - y)), 25);
-         dmg:= hwRound(_0_01 * cDamageModifier * dmg * cDamagePercent);
-         if dmg > 0 then
+        begin
+        dmg:= 0;
+        if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
             begin
-                if dmg >= abs(Score) then dmg := KillScore;
-                if Score > 0 then inc(rate, dmg)
-                else dec(rate, dmg * friendlyfactor div 100);
+            dmg:= min(baseDmg - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y))), 25);
+            dmg:= trunc(dmg * dmgMod);
             end;
-         end;        
+        if dmg > 0 then
+            begin
+            dX:= gdX * dmg;
+            dY:= gdY * dmg;
+            if dX < 0 then dX:= dX - 0.01
+            else dX:= dX + 0.01;
+            if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and 
+               (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                 fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
+            else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
+            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                if Score > 0 then
+                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                else
+                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+            else if (dmg+fallDmg) >= abs(Score) then
+                if Score > 0 then
+                    inc(rate, KillScore)
+                else
+                    dec(rate, KillScore * friendlyfactor div 100)
+            else
+                if Score > 0 then
+                    inc(rate, dmg+fallDmg)
+            else
+                dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+            end;
+        end;        
 RateShotgun:= rate * 1024;
 end;
 
@@ -308,189 +571,195 @@ rate:= 0;
 
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
-         begin
          // hammer hit radius is 8, shift is 10
-         r:= hwRound(DistanceI(Point.x - x, Point.y - y));
+        if abs(Point.x - x) + abs(Point.y - y) < 18 then
+            begin
+            r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
-         if r <= 18 then
-            if Score > 0 then 
-                inc(rate, Score div 3)
-                else 
-                inc(rate, Score div 3 * friendlyfactor div 100)
-         end;
+            if r <= 18 then
+                if Score > 0 then 
+                    inc(rate, Score div 3)
+                else
+                    inc(rate, Score div 3 * friendlyfactor div 100)
+            end;
 RateHammer:= rate * 1024;
 end;
 
 function HHJump(Gear: PGear; JumpType: TJumpType; var GoInfo: TGoInfo): boolean;
 var bX, bY: LongInt;
-    bRes: boolean;
 begin
-bRes:= false;
+HHJump:= false;
 GoInfo.Ticks:= 0;
 GoInfo.JumpType:= jmpNone;
 bX:= hwRound(Gear^.X);
 bY:= hwRound(Gear^.Y);
 case JumpType of
-     jmpNone: exit(bRes);
-    jmpHJump: if TestCollisionYwithGear(Gear, -1) = 0 then
-                 begin
-                 Gear^.dY:= -_0_2;
-                 SetLittle(Gear^.dX);
-                 Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
-                 end else exit(bRes);
-    jmpLJump: begin
-              if TestCollisionYwithGear(Gear, -1) <> 0 then
-                 if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - int2hwFloat(2) else
-                 if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then Gear^.Y:= Gear^.Y - _1;
-              if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
-                 or   (TestCollisionYwithGear(Gear, -1) <> 0)) then
-                 begin
-                 Gear^.dY:= -_0_15;
-                 Gear^.dX:= SignAs(_0_15, Gear^.dX);
-                 Gear^.State:= Gear^.State or gstMoving or gstHHJumping
-                 end else exit(bRes)
-              end
-    end;
+    jmpNone: exit(false);
+    
+    jmpHJump:
+        if TestCollisionYwithGear(Gear, -1) = 0 then
+        begin
+            Gear^.dY:= -_0_2;
+            SetLittle(Gear^.dX);
+            Gear^.State:= Gear^.State or gstMoving or gstHHJumping;
+        end
+    else
+        exit(false);
+        
+    jmpLJump:
+        begin
+            if TestCollisionYwithGear(Gear, -1) <> 0 then
+                if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then
+                    Gear^.Y:= Gear^.Y - int2hwFloat(2)
+                else
+                    if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then
+                        Gear^.Y:= Gear^.Y - _1;
+            if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) or
+               (TestCollisionYwithGear(Gear, -1) <> 0)) then
+            begin
+                Gear^.dY:= -_0_15;
+                Gear^.dX:= SignAs(_0_15, Gear^.dX);
+                Gear^.State:= Gear^.State or gstMoving or gstHHJumping
+            end
+        else
+            exit(false)
+        end
+end;
 
 repeat
-if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then exit(bRes);
-if (Gear^.State and gstMoving) <> 0 then
-   begin
-   if (GoInfo.Ticks = 350) then
-      if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
-         begin
-         Gear^.dY:= -_0_25;
-         Gear^.dX:= SignAs(_0_02, Gear^.dX)
-         end;
-   if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
-   Gear^.X:= Gear^.X + Gear^.dX;
-   inc(GoInfo.Ticks);
-   Gear^.dY:= Gear^.dY + cGravity;
-   if Gear^.dY > _0_4 then exit(bRes);
-   if (Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, -1) <> 0) then Gear^.dY:= _0;
-   Gear^.Y:= Gear^.Y + Gear^.dY;
-   if (not Gear^.dY.isNegative)and (TestCollisionYwithGear(Gear, 1) <> 0) then
-      begin
-      Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
-      Gear^.dY:= _0;
-      case JumpType of
-           jmpHJump: if bY - hwRound(Gear^.Y) > 5 then
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
+            
+    if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
+        exit(false);
+    if (Gear^.State and gstMoving) <> 0 then
+    begin
+        if (GoInfo.Ticks = 350) then
+            if (not (hwAbs(Gear^.dX) > cLittle)) and (Gear^.dY < -_0_02) then
+            begin
+                Gear^.dY:= -_0_25;
+                Gear^.dX:= SignAs(_0_02, Gear^.dX)
+            end;
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+            Gear^.X:= Gear^.X + Gear^.dX;
+        inc(GoInfo.Ticks);
+        Gear^.dY:= Gear^.dY + cGravity;
+        if Gear^.dY > _0_4 then
+            exit(false);
+        if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+            Gear^.dY:= _0;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+            begin
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
+            Gear^.dY:= _0;
+            case JumpType of
+                jmpHJump:
+                    if bY - hwRound(Gear^.Y) > 5 then
                         begin
-                        bRes:= true;
                         GoInfo.JumpType:= jmpHJump;
-                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
+                        inc(GoInfo.Ticks, 300 + 300); // 300 before jump, 300 after
+                        exit(true)
                         end;
-           jmpLJump: if abs(bX - hwRound(Gear^.X)) > 30 then
+                jmpLJump:
+                    if abs(bX - hwRound(Gear^.X)) > 30 then
                         begin
-                        bRes:= true;
                         GoInfo.JumpType:= jmpLJump;
-                        inc(GoInfo.Ticks, 300 + 300) // 300 before jump, 300 after
-                        end;
-           end;
-      exit(bRes)
-      end;
-   end;
+                        inc(GoInfo.Ticks, 300 + 300); // 300 before jump, 300 after
+                        exit(true)
+                        end
+                end;
+            exit(false)
+            end;
+    end;
 until false
 end;
 
 function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
-var pX, pY: LongInt;
+var pX, pY, tY: LongInt;
 begin
+HHGo:= false;
+Gear^.CollisionMask:= $FF7F;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;
 GoInfo.FallPix:= 0;
 GoInfo.JumpType:= jmpNone;
+tY:= hwRound(Gear^.Y);
 repeat
-pX:= hwRound(Gear^.X);
-pY:= hwRound(Gear^.Y);
-if pY + cHHRadius >= cWaterLine then exit(false);
-if (Gear^.State and gstMoving) <> 0 then
-   begin
-   inc(GoInfo.Ticks);
-   Gear^.dY:= Gear^.dY + cGravity;
-   if Gear^.dY > _0_4 then
-      begin
-      Goinfo.FallPix:= 0;
-      HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall with damage
-      exit(false)
-      end;
-   Gear^.Y:= Gear^.Y + Gear^.dY;
-   if hwRound(Gear^.Y) > pY then inc(GoInfo.FallPix);
-   if TestCollisionYwithGear(Gear, 1) <> 0 then
-      begin
-      inc(GoInfo.Ticks, 410);
-      Gear^.State:= Gear^.State and not (gstMoving or gstHHJumping);
-      Gear^.dY:= _0;
-      HHJump(AltGear, jmpLJump, GoInfo); // try ljump instead of fall
-      exit(true)
-      end;
-   continue
-   end;
-   if (Gear^.Message and gmLeft  )<>0 then Gear^.dX:= -cLittle else
-   if (Gear^.Message and gmRight )<>0 then Gear^.dX:=  cLittle else exit(false);
-   if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-      begin
-      if not (TestCollisionXwithXYShift(Gear, _0, -6, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      if not (TestCollisionXwithXYShift(Gear, _0, -5, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      if not (TestCollisionXwithXYShift(Gear, _0, -4, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-         or (TestCollisionYwithGear(Gear, -1) <> 0)) then Gear^.Y:= Gear^.Y - _1;
-      end;
+        {if ((hwRound(Gear^.Y) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X) and LAND_WIDTH_MASK) = 0) then 
+            begin
+            LandPixels[hwRound(Gear^.Y), hwRound(Gear^.X)]:= random($FFFFFFFF);//Gear^.Hedgehog^.Team^.Clan^.Color;
+            UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
+            end;}
 
-   if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
-      begin
-      Gear^.X:= Gear^.X + int2hwFloat(hwSign(Gear^.dX));
-      inc(GoInfo.Ticks, cHHStepTicks)
-      end;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-   begin
-   Gear^.Y:= Gear^.Y + _1;
-   if TestCollisionYwithGear(Gear, 1) = 0 then
-      begin
-      Gear^.Y:= Gear^.Y - _6;
-      Gear^.dY:= _0;
-      Gear^.State:= Gear^.State or gstMoving
-      end
-   end
-   end
-   end
-   end
-   end
-   end;
-if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
-   exit(true);
+    pX:= hwRound(Gear^.X);
+    pY:= hwRound(Gear^.Y);
+    if pY + cHHRadius >= cWaterLine then
+        begin
+        if AltGear^.Hedgehog^.BotLevel < 4 then
+            AddWalkBonus(pX, tY, 250, -40);
+        exit(false)
+        end;
+        
+    // hog is falling    
+    if (Gear^.State and gstMoving) <> 0 then
+        begin
+        inc(GoInfo.Ticks);
+        Gear^.dY:= Gear^.dY + cGravity;
+        if Gear^.dY > _0_4 then
+            begin
+            GoInfo.FallPix:= 0;
+            // try ljump instead of fall with damage
+            HHJump(AltGear, jmpLJump, GoInfo); 
+            if AltGear^.Hedgehog^.BotLevel < 4 then
+                AddWalkBonus(pX, tY, 175, -20);
+            exit(false)
+            end;
+        Gear^.Y:= Gear^.Y + Gear^.dY;
+        if hwRound(Gear^.Y) > pY then
+            inc(GoInfo.FallPix);
+        if TestCollisionYwithGear(Gear, 1) <> 0 then
+            begin
+            inc(GoInfo.Ticks, 410);
+            Gear^.State:= Gear^.State and (not (gstMoving or gstHHJumping));
+            Gear^.dY:= _0;
+            // try ljump instead of fall
+            HHJump(AltGear, jmpLJump, GoInfo);
+            exit(true)
+            end;
+        continue
+        end;
+
+        // usual walk
+        if (Gear^.Message and gmLeft) <> 0 then
+            Gear^.dX:= -cLittle
+        else
+            if (Gear^.Message and gmRight) <> 0 then
+                Gear^.dX:=  cLittle
+            else
+                exit(false);
+
+        if MakeHedgehogsStep(Gear) then
+            inc(GoInfo.Ticks, cHHStepTicks);
+
+        // we have moved for 1 px
+        if (pX <> hwRound(Gear^.X)) and ((Gear^.State and gstMoving) = 0) then
+            exit(true)
 until (pX = hwRound(Gear^.X)) and (pY = hwRound(Gear^.Y)) and ((Gear^.State and gstMoving) = 0);
+
 HHJump(AltGear, jmpHJump, GoInfo);
-HHGo:= false;
 end;
 
 function AIrndSign(num: LongInt): LongInt;
 begin
-if random(2) = 0 then AIrndSign:=   num
-                 else AIrndSign:= - num
+if random(2) = 0 then
+    AIrndSign:=   num
+else
+    AIrndSign:= - num
 end;
 
 procedure initModule;
@@ -503,7 +772,6 @@ end;
 
 procedure freeModule;
 begin
-
 end;
 
 end.

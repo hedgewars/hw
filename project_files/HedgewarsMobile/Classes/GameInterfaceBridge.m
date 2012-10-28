@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,36 +14,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 18/04/2011.
  */
 
 
 #import "GameInterfaceBridge.h"
 #import "EngineProtocolNetwork.h"
-#import "OverlayViewController.h"
 #import "StatsPageViewController.h"
-#import "AudioManagerController.h"
-#import "ObjcExports.h"
+
+
+static UIViewController *callingController;
 
 @implementation GameInterfaceBridge
-@synthesize blackView;
+@synthesize blackView, savePath, port;
 
 #pragma mark -
 #pragma mark Instance methods for engine interaction
 // prepares the controllers for hosting a game
--(void) earlyEngineLaunch:(NSString *)pathOrNil withOptions:(NSDictionary *)optionsOrNil {
+-(void) earlyEngineLaunch:(NSDictionary *)optionsOrNil {
     [self retain];
-    [AudioManagerController stopBackgroundMusic];
-    [EngineProtocolNetwork spawnThread:pathOrNil withOptions:optionsOrNil];
+    [[AudioManagerController mainManager] fadeOutBackgroundMusic];
+
+    EngineProtocolNetwork *engineProtocol = [[EngineProtocolNetwork alloc] init];
+    self.port = engineProtocol.enginePort;
+    engineProtocol.delegate = self;
+    [engineProtocol spawnThread:self.savePath withOptions:optionsOrNil];
+    [engineProtocol release];
 
     // add a black view hiding the background
-    CGRect theFrame = [[UIScreen mainScreen] bounds];
     UIWindow *thisWindow = [[HedgewarsAppDelegate sharedAppDelegate] uiwindow];
-    self.blackView = [[UIView alloc] initWithFrame:theFrame];
+    self.blackView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.blackView.opaque = YES;
     self.blackView.backgroundColor = [UIColor blackColor];
     self.blackView.alpha = 0;
+    self.blackView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [UIView beginAnimations:@"fade out" context:NULL];
     [UIView setAnimationDuration:1];
     self.blackView.alpha = 1;
@@ -51,17 +54,22 @@
     [thisWindow addSubview:self.blackView];
     [self.blackView release];
 
-    // keep track of uncompleted games
+    // keep the point of return for games that completed loading
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    [userDefaults setObject:pathOrNil forKey:@"savedGamePath"];
+    [userDefaults setObject:self.savePath forKey:@"savedGamePath"];
+    [userDefaults setObject:[NSNumber numberWithBool:NO] forKey:@"saveIsValid"];
     [userDefaults synchronize];
 
     // let's launch the engine using this -perfomSelector so that the runloop can deal with queued messages first
-    [self performSelector:@selector(engineLaunch:) withObject:pathOrNil afterDelay:0.1f];
+    [self performSelector:@selector(engineLaunch) withObject:nil afterDelay:0.1f];
 }
 
 // cleans up everything
 -(void) lateEngineLaunch {
+    // notify views below that they are getting the spotlight again
+    [[[HedgewarsAppDelegate sharedAppDelegate] uiwindow] makeKeyAndVisible];
+    [callingController viewWillAppear:YES];
+
     // remove completed games notification
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     [userDefaults setObject:@"" forKey:@"savedGamePath"];
@@ -75,33 +83,29 @@
     [UIView commitAnimations];
     [self.blackView performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
 
-    // the overlay is not needed any more and can be removed
-    [[OverlayViewController mainOverlay] removeOverlay];
+    // can remove the savefile if the replay has ended
+    if ([HWUtils gameType] == gtSave)
+        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
 
     // restart music and we're done
-    [AudioManagerController playBackgroundMusic];
+    [[AudioManagerController mainManager] fadeInBackgroundMusic];
+    [HWUtils setGameStatus:gsNone];
+    [HWUtils setGameType:gtNone];
     [self release];
 }
 
 // main routine for calling the actual game engine
--(void) engineLaunch:(NSString *)pathOrNil {
+-(void) engineLaunch {
     const char *gameArgs[11];
     CGFloat width, height;
-    NSInteger enginePort = [EngineProtocolNetwork activeEnginePort];
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
-    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",enginePort];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]];
+    NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
-    if (IS_DUALHEAD()) {
-        CGRect screenBounds = [[[UIScreen screens] objectAtIndex:1] bounds];
-        width = screenBounds.size.width;
-        height = screenBounds.size.height;
-    } else {
-        CGRect screenBounds = [[UIScreen mainScreen] bounds];
-        width = screenBounds.size.height;
-        height = screenBounds.size.width;
-    }
+    CGRect screenBounds = [[UIScreen mainScreen] safeBounds];
+    width = screenBounds.size.width;
+    height = screenBounds.size.height;
 
     NSString *horizontalSize = [[NSString alloc] initWithFormat:@"%d", (int)(width * screenScale)];
     NSString *verticalSize = [[NSString alloc] initWithFormat:@"%d", (int)(height * screenScale)];
@@ -133,13 +137,13 @@
     gameArgs[ 1] = [horizontalSize UTF8String];                                                 //cScreenWidth
     gameArgs[ 2] = [verticalSize UTF8String];                                                   //cScreenHeight
     gameArgs[ 3] = [[NSString stringWithFormat:@"%d",tmpQuality] UTF8String];                   //quality
-    gameArgs[ 4] = "en.txt";//[localeString UTF8String];                                        //cLocaleFName
+    gameArgs[ 4] = [localeString UTF8String];                                                   //cLocaleFName
     gameArgs[ 5] = [username UTF8String];                                                       //UserNick
     gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
     gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
     gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
     gameArgs[ 9] = [resourcePath UTF8String];                                                   //PathPrefix
-    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [pathOrNil UTF8String] : NULL;              //recordFileName
+    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
 
     [verticalSize release];
     [horizontalSize release];
@@ -154,12 +158,36 @@
     [self lateEngineLaunch];
 }
 
+-(void) dealloc {
+    releaseAndNil(blackView);
+    releaseAndNil(savePath);
+    [super dealloc];
+}
+
+#pragma mark -
+#pragma mark EngineProtocolDelegate methods
+-(void) gameEndedWithStatistics:(NSArray *)stats {
+    if (stats != nil) {
+        StatsPageViewController *statsPage = [[StatsPageViewController alloc] init];
+        statsPage.statsArray = stats;
+        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+
+        [callingController presentModalViewController:statsPage animated:YES];
+        [statsPage release];
+    }
+}
+
 #pragma mark -
 #pragma mark Class methods for setting up the engine from outsite
++(void) registerCallingController:(UIViewController *)controller {
+    callingController = controller;
+}
+
 +(void) startGame:(TGameType) type atPath:(NSString *)path withOptions:(NSDictionary *)config {
     [HWUtils setGameType:type];
-    GameInterfaceBridge *bridge = [[GameInterfaceBridge alloc] init];
-    [bridge earlyEngineLaunch:path withOptions:config];
+    id bridge = [[self alloc] init];
+    [bridge setSavePath:path];
+    [bridge earlyEngineLaunch:config];
     [bridge release];
 }
 
@@ -190,27 +218,67 @@
     [missionLine release];
 }
 
-/*
--(void) gameHasEndedWithStats:(NSArray *)stats {
-    // wrap this around a retain/realse to prevent being deallocated too soon
-    [self retain];
-    // display stats page if there is something to display
-    if (stats != nil) {
-        StatsPageViewController *statsPage = [[StatsPageViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        statsPage.statsArray = stats;
-        statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-        if ([statsPage respondsToSelector:@selector(setModalPresentationStyle:)])
-            statsPage.modalPresentationStyle = UIModalPresentationPageSheet;
++(void) startSimpleGame {
+    srand(time(0));
 
-        [self.parentController presentModalViewController:statsPage animated:YES];
-        [statsPage release];
-    }
+    // generate a seed
+    CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+    NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
+    CFRelease(uuid);
+    NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
 
-    // can remove the savefile if the replay has ended
-    if ([HWUtils gameType] == gtSave)
-        [[NSFileManager defaultManager] removeItemAtPath:self.savePath error:nil];
-    [self release];
+    // pick a random static map
+    NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
+    NSString *mapName = [listOfMaps objectAtIndex:random()%[listOfMaps count]];
+    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",MAPS_DIRECTORY(),mapName];
+    NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
+    [fileCfg release];
+    NSArray *split = [contents componentsSeparatedByString:@"\n"];
+    [contents release];
+    NSString *themeCommand = [[NSString alloc] initWithFormat:@"etheme %@", [split objectAtIndex:0]];
+    NSString *staticMapCommand = [[NSString alloc] initWithFormat:@"emap %@", mapName];
+
+    // select teams with two different colors
+    NSArray *colorArray = [HWUtils teamColors];
+    NSInteger firstColorIndex, secondColorIndex;
+    do {
+        firstColorIndex = random()%[colorArray count];
+        secondColorIndex = random()%[colorArray count];
+    } while (firstColorIndex == secondColorIndex);
+    unsigned int firstColor = [[colorArray objectAtIndex:firstColorIndex] intValue];
+    unsigned int secondColor = [[colorArray objectAtIndex:secondColorIndex] intValue];
+
+    NSDictionary *firstTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                           [NSNumber numberWithUnsignedInt:firstColor],@"color",
+                                                                           @"Ninjas.plist",@"team",nil];
+    NSDictionary *secondTeam = [[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithInt:4],@"number",
+                                                                            [NSNumber numberWithUnsignedInt:secondColor],@"color",
+                                                                            @"Robots.plist",@"team",nil];
+    NSArray *listOfTeams = [[NSArray alloc] initWithObjects:firstTeam,secondTeam,nil];
+    [firstTeam release];
+    [secondTeam release];
+
+    // create the configuration
+    NSDictionary *gameDictionary = [[NSDictionary alloc] initWithObjectsAndKeys:
+                                    seedCmd,@"seed_command",
+                                    @"e$template_filter 0",@"templatefilter_command",
+                                    @"e$mapgen 0",@"mapgen_command",
+                                    @"e$maze_size 0",@"mazesize_command",
+                                    themeCommand,@"theme_command",
+                                    staticMapCommand,@"staticmap_command",
+                                    listOfTeams,@"teams_list",
+                                    @"Default.plist",@"scheme",
+                                    @"Default.plist",@"weapon",
+                                    @"",@"mission_command",
+                                    nil];
+    [listOfTeams release];
+    [staticMapCommand release];
+    [themeCommand release];
+    [seedCmd release];
+
+    // launch game
+    [GameInterfaceBridge startLocalGame:gameDictionary];
+    [gameDictionary release];
 }
-*/
 
 @end

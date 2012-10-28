@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 18/04/2010.
  */
 
 
@@ -23,13 +21,12 @@
 #import "MapConfigViewController.h"
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
-#import "HelpPageViewController.h"
 #import "GameInterfaceBridge.h"
 
 
 @implementation GameConfigViewController
-@synthesize imgContainer, helpPage, mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
-
+@synthesize imgContainer, titleImage, sliderBackground, //helpPage,
+            mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -49,12 +46,12 @@
                 [alert show];
                 [alert release];
             } else {
-                [AudioManagerController playBackSound];
+                [[AudioManagerController mainManager] playBackSound];
                 [[self parentViewController] dismissModalViewControllerAnimated:YES];
             }
             break;
         case 1:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
             if ([self isEverythingSet] == NO)
                 return;
             theButton.enabled = NO;
@@ -68,14 +65,16 @@
             
             break;
         case 2:
-            [AudioManagerController playClickSound];
+            [[AudioManagerController mainManager] playClickSound];
+            /*
             if (self.helpPage == nil)
-                self.helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
+                self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
             [self.view addSubview:self.helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
             self.helpPage.view.alpha = 1;
             [UIView commitAnimations];
+            */
             break;
         default:
             DLog(@"Nope");
@@ -87,7 +86,7 @@
 
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
 
-    [AudioManagerController playSelectSound];
+    [[AudioManagerController mainManager] playSelectSound];
     switch (theSegment.selectedSegmentIndex) {
         case 0:
             // this message is compulsory otherwise the table won't be loaded at all
@@ -105,13 +104,15 @@
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
             break;
         case 3:
+            /*
             if (helpPage == nil) {
-                helpPage = [[HelpPageViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
+                helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
                 [self.view addSubview:helpPage.view];
             }
             // this message is compulsory otherwise the table won't be loaded at all
             [helpPage viewWillAppear:NO];
             [self.view bringSubviewToFront:helpPage.view];
+            */
             break;
         default:
             DLog(@"Nope");
@@ -161,7 +162,7 @@
     }
 
     // play if there aren't too many teams
-    if ([self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
+    if ((int)[self.teamConfigViewController.listOfSelectedTeams count] > HW_getMaxNumberOfTeams()) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Too many teams",@"")
                                                         message:NSLocalizedString(@"You exceeded the maximum number of tems allowed in a game",@"")
                                                        delegate:nil
@@ -223,6 +224,7 @@
                                     script,@"mission_command",
                                     nil];
 
+    [GameInterfaceBridge registerCallingController:self];
     [GameInterfaceBridge startLocalGame:gameDictionary];
     [gameDictionary release];
 }
@@ -242,7 +244,9 @@
         [self.imgContainer removeFromSuperview];
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    for (int i = 0; i < 1 + random()%20; i++) {
+    NSInteger numberOfHogs = 1 + random() % 20;
+    DLog(@"Drawing %d nice hedgehogs", numberOfHogs);
+    for (int i = 0; i < numberOfHogs; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
 
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
@@ -273,6 +277,11 @@
         [hog release];
     }
 
+    // don't place the nice hogs if there is no space for them
+    if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
+         self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
+        self.imgContainer.alpha = 0;
+
     [self.view addSubview:self.imgContainer];
     [hogSprite release];
     [pool drain];
@@ -281,16 +290,17 @@
 -(void) viewDidLoad {
     self.view.backgroundColor = [UIColor blackColor];
 
-    CGRect screen = [[UIScreen mainScreen] bounds];
-    self.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width);
+    CGRect screenRect = [[UIScreen mainScreen] safeBounds];
+    self.view.frame = screenRect;
 
     if (IS_IPAD()) {
         // the label for the filter slider
-        UILabel *filterLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
-                                                     andTitle:nil
-                                              withBorderWidth:2.0f];
-        [self.view insertSubview:filterLabel belowSubview:self.mapConfigViewController.slider];
-        [filterLabel release];
+        UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
+                                                   andTitle:nil
+                                            withBorderWidth:2.0f];
+        self.sliderBackground = backLabel;
+        [backLabel release];
+        [self.view addSubview:self.sliderBackground];
 
         // the label for max hogs
         UILabel *maxLabel = [[UILabel alloc] initWithFrame:CGRectMake(598, 714, 310, 40)
@@ -302,15 +312,42 @@
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];
-
-        // as this is loaded from a NIB we need to set its size and position
-        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
     } else {
-        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screen.size.height, screen.size.width-44);
+        self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height-44);
     }
     [self.view addSubview:self.mapConfigViewController.view];
+    [self.view bringSubviewToFront:self.mapConfigViewController.slider];
 
     [super viewDidLoad];
+}
+
+-(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
+    if (IS_IPAD() == NO)
+        return;
+
+    if ((toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+        self.imgContainer.alpha = 1;
+        self.titleImage.frame = CGRectMake(357, 17, 309, 165);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
+        self.mapConfigViewController.view.frame = CGRectMake(704, 0, 320, 680);
+        self.teamConfigViewController.view.frame = CGRectMake(337, 187, 350, 505);
+        self.mapConfigViewController.maxLabel.frame = CGRectMake(121, 714, 300, 40);
+        self.sliderBackground.frame = CGRectMake(603, 714, 300, 40);
+        self.mapConfigViewController.slider.frame = CGRectMake(653, 724, 200, 23);
+    } else {
+        self.imgContainer.alpha = 0;
+        self.titleImage.frame = CGRectMake(37, 28, 309, 165);
+        self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 214, 378, 366);
+        self.mapConfigViewController.view.frame = CGRectMake(390, 0, 378, 580);
+        self.teamConfigViewController.view.frame = CGRectMake(170, 590, 428, 366);
+        self.mapConfigViewController.maxLabel.frame = CGRectMake(104, 975, 200, 40);
+        self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
+        self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
+    }
+
+    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
+                                                                            duration:duration];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -349,34 +386,43 @@
 -(void) didReceiveMemoryWarning {
     self.imgContainer = nil;
 
+    if (self.titleImage.superview == nil)
+        self.titleImage = nil;
+    if (self.sliderBackground.superview == nil)
+        self.sliderBackground = nil;
+
     if (self.mapConfigViewController.view.superview == nil)
         self.mapConfigViewController = nil;
     if (self.teamConfigViewController.view.superview == nil)
         self.teamConfigViewController = nil;
     if (self.schemeWeaponConfigViewController.view.superview == nil)
         self.schemeWeaponConfigViewController = nil;
-    if (self.helpPage.view.superview == nil)
-        self.helpPage = nil;
+    //if (self.helpPage.view.superview == nil)
+    //    self.helpPage = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
     self.imgContainer = nil;
+    self.titleImage = nil;
+    self.sliderBackground = nil;
     self.schemeWeaponConfigViewController = nil;
     self.teamConfigViewController = nil;
     self.mapConfigViewController = nil;
-    self.helpPage = nil;
+    //self.helpPage = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) dealloc {
     releaseAndNil(imgContainer);
+    releaseAndNil(titleImage);
+    releaseAndNil(sliderBackground);
     releaseAndNil(schemeWeaponConfigViewController);
     releaseAndNil(teamConfigViewController);
     releaseAndNil(mapConfigViewController);
-    releaseAndNil(helpPage);
+    //releaseAndNil(helpPage);
     [super dealloc];
 }
 

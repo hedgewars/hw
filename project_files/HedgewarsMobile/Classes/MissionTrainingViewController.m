@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2011 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,8 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- * File created on 03/10/2011.
  */
 
 
@@ -34,11 +32,6 @@
 #pragma mark -
 #pragma mark View management
 -(void) viewDidLoad {
-    NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
-    UIImage *img = [[UIImage alloc] initWithContentsOfFile:imgName];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:img];
-    [img release];
-    
     self.previewImage.layer.borderColor = [[UIColor darkYellowColor] CGColor];
     self.previewImage.layer.borderWidth = 3.8f;
     self.previewImage.layer.cornerRadius = 14;
@@ -71,9 +64,10 @@
     UIButton *button = (UIButton *)sender;
 
     if (button.tag == 0) {
-        [AudioManagerController playBackSound];
+        [[AudioManagerController mainManager] playBackSound];
         [[self parentViewController] dismissModalViewControllerAnimated:YES];
     } else {
+        [GameInterfaceBridge registerCallingController:self];
         [GameInterfaceBridge startMissionGame:self.missionName];
     }
 }
@@ -92,13 +86,13 @@
         NSString *descComplete = [[NSString alloc] initWithContentsOfFile:descLocation encoding:NSUTF8StringEncoding error:NULL];
         [descLocation release];
         NSArray *descArray = [descComplete componentsSeparatedByString:@"\n"];
-        NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]];
+        NSMutableArray *filteredArray = [[NSMutableArray alloc] initWithCapacity:[descArray count]/3];
         [descComplete release];
         // sanity check to avoid having missions and descriptions conflicts
-        for (int i = 0; i < [self.listOfMissions count]; i++) {
+        for (NSUInteger i = 0; i < [self.listOfMissions count]; i++) {
             NSString *desc = [[self.listOfMissions objectAtIndex:i] stringByDeletingPathExtension];
             for (NSString *str in descArray)
-                if ([str hasPrefix:desc]) {
+                if ([str hasPrefix:desc] && [str hasSuffix:@"\""]) {
                     NSArray *descriptionText = [str componentsSeparatedByString:@"\""];
                     [filteredArray insertObject:[descriptionText objectAtIndex:1] atIndex:i];
                     break;

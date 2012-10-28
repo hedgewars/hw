@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2006-2011 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,9 @@ QLayout * PageNetType::bodyLayoutDefinition()
     pageLayout->setColumnStretch(3, 10);
 
     BtnLAN = addButton(tr("LAN game"), pageLayout, 1, 2);
+    BtnLAN->setWhatsThis(tr("Join or host your own game server in a Local Area Network."));
     BtnOfficialServer = addButton(tr("Official server"), pageLayout, 2, 2);
+    BtnOfficialServer->setWhatsThis(tr("Join hundreds of players online!"));
 
     // hack: temporary deactivated - requires server modifications that aren't backward compatible (yet)
     //BtnOfficialServer->setEnabled(false);
