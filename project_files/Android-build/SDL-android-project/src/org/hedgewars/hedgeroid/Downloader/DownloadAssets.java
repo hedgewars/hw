@@ -1,100 +1,83 @@
+/*
+ * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid.Downloader;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import org.hedgewars.hedgeroid.MainActivity;
 import org.hedgewars.hedgeroid.R;
-import org.hedgewars.hedgeroid.Utils;
-import org.hedgewars.hedgeroid.Datastructures.Scheme;
+import org.hedgewars.hedgeroid.Datastructures.Schemes;
 import org.hedgewars.hedgeroid.Datastructures.Team;
-import org.hedgewars.hedgeroid.Datastructures.Weapon;
+import org.hedgewars.hedgeroid.Datastructures.Weaponsets;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class DownloadAssets extends AsyncTask<Object, Long, Long>{
+public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
+	private static final String VERSION_FILENAME = "assetsversion.txt";
+	private final MainActivity act;
 	
-	private MainActivity act;
-	private static byte[] buffer = null;
-	
-	public DownloadAssets(MainActivity _act){
-		act = _act;
+	public DownloadAssets(MainActivity act){
+		this.act = act;
 	}
 	
-	public static Long copyFileOrDir(Context c, String path) {
-	    AssetManager assetManager = c.getAssets();
-	    String assets[] = null;
-	    try {
-	        assets = assetManager.list(path);
-	        if (assets.length == 0) {
-	            return DownloadAssets.copyFile(c, path);
-	        } else {
-	            String fullPath = Utils.getCachePath(c) + path;
-	            File dir = new File(fullPath);
-	            if (!dir.exists())
-	                dir.mkdir();
-	            for (int i = 0; i < assets.length; ++i) {
-	                Long result = DownloadAssets.copyFileOrDir(c, path + "/" + assets[i]);
-	                if(result > 0) return 1l;
-	            }
-	        }
-	    } catch (IOException ex) {
-	    	ex.printStackTrace();
-	        Log.e("tag", "I/O Exception", ex);
-	        return 1l;
-	    }
-	    return 0l;
+	private void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
+		try {
+			FileUtils.writeStreamToFile(assetManager.open(assetPath), target);
+		} catch(FileNotFoundException e) {
+			/*
+			 * I can't find a better way to figure out whether an asset entry is
+			 * a file or a directory. Checking if assetManager.list(assetPath)
+			 * is empty is a bit cleaner, but SLOW.
+			 */
+			if (!target.isDirectory() && !target.mkdir()) {
+				throw new IOException("Unable to create directory "+target);
+			}
+			for (String asset : assetManager.list(assetPath)) {
+				copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
+			}
+		}
 	}
 	
-	private static Long copyFile(Context c, String filename) {
-	    AssetManager assetManager = c.getAssets();
-
-	    InputStream in = null;
-	    OutputStream out = null;
-	    try {
-	        in = assetManager.open(filename);
-	        in = new BufferedInputStream(in, 8192);
-	        
-	        String newFileName = Utils.getCachePath(c) + filename;
-	        out = new FileOutputStream(newFileName);
-	        out = new BufferedOutputStream(out, 8192);
-
-	        int read;
-	        while ((read = in.read(buffer)) != -1) {
-	            out.write(buffer, 0, read);
-	        }
-	        in.close();
-	        in = null;
-	        out.flush();
-	        out.close();
-	        out = null;
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	        Log.e("tag", e.getMessage());
-	        return 1l;
-	    }
-	    return 0l;
-
-	}
-
-	protected Long doInBackground(Object... params) {
-		Utils.resRawToFilesDir(act,R.array.schemes, Scheme.DIRECTORY_SCHEME);
-		Utils.resRawToFilesDir(act, R.array.weapons, Weapon.DIRECTORY_WEAPON);
-		Utils.resRawToFilesDir(act, R.array.teams, Team.DIRECTORY_TEAMS);
-		buffer = new byte[8192];//allocate the buffer
-		return DownloadAssets.copyFileOrDir(act, "Data");
+	@Override
+	protected Boolean doInBackground(Object... params) {
+		try {
+			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
+			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
+			FileUtils.resRawToFilesDir(act, R.array.teams, R.array.teamFilenames, Team.DIRECTORY_TEAMS);
+			copyFileOrDir(act.getAssets(), FileUtils.getDataPathFile(act), "Data");
+			copyFileOrDir(act.getAssets(), new File(FileUtils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
+			return Boolean.TRUE;
+		} catch(IOException e) {
+			Log.e("DownloadAssets", e.getMessage(), e);
+			return Boolean.FALSE;
+		}
 	}
 	
-	protected void onPostExecute(Long result){
-		act.onAssetsDownloaded(result == 0);
-		buffer = null;
+	@Override
+	protected void onPostExecute(Boolean result){
+		act.onAssetsDownloaded(result);
 	}
 }

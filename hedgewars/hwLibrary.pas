@@ -99,14 +99,18 @@ begin
     JNI_HW_versionInfoVersion := envderef^.NewStringUTF(env, PChar(cVersionString));
 end;
 
+procedure JNI_HW_GenLandPreview(env: PJNIEnv; c: JClass; port: JInt); cdecl;
+begin
+	GenLandPreview(port);
+end;
+
 exports
     JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
     JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 
-    GenLandPreview name Java_Prefix + 'GenLandPreview',
+    JNI_HW_GenLandPreview name Java_Prefix + 'HWGenLandPreview',
     HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
     HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',
     HW_getMaxNumberOfTeams name Java_Prefix + 'HWgetMaxNumberOfTeams',
-    HW_terminate name Java_Prefix + 'HWterminate',
     Game;
 {$ELSE}
 exports
