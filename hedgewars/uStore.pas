@@ -53,7 +53,7 @@ procedure InitOffscreenOpenGL;
 {$ENDIF}
 
 procedure WarpMouse(x, y: Word); inline;
-procedure SwapBuffers; inline;
+procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 
 implementation
 uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
@@ -1115,6 +1115,7 @@ begin
     glutInitWindowSize(cScreenWidth, cScreenHeight);
     glutCreateWindow('hedgewars (you don''t see this)'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
     glutHideWindow();
+    glutDisplayFunc(@SwapBuffers); // we don't need a callback, but it's required for GLUT3
     SetupOpenGL();
 end;
 {$ENDIF} // SDL13
@@ -1296,7 +1297,7 @@ begin
 {$ENDIF}
 end;
 
-procedure SwapBuffers; inline;
+procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 begin
     if GameType = gmtRecord then
         exit;
