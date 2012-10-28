@@ -426,8 +426,6 @@ end;
 
 procedure initModule;
 begin
-    wheelUp:= false;
-    wheelDown:= false;
 end;
 
 procedure freeModule;

@@ -311,7 +311,6 @@ end;
 
 procedure freeModule;
 begin
-    recordFileName:= '';
     SDL_FreeFormat(conversionFormat);
 end;
 
