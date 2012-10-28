@@ -1892,19 +1892,12 @@ begin
     stereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
+    stereoDepth:= stereoDepth; // avoid hint
 end;
 
 procedure freeModule;
 begin
-    stereoDepth:= stereoDepth; // avoid hint
-    FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-    FreeTexture(timeTexture);
-    timeTexture:= nil;
-    FreeTexture(missionTex);
-    missionTex:= nil;
-    FreeTexture(recTexture);
-    recTexture:= nil;
+    ResetWorldTex();
 end;
 
 end.
