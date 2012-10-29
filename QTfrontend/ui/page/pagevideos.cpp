@@ -862,8 +862,8 @@ void PageVideos::deleteSelectedFiles()
     {
         cfgdir->remove("Videos/" + item->name);
         // we have no idea whether screenshot is going to be bmp or png so let's delete both
-        cfgdir->remove("VideoTemp/" + item->name.section(".", 0, 0) + ".png");
-        cfgdir->remove("VideoTemp/" + item->name.section(".", 0, 0) + ".bmp");
+        cfgdir->remove("VideoTemp/" + item->prefix + ".png");
+        cfgdir->remove("VideoTemp/" + item->prefix + ".bmp");
     }
 
 // this code is for removing several files when multiple selection is enabled
