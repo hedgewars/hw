@@ -1669,6 +1669,7 @@ begin
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             hat:= lua_tostring(L, 2);
             gear^.Hedgehog^.Hat:= hat;
+AddFileLog('Changed hat to: '+hat);
             if (Length(hat) > 39) and (Copy(hat,1,8) = 'Reserved') and (Copy(hat,9,32) = gear^.Hedgehog^.Team^.PlayerHash) then
                 LoadHedgehogHat(gear^.Hedgehog^, 'Reserved/' + Copy(hat,9,Length(hat)-8))
             else
