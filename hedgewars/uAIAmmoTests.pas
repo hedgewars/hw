@@ -682,7 +682,7 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (y < 0)
     or (trunc(x) > LAND_WIDTH)
     or (trunc(y) > LAND_HEIGHT)
-    or (d > 23);
+    or (d > 22);
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4 then
     begin

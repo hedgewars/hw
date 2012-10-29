@@ -53,7 +53,7 @@ handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
             [
                 AddRoom rName roomPassword
                 , AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+hr", nick cl]
-                , ModifyClient (\cl -> cl{isMaster = True, isReady = True})
+                , ModifyClient (\c -> c{isMaster = True, isReady = True})
                 , ModifyRoom (\r -> r{readyPlayers = 1})
             ]
 

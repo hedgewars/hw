@@ -163,8 +163,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     // ctrl+q closes frontend for consistency
     QShortcut * closeFrontend = new QShortcut(QKeySequence("Ctrl+Q"), this);
     connect (closeFrontend, SIGNAL(activated()), this, SLOT(close()));
-    QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
-    connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
+    //QShortcut * updateData = new QShortcut(QKeySequence("F5"), this);
+    //connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
 
     UpdateTeamsLists();
@@ -204,8 +204,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnDataDownload, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnDataDownload, ID_PAGE_DATADOWNLOAD);
 
-    connect(ui.pageNetGame, SIGNAL(DLCClicked()), pageSwitchMapper, SLOT(map()));
-    pageSwitchMapper->setMapping(ui.pageNetGame, ID_PAGE_DATADOWNLOAD);
 
 #ifdef VIDEOREC
     connect(ui.pageMain->BtnVideos, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -695,16 +693,13 @@ void HWForm::GoToPage(int id)
         animationOldOpacity->setEasingCurve(QEasingCurve::OutExpo);
 #endif
 
-        QParallelAnimationGroup *group = new QParallelAnimationGroup;
-        group->addAnimation(animationOldSlide);
-        group->addAnimation(animationNewSlide);
-#ifdef false
-        group->addAnimation(animationOldOpacity);
-        group->addAnimation(animationNewOpacity);
-#endif
-        group->start();
-
+        // let's hide the old slide after its animation has finished
         connect(animationOldSlide, SIGNAL(finished()), ui.Pages->widget(lastid), SLOT(hide()));
+
+        // start animations
+        animationOldSlide->start(QAbstractAnimation::DeleteWhenStopped);
+        animationNewSlide->start(QAbstractAnimation::DeleteWhenStopped);
+
     	/* this is for the situation when the animation below is interrupted by a new animation.  For some reason, finished is not being fired */ 	
     	for(int i=0;i<MAX_PAGE;i++) if (i!=id && i!=lastid) ui.Pages->widget(i)->hide();
     }
@@ -808,18 +803,21 @@ void HWForm::GoBack()
         animationNewOpacity->setEasingCurve(QEasingCurve::OutExpo);
 #endif
 
-        QParallelAnimationGroup *group = new QParallelAnimationGroup;
-        group->addAnimation(animationOldSlide);
-        group->addAnimation(animationNewSlide);
-#ifdef false
-        group->addAnimation(animationOldOpacity);
-        group->addAnimation(animationNewOpacity);
-#endif
-        group->start();
-
+        // let's hide the old slide after its animation has finished
         connect(animationNewSlide, SIGNAL(finished()), ui.Pages->widget(curid), SLOT(hide()));
+
+        // start animations
+        animationOldSlide->start(QAbstractAnimation::DeleteWhenStopped);
+        animationNewSlide->start(QAbstractAnimation::DeleteWhenStopped);
     }
 #endif
+
+    if (stopAnim)
+        ui.Pages->widget(curid)->hide();
+
+// TODO the whole pages shown and effects stuff should be moved
+// out of hwform.cpp and into a subclass of QStackedLayout
+
 }
 
 void HWForm::OpenSnapshotFolder()
@@ -1285,11 +1283,12 @@ void HWForm::ForcedDisconnect(const QString & reason)
         QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
         ShowErrorMessage(errorStr);
     }
-    if (ui.Pages->currentIndex() != ID_PAGE_NET)
+
+    while (ui.Pages->currentIndex() != ID_PAGE_NET
+        && ui.Pages->currentIndex() != ID_PAGE_NETTYPE
+        && ui.Pages->currentIndex() != ID_PAGE_MAIN)
     {
-        while (!PagesStack.isEmpty()) PagesStack.pop();
-        PagesStack.push(ID_PAGE_MAIN);
-        GoToPage(ID_PAGE_NET);
+        GoBack();
     }
 }
 

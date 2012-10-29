@@ -57,7 +57,7 @@ const
     RCTRL  = $4000; 
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
-    quitKeyCode: Byte;
+    quitKeyCode, closeKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
 
@@ -134,7 +134,23 @@ if(KeyDown and (code = quitKeyCode)) then
 {$ELSE}
     if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
 {$ENDIF}
-        ParseCommand('halt', true);    
+        ParseCommand('halt', true);
+    end;
+
+// ctrl/cmd + w to close engine
+if(KeyDown and (code = closeKeyCode)) then
+    begin
+{$IFDEF DARWIN}
+    // on OS X it this is expected behaviour
+    if tkbd[KeyNameToCode('left_meta')] or tkbd[KeyNameToCode('right_meta')] then
+{$ELSE}
+    // on other systems use this shortcut only if the keys are not bound to any command
+    if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
+        if ((CurrentBinds[KeyNameToCode('left_ctrl')] = '') or
+            (CurrentBinds[KeyNameToCode('right_ctrl')] = '')) and
+            (CurrentBinds[closeKeyCode] = '') then
+{$ENDIF}
+        ParseCommand('forcequit', true);
     end;
 
 if CurrentBinds[code][0] <> #0 then
@@ -204,7 +220,7 @@ KeyNames[5]:= 'wheeldown';
 for i:= 6 to cKeyMaxIndex do
     begin
     s:= shortstring(sdl_getkeyname(i));
-    //WriteLnToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
+    //WriteLnToConsole('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
@@ -216,6 +232,7 @@ for i:= 6 to cKeyMaxIndex do
     end;
 
 quitKeyCode:= KeyNameToCode(_S'q');
+closeKeyCode:= KeyNameToCode(_S'w');
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);
@@ -245,7 +262,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
     end;
 
 DefaultBinds[KeyNameToCode('escape')]:= 'quit';
-DefaultBinds[KeyNameToCode('grave')]:= 'history';
+DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
 DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
 
 //numpad
@@ -426,8 +443,6 @@ end;
 
 procedure initModule;
 begin
-    wheelUp:= false;
-    wheelDown:= false;
 end;
 
 procedure freeModule;

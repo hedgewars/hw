@@ -629,11 +629,7 @@ if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMType
 Pos:= -1;
 Slot:= -1;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
-    {$IFDEF USE_AM_NUMCOLUMN}
-c:= 0;
-    {$ELSE}
 c:= -1;
-    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
@@ -647,8 +643,8 @@ c:= -1;
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( g    * (AMSlotSize+1))) and
-                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >= AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
+                       (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
+                       (CursorPoint.X >  AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
                        (CursorPoint.X <= AmmoRect.x                   + ((c+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
@@ -663,11 +659,7 @@ c:= -1;
                    end;
             end;
 {$ELSE}
-    {$IFDEF USE_AM_NUMCOLUMN}
 c:= -1;
-    {$ELSE}
-c:= 0;
-    {$ENDIF}
     for i:= 0 to cMaxSlotIndex do
         if ((i = 0) and (Ammo^[i, 1].Count > 0)) or ((i <> 0) and (Ammo^[i, 0].Count > 0)) then
             begin
@@ -681,8 +673,8 @@ c:= 0;
                 if (Ammo^[i, t].Count > 0) and (Ammo^[i, t].AmmoType <> amNothing) then
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( c    * (AMSlotSize+1))) and
-                       (CursorPoint.Y >= (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >= AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
+                       (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
+                       (CursorPoint.X >  AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
                        (CursorPoint.X <= AmmoRect.x                   + ((g+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
@@ -1168,28 +1160,6 @@ else
 
     DrawWater(255, 0);
 
-// Attack bar
-    if CurrentTeam <> nil then
-        case AttackBar of
-(*        1: begin
-        r:= StuffPoz[sPowerBar];
-        {$WARNINGS OFF}
-        r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
-        {$WARNINGS ON}
-        DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
-        end;*)
-        2: with CurrentHedgehog^ do
-                begin
-                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
-                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
-                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
-                    DrawSprite(sprPower,
-                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
-                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
-                            i)
-                end
-        end;
-
 DrawVisualGears(1);
 DrawGears;
 DrawVisualGears(6);
@@ -1616,6 +1586,29 @@ if flagPrerecording then
 
 SetScale(zoom);
 
+// Attack bar
+    if CurrentTeam <> nil then
+        case AttackBar of
+(*        1: begin
+        r:= StuffPoz[sPowerBar];
+        {$WARNINGS OFF}
+        r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
+        {$WARNINGS ON}
+        DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
+        end;*)
+        2: with CurrentHedgehog^ do
+                begin
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
+                            i)
+                end
+        end;
+
+
 // Cursor
 if isCursorVisible then
     begin
@@ -1640,7 +1633,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z: LongInt;
+var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
 begin
 {$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
@@ -1672,14 +1665,30 @@ if ((CursorPoint.X = prevPoint.X) and (CursorPoint.Y = prevpoint.Y)) then
 
 if (AMState = AMShowingUp) or (AMState = AMShowing) then
 begin
-    if CursorPoint.X < AmmoRect.x then//check left 
-        CursorPoint.X:= AmmoRect.x;
-    if CursorPoint.X > AmmoRect.x + AmmoRect.w then//check right
-        CursorPoint.X:= AmmoRect.x + AmmoRect.w;
-    if CursorPoint.Y > cScreenHeight - AmmoRect.y then//check top
-        CursorPoint.Y:= cScreenHeight - AmmoRect.y;
-    if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 2) then//check bottom
-        CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 2);
+{$IFDEF USE_LANDSCAPE_AMMOMENU}
+    amNumOffsetX:= 0;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    amNumOffsetY:= AMSlotSize;
+    {$ELSE}
+    amNumOffsetY:= 0;
+    {$ENDIF}
+{$ELSE}
+    amNumOffsetY:= 0;
+    {$IFDEF USE_AM_NUMCOLUMN}
+    amNumOffsetX:= AMSlotSize;
+    {$ELSE}
+    amNumOffsetX:= 0;
+    {$ENDIF}
+
+{$ENDIF}
+    if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left 
+        CursorPoint.X:= AmmoRect.x + amNumOffsetX + 3;
+    if CursorPoint.X > AmmoRect.x + AmmoRect.w - 3 then//check right
+        CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
+    if CursorPoint.Y > cScreenHeight - AmmoRect.y -amNumOffsetY - 1 then//check top
+        CursorPoint.Y:= cScreenHeight - AmmoRect.y - amNumOffsetY - 1;
+    if CursorPoint.Y < cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5) then//check bottom
+        CursorPoint.Y:= cScreenHeight - (AmmoRect.y + AmmoRect.h - AMSlotSize - 5);
     prevPoint:= CursorPoint;
     //if cHasFocus then SDL_WarpMouse(CursorPoint.X + cScreenWidth div 2, cScreenHeight - CursorPoint.Y);
     exit
@@ -1793,6 +1802,10 @@ procedure onFocusStateChanged;
 begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
     ParseCommand('quit', true);
+{$IFDEF MOBILE}
+// when created SDL receives an exposure event that calls UndampenAudio at full power, muting audio
+exit;
+{$ENDIF}
 
 {$IFDEF USE_VIDEO_RECORDING}
 // do not change volume during prerecording as it will affect sound in video file
@@ -1880,19 +1893,12 @@ begin
     stereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
+    stereoDepth:= stereoDepth; // avoid hint
 end;
 
 procedure freeModule;
 begin
-    stereoDepth:= stereoDepth; // avoid hint
-    FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-    FreeTexture(timeTexture);
-    timeTexture:= nil;
-    FreeTexture(missionTex);
-    missionTex:= nil;
-    FreeTexture(recTexture);
-    recTexture:= nil;
+    ResetWorldTex();
 end;
 
 end.

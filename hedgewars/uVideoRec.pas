@@ -49,6 +49,7 @@ procedure BeginPreRecording;
 procedure StopPreRecording;
 procedure SaveCameraPosition;
 
+procedure initModule;
 procedure freeModule;
 
 implementation
@@ -364,6 +365,10 @@ begin
     frame.CamY:= WorldDy - cScreenHeight div 2;
     frame.zoom:= zoom/cScreenWidth;
     BlockWrite(cameraFile, frame, 1);
+end;
+
+procedure initModule;
+begin
 end;
 
 procedure freeModule;

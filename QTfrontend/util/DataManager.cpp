@@ -201,11 +201,9 @@ QStandardItemModel * DataManager::bindsModel()
 
 void DataManager::reload()
 {
-    m_gameStyleModel->loadGameStyles();
-    m_hatModel->loadHats();
-    m_mapModel->loadMaps();
-    m_themeModel->loadThemes();
-    emit updated();
+    // removed for now (also code was a bit unclean, could lead to segfault if
+    // reload() is called before all members are initialized - because currently
+    // they are initialized in the getter methods rather than the constructor)
 }
 
 void DataManager::resetColors()
