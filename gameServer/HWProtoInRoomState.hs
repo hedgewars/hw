@@ -3,7 +3,7 @@ module HWProtoInRoomState where
 
 import qualified Data.Map as Map
 import Data.Sequence((|>))
-import Data.List
+import Data.List as L
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
 import Control.Monad
@@ -52,6 +52,13 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         clNick <- clientNick
         clChan <- thisClientChans
         othChans <- roomOthersChans
+        roomChans <- roomClientsChans
+        cl <- thisClient
+        teamColor <-
+            if clientProto cl < 42 then 
+                return color
+                else
+                liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
         return $
             if not . null . drop (maxTeams rm - 1) $ teams rm then
                 [Warning "too many teams"]
@@ -64,16 +71,16 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
             else if isRestrictedTeams rm then
                 [Warning "restricted"]
             else
-                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r]}),
-                ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just color}),
+                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r teamColor]}),
+                ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
-                AnswerClients othChans $ teamToNet $ newTeam ci clNick rm,
-                AnswerClients othChans ["TEAM_COLOR", tName, color]
+                AnswerClients othChans $ teamToNet $ newTeam ci clNick rm teamColor,
+                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
                 ]
         where
         canAddNumber r = 48 - (sum . map hhnum $ teams r)
         findTeam = find (\t -> tName == teamname t) . teams
-        newTeam ci clNick r = TeamInfo ci clNick tName color grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
+        newTeam ci clNick r tColor = TeamInfo ci clNick tName tColor grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
         dif = readInt_ difStr
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"

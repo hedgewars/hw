@@ -238,7 +238,7 @@ function CheckScore(teamID)
 	if fCaptures[teamID] == 3 then
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) == alt then
-				SetEffect(hhs[i], heResurrectable, false)
+				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
 		end
@@ -784,7 +784,7 @@ function onGearAdd(gear)
 
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
-		SetEffect(gear, heResurrectable, true)
+		SetEffect(gear, heResurrectable, 1)
 
 	end
 

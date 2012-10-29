@@ -92,7 +92,7 @@ class VideoItem : public QTableWidgetItem
 };
 
 VideoItem::VideoItem(const QString& name)
-    : QTableWidgetItem(name, UserType)
+: QTableWidgetItem(name, UserType)
 {
     this->name = name;
     pRecorder = NULL;
@@ -217,6 +217,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // button 'set default options'
         btnDefaults = new QPushButton(pOptionsGroup);
         btnDefaults->setText(QPushButton::tr("Set default options"));
+        btnDefaults->setWhatsThis(QPushButton::tr("Restore default coding parameters"));
         pOptLayout->addWidget(btnDefaults, 7, 0, 1, 5);
 
         pPageLayout->addWidget(pOptionsGroup, 1, 0);
@@ -250,6 +251,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         header->setStretchLastSection(true);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
+        btnOpenDir->setWhatsThis(QPushButton::tr("Open the video directory in your system"));
 
         QVBoxLayout *box = new QVBoxLayout(pTableGroup);
         box->addWidget(filesTable);
@@ -296,12 +298,15 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
         btnPlay->setEnabled(false);
+        btnPlay->setWhatsThis(QPushButton::tr("Play this video"));
         pBottomDescLayout->addWidget(btnPlay);
         btnDelete = new QPushButton(QPushButton::tr("Delete"), pDescGroup);
         btnDelete->setEnabled(false);
+        btnDelete->setWhatsThis(QPushButton::tr("Delete this video"));
         pBottomDescLayout->addWidget(btnDelete);
         btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
         btnToYouTube->setEnabled(false);
+        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addStretch(1);
@@ -411,13 +416,14 @@ void PageVideos::changeRecordAudio(int state)
 
 void PageVideos::setDefaultCodecs()
 {
-    if (tryCodecs("mp4", "libx264", "libmp3lame"))
+    // VLC should be able to handle any of these configurations
+    // Quicktime X only opens the first one
+    // Windows Media Player TODO
+    if (tryCodecs("mp4", "libx264", "aac"))
         return;
     if (tryCodecs("mp4", "libx264", "libfaac"))
         return;
-    if (tryCodecs("mp4", "libx264", "libvo_aacenc"))
-        return;
-    if (tryCodecs("mp4", "libx264", "aac"))
+    if (tryCodecs("mp4", "libx264", "libmp3lame"))
         return;
     if (tryCodecs("mp4", "libx264", "mp2"))
         return;
@@ -442,8 +448,8 @@ void PageVideos::setDefaultCodecs()
 
 void PageVideos::setDefaultOptions()
 {
-    framerateBox->setValue(25);
-    bitrateBox->setValue(400);
+    framerateBox->setValue(30);
+    bitrateBox->setValue(1000);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
     setDefaultCodecs();
@@ -853,7 +859,12 @@ void PageVideos::deleteSelectedFiles()
     if (!item->ready())
         item->pRecorder->deleteLater();
     else
+    {
         cfgdir->remove("Videos/" + item->name);
+        // we have no idea whether screenshot is going to be bmp or png so let's delete both
+        cfgdir->remove("VideoTemp/" + item->prefix + ".png");
+        cfgdir->remove("VideoTemp/" + item->prefix + ".bmp");
+    }
 
 // this code is for removing several files when multiple selection is enabled
 #if 0

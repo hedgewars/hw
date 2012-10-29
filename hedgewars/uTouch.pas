@@ -22,10 +22,11 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, uIO, GLUnit, uTypes, uCaptions, uAmmos, uWorld, uMobile;
+uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld, uMobile;
 
 
 procedure initModule;
+procedure freeModule;
 
 procedure ProcessTouch;
 procedure NewTurnBeginning;
@@ -641,6 +642,10 @@ begin
 
     rectSize:= round(baseRectSize * uMobile.getScreenDPI);
     halfRectSize:= rectSize shl 1;
+end;
+
+procedure freeModule;
+begin
 end;
 
 begin

@@ -40,9 +40,9 @@ function onGameInit()
 	AddTeam("Blue Team", 29439, "Simple", "Island", "Default")
 	enemy = AddHog("Filthy Blue", 1, 100, "Skull")
 
-	SetGearPosition(player, 1170, 1926)
-	SetGearPosition(instructor, 1341, 1926)
-	SetGearPosition(enemy, 2942, 1861)
+	SetGearPosition(player,146,902)
+	SetGearPosition(instructor,317,902)
+	SetGearPosition(enemy,1918,837)
 
 
 	HogSay(player, ".............................", SAY_THINK)
@@ -54,8 +54,8 @@ end
 
 function onGameStart()
 
-	SpawnAmmoCrate(1499,1500,amRope)
-	SpawnAmmoCrate(2753,1500,amFirePunch)
+	SpawnAmmoCrate(475,476,amRope)
+	SpawnAmmoCrate(1729,476,amFirePunch)
 
 	FollowGear(player)
 

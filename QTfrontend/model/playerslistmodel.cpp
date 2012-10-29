@@ -110,8 +110,9 @@ void PlayersListModel::playerJoinedRoom(const QString & nickname)
 
     if(mil.size())
     {
-        setData(mil[0], "1", RoomFilterRole);
+        setData(mil[0], true, RoomFilterRole);
         updateIcon(mil[0]);
+        updateSortData(mil[0]);
     }
 }
 
@@ -122,7 +123,10 @@ void PlayersListModel::playerLeftRoom(const QString & nickname)
 
     if(mil.size())
     {
-        setData(mil[0], "0", RoomFilterRole);
+        setData(mil[0], false, RoomFilterRole);
+        setData(mil[0], false, RoomAdmin);
+        setData(mil[0], false, Ready);
+        setData(mil[0], false, InGame);
         updateIcon(mil[0]);
     }
 }
@@ -181,9 +185,9 @@ void PlayersListModel::resetRoomFlags()
     {
         QModelIndex mi = index(i);
 
-        if(mi.data(RoomFilterRole).toString() == "1")
+        if(mi.data(RoomFilterRole).toBool())
         {
-            setData(mi, "0", RoomFilterRole);
+            setData(mi, false, RoomFilterRole);
             setData(mi, false, RoomAdmin);
             setData(mi, false, Ready);
             setData(mi, false, InGame);
@@ -207,7 +211,7 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         << index.data(Friend).toBool()
         << index.data(Ignore).toBool()
         << index.data(InGame).toBool()
-        << (index.data(RoomFilterRole).toString() == "1")
+        << index.data(RoomFilterRole).toBool()
         ;
 
     for(int i = flags.size() - 1; i >= 0; --i)
@@ -225,14 +229,20 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
 
         QPainter painter(&result);
 
-        if(index.data(RoomFilterRole).toString() == "1")
+        if(index.data(RoomFilterRole).toBool())
+        {
             if(index.data(InGame).toBool())
+            {
                 painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/ingame.png"));
+            }
             else
+            {
                 if(index.data(Ready).toBool())
                     painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp.png"));
                 else
                     painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
+            }
+        }
 
         QString mainIconName(":/res/chat/");
 

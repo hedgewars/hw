@@ -56,6 +56,8 @@
 00:53=TARDIS
 00:54=Budynek
 00:55=Miotacz błota
+00:56=Zamrażarka
+00:57=Tasak
 
 01:00=Walczmy!
 01:01=Remis
@@ -78,6 +80,7 @@
 01:18=Duże
 01:19=Ekstremalne
 01:20=%1 odbicie
+01:21=Dźwięk wyciszony
 
 ; Event messages
 ; Hog (%1) died

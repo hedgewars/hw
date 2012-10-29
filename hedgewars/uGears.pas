@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses SDLh, uConsts, uFloat, uTypes, uLandObjects;
+uses SDLh, uConsts, uFloat, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -111,10 +111,12 @@ while Gear <> nil do
                 end
             else
                 dec(Gear^.Health, dmg);
-
+(*
+This doesn't fit well w/ the new loser sprite which is cringing from an attack.
             if (Gear^.Hedgehog^.Team = CurrentTeam) and (Gear^.Damage <> Gear^.Karma)
             and (not Gear^.Hedgehog^.King) and (Gear^.Hedgehog^.Effects[hePoisoned] = 0) and (not SuddenDeathDmg) then
                 Gear^.State:= Gear^.State or gstLoser;
+*)
 
             spawnHealthTagForHH(Gear, dmg);
 

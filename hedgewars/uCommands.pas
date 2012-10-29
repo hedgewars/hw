@@ -46,8 +46,7 @@ type  PVariable = ^TVariable;
         Trusted, Rand: boolean;
         end;
 
-var
-    Variables: PVariable;
+var Variables: PVariable;
 
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean);
 begin
