@@ -146,9 +146,9 @@ if(KeyDown and (code = closeKeyCode)) then
 {$ELSE}
     // on other systems use this shortcut only if the keys are not bound to any command
     if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
-        if ((CurrentBinds([KeyNameToCode('left_ctrl')]:= '') or
-             CurrentBinds([KeyNameToCode('right_ctrl')]:= '')) and
-             CurrentBinds([closeKeyCode]:= '') then
+        if ((CurrentBinds[KeyNameToCode('left_ctrl')] = '') or
+            (CurrentBinds[KeyNameToCode('right_ctrl')] = '')) and
+            (CurrentBinds[closeKeyCode] = '') then
 {$ENDIF}
         ParseCommand('forcequit', true);
     end;
