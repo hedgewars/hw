@@ -262,7 +262,7 @@ for j:= 0 to Pred(ControllerNumControllers) do
     end;
 
 DefaultBinds[KeyNameToCode('escape')]:= 'quit';
-DefaultBinds[KeyNameToCode('grave')]:= 'history';
+DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
 DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
 
 //numpad
