@@ -220,7 +220,7 @@ KeyNames[5]:= 'wheeldown';
 for i:= 6 to cKeyMaxIndex do
     begin
     s:= shortstring(sdl_getkeyname(i));
-    //WriteLnToConsole(IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
+    //WriteLnToConsole('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
     else 
         begin
