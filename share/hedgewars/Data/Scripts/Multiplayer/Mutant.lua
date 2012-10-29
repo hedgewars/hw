@@ -236,10 +236,10 @@ function countBodies()
             AddCaption(loc("LUDICROUS KILL"))
             PlaySound(sndNutter)
         elseif killsCounter == 7 then
-            AddCaption(loc("HOLY SHIT!!"))
+            AddCaption(loc("HOLY SHIT!"))
             PlaySound(sndLaugh)
-        elseif killsCounter >8 then
-            AddCaption(loc("ZADROT"))
+        elseif killsCounter > 8 then
+            AddCaption(loc("FAG"))
         end
 
 end
