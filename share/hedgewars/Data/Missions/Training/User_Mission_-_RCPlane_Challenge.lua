@@ -275,13 +275,13 @@ function onGameStart()
 
 end
 
-function onGameTick()
+--function onGameTick()
 
 	--if RCGear ~= nil then
 	--	AddCaption(GetTimer(RCGear))
 	--end
 
-end
+--end
 
 function onNewTurn()
 	TurnTimeLeft = -1

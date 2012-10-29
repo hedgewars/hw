@@ -34,8 +34,8 @@ function onGameInit()
 	AddTeam(loc("Toxic Team"), 	1175851, "Simple", "Island", "Default")
 	enemy = AddHog(loc("Poison"), 1, 10, "Skull")
 
-	SetGearPosition(player, 1994, 1047)
-	SetGearPosition(enemy, 1522, 1830)
+	SetGearPosition(player,970,23)
+	SetGearPosition(enemy,498,806)
 
 end
 
@@ -43,42 +43,42 @@ end
 function onGameStart()
 
 	--right side mines
-	AddGear(2705, 1383, gtMine, 0, 0, 0, 0)
-	AddGear(2742, 1542, gtMine, 0, 0, 0, 0)
-	AddGear(2672, 1551, gtMine, 0, 0, 0, 0)
-	AddGear(2608, 1546, gtMine, 0, 0, 0, 0)
+	AddGear(1681,359,gtMine, 0, 0, 0, 0)
+	AddGear(1718,518,gtMine, 0, 0, 0, 0)
+	AddGear(1648,527,gtMine, 0, 0, 0, 0)
+	AddGear(1584,522,gtMine, 0, 0, 0, 0)
 
 	--tunnel mines
-	AddGear(1325, 1593, gtSMine, 0, 0, 0, 0)
-	AddGear(1396, 1632, gtSMine, 0, 0, 0, 0)
-	AddGear(1477, 1652, gtSMine, 0, 0, 0, 0)
-	AddGear(1548, 1635, gtSMine, 0, 0, 0, 0)
-	AddGear(1637, 1635, gtSMine, 0, 0, 0, 0)
+	AddGear(301,569,gtSMine, 0, 0, 0, 0)
+	AddGear(372,608,gtSMine, 0, 0, 0, 0)
+	AddGear(453,628,gtSMine, 0, 0, 0, 0)
+	AddGear(524,611,gtSMine, 0, 0, 0, 0)
+	AddGear(613,611,gtSMine, 0, 0, 0, 0)
 
-	AddGear(1332, 1510, gtSMine, 0, 0, 0, 0)
-	AddGear(1396, 1502, gtSMine, 0, 0, 0, 0)
-	AddGear(1477, 1490, gtSMine, 0, 0, 0, 0)
-	AddGear(1548, 1495, gtSMine, 0, 0, 0, 0)
-	AddGear(1637, 1490, gtSMine, 0, 0, 0, 0)
+	AddGear(308,486,gtSMine, 0, 0, 0, 0)
+	AddGear(372,478,gtSMine, 0, 0, 0, 0)
+	AddGear(453,466,gtSMine, 0, 0, 0, 0)
+	AddGear(524,471,gtSMine, 0, 0, 0, 0)
+	AddGear(613,466,gtSMine, 0, 0, 0, 0)
 
 	--above the tunnel mines
-	AddGear(1355, 1457, gtMine, 0, 0, 0, 0)
-	AddGear(1428, 1444, gtMine, 0, 0, 0, 0)
-	AddGear(1508, 1448, gtMine, 0, 0, 0, 0)
-	AddGear(1586, 1441, gtMine, 0, 0, 0, 0)
-	AddGear(1664, 1436, gtMine, 0, 0, 0, 0)
+	AddGear(331,433,gtMine, 0, 0, 0, 0)
+	AddGear(404,420,gtMine, 0, 0, 0, 0)
+	AddGear(484,424,gtMine, 0, 0, 0, 0)
+	AddGear(562,417,gtMine, 0, 0, 0, 0)
+	AddGear(640,412,gtMine, 0, 0, 0, 0)
 
 	-- crates crates and more crates
-	SpawnAmmoCrate(2232,1600,amBlowTorch)
-	SpawnAmmoCrate(2491,1400,amPickHammer)
-	SpawnUtilityCrate(1397,1189,amGirder)
-	SpawnUtilityCrate(1728,1647,amJetpack)
-	SpawnUtilityCrate(2670,1773,amLaserSight)
+	SpawnAmmoCrate(1208,576,amBlowTorch)
+	SpawnAmmoCrate(1467,376,amPickHammer)
+	SpawnUtilityCrate(373,165,amGirder)
+	SpawnUtilityCrate(704,623,amJetpack)
+	SpawnUtilityCrate(1646,749,amLaserSight)
 
-	SpawnAmmoCrate(1769,1442,amShotgun) --shotgun1
-	SpawnAmmoCrate(1857,1456,amFirePunch) --fire punch
-	GirderCrate = SpawnAmmoCrate(2813,1538,amShotgun) -- final shotgun
-	SpawnAmmoCrate(2205,1443,amBee)
+	SpawnAmmoCrate(745,418,amShotgun) --shotgun1
+	SpawnAmmoCrate(833,432,amFirePunch) --fire punch
+	GirderCrate = SpawnAmmoCrate(1789,514,amShotgun) -- final shotgun
+	SpawnAmmoCrate(1181,419,amBee)
 
 	ShowMission(loc("Spooky Tree"), "", loc("Eliminate all enemies") .. loc("|- Mines Time:") .. " " .. 0 .. " " .. loc("sec"), -amBee, 0)
 
@@ -92,12 +92,12 @@ function onGameTick()
 
 	if CurrentHedgehog ~= nil then
 
-		if (birdSqualk == false) and (GetX(CurrentHedgehog) == 2126) and (GetY(CurrentHedgehog) == 1157)  then
+		if (birdSqualk == false) and (GetX(CurrentHedgehog) == 1102) and (GetY(CurrentHedgehog) == 133)  then
 			birdSqualk = true
 			PlaySound(sndBirdyLay)
 		end
 
-		if (birdSpeech == false) and (GetX(CurrentHedgehog) == 2092) and (GetY(CurrentHedgehog) == 1186) then
+		if (birdSpeech == false) and (GetX(CurrentHedgehog) == 1068) and (GetY(CurrentHedgehog) == 162) then
 			birdSpeech = true
 			HogSay(player,loc("Good birdy......"),SAY_THINK)
 		end
