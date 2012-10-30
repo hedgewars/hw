@@ -2532,44 +2532,63 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
 
+procedure preInitModule;
 procedure initModule;
 procedure freeModule;
 
 implementation
 
 
-procedure initModule;
+procedure preInitModule;
 begin
-    // initialisation flags - they are going to be overwritten by args or by msgs
+    // initialisation flags - they are going to be overwritten by program args
+
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
     cBits           := 32;
-    ipcPort         := 0;
-    cFullScreen     := false;
-    cLocaleFName    := 'en.txt';
-    cLocale         := 'en';
-    cTimerInterval  := 8;
-    PathPrefix      := './';
-    UserPathPrefix  := './';
     cShowFPS        := false;
-    cFlattenFlakes  := false;
-    cFlattenClouds  := false;
     cAltDamage      := true;
+    cTimerInterval  := 8;
     cReducedQuality := rqNone;
+    cLocaleFName    := 'en.txt';
+    cFullScreen     := false;
+
+    UserPathPrefix  := '';
+    ipcPort         := 0;
     UserNick        := '';
-    recordFileName  := '';
-    cScriptName     := '';
-    cReadyDelay     := 5000;
     cStereoMode     := smNone;
     GrayScale       := false;
+    PathPrefix      := './';
+    GameType        := gmtLocal;
 
-    cFlattenFlakes  := false;
-    cFlattenClouds  := false;
-    cOnlyStats      := False;
-    lastVisualGearByUID:= nil;
-    lastGearByUID:= nil;
-    
-    Pathz:= cPathz;
+{$IFDEF USE_VIDEO_RECORDING}
+    RecPrefix          := '';
+    cAVFormat          := '';
+    cVideoCodec        := '';
+    cVideoFramerateNum := 0;
+    cVideoFramerateDen := 0;
+    cVideoQuality      := 0;
+    cAudioCodec        := '';
+{$ENDIF}
+end;
+
+procedure initModule;
+begin
+
+    if (Length(cLocaleFName) > 6) then
+        cLocale := Copy(cLocaleFName,1,5)
+    else
+        cLocale := Copy(cLocaleFName,1,2);
+
+    cFlattenFlakes      := false;
+    cFlattenClouds      := false;
+    cOnlyStats          := False;
+    lastVisualGearByUID := nil;
+    lastGearByUID       := nil;
+    recordFileName      := '';
+    cReadyDelay         := 5000;
+    Pathz               := cPathz;
+
         {*  REFERENCE
       4096 -> $FFFFF000
       2048 -> $FFFFF800
@@ -2679,7 +2698,6 @@ begin
     ReadyTimeLeft   := 0;
     
     disableLandBack := false;
-
     ScreenFade      := sfNone;
 
     // those values still are not perfect
@@ -2699,14 +2717,13 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    cMinScreenWidth    := 640;
-    cMinScreenHeight   := 480;
-    cScreenWidth       := 1024;
-    cScreenHeight      := 768;
-    cOrigScreenWidth   := 1024;
-    cOrigScreenHeight  := 768;
-    cNewScreenWidth    := 1024;
-    cNewScreenHeight   := 768;
+    cMinScreenWidth:= min(cScreenWidth, 640);
+    cMinScreenHeight:= min(cScreenHeight, 480);
+    cOrigScreenWidth:= cScreenWidth;
+    cOrigScreenHeight:= cScreenHeight;
+
+    cNewScreenWidth    := cScreenWidth;
+    cNewScreenHeight   := cScreenHeight;
     cScreenResizeDelay := 0;
 
     LuaGoals:= '';
