@@ -116,7 +116,8 @@ function limitHogs(gear)
         if cnthhs > 1 then
             hogLimitHit = true
             SetEffect(gear, heResurrectable, false)
-            SetHealth(gear, 0)
+            --SetHealth(gear, 0)
+            SetGearPosition(gear, -100,LAND_HEIGHT)
         end
 end
 
@@ -414,7 +415,7 @@ function setFeeder(gear)
 
     if gear~= mutant and gear~= nil then
         SetHogName(gear,"BOTTOM FEEDER")
-        SetHogHat(gear, 'Poke_Slowpoke')
+        SetHogHat(gear, 'poke_slowpoke')
         setGearValue(gear,"Feeder", true)
     end
 end
@@ -423,7 +424,7 @@ function setMutantStuff(gear)
     mutant = gear
 
     SetHogName(gear,"MUTANT")
-    SetHogHat(gear,'whysoserious')
+    SetHogHat(gear,'WhySoSerious')
     SetHealth(gear, ( mutant_base_health + numhhs*25) )
     SetEffect(gear, hePoisoned, 1)
     setGearValue(mutant,"SelfDestruct",false)
