@@ -23,7 +23,7 @@
 #include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "game.h"
-#include "libav_iteraction.h"
+#include "LibavInteraction.h"
 
 // Encoding is memory expensive process, so we need to limit maximum number
 // of simultaneous encoders.
@@ -38,7 +38,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     this->config = config;
     this->prefix = prefix;
     finished = false;
-    name = prefix + "." + LibavIteraction::instance().getExtension(config->AVFormat());
+    name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
 }
 
 HWRecorder::~HWRecorder()

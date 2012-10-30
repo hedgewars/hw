@@ -26,15 +26,15 @@
  *
  * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
  */
-class LibavIteraction : public QObject
+class LibavInteraction : public QObject
 {
     Q_OBJECT;
 
-    LibavIteraction();
+    LibavInteraction();
 
 public:
 
-    static LibavIteraction & instance();
+    static LibavInteraction & instance();
 
     // fill combo box with known file formats
     void fillFormats(QComboBox * pFormats);
