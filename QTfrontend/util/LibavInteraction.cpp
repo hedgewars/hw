@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include "libav_iteraction.h"
+#include "LibavInteraction.h"
 
 #if VIDEOREC
 extern "C"
@@ -63,7 +63,7 @@ bool FormatQueryCodec(AVOutputFormat *ofmt, enum CodecID codec_id)
 #endif
 }
 
-LibavIteraction::LibavIteraction() : QObject()
+LibavInteraction::LibavInteraction() : QObject()
 {
     // initialize libav and register all codecs and formats
     av_register_all();
@@ -199,7 +199,7 @@ LibavIteraction::LibavIteraction() : QObject()
     }
 }
 
-void LibavIteraction::fillFormats(QComboBox * pFormats)
+void LibavInteraction::fillFormats(QComboBox * pFormats)
 {
     // first insert recomended formats
     foreach(const Format & format, formats)
@@ -219,7 +219,7 @@ void LibavIteraction::fillFormats(QComboBox * pFormats)
         pFormats->insertSeparator(sep);
 }
 
-void LibavIteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QComboBox * pACodecs)
+void LibavInteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QComboBox * pACodecs)
 {
     Format & format = formats[fmt];
 
@@ -258,13 +258,13 @@ void LibavIteraction::fillCodecs(const QString & fmt, QComboBox * pVCodecs, QCom
         pACodecs->insertSeparator(asep);
 }
 
-QString LibavIteraction::getExtension(const QString & format)
+QString LibavInteraction::getExtension(const QString & format)
 {
     return formats[format].extension;
 }
 
 // get information abaout file (duration, resolution etc) in multiline string
-QString LibavIteraction::getFileInfo(const QString & filepath)
+QString LibavInteraction::getFileInfo(const QString & filepath)
 {
     AVFormatContext* pContext = NULL;
     QByteArray utf8path = filepath.toUtf8();
@@ -317,31 +317,31 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
 }
 
 #else
-LibavIteraction::LibavIteraction() : QObject()
+LibavInteraction::LibavInteraction() : QObject()
 {
 
 }
 
-void LibavIteraction::fillFormats(QComboBox * pFormats)
+void LibavInteraction::fillFormats(QComboBox * pFormats)
 {
     Q_UNUSED(pFormats);
 }
 
-void LibavIteraction::fillCodecs(const QString & format, QComboBox * pVCodecs, QComboBox * pACodecs)
+void LibavInteraction::fillCodecs(const QString & format, QComboBox * pVCodecs, QComboBox * pACodecs)
 {
     Q_UNUSED(format);
     Q_UNUSED(pVCodecs);
     Q_UNUSED(pACodecs);
 }
 
-QString LibavIteraction::getExtension(const QString & format)
+QString LibavInteraction::getExtension(const QString & format)
 {
     Q_UNUSED(format);
 
     return QString();
 }
 
-QString LibavIteraction::getFileInfo(const QString & filepath)
+QString LibavInteraction::getFileInfo(const QString & filepath)
 {
     Q_UNUSED(filepath);
 
@@ -349,8 +349,8 @@ QString LibavIteraction::getFileInfo(const QString & filepath)
 }
 #endif
 
-LibavIteraction & LibavIteraction::instance()
+LibavInteraction & LibavInteraction::instance()
 {
-    static LibavIteraction instance;
+    static LibavInteraction instance;
     return instance;
 }

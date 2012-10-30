@@ -47,7 +47,7 @@
 #include "hwconsts.h"
 #include "pagevideos.h"
 #include "igbox.h"
-#include "libav_iteraction.h"
+#include "LibavInteraction.h"
 #include "gameuiconfig.h"
 #include "recorder.h"
 #include "ask_quit.h"
@@ -128,7 +128,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // list of supported formats
         comboAVFormats = new QComboBox(pOptionsGroup);
         pOptLayout->addWidget(comboAVFormats, 0, 1, 1, 4);
-        LibavIteraction::instance().fillFormats(comboAVFormats);
+        LibavInteraction::instance().fillFormats(comboAVFormats);
 
         // separator
         QFrame * hr = new QFrame(pOptionsGroup);
@@ -374,7 +374,7 @@ void PageVideos::changeAVFormat(int index)
     comboAudioCodecs->clear();
 
     // get list of codecs for specified format
-    LibavIteraction::instance().fillCodecs(comboAVFormats->itemData(index).toString(), comboVideoCodecs, comboAudioCodecs);
+    LibavInteraction::instance().fillCodecs(comboAVFormats->itemData(index).toString(), comboVideoCodecs, comboAudioCodecs);
 
     // disable audio if there is no audio codec
     if (comboAudioCodecs->count() == 0)
@@ -651,7 +651,7 @@ void PageVideos::cellChanged(int row, int column)
     }
 #ifdef Q_WS_WIN
     // there is a bug in qt, QDir::rename() doesn't fail on such names but damages files
-    if (newName.contains(QRegExp("[\"*:<>?\/|]")))
+    if (newName.contains(QRegExp("[\"*:<>?\\/|]")))
     {
         setName(item, oldName);
         return;
@@ -749,7 +749,7 @@ void PageVideos::updateDescription()
         {
             // Extract description from file;
             // It will contain duration, resolution, etc and also comment added by hwengine.
-            item->desc = LibavIteraction::instance().getFileInfo(path);
+            item->desc = LibavInteraction::instance().getFileInfo(path);
 
             // extract prefix (original name) from description (it is enclosed in prefix[???]prefix)
             int prefixBegin = item->desc.indexOf("prefix[");
