@@ -73,7 +73,7 @@ procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 {$ENDIF}
 
-procedure initModule(isGame: boolean);
+procedure initModule(isNotPreview: boolean);
 procedure freeModule;
 
 
@@ -401,14 +401,14 @@ system.writeln(f, s)
 end;
 {$ENDIF}
 
-procedure initModule(isGame: boolean);
+procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
 {$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
-    if isGame then
+    if isNotPreview then
     begin
         if GameType = gmtRecord then
             logfileBase:= 'rec'
@@ -422,7 +422,7 @@ begin
 {$ENDIF}
 {$I-}
 {$IFDEF MOBILE}
-    {$IFDEF IPHONEOS} Assign(f,'../Documents/hw-' + logfileBase + '.log'); {$ENDIF}
+    {$IFDEF IPHONEOS} Assign(f, UserPathPrefix + '/hw-' + logfileBase + '.log'); {$ENDIF}
     {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
     Rewrite(f);
 {$ELSE}
@@ -450,8 +450,6 @@ end;
 
 procedure freeModule;
 begin
-recordFileName:= '';
-
 {$IFDEF DEBUGFILE}
     writeln(f, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
     flush(f);

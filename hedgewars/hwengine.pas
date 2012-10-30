@@ -39,6 +39,7 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
 
 
 {$IFDEF HWLIBRARY}
+procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 procedure Game(gameArgs: PPChar); cdecl; export;
@@ -46,11 +47,12 @@ procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
+procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
 begin
@@ -138,7 +140,7 @@ begin
         end;
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: Longword;
@@ -310,28 +312,20 @@ begin
 end;
 {$ENDIF}
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
-    initEverything(true);
+    preInitEverything();
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     ipcPort:= StrToInt(gameArgs[0]);
     cScreenWidth:= StrToInt(gameArgs[1]);
     cScreenHeight:= StrToInt(gameArgs[2]);
     cReducedQuality:= StrToInt(gameArgs[3]);
     cLocaleFName:= gameArgs[4];
-    // cFullScreen functionality is platform dependent, ifdef it if you need to modify it
-    cFullScreen:= false;
-    
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
-        
     UserNick:= gameArgs[5];
     SetSound(gameArgs[6] = '1');
     SetMusic(gameArgs[7] = '1');
@@ -339,12 +333,8 @@ begin
     PathPrefix:= gameArgs[9];
     UserPathPrefix:= '../Documents';
     recordFileName:= gameArgs[10];
-    cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= min(cScreenWidth, cMinScreenWidth);
-    cMinScreenHeight:= min(cScreenHeight, cMinScreenHeight);
-    cOrigScreenWidth:= cScreenWidth;
-    cOrigScreenHeight:= cScreenHeight;
+    initEverything(true);
 
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
@@ -443,15 +433,20 @@ begin
     freeEverything(true);
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-// As a rule of thumb, every module that is listed in either initEverything or 
-// freeEverything should come in pair, even if they are stubs. Only use this 
-// section for inialising variables and remeber that game args overwrite these,
-// so handle this section with care. Pay attention to the init/free order too! 
-procedure initEverything (complete:boolean);
+///////////////////////////////////////////////////////////////////////////////
+// preInitEverything - init variables that are going to be ovewritten by arguments
+// initEverything - init variables only. Should be coupled by below
+// freeEverything - free above. Pay attention to the init/free order!
+procedure preInitEverything;
 begin
     Randomize();
 
+    uVariables.preInitModule;
+    uSound.preInitModule;
+end;
+
+procedure initEverything (complete:boolean);
+begin
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
     uConsole.initModule;            // opens stdout
@@ -528,12 +523,12 @@ begin
     uUtils.freeModule;              // closes debug file
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
-{$IFDEF HWLIBRARY}
     initEverything(false);
+{$IFDEF HWLIBRARY}
     WriteLnToConsole('Preview connecting on port ' + inttostr(port));
     ipcPort:= port;
     InitStepsFlags:= cifRandomize;
@@ -551,7 +546,7 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure DisplayUsage;
 var i: LongInt;
 begin
@@ -577,7 +572,7 @@ begin
     WriteLn(stdout, '');
 end;
 
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
@@ -587,14 +582,11 @@ begin
     else
         if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
             begin
-            initEverything(false);
             ipcPort:= StrToInt(ParamStr(2));
             GameType:= gmtLandPreview;
-            exit;
             end
         else
             begin
-            initEverything(true);
             if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
                 playReplayFileWithParameters()
             else
@@ -609,15 +601,12 @@ begin
             end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// m a i n ////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// m a i n ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 begin
+    preInitEverything();
     GetParams();
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
 
     if GameType = gmtLandPreview then
         GenLandPreview()

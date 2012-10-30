@@ -35,6 +35,7 @@ unit uSound;
 interface
 uses SDLh, uConsts, uTypes, SysUtils;
 
+procedure preInitModule;
 procedure initModule;
 procedure freeModule;
 
@@ -577,6 +578,13 @@ begin
     MuteAudio;
 end;
 
+procedure preInitModule;
+begin
+    isMusicEnabled:= true;
+    isSoundEnabled:= true;
+    cInitVolume:= 100;
+end;
+
 procedure initModule;
 var t: LongInt;
     i: TSound;
@@ -586,12 +594,9 @@ begin
 
     MusicFN:='';
     Mus:= nil;
-    isMusicEnabled:= true;
-    isSoundEnabled:= true;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     Volume:= 0;
-    cInitVolume:= 100;
     defVoicepack:= AskForVoicepack('Default');
 
     for i:= Low(TSound) to High(TSound) do
