@@ -211,7 +211,7 @@ processAction (MoveToRoom ri) = do
     rnc <- gets roomsClients
 
     io $ do
-        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
+        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False, isInGame = False}) ci
         modifyRoom rnc (\r -> r{playersIn = playersIn r + 1}) ri
         moveClientToRoom rnc ri ci
 
