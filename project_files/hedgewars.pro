@@ -99,13 +99,13 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/colorwidget.h \
     ../QTfrontend/model/HatModel.h \
     ../QTfrontend/model/GameStyleModel.h \
-    ../QTfrontend/util/libav_iteraction.h \
     ../QTfrontend/ui/page/pagevideos.h \
     ../QTfrontend/net/recorder.h \
     ../QTfrontend/ui/dialog/ask_quit.h \
     ../QTfrontend/ui/dialog/upload_video.h \
     ../QTfrontend/campaign.h \
-    ../QTfrontend/model/playerslistmodel.h
+    ../QTfrontend/model/playerslistmodel.h \
+    ../QTfrontend/util/LibavInteraction.h
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
@@ -188,13 +188,13 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
     ../QTfrontend/model/HatModel.cpp \
     ../QTfrontend/model/GameStyleModel.cpp \
-    ../QTfrontend/util/libav_iteraction.cpp \
     ../QTfrontend/ui/page/pagevideos.cpp \
     ../QTfrontend/net/recorder.cpp \
     ../QTfrontend/ui/dialog/ask_quit.cpp \
     ../QTfrontend/ui/dialog/upload_video.cpp \
     ../QTfrontend/campaign.cpp \
-    ../QTfrontend/model/playerslistmodel.cpp
+    ../QTfrontend/model/playerslistmodel.cpp \
+    ../QTfrontend/util/LibavInteraction.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
