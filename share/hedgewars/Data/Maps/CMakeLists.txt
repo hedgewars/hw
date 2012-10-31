@@ -30,6 +30,7 @@ foreach(dir
 	Octorama
 	PirateFlag
 	Plane
+	portal
 	Ropes
 	Ruler
 	Sheep
