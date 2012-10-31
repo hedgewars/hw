@@ -55,7 +55,7 @@
 <context>
     <name>HWAskQuitDialog</name>
     <message>
-        <source>Do yot really want to quit?</source>
+        <source>Do you really want to quit?</source>
         <translation>Vuoi veramente uscire?</translation>
     </message>
 </context>
@@ -1734,7 +1734,7 @@ Please pick another nickname:</source>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
-Do yot really want to quit?</source>
+Do you really want to quit?</source>
         <translation>Ci sono video che stanno ancora venendo elaborati.
 Uscire ora annullerà questo processo e conseguentemente i video non verrano salvati.
 Vuoi veramente uscire?</translation>
@@ -1891,7 +1891,7 @@ Vuoi veramente uscire?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)</source>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
