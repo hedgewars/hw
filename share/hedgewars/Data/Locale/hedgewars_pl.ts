@@ -56,7 +56,7 @@
 <context>
     <name>HWAskQuitDialog</name>
     <message>
-        <source>Do yot really want to quit?</source>
+        <source>Do you really want to quit?</source>
         <translation>Na pewno chcesz zakończyć?</translation>
     </message>
 </context>
@@ -1745,7 +1745,7 @@ Niektóre funkcje mogą nie działać lub być niekompletne. Używaj na własne 
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
-Do yot really want to quit?</source>
+Do you really want to quit?</source>
         <translation>Są filmy które właśnie są przetwarzane.
 Wyjście spowoduje przerwanie pracy.
 Czy na pewno chcesz wyjść?</translation>
@@ -1902,7 +1902,7 @@ Czy na pewno chcesz wyjść?</translation>
         <translation>Błąd podczas logowania do google.com</translation>
     </message>
     <message>
-        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)</source>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
         <translation>Bład podczas wysyłania informacji. Spróbuj ponownie później lub odwiedź hedgewars.googlecode.com)</translation>
     </message>
     <message>
