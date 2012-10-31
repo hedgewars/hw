@@ -1812,7 +1812,7 @@ void HWForm::finishedSlot(QNetworkReply* reply)
         ShowErrorMessage(QMessageBox::tr("Error during authentication at google.com"));
     else
     {
-        ShowErrorMessage(QMessageBox::tr("Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)"));
+        ShowErrorMessage(QMessageBox::tr("Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)"));
         authToken = "";
     }
 

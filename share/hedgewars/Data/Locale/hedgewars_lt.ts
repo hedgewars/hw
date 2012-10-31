@@ -66,7 +66,7 @@
     <name>HWAskQuitDialog</name>
     <message>
         <location filename="../../../../QTfrontend/ui/dialog/ask_quit.cpp" line="33"/>
-        <source>Do yot really want to quit?</source>
+        <source>Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2144,7 +2144,7 @@ Please pick another nickname:</source>
         <location filename="../../../../QTfrontend/ui/dialog/ask_quit.cpp" line="38"/>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
-Do yot really want to quit?</source>
+Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2304,7 +2304,7 @@ Do yot really want to quit?</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="1812"/>
-        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.come directly)</source>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
