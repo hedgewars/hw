@@ -21,7 +21,7 @@ HWForm,QDialog {
 background-image: url(":/res/BackgroundBirthday.png");
 background-position: bottom center;
 background-repeat: repeat-x;
-background-color: black;
+background-color: #100308;
 }
 
 * {

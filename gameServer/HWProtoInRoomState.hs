@@ -72,6 +72,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 [Warning "restricted"]
             else
                 [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r teamColor]}),
+                SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
                 AnswerClients othChans $ teamToNet $ newTeam ci clNick rm teamColor,
@@ -106,6 +107,7 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 [ProtocolError "Not team owner!"]
             else
                 [RemoveTeam tName,
+                SendUpdateOnThisRoom,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
@@ -194,6 +196,7 @@ handleCmd_inRoom ["START_GAME"] = do
                         }
                     )
                 , AnswerClients chans ["RUN_GAME"]
+                , SendUpdateOnThisRoom
                 , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
                 , ModifyRoomClients (\c -> c{isInGame = True})
                 ]
