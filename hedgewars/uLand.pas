@@ -405,6 +405,7 @@ end;
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
+ResizeLand(4096,2048);
 MaxHedgehogs:= 32;
 // For now, defining a fort is playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it will give a bit more maneuvering room.
 playHeight:= 1200;
