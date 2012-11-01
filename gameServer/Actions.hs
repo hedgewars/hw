@@ -62,6 +62,7 @@ data Action =
     | ModifyRoom (RoomInfo -> RoomInfo)
     | ModifyServerInfo (ServerInfo -> ServerInfo)
     | AddRoom B.ByteString B.ByteString
+    | SendUpdateOnThisRoom
     | CheckRegistered
     | ClearAccountsCache
     | ProcessAccountInfo AccountInfo
@@ -319,6 +320,16 @@ processAction RemoveRoom = do
     io $ removeRoom rnc ri
 
 
+processAction SendUpdateOnThisRoom = do
+    Just clId <- gets clientIndex
+    proto <- client's clientProto
+    rnc <- gets roomsClients
+    ri <- io $ clientRoomM rnc clId
+    rm <- io $ room'sM rnc id ri
+    chans <- liftM (map sendChan) $! sameProtoClientsS proto
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (name rm) rm)
+
+
 processAction UnreadyRoomClients = do
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
@@ -348,6 +359,7 @@ processAction FinishGame = do
                 }
             )
         : UnreadyRoomClients
+        : SendUpdateOnThisRoom
         : answerRemovedTeams
 
 
