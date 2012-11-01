@@ -55,6 +55,8 @@ option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
+
+option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 
 

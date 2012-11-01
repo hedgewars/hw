@@ -100,7 +100,6 @@
 #ifdef __APPLE__
 #include "M3Panel.h"
 #ifdef SPARKLE_ENABLED
-#define SPARKLE_APPCAST_URL "http://www.hedgewars.org/download/appcast.xml"
 #include "SparkleAutoUpdater.h"
 #endif
 #endif
@@ -152,7 +151,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef SPARKLE_ENABLED
     AutoUpdater* updater;
 
-    updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+    updater = new SparkleAutoUpdater();
     if (updater && config->isAutoUpdateEnabled())
         updater->checkForUpdates();
 #endif
