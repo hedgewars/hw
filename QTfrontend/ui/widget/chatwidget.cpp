@@ -532,9 +532,9 @@ void HWChatWidget::clear()
     QString hlRegExp("^(.* )?%1[^-a-z0-9_]*( .*)?$");
     QRegExp whitespace("\\s");
 
-    m_highlights.append(QRegExp(hlRegExp.arg(m_userNick)));
+    m_highlights.append(QRegExp(hlRegExp.arg(m_userNick.toLower())));
 
-    QFile file(cfgdir->absolutePath() + "/" + m_userNick + "_highlight.txt");
+    QFile file(cfgdir->absolutePath() + "/" + m_userNick.toLower() + "_highlight.txt");
 
     if (file.exists() && (file.open(QIODevice::ReadOnly | QIODevice::Text)))
     {
@@ -554,7 +554,7 @@ void HWChatWidget::clear()
             file.close();
     }
 
-    QFile file2(cfgdir->absolutePath() + "/" + m_userNick + "_hlregexp.txt");
+    QFile file2(cfgdir->absolutePath() + "/" + m_userNick.toLower() + "_hlregexp.txt");
 
     if (file2.exists() && (file2.open(QIODevice::ReadOnly | QIODevice::Text)))
     {

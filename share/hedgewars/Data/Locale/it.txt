@@ -442,7 +442,7 @@
 ; the misspelled "Beethoven" is intentional (-> to beat)
 03:43=La mortale sonata di Beathoven!
 03:44=Il meglio prima del 1923
-03:45=Arma Scientifica (beta)
+03:45=Arma Scientifica
 03:46=Arma da Fuoco (quello vero!)
 03:47=Arma da Lancio
 03:48=E' tempo di martellate!
@@ -451,9 +451,9 @@
 03:51=Terreno al 100%
 03:52=NON USATO
 03:53=TARDIS Modello 40
-03:54=Kit di costruzione
+03:54=(Arma in sviluppo)
 03:55=Utilità di costruzione
-03:56=Arma da congelamento di massa
+03:56=(Arma in sviluppo)
 03:57=Ecco il grande chef!
 
 ; Weapon Descriptions (use | as line breaks)
