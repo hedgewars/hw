@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content" 
+	android:paddingTop="4dp"
+	android:paddingBottom="4dp">
+	
+<TextView
+    android:id="@+id/roomname"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_weight="1.5"
+    android:padding="3dp"
+    android:drawablePadding="5dp"
+    android:gravity="left|center_vertical"
+    android:singleLine="true"
+    android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+<include layout="@layout/roomlist_player_team_count" />
+
+<TextView
+    android:id="@+id/owner"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="left"
+	android:layout_gravity="center_vertical"
+	android:singleLine="true"/>
+
+<TextView
+    android:id="@+id/map"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="left"
+	android:layout_gravity="center_vertical"
+	android:singleLine="true"/>
+
+<TextView
+    android:id="@+id/scheme"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="left"
+	android:layout_gravity="center_vertical"
+	android:singleLine="true"/>
+
+<TextView
+    android:id="@+id/weapons"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="left"
+	android:layout_gravity="center_vertical"
+	android:singleLine="true"/>
+
+</LinearLayout>
+    
+    

@@ -1,4 +1,29 @@
+/*
+ * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
+ * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
 package org.hedgewars.hedgeroid;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.ConnectException;
 
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -6,9 +31,10 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
 
-import org.hedgewars.hedgeroid.EngineProtocol.EngineProtocolNetwork;
-import org.hedgewars.hedgeroid.EngineProtocol.GameConfig;
+import org.hedgewars.hedgeroid.Datastructures.GameConfig;
 import org.hedgewars.hedgeroid.EngineProtocol.PascalExports;
+import org.hedgewars.hedgeroid.netplay.Netplay;
+import org.hedgewars.hedgeroid.util.FileUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,8 +48,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,12 +62,17 @@ import android.view.View;
     SDL Activity
  */
 public class SDLActivity extends Activity {
-
+	/**
+	 * Set startConfig to the desired config when starting this activity. This avoids having to parcel all
+	 * the config objects into the Intent. Not particularly elegant, but it's actually a recommended
+	 * way to do this (http://developer.android.com/guide/faq/framework.html#3)
+	 */
+	public static volatile GameConfig startConfig;
+	public static volatile boolean startNetgame;
+	
 	// Main components
 	public static SDLActivity mSingleton;
 	private static SDLSurface mSurface;
-
-	// This is what SDL runs in. It invokes SDL_main(), eventually
 	private static Thread mSDLThread;
 
 	// Audio
@@ -59,26 +89,20 @@ public class SDLActivity extends Activity {
 	// Load the .so
 	static {
 		System.loadLibrary("SDL");
-		//System.loadLibrary("SDL_image");
-		//System.loadLibrary("SDL_mixer");
-		//System.loadLibrary("SDL_ttf");
 		System.loadLibrary("main");
 	}
 
 	// Setup
 	protected void onCreate(Bundle savedInstanceState) {
-		//Log.v("SDL", "onCreate()");
 		super.onCreate(savedInstanceState);
 
 		// So we can call stuff from static callbacks
 		mSingleton = this;
 
 		// Set up the surface
-		GameConfig config = getIntent().getParcelableExtra("config");
-
-		mSurface = new SDLSurface(getApplication(), config);
+		mSurface = new SDLSurface(getApplication(), startConfig, startNetgame);
+		startConfig = null;
 		setContentView(mSurface);
-		SurfaceHolder holder = mSurface.getHolder();
 	}
 
 	// Events
@@ -106,42 +130,26 @@ public class SDLActivity extends Activity {
 		Log.v("SDL", "onDestroy()");
 		// Send a quit message to the application
 		SDLActivity.nativeQuit();
-
 		// Now wait for the SDL thread to quit
 		if (mSDLThread != null) {
 			try {
 				mSDLThread.join();
 			} catch(Exception e) {
-				Log.v("SDL", "Problem stopping thread: " + e);
+				Log.w("SDL", "Problem stopping thread: " + e);
 			}
 			mSDLThread = null;
-
-			//Log.v("SDL", "Finished waiting for SDL thread");
+		}
+		mSingleton = null;
+	}
+	
+	public static void synchronizedNativeInit(String...args) {
+		synchronized(PascalExports.engineMutex) {
+			nativeInit(args);
 		}
 	}
-
-	// Messages from the SDLMain thread
-	static int COMMAND_CHANGE_TITLE = 1;
-
-	// Handler for the messages
-	Handler commandHandler = new Handler() {
-		public void handleMessage(Message msg) {
-			if (msg.arg1 == COMMAND_CHANGE_TITLE) {
-				setTitle((String)msg.obj);
-			}
-		}
-	};
-
-	// Send a message from the SDLMain thread
-	void sendCommand(int command, Object data) {
-		Message msg = commandHandler.obtainMessage();
-		msg.arg1 = command;
-		msg.obj = data;
-		commandHandler.sendMessage(msg);
-	}
-
+	
 	// C functions we call
-	public static native void nativeInit(String...args);
+	private static native void nativeInit(String...args);
 	public static native void nativeQuit();
 	public static native void nativePause();
 	public static native void nativeResume();
@@ -165,22 +173,25 @@ public class SDLActivity extends Activity {
 		flipEGL();
 	}
 
-	public static void setActivityTitle(String title) {
+	public static void setActivityTitle(final String title) {
 		// Called from SDLMain() thread and can't directly affect the view
-		mSingleton.sendCommand(COMMAND_CHANGE_TITLE, title);
+		mSingleton.runOnUiThread(new Runnable() {
+			public void run() {
+				mSingleton.setTitle(title);
+			}
+		});
 	}
 
 	public static Context getContext() {
 		return mSingleton;
 	}
 
-	public static void startApp(int width, int height, GameConfig config) {
+	public static void startApp(final int width, final int height, GameConfig config, boolean netgame) {
 		// Start up the C app thread
 		if (mSDLThread == null) {
-			mSDLThread = new Thread(new SDLMain(width, height, config), "SDLThread");
+			mSDLThread = new Thread(new SDLMain(width, height, config, netgame));
 			mSDLThread.start();
-		}
-		else {
+		} else {
 			SDLActivity.nativeResume();
 		}
 	}
@@ -188,8 +199,6 @@ public class SDLActivity extends Activity {
 	// EGL functions
 	public static boolean initEGL(int majorVersion, int minorVersion) {
 		if (SDLActivity.mEGLDisplay == null) {
-			//Log.v("SDL", "Starting up OpenGL ES " + majorVersion + "." + minorVersion);
-
 			try {
 				EGL10 egl = (EGL10)EGLContext.getEGL();
 
@@ -207,7 +216,6 @@ public class SDLActivity extends Activity {
 					renderableType = EGL_OPENGL_ES_BIT;
 				}
 				int[] configSpec = {
-						//EGL10.EGL_DEPTH_SIZE,   16,
 						EGL10.EGL_RENDERABLE_TYPE, renderableType,
 						EGL10.EGL_NONE
 				};
@@ -219,15 +227,6 @@ public class SDLActivity extends Activity {
 				}
 				EGLConfig config = configs[0];
 
-				/*int EGL_CONTEXT_CLIENT_VERSION=0x3098;
-                int contextAttrs[] = new int[] { EGL_CONTEXT_CLIENT_VERSION, majorVersion, EGL10.EGL_NONE };
-                EGLContext ctx = egl.eglCreateContext(dpy, config, EGL10.EGL_NO_CONTEXT, contextAttrs);
-
-                if (ctx == EGL10.EGL_NO_CONTEXT) {
-                    Log.e("SDL", "Couldn't create context");
-                    return false;
-                }
-                SDLActivity.mEGLContext = ctx;*/
 				SDLActivity.mEGLDisplay = dpy;
 				SDLActivity.mEGLConfig = config;
 				SDLActivity.mGLMajor = majorVersion;
@@ -413,37 +412,74 @@ public class SDLActivity extends Activity {
     Simple nativeInit() runnable
  */
 class SDLMain implements Runnable {
-
-	private int surfaceWidth, surfaceHeight;
-	private GameConfig config;
-
-	public SDLMain(int width, int height, GameConfig _config) {
-		config = _config;
+	public static final String TAG = "SDLMain";
+	
+    public static final int RQ_LOWRES            = 0x00000001; // use half land array
+    public static final int RQ_BLURRY_LAND       = 0x00000002; // downscaled terrain
+    public static final int RQ_NO_BACKGROUND     = 0x00000004; // don't draw background
+    public static final int RQ_SIMPLE_ROPE       = 0x00000008; // avoid drawing rope
+    public static final int RQ_2D_WATER          = 0x00000010; // disabe 3D water effect
+    public static final int RQ_SIMPLE_EXPLOSIONS = 0x00000020; // no fancy explosion effects
+    public static final int RQ_NO_FLAKES         = 0x00000040; // no flakes
+    public static final int RQ_NO_MENU_ANIM      = 0x00000080; // ammomenu appears with no animation
+    public static final int RQ_NO_DROPLETS       = 0x00000100; // no droplets
+    public static final int RQ_NO_CLAMPING       = 0x00000200; // don't clamp textures
+    public static final int RQ_NO_TOOLTIPS       = 0x00000400; // tooltips are not drawn
+    public static final int RQ_NO_VSYNC          = 0x00000800; // don't sync on vblank
+	
+	private final int surfaceWidth, surfaceHeight;
+	private final String playerName;
+	private final GameConfig config;
+	private final boolean netgame;
+	
+	public SDLMain(int width, int height, GameConfig config, boolean netgame) {
 		surfaceWidth = width;
 		surfaceHeight = height;
+		if(netgame) {
+			playerName = Netplay.getAppInstance(SDLActivity.getContext().getApplicationContext()).getPlayerName();
+		} else {
+			playerName = "Player";
+		}
+		this.config = config;
+		this.netgame = netgame;
 	}
 
 	public void run() {
 		//Set up the IPC socket server to communicate with the engine
-		EngineProtocolNetwork ipc = new EngineProtocolNetwork(config);
-
-		String path = Utils.getDataPath(SDLActivity.mSingleton);//This represents the data directory
-		path = path.substring(0, path.length()-1);//remove the trailing '/'
-
-
-		// Runs SDL_main() with added parameters
-		SDLActivity.nativeInit(new String[] { String.valueOf(ipc.port),
-				String.valueOf(surfaceWidth), String.valueOf(surfaceHeight),
-				"0", "en.txt", "xeli", "1", "1", "1", path, ""  });
-
+		GameConnection gameConn;
+		String path;
 		try {
-			ipc.quitIPC();
-			ipc.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+			if(netgame) {
+				Netplay netplay = Netplay.getAppInstance(SDLActivity.mSingleton.getApplicationContext());
+				gameConn = GameConnection.forNetgame(config, netplay);
+			} else {
+				gameConn = GameConnection.forLocalGame(config);
+			}
+			
+			path = FileUtils.getDataPathFile(SDLActivity.mSingleton).getAbsolutePath();
+			Log.d(TAG, "Starting engine");
+			// Runs SDL_main() with added parameters
+			try {
+				String pPort = String.valueOf(gameConn.port);
+				String pWidth = String.valueOf(surfaceWidth);
+				String pHeight = String.valueOf(surfaceHeight);
+				String pQuality = Integer.toString(RQ_NO_FLAKES|RQ_NO_DROPLETS|RQ_SIMPLE_EXPLOSIONS);
+				String pPlayerName = Base64.encodeToString(playerName.getBytes("UTF-8"), 0);
+				SDLActivity.synchronizedNativeInit(new String[] { pPort, pWidth, pHeight, pQuality, "en.txt", pPlayerName, "1", "1", "1", path, ""  });
+			} catch (UnsupportedEncodingException e) {
+				throw new AssertionError(e); // never happens
+			}
+			Log.d(TAG, "Engine stopped");
+		} catch(ConnectException e) {
+			Log.e(TAG, "Error starting IPC connection");
+		} catch (IOException e) {
+			Log.e(TAG, "Missing SDCard");
 		}
-		Log.v("SDL", "SDL thread terminated");
-		//Log.v("SDL", "SDL thread terminated");
+		SDLActivity.mSingleton.runOnUiThread(new Runnable() { public void run() {
+			if(SDLActivity.mSingleton != null) {
+				SDLActivity.mSingleton.finish();
+			}
+		}});
 	}
 }
 
@@ -458,12 +494,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
 View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 	private GameConfig config;
-
+	private boolean netgame;
+	
 	// Sensors
 	private static SensorManager mSensorManager;
 
 	// Startup    
-	public SDLSurface(Context context, GameConfig _config) {
+	public SDLSurface(Context context, GameConfig _config, boolean netgame) {
 		super(context);
 		getHolder().addCallback(this); 
 
@@ -475,6 +512,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 		mSensorManager = (SensorManager)context.getSystemService("sensor");
 		config = _config;
+		this.netgame = netgame;
 	}
 
 	// Called when we have a valid drawing surface
@@ -544,7 +582,7 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 		SDLActivity.onNativeResize(width, height, sdlFormat);
 		Log.v("SDL", "Window size:" + width + "x"+height);
 
-		SDLActivity.startApp(width, height, config);
+		SDLActivity.startApp(width, height, config, netgame);
 	}
 
 	// unused
@@ -557,8 +595,9 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 	public boolean onKey(View  v, int keyCode, KeyEvent event) {
 		switch(keyCode){
 		case KeyEvent.KEYCODE_BACK:
-		        PascalExports.HWterminate(true);
-                        return true;
+			Log.d("SDL", "KEYCODE_BACK");
+			SDLActivity.nativeQuit();
+            return true;
 		case KeyEvent.KEYCODE_VOLUME_DOWN:
 		case KeyEvent.KEYCODE_VOLUME_UP:
 		case KeyEvent.KEYCODE_VOLUME_MUTE:
@@ -580,34 +619,29 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 
 	// Touch events
 	public boolean onTouch(View v, MotionEvent event) {
-		{
-			final int touchDevId = event.getDeviceId();
-			final int pointerCount = event.getPointerCount();
-			// touchId, pointerId, action, x, y, pressure
-			int actionPointerIndex = event.getActionIndex();
-			int pointerFingerId = event.getPointerId(actionPointerIndex);
-			int action = event.getActionMasked();
+		final int action = event.getAction() & MotionEvent.ACTION_MASK;
+		final int actionPointerIndex = (event.getAction() & MotionEvent.ACTION_POINTER_ID_MASK) >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;		
 
-			float x = event.getX(actionPointerIndex);
-			float y = event.getY(actionPointerIndex);
-			float p = event.getPressure(actionPointerIndex);
-
-			if (action == MotionEvent.ACTION_MOVE && pointerCount > 1) {
-				// TODO send motion to every pointer if its position has
-				// changed since prev event.
-				for (int i = 0; i < pointerCount; i++) {
-					pointerFingerId = event.getPointerId(i);
-					x = event.getX(i);
-					y = event.getY(i);
-					p = event.getPressure(i);
-					SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
-				}
-			} else {
-				SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, p);
+		if (action == MotionEvent.ACTION_MOVE) {
+			// TODO send motion to every pointer if its position has
+			// changed since prev event.
+			for (int i = 0; i < event.getPointerCount(); i++) {
+				sendNativeTouch(event, action, i);
 			}
+		} else {
+			sendNativeTouch(event, action, actionPointerIndex);
 		}
 		return true;
 	} 
+	
+	private static void sendNativeTouch(MotionEvent event, int action, int pointerIndex) {
+		int touchDevId = event.getDeviceId();
+		int pointerFingerId = event.getPointerId(pointerIndex);
+		float x = event.getX(pointerIndex);
+		float y = event.getY(pointerIndex);
+		float pressure = event.getPressure(pointerIndex);
+		SDLActivity.onNativeTouch(touchDevId, pointerFingerId, action, x, y, pressure);
+	}
 
 	// Sensor events
 	public void enableSensor(int sensortype, boolean enabled) {
@@ -633,6 +667,5 @@ View.OnKeyListener, View.OnTouchListener, SensorEventListener  {
 					event.values[2] / SensorManager.GRAVITY_EARTH);
 		}
 	}
-
 }
 

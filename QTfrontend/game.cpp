@@ -28,7 +28,6 @@
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
-#include "KB.h"
 #include "proto.h"
 #include "campaign.h"
 
@@ -230,20 +229,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
             emit ErrorMessage(QString("Last two engine messages:\n") + QString().append(msg.mid(2)).left(size - 4));
             return;
         }
-        case 'K':
-        {
-            ulong kb = msg.mid(2).toULong();
-            if (kb==1)
-            {
-                qWarning("%s", KBMessages[kb - 1].toLocal8Bit().constData());
-                return;
-            }
-            if (kb && kb <= KBmsgsCount)
-            {
-                emit ErrorMessage(KBMessages[kb - 1]);
-            }
-            return;
-        }
         case 'i':
         {
             emit GameStats(msg.at(2), QString::fromUtf8(msg.mid(3)));
@@ -269,7 +254,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
             int size = msg.size();
             QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
             emit SendChat(msgbody);
-            // FIXME: /me command doesn't work here
             QByteArray buf;
             HWProto::addStringToBuffer(buf, "s" + HWProto::formatChatMsg(config->netNick(), msgbody) + "\x20\x20");
             demo.append(buf);
@@ -296,8 +280,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
             {
                 emit SendNet(msg);
             }
-            if (msg.at(1) != 's')
-                demo.append(msg);
+            demo.append(msg);
         }
     }
 }

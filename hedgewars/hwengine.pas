@@ -271,7 +271,7 @@ begin
         CurrTime:= SDL_GetTicks();
         if PrevTime + longword(cTimerInterval) <= CurrTime then
         begin
-            isTerminated:= DoTimer(CurrTime - PrevTime);
+            isTerminated := isTerminated or DoTimer(CurrTime - PrevTime);
             PrevTime:= CurrTime
         end
         else SDL_Delay(1);

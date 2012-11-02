@@ -32,7 +32,7 @@ else ()
 endif()
 
 if(NOT ANDROID_NDK_TOOLCHAINDIR)
-    set(toolchainbase "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.4.3/prebuilt")
+    set(toolchainbase "${ANDROID_NDK}/toolchains/arm-linux-androideabi-4.6/prebuilt")
     find_path(ANDROID_NDK_TOOLCHAINDIR arm-linux-androideabi
                 "${toolchainbase}/linux-x86"
                 "${toolchainbase}/windows")
