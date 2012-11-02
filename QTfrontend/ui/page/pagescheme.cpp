@@ -516,12 +516,30 @@ void PageScheme::copyRow()
 
 void PageScheme::deleteRow()
 {
-    QMessageBox reallyDelete(QMessageBox::Question, QMessageBox::tr("Schemes"), QMessageBox::tr("Really delete this game scheme?"), QMessageBox::Ok | QMessageBox::Cancel);
-
-    if (reallyDelete.exec() == QMessageBox::Ok)
+    int numberOfDefaultSchemes = ((AmmoSchemeModel*)mapper->model())->numberOfDefaultSchemes;
+    if (selectScheme->currentIndex() < numberOfDefaultSchemes)
     {
-        QAbstractItemModel * model = mapper->model();
-        model->removeRow(selectScheme->currentIndex());
+        QMessageBox deniedMsg(this);
+        deniedMsg.setIcon(QMessageBox::Warning);
+        deniedMsg.setWindowTitle(QMessageBox::tr("Schemes - Warning"));
+        deniedMsg.setText(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(selectScheme->currentText()));
+        deniedMsg.setWindowModality(Qt::WindowModal);
+        deniedMsg.exec();
+    }
+    else
+    {
+        QMessageBox reallyDeleteMsg(this);
+        reallyDeleteMsg.setIcon(QMessageBox::Question);
+        reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Schemes - Are you sure?"));
+        reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the game scheme '%1'?").arg(selectScheme->currentText()));
+        reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+        reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+        if (reallyDeleteMsg.exec() == QMessageBox::Ok)
+        {
+            QAbstractItemModel * model = mapper->model();
+            model->removeRow(selectScheme->currentIndex());
+        }
     }
 }
 

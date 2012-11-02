@@ -108,7 +108,7 @@ end;
 
 
 
-procedure TestAmmos(var Actions: TActions; Me: PGear; isMoved: boolean);
+procedure TestAmmos(var Actions: TActions; Me: PGear; rareChecks: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
     Score, i, dAngle: LongInt;
@@ -130,7 +130,7 @@ for i:= 0 to Pred(Targets.Count) do
 {$ENDIF}       
         repeat
         if (CanUseAmmo[a]) 
-            and ((not isMoved) or ((AmmoTests[a].flags and amtest_OnTurn) = 0)) 
+            and ((not rareChecks) or ((AmmoTests[a].flags and amtest_Rare) = 0)) 
             and ((i = 0) or ((AmmoTests[a].flags and amtest_NoTarget) = 0)) 
             then
             begin
@@ -151,7 +151,7 @@ for i:= 0 to Pred(Targets.Count) do
                     else if (ap.Angle < 0) then
                         AddAction(BestActions, aia_LookLeft, 0, 200, 0, 0);
                     
-                    if (ap.Time <> 0) then
+                    if (Ammoz[a].Ammo.Propz and ammoprop_Timerable) <> 0 then
                         AddAction(BestActions, aia_Timer, ap.Time div 1000, 400, 0, 0);
                         
                     if (Ammoz[a].Ammo.Propz and ammoprop_NoCrosshair) = 0 then
@@ -217,7 +217,7 @@ end;
 procedure Walk(Me: PGear; var Actions: TActions);
 const FallPixForBranching = cHHRadius;
 var
-    ticks, maxticks, steps, tmp: Longword;
+    ticks, maxticks, oldticks, steps, tmp: Longword;
     BaseRate, BestRate, Rate: integer;
     GoInfo: TGoInfo;
     CanGo: boolean;
@@ -225,8 +225,11 @@ var
     BotLevel: Byte;
     a: TAmmoType;
 begin
-ticks:= 0; // avoid compiler hint
+ticks:= 0;
+oldticks:= 0; // avoid compiler hint
 Stack.Count:= 0;
+
+clearAllMarks;
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     CanUseAmmo[a]:= Assigned(AmmoTests[a].proc) and (HHHasAmmo(Me^.Hedgehog^, a) > 0);
@@ -272,12 +275,18 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
     {$HINTS OFF}
             CanGo:= HHGo(Me, @AltMe, GoInfo);
     {$HINTS ON}
+            oldticks:= ticks;
             inc(ticks, GoInfo.Ticks);
             if ticks > maxticks then
                 break;
 
-            if (BotLevel < 5) and (GoInfo.JumpType = jmpHJump) then // hjump support
+            if (BotLevel < 5) 
+                and (GoInfo.JumpType = jmpHJump) 
+                and (not checkMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped))
+                then // hjump support
+                begin
                 // check if we could go backwards and maybe ljump over a gap after this hjump
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markHJumped);
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     begin
                     with Stack.States[Pred(Stack.Count)] do
@@ -298,8 +307,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                     // but first check walking forward
                     Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
                     end;
-            if (BotLevel < 3) and (GoInfo.JumpType = jmpLJump) then // ljump support
+                end;
+            if (BotLevel < 3) 
+                and (GoInfo.JumpType = jmpLJump) 
+                and (not checkMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped))
+                then // ljump support
                 begin
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markLJumped);
                 // at final check where we go after jump walking backward
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
@@ -334,11 +348,11 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 
             if ((Me^.State and gstAttacked) = 0) and ((steps mod 4) = 0) then
                 begin
-                if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere) then
+                if (steps > 4) and checkMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere) then
                     break;                    
-                addMark(hwRound(Me^.X), hwRound(Me^.Y), markWasHere);
-                
-                TestAmmos(Actions, Me, true);
+                addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
+
+                TestAmmos(Actions, Me, ticks shr 12 = oldticks shr 12);
                 end;
                 
             if GoInfo.FallPix >= FallPixForBranching then
@@ -449,7 +463,6 @@ or isInMultiShoot then
     exit;
 
 //DeleteCI(Me); // this will break demo/netplay
-clearAllMarks;
 
 Me^.State:= Me^.State or gstHHThinking;
 Me^.Message:= 0;

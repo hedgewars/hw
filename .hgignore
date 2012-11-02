@@ -3,6 +3,7 @@ glob:CMakeFiles
 glob:moc_*.cxx
 glob:qrc_*.cxx
 glob:*.o
+glob:*.qm
 glob:Makefile
 glob:bin
 glob:*.hi
@@ -50,3 +51,8 @@ glob:project_files/Android-build/SDL-android-project/proguard.cfg
 glob:project_files/Android-build/SDL-android-project/.*
 glob:project_files/Android-build/out
 glob:project_files/Android-build/Makefile.android
+glob:hedgewars-build-desktop-Qt_4_7_4_for_Desktop_-_MinGW_4_4__Qt_SDK__Debug
+glob:hedgewars-build-desktop-Qt_4_7_4_for_Desktop_-_MinGW_4_4__Qt_SDK__Release
+glob:*.depends
+glob:tools/build_windows_koda.bat
+

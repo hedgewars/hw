@@ -108,7 +108,12 @@ void PageNet::slotConnect()
     QModelIndex mi = tvServersList->currentIndex();
     if(!mi.isValid())
     {
-        QMessageBox::information(this, tr("Error"), tr("Please select server from the list above"));
+        QMessageBox serverMsg(this);
+        serverMsg.setIcon(QMessageBox::Warning);
+        serverMsg.setWindowTitle(QMessageBox::tr("Netgame - Error"));
+        serverMsg.setText(QMessageBox::tr("Please select a server from the list"));
+        serverMsg.setWindowModality(Qt::WindowModal);
+        serverMsg.exec();
         return;
     }
     QString host = model->index(mi.row(), 1).data().toString();

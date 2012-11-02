@@ -140,7 +140,7 @@ void PageGameStats::renderStats()
     while (i != healthPoints.constEnd())
     {
         quint32 c = i.key();
-        QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
+        //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
         QVector<quint32> hps = i.value();
 
         QPainterPath path;

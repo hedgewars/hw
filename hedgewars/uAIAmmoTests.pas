@@ -22,7 +22,7 @@ unit uAIAmmoTests;
 interface
 uses SDLh, uConsts, uFloat, uTypes;
 const 
-    amtest_OnTurn   = $00000001; // from one position
+    amtest_Rare     = $00000001; // check only several positions
     amtest_NoTarget = $00000002; // each pos, but no targetting
 
 var windSpeed: real;
@@ -77,7 +77,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
             (proc: @TestBaseballBat; flags: amtest_NoTarget), // amBaseballBat
             (proc: nil;              flags: 0), // amParachute
-            (proc: @TestAirAttack;   flags: amtest_OnTurn), // amAirAttack
+            (proc: @TestAirAttack;   flags: amtest_Rare), // amAirAttack
             (proc: nil;              flags: 0), // amMineStrike
             (proc: nil;              flags: 0), // amBlowTorch
             (proc: nil;              flags: 0), // amGirder
@@ -86,7 +86,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amSwitch
             (proc: @TestMortar;      flags: 0), // amMortar
             (proc: @TestKamikaze;    flags: 0), // amKamikaze
-            (proc: @TestCake;        flags: amtest_OnTurn or amtest_NoTarget), // amCake
+            (proc: @TestCake;        flags: amtest_Rare or amtest_NoTarget), // amCake
             (proc: nil;              flags: 0), // amSeduction
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
@@ -287,7 +287,6 @@ repeat
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
             ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
-            ap.Time:= TestTime;
             ap.ExplR:= 100;
             ap.ExplX:= EX;
             ap.ExplY:= EY;
@@ -496,6 +495,7 @@ var Vx, Vy: real;
 begin
     TestMortar:= BadTurn;
     ap.ExplR:= 0;
+
     meX:= hwFloat2Float(Me^.X);
     meY:= hwFloat2Float(Me^.Y);
 
@@ -682,7 +682,7 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (y < 0)
     or (trunc(x) > LAND_WIDTH)
     or (trunc(y) > LAND_HEIGHT)
-    or (d > 23);
+    or (d > 22);
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4 then
     begin

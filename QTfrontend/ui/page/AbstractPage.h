@@ -138,6 +138,7 @@ class AbstractPage : public QWidget
          * @return the button.
          */
         QPushButtonWithSound * formattedButton(const QString & name, bool hasIcon = false);
+        QPushButton * formattedSoundlessButton(const QString & name, bool hasIcon = false);
 
         /**
          * @brief Creates a default formatted button and adds it to a
@@ -167,6 +168,7 @@ class AbstractPage : public QWidget
          * @return the button.
          */
         QPushButtonWithSound * addButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
+        QPushButton* addSoundlessButton(const QString & name, QBoxLayout * box, int where, bool hasIcon = false);
 
         /**
          * @brief Changes visibility of the back-button.

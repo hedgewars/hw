@@ -30,14 +30,14 @@ HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(paren
 {
     this->form = form;
 
-    setWindowTitle(tr("Do yot really want to quit?"));
+    setWindowTitle(tr("Do you really want to quit?"));
 
     QVBoxLayout * layout = new QVBoxLayout(this);
 
     QLabel * lbLabel = new QLabel(this);
     lbLabel->setText(QLabel::tr("There are videos that are currently being processed.\n"
                                 "Exiting now will abort them.\n"
-                                "Do yot really want to quit?"));
+                                "Do you really want to quit?"));
     layout->addWidget(lbLabel);
 
     lbList = new QLabel(this);
@@ -58,6 +58,8 @@ HWAskQuitDialog::HWAskQuitDialog(QWidget* parent, HWForm * form) : QDialog(paren
     QTimer * timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateList()));
     timer->start(200);
+
+    this->setWindowModality(Qt::WindowModal);
 }
 
 void HWAskQuitDialog::goToPageVideos()

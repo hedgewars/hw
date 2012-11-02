@@ -11,15 +11,12 @@ AC_CANONICAL_TARGET
 
 AM_CONFIG_HEADER([config.h])
 
-AM_INIT_AUTOMAKE(libvorbisidec,1.2.1)
-
-dnl AM_MAINTAINER_MODE only provides the option to configure to enable it
-AM_MAINTAINER_MODE
+AM_INIT_AUTOMAKE(libvorbisidec,1.2.0)
 
 dnl Library versioning
 
 V_LIB_CURRENT=1
-V_LIB_REVISION=3
+V_LIB_REVISION=2
 V_LIB_AGE=0
 AC_SUBST(V_LIB_CURRENT)
 AC_SUBST(V_LIB_REVISION)
@@ -51,7 +48,7 @@ if test -z "$GCC"; then
         arm-*-*)
                 DEBUG="-g -D_ARM_ASSEM_" 
                 CFLAGS="-O -D_ARM_ASSEM_"
-                PROFILE="-p -g -O -D_ARM_ASSEM" ;;
+                PROFILE="-p -g -O -D_ARM_ASSEM_" ;;
         *)
                 DEBUG="-g"
                 CFLAGS="-O"
@@ -61,18 +58,36 @@ else
 
         case $host in 
         arm-*-*)
-                DEBUG="-g -W -D__NO_MATH_INLINES -fsigned-char -D_ARM_ASSEM_"
+                DEBUG="-g -Wall -D__NO_MATH_INLINES -fsigned-char -D_ARM_ASSEM_"
                 CFLAGS="-O2 -D_ARM_ASSEM_ -fsigned-char"
                 PROFILE="-W -pg -g -O2 -D_ARM_ASSEM_ -fsigned-char -fno-inline-functions";;
 
         *)
-                DEBUG="-g -W -D__NO_MATH_INLINES -fsigned-char"
-                CFLAGS="-O2 -fsigned-char"
-                PROFILE="-W -pg -g -O2 -fsigned-char -fno-inline-functions";;
+                DEBUG="-g -Wall -D__NO_MATH_INLINES -fsigned-char"
+                CFLAGS="-O2 -Wall -fsigned-char"
+                PROFILE="-Wall -pg -g -O2 -fsigned-char -fno-inline-functions";;
         esac
 fi
 CFLAGS="$CFLAGS $cflags_save -D_REENTRANT"
 LDFLAGS="$LDFLAGS $ldflags_save"
+
+
+# Test whenever ld supports -version-script
+AC_PROG_LD
+AC_PROG_LD_GNU
+if test "x$lt_cv_prog_gnu_ld" = "xyes"; then
+   SHLIB_VERSION_ARG="Wl,--version-script=Version_script"
+
+   dnl Set extra linker options
+   case "$target_os" in
+  linux* | solaris* )
+    SHLIB_VERSION_ARG="-Wl,--version-script=Version_script"
+    ;;
+  *)
+    ;;
+   esac
+   LDFLAGS="$LDFLAGS $SHLIB_VERSION_ARG"
+fi
 
 dnl --------------------------------------------------
 dnl Options 
@@ -113,4 +128,4 @@ AC_SUBST(LIBS)
 AC_SUBST(DEBUG)
 AC_SUBST(PROFILE)
 
-AC_OUTPUT(Makefile vorbisidec.pc)
+AC_OUTPUT(Makefile Version_script)

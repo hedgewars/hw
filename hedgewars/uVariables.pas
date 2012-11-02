@@ -25,45 +25,44 @@ uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
 
 var
 /////// init flags ///////
-    cMinScreenWidth    : LongInt     = 640;
-    cMinScreenHeight   : LongInt     = 480;
-    cScreenWidth       : LongInt     = 1024;
-    cScreenHeight      : LongInt     = 768;
-    cOrigScreenWidth   : LongInt     = 1024;
-    cOrigScreenHeight  : LongInt     = 768;
-    cNewScreenWidth    : LongInt     = 1024;
-    cNewScreenHeight   : LongInt     = 768;
-    cScreenResizeDelay : LongWord    = 0;
-    cBits           : LongInt     = 32;
-    ipcPort         : Word        = 0;
-    cFullScreen     : boolean     = false;
-    cLocaleFName    : shortstring = 'en.txt';
-    cLocale         : shortstring = 'en';
-    cTimerInterval  : LongInt     = 8;
-    PathPrefix      : shortstring = './';
-    UserPathPrefix  : shortstring = './';
-    cShowFPS        : boolean     = false;
-    cFlattenFlakes  : boolean     = false;
-    cFlattenClouds  : boolean     = false;
-    cAltDamage      : boolean     = true;
-    cReducedQuality : LongWord    = rqNone;
-    UserNick        : shortstring = '';
-    recordFileName  : shortstring = '';
-    cReadyDelay     : Longword    = 5000;
-    cStereoMode     : TStereoMode = smNone;
-    cOnlyStats      : boolean = False;
+    cMinScreenWidth    : LongInt;
+    cMinScreenHeight   : LongInt;
+    cScreenWidth       : LongInt;
+    cScreenHeight      : LongInt;
+    cOrigScreenWidth   : LongInt;
+    cOrigScreenHeight  : LongInt;
+    cNewScreenWidth    : LongInt;
+    cNewScreenHeight   : LongInt;
+    cScreenResizeDelay : LongWord;
+    cBits              : LongInt;
+    ipcPort            : Word;
+    cFullScreen        : boolean;
+    cLocaleFName       : shortstring;
+    cLocale            : shortstring;
+    cTimerInterval     : LongInt;
+    PathPrefix         : shortstring;
+    UserPathPrefix     : shortstring;
+    cShowFPS           : boolean;
+    cFlattenFlakes     : boolean;
+    cFlattenClouds     : boolean;
+    cAltDamage         : boolean;
+    cReducedQuality    : LongWord;
+    UserNick           : shortstring;
+    recordFileName     : shortstring;
+    cReadyDelay        : Longword;
+    cStereoMode        : TStereoMode;
+    cOnlyStats         : boolean;
 {$IFDEF USE_VIDEO_RECORDING}
-    RecPrefix      : shortstring;
-    cAVFormat       : shortstring;
-    cVideoCodec     : shortstring;
+    RecPrefix          : shortstring;
+    cAVFormat          : shortstring;
+    cVideoCodec        : shortstring;
     cVideoFramerateNum : LongInt;
     cVideoFramerateDen : LongInt;
     cVideoQuality      : LongInt;
-    cAudioCodec     : shortstring;
+    cAudioCodec        : shortstring;
 {$ENDIF}
 //////////////////////////
-    cMapName        : shortstring = '';
-
+    cMapName        : shortstring;
     isCursorVisible : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
@@ -111,7 +110,7 @@ var
 
     cWaterLine       : Word;
     cGearScrEdgesDist: LongInt;
-	isAudioMuted     : boolean;
+    isAudioMuted     : boolean;
 
     // originally typed consts
     ExplosionBorderColor: LongWord;
@@ -2105,7 +2104,8 @@ var
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
-                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2338,7 +2338,8 @@ var
             Probability: 100;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
-                          ammoprop_NeedUpDown; //FIXME: enable multishoot at altuse, until then removed ammoprop_AltUse
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
                 Count: 1;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -2509,8 +2510,6 @@ var
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
     hideAmmoMenu: boolean;
-    wheelUp: boolean;
-    wheelDown: boolean;
 
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
@@ -2533,18 +2532,63 @@ var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
     trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
 
+procedure preInitModule;
 procedure initModule;
 procedure freeModule;
 
 implementation
 
 
+procedure preInitModule;
+begin
+    // initialisation flags - they are going to be overwritten by program args
+
+    cScreenWidth    := 1024;
+    cScreenHeight   := 768;
+    cBits           := 32;
+    cShowFPS        := false;
+    cAltDamage      := true;
+    cTimerInterval  := 8;
+    cReducedQuality := rqNone;
+    cLocaleFName    := 'en.txt';
+    cFullScreen     := false;
+
+    UserPathPrefix  := '';
+    ipcPort         := 0;
+    UserNick        := '';
+    cStereoMode     := smNone;
+    GrayScale       := false;
+    PathPrefix      := './';
+    GameType        := gmtLocal;
+
+{$IFDEF USE_VIDEO_RECORDING}
+    RecPrefix          := '';
+    cAVFormat          := '';
+    cVideoCodec        := '';
+    cVideoFramerateNum := 0;
+    cVideoFramerateDen := 0;
+    cVideoQuality      := 0;
+    cAudioCodec        := '';
+{$ENDIF}
+end;
+
 procedure initModule;
 begin
-    lastVisualGearByUID:= nil;
-    lastGearByUID:= nil;
-    
-    Pathz:= cPathz;
+
+    if (Length(cLocaleFName) > 6) then
+        cLocale := Copy(cLocaleFName,1,5)
+    else
+        cLocale := Copy(cLocaleFName,1,2);
+
+    cFlattenFlakes      := false;
+    cFlattenClouds      := false;
+    cOnlyStats          := False;
+    lastVisualGearByUID := nil;
+    lastGearByUID       := nil;
+    recordFileName      := '';
+    cReadyDelay         := 5000;
+    Pathz               := cPathz;
+
         {*  REFERENCE
       4096 -> $FFFFF000
       2048 -> $FFFFF800
@@ -2575,8 +2619,10 @@ begin
     SDWaterColorArray[2].a := 255;
     SDWaterColorArray[1]:= SDWaterColorArray[0];
     SDWaterColorArray[3]:= SDWaterColorArray[2];
-
+    SDWaterOpacity:= $80;
     SDTint:= $80;
+    ExplosionBorderColor:= $FF808080;
+    WaterOpacity:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
     cDrownSpeedf            := 0.06;
@@ -2626,7 +2672,6 @@ begin
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
-//    GameType        := gmtLocal;
     zoom            := cDefaultZoomLevel;
     ZoomValue       := cDefaultZoomLevel;
     WeaponTooltipTex:= nil;
@@ -2653,7 +2698,6 @@ begin
     ReadyTimeLeft   := 0;
     
     disableLandBack := false;
-
     ScreenFade      := sfNone;
 
     // those values still are not perfect
@@ -2673,11 +2717,17 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    ExplosionBorderColor:= $FF808080;
-    WaterOpacity:= $80;
-    SDWaterOpacity:= $80;
+    cMinScreenWidth:= min(cScreenWidth, 640);
+    cMinScreenHeight:= min(cScreenHeight, 480);
+    cOrigScreenWidth:= cScreenWidth;
+    cOrigScreenHeight:= cScreenHeight;
+
+    cNewScreenWidth    := cScreenWidth;
+    cNewScreenHeight   := cScreenHeight;
+    cScreenResizeDelay := 0;
 
     LuaGoals:= '';
+    cMapName:= '';
 
     LuaTemplateNumber:= 0;
     hiddenHedgehogsNumber:=0;
@@ -2685,27 +2735,6 @@ end;
 
 procedure freeModule;
 begin
-    // re-init flags so they will always contain safe values
-    cScreenWidth    := 1024;
-    cScreenHeight   := 768;
-    cBits           := 32;
-    ipcPort         := 0;
-    cFullScreen     := false;
-    cLocaleFName    := 'en.txt';
-    cTimerInterval  := 8;
-    PathPrefix      := './';
-    UserPathPrefix  := './';
-    cShowFPS        := false;
-    cFlattenFlakes  := false;
-    cFlattenClouds  := false;
-    cAltDamage      := true;
-    cReducedQuality := rqNone;
-    UserNick        := '';
-    recordFileName  := '';
-    cScriptName     := '';
-    cReadyDelay     := 5000;
-    cStereoMode     := smNone;
-    GrayScale       := false;
 end;
 
 end.

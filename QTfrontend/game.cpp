@@ -21,7 +21,6 @@
 #include <QUuid>
 #include <QColor>
 #include <QStringListModel>
-#include <QMessageBox>
 #include <QTextStream>
 
 #include "game.h"

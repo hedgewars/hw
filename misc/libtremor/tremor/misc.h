@@ -6,7 +6,7 @@
  * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
- * THE OggVorbis 'TREMOR' SOURCE CODE IS (C) COPYRIGHT 1994-2003    *
+ * THE OggVorbis 'TREMOR' SOURCE CODE IS (C) COPYRIGHT 1994-2002    *
  * BY THE Xiph.Org FOUNDATION http://www.xiph.org/                  *
  *                                                                  *
  ********************************************************************
@@ -18,26 +18,10 @@
 #ifndef _V_RANDOM_H_
 #define _V_RANDOM_H_
 #include "ivorbiscodec.h"
-#include "os_types.h"
-
-/*#define _VDBG_GRAPHFILE "_0.m"*/
-
-#ifdef _VDBG_GRAPHFILE
-extern void *_VDBG_malloc(void *ptr,long bytes,char *file,long line); 
-extern void _VDBG_free(void *ptr,char *file,long line); 
-
-#undef _ogg_malloc
-#undef _ogg_calloc
-#undef _ogg_realloc
-#undef _ogg_free
-
-#define _ogg_malloc(x) _VDBG_malloc(NULL,(x),__FILE__,__LINE__)
-#define _ogg_calloc(x,y) _VDBG_malloc(NULL,(x)*(y),__FILE__,__LINE__)
-#define _ogg_realloc(x,y) _VDBG_malloc((x),(y),__FILE__,__LINE__)
-#define _ogg_free(x) _VDBG_free((x),__FILE__,__LINE__)
-#endif
+#include "os.h"
 
 #include "asm_arm.h"
+#include <stdlib.h> /* for abs() */
   
 #ifndef _V_WIDE_MATH
 #define _V_WIDE_MATH
@@ -45,7 +29,9 @@ extern void _VDBG_free(void *ptr,char *file,long line);
 #ifndef  _LOW_ACCURACY_
 /* 64 bit multiply */
 
+#if !(defined WIN32 && defined WINCE)
 #include <sys/types.h>
+#endif
 
 #if BYTE_ORDER==LITTLE_ENDIAN
 union magic {
@@ -58,26 +44,26 @@ union magic {
 #endif 
 
 #if BYTE_ORDER==BIG_ENDIAN
-union magic {
+/*union magic {
   struct {
     ogg_int32_t hi;
     ogg_int32_t lo;
   } halves;
   ogg_int64_t whole;
-};
+};*/
 #endif
 
-static inline ogg_int32_t MULT32(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT32(ogg_int32_t x, ogg_int32_t y) {
   union magic magic;
   magic.whole = (ogg_int64_t)x * y;
   return magic.halves.hi;
 }
 
-static inline ogg_int32_t MULT31(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT31(ogg_int32_t x, ogg_int32_t y) {
   return MULT32(x,y)<<1;
 }
 
-static inline ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
   union magic magic;
   magic.whole  = (ogg_int64_t)x * y;
   return ((ogg_uint32_t)(magic.halves.lo)>>15) | ((magic.halves.hi)<<17);
@@ -99,15 +85,15 @@ static inline ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
  * tables in this case.
  */
 
-static inline ogg_int32_t MULT32(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT32(ogg_int32_t x, ogg_int32_t y) {
   return (x >> 9) * y;  /* y preshifted >>23 */
 }
 
-static inline ogg_int32_t MULT31(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT31(ogg_int32_t x, ogg_int32_t y) {
   return (x >> 8) * y;  /* y preshifted >>23 */
 }
 
-static inline ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
+STIN ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
   return (x >> 6) * y;  /* y preshifted >>9 */
 }
 
@@ -144,7 +130,7 @@ static inline ogg_int32_t MULT31_SHIFT15(ogg_int32_t x, ogg_int32_t y) {
 
 #else
 
-static inline void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
+STIN void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
 			   ogg_int32_t  t, ogg_int32_t  v,
 			   ogg_int32_t *x, ogg_int32_t *y)
 {
@@ -152,7 +138,7 @@ static inline void XPROD32(ogg_int32_t  a, ogg_int32_t  b,
   *y = MULT32(b, t) - MULT32(a, v);
 }
 
-static inline void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
+STIN void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
 			   ogg_int32_t  t, ogg_int32_t  v,
 			   ogg_int32_t *x, ogg_int32_t *y)
 {
@@ -160,7 +146,7 @@ static inline void XPROD31(ogg_int32_t  a, ogg_int32_t  b,
   *y = MULT31(b, t) - MULT31(a, v);
 }
 
-static inline void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
+STIN void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
 			    ogg_int32_t  t, ogg_int32_t  v,
 			    ogg_int32_t *x, ogg_int32_t *y)
 {
@@ -175,7 +161,7 @@ static inline void XNPROD31(ogg_int32_t  a, ogg_int32_t  b,
 #ifndef _V_CLIP_MATH
 #define _V_CLIP_MATH
 
-static inline ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
+STIN ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
   int ret=x;
   ret-= ((x<=32767)-1)&(x-32767);
   ret-= ((x>=-32768)-1)&(x+32768);
@@ -183,6 +169,73 @@ static inline ogg_int32_t CLIP_TO_15(ogg_int32_t x) {
 }
 
 #endif
+
+STIN ogg_int32_t VFLOAT_MULT(ogg_int32_t a,ogg_int32_t ap,
+				      ogg_int32_t b,ogg_int32_t bp,
+				      ogg_int32_t *p){
+  if(a && b){
+#ifndef _LOW_ACCURACY_
+    *p=ap+bp+32;
+    return MULT32(a,b);
+#else
+    *p=ap+bp+31;
+    return (a>>15)*(b>>16); 
+#endif
+  }else
+    return 0;
+}
+
+int _ilog(unsigned int);
+
+STIN ogg_int32_t VFLOAT_MULTI(ogg_int32_t a,ogg_int32_t ap,
+				      ogg_int32_t i,
+				      ogg_int32_t *p){
+
+  int ip=_ilog(abs(i))-31;
+  return VFLOAT_MULT(a,ap,i<<-ip,ip,p);
+}
+
+STIN ogg_int32_t VFLOAT_ADD(ogg_int32_t a,ogg_int32_t ap,
+				      ogg_int32_t b,ogg_int32_t bp,
+				      ogg_int32_t *p){
+
+  if(!a){
+    *p=bp;
+    return b;
+  }else if(!b){
+    *p=ap;
+    return a;
+  }
+
+  /* yes, this can leak a bit. */
+  if(ap>bp){
+    int shift=ap-bp+1;
+    *p=ap+1;
+    a>>=1;
+    if(shift<32){
+      b=(b+(1<<(shift-1)))>>shift;
+    }else{
+      b=0;
+    }
+  }else{
+    int shift=bp-ap+1;
+    *p=bp+1;
+    b>>=1;
+    if(shift<32){
+      a=(a+(1<<(shift-1)))>>shift;
+    }else{
+      a=0;
+    }
+  }
+
+  a+=b;
+  if((a&0xc0000000)==0xc0000000 || 
+     (a&0xc0000000)==0){
+    a<<=1;
+    (*p)--;
+  }
+  return(a);
+}
 
 #endif
 

@@ -29,14 +29,17 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler, uSound,
-     uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler,
+     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions,
      SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
-     {$IFDEF SDL13}, uTouch{$ENDIF}{$IFDEF ANDROID}, GLUnit{$ENDIF}, uAILandMarks;
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
+     {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     ;
 
 
 {$IFDEF HWLIBRARY}
+procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 procedure Game(gameArgs: PPChar); cdecl; export;
@@ -44,11 +47,12 @@ procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
+procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
-////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
 begin
@@ -59,9 +63,9 @@ begin
         gsLandGen:
             begin
             GenMap;
-            uLandTexture.initModule;
-            UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false); 
-            uAILandMarks.initModule;
+            SetLandTexture;
+            UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
+            setAILandMarks;
             ParseCommand('sendlanddigest', true);
             GameState:= gsStart;
             end;
@@ -136,7 +140,7 @@ begin
         end;
 end;
 
-///////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: Longword;
@@ -308,29 +312,20 @@ begin
 end;
 {$ENDIF}
 
-///////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
-    cBits:= 32;
-    cTimerInterval:= 8;
+    preInitEverything();
     cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
     ipcPort:= StrToInt(gameArgs[0]);
     cScreenWidth:= StrToInt(gameArgs[1]);
     cScreenHeight:= StrToInt(gameArgs[2]);
     cReducedQuality:= StrToInt(gameArgs[3]);
     cLocaleFName:= gameArgs[4];
-    // cFullScreen functionality is platform dependent, ifdef it if you need to modify it
-    cFullScreen:= false;
-    
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
-        
     UserNick:= gameArgs[5];
     SetSound(gameArgs[6] = '1');
     SetMusic(gameArgs[7] = '1');
@@ -338,14 +333,9 @@ begin
     PathPrefix:= gameArgs[9];
     UserPathPrefix:= '../Documents';
     recordFileName:= gameArgs[10];
-    cStereoMode:= smNone;
 {$ENDIF}
-    cMinScreenWidth:= min(cScreenWidth, cMinScreenWidth);
-    cMinScreenHeight:= min(cScreenHeight, cMinScreenHeight);
-    cOrigScreenWidth:= cScreenWidth;
-    cOrigScreenHeight:= cScreenHeight;
-
     initEverything(true);
+
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
@@ -443,40 +433,47 @@ begin
     freeEverything(true);
 end;
 
-procedure initEverything (complete:boolean);
+///////////////////////////////////////////////////////////////////////////////
+// preInitEverything - init variables that are going to be ovewritten by arguments
+// initEverything - init variables only. Should be coupled by below
+// freeEverything - free above. Pay attention to the init/free order!
+procedure preInitEverything;
 begin
     Randomize();
 
-    uUtils.initModule(complete);      // this opens the debug file, must be the first
-    uMisc.initModule;
-    uVariables.initModule;
-    uConsole.initModule;
-    uCommands.initModule;
-    uCommandHandlers.initModule;
+    uVariables.preInitModule;
+    uSound.preInitModule;
+end;
 
-    uLand.initModule;
-    uLandPainted.initModule;
-    uIO.initModule;
+procedure initEverything (complete:boolean);
+begin
+    uUtils.initModule(complete);    // opens the debug file, must be the first
+    uVariables.initModule;          // inits all global variables
+    uConsole.initModule;            // opens stdout
+    uCommands.initModule;           // helps below
+    uCommandHandlers.initModule;    // registers all messages from frontend
+
+    uLand.initModule;               // computes land
+    uLandPainted.initModule;        // computes drawn land
+    uIO.initModule;                 // sets up sockets
 
     if complete then
     begin
-{$IFDEF ANDROID}GLUnit.init;{$ENDIF}
-{$IFDEF SDL13}uTouch.initModule;{$ENDIF}
+{$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
+{$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
+{$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}   //stub
         uAI.initModule;
-        //uAIActions does not need initialization
-        //uAIAmmoTests does not need initialization
         uAIMisc.initModule;
+        uAILandMarks.initModule;    //stub
         uAmmos.initModule;
+        uCaptions.initModule;
+
         uChat.initModule;
         uCollisions.initModule;
-        //uFloat does not need initialization
-        //uGame does not need initialization
         uGears.initModule;
-        uInputHandler.initModule;
-        //uLandGraphics does not need initialization
-        //uLandObjects does not need initialization
-        //uLandTemplates does not need initialization
-        //uLocale does not need initialization
+        uInputHandler.initModule;   //stub
+        uMisc.initModule;
+        uLandTexture.initModule;    //stub
         uScript.initModule;
         uSound.initModule;
         uStats.initModule;
@@ -484,7 +481,6 @@ begin
         uTeams.initModule;
         uVisualGears.initModule;
         uWorld.initModule;
-        uCaptions.initModule;
     end;
 end;
 
@@ -493,9 +489,9 @@ begin
     if complete then
     begin
         WriteLnToConsole('Freeing resources...');
-        uAI.freeModule;
-        uAILandMarks.freeModule;
+        uAI.freeModule;             // AI things need to be freed first
         uAIMisc.freeModule;         //stub
+        uAILandMarks.freeModule;
         uCaptions.freeModule;
         uWorld.freeModule;
         uVisualGears.freeModule;
@@ -504,22 +500,16 @@ begin
         uStats.freeModule;          //stub
         uSound.freeModule;
         uScript.freeModule;
-        //uRandom does not need to be freed
-        //uLocale does not need to be freed
-        //uLandTemplates does not need to be freed
+        uMisc.freeModule;
         uLandTexture.freeModule;
-        //uLandObjects does not need to be freed
-        //uLandGraphics does not need to be freed
         uGears.freeModule;
-        //uGame does not need to be freed
-        //uFloat does not need to be freed
         uCollisions.freeModule;     //stub
         uChat.freeModule;
         uAmmos.freeModule;
-        //uAIAmmoTests does not need to be freed
-        //uAIActions does not need to be freed
-        uStore.freeModule;
+        uStore.freeModule;          // closes SDL
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
+{$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
+{$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
     end;
 
     uIO.freeModule;
@@ -528,13 +518,12 @@ begin
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
-    uConsole.freeModule;
+    uConsole.freeModule;            // closes stdout
     uVariables.freeModule;
-    uUtils.freeModule;
-    uMisc.freeModule;           // uMisc closes the debug log.
+    uUtils.freeModule;              // closes debug file
 end;
 
-/////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
 var Preview: TPreview;
 begin
@@ -557,7 +546,7 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-/////////////////////
+///////////////////////////////////////////////////////////////////////////////
 procedure DisplayUsage;
 var i: LongInt;
 begin
@@ -583,7 +572,7 @@ begin
     WriteLn(stdout, '');
 end;
 
-////////////////////
+///////////////////////////////////////////////////////////////////////////////
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
@@ -591,27 +580,33 @@ begin
     if (ParamCount < 3) then
         GameType:= gmtSyntax
     else
-        if (ParamCount = 3) and ((ParamStr(3) = '--stats-only') or (ParamStr(3) = 'landpreview')) then
-            internalSetGameTypeLandPreviewFromParameters()
-        else if ParamCount = cDefaultParamNum then
-            internalStartGameWithParameters()
-{$IFDEF USE_VIDEO_RECORDING}
-        else if ParamCount = cVideorecParamNum then
-            internalStartVideoRecordingWithParameters()
-{$ENDIF}
+        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+            begin
+            ipcPort:= StrToInt(ParamStr(2));
+            GameType:= gmtLandPreview;
+            end
         else
-            playReplayFileWithParameters();
+            begin
+            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
+                playReplayFileWithParameters()
+            else
+                if ParamCount = cDefaultParamNum then
+                    internalStartGameWithParameters()
+{$IFDEF USE_VIDEO_RECORDING}
+                else if ParamCount = cVideorecParamNum then
+                    internalStartVideoRecordingWithParameters()
+{$ENDIF}
+                else
+                    playReplayFileWithParameters();
+            end
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////// m a i n ////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// m a i n ///////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 begin
+    preInitEverything();
     GetParams();
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
 
     if GameType = gmtLandPreview then
         GenLandPreview()

@@ -120,10 +120,12 @@ void PagePlayDemo::renameRecord()
     QListWidgetItem * curritem = DemosList->currentItem();
     if (!curritem)
     {
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please select record from the list"),
-                              tr("OK"));
+        QMessageBox recordMsg(this);
+        recordMsg.setIcon(QMessageBox::Warning);
+        recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        recordMsg.setText(QMessageBox::tr("Please select record from the list"));
+        recordMsg.setWindowModality(Qt::WindowModal);
+        recordMsg.exec();
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());
@@ -144,7 +146,14 @@ void PagePlayDemo::renameRecord()
 
         ok = rfile.rename(newfullname);
         if(!ok)
-            QMessageBox::critical(this, tr("Error"), tr("Cannot rename to") + newfullname);
+        {
+            QMessageBox renameMsg(this);
+            renameMsg.setIcon(QMessageBox::Warning);
+            renameMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+            renameMsg.setText(QMessageBox::tr("Cannot rename to ") + newfullname);
+            renameMsg.setWindowModality(Qt::WindowModal);
+            renameMsg.exec();
+        }
         else
             FillFromDir(recType);
     }
@@ -155,10 +164,12 @@ void PagePlayDemo::removeRecord()
     QListWidgetItem * curritem = DemosList->currentItem();
     if (!curritem)
     {
-        QMessageBox::critical(this,
-                              tr("Error"),
-                              tr("Please select record from the list"),
-                              tr("OK"));
+        QMessageBox recordMsg(this);
+        recordMsg.setIcon(QMessageBox::Warning);
+        recordMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        recordMsg.setText(QMessageBox::tr("Please select record from the list"));
+        recordMsg.setWindowModality(Qt::WindowModal);
+        recordMsg.exec();
         return ;
     }
     QFile rfile(curritem->data(Qt::UserRole).toString());
@@ -167,7 +178,14 @@ void PagePlayDemo::removeRecord()
 
     ok = rfile.remove();
     if(!ok)
-        QMessageBox::critical(this, tr("Error"), tr("Cannot delete file"));
+    {
+        QMessageBox removeMsg(this);
+        removeMsg.setIcon(QMessageBox::Warning);
+        removeMsg.setWindowTitle(QMessageBox::tr("Record Play - Error"));
+        removeMsg.setText(QMessageBox::tr("Cannot delete file ") + rfile.fileName());
+        removeMsg.setWindowModality(Qt::WindowModal);
+        removeMsg.exec();
+    }
     else
     {
         int i = DemosList->row(curritem);

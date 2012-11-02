@@ -31,23 +31,35 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
 
   find_path(FFMPEG_AVCODEC_INCLUDE_DIR
     NAMES libavcodec/avcodec.h
-    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS} /usr/include /usr/local/include /opt/local/include /sw/include
+    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS}
+        /usr/include /usr/local/include #system level
+        /opt/local/include #macports
+        /sw/include #fink
     PATH_SUFFIXES ffmpeg libav
   )
 
   find_library(FFMPEG_LIBAVCODEC
     NAMES avcodec
-    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
+    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS}
+        /usr/lib /usr/local/lib #system level
+        /opt/local/lib #macports
+        /sw/lib #fink
   )
 
   find_library(FFMPEG_LIBAVFORMAT
     NAMES avformat
-    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
+    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS}
+        /usr/lib /usr/local/lib #system level
+        /opt/local/lib #macports
+        /sw/lib #fink
   )
 
   find_library(FFMPEG_LIBAVUTIL
     NAMES avutil
-    PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS} /usr/lib /usr/local/lib /opt/local/lib /sw/lib
+    PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS}
+        /usr/lib /usr/local/lib #system level
+        /opt/local/lib #macports
+        /sw/lib #fink
   )
 
   if (FFMPEG_LIBAVCODEC AND FFMPEG_LIBAVFORMAT)
@@ -62,16 +74,19 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
       ${FFMPEG_LIBAVFORMAT}
       ${FFMPEG_LIBAVUTIL}
     )
+    if (APPLE)
+      set(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} "bz2" "-framework CoreVideo" "-framework VideoDecodeAcceleration")
+    endif(APPLE)
 
   endif (FFMPEG_FOUND)
 
   if (FFMPEG_FOUND)
     if (NOT FFMPEG_FIND_QUIETLY)
-      message(STATUS "Found FFMPEG or Libav: ${FFMPEG_LIBRARIES}, ${FFMPEG_INCLUDE_DIR}")
+      message(STATUS "Found FFMPEG/LibAV: ${FFMPEG_LIBRARIES}, ${FFMPEG_INCLUDE_DIR}")
     endif (NOT FFMPEG_FIND_QUIETLY)
   else (FFMPEG_FOUND)
     if (FFMPEG_FIND_REQUIRED)
-      message(FATAL_ERROR "Could not find libavcodec or libavformat or libavutil")
+      message(FATAL_ERROR "Could NOT find libavcodec or libavformat or libavutil")
     endif (FFMPEG_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 

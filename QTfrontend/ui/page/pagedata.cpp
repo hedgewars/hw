@@ -222,10 +222,7 @@ bool PageDataDownload::extractDataPack(QByteArray * buf)
                 return false;
             }
 
-            if (this->isVisible())
-                m_contentDownloaded = true;
-            else
-                DataManager::instance().reload();
+            m_contentDownloaded = true;
         }
 
         file.close();
@@ -248,6 +245,6 @@ void PageDataDownload::onPageLeave()
     if (m_contentDownloaded)
     {
         m_contentDownloaded = false;
-        DataManager::instance().reload();
+        //DataManager::instance().reload();
     }
 }
