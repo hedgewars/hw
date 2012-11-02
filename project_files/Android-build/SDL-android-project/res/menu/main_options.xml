@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/download"
+        android:title="@string/main_menu_downloader"
+        android:icon="@android:drawable/ic_menu_save"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/preferences"
+        android:title="@string/main_menu_preferences"
+        android:icon="@android:drawable/ic_menu_preferences"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/edit_teams"
+        android:title="@string/edit_teams_menu"
+        android:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/edit_weaponsets"
+        android:title="@string/edit_weaponsets_menu"
+        android:showAsAction="ifRoom|withText" />
+</menu>
