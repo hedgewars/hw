@@ -10,23 +10,23 @@ function spawnTarget()
 
 	gear = AddGear(0, 0, gtTarget, 0, 0, 0, 0)
 	
-	if scored == 0 then x = 1652 end
-	if scored == 1 then x = 1915 end
-	if scored == 2 then x = 2333 end
-	if scored == 3 then x = 2152 end
-	if scored == 4 then x = 1434 end
-	if scored == 5 then x = 2588 end
-	if scored == 6 then x = 2372 end
-	if scored == 7 then x = 1193 end
-	if scored == 8 then x = 2744 end
-	if scored == 9 then x = 2465 end
-	if scored == 10 then x = 1623 end
-	if scored == 11 then x = 2662 end
+	if scored == 0 then x = 628 end
+	if scored == 1 then x = 891 end
+	if scored == 2 then x = 1309 end
+	if scored == 3 then x = 1128 end
+	if scored == 4 then x = 410 end
+	if scored == 5 then x = 1564 end
+	if scored == 6 then x = 1348 end
+	if scored == 7 then x = 169 end
+	if scored == 8 then x = 1720 end
+	if scored == 9 then x = 1441 end
+	if scored == 10 then x = 599 end
+	if scored == 11 then x = 1638 end
 
 	if scored == 6 then
-		SetGearPosition(gear, 2272, 1500)
+		SetGearPosition(gear, 1248, 476)
 	else
-		SetGearPosition(gear, x, 1000)
+		SetGearPosition(gear, x, 0)
 	end
 
 end
@@ -46,7 +46,7 @@ function onGameInit()
 	AddTeam("The Hogies", 2850005, "Statue", "Island", "Hog Islands")
 
 	player = AddHog(loc("Private Novak"), 0, 1, "war_desertGrenadier1")
-	SetGearPosition(player, 1780, 1300)
+	SetGearPosition(player, 756, 370)
 
 end
 

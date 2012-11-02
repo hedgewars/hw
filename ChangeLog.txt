@@ -1,6 +1,34 @@
 + features
 * bugfixes
 
+0.9.17 -> 0.9.18:
+
+ + 'A Classic Fairytale' Campaign
+ + Video recorder (requires ffmpeg)
+ + Cleaver weapon
+ + AI is now aware of drowning and fall damage
+ + AI learned how to use Sniper Rifle and Cake
+ + Variable pen width and eraser for drawn maps
+ + Several trainings and missions
+ + Allow setting custom local palette of teams colors
+ + Hide eliminated teams from teams healths widget
+ + Server doesn't delete room till last player quits it
+ + PNG screenshots
+ + Show bot level on CPU flag
+ + Objects now have density value assigned which impacts their behavior on explosions, throwing from rope and drowning
+ + Improve AI skills at Desert Eagel, Whip, Firepunch, Baseball Bat, Hammer, Cluster Bomb, Watermelon and walking
+ + Individual hedgehogs healths in team health bar
+ + Drill rocket wouldn't explode in your face if you stand close to wall
+ + Ability to rope into a portal, allow RC plane to go through portals
+ + Many small frontend improvements: get rid of "save" buttons, descriptions, allow to use network proxy, etc
+ + Reduce amount of memory needed for engine to store land data
+ + Countless other small fixes and improvements
+ + Detect desyncs early
+ * Fix cake getting stuck in barrels, crates and hedgehogs
+ * Fix all knowns bugs which caused network game hang when players close engine or quit
+ * Fix drill strike bug when drill's timer gets ridiculously high value instead of explosion
+ * Fix some crashes, freezes and memory leaks in frontend and engine
+ 
 0.9.16 -> 0.9.17:
  + New theme, Cave
  + New voicepack, Hillbilly

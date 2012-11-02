@@ -6,7 +6,7 @@
  * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
- * THE OggVorbis 'TREMOR' SOURCE CODE IS (C) COPYRIGHT 1994-2003    *
+ * THE OggVorbis 'TREMOR' SOURCE CODE IS (C) COPYRIGHT 1994-2002    *
  * BY THE Xiph.Org FOUNDATION http://www.xiph.org/                  *
  *                                                                  *
  ********************************************************************
@@ -34,15 +34,8 @@
 #define cPI1_8 (0x7641af3d)
 #endif
 
-extern void mdct_backward(int n, DATA_TYPE *in);
-extern void mdct_shift_right(int n, DATA_TYPE *in, DATA_TYPE *right);
-extern void mdct_unroll_lap(int n0,int n1,
-			    int lW,int W,
-			    DATA_TYPE *in,DATA_TYPE *right,
-			    LOOKUP_T *w0,LOOKUP_T *w1,
-			    ogg_int16_t *out,
-			    int step,
-			    int start,int end /* samples, this frame */);
+extern void mdct_forward(int n, DATA_TYPE *in, DATA_TYPE *out);
+extern void mdct_backward(int n, DATA_TYPE *in, DATA_TYPE *out);
 
 #endif
 

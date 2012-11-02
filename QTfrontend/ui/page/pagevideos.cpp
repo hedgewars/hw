@@ -47,7 +47,7 @@
 #include "hwconsts.h"
 #include "pagevideos.h"
 #include "igbox.h"
-#include "libav_iteraction.h"
+#include "LibavInteraction.h"
 #include "gameuiconfig.h"
 #include "recorder.h"
 #include "ask_quit.h"
@@ -92,7 +92,7 @@ class VideoItem : public QTableWidgetItem
 };
 
 VideoItem::VideoItem(const QString& name)
-    : QTableWidgetItem(name, UserType)
+: QTableWidgetItem(name, UserType)
 {
     this->name = name;
     pRecorder = NULL;
@@ -128,7 +128,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // list of supported formats
         comboAVFormats = new QComboBox(pOptionsGroup);
         pOptLayout->addWidget(comboAVFormats, 0, 1, 1, 4);
-        LibavIteraction::instance().fillFormats(comboAVFormats);
+        LibavInteraction::instance().fillFormats(comboAVFormats);
 
         // separator
         QFrame * hr = new QFrame(pOptionsGroup);
@@ -217,6 +217,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // button 'set default options'
         btnDefaults = new QPushButton(pOptionsGroup);
         btnDefaults->setText(QPushButton::tr("Set default options"));
+        btnDefaults->setWhatsThis(QPushButton::tr("Restore default coding parameters"));
         pOptLayout->addWidget(btnDefaults, 7, 0, 1, 5);
 
         pPageLayout->addWidget(pOptionsGroup, 1, 0);
@@ -250,6 +251,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         header->setStretchLastSection(true);
 
         btnOpenDir = new QPushButton(QPushButton::tr("Open videos directory"), pTableGroup);
+        btnOpenDir->setWhatsThis(QPushButton::tr("Open the video directory in your system"));
 
         QVBoxLayout *box = new QVBoxLayout(pTableGroup);
         box->addWidget(filesTable);
@@ -296,12 +298,15 @@ QLayout * PageVideos::bodyLayoutDefinition()
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
         btnPlay->setEnabled(false);
+        btnPlay->setWhatsThis(QPushButton::tr("Play this video"));
         pBottomDescLayout->addWidget(btnPlay);
         btnDelete = new QPushButton(QPushButton::tr("Delete"), pDescGroup);
         btnDelete->setEnabled(false);
+        btnDelete->setWhatsThis(QPushButton::tr("Delete this video"));
         pBottomDescLayout->addWidget(btnDelete);
         btnToYouTube = new QPushButton(QPushButton::tr("Upload to YouTube"), pDescGroup);
         btnToYouTube->setEnabled(false);
+        btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addStretch(1);
@@ -369,7 +374,7 @@ void PageVideos::changeAVFormat(int index)
     comboAudioCodecs->clear();
 
     // get list of codecs for specified format
-    LibavIteraction::instance().fillCodecs(comboAVFormats->itemData(index).toString(), comboVideoCodecs, comboAudioCodecs);
+    LibavInteraction::instance().fillCodecs(comboAVFormats->itemData(index).toString(), comboVideoCodecs, comboAudioCodecs);
 
     // disable audio if there is no audio codec
     if (comboAudioCodecs->count() == 0)
@@ -411,13 +416,14 @@ void PageVideos::changeRecordAudio(int state)
 
 void PageVideos::setDefaultCodecs()
 {
-    if (tryCodecs("mp4", "libx264", "libmp3lame"))
+    // VLC should be able to handle any of these configurations
+    // Quicktime X only opens the first one
+    // Windows Media Player TODO
+    if (tryCodecs("mp4", "libx264", "aac"))
         return;
     if (tryCodecs("mp4", "libx264", "libfaac"))
         return;
-    if (tryCodecs("mp4", "libx264", "libvo_aacenc"))
-        return;
-    if (tryCodecs("mp4", "libx264", "aac"))
+    if (tryCodecs("mp4", "libx264", "libmp3lame"))
         return;
     if (tryCodecs("mp4", "libx264", "mp2"))
         return;
@@ -442,8 +448,8 @@ void PageVideos::setDefaultCodecs()
 
 void PageVideos::setDefaultOptions()
 {
-    framerateBox->setValue(25);
-    bitrateBox->setValue(400);
+    framerateBox->setValue(30);
+    bitrateBox->setValue(1000);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
     setDefaultCodecs();
@@ -645,7 +651,7 @@ void PageVideos::cellChanged(int row, int column)
     }
 #ifdef Q_WS_WIN
     // there is a bug in qt, QDir::rename() doesn't fail on such names but damages files
-    if (newName.contains(QRegExp("[\"*:<>?\/|]")))
+    if (newName.contains(QRegExp("[\"*:<>?\\/|]")))
     {
         setName(item, oldName);
         return;
@@ -743,7 +749,7 @@ void PageVideos::updateDescription()
         {
             // Extract description from file;
             // It will contain duration, resolution, etc and also comment added by hwengine.
-            item->desc = LibavIteraction::instance().getFileInfo(path);
+            item->desc = LibavInteraction::instance().getFileInfo(path);
 
             // extract prefix (original name) from description (it is enclosed in prefix[???]prefix)
             int prefixBegin = item->desc.indexOf("prefix[");
@@ -839,18 +845,26 @@ void PageVideos::deleteSelectedFiles()
         return;
 
     // ask user if (s)he is serious
-    if (QMessageBox::question(this,
-                              tr("Are you sure?"),
-                              tr("Do you really want do remove %1?").arg(item->name),
-                              QMessageBox::Yes | QMessageBox::No)
-            != QMessageBox::Yes)
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the video '%1'?").arg(item->name));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDeleteMsg.exec() != QMessageBox::Ok)
         return;
 
     // remove
     if (!item->ready())
         item->pRecorder->deleteLater();
     else
+    {
         cfgdir->remove("Videos/" + item->name);
+        // we have no idea whether screenshot is going to be bmp or png so let's delete both
+        cfgdir->remove("VideoTemp/" + item->prefix + ".png");
+        cfgdir->remove("VideoTemp/" + item->prefix + ".bmp");
+    }
 
 // this code is for removing several files when multiple selection is enabled
 #if 0
@@ -860,11 +874,14 @@ void PageVideos::deleteSelectedFiles()
         return;
 
     // ask user if (s)he is serious
-    if (QMessageBox::question(this,
-                              tr("Are you sure?"),
-                              tr("Do you really want do remove %1 file(s)?", "", num).arg(num),
-                              QMessageBox::Yes | QMessageBox::No)
-            != QMessageBox::Yes)
+    QMessageBox reallyDeleteMsg(this);
+    reallyDeleteMsg.setIcon(QMessageBox::Question);
+    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to remove %1 file(s)?", "", num).arg(num));
+    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
+    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+    if (reallyDeleteMsg.exec() != QMessageBox::Ok)
         return;
 
     // remove
@@ -1081,11 +1098,15 @@ void PageVideos::uploadToYouTube()
 
     if (item->pUploading)
     {
-        if (QMessageBox::question(this,
-                                  tr("Are you sure?"),
-                                  tr("Do you really want do cancel uploading %1?").arg(item->name),
-                                  QMessageBox::Yes | QMessageBox::No)
-                != QMessageBox::Yes)
+        // ask user if (s)he is serious
+        QMessageBox reallyStopMsg(this);
+        reallyStopMsg.setIcon(QMessageBox::Question);
+        reallyStopMsg.setWindowTitle(QMessageBox::tr("Videos - Are you sure?"));
+        reallyStopMsg.setText(QMessageBox::tr("Do you really want to cancel uploading %1?").arg(item->name));
+        reallyStopMsg.setWindowModality(Qt::WindowModal);
+        reallyStopMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+
+        if (reallyStopMsg.exec() != QMessageBox::Ok)
             return;
         item->pUploading->deleteLater();
         filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar

@@ -19,7 +19,6 @@
 #include <QDir>
 #include <QFile>
 #include <QTextStream>
-#include <QMessageBox>
 #include <QPushButton>
 #include <QListWidget>
 #include <QStackedLayout>

@@ -46,7 +46,7 @@ function spawnTarget()
 	-- move the target to a higher vertical position
 	-- to ensure it's not somewhere down below
 	x, y = GetGearPosition(gear)
-	SetGearPosition(gear, x, 500)
+	SetGearPosition(gear, x, 0)
 end
 
 function onNewTurn()
@@ -88,7 +88,7 @@ function onGameInit()
 	AddTeam(loc("Shotgun Team"), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
-	SetGearPosition(player, 2334, 1254)
+	SetGearPosition(player, 1210, 230)
 end
 
 -- This function is called when the round starts

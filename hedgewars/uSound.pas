@@ -35,6 +35,7 @@ unit uSound;
 interface
 uses SDLh, uConsts, uTypes, SysUtils;
 
+procedure preInitModule;
 procedure initModule;
 procedure freeModule;
 
@@ -47,7 +48,7 @@ procedure SetSound(enabled: boolean);           // Enable/disable sound-system a
 
 // Obvious music commands for music track
 procedure SetMusic(enabled: boolean);           // Enable/disable music.
-procedure SetMusicName(musicname: shortstring); // Enable/disable music and set name of the file to play.
+procedure SetMusicName(musicname: shortstring); // Set name of the file to play.
 procedure PlayMusic;                            // Play music from the start.
 procedure PauseMusic;                           // Pause music.
 procedure ResumeMusic;                          // Resume music from pause point.
@@ -95,7 +96,7 @@ procedure MuteAudio;
 // MISC
 
 // Set the initial volume
-procedure SetVolume(volume: LongInt);
+procedure SetVolume(vol: LongInt);
 
 // Modifies the sound volume of the game by voldelta and returns the new volume level.
 function  ChangeVolume(voldelta: LongInt): LongInt;
@@ -114,7 +115,7 @@ var Volume: LongInt;
     lastChan: array [TSound] of LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
     defVoicepack: PVoicepack;
-    Mus: PMixMusic = nil; // music pointer
+    Mus: PMixMusic; // music pointer
     MusicFN: shortstring; // music file name
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
@@ -445,15 +446,15 @@ begin
     SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
 end;
 
-procedure SetVolume(volume: LongInt);
+procedure SetVolume(vol: LongInt);
 begin
-    cInitVolume:= volume;
+    cInitVolume:= vol;
 end;
 
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
-    if (not isSoundEnabled) or (voldelta = 0) then
+    if (not isSoundEnabled) or ((voldelta = 0) and not (cInitVolume = 0)) then
         exit;
 
     inc(Volume, voldelta);
@@ -494,7 +495,7 @@ end;
 procedure MuteAudio;
 begin
     if (not isSoundEnabled) then
-    exit;
+        exit;
 
     if (isAudioMuted) then
     begin
@@ -514,12 +515,10 @@ end;
 procedure SetMusic(enabled: boolean);
 begin
     isMusicEnabled:= enabled;
-    MusicFN:= '';
 end;
 
 procedure SetMusicName(musicname: shortstring);
 begin
-    isMusicEnabled:= not (musicname = '');    
     MusicFN:= musicname;
 end;
 
@@ -579,6 +578,13 @@ begin
     MuteAudio;
 end;
 
+procedure preInitModule;
+begin
+    isMusicEnabled:= true;
+    isSoundEnabled:= true;
+    cInitVolume:= 100;
+end;
+
 procedure initModule;
 var t: LongInt;
     i: TSound;
@@ -587,6 +593,7 @@ begin
     RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
+    Mus:= nil;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     Volume:= 0;
@@ -602,7 +609,7 @@ begin
                 voicepacks[t].chunks[i]:= nil;
 
     (* on MOBILE SDL_mixer has to be compiled against Tremor (USE_OGG_TREMOR)
-       or sound files bigger than 32k will lockup the game*)
+       or sound files bigger than 32k will lockup the game *)
     for i:= Low(TSound) to High(TSound) do
         defVoicepack^.chunks[i]:= nil;
 
@@ -612,11 +619,6 @@ procedure freeModule;
 begin
     if isSoundEnabled then
         ReleaseSound(true);
-    // koda still needs to fix this properly.  when he rearranged things, he made these variables get
-    // reset after argparsers picks them up
-    isMusicEnabled:= true;
-    isSoundEnabled:= true;
-    cInitVolume:= 100;
 end;
 
 end.

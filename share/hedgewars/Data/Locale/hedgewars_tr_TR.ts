@@ -20,21 +20,6 @@
     </message>
 </context>
 <context>
-    <name>DrawMapWidget</name>
-    <message>
-        <source>File error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -54,14 +39,6 @@
         <translation>Silahları düzenle</translation>
     </message>
     <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>Illegal ammo scheme</source>
-        <translation>Uygunsuz cephane düzeni</translation>
-    </message>
-    <message>
         <source>Edit schemes</source>
         <translation>Düzeni değiştir</translation>
     </message>
@@ -77,7 +54,7 @@
 <context>
     <name>HWAskQuitDialog</name>
     <message>
-        <source>Do yot really want to quit?</source>
+        <source>Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -131,28 +108,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">yeni</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>Tamam</translation>
-    </message>
-    <message>
-        <source>Unable to start the server</source>
-        <translation>Sunucu başlatılamadı</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Kayıt %1 dosyasına yazılamadı</translation>
-    </message>
-    <message>
-        <source>Please select record from the list above</source>
-        <translation>Lütfen üstteki listeden kaydı seçin</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -181,10 +138,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">Parola</translation>
-    </message>
-    <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
@@ -200,14 +153,12 @@ or pick another nickname in game config:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No nickname supplied.</source>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -335,10 +286,6 @@ Please pick another nickname:</source>
         <translation>Kovuldunuz</translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">Parola</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation type="unfinished"></translation>
     </message>
@@ -415,14 +362,6 @@ Please pick another nickname:</source>
 <context>
     <name>PageAdmin</name>
     <message>
-        <source>Server message:</source>
-        <translation type="obsolete">Sunucu iletisi:</translation>
-    </message>
-    <message>
-        <source>Set message</source>
-        <translation type="obsolete">İletiyi ayarla</translation>
-    </message>
-    <message>
         <source>Clear Accounts Cache</source>
         <translation type="unfinished"></translation>
     </message>
@@ -456,10 +395,6 @@ Please pick another nickname:</source>
     <message>
         <source>Connecting...</source>
         <translation>Bağlanıyor...</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">İptal</translation>
     </message>
 </context>
 <context>
@@ -514,10 +449,6 @@ Please pick another nickname:</source>
 </context>
 <context>
     <name>PageGameStats</name>
-    <message>
-        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;En iyi atış ödülünü &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt; kazandı.&lt;/p&gt;</translation>
-    </message>
     <message>
         <source>Details</source>
         <translation type="unfinished"></translation>
@@ -587,14 +518,6 @@ Please pick another nickname:</source>
 </context>
 <context>
     <name>PageMain</name>
-    <message>
-        <source>Local Game (Play a game on a single computer)</source>
-        <translation type="obsolete">Yerel Oyun (Tek bilgisayarda oyna)</translation>
-    </message>
-    <message>
-        <source>Network Game (Play a game across a network)</source>
-        <translation type="obsolete">Ağ Oyunu (Bir bilgisayar ağı üzerinde oyna)</translation>
-    </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
@@ -893,33 +816,10 @@ Please pick another nickname:</source>
     </message>
 </context>
 <context>
-    <name>PageNet</name>
-    <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>Please select server from the list above</source>
-        <translation>Lütfen üstteki listeden bir sunucu seçin</translation>
-    </message>
-</context>
-<context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
         <translation>Kontrol</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished">Hata</translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation type="unfinished">Lütfen oda ismini girin</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">Tamam</translation>
     </message>
     <message>
         <source>DLC</source>
@@ -1039,32 +939,12 @@ Please pick another nickname:</source>
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>Tamam</translation>
-    </message>
-    <message>
         <source>Rename dialog</source>
         <translation>Yeniden adlandırma</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
         <translation>Yeni dosya adını girin:</translation>
-    </message>
-    <message>
-        <source>Cannot rename to</source>
-        <translation>Adlandırılamıyor</translation>
-    </message>
-    <message>
-        <source>Cannot delete file</source>
-        <translation>Dosya silinemiyor</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation>Lütfen listeden kaydı seçin</translation>
     </message>
 </context>
 <context>
@@ -1078,32 +958,12 @@ Please pick another nickname:</source>
         <translation>Katıl</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation>Tazele</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>Tamam</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Yönetici görevleri</translation>
     </message>
     <message>
         <source>Room Name:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation>Lütfen oda ismini girin</translation>
-    </message>
-    <message>
-        <source>Please select room from the list</source>
-        <translation>Lütfen listeden bir oda seçin</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1119,15 +979,6 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The game you are trying to join has started.
-Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
@@ -1152,10 +1003,6 @@ Do you still want to join the room?</source>
         <translation>Zemin yok edilemez!</translation>
     </message>
     <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">Bölgenin etrafına yok edilemez bir sınır ekle</translation>
-    </message>
-    <message>
         <source>Lower gravity</source>
         <translation>Düşük yer çekimi</translation>
     </message>
@@ -1166,10 +1013,6 @@ Do you still want to join the room?</source>
     <message>
         <source>All hogs have a personal forcefield</source>
         <translation>Tüm kirpilerin kişisel güç kalkanı olur</translation>
-    </message>
-    <message>
-        <source>Enable random mines</source>
-        <translation type="obsolete">Rastgele mayınlar</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1290,26 +1133,6 @@ Do you still want to join the room?</source>
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="obsolete">Basit Oyun (bilgisayara karşı oynayın, ayarlar sizin yerinize seçilir)</translation>
-    </message>
-    <message>
-        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="obsolete">Çok oyunculu (arkadaşlarınızın veya bilgisayarın takımlarına karşı oynayın)</translation>
-    </message>
-    <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="obsolete"> Talim Modu (Bir takım talimlere katılarak kirpilerinizi eğitin). YAPIM AŞAMASINDA</translation>
-    </message>
-    <message>
-        <source>Demos (Watch recorded demos)</source>
-        <translation type="obsolete">Kayıtlı Oyunlar (Kaydedilmiş oyunları izleyin)</translation>
-    </message>
-    <message>
-        <source>Load (Load a previously saved game)</source>
-        <translation type="obsolete">Yükle (Kaydedilmiş bir oyunu yükleyin)</translation>
-    </message>
-    <message>
         <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1402,29 +1225,11 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do remove %1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
         <source>encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1593,10 +1398,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Default</source>
-        <translation type="obsolete">Öntanımlı</translation>
-    </message>
-    <message>
         <source>hand drawn map...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1684,10 +1485,6 @@ Do you still want to join the room?</source>
         <translation>Takımlar</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Silahlar</translation>
-    </message>
-    <message>
         <source>Audio/Graphic options</source>
         <translation>Ses/Görüntü seçenekleri</translation>
     </message>
@@ -1759,10 +1556,6 @@ Do you still want to join the room?</source>
         <translation>Sürüm</translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="obsolete">Bu program GNU Genel Kamu Lisansı&apos;yla dağıtılmaktadır</translation>
-    </message>
-    <message>
         <source>Developers:</source>
         <translation>Geliştiriciler:</translation>
     </message>
@@ -1793,10 +1586,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Port:</source>
         <translation>Port:</translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="obsolete">Takma ad</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1923,10 +1712,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">Parola</translation>
-    </message>
-    <message>
         <source>% Get Away Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1937,7 +1722,7 @@ Do you still want to join the room?</source>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
-Do yot really want to quit?</source>
+Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2022,10 +1807,6 @@ Do yot really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Network</source>
-        <translation>Ağ</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>Sunucuyla olan bağlantı kesildi</translation>
     </message>
@@ -2034,87 +1815,11 @@ Do yot really want to quit?</source>
         <translation>Hata</translation>
     </message>
     <message>
-        <source>Failed to open data directory:
-%1
-Please check your installation</source>
-        <translation>Veri dizini açılamadı:
- %1
-Lütfen kurulumunuzu kontrol edin</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>Silahlar</translation>
-    </message>
-    <message>
-        <source>Can not edit default weapon set</source>
-        <translation type="obsolete">Öntanımlı silah seti düzenlenemez</translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set</source>
-        <translation type="obsolete">Öntanımlı silah seti silinemez</translation>
-    </message>
-    <message>
-        <source>Really delete this weapon set?</source>
-        <translation>Bu silah seti silinsin mi?</translation>
-    </message>
-    <message>
-        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Teams</source>
-        <translation type="unfinished">Takımlar</translation>
-    </message>
-    <message>
-        <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Schemes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fields required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Successfully posted the issue on code.google.com!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error during authentication with www.google.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error creating the issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2131,21 +1836,199 @@ Lütfen kurulumunuzu kontrol edin</translation>
 </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Error</source>
-        <translation>Hata</translation>
+        <source>Teams - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the team &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a record from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication at google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main - Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>%1 dizini oluşturulamadı</translation>
+        <translation type="unfinished">%1 dizini oluşturulamadı</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>Tamam</translation>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>TCP - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation type="unfinished">Sunucu başlatılamadı: %1.</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video upload - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netgame - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a server from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Lütfen oda ismini girin</translation>
+    </message>
+    <message>
+        <source>Record Play - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation type="unfinished">Lütfen listeden kaydı seçin</translation>
+    </message>
+    <message>
+        <source>Cannot rename to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation type="unfinished">Lütfen listeden bir oda seçin</translation>
+    </message>
+    <message>
+        <source>Room Name - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the video &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Do you really want to remove %1 file(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the ammo &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Nickname</source>
         <translation type="unfinished"></translation>
@@ -2255,17 +2138,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
 </context>
 <context>
-    <name>QTableWidget</name>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Harita</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Silahlar</translation>
-    </message>
-</context>
-<context>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
@@ -2340,21 +2212,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
     </message>
 </context>
 <context>
-    <name>TCPBase</name>
-    <message>
-        <source>Error</source>
-        <translation>Hata</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation>Sunucu başlatılamadı: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine: %1 (</source>
-        <translation>Oyun motoru çalıştırılamadı: %1 (</translation>
-    </message>
-</context>
-<context>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
@@ -2395,10 +2252,6 @@ Lütfen kurulumunuzu kontrol edin</translation>
     <message>
         <source>Invulnerable</source>
         <translation>Ölümsüzlük</translation>
-    </message>
-    <message>
-        <source>Add Mines</source>
-        <translation type="obsolete">Mayın Ekle</translation>
     </message>
     <message>
         <source>Random Order</source>

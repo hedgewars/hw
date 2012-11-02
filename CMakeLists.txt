@@ -43,8 +43,8 @@ ENDIF()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 18${version_suffix})
-set(HEDGEWARS_PROTO_VER 42)
+set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
+set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
@@ -176,13 +176,13 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed} "-vq" "-vm4079,4080,4081" "-B" "-FE../bin" "-Cs2000000" "-vewn" "-dDEBUGFILE" ${pascal_flags})
+set(pascal_flags ${fpflags_parsed} "-vm4079,4080,4081" "-B" "-FE../bin" "-Cs2000000" "-vewnq" "-dDEBUGFILE" ${pascal_flags})
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     message(STATUS "Building Debug flavour")
-    set(pascal_flags "-O-" "-g" "-gl" "-gv" "-Ct" ${pascal_flags})
+    set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 else()
     message(STATUS "Building Release flavour")
@@ -227,9 +227,9 @@ endif()
 #lua discovery
 find_package(Lua)
 if(LUA_FOUND)
-    message(STATUS "LUA found: ${LUA_DEFAULT}")
+    message(STATUS "Found LUA: ${LUA_DEFAULT}")
 else()
-    message(STATUS "Cound NOT find LUA, building bundled dependency")
+    message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})

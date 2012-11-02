@@ -31,7 +31,7 @@ TargetPos[ 3 ] = { X = 2200, Y = 800, Message = loc("The next one is pretty hard
 TargetPos[ 4 ] = { X = 2870, Y = 400, Message = loc("I don't know how you did that.. But good work! |The next one should be easy as cake for you!") }
 TargetPos[ 5 ] = { X = 4000, Y = 1750, Message = "" }
 TargetPos[ 6 ] = { Modifier = true, Func = function() -- Last target is ALWAYS the "winning" target!
-	Info( "Congratulations", "Congratulations! You've completed the Rope tutorial! |- Tutorial ends in 10 seconds!", 0 ) -- Congrats
+	Info( loc("Congratulations"), loc("Congratulations! You've completed the Rope tutorial! |- Tutorial ends in 10 seconds!"), 0 ) -- Congrats
 	HogSay( Player, loc("Victory!"), SAY_SHOUT) -- You win!
 	PlaySound( sndVictory )
 
@@ -44,7 +44,7 @@ TargetPos[ 6 ] = { Modifier = true, Func = function() -- Last target is ALWAYS t
 end }
 
 function Info( Title, Text, Icon ) -- I made a small wrapper to ease the process
-	ShowMission( loc("Rope Training"), loc(Title), loc( Text ), Icon, 0 )
+	ShowMission( loc("Rope Training"), Title, Text, Icon, 0 )
 end
 
 function NewFollowGear( Gear )
@@ -67,7 +67,7 @@ function AutoSpawn() -- Auto spawn the next target after you've killed the curre
 	end
 
 	if TargetNumber > 1 then
-		Info( "Aiming Practice", TargetPos[ TargetNumber - 1 ].Message, -amRope )
+		Info(loc("Aiming Practice"), TargetPos[ TargetNumber - 1 ].Message, -amRope )
 	end
 
 	SpawnTarget( TargetPos[ TargetNumber ].X, TargetPos[ TargetNumber ].Y ) -- Spawn target on the next position
@@ -83,8 +83,8 @@ function CheckPosition( Hog, Distance ) -- Show a message when you get close to 
 	if (not BaseballIntro and not Objective) and (CurrentHedgehog ~= nil) then --Fail safe check
 		if InRange( Hog, 1100, 1100, Distance ) then -- Check if the player is within predefined position of the first target
 			BaseballIntro = true
-			Info( "Aiming Practice", "Great work! Now hit it with your Baseball Bat! |Tip: You can change weapon with 'Right Click'!", -amRope ) -- Guide them
-			Timer( 10000, "Remember: The rope only bend around objects, |if it doesn't hit anything it's always stright!" )
+			Info(loc("Aiming Practice"), loc("Great work! Now hit it with your Baseball Bat! |Tip: You can change weapon with 'Right Click'!"), -amRope ) -- Guide them
+			Timer( 10000, loc("Remember: The rope only bend around objects, |if it doesn't hit anything it's always stright!"))
 		end
 	end
 end
@@ -112,7 +112,7 @@ function onGameInit() -- Called when the game loads
 	Player = AddHog( loc( "Hunter" ), 0, 1, "StrawHat" ) -- Add a hog for it, and name it "Hunter"
 	SetGearPosition( Player, 420, 1750 ) -- Set player position
 
-	SetEffect( Player, heResurrectable, true ) -- By Suggestion :)
+	SetEffect( Player, heResurrectable, 1 ) -- By Suggestion :)
 end
 
 function onGameStart() -- Called when the game starts
@@ -120,8 +120,8 @@ function onGameStart() -- Called when the game starts
 
 	SetHealth( Player, 100 ) -- Give the player 100 Health points
 
-	Info( "Aiming Practice", "Get to the target using your rope! |Controls: Left & Right to swing the rope - Up & Down to Contract and Expand!", -amRope ) -- Short intro to tell the player what to do
-	Timer( 10000, "Tip: The rope physics are different than in the real world, |use it to your advantage!" ) -- After 15 sec, give them more help
+	Info(loc("Aiming Practice"), loc("Get to the target using your rope! |Controls: Left & Right to swing the rope - Up & Down to Contract and Expand!"), -amRope ) -- Short intro to tell the player what to do
+	Timer( 10000, loc("Tip: The rope physics are different than in the real world, |use it to your advantage!") ) -- After 15 sec, give them more help
 end
 
 function onNewTurn()
@@ -131,10 +131,10 @@ end
 function onGameTick20()
 	if TurnTimeLeft < 40 and TurnTimeLeft > 0 then -- Round starts at 0, so we check if the round is finished by using 1
 		GameLost = true -- You lost the game
-		Info( "Aiming Practice", "You did not make it in time, try again!", -amSkip )
+		Info(loc("Aiming Practice"), loc("You did not make it in time, try again!"), -amSkip )
 		SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
 
-		SetEffect( Player, heResurrectable, false )
+		SetEffect( Player, heResurrectable, 0 )
 
 	end
 
@@ -146,7 +146,7 @@ function onGameTick20()
 			ParseCommand("teamgone " .. loc( "Rope Team" ))
 
 			--SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
-			--SetEffect( Player, heResurrectable, false )
+			--SetEffect( Player, heResurrectable, 0 )
 			TurnTimeLeft = 1
 
 			WaitTime = -1
@@ -167,7 +167,7 @@ function onGameTick20()
 
 	for k, v in pairs( Timers ) do
 		if v.End <= GetTime then
-			Info( "Aiming Practice", v.Message, -amRope )
+			Info(loc("Aiming Practice"), v.Message, -amRope )
 			Timers[ k ] = nil
 		end
 	end
@@ -185,10 +185,10 @@ end
 function onGearResurrect( Gear )
 	if TargetNumber > 1 then
 		SetGearPosition( Player, TargetPos[ TargetNumber - 1 ].X, TargetPos[ TargetNumber - 1 ].Y ) -- If the player dies spawn him where he last killed a target
-		Info( "Aiming Practice", "You have been respawned, at your last checkpoint!", -amRope )
+		Info(loc("Aiming Practice"), loc("You have been respawned, at your last checkpoint!"), -amRope )
 	else
 		SetGearPosition( Player, 420, 1750 ) -- If the player dies and didn't kill a target just spawn him at the default spawn
-		Info( "Aiming Practice", "You have been respawned, be more carefull next time!", -amRope )
+		Info(loc("Aiming Practice"), loc("You have been respawned, be more carefull next time!"), -amRope )
 	end
 end
 

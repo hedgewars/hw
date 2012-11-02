@@ -28,7 +28,9 @@ endif()
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
-find_package(FFMPEG)
+if(NOT NOVIDEOREC)
+    find_package(FFMPEG)
+endif()
 
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
@@ -74,8 +76,8 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
-if((NOT NOVIDEOREC) AND "${FFMPEG_FOUND}")
-    add_definitions(-DVIDEOREC)
+if(${FFMPEG_FOUND})
+    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
 endif()
 
 set(hwfr_src
@@ -130,7 +132,7 @@ set(hwfr_moc_hdrs
     hwform.h
     team.h
     util/DataManager.h
-    util/libav_iteraction.h
+    util/LibavInteraction.h
     )
 
 set(hwfr_hdrs

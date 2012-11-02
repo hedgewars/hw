@@ -29,7 +29,6 @@
 #include <QVBoxLayout>
 #include <QIcon>
 #include <QLineEdit>
-#include <QMessageBox>
 #include <QStringListModel>
 
 #include "hwconsts.h"

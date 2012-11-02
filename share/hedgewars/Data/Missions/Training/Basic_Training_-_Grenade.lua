@@ -44,12 +44,12 @@ function spawnTarget()
 	
 	-- move it to a random position within 0 and
 	-- LAND_WIDTH - the width of the map
-	FindPlace(gear, true, 0, LAND_WIDTH-1350)
+	FindPlace(gear, true, 0, LAND_WIDTH-326)
 	
 	-- move the target to a higher vertical position
 	-- to ensure it's not somewhere down below
 	x, y = GetGearPosition(gear)
-	SetGearPosition(gear, x, 500)
+	SetGearPosition(gear, x, 0)
 end
 
 -- This function is called before the game loads its
@@ -87,7 +87,7 @@ function onGameInit()
 	AddTeam(loc("Grenadiers"), 14483456, "Simple", "Island", "Default")
 	-- And add a hog to it
 	player = AddHog(loc("Nade Boy"), 0, 1, "war_grenadier1")
-	SetGearPosition(player, 1530, 1100)
+	SetGearPosition(player, 506, 76)
 end
 
 -- This function is called when the round starts

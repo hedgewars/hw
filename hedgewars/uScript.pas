@@ -46,7 +46,7 @@ function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : Lon
 function ScriptExists(fname : shortstring) : boolean;
 
 
-function ParseCommandOverride(key, value : shortstring) : shortstring;
+//function ParseCommandOverride(key, value : shortstring) : shortstring;  This did not work out well
 
 procedure initModule;
 procedure freeModule;
@@ -196,7 +196,7 @@ begin
         for i:= 1 to c do s[i]:= t[i-1];
         s[0]:= char(c);
 
-        ParseCommand(s, true);
+        ParseCommand(s, true, true);
 
         end
     else
@@ -1306,11 +1306,11 @@ begin
         end
     else
         begin
-        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true);
-        ParseCommand('grave ' + lua_tostring(L, 3), true);
-        ParseCommand('fort ' + lua_tostring(L, 4), true);
-        ParseCommand('voicepack ' + lua_tostring(L, 5), true);
-        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true);
+        ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true, true);
+        ParseCommand('grave ' + lua_tostring(L, 3), true, true);
+        ParseCommand('fort ' + lua_tostring(L, 4), true, true);
+        ParseCommand('voicepack ' + lua_tostring(L, 5), true, true);
+        if (np = 6) then ParseCommand('flag ' + lua_tostring(L, 6), true, true);
         CurrentTeam^.Binds:= DefaultBinds
         // fails on x64
         //lua_pushinteger(L, LongInt(CurrentTeam));
@@ -1329,8 +1329,8 @@ begin
     else
         begin
         temp:= lua_tostring(L, 4);
-        ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true);
-        ParseCommand('hat ' + temp, true);
+        ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true, true);
+        ParseCommand('hat ' + temp, true, true);
         lua_pushinteger(L, CurrentHedgehog^.Gear^.uid);
         end;
     lc_addhog:= 1;
@@ -1669,7 +1669,11 @@ begin
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
             hat:= lua_tostring(L, 2);
             gear^.Hedgehog^.Hat:= hat;
-            LoadHedgehogHat(gear^.Hedgehog^, hat);
+AddFileLog('Changed hat to: '+hat);
+            if (Length(hat) > 39) and (Copy(hat,1,8) = 'Reserved') and (Copy(hat,9,32) = gear^.Hedgehog^.Team^.PlayerHash) then
+                LoadHedgehogHat(gear^.Hedgehog^, 'Reserved/' + Copy(hat,9,Length(hat)-8))
+            else
+                LoadHedgehogHat(gear^.Hedgehog^, hat);
         end;
     lc_sethoghat:= 0;
 end;
@@ -1871,7 +1875,7 @@ ScriptSetString('Goals', '');
 ScriptCall('onGameInit');
 
 // pop game variables
-ParseCommand('seed ' + ScriptGetString('Seed'), true);
+ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := ScriptGetInteger('MapGen');
@@ -1892,9 +1896,10 @@ cSuddenDTurns    := ScriptGetInteger('SuddenDeathTurns');
 cWaterRise       := ScriptGetInteger('WaterRise');
 cHealthDecrease  := ScriptGetInteger('HealthDecrease');
 
-ParseCommand('map ' + ScriptGetString('Map'), true);
+if cMapName <> ScriptGetString('Map') then
+    ParseCommand('map ' + ScriptGetString('Map'), true, true);
 if ScriptGetString('Theme') <> '' then
-    ParseCommand('theme ' + ScriptGetString('Theme'), true);
+    ParseCommand('theme ' + ScriptGetString('Theme'), true, true);
 LuaGoals:= ScriptGetString('Goals');
 
 // Support lua changing the ammo layout - assume all hogs have same ammo, note this might leave a few ammo stores lying around.
@@ -2016,6 +2021,7 @@ if lua_pcall(luaState, 0, 0, 0) <> 0 then
 GetGlobals;
 end;
 
+(*
 function ParseCommandOverride(key, value : shortstring) : shortstring;
 begin
 ParseCommandOverride:= value;
@@ -2035,6 +2041,7 @@ else
     lua_pop(luaState, 1)
     end;
 end;
+*)
 
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
 begin
@@ -2449,7 +2456,7 @@ begin
     fname:= fname; // avoid hint
     ScriptExists:= false
 end;
-
+(*
 function ParseCommandOverride(key, value : shortstring) : shortstring;
 begin
     // avoid hints
@@ -2457,6 +2464,7 @@ begin
     value:= value;
     ParseCommandOverride:= ''
 end;
+*)
 
 procedure ScriptOnScreenResize;
 begin

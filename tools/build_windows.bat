@@ -1,45 +1,63 @@
 @echo off
-:edit these variables if you need
-SET PASCAL=C:\FPC\2.4.4\bin\i386-win32\
-SET QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
-SET PATH=%PATH%;%PASCAL%
+::edit these variables if you need
+set PASCAL=C:\FPC\2.4.4\bin\i386-win32\
+set QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
+set PATH=%PATH%;%PASCAL%
+set BUILD_TYPE="Debug"
 
-:SETUP
+:setup
+set CURRDIR="%CD%"
 cd ..
-if not exist bin mkdir bin
-cd bin
 
-echo Copying the DLLs...
-xcopy /d/y ..\misc\winutils\bin\* .
-xcopy /d/y %QTDIR%\QtCore4.dll .
-xcopy /d/y %QTDIR%\QtGui4.dll .
-xcopy /d/y %QTDIR%\QtNetwork4.dll .
-xcopy /d/y %QTDIR%\libgcc_s_dw2-1.dll .
-xcopy /d/y %QTDIR%\mingwm10.dll .
+echo Fetching all DLLs...
+if %BUILD_TYPE%=="Debug" (
+    for %%G in (QtCored4 QtGuid4 QtNetworkd4) do xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
+)
+for %%G in (QtCore4 QtGui4 QtNetwork4 libgcc_s_dw2-1 mingwm10) do (
+    xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
+)
 
-echo Setting up the environment...
+if not exist %CD%\misc\winutils\bin\ mkdir %CD%\misc\winutils\bin\
+if not exist %CD%\misc\winutils\bin\SDL.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/release/SDL-1.2.15-win32.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\SDL_image.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_image/release/SDL_image-1.2.12-win32.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\SDL_net.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_net/release/SDL_net-1.2.8-win32.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\SDL_mixer.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://www.libsdl.org/projects/SDL_mixer/release/SDL_mixer-1.2.12-win32.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\SDL_ttf.dll cscript %CD%\tools\w32DownloadUnzip.vbs  http://www.libsdl.org/projects/SDL_ttf/release/SDL_ttf-2.0.11-win32.zip %CD%\misc\winutils\bin
+
+::for video recording
+if not exist %CD%\misc\winutils\bin\avformat-54.dll cscript %CD%\tools\w32DownloadUnzip.vbs http://hedgewars.googlecode.com/files/libav-win32-20121022-dll.zip %CD%\misc\winutils\bin
+if not exist %CD%\misc\winutils\bin\glut32.dll cscript %CD%\tools\w32DownloadUnzip.vbs https://user.xmission.com/~nate/glut/glut-3.7.6-bin.zip %CD%\misc\winutils\bin
+copy /y %CD%\misc\winutils\bin\glut-3.7.6-bin\glut32.dll %CD%\misc\winutils\bin\glut32.dll
+
+::this is needed because fpc png unit hardcodes libpng-1.2.12
+if not exist %CD%\misc\winutils\bin\libpng13.dll copy /y %CD%\misc\winutils\bin\libpng15-15.dll %CD%\misc\winutils\bin\libpng13.dll
+
+xcopy /d/y %CD%\misc\winutils\bin\*.dll %CD%\bin\
+
+::setting up the environment...
 call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
-set errorlevel=
-cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\..\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\..\misc\winutils\lib" ..
+set ERRORLEVEL=
+cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" . -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
 
-if %errorlevel% NEQ 0 goto exit
+if %ERRORLEVEL% NEQ 0 goto exitpoint
 
 echo Running make...
-set errorlevel=
-mingw32-make -lSDL -lSDL_Mixer install
+set ERRORLEVEL=
+mingw32-make
+if %ERRORLEVEL% NEQ 0 goto exitpoint
 
-if %errorlevel% NEQ 0 goto exit
+echo Installing...
+set ERRORLEVEL=
+mingw32-make install > nul
+if %ERRORLEVEL% NEQ 0 goto exitpoint
 
-echo Creating shortcut...
-if /i "%PROGRAMFILES(X86)%"=="" (
-	COPY /y ..\misc\winutils\Hedgewars_x86.lnk C:\%HOMEPATH%\Desktop\Hedgewars.lnk 
-) else (
-	COPY /y ..\misc\winutils\Hedgewars_x64.lnk C:\%HOMEPATH%\Desktop\Hedgewars.lnk
-)
+echo Creating commodity shortcut...
+copy /y %CD%\misc\winutils\Hedgewars.lnk C:%HOMEPATH%\Desktop\Hedgewars.lnk
+
 echo ALL DONE, Hedgewars has been successfully compiled and installed
 
-:exit
-cd ../tools
+:exitpoint
+cd %CURRDIR%
 pause

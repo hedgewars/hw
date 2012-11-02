@@ -27,6 +27,7 @@ procedure freeModule;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 procedure DrawLand(dX, dY: LongInt);
 procedure ResetLand;
+procedure SetLandTexture;
 
 implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
@@ -183,7 +184,7 @@ for x:= 0 to LANDTEXARW -1 do
 
 end;
 
-procedure initModule;
+procedure SetLandTexture;
 begin
     if (cReducedQuality and rqBlurryLand) = 0 then
         begin
@@ -197,6 +198,10 @@ begin
         end;
 
     SetLength(LandTextures, LANDTEXARW, LANDTEXARH);
+end;
+
+procedure initModule;
+begin
 end;
 
 procedure ResetLand;

@@ -62,6 +62,7 @@ data Action =
     | ModifyRoom (RoomInfo -> RoomInfo)
     | ModifyServerInfo (ServerInfo -> ServerInfo)
     | AddRoom B.ByteString B.ByteString
+    | SendUpdateOnThisRoom
     | CheckRegistered
     | ClearAccountsCache
     | ProcessAccountInfo AccountInfo
@@ -211,7 +212,7 @@ processAction (MoveToRoom ri) = do
     rnc <- gets roomsClients
 
     io $ do
-        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False}) ci
+        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False, isInGame = False}) ci
         modifyRoom rnc (\r -> r{playersIn = playersIn r + 1}) ri
         moveClientToRoom rnc ri ci
 
@@ -254,19 +255,23 @@ processAction ChangeMaster = do
     proto <- client's clientProto
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM (head . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
+    newMasterId <- liftM (last . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
     oldRoomName <- io $ room'sM rnc name ri
     oldMaster <- client's nick
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     let newRoomName = if proto < 42 then nick newMaster else oldRoomName
     mapM_ processAction [
-        ModifyRoom (\r -> r{masterID = newMasterId, name = newRoomName, isRestrictedJoins = False, isRestrictedTeams = False})
-        , ModifyClient2 newMasterId (\c -> c{isMaster = True})
+        ModifyRoom (\r -> r{masterID = newMasterId
+                , name = newRoomName
+                , isRestrictedJoins = False
+                , isRestrictedTeams = False
+                , readyPlayers = if isReady newMaster then readyPlayers r else readyPlayers r + 1})
+        , ModifyClient2 newMasterId (\c -> c{isMaster = True, isReady = True})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["WARNING", "New room admin is " `B.append` nick newMaster]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+hr", nick newMaster]
         ]
 
     newRoom' <- io $ room'sM rnc id ri
@@ -279,7 +284,6 @@ processAction (AddRoom roomName roomPassword) = do
     rnc <- gets roomsClients
     proto <- client's clientProto
     n <- client's nick
-    chan <- client's sendChan
 
     let rm = newRoom{
             masterID = clId,
@@ -296,8 +300,6 @@ processAction (AddRoom roomName roomPassword) = do
 
     mapM_ processAction [
         AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm)
-        , AnswerClients [chan] ["CLIENT_FLAGS", "+h", n]
-        , ModifyClient (\cl -> cl{isMaster = True})
         ]
 
 
@@ -318,14 +320,25 @@ processAction RemoveRoom = do
     io $ removeRoom rnc ri
 
 
+processAction SendUpdateOnThisRoom = do
+    Just clId <- gets clientIndex
+    proto <- client's clientProto
+    rnc <- gets roomsClients
+    ri <- io $ clientRoomM rnc clId
+    rm <- io $ room'sM rnc id ri
+    n <- io $ client'sM rnc nick (masterID rm)
+    chans <- liftM (map sendChan) $! sameProtoClientsS proto
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo n rm)
+
+
 processAction UnreadyRoomClients = do
     ri <- clientRoomA
     roomPlayers <- roomClientsS ri
     pr <- client's clientProto
     mapM_ processAction [
-        AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr (map nick roomPlayers)
-        , ModifyRoomClients (\cl -> cl{isReady = False})
-        , ModifyRoom (\r -> r{readyPlayers = 0})
+        AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr . map nick . filter (not . isMaster) $ roomPlayers
+        , ModifyRoomClients (\cl -> cl{isReady = isMaster cl})
+        , ModifyRoom (\r -> r{readyPlayers = 1})
         ]
     where
         notReadyMessage p nicks = if p < 38 then "NOT_READY" : nicks else "CLIENT_FLAGS" : "-r" : nicks
@@ -347,6 +360,7 @@ processAction FinishGame = do
                 }
             )
         : UnreadyRoomClients
+        : SendUpdateOnThisRoom
         : answerRemovedTeams
 
 

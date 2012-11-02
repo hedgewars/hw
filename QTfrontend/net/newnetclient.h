@@ -145,11 +145,7 @@ class HWNewNet : public QObject
         void serverMessageOld(const QString &);
         void latestProtocolVar(int);
 
-        void setReadyStatus(const QString & nick, bool isReady);
         void setMyReadyStatus(bool isReady);
-        void setAdminStatus(const QString & nick, bool isAdmin);
-        void setRoomMasterStatus(const QString & nick, bool isAdmin);
-        void setRegisteredStatus(const QStringList & nicks, bool isRegistered);
 
     public slots:
         void ToggleReady();

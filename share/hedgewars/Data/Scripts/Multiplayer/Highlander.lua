@@ -175,9 +175,9 @@ function onGameStart()
 
 end
 
-function onNewTurn()
+--function onNewTurn()
 --
-end
+--end
 
 
 function onGameTick20()

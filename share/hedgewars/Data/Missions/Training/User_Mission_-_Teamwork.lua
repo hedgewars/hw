@@ -30,9 +30,9 @@ function onGameInit()
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Robot", "cm_binary")
 	enemy = AddHog(loc("Unit 3378"), 5, 30, "cyborg1")
 
-	SetGearPosition(player, 2427, 1259)
-	SetGearPosition(p2, 2293, 1263)
-	SetGearPosition(enemy, 1516, 1519)
+	SetGearPosition(player,1403,235)
+	SetGearPosition(p2,1269,239)
+	SetGearPosition(enemy,492,495)
 
 end
 
@@ -40,43 +40,43 @@ end
 function onGameStart()
 
 	--mines
-	AddGear(1300, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1325, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1350, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1375, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1400, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1425, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1450, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1475, 1100, gtMine, 0, 0, 0, 0)
-	AddGear(1500, 1100, gtMine, 0, 0, 0, 0)
+	AddGear(276,76,gtMine, 0, 0, 0, 0)
+	AddGear(301,76,gtMine, 0, 0, 0, 0)
+	AddGear(326,76,gtMine, 0, 0, 0, 0)
+	AddGear(351,76,gtMine, 0, 0, 0, 0)
+	AddGear(376,76,gtMine, 0, 0, 0, 0)
+	AddGear(401,76,gtMine, 0, 0, 0, 0)
+	AddGear(426,76,gtMine, 0, 0, 0, 0)
+	AddGear(451,76,gtMine, 0, 0, 0, 0)
+	AddGear(476,76,gtMine, 0, 0, 0, 0)
 
-	AddGear(1910, 1380, gtMine, 0, 0, 0, 0)
-	AddGear(1925, 1380, gtMine, 0, 0, 0, 0)
-	AddGear(1950, 1380, gtMine, 0, 0, 0, 0)
-	AddGear(1975, 1380, gtMine, 0, 0, 0, 0)
-	AddGear(2000, 1380, gtMine, 0, 0, 0, 0)
-	AddGear(2025, 1380, gtMine, 0, 0, 0, 0)
+	AddGear(886,356,gtMine, 0, 0, 0, 0)
+	AddGear(901,356,gtMine, 0, 0, 0, 0)
+	AddGear(926,356,gtMine, 0, 0, 0, 0)
+	AddGear(951,356,gtMine, 0, 0, 0, 0)
+	AddGear(976,356,gtMine, 0, 0, 0, 0)
+	AddGear(1001,356,gtMine, 0, 0, 0, 0)
 
 	-- crates crates and more crates
-	bCrate = SpawnAmmoCrate(2712,1500,amBaseballBat)
-	SpawnUtilityCrate(1596,1167,amGirder)
-	SpawnAmmoCrate(2728,1978,amPickHammer)
-	SpawnAmmoCrate(1728,1647,amBlowTorch)
-	SpawnUtilityCrate(2567,1768,amJetpack)
-	SpawnAmmoCrate(1251,1466,amDrill)
+	bCrate = SpawnAmmoCrate(1688,476,amBaseballBat)
+	SpawnUtilityCrate(572,143,amGirder)
+	SpawnAmmoCrate(1704,954,amPickHammer)
+	SpawnAmmoCrate(704,623,amBlowTorch)
+	SpawnUtilityCrate(1543,744,amJetpack)
+	SpawnAmmoCrate(227,442,amDrill)
 
 	ShowMission(loc("Codename: Teamwork"), "", loc("- Eliminate Unit 3378 |- Feeble Resistance must survive") .. loc("|- Mines Time:") .. " " .. 0 .. " " .. loc("sec"), 0, 0)
 
 end
 
 
-function onGameTick()
+--function onGameTick()
 
 	--if CurrentHedgehog ~= nil then
 	--	AddCaption(GetX(CurrentHedgehog) .. ";" .. GetY(CurrentHedgehog))
 	--end
 
-end
+--end
 
 
 function onAmmoStoreInit()

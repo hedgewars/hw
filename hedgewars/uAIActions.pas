@@ -72,7 +72,7 @@ uses uAIMisc, uAI, uAmmos, uVariables, uCommands, uUtils, uIO{$IFDEF TRACEAIACTI
 var PrevX: LongInt = 0;
     timedelta: Longword = 0;
 
-const ActionIdToStr: array[0..8] of string[16] = (
+const ActionIdToStr: array[0..7] of string[16] = (
 {aia_none}           '',
 {aia_Left}           'left',
 {aia_Right}          'right',
@@ -80,12 +80,11 @@ const ActionIdToStr: array[0..8] of string[16] = (
 {aia_attack}         'attack',
 {aia_Up}             'up',
 {aia_Down}           'down',
-{aia_Switch}         'switch',
-{aia_waitAngle}      'waitAngle'
+{aia_Switch}         'switch'
                      );
 
 {$IFDEF TRACEAIACTIONS}
-const SpecActionIdToStr: array[$8000..$8009] of string[16] = (
+const SpecActionIdToStr: array[$8000..$800C] of string[16] = (
 {aia_Weapon}             'aia_Weapon',
 {aia_WaitX}              'aia_WaitX',
 {aia_WaitY}              'aia_WaitY',
@@ -95,7 +94,10 @@ const SpecActionIdToStr: array[$8000..$8009] of string[16] = (
 {aia_HJump}              'aia_HJump',
 {aia_LJump}              'aia_LJump',
 {aia_Skip}               'aia_Skip',
-{aia_Wait}               'aia_Wait'
+{aia_Wait}               'aia_Wait',
+{aia_Put}                'aia_Put',
+{aia_waitAngle}          'aia_waitAngle',
+{aia_waitAmmoXY}         'aia_waitAmmoXY'
 );
 
 procedure DumpAction(Action: TAction; Me: PGear);
@@ -237,8 +239,8 @@ with Actions.actions[Actions.Pos] do
                 if LongInt(Me^.Angle) <> Abs(Param) then exit;
 
             aia_waitAmmoXY:
-                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then exit;
-
+                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then 
+                    exit;
             end
         else
             begin

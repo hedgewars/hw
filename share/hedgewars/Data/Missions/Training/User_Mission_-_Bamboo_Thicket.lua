@@ -26,8 +26,8 @@ function onGameInit()
 	AddTeam(loc("Cybernetic Empire"), 	1175851, "Simple", "Island", "Default")
 	enemy = AddHog(loc("Unit 835"), 1, 10, "cyborg1")
 
-	SetGearPosition(player,1166,1680)
-	SetGearPosition(enemy,2848,1443)
+	SetGearPosition(player,142,656)
+	SetGearPosition(enemy,1824,419)
 
 end
 
@@ -37,10 +37,10 @@ function onGameStart()
 	ShowMission(loc("Bamboo Thicket"), loc("User Challenge"), loc("Eliminate the enemy before the time runs out"), -amBazooka, 0)
 
 	--WEAPON CRATE LIST. WCRATES: 1
-	SpawnAmmoCrate(1915,1876,amBazooka)
+	SpawnAmmoCrate(891,852,amBazooka)
 	--UTILITY CRATE LIST. UCRATES: 2
-	SpawnUtilityCrate(1986,1141,amBlowTorch)
-	SpawnUtilityCrate(1427,1527,amParachute)
+	SpawnUtilityCrate(962,117,amBlowTorch)
+	SpawnUtilityCrate(403,503,amParachute)
 
 	AddAmmo(enemy, amGrenade, 100)
 		

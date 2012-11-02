@@ -144,7 +144,7 @@ function CheckScore(teamID)
 		for i = 0, (numhhs-1) do
 			if hhs[i] ~= nil then
 				if GetHogClan(hhs[i]) == alt then
-					SetEffect(hhs[i], heResurrectable, false)
+					SetEffect(hhs[i], heResurrectable, 0)
 					SetHealth(hhs[i],0)
 				end
 			end
@@ -607,7 +607,7 @@ function onGearAdd(gear)
 	if GetGearType(gear) == gtHedgehog then
 		hhs[numhhs] = gear
 		numhhs = numhhs + 1
-		SetEffect(gear, heResurrectable, true)
+		SetEffect(gear, heResurrectable, 1)
 
 	elseif GetGearType(gear) == gtPiano then
 

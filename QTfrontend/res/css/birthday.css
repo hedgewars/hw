@@ -21,7 +21,7 @@ HWForm,QDialog {
 background-image: url(":/res/BackgroundBirthday.png");
 background-position: bottom center;
 background-repeat: repeat-x;
-background-color: #141250;
+background-color: #100308;
 }
 
 * {
@@ -32,16 +32,16 @@ selection-color: #00351d;
 
 a { color:#c8c8ff; }
 
-QLineEdit, QListWidget, QTableView, QTextBrowser, QSpinBox, QComboBox,
+QLineEdit, QListWidget, QListView, QTableView, QTextBrowser, QSpinBox, QComboBox,
 QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item {
-background-color: rgba(13, 5, 68, 70%);
+background-color: rgba(20, 20, 20, 70%);
 }
 
 QComboBox::separator {
 border: solid; border-width: 3px; border-color: #ffcc00;
 }
 
-QPushButton, QListWidget, QTableView, QLineEdit, QHeaderView,
+QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
 QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget,
@@ -51,17 +51,17 @@ border-width: 3px;
 border-color: #ffcc00;
 }
 
-QPushButton:hover, QLineEdit:hover, QListWidget:hover,
+QPushButton:hover, QLineEdit:hover, QListWidget:hover, QListView:hover,
 QSpinBox:hover, QToolBox:hover, QComboBox:hover {
 border-color: yellow;
 }
 
-QLineEdit, QListWidget,QTableView, QTextBrowser,
+QLineEdit, QListWidget, QListView,QTableView, QTextBrowser,
 QSpinBox, QToolBox, QPlainTextEdit {
 border-radius: 10px;
 }
 
-QLineEdit, QLabel, QHeaderView, QListWidget, QTableView,
+QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
 QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget,
 SelWeaponWidget, QCheckBox, QRadioButton, QPushButton, QPlainTextEdit {
@@ -76,7 +76,7 @@ background-color: #000000;
 background-position: bottom center;
 background-repeat: repeat-x;
 border-radius: 16px;
-background-color: rgba(13, 5, 68, 70%);
+background-color: rgba(20, 20, 20, 70%);
 padding: 6px;
 }
 /*  Experimenting with PaintOnScreen and border-radius on IconedGroupBox children didn't work out well

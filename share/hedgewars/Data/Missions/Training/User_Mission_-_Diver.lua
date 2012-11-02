@@ -28,8 +28,8 @@ function onGameInit()
 	AddTeam(loc("Toxic Team"), 	1175851, "Simple", "Island", "Default")
 	enemy = AddHog(loc("Poison"), 1, 100, "Skull")
 
-	SetGearPosition(player, 1454, 1540)
-	SetGearPosition(enemy, 2488, 1960)
+	SetGearPosition(player,430,516)
+	SetGearPosition(enemy,1464,936)
 
 end
 
@@ -37,12 +37,12 @@ end
 function onGameStart()
 
 
-	SpawnAmmoCrate(1450,1910,amJetpack)
-	SpawnAmmoCrate(2568,1714,amFirePunch)
-	SpawnAmmoCrate(1974,1875,amBlowTorch)
-	SpawnAmmoCrate(2056,1877,amParachute)
+	SpawnAmmoCrate(426,886,amJetpack)
+	SpawnAmmoCrate(1544,690,amFirePunch)
+	SpawnAmmoCrate(950,851,amBlowTorch)
+	SpawnAmmoCrate(1032,853,amParachute)
 
-	AddGear(1603, 1320, gtMine, 0, 0, 0, 0)
+	AddGear(579, 296, gtMine, 0, 0, 0, 0)
 
 	ShowMission(loc("Operation Diver"), "", loc("Eliminate Poison before the time runs out") .. loc("|- Mines Time:") .. " " .. 1 .. " " .. loc("sec"), -amFirePunch, 0);
 	--SetTag(AddGear(0, 0, gtATSmoothWindCh, 0, 0, 0, 1), -70)

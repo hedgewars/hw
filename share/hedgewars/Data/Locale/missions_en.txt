@@ -45,3 +45,6 @@ User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
 
 User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
 User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
+
+portal.name= Mission: Portal training mission
+portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"

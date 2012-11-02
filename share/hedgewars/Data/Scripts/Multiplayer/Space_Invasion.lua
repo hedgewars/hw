@@ -619,7 +619,7 @@ function onNewRound()
 
 		for i = 0, (numhhs-1) do
 			if GetHogClan(hhs[i]) ~= bestClan then
-				SetEffect(hhs[i], heResurrectable, false)
+				SetEffect(hhs[i], heResurrectable, 0)
 				SetHealth(hhs[i],0)
 			end
 		end
@@ -1448,7 +1448,7 @@ function onGearAdd(gear)
 	--end
 
 	if GetGearType(gear) == gtHedgehog then
-		SetEffect(gear, heResurrectable, true)
+		SetEffect(gear, heResurrectable, 1)
 
 		-----------
 		-- control

@@ -18,13 +18,12 @@
 
 #include <QString>
 #include <QByteArray>
-//#include <QMessageBox>
 
 #include "recorder.h"
 #include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "game.h"
-#include "libav_iteraction.h"
+#include "LibavInteraction.h"
 
 // Encoding is memory expensive process, so we need to limit maximum number
 // of simultaneous encoders.
@@ -39,7 +38,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
     this->config = config;
     this->prefix = prefix;
     finished = false;
-    name = prefix + "." + LibavIteraction::instance().getExtension(config->AVFormat());
+    name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
 }
 
 HWRecorder::~HWRecorder()
@@ -111,7 +110,7 @@ QStringList HWRecorder::getArguments()
     arguments << "0"; // sound volume
     arguments << QString::number(config->timerInterval());
     arguments << datadir->absolutePath();
-    arguments << (config->isShowFPSEnabled() ? "1" : "0");
+    arguments << "0"; // fps
     arguments << (config->isAltDamageEnabled() ? "1" : "0");
     arguments << config->netNick().toUtf8().toBase64();
     arguments << QString::number(config->translateQuality());
@@ -125,7 +124,7 @@ QStringList HWRecorder::getArguments()
 // Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both. 
 // The library does support using both at once after all.
     arguments << QString::number(config->rec_Bitrate()*1024);
-    arguments << (config->recordAudio()? config->audioCodec() : "no");
+    arguments << (config->recordAudio() ? config->audioCodec() : "no");
 
     return arguments;
 }

@@ -1,12 +1,16 @@
 unit uAILandMarks;
 
 interface
-const markWasHere = $01;
+const 
+    markWalkedHere = $01;
+    markHJumped    = $02;
+    markLJumped    = $04;
 
 procedure addMark(X, Y: LongInt; mark: byte);
 function  checkMark(X, Y: LongInt; mark: byte) : boolean;
 procedure clearAllMarks;
 procedure clearMarks(mark: byte);
+procedure setAILandMarks;
 
 procedure initModule;
 procedure freeModule;
@@ -54,13 +58,16 @@ begin
             marks[Y, X]:= marks[Y, X] and (not mark)
 end;
 
-
-procedure initModule;
+procedure setAILandMarks;
 begin
     WIDTH:= LAND_WIDTH shr gr;
     HEIGHT:= LAND_HEIGHT shr gr;
     
     SetLength(marks, HEIGHT, WIDTH);
+end;
+
+procedure initModule;
+begin
 end;
 
 procedure freeModule;

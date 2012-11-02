@@ -60,6 +60,8 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
     connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));
     connect(pbDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
+
+    this->setWindowModality(Qt::WindowModal);
 }
 
 void HWHostPortDialog::setDefaultPort()

@@ -116,17 +116,18 @@ QTableView {
 alternate-background-color: #2f213a;
 gridline-color: transparent;
 }
-
+QTabWidget::pane { top: -2px; }
 QTabBar::tab {
-border-bottom-width: 0;
 border-radius: 0;
 border-top-left-radius: 6px;
 border-top-right-radius: 6px;
 padding: 3px;
+background-color: #00351d;
+color: #ffcc00;
 }
-QTabBar::tab:!selected {
-color: #0d0544;
-background-color: #ffcc00;
+QTabBar::tab:selected {
+border-bottom-color: #0d0544;
+border-bottom-width: 0;
 }
 QSpinBox::up-button{
 background: transparent;

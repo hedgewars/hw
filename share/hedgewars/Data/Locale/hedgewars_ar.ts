@@ -20,21 +20,6 @@
     </message>
 </context>
 <context>
-    <name>DrawMapWidget</name>
-    <message>
-        <source>File error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot open file &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cannot read file &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -56,14 +41,6 @@
         <translation>تغيير سلاح</translation>
     </message>
     <message>
-        <source>Error</source>
-        <translation>خطأ</translation>
-    </message>
-    <message>
-        <source>Illegal ammo scheme</source>
-        <translation>نظام اسلحة غير صحيح</translation>
-    </message>
-    <message>
         <source>Edit schemes</source>
         <translation>Edit schemes</translation>
     </message>
@@ -79,28 +56,12 @@
 <context>
     <name>HWAskQuitDialog</name>
     <message>
-        <source>Do yot really want to quit?</source>
+        <source>Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
-    <message>
-        <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="obsolete">%1 *** %2 تم حذفة من قائمة الترك</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="obsolete">%1 *** %2 تم اضافته الى قائمة النرك</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="obsolete">%1 *** %2 تم حذقه الى قائمة الاصدقاء</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="obsolete">%1 *** %2 تم حذفة من قائمة الاصدقاء</translation>
-    </message>
     <message>
         <source>%1 has been removed from your ignore list</source>
         <translation type="unfinished"></translation>
@@ -149,28 +110,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">جديد</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>خطا</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
-        <source>Unable to start the server</source>
-        <translation>لم اتمكن من بدا الخادم</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>لم اتمكن من حقظ الملف %1</translation>
-    </message>
-    <message>
-        <source>Please select record from the list above</source>
-        <translation>اختار من القائمة</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -199,10 +140,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">كلمة السر</translation>
-    </message>
-    <message>
         <source>Your nickname %1 is
 registered on Hedgewars.org
 Please provide your password below
@@ -218,14 +155,12 @@ or pick another nickname in game config:</source>
         <translation type="unfinished">اسم اللاعب</translation>
     </message>
     <message>
-        <source>Some one already uses
- your nickname %1
-on the server.
-Please pick another nickname:</source>
+        <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No nickname supplied.</source>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -353,20 +288,6 @@ Please pick another nickname:</source>
         <translation>تم طردك</translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">كلمة السر</translation>
-    </message>
-    <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password
-or pick another nickname:</source>
-        <translation type="obsolete">اسمك %1
-سجلت على Hedgewars.org
-اعطي كلمة السر
-او اختر اسم ثاني</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 انضم للغرفة</translation>
     </message>
@@ -381,10 +302,6 @@ or pick another nickname:</source>
     <message>
         <source>%1 *** %2 has left</source>
         <translation>%1 *** %2 خرج</translation>
-    </message>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">اسم اللاعب</translation>
     </message>
     <message>
         <source>User quit</source>
@@ -447,14 +364,6 @@ or pick another nickname:</source>
 <context>
     <name>PageAdmin</name>
     <message>
-        <source>Server message:</source>
-        <translation type="obsolete">Server message:</translation>
-    </message>
-    <message>
-        <source>Set message</source>
-        <translation type="obsolete">Set message</translation>
-    </message>
-    <message>
         <source>Clear Accounts Cache</source>
         <translation>Clear Accounts Cache</translation>
     </message>
@@ -488,10 +397,6 @@ or pick another nickname:</source>
     <message>
         <source>Connecting...</source>
         <translation type="unfinished">جاري الاتصال</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">الغاء</translation>
     </message>
 </context>
 <context>
@@ -546,20 +451,6 @@ or pick another nickname:</source>
 </context>
 <context>
     <name>PageGameStats</name>
-    <message>
-        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;افضل ضربة كانت من قبل &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;افضل لاعب هو &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;
-        </translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;المجموع&lt;b&gt;%1&lt;/b&gt; من اللاعبين قضوا في اللعبة.&lt;/p&gt;
-        </translation>
-    </message>
     <message>
         <source>Details</source>
         <translation type="unfinished"></translation>
@@ -635,14 +526,6 @@ or pick another nickname:</source>
 </context>
 <context>
     <name>PageMain</name>
-    <message>
-        <source>Local Game (Play a game on a single computer)</source>
-        <translation type="obsolete">لعبة محلية</translation>
-    </message>
-    <message>
-        <source>Network Game (Play a game across a network)</source>
-        <translation type="obsolete">لعبة شبكية (عن طريق شبكة اتصال)</translation>
-    </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
         <comment>Tips</comment>
@@ -941,33 +824,10 @@ or pick another nickname:</source>
     </message>
 </context>
 <context>
-    <name>PageNet</name>
-    <message>
-        <source>Error</source>
-        <translation>خطا</translation>
-    </message>
-    <message>
-        <source>Please select server from the list above</source>
-        <translation>اختار من القائمة</translation>
-    </message>
-</context>
-<context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
         <translation>تحكم</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation type="unfinished">ادخل رقم الغرقة</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>DLC</source>
@@ -1010,18 +870,6 @@ or pick another nickname:</source>
     <message>
         <source>Delete team</source>
         <translation>حذف فريق</translation>
-    </message>
-    <message>
-        <source>New weapon scheme</source>
-        <translation type="obsolete">طريقة اسلحة جديدة</translation>
-    </message>
-    <message>
-        <source>Edit weapon scheme</source>
-        <translation type="obsolete">تغيير طريقة الاسلحة</translation>
-    </message>
-    <message>
-        <source>Delete weapon scheme</source>
-        <translation type="obsolete">حذف طريقة الاسلحة</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
@@ -1099,32 +947,12 @@ or pick another nickname:</source>
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <source>Error</source>
-        <translation>خطأ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>Rename dialog</source>
         <translation>تغيير الشباك</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
         <translation type="unfinished">ادخل اسم الملف</translation>
-    </message>
-    <message>
-        <source>Cannot rename to</source>
-        <translation>لا استطيع التغيير الى</translation>
-    </message>
-    <message>
-        <source>Cannot delete file</source>
-        <translation>لا استطيع حذف الملف</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation>اختر المقطع من القائمة</translation>
     </message>
 </context>
 <context>
@@ -1138,85 +966,12 @@ or pick another nickname:</source>
         <translation>انضم</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation>تحديث</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>خطأ</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>الادارة</translation>
     </message>
     <message>
         <source>Room Name:</source>
         <translation type="unfinished">رقم الغرقة</translation>
-    </message>
-    <message>
-        <source>This game is in lobby.
-You may join and start playing once the game starts.</source>
-        <translation type="obsolete">هذه غرقة اللعب
-يمكنك الانضمام و بدء اللعب عند الاتضمام الى غرفة
-You may join and start playing once the game starts.</translation>
-    </message>
-    <message>
-        <source>This game is in progress.
-You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="obsolete">اللعبة قيد اللعب
-يمكنك الانضمام و المشاهدة</translation>
-    </message>
-    <message>
-        <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="obsolete">%1هو المضيف الذي يبدا و يغيير اعدادات اللعبة</translation>
-    </message>
-    <message>
-        <source>Random Map</source>
-        <translation type="obsolete">خارطة عشوائية</translation>
-    </message>
-    <message>
-        <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="obsolete">اللعبة يمكن ان تكون على خارطة عشوائية او يدوية</translation>
-    </message>
-    <message>
-        <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="obsolete">طراز اللعية يحدد الخيارات مثل وقت الجولة، الموت المفاجئ و مصاص الدماء</translation>
-    </message>
-    <message>
-        <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="obsolete">طراز الاسلحة يحدد المتوفرة منها و عددها</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="obsolete">
-            <numerusform>يوجد %1 مرتبطون بالغرقة
-        </numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="obsolete">
-            <numerusform>يوجد %1 فريق في الغرفة
-        </numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation>ادخل رقم الغرقة</translation>
-    </message>
-    <message>
-        <source>Please select room from the list</source>
-        <translation>اختر الغرقة من القائمة</translation>
-    </message>
-    <message>
-        <source>Random Maze</source>
-        <translation type="obsolete">متاهة عشوائية</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1232,15 +987,6 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The game you are trying to join has started.
-Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
@@ -1266,10 +1012,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished">الارض لا يمكن ان تدمر</translation>
     </message>
     <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">اضف اطار لا يمكن تدميره</translation>
-    </message>
-    <message>
         <source>Lower gravity</source>
         <translation>جاذبية قليلة</translation>
     </message>
@@ -1280,10 +1022,6 @@ Do you still want to join the room?</source>
     <message>
         <source>All hogs have a personal forcefield</source>
         <translation>كل اللاعبين لهم حقل قوى</translation>
-    </message>
-    <message>
-        <source>Enable random mines</source>
-        <translation type="obsolete">فعل الالغام العشوائية</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1404,26 +1142,6 @@ Do you still want to join the room?</source>
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="obsolete">لعية بسيطة ضد الحاسوب</translation>
-    </message>
-    <message>
-        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="obsolete">لعبة متعددة</translation>
-    </message>
-    <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="obsolete">نمط التدريب، تحت التطوير</translation>
-    </message>
-    <message>
-        <source>Demos (Watch recorded demos)</source>
-        <translation type="obsolete">عرض</translation>
-    </message>
-    <message>
-        <source>Load (Load a previously saved game)</source>
-        <translation type="obsolete">تحميل</translation>
-    </message>
-    <message>
         <source>Simple Game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1517,30 +1235,11 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Are you sure?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do remove %1?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message numerus="yes">
-        <source>Do you really want do remove %1 file(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-        </translation>
-    </message>
-    <message>
         <source>encoding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Do you really want do cancel uploading %1?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1630,10 +1329,6 @@ Do you still want to join the room?</source>
         <translation>اضف التاريخ و اليوم الى الملف</translation>
     </message>
     <message>
-        <source>Reduced quality</source>
-        <translation type="obsolete">قلل الجودة</translation>
-    </message>
-    <message>
         <source>Show ammo menu tooltips</source>
         <translation>اضهر قوائم للعتاد</translation>
     </message>
@@ -1711,10 +1406,6 @@ Do you still want to join the room?</source>
     <message>
         <source>In progress</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">التلقائي</translation>
     </message>
     <message>
         <source>hand drawn map...</source>
@@ -1804,10 +1495,6 @@ Do you still want to join the room?</source>
         <translation>فرق</translation>
     </message>
     <message>
-        <source>Weapons</source>
-        <translation type="obsolete">اسلحة</translation>
-    </message>
-    <message>
         <source>Audio/Graphic options</source>
         <translation>قوائم الصوتيات و المرئيات</translation>
     </message>
@@ -1879,10 +1566,6 @@ Do you still want to join the room?</source>
         <translation>نسخة</translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="obsolete">This program is distributed under the GNU General Public License</translation>
-    </message>
-    <message>
         <source>Developers:</source>
         <translation type="unfinished">المطورون</translation>
     </message>
@@ -1913,10 +1596,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Port:</source>
         <translation>Port:</translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="obsolete">اسم اللاعب</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1995,10 +1674,6 @@ Do you still want to join the room?</source>
         <translation>محلي</translation>
     </message>
     <message>
-        <source>Restart game to apply</source>
-        <translation type="obsolete">اعد تشغيل اللعبة لتفعيل التغيير</translation>
-    </message>
-    <message>
         <source>Explosives</source>
         <translation>متفجرات</translation>
     </message>
@@ -2047,10 +1722,6 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">كلمة السر</translation>
-    </message>
-    <message>
         <source>% Get Away Time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2061,7 +1732,7 @@ Do you still want to join the room?</source>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
-Do yot really want to quit?</source>
+Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2146,10 +1817,6 @@ Do yot really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Network</source>
-        <translation>شبكة</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>ضاع الاتصال للخادم</translation>
     </message>
@@ -2158,87 +1825,11 @@ Do yot really want to quit?</source>
         <translation>خطأ</translation>
     </message>
     <message>
-        <source>Failed to open data directory:
-%1
-Please check your installation</source>
-        <translation>Failed to open data directory:
- %1
-Please check your installation</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation>اسلحة</translation>
-    </message>
-    <message>
-        <source>Can not edit default weapon set</source>
-        <translation type="obsolete">Can not edit default weapon set</translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set</source>
-        <translation type="obsolete">Can not delete default weapon set</translation>
-    </message>
-    <message>
-        <source>Really delete this weapon set?</source>
-        <translation type="unfinished">هل تريد حذف قائمة الاسلحة</translation>
-    </message>
-    <message>
-        <source>All file associations have been set.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="unfinished">فرق</translation>
-    </message>
-    <message>
-        <source>Really delete this team?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Schemes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Really delete this game scheme?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fields required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Please fill out all fields</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Success</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Successfully posted the issue on code.google.com!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error during authentication with www.google.com</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Error creating the issue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2255,21 +1846,200 @@ Please check your installation</translation>
 </source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Error</source>
-        <translation>خطأ</translation>
+        <source>Teams - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the team &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a record from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication at google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main - Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Cannot create directory %1</translation>
+        <translation type="unfinished">Cannot create directory %1</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>OK</translation>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>TCP - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation type="unfinished">Unable to start the server: %1.</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video upload - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netgame - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a server from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">ادخل رقم الغرقة</translation>
+    </message>
+    <message>
+        <source>Record Play - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation type="unfinished">اختر المقطع من القائمة</translation>
+    </message>
+    <message>
+        <source>Cannot rename to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation type="unfinished">اختر الغرقة من القائمة</translation>
+    </message>
+    <message>
+        <source>Room Name - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the video &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Do you really want to remove %1 file(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the ammo &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
     <message>
         <source>Nickname</source>
         <translation>اسم اللاعب</translation>
@@ -2379,37 +2149,6 @@ Please check your installation</translation>
     </message>
 </context>
 <context>
-    <name>QTableWidget</name>
-    <message>
-        <source>Room Name</source>
-        <translation type="obsolete">اسم الغرقة</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>T</source>
-        <translation type="obsolete">T</translation>
-    </message>
-    <message>
-        <source>Owner</source>
-        <translation type="obsolete">المالك</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">خارطة</translation>
-    </message>
-    <message>
-        <source>Rules</source>
-        <translation type="obsolete">قوانين</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">اسلحة</translation>
-    </message>
-</context>
-<context>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
@@ -2484,21 +2223,6 @@ Please check your installation</translation>
     </message>
 </context>
 <context>
-    <name>TCPBase</name>
-    <message>
-        <source>Error</source>
-        <translation>خطأ</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation>Unable to start the server: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine: %1 (</source>
-        <translation>Unable to run engine: %1 (</translation>
-    </message>
-</context>
-<context>
     <name>ToggleButtonWidget</name>
     <message>
         <source>Vampirism</source>
@@ -2539,10 +2263,6 @@ Please check your installation</translation>
     <message>
         <source>Invulnerable</source>
         <translation>غير قابل للتدمير</translation>
-    </message>
-    <message>
-        <source>Add Mines</source>
-        <translation type="obsolete">اضف الغام</translation>
     </message>
     <message>
         <source>Random Order</source>

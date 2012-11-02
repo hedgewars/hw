@@ -43,7 +43,7 @@ class TeamSelWidget : public QGroupBox
         void setAcceptOuter(bool acceptOuter);
         void removeNetTeam(const HWTeam& team);
         void resetPlayingTeams(const QList<HWTeam>& teamslist);
-        bool isPlaying(HWTeam team) const;
+        bool isPlaying(const HWTeam &team) const;
         QList<HWTeam> getPlayingTeams() const;
         QList<HWTeam> getNotPlayingTeams() const;
         void setInteractivity(bool interactive);
@@ -57,14 +57,14 @@ class TeamSelWidget : public QGroupBox
 
     signals:
         void setEnabledGameStart(bool);
-        void teamWillPlay(HWTeam team);
+        void teamWillPlay(const HWTeam& team);
         void teamNotPlaying(const HWTeam& team);
         void hhogsNumChanged(const HWTeam&);
         void teamColorChanged(const HWTeam&);
-        void acceptRequested(HWTeam team);
+        void acceptRequested(const HWTeam& team);
 
     private slots:
-        void pre_changeTeamStatus(HWTeam);
+        void pre_changeTeamStatus(const HWTeam&);
         void hhNumChanged(const HWTeam& team);
         void proxyTeamColorChanged(const HWTeam& team);
 
