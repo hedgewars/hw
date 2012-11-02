@@ -327,7 +327,8 @@ processAction SendUpdateOnThisRoom = do
     ri <- io $ clientRoomM rnc clId
     rm <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (name rm) rm)
+    n <- client's nick
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo n rm)
 
 
 processAction UnreadyRoomClients = do
