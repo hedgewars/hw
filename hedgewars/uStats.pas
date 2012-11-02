@@ -36,7 +36,7 @@ procedure SendStats;
 procedure hedgehogFlight(Gear: PGear; time: Longword);
 
 implementation
-uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc;
+uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc, uConsole;
 
 var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
@@ -185,12 +185,10 @@ procedure hedgehogFlight(Gear: PGear; time: Longword);
 begin
 if time > 4000 then
     begin
-	{$IFNDEF MOBILE}
-    writeln(stdout, 'FLIGHT');
-    writeln(stdout, Gear^.Hedgehog^.Team^.TeamName);
-    writeln(stdout, inttostr(time));
-    writeln(stdout, '');
-	{$ENDIF}
+    WriteLnToConsole('FLIGHT');
+    WriteLnToConsole(Gear^.Hedgehog^.Team^.TeamName);
+    WriteLnToConsole(inttostr(time));
+    WriteLnToConsole( '');
     end
 end;
 
@@ -292,19 +290,17 @@ if maxTeamDamage > 30 then
 if KilledHHs > 0 then
     SendStat(siKilledHHs, IntToStr(KilledHHs));
 
-{$IFNDEF MOBILE}
 // now to console
 if winnersClan <> nil then 
     begin
-    writeln(stdout, 'WINNERS');
+    WriteLnToConsole('WINNERS');
     for t:= 0 to winnersClan^.TeamsNumber - 1 do
-        writeln(stdout, winnersClan^.Teams[t]^.TeamName);
+        WriteLnToConsole(winnersClan^.Teams[t]^.TeamName);
     end
 else
-    writeln(stdout, 'DRAW');
+    WriteLnToConsole('DRAW');
 
-writeln(stdout, '');
-{$ENDIF}
+WriteLnToConsole('');
 end;
 
 procedure initModule;
