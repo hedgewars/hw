@@ -286,10 +286,10 @@ locale = {
     ["Hahahaha!"] = "Hahahaha!",
     ["Haha, now THAT would be something!"] = "Haha, allora questa pioggia ha DAVVERO qualcosa di strano!",
 --      ["Hannibal"] = "", -- A_Classic_Fairytale:epil
-    ["Hapless Hogs left!"] = "Ricci Sfortunati rimanenti!",
---      [" Hapless Hogs left!"] = "", -- User_Mission_-_That_Sinking_Feeling
+    [" Hapless Hogs left!"] = "Ricci Sfortunati rimanenti!", -- User_Mission_-_That_Sinking_Feeling
     ["Hapless Hogs"] = "Ricci Sfortunati",
---      [" HAS MUTATED\" )"] = "", -- 
+
+--      [" HAS MUTATED"] = "", -- Mutant
 --      ["Hatless Jerry"] = "", -- A_Classic_Fairytale:queen
 --      ["Have no illusions, your tribe is dead, indifferent of your choice."] = "", -- A_Classic_Fairytale:shadow
 --      ["Have we ever attacked you first?"] = "", -- A_Classic_Fairytale:enemy
@@ -366,7 +366,7 @@ locale = {
 --      ["If you get stuck, use your Desert Eagle or restart the mission!|"] = "", -- A_Classic_Fairytale:journey
 --      ["If you know what I mean..."] = "", -- A_Classic_Fairytale:shadow
 --      ["If you say so..."] = "", -- A_Classic_Fairytale:shadow
---      ["If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)"] = "", -- 
+
 --      ["I guess you'll have to kill them."] = "", -- A_Classic_Fairytale:dragon
 --      ["I have come to make you an offering..."] = "", -- A_Classic_Fairytale:shadow
 --      ["I have no idea where that mole disappeared...Can you see it?"] = "", -- A_Classic_Fairytale:shadow
@@ -565,11 +565,12 @@ locale = {
     ["Pathetic Resistance"] = "Resistenza Patetica", -- User_Mission_-_Bamboo_Thicket, User_Mission_-_Newton_and_the_Hammock
 --      ["Perfect! Now try to get the next crate without hurting yourself!"] = "", -- A_Classic_Fairytale:first_blood
     ["Per-Hog Ammo"] = "Munizioni per Riccio",
---      ["- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[presice/left shift]=Decrease)"] = "", -- 
+--      ["- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[precise/left shift]=Decrease) on Skip|Some weapons have a second option. Find them with [switch/tab]"] = "", -- Continental_supplies
+
 --      ["Pfew! That was close!"] = "", -- A_Classic_Fairytale:shadow
 --      ["Piñata bullet: [Contains some sweet candy!]"] = "", -- Continental_supplies
 --      ["Pings left:"] = "", -- Space_Invasion
-    ["Place more waypoints using [ENTER]"] = "Piazza più punti usando [ENTER]",
+
     ["Place more waypoints using the 'Air Attack' weapon."] = "Piazza più punti usando l'Attacco Aereo",
 --      ["Planes Used:"] = "", -- User_Mission_-_RCPlane_Challenge
 --      ["Planes Used"] = "", -- User_Mission_-_RCPlane_Challenge
@@ -611,7 +612,6 @@ locale = {
     ["Round Limit"] = "Limite del Round",
     ["Rounds Complete: "] = "Round Completati: ",
     ["Rounds Complete"] = "Round Completati",
-    ["RULES OF THE GAME [Press ESC to view]"] = "REGOLE DEL GIOCO [Premi ESC per visualizzarle] ",
 	["RULES OF THE GAME [Press ESC to view]"] = "REGOLE DEL GIOCO (Premi ESC per visualizzarle)",
 --      ["Rusty Joe"] = "", -- A_Classic_Fairytale:queen
 --      ["Sabotage: [Sabotage all hogs in the circle and deal ~10 dmg]"] = "", -- Continental_supplies
@@ -821,7 +821,7 @@ locale = {
 --      ["Use it wisely!"] = "", -- A_Classic_Fairytale:dragon
 --      ["Use it with precaution!"] = "", -- A_Classic_Fairytale:first_blood
     ["User Challenge"] = "Sfida Utente",
---      ["Use the parachute ([Space] while in air)"] = "", -- 
+
 --      ["Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|"] = "", -- A_Classic_Fairytale:dragon
 --      ["Use the rope to get on the head of the mole, young one!"] = "", -- A_Classic_Fairytale:first_blood
 --      ["Use the rope to knock your enemies to their doom."] = "", -- User_Mission_-_Rope_Knock_Challenge
@@ -829,7 +829,6 @@ locale = {
 --      ["Vedgies"] = "", -- A_Classic_Fairytale:journey
 --      ["Vegan Jack"] = "", -- A_Classic_Fairytale:enemy
 --      ["Victory!"] = "", -- Basic_Training_-_Rope
-	["Victory for the"] = "La vittoria è di",
     ["Victory for the "] = "La vittoria è di ", -- CTF_Blizzard, Capture_the_Flag
 --      ["Violence is not the answer to your problems!"] = "", -- A_Classic_Fairytale:first_blood
 --      ["Walls Left"] = "", -- WxW
