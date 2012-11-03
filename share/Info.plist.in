@@ -47,6 +47,8 @@
 	<string>${minimum_macosx_version}</string>
 	<key>SUPublicDSAKeyFile</key>
 	<string>dsa_pub.pem</string>
+	<key>SUFeedURL</key>
+	<string>http://www.hedgewars.org/download/appcast.xml</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>ar</string>
