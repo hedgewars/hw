@@ -1,5 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-module Pas2C where
+module Main where
 
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
@@ -1084,3 +1084,4 @@ op2C "=" = "=="
 op2C "/" = "/(float)"
 op2C a = a
 
+main = pas2C "hwengine"
