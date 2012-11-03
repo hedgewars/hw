@@ -287,7 +287,8 @@ locale = {
 --      ["Hannibal"] = "", -- A_Classic_Fairytale:epil
 --      ["Hapless Hogs"] = "",
 --      [" Hapless Hogs left!"] = "",
---      [" HAS MUTATED\" )"] = "", -- 
+
+--      [" HAS MUTATED"] = "", -- Mutant
 --      ["Hatless Jerry"] = "", -- A_Classic_Fairytale:queen
 --      ["Have no illusions, your tribe is dead, indifferent of your choice."] = "", -- A_Classic_Fairytale:shadow
 --      ["Have we ever attacked you first?"] = "", -- A_Classic_Fairytale:enemy
@@ -364,7 +365,7 @@ locale = {
 --      ["If you get stuck, use your Desert Eagle or restart the mission!|"] = "", -- A_Classic_Fairytale:journey
 --      ["If you know what I mean..."] = "", -- A_Classic_Fairytale:shadow
 --      ["If you say so..."] = "", -- A_Classic_Fairytale:shadow
---      ["If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)"] = "", -- 
+
 --      ["I guess you'll have to kill them."] = "", -- A_Classic_Fairytale:dragon
 --      ["I have come to make you an offering..."] = "", -- A_Classic_Fairytale:shadow
 --      ["I have no idea where that mole disappeared...Can you see it?"] = "", -- A_Classic_Fairytale:shadow
@@ -554,8 +555,7 @@ locale = {
 --      ["Oops...I dropped them."] = "", -- A_Classic_Fairytale:united
 --      ["Open that crate and we will continue!"] = "", -- A_Classic_Fairytale:first_blood
       ["Operation Diver"] = "水下行动",
---      ["Opposing Team: "] =
-      ["Opposing Team:"] = "对方队伍",
+      ["Opposing Team: "] = "对方队伍",
 --      ["Orlando Boom!"] = "", -- A_Classic_Fairytale:queen
 --      ["Ouch!"] = "", -- User_Mission_-_Rope_Knock_Challenge
 --      ["Our tribe, our beautiful island!"] = "", -- A_Classic_Fairytale:enemy
@@ -566,11 +566,12 @@ locale = {
 --      ["Pathetic Resistance"] = "", -- User_Mission_-_Bamboo_Thicket, User_Mission_-_Newton_and_the_Hammock
 --      ["Perfect! Now try to get the next crate without hurting yourself!"] = "", -- A_Classic_Fairytale:first_blood
 --      ["Per-Hog Ammo"] = "",
---      ["- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[presice/left shift]=Decrease)"] = "", -- 
+--      ["- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[precise/left shift]=Decrease) on Skip|Some weapons have a second option. Find them with [switch/tab]"] = "", -- Continental_supplies
+
 --      ["Pfew! That was close!"] = "", -- A_Classic_Fairytale:shadow
 --      ["Piñata bullet: [Contains some sweet candy!]"] = "", -- Continental_supplies
 --      ["Pings left:"] = "", -- Space_Invasion
---      ["Place more waypoints using [ENTER]"] = "",
+
 --      ["Place more waypoints using the 'Air Attack' weapon."] = "",
 --      ["Planes Used:"] = "", -- User_Mission_-_RCPlane_Challenge
 --      ["Planes Used"] = "", -- User_Mission_-_RCPlane_Challenge
@@ -602,8 +603,7 @@ locale = {
 --      ["Reinforcements"] = "", -- A_Classic_Fairytale:backstab
 --      ["Remember: The rope only bend around objects, |if it doesn't hit anything it's always stright!"] = "", -- Basic_Training_-_Rope
 --      ["Remember this, pathetic animal: when the day comes, you will regret your blind loyalty!"] = "", -- A_Classic_Fairytale:shadow
---      [" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"] =
-      ["- Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"] = "-带回敌人旗帜得分| -第一支3次夺旗队伍获胜| - 只有旗帜在己方基地才算| -带旗刺猬消逝则旗帜落下| -落下的旗帜使用方式不变| -损失的刺猬瞬间还原",
+        [" - Return the enemy flag to your base to score | - First team to 3 captures wins | - You may only score when your flag is in your base | - Hogs will drop the flag if killed, or drowned | - Dropped flags may be returned or recaptured | - Hogs respawn when killed"] = "-带回敌人旗帜得分| -第一支3次夺旗队伍获胜| - 只有旗帜在己方基地才算| -带旗刺猬消逝则旗帜落下| -落下的旗帜使用方式不变| -损失的刺猬瞬间还原",
 --      ["Return to Leaks A Lot! If you get stuck, press [Precise] to try again!"] = "", -- A_Classic_Fairytale:shadow
 --      ["Righteous Beard"] = "", -- A_Classic_Fairytale:backstab, A_Classic_Fairytale:dragon, A_Classic_Fairytale:enemy, A_Classic_Fairytale:epil, A_Classic_Fairytale:family, A_Classic_Fairytale:first_blood, A_Classic_Fairytale:queen, A_Classic_Fairytale:united
 --      ["ROPE-KNOCKING"] = "", -- User_Mission_-_Rope_Knock_Challenge
@@ -822,7 +822,7 @@ locale = {
 --      ["Use it wisely!"] = "", -- A_Classic_Fairytale:dragon
 --      ["Use it with precaution!"] = "", -- A_Classic_Fairytale:first_blood
 --      ["User Challenge"] = "",
---      ["Use the parachute ([Space] while in air)"] = "", -- 
+
 --      ["Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|"] = "", -- A_Classic_Fairytale:dragon
 --      ["Use the rope to get on the head of the mole, young one!"] = "", -- A_Classic_Fairytale:first_blood
 --      ["Use the rope to knock your enemies to their doom."] = "", -- User_Mission_-_Rope_Knock_Challenge

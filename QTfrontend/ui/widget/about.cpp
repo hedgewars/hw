@@ -88,7 +88,7 @@ About::About(QWidget * parent) :
         "Android netplay, portability abstraction: Simeon Maxein &lt;<a href=\"mailto:smaxein@googlemail.com\">smaxein@googlemail.com</a>&gt;<br>"
         "WebGL port, some pas2c and GLES2 work: Meng Xiangyun &lt;<a href=\"mailto:xymengxy@gmail.com\">xymengxy@gmail.com</a>&gt;<br>"
         "Video recording: Stepan Podoskin &lt;<a href=\"mailto:stepik-777@mail.ru\">stepik-777@mail.ru</a>&gt;<br>"
-        "Campaign support, first campaign: Szabolcs Orbàn &lt;<a href=\"mailto:szabibibi@gmail.com\">szabibibi@gmail.com</a>&gt;<br>"
+        "Campaign support, first campaign: Szabolcs Orb&agrave;n &lt;<a href=\"mailto:szabibibi@gmail.com\">szabibibi@gmail.com</a>&gt;<br>"
         "</p><h2>" +
 
         QLabel::tr("Art:") + "</h2>"
