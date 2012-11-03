@@ -10,17 +10,7 @@ locale = {
       ["Accuracy Bonus!"] = "Bonus précision",
 --      ["Ace"] = "", -- User_Mission_-_RCPlane_Challenge, User_Mission_-_Rope_Knock_Challenge
       ["Achievement Unlocked"] = "Succes débloqué", -- User_Mission_-_Bamboo_Thicket, User_Mission_-_That_Sinking_Feeling, Tumbler
--- a classic fairytale: backstab
--- a classic fairytale: dragon's lair
--- a classic fairytale: epilogue
--- a classic fairytale: family reunion
-	  -- a classic fairytale: first blood
--- a classic fairytale: long live the queen
--- a classic fairytale: the enemy of my enemy...
--- a classic fairytale: the journey back
--- a classic fairytale: the shadow falls
       ["A Classic Fairytale"] = "Un conte de fée classique",
--- a classic fairytale: united we stand
       ["Actually, you aren't worthy of life! Take this..."] = "En fait, tu n'es pas digne de vivre ! Prends ça....",
       ["A cy-what?"] = "Un cy-quoi ?",
       ["Adventurous"] = "Aventureux",
@@ -219,7 +209,7 @@ locale = {
       ["Exactly, man! That was my dream."] = "Exactement, mec ! C'était mon rêve.",
       ["Eye Chewer"] = "Eye Chewer",
 --      ["FAG"] = "", -- Mutant
-	  = "Fais sortir tes coéquipiers de leur prison naturelle et sauve la princesse ! |Percer des trous résoudrait tout. |ca serait une bonne idée de placer quelque poutres avant de commencer à percer. je dis ça, je dis rien. |Tous vos hérissons doivent être au dessus de la hauteur marquée ! | Leaks A Lot doit être très proche de la princesse !  ",
+	 ["Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"] = "Fais sortir tes coéquipiers de leur prison naturelle et sauve la princesse ! |Percer des trous résoudrait tout. |ca serait une bonne idée de placer quelque poutres avant de commencer à percer. je dis ça, je dis rien. |Tous vos hérissons doivent être au dessus de la hauteur marquée ! | Leaks A Lot doit être très proche de la princesse !  ",
       ["Family Reunion"] = "Réunion de famille ",
       ["Fastest lap: "] = "Meilleur tour : ",
       ["Feeble Resistance"] = "Résistance Futile",
@@ -299,7 +289,6 @@ locale = {
       ["Hannibal"] = "Hannibal",
 --      ["Hapless Hogs"] = "",
 --      [" Hapless Hogs left!"] = "",
-
 --      [" HAS MUTATED"] = "", -- Mutant
 --      ["Hatless Jerry"] = "",
       ["Have no illusions, your tribe is dead, indifferent of your choice."] = "N'ai pas d'illusion, ta tribue est morte, quel que soit ton choix",
@@ -376,7 +365,6 @@ locale = {
       ["If you get stuck, use your Desert Eagle or restart the mission!|"] = "Si vous êtes coincés, utiliser le Desert Eable, ou recommencez la missions",
       ["If you know what I mean..."] = "Si tu vois ce que je veux dire...",
       ["If you say so..."] = "Si tu le dis...",
-
       ["If you wish to restart the course, hold [Precise] while your turn ends (e.g with Skip)!|"] = "Si tu soihaire recommencer la coursse, maintien [precise] quand ton tour se termine (avec [passe ton tour ] par exemple",
       ["I guess you'll have to kill them."] = "Je suppose que vous devrez les tuer",
       ["I have come to make you an offering..."] = "Je suis venu te faire une offre...",
@@ -576,11 +564,9 @@ locale = {
 	  ["Perfect! Now try to get the next crate without hurting yourself!"] = "Parfait, maintenant essaye d'avoir la prochaine caisse sans te blesser !",
       ["Per-Hog Ammo"] = "Munitions par hérissons",
 --      ["- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[precise/left shift]=Decrease) on Skip|Some weapons have a second option. Find them with [switch/tab]"] = "", -- Continental_supplies
-
       ["Pfew! That was close!"] = "Ouf! C'est pas passé loin !",
 --      ["Piñata bullet: [Contains some sweet candy!]"] = "", -- Continental_supplies
 --      ["Pings left:"] = "", -- Space_Invasion
-
       ["Place more waypoints using the 'Air Attack' weapon."] = "Place plus de points de passage avec l'arme : attaque aérienne.",
 --      ["Planes Used:"] = "", -- User_Mission_-_RCPlane_Challenge
 --      ["Planes Used"] = "", -- User_Mission_-_RCPlane_Challenge
@@ -831,7 +817,6 @@ locale = {
       ["Use it wisely!"] = "a utiliser intelligemment",
       ["Use it with precaution!"] = "Utilise la avec prudence",
 --      ["User Challenge"] = "",
-
 	  ["Use the parachute ([Space] while in air) to get the next crate"] = "utilisez le parachute ([Espace] en vol) pour atteindre la prochaine caisse ",
       ["Use the portal gun to get to the next crate, then use the new gun to get to the final destination!|"] = "Utilise le fusil à portail pour atteindre la prochaine caisse, puis utilise le nouveau fusil pour atteindre la destination finale",
 	  ["Use the rope to get on the head of the mole, young one!"] = "Utilise la corde pour atteindre la tête de la taupe, l'apprenti !",
