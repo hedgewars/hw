@@ -299,7 +299,7 @@ processAction (AddRoom roomName roomPassword) = do
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
 
     mapM_ processAction [
-        AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm)
+      AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm{playersIn = 1})
         ]
 
 
