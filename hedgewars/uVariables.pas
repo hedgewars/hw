@@ -2509,8 +2509,6 @@ var
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
-    hideAmmoMenu: boolean;
-
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
     ControllerNumAxes: array[0..5] of Integer;
