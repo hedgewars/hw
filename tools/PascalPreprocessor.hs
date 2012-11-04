@@ -22,9 +22,9 @@ initDefines = Map.fromList [
     , ("S3D_DISABLED", "")
     ]
 
-preprocess :: String -> IO String
-preprocess fn = do
-    r <- runParserT (preprocessFile fn) (initDefines, [True]) "" ""
+preprocess :: String -> String -> IO String
+preprocess inputPath fn = do
+    r <- runParserT (preprocessFile (inputPath ++ fn)) (initDefines, [True]) "" ""
     case r of
          (Left a) -> do
              hPutStrLn stderr (show a)
@@ -79,7 +79,7 @@ preprocess fn = do
         char '"'
         spaces
         char '}'
-        f <- liftIO (readFile fn `catch` error ("File not found: " ++ fn))
+        f <- liftIO (readFile (inputPath ++ fn) `catch` error ("File not found: " ++ fn))
         c <- getInput
         setInput $ f ++ c
         return ""
