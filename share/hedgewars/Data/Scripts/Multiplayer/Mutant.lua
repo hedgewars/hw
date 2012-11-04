@@ -430,7 +430,7 @@ function setMutantStuff(gear)
     setGearValue(mutant,"SelfDestruct",false)
     setGearValue(gear, "Feeder", false)
 
-    AddCaption(getGearValue(gear, "Name") .. loc(" HAS MUTATED" ))
+    AddCaption(getGearValue(gear, "Name") .. loc(" HAS MUTATED"))
 
     TurnTimeLeft=0
 

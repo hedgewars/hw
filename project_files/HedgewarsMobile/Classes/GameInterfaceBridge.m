@@ -226,6 +226,7 @@ static UIViewController *callingController;
     NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
     CFRelease(uuid);
     NSString *seedCmd = [[NSString alloc] initWithFormat:@"eseed {%@}", seed];
+    [seed release];
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];

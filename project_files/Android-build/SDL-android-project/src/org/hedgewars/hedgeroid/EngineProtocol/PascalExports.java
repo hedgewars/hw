@@ -1,10 +1,12 @@
 /*
  * Hedgewars for Android. An Android port of Hedgewars, a free turn based strategy game
  * Copyright (c) 2011-2012 Richard Deurwaarder <xeli@xelification.com>
+ * Copyright (C) 2012 Simeon Maxein <smaxein@googlemail.com>
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -13,12 +15,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.hedgewars.hedgeroid.EngineProtocol;
 
 public class PascalExports {
+	public static Object engineMutex = new Object();
 
 	static{
 		System.loadLibrary("SDL");
@@ -31,10 +34,13 @@ public class PascalExports {
 		System.loadLibrary("hwengine");
 	}
 	
-	public static native int HWversionInfoNetProto();
-	public static native String HWversionInfoVersion();
-	public static native int HWgetNumberOfWeapons();
 	public static native int HWgetMaxNumberOfTeams();
-	public static native int HWgetMaxNumberOfHogs();
-        public static native int HWterminate(boolean b);	
+    private static native void HWGenLandPreview(int port);
+
+    public static void synchronizedGenLandPreview(int port) {
+    	synchronized(engineMutex) {
+    		HWGenLandPreview(port);
+    	}
+    }
+    
 }
