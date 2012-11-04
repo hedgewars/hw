@@ -74,27 +74,6 @@ class HWNewNet : public QObject
         QSortFilterProxyModel * m_lobbyPlayersModel;
         QSortFilterProxyModel * m_roomPlayersModel;
 
-        template <typename T>
-        void SendCfgStrNet(T a)
-        {
-            QByteArray strmsg;
-            strmsg.append(a);
-            quint8 sz = strmsg.size();
-            QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg;
-            QString _msg = delimeter + QString(enginemsg.toBase64());
-            RawSendNet(_msg);
-        }
-
-        template <typename T>
-        void SendCfgStrLoc(T a)
-        {
-            QByteArray strmsg;
-            strmsg.append(QString(a).toUtf8());
-            quint8 sz = strmsg.size();
-            QByteArray enginemsg = QByteArray((char *)&sz, 1) + strmsg;
-            emit FromNet(enginemsg);
-        }
-
         QStringList cmdbuf;
 
         void RawSendNet(const QString & buf);

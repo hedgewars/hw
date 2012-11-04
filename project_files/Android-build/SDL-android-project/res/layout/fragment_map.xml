@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="3dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="3dp"
+    android:paddingTop="3dp" >
+
+    <ImageView
+        android:id="@+id/mapPreview"
+        android:layout_width="256dip"
+        android:layout_height="128dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/box"
+        android:scaleType="fitCenter"
+        android:src="@drawable/roomlist_preparing" />
+
+    <TableLayout
+        android:id="@+id/gameOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/mapPreview"
+        android:stretchColumns="1" >
+
+        <TableRow android:layout_marginTop="5dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/map_gen" />
+
+            <Spinner
+                android:id="@+id/spinMapType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft = "5dip"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/rowMapName"
+            android:layout_marginTop="5dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_name" />
+
+            <Spinner
+                android:id="@+id/spinMapName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft = "5dip"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/rowTemplateFilter"
+            android:layout_marginTop="5dip"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_template" />
+
+            <Spinner
+                android:id="@+id/spinTemplateFilter"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft = "5dip"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/rowMazeSize"
+            android:layout_marginTop="5dip"
+            android:visibility="gone" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/map_maze_size" />
+
+            <Spinner
+                android:id="@+id/spinMazeSize"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft = "5dip"
+                android:background="@drawable/dropdown" />
+        </TableRow>
+
+        <Button
+            android:id="@+id/btnEditDrawnMap"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:background="@drawable/button"
+            android:enabled="false"
+            android:text="@string/map_button_editdrawnmap"
+            android:visibility="gone" />
+    </TableLayout>
+
+</RelativeLayout>

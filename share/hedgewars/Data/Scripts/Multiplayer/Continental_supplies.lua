@@ -58,12 +58,12 @@ local asianflame=0
 
 local temp_val=0
 
---för sabotage
+--f?r sabotage
 local disallowattack=0
 local disallowleft=true
 local disable_moving={}
 
---skall bytas till för alla teams
+--skall bytas till f?r alla teams
 local continent = {}
 
 local weapontexts = {
@@ -506,7 +506,7 @@ function onGameStart()
 	--trackTeams()
 
 	ShowMission(loc("Continental supplies").." 1.1a",loc("Let a Continent provide your weapons!"),
-	loc("- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[presice/left shift]=Decrease) on Skip|Some weapons have a second option. Find them with [switch/tab]"), -amLowGravity, 0)
+	loc("- Per team weapons|- 9 weaponschemes|- Unique new weapons| |Select continent first round with the Weapon Menu or by ([switch/tab]=Increase,[precise/left shift]=Decrease) on Skip|Some weapons have a second option. Find them with [switch/tab]"), -amLowGravity, 0)
 end
 
 --what happen when a turn starts

@@ -107,7 +107,6 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 [ProtocolError "Not team owner!"]
             else
                 [RemoveTeam tName,
-                SendUpdateOnThisRoom,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,

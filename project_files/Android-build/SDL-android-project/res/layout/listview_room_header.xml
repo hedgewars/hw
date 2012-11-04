@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content" >
+	
+<TextView
+    android:id="@+id/roomname"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_weight="1.5"
+    android:padding="3dp"
+    android:gravity="center"
+    android:singleLine="true"
+    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:text="@string/roomlist_header_roomname" />
+
+<include layout="@layout/roomlist_player_team_count_header" />
+
+<TextView
+    android:id="@+id/owner"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="center"
+	android:singleLine="true"
+	android:textAppearance="?android:attr/textAppearanceMedium"
+	android:text="@string/roomlist_header_owner" />
+
+<TextView
+    android:id="@+id/map"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="center"
+	android:singleLine="true"
+	android:textAppearance="?android:attr/textAppearanceMedium"
+	android:text="@string/roomlist_header_map" />
+
+<TextView
+    android:id="@+id/scheme"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="center"
+	android:singleLine="true"
+	android:textAppearance="?android:attr/textAppearanceMedium"
+	android:text="@string/roomlist_header_scheme" />
+
+<TextView
+    android:id="@+id/weapons"
+	android:layout_width="0dp"
+	android:layout_height="wrap_content"
+	android:layout_weight="0.5"
+	android:padding="3dp"
+	android:gravity="center"
+	android:singleLine="true"
+	android:textAppearance="?android:attr/textAppearanceMedium"
+	android:text="@string/roomlist_header_weapons" />
+
+</LinearLayout>
+    
+    

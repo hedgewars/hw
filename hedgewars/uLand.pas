@@ -124,7 +124,7 @@ begin
     SDL_FreeSurface(tmpsurf);
 end;
 
-procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr);
+procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
 var i: LongInt;
 begin
 with Template do
@@ -145,7 +145,7 @@ with Template do
                if pa.ar[i].x <> NTPX then
                    pa.ar[i].x:= LAND_WIDTH - 1 - pa.ar[i].x;
             for i:= 0 to pred(FillPointsCount) do
-                FillPoints^[i].x:= LAND_WIDTH - 1 - FillPoints^[i].x;
+                fps^[i].x:= LAND_WIDTH - 1 - fps^[i].x;
             end;
 
 (*  Experiment in making this option more useful
@@ -178,9 +178,9 @@ with Template do
             end;
         for i:= 0 to pred(FillPointsCount) do
             begin
-            dec(FillPoints^[i].y, 100);
-            if FillPoints^[i].y < 0 then
-                FillPoints^[i].y:= 0;
+            dec(fps^[i].y, 100);
+            if fps^[i].y < 0 then
+                fps^[i].y:= 0;
             end;
         end;
 
@@ -189,7 +189,7 @@ with Template do
         for i:= 0 to pred(BasePointsCount) do
             pa.ar[i].y:= LAND_HEIGHT - 1 - pa.ar[i].y;
         for i:= 0 to pred(FillPointsCount) do
-            FillPoints^[i].y:= LAND_HEIGHT - 1 - FillPoints^[i].y;
+            fps^[i].y:= LAND_HEIGHT - 1 - fps^[i].y;
         end;
     end
 end;
@@ -199,13 +199,15 @@ procedure GenBlank(var Template: TEdgeTemplate);
 var pa: TPixAr;
     i: Longword;
     y, x: Longword;
+    fps: TPointArray;
 begin
+    fps:=Template.FillPoints^;
     ResizeLand(Template.TemplateWidth, Template.TemplateHeight);
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
     {$HINTS OFF}
-    SetPoints(Template, pa);
+    SetPoints(Template, pa, @fps);
     {$HINTS ON}
     for i:= 1 to Template.BezierizeCount do
         begin
@@ -222,7 +224,7 @@ begin
 
     with Template do
         for i:= 0 to pred(FillPointsCount) do
-            with FillPoints^[i] do
+            with fps[i] do
                 FillLand(x, y);
 
     DrawEdge(pa, lfBasic);
@@ -405,6 +407,7 @@ end;
 procedure MakeFortsMap;
 var tmpsurf: PSDL_Surface;
 begin
+ResizeLand(4096,2048);
 MaxHedgehogs:= 32;
 // For now, defining a fort is playable area as 3072x1200 - there are no tall forts.  The extra height is to avoid triggering border with current code, also if user turns on a border, it will give a bit more maneuvering room.
 playHeight:= 1200;

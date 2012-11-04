@@ -100,7 +100,6 @@
 #ifdef __APPLE__
 #include "M3Panel.h"
 #ifdef SPARKLE_ENABLED
-#define SPARKLE_APPCAST_URL "http://www.hedgewars.org/download/appcast.xml"
 #include "SparkleAutoUpdater.h"
 #endif
 #endif
@@ -152,7 +151,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef SPARKLE_ENABLED
     AutoUpdater* updater;
 
-    updater = new SparkleAutoUpdater(SPARKLE_APPCAST_URL);
+    updater = new SparkleAutoUpdater();
     if (updater && config->isAutoUpdateEnabled())
         updater->checkForUpdates();
 #endif
@@ -190,8 +189,10 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
 
+#if 0
     connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnFeedback, ID_PAGE_FEEDBACK);
+#endif
 
     connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
@@ -1068,7 +1069,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
     connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)), Qt::QueuedConnection);
@@ -1471,8 +1472,8 @@ void HWForm::CreateNetGame()
     connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
     connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));
     connect(game, SIGNAL(SendTeamMessage(const QString &)), hwnet, SLOT(SendTeamMessage(const QString &)));
-    connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)));
-    connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)));
+    connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)), Qt::QueuedConnection);
 
     game->StartNet();
 }

@@ -740,7 +740,7 @@ int ov_clear(OggVorbis_File *vf){
     ogg_sync_destroy(vf->oy);
 
     if(vf->datasource && vf->callbacks.close_func)
-      (vf->callbacks.close_func)(vf->datasource);
+        (vf->callbacks.close_func)(vf->datasource);
     memset(vf,0,sizeof(*vf));
   }
 #ifdef DEBUG_LEAKS
