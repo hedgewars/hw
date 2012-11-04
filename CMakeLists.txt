@@ -58,7 +58,7 @@ option(ANDROID "Enable Android build [default: off]" OFF)
 
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
-
+option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
 
 #bundle .app setup
 if(APPLE OR CROSSAPPLE)
@@ -158,14 +158,21 @@ else (CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
 endif (CMAKE_BUILD_TYPE)
 
-
-#set default flags values for all projects
-set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
-set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
-set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+#set default flags values for all projects (unless MINIMAL_FLAGS is true)
+if(NOT MINIMAL_FLAGS)
+    set(CMAKE_C_FLAGS "-pipe")
+    set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG")
+    set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+    set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+    set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+else()
+    #CMake adds a lot of additional configuration flags, so let's clear them up
+    set(CMAKE_C_FLAGS_RELEASE "")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -DDEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "")
+    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
+endif()
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
