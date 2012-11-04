@@ -96,7 +96,6 @@ docToLower = text . map toLower . render
 
 pas2C :: String -> String -> String -> IO ()
 pas2C fn inputPath outputPath = do
-    setCurrentDirectory inputPath
     s <- flip execStateT initState $ f fn
     renderCFiles s outputPath
     where
@@ -110,7 +109,7 @@ pas2C fn inputPath outputPath = do
             print ("Preprocessing '" ++ fileName ++ ".pas'... ")
             fc' <- liftIO
                 $ tryJust (guard . isDoesNotExistError)
-                $ preprocess (fileName ++ ".pas")
+                $ preprocess inputPath (fileName ++ ".pas")
             case fc' of
                 (Left a) -> do
                     modify (Map.insert fileName (System []))
