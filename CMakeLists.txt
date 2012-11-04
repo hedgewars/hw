@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 
 #detect Mercurial revision (if present)
-set(version_suffix "") #UNSET THIS VARIABLE AT RELEASE TIME
+set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 set(HGCHANGED "")
 IF(version_suffix MATCHES "-dev")
     set(HW_DEV true)
@@ -43,8 +43,8 @@ ENDIF()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 18${version_suffix})
-set(HEDGEWARS_PROTO_VER 43)
+set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
+set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
@@ -55,7 +55,6 @@ option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
-
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 
