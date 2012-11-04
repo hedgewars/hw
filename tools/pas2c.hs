@@ -1,5 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables #-}
-module Main where
+module Pas2C where
 
 import Text.PrettyPrint.HughesPJ
 import Data.Maybe
@@ -1083,9 +1083,3 @@ op2C "=" = "=="
 op2C "/" = "/(float)"
 op2C a = a
 
-main = do
-    let programName = "hwengine"
-    let inputPath = "../hedgewars/"
-    let outputPath = "./"
-    let alternateInputPath = "./"
-    pas2C programName inputPath alternateInputPath outputPath
