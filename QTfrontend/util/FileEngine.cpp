@@ -167,10 +167,12 @@ void FileEngine::setFileName(const QString &file)
         _filename = file.mid(FileEngineHandler::scheme.size());
     else
         _filename = file;
+
     PHYSFS_Stat stat;
     if (PHYSFS_stat(_filename.toUtf8().constData(), &stat) != 0) {
         _size = stat.filesize;
         _datetime = QDateTime::fromTime_t(stat.modtime);
+        _flags |= QAbstractFileEngine::ReadUserPerm;
         _flags |= QAbstractFileEngine::ExistsFlag;
 
         switch (stat.filetype)

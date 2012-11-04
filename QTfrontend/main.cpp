@@ -221,8 +221,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // setup PhysFS
     engine.mount(datadir->absolutePath());
     engine.mount(cfgdir->absolutePath() + "/Data");
+    engine.mount(cfgdir->absolutePath());
     engine.setWriteDir(cfgdir->absolutePath());
 
     DataManager & dataMgr = DataManager::instance();
@@ -235,11 +237,8 @@ int main(int argc, char *argv[])
             cc = QLocale::system().name();
 
         // load locale file into translator
-        Translator.load(
-            dataMgr.findFileForRead(
-                QString("physfs://Locale/hedgewars_" + cc)
-            )
-        );
+        if(!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+            qWarning("Failed to install translation");
         app.installTranslator(&Translator);
     }
 
