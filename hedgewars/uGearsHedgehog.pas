@@ -1060,8 +1060,7 @@ else
             end;
 
 if (CurAmmoGear = nil)
-or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) 
-or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) then
+or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0)  then
     begin
     if ((HHGear^.Message and gmSlot) <> 0) then
         if ChangeAmmo(HHGear) then ApplyAmmoChanges(Hedgehog^);
