@@ -22,8 +22,8 @@ initDefines = Map.fromList [
     , ("S3D_DISABLED", "")
     ]
 
-preprocess :: String -> String -> IO String
-preprocess inputPath fn = do
+preprocess :: String -> String -> String -> IO String
+preprocess inputPath alternateInputPath fn = do
     r <- runParserT (preprocessFile (inputPath ++ fn)) (initDefines, [True]) "" ""
     case r of
          (Left a) -> do
@@ -79,7 +79,7 @@ preprocess inputPath fn = do
         char '"'
         spaces
         char '}'
-        f <- liftIO (readFile (inputPath ++ fn) `catch` error ("File not found: " ++ fn))
+        f <- liftIO (readFile (inputPath ++ fn) `catch` (\exc -> readFile (alternateInputPath ++ fn) `catch` error ("File not found: " ++ fn)))
         c <- getInput
         setInput $ f ++ c
         return ""

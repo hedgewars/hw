@@ -94,8 +94,8 @@ renderStringConsts = liftM (vcat . map (\(a, b) -> text "static const string255"
 docToLower :: Doc -> Doc
 docToLower = text . map toLower . render
 
-pas2C :: String -> String -> String -> IO ()
-pas2C fn inputPath outputPath = do
+pas2C :: String -> String -> String -> String -> IO ()
+pas2C fn inputPath alternateInputPath outputPath = do
     s <- flip execStateT initState $ f fn
     renderCFiles s outputPath
     where
@@ -109,7 +109,7 @@ pas2C fn inputPath outputPath = do
             print ("Preprocessing '" ++ fileName ++ ".pas'... ")
             fc' <- liftIO
                 $ tryJust (guard . isDoesNotExistError)
-                $ preprocess inputPath (fileName ++ ".pas")
+                $ preprocess inputPath alternateInputPath (fileName ++ ".pas")
             case fc' of
                 (Left a) -> do
                     modify (Map.insert fileName (System []))
@@ -1087,4 +1087,5 @@ main = do
     let programName = "hwengine"
     let inputPath = "../hedgewars/"
     let outputPath = "./"
-    pas2C programName inputPath outputPath
+    let alternateInputPath = "./"
+    pas2C programName inputPath alternateInputPath outputPath
