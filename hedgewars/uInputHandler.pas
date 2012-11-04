@@ -121,7 +121,6 @@ begin
 if not(tkbd[code] xor KeyDown) then exit;
 tkbd[code]:= KeyDown;
 
-hideAmmoMenu:= false;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
@@ -155,7 +154,7 @@ if(KeyDown and (code = closeKeyCode)) then
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) then hideAmmoMenu:= true;
+    if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
 
     if KeyDown then
         begin

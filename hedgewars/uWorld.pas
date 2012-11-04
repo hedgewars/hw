@@ -511,9 +511,7 @@ var Slot, Pos: LongInt;
     Ammo: PHHAmmo;
     c,i,g,t,STurns: LongInt;
 begin
-if (TurnTimeLeft = 0) or (not CurrentTeam^.ExtDriven and (((CurAmmoGear = nil)
-or ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) = 0)) and hideAmmoMenu)) then
-    bShowAmmoMenu:= false;
+if TurnTimeLeft = 0 then bShowAmmoMenu:= false;
 
 // give the assigned ammo to hedgehog
 Ammo:= nil;
@@ -552,16 +550,19 @@ if(AmmoMenuInvalidated) then
         AmmoRect.x:= (cScreenWidth shr 1) - AmmoRect.w - AMSlotSize;
         AmmoRect.y:= cScreenHeight - (AmmoRect.h + AMSlotSize);
 {$ENDIF}
-    AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
-    AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
+    if AMState <> AMShowing then
+        begin
+        AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x;
+        AMShiftTargetY:= cScreenHeight        - AmmoRect.y;
 
-    if (AMAnimType and AMTypeMaskX) <> 0 then AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x
-    else AMShiftTargetX:= 0;
-    if (AMAnimType and AMTypeMaskY) <> 0 then AMShiftTargetY:= cScreenHeight        - AmmoRect.y
-    else AMShiftTargetY:= 0;
+        if (AMAnimType and AMTypeMaskX) <> 0 then AMShiftTargetX:= (cScreenWidth shr 1) - AmmoRect.x
+        else AMShiftTargetX:= 0;
+        if (AMAnimType and AMTypeMaskY) <> 0 then AMShiftTargetY:= cScreenHeight        - AmmoRect.y
+        else AMShiftTargetY:= 0;
 
-    AMShiftX:= AMShiftTargetX;
-    AMShiftY:= AMShiftTargetY;
+        AMShiftX:= AMShiftTargetX;
+        AMShiftY:= AMShiftTargetY
+        end
 end;
 
 AMAnimState:= (RealTicks - AMAnimStartTime) / AMAnimDuration;
