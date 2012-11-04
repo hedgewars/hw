@@ -395,6 +395,7 @@ processAction (RemoveTeam teamName) = do
             teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r
             , gameInfo = liftM (\g -> g{leftTeams = teamName : leftTeams g}) $ gameInfo r
             })
+        : SendUpdateOnThisRoom
         : AnswerClients chans ["REMOVE_TEAM", teamName]
         : [SendTeamRemovalMessage teamName | inGame]
 
