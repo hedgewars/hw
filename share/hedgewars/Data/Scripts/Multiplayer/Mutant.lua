@@ -240,7 +240,7 @@ function countBodies()
             AddCaption(loc("HOLY SHIT!"))
             PlaySound(sndLaugh)
         elseif killsCounter > 8 then
-            AddCaption(loc("FAG"))
+            AddCaption(loc("INSANITY"))
         end
 
 end
