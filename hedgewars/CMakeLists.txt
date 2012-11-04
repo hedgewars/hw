@@ -193,7 +193,14 @@ endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if(fpc_version LESS "020600")
-    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+    #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
+    #TODO: check if this is needed on windows too
+    if(UNIX)
+        set(SAFE_BUILD_TOOL $(MAKE))
+    else()
+        set(SAFE_BUILD_TOOL ${CMAKE_BUILD_TOOL})
+    endif()
+    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
 endif()
 
 
