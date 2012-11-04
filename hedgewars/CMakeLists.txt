@@ -219,9 +219,6 @@ if(NOT NOVIDEOREC)
             add_library(avwrapper STATIC avwrapper.c)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
         ENDIF()
-        if(fpc_version LESS "020600")
-            add_dependencies(avwrapper ENGINECLEAN)
-        endif()
     else()
         message(STATUS "Could NOT find FFMPEG/LibAV, video recording will be disabled")
     endif()
@@ -265,6 +262,12 @@ add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/$
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
+endif()
+
+#when ffmpeg/libav is found we need to compile it before engine
+#TODO: convert avwrapper to .pas unit so we can skip this
+if(${FFMPEG_FOUND})
+    add_dependencies(${engine_output_name} avwrapper)
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
