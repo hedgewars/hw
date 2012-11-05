@@ -55,6 +55,7 @@ option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
+option(WEBGL "Enable WebGL build [default: off]" OFF)
 
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
@@ -204,8 +205,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 
-#server discovery
-if(NOT NOSERVER)
+#Haskell compiler discovery (for server and webgl
+if((NOT NOSERVER) OR WEBGL)
     if(GHC)
         set(ghc_executable ${GHC})
     else()
@@ -213,22 +214,28 @@ if(NOT NOSERVER)
     endif()
 
     if(ghc_executable)
-        set(HAVE_NETSERVER true)
-        add_subdirectory(gameServer)
-        message(STATUS "Found GHC: ${ghc_executable}")
+        exec_program(${ghc_executable} ARGS "-V" OUTPUT_VARIABLE ghc_version_long)
+        string(REGEX REPLACE ".*([0-9]+\\.[0-9]+\\.[0-9]+)" "\\1" ghc_version "${ghc_version_long}")
+        message(STATUS "Found GHC: ${ghc_executable} (version ${ghc_version})")
     else()
-        message(STATUS "Could NOT find GHC, server will not be built")
-        set(HAVE_NETSERVER false)
+        message(STATUS "Could NOT find GHC, needed by gameServer and pas2c")
     endif()
+endif()
+
+
+#check gameServer
+if((ghc_executable) AND (NOT NOSERVER) AND (NOT WEBGL))
+    set(HAVE_NETSERVER true)
+    add_subdirectory(gameServer)
 else()
-    message(STATUS "Server will not be built per user request")
+    message(STATUS "Skipping gameServer target")
     set(HAVE_NETSERVER false)
 endif()
 
 
 #lua discovery
 find_package(Lua)
-if(LUA_FOUND)
+if(LUA_FOUND AND (NOT WEBGL))
     message(STATUS "Found LUA: ${LUA_DEFAULT}")
 else()
     message(STATUS "LUA will be provided by the bundled sources")
@@ -238,23 +245,32 @@ else()
 endif()
 
 
-#main engine
-add_subdirectory(hedgewars)
+if(WEBGL)
+    if (NOT ghc_executable)
+        message(FATAL_ERROR "A Haskell compiler is required to build the WebGL port")
+    endif()
+    #pascal to c converter
+    add_subdirectory(tools/pas2c)
+else()
+    #main engine
+    add_subdirectory(hedgewars)
 
-#Android related build scripts
-if(ANDROID)
-    #run cmake -DANDROID=1 to enable this
-    add_subdirectory(project_files/Android-build)
+    #Android related build scripts
+    if(ANDROID)
+        #run cmake -DANDROID=1 to enable this
+        add_subdirectory(project_files/Android-build)
+    endif()
+
+    #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
+    if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID OR WEBGL))
+        add_subdirectory(bin)
+        add_subdirectory(misc/quazip)
+        add_subdirectory(QTfrontend)
+        add_subdirectory(share)
+        add_subdirectory(tools)
+    endif()
 endif()
 
-#TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
-if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
-    add_subdirectory(bin)
-    add_subdirectory(misc/quazip)
-    add_subdirectory(QTfrontend)
-    add_subdirectory(share)
-    add_subdirectory(tools)
-endif()
 
 
 # CPack variables
