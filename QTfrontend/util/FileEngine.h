@@ -64,6 +64,7 @@ class FileEngineHandler : public QAbstractFileEngineHandler
         QAbstractFileEngine *create(const QString &filename) const;
 
         void mount(const QString & path);
+        void mount(const QString & path, const QString & mountPoint);
         void setWriteDir(const QString & path);
 
 //    private:

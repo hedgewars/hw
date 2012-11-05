@@ -2,6 +2,7 @@
  * TODO: add copyright header, determine license
  */
 
+
 #include "FileEngine.h"
 
 
@@ -147,11 +148,12 @@ QString FileEngine::fileName(FileName file) const
     if (file == QAbstractFileEngine::AbsolutePathName)
         return PHYSFS_getWriteDir();
 
-    return _filename;
+    return QString("physfs://%1").arg(_filename);
 }
 
 QDateTime FileEngine::fileTime(FileTime time) const
 {
+
     switch (time)
     {
         case QAbstractFileEngine::ModificationTime:
@@ -172,6 +174,7 @@ void FileEngine::setFileName(const QString &file)
     if (PHYSFS_stat(_filename.toUtf8().constData(), &stat) != 0) {
         _size = stat.filesize;
         _datetime = QDateTime::fromTime_t(stat.modtime);
+//        _flags |= QAbstractFileEngine::WriteUserPerm;
         _flags |= QAbstractFileEngine::ReadUserPerm;
         _flags |= QAbstractFileEngine::ExistsFlag;
 
@@ -188,7 +191,7 @@ void FileEngine::setFileName(const QString &file)
                 _flags |= QAbstractFileEngine::LinkType;
                 break;
             default: ;
-        };
+        }
     }
 }
 
@@ -250,6 +253,11 @@ QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 void FileEngineHandler::mount(const QString &path)
 {
     PHYSFS_mount(path.toUtf8().constData(), NULL, 1);
+}
+
+void FileEngineHandler::mount(const QString & path, const QString & mountPoint)
+{
+    PHYSFS_mount(path.toUtf8().constData(), mountPoint.toUtf8().constData(), 1);
 }
 
 void FileEngineHandler::setWriteDir(const QString &path)
