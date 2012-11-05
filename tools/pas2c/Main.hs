@@ -27,6 +27,7 @@ main = do
                     error $ usageInfo header options
           (_,     nonOpts, [])     -> error $ "unrecognized arguments: " ++ unwords nonOpts
           (_,     _,       msgs)   -> error $ usageInfo header options
+    where header = "Freepascal to C conversion! Please use -n -i -o -a options in this order.\n"
 
 
 data Flag = HelpMessage | Name String | Input String | Output String | Alternate String
@@ -39,6 +40,4 @@ options = [
     Option ['o'] ["output"]    (ReqArg Output "DIR")    "output directory, where .c/.h files will be written",
     Option ['a'] ["alternate"] (ReqArg Alternate "DIR") "alternate input directory, for out of source builds"
   ]
-
-header = "Freepascal to C conversion!\n"
 
