@@ -276,7 +276,7 @@ processAction ChangeMaster = do
 
     newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo newRoomName newRoom')
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
