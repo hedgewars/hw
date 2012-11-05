@@ -253,7 +253,6 @@ locale = {
 	  ["Get that crate!"] = "Prends cette caisse",
       ["Get the crate on the other side of the island!|"] = "Prends la caisse de l'autre côté de l'île !",
 --      ["Get to the target using your rope! |Controls: Left & Right to swing the rope - Up & Down to Contract and Expand!"] = "", -- Basic_Training_-_Rope
-      ["Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|	  Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"] 
 --      ["Get your teammates out of their natural prison and save the princess!|Hint: Drilling holes should solve everything.|Hint: It might be a good idea to place a girder before starting to drill. Just saying.|Hint: All your hedgehogs need to be above the marked height!|Hint: Leaks A Lot needs to get really close to the princess!"] = "", -- A_Classic_Fairytale:family
 --      ["GG!"] = "", -- User_Mission_-_Rope_Knock_Challenge
 --      ["Gimme Bones"] = "",
