@@ -78,15 +78,12 @@ void ThemeModel::loadThemes()
         dataset.insert(Qt::DisplayRole, theme);
 
         // load and set icon
-
-        QPixmap pix(iconpath); // workaround, as QIcon(iconpath) and even QIcon(QPixmap(iconpath)) don't work
-        QIcon icon(pix);
+        QIcon icon(iconpath);
 
         dataset.insert(Qt::DecorationRole, icon);
 
         // load and set preview icon
-        pix.load(datamgr.findFileForRead(QString("Themes/%1/icon@2x.png").arg(theme)));
-        QIcon preview(pix);
+        QIcon preview(datamgr.findFileForRead(QString("Themes/%1/icon@2x.png").arg(theme)));
         dataset.insert(Qt::UserRole, preview);
 
         m_data.append(dataset);
