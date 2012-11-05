@@ -13,7 +13,7 @@ uses uUtils;
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external;
 function PHYSFS_deinit() : LongInt; cdecl; external;
 
-function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool); cdecl; external;
+function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external;
 
 procedure initModule;
 begin
