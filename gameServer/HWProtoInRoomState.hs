@@ -59,6 +59,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 return color
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
+        let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif (newTeamHHNum rm) (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ teams rm then
                 [Warning "too many teams"]
@@ -71,17 +72,16 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
             else if isRestrictedTeams rm then
                 [Warning "restricted"]
             else
-                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r teamColor]}),
+                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
-                AnswerClients othChans $ teamToNet $ newTeam ci clNick rm teamColor,
+                AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
                 ]
         where
         canAddNumber r = 48 - (sum . map hhnum $ teams r)
         findTeam = find (\t -> tName == teamname t) . teams
-        newTeam ci clNick r tColor = TeamInfo ci clNick tName tColor grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
         dif = readInt_ difStr
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"
