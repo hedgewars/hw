@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uUtils;
 
 var
 /////// init flags ///////
@@ -2578,10 +2578,7 @@ end;
 procedure initModule;
 begin
 
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
+    SplitByChar(cLocaleFName, cLocale, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;

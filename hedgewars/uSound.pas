@@ -139,7 +139,7 @@ i:= 0;
             path:= Pathz[ptVoices] + '/' + locName;
             if DirectoryExists(path) then
                 name:= locName
-            else if Length(cLocale) > 2
+            else if Length(cLocale) > 3
                 then
                 begin
                 locName:= name+'_'+Copy(cLocale,1,2);
