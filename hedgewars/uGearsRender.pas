@@ -750,6 +750,7 @@ begin
         begin
         if defaultPos then
             begin
+            if HH^.Team^.hasGone then Tint($FF, $FF, $FF, $80);
             DrawSpriteRotatedF(sprHHIdle,
                 sx,
                 sy,
@@ -791,7 +792,8 @@ begin
                         32,
                         32);
                     Tint($FF, $FF, $FF, $FF)
-                    end
+                    end;
+                if HH^.Team^.hasGone then Tint($FF, $FF, $FF, $FF)
                 end
             else
                 begin
