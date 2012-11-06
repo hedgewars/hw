@@ -161,18 +161,6 @@ const
     // do not change this value
     cDefaultZoomLevel = 2.0;
 
-{$IFDEF MOBILE}
-    cMaxZoomLevel = 0.5;
-    cMinZoomLevel = 3.5;
-    cZoomDelta = 0.20;
-{$ELSE}
-    cMaxZoomLevel = 1.0;
-    cMinZoomLevel = 3.0;
-    cZoomDelta = 0.25;
-{$ENDIF}
-
-    cMinMaxZoomLevelDelta = cMaxZoomLevel - cMinZoomLevel;
-
     cSendEmptyPacketTime = 1000;
     trigTurns = $80000001;
 

@@ -108,7 +108,7 @@ var
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
-    cWaterLine       : Word;
+    cWaterLine       : LongWord;
     cGearScrEdgesDist: LongInt;
     isAudioMuted     : boolean;
 
@@ -122,8 +122,8 @@ var
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
     CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH       : Word;
-    LAND_HEIGHT      : Word;
+    LAND_WIDTH       : LongWord;
+    LAND_HEIGHT      : LongWord;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
@@ -164,6 +164,10 @@ var
     AmmoMenuInvalidated: boolean;
     AmmoRect		: TSDL_Rect;
     HHTexture       : PTexture;
+    cMaxZoomLevel   : real;
+    cMinZoomLevel   : real;
+    cZoomDelta      : real;
+    cMinMaxZoomLevelDelta : real;
 
 
     flagMakeCapture : boolean;
@@ -2631,6 +2635,18 @@ begin
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
+
+{$IFDEF MOBILE}
+    cMaxZoomLevel:= 0.5;
+    cMinZoomLevel:= 3.5;
+    cZoomDelta:= 0.20;
+{$ELSE}
+    cMaxZoomLevel:= 1.0;
+    cMinZoomLevel:= 3.0;
+    cZoomDelta:= 0.25;
+{$ENDIF}
+
+    cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
 
     // int, longint longword and byte
     CursorMovementX     := 0;
