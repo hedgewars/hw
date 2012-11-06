@@ -447,16 +447,18 @@ var i: LongInt;
 begin
 with team^ do
     begin
-    NewTeamHealthBarWidth:= 0;
+    TeamHealth:= 0;
+    for i:= 0 to cMaxHHIndex do
+        if Hedgehogs[i].Gear <> nil then
+            inc(TeamHealth, Hedgehogs[i].Gear^.Health)
+        else if Hedgehogs[i].GearHidden <> nil then
+            inc(TeamHealth, Hedgehogs[i].GearHidden^.Health);
 
     if not hasGone then
-        for i:= 0 to cMaxHHIndex do
-            if Hedgehogs[i].Gear <> nil then
-                inc(NewTeamHealthBarWidth, Hedgehogs[i].Gear^.Health)
-            else if Hedgehogs[i].GearHidden <> nil then
-                inc(NewTeamHealthBarWidth, Hedgehogs[i].GearHidden^.Health);
+        NewTeamHealthBarWidth:= TeamHealth
+        else
+        NewTeamHealthBarWidth:= 0;
 
-    TeamHealth:= NewTeamHealthBarWidth;
     if NewTeamHealthBarWidth > MaxTeamHealth then
         begin
         MaxTeamHealth:= NewTeamHealthBarWidth;
