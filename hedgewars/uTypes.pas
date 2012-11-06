@@ -123,7 +123,7 @@ type
             sndSplash, sndShotgunReload, sndShotgunFire, sndGraveImpact,
             sndMineImpact, sndMineTick, sndMudballImpact,
             sndPickhammer, sndGun, sndBee, sndJump1, sndJump2,
-            sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndIncoming,
+            sndJump3, sndYesSir, sndLaugh, sndIllGetYou, sndJustYouWait, sndIncoming,
             sndMissed, sndStupid, sndFirstBlood, sndBoring, sndByeBye,
             sndSameTeam, sndNutter, sndReinforce, sndTraitor, sndRegret,
             sndEnemyDown, sndCoward, sndHurry, sndWatchIt, sndKamikaze,
