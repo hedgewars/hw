@@ -345,22 +345,42 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
 </context>
 <context>
-    <name>LibavIteraction</name>
+    <name>LibavInteraction</name>
     <message>
-        <source>Duration: %1m %2s</source>
-        <translation>Duração: %1m %2s</translation>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Vídeo:  %1x%2, </translation>
+        <translation type="unfinished">Vídeo:  %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="unfinished">%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation>Audio: </translation>
+        <translation type="unfinished">Audio: </translation>
+    </message>
+</context>
+<context>
+    <name>LibavIteraction</name>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation type="obsolete">Duração: %1m %2s</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="obsolete">Vídeo:  %1x%2, </translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="obsolete">%1 fps, </translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="obsolete">Audio: </translation>
     </message>
 </context>
 <context>
@@ -833,11 +853,11 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>DLC</source>
-        <translation>DLC</translation>
+        <translation type="obsolete">DLC</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation>Conteúdo Transferível</translation>
+        <translation type="obsolete">Conteúdo Transferível</translation>
     </message>
 </context>
 <context>
@@ -2156,6 +2176,26 @@ Desejas entrar na sala de qualquer maneira?</translation>
     <message>
         <source>Cancel uploading</source>
         <translation>Cancelar o upload</translation>
+    </message>
+    <message>
+        <source>Restore default coding parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload this video to your Youtube account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

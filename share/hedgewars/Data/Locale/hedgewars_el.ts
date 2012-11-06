@@ -2,10 +2,21 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="el">
 <context>
+    <name>AbstractPage</name>
+    <message>
+        <source>Go back</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
         <translation type="unfinished">Νέο</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -30,11 +41,11 @@
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>Illegal ammo scheme</source>
-        <translation type="unfinished">Ασύμβατος σχεδιασμός όπλων</translation>
+        <translation type="obsolete">Ασύμβατος σχεδιασμός όπλων</translation>
     </message>
     <message>
         <source>Edit schemes</source>
@@ -42,45 +53,104 @@
     </message>
     <message>
         <source>When this option is enabled selecting a game scheme will auto-select a weapon (and viceversa)</source>
-        <translation type="unfinished">Όταν αυτή η επιλογη είναι ενεργοποιημένη, επιλέγοντας ένα σχεδιασμό παιχνιδιού θα επιλέγεται αυτομάτως ένα όπλο (και αντιστρόφως)</translation>
+        <translation type="obsolete">Όταν αυτή η επιλογη είναι ενεργοποιημένη, επιλέγοντας ένα σχεδιασμό παιχνιδιού θα επιλέγεται αυτομάτως ένα όπλο (και αντιστρόφως)</translation>
+    </message>
+    <message>
+        <source>Game Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWAskQuitDialog</name>
+    <message>
+        <source>Do you really want to quit?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 *** %2 has been removed from your ignore list</source>
-        <translation type="unfinished">%1 *** %2 αφαιρέθηκε από τη &quot;μαύρη&quot; λίστα</translation>
+        <translation type="obsolete">%1 *** %2 αφαιρέθηκε από τη &quot;μαύρη&quot; λίστα</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your ignore list</source>
-        <translation type="unfinished">%1 *** %2 προστέθηκε στη &quot;μαύρη&quot; λίστα</translation>
+        <translation type="obsolete">%1 *** %2 προστέθηκε στη &quot;μαύρη&quot; λίστα</translation>
     </message>
     <message>
         <source>%1 *** %2 has been removed from your friends list</source>
-        <translation type="unfinished">%1 *** %2 αφαιρέθηκε από τη λίστα φίλων</translation>
+        <translation type="obsolete">%1 *** %2 αφαιρέθηκε από τη λίστα φίλων</translation>
     </message>
     <message>
         <source>%1 *** %2 has been added to your friends list</source>
-        <translation type="unfinished">%1 *** %2 προστέθηκε στη λίστα φίλων</translation>
+        <translation type="obsolete">%1 *** %2 προστέθηκε στη λίστα φίλων</translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a valid command!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWForm</name>
     <message>
         <source>new</source>
-        <translation type="unfinished">Νέο</translation>
+        <translation type="obsolete">Νέο</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Εντάξει</translation>
+        <translation type="obsolete">Εντάξει</translation>
     </message>
     <message>
         <source>Unable to start the server</source>
-        <translation type="unfinished">Δεν είναι δυνατόν να ξεκινήσει ο εξυπηρετητής</translation>
+        <translation type="obsolete">Δεν είναι δυνατόν να ξεκινήσει ο εξυπηρετητής</translation>
     </message>
     <message>
         <source>Cannot save record to file %1</source>
@@ -88,7 +158,7 @@
     </message>
     <message>
         <source>Please select record from the list above</source>
-        <translation type="unfinished">Παρακαλώ επέλεξε εγγραφή από την παραπάνω λίστα</translation>
+        <translation type="obsolete">Παρακαλώ επέλεξε εγγραφή από την παραπάνω λίστα</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -106,16 +176,60 @@
         <translatorcomment>Τύπος Αρχείων</translatorcomment>
         <translation type="unfinished">Αρχείο Αποθήκευσης Hedgewars</translation>
     </message>
+    <message>
+        <source>Game aborted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your nickname %1 is
+registered on Hedgewars.org
+Please provide your password below
+or pick another nickname in game config:</source>
+        <translation type="unfinished">Το ψευδώνυμο %1 είναι ήδη
+καταχωρημένο στο Hedgewars.org
+Παρακαλώ εισάγετε τον κωδικό σας
+ή επιλέξτε άλλο ψευδώνυμο από τις
+ρυθμίσεις του παιχνιδιού:</translation>
+    </message>
+    <message>
+        <source>No password supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Ψευδώνυμο</translation>
+    </message>
+    <message>
+        <source>Someone already uses your nickname %1 on the server.
+Please pick another nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No nickname supplied.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo name:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
     <message>
         <source>el.txt</source>
-        <translation>el.txt</translation>
+        <translation type="obsolete">el.txt</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
         <translation type="unfinished">Δεν μπορεί να φορτωθεί το αρχείο επιδείξεων %1</translation>
+    </message>
+    <message>
+        <source>en.txt</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -184,6 +298,14 @@
         <source>Large floating islands</source>
         <translation type="unfinished">Μεγάλα επιπλέοντα νησιά</translation>
     </message>
+    <message>
+        <source>Seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -224,7 +346,7 @@
     </message>
     <message>
         <source>Password</source>
-        <translation type="unfinished">Κωδικός</translation>
+        <translation type="obsolete">Κωδικός</translation>
     </message>
     <message>
         <source>Your nickname %1 is
@@ -257,11 +379,41 @@ or pick another nickname:</translation>
 registered on Hedgewars.org
 Please provide your password below
 or pick another nickname in game config:</source>
-        <translation type="unfinished">Το ψευδώνυμο %1 είναι ήδη
+        <translation type="obsolete">Το ψευδώνυμο %1 είναι ήδη
 καταχωρημένο στο Hedgewars.org
 Παρακαλώ εισάγετε τον κωδικό σας
 ή επιλέξτε άλλο ψευδώνυμο από τις
 ρυθμίσεις του παιχνιδιού:</translation>
+    </message>
+    <message>
+        <source>User quit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remote host has closed connection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The server is too old. Disconnecting now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWPasswordDialog</name>
+    <message>
+        <source>Password</source>
+        <translation type="unfinished">Κωδικός</translation>
+    </message>
+</context>
+<context>
+    <name>HWUploadVideoDialog</name>
+    <message>
+        <source>Upload video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -269,6 +421,26 @@ or pick another nickname in game config:</source>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
         <translation type="unfinished">Το SDL_ttf επέστρεψε σφάλμα καθώς διερμήνευσε κείμενο. Το πιο πιθανό είναι αυτό να σχετίζεται με το σφάλμα στο freetype2. Προτείνεται να αναβαθμίσετε το freetype lib.</translation>
+    </message>
+</context>
+<context>
+    <name>LibavInteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -315,6 +487,45 @@ or pick another nickname in game config:</source>
     <message>
         <source>Connecting...</source>
         <translation type="unfinished">Σύνδεση...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDrawMap</name>
+    <message>
+        <source>Eraser</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Φόρτωση</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save drawn map</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -408,14 +619,28 @@ or pick another nickname in game config:</source>
     </message>
 </context>
 <context>
+    <name>PageInGame</name>
+    <message>
+        <source>In game...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageInfo</name>
+    <message>
+        <source>Open the snapshot folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMain</name>
     <message>
         <source>Local Game (Play a game on a single computer)</source>
-        <translation type="unfinished">Τοπικό Παιχνίδι (Παίξιμο παιχνιδιού σε ένα υπολογιστή)</translation>
+        <translation type="obsolete">Τοπικό Παιχνίδι (Παίξιμο παιχνιδιού σε ένα υπολογιστή)</translation>
     </message>
     <message>
         <source>Network Game (Play a game across a network)</source>
-        <translation type="unfinished">Δικτυακό Παιχνίδι (Παίξιμο παιχνιδιού σε δίκτυο)</translation>
+        <translation type="obsolete">Δικτυακό Παιχνίδι (Παίξιμο παιχνιδιού σε δίκτυο)</translation>
     </message>
     <message>
         <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
@@ -510,7 +735,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgwars to its game list so your friends can see you playing.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Η έκδοση Hedgewars για Windows υποστηρίζει Xfire. Σιγουρευτείτε οτι προσθέσατε το Hedgewars στη λίστα παιχνιδιών του, ώστε οι φίλοι σας να μπορούν να σας δουν όταν εσείς παίζετε.</translation>
+        <translation type="obsolete">Η έκδοση Hedgewars για Windows υποστηρίζει Xfire. Σιγουρευτείτε οτι προσθέσατε το Hedgewars στη λίστα παιχνιδιών του, ώστε οι φίλοι σας να μπορούν να σας δουν όταν εσείς παίζετε.</translation>
     </message>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
@@ -580,7 +805,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>The Homing Bee can be tricky to use. It&apos;s turn radius depends on it&apos;s velocity, so try to not use full power.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Η Αυτοκαθοδηγούμενη Μέλισσα μπορεί να είναι δύσκολη στη χρήση. Η ακτίνα καμπυλότητάς της εξαρτάται από την ταχύτητά της, επομένως προσπαθήστε να μην χρησιμοποιείτε την πλήρη ισχύ.</translation>
+        <translation type="obsolete">Η Αυτοκαθοδηγούμενη Μέλισσα μπορεί να είναι δύσκολη στη χρήση. Η ακτίνα καμπυλότητάς της εξαρτάται από την ταχύτητά της, επομένως προσπαθήστε να μην χρησιμοποιείτε την πλήρη ισχύ.</translation>
     </message>
     <message>
         <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
@@ -610,7 +835,7 @@ or pick another nickname in game config:</source>
     <message>
         <source>Use the Incinerating Grenade to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
         <comment>Tips</comment>
-        <translation type="unfinished">Χρησιμοποιήστε την Καυστική Χειροβομβίδα για να εμποδίσετε προσωρινώς τους σκατζόχοιρους από το να διασχίσουν έδαφος, όπως σήραγγες ή εξέδρες.</translation>
+        <translation type="obsolete">Χρησιμοποιήστε την Καυστική Χειροβομβίδα για να εμποδίσετε προσωρινώς τους σκατζόχοιρους από το να διασχίσουν έδαφος, όπως σήραγγες ή εξέδρες.</translation>
     </message>
     <message>
         <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
@@ -662,6 +887,65 @@ or pick another nickname in game config:</source>
         <comment>Tips</comment>
         <translation type="unfinished">Μπορείτε να βρείτε τα αρχεία ρυθμίσεων του Hedgewars στο &quot;.hedgewars&quot; στον προσωπικό σας φάκελο. Δημιουργήστε αντίγραφα ασφαλείας ή πάρτε τα αρχεία μαζί σας, αλλά μην τα επεξεργαστείτε χειροκίνητα.</translation>
     </message>
+    <message>
+        <source>Local Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on a single computer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game across a network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloadable Content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access the user created content downloadable from our website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Exit game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Manage videos recorded from game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
+        <comment>Tips</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -674,11 +958,11 @@ or pick another nickname in game config:</source>
     <name>PageNet</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>Please select server from the list above</source>
-        <translation type="unfinished">Παρακαλώ επιλέξτε εξυπηρετητή από την παρακάτω λίστα</translation>
+        <translation type="obsolete">Παρακαλώ επιλέξτε εξυπηρετητή από την παρακάτω λίστα</translation>
     </message>
 </context>
 <context>
@@ -698,6 +982,14 @@ or pick another nickname in game config:</source>
         <source>Official server</source>
         <translation type="unfinished">Επίσημος εξυπηρετητής</translation>
     </message>
+    <message>
+        <source>Join or host your own game server in a Local Area Network.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join hundreds of players online!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageOptions</name>
@@ -715,30 +1007,98 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>New weapon scheme</source>
-        <translation type="unfinished">Νέος σχεδιασμός όπλων</translation>
+        <translation type="obsolete">Νέος σχεδιασμός όπλων</translation>
     </message>
     <message>
         <source>Edit weapon scheme</source>
-        <translation type="unfinished">Επεξεργασία σχεδιασμού όπλων</translation>
+        <translation type="obsolete">Επεξεργασία σχεδιασμού όπλων</translation>
     </message>
     <message>
         <source>Delete weapon scheme</source>
-        <translation type="unfinished">Διαγραφή σχεδιασμού όπλων</translation>
+        <translation type="obsolete">Διαγραφή σχεδιασμού όπλων</translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
         <translation type="unfinished">Δεν μπορείτε να επεξεργαστείτε τις ομάδες από την επιλογή ομάδων. Πηγαίνετε πίσω στην κύρια σελίδα για να προσθέσετε, να επεξεργαστείτε ή να διαγράψετε ομάδες.</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Γενικά</translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished">Για προχωρημένους</translation>
+    </message>
+    <message>
+        <source>New scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete weapon set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to default colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy host</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>System proxy settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Socks5 proxy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>HTTP proxy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Εντάξει</translation>
+        <translation type="obsolete">Εντάξει</translation>
     </message>
     <message>
         <source>Rename dialog</source>
@@ -750,15 +1110,15 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Cannot rename to</source>
-        <translation type="unfinished">Δεν μπορεί να γίνει μετονομασία σε</translation>
+        <translation type="obsolete">Δεν μπορεί να γίνει μετονομασία σε</translation>
     </message>
     <message>
         <source>Cannot delete file</source>
-        <translation type="unfinished">Δεν μπορεί να διαγραφεί το αρχείο</translation>
+        <translation type="obsolete">Δεν μπορεί να διαγραφεί το αρχείο</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation type="unfinished">Παρακαλώ επιλέξτε εγγραφή από την λίστα</translation>
+        <translation type="obsolete">Παρακαλώ επιλέξτε εγγραφή από την λίστα</translation>
     </message>
 </context>
 <context>
@@ -773,15 +1133,15 @@ or pick another nickname in game config:</source>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished">Ανανέωση</translation>
+        <translation type="obsolete">Ανανέωση</translation>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation type="unfinished">Εντάξει</translation>
+        <translation type="obsolete">Εντάξει</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -794,64 +1154,64 @@ or pick another nickname in game config:</source>
     <message>
         <source>This game is in lobby.
 You may join and start playing once the game starts.</source>
-        <translation type="unfinished">Αυτό το παιχνίδι είναι σε αναμονή.
+        <translation type="obsolete">Αυτό το παιχνίδι είναι σε αναμονή.
 Μπορείτε να συνδεθείτε και να παίξετε μόλις το παιχνίδι ξεκινήσει.</translation>
     </message>
     <message>
         <source>This game is in progress.
 You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="unfinished">Αυτό το παιχνίδι είναι σε εξέλιξη.
+        <translation type="obsolete">Αυτό το παιχνίδι είναι σε εξέλιξη.
 Μπορείτε να συνδεθείτε και να παρακολουθείτε την εξέλιξη αλλά θα πρέπει να περιμένετε να τελειώσει το παιχνίδι για να ξεκινήσετε να παίζετε.</translation>
     </message>
     <message>
         <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="unfinished">%1 είναι ο οικοδεσπότης. Μπορεί να προσαρμόζει τις ρυθμίσεις και να ξεκινά το παιχνίδι.</translation>
+        <translation type="obsolete">%1 είναι ο οικοδεσπότης. Μπορεί να προσαρμόζει τις ρυθμίσεις και να ξεκινά το παιχνίδι.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Τυχαίος χάρτης</translation>
+        <translation type="obsolete">Τυχαίος χάρτης</translation>
     </message>
     <message>
         <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="unfinished">Τα παιχνίδια μπορούν να παίζονται σε προκατασκευασμένους ή τυχαιοποιημένους χάρτες.</translation>
+        <translation type="obsolete">Τα παιχνίδια μπορούν να παίζονται σε προκατασκευασμένους ή τυχαιοποιημένους χάρτες.</translation>
     </message>
     <message>
         <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="unfinished">Ο σχεδιασμός του παιχνιδιού καθορίζει τις γενικές επιλογές και τις προτιμήσεις όπως τον Χρόνο του Γύρου, τον Ξαφνικό Θάνατο ή τον Βαμπιρισμό.</translation>
+        <translation type="obsolete">Ο σχεδιασμός του παιχνιδιού καθορίζει τις γενικές επιλογές και τις προτιμήσεις όπως τον Χρόνο του Γύρου, τον Ξαφνικό Θάνατο ή τον Βαμπιρισμό.</translation>
     </message>
     <message>
         <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="unfinished">Ο Σχεδιασμός των Όπλων καθορίζει τα διαθέσιμα όπλα και το ποσό των πυρομαχικών.</translation>
+        <translation type="obsolete">Ο Σχεδιασμός των Όπλων καθορίζει τα διαθέσιμα όπλα και το ποσό των πυρομαχικών.</translation>
     </message>
     <message numerus="yes">
         <source>There are %1 clients connected to this room.</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>Υπάρχει %1 χρήστης συνδεδεμένος σε αυτό το δωμάτιο.</numerusform>
             <numerusform>Υπάρχουν %1 χρήστες συνδεδεμένοι σε αυτό το δωμάτιο.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>There are %1 teams participating in this room.</source>
-        <translation type="unfinished">
+        <translation type="obsolete">
             <numerusform>%1 ομάδα συμμετέχει σε αυτό το δωμάτιο.</numerusform>
             <numerusform>%1 ομάδες συμμετέχουν σε αυτό το δωμάτιο.</numerusform>
         </translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Εισάγετε το όνομα του δωματίου</translation>
+        <translation type="obsolete">Εισάγετε το όνομα του δωματίου</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation type="unfinished">Παρακαλώ επιλέξτε δωμάτιο από τη λίστα</translation>
+        <translation type="obsolete">Παρακαλώ επιλέξτε δωμάτιο από τη λίστα</translation>
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished">Τυχαίος Λαβύρινθος</translation>
+        <translation type="obsolete">Τυχαίος Λαβύρινθος</translation>
     </message>
     <message>
         <source>State:</source>
-        <translation type="unfinished">Κατάσταση :</translation>
+        <translation type="obsolete">Κατάσταση :</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -871,13 +1231,20 @@ You may join and spectate now but you&apos;ll have to wait for the game to end t
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished">Προσοχή</translation>
+        <translation type="obsolete">Προσοχή</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished">Το παιχνίδι στο οποίο προσπαθείτε να συνδεθείτε έχει ήδη ξεκινήσει.
+        <translation type="obsolete">Το παιχνίδι στο οποίο προσπαθείτε να συνδεθείτε έχει ήδη ξεκινήσει.
 Θέλετε ακόμα να συνδεθείτε με το δωμάτιο;</translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 players online</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -896,7 +1263,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Add an indestructable border around the terrain</source>
-        <translation type="unfinished">Προσθήκη ενός άφθαρτου συνόρου γύρω από την πίστα</translation>
+        <translation type="obsolete">Προσθήκη ενός άφθαρτου συνόρου γύρω από την πίστα</translation>
     </message>
     <message>
         <source>Lower gravity</source>
@@ -986,6 +1353,30 @@ Do you still want to join the room?</source>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
         <translation type="unfinished">Κάθε σκατζόχοιρος έχει τα δικά του πυρομαχικά. Δεν τα μοιράζεται με την ομάδα.</translation>
     </message>
+    <message>
+        <source>Add an indestructible border around the terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You will not have to worry about wind anymore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind will affect almost everything.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams in each clan take successive turns sharing their turn time.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add an indestructible border along the bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -997,32 +1388,141 @@ Do you still want to join the room?</source>
         <source>Delete</source>
         <translation type="unfinished">Διαγραφή</translation>
     </message>
+    <message>
+        <source>New</source>
+        <translation type="unfinished">Νέο</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSinglePlayer</name>
     <message>
         <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="unfinished">Απλό Παιχνίδι (ένα γρήγορο παιχνίδι εναντίον του υπολογιστή, οι ρυθμίσεις είναι προεπιλεγμένεs)</translation>
+        <translation type="obsolete">Απλό Παιχνίδι (ένα γρήγορο παιχνίδι εναντίον του υπολογιστή, οι ρυθμίσεις είναι προεπιλεγμένεs)</translation>
     </message>
     <message>
         <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="unfinished">Πολλοί Παίχτες (ένα παιχνίδι εναντίον των φίλων σας ή του υπολογιστή)</translation>
+        <translation type="obsolete">Πολλοί Παίχτες (ένα παιχνίδι εναντίον των φίλων σας ή του υπολογιστή)</translation>
     </message>
     <message>
         <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="unfinished">Εξάσκηση (Εξασκήστε τις δεξιότητές σας σε ένα εύρος εκπαιδευτικών αποστολών). ΣΕ ΕΞΕΛΙΞΗ</translation>
+        <translation type="obsolete">Εξάσκηση (Εξασκήστε τις δεξιότητές σας σε ένα εύρος εκπαιδευτικών αποστολών). ΣΕ ΕΞΕΛΙΞΗ</translation>
     </message>
     <message>
         <source>Demos (Watch recorded demos)</source>
-        <translation type="unfinished">Επιδείξεις (Παρακολουθήστε καταγεγραμμένες επιδείξεις)</translation>
+        <translation type="obsolete">Επιδείξεις (Παρακολουθήστε καταγεγραμμένες επιδείξεις)</translation>
     </message>
     <message>
         <source>Load (Load a previously saved game)</source>
-        <translation type="unfinished">Φόρτωση Σωσμένου Παιχνιδιού (Φορτώστε ένα σωσμένο παιχνίδι)</translation>
+        <translation type="obsolete">Φόρτωση Σωσμένου Παιχνιδιού (Φορτώστε ένα σωσμένο παιχνίδι)</translation>
     </message>
     <message>
         <source>Campaign Mode (...). IN DEVELOPMENT</source>
-        <translation type="unfinished">Εκστρατεία ΣΕ ΕΞΕΛΙΞΗ</translation>
+        <translation type="obsolete">Εκστρατεία ΣΕ ΕΞΕΛΙΞΗ</translation>
+    </message>
+    <message>
+        <source>Simple Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a quick game against the computer with random settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Multiplayer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a hotseat game against your friends, or AI teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Campaign Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Training Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Practice your skills in a range of training missions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Watch recorded demos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load</source>
+        <translation type="unfinished">Φόρτωση</translation>
+    </message>
+    <message>
+        <source>Load a previously saved game</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageTraining</name>
+    <message>
+        <source>Pick the mission or training to play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start fighting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select a mission!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageVideos</name>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Όνομα</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 bytes</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>(in progress...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>encoding</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>uploading</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1070,6 +1570,10 @@ Do you still want to join the room?</source>
     <message>
         <source>Remove friend</source>
         <translation type="unfinished">Αφαίρεση φίλου</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Αναβάθμιση</translation>
     </message>
 </context>
 <context>
@@ -1126,6 +1630,26 @@ Do you still want to join the room?</source>
         <source>Frontend effects</source>
         <translation type="unfinished">Ενεργοποίηση εφε διεπαφής</translation>
     </message>
+    <message>
+        <source>Save password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save account name and password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video is private</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use game resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1173,6 +1697,74 @@ Do you still want to join the room?</source>
         <source>Default</source>
         <translation type="obsolete">Default</translation>
     </message>
+    <message>
+        <source>hand drawn map...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Side-by-side</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Top-Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wiggle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Cyan grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cyan/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Blue grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Blue/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Red/Green grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Green/Red grayscale</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QGroupBox</name>
@@ -1194,7 +1786,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Όπλα</translation>
+        <translation type="obsolete">Όπλα</translation>
     </message>
     <message>
         <source>Audio/Graphic options</source>
@@ -1224,6 +1816,34 @@ Do you still want to join the room?</source>
         <source>Misc</source>
         <translation type="unfinished">Διάφορα</translation>
     </message>
+    <message>
+        <source>Schemes and Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLabel</name>
@@ -1241,7 +1861,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License</source>
-        <translation type="unfinished">Το πρόγραμμα αυτό διανέμεται κάτω από την GNU General Public License</translation>
+        <translation type="obsolete">Το πρόγραμμα αυτό διανέμεται κάτω από την GNU General Public License</translation>
     </message>
     <message>
         <source>Developers:</source>
@@ -1277,7 +1897,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Net nick</source>
-        <translation type="unfinished">Ψευδώνυμο</translation>
+        <translation type="obsolete">Ψευδώνυμο</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -1357,7 +1977,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Restart game to apply</source>
-        <translation type="unfinished">Επανεκκινήστε το παιχνίδι για εφαρμογή των αλλαγών</translation>
+        <translation type="obsolete">Επανεκκινήστε το παιχνίδι για εφαρμογή των αλλαγών</translation>
     </message>
     <message>
         <source>Explosives</source>
@@ -1393,7 +2013,93 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Bind schemes and weapons</source>
-        <translation type="unfinished">Σύζευξη σχεδιασμών και όπλων</translation>
+        <translation type="obsolete">Σύζευξη σχεδιασμών και όπλων</translation>
+    </message>
+    <message>
+        <source>There are videos that are currently being processed.
+Exiting now will abort them.
+Do you really want to quit?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account name (or email): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video title: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video description: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tags (comma separated): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary   </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname</source>
+        <translation type="unfinished">Ψευδώνυμο</translation>
+    </message>
+    <message>
+        <source>Stereo rendering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Rope Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>% Get Away Time</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Framerate</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bitrate (Kbps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the GNU General Public License v2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scheme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1401,6 +2107,14 @@ Do you still want to join the room?</source>
     <message>
         <source>unnamed</source>
         <translation type="unfinished">Ανώνυμο</translation>
+    </message>
+    <message>
+        <source>hedgehog %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>anonymous</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1414,7 +2128,7 @@ Do you still want to join the room?</source>
     <name>QMessageBox</name>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Δίκτυο</translation>
+        <translation type="obsolete">Δίκτυο</translation>
     </message>
     <message>
         <source>Connection to server is lost</source>
@@ -1428,13 +2142,13 @@ Do you still want to join the room?</source>
         <source>Failed to open data directory:
 %1
 Please check your installation</source>
-        <translation type="unfinished">Αποτυχία ανοίγματος φακέλου δεδομένων :
+        <translation type="obsolete">Αποτυχία ανοίγματος φακέλου δεδομένων :
  %1
 Παρακαλώ ελέγξτε την εγκατάστασή σας</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Όπλα</translation>
+        <translation type="obsolete">Όπλα</translation>
     </message>
     <message>
         <source>Can not edit default weapon set</source>
@@ -1442,38 +2156,248 @@ Please check your installation</source>
     </message>
     <message>
         <source>Can not delete default weapon set</source>
-        <translation type="unfinished">Δεν μπορεί να διαγραφεί η βασική σειρά όπλων</translation>
+        <translation type="obsolete">Δεν μπορεί να διαγραφεί η βασική σειρά όπλων</translation>
     </message>
     <message>
         <source>Really delete this weapon set?</source>
-        <translation type="unfinished">Σίγουρα να διαγραφεί αυτή η σειρά όπλων ;</translation>
+        <translation type="obsolete">Σίγουρα να διαγραφεί αυτή η σειρά όπλων ;</translation>
     </message>
     <message>
         <source>Can not overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished">Δεν μπορεί να αντικατασταθεί η βασική σειρά όπλων &apos;%1&apos;!</translation>
+        <translation type="obsolete">Δεν μπορεί να αντικατασταθεί η βασική σειρά όπλων &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>All file associations have been set.</source>
-        <translation type="unfinished">Όλες οι αντιστοιχίσεις αρχείων έχουν τεθεί.</translation>
+        <translation type="obsolete">Όλες οι αντιστοιχίσεις αρχείων έχουν τεθεί.</translation>
     </message>
     <message>
         <source>File association failed.</source>
         <translation type="unfinished">Η αντιστοίχιση του αρχείου απέτυχε.</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <source>Teams - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the team &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default scheme &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a record from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Success</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All file associations have been set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error during authentication at google.com</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main - Error</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
         <translation type="unfinished">Δεν μπορεί να δημιουργηθεί ο κατάλογος %1</translation>
     </message>
     <message>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>TCP - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to start the server: %1.</source>
+        <translation type="unfinished">Δεν είναι δυνατόν να ξεκινήσει ο εξυπηρετητής : %1.</translation>
+    </message>
+    <message>
+        <source>Unable to run engine at </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error code: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while authenticating at google.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Login or password is incorrect</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video upload - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error while sending metadata to youtube.com:
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Netgame - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select a server from the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please enter room name</source>
+        <translation type="unfinished">Εισάγετε το όνομα του δωματίου</translation>
+    </message>
+    <message>
+        <source>Record Play - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select record from the list</source>
+        <translation type="unfinished">Παρακαλώ επιλέξτε εγγραφή από την λίστα</translation>
+    </message>
+    <message>
+        <source>Cannot rename to </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete file </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room Name - Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please select room from the list</source>
+        <translation type="unfinished">Παρακαλώ επιλέξτε δωμάτιο από τη λίστα</translation>
+    </message>
+    <message>
+        <source>Room Name - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game you are trying to join has started.
+Do you still want to join the room?</source>
+        <translation type="unfinished">Το παιχνίδι στο οποίο προσπαθείτε να συνδεθείτε έχει ήδη ξεκινήσει.
+Θέλετε ακόμα να συνδεθείτε με το δωμάτιο;</translation>
+    </message>
+    <message>
+        <source>Schemes - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Schemes - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Videos - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the video &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>Do you really want to remove %1 file(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Do you really want to cancel uploading %1?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot open &apos;%1&apos; for reading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot use the ammo &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot delete default weapon set &apos;%1&apos;!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons - Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>Error</source>
+        <translation type="obsolete">Σφάλμα</translation>
+    </message>
+    <message>
+        <source>Cannot create directory %1</source>
+        <translation type="obsolete">Δεν μπορεί να δημιουργηθεί ο κατάλογος %1</translation>
+    </message>
+    <message>
         <source>OK</source>
-        <translation type="unfinished">Εντάξει</translation>
+        <translation type="obsolete">Εντάξει</translation>
     </message>
     <message>
         <source>Nickname</source>
@@ -1554,20 +2478,103 @@ Please check your installation</source>
         <source>Associate file extensions</source>
         <translation type="unfinished">Αντιστοίχηση επεκτάσεων αρχείων</translation>
     </message>
+    <message>
+        <source>More info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set default options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore default coding parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open videos directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload to YouTube</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload this video to your Youtube account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>more</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QTableWidget</name>
+    <message>
+        <source>Room Name</source>
+        <translation type="obsolete">Όνομα Δωματίου</translation>
+    </message>
+    <message>
+        <source>C</source>
+        <translation type="obsolete">C</translation>
+    </message>
+    <message>
+        <source>T</source>
+        <translation type="obsolete">T</translation>
+    </message>
+    <message>
+        <source>Owner</source>
+        <translation type="obsolete">Ιδιοκτήτης</translation>
+    </message>
+    <message>
+        <source>Map</source>
+        <translation type="obsolete">Χάρτης</translation>
+    </message>
+    <message>
+        <source>Rules</source>
+        <translation type="obsolete">Κανόνες</translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="obsolete">Όπλα</translation>
+    </message>
+</context>
+<context>
+    <name>RoomsListModel</name>
+    <message>
+        <source>In progress</source>
+        <translation type="unfinished">Σε εξέλιξη</translation>
+    </message>
     <message>
         <source>Room Name</source>
         <translation type="unfinished">Όνομα Δωματίου</translation>
     </message>
     <message>
         <source>C</source>
-        <translation>C</translation>
+        <translation type="unfinished">C</translation>
     </message>
     <message>
         <source>T</source>
-        <translation>T</translation>
+        <translation type="unfinished">T</translation>
     </message>
     <message>
         <source>Owner</source>
@@ -1584,6 +2591,18 @@ Please check your installation</source>
     <message>
         <source>Weapons</source>
         <translation type="unfinished">Όπλα</translation>
+    </message>
+    <message>
+        <source>Random Map</source>
+        <translation type="unfinished">Τυχαίος χάρτης</translation>
+    </message>
+    <message>
+        <source>Random Maze</source>
+        <translation type="unfinished">Τυχαίος Λαβύρινθος</translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1604,20 +2623,28 @@ Please check your installation</source>
         <source>Delays</source>
         <translation type="unfinished">Καθυστερήσεις</translation>
     </message>
+    <message>
+        <source>new</source>
+        <translation type="unfinished">Νέο</translation>
+    </message>
+    <message>
+        <source>copy of</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TCPBase</name>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Σφάλμα</translation>
+        <translation type="obsolete">Σφάλμα</translation>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation type="unfinished">Δεν είναι δυνατόν να ξεκινήσει ο εξυπηρετητής : %1.</translation>
+        <translation type="obsolete">Δεν είναι δυνατόν να ξεκινήσει ο εξυπηρετητής : %1.</translation>
     </message>
     <message>
         <source>Unable to run engine: %1 (</source>
-        <translation type="unfinished">Δεν είναι δυνατόν να τρέξει η μηχανή : %1 (</translation>
+        <translation type="obsolete">Δεν είναι δυνατόν να τρέξει η μηχανή : %1 (</translation>
     </message>
 </context>
 <context>
@@ -1709,6 +2736,22 @@ Please check your installation</source>
     <message>
         <source>Per Hedgehog Ammo</source>
         <translation type="unfinished">Πυρομαχικά ανά σκατζόχοιρο</translation>
+    </message>
+    <message>
+        <source>Disable Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>More Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tag Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add Bottom Border</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1875,6 +2918,14 @@ info</source>
         <source>slot 10</source>
         <translation type="unfinished">θέση 10</translation>
     </message>
+    <message>
+        <source>mute audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>record</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -1960,6 +3011,10 @@ info</source>
     <message>
         <source>Toggle labels above hedgehogs:</source>
         <translation type="unfinished">Εναλλάξτε τις επιγραφές πάνω από τους σκατζόχοιρους :</translation>
+    </message>
+    <message>
+        <source>Record video:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

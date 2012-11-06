@@ -107,6 +107,7 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/playerslistmodel.h \
     ../QTfrontend/util/LibavInteraction.h
 
+
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
     ../QTfrontend/model/ThemeModel.cpp \
@@ -200,11 +201,14 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
     ../share/hedgewars/Data/Locale/hedgewars_bg.ts \
     ../share/hedgewars/Data/Locale/hedgewars_cs.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_da.ts \
     ../share/hedgewars/Data/Locale/hedgewars_de.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_el.ts \
     ../share/hedgewars/Data/Locale/hedgewars_en.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_es.ts \
     ../share/hedgewars/Data/Locale/hedgewars_fi.ts \
     ../share/hedgewars/Data/Locale/hedgewars_fr.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_gl.ts \
     ../share/hedgewars/Data/Locale/hedgewars_hu.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_it.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_ja.ts \ 
@@ -214,13 +218,15 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
     ../share/hedgewars/Data/Locale/hedgewars_pl.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts \
     ../share/hedgewars/Data/Locale/hedgewars_pt_PT.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_ro.ts \
     ../share/hedgewars/Data/Locale/hedgewars_ru.ts \
     ../share/hedgewars/Data/Locale/hedgewars_sk.ts \
     ../share/hedgewars/Data/Locale/hedgewars_sv.ts \
     ../share/hedgewars/Data/Locale/hedgewars_tr_TR.ts \
     ../share/hedgewars/Data/Locale/hedgewars_uk.ts \
     ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
+    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_zsm.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
