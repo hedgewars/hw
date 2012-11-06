@@ -472,6 +472,8 @@ if ((GameTicks and $FFFF) = $FFFF) then
 AddRandomness(CheckSum);
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
+
+AddFileLog('CheckSum = ' + inttostr(CheckSum));
 inc(GameTicks)
 end;
 
