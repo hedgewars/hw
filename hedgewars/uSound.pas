@@ -270,6 +270,8 @@ begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if not FileExists(s) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+                s:= Pathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
