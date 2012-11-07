@@ -27,7 +27,7 @@ procedure freeModule;
 
 procedure InitIPC;
 procedure SendIPC(s: shortstring);
-procedure SendIPCXY(cmd: char; X, Y: SmallInt);
+procedure SendIPCXY(cmd: char; X, Y: LongInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
 procedure SendKeepAliveMessage(Lag: Longword);
@@ -48,7 +48,7 @@ type PCmd = ^TCmd;
             case byte of
             1: (len: byte;
                 cmd: Char;
-                X, Y: SmallInt);
+                X, Y: LongInt);
             2: (str: shortstring);
             end;
 
@@ -234,13 +234,13 @@ if IPCSock <> nil then
     end
 end;
 
-procedure SendIPCXY(cmd: char; X, Y: SmallInt);
+procedure SendIPCXY(cmd: char; X, Y: LongInt);
 var s: shortstring;
 begin
 s[0]:= #5;
 s[1]:= cmd;
-SDLNet_Write16(X, @s[2]);
-SDLNet_Write16(Y, @s[4]);
+SDLNet_Write32(X, @s[2]);
+SDLNet_Write32(Y, @s[4]);
 SendIPC(s)
 end;
 
@@ -270,7 +270,7 @@ end;
 procedure NetGetNextCmd;
 var tmpflag: boolean;
     s: shortstring;
-    x16, y16: SmallInt;
+    x32, y32: LongInt;
 begin
 tmpflag:= true;
 
@@ -327,9 +327,9 @@ while (headcmd <> nil)
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin
-            x16:= SDLNet_Read16(@(headcmd^.X));
-            y16:= SDLNet_Read16(@(headcmd^.Y));
-            doPut(x16, y16, false)
+            x32:= SDLNet_Read32(@(headcmd^.X));
+            y32:= SDLNet_Read32(@(headcmd^.Y));
+            doPut(x32, y32, false)
              end;
         'P': begin
             // these are equations solved for CursorPoint
@@ -337,8 +337,8 @@ while (headcmd <> nil)
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
             if not (CurrentTeam^.ExtDriven and bShowAmmoMenu) then
                begin
-               CursorPoint.X:= SmallInt(SDLNet_Read16(@(headcmd^.X))) + WorldDx;
-               CursorPoint.Y:= cScreenHeight - SmallInt(SDLNet_Read16(@(headcmd^.Y))) - WorldDy
+               CursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
+               CursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy
                end
              end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);

@@ -108,7 +108,7 @@ var
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
-    cWaterLine       : LongWord;
+    cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
     isAudioMuted     : boolean;
 
@@ -122,8 +122,8 @@ var
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
     CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH       : LongWord;
-    LAND_HEIGHT      : LongWord;
+    LAND_WIDTH       : LongInt;
+    LAND_HEIGHT      : LongInt;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
