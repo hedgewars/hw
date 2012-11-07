@@ -16,7 +16,6 @@ Executable hedgewars-server
 
   Build-depends:
     base >= 4.3,
-    unix,
     containers,
     vector,
     bytestring,
