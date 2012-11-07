@@ -286,7 +286,7 @@ end;
 procedure CheckHHDamage(Gear: PGear);
 var 
     dmg: Longword;
-    i: LongInt;
+    i: LongWord;
     particle: PVisualGear;
 begin
     if _0_4 < Gear^.dY then

@@ -722,7 +722,7 @@ if move then
         end;
     Gear^.Pos:= 0;
     Gear^.X:= int2hwFloat(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft);
-    Gear^.Y:= int2hwFloat(LongInt(LAND_HEIGHT + GetRandom(50)) - 1325);
+    Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1325);
     Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
