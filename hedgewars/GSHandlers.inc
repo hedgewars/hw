@@ -3847,7 +3847,7 @@ begin
             begin
             inc(iterator^.PortalCounter);
             iterator^.Active:= true;
-            iterator^.State:= iterator^.State and (not gstHHHJump)
+            iterator^.State:= iterator^.State and (not gstHHHJump) or gstMoving;
             end;
 
         // is it worth adding an arcsin table?  Just how often would we end up doing something like this?
@@ -4051,7 +4051,7 @@ begin
                     or ((iterator^.Message and gmAllStoppable) = 0)) then
                             begin
                             iterator^.Active:= true;
-                            if iterator^.dY.QWordValue = _0.QWordValue then
+                            if iterator^.dY.QWordValue = 0 then
                                 iterator^.dY.isNegative:= false;
                             iterator^.State:= iterator^.State or gstMoving;
                             DeleteCI(iterator);
