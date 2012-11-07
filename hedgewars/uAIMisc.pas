@@ -110,7 +110,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             for i:= 0 to cMaxHHIndex do
                 if (Hedgehogs[i].Gear <> nil)
-                and (Hedgehogs[i].Gear <> ThinkingHH) 
+                and (Hedgehogs[i].Gear <> ThinkingHH)
                 and (Hedgehogs[i].Gear^.Health > Hedgehogs[i].Gear^.Damage) 
                     then
                     begin
@@ -119,15 +119,17 @@ for t:= 0 to Pred(TeamsCount) do
                         skip:= false;
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
-                        if Clan <> CurrentTeam^.Clan then
-                            begin
-                            Score:= Gear^.Health - Gear^.Damage;
-                            inc(e)
-                            end else
-                            begin
-                            Score:= Gear^.Damage - Gear^.Health;
-                            inc(f)
-                            end
+                        if (Hedgehogs[i].Gear^.AIHints and aihDoesntMatter) <> 0 then
+                            Score:= 0
+                            else if Clan <> CurrentTeam^.Clan then
+                                begin
+                                Score:= Gear^.Health - Gear^.Damage;
+                                inc(e)
+                                end else
+                                begin
+                                Score:= Gear^.Damage - Gear^.Health;
+                                inc(f)
+                                end
                         end;
                     inc(Targets.Count)
                     end;
