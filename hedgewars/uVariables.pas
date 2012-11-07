@@ -2576,9 +2576,10 @@ begin
 end;
 
 procedure initModule;
+var s: ShortString;
 begin
-
-    SplitByChar(cLocaleFName, cLocale, '.');
+    cLocale:= cLocaleFName;
+    SplitByChar(cLocale, s, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
