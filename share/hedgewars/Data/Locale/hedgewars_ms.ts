@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="ms_MY">
 <context>
     <name>AbstractPage</name>
     <message>
@@ -203,7 +203,7 @@ Please pick another nickname:</source>
         <location filename="../../../../QTfrontend/game.cpp" line="333"/>
         <location filename="../../../../QTfrontend/net/recorder.cpp" line="118"/>
         <source>en.txt</source>
-        <translation>zsm.txt</translation>
+        <translation>ms.txt</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/game.cpp" line="344"/>

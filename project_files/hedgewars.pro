@@ -214,6 +214,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
     ../share/hedgewars/Data/Locale/hedgewars_ja.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_ko.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_lt.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_ms.ts \
     ../share/hedgewars/Data/Locale/hedgewars_nl.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_pl.ts \ 
     ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts \
@@ -225,8 +226,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
     ../share/hedgewars/Data/Locale/hedgewars_tr_TR.ts \
     ../share/hedgewars/Data/Locale/hedgewars_uk.ts \
     ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_zsm.ts
+    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
