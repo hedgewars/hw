@@ -264,6 +264,8 @@ if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 
+add_dependencies(${engine_output_name} physfs)
+
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if((fpc_version LESS "020600") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
     add_dependencies(${engine_output_name} ENGINECLEAN)
