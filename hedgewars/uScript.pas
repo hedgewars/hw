@@ -1783,6 +1783,22 @@ begin
         end;
     lc_testrectforobstacle:= 1
 end;
+
+
+function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        LuaError('Lua: Wrong number of parameters passed to SetAIHintOnGear!')
+    else
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.aihints:= lua_tointeger(L, 2);
+        end;
+    lc_setaihintsongear:= 0
+end;
+
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -2287,6 +2303,9 @@ ScriptSetInteger('gstLoser'          ,$00080000);
 ScriptSetInteger('gstHHGone'         ,$00100000);
 ScriptSetInteger('gstInvisible'      ,$00200000);
 
+ScriptSetInteger('aihUsualProcessing' ,$00000000);
+ScriptSetInteger('aihDoesntMatter'    ,$00000001);
+
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
 lua_register(luaState, _P'RestoreHog', @lc_restorehog);
@@ -2379,6 +2398,8 @@ lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
 lua_register(luaState, _P'PlaceGirder', @lc_placegirder);
 lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
+
+lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 
 
 ScriptClearStack; // just to be sure stack is empty
