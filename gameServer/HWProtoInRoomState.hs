@@ -8,6 +8,7 @@ import Data.Maybe
 import qualified Data.ByteString.Char8 as B
 import Control.Monad
 import Control.Monad.Reader
+import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import Actions
@@ -300,11 +301,18 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
 handleCmd_inRoom ["BAN", banNick] = do
-    (_, rnc) <- ask
+    (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick banNick
-    let banId = fromJust maybeClientId
     master <- liftM isMaster thisClient
-    return [ModifyRoom (\r -> r{roomBansList = (host $ rnc `client` banId) : roomBansList r}) | master && isJust maybeClientId]
+    let banId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc banId
+    if master && isJust maybeClientId && (banId /= thisClientId) && sameRoom then
+        return [
+                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
+              , KickRoomClient banId
+            ]
+        else
+        return []
 
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
