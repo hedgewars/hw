@@ -18,10 +18,24 @@ main = do
         case getOpt RequireOrder options args of
           (flags, [],      [])     ->
             if length args == 8 then do
+                hPutStrLn stdout $ "--------Pas2C Config--------"
+                hPutStrLn stdout $ "Main module: " ++ (args !! 1)
+                hPutStrLn stdout $ "Input path : " ++ (args !! 3)
+                hPutStrLn stdout $ "Output path: " ++ (args !! 5)
+                hPutStrLn stdout $ "Altern path: " ++ (args !! 7)
+                hPutStrLn stdout $ "----------------------------"
                 pas2C (args !! 1) ((args !! 3)++"/") ((args !! 5)++"/") ((args !! 7)++"/")
+                hPutStrLn stdout $ "----------------------------"
             else do
                 if length args == 6 then do
+                    hPutStrLn stdout $ "--------Pas2C Config--------"
+                    hPutStrLn stdout $ "Main module: " ++ (args !! 1)
+                    hPutStrLn stdout $ "Input path : " ++ (args !! 3)
+                    hPutStrLn stdout $ "Output path: " ++ (args !! 5)
+                    hPutStrLn stdout $ "Altern path: " ++ "./"
+                    hPutStrLn stdout $ "----------------------------"
                     pas2C (args !! 1) ((args !! 3)++"/") ((args !! 5)++"/") "./"
+                    hPutStrLn stdout $ "----------------------------"
                 else do
                     error $ usageInfo header options
           (_,     nonOpts, [])     -> error $ "unrecognized arguments: " ++ unwords nonOpts
