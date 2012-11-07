@@ -208,6 +208,11 @@ if(NOT NOVIDEOREC)
     set(FFMPEG_FIND_QUIETLY true)
     find_package(FFMPEG)
     if(${FFMPEG_FOUND})
+        # TODO: this check is only for SDL < 2
+        # fpc will take care of linking but we need to have this library installed
+        find_package(GLUT REQUIRED)
+
+        #TODO: convert avwrapper to .pas unit so we can skip this step
         include_directories(${FFMPEG_INCLUDE_DIR})
         set(pascal_flags "-dUSE_VIDEO_RECORDING" ${pascal_flags})
         IF (WIN32)
@@ -265,7 +270,7 @@ if(NOT LUA_FOUND)
 endif()
 
 #when ffmpeg/libav is found we need to compile it before engine
-#TODO: convert avwrapper to .pas unit so we can skip this
+#TODO: convert avwrapper to .pas unit so we can skip this step
 if(${FFMPEG_FOUND})
     add_dependencies(${engine_output_name} avwrapper)
 endif()
