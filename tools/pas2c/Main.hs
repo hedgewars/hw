@@ -1,6 +1,5 @@
 module Main( main ) where
 
-import System( getArgs )
 import System.Console.GetOpt
 import System.Environment
 import System.Exit
