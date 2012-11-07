@@ -2717,10 +2717,13 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
+{$IFNDEF PAS2C}
+    //TODO: FIXME!!
     cMinScreenWidth:= min(cScreenWidth, 640);
     cMinScreenHeight:= min(cScreenHeight, 480);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
+{$ENDIF}
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;
