@@ -36,7 +36,7 @@ uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
 var digest: shortstring;
 
 procedure ResizeLand(width, height: LongWord);
-var potW, potH: LongWord;
+var potW, potH: LongInt;
 begin 
 potW:= toPowerOf2(width);
 potH:= toPowerOf2(height);

@@ -658,7 +658,7 @@ snowLeft:= -(snowRight-LAND_WIDTH);
 
 if (not hasBorder) and ((Theme = 'Snow') or (Theme = 'Christmas')) then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
-        AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LongInt(LAND_HEIGHT + GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
+        AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LAND_HEIGHT + LongInt(GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
 end;
 
 
