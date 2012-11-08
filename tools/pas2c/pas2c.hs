@@ -95,7 +95,7 @@ docToLower :: Doc -> Doc
 docToLower = text . map toLower . render
 
 pas2C :: String -> String -> String -> String -> IO ()
-pas2C fn inputPath alternateInputPath outputPath = do
+pas2C fn inputPath outputPath alternateInputPath = do
     s <- flip execStateT initState $ f fn
     renderCFiles s outputPath
     where
