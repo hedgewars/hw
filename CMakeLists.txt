@@ -55,7 +55,8 @@ option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
-option(WEBGL "Enable WebGL build [default: off]" OFF)
+option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
+option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
 
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
@@ -205,8 +206,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
 
 
-#Haskell compiler discovery (for server and webgl
-if((NOT NOSERVER) OR WEBGL)
+#Haskell compiler discovery (for server and engine in c)
+if((NOT NOSERVER) OR NOPASCAL)
     if(GHC)
         set(ghc_executable ${GHC})
     else()
@@ -238,31 +239,34 @@ find_package(Lua)
 if(LUA_FOUND AND (NOT WEBGL))
     message(STATUS "Found LUA: ${LUA_DEFAULT}")
 else()
-    message(STATUS "LUA will be provided by the bundled sources")
+    message(STATUS "Using internal LUA library")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
 endif()
 
 
-if(WEBGL)
+if(NOPASCAL)
     if (NOT ghc_executable)
-        message(FATAL_ERROR "A Haskell compiler is required to build the WebGL port")
+        message(FATAL_ERROR "A Haskell compiler is required to build engine in C")
     endif()
     #pascal to c converter
     add_subdirectory(tools/pas2c)
 else()
-    #main engine
+    #main pascal engine
     add_subdirectory(hedgewars)
+endif()
 
+if(WEBGL)
+    #WEBGL deps
+else()
     #Android related build scripts
     if(ANDROID)
-        #run cmake -DANDROID=1 to enable this
         add_subdirectory(project_files/Android-build)
     endif()
 
     #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
-    if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID OR WEBGL))
+    if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
         add_subdirectory(bin)
         add_subdirectory(misc/quazip)
         add_subdirectory(QTfrontend)
