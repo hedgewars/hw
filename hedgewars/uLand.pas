@@ -582,8 +582,10 @@ end;
 procedure GenMap;
 var x, y, w, c: Longword;
     usermap, usermask, map, mask: shortstring;
+    maskOnly: boolean;
 begin
     hasBorder:= false;
+    maskOnly:= false;
 
     LoadThemeConfig;
 
@@ -601,6 +603,7 @@ begin
             if (not(FileExists(usermap)) and FileExists(usermask)) or
                (not(FileExists(map)) and FileExists(mask)) then
                 begin
+                maskOnly:= true;
                 LoadMask;
                 GenLandSurface
                 end
@@ -693,7 +696,7 @@ if (GameFlags and gfBottomBorder) <> 0 then
 if (GameFlags and gfDisableGirders) <> 0 then
     hasGirders:= false;
 
-if ((GameFlags and gfForts) = 0) and (Pathz[ptMapCurrent] = '') then
+if (GameFlags and gfForts = 0) and (maskOnly or (Pathz[ptMapCurrent] = '')) then
     AddObjects
     
 else
