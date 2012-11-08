@@ -327,14 +327,6 @@ procedure GenLandSurface;
 var tmpsurf: PSDL_Surface;
     x,y: Longword;
 begin
-    WriteLnToConsole('Generating land...');
-    case cMapGen of
-        0: GenBlank(EdgeTemplates[SelectTemplate]);
-        1: begin ResizeLand(4096,2048); GenMaze; end;
-        2: GenDrawnMap;
-    else
-        OutError('Unknown mapgen', true);
-    end;
     AddProgress();
 
     tmpsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, LAND_WIDTH, LAND_HEIGHT, 32, RMask, GMask, BMask, 0);
@@ -430,11 +422,39 @@ BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsu
 SDL_FreeSurface(tmpsurf);
 end;
 
+procedure LoadMapConfig;
+var f: textfile;
+    s: shortstring;
+begin
+// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
+s:= UserPathz[ptMapCurrent] + '/map.cfg';
+if not FileExists(s) then
+    s:= Pathz[ptMapCurrent] + '/map.cfg';
+WriteLnToConsole('Fetching map HH limit');
+{$I-}
+Assign(f, s);
+filemode:= 0; // readonly
+Reset(f);
+if IOResult <> 0 then
+    begin
+    s:= Pathz[ptMissionMaps] + '/' + ExtractFileName(Pathz[ptMapCurrent]) + '/map.cfg';
+    Assign(f, s);
+    Reset(f);
+    end;
+Readln(f);
+if not eof(f) then
+    Readln(f, MaxHedgehogs);
+{$I+}
+if (MaxHedgehogs = 0) then
+    MaxHedgehogs:= 18;
+end;
+
 // Loads Land[] from an image, allowing overriding standard collision
-procedure LoadMask(mapName: shortstring);
+procedure LoadMask;
 var tmpsurf: PSDL_Surface;
     p: PLongwordArray;
     x, y, cpX, cpY: Longword;
+    mapName: shortstring;
 begin
 tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
@@ -444,8 +464,18 @@ if tmpsurf = nil then
     end;
 
 
-if (tmpsurf <> nil) and (tmpsurf^.w <= LAND_WIDTH) and (tmpsurf^.h <= LAND_HEIGHT) and (tmpsurf^.format^.BytesPerPixel = 4) then
+if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
     begin
+    if LAND_WIDTH = 0 then
+        begin
+        LoadMapConfig;
+        ResizeLand(tmpsurf^.w, tmpsurf^.h);
+        playHeight:= tmpsurf^.h;
+        playWidth:= tmpsurf^.w;
+        leftX:= (LAND_WIDTH - playWidth) div 2;
+        rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
+        topY:= LAND_HEIGHT - playHeight;
+        end;
     disableLandBack:= true;
 
     cpX:= (LAND_WIDTH - tmpsurf^.w) div 2;
@@ -496,7 +526,6 @@ end;
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
-    f: textfile;
     mapName: shortstring = '';
 begin
 WriteLnToConsole('Loading land from file...');
@@ -511,28 +540,7 @@ if tmpsurf = nil then
 TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
 
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
-
-// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
-s:= UserPathz[ptMapCurrent] + '/map.cfg';
-if not FileExists(s) then
-    s:= Pathz[ptMapCurrent] + '/map.cfg';
-WriteLnToConsole('Fetching map HH limit');
-{$I-}
-Assign(f, s);
-filemode:= 0; // readonly
-Reset(f);
-if IOResult <> 0 then
-    begin
-    s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
-    Assign(f, s);
-    Reset(f);
-    end;
-Readln(f);
-if not eof(f) then
-    Readln(f, MaxHedgehogs);
-{$I+}
-if (MaxHedgehogs = 0) then
-    MaxHedgehogs:= 18;
+LoadMapConfig;
 
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;
@@ -549,7 +557,7 @@ BlitImageAndGenerateCollisionInfo(
     tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-LoadMask(mapname);
+LoadMask;
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
@@ -573,6 +581,7 @@ end;
 
 procedure GenMap;
 var x, y, w, c: Longword;
+    usermap, usermask, map, mask: shortstring;
 begin
     hasBorder:= false;
 
@@ -584,9 +593,31 @@ begin
 
     if (GameFlags and gfForts) = 0 then
         if Pathz[ptMapCurrent] <> '' then
-            LoadMap
+            begin
+            usermap:= UserPathz[ptMapCurrent] + '/map.png';
+            usermask:= UserPathz[ptMapCurrent] + '/mask.png';
+            map:= Pathz[ptMapCurrent] + '/map.png';
+            mask:= Pathz[ptMapCurrent] + '/mask.png';
+            if (not(FileExists(usermap)) and FileExists(usermask)) or
+               (not(FileExists(map)) and FileExists(mask)) then
+                begin
+                LoadMask;
+                GenLandSurface
+                end
+            else LoadMap;
+            end
         else
+            begin
+            WriteLnToConsole('Generating land...');
+            case cMapGen of
+                0: GenBlank(EdgeTemplates[SelectTemplate]);
+                1: begin ResizeLand(4096,2048); GenMaze; end;
+                2: GenDrawnMap;
+            else
+                OutError('Unknown mapgen', true);
+            end;
             GenLandSurface
+            end
     else
         MakeFortsMap;
 
