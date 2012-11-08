@@ -270,7 +270,7 @@ begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             if not FileExists(s) then
                 s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            if not FileExists(s) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+            if (not FileExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
                 s:= Pathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
@@ -456,7 +456,7 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
-    if (not isSoundEnabled) or ((voldelta = 0) and not (cInitVolume = 0)) then
+    if (not isSoundEnabled) or ((voldelta = 0) and (not (cInitVolume = 0))) then
         exit;
 
     inc(Volume, voldelta);
@@ -496,7 +496,7 @@ end;
 
 procedure MuteAudio;
 begin
-    if (not isSoundEnabled) then
+    if not isSoundEnabled then
         exit;
 
     if (isAudioMuted) then
