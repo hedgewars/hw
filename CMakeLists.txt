@@ -53,11 +53,11 @@ option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
-option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
 option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
-option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
+option(LIBENGINE "Enable hwengine library [default: off]" OFF)
 
+option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 
@@ -265,8 +265,8 @@ else()
         add_subdirectory(project_files/Android-build)
     endif()
 
-    #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
-    if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
+    #TODO: when ANDROID, LIBENGINE should be set
+    if(NOT (LIBENGINE OR ANDROID))
         add_subdirectory(bin)
         add_subdirectory(misc/quazip)
         add_subdirectory(QTfrontend)

@@ -79,7 +79,7 @@ set(engine_sources
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
-if(BUILD_ENGINE_LIBRARY)
+if(LIBENGINE)
     message(STATUS "Engine will be built as library (experimental)")
     set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
     set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
@@ -97,7 +97,7 @@ if(BUILD_ENGINE_LIBRARY)
     if (APPLE)
         set(engine_output_name "hwengine.dylib")
     endif (APPLE)
-endif(BUILD_ENGINE_LIBRARY)
+endif(LIBENGINE)
 
 IF(FPC)
     set(fpc_executable ${FPC})
@@ -133,7 +133,7 @@ if(APPLE)
     endif()
 
     #on OSX we need to provide the SDL_main() function when building as executable
-    if(NOT BUILD_ENGINE_LIBRARY)
+    if(NOT LIBENGINE)
         #let's look for the installed sdlmain file; if it is not found, let's build our own
         find_package(SDL REQUIRED)
         #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
