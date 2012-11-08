@@ -196,8 +196,6 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
-    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
-    hiddenHedgehogsNumber : longint;
 
     LuaTemplateNumber : LongWord;
 
@@ -2743,7 +2741,6 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
-    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;
