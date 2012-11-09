@@ -6,6 +6,8 @@ set(fpcrtl_src  fileio.c
                 sysutils.c
 )
 
+include_directories(${GLEW_INCLUDE_PATH})
+
 add_library(fpcrtl ${fpcrtl_src})
 
 if(WEBGL)
