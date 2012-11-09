@@ -6,7 +6,7 @@
 #include <wchar.h>
 #include <math.h>
 
-#define MAX_PARAMS	64
+#define MAX_PARAMS 64
 
 typedef union string255_
     {
