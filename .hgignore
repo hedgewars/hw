@@ -39,6 +39,8 @@ glob:*.patch
 glob:*.orig
 glob:*.bak
 glob:*.rej
+glob:project_files/hwc/*.c
+glob:project_files/hwc/*.h
 glob:project_files/Android-build/SDL-android-project/jni/**
 glob:project_files/Android-build/SDL-android-project/obj
 glob:project_files/Android-build/SDL-android-project/libs/armeabi*

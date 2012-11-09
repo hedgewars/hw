@@ -252,6 +252,7 @@ if(NOPASCAL)
     endif()
     #pascal to c converter
     add_subdirectory(tools/pas2c)
+    add_subdirectory(project_files/hwc)
 else()
     #main pascal engine
     add_subdirectory(hedgewars)
