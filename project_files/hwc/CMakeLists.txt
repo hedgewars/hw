@@ -2,13 +2,14 @@
 if(CLANG)
     set(clang_executable ${CLANG})
 else()
-    find_program(clang_executable clang)
+    find_program(clang_executable clang-mp clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang)
 endif()
 
 if (clang_executable)
     exec_program(${clang_executable} ARGS "-v" OUTPUT_VARIABLE clang_version_full)
     string(REGEX MATCH "[0-9]+\\.[0-9]+" clang_version_long "${clang_version_full}")
     string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" clang_version "${clang_version_long}")
+    #TODO: check version >= 3.0
     message(STATUS "Found CLANG: ${clang_executable} (version ${clang_version})")
 else()
     message(FATAL_ERROR "No LLVM/Clang compiler found (required for engine_c target)")
@@ -27,6 +28,7 @@ add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hwengine.c"
         COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
         ARGS -n hwengine
              -i "${hedgewars_SOURCE_DIR}/hedgewars"
+             #-i "~/xymengxy-webport/hedgewars"
              -o "${CMAKE_CURRENT_BINARY_DIR}"
              -a "${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS pas2c
