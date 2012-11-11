@@ -19,7 +19,7 @@ data TypesAndVars = TypesAndVars [TypeVarDeclaration]
     deriving Show
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
-    | FunctionDeclaration Identifier Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
+    | FunctionDeclaration Identifier Bool Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     | OperatorDeclaration String Identifier Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     deriving Show
 data TypeDecl = SimpleType Identifier
@@ -103,12 +103,12 @@ data InitExpression = InitBinOp String InitExpression InitExpression
 data BaseType = BTUnknown
     | BTChar
     | BTString
-    | BTInt
+    | BTInt Bool -- second param indicates whether signed or not
     | BTBool
     | BTFloat
     | BTRecord String [(String, BaseType)]
     | BTArray Range BaseType BaseType
-    | BTFunction Bool Int BaseType
+    | BTFunction Bool [(Bool, BaseType)] BaseType -- (Bool, BaseType), Bool indiciates whether var or not
     | BTPointerTo BaseType
     | BTUnresolved String
     | BTSet BaseType

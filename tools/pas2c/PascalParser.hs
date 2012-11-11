@@ -232,19 +232,30 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
     operatorDecl
     ]
     where
+
+    fixInit v = concat $ map (\x -> case x of
+                    VarDeclaration a b (ids, t) c ->
+                        let typeId = (Identifier ((\(Identifier i _) -> i) (head ids) ++ "_tt") BTUnknown) in
+                        let res =  [TypeDeclaration typeId t, VarDeclaration a b (ids, (SimpleType typeId)) c] in
+                        case t of
+                            RecordType _ _ -> res -- create a separated type declaration
+                            ArrayDecl _ _ -> res
+                            _ -> [x]
+                    _ -> error ("checkInit:\n" ++ (show v))) v
+
     varSection = do
         try $ string "var"
         comments
         v <- varsDecl1 True <?> "variable declaration"
         comments
-        return v
+        return $ fixInit v
 
     constSection = do
         try $ string "const"
         comments
         c <- constsDecl <?> "const declaration"
         comments
-        return c
+        return $ fixInit c
 
     typeSection = do
         try $ string "type"
@@ -295,12 +306,14 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         char ';'
         comments
         forward <- liftM isJust $ optionMaybe (try (string "forward;") >> comments)
-        inline <- liftM (any (== "inline;")) $ many functionDecorator
+        decorators <- many functionDecorator
+        let inline = any (== "inline;") decorators
+            overload = any (== "overload;") decorators
         b <- if isImpl && (not forward) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i inline ret vs b]
+        return $ [FunctionDeclaration i inline overload ret vs b]
 
     functionDecorator = do
         d <- choice [
@@ -375,9 +388,9 @@ expression = do
         ] <?> "simple expression"
 
     table = [
-          [  Prefix (try (string "not") >> return (PrefixOp "not"))
+          [  Prefix (reservedOp pas "not">> return (PrefixOp "not"))
            , Prefix (try (char '-') >> return (PrefixOp "-"))]
-        ,
+           ,
           [  Infix (char '*' >> return (BinOp "*")) AssocLeft
            , Infix (char '/' >> return (BinOp "/")) AssocLeft
            , Infix (try (string "div") >> return (BinOp "div")) AssocLeft
