@@ -2556,6 +2556,7 @@ begin
 
     UserPathPrefix  := '';
     ipcPort         := 0;
+    recordFileName  := '';
     UserNick        := '';
     cStereoMode     := smNone;
     GrayScale       := false;
@@ -2584,7 +2585,6 @@ begin
     cOnlyStats          := False;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
-    recordFileName      := '';
     cReadyDelay         := 5000;
     Pathz               := cPathz;
 
