@@ -13,6 +13,9 @@ For server:
  - bytestring-show package
  - dataenc package
  - hslogger package
+For videorecording:
+ - FFmpeg or LibAV
+ - GLUT (when SDL < 2)
 
 1. Configure:
 $ cmake .

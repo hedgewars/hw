@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
 
 
 #detect Mercurial revision (if present)
-set(version_suffix "") #UNSET THIS VARIABLE AT RELEASE TIME
+set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
 set(HGCHANGED "")
 IF(version_suffix MATCHES "-dev")
     set(HW_DEV true)
@@ -43,8 +43,8 @@ ENDIF()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 18${version_suffix})
-set(HEDGEWARS_PROTO_VER 43)
+set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
+set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
@@ -60,7 +60,7 @@ option(LIBENGINE "Enable hwengine library [default: off]" OFF)
 option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
-
+option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
 
 #bundle .app setup
 if(APPLE OR CROSSAPPLE)
@@ -160,14 +160,21 @@ else (CMAKE_BUILD_TYPE)
     set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
 endif (CMAKE_BUILD_TYPE)
 
-
-#set default flags values for all projects
-set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
-set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
-set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
-set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+#set default flags values for all projects (unless MINIMAL_FLAGS is true)
+if(NOT MINIMAL_FLAGS)
+    set(CMAKE_C_FLAGS "-pipe")
+    set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG")
+    set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
+    set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
+    set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+else()
+    #CMake adds a lot of additional configuration flags, so let's clear them up
+    set(CMAKE_C_FLAGS_RELEASE "")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -DDEBUG")
+    set(CMAKE_CXX_FLAGS_RELEASE "")
+    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
+endif()
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)

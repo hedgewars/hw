@@ -1206,6 +1206,7 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				6137A859164732120043D108 /* Update Revision Information */,
 			);
 			buildRules = (
 				9283015B0F10E46D00CC5A3C /* PBXBuildRule */,
@@ -1474,6 +1475,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		6137A859164732120043D108 /* Update Revision Information */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Update Revision Information";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "HEDGEWARS_REVISION=`/usr/local/bin/hg identify -n ${SOURCE_DIR}|sed -e 's/\\+//'`\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $HEDGEWARS_REVISION\" \"${TARGET_BUILD_DIR}\"/\"${INFOPLIST_PATH}\"";
+		};
 		6179928A114AE0C800BA94A9 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

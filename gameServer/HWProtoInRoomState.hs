@@ -8,6 +8,7 @@ import Data.Maybe
 import qualified Data.ByteString.Char8 as B
 import Control.Monad
 import Control.Monad.Reader
+import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import Actions
@@ -59,6 +60,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 return color
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
+        let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif (newTeamHHNum rm) (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ teams rm then
                 [Warning "too many teams"]
@@ -71,17 +73,16 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
             else if isRestrictedTeams rm then
                 [Warning "restricted"]
             else
-                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam ci clNick r teamColor]}),
+                [ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
-                AnswerClients othChans $ teamToNet $ newTeam ci clNick rm teamColor,
+                AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
                 ]
         where
         canAddNumber r = 48 - (sum . map hhnum $ teams r)
         findTeam = find (\t -> tName == teamname t) . teams
-        newTeam ci clNick r tColor = TeamInfo ci clNick tName tColor grave fort voicepack flag dif (newTeamHHNum r) (hhsList hhsInfo)
         dif = readInt_ difStr
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"
@@ -107,7 +108,6 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 [ProtocolError "Not team owner!"]
             else
                 [RemoveTeam tName,
-                SendUpdateOnThisRoom,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
@@ -301,11 +301,18 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
 
 handleCmd_inRoom ["BAN", banNick] = do
-    (_, rnc) <- ask
+    (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick banNick
-    let banId = fromJust maybeClientId
     master <- liftM isMaster thisClient
-    return [ModifyRoom (\r -> r{roomBansList = (host $ rnc `client` banId) : roomBansList r}) | master && isJust maybeClientId]
+    let banId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc banId
+    if master && isJust maybeClientId && (banId /= thisClientId) && sameRoom then
+        return [
+                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
+              , KickRoomClient banId
+            ]
+        else
+        return []
 
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)

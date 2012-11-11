@@ -286,7 +286,7 @@ end;
 procedure CheckHHDamage(Gear: PGear);
 var 
     dmg: Longword;
-    i: LongInt;
+    i: LongWord;
     particle: PVisualGear;
 begin
     if _0_4 < Gear^.dY then
@@ -555,8 +555,8 @@ end;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 var x: LongInt;
     y, sy: LongInt;
-    ar: array[0..511] of TPoint;
-    ar2: array[0..1023] of TPoint;
+    ar: array[0..1023] of TPoint;
+    ar2: array[0..2047] of TPoint;
     cnt, cnt2: Longword;
     delta: LongInt;
     ignoreNearObjects, ignoreOverlap, tryAgain: boolean;
@@ -566,10 +566,10 @@ ignoreOverlap:= false; // this not only skips proximity, but allows overlapping 
 tryAgain:= true;
 while tryAgain do
     begin
-    delta:= 250;
+    delta:= LAND_WIDTH div 16;
     cnt2:= 0;
     repeat
-        x:= Left + LongInt(GetRandom(Delta));
+        x:= Left + max(LAND_WIDTH div 2048, LongInt(GetRandom(Delta)));
         repeat
             inc(x, Delta);
             cnt:= 0;
