@@ -77,5 +77,8 @@ target_link_libraries(hwengine  fpcrtl
                                 ${SDLNET_LIBRARY}
                                 ${SDLIMAGE_LIBRARY}
                                 ${SDLTTF_LIBRARY}
+                                #TODO: add other libraries
                             )
+
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 
