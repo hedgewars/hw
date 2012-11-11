@@ -1,4 +1,5 @@
 
+#only Clang is supported
 if(CLANG)
     set(clang_executable ${CLANG})
 else()
@@ -20,6 +21,7 @@ endif()
 set(CMAKE_C_COMPILER ${clang_executable})
 
 
+#the usual set of dependencies
 find_package(OPENGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(SDL REQUIRED)
@@ -28,70 +30,44 @@ find_package(SDL_net REQUIRED)
 find_package(SDL_image REQUIRED)
 find_package(SDL_ttf REQUIRED)
 
+#compile our rtl implementation
+include_directories("${GLEW_INCLUDE_PATH}")
+include_directories(rtl)
+add_subdirectory(rtl)
+
+
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
+#get the list of pas files that are going to be converted and compiled
+file(GLOB engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/*.pas")
+#TODO: temporary until cmake can configure itself accordingly
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uWeb.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uVideoRec.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uTouch.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/PNGh.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/pas2cSystem.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/pas2cRedo.pas")
+list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas")
 
-add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/hwengine.c"
+foreach(sourcefile ${engine_sources_pas})
+    get_filename_component(sourcename ${sourcefile} NAME_WE) #drops .pas
+    set(engine_sources "${CMAKE_CURRENT_BINARY_DIR}/${sourcename}.c" ${engine_sources})
+endforeach()
+
+#invoke pas2c on our pas files
+add_custom_command(OUTPUT ${engine_sources}
         COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-        ARGS -n hwengine
+        ARGS -n "hwengine"
              -i "${hedgewars_SOURCE_DIR}/hedgewars"
-             #-i "~/xymengxy-webport/hedgewars"
              -o "${CMAKE_CURRENT_BINARY_DIR}"
              -a "${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS pas2c
     )
+add_custom_target(engine_c DEPENDS ${engine_sources})
 
-add_custom_target(engine_c ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/hwengine.c")
 
-
-add_subdirectory(rtl)
-
-include_directories("${GLEW_INCLUDE_PATH}")
-include_directories(rtl)
-
-set(engine_src               uDebug.c             uLandTexture.c
-        LuaPas.c             uFloat.c             uLocale.c
-        SDLh.c               uGame.c              uMisc.c
-        adler32.c            uGears.c             uMobile.c
-        hwengine.c           uGearsHandlers.c     uRandom.c
-        uAI.c                uGearsHandlersRope.c uRender.c
-        uAIActions.c         uGearsHedgehog.c     uRenderUtils.c
-        uAIAmmoTests.c       uGearsList.c         uScript.c
-        uAILandMarks.c       uGearsRender.c       uSinTable.c
-        uAIMisc.c            uGearsUtils.c        uSound.c
-        uAmmos.c             uIO.c                uStats.c
-        uCaptions.c          uInputHandler.c      uStore.c
-        uChat.c              uLand.c              uTeams.c
-        uCollisions.c        uLandGenMaze.c       uTextures.c
-        uCommandHandlers.c   uLandGraphics.c      uTypes.c
-        uCommands.c          uLandObjects.c       uUtils.c
-        uConsole.c           uLandOutline.c       uVariables.c
-        uConsts.c            uLandPainted.c       uVisualGears.c
-        uCursor.c            uLandTemplates.c     uWorld.c
-    )
-
-set(engine_hdr               uGame.h              uFloat.h
-        uLocale.h            SDLh.h               uMisc.h
-        adler32.h            uDebug.h             uLandTexture.h
-        LuaPas.h             uGears.h             uMobile.h
-        uAI.h                uGearsHandlersRope.h uRender.h
-        uAIActions.h         uGearsHedgehog.h     uRenderUtils.h
-        uAIAmmoTests.h       uGearsList.h         uScript.h
-        uGearsHandlers.h     uRandom.h
-        uAILandMarks.h       uGearsRender.h       uSinTable.h
-        uAIMisc.h            uGearsUtils.h        uSound.h
-        uAmmos.h             uIO.h                uStats.h
-        uCaptions.h          uInputHandler.h      uStore.h
-        uChat.h              uLand.h              uTeams.h
-        uCollisions.h        uLandGenMaze.h       uTextures.h
-        uCommandHandlers.h   uLandGraphics.h      uTypes.h
-        uCommands.h          uLandObjects.h       uUtils.h
-        uConsole.h           uLandOutline.h       uVariables.h
-        uConsts.h            uLandPainted.h       uVisualGears.h
-        uCursor.h            uLandTemplates.h     uWorld.h
-    )
-
-add_executable(hwengine WIN32 ${engine_src})
+#compile the c files
+add_executable(hwengine WIN32 ${engine_sources})
 
 target_link_libraries(hwengine  fpcrtl
                                 ${LUA_LIBRARY}
@@ -102,6 +78,4 @@ target_link_libraries(hwengine  fpcrtl
                                 ${SDLIMAGE_LIBRARY}
                                 ${SDLTTF_LIBRARY}
                             )
-
-add_dependencies(hwengine engine_c fpcrtl)
 
