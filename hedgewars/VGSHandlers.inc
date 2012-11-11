@@ -197,7 +197,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
 begin
+{$IFNDEF PAS2C}
 Steps := Steps;
+{$ENDIF}
 if Gear^.Timer <= Steps then
     DeleteVisualGear(Gear)
 else
@@ -464,7 +466,9 @@ var i: Longword;
     b: boolean;
     t: LongInt;
 begin
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
 
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
@@ -532,7 +536,10 @@ end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
+
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
 
 with Gear^.Hedgehog^ do
     if SpeechGear <> nil then

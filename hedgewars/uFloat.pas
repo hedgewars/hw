@@ -55,7 +55,7 @@ type hwFloat = record
     1: (QWordValue : QWord);
     end;
 {$ENDIF}
-
+		  
 // Returns an hwFloat that represents the value of integer parameter i
 function int2hwFloat (const i: LongInt) : hwFloat; inline;
 function hwFloat2Float (const i: hwFloat) : extended; inline;
@@ -221,7 +221,7 @@ if i.isNegative then
     hwFloat2Float:= -hwFloat2Float;
 end;
 
-{$IFNDEF WEB}
+{$IFNDEF WEBGL}
 operator = (const z1, z2: hwFloat) z : boolean; inline;
 begin
     z:= (z1.isNegative = z2.isNegative) and (z1.QWordValue = z2.QWordValue);
@@ -301,7 +301,7 @@ else
         b:= (z1.QWordValue > z2.QWordValue) <> z2.isNegative
 end;
 {$ENDIF}
-{$IFDEF WEB}
+{$IFDEF WEBGL}
 (*
     Mostly to be kind to JS as of 2012-08-27 where there is no int64/uint64.  This may change though.
 *)

@@ -17,12 +17,13 @@
  *)
 
 {$INCLUDE "options.inc"}
+{$IF GLunit = GL}{$DEFINE GLunit:=GL,GLext}{$ENDIF}
 
 unit uRender;
 
 interface
 
-uses SDLh, uTypes, GLunit, uConsts;
+uses SDLh, uTypes, GLunit, uConsts, uStore, uMatrix;
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
@@ -51,7 +52,6 @@ procedure DrawScreenWidget      (widget: POnScreenWidget);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 
-
 implementation
 uses uVariables;
 
@@ -68,7 +68,7 @@ procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTextu
 begin
 DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
 end;
-
+{
 procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
@@ -115,6 +115,63 @@ TextureBuffer[3].Y:= _b;
 
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
+end;
+}
+
+procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+var 
+    rr: TSDL_Rect;
+    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+    //VertexBuffer, TextureBuffer: TVertexRect;
+    _l, _r, _t, _b: GLfloat;
+begin
+if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
+    exit;
+
+// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+    exit;
+if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
+    exit;
+
+rr.x:= X;
+rr.y:= Y;
+rr.w:= W;
+rr.h:= H;
+
+_l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
+_r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;
+_t:= r^.y / SourceTexture^.h * SourceTexture^.ry;
+_b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
+
+glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
+
+VertexBuffer[0].X:= X;
+VertexBuffer[0].Y:= Y;
+VertexBuffer[1].X:= rr.w + X;
+VertexBuffer[1].Y:= Y;
+VertexBuffer[2].X:= rr.w + X;
+VertexBuffer[2].Y:= rr.h + Y;
+VertexBuffer[3].X:= X;
+VertexBuffer[3].Y:= rr.h + Y;
+
+TextureBuffer[0].X:= _l;
+TextureBuffer[0].Y:= _t;
+TextureBuffer[1].X:= _r;
+TextureBuffer[1].Y:= _t;
+TextureBuffer[2].X:= _r;
+TextureBuffer[2].Y:= _b;
+TextureBuffer[3].X:= _l;
+TextureBuffer[3].Y:= _b;
+
+SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+
+{$IFDEF GL2}
+UpdateModelviewProjection;
+{$ENDIF}
+
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 end;
 
@@ -126,17 +183,30 @@ end;
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
 
+{$IFDEF GL2}
+hglPushMatrix;
+hglTranslatef(X, Y, 0);
+hglScalef(Scale, Scale, 1);
+{$ELSE}
 glPushMatrix;
 glTranslatef(X, Y, 0);
 glScalef(Scale, Scale, 1);
+{$ENDIF}
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
-glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
-glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+SetVertexPointer(@Texture^.vb, Length(Texture^.vb));
+SetTexCoordPointer(@Texture^.tb, Length(Texture^.vb));
 
-glPopMatrix
+{$IFDEF GL2}
+UpdateModelviewProjection;
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+hglPopMatrix;
+{$ELSE}
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+glPopMatrix;
+{$ENDIF}
+
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
@@ -155,14 +225,25 @@ if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWi
 if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
+{$IFDEF GL2}
+hglPushMatrix;
+hglTranslatef(X, Y, 0);
+{$ELSE}
 glPushMatrix;
 glTranslatef(X, Y, 0);
+{$ENDIF}
+
 if Dir = 0 then Dir:= 1;
 
+{$IFDEF GL2}
+hglRotatef(Angle, 0, 0, Dir);
+hglTranslatef(Dir*OffsetX, OffsetY, 0);
+hglScalef(Scale, Scale, 1);
+{$ELSE}
 glRotatef(Angle, 0, 0, Dir);
-
 glTranslatef(Dir*OffsetX, OffsetY, 0);
 glScalef(Scale, Scale, 1);
+{$ENDIF}
 
 // Any reason for this call? And why only in t direction, not s?
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -197,11 +278,21 @@ TextureBuffer[2].Y:= fb;
 TextureBuffer[3].X:= fl;
 TextureBuffer[3].Y:= fb;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+
+{$IFDEF GL2}
+UpdateModelviewProjection;
+{$ENDIF}
+
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-glPopMatrix
+{$IFDEF GL2}
+hglPopMatrix;
+{$ELSE}
+glPopMatrix;
+{$ENDIF}
+
 end;
 
 procedure DrawSpriteRotated(Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
@@ -214,19 +305,42 @@ end;
 
 procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
+
+{$IFDEF GL2}
+hglPushMatrix;
+hglTranslatef(X, Y, 0);
+{$ELSE}
 glPushMatrix;
 glTranslatef(X, Y, 0);
+{$ENDIF}
 
 if Dir < 0 then
+{$IFDEF GL2}
+    hglRotatef(Angle, 0, 0, -1)
+{$ELSE}
     glRotatef(Angle, 0, 0, -1)
+{$ENDIF}
 else
+{$IFDEF GL2}
+    hglRotatef(Angle, 0, 0,  1);
+{$ELSE}
     glRotatef(Angle, 0, 0,  1);
+{$ENDIF}
 if Dir < 0 then
+{$IFDEF GL2}
+    hglScalef(-1.0, 1.0, 1.0);
+{$ELSE}
     glScalef(-1.0, 1.0, 1.0);
+{$ENDIF}
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
-glPopMatrix
+{$IFDEF GL2}
+hglPopMatrix;
+{$ELSE}
+glPopMatrix;
+{$ENDIF}
+
 end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -238,17 +352,29 @@ if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
 if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
     exit;
 
+{$IFDEF GL2}
+hglPushMatrix;
+hglTranslatef(X, Y, 0);
+{$ELSE}
 glPushMatrix;
 glTranslatef(X, Y, 0);
+{$ENDIF}
 
 if Dir < 0 then
     begin
     hw:= - hw;
+{$IFDEF GL2}
+    hglRotatef(Angle, 0, 0, -1);
+{$ELSE}
     glRotatef(Angle, 0, 0, -1);
+{$ENDIF}
     end
 else
-    glRotatef(Angle, 0, 0,  1);
-
+{$IFDEF GL2}
+    hglRotatef(Angle, 0, 0,  1);
+{$ELSE}
+    glRotatef(Angle, 0, 0, 1);
+{$ENDIF}
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -261,11 +387,21 @@ VertexBuffer[2].Y:= hh;
 VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
+SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+SetTexCoordPointer(@Texture^.tb, Length(VertexBuffer));
+
+{$IFDEF GL2}
+UpdateModelviewProjection;
+{$ENDIF}
+
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-glPopMatrix
+{$IFDEF GL2}
+hglPopMatrix;
+{$ELSE}
+glPopMatrix;
+{$ENDIF}
+
 end;
 
 procedure DrawSprite(Sprite: TSprite; X, Y, Frame: LongInt);
@@ -324,10 +460,11 @@ begin
 end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-var VertexBuffer: array [0..3] of TVertex2f;
+var VertexBuffer: array [0..1] of TVertex2f;
 begin
-    glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
+{$IFNDEF GL2}
+    glDisable(GL_TEXTURE_2D);
 
     glPushMatrix;
     glTranslatef(WorldDx, WorldDy, 0);
@@ -339,13 +476,37 @@ begin
     VertexBuffer[1].X:= X1;
     VertexBuffer[1].Y:= Y1;
 
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
     Tint($FF, $FF, $FF, $FF);
     
     glPopMatrix;
     
     glEnable(GL_TEXTURE_2D);
+
+{$ELSE}
+    EnableTexture(False);
+
+    hglPushMatrix;
+    hglTranslatef(WorldDx, WorldDy, 0);
+    glLineWidth(Width);
+
+    UpdateModelviewProjection;
+
+    Tint(r, g, b, a);
+    VertexBuffer[0].X:= X0;
+    VertexBuffer[0].Y:= Y0;
+    VertexBuffer[1].X:= X1;
+    VertexBuffer[1].Y:= Y1;
+
+    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
+    Tint($FF, $FF, $FF, $FF);
+
+    hglPopMatrix;
+    EnableTexture(True);
+
+{$ENDIF}
     glDisable(GL_LINE_SMOOTH);
 end;
 
@@ -353,12 +514,17 @@ procedure DrawFillRect(r: TSDL_Rect);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
+
 if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
     exit;
 if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
+{$IFDEF GL2}
+EnableTexture(False);
+{$ELSE}
 glDisable(GL_TEXTURE_2D);
+{$ENDIF}
 
 Tint($00, $00, $00, $80);
 
@@ -371,11 +537,17 @@ VertexBuffer[2].Y:= r.y + r.h;
 VertexBuffer[3].X:= r.x;
 VertexBuffer[3].Y:= r.y + r.h;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
+
+{$IFDEF GL2}
+EnableTexture(True);
+{$ELSE}
 glEnable(GL_TEXTURE_2D)
+{$ENDIF}
+
 end;
 
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte); 
@@ -394,6 +566,9 @@ begin
         CircleVertex[i].X := X + Radius*cos(i*pi/30);
         CircleVertex[i].Y := Y + Radius*sin(i*pi/30);
     end;
+
+{$IFNDEF GL2}
+
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
     glPushMatrix;
@@ -403,6 +578,18 @@ begin
     glPopMatrix;
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_LINE_SMOOTH);
+
+{$ELSE}
+    EnableTexture(False);
+    glEnable(GL_LINE_SMOOTH);
+    hglPushMatrix;
+    glLineWidth(Width);
+    SetVertexPointer(@CircleVertex[0], 60);
+    glDrawArrays(GL_LINE_LOOP, 0, 60);
+    hglPopMatrix;
+    EnableTexture(True);
+    glDisable(GL_LINE_SMOOTH);
+{$ENDIF}
 end;
 
 
@@ -435,10 +622,15 @@ begin
         r:= (Step + 1) * 32 / HHTexture^.w
     end;
 
-
+{$IFDEF GL2}
+    hglPushMatrix();
+    hglTranslatef(X, Y, 0);
+    hglRotatef(Angle, 0, 0, 1);
+{$ELSE}
     glPushMatrix();
     glTranslatef(X, Y, 0);
     glRotatef(Angle, 0, 0, 1);
+{$ENDIF}
 
     glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
 
@@ -451,11 +643,20 @@ begin
     TextureBuffer[3].X:= l;
     TextureBuffer[3].Y:= b;
 
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+    SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+
+{$IFDEF GL2}
+    UpdateModelviewProjection;
+{$ENDIF}
+
     glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-    glPopMatrix
+{$IFDEF GL2}
+    hglPopMatrix;
+{$ELSE}
+    glPopMatrix;
+{$ENDIF}
 end;
 
 procedure DrawScreenWidget(widget: POnScreenWidget);
@@ -501,12 +702,14 @@ with widget^ do
     end;
 {$ELSE}
 begin
-widget:= widget; // avoid hint
+{widget:= widget; // avoid hint}
 {$ENDIF}
 end;
 
 procedure Tint(r, g, b, a: Byte); inline;
-var nc, tw: Longword;
+var
+    nc, tw: Longword;
+    scale:Real = 1.0/255.0;
 begin
     nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
 
@@ -523,7 +726,12 @@ begin
         b:= tw
         end;
 
+    {$IFDEF GL2}
+    glUniform4f(uMainTintLocation, r*scale, g*scale, b*scale, a*scale);
+    //glColor4ub(r, g, b, a);
+    {$ELSE}
     glColor4ub(r, g, b, a);
+    {$ENDIF}
     lastTint:= nc;
 end;
 
@@ -531,5 +739,6 @@ procedure Tint(c: Longword); inline;
 begin
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
+
 
 end.

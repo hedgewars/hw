@@ -138,7 +138,7 @@ if FinishedTurnsTotal <> 0 then
         AddVoice(sndBoring, PreviousTeam^.voicepack);
         AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
-    else if (not PlacingHogs) then
+    else if not PlacingHogs then
         AddVoice(sndCoward, PreviousTeam^.voicepack);
     end;
 
@@ -215,7 +215,7 @@ winnersClan:= nil;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
     begin
-        if (not ExtDriven) then
+        if not ExtDriven then
             SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
         for i:= 0 to cMaxHHIndex do
             begin

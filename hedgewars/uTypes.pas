@@ -44,7 +44,8 @@ type
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
             ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons);
+            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons,
+            ptShaders);
 
     // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
@@ -199,6 +200,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TVertex2i = record
             X, Y: GLint;
             end;
+
+    TMatrix4x4f = array[0..3, 0..3] of GLfloat;
 
     PTexture = ^TTexture;
     TTexture = record
@@ -390,12 +393,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TClan = record
             Color: Longword;
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
-            TeamsNumber: Longword;
+	    TeamsNumber: LongInt;{xymeng, org:LongWord}
             TagTeamIndex: Longword;
             CurrTeam: LongWord;
             ClanHealth: LongInt;
             ClanIndex: LongInt;
-            TurnNumber: LongWord;
+	    TurnNumber: LongInt;{xymeng, org:LongWord}
             Flawless: boolean;
             end;
 
@@ -430,11 +433,13 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival, 
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
+
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
-
+				 
+    TPreview  = packed array[0..127, 0..31] of byte;
+  
     PWidgetMovement = ^TWidgetMovement;
     TWidgetMovement = record
         animate   : Boolean;

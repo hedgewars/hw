@@ -19,7 +19,7 @@
 {$INCLUDE "options.inc"}
 
 {$IFDEF WIN32}
-{$R res/hwengine.rc}
+{$R hwengine.rc}
 {$ENDIF}
 
 {$IFDEF HWLIBRARY}
@@ -30,13 +30,13 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler,
-     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions,
-     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions, uAILandMarks,
+     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted, uFloat
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
+     {$IFDEF WEBGL}, uWeb{$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
-
 
 {$IFDEF HWLIBRARY}
 procedure preInitEverything();
@@ -52,9 +52,23 @@ procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
 
+{$IFDEF WEBGL}
+procedure playFile(path: PChar); forward;
+function isEngineRunning():Integer; forward;
+procedure shutdown();forward;
+function getRealTicks():Integer; forward;
+procedure mainhook(); forward;
+var
+    args: array[0..3] of PChar;
+    PrevTime, CurrTime: LongInt;
+    isTerminated: boolean;
+    prevFocusState: boolean;
+    isRunning : boolean;
+{$ENDIF}
+
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
-var s: shortstring;
+var s : shortstring;
 begin
     DoTimer:= false;
     inc(RealTicks, Lag);
@@ -90,7 +104,11 @@ begin
             end;
         gsConfirm, gsGame:
             begin
-            DrawWorld(Lag);
+{$IFDEF WEBGL}
+            drawworld_hook();
+{$ELSE}
+            DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+{$ENDIF}
             DoGameTick(Lag);
             ProcessVisualGears(Lag);
             end;
@@ -143,18 +161,26 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 procedure MainLoop;
 var event: TSDL_Event;
-    PrevTime, CurrTime: Longword;
+{$IFNDEF WEBGL}
+    PrevTime, CurrTime: LongInt;
     isTerminated: boolean;
 {$IFDEF SDL13}
     previousGameState: TGameState;
 {$ELSE}
     prevFocusState: boolean;
 {$ENDIF}
+
+{$ENDIF}
+
 begin
+
+{$IFNDEF WEBGL}
     isTerminated:= false;
     PrevTime:= SDL_GetTicks;
     while isTerminated = false do
     begin
+{$ENDIF}
+
         SDL_PumpEvents();
  
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
@@ -271,12 +297,24 @@ begin
         CurrTime:= SDL_GetTicks();
         if PrevTime + longword(cTimerInterval) <= CurrTime then
         begin
-            isTerminated := isTerminated or DoTimer(CurrTime - PrevTime);
-            PrevTime:= CurrTime
+            isTerminated:= isTerminated or DoTimer(CurrTime - PrevTime);
+            PrevTime:= CurrTime;
+            {$IFDEF WEBGL}
+            if not isTerminated then
+                mainloop_hook();
+            else
+            begin
+                freeEverything(true);
+                isRunning := false;
+            end
+            {$ENDIF}
         end
-        else SDL_Delay(1);
+        else {$IFNDEF WEBGL}SDL_Delay(1){$ELSE}mainloop_hook(){$ENDIF};
         IPCCheckSock();
+
+{$IFNDEF WEBGL}
     end;
+{$ENDIF}
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
@@ -317,6 +355,10 @@ procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
+{$IFDEF WEBGL}
+    l:TResourceList;
+{$ENDIF}
+
 begin
 {$IFDEF HWLIBRARY}
     preInitEverything();
@@ -409,7 +451,7 @@ begin
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
     SendIPCRaw(@s[0], Length(s) + 1); // send proto version
-
+	
     InitTeams();
     AssignStores();
 
@@ -424,13 +466,27 @@ begin
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
-        RecorderMainLoop()
-    else
+    begin
+        RecorderMainLoop();
+        freeEverything(true);
+        exit;
+    end;
 {$ENDIF}
-        MainLoop();
-
+	
+{$IFDEF WEBGL}
+    l := generateResourceList();
+    clear_filelist_hook();
+    for i:= 0 to l.count - 1 do
+    add_file_hook(PChar(l.files[i] + '.png'));
+    isTerminated := false;
+    isRunning := true;
+    PrevTime := SDL_GetTicks();
+    idb_loader_hook();
+{$ELSE}
+    MainLoop;
     // clean up all the memory allocated
     freeEverything(true);
+{$ENDIF}
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -604,7 +660,18 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+{$IFDEF WEBGL}
+procedure hwmain(argc:Integer; argv:PPChar);
+{$ENDIF}
 begin
+{$IFDEF PAS2C}
+    // workaround for pascal's ParamStr and ParamCount
+    init(argc, argv);
+{$IFDEF WEBGL}
+    // patch emscripten's SDL implementation
+    SDL_InitPatch();
+{$ENDIF}
+{$ENDIF}
     preInitEverything();
     GetParams();
 
@@ -615,6 +682,62 @@ begin
     else Game();
 
     // return 1 when engine is not called correctly
-    halt(LongInt(GameType = gmtSyntax));
+    {$IFDEF PAS2C}
+       {$IFNDEF WEBGL}
+       exit(LongInt(GameType = gmtSyntax));
+       {$ENDIF}
+    {$ELSE}
+       halt(LongInt(GameType = gmtSyntax));
+    {$ENDIF}
+
+
+{$IFDEF WEBGL}
+end;
+
+// hook
+procedure playFile(path: PChar);
+begin
+    args[0] := PChar('');
+    args[1] := PChar('');
+    args[2] := PChar('Data');
+    args[3] := path;
+    hwmain(4, args);
+end;
+
+// hook
+function isEngineRunning:Integer;
+begin
+    isEngineRunning := isRunning;
+end;
+
+// hook
+procedure shutdown;
+begin
+    GameState := gsExit;
+end;
+
+// hook
+function getRealTicks():Integer;
+begin
+    getRealTicks := RealTicks;
+end;
+
+// main
+begin
+    isRunning := false;
+
+    // avoid hooks to be eliminated by optimizer
+    if argc = 1234 then
+    begin
+        mainhook();
+        isRunning := isEngineRunning();
+        playFile(argv);
+        argc := getRealTicks();
+        DrawWorld(argc);
+        MainLoop;
+        shutdown;
+    end
+{$ENDIF}
+
 {$ENDIF}
 end.

@@ -64,6 +64,9 @@ uses
 {$IFDEF USE_VIDEO_RECORDING}    
     , uVideoRec
 {$ENDIF}    
+{$IFDEF GL2}
+    , uMatrix
+{$ENDIF}
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -755,9 +758,9 @@ c:= -1;
 end;
 
 procedure DrawWater(Alpha: byte; OffsetY: LongInt);
-var VertexBuffer: array [0..3] of TVertex2f;
-    r: TSDL_Rect;
-    lw, lh: GLfloat;
+var VertexBuffer : array [0..3] of TVertex2f;
+    r		 : TSDL_Rect;
+    lw, lh	 : GLfloat;
 begin
 if SuddenDeathDmg then
     begin
@@ -783,7 +786,7 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
     begin
         if r.y < 0 then
             r.y:= 0;
-
+ 
         glDisable(GL_TEXTURE_2D);
         VertexBuffer[0].X:= -lw;
         VertexBuffer[0].Y:= r.y;
@@ -794,6 +797,7 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= lh;
 
+{$IFNDEF GL2}
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
         if SuddenDeathDmg then
@@ -807,8 +811,29 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
 
         glDisableClientState(GL_COLOR_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+{$ELSE}
+        UpdateModelviewProjection;
+
+        BeginWater;
+        if SuddenDeathDmg then
+            SetColorPointer(@SDWaterColorArray[0], 4)
+        else
+            SetColorPointer(@WaterColorArray[0], 4);
+
+        SetVertexPointer(@VertexBuffer[0], 4);
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        EndWater;
+{$ENDIF}
+
+        {$IFNDEF GL2}
         glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
+        {$ENDIF}
+        {$IFNDEF WEBGL}
         glEnable(GL_TEXTURE_2D);
+        {$ENDIF}
     end;
 end;
 
@@ -862,8 +887,13 @@ TextureBuffer[3].X:= TextureBuffer[0].X;
 TextureBuffer[3].Y:= TextureBuffer[2].Y;
 
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
+SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+
+{$IFDEF GL2}
+UpdateModelviewProjection;
+{$ENDIF}
+
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 Tint($FF, $FF, $FF, $FF);
@@ -1084,24 +1114,34 @@ begin
     else if rm = rmLeftEye then
         d:= -d;
     stereoDepth:= stereoDepth + d;
+
+    {$IFDEF GL2}
+    hglMatrixMode(MATRIX_PROJECTION);
+    hglTranslatef(d, 0, 0);
+    hglMatrixMode(MATRIX_MODELVIEW);
+    {$ELSE}
     glMatrixMode(GL_PROJECTION);
     glTranslatef(d, 0, 0);
     glMatrixMode(GL_MODELVIEW);
+    {$ENDIF}
 {$ENDIF}
 end;
  
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFDEF S3D_DISABLED}
-    rm:= rm; // avoid hint
-    exit;
-{$ELSE}
+{$IFNDEF S3D_DISABLED}
     if rm = rmDefault then
         exit;
+    {$IFDEF GL2}
+    hglMatrixMode(MATRIX_PROJECTION);
+    hglTranslatef(-stereoDepth, 0, 0);
+    hglMatrixMode(MATRIX_MODELVIEW);    
+    {$ELSE}
     glMatrixMode(GL_PROJECTION);
     glTranslatef(-stereoDepth, 0, 0);
     glMatrixMode(GL_MODELVIEW);
-    stereoDepth:= 0;
+    {$ENDIF}
+    cStereoDepth:= 0;
 {$ENDIF}
 end;
  
@@ -1160,6 +1200,30 @@ else
     DrawLand(WorldDx, WorldDy);
 
     DrawWater(255, 0);
+
+(*
+// Attack bar
+    if CurrentTeam <> nil then
+        case AttackBar of
+        //1: begin
+        //r:= StuffPoz[sPowerBar];
+        //{$WARNINGS OFF}
+        //r.w:= (CurrentHedgehog^.Gear^.Power * 256) div cPowerDivisor;
+        //{$WARNINGS ON}
+        //DrawSpriteFromRect(r, cScreenWidth - 272, cScreenHeight - 48, 16, 0, Surface);
+        //end;
+        2: with CurrentHedgehog^ do
+                begin
+                tdx:= hwSign(Gear^.dX) * Sin(Gear^.Angle * Pi / cMaxAngle);
+                tdy:= - Cos(Gear^.Angle * Pi / cMaxAngle);
+                for i:= (Gear^.Power * 24) div cPowerDivisor downto 0 do
+                    DrawSprite(sprPower,
+                            hwRound(Gear^.X) + GetLaunchX(CurAmmoType, hwSign(Gear^.dX), Gear^.Angle) + LongInt(round(WorldDx + tdx * (24 + i * 2))) - 16,
+                            hwRound(Gear^.Y) + GetLaunchY(CurAmmoType, Gear^.Angle) + LongInt(round(WorldDy + tdy * (24 + i * 2))) - 16,
+                            i)
+                end
+        end;
+*)
 
 DrawVisualGears(1);
 DrawGears;
@@ -1427,12 +1491,13 @@ if isCursorVisible and bShowAmmoMenu then
 // Chat
 DrawChat;
 
+
 // various captions
 if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
-if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
+if (not isFirstFrame) and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then
         dec(missionTimer, Lag);
@@ -1549,11 +1614,11 @@ if ScreenFade <> sfNone then
         glDisable(GL_TEXTURE_2D);
 
         glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+        glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
 
         glEnable(GL_TEXTURE_2D);
         Tint($FF, $FF, $FF, $FF);
-        if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
+        if (not isFirstFrame) and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
         end
     end;
@@ -1628,6 +1693,7 @@ if isCursorVisible then
         DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
         end
     end;
+
 isFirstFrame:= false
 end;
 

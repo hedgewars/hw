@@ -208,7 +208,7 @@ begin
 t:= y + dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
     for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-        if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+        if ((Land[t, i] and lfIndestructible) = 0) and ((not disableLandBack) or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
             else
@@ -217,7 +217,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y - dy;
 if (t and LAND_HEIGHT_MASK) = 0 then
     for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-        if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+        if ((Land[t, i] and lfIndestructible) = 0) and ((not disableLandBack) or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
             else
@@ -226,7 +226,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y + dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
     for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-        if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+        if ((Land[t, i] and lfIndestructible) = 0) and ((not disableLandBack) or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
             else
@@ -235,7 +235,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 t:= y - dx;
 if (t and LAND_HEIGHT_MASK) = 0 then
     for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-        if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+        if ((Land[t, i] and lfIndestructible) = 0) and ((not disableLandBack) or (Land[t, i] > 255))  then
             if (cReducedQuality and rqBlurryLand) = 0 then
                 LandPixels[t, i]:= 0
             else

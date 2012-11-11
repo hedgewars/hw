@@ -139,7 +139,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushinteger(L, not lua_tointeger(L, 1));
+        lua_pushinteger(L, (not lua_tointeger(L, 1)));
     lc_bnot := 1;
 end;
 
@@ -1248,7 +1248,9 @@ end;
 
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
+   {$IFNDEF PAS2C}
     L:= L; // avoid compiler hint
+   {$ENDIF}
     GameState:= gsExit;
     lc_endgame:= 0
 end;
@@ -2018,7 +2020,7 @@ end;
 
 procedure ScriptCall(fname : shortstring);
 begin
-if not ScriptLoaded or (not ScriptExists(fname)) then
+if (not ScriptLoaded) or (not ScriptExists(fname)) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
@@ -2069,7 +2071,7 @@ end;
 
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
-if not ScriptLoaded or (not ScriptExists(fname)) then
+if (not ScriptLoaded) or (not ScriptExists(fname)) then
     exit;
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));

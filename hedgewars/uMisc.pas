@@ -49,7 +49,7 @@ type PScreenshot = ^TScreenshot;
          size: QWord;
          end;
 
-var conversionFormat: PSDL_PixelFormat;
+var conversionFormat : PSDL_PixelFormat;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -68,7 +68,7 @@ function SaveScreenshot(screenshot: pointer): PtrInt;
 var i: LongInt;
     png_ptr: ^png_struct;
     info_ptr: ^png_info;
-    f: file;
+    f: File;
     image: PScreenshot;
 begin
 image:= PScreenshot(screenshot);
@@ -141,6 +141,7 @@ var f: file;
     );
     image: PScreenshot;
     size: QWord;
+    writeResult:LongInt;
 begin
 image:= PScreenshot(screenshot);
 
@@ -168,8 +169,8 @@ Assign(f, image^.filename);
 Rewrite(f, 1);
 if IOResult = 0 then
     begin
-    BlockWrite(f, head, sizeof(head));
-    BlockWrite(f, image^.buffer^, size);
+    BlockWrite(f, head, sizeof(head), writeResult);
+    BlockWrite(f, image^.buffer^, size, writeResult);
     Close(f);
     end
 else
@@ -275,6 +276,7 @@ function doSurfaceConversion(tmpsurf: PSDL_Surface): PSDL_Surface;
 var convertedSurf: PSDL_Surface;
 begin
     doSurfaceConversion:= tmpsurf;
+{$IFNDEF WEBGL}
     if ((tmpsurf^.format^.bitsperpixel = 32) and (tmpsurf^.format^.rshift > tmpsurf^.format^.bshift)) or
        (tmpsurf^.format^.bitsperpixel = 24) then
     begin
@@ -282,6 +284,7 @@ begin
         SDL_FreeSurface(tmpsurf);
         doSurfaceConversion:= convertedSurf;
     end;
+{$ENDIF}
 end;
 
 {$IFDEF SDL13}
@@ -314,4 +317,4 @@ begin
     SDL_FreeFormat(conversionFormat);
 end;
 
-end.
+end.		

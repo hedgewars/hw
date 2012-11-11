@@ -704,7 +704,7 @@ begin
     Targ:= Targ; // avoid compiler hint
 
     if Level < 3 then trackFall:= afTrackFall
-    else trackFall:= 0;
+        else trackFall:= 0;
 
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -1047,7 +1047,7 @@ begin
             begin
             maxTop := Targ.Y - cHHRadius * 2;
             
-            while not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1) do
+            while (not TestColl(Targ.X, maxTop, cHHRadius)) and (maxTop > topY + cHHRadius * 2 + 1) do
                 dec(maxTop, cHHRadius*2);
             if not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius) then
                 begin

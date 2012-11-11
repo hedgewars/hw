@@ -244,7 +244,11 @@ const
     SDL_SRCCOLORKEY = $00001000;
     SDL_RLEACCEL    = $00004000;
     SDL_SRCALPHA    = $00010000;
+ {$IFDEF PAS2C}
+    SDL_ANYFORMAT   = $10000000;
+ {$ELSE}
     SDL_ANYFORMAT   = $00100000;
+ {$ENDIF}
     SDL_HWPALETTE   = $20000000;
     SDL_DOUBLEBUF   = $40000000;
     SDL_FULLSCREEN  = $80000000;
@@ -387,7 +391,7 @@ type
 {$ENDIF}
         end;
 
-    TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEPEVENT, SDL_GETEVENT);
+    TSDL_eventaction = (SDL_ADDEVENT, SDL_PEEKEVENT, SDL_GETEVENT);
 
     PSDL_Surface = ^TSDL_Surface;
     TSDL_Surface = record
@@ -397,6 +401,16 @@ type
         pitch : {$IFDEF SDL13}LongInt{$ELSE}Word{$ENDIF};
         pixels: Pointer;
         offset: LongInt;
+{$IFDEF PAS2C}
+	hwdata:Pointer;
+	clip_rect:TSDL_Rect;
+        unsed1:LongWord;
+        locked:LongWord;
+        map:Pointer;
+        format_version:Longword;
+        refcount:LongInt;
+{$ELSE}
+		      
 {$IFDEF SDL13}
         userdata: Pointer;
         locked: LongInt;
@@ -404,6 +418,7 @@ type
         clip_rect: TSDL_Rect;
         map: Pointer;
         refcount: LongInt;
+{$ENDIF}
 {$ENDIF}
         end;
 
@@ -747,6 +762,7 @@ type
 
     TByteArray = array[0..65535] of Byte;
     PByteArray = ^TByteArray;
+
     TLongWordArray = array[0..16383] of LongWord;
     PLongWordArray = ^TLongWordArray;
 
@@ -1109,22 +1125,31 @@ begin
     SDL_EnableKeyRepeat:= 0;
 end;
 {$ELSE}
-const conversionFormat: TSDL_PixelFormat = (
+const convFormat:TSDL_PixelFormat = (
         palette: nil; BitsPerPixel: 32; BytesPerPixel: 4;
         Rloss: 0; Gloss: 0; Bloss: 0; Aloss: 0;
         Rshift: RShift; Gshift: GShift; Bshift: BShift; Ashift: AShift;
+
+        //TODO: FIXME in pas2c
+        {$IFDEF WEBGL}
+        Rmask: RMask; Gmask: GMask; Bmask: BMask; Amask: AMask;
+        {$ELSE}
         RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
-        colorkey: 0; alpha: 255);
+        colorkey: 0; alpha: 255
+        {$ENDIF}
+        );
 
 function SDL_AllocFormat(format: LongWord): PSDL_PixelFormat;
 begin
     format:= format;
-    SDL_AllocFormat:= @conversionFormat;
+    SDL_AllocFormat:= @convFormat;
 end;
 
 procedure SDL_FreeFormat(pixelformat: PSDL_PixelFormat);
 begin
+   {$IFNDEF PAS2C}
     pixelformat:= pixelformat;  // avoid hint
+   {$ENDIF}
 end;
 {$ENDIF}
 
@@ -1134,7 +1159,7 @@ begin
 {$IFDEF SDL13}
         ((surface^.flags and SDL_RLEACCEL) <> 0)
 {$ELSE}
-        ( surface^.offset <> 0 ) or (( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
+        {$IFNDEF WEBGL}( surface^.offset <> 0 ) or {$ENDIF}(( surface^.flags and (SDL_HWSURFACE or SDL_ASYNCBLIT or SDL_RLEACCEL)) <> 0)
 {$ENDIF}
 end;
 

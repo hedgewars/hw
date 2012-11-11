@@ -61,8 +61,8 @@ TryDo(loaded, 'Cannot load locale "' + FileName + '"', false);
 if loaded then
     begin
     while not eof(f) do
-        begin
-        readln(f, s);
+    begin
+       readln(f, s);
         if Length(s) = 0 then
             continue;
         if (s[1] < '0') or (s[1] > '9') then

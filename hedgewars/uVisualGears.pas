@@ -82,7 +82,7 @@ end;
 // ==================================================================
 
 // ==================================================================
-const doStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
+const vdoStepHandlers: array[TVisualGearType] of TVGearStepProcedure =
         (
             @doStepFlake,
             @doStepCloud,
@@ -160,7 +160,7 @@ FillChar(gear^, sizeof(TVisualGear), 0);
 gear^.X:= real(X);
 gear^.Y:= real(Y);
 gear^.Kind := Kind;
-gear^.doStep:= doStepHandlers[Kind];
+gear^.doStep:= vdoStepHandlers[Kind];
 gear^.State:= 0;
 gear^.Tint:= $FFFFFFFF;
 gear^.uid:= VGCounter;

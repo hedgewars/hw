@@ -257,7 +257,7 @@ begin
             Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
             Ammo^[Slot, ami + 1].Count:= 0
             end;
-    until not b;
+    until (not b);
 AmmoMenuInvalidated:= true;
 end;
 

@@ -24,20 +24,20 @@ uses SDLh;
 
 const NTPX = Low(SmallInt);
 
-type TPointArray = array[0..64] of TSDL_Rect;
-     PPointArray = ^TPointArray;
+type TPointArray   = array[0..64] of TSDL_Rect;
+     PPointArray   = ^TPointArray;
      TEdgeTemplate = record
-                     BasePoints: PPointArray;
-                     BasePointsCount: Longword;
-                     FillPoints: PPointArray;
-                     FillPointsCount: Longword;
-                     BezierizeCount: Longword;
-                     RandPassesCount: Longword;
-                     TemplateHeight, TemplateWidth: Longword;
-                     canMirror, canFlip, isNegative, canInvert: boolean;
-                     hasGirders: boolean;
-                     MaxHedgeHogs: Longword;
-                     end;
+			BasePoints				  : PPointArray;		  
+			BasePointsCount				  : Longword;
+			FillPoints				  : PPointArray;
+			FillPointsCount				  : Longword;
+			BezierizeCount				  : Longword;
+			RandPassesCount				  : Longword;
+			TemplateHeight, TemplateWidth		  : Longword;
+			canMirror, canFlip, isNegative, canInvert : boolean;
+			hasGirders				  : boolean;
+			MaxHedgeHogs				  : Longword;
+		     end;					  
 ///////////////////////// ORIGINAL SET //////////////////////////////
 /// Area expanded to 2848x1424 at Tiys request to move out border ///
 /////////////////////////////////////////////////////////////////////
@@ -63,9 +63,9 @@ const Template0Points: array[0..18] of TSDL_Rect =
        (x: 2134; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template0FPoints: array[0..0] of TPoint =
+      Template0FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template1Points: array[0..15] of TSDL_Rect =
@@ -87,9 +87,9 @@ const Template1Points: array[0..15] of TSDL_Rect =
        (x: 1860; y: 1424; w:   25; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template1FPoints: array[0..0] of TPoint =
+      Template1FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template2Points: array[0..21] of TSDL_Rect =
@@ -117,9 +117,9 @@ const Template2Points: array[0..21] of TSDL_Rect =
        (x: 2004; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template2FPoints: array[0..0] of TPoint =
+      Template2FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template3Points: array[0..16] of TSDL_Rect =
@@ -142,9 +142,9 @@ const Template3Points: array[0..16] of TSDL_Rect =
        (x: 1834; y:  622; w:  254; h:  116),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template3FPoints: array[0..0] of TPoint =
+      Template3FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template4Points: array[0..22] of TSDL_Rect =
@@ -173,9 +173,9 @@ const Template4Points: array[0..22] of TSDL_Rect =
        (x: 2150; y:  552; w:   86; h:  220),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template4FPoints: array[0..0] of TPoint =
+      Template4FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template5Points: array[0..15] of TSDL_Rect =
@@ -197,9 +197,9 @@ const Template5Points: array[0..15] of TSDL_Rect =
        (x: 2012; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
        );
-      Template5FPoints: array[0..0] of TPoint =
+      Template5FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template6Points: array[0..13] of TSDL_Rect =
@@ -219,9 +219,9 @@ const Template6Points: array[0..13] of TSDL_Rect =
        (x: 2046; y: 1420; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
        );
-      Template6FPoints: array[0..0] of TPoint =
+      Template6FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template7Points: array[0..5] of TSDL_Rect =
@@ -233,9 +233,9 @@ const Template7Points: array[0..5] of TSDL_Rect =
        (x: 1830; y: 1424; w:  454; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template7FPoints: array[0..0] of TPoint =
+      Template7FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 
@@ -262,9 +262,9 @@ const Template8Points: array[0..19] of TSDL_Rect =
        (x: 2030; y: 1424; w:   20; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template8FPoints: array[0..0] of TPoint =
+      Template8FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template9Points: array[0..31] of TSDL_Rect =
@@ -302,9 +302,9 @@ const Template9Points: array[0..31] of TSDL_Rect =
        (x: 2080; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template9FPoints: array[0..0] of TPoint =
+      Template9FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template10Points: array[0..13] of TSDL_Rect =
@@ -324,9 +324,9 @@ const Template10Points: array[0..13] of TSDL_Rect =
        (x: 2182; y: 1424; w:    2; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template10FPoints: array[0..0] of TPoint =
+      Template10FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template11Points: array[0..9] of TSDL_Rect =
@@ -342,9 +342,9 @@ const Template11Points: array[0..9] of TSDL_Rect =
        (x: 1984; y: 1424; w:  136; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template11FPoints: array[0..0] of TPoint =
+      Template11FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template12Points: array[0..13] of TSDL_Rect =
@@ -364,9 +364,9 @@ const Template12Points: array[0..13] of TSDL_Rect =
        (x: 2088; y: 1424; w:  176; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template12FPoints: array[0..0] of TPoint =
+      Template12FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template13Points: array[0..15] of TSDL_Rect =
@@ -388,9 +388,9 @@ const Template13Points: array[0..15] of TSDL_Rect =
        (x: 1844; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template13FPoints: array[0..0] of TPoint =
+      Template13FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template14Points: array[0..13] of TSDL_Rect =
@@ -410,9 +410,9 @@ const Template14Points: array[0..13] of TSDL_Rect =
        (x: 2008; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template14FPoints: array[0..0] of TPoint =
+      Template14FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template15Points: array[0..23] of TSDL_Rect =
@@ -442,9 +442,9 @@ const Template15Points: array[0..23] of TSDL_Rect =
        (x: 2056; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template15FPoints: array[0..0] of TPoint =
+      Template15FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template16Points: array[0..28] of TSDL_Rect =
@@ -479,9 +479,9 @@ const Template16Points: array[0..28] of TSDL_Rect =
        (x: 2098; y: 1424; w:   52; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template16FPoints: array[0..0] of TPoint =
+      Template16FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template17Points: array[0..13] of TSDL_Rect =
@@ -501,9 +501,9 @@ const Template17Points: array[0..13] of TSDL_Rect =
        (x: 1998; y: 1424; w:   42; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template17FPoints: array[0..0] of TPoint =
+      Template17FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (X: 1023; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 //////////////////// MIXING AND MATCHING ORIGINAL //////////////////////////////////////
 const Template18Points: array[0..32] of TSDL_Rect =
@@ -542,9 +542,9 @@ const Template18Points: array[0..32] of TSDL_Rect =
        (x: 3598; y: 1424; w:   42; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template18FPoints: array[0..0] of TPoint =
+      Template18FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template19Points: array[0..44] of TSDL_Rect =
@@ -595,9 +595,9 @@ const Template19Points: array[0..44] of TSDL_Rect =
        (x: 3398; y: 1424; w:   52; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template19FPoints: array[0..0] of TPoint =
+      Template19FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template20Points: array[0..45] of TSDL_Rect =
@@ -649,9 +649,9 @@ const Template20Points: array[0..45] of TSDL_Rect =
        (x: 3456; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template20FPoints: array[0..0] of TPoint =
+      Template20FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template21Points: array[0..30] of TSDL_Rect =
@@ -688,9 +688,9 @@ const Template21Points: array[0..30] of TSDL_Rect =
        (x: 3258; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template21FPoints: array[0..0] of TPoint =
+      Template21FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template22Points: array[0..38] of TSDL_Rect =
@@ -735,9 +735,9 @@ const Template22Points: array[0..38] of TSDL_Rect =
        (x: 3244; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template22FPoints: array[0..0] of TPoint =
+      Template22FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template23Points: array[0..29] of TSDL_Rect =
@@ -773,9 +773,9 @@ const Template23Points: array[0..29] of TSDL_Rect =
        (x: 3438; y: 1424; w:  176; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
        );
-      Template23FPoints: array[0..0] of TPoint =
+      Template23FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template24Points: array[0..23] of TSDL_Rect =
@@ -805,9 +805,9 @@ const Template24Points: array[0..23] of TSDL_Rect =
        (x: 3346; y: 1420; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
        );
-      Template24FPoints: array[0..0] of TPoint =
+      Template24FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template25Points: array[0..19] of TSDL_Rect =
@@ -833,9 +833,9 @@ const Template25Points: array[0..19] of TSDL_Rect =
        (x: 3532; y: 1424; w:    2; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template25FPoints: array[0..0] of TPoint =
+      Template25FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 
@@ -894,9 +894,9 @@ const Template26Points: array[0..51] of TSDL_Rect =
        (x: 3480; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template26FPoints: array[0..0] of TPoint =
+      Template26FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template27Points: array[0..42] of TSDL_Rect =
@@ -945,9 +945,9 @@ const Template27Points: array[0..42] of TSDL_Rect =
        (x: 3556; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template27FPoints: array[0..0] of TPoint =
+      Template27FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template28Points: array[0..29] of TSDL_Rect =
@@ -983,9 +983,9 @@ const Template28Points: array[0..29] of TSDL_Rect =
        (x: 3308; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template28FPoints: array[0..0] of TPoint =
+      Template28FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template29Points: array[0..37] of TSDL_Rect =
@@ -1029,9 +1029,9 @@ const Template29Points: array[0..37] of TSDL_Rect =
        (x: 3094; y: 1424; w:    2; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template29FPoints: array[0..0] of TPoint =
+      Template29FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template30Points: array[0..30] of TSDL_Rect =
@@ -1068,9 +1068,9 @@ const Template30Points: array[0..30] of TSDL_Rect =
        (x: 3288; y: 1424; w:  176; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template30FPoints: array[0..0] of TPoint =
+      Template30FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template31Points: array[0..32] of TSDL_Rect =
@@ -1109,9 +1109,9 @@ const Template31Points: array[0..32] of TSDL_Rect =
        (x: 3584; y: 1424; w:  136; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template31FPoints: array[0..0] of TPoint =
+      Template31FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template32Points: array[0..29] of TSDL_Rect =
@@ -1147,9 +1147,9 @@ const Template32Points: array[0..29] of TSDL_Rect =
        (x: 3682; y: 1424; w:    2; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template32FPoints: array[0..0] of TPoint =
+      Template32FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-         (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template33Points: array[0..45] of TSDL_Rect =
@@ -1201,9 +1201,9 @@ const Template33Points: array[0..45] of TSDL_Rect =
        (x: 3480; y: 1424; w:    1; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template33FPoints: array[0..0] of TPoint =
+      Template33FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template34Points: array[0..25] of TSDL_Rect =
@@ -1235,9 +1235,9 @@ const Template34Points: array[0..25] of TSDL_Rect =
        (x: 3230; y: 1424; w:   20; h:    1),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template34FPoints: array[0..0] of TPoint =
+      Template34FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 const Template35Points: array[0..48] of TSDL_Rect =
@@ -1292,9 +1292,9 @@ const Template35Points: array[0..48] of TSDL_Rect =
        (x: 3498; y: 1424; w:   52; h:    2),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template35FPoints: array[0..0] of TPoint =
+      Template35FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 ///////////////////////// CAVERNS ///////////////////////////////////
@@ -1320,9 +1320,9 @@ const Template36Points: array[0..18] of TSDL_Rect =
        (x:  576; y:  976; w:   16; h:   28),
        (x: NTPX; y:    0; w:    1; h:    1)
       );
-      Template36FPoints: array[0..0] of TPoint =
+      Template36FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
 /// Ok. Tiy does not care for these.  Perhaps they could be saved.
@@ -1361,9 +1361,9 @@ const Template37Points: array[0..27] of TSDL_Rect =
        (x: 2250; y: 1200; w: 25; h: 25),
        (x: NTPX; y:    0; w:  1; h:  1)
       );
-      Template37FPoints: array[0..0] of TPoint =
+      Template37FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 // attempt to make a series of moderate hills/valleys - was before I really figured out the whole probabilities thing
 const Template38Points: array[0..16] of TSDL_Rect =
@@ -1386,9 +1386,9 @@ const Template38Points: array[0..16] of TSDL_Rect =
        (x: 3700; y: 2100; w:   1; h:    1),
        (x: NTPX; y:    0; w:   1; h:    1)
       );
-      Template38FPoints: array[0..0] of TPoint =
+      Template38FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 // 8 tiny islands
@@ -1435,9 +1435,9 @@ const Template39Points: array[0..39] of TSDL_Rect =
        (x: 1430; y: 520; w:   1; h:   1),
        (x: NTPX; y:   0; w:   1; h:   1)
       );
-      Template39FPoints: array[0..0] of TPoint =
+      Template39FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 512; Y:    0)
+       (X: 512; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 const Template40Points: array[0..7] of TSDL_Rect =
       (
@@ -1450,9 +1450,9 @@ const Template40Points: array[0..7] of TSDL_Rect =
        (x:  900; y: 1050; w:    1; h:   1),
        (x: NTPX; y:    0; w:    1; h:   1)
       );
-      Template40FPoints: array[0..0] of TPoint =
+      Template40FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 512; Y:    0)
+       (X: 512; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 // Many islands
 const Template41Points: array[0..86] of TSDL_Rect =
@@ -1545,9 +1545,9 @@ const Template41Points: array[0..86] of TSDL_Rect =
        (x: 4050; y: 125; w:  50; h:  75),
        (x: NTPX; y:   0; w:   1; h:   1)
       );
-      Template41FPoints: array[0..0] of TPoint =
+      Template41FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (X: 2047; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 // 2 tiny islands
 const Template42Points: array[0..13] of TSDL_Rect =
@@ -1567,9 +1567,9 @@ const Template42Points: array[0..13] of TSDL_Rect =
        (x: 1430; y: 520; w:   1; h:   1),
        (x: NTPX; y:   0; w:   1; h:   1)
       );
-      Template42FPoints: array[0..0] of TPoint =
+      Template42FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 512; Y:    0)
+       (X: 512; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 // Many islands
 const Template43Points: array[0..173] of TSDL_Rect =
@@ -1749,9 +1749,9 @@ const Template43Points: array[0..173] of TSDL_Rect =
        (x: 4050; y:2173; w:  50; h:  75),
        (x: NTPX; y:2048; w:   1; h:   1)
       );
-      Template43FPoints: array[0..0] of TPoint =
+      Template43FPoints: array[0..{$IFDEF PAS2C}1{$ELSE}0{$ENDIF}] of TPoint =
       (
-       (X: 4095; Y:    0)
+       (X: 4095; Y:    0){$IFDEF PAS2C},(X:0;Y:9){$ENDIF}
       );
 
 // 3 large caverns
@@ -1775,12 +1775,12 @@ const Template44Points: array[0..14] of TSDL_Rect =
       );
       Template44FPoints: array[0..5] of TSDL_Rect =
       (
-       (X:   1; Y:  90; w:   0; h:   0),
-       (X:   1; Y: 500; w:   0; h:   0),
-       (X:4095; Y: 500; w:   0; h:   0),
-       (X:   1; Y:1200; w:   0; h:   0),
-       (X:4095; Y:1200; w:   0; h:   0),
-       (X:   1; Y:2010; w:   0; h:   0)
+       (x:   1; y:  90; w:   0; h:   0),
+       (x:   1; y: 500; w:   0; h:   0),
+       (x:4095; y: 500; w:   0; h:   0),
+       (x:   1; y:1200; w:   0; h:   0),
+       (x:4095; y:1200; w:   0; h:   0),
+       (x:   1; y:2010; w:   0; h:   0)
       );
 
 // large caverns with an island
@@ -1801,9 +1801,9 @@ const Template45Points: array[0..11] of TSDL_Rect =
       );
       Template45FPoints: array[0..2] of TSDL_Rect =
       (
-       (X:   1; Y:   1; w:   0; h:   0),
-       (X:   1; Y:2047; w:   0; h:   0),
-       (X:1005; Y: 805; w:   0; h:   0)
+       (x:   1; y:   1; w:   0; h:   0),
+       (x:   1; y:2047; w:   0; h:   0),
+       (x:1005; y: 805; w:   0; h:   0)
       );
 
 ////////////////////////////////////////////////////////////////////////
@@ -1812,7 +1812,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template0Points;
         BasePointsCount: Succ(High(Template0Points));
         FillPoints: @Template0FPoints;
-        FillPointsCount: Succ(High(Template0FPoints));
+        FillPointsCount: Succ(High(Template0FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1823,7 +1823,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template1Points;
         BasePointsCount: Succ(High(Template1Points));
         FillPoints: @Template1FPoints;
-        FillPointsCount: Succ(High(Template1FPoints));
+        FillPointsCount: Succ(High(Template1FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1834,7 +1834,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template2Points;
         BasePointsCount: Succ(High(Template2Points));
         FillPoints: @Template2FPoints;
-        FillPointsCount: Succ(High(Template2FPoints));
+        FillPointsCount: Succ(High(Template2FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1845,7 +1845,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template3Points;
         BasePointsCount: Succ(High(Template3Points));
         FillPoints: @Template3FPoints;
-        FillPointsCount: Succ(High(Template3FPoints));
+        FillPointsCount: Succ(High(Template3FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1856,7 +1856,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template4Points;
         BasePointsCount: Succ(High(Template4Points));
         FillPoints: @Template4FPoints;
-        FillPointsCount: Succ(High(Template4FPoints));
+        FillPointsCount: Succ(High(Template4FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1867,7 +1867,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template5Points;
         BasePointsCount: Succ(High(Template5Points));
         FillPoints: @Template5FPoints;
-        FillPointsCount: Succ(High(Template5FPoints));
+        FillPointsCount: Succ(High(Template5FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1878,7 +1878,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template6Points;
         BasePointsCount: Succ(High(Template6Points));
         FillPoints: @Template6FPoints;
-        FillPointsCount: Succ(High(Template6FPoints));
+        FillPointsCount: Succ(High(Template6FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1889,7 +1889,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template7Points;
         BasePointsCount: Succ(High(Template7Points));
         FillPoints: @Template7FPoints;
-        FillPointsCount: Succ(High(Template7FPoints));
+        FillPointsCount: Succ(High(Template7FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 4;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1900,7 +1900,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template8Points;
         BasePointsCount: Succ(High(Template8Points));
         FillPoints: @Template8FPoints;
-        FillPointsCount: Succ(High(Template8FPoints));
+        FillPointsCount: Succ(High(Template8FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1911,7 +1911,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template9Points;
         BasePointsCount: Succ(High(Template9Points));
         FillPoints: @Template9FPoints;
-        FillPointsCount: Succ(High(Template9FPoints));
+        FillPointsCount: Succ(High(Template9FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 1;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1922,7 +1922,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template10Points;
         BasePointsCount: Succ(High(Template10Points));
         FillPoints: @Template10FPoints;
-        FillPointsCount: Succ(High(Template10FPoints));
+        FillPointsCount: Succ(High(Template10FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1933,7 +1933,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template11Points;
         BasePointsCount: Succ(High(Template11Points));
         FillPoints: @Template11FPoints;
-        FillPointsCount: Succ(High(Template11FPoints));
+        FillPointsCount: Succ(High(Template11FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 1;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1944,7 +1944,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template12Points;
         BasePointsCount: Succ(High(Template12Points));
         FillPoints: @Template12FPoints;
-        FillPointsCount: Succ(High(Template12FPoints));
+        FillPointsCount: Succ(High(Template12FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1955,7 +1955,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template13Points;
         BasePointsCount: Succ(High(Template13Points));
         FillPoints: @Template13FPoints;
-        FillPointsCount: Succ(High(Template13FPoints));
+        FillPointsCount: Succ(High(Template13FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1966,7 +1966,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template14Points;
         BasePointsCount: Succ(High(Template14Points));
         FillPoints: @Template14FPoints;
-        FillPointsCount: Succ(High(Template14FPoints));
+        FillPointsCount: Succ(High(Template14FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1977,7 +1977,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template15Points;
         BasePointsCount: Succ(High(Template15Points));
         FillPoints: @Template15FPoints;
-        FillPointsCount: Succ(High(Template15FPoints));
+        FillPointsCount: Succ(High(Template15FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1988,7 +1988,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template16Points;
         BasePointsCount: Succ(High(Template16Points));
         FillPoints: @Template16FPoints;
-        FillPointsCount: Succ(High(Template16FPoints));
+        FillPointsCount: Succ(High(Template16FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -1999,7 +1999,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template17Points;
         BasePointsCount: Succ(High(Template17Points));
         FillPoints: @Template17FPoints;
-        FillPointsCount: Succ(High(Template17FPoints));
+        FillPointsCount: Succ(High(Template17FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 2848;
@@ -2010,7 +2010,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template18Points;
         BasePointsCount: Succ(High(Template18Points));
         FillPoints: @Template18FPoints;
-        FillPointsCount: Succ(High(Template18FPoints));
+        FillPointsCount: Succ(High(Template18FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2021,7 +2021,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template19Points;
         BasePointsCount: Succ(High(Template19Points));
         FillPoints: @Template19FPoints;
-        FillPointsCount: Succ(High(Template19FPoints));
+        FillPointsCount: Succ(High(Template19FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2032,7 +2032,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template20Points;
         BasePointsCount: Succ(High(Template20Points));
         FillPoints: @Template20FPoints;
-        FillPointsCount: Succ(High(Template20FPoints));
+        FillPointsCount: Succ(High(Template20FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2043,7 +2043,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template21Points;
         BasePointsCount: Succ(High(Template21Points));
         FillPoints: @Template21FPoints;
-        FillPointsCount: Succ(High(Template21FPoints));
+        FillPointsCount: Succ(High(Template21FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2054,7 +2054,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template22Points;
         BasePointsCount: Succ(High(Template22Points));
         FillPoints: @Template22FPoints;
-        FillPointsCount: Succ(High(Template22FPoints));
+        FillPointsCount: Succ(High(Template22FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2065,7 +2065,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template23Points;
         BasePointsCount: Succ(High(Template23Points));
         FillPoints: @Template23FPoints;
-        FillPointsCount: Succ(High(Template23FPoints));
+        FillPointsCount: Succ(High(Template23FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2076,7 +2076,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template24Points;
         BasePointsCount: Succ(High(Template24Points));
         FillPoints: @Template24FPoints;
-        FillPointsCount: Succ(High(Template24FPoints));
+        FillPointsCount: Succ(High(Template24FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2087,7 +2087,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template25Points;
         BasePointsCount: Succ(High(Template25Points));
         FillPoints: @Template25FPoints;
-        FillPointsCount: Succ(High(Template25FPoints));
+        FillPointsCount: Succ(High(Template25FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 4;
         RandPassesCount: 4;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2098,7 +2098,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template26Points;
         BasePointsCount: Succ(High(Template26Points));
         FillPoints: @Template26FPoints;
-        FillPointsCount: Succ(High(Template26FPoints));
+        FillPointsCount: Succ(High(Template26FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2109,7 +2109,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template27Points;
         BasePointsCount: Succ(High(Template27Points));
         FillPoints: @Template27FPoints;
-        FillPointsCount: Succ(High(Template27FPoints));
+        FillPointsCount: Succ(High(Template27FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 1;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2120,7 +2120,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template28Points;
         BasePointsCount: Succ(High(Template28Points));
         FillPoints: @Template28FPoints;
-        FillPointsCount: Succ(High(Template28FPoints));
+        FillPointsCount: Succ(High(Template28FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2131,7 +2131,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template29Points;
         BasePointsCount: Succ(High(Template29Points));
         FillPoints: @Template29FPoints;
-        FillPointsCount: Succ(High(Template29FPoints));
+        FillPointsCount: Succ(High(Template29FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 1;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2142,7 +2142,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template30Points;
         BasePointsCount: Succ(High(Template30Points));
         FillPoints: @Template30FPoints;
-        FillPointsCount: Succ(High(Template30FPoints));
+        FillPointsCount: Succ(High(Template30FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 8;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2153,7 +2153,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template31Points;
         BasePointsCount: Succ(High(Template31Points));
         FillPoints: @Template31FPoints;
-        FillPointsCount: Succ(High(Template31FPoints));
+        FillPointsCount: Succ(High(Template31FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 5;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2164,7 +2164,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template32Points;
         BasePointsCount: Succ(High(Template32Points));
         FillPoints: @Template32FPoints;
-        FillPointsCount: Succ(High(Template32FPoints));
+        FillPointsCount: Succ(High(Template32FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2175,7 +2175,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template33Points;
         BasePointsCount: Succ(High(Template33Points));
         FillPoints: @Template33FPoints;
-        FillPointsCount: Succ(High(Template33FPoints));
+        FillPointsCount: Succ(High(Template33FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2186,7 +2186,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template34Points;
         BasePointsCount: Succ(High(Template34Points));
         FillPoints: @Template34FPoints;
-        FillPointsCount: Succ(High(Template34FPoints));
+        FillPointsCount: Succ(High(Template34FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 6;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2197,7 +2197,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template35Points;
         BasePointsCount: Succ(High(Template35Points));
         FillPoints: @Template35FPoints;
-        FillPointsCount: Succ(High(Template35FPoints));
+        FillPointsCount: Succ(High(Template35FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 7;
         TemplateHeight: 1424; TemplateWidth: 3900;
@@ -2208,7 +2208,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template36Points;
         BasePointsCount: Succ(High(Template36Points));
         FillPoints: @Template36FPoints;
-        FillPointsCount: Succ(High(Template36FPoints));
+        FillPointsCount: Succ(High(Template36FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 4;
         RandPassesCount: 12;
         TemplateHeight: 1024; TemplateWidth: 4096;
@@ -2219,7 +2219,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template37Points;
         BasePointsCount: Succ(High(Template37Points));
         FillPoints: @Template37FPoints;
-        FillPointsCount: Succ(High(Template37FPoints));
+        FillPointsCount: Succ(High(Template37FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 3;
         TemplateHeight: 2048; TemplateWidth: 4096;
@@ -2230,7 +2230,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template38Points;
         BasePointsCount: Succ(High(Template38Points));
         FillPoints: @Template38FPoints;
-        FillPointsCount: Succ(High(Template38FPoints));
+        FillPointsCount: Succ(High(Template38FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 4;
         RandPassesCount: 4;
         TemplateHeight: 2048; TemplateWidth: 4096;
@@ -2241,7 +2241,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template39Points;
         BasePointsCount: Succ(High(Template39Points));
         FillPoints: @Template39FPoints;
-        FillPointsCount: Succ(High(Template39FPoints));
+        FillPointsCount: Succ(High(Template39FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 3;
         TemplateHeight: 512; TemplateWidth: 1536;
@@ -2252,7 +2252,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template40Points;
         BasePointsCount: Succ(High(Template40Points));
         FillPoints: @Template40FPoints;
-        FillPointsCount: Succ(High(Template40FPoints));
+        FillPointsCount: Succ(High(Template40FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 3;
         TemplateHeight: 1024; TemplateWidth: 1024;
@@ -2263,7 +2263,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template41Points;
         BasePointsCount: Succ(High(Template41Points));
         FillPoints: @Template41FPoints;
-        FillPointsCount: Succ(High(Template41FPoints));
+        FillPointsCount: Succ(High(Template41FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 9;
         TemplateHeight: 2048; TemplateWidth: 4096;
@@ -2274,7 +2274,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template42Points;
         BasePointsCount: Succ(High(Template42Points));
         FillPoints: @Template42FPoints;
-        FillPointsCount: Succ(High(Template42FPoints));
+        FillPointsCount: Succ(High(Template42FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 3;
         RandPassesCount: 3;
         TemplateHeight: 512; TemplateWidth: 1536;
@@ -2285,7 +2285,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
        (BasePoints: @Template43Points;
         BasePointsCount: Succ(High(Template43Points));
         FillPoints: @Template43FPoints;
-        FillPointsCount: Succ(High(Template43FPoints));
+        FillPointsCount: Succ(High(Template43FPoints)){$IFDEF PAS2C}-1{$ENDIF};
         BezierizeCount: 2;
         RandPassesCount: 9;
         TemplateHeight: 4096; TemplateWidth: 4096;

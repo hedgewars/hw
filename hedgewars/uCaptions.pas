@@ -30,8 +30,6 @@ procedure ReloadCaptions(unload: boolean);
 procedure initModule;
 procedure freeModule;
 
-implementation
-uses uTextures, uRenderUtils, uVariables, uRender;
 
 type TCaptionStr = record
     Tex: PTexture;
@@ -42,8 +40,13 @@ type TCaptionStr = record
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
+implementation
+uses uTextures, uRenderUtils, uVariables, uRender;
+
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
+    if Length(s) = 0 then
+        exit;
     if Captions[Group].Text <> s then
         begin
         FreeTexture(Captions[Group].Tex);

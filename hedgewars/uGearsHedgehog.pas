@@ -1114,7 +1114,7 @@ if (HHGear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    if not isInMultiShoot and (Hedgehog^.Gear <> nil) then
+    if (not isInMultiShoot) and (Hedgehog^.Gear <> nil) then
         begin
         if GHStepTicks > 0 then
             dec(GHStepTicks);

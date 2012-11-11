@@ -20,7 +20,7 @@
 
 unit uIO;
 interface
-uses SDLh, uTypes;
+uses SDLh, uTypes, uMisc;
 
 procedure initModule;
 procedure freeModule;
@@ -114,6 +114,7 @@ end;
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
 begin
+
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
      '?': SendIPC(_S'!');
@@ -168,10 +169,11 @@ begin
 end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
-var f: file;
-    ss: shortstring = '';
-    i: LongInt;
-    s: shortstring;
+var f  : File;
+    ss : shortstring = '';
+    i  : LongInt;
+    s  : shortstring;
+   t, tt   : string;
 begin
 
 // set RDNLY on file open
@@ -179,7 +181,6 @@ filemode:= 0;
 {$I-}
 assign(f, fileName);
 reset(f, 1);
-
 tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
@@ -187,13 +188,13 @@ s[0]:= #0;
 repeat
     BlockRead(f, s[1], 255 - Length(ss), i);
     if i > 0 then
-        begin
+    begin
         s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+	       Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
 until i = 0;
@@ -222,7 +223,8 @@ if IPCSock <> nil then
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
     AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
-    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+       SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])));
+       //log('SendIPC');
     end
 end;
 
@@ -376,7 +378,7 @@ begin
 if CheckNoTeamOrHH or isPaused then
     exit;
 bShowFinger:= false;
-if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
+if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
     begin
     bSelected:= true;
     exit
@@ -429,6 +431,7 @@ begin
     
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
+
 end;
 
 procedure freeModule;
@@ -437,6 +440,7 @@ begin
     SDLNet_FreeSocketSet(fds);
     SDLNet_TCP_Close(IPCSock);
     SDLNet_Quit();
+
 end;
 
 end.

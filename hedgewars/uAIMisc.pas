@@ -49,7 +49,17 @@ TBonus = record
     X, Y: LongInt;
     Radius: LongInt;
     Score: LongInt;
-    end;
+	 end;
+
+Tbonuses = record
+	      Count : Longword;
+	      ar    : array[0..Pred(MAXBONUS)] of TBonus;
+	   end;
+
+Twalkbonuses =  record
+        Count: Longword;
+        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
+        end;
 
 procedure initModule;
 procedure freeModule;
@@ -77,15 +87,9 @@ function  AIrndSign(num: LongInt): LongInt;
 var ThinkingHH: PGear;
     Targets: TTargets;
 
-    bonuses: record
-        Count: Longword;
-        ar: array[0..Pred(MAXBONUS)] of TBonus;
-        end;
+    bonuses: Tbonuses;
 
-    walkbonuses: record
-        Count: Longword;
-        ar: array[0..Pred(MAXBONUS div 8)] of TBonus;  // don't use too many
-        end;
+    walkbonuses: Twalkbonuses;
 
 const KillScore = 200;
 var friendlyfactor: LongInt = 300;
@@ -353,7 +357,7 @@ begin
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
-        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
+        if (not skipLandCheck) and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
         begin
             if 0.4 < dY then
             begin
