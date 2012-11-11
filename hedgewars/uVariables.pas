@@ -2763,8 +2763,8 @@ begin
     LuaTemplateNumber:= 0;
     cStereoDepth := 0;
 
-    MatrixLoadIdentity(mModelview);
-    MatrixLoadIdentity(mProjection);
+//    MatrixLoadIdentity(mModelview);
+//    MatrixLoadIdentity(mProjection);
     aVertex:= 0;
     aTexCoord:= 1;
     aColor:= 2;
