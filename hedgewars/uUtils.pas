@@ -25,16 +25,19 @@ uses uTypes, uFloat, GLunit;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
-procedure SplitByChar(var a, b: ansistring; c: char);
 
 {$IFNDEF PAS2C}
+procedure SplitByChar(var a, b: ansistring; c: char);
+{$ENDIF}
+
+//{$IFNDEF PAS2C}
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
-{$ENDIF}
+//{$ENDIF}
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
@@ -86,7 +89,7 @@ var f: textfile;
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
-var CharArray: array[byte] of Char;
+var CharArray: array[0..255] of Char;
 
 procedure SplitBySpace(var a,b: shortstring);
 begin
@@ -105,11 +108,15 @@ if i > 0 then
             Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     a[0]:= char(Pred(i))
+    {$IFDEF PAS2C}
+       a[i] := 0;
+    {$ENDIF}
     end
 else
     b:= '';
 end;
 
+{$IFNDEF PAS2C}
 procedure SplitByChar(var a, b: ansistring; c: char);
 var i: LongInt;
 begin
@@ -119,9 +126,10 @@ if i > 0 then
     b:= copy(a, i + 1, Length(a) - i);
     setlength(a, Pred(i));
     end else b:= '';
-end;
+end; { SplitByChar }
+{$ENDIF}
 
-{$IFNDEF PAS2C}
+//{$IFNDEF PAS2C}
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
@@ -150,7 +158,7 @@ function EnumToStr(const en: TCapGroup) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
-{$ENDIF}
+//{$ENDIF}
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -271,10 +279,14 @@ end;
 
 
 function Str2PChar(const s: shortstring): PChar;
+var i :Integer ;
 begin
-CharArray:= s;
+   for i:= 1 to Length(s) do
+      begin
+      CharArray[i - 1] := s[i];
+      end;
 CharArray[Length(s)]:= #0;
-Str2PChar:= @CharArray
+   Str2PChar:= @(CharArray[0]);
 end;
 
 
@@ -293,15 +305,20 @@ end;
 
 procedure AddFileLog(s: shortstring);
 begin
-s:= s;
+// s:= s;
+{$IFNDEF WEBGL}
 {$IFDEF DEBUGFILE}
+
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
 writeln(f, inttostr(GameTicks)  + ': ' + s);
 flush(f);
+
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
+{$ENDIF}
+
 {$ENDIF}
 {$ENDIF}
 end;

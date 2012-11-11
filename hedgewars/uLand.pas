@@ -240,6 +240,7 @@ begin
     rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
     topY:= LAND_HEIGHT - playHeight;
 
+    
     // HACK: force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
     if (cTemplateFilter = 4)
     or (Template.canInvert and (getrandom(2) = 0))
@@ -458,7 +459,9 @@ var tmpsurf: PSDL_Surface;
 begin
 tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
-    begin
+    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
+if tmpsurf = nil then
+begin
     mapName:= ExtractFileName(Pathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
@@ -524,9 +527,11 @@ tmpsurf:= nil;
 end;
 
 procedure LoadMap;
-var tmpsurf: PSDL_Surface;
-    s: shortstring;
-    mapName: shortstring = '';
+var tmpsurf : PSDL_Surface;
+    s	    : shortstring;
+    f	    : textfile;
+    mapName : shortstring = '';
+
 begin
 WriteLnToConsole('Loading land from file...');
 AddProgress;
@@ -542,6 +547,29 @@ TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tm
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
 LoadMapConfig;
 
+// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
+s:= UserPathz[ptMapCurrent] + '/map.cfg';
+if not FileExists(s) then
+    s:= Pathz[ptMapCurrent] + '/map.cfg';
+WriteLnToConsole('Fetching map HH limit');
+{$I-}
+Assign(f, s);
+filemode:= 0; // readonly
+Reset(f);
+if IOResult <> 0 then
+    begin
+    s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
+    Assign(f, s);
+    Reset(f);
+    end;
+Readln(f);
+if not eof(f) then
+    Readln(f, MaxHedgehogs);
+   
+{$I+}
+if (MaxHedgehogs = 0) then
+    MaxHedgehogs:= 18;
+
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;
 leftX:= (LAND_WIDTH - playWidth) div 2;
@@ -555,9 +583,11 @@ BlitImageAndGenerateCollisionInfo(
     LAND_HEIGHT - tmpsurf^.h,
     tmpsurf^.w,
     tmpsurf);
+   
 SDL_FreeSurface(tmpsurf);
 
 LoadMask;
+
 end;
 
 procedure DrawBottomBorder; // broken out from other borders for doing a floor-only map, or possibly updating bottom during SD
@@ -580,9 +610,9 @@ for w:= 0 to 23 do
 end;
 
 procedure GenMap;
-var x, y, w, c: Longword;
+var x, y, w, c : Longword;
     usermap, usermask, map, mask: shortstring;
-    maskOnly: boolean;
+    maskOnly : boolean;
 begin
     hasBorder:= false;
     maskOnly:= false;
@@ -625,7 +655,6 @@ begin
         MakeFortsMap;
 
     AddProgress;
-
 // check for land near top
 c:= 0;
 if (GameFlags and gfBorder) <> 0 then
@@ -776,7 +805,7 @@ begin
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
             end;
-        end;
+	end;
 end;
 
 
@@ -790,11 +819,13 @@ begin
 end;
 
 procedure chSendLandDigest(var s: shortstring);
-var adler, i: LongInt;
+var adler, i : LongInt;
 begin
     adler:= 1;
-    for i:= 0 to LAND_HEIGHT-1 do
+     for i:= 0 to LAND_HEIGHT-1 do
+       begin
         adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
+       end;
     s:= 'M' + IntToStr(adler) + cScriptName;
 
     chLandCheck(s);
@@ -823,9 +854,13 @@ end;
 
 procedure freeModule;
 begin
-    SetLength(Land, 0, 0);
-    SetLength(LandPixels, 0, 0);
-    SetLength(LandDirty, 0, 0);
+
+   SetLength(LandPixels, 0, 0);
+   
+   SetLength(Land, 0, 0);
+ 
+   SetLength(LandDirty, 0, 0);
+
 end;
 
 end.

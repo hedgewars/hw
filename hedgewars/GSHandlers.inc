@@ -173,7 +173,7 @@ var
     land: word;
 begin
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
-{$IFNDEF WEB}
+{$IFNDEF WEBGL}
     if Gear^.dX.Round > 2 then
         Gear^.dX.QWordValue:= 8589934592;
     if Gear^.dY.Round > 2 then
@@ -999,7 +999,8 @@ end;
 
 procedure doStepBulletWork(Gear: PGear);
 var 
-    i, x, y: LongWord;
+    i: LongInt;
+    x, y: LongWord;
     oX, oY: hwFloat;
     VGear: PVisualGear;
 begin
@@ -2741,6 +2742,7 @@ end;
 procedure doStepSeductionWork(Gear: PGear);
 var i: LongInt;
     hogs: PGearArrayS;
+    len: Integer;
 begin
     AllInactive := false;
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
@@ -3513,7 +3515,9 @@ var
     i: LongInt;
 begin
     AllInactive := false;
+    {$IFNDEF PAS2C}
     Gear^.dX := Gear^.dX;
+    {$ENDIF}
     doStepFallingGear(Gear);
     //    CheckGearDrowning(Gear); // already checked for in doStepFallingGear
     CalcRotationDirAngle(Gear);
@@ -4614,6 +4618,7 @@ var
     resgear: PGear;
     hh: PHedgehog;
     i: LongInt;
+    len: Integer;
 begin
     if (TurnTimeLeft > 0) then
         dec(TurnTimeLeft);
@@ -4705,6 +4710,7 @@ procedure doStepResurrector(Gear: PGear);
 var
     graves: PGearArrayS;
     i: LongInt;
+    len: Integer;
 begin
     AllInactive := false;
     graves := GearsNear(Gear^.X, Gear^.Y, gtGrave, Gear^.Radius);
@@ -5028,12 +5034,14 @@ All these effects assume the ray's angle is not changed and that the target type
 A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
 A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
+
 procedure doStepIceGun(Gear: PGear);
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
     i, t, gX, gY: LongInt;
     hogs: PGearArrayS;
+    len: Integer;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then

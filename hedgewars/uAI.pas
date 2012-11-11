@@ -33,6 +33,11 @@ uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
     uAmmos, SysUtils{$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF}, uTypes,
     uVariables, uCommands, uUtils, uDebug, uAILandMarks;
 
+{$IFDEF AI_MAINTHREAD}
+const
+    mainThreadMaxThinkTime:Integer = 1500;
+{$ENDIF}
+
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
@@ -42,7 +47,7 @@ var BestActions: TActions;
     ThinkThread: TThreadID;
 {$ENDIF}
     hasThread: LongInt;
-    StartTicks: Longword;
+    StartTicks: LongInt;
 
 procedure FreeActionsList;
 begin
@@ -330,7 +335,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 end;
 
             // 'not CanGO' means we can't go straight, possible jumps are checked above
-            if not CanGo then
+            if (not CanGo) then
                 break;
             
              inc(steps);
@@ -357,6 +362,15 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 
             if GoInfo.FallPix >= FallPixForBranching then
                 Push(ticks, Actions, Me^, Me^.Message xor 3); // aia_Left xor 3 = aia_Right
+
+{$IFDEF AI_MAINTHREAD}
+            if StartTicks < (SDL_GetTicks() - mainThreadMaxThinkTime) then
+                StopThinking := true;
+{$ELSE}
+            if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+                SDL_Delay(1000);
+{$ENDIF}
+
             end {while};
 
         if BestRate > BaseRate then
@@ -368,12 +382,18 @@ end;
 function Think(Me: Pointer): ptrint;
 var BackMe, WalkMe: TGear;
     switchCount: LongInt;
-    StartTicks, currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
+    currHedgehogIndex, itHedgehog, switchesNum, i: Longword;
     switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
 InterlockedIncrement(hasThread);
+
+{$IFDEF AI_MAINTHREAD}
+StartTicks:= SDL_GetTicks();
+{$ELSE}
 StartTicks:= GameTicks;
+{$ENDIF}
+
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
 itHedgehog:= currHedgehogIndex;
 switchesNum:= 0;
@@ -383,7 +403,7 @@ if PGear(Me)^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if (PGear(Me)^.State and gstAttacked) = 0 then
+if (PGear(Me)^.State and gstAttacking) = 0 then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -395,7 +415,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             Actions.Score:= 0;
             if switchesNum > 0 then
                 begin
-                if not switchImmediatelyAvailable  then
+                if (not switchImmediatelyAvailable)  then
                     begin
                     // when AI has to use switcher, make it cost smth unless they have a lot of switches
                     if (switchCount < 10) then Actions.Score:= (-27+switchCount*3)*4000;
@@ -420,8 +440,13 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             or (itHedgehog = currHedgehogIndex)
             or BestActions.isWalkingToABetterPlace;
 
-        if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-            SDL_Delay(1000);
+            {$IFDEF AI_MAINTHREAD}
+                if StartTicks < (SDL_GetTicks() - mainThreadMaxThinkTime) then
+                    StopThinking := true;
+            {$ELSE}
+                if (StartTicks > GameTicks - 1500) and (not StopThinking) then
+                    SDL_Delay(1000);
+            {$ENDIF}
 
         if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin
@@ -433,22 +458,29 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
 else
     begin
     BackMe:= PGear(Me)^;
+    
+//{$IFNDEF AI_MAINTHREAD}
     while (not StopThinking) and (BestActions.Count = 0) do
         begin
+
 (*
         // Maybe this would get a bit of movement out of them? Hopefully not *toward* water. Need to check how often he'd choose that strategy
         if SuddenDeathDmg and ((hwRound(BackMe.Y)+cWaterRise*2) > cWaterLine) then
             AddBonus(hwRound(BackMe.X), hwRound(BackMe.Y), 250, -40);
 *)
+
         FillBonuses(true);
         WalkMe:= BackMe;
         Actions.Count:= 0;
         Actions.Pos:= 0;
         Actions.Score:= 0;
         Walk(@WalkMe, Actions);
-        if not StopThinking then
+{$IFNDEF AI_MAINTHREAD}
+        if (not StopThinking) then
             SDL_Delay(100)
+{$ENDIF}
         end
+//{$ENDIF}
     end;
 
 PGear(Me)^.State:= PGear(Me)^.State and (not gstHHThinking);
@@ -484,12 +516,17 @@ if Targets.Count = 0 then
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
 AddFileLog('Enter Think Thread');
+
+{$IFDEF AI_MAINTHREAD}
+Think(Me);
+{$ELSE}
 {$IFDEF USE_SDLTHREADS}
 ThinkThread := SDL_CreateThread(@Think{$IFDEF SDL13}, nil{$ENDIF}, Me);
 {$ELSE}
 BeginThread(@Think, Me, ThinkThread);
 {$ENDIF}
 AddFileLog('Thread started');
+{$ENDIF}
 end;
 
 //var scoreShown: boolean = false;
@@ -536,7 +573,9 @@ procedure initModule;
 begin
     hasThread:= 0;
     StartTicks:= 0;
+{$IFNDEF PAS2C}
     ThinkThread:= ThinkThread;
+{$ENDIF}
 end;
 
 procedure freeModule;

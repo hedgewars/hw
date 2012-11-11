@@ -149,7 +149,7 @@ const
     cBlowTorchC    = 6;
     cakeDmg =   75;
 
-    cKeyMaxIndex = 1023;
+    cKeyMaxIndex = 1600;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
     cHHFileName = 'Hedgehog';

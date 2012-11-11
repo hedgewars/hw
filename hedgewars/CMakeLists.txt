@@ -52,6 +52,7 @@ set(engine_sources
     uLandTemplates.pas
     uLandTexture.pas
     uLocale.pas
+    uMatrix.pas
     uMisc.pas
     uMobile.pas
     uRandom.pas

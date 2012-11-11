@@ -66,6 +66,8 @@ var Rects: PRectArray;
     ThemeObjects: TThemeObjects;
     SprayObjects: TSprayObjects;
 
+
+
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
@@ -442,7 +444,7 @@ ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
 
 while not eof(f) do
-    begin
+begin
     Readln(f, s);
     if Length(s) = 0 then
         continue;

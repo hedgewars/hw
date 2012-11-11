@@ -211,7 +211,7 @@ else if (s[1] = '''') and (s[Length(s)] = '''') then
 else if (s[1] = '-') and (s[Length(s)] = '-') then
     x:= 3;
     
-if not CurrentTeam^.ExtDriven and (x <> 0) then
+if (not CurrentTeam^.ExtDriven) and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
         if (TeamsArray[c] = CurrentTeam) then
             t:= c;

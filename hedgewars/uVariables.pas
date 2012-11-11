@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uUtils;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uUtils, uMatrix;
 
 var
 /////// init flags ///////
@@ -76,7 +76,7 @@ var
 
     CheckSum        : LongWord;
     CampaignVariable: shortstring;
-    GameTicks       : LongWord;
+    GameTicks       : LongInt; {xymeng:originally LongWord}
     GameState       : TGameState;
     GameType        : TGameType;
     InputMask       : LongWord;
@@ -197,7 +197,7 @@ var
 
     LuaGoals        : shortstring;
 
-    LuaTemplateNumber : LongWord;
+    LuaTemplateNumber : LongInt; {org: LongWord}
 
     VoiceList : array[0..7] of TVoice =  (
                     ( snd: sndNone; voicepack: nil),
@@ -245,9 +245,11 @@ var
         'Graphics/Flags',                // ptFlags
         'Missions/Maps',                 // ptMissionMaps
         'Graphics/SuddenDeath',           // ptSuddenDeath
-        'Graphics/Buttons'                // ptButton
+        'Graphics/Buttons',               // ptButton
+        'Shaders'                        // ptShaders
     );
 
+var
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
             Height: 12;
@@ -823,7 +825,7 @@ var
             TimeAfterTurn: Longword;
             minAngle, maxAngle: Longword;
             isDamaging: boolean;
-            SkipTurns: Longword;
+	    SkipTurns: LongInt; {xymeng, org:LongWord}
             PosCount: Longword;
             PosSprite: TSprite;
             ejectX, ejectY: Longint;
@@ -2489,6 +2491,7 @@ var
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
+    cStereoDepth: GLfloat;
     SupportNPOTT: Boolean;
     Step: LongInt;
     squaresize : LongInt;
@@ -2526,6 +2529,23 @@ var
     DefaultBinds : TBinds;
 
     lastTurnChecksum : Longword;
+
+    mModelview: TMatrix4x4f;
+    mProjection: TMatrix4x4f;
+    vBuffer: GLuint; // vertex buffer
+    tBuffer: GLuint; // texture coords buffer
+    cBuffer: GLuint; // color buffer
+
+    uCurrentMVPLocation: GLint;
+
+    uMainMVPLocation: GLint;
+    uMainTintLocation: GLint;
+
+    uWaterMVPLocation: GLint;
+
+    aVertex: GLint;
+    aTexCoord: GLint;
+    aColor: GLint;
 
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
@@ -2728,13 +2748,10 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-{$IFNDEF PAS2C}
-    //TODO: FIXME!!
     cMinScreenWidth:= min(cScreenWidth, 640);
     cMinScreenHeight:= min(cScreenHeight, 480);
     cOrigScreenWidth:= cScreenWidth;
     cOrigScreenHeight:= cScreenHeight;
-{$ENDIF}
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;
@@ -2744,6 +2761,13 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
+    cStereoDepth := 0;
+
+    MatrixLoadIdentity(mModelview);
+    MatrixLoadIdentity(mProjection);
+    aVertex:= 0;
+    aTexCoord:= 1;
+    aColor:= 2;
 end;
 
 procedure freeModule;

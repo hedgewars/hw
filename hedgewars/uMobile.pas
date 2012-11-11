@@ -73,7 +73,7 @@ begin
 end;
 
 // this function should make the device vibrate in some way
-procedure PerformRumble; inline;
+procedure performRumble; inline;
 {$IFDEF IPHONEOS}const kSystemSoundID_Vibrate = $00000FFF;{$ENDIF}
 begin
     // do not vibrate while synchronising a demo/save

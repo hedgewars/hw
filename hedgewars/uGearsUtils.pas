@@ -557,6 +557,7 @@ var x: LongInt;
     y, sy: LongInt;
     ar: array[0..1023] of TPoint;
     ar2: array[0..2047] of TPoint;
+    temp: TPoint;
     cnt, cnt2: Longword;
     delta: LongInt;
     ignoreNearObjects, ignoreOverlap, tryAgain: boolean;
@@ -579,7 +580,7 @@ while tryAgain do
                 repeat
                     inc(y, 2);
                 until (y >= cWaterLine) or
-                        (not ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or 
+                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or 
                         (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) = 0));
 
                 sy:= y;
@@ -587,7 +588,7 @@ while tryAgain do
                 repeat
                     inc(y);
                 until (y >= cWaterLine) or
-                        (not ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or 
+                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or 
                         (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) <> 0)); 
 
                 if (y - sy > Gear^.Radius * 2)
@@ -613,12 +614,15 @@ while tryAgain do
                 end;
 
             if cnt > 0 then
-                with ar[GetRandom(cnt)] do
+	    begin
+	       temp := ar[GetRandom(cnt)];
+               with temp do
                     begin
                     ar2[cnt2].x:= x;
                     ar2[cnt2].y:= y;
                     inc(cnt2)
-                    end
+		    end
+	       end
         until (x + Delta > Right);
 
         dec(Delta, 60)
@@ -632,12 +636,15 @@ while tryAgain do
     end;
 
 if cnt2 > 0 then
-    with ar2[GetRandom(cnt2)] do
+    begin
+    temp := ar2[GetRandom(cnt2)];
+    with temp do
         begin
         Gear^.X:= int2hwFloat(x);
         Gear^.Y:= int2hwFloat(y);
         AddFileLog('Assigned Gear coordinates (' + inttostr(x) + ',' + inttostr(y) + ')');
         end
+    end
     else
     begin
     OutError('Can''t find place for Gear', false);

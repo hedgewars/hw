@@ -83,8 +83,10 @@ function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloa
 var gear: PGear;
 begin
 inc(GCounter);
+
 AddFileLog('AddGear: #' + inttostr(GCounter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
+   
 New(gear);
 FillChar(gear^, sizeof(TGear), 0);
 gear^.X:= int2hwFloat(X);
@@ -525,7 +527,7 @@ else if Gear^.Kind = gtHedgehog then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if ((not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (WaterOpacity < $FF)))
+            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (WaterOpacity < $FF)))
             and (hwRound(Gear^.Y) < cWaterLine + 256) then
                 spawnHealthTagForHH(Gear, t);
             end;
