@@ -20,8 +20,13 @@ endif()
 set(CMAKE_C_COMPILER ${clang_executable})
 
 
+find_package(OPENGL REQUIRED)
 find_package(GLEW REQUIRED)
-
+find_package(SDL REQUIRED)
+find_package(SDL_mixer REQUIRED)
+find_package(SDL_net REQUIRED)
+find_package(SDL_image REQUIRED)
+find_package(SDL_ttf REQUIRED)
 
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
@@ -87,5 +92,16 @@ set(engine_hdr               uGame.h              uFloat.h
     )
 
 add_executable(hwengine WIN32 ${engine_src})
+
+target_link_libraries(hwengine  fpcrtl
+                                ${LUA_LIBRARY}
+                                ${OPENGL_LIBRARY}
+                                ${SDL_LIBRARY}
+                                ${SDLMIXER_LIBRARY}
+                                ${SDLNET_LIBRARY}
+                                ${SDLIMAGE_LIBRARY}
+                                ${SDLTTF_LIBRARY}
+                            )
+
 add_dependencies(hwengine engine_c fpcrtl)
 
