@@ -18,6 +18,7 @@ pascalLanguageDef
     , nestedComments = False
     , identStart     = letter <|> oneOf "_"
     , identLetter    = alphaNum <|> oneOf "_"
+    , opLetter       = letter
     , reservedNames  = [
             "begin", "end", "program", "unit", "interface"
             , "implementation", "and", "or", "xor", "shl"
@@ -27,7 +28,6 @@ pascalLanguageDef
             , "downto", "div", "mod", "record", "set", "nil"
             , "cdecl", "external", "if", "then", "else"
             ] -- ++ builtin
-    , reservedOpNames= []
     , caseSensitive  = False
     }
 

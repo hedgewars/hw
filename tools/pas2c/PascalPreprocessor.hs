@@ -15,9 +15,12 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
+
 initDefines = Map.fromList [
     ("FPC", "")
     , ("PAS2C", "")
+--    , ("WEBGL", "")
+--    , ("AI_MAINTHREAD", "")
     , ("ENDIAN_LITTLE", "")
     , ("S3D_DISABLED", "")
     ]
