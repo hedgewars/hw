@@ -161,21 +161,10 @@ const
     // do not change this value
     cDefaultZoomLevel = 2.0;
 
-{$IFDEF MOBILE}
-    cMaxZoomLevel = 0.5;
-    cMinZoomLevel = 3.5;
-    cZoomDelta = 0.20;
-{$ELSE}
-    cMaxZoomLevel = 1.0;
-    cMinZoomLevel = 3.0;
-    cZoomDelta = 0.25;
-{$ENDIF}
-
-    cMinMaxZoomLevelDelta = cMaxZoomLevel - cMinZoomLevel;
-
     cSendEmptyPacketTime = 1000;
     trigTurns = $80000001;
 
+    // game flags
     gfAny                = $FFFFFFFF;
     gfOneClanMode        = $00000001;           // used in trainings
     gfMultiWeapon        = $00000002;           // used in trainings
@@ -208,6 +197,7 @@ const
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
 
+    // gear states
     gstDrowning       = $00000001;
     gstHHDriven       = $00000002;
     gstMoving         = $00000004;
@@ -229,6 +219,7 @@ const
     gstHHGone         = $00100000;
     gstInvisible      = $00200000;
 
+    // gear messages
     gmLeft           = $00000001;
     gmRight          = $00000002;
     gmUp             = $00000004;
@@ -251,7 +242,12 @@ const
 
     cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;
-
+    
+    // ai hints
+    aihUsualProcessing    = $00000000;
+    aihDoesntMatter       = $00000001;
+    
+    // ammo properties
     ammoprop_Timerable    = $00000001;
     ammoprop_Power        = $00000002;
     ammoprop_NeedTarget   = $00000004;
@@ -274,6 +270,7 @@ const
 
     AMMO_INFINITE = 100;
 
+    // explosion flags
     //EXPLAllDamageInRadius = $00000001;  Completely unused for ages
     EXPLAutoSound         = $00000002;
     EXPLNoDamage          = $00000004;

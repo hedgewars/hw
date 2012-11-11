@@ -100,7 +100,7 @@ data RoomInfo =
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
-        roomBansList :: [B.ByteString],
+        roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
     }

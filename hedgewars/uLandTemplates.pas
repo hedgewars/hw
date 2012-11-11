@@ -24,12 +24,10 @@ uses SDLh;
 
 const NTPX = Low(SmallInt);
 
-type TRectArray = array[0..64] of TSDL_Rect;
-     PRectArray = ^TRectArray;
-     TPointArray = array[0..64] of TPoint;
+type TPointArray = array[0..64] of TSDL_Rect;
      PPointArray = ^TPointArray;
      TEdgeTemplate = record
-                     BasePoints: PRectArray;
+                     BasePoints: PPointArray;
                      BasePointsCount: Longword;
                      FillPoints: PPointArray;
                      FillPointsCount: Longword;

@@ -139,7 +139,7 @@ i:= 0;
             path:= Pathz[ptVoices] + '/' + locName;
             if DirectoryExists(path) then
                 name:= locName
-            else if Length(cLocale) > 2
+            else if Length(cLocale) > 3
                 then
                 begin
                 locName:= name+'_'+Copy(cLocale,1,2);
@@ -270,6 +270,8 @@ begin
             s:= UserPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             if (not FileExists(s)) then
                 s:= Pathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
+            if (not FileExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+                s:= Pathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(SDL_RWFromFile(Str2PChar(s), _P'rb'), 1);
             if voicepack^.chunks[snd] = nil then
@@ -494,7 +496,7 @@ end;
 
 procedure MuteAudio;
 begin
-    if (not isSoundEnabled) then
+    if not isSoundEnabled then
         exit;
 
     if (isAudioMuted) then

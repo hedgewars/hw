@@ -276,7 +276,7 @@ processAction ChangeMaster = do
 
     newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo newRoomName newRoom')
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -395,6 +395,7 @@ processAction (RemoveTeam teamName) = do
             teams = Prelude.filter (\t -> teamName /= teamname t) $ teams r
             , gameInfo = liftM (\g -> g{leftTeams = teamName : leftTeams g}) $ gameInfo r
             })
+        : SendUpdateOnThisRoom
         : AnswerClients chans ["REMOVE_TEAM", teamName]
         : [SendTeamRemovalMessage teamName | inGame]
 
