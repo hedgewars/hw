@@ -689,7 +689,9 @@ end;
 
 function glLoadExtension(extension : shortstring) : boolean;
 begin
-{$IF (GLunit = gles11) OR DEFINED(PAS2C)}
+//TODO: pas2c doesn't handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
+{$IFNDEF PAS2C}
+{$IF GLunit = gles11}
     // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
     extension:= extension; // avoid hint
     glLoadExtension:= false;
@@ -700,6 +702,7 @@ begin
         AddFileLog('OpenGL - "' + extension + '" loaded')
     else
         AddFileLog('OpenGL - "' + extension + '" failed to load');
+{$ENDIF}
 {$ENDIF}
 end;
 
