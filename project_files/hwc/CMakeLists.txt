@@ -31,9 +31,9 @@ find_package(SDL_image REQUIRED)
 find_package(SDL_ttf REQUIRED)
 
 #compile our rtl implementation
+add_subdirectory(rtl)
 include_directories("${GLEW_INCLUDE_PATH}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/rtl")
-add_subdirectory(rtl)
 
 
 configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)

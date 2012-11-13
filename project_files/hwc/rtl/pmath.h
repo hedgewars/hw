@@ -2,6 +2,7 @@
 #define PMATH_H_
 
 #include <stdint.h>
+#include <math.h>
 
 #define     fpcrtl_min(a, b)                ((a) < (b) ? (a) : (b))
 #define     fpcrtl_max(a, b)                ((a) > (b) ? (a) : (b))

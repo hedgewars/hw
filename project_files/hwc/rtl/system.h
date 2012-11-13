@@ -2,8 +2,7 @@
 #define SYSTEM_H_
 
 #include <time.h>
-#include <math.h>
-#include "types.h"
+#include "Types.h"
 #include "misc.h"
 
 extern double pi;

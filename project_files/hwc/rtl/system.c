@@ -3,12 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
-#include <math.h>
 
 int paramCount;
 string255 params[MAX_PARAMS];
-
-double pi = M_PI;
 
 string255 fpcrtl_copy(string255 s, Integer index, Integer count) {
     string255 result = STRINIT("");
