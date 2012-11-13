@@ -32,22 +32,22 @@ find_package(SDL_ttf REQUIRED)
 
 #compile our rtl implementation
 include_directories("${GLEW_INCLUDE_PATH}")
-include_directories(rtl)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/rtl")
 add_subdirectory(rtl)
 
 
-configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
+configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #get the list of pas files that are going to be converted and compiled
-file(GLOB engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/*.pas")
+file(GLOB engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/*.pas")
 #TODO: temporary until cmake can configure itself accordingly
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uWeb.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uVideoRec.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/uTouch.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/PNGh.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/pas2cSystem.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/pas2cRedo.pas")
-list(REMOVE_ITEM engine_sources_pas "${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/uWeb.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/uVideoRec.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/uTouch.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/PNGh.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas")
+list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/hwLibrary.pas")
 
 foreach(sourcefile ${engine_sources_pas})
     get_filename_component(sourcename ${sourcefile} NAME_WE) #drops .pas
@@ -58,7 +58,7 @@ endforeach()
 add_custom_command(OUTPUT ${engine_sources}
         COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
         ARGS -n "hwengine"
-             -i "${hedgewars_SOURCE_DIR}/hedgewars"
+             -i "${CMAKE_SOURCE_DIR}/hedgewars"
              -o "${CMAKE_CURRENT_BINARY_DIR}"
              -a "${CMAKE_CURRENT_BINARY_DIR}"
         DEPENDS pas2c

@@ -1,5 +1,7 @@
 #this file is included only when system Lua library is not found
 
+#TODO: when NOPASCAL=1 it should use clang here too
+
 file(GLOB lua_src *.c *.h)
 
 if(WIN32)
