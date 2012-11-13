@@ -344,7 +344,7 @@ Please pick another nickname:</source>
     </message>
 </context>
 <context>
-    <name>LibavIteraction</name>
+    <name>LibavInteraction</name>
     <message>
         <source>Duration: %1m %2s
 </source>
@@ -832,12 +832,8 @@ Please pick another nickname:</source>
         <translation>Kontroll</translation>
     </message>
     <message>
-        <source>DLC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished">Nedladdningsbart innehåll</translation>
+        <translation type="obsolete">Nedladdningsbart innehåll</translation>
     </message>
 </context>
 <context>
@@ -2148,6 +2144,26 @@ Vill du fortfarande gå med i rummet?</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restore default coding parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload this video to your Youtube account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

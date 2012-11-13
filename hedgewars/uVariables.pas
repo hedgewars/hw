@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uUtils;
 
 var
 /////// init flags ///////
@@ -108,7 +108,7 @@ var
     zoom             : GLfloat;
     ZoomValue        : GLfloat;
 
-    cWaterLine       : Word;
+    cWaterLine       : LongInt;
     cGearScrEdgesDist: LongInt;
     isAudioMuted     : boolean;
 
@@ -122,8 +122,8 @@ var
     Pathz: array[TPathType] of shortstring;
     UserPathz: array[TPathType] of shortstring;
     CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
-    LAND_WIDTH       : Word;
-    LAND_HEIGHT      : Word;
+    LAND_WIDTH       : LongInt;
+    LAND_HEIGHT      : LongInt;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
@@ -164,6 +164,10 @@ var
     AmmoMenuInvalidated: boolean;
     AmmoRect		: TSDL_Rect;
     HHTexture       : PTexture;
+    cMaxZoomLevel   : real;
+    cMinZoomLevel   : real;
+    cZoomDelta      : real;
+    cMinMaxZoomLevelDelta : real;
 
 
     flagMakeCapture : boolean;
@@ -192,8 +196,6 @@ var
     hiTicks: Word;
 
     LuaGoals        : shortstring;
-    hiddenHedgehogs : array [0..cMaxHHs] of PHedgehog;
-    hiddenHedgehogsNumber : longint;
 
     LuaTemplateNumber : LongWord;
 
@@ -716,6 +718,7 @@ const
             (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
             (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
             (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
+            (FileName:          'JustYouWait.ogg'; Path: ptVoices),// sndJustYouWait
             (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
             (FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
             (FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
@@ -2509,8 +2512,6 @@ var
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
 
-    hideAmmoMenu: boolean;
-
     ControllerNumControllers: Integer;
     ControllerEnabled: Integer;
     ControllerNumAxes: array[0..5] of Integer;
@@ -2555,6 +2556,7 @@ begin
 
     UserPathPrefix  := '';
     ipcPort         := 0;
+    recordFileName  := '';
     UserNick        := '';
     cStereoMode     := smNone;
     GrayScale       := false;
@@ -2573,19 +2575,16 @@ begin
 end;
 
 procedure initModule;
+var s: ShortString;
 begin
-
-    if (Length(cLocaleFName) > 6) then
-        cLocale := Copy(cLocaleFName,1,5)
-    else
-        cLocale := Copy(cLocaleFName,1,2);
+    cLocale:= cLocaleFName;
+    SplitByChar(cLocale, s, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
     cOnlyStats          := False;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
-    recordFileName      := '';
     cReadyDelay         := 5000;
     Pathz               := cPathz;
 
@@ -2633,6 +2632,18 @@ begin
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
+
+{$IFDEF MOBILE}
+    cMaxZoomLevel:= 0.5;
+    cMinZoomLevel:= 3.5;
+    cZoomDelta:= 0.20;
+{$ELSE}
+    cMaxZoomLevel:= 1.0;
+    cMinZoomLevel:= 3.0;
+    cZoomDelta:= 0.25;
+{$ENDIF}
+
+    cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel;
 
     // int, longint longword and byte
     CursorMovementX     := 0;
@@ -2730,7 +2741,6 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
-    hiddenHedgehogsNumber:=0;
 end;
 
 procedure freeModule;

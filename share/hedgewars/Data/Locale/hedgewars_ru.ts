@@ -346,23 +346,43 @@ Please pick another nickname:</source>
     </message>
 </context>
 <context>
+    <name>LibavInteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished">Длительность: %1мин %2сек</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished">Видео: %1x%2, </translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished">%1 кадров/сек,</translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished">Аудио: </translation>
+    </message>
+</context>
+<context>
     <name>LibavIteraction</name>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Длительность: %1мин %2сек</translation>
+        <translation type="obsolete">Длительность: %1мин %2сек</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Видео: %1x%2, </translation>
+        <translation type="obsolete">Видео: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 кадров/сек,</translation>
+        <translation type="obsolete">%1 кадров/сек,</translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation>Аудио: </translation>
+        <translation type="obsolete">Аудио: </translation>
     </message>
 </context>
 <context>
@@ -838,14 +858,6 @@ Please pick another nickname:</source>
     <message>
         <source>Control</source>
         <translation>Управление</translation>
-    </message>
-    <message>
-        <source>DLC</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2009,6 +2021,8 @@ Do you still want to join the room?</source>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -2160,6 +2174,26 @@ Do you still want to join the room?</source>
     <message>
         <source>Cancel uploading</source>
         <translation>Отменить отправку</translation>
+    </message>
+    <message>
+        <source>Restore default coding parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload this video to your Youtube account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -28,11 +28,12 @@ const MAXBONUS = 1024;
       afErasesLand = $00000002;
       afSetSkip    = $00000004;
 
+      BadTurn = Low(LongInt) div 4;
 
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
-    skip: boolean;
+    skip, matters: boolean;
     end;
 TTargets = record
     Count: Longword;
@@ -110,13 +111,15 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             for i:= 0 to cMaxHHIndex do
                 if (Hedgehogs[i].Gear <> nil)
-                and (Hedgehogs[i].Gear <> ThinkingHH) 
+                and (Hedgehogs[i].Gear <> ThinkingHH)
                 and (Hedgehogs[i].Gear^.Health > Hedgehogs[i].Gear^.Damage) 
                     then
                     begin
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
                         skip:= false;
+                        matters:= (Hedgehogs[i].Gear^.AIHints and aihDoesntMatter) = 0;
+                        
                         Point.X:= hwRound(Gear^.X);
                         Point.Y:= hwRound(Gear^.Y);
                         if Clan <> CurrentTeam^.Clan then
@@ -407,6 +410,7 @@ end;
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
     dX, dY, dmgMod: real;
+    hadSkips: boolean;
 begin
 fallDmg:= 0;
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
@@ -416,14 +420,22 @@ with Targets.ar[Targets.Count] do
     begin
     Point.x:= hwRound(Me^.X);
     Point.y:= hwRound(Me^.Y);
+    skip:= false;
+    matters:= true;
     Score:= - ThinkingHH^.Health
     end;
 // rate explosion
 dmgBase:= r + cHHRadius div 2;
+
 if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
+
+hadSkips:= false;
+
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
+      if not matters then hadSkips:= true
+        else
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
@@ -456,7 +468,11 @@ for i:= 0 to Targets.Count do
                 else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
             end;
         end;
-RateExplosion:= rate;
+
+if hadSkips and (rate = 0) then
+    RateExplosion:= BadTurn
+    else
+    RateExplosion:= rate;
 end;
 
 function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
@@ -472,7 +488,7 @@ for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
       if skip then 
         if (Flags and afSetSkip = 0) then skip:= false else {still skip}
-      else  
+      else if matters then
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < r then
@@ -506,6 +522,7 @@ end;
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
     dX, dY, dmgMod: real;
+    hadSkips: boolean;
 begin
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
@@ -516,14 +533,22 @@ with Targets.ar[Targets.Count] do
     begin
     Point.x:= hwRound(Me^.X);
     Point.y:= hwRound(Me^.Y);
+    skip:= false;
+    matters:= true;
     Score:= - ThinkingHH^.Health
     end;
 // rate shot
 baseDmg:= cHHRadius + cShotgunRadius + 4;
+
 if GameFlags and gfSolidLand = 0 then erasure:= cShotgunRadius
 else erasure:= 0;
+
+hadSkips:= false;
+
 for i:= 0 to Targets.Count do
     with Targets.ar[i] do
+      if not matters then hadSkips:= true
+        else
         begin
         dmg:= 0;
         if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
@@ -557,8 +582,12 @@ for i:= 0 to Targets.Count do
             else
                 dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
             end;
-        end;        
-RateShotgun:= rate * 1024;
+        end;
+
+if hadSkips and (rate = 0) then
+    RateShotgun:= BadTurn
+    else
+    RateShotgun:= rate * 1024;
 end;
 
 function RateHammer(Me: PGear): LongInt;
@@ -571,6 +600,7 @@ rate:= 0;
 
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
+      if matters then
          // hammer hit radius is 8, shift is 10
         if abs(Point.x - x) + abs(Point.y - y) < 18 then
             begin

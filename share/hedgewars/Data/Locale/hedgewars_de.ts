@@ -346,23 +346,43 @@ Please pick another nickname:</source>
     </message>
 </context>
 <context>
+    <name>LibavInteraction</name>
+    <message>
+        <source>Duration: %1m %2s
+</source>
+        <translation type="unfinished">Dauer: %1m %2s</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2, </source>
+        <translation type="unfinished">Video: %1x%2, </translation>
+    </message>
+    <message>
+        <source>%1 fps, </source>
+        <translation type="unfinished">%1 fps, </translation>
+    </message>
+    <message>
+        <source>Audio: </source>
+        <translation type="unfinished">Audio: </translation>
+    </message>
+</context>
+<context>
     <name>LibavIteraction</name>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Dauer: %1m %2s</translation>
+        <translation type="obsolete">Dauer: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Video: %1x%2, </translation>
+        <translation type="obsolete">Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="obsolete">%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation>Audio: </translation>
+        <translation type="obsolete">Audio: </translation>
     </message>
 </context>
 <context>
@@ -835,11 +855,11 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>DLC</source>
-        <translation>DLC</translation>
+        <translation type="obsolete">DLC</translation>
     </message>
     <message>
         <source>Downloadable Content</source>
-        <translation>Herunterladbare Inhalte</translation>
+        <translation type="obsolete">Herunterladbare Inhalte</translation>
     </message>
 </context>
 <context>
@@ -2158,6 +2178,26 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Cancel uploading</source>
         <translation>Hochladen abbrechen</translation>
+    </message>
+    <message>
+        <source>Restore default coding parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open the video directory in your system</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete this video</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload this video to your Youtube account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
