@@ -14,6 +14,9 @@
 #include "pmath.h"
 
 #ifndef EMSCRIPTEN
+#if __APPLE__
+#define main SDL_main
+#endif
 #include "GL/glew.h"
 #endif
 
