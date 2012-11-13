@@ -249,6 +249,7 @@ add_subdirectory(hedgewars)
 
 # physfs library
 add_subdirectory(misc/physfs)
+add_subdirectory(misc/physfs/extras)
 
 #Android related build scripts
 if(ANDROID)

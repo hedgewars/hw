@@ -56,9 +56,11 @@ procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands,
-     uDebug{$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
-     {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
+uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
+    , uPhysFSLayer
+    , uDebug
+    {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
+    {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
@@ -564,7 +566,7 @@ begin
     WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
     s:= filename + '.png';
-    tmpsurf:= IMG_Load(Str2PChar(s));
+    tmpsurf:= IMG_Load_RW(PHYSFSRWOPS_openRead(Str2PChar(s)), true);
 
     if tmpsurf = nil then
     begin
@@ -596,13 +598,7 @@ function LoadDataImage(const path: TPathType; const filename: shortstring; image
 var tmpsurf: PSDL_Surface;
 begin
     // check for file in user dir (never critical)
-    tmpsurf:= LoadImage(UserPathz[path] + '/' + filename, imageFlags and (not ifCritical));
-
-    // if unsuccessful check data dir
-    if (tmpsurf = nil) then
-        tmpsurf:= LoadImage(Pathz[path] + '/' + filename, imageFlags);
-
-    LoadDataImage:= tmpsurf;
+    tmpsurf:= LoadImage(cPathz[path] + '/' + filename, imageFlags);
 end;
 
 

@@ -275,6 +275,7 @@ endif()
 
 # compile physfs before engine
 add_dependencies(${engine_output_name} physfs)
+add_dependencies(${engine_output_name} physfsrwops)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
