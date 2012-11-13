@@ -6,10 +6,10 @@ find_package(SDL_mixer)
 
 include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
 
-configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
+configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
-set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
+set(hwengine_project ${CMAKE_SOURCE_DIR}/hedgewars/hwengine.pas)
 set(engine_output_name "hwengine")
 
 set(engine_sources
@@ -82,7 +82,7 @@ set(engine_sources
 
 if(LIBENGINE)
     message(STATUS "Engine will be built as library (experimental)")
-    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
+    set(hwengine_project ${CMAKE_SOURCE_DIR}/hedgewars/hwLibrary.pas)
     set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
@@ -201,7 +201,7 @@ if(fpc_version LESS "020600")
     else()
         set(SAFE_BUILD_TOOL ${CMAKE_BUILD_TOOL})
     endif()
-    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/hedgewars")
 endif()
 
 

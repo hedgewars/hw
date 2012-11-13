@@ -8,8 +8,7 @@ FOREACH(policy CMP0003 CMP0012)
         CMAKE_POLICY(SET ${policy} NEW)
     ENDIF()
 ENDFOREACH()
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
-
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
 
 #detect Mercurial revision (if present)
 set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME

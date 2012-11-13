@@ -37,6 +37,6 @@ endif(MSVC)
 endif(WIN32)
 
 #type make openalbridge_test to get a small executable test
-add_executable(openalbridge_test "${hedgewars_SOURCE_DIR}/misc/libopenalbridge/tester.c")
+add_executable(openalbridge_test "${CMAKE_SOURCE_DIR}/misc/libopenalbridge/tester.c")
 target_link_libraries(openalbridge_test openalbridge ${OPENAL_LIBRARY} ${OGGVORBIS_LIBRARIES})
 
