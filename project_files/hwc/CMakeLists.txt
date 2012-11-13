@@ -35,7 +35,6 @@ add_subdirectory(rtl)
 include_directories("${GLEW_INCLUDE_PATH}")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/rtl")
 
-
 configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #get the list of pas files that are going to be converted and compiled
@@ -79,6 +78,26 @@ target_link_libraries(hwengine  fpcrtl
                                 ${SDLTTF_LIBRARY}
                                 #TODO: add other libraries
                             )
+
+#TODO: move this away in its proper findxxx.cmake
+if(APPLE)
+    #let's look for the installed sdlmain file; if it is not found, let's build our own
+    find_package(SDL REQUIRED)
+    #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+    #find libsdmain.a
+    find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_dir}/Resources/)
+
+    if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
+        include_directories(${SDL_INCLUDE_DIR})
+        add_library (SDLmain STATIC ${CMAKE_SOURCE_DIR}/hedgewars/sdlmain_osx/SDLMain.m)
+        #add a dependency to the hwengine target
+        set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
+    endif()
+
+    target_link_libraries(hwengine ${SDLMAIN_LIB})
+endif(APPLE)
+
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
 
