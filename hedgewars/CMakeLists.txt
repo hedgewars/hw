@@ -197,7 +197,14 @@ endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if(fpc_version LESS "020600")
-    add_custom_target(ENGINECLEAN COMMAND ${CMAKE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+    #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
+    #TODO: check if this is needed on windows too
+    if(UNIX)
+        set(SAFE_BUILD_TOOL $(MAKE))
+    else()
+        set(SAFE_BUILD_TOOL ${CMAKE_BUILD_TOOL})
+    endif()
+    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
 endif()
 
 
@@ -205,6 +212,11 @@ if(NOT NOVIDEOREC)
     set(FFMPEG_FIND_QUIETLY true)
     find_package(FFMPEG)
     if(${FFMPEG_FOUND})
+        # TODO: this check is only for SDL < 2
+        # fpc will take care of linking but we need to have this library installed
+        find_package(GLUT REQUIRED)
+
+        #TODO: convert avwrapper to .pas unit so we can skip this step
         include_directories(${FFMPEG_INCLUDE_DIR})
         set(pascal_flags "-dUSE_VIDEO_RECORDING" ${pascal_flags})
         IF (WIN32)
@@ -216,9 +228,6 @@ if(NOT NOVIDEOREC)
             add_library(avwrapper STATIC avwrapper.c)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
         ENDIF()
-        if(fpc_version LESS "020600")
-            add_dependencies(avwrapper ENGINECLEAN)
-        endif()
     else()
         message(STATUS "Could NOT find FFMPEG/LibAV, video recording will be disabled")
     endif()
@@ -264,7 +273,14 @@ if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
 
+# compile physfs before engine
 add_dependencies(${engine_output_name} physfs)
+
+#when ffmpeg/libav is found we need to compile it before engine
+#TODO: convert avwrapper to .pas unit so we can skip this step
+if(${FFMPEG_FOUND})
+    add_dependencies(${engine_output_name} avwrapper)
+endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if((fpc_version LESS "020600") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))

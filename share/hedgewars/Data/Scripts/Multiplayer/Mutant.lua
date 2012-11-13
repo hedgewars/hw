@@ -209,6 +209,7 @@ function onNewTurn()
     checkScore()
     giveWeapons(CurrentHedgehog)
     drawCircles()
+    setAIHints()
     kill_reward= numhhs*10
 
     if CurrentHedgehog == mutant then
@@ -240,7 +241,7 @@ function countBodies()
             AddCaption(loc("HOLY SHIT!"))
             PlaySound(sndLaugh)
         elseif killsCounter > 8 then
-            AddCaption(loc("FAG"))
+            AddCaption(loc("INSANITY"))
         end
 
 end
@@ -397,6 +398,16 @@ function backToNormal(gear)
     setGearValue(mutant,"SelfDestruct",false)
     mt_hurt=false
     mutant=nil
+end
+
+function setAIHints()
+    for i = 0, #hhs do
+        if mutant == nil or hhs[i] == mutant or CurrentHedgehog == mutant then
+            SetGearAIHints(hhs[i], aihUsual)
+        else
+            SetGearAIHints(hhs[i], aihDoesntMatter)
+        end
+    end
 end
 
 function removeFeeder(gear)
