@@ -317,7 +317,14 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 // at final check where we go after jump walking backward
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
+                        begin
+                        if Me^.dX.isNegative then
+                            AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
+                        else
+                            AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
+
                         AddAction(MadeActions, aia_LJump, 0, 305 + random(50), 0, 0);
+                        end;
 
                 // push current position so we proceed from it after checking jump+forward walk opportunities
                 if CanGo then Push(ticks, Actions, Me^, Me^.Message);
@@ -353,6 +360,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 addMark(hwRound(Me^.X), hwRound(Me^.Y), markWalkedHere);
 
                 TestAmmos(Actions, Me, ticks shr 12 = oldticks shr 12);
+                
                 end;
                 
             if GoInfo.FallPix >= FallPixForBranching then
@@ -429,7 +437,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
 
-        end else
+        end else SDL_Delay(100)
 else
     begin
     BackMe:= PGear(Me)^;
