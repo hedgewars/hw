@@ -1,12 +1,7 @@
 
-set(fpcrtl_src  fileio.c
-                misc.c
-                pmath.c
-                system.c
-                sysutils.c
-)
-
 include_directories(${GLEW_INCLUDE_PATH})
+
+file(GLOB fpcrtl_src *.c)
 
 add_library(fpcrtl ${fpcrtl_src})
 

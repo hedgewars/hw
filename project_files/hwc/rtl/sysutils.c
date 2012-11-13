@@ -1,10 +1,12 @@
-#include "sysutils.h"
-#include "system.h"
-#include "misc.h"
+#include "SysUtils.h"
+
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "system.h"
+#include "misc.h"
 
 TDateTime fpcrtl_date()
 {

@@ -1,7 +1,6 @@
 #include "pmath.h"
-#include <math.h>
 #include <stdlib.h>
-#include <stdint.h>
+#include <math.h>
 
 /*
  * power raises base to the power power.

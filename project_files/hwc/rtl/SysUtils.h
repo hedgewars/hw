@@ -1,7 +1,7 @@
 #ifndef _FPCRTL_SYSUTILS_H_
 #define _FPCRTL_SYSUTILS_H_
 
-#include "types.h"
+#include "Types.h"
 
 // EFFECTS: return the current date time in pascal notation
 //          http://www.merlyn.demon.co.uk/del-prgg.htm#TDT

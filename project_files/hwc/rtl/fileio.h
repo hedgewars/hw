@@ -2,7 +2,7 @@
 #define FILEIO_H_
 
 #include <stdio.h>
-#include "types.h"
+#include "Types.h"
 #include "misc.h"
 
 extern        int                                       FileMode;
