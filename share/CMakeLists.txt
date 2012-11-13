@@ -20,8 +20,8 @@ IF(APPLE OR CROSSAPPLE)
 		DESTINATION ../)
 	install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/Icon.icns"
 		DESTINATION ../Resources/)
-	install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/share/hwico.icns"
+	install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/hwico.icns"
 		DESTINATION ../Resources/)
-	install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/share/dsa_pub.pem"
+	install(PROGRAMS "${CMAKE_CURRENT_SOURCE_DIR}/dsa_pub.pem"
 		DESTINATION ../Resources/)
 ENDIF(APPLE OR CROSSAPPLE)
