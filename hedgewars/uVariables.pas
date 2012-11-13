@@ -225,27 +225,27 @@ var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
-        '',                              // ptData
-        'Graphics',                      // ptGraphics
-        'Themes',                        // ptThemes
-        'Themes/Bamboo',                 // ptCurrTheme
-        'Teams',                         // ptTeams
-        'Maps',                          // ptMaps
+        '/',                             // ptData
+        '/Graphics',                     // ptGraphics
+        '/Themes',                       // ptThemes
+        '/Themes/Bamboo',                // ptCurrTheme
+        '/Teams',                        // ptTeams
+        '/Maps',                         // ptMaps
         '',                              // ptMapCurrent
-        'Demos',                         // ptDemos
-        'Sounds',                        // ptSounds
-        'Graphics/Graves',               // ptGraves
-        'Fonts',                         // ptFonts
-        'Forts',                         // ptForts
-        'Locale',                        // ptLocale
-        'Graphics/AmmoMenu',             // ptAmmoMenu
-        'Graphics/Hedgehog',             // ptHedgehog
-        'Sounds/voices',                 // ptVoices
-        'Graphics/Hats',                 // ptHats
-        'Graphics/Flags',                // ptFlags
-        'Missions/Maps',                 // ptMissionMaps
-        'Graphics/SuddenDeath',           // ptSuddenDeath
-        'Graphics/Buttons'                // ptButton
+        '/Demos',                        // ptDemos
+        '/Sounds',                       // ptSounds
+        '/Graphics/Graves',              // ptGraves
+        '/Fonts',                        // ptFonts
+        '/Forts',                        // ptForts
+        '/Locale',                       // ptLocale
+        '/Graphics/AmmoMenu',            // ptAmmoMenu
+        '/Graphics/Hedgehog',            // ptHedgehog
+        '/Sounds/voices',                // ptVoices
+        '/Graphics/Hats',                // ptHats
+        '/Graphics/Flags',               // ptFlags
+        '/Missions/Maps',                // ptMissionMaps
+        '/Graphics/SuddenDeath',         // ptSuddenDeath
+        '/Graphics/Buttons'              // ptButton
     );
 
     Fontz: array[THWFont] of THHFont = (
