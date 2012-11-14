@@ -312,7 +312,7 @@ if not reload then
             begin
             s:= cPathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
-            Handle:= TTF_OpenFontRW(Str2PChar(s), true, Height);
+            Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
             SDLTry(Handle <> nil, true);
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)

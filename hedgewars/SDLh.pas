@@ -1004,7 +1004,7 @@ function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Colo
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
-function  TTF_OpenFontRW(const filename: PChar; freesrc: LongBool; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+function  TTF_OpenFontRW(src: PSDL_RWops; freesrc: LongBool; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
