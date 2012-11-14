@@ -380,11 +380,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             flags.remove(0, 1);
             char c = flags[0].toAscii();
+            bool inRoom = (netClientState == InRoom || netClientState == InGame);
 
             switch(c)
             {
                 // flag indicating if a player is ready to start a game
                 case 'r':
+                    if(inRoom)
                         foreach (const QString & nick, nicks)
                         {
                             if (nick == mynick)
@@ -401,14 +403,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
-
+                // flag indicating if a player has engine running
                 case 'g':
+                    if(inRoom)
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::InGame, setFlag);
                         break;
 
                 // flag indicating if a player is the host/master of the room
                 case 'h':
+                    if(inRoom)
                         foreach (const QString & nick, nicks)
                         {
                             if (nick == mynick)
