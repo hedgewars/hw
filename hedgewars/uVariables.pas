@@ -118,9 +118,6 @@ var
     SDWaterOpacity: byte;
     GrayScale: Boolean;
 
-    // originally from uConsts
-    Pathz: array[TPathType] of shortstring;
-    UserPathz: array[TPathType] of shortstring;
     CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : LongInt;
     LAND_HEIGHT      : LongInt;
@@ -2586,7 +2583,6 @@ begin
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
-    Pathz               := cPathz;
 
         {*  REFERENCE
       4096 -> $FFFFF000

@@ -310,11 +310,9 @@ if not reload then
     for fi:= Low(THWFont) to High(THWFont) do
         with Fontz[fi] do
             begin
-            s:= UserPathz[ptFonts] + '/' + Name;
-            if not FileExists(s) then
-                s:= Pathz[ptFonts] + '/' + Name;
+            s:= cPathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
-            Handle:= TTF_OpenFont(Str2PChar(s), Height);
+            Handle:= TTF_OpenFontRW(Str2PChar(s), true, Height);
             SDLTry(Handle <> nil, true);
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
@@ -566,7 +564,7 @@ begin
     WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
     s:= filename + '.png';
-    tmpsurf:= IMG_Load_RW(PHYSFSRWOPS_openRead(Str2PChar(s)), true);
+    tmpsurf:= IMG_Load_RW(rwopsOpenRead(s), true);
 
     if tmpsurf = nil then
     begin

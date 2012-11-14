@@ -426,10 +426,8 @@ procedure LoadMapConfig;
 var f: textfile;
     s: shortstring;
 begin
-// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
-s:= UserPathz[ptMapCurrent] + '/map.cfg';
-if not FileExists(s) then
-    s:= Pathz[ptMapCurrent] + '/map.cfg';
+s:= cPathz[ptMapCurrent] + '/map.cfg';
+
 WriteLnToConsole('Fetching map HH limit');
 {$I-}
 Assign(f, s);
@@ -437,7 +435,7 @@ filemode:= 0; // readonly
 Reset(f);
 if IOResult <> 0 then
     begin
-    s:= Pathz[ptMissionMaps] + '/' + ExtractFileName(Pathz[ptMapCurrent]) + '/map.cfg';
+    s:= cPathz[ptMissionMaps] + '/' + ExtractFileName(cPathz[ptMapCurrent]) + '/map.cfg';
     Assign(f, s);
     Reset(f);
     end;
@@ -459,7 +457,7 @@ begin
 tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
-    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
@@ -533,7 +531,7 @@ AddProgress;
 tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
-    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
@@ -581,7 +579,7 @@ end;
 
 procedure GenMap;
 var x, y, w, c: Longword;
-    usermap, usermask, map, mask: shortstring;
+    map, mask: shortstring;
     maskOnly: boolean;
 begin
     hasBorder:= false;
@@ -594,14 +592,11 @@ begin
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
 
     if (GameFlags and gfForts) = 0 then
-        if Pathz[ptMapCurrent] <> '' then
+        if cPathz[ptMapCurrent] <> '' then
             begin
-            usermap:= UserPathz[ptMapCurrent] + '/map.png';
-            usermask:= UserPathz[ptMapCurrent] + '/mask.png';
-            map:= Pathz[ptMapCurrent] + '/map.png';
-            mask:= Pathz[ptMapCurrent] + '/mask.png';
-            if (not(FileExists(usermap)) and FileExists(usermask)) or
-               (not(FileExists(map)) and FileExists(mask)) then
+            map:= cPathz[ptMapCurrent] + '/map.png';
+            mask:= cPathz[ptMapCurrent] + '/mask.png';
+            if (not(FileExists(map)) and FileExists(mask)) then
                 begin
                 maskOnly:= true;
                 LoadMask;
@@ -696,7 +691,7 @@ if (GameFlags and gfBottomBorder) <> 0 then
 if (GameFlags and gfDisableGirders) <> 0 then
     hasGirders:= false;
 
-if (GameFlags and gfForts = 0) and (maskOnly or (Pathz[ptMapCurrent] = '')) then
+if (GameFlags and gfForts = 0) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
     AddObjects
     
 else
