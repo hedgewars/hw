@@ -1592,7 +1592,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushstring(L, str2pchar(Pathz[ptData]));
+        lua_pushstring(L, str2pchar(cPathz[ptData]));
     lc_getdatapath:= 1
 end;
 
@@ -1604,7 +1604,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushstring(L, str2pchar(UserPathz[ptData]));
+        lua_pushstring(L, str2pchar(cPathz[ptData]));
     lc_getuserdatapath:= 1
 end;
 
@@ -1969,9 +1969,7 @@ procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
 begin
-s:= UserPathz[ptData] + '/' + name;
-if not FileExists(s) then
-    s:= Pathz[ptData] + '/' + name;
+s:= cPathz[ptData] + '/' + name;
 if not FileExists(s) then
     exit;
 

@@ -344,16 +344,6 @@ begin
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
-    for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if (p <> ptMapCurrent) and (p <> ptData) then
-            UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
-
-    UserPathz[ptData]:= UserPathPrefix + '/Data';
-
-    for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if p <> ptMapCurrent then
-            Pathz[p]:= PathPrefix + '/' + Pathz[p];
-
     WriteToConsole('Init SDL... ');
     SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
@@ -382,18 +372,15 @@ begin
     InitKbdKeyTable();
     AddProgress();
 
-    LoadLocale(UserPathz[ptLocale] + '/en.txt');  // Do an initial load with english
-    LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
+    LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
         begin
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocale) > 3) and (Copy(cLocale,1,2) <> 'en') then
+        if (Length(cLocale) > 3) and (Copy(cLocale, 1, 2) <> 'en') then
             begin
-            LoadLocale(UserPathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
-            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt')
+            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLocale, 1, 2) + '.txt')
             end;
-        LoadLocale(UserPathz[ptLocale] + '/' + cLocaleFName);
-        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName)
+        LoadLocale(cPathz[ptLocale] + '/' + cLocaleFName)
         end
     else cLocale := 'en';
 

@@ -429,9 +429,7 @@ if GrayScale then
         end
     end;
 
-s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
-if not FileExists(s) then
-    s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
+s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 Assign(f, s);
 {$I-}
