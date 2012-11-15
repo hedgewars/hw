@@ -146,6 +146,7 @@ var t: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
 begin
+    if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
@@ -873,6 +874,7 @@ procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
 begin
+    if cOnlyStats then exit;
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
@@ -1127,10 +1129,14 @@ var flags: Longword = 0;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
+    if cOnlyStats then
+        begin
+        MaxTextureSize:= 1024;
+        exit
+        end;
     if Length(s) = 0 then
-        cFullScreen:= (not cFullScreen)
-    else
-        cFullScreen:= s = '1';
+         cFullScreen:= (not cFullScreen)
+    else cFullScreen:= s = '1';
 
     AddFileLog('Preparing to change video parameters...');
 {$IFDEF SDL13}
