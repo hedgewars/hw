@@ -291,18 +291,13 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                     begin
                     with Stack.States[Pred(Stack.Count)] do
                         begin
-                        if Me^.dX.isNegative then
+                        if (Me^.Message and gmLeft) <> 0 then
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0)
                         else
                             AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0);
                             
                         AddAction(MadeActions, aia_HJump, 0, 305 + random(50), 0, 0);
                         AddAction(MadeActions, aia_HJump, 0, 350, 0, 0);
-                        
-                        if Me^.dX.isNegative then
-                            AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
-                        else
-                            AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
                         end;
                     // but first check walking forward
                     Push(ticks, Stack.States[Pred(Stack.Count)].MadeActions, AltMe, Me^.Message)
@@ -318,7 +313,7 @@ if ((CurrentHedgehog^.MultiShootAttacks = 0) or ((Ammoz[Me^.Hedgehog^.CurAmmoTyp
                 if Push(ticks, Actions, AltMe, Me^.Message xor 3) then
                     with Stack.States[Pred(Stack.Count)] do
                         begin
-                        if Me^.dX.isNegative then
+                        if (Me^.Message and gmLeft) <> 0 then
                             AddAction(MadeActions, aia_LookLeft, 0, 200, 0, 0)
                         else
                             AddAction(MadeActions, aia_LookRight, 0, 200, 0, 0);
