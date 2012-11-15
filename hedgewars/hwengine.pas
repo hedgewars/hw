@@ -90,15 +90,15 @@ begin
             end;
         gsConfirm, gsGame:
             begin
-            DrawWorld(Lag);
+            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsChat:
             begin
-            DrawWorld(Lag);
+            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsExit:
             begin

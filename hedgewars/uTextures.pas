@@ -126,6 +126,7 @@ var tw, th, x, y: Longword;
     tmpp: pointer;
     fromP4, toP4: PLongWordArray;
 begin
+if cOnlyStats then exit(nil);
 new(Surface2Tex);
 Surface2Tex^.PrevTexture:= nil;
 Surface2Tex^.NextTexture:= nil;

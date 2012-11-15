@@ -2562,6 +2562,7 @@ begin
     GrayScale       := false;
     PathPrefix      := './';
     GameType        := gmtLocal;
+    cOnlyStats      := False;
 
 {$IFDEF USE_VIDEO_RECORDING}
     RecPrefix          := '';
@@ -2582,7 +2583,6 @@ begin
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
-    cOnlyStats          := False;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
