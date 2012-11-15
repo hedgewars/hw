@@ -81,7 +81,9 @@ uses LuaPas,
     uLandGraphics,
     SDLh,
     SysUtils, 
-    uIO;
+    uIO,
+    uPhysFSLayer
+    ;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -1964,16 +1966,46 @@ ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptCall('onScreenResize');
 end;
 
+// custom script loader via physfs, passed to lua_load
+const BUFSIZE = 16;
+var phyfsReaderBuffer: pointer;
+
+function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl;
+var fileSize: Longword;
+begin
+writeln(stdout, '==== reading');
+    if pfsEOF(f) then
+        physfsReader:= nil
+    else
+        begin
+        sz^:= pfsBlockRead(f, phyfsReaderBuffer, BUFSIZE);
+writeln(stdout, '==== read ' + inttostr(sz^));
+        if sz^ = 0 then
+            physfsReader:= nil
+        else
+            physfsReader:= phyfsReaderBuffer
+        end
+end;
+
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
+      f : PFSFile;
 begin
-s:= cPathz[ptData] + '/' + name;
-if not FileExists(s) then
+s:= cPathz[ptData] + name;
+if not pfsExists(s) then
     exit;
 
-ret:= luaL_loadfile(luaState, Str2PChar(s));
+f:= pfsOpenRead(s);
+if f = nil then 
+    exit;
+
+GetMem(phyfsReaderBuffer, BUFSIZE);
+ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
+FreeMem(phyfsReaderBuffer, BUFSIZE);
+pfsClose(f);
+
 if ret <> 0 then
     begin
     LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
