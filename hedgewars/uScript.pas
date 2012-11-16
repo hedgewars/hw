@@ -1794,6 +1794,18 @@ begin
     lc_setaihintsongear:= 0
 end;
 
+
+function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to HedgewarsScriptLoad!');
+        lua_pushnil(L)
+        end
+    else
+        ScriptLoad(lua_tostring(L, 1));
+    lc_hedgewarsscriptload:= 0;
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -2407,6 +2419,7 @@ lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
+lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 
 
 ScriptClearStack; // just to be sure stack is empty

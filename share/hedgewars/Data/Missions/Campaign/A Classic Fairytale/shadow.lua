@@ -1,5 +1,5 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Animate.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 -----------------------------Constants---------------------------------
 startStage = 0

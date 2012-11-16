@@ -1,5 +1,5 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun, amMine, amDEagle, amDynamite, amFirePunch, amWhip, amPickHammer, amBaseballBat, amMortar, amCake, amSeduction, amWatermelon, amHellishBomb, amDrill, amBallgun, amRCPlane, amSniperRifle, amMolotov, amBirdy, amBlowTorch, amGasBomb, amFlamethrower, amSMine, amKamikaze }
 
