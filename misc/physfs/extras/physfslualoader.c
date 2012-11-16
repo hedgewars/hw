@@ -1,4 +1,4 @@
-#include <lua51/lua.h>
+#include <lua.h>
 #include <physfs.h>
 
 #define BUFSIZE 1024
