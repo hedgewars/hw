@@ -239,7 +239,6 @@ if(LUA_FOUND)
 else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
-    set(LUA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/liblua)
     #linking with liblua.a requires system readline -- this works everywhere, right?
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
     add_dependencies(physfsrwops lua)
