@@ -34,7 +34,7 @@ function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external;
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external;
 function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external;
-function PHYSFS_read(f: PFSFile; buf: pointer; objSize: Longword; objCount: Longword): Int64; cdecl; external;
+function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external;
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external;
 
@@ -74,7 +74,7 @@ var c: char;
 begin
 s[0]:= #0;
 
-while (PHYSFS_read(f, @c, 1, 1) = 1) and (c <> #10) do
+while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
     if (c <> #13) and (s[0] < #255) then
         begin
         inc(s[0]);
@@ -85,7 +85,7 @@ end;
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 var r: Int64;
 begin
-    r:= PHYSFS_read(f, buf, 1, size);
+    r:= PHYSFS_readBytes(f, buf, size);
 
     if r <= 0 then
         pfsBlockRead:= 0
