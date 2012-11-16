@@ -1967,31 +1967,16 @@ ScriptCall('onScreenResize');
 end;
 
 // custom script loader via physfs, passed to lua_load
-const BUFSIZE = 16;
-var phyfsReaderBuffer: pointer;
-
-function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl;
-var fileSize: Longword;
-begin
-writeln(stdout, '==== reading');
-    if pfsEOF(f) then
-        physfsReader:= nil
-    else
-        begin
-        sz^:= pfsBlockRead(f, phyfsReaderBuffer, BUFSIZE);
-writeln(stdout, '==== read ' + inttostr(sz^));
-        if sz^ = 0 then
-            physfsReader:= nil
-        else
-            physfsReader:= phyfsReaderBuffer
-        end
-end;
+const BUFSIZE = 1024;
+var physfsReaderBuffer: pointer; external;
+function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external;
 
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
       f : PFSFile;
+    buf : array[0..Pred(BUFSIZE)] of byte;
 begin
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
@@ -2001,9 +1986,8 @@ f:= pfsOpenRead(s);
 if f = nil then 
     exit;
 
-GetMem(phyfsReaderBuffer, BUFSIZE);
+physfsReaderBuffer:= @buf;
 ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
-FreeMem(phyfsReaderBuffer, BUFSIZE);
 pfsClose(f);
 
 if ret <> 0 then
