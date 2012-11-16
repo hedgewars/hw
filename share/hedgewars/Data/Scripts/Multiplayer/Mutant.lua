@@ -52,8 +52,8 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 
 --]]
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 --[[
     MUTANT SCRIPT
