@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = hedgewars
 DEPENDPATH += ../QTfrontend/
-INCLUDEPATH += ../QTfrontend/
+INCLUDEPATH += ../QTfrontend
 INCLUDEPATH += ../QTfrontend/model
 INCLUDEPATH += ../QTfrontend/ui
 INCLUDEPATH += ../QTfrontend/ui/widget
@@ -10,7 +10,8 @@ INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../misc/quazip/
-INCLUDEPATH += ../misc/physfs/src/
+INCLUDEPATH += ../misc/physfs/src
+INCLUDEPATH += ../misc/physfs/extras
 
 DESTDIR = ../bin
 
@@ -233,7 +234,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lquazip -lphysfs
+LIBS += -L../bin -lquazip -lphysfs -lphysfsrwops
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
