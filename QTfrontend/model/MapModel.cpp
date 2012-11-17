@@ -62,10 +62,8 @@ void MapModel::loadMaps()
     // add mission/static maps to lists
     foreach (QString map, maps)
     {
-        mapCfgFile.setFileName(
-            datamgr.findFileForRead(QString("Maps/%1/map.cfg").arg(map)));
-        mapLuaFile.setFileName(
-            datamgr.findFileForRead(QString("Maps/%1/map.lua").arg(map)));
+        mapCfgFile.setFileName(QString("physfs://Maps/%1/map.cfg").arg(map));
+        mapLuaFile.setFileName(QString("physfs://Maps/%1/map.lua").arg(map));
 
 
         if (mapCfgFile.open(QFile::ReadOnly))

@@ -34,14 +34,14 @@ procedure LoadLocaleWrapper(str: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
-uses uRandom, uUtils, uVariables, uDebug;
+uses uRandom, uUtils, uVariables, uDebug, uPhysFSLayer;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s: ansistring;
-    f: textfile;
+var s: shortstring;
+    f: pfsFile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;
     e: TEventId;
@@ -51,18 +51,14 @@ loaded:= false;
 for e:= Low(TEventId) to High(TEventId) do
     first[e]:= true;
 
-{$I-} // iochecks off
-Assign(f, FileName);
-filemode:= 0; // readonly
-Reset(f);
-if IOResult = 0 then
-    loaded:= true;
-TryDo(loaded, 'Cannot load locale "' + FileName + '"', false);
-if loaded then
+f:= pfsOpenRead(FileName);
+TryDo(f <> nil, 'Cannot load locale "' + FileName + '"', false);
+
+if f <> nil then
     begin
-    while not eof(f) do
+    while not pfsEof(f) do
         begin
-        readln(f, s);
+        pfsReadLn(f, s);
         if Length(s) = 0 then
             continue;
         if (s[1] < '0') or (s[1] > '9') then
@@ -99,9 +95,8 @@ if loaded then
                 trgoal[TGoalStrId(b)]:= s;
            end;
        end;
-   Close(f);
+   pfsClose(f);
    end;
-{$I+}
 end;
 
 function GetEventString(e: TEventId): ansistring;

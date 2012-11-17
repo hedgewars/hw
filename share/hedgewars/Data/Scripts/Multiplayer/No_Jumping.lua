@@ -2,7 +2,7 @@
 -- NO JUMPING
 --------------------------------
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local specialGear = nil
 

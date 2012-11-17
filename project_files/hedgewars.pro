@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = hedgewars
 DEPENDPATH += ../QTfrontend/
-INCLUDEPATH += ../QTfrontend/
+INCLUDEPATH += ../QTfrontend
 INCLUDEPATH += ../QTfrontend/model
 INCLUDEPATH += ../QTfrontend/ui
 INCLUDEPATH += ../QTfrontend/ui/widget
@@ -9,7 +9,8 @@ INCLUDEPATH += ../QTfrontend/ui/page
 INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
-INCLUDEPATH += ../misc/quazip/
+INCLUDEPATH += ../misc/physfs/src
+INCLUDEPATH += ../misc/physfs/extras
 
 DESTDIR = ../bin
 
@@ -105,7 +106,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/dialog/upload_video.h \
     ../QTfrontend/campaign.h \
     ../QTfrontend/model/playerslistmodel.h \
-    ../QTfrontend/util/LibavInteraction.h
+    ../QTfrontend/util/LibavInteraction.h \
+    ../QTfrontend/util/FileEngine.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -195,7 +197,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/dialog/upload_video.cpp \
     ../QTfrontend/campaign.cpp \
     ../QTfrontend/model/playerslistmodel.cpp \
-    ../QTfrontend/util/LibavInteraction.cpp
+    ../QTfrontend/util/LibavInteraction.cpp \
+    ../QTfrontend/util/FileEngine.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
@@ -230,7 +233,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lquazip
+LIBS += -L../bin -lphysfs -lphysfsrwops
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6

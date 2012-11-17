@@ -31,9 +31,7 @@
 #include "databrowser.h"
 #include "hwconsts.h"
 #include "DataManager.h"
-
-#include "quazip.h"
-#include "quazipfile.h"
+#include "FileEngine.h"
 
 QLayout * PageDataDownload::bodyLayoutDefinition()
 {
@@ -74,7 +72,7 @@ void PageDataDownload::request(const QUrl &url)
     else
         finalUrl = url;
 
-    if(url.path().endsWith(".zip"))
+    if(url.path().endsWith(".hwp"))
     {
         qWarning() << "Download Request" << url.toString();
         QString fileName = QFileInfo(url.toString()).fileName();
@@ -128,7 +126,6 @@ void PageDataDownload::fileDownloaded()
 
     if(reply)
     {
-        QByteArray fileContents = reply->readAll();
         QProgressBar *progressBar = progressBars.value(reply, 0);
 
         if(progressBar)
@@ -137,7 +134,24 @@ void PageDataDownload::fileDownloaded()
             progressBar->deleteLater();
         }
 
-        extractDataPack(&fileContents);
+        QDir extractDir(*cfgdir);
+        extractDir.cd("Data");
+
+        QString fileName = extractDir.filePath(QFileInfo(reply->url().path()).fileName());
+
+        QFile out(fileName);
+        if(!out.open(QFile::WriteOnly))
+        {
+            qWarning() << "out.open():" << out.errorString();
+            return ;
+        }
+
+        out.write(reply->readAll());
+
+        out.close();
+
+        // now mount it
+        FileEngineHandler::mount(fileName);
     }
 }
 
@@ -160,83 +174,6 @@ void PageDataDownload::downloadProgress(qint64 bytesRecieved, qint64 bytesTotal)
 void PageDataDownload::fetchList()
 {
     request(QUrl("http://hedgewars.org/content.html"));
-}
-
-bool PageDataDownload::extractDataPack(QByteArray * buf)
-{
-    QBuffer buffer;
-    buffer.setBuffer(buf);
-
-    QuaZip zip;
-    zip.setIoDevice(&buffer);
-    if(!zip.open(QuaZip::mdUnzip))
-    {
-        qWarning("testRead(): zip.open(): %d", zip.getZipError());
-        return false;
-    }
-
-    QuaZipFile file(&zip);
-
-    QDir extractDir(*cfgdir);
-    extractDir.cd("Data");
-
-    for(bool more = zip.goToFirstFile(); more; more = zip.goToNextFile())
-    {
-        if(!file.open(QIODevice::ReadOnly))
-        {
-            qWarning("file.open(): %d", file.getZipError());
-            return false;
-        }
-
-
-        QString fileName = file.getActualFileName();
-        QString filePath = extractDir.filePath(fileName);
-        if (fileName.endsWith("/"))
-        {
-            QFileInfo fi(filePath);
-            QDir().mkpath(fi.filePath());
-        }
-        else
-        {
-            qDebug() << "Extracting" << filePath;
-            QFile out(filePath);
-            if(!out.open(QFile::WriteOnly))
-            {
-                qWarning() << "out.open():" << out.errorString();
-                return false;
-            }
-
-            out.write(file.readAll());
-
-            out.close();
-
-            if(file.getZipError() != UNZ_OK)
-            {
-                qWarning("file.getFileName(): %d", file.getZipError());
-                return false;
-            }
-
-            if(!file.atEnd())
-            {
-                qWarning("read all but not EOF");
-                return false;
-            }
-
-            m_contentDownloaded = true;
-        }
-
-        file.close();
-
-        if(file.getZipError()!=UNZ_OK)
-        {
-            qWarning("file.close(): %d", file.getZipError());
-            return false;
-        }
-    }
-
-    zip.close();
-
-    return true;
 }
 
 
