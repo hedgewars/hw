@@ -606,10 +606,7 @@ void HWMapContainer::updatePreview()
             break;
         default:
             QPixmap mapImage;
-            bool success = mapImage.load(
-                DataManager::instance().findFileForRead(
-                    "Maps/" + m_mapInfo.name + "/preview.png")
-            );
+            bool success = mapImage.load("physfs://Maps/" + m_mapInfo.name + "/preview.png");
 
             if(!success)
             {

@@ -56,7 +56,7 @@ extern QString campaign, campaignTeam;
 
 QStringList getCampMissionList(QString & campaign)
 {
-    QSettings campfile(DataManager::instance().findFileForRead("Missions/Campaign/" + campaign + "/campaign.ini"), QSettings::IniFormat, 0);
+    QSettings campfile("physfs://Missions/Campaign/" + campaign + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
     unsigned int mNum = campfile.value("MissionNum", 0).toInt();
     
@@ -77,7 +77,7 @@ unsigned int getCampProgress(QString & teamName, QString & campName)
 
 QString getCampaignScript(QString campaign, unsigned int mNum)
 {
-    QSettings campfile(DataManager::instance().findFileForRead("Missions/Campaign/" + campaign + "/campaign.ini"), QSettings::IniFormat, 0);
+    QSettings campfile("physfs://Missions/Campaign/" + campaign + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
     return campfile.value(QString("Mission %1/Script").arg(mNum)).toString();
 }

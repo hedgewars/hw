@@ -227,8 +227,6 @@ int main(int argc, char *argv[])
     engine.mount(cfgdir->absolutePath(), "/config");
     engine.setWriteDir(cfgdir->absolutePath());
 
-    DataManager & dataMgr = DataManager::instance();
-
     QTranslator Translator;
     {
         QSettings settings("physfs://config/hedgewars.ini", QSettings::IniFormat);
@@ -280,7 +278,7 @@ int main(int argc, char *argv[])
     }
 
     // load external stylesheet if there is any
-    QFile extFile(dataMgr.findFileForRead("css/" + fname));
+    QFile extFile("physfs://css/" + fname);
 
     QFile resFile(":/res/css/" + fname);
 
