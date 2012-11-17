@@ -74,28 +74,6 @@ QStringList DataManager::entryList(
     return result;
 }
 
-
-QString DataManager::findFileForRead(
-    const QString & relativeDataFilePath) const
-{
-    QString path("physfs://%1");
-
-    return path.arg(relativeDataFilePath);
-}
-
-
-QString DataManager::findFileForWrite(
-    const QString & relativeDataFilePath) const
-{
-    QString path("physfs://%1");
-
-    // create folders if needed
-    QDir tmp;
-    tmp.mkpath(QFileInfo(path.arg(relativeDataFilePath)).absolutePath());
-
-    return path;
-}
-
 GameStyleModel * DataManager::gameStyleModel()
 {
     if (m_gameStyleModel == NULL) {

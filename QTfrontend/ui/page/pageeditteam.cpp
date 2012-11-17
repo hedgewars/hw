@@ -270,7 +270,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 
     foreach (QString file, list)
     {
-        QPixmap pix(dataMgr.findFileForRead("Graphics/Graves/" + file));
+        QPixmap pix("physfs://Graphics/Graves/" + file);
         if ((pix.height() > 32) || pix.width() > 32)
             pix = pix.copy(0, 0, 32, 32);
         QIcon icon(pix);
@@ -297,7 +297,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
         list.removeAt(idx);
 
     // add the default flag
-    QPixmap hwFlag(dataMgr.findFileForRead("Graphics/Flags/hedgewars.png"));
+    QPixmap hwFlag("physfs://Graphics/Flags/hedgewars.png");
     CBFlag->addItem(QIcon(hwFlag.copy(0, 0, 22, 15)), "Hedgewars", "hedgewars");
 
     // add seperator after
@@ -308,7 +308,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
     // add all country flags
     foreach (const QString & file, list)
     {
-        QIcon icon(QPixmap(dataMgr.findFileForRead("Graphics/Flags/" + file)));
+        QIcon icon(QPixmap("physfs://Graphics/Flags/" + file));
 
         QString flag = QString(file).remove(pngSuffix);
 
@@ -337,8 +337,7 @@ void PageEditTeam::fixHHname(int idx)
 
 void PageEditTeam::CBFort_activated(const QString & fortname)
 {
-    DataManager & dataMgr = DataManager::instance();
-    QPixmap pix(dataMgr.findFileForRead("Forts/" + fortname + "L.png"));
+    QPixmap pix("physfs://Forts/" + fortname + "L.png");
     FortPreview->setPixmap(pix);
 }
 
@@ -360,10 +359,8 @@ void PageEditTeam::testSound()
                        );
 
     if (!list.isEmpty())
-        SDLInteraction::instance().playSoundFile(
-            dataMgr.findFileForRead(voiceDir + "/" +
-                                    list[rand() % list.size()])
-        );
+        SDLInteraction::instance().playSoundFile("physfs://" + voiceDir + "/" +
+                                    list[rand() % list.size()]);
 }
 
 void PageEditTeam::createTeam(const QString & name, const QString & playerHash)

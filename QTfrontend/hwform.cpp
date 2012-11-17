@@ -122,9 +122,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     , hwnet(0)
 {
     // set music track
-    SDLInteraction::instance().setMusicTrack(
-        DataManager::instance().findFileForRead("Music/main_theme.ogg")
-    );
+    SDLInteraction::instance().setMusicTrack("/Music/main_theme.ogg");
 
 #ifdef USE_XFIRE
     xfire_init();
