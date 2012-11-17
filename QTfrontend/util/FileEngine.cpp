@@ -3,6 +3,7 @@
  */
 
 
+#include "hwpacksmounter.h"
 #include "FileEngine.h"
 
 
@@ -265,6 +266,10 @@ void FileEngineHandler::setWriteDir(const QString &path)
     PHYSFS_setWriteDir(path.toUtf8().constData());
 }
 
+void FileEngineHandler::mountPacks()
+{
+    hedgewarsMountPackages();
+}
 
 
 FileEngineIterator::FileEngineIterator(QDir::Filters filters, const QStringList &nameFilters, const QStringList &entries)

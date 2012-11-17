@@ -38,6 +38,8 @@ function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external;
 
+procedure hedgewarsMountPackages(); cdecl; external;
+
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 begin
     exit(PHYSFSRWOPS_openRead(Str2PChar(fname)));
@@ -103,6 +105,8 @@ begin
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
     i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, true);
     AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
+
+    hedgewarsMountPackages;
 end;
 
 procedure freeModule;

@@ -45,6 +45,7 @@ include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
+include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -179,6 +180,7 @@ add_executable(hedgewars WIN32
 set(HW_LINK_LIBS
     quazip
     physfs
+    physfsrwops
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
