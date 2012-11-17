@@ -416,12 +416,10 @@ begin
     if (not isSoundEnabled) or (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
-    s:= UserPathPrefix + '/Data/Music/' + MusicFN;
-    if not FileExists(s) then
-        s:= PathPrefix + '/Music/' + MusicFN;
+    s:= '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
-    Mus:= Mix_LoadMUS(Str2PChar(s));
+    Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
     SDLTry(Mus <> nil, false);
     WriteLnToConsole(msgOK);
 

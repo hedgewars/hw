@@ -102,7 +102,7 @@ begin
     i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, true);
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
     i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, true);
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + ': ' + inttostr(i));
+    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
 end;
 
 procedure freeModule;
