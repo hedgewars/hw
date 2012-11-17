@@ -260,7 +260,6 @@ endif()
 #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
 if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
     add_subdirectory(bin)
-    add_subdirectory(misc/quazip)
     add_subdirectory(QTfrontend)
     add_subdirectory(share)
     add_subdirectory(tools)

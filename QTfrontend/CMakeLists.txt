@@ -15,16 +15,6 @@ if (NOT CROSSAPPLE)
     include(${QT_USE_FILE})
 endif()
 
-# Check if we need zlib
-check_library_exists("${QT_QTCORE_LIBRARY}" inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
-
-if(NOT QT_PROVIDES_ZLIB_FUNCTIONS)
-    find_package(ZLIB REQUIRED)
-
-    set(HW_LINK_LIBS ${ZLIB_LIBRARIES} ${HW_LINK_LIBS})
-endif()
-
-
 # Configure for SDL
 find_package(SDL REQUIRED)
 find_package(SDL_mixer REQUIRED)
@@ -43,7 +33,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
 include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
 include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
 if(UNIX)
@@ -178,7 +167,6 @@ add_executable(hedgewars WIN32
 
 
 set(HW_LINK_LIBS
-    quazip
     physfs
     physfsrwops
     ${QT_LIBRARIES}
@@ -204,7 +192,7 @@ endif()
 
 
 if (CROSSAPPLE)
-    add_dependencies(hedgewars quazip)
+
 else()
     target_link_libraries(hedgewars ${HW_LINK_LIBS})
 endif()

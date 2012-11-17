@@ -9,7 +9,6 @@ INCLUDEPATH += ../QTfrontend/ui/page
 INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
-INCLUDEPATH += ../misc/quazip/
 INCLUDEPATH += ../misc/physfs/src
 INCLUDEPATH += ../misc/physfs/extras
 
@@ -234,7 +233,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lquazip -lphysfs -lphysfsrwops
+LIBS += -L../bin -lphysfs -lphysfsrwops
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6

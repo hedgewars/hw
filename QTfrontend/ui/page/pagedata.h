@@ -48,8 +48,6 @@ class PageDataDownload : public AbstractPage
 
         bool m_contentDownloaded; ///< true if something was downloaded since last page leave
 
-        bool extractDataPack(QByteArray * buf);
-
     private slots:
         void request(const QUrl &url);
 
