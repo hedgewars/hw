@@ -1024,7 +1024,7 @@ procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
 procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
 
 function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: LongInt): PMixChunk; cdecl; external SDL_MixerLibName;
-function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_MixerLibName;
+function  Mix_LoadMUS_RW(src: PSDL_RWops): PMixMusic; cdecl; external SDL_MixerLibName;
 
 function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
