@@ -81,7 +81,9 @@ uses LuaPas,
     uLandGraphics,
     SDLh,
     SysUtils, 
-    uIO;
+    uIO,
+    uPhysFSLayer
+    ;
 
 var luaState : Plua_State;
     ScriptAmmoLoadout : shortstring;
@@ -1592,7 +1594,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushstring(L, str2pchar(Pathz[ptData]));
+        lua_pushstring(L, str2pchar(cPathz[ptData]));
     lc_getdatapath:= 1
 end;
 
@@ -1604,7 +1606,7 @@ begin
         lua_pushnil(L);
         end
     else
-        lua_pushstring(L, str2pchar(UserPathz[ptData]));
+        lua_pushstring(L, str2pchar(cPathz[ptData]));
     lc_getuserdatapath:= 1
 end;
 
@@ -1792,6 +1794,18 @@ begin
     lc_setaihintsongear:= 0
 end;
 
+
+function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to HedgewarsScriptLoad!');
+        lua_pushnil(L)
+        end
+    else
+        ScriptLoad(lua_tostring(L, 1));
+    lc_hedgewarsscriptload:= 0;
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -1964,18 +1978,30 @@ ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptCall('onScreenResize');
 end;
 
+// custom script loader via physfs, passed to lua_load
+const BUFSIZE = 1024;
+var physfsReaderBuffer: pointer; external;
+function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external;
+
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
       s : shortstring;
+      f : PFSFile;
+    buf : array[0..Pred(BUFSIZE)] of byte;
 begin
-s:= UserPathz[ptData] + '/' + name;
-if not FileExists(s) then
-    s:= Pathz[ptData] + '/' + name;
-if not FileExists(s) then
+s:= cPathz[ptData] + name;
+if not pfsExists(s) then
     exit;
 
-ret:= luaL_loadfile(luaState, Str2PChar(s));
+f:= pfsOpenRead(s);
+if f = nil then 
+    exit;
+
+physfsReaderBuffer:= @buf;
+ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
+pfsClose(f);
+
 if ret <> 0 then
     begin
     LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
@@ -2393,6 +2419,7 @@ lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
+lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 
 
 ScriptClearStack; // just to be sure stack is empty

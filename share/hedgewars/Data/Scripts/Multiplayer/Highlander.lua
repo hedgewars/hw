@@ -51,8 +51,8 @@
 -- added napalm (whoops) to list of possible weapons you can get
 -- hogs no longer recieve airstrike-related weps on border maps
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local airWeapons = 	{amAirAttack, amMineStrike, amNapalm, amDrillStrike --[[,amPiano]]}
 

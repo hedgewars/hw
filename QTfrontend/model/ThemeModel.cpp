@@ -66,8 +66,7 @@ void ThemeModel::loadThemes()
     foreach (QString theme, themes)
     {
         // themes without icon are supposed to be hidden
-        QString iconpath =
-            datamgr.findFileForRead(QString("Themes/%1/icon.png").arg(theme));
+        QString iconpath = QString("physfs://Themes/%1/icon.png").arg(theme);
 
         if (!QFile::exists(iconpath))
             continue;
@@ -79,10 +78,11 @@ void ThemeModel::loadThemes()
 
         // load and set icon
         QIcon icon(iconpath);
+
         dataset.insert(Qt::DecorationRole, icon);
 
         // load and set preview icon
-        QIcon preview(datamgr.findFileForRead(QString("Themes/%1/icon@2x.png").arg(theme)));
+        QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
         dataset.insert(Qt::UserRole, preview);
 
         m_data.append(dataset);
