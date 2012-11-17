@@ -103,6 +103,13 @@ with HHGear^.Hedgehog^ do
             LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
         else if prevAmmo = amKnife then
             LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
+        end;
+    // Try again in the next slot
+    if CurAmmoType = prevAmmo then 
+        begin
+        if slot >= cMaxSlotIndex then slot:= 0 else inc(slot);
+        HHGear^.MsgParam:= slot;
+        ChangeAmmo(HHGear)
         end
     end
 end;
