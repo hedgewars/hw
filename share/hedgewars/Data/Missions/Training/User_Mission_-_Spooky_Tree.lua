@@ -1,5 +1,5 @@
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 
