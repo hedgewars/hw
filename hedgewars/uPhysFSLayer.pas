@@ -1,7 +1,11 @@
 unit uPhysFSLayer;
-
-{$LINKLIB ../bin/libphysfs.a}
-{$LINKLIB ../bin/libphysfsrwops.a}
+{$IFDEF ANDROID}
+    {$linklib physfs}
+    {$linklib physfsrwops}
+{$ELSE}
+    {$LINKLIB ../bin/libphysfs.a}
+    {$LINKLIB ../bin/libphysfsrwops.a}
+{$ENDIF}
 
 interface
 uses SDLh;
