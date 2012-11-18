@@ -7,6 +7,10 @@ unit uPhysFSLayer;
     {$LINKLIB ../bin/libphysfsrwops.a}
 {$ENDIF}
 
+{$IFDEF DARWIN}
+    {$LINKFRAMEWORK IOKit}
+{$ENDIF}
+
 interface
 uses SDLh;
 
