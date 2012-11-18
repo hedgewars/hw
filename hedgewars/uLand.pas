@@ -31,7 +31,7 @@ procedure GenPreview(out Preview: TPreview);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uLandOutline;
+     uLandGenMaze, uLandOutline, uPhysFSLayer;
 
 var digest: shortstring;
 
@@ -423,26 +423,26 @@ SDL_FreeSurface(tmpsurf);
 end;
 
 procedure LoadMapConfig;
-var f: textfile;
+var f: PFSFile;
     s: shortstring;
 begin
 s:= cPathz[ptMapCurrent] + '/map.cfg';
 
 WriteLnToConsole('Fetching map HH limit');
-{$I-}
-Assign(f, s);
-filemode:= 0; // readonly
-Reset(f);
-if IOResult <> 0 then
+
+f:= pfsOpenRead(s);
+if f <> nil then
     begin
-    s:= cPathz[ptMissionMaps] + '/' + ExtractFileName(cPathz[ptMapCurrent]) + '/map.cfg';
-    Assign(f, s);
-    Reset(f);
+    pfsReadLn(f, s);
+    if not pfsEof(f) then
+        begin
+        pfsReadLn(f, s);
+        val(s, MaxHedgehogs)
+        end;
+
+    pfsClose(f)
     end;
-Readln(f);
-if not eof(f) then
-    Readln(f, MaxHedgehogs);
-{$I+}
+
 if (MaxHedgehogs = 0) then
     MaxHedgehogs:= 18;
 end;
