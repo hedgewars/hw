@@ -72,7 +72,7 @@ void PageDataDownload::request(const QUrl &url)
     else
         finalUrl = url;
 
-    if(url.path().endsWith(".hwp"))
+    if(url.path().endsWith(".hwp") || url.path().endsWith(".zip"))
     {
         qWarning() << "Download Request" << url.toString();
         QString fileName = QFileInfo(url.toString()).fileName();
@@ -138,6 +138,8 @@ void PageDataDownload::fileDownloaded()
         extractDir.cd("Data");
 
         QString fileName = extractDir.filePath(QFileInfo(reply->url().path()).fileName());
+        if(fileName.endsWith(".zip"))
+            fileName = fileName.left(fileName.length() - 4) + ".hwp";
 
         QFile out(fileName);
         if(!out.open(QFile::WriteOnly))
