@@ -1980,7 +1980,7 @@ end;
 
 // custom script loader via physfs, passed to lua_load
 const BUFSIZE = 1024;
-var physfsReaderBuffer: pointer; external;
+var physfsReaderBuffer: pointer; cvar; external;
 function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external;
 
 
