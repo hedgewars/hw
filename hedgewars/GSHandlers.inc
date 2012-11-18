@@ -2456,6 +2456,12 @@ begin
         Gear^.AdvBounce:= 1;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
