@@ -52,8 +52,8 @@
 -- balance hog health, maybe
 -- add proper gameflag checking, maybe (so that we can throw in a .cfg and let the users break everything)
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local numhhs = 0
 local hhs = {}

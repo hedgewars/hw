@@ -118,9 +118,6 @@ var
     SDWaterOpacity: byte;
     GrayScale: Boolean;
 
-    // originally from uConsts
-    Pathz: array[TPathType] of shortstring;
-    UserPathz: array[TPathType] of shortstring;
     CountTexz: array[0..Pred(AMMO_INFINITE)] of PTexture;
     LAND_WIDTH       : LongInt;
     LAND_HEIGHT      : LongInt;
@@ -225,27 +222,27 @@ var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
-        '',                              // ptData
-        'Graphics',                      // ptGraphics
-        'Themes',                        // ptThemes
-        'Themes/Bamboo',                 // ptCurrTheme
-        'Teams',                         // ptTeams
-        'Maps',                          // ptMaps
+        '/',                             // ptData
+        '/Graphics',                     // ptGraphics
+        '/Themes',                       // ptThemes
+        '/Themes/Bamboo',                // ptCurrTheme
+        '/Teams',                        // ptTeams
+        '/Maps',                         // ptMaps
         '',                              // ptMapCurrent
-        'Demos',                         // ptDemos
-        'Sounds',                        // ptSounds
-        'Graphics/Graves',               // ptGraves
-        'Fonts',                         // ptFonts
-        'Forts',                         // ptForts
-        'Locale',                        // ptLocale
-        'Graphics/AmmoMenu',             // ptAmmoMenu
-        'Graphics/Hedgehog',             // ptHedgehog
-        'Sounds/voices',                 // ptVoices
-        'Graphics/Hats',                 // ptHats
-        'Graphics/Flags',                // ptFlags
-        'Missions/Maps',                 // ptMissionMaps
-        'Graphics/SuddenDeath',           // ptSuddenDeath
-        'Graphics/Buttons'                // ptButton
+        '/Demos',                        // ptDemos
+        '/Sounds',                       // ptSounds
+        '/Graphics/Graves',              // ptGraves
+        '/Fonts',                        // ptFonts
+        '/Forts',                        // ptForts
+        '/Locale',                       // ptLocale
+        '/Graphics/AmmoMenu',            // ptAmmoMenu
+        '/Graphics/Hedgehog',            // ptHedgehog
+        '/Sounds/voices',                // ptVoices
+        '/Graphics/Hats',                // ptHats
+        '/Graphics/Flags',               // ptFlags
+        '/Missions/Maps',                // ptMissionMaps
+        '/Graphics/SuddenDeath',         // ptSuddenDeath
+        '/Graphics/Buttons'              // ptButton
     );
 
     Fontz: array[THWFont] of THHFont = (
@@ -2586,7 +2583,6 @@ begin
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
-    Pathz               := cPathz;
 
         {*  REFERENCE
       4096 -> $FFFFF000

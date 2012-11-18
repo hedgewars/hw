@@ -64,7 +64,7 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
     if (orgStyleSheet.isEmpty())
     {
         // load external stylesheet if there is any
-        QFile extFile(DataManager::instance().findFileForRead("css/chat.css"));
+        QFile extFile("physfs://css/chat.css");
 
         QFile resFile(":/res/css/chat.css");
 
@@ -194,12 +194,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
         foreach (QString vp, vpList)
         {
-            m_helloSounds.append(DataManager::instance().findFileForRead(
-                               QString("Sounds/voices/%1/Hello.ogg").arg(vp)));
+            m_helloSounds.append(QString("physfs://Sounds/voices/%1/Hello.ogg").arg(vp));
         }
 
-        m_hilightSound = DataManager::instance().findFileForRead(
-                             "Sounds/beep.ogg");
+        m_hilightSound = "physfs://Sounds/beep.ogg";
 
     }
 
@@ -762,8 +760,7 @@ void HWChatWidget::discardStyleSheet()
 
 void HWChatWidget::saveStyleSheet()
 {
-    QString dest =
-        DataManager::instance().findFileForWrite("css/chat.css");
+    QString dest = "physfs://css/chat.css";
 
     QFile file(dest);
     if (file.open(QIODevice::WriteOnly | QIODevice::Text))

@@ -54,6 +54,7 @@ set(engine_sources
     uLocale.pas
     uMisc.pas
     uMobile.pas
+    uPhysFSLayer.pas
     uRandom.pas
     uRender.pas
     uRenderUtils.pas
@@ -98,6 +99,9 @@ if(BUILD_ENGINE_LIBRARY)
         set(engine_output_name "hwengine.dylib")
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
+
+# doesn't work for some reason (doesn't find symbols)
+#set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
 
 IF(FPC)
     set(fpc_executable ${FPC})
@@ -268,6 +272,10 @@ add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/$
 if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
+
+# compile physfs before engine
+add_dependencies(${engine_output_name} physfs)
+add_dependencies(${engine_output_name} physfsrwops)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step

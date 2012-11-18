@@ -1,4 +1,4 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local hhs = {}
 local missionWon = nil

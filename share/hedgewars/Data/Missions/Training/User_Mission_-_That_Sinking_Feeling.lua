@@ -1,6 +1,6 @@
 
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local player
 local hh = {}

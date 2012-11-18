@@ -33,6 +33,7 @@
 #include "newnetclient.h"
 
 #include "DataManager.h"
+#include "FileEngine.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -106,6 +107,8 @@ int main(int argc, char *argv[])
 {
     HWApplication app(argc, argv);
 
+    FileEngineHandler engine(argv[0]);
+
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
     QStringList arguments = app.arguments();
@@ -147,7 +150,7 @@ int main(int argc, char *argv[])
         custom_config = true;
     }
 
-    app.setStyle(new QPlastiqueStyle);
+    app.setStyle(new QPlastiqueStyle());
 
     QDateTime now = QDateTime::currentDateTime();
     srand(now.toTime_t());
@@ -218,21 +221,23 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    DataManager & dataMgr = DataManager::instance();
+    // setup PhysFS
+    engine.mount(datadir->absolutePath());
+    engine.mount(cfgdir->absolutePath() + "/Data");
+    engine.mount(cfgdir->absolutePath(), "/config");
+    engine.setWriteDir(cfgdir->absolutePath());
+    engine.mountPacks();
 
     QTranslator Translator;
     {
-        QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
+        QSettings settings("physfs://config/hedgewars.ini", QSettings::IniFormat);
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
 
         // load locale file into translator
-        Translator.load(
-            dataMgr.findFileForRead(
-                QString("Locale/hedgewars_" + cc)
-            )
-        );
+        if(!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+            qWarning("Failed to install translation");
         app.installTranslator(&Translator);
     }
 
@@ -274,7 +279,7 @@ int main(int argc, char *argv[])
     }
 
     // load external stylesheet if there is any
-    QFile extFile(dataMgr.findFileForRead("css/" + fname));
+    QFile extFile("physfs://css/" + fname);
 
     QFile resFile(":/res/css/" + fname);
 
