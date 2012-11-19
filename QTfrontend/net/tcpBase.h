@@ -41,13 +41,16 @@ class TCPBase : public QObject
         TCPBase(bool demoMode);
         virtual ~TCPBase();
 
+        virtual bool couldBeRemoved();
+
     signals:
         void isReadyNow();
 
     protected:
+        bool m_hasStarted;
         quint16 ipc_port;
 
-        void Start();
+        void Start(bool couldCancelPreviousRequest);
 
         QByteArray readbuffer;
 
