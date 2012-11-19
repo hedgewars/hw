@@ -100,8 +100,6 @@ if(BUILD_ENGINE_LIBRARY)
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
-# doesn't work for some reason (doesn't find symbols)
-#set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
 
 IF(FPC)
     set(fpc_executable ${FPC})
