@@ -42,8 +42,8 @@ interface
         {$linklib root}
     {$ELSE}
         {$IFNDEF ANDROID}
-        {$linklib pthread}
-    {$ENDIF}
+            {$linklib pthread}
+        {$ENDIF}
     {$ENDIF}
 {$ENDIF}
 

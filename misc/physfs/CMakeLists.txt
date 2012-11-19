@@ -34,7 +34,7 @@ INCLUDE(CheckIncludeFile)
 INCLUDE(CheckLibraryExists)
 INCLUDE(CheckCSourceCompiles)
 
-INCLUDE_DIRECTORIES(./src)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 IF(MACOSX)
     # Fallback to older OS X on PowerPC to support wider range of systems...
