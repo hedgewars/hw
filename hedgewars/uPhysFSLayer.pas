@@ -7,6 +7,14 @@ unit uPhysFSLayer;
     {$LINKLIB ../bin/libphysfsrwops.a}
 {$ENDIF}
 
+{$IFDEF WIN32}
+    {$LINKLIB kernel32}
+    {$LINKLIB user32}
+    {$LINKLIB shell32}
+    {$LINKLIB advapi32}
+    {$LINKLIB msvcrt}
+{$ENDIF}
+
 {$IFDEF DARWIN}
     {$LINKFRAMEWORK IOKit}
 {$ENDIF}

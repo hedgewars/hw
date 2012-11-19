@@ -233,6 +233,14 @@ else()
     message(STATUS "Video recording disabled by user")
 endif()
 
+if(MINGW)
+    get_filename_component(MINGWBINPATH ${CMAKE_C_COMPILER} PATH)
+    set(MINGWLIBPATH "${MINGWBINPATH}/../lib"
+            CACHE FILEPATH "Path to MinGW import libraries")
+
+    set(pascal_flags "-Fl${MINGWLIBPATH}" ${pascal_flags})
+endif(MINGW)
+
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
 IF(NOT APPLE)
