@@ -29,19 +29,19 @@ class M3Panel::Private
 
 M3Panel::M3Panel(void)
 {
-    c = new Private;
+    m = new M3Panel::Private();
 
-    c->install = [[M3InstallController alloc] init];
-    [c->install retain];
+    m->install = [[M3InstallController alloc] init];
+    [m->install retain];
 }
 
 M3Panel::~M3Panel()
 {
-    [c->install release];
-    delete c;
+    [m->install release];
+    delete m;
 }
 
 void M3Panel::showInstallController()
 {
-    [c->install displayInstaller];
+    [m->install displayInstaller];
 }
