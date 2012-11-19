@@ -38,7 +38,8 @@ TCPBase::~TCPBase()
         IPCSocket->deleteLater();
 }
 
-TCPBase::TCPBase(bool demoMode) :
+TCPBase::TCPBase(bool demoMode, QObject *parent) :
+    QObject(parent),
     m_hasStarted(false),
     m_isDemoMode(demoMode),
     IPCSocket(0)
@@ -144,9 +145,12 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
     }
     else
     {
-        if(couldCancelPreviousRequest && srvsList.last()->couldBeRemoved())
+        TCPBase * last = srvsList.last();
+        if(couldCancelPreviousRequest
+            && last->couldBeRemoved()
+            && (last->parent() == parent()))
         {
-            TCPBase * last = srvsList.takeLast();
+            srvsList.removeLast();
             last->deleteLater();
             Start(couldCancelPreviousRequest);
         } else

@@ -37,7 +37,7 @@
 QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
-    TCPBase(true),
+    TCPBase(true, 0),
     ammostr(ammo),
     m_pTeamSelWidget(pTeamSelWidget)
 {

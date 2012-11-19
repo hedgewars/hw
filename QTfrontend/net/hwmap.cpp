@@ -20,8 +20,8 @@
 #include "hwconsts.h"
 #include "hwmap.h"
 
-HWMap::HWMap() :
-    TCPBase(false)
+HWMap::HWMap(QObject * parent) :
+    TCPBase(false, parent)
 {
 }
 

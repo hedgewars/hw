@@ -39,7 +39,7 @@ class HWMap : public TCPBase
         Q_OBJECT
 
     public:
-        HWMap();
+        HWMap(QObject *parent = 0);
         virtual ~HWMap();
         void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData);
         bool couldBeRemoved();
