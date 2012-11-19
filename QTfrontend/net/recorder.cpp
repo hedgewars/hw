@@ -47,7 +47,7 @@ HWRecorder::~HWRecorder()
     if (queue.empty())
         numRecorders--;
     else
-        queue.takeFirst()->Start();
+        queue.takeFirst()->Start(false);
 }
 
 void HWRecorder::onClientDisconnect()
@@ -89,7 +89,7 @@ void HWRecorder::EncodeVideo(const QByteArray & record)
     if (numRecorders < maxRecorders)
     {
         numRecorders++;
-        Start(); // run engine
+        Start(false); // run engine
     }
     else
         queue.push_back(this);

@@ -29,6 +29,11 @@ HWMap::~HWMap()
 {
 }
 
+bool HWMap::couldBeRemoved()
+{
+    return !m_hasStarted;
+}
+
 void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
 {
     m_seed = seed;
@@ -36,7 +41,7 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
     m_mapgen = mapgen;
     m_maze_size = maze_size;
     if(mapgen == MAPGEN_DRAWN) m_drawMapData = drawMapData;
-    Start();
+    Start(true);
 }
 
 QStringList HWMap::getArguments()
