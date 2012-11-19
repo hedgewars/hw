@@ -38,7 +38,7 @@ class TCPBase : public QObject
         Q_OBJECT
 
     public:
-        TCPBase(bool demoMode);
+        TCPBase(bool demoMode, QObject * parent = 0);
         virtual ~TCPBase();
 
         virtual bool couldBeRemoved();

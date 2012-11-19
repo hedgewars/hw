@@ -298,7 +298,7 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
 
 void HWMapContainer::askForGeneratedPreview()
 {
-    pMap = new HWMap();
+    pMap = new HWMap(this);
     connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
     connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
