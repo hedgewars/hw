@@ -151,7 +151,7 @@ if(APPLE)
             set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
         endif()
 
-        set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
+        set(pascal_flags "-k${SDLMAIN_LIB}" "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
     endif()
 endif(APPLE)
 
