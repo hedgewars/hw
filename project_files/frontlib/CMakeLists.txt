@@ -1,6 +1,7 @@
+find_package(SDL REQUIRED)
 find_package(SDL_net REQUIRED)
 
-set(CMAKE_C_FLAGS "-std=c99")
+add_definitions("-std=c99")
 
 file(GLOB frontlib_src
         *.c *.h
@@ -12,6 +13,7 @@ file(GLOB frontlib_src
         util/*.c util/*.h
     )
 
+include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLNET_INCLUDE_DIR})
 
 add_library(frontlib STATIC ${frontlib_src})
