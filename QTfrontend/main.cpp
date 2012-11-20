@@ -35,6 +35,8 @@
 #include "DataManager.h"
 #include "FileEngine.h"
 
+#include "frontlib.h"
+
 #ifdef _WIN32
 #include <Shlobj.h>
 #endif
@@ -108,6 +110,8 @@ int main(int argc, char *argv[])
     HWApplication app(argc, argv);
 
     FileEngineHandler engine(argv[0]);
+
+    flib_init();
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -290,5 +294,9 @@ int main(int argc, char *argv[])
 
     app.form = new HWForm(NULL, style);
     app.form->show();
-    return app.exec();
+    int r = app.exec();
+
+    flib_quit();
+
+    return r;
 }

@@ -11,6 +11,7 @@ INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../misc/physfs/src
 INCLUDEPATH += ../misc/physfs/extras
+INCLUDEPATH += ../project_files/frontlib
 
 DESTDIR = ../bin
 
@@ -233,7 +234,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lphysfs
+LIBS += -L../bin -lphysfs -lfrontlib
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
