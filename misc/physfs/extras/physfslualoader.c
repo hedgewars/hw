@@ -1,5 +1,5 @@
-#include <lua.h>
-#include <physfs.h>
+#include "lua.h"
+#include "physfs.h"
 
 #define BUFSIZE 1024
 
@@ -27,3 +27,4 @@ void physfsReaderSetBuffer(void *buffer)
 {
     physfsReaderBuffer = buffer;
 }
+

@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <physfs.h>
+#include "physfs.h"
 
 #include "hwpacksmounter.h"
 
