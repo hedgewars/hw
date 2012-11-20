@@ -15,11 +15,7 @@ const
 {$IFDEF WIN32}
     PhysfsLibName = 'libphysfs';
 {$ELSE}
-    {$IFDEF DARWIN}
     PhysfsLibName = 'physfs';
-    {$ELSE}
-    PhysfsLibName = 'physfs';
-    {$ENDIF}
 {$ENDIF}
 
 procedure initModule;
