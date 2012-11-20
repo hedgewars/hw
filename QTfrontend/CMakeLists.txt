@@ -168,7 +168,6 @@ add_executable(hedgewars WIN32
 
 set(HW_LINK_LIBS
     physfs
-    physfsrwops
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}

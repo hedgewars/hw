@@ -233,13 +233,11 @@ else()
     message(STATUS "Video recording disabled by user")
 endif()
 
-if(MINGW)
-    get_filename_component(MINGWBINPATH ${CMAKE_C_COMPILER} PATH)
-    set(MINGWLIBPATH "${MINGWBINPATH}/../lib"
-            CACHE FILEPATH "Path to MinGW import libraries")
-
-    set(pascal_flags "-Fl${MINGWLIBPATH}" ${pascal_flags})
-endif(MINGW)
+#if(MINGW)
+#    get_filename_component(MINGWBINPATH ${CMAKE_C_COMPILER} PATH)
+#    set(MINGWLIBPATH "${MINGWBINPATH}/../lib"
+#            CACHE FILEPATH "Path to MinGW import libraries")
+#endif(MINGW)
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
@@ -281,7 +279,6 @@ endif()
 
 # compile physfs before engine
 add_dependencies(${engine_output_name} physfs)
-add_dependencies(${engine_output_name} physfsrwops)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step

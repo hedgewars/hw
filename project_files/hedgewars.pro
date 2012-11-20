@@ -233,7 +233,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lphysfs -lphysfsrwops
+LIBS += -L../bin -lphysfs
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
