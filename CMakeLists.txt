@@ -253,6 +253,9 @@ add_subdirectory(hedgewars)
 # physfs library
 add_subdirectory(misc/physfs)
 
+# frontend library
+add_subdirectory(project_files/frontlib)
+
 #Android related build scripts
 if(ANDROID)
     #run cmake -DANDROID=1 to enable this
