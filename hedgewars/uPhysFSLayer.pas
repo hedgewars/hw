@@ -1,14 +1,11 @@
 unit uPhysFSLayer;
 
 interface
-uses SDLh;
+uses SDLh, LuaPas;
 
 {$IFDEF ANDROID}
     {$linklib physfs}
 {$ELSE}
-    {$IFNDEF WIN32}
-        {$linklib ../bin/libphysfs.a}
-    {$ENDIF}
     {$IFDEF DARWIN}
         {$LINKFRAMEWORK IOKit}
     {$ENDIF}
@@ -21,7 +18,7 @@ const
     {$IFDEF DARWIN}
     PhysfsLibName = 'physfs';
     {$ELSE}
-    PhysfsLibName = 'physfs.a';
+    PhysfsLibName = 'physfs';
     {$ENDIF}
 {$ENDIF}
 
@@ -41,6 +38,9 @@ function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
+
+function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhysfsLibName;
+procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 
 implementation
 uses uUtils, uVariables;
