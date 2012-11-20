@@ -3,7 +3,7 @@
 
 #define BUFSIZE 1024
 
-void * physfsReaderBuffer;
+void *physfsReaderBuffer;
 
 const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
 {
@@ -21,4 +21,9 @@ const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
         else
             return physfsReaderBuffer;
     }
+}
+
+void physfsReaderSetBuffer(void *buffer)
+{
+    physfsReaderBuffer = buffer;
 }

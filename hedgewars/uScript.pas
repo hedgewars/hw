@@ -1980,8 +1980,17 @@ end;
 
 // custom script loader via physfs, passed to lua_load
 const BUFSIZE = 1024;
-var physfsReaderBuffer: pointer; cvar; external;
-function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external;
+{$IFDEF WIN32}
+    PhysfsLibName = 'libphysfs';
+{$ELSE}
+    {$IFDEF DARWIN}
+    PhysfsLibName = 'physfs';
+    {$ELSE}
+    PhysfsLibName = 'physfs.a';
+    {$ENDIF}
+{$ENDIF}
+function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhysfsLibName;
+procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 
 
 procedure ScriptLoad(name : shortstring);
@@ -1998,7 +2007,7 @@ f:= pfsOpenRead(s);
 if f = nil then 
     exit;
 
-physfsReaderBuffer:= @buf;
+physfsReaderSetBuffer(@buf);
 ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
 pfsClose(f);
 

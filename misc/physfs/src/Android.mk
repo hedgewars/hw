@@ -23,5 +23,8 @@ LOCAL_SRC_FILES :=    physfs.c \
     archiver_qpak.c \
     archiver_wad.c \
     archiver_zip.c \
+    ../extras/hwpacksmounter.c \
+    ../extras/physfslualoader.c \
+    ../extras/physfsrwops.c \
     
 include $(BUILD_SHARED_LIBRARY)
