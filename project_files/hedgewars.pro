@@ -262,7 +262,7 @@ win32 {
 }
 
 !macx {
-    LIBS += -lSDL -lSDL_mixer
+    LIBS += -lSDL -lSDL_mixer -lSDL_net
     !win32 {
         INCLUDEPATH += /usr/local/include/SDL /usr/include/SDL
     }
