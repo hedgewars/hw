@@ -11,45 +11,9 @@ ENDFOREACH()
 #use available modules, fallback to ours if not present (CMP0017 helps)
 set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
-
-#detect Mercurial revision (if present)
-set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
-set(HGCHANGED "")
-IF(version_suffix MATCHES "-dev")
-    set(HW_DEV true)
-    set(default_build_type "DEBUG")
-    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
-        FIND_PROGRAM(HGCOMMAND hg)
-        IF(HGCOMMAND)
-            exec_program(${HGCOMMAND}
-                     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
-                     OUTPUT_VARIABLE version_suffix
-                     )
-            STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${version_suffix})
-            STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3-\\1" version_suffix ${version_suffix})
-            IF (HGCHANGED)
-                MESSAGE(STATUS "Building revision ${version_suffix} (SOURCE CODE MODIFIED)")
-            ELSE()
-                MESSAGE(STATUS "Building revision ${version_suffix}")
-            ENDIF()
-            set(version_suffix "-${version_suffix}")
-        ENDIF()
-    ENDIF()
-ELSE()
-    set(HW_DEV false)
-    set(default_build_type "RELEASE")
-ENDIF()
-
-
-#versioning
-set(CPACK_PACKAGE_VERSION_MAJOR 0)
-set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
-set(HEDGEWARS_PROTO_VER 44)
-set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-
-
 #set some default values
+option(NOREVISION "Build Hedgewars without revision information" OFF)
+
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
@@ -59,6 +23,45 @@ option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+
+#detect Mercurial revision (if present)
+IF(NOT NOREVISION)
+    set(default_build_type "DEBUG")
+    set(version_suffix "-development_version")
+    set(HW_DEV true)
+    FIND_PROGRAM(HGCOMMAND hg)
+    IF(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
+        execute_process(COMMAND ${HGCOMMAND} identify -in
+                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                        OUTPUT_VARIABLE internal_version
+                        ERROR_QUIET
+                    )
+        #check local repo status
+        STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
+
+        STRING(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
+        STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
+
+        MESSAGE(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
+        IF(HGCHANGED)
+            MESSAGE(WARNING "You have uncommitted changes")
+        ENDIF()
+        set(version_suffix "-${revision_number}${HGCHANGED}")
+    ENDIF()
+ELSE(NOT NOREVISION)
+    set(default_build_type "RELEASE")
+    set(HWDEV false)
+    MESSAGE(STATUS "Building distributable version")
+ENDIF(NOT NOREVISION)
+
+
+#versioning
+set(CPACK_PACKAGE_VERSION_MAJOR 0)
+set(CPACK_PACKAGE_VERSION_MINOR 9)
+set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
+set(HEDGEWARS_PROTO_VER 44)
+set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+
 
 #bundle .app setup
 if(APPLE OR CROSSAPPLE)
@@ -82,7 +85,7 @@ if(APPLE)
     #detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
     find_program(sw_vers sw_vers)
     if(sw_vers)
-        exec_program(${sw_vers} ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+        execute_process(COMMAND ${sw_vers} "-productVersion" OUTPUT_VARIABLE current_macosx_version)
         string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
         else()
         if(NOT minimum_macosx_version)

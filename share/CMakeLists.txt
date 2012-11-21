@@ -4,12 +4,13 @@ IF(APPLE OR CROSSAPPLE)
 	#needed for CFBundleVersion and CFBundleShortVersionString
 	FIND_PROGRAM(HGCOMMAND hg)
 	IF (HGCOMMAND AND (EXISTS ${hedgewars_SOURCE_DIR}/.hg))
-		exec_program(${HGCOMMAND}
-			     ARGS identify -n ${hedgewars_SOURCE_DIR}
-			     OUTPUT_VARIABLE version_suffix
-			     )
-		STRING(REGEX REPLACE "([0-9]+)(.*)" "\\1" version_suffix ${version_suffix})
-		set (HEDGEWARS_REVISION ${version_suffix})
+            execute_process(COMMAND ${HGCOMMAND} identify -in
+                            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                            OUTPUT_VARIABLE internal_version
+                            ERROR_QUIET
+                        )
+		STRING(REGEX REPLACE "([0-9]+)(.*)" "\\1" revision_number ${internal_version})
+		set (HEDGEWARS_REVISION ${revision_number})
 	ELSE ()
 		set (HEDGEWARS_REVISION ${HEDGEWARS_VERSION})
 	ENDIF ()
