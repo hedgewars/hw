@@ -302,7 +302,10 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         else AddVoice(sndJustYouWait, CurrentTeam^.voicepack)
         end
     else
+        begin
+        GetRandom(2); // needed to avoid extdriven desync
         AddVoice(sndYesSir, CurrentTeam^.voicepack);
+        end;
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
     AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)

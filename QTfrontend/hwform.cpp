@@ -122,9 +122,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     , hwnet(0)
 {
     // set music track
-    SDLInteraction::instance().setMusicTrack(
-        DataManager::instance().findFileForRead("Music/main_theme.ogg")
-    );
+    SDLInteraction::instance().setMusicTrack("/Music/main_theme.ogg");
 
 #ifdef USE_XFIRE
     xfire_init();
@@ -189,10 +187,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
 
-#if 0
     connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnFeedback, ID_PAGE_FEEDBACK);
-#endif
 
     connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);

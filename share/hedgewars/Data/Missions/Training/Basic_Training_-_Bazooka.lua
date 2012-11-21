@@ -13,7 +13,7 @@
 -- about translations.
 -- We can use the function loc(text) to localize a string.
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- This variable will hold the number of destroyed targets.
 local score = 0

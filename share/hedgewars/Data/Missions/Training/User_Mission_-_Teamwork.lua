@@ -1,4 +1,4 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local player = nil -- This variable will point to the hog's gear
 local p2 = nil

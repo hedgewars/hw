@@ -55,8 +55,7 @@ void GameStyleModel::loadGameStyles()
     {
         script = script.remove(".lua", Qt::CaseInsensitive);
 
-        QFile scriptCfgFile(DataManager::instance().findFileForRead(
-                            QString("Scripts/Multiplayer/%2.cfg").arg(script)));
+        QFile scriptCfgFile(QString("physfs://Scripts/Multiplayer/%2.cfg").arg(script));
 
         QString name = script;
         name = name.replace("_", " ");

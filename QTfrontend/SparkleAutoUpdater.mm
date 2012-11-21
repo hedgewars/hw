@@ -31,7 +31,7 @@ class SparkleAutoUpdater::Private
 
 SparkleAutoUpdater::SparkleAutoUpdater()
 {
-    d = new Private;
+    d = new SparkleAutoUpdater::Private();
 
     d->updater = [SUUpdater sharedUpdater];
     [d->updater retain];

@@ -31,7 +31,7 @@ class M3Panel : public InstallController
 
     private:
         class Private;
-        Private* c;
+        Private* m;
 };
 
 #endif

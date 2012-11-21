@@ -103,6 +103,13 @@ with HHGear^.Hedgehog^ do
             LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
         else if prevAmmo = amKnife then
             LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
+        end;
+    // Try again in the next slot
+    if CurAmmoType = prevAmmo then 
+        begin
+        if slot >= cMaxSlotIndex then slot:= 0 else inc(slot);
+        HHGear^.MsgParam:= slot;
+        ChangeAmmo(HHGear)
         end
     end
 end;
@@ -641,9 +648,10 @@ case Gear^.Pos of
                         gi := GearsList;
                         while gi <> nil do
                             begin
-                            if gi^.Kind = gtGenericFaller then
+                            if (gi^.Kind = gtGenericFaller) and (gi^.State and gstInvisible <> 0) then
                                 begin
                                 gi^.Active:= true;
+                                gi^.State:= gi^.State or gstTmpFlag;
                                 gi^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
                                 gi^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
                                 gi^.dX:= _90-(GetRandomf*_360);

@@ -54,9 +54,9 @@
 -- GO PONIES, GO PONIES, GO!
 -----------------------------
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
-loadfile(GetDataPath() .. "Scripts/Utils.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 -- experimental menu stuff
 local menuIndex = 1

@@ -70,28 +70,6 @@ class DataManager: public QObject
                              ) const;
 
         /**
-         * @brief Returns the path for the desires data file.
-         *
-         * Use this method if you want to read an existing data file.
-         *
-         * @param relativeDataFilePath relative path of the data file.
-         * @return real path to the file.
-         */
-        QString findFileForRead(const QString & relativeDataFilePath) const;
-
-
-        /**
-         * @brief Returns the path for the data file that is to be written.
-         *
-         * Use this method if you want to create or write into a data file.
-         *
-         * @param relativeDataFilePath relative path of data file write path.
-         * @return destination of path data file.
-         */
-        QString findFileForWrite(const QString & relativeDataFilePath) const;
-
-
-        /**
          * @brief Returns pointer to a model of available game styles.
          *
          * The model is updated automatically on data reload.
@@ -151,9 +129,6 @@ class DataManager: public QObject
          * @see <a href="http://en.wikipedia.org/wiki/Singleton_pattern">singleton pattern</a>
          */
         DataManager();
-
-        QDir * m_defaultData; ///< directory of the installed data
-        QDir * m_userData;    ///< directory of custom data in the user's directory
 
         GameStyleModel * m_gameStyleModel; ///< game style model instance
         HatModel * m_hatModel; ///< hat model instance

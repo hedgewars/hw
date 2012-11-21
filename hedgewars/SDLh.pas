@@ -42,8 +42,8 @@ interface
         {$linklib root}
     {$ELSE}
         {$IFNDEF ANDROID}
-        {$linklib pthread}
-    {$ENDIF}
+            {$linklib pthread}
+        {$ENDIF}
     {$ENDIF}
 {$ENDIF}
 
@@ -1020,7 +1020,7 @@ function  TTF_RenderUTF8_Solid(font: PTTF_Font; const text: PChar; fg: TSDL_Colo
 function  TTF_RenderUTF8_Blended(font: PTTF_Font; const text: PChar; fg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL_Color): PSDL_Surface; cdecl; external SDL_TTFLibName;
 
-function  TTF_OpenFont(const filename: PChar; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
+function  TTF_OpenFontRW(src: PSDL_RWops; freesrc: LongBool; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
@@ -1040,7 +1040,7 @@ procedure Mix_FreeChunk(chunk: PMixChunk); cdecl; external SDL_MixerLibName;
 procedure Mix_FreeMusic(music: PMixMusic); cdecl; external SDL_MixerLibName;
 
 function  Mix_LoadWAV_RW(src: PSDL_RWops; freesrc: LongInt): PMixChunk; cdecl; external SDL_MixerLibName;
-function  Mix_LoadMUS(const filename: PChar): PMixMusic; cdecl; external SDL_MixerLibName;
+function  Mix_LoadMUS_RW(src: PSDL_RWops): PMixMusic; cdecl; external SDL_MixerLibName;
 
 function  Mix_Playing(channel: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_PlayingMusic: LongInt; cdecl; external SDL_MixerLibName;
@@ -1064,9 +1064,9 @@ function  IMG_Init(flags: LongInt): LongInt; {$IFDEF SDL_IMAGE_NEWER}cdecl; exte
 procedure IMG_Quit; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName;{$ENDIF}
 
 function  IMG_Load(const _file: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
-function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongInt): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_Load_RW(rwop: PSDL_RWops; freesrc: LongBool): PSDL_Surface; cdecl; external SDL_ImageLibName;
 function  IMG_LoadPNG_RW(rwop: PSDL_RWops): PSDL_Surface; cdecl; external SDL_ImageLibName;
-function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongInt; type_: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
+function  IMG_LoadTyped_RW(rwop: PSDL_RWops; freesrc: LongBool; type_: PChar): PSDL_Surface; cdecl; external SDL_ImageLibName;
 
 (*  SDL_net  *)
 function  SDLNet_Init: LongInt; cdecl; external SDL_NetLibName;

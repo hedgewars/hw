@@ -1692,7 +1692,7 @@ begin
         end
     else
         begin 
-        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then // stir it up every second or so
+        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $1FFF = 0) then // stir 'em up periodically
             begin
             gi := GearsList;
             while gi <> nil do
@@ -2457,6 +2457,12 @@ begin
         Gear^.AdvBounce:= 1;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
@@ -5151,6 +5157,7 @@ else
         begin
         with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
         AddRandomness(CheckSum);
+        if gi^.Kind = gtGenericFaller then gi^.State:= gi^.State and not gstTmpFlag;
         gi := gi^.NextGear
         end;
     AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
@@ -5168,8 +5175,17 @@ if Gear^.Timer < $FFFFFFFF then
         DeleteGear(Gear);
         exit
         end;
-    
-doStepFallingGear(Gear);
+if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
+    begin
+    doStepFallingGear(Gear);
+    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and ((hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < topY)) then
+        begin
+        Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+        Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+        Gear^.dX:= _90-(GetRandomf*_360);
+        Gear^.dY:= _90-(GetRandomf*_360)
+        end;
+    end
 end;
 
 procedure doStepCreeper(Gear: PGear);

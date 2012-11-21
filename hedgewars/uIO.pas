@@ -239,10 +239,10 @@ end;
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
 var s: shortstring;
 begin
-s[0]:= #5;
+s[0]:= #9;
 s[1]:= cmd;
 SDLNet_Write32(X, @s[2]);
-SDLNet_Write32(Y, @s[4]);
+SDLNet_Write32(Y, @s[6]);
 SendIPC(s)
 end;
 

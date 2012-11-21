@@ -3,8 +3,8 @@
 -- v.0.7.1
 ------------------------------------
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 local fMod = 1000000 -- use this for dev and .16+ games
 

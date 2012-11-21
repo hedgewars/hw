@@ -44,7 +44,7 @@
 // Used for sending scripts to the engine
 #define MULTIPLAYER_SCRIPT_PATH "Scripts/Multiplayer/"
 
-#define WEAPONS_COUNT 55
+#define WEAPONS_COUNT 56
 
 // TODO allow frontend to override these?
 /* A merge of mikade/bugq colours w/ a bit of channel feedback */

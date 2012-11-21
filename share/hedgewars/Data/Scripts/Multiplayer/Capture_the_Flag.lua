@@ -75,7 +75,7 @@
 -----------------
 
 -- enable awesome translaction support so we can use loc() wherever we want
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things

@@ -125,17 +125,15 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     if (loc.isEmpty())
         loc = QLocale::system().name();
 
-    QString infoFile = dataMgr.findFileForRead(
-                           QString("Locale/missions_" + loc + ".txt"));
+    QString infoFile = QString("physfs://Locale/missions_" + loc + ".txt");
 
     // if file is non-existant try with language only
     if (!QFile::exists(infoFile))
-        infoFile = dataMgr.findFileForRead(QString(
-                                               "Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt"));
+        infoFile = QString("physfs://Locale/missions_" + loc.remove(QRegExp("_.*$")) + ".txt");
 
     // fallback if file for current locale is non-existant
     if (!QFile::exists(infoFile))
-        infoFile = dataMgr.findFileForRead(QString("Locale/missions_en.txt"));
+        infoFile = QString("physfs://Locale/missions_en.txt");
 
 
     // preload mission info for current locale
@@ -186,15 +184,12 @@ void PageTraining::startSelected()
 
 void PageTraining::updateInfo()
 {
-    DataManager & dataMgr = DataManager::instance();
-
     if (lstMissions->currentItem())
     {
         // TODO also use .pngs in userdata folder
-        QString thumbFile = dataMgr.findFileForRead(
-                                "Graphics/Missions/Training/" +
+        QString thumbFile =     "physfs://Graphics/Missions/Training/" +
                                 lstMissions->currentItem()->data(Qt::UserRole).toString() +
-                                "@2x.png");
+                                "@2x.png";
 
         if (QFile::exists(thumbFile))
             btnPreview->setIcon(QIcon(thumbFile));

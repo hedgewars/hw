@@ -41,8 +41,7 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         QTabWidget * tab = dynamic_cast<QTabWidget*>(dist);
         if (HWForm::config->isFrontendSoundEnabled() && (button || textfield || checkbox || droplist || slider || tab))
         {
-            DataManager & dataMgr = DataManager::instance();
-            SDLInteraction::instance().playSoundFile(dataMgr.findFileForRead("Sounds/steps.ogg"));
+            SDLInteraction::instance().playSoundFile("/Sounds/steps.ogg");
         }
 
         return true;

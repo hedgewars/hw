@@ -1,6 +1,6 @@
 @echo off
 ::edit these variables if you need
-set PASCAL=C:\FPC\2.4.4\bin\i386-win32\
+set PASCAL=C:\FPC\2.6.0\bin\i386-win32\
 set QTDIR=C:\QtSDK\Desktop\Qt\4.7.4\mingw\bin
 set PATH=%PATH%;%PASCAL%
 set BUILD_TYPE="Debug"
@@ -39,13 +39,13 @@ call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
 set ERRORLEVEL=
-cmake -G "MinGW Makefiles" -DCMAKE_INCLUDE_PATH="%CD%\misc\winutils\include" -DCMAKE_LIBRARY_PATH="%CD%\misc\winutils\lib" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" . -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
+cmake -G "MinGW Makefiles" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" . -DCMAKE_BUILD_TYPE=%BUILD_TYPE%
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
 echo Running make...
 set ERRORLEVEL=
-mingw32-make
+mingw32-make VERBOSE=1
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
 echo Installing...

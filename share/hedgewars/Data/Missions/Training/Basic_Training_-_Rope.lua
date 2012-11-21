@@ -7,8 +7,8 @@
 --I know there need to be more "tutorial" specefic messages, but I had a hard timer figuring out what to type / what would be the best technical description.
 
 
-loadfile( GetDataPath() .. "Scripts/Locale.lua" )()
-loadfile( GetDataPath() .. "Scripts/Utils.lua" )() -- For the gearIsInBox function, wrote my own, but decided it was a waste to include it
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua") -- For the gearIsInBox function, wrote my own, but decided it was a waste to include it
 
 local Player = nil -- Pointer to hog created in: onGameInit
 local Target = nil -- Pointer to target hog

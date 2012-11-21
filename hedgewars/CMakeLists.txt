@@ -4,7 +4,7 @@ find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake_modules/FindSDL_Extras.cmake)
 
 configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
@@ -55,6 +55,7 @@ set(engine_sources
     uMatrix.pas
     uMisc.pas
     uMobile.pas
+    uPhysFSLayer.pas
     uRandom.pas
     uRender.pas
     uRenderUtils.pas
@@ -95,35 +96,62 @@ if(LIBENGINE)
         set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
 
-    if (APPLE)
-        set(engine_output_name "hwengine.dylib")
+    if(APPLE)
+        set(engine_output_name "libhwengine.dylib")
     endif (APPLE)
 endif(LIBENGINE)
 
+
+#PASCAL DETECTION SECTION
 IF(FPC)
     set(fpc_executable ${FPC})
 ELSE()
     find_program(fpc_executable fpc)
 ENDIF()
 
-if(fpc_executable)
-    exec_program(${fpc_executable} ARGS "-iV" OUTPUT_VARIABLE fpc_output)
-endif(fpc_executable)
+message(STATUS "Check for working FPC compiler: ${fpc_executable}")
+execute_process(COMMAND ${fpc_executable} -iV OUTPUT_VARIABLE fpc_output ERROR_VARIABLE fpc_error)
+if(fpc_error)
+    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- broken")
+else(fpc_error)
+    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- works")
+endif(fpc_error)
 
+string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
+if(fpc_version)
+    string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
+    string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
+    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
+    message(STATUS "Found Freepascal: ${fpc_executable} (version ${fpc_vers_major}.${fpc_vers_minor})")
+    math(EXPR fpc_version "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
+
+    if(fpc_version LESS "020200")
+        message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
+    elseif(APPLE AND (fpc_version LESS "020600"))
+        message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
+    endif()
+else()
+    message(FATAL_ERROR "No FreePascal compiler found!")
+endif()
+
+message(STATUS "Checking whether linker supports noexecstack flag")
 set(noexecstack_flags "-k-z" "-knoexecstack")
 file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
 
-exec_program(${fpc_executable} ${EXECUTABLE_OUTPUT_PATH}
-    ARGS ${noexecstack_flags} checkstack.pas
-    OUTPUT_VARIABLE noout
-    RETURN_VALUE testnoexecstack
+execute_process(COMMAND ${fpc_executable} ${noexecstack_flags} checkstack.pas
+    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+    RESULT_VARIABLE testnoexecstack
+    OUTPUT_QUIET ERROR_QUIET
     )
 
 if(${testnoexecstack})
     set (noexecstack_flags "")
+    message(STATUS "Checking whether linker supports noexecstack flag -- no")
+else(${testnoexecstack})
+    message(STATUS "Checking whether linker supports noexecstack flag -- yes")
 endif(${testnoexecstack})
 
-
+#DEPENDECIES AND EXECUTABLES SECTION
 if(APPLE)
     string(REGEX MATCH "[pP][pP][cC]+" powerpc_build "${CMAKE_OSX_ARCHITECTURES}")
     string(REGEX MATCH "[iI]386+" i386_build "${CMAKE_OSX_ARCHITECTURES}")
@@ -152,30 +180,9 @@ if(APPLE)
 
         set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
     endif()
+    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
 endif(APPLE)
 
-
-#PASCAL DETECTION SECTION
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
-
-if(fpc_version)
-    string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-    message(STATUS "Found Freepascal: ${fpc_executable} (version ${fpc_vers_major}.${fpc_vers_minor})")
-    math(EXPR fpc_version "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
-
-    if(fpc_version LESS "020200")
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-    elseif(APPLE AND (fpc_version LESS "020600"))
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
-    endif()
-else()
-    message(FATAL_ERROR "No FreePascal compiler found!")
-endif()
-
-
-#DEPENDECIES AND EXECUTABLES SECTION
 if(NOT NOPNG)
     find_package(PNG)
     if(${PNG_FOUND})
@@ -184,12 +191,11 @@ if(NOT NOPNG)
             set(pascal_flags "-k${PNG_LIBRARY}" ${pascal_flags})
         endif()
     else()
-        message(STATUS "Screenshots will be in BMP format because libpng was not found")
+        message(WARNING "Screenshots will be in BMP format because libpng was not found")
     endif()
 else()
     message(STATUS "Screenshots will be in BMP format per user request")
 endif()
-
 
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
@@ -226,11 +232,13 @@ if(NOT NOVIDEOREC)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
         ENDIF()
     else()
-        message(STATUS "Could NOT find FFMPEG/LibAV, video recording will be disabled")
+        message(WARNING "Could NOT find FFMPEG/LibAV, video recording will be disabled")
     endif()
 else()
     message(STATUS "Video recording disabled by user")
 endif()
+
+set(pascal_flags "-Fl${LIBRARY_OUTPUT_PATH}" ${pascal_flags})
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
@@ -269,6 +277,9 @@ add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/$
 if(NOT LUA_FOUND)
     add_dependencies(${engine_output_name} lua)
 endif()
+
+# compile physfs before engine
+add_dependencies(${engine_output_name} physfs)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
