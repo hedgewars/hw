@@ -23,8 +23,38 @@
 #include <QList>
 #include <QApplication>
 #include <QImage>
+#include <QThread>
 
 #include "hwconsts.h"
+
+#ifdef HWLIBRARY
+extern "C" void Game(char**arguments);
+
+//NOTE: most likely subclassing QThread is wrong
+class EngineThread : public QThread
+{
+protected:
+    void run();
+};
+
+void EngineThread::run()
+{
+    char *args[12];
+    args[0] = "1";      //cShowFPS
+    args[1] = "65000";  //ipcPort
+    args[2] = "1024";   //cScreenWidth
+    args[3] = "768";    //cScreenHeight
+    args[4] = "0";      //cReducedQuality
+    args[5] = "en.txt"; //cLocaleFName
+    args[6] = "koda";   //UserNick
+    args[7] = "1";      //SetSound
+    args[8] = "1";      //SetMusic
+    args[9] = "0";      //cAltDamage
+    args[10]= "../Resources/hedgewars/Data";   //cPathPrefix
+    args[11]= NULL;     //recordFileName
+    Game(args);
+}
+#endif
 
 QList<TCPBase*> srvsList;
 QPointer<QTcpServer> TCPBase::IPCServer(0);
@@ -60,7 +90,11 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
             exit(0); // FIXME - should be graceful exit here (lower Critical -> Warning above when implemented)
         }
     }
+#ifdef HWLIBRARY
+    ipc_port=65000; //HACK
+#else
     ipc_port=IPCServer->serverPort();
+#endif
 }
 
 void TCPBase::NewConnection()
@@ -83,6 +117,10 @@ void TCPBase::RealStart()
     connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
     IPCSocket = 0;
 
+#ifdef HWLIBRARY
+    EngineThread engineThread;// = new EngineThread(this);
+    engineThread.start();
+#else
     QProcess * process;
     process = new QProcess();
     connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
@@ -93,7 +131,7 @@ void TCPBase::RealStart()
         process->setProcessChannelMode(QProcess::ForwardedChannels);
 
     process->start(bindir->absolutePath() + "/hwengine", arguments);
-
+#endif
     m_hasStarted = true;
 }
 

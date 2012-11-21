@@ -95,8 +95,8 @@ if(BUILD_ENGINE_LIBRARY)
         set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
 
-    if (APPLE)
-        set(engine_output_name "hwengine.dylib")
+    if(APPLE)
+        set(engine_output_name "libhwengine.dylib")
     endif (APPLE)
 endif(BUILD_ENGINE_LIBRARY)
 
@@ -151,8 +151,9 @@ if(APPLE)
             set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
         endif()
 
-        set(pascal_flags "-k${SDLMAIN_LIB}" "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
+        set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
     endif()
+    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
 endif(APPLE)
 
 

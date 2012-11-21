@@ -263,7 +263,7 @@ if(ANDROID)
 endif()
 
 #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
-if(NOT (BUILD_ENGINE_LIBRARY OR ANDROID))
+if(NOT ANDROID)
     add_subdirectory(bin)
     add_subdirectory(QTfrontend)
     add_subdirectory(share)
