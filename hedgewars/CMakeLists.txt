@@ -108,9 +108,13 @@ ELSE()
     find_program(fpc_executable fpc)
 ENDIF()
 
-if(fpc_executable)
-    execute_process(COMMAND ${fpc_executable} -iV OUTPUT_VARIABLE fpc_output)
-endif(fpc_executable)
+message(STATUS "Check for working FPC compiler: ${fpc_executable}")
+execute_process(COMMAND ${fpc_executable} -iV OUTPUT_VARIABLE fpc_output ERROR_VARIABLE fpc_error)
+if(fpc_error)
+    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- broken")
+else(fpc_error)
+    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- works")
+endif(fpc_error)
 
 string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
 if(fpc_version)
@@ -129,17 +133,21 @@ else()
     message(FATAL_ERROR "No FreePascal compiler found!")
 endif()
 
+message(STATUS "Checking whether linker supports noexecstack flag")
 set(noexecstack_flags "-k-z" "-knoexecstack")
 file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
 
 execute_process(COMMAND ${fpc_executable} ${noexecstack_flags} checkstack.pas
     WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
     RESULT_VARIABLE testnoexecstack
-    OUTPUT_QUIET
+    OUTPUT_QUIET ERROR_QUIET
     )
 
 if(${testnoexecstack})
     set (noexecstack_flags "")
+    message(STATUS "Checking whether linker supports noexecstack flag -- no")
+else(${testnoexecstack})
+    message(STATUS "Checking whether linker supports noexecstack flag -- yes")
 endif(${testnoexecstack})
 
 #DEPENDECIES AND EXECUTABLES SECTION
@@ -182,12 +190,11 @@ if(NOT NOPNG)
             set(pascal_flags "-k${PNG_LIBRARY}" ${pascal_flags})
         endif()
     else()
-        message(STATUS "Screenshots will be in BMP format because libpng was not found")
+        message(WARNING "Screenshots will be in BMP format because libpng was not found")
     endif()
 else()
     message(STATUS "Screenshots will be in BMP format per user request")
 endif()
-
 
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
@@ -224,7 +231,7 @@ if(NOT NOVIDEOREC)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
         ENDIF()
     else()
-        message(STATUS "Could NOT find FFMPEG/LibAV, video recording will be disabled")
+        message(WARNING "Could NOT find FFMPEG/LibAV, video recording will be disabled")
     endif()
 else()
     message(STATUS "Video recording disabled by user")

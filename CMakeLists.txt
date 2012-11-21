@@ -44,7 +44,7 @@ IF(NOT NOREVISION)
 
         MESSAGE(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
         IF(HGCHANGED)
-            MESSAGE(WARNING "You have uncommitted changes")
+            MESSAGE(WARNING "Notice: you have uncommitted changes in your repository")
         ENDIF()
         set(version_suffix "-${revision_number}${HGCHANGED}")
     ENDIF()
@@ -85,12 +85,15 @@ if(APPLE)
     #detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
     find_program(sw_vers sw_vers)
     if(sw_vers)
-        execute_process(COMMAND ${sw_vers} "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+        execute_process(COMMAND ${sw_vers} "-productVersion"
+                        OUTPUT_VARIABLE current_macosx_version
+                        OUTPUT_STRIP_TRAILING_WHITESPACE)
         string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
-        else()
+    else()
         if(NOT minimum_macosx_version)
             message(FATAL_ERROR "sw_vers not found! Need explicit MACOSX_DEPLOYMENT_TARGET variable set")
         else()
+            message(WARNING "sw_vers not found! Fallback to MACOSX_DEPLOYMENT_TARGET variable")
             set(current_macosx_version ${minimum_macosx_version})
         endif()
     endif()
@@ -100,7 +103,7 @@ if(APPLE)
         set(minimum_macosx_version ${current_macosx_version})
     endif()
 
-    #lower systems don't have enough processing power anyways
+    #lower systems don't have enough processing power anyway
     if (minimum_macosx_version LESS "10.4")
         message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
     endif()
@@ -145,8 +148,8 @@ if(APPLE)
     #set deployment target
     set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
 
-    message(STATUS "Build system: Mac OS X ${current_macosx_version} with GCC:${CMAKE_C_COMPILER}")
-    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s):${CMAKE_OSX_ARCHITECTURES}")
+    message(STATUS "Build system: Mac OS X ${current_macosx_version} with C compiler: ${CMAKE_C_COMPILER}")
+    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s): ${CMAKE_OSX_ARCHITECTURES}")
 endif(APPLE)
 
 
@@ -230,7 +233,7 @@ if(NOT NOSERVER)
         add_subdirectory(gameServer)
         message(STATUS "Found GHC: ${ghc_executable}")
     else()
-        message(STATUS "Could NOT find GHC, server will not be built")
+        message(WARNING "Could NOT find GHC, server will not be built")
         set(HAVE_NETSERVER false)
     endif()
 else()
@@ -246,7 +249,7 @@ if(LUA_FOUND)
 else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
-    #linking with liblua.a requires system readline -- this works everywhere, right?
+    #linking with liblua.a requires system readline
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
 endif()
 
@@ -254,10 +257,10 @@ endif()
 #main engine
 add_subdirectory(hedgewars)
 
-# physfs library
+#physfs library
 add_subdirectory(misc/physfs)
 
-# frontend library
+#frontend library
 add_subdirectory(project_files/frontlib)
 
 #Android related build scripts
