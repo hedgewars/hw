@@ -1,5 +1,6 @@
 find_package(SDL REQUIRED)
 find_package(SDL_net REQUIRED)
+find_package(ZLIB REQUIRED)
 
 add_definitions("-std=c99")
 
@@ -15,5 +16,6 @@ file(GLOB frontlib_src
 
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLNET_INCLUDE_DIR})
+include_directories(${ZLIB_INCLUDE_DIR})
 
 add_library(frontlib STATIC ${frontlib_src})
