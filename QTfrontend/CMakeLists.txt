@@ -59,7 +59,6 @@ else()
     endif()
 endif()
 
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
 file(GLOB NetCpp net/*.cpp)
@@ -156,6 +155,12 @@ if(APPLE OR CROSSAPPLE)
             set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
         endif()
     endif()
+endif()
+
+if(BUILD_ENGINE_LIBRARY)
+    add_definitions(-DHWLIBRARY)
+    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
+    link_directories(${EXECUTABLE_OUTPUT_PATH})
 endif()
 
 
