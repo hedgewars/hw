@@ -15,9 +15,9 @@ if (NOT CROSSAPPLE)
     include(${QT_USE_FILE})
 endif()
 
-# Configure for SDL
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
+find_package(SDL REQUIRED)       #video in SDLInteraction
+find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL_net REQUIRED)   #network frontlib
 if(NOT NOVIDEOREC)
     find_package(FFMPEG)
 endif()
