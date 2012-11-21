@@ -67,6 +67,7 @@ end;
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 var tx, ty: Longword;
 begin
+    if cOnlyStats then exit;
     if (Width <= 0) or (Height <= 0) then
         exit;
     TryDo((X >= 0) and (X < LAND_WIDTH), 'UpdateLandTexture: wrong X parameter', true);
@@ -94,6 +95,7 @@ procedure RealLandTexUpdate;
 var x, y, ty, tx, lx, ly : LongWord;
     isEmpty: boolean;
 begin
+    if cOnlyStats then exit;
 (*
 if LandTextures[0, 0].tex = nil then
     for x:= 0 to LANDTEXARW -1 do

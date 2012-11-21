@@ -643,8 +643,7 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
-
-for i:= GetRandom(10)+30 downto 0 do
+for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     begin
     rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
@@ -932,7 +931,7 @@ end;
 var GearsNearArray : TPGearArray;
 function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
 var
-    t  : PGear;
+    t: PGear;
     s: Longword;
 begin
     r:= r*r;
@@ -949,7 +948,7 @@ begin
             GearsNearArray[s - 1] := t;
             end;
         t := t^.NextGear;
-	end;
+    end;
 
     GearsNear.size:= s;
     GearsNear.ar:= @GearsNearArray

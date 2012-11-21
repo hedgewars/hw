@@ -1,5 +1,5 @@
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
-loadfile(GetDataPath() .. "Scripts/Utils.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 
 local MineArray = {}
 local player 

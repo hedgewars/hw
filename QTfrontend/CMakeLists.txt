@@ -15,19 +15,9 @@ if (NOT CROSSAPPLE)
     include(${QT_USE_FILE})
 endif()
 
-# Check if we need zlib
-check_library_exists("${QT_QTCORE_LIBRARY}" inflateInit2_ ${QT_LIBRARY_DIR} QT_PROVIDES_ZLIB_FUNCTIONS)
-
-if(NOT QT_PROVIDES_ZLIB_FUNCTIONS)
-    find_package(ZLIB REQUIRED)
-
-    set(HW_LINK_LIBS ${ZLIB_LIBRARIES} ${HW_LINK_LIBS})
-endif()
-
-
-# Configure for SDL
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
+find_package(SDL REQUIRED)       #video in SDLInteraction
+find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL_net REQUIRED)   #network frontlib
 if(NOT NOVIDEOREC)
     find_package(FFMPEG)
 endif()
@@ -43,7 +33,9 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/misc/quazip)
+include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
+include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
+include_directories(${CMAKE_SOURCE_DIR}/project_files/frontlib)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -66,7 +58,6 @@ else()
         message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
     endif()
 endif()
-
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
@@ -166,6 +157,12 @@ if(APPLE OR CROSSAPPLE)
     endif()
 endif()
 
+if(BUILD_ENGINE_LIBRARY)
+    add_definitions(-DHWLIBRARY)
+    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
+    link_directories(${EXECUTABLE_OUTPUT_PATH})
+endif()
+
 
 add_executable(hedgewars WIN32
     ${hwfr_src}
@@ -176,10 +173,12 @@ add_executable(hedgewars WIN32
 
 
 set(HW_LINK_LIBS
-    quazip
+    physfs
+    frontlib
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
+    ${SDLNET_LIBRARY}
     ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )
@@ -200,7 +199,7 @@ endif()
 
 
 if (CROSSAPPLE)
-    add_dependencies(hedgewars quazip)
+
 else()
     target_link_libraries(hedgewars ${HW_LINK_LIBS})
 endif()

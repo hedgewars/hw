@@ -36,8 +36,6 @@ void QPushButtonWithSound::buttonClicked()
     if ( !isSoundEnabled || !HWForm::config->isFrontendSoundEnabled())
         return;
 
-    DataManager & dataMgr = DataManager::instance();
-
     if (this->isEnabled())
-        SDLInteraction::instance().playSoundFile(dataMgr.findFileForRead("Sounds/roperelease.ogg"));
+        SDLInteraction::instance().playSoundFile("/Sounds/roperelease.ogg");
 }

@@ -31,7 +31,7 @@ procedure GenPreview(out Preview: TPreview);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uLandOutline;
+     uLandGenMaze, uLandOutline, uPhysFSLayer;
 
 var digest: shortstring;
 
@@ -424,28 +424,26 @@ SDL_FreeSurface(tmpsurf);
 end;
 
 procedure LoadMapConfig;
-var f: textfile;
+var f: PFSFile;
     s: shortstring;
 begin
-// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
-s:= UserPathz[ptMapCurrent] + '/map.cfg';
-if not FileExists(s) then
-    s:= Pathz[ptMapCurrent] + '/map.cfg';
+s:= cPathz[ptMapCurrent] + '/map.cfg';
+
 WriteLnToConsole('Fetching map HH limit');
-{$I-}
-Assign(f, s);
-filemode:= 0; // readonly
-Reset(f);
-if IOResult <> 0 then
+
+f:= pfsOpenRead(s);
+if f <> nil then
     begin
-    s:= Pathz[ptMissionMaps] + '/' + ExtractFileName(Pathz[ptMapCurrent]) + '/map.cfg';
-    Assign(f, s);
-    Reset(f);
+    pfsReadLn(f, s);
+    if not pfsEof(f) then
+        begin
+        pfsReadLn(f, s);
+        val(s, MaxHedgehogs)
+        end;
+
+    pfsClose(f)
     end;
-Readln(f);
-if not eof(f) then
-    Readln(f, MaxHedgehogs);
-{$I+}
+
 if (MaxHedgehogs = 0) then
     MaxHedgehogs:= 18;
 end;
@@ -459,10 +457,8 @@ var tmpsurf: PSDL_Surface;
 begin
 tmpsurf:= LoadDataImage(ptMapCurrent, 'mask', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
-    tmpsurf:= LoadImage(Pathz[ptMapCurrent] + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
-if tmpsurf = nil then
-begin
-    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    begin
+    mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/mask', ifAlpha or ifTransparent or ifIgnoreCaps);
     end;
 
@@ -538,7 +534,7 @@ AddProgress;
 tmpsurf:= LoadDataImage(ptMapCurrent, 'map', ifAlpha or ifTransparent or ifIgnoreCaps);
 if tmpsurf = nil then
     begin
-    mapName:= ExtractFileName(Pathz[ptMapCurrent]);
+    mapName:= ExtractFileName(cPathz[ptMapCurrent]);
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
@@ -546,29 +542,6 @@ TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tm
 
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
 LoadMapConfig;
-
-// unC0Rr - should this be passed from the GUI? I am not sure which layer does what
-s:= UserPathz[ptMapCurrent] + '/map.cfg';
-if not FileExists(s) then
-    s:= Pathz[ptMapCurrent] + '/map.cfg';
-WriteLnToConsole('Fetching map HH limit');
-{$I-}
-Assign(f, s);
-filemode:= 0; // readonly
-Reset(f);
-if IOResult <> 0 then
-    begin
-    s:= Pathz[ptMissionMaps] + '/' + mapName + '/map.cfg';
-    Assign(f, s);
-    Reset(f);
-    end;
-Readln(f);
-if not eof(f) then
-    Readln(f, MaxHedgehogs);
-   
-{$I+}
-if (MaxHedgehogs = 0) then
-    MaxHedgehogs:= 18;
 
 playHeight:= tmpsurf^.h;
 playWidth:= tmpsurf^.w;
@@ -610,9 +583,9 @@ for w:= 0 to 23 do
 end;
 
 procedure GenMap;
-var x, y, w, c : Longword;
-    usermap, usermask, map, mask: shortstring;
-    maskOnly : boolean;
+var x, y, w, c: Longword;
+    map, mask: shortstring;
+    maskOnly: boolean;
 begin
     hasBorder:= false;
     maskOnly:= false;
@@ -624,14 +597,11 @@ begin
     //    FillChar(Land,SizeOf(TCollisionArray),0);*)
 
     if (GameFlags and gfForts) = 0 then
-        if Pathz[ptMapCurrent] <> '' then
+        if cPathz[ptMapCurrent] <> '' then
             begin
-            usermap:= UserPathz[ptMapCurrent] + '/map.png';
-            usermask:= UserPathz[ptMapCurrent] + '/mask.png';
-            map:= Pathz[ptMapCurrent] + '/map.png';
-            mask:= Pathz[ptMapCurrent] + '/mask.png';
-            if (not(FileExists(usermap)) and FileExists(usermask)) or
-               (not(FileExists(map)) and FileExists(mask)) then
+            map:= cPathz[ptMapCurrent] + '/map.png';
+            mask:= cPathz[ptMapCurrent] + '/mask.png';
+            if (not(FileExists(map)) and FileExists(mask)) then
                 begin
                 maskOnly:= true;
                 LoadMask;
@@ -725,7 +695,7 @@ if (GameFlags and gfBottomBorder) <> 0 then
 if (GameFlags and gfDisableGirders) <> 0 then
     hasGirders:= false;
 
-if (GameFlags and gfForts = 0) and (maskOnly or (Pathz[ptMapCurrent] = '')) then
+if (GameFlags and gfForts = 0) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
     AddObjects
     
 else
@@ -805,7 +775,7 @@ begin
                 if t > 8 then
                     Preview[y, x]:= Preview[y, x] or ($80 shr bit);
             end;
-	end;
+        end;
 end;
 
 
@@ -819,7 +789,7 @@ begin
 end;
 
 procedure chSendLandDigest(var s: shortstring);
-var adler, i : LongInt;
+var adler, i: LongInt;
 begin
     adler:= 1;
      for i:= 0 to LAND_HEIGHT-1 do
@@ -854,13 +824,9 @@ end;
 
 procedure freeModule;
 begin
-
-   SetLength(LandPixels, 0, 0);
-   
-   SetLength(Land, 0, 0);
- 
-   SetLength(LandDirty, 0, 0);
-
+    SetLength(Land, 0, 0);
+    SetLength(LandPixels, 0, 0);
+    SetLength(LandDirty, 0, 0);
 end;
 
 end.

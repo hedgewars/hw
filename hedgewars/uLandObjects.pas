@@ -30,8 +30,9 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 
 implementation
-uses uStore, uConsts, uConsole, uRandom, uSound, GLunit,
-     uTypes, uVariables, uUtils, uDebug, SysUtils;
+uses uStore, uConsts, uConsole, uRandom, uSound, GLunit
+     , uTypes, uVariables, uUtils, uDebug, SysUtils
+     , uPhysFSLayer;
 
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
@@ -401,7 +402,7 @@ end;
 
 procedure ReadThemeInfo(var ThemeObjects: TThemeObjects; var SprayObjects: TSprayObjects);
 var s, key: shortstring;
-    f: textfile;
+    f: PFSFile;
     i: LongInt;
     ii, t: Longword;
     c2: TSDL_Color;
@@ -431,21 +432,17 @@ if GrayScale then
         end
     end;
 
-s:= UserPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
-if not FileExists(s) then
-    s:= Pathz[ptCurrTheme] + '/' + cThemeCFGFilename;
+s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
-Assign(f, s);
-{$I-}
-filemode:= 0; // readonly
-Reset(f);
+f:= pfsOpenRead(s);
+TryDo(f <> nil, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
 
-while not eof(f) do
-begin
-    Readln(f, s);
+while not pfsEOF(f) do
+    begin
+    pfsReadLn(f, s);
     if Length(s) = 0 then
         continue;
     if s[1] = ';' then
@@ -740,9 +737,7 @@ begin
         end
     end;
 
-Close(f);
-{$I+}
-TryDo(IOResult = 0, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
+pfsClose(f);
 AddProgress;
 end;
 

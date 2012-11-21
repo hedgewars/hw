@@ -74,7 +74,7 @@ endif()
 set(SDL_DIR /home/richard/Downloads/android-project)
 
 
-set(ANDROID_SDK_API_LVL 14)
+set(ANDROID_SDK_API_LVL 16)
 set(ANDROID_NDK_API_LVL 5)
 
 MESSAGE(STATUS "Creating Makefile.android...")

@@ -1,10 +1,10 @@
 -- Random Weapons, example for gameplay scripts
 
 -- Load the library for localisation ("loc" function)
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- Load the gear tracker
-loadfile(GetDataPath() .. "Scripts/Tracker.lua")()
+HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
 -- List of available weapons
 local weapons = { amGrenade, amClusterBomb, amBazooka, amBee, amShotgun,

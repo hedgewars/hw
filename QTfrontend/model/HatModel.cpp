@@ -46,9 +46,7 @@ void HatModel::loadHats()
 
     DataManager & dataMgr = DataManager::instance();
 
-    QPixmap hhpix = QPixmap(
-                        dataMgr.findFileForRead("Graphics/Hedgehog/Idle.png")
-                    ).copy(0, 0, 32, 32);
+    QPixmap hhpix = QPixmap("physfs://Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
 
     // my reserved hats
     QStringList hatsList = dataMgr.entryList(
@@ -76,11 +74,9 @@ void HatModel::loadHats()
 
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
-        QPixmap pix(
-            dataMgr.findFileForRead(
-                "Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
-                ".png"
-            )
+        QPixmap pix(            
+                "physfs://Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
+                ".png"           
         );
 
         // rename properly

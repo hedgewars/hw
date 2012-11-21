@@ -1,42 +1,63 @@
 project(hedgewars)
 
-
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-FOREACH(policy CMP0003 CMP0012)
-    IF(POLICY ${policy})
-        CMAKE_POLICY(SET ${policy} NEW)
+cmake_policy(VERSION 2.6)
+FOREACH(hwpolicy CMP0003 CMP0012 CMP0017)
+    IF(POLICY ${hwpolicy})
+        CMAKE_POLICY(SET ${hwpolicy} NEW)
     ENDIF()
 ENDFOREACH()
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake_modules)
+#use available modules, fallback to ours if not present (CMP0017 helps)
+set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
+
+#set some default values
+option(NOREVISION "Build Hedgewars without revision information" OFF)
+
+option(NOSERVER "Disable gameServer build [default: auto]" OFF)
+option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
+option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
+
+
+option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
+option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
+option(LIBENGINE "Enable hwengine library [default: off]" OFF)
+
+option(ANDROID "Enable Android build [default: off]" OFF)
+option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
+option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
+option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+
 
 #detect Mercurial revision (if present)
-set(version_suffix "-dev") #UNSET THIS VARIABLE AT RELEASE TIME
-set(HGCHANGED "")
-IF(version_suffix MATCHES "-dev")
-    set(HW_DEV true)
+IF(NOT NOREVISION)
     set(default_build_type "DEBUG")
-    IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.hg)
-        FIND_PROGRAM(HGCOMMAND hg)
-        IF(HGCOMMAND)
-            exec_program(${HGCOMMAND}
-                     ARGS identify -in ${CMAKE_CURRENT_SOURCE_DIR}
-                     OUTPUT_VARIABLE version_suffix
-                     )
-            STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${version_suffix})
-            STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) ([0-9]+)(.*)" "\\3-\\1" version_suffix ${version_suffix})
-            IF (HGCHANGED)
-                MESSAGE(STATUS "Building revision ${version_suffix} (SOURCE CODE MODIFIED)")
-            ELSE()
-                MESSAGE(STATUS "Building revision ${version_suffix}")
-            ENDIF()
-            set(version_suffix "-${version_suffix}")
+    set(version_suffix "-development_version")
+    set(HW_DEV true)
+    FIND_PROGRAM(HGCOMMAND hg)
+    IF(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
+        execute_process(COMMAND ${HGCOMMAND} identify -in
+                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                        OUTPUT_VARIABLE internal_version
+                        ERROR_QUIET
+                    )
+        #check local repo status
+        STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
+
+        STRING(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
+        STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
+
+        MESSAGE(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
+        IF(HGCHANGED)
+            MESSAGE(WARNING "Notice: you have uncommitted changes in your repository")
         ENDIF()
+        set(version_suffix "-${revision_number}${HGCHANGED}")
     ENDIF()
-ELSE()
-    set(HW_DEV false)
+ELSE(NOT NOREVISION)
     set(default_build_type "RELEASE")
-ENDIF()
+    set(HWDEV false)
+    MESSAGE(STATUS "Building distributable version")
+ENDIF(NOT NOREVISION)
 
 
 #versioning
@@ -46,20 +67,6 @@ set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
 set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
-
-#set some default values
-option(NOSERVER "Disable gameServer build [default: auto]" OFF)
-option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
-option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
-
-option(ANDROID "Enable Android build [default: off]" OFF)
-option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
-option(LIBENGINE "Enable hwengine library [default: off]" OFF)
-
-option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
-option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
-option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
-option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
 
 #bundle .app setup
 if(APPLE OR CROSSAPPLE)
@@ -83,12 +90,15 @@ if(APPLE)
     #detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
     find_program(sw_vers sw_vers)
     if(sw_vers)
-        exec_program(${sw_vers} ARGS "-productVersion" OUTPUT_VARIABLE current_macosx_version)
+        execute_process(COMMAND ${sw_vers} "-productVersion"
+                        OUTPUT_VARIABLE current_macosx_version
+                        OUTPUT_STRIP_TRAILING_WHITESPACE)
         string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
-        else()
+    else()
         if(NOT minimum_macosx_version)
             message(FATAL_ERROR "sw_vers not found! Need explicit MACOSX_DEPLOYMENT_TARGET variable set")
         else()
+            message(WARNING "sw_vers not found! Fallback to MACOSX_DEPLOYMENT_TARGET variable")
             set(current_macosx_version ${minimum_macosx_version})
         endif()
     endif()
@@ -98,7 +108,7 @@ if(APPLE)
         set(minimum_macosx_version ${current_macosx_version})
     endif()
 
-    #lower systems don't have enough processing power anyways
+    #lower systems don't have enough processing power anyway
     if (minimum_macosx_version LESS "10.4")
         message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
     endif()
@@ -143,8 +153,8 @@ if(APPLE)
     #set deployment target
     set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
 
-    message(STATUS "Build system: Mac OS X ${current_macosx_version} with GCC:${CMAKE_C_COMPILER}")
-    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s):${CMAKE_OSX_ARCHITECTURES}")
+    message(STATUS "Build system: Mac OS X ${current_macosx_version} with C compiler: ${CMAKE_C_COMPILER}")
+    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s): ${CMAKE_OSX_ARCHITECTURES}")
 endif(APPLE)
 
 
@@ -210,6 +220,10 @@ else()
 endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+if(WIN32)
+    set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
+    link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
+endif(WIN32)
 
 
 #Haskell compiler discovery (for server and engine in c)
@@ -247,9 +261,16 @@ if(LUA_FOUND AND (NOT WEBGL))
 else()
     message(STATUS "Using internal LUA library")
     add_subdirectory(misc/liblua)
-    #linking with liblua.a requires system readline -- this works everywhere, right?
+    #linking with liblua.a requires system readline
     set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
 endif()
+
+
+#physfs library
+add_subdirectory(misc/physfs)
+
+#frontend library
+add_subdirectory(project_files/frontlib)
 
 
 if(NOPASCAL)
@@ -266,21 +287,20 @@ endif()
 
 if(WEBGL)
     #WEBGL deps
-else()
+else(WEBGL)
     #Android related build scripts
     if(ANDROID)
         add_subdirectory(project_files/Android-build)
     endif()
 
-    #TODO: when ANDROID, LIBENGINE should be set
-    if(NOT (LIBENGINE OR ANDROID))
+    #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
+    if(NOT ANDROID)
         add_subdirectory(bin)
-        add_subdirectory(misc/quazip)
         add_subdirectory(QTfrontend)
         add_subdirectory(share)
         add_subdirectory(tools)
     endif()
-endif()
+endif(WEBGL)
 
 
 

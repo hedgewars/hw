@@ -33,8 +33,8 @@ class CocoaInitializer::Private
 CocoaInitializer::CocoaInitializer()
 {
     c = new CocoaInitializer::Private();
-    NSApplicationLoad();
     c->pool = [[NSAutoreleasePool alloc] init];
+    NSApplicationLoad();
 }
 
 CocoaInitializer::~CocoaInitializer()

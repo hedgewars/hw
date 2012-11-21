@@ -169,7 +169,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + m_name + ".hwt", QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     m_name = teamfile.value("Team/Name", m_name).toString();
     m_grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -202,7 +202,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-    QFile f(cfgdir->absolutePath() + "/Teams/" + m_name + ".hwt");
+    QFile f(QString("physfs://config/Teams/%1.hwt").arg(m_name));
     return f.exists();
 }
 
@@ -210,7 +210,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + m_name + ".hwt");
+    QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(m_name));
     cfgfile.remove();
     return true;
 }
@@ -219,11 +219,11 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-        QFile cfgfile(cfgdir->absolutePath() + "/Teams/" + OldTeamName + ".hwt");
+        QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(OldTeamName));
         cfgfile.remove();
         OldTeamName = m_name;
     }
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + m_name + ".hwt", QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Team/Name", m_name);
     teamfile.setValue("Team/Grave", m_grave);

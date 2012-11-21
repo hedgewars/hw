@@ -37,7 +37,7 @@
 QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
-    TCPBase(true),
+    TCPBase(true, 0),
     ammostr(ammo),
     m_pTeamSelWidget(pTeamSelWidget)
 {
@@ -350,7 +350,7 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 
     // run engine
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -358,7 +358,7 @@ void HWGame::StartNet()
 {
     gameType = gtNet;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -366,7 +366,7 @@ void HWGame::StartLocal()
 {
     gameType = gtLocal;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -374,7 +374,7 @@ void HWGame::StartQuick()
 {
     gameType = gtQLocal;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -383,7 +383,7 @@ void HWGame::StartTraining(const QString & file)
     gameType = gtTraining;
     training = "Missions/Training/" + file + ".lua";
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -394,7 +394,7 @@ void HWGame::StartCampaign(const QString & camp, const QString & campScript, con
     campaignScript = "Missions/Campaign/" + camp + "/" + campScript;
     campaignTeam = campTeam;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 

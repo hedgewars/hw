@@ -28,6 +28,7 @@ import com.sun.jna.Native;
 
 public class Flib {
 	static {
+		System.loadLibrary("SDL");
 		System.loadLibrary("SDL_net");
 		System.setProperty("jna.encoding", "UTF8"); // Ugly global setting, but it seems JNA doesn't allow setting this per-library... 
 	}

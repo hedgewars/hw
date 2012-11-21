@@ -30,12 +30,13 @@ program hwengine;
 {$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler,
-     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions, uAILandMarks,
-     SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted, uFloat
+     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
+     uAILandMarks, SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers,
+     uLandPainted, uFloat, uPhysFSLayer
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
-     {$IFDEF WEBGL}, uWeb{$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
+     {$IFDEF WEBGL}, uWeb{$ENDIF}
      ;
 
 {$IFDEF HWLIBRARY}
@@ -68,7 +69,7 @@ var
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
-var s : shortstring;
+var s: shortstring;
 begin
     DoTimer:= false;
     inc(RealTicks, Lag);
@@ -104,19 +105,21 @@ begin
             end;
         gsConfirm, gsGame:
             begin
+            if not cOnlyStats then
 {$IFDEF WEBGL}
-            drawworld_hook();
+                drawworld_hook();
 {$ELSE}
-            DrawWorld(Lag); // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+                // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+                DrawWorld(Lag);
 {$ENDIF}
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsChat:
             begin
-            DrawWorld(Lag);
+            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsExit:
             begin
@@ -126,7 +129,7 @@ begin
             exit(false);
             end;
 
-    SwapBuffers;
+    if not cOnlyStats then SwapBuffers;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if flagPrerecording then
@@ -379,24 +382,12 @@ begin
     initEverything(true);
 
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-    AddFileLog('Prefix: "' + PathPrefix +'"');
-    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
     
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
-    for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if (p <> ptMapCurrent) and (p <> ptData) then
-            UserPathz[p]:= UserPathPrefix + '/Data/' + Pathz[p];
-
-    UserPathz[ptData]:= UserPathPrefix + '/Data';
-
-    for p:= Succ(Low(TPathType)) to High(TPathType) do
-        if p <> ptMapCurrent then
-            Pathz[p]:= PathPrefix + '/' + Pathz[p];
-
     WriteToConsole('Init SDL... ');
-    SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
+    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
 
     SDL_EnableUNICODE(1);
@@ -423,18 +414,15 @@ begin
     InitKbdKeyTable();
     AddProgress();
 
-    LoadLocale(UserPathz[ptLocale] + '/en.txt');  // Do an initial load with english
-    LoadLocale(Pathz[ptLocale] + '/en.txt');  // Do an initial load with english
+    LoadLocale(cPathz[ptLocale] + '/en.txt');  // Do an initial load with english
     if cLocaleFName <> 'en.txt' then
         begin
         // Try two letter locale first before trying specific locale overrides
-        if (Length(cLocale) > 3) and (Copy(cLocale,1,2) <> 'en') then
+        if (Length(cLocale) > 3) and (Copy(cLocale, 1, 2) <> 'en') then
             begin
-            LoadLocale(UserPathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt');
-            LoadLocale(Pathz[ptLocale] + '/' + Copy(cLocale,1,2)+'.txt')
+            LoadLocale(cPathz[ptLocale] + '/' + Copy(cLocale, 1, 2) + '.txt')
             end;
-        LoadLocale(UserPathz[ptLocale] + '/' + cLocaleFName);
-        LoadLocale(Pathz[ptLocale] + '/' + cLocaleFName)
+        LoadLocale(cPathz[ptLocale] + '/' + cLocaleFName)
         end
     else cLocale := 'en';
 
@@ -451,7 +439,7 @@ begin
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
     SendIPCRaw(@s[0], Length(s) + 1); // send proto version
-	
+
     InitTeams();
     AssignStores();
 
@@ -515,6 +503,7 @@ begin
 
     if complete then
     begin
+        uPhysFSLayer.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}   //stub
@@ -566,6 +555,7 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
+        uPhysFSLayer.freeModule;
     end;
 
     uIO.freeModule;
