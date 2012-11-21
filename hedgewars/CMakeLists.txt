@@ -4,7 +4,7 @@ find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include(${CMAKE_MODULE_PATH}/FindSDL_Extras.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake_modules/FindSDL_Extras.cmake)
 
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 

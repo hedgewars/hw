@@ -1,14 +1,13 @@
 project(hedgewars)
 
-
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-FOREACH(policy CMP0003 CMP0012)
-    IF(POLICY ${policy})
-        CMAKE_POLICY(SET ${policy} NEW)
-    ENDIF()
+cmake_policy(VERSION 2.6)
+FOREACH(hwpolicy CMP0003 CMP0012 CMP0017)
+    CMAKE_POLICY(SET ${hwpolicy} NEW)
 ENDFOREACH()
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules)
+#use available modules, fallback to ours if not present (CMP0017 helps)
+set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
 
 #detect Mercurial revision (if present)
