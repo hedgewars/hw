@@ -2,7 +2,6 @@
  * TODO: add copyright header, determine license
  */
 
-
 #include "hwpacksmounter.h"
 #include "FileEngine.h"
 
@@ -146,10 +145,27 @@ QAbstractFileEngine::FileFlags FileEngine::fileFlags(FileFlags type) const
 
 QString FileEngine::fileName(FileName file) const
 {
-    if (file == QAbstractFileEngine::AbsolutePathName)
-        return PHYSFS_getWriteDir();
-
-    return QString("physfs://%1").arg(_filename);
+    switch(file)
+    {
+        case QAbstractFileEngine::AbsolutePathName:
+        {
+            QString s(PHYSFS_getWriteDir());
+            return s;
+        }
+        case QAbstractFileEngine::BaseName:
+        {
+            int l = _filename.lastIndexOf('/');
+            QString s = _filename.mid(l + 1);
+            return s;
+        }
+        case QAbstractFileEngine::DefaultName:
+        case QAbstractFileEngine::AbsoluteName:
+        default:
+        {
+            QString s = "physfs:/" + _filename;
+            return s;
+        }
+    }
 }
 
 QDateTime FileEngine::fileTime(FileTime time) const
