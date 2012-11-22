@@ -404,7 +404,7 @@ end;
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
-{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
+    i: LongInt;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -423,26 +423,25 @@ begin
 {$I-}
 {$IFDEF MOBILE}
     {$IFDEF IPHONEOS} Assign(f, UserPathPrefix + '/hw-' + logfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
-    Rewrite(f);
+    {$IFDEF ANDROID} Assign(f, pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
+    i:= i; // avoid hint
 {$ELSE}
+    f:= stdout; // if everything fails, write to stderr
     if (UserPathPrefix <> '') then
         begin
-            i:= 0;
-            while(i < 7) do
+        if not FileExists(UserPathPrefix + '/Logs/') then
+            CreateDir(UserPathPrefix + '/Logs/');
+        i:= 0;
+        while(i < 7) do
             begin
-                assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
-                rewrite(f);
-                if IOResult = 0 then
-                    break;
-                inc(i)
+            assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            if IOResult = 0 then
+                break;
+            inc(i)
             end;
-            if i = 7 then
-                f:= stderr; // if everything fails, write to stderr
-        end
-    else
-        f:= stderr;
+        end;
 {$ENDIF}
+    Rewrite(f);
 {$I+}
 {$ENDIF}
 
