@@ -228,13 +228,14 @@ int main(int argc, char *argv[])
     // setup PhysFS
     engine.mount(datadir->absolutePath());
     engine.mount(cfgdir->absolutePath() + "/Data");
-    engine.mount(cfgdir->absolutePath(), "/config");
+    engine.mount(cfgdir->absolutePath());
     engine.setWriteDir(cfgdir->absolutePath());
     engine.mountPacks();
+    qDebug() << datadir->absolutePath();
 
     QTranslator Translator;
     {
-        QSettings settings("physfs://config/hedgewars.ini", QSettings::IniFormat);
+        QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();

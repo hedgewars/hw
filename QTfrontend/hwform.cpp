@@ -127,7 +127,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef USE_XFIRE
     xfire_init();
 #endif
-    gameSettings = new QSettings(cfgdir->absolutePath() + "/hedgewars.ini", QSettings::IniFormat);
+    gameSettings = new QSettings("physfs://hedgewars.ini", QSettings::IniFormat);
     frontendEffects = gameSettings->value("frontend/effects", true).toBool();
     playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
@@ -139,7 +139,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
 
-    config = new GameUIConfig(this, cfgdir->absolutePath() + "/hedgewars.ini");
+    config = new GameUIConfig(this, "physfs://hedgewars.ini");
 
     ui.pageVideos->init(config);
 
@@ -636,8 +636,8 @@ void HWForm::GoToPage(int id)
 
    /* if (id == ID_PAGE_DRAWMAP || id == ID_PAGE_GAMESTATS)
         stopAnim = true;
-	This were disabled due to broken flake animations.  I believe the more general problems w/ opacity that forced its disable makes blocking these
-	unnecessary.
+    This were disabled due to broken flake animations.  I believe the more general problems w/ opacity that forced its disable makes blocking these
+    unnecessary.
    */
 
 #if (QT_VERSION >= 0x040600)
@@ -695,8 +695,8 @@ void HWForm::GoToPage(int id)
         animationOldSlide->start(QAbstractAnimation::DeleteWhenStopped);
         animationNewSlide->start(QAbstractAnimation::DeleteWhenStopped);
 
-    	/* this is for the situation when the animation below is interrupted by a new animation.  For some reason, finished is not being fired */ 	
-    	for(int i=0;i<MAX_PAGE;i++) if (i!=id && i!=lastid) ui.Pages->widget(i)->hide();
+        /* this is for the situation when the animation below is interrupted by a new animation.  For some reason, finished is not being fired */
+        for(int i=0;i<MAX_PAGE;i++) if (i!=id && i!=lastid) ui.Pages->widget(i)->hide();
     }
 #endif
 }

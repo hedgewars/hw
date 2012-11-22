@@ -38,11 +38,11 @@ bool FileEngine::open(QIODevice::OpenMode openMode)
     }
 
     else {
-        qWarning("Bad file open mode: %d", (int)openMode);
+        qWarning("[PHYSFS] Bad file open mode: %d", (int)openMode);
     }
 
     if (!_handler) {
-        qWarning("Failed to open %s, reason: %s", _filename.toUtf8().constData(), PHYSFS_getLastError());
+        qWarning("[PHYSFS] Failed to open %s, reason: %s", _filename.toUtf8().constData(), PHYSFS_getLastError());
         return false;
     }
 

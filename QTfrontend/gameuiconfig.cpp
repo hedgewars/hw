@@ -44,9 +44,11 @@ const QNetworkProxy::ProxyType proxyTypesMap[] = {
 
 
 GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
-    : QSettings(fileName, QSettings::IniFormat)
+    : QSettings(fileName, QSettings::IniFormat, FormWidgets)
 {
     Form = FormWidgets;
+
+    setIniCodec("UTF-8");
 
     connect(Form->ui.pageOptions->CBEnableFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
@@ -77,7 +79,7 @@ void GameUIConfig::reloadValues(void)
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
-    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/effects", true).toBool());
+    Form->ui.pageOptions->CBFrontendEffects->setChecked(value("frontend/effects", true).toBool());
     Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
     Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
@@ -96,7 +98,7 @@ void GameUIConfig::reloadValues(void)
     if (savePwd == false) {
         Form->ui.pageOptions->editNetPassword->setEnabled(savePwd);
         Form->ui.pageOptions->editNetPassword->setText("");
-        setNetPasswordLength(0);        
+        setNetPasswordLength(0);
     }
 
     delete netHost;
