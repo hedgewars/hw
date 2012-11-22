@@ -191,26 +191,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             // List of installed languages
             CBLanguage = new QComboBox(groupMisc);
-            QDir tmpdir;
-            tmpdir.cd(cfgdir->absolutePath());
-            tmpdir.cd("Data/Locale");
-            tmpdir.setFilter(QDir::Files);
-            QStringList locs = tmpdir.entryList(QStringList("hedgewars_*.qm"));
+            QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
             CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
             for(int i = 0; i < locs.count(); i++)
             {
                 QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
-            }
-
-            tmpdir.cd(datadir->absolutePath());
-            tmpdir.cd("Locale");
-            tmpdir.setFilter(QDir::Files);
-            QStringList tmplist = tmpdir.entryList(QStringList("hedgewars_*.qm"));
-            for(int i = 0; i < tmplist.count(); i++)
-            {
-                if (locs.contains(tmplist[i])) continue;
-                QLocale loc(tmplist[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
                 CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
             }
 

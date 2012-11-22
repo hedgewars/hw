@@ -118,7 +118,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     DataManager & dataMgr = DataManager::instance();
 
     // get locale
-    QSettings settings(cfgdir->absolutePath() + "/hedgewars.ini",
+    QSettings settings("physfs://hedgewars.ini",
                        QSettings::IniFormat);
 
     QString loc = settings.value("misc/locale", "").toString();
