@@ -293,7 +293,7 @@ else(WEBGL)
         add_subdirectory(project_files/Android-build)
     endif()
 
-    #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
+    #TODO: when ANDROID, LIBENGINE should be set
     if(NOT ANDROID)
         add_subdirectory(bin)
         add_subdirectory(QTfrontend)
