@@ -22,6 +22,10 @@ procedure initModule;
 procedure freeModule;
 
 type PFSFile = pointer;
+{$IFDEF PAS2C}
+     Int64 = LongInt; //FIXME!!!!!!!!!
+     LongBool = boolean;
+{$ENDIF}
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 function rwopsOpenWrite(fname: shortstring): PSDL_RWops;
@@ -41,9 +45,12 @@ procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 implementation
 uses uUtils, uVariables;
 
+{$IFNDEF PAS2C}
+// pas2c unable to parse this section???
+
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
-function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
-function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhysfsLibName;
+function PHYSFS_deinit: LongInt; cdecl; external PhysfsLibName;
+function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
 
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external PhysfsLibName;
@@ -53,7 +60,9 @@ function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 
-procedure hedgewarsMountPackages(); cdecl; external PhysfsLibName;
+procedure hedgewarsMountPackages; cdecl; external PhysfsLibName;
+
+(*****************************************************************)
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 begin
@@ -128,5 +137,6 @@ procedure freeModule;
 begin
     PHYSFS_deinit;
 end;
+{$ENDIF}
 
 end.
