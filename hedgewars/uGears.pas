@@ -98,7 +98,7 @@ while Gear <> nil do
         begin
         if (not isInMultiShoot) then
             inc(Gear^.Damage, Gear^.Karma);
-        if (Gear^.Damage <> 0) and (not Gear^.Invulnerable) then
+        if ((Gear^.Damage <> 0) and (not Gear^.Invulnerable)) then
             begin
             CheckNoDamage:= false;
 
@@ -165,7 +165,7 @@ begin
                     if (team^.Hedgehogs[i].Gear <> nil) and (not team^.Hedgehogs[i].King)
                     and (team^.Hedgehogs[i].Gear^.Health > team^.Hedgehogs[i].Gear^.Damage) then
                         flag:= true;
-                if not flag then
+                if (not flag) then
                     begin
                     inc(tmp, 5);
                     if (GameFlags and gfResetHealth) <> 0 then
@@ -217,7 +217,7 @@ while t <> nil do
             RemoveGearFromList(curHandledGear);
             // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
             if curHandledGear^.Message and gmAddToList <> 0 then InsertGearToList(curHandledGear);
-            curHandledGear^.Message:= curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList))
+            curHandledGear^.Message:= (curHandledGear^.Message and (not (gmRemoveFromList or gmAddToList)))
             end;
         if curHandledGear^.Active then
             begin
@@ -332,7 +332,7 @@ case step of
                 StopMusic //No SDMusic for now
                     //ChangeMusic(SDMusic)
                     end
-                else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
+                else if ((TotalRounds < cSuddenDTurns) and (not isInMultiShoot)) then
                     begin
                     i:= cSuddenDTurns - TotalRounds;
                     s:= inttostr(i);
@@ -355,7 +355,7 @@ case step of
             end;
     stSpawn:
         begin
-        if not isInMultiShoot then
+        if (not isInMultiShoot) then
             SpawnBoxOfSmth;
         inc(step)
         end;
@@ -404,7 +404,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
                 CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
                 isCursorVisible := true
                 end;
-            CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacked);
+            CurrentHedgehog^.Gear^.State:= (CurrentHedgehog^.Gear^.State and (not gstAttacked));
             end;
         if delay2 = 0 then
             begin
@@ -702,7 +702,7 @@ while t <> nil do
                         t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
                         t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
                         t^.State:= t^.State or gstMoving;
-                        if t^.Kind = gtKnife then t^.State:= t^.State and (not gstCollision);
+                        if t^.Kind = gtKnife then t^.State:= (t^.State and (not gstCollision));
                         t^.Active:= true;
                         FollowGear:= t
                         end
@@ -813,7 +813,7 @@ while i > 0 do
             if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
                 begin
                 if (Ammo^.Hedgehog^.Gear <> nil) then
-                    Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable);
+                    Ammo^.Hedgehog^.Gear^.State:= (Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable));
                 ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
                 end;
 
@@ -833,17 +833,17 @@ while i > 0 do
                 Gear^.Active:= true;
                 DeleteCI(Gear);
                 Gear^.State:= Gear^.State or gstMoving;
-                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
+                if Gear^.Kind = gtKnife then Gear^.State:= (Gear^.State and (not gstCollision));
                 // move the gear upwards a bit to throw it over tiny obstacles at start
                 if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
                     begin
-                    if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
+                    if (not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX)))
                     or (TestCollisionYwithGear(Gear, -1) <> 0)) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
+                    if (not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)))
                     or (TestCollisionYwithGear(Gear, -1) <> 0)) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
+                    if (not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)))
                     or (TestCollisionYwithGear(Gear, -1) <> 0)) then
                         Gear^.Y:= Gear^.Y - _1;
                     end
@@ -961,7 +961,7 @@ t:= GearsList;
 while t <> nil do
     begin
     if (t^.Kind = gtHedgehog) and (t^.Y < Ammo^.Y) then
-        if not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2) then
+        if (not (hwSqr(Ammo^.X - t^.X) + hwSqr(Ammo^.Y - t^.Y - int2hwFloat(cHHRadius)) * 2 > _2)) then
             begin
             ApplyDamage(t, 5);
             t^.dX:= t^.dX + (t^.X - Ammo^.X) * _0_02;
@@ -1226,7 +1226,7 @@ end;
 procedure chSkip(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not isExternalSource then
+if (not isExternalSource) then
     SendIPC(_S',');
 uStats.Skipped;
 skipFlag:= true

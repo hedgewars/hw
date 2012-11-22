@@ -721,7 +721,7 @@ c:= -1;
 {$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
                 if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
                     begin
-                    if not(arrowUp.show) then
+                    if (not arrowUp.show) then
                         begin
                         animateWidget(@arrowUp, true, true);
                         animateWidget(@arrowDown, true, true);
@@ -744,7 +744,7 @@ c:= -1;
 
     if (WeaponTooltipTex <> nil) and (AMShiftX = 0) and (AMShiftY = 0) then
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
-        if not isPhone() then
+        if (not isPhone()) then
             ShowWeaponTooltip(-WeaponTooltipTex^.w div 2, AmmoRect.y - WeaponTooltipTex^.h - AMSlotSize);
 {$ELSE}
         ShowWeaponTooltip(AmmoRect.x - WeaponTooltipTex^.w - 3, Min(AmmoRect.y + 1, cScreenHeight - WeaponTooltipTex^.h - 40));
@@ -994,7 +994,7 @@ begin
 {$IFNDEF S3D_DISABLED}
     else if (cStereoMode = smAFR) then
         begin
-        AFRToggle:= not AFRToggle;
+        AFRToggle:= (not AFRToggle);
         glClear(GL_COLOR_BUFFER_BIT);
         if AFRToggle then
             DrawWorldStereo(Lag, rmLeftEye)
@@ -1370,7 +1370,7 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
-        if not highlight and (not hasGone) then
+        if (not highlight) and (not hasGone) then
             for i:= 0 to cMaxHHIndex do
                 if Hedgehogs[i].Gear <> nil then
                     begin
@@ -1406,7 +1406,7 @@ for t:= 0 to Pred(TeamsCount) do
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
             DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
-            if not hasGone and (TeamHealth > 1) then
+            if (not hasGone) and (TeamHealth > 1) then
                 begin
                 Tint(Clan^.Color shl 8 or $FF);
                 for i:= 0 to cMaxHHIndex do
@@ -1472,7 +1472,7 @@ if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
         AMAnimStartTime:= RealTicks - (AMAnimDuration - (RealTicks - AMAnimStartTime));
     AMState:= AMShowingUp;
     end;
-if not(bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) then
+if (not bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) then
     begin
     if (AMState = AMShowing) then
         AMAnimStartTime:= RealTicks
@@ -1584,7 +1584,7 @@ if GameState = gsConfirm then
 
 if ScreenFade <> sfNone then
     begin
-    if not isFirstFrame then
+    if (not isFirstFrame) then
         case ScreenFade of
             sfToBlack, sfToWhite:     if ScreenFadeValue + Lag * ScreenFadeSpeed < sfMax then
                                           inc(ScreenFadeValue, Lag * ScreenFadeSpeed)
@@ -1678,7 +1678,7 @@ SetScale(zoom);
 // Cursor
 if isCursorVisible then
     begin
-    if not bShowAmmoMenu then
+    if (not bShowAmmoMenu) then
         begin
         with CurrentHedgehog^ do
             if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
@@ -1707,7 +1707,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) an
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and autoCameraOn then
+if (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and autoCameraOn then
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;
@@ -1876,10 +1876,10 @@ exit;
 
 {$IFDEF USE_VIDEO_RECORDING}
 // do not change volume during prerecording as it will affect sound in video file
-if not flagPrerecording then
+if (not flagPrerecording) then
 {$ENDIF}
     begin
-    if not cHasFocus then DampenAudio()
+    if (not cHasFocus) then DampenAudio()
     else UndampenAudio();
     end;
 end;
