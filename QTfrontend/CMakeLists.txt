@@ -157,7 +157,7 @@ if(APPLE OR CROSSAPPLE)
     endif()
 endif()
 
-if(BUILD_ENGINE_LIBRARY)
+if(LIBENGINE)
     add_definitions(-DHWLIBRARY)
     set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
     link_directories(${EXECUTABLE_OUTPUT_PATH})
