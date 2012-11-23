@@ -9,8 +9,9 @@
 const QString FileEngineHandler::scheme = "physfs:/";
 
 FileEngine::FileEngine(const QString& filename)
-: _handler(NULL)
-, _flags(0)
+    : _handler(NULL)
+    , _flags(0)
+    , m_bufferSet(false)
 {
     setFileName(filename);
 }
@@ -222,6 +223,27 @@ qint64 FileEngine::read(char *data, qint64 maxlen)
     return PHYSFS_readBytes(_handler, data, maxlen);
 }
 
+qint64 FileEngine::readLine(char *data, qint64 maxlen)
+{
+    if(!m_bufferSet)
+    {
+        PHYSFS_setBuffer(_handler, 4096);
+        m_bufferSet = true;
+    }
+
+    qint64 bytesRead = 0;
+    while(PHYSFS_readBytes(_handler, data, 1)
+          && maxlen
+          && (*data == '\n'))
+    {
+        ++data;
+        --maxlen;
+        ++bytesRead;
+    }
+
+    return bytesRead;
+}
+
 qint64 FileEngine::write(const char *data, qint64 len)
 {
     return PHYSFS_writeBytes(_handler, data, len);
@@ -244,9 +266,11 @@ QString FileEngine::errorString() const
 
 bool FileEngine::supportsExtension(Extension extension) const
 {
-    return extension == QAbstractFileEngine::AtEndExtension;
+    return
+            (extension == QAbstractFileEngine::AtEndExtension)
+            || (extension == QAbstractFileEngine::FastReadLineExtension)
+            ;
 }
-
 
 
 FileEngineHandler::FileEngineHandler(char *argv0)

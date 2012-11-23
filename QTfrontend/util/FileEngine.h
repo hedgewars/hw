@@ -38,6 +38,7 @@ class FileEngine : public QAbstractFileEngine
         bool atEnd() const;
 
         virtual qint64 read(char *data, qint64 maxlen);
+        virtual qint64 readLine(char *data, qint64 maxlen);
         virtual qint64 write(const char *data, qint64 len);
 
         bool isOpened() const;
@@ -53,6 +54,7 @@ class FileEngine : public QAbstractFileEngine
         FileFlags _flags;
         QString _filename;
         QDateTime _datetime;
+        bool m_bufferSet;
 };
 
 class FileEngineHandler : public QAbstractFileEngineHandler
