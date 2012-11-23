@@ -163,8 +163,13 @@ if(BUILD_ENGINE_LIBRARY)
     link_directories(${EXECUTABLE_OUTPUT_PATH})
 endif()
 
+#when debugging, always prompt a console to see fronted messages
+#TODO: check it doesn't interfere on UNIX
+if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+    set(console_access "WIN32")
+endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
 
-add_executable(hedgewars WIN32
+add_executable(hedgewars ${console_access}
     ${hwfr_src}
     ${hwfr_moc_srcs}
     ${hwfr_hdrs}

@@ -1,8 +1,7 @@
 project(hedgewars)
 
 #initialise cmake environment
-cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-cmake_policy(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6.0)
 FOREACH(hwpolicy CMP0003 CMP0012 CMP0017)
     IF(POLICY ${hwpolicy})
         CMAKE_POLICY(SET ${hwpolicy} NEW)
@@ -11,9 +10,11 @@ ENDFOREACH()
 #use available modules, fallback to ours if not present (CMP0017 helps)
 set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
-#set some default values
-option(NOREVISION "Build Hedgewars without revision information" OFF)
 
+#usually this is set at release time
+option(NOREVISION "Build Hedgewars without revision information [default: off]" OFF)
+
+#set other default values
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
@@ -23,6 +24,7 @@ option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+
 
 #detect Mercurial revision (if present)
 IF(NOT NOREVISION)
@@ -71,7 +73,6 @@ if(APPLE OR CROSSAPPLE)
     set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
     set(DATA_INSTALL_DIR "../Resources/")
     set(target_dir ".")
-    set(minimum_macosx_version "10.6")
 else()
     set(target_dir "bin")
 endif()
