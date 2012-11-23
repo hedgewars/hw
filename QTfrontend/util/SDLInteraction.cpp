@@ -28,6 +28,8 @@
 
 #include "SDLInteraction.h"
 
+#include "physfsrwops.h"
+
 extern char sdlkeys[1024][2][128];
 extern char xb360buttons[][128];
 extern char xb360dpad[128];
@@ -193,7 +195,7 @@ void SDLInteraction::playSoundFile(const QString & soundFile)
 {
     SDLAudioInit();
     if (!m_soundMap->contains(soundFile))
-        m_soundMap->insert(soundFile, Mix_LoadWAV(soundFile.toLocal8Bit().constData()));
+        m_soundMap->insert(soundFile, Mix_LoadWAV_RW(PHYSFSRWOPS_openRead(soundFile.toLocal8Bit().constData()), 1));
 
     //FIXME: this is a hack, but works as long as we have few concurrent playing sounds
     if (Mix_Playing(lastchannel) == false)
@@ -232,7 +234,7 @@ void SDLInteraction::startMusic()
     SDLAudioInit();
 
     if (m_music == NULL)
-        m_music = Mix_LoadMUS(m_musicTrack.toLocal8Bit().constData());
+        m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()));
 
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
     Mix_FadeInMusic(m_music, -1, 1750);

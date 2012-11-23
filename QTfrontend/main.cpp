@@ -231,7 +231,6 @@ int main(int argc, char *argv[])
     engine.mount(cfgdir->absolutePath());
     engine.setWriteDir(cfgdir->absolutePath());
     engine.mountPacks();
-    qDebug() << datadir->absolutePath();
 
     QTranslator Translator;
     {
