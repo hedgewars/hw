@@ -30,6 +30,7 @@ glob:misc/libtremor/Xcode/build/
 glob:misc/liblua/Xcode/build/
 glob:misc/libfreetype/Xcode/build/
 glob:misc/libfreetype/Xcode-iOS/build/
+glob:misc/physfs/Xcode/build/
 glob:moc_*.cxx_parameters
 relre:^release\/
 glob:*.log
