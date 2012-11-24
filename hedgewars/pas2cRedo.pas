@@ -12,6 +12,7 @@ type
     Byte = integer;
     SmallInt = integer;
     ShortInt = integer;
+    Int64 = integer;
     QWord = uinteger;
     GLint = integer;
     GLuint = integer;
