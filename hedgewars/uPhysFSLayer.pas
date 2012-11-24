@@ -22,10 +22,6 @@ procedure initModule;
 procedure freeModule;
 
 type PFSFile = pointer;
-{$IFDEF PAS2C}
-     Int64 = LongInt; //FIXME!!!!!!!!!
-     LongBool = boolean;
-{$ENDIF}
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 function rwopsOpenWrite(fname: shortstring): PSDL_RWops;
@@ -42,13 +38,13 @@ function pfsExists(fname: shortstring): boolean;
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhysfsLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 
+{$IFNDEF PAS2C}
+//apparently pas2c doesn't render the functions below if it finds 'implementation' first
 implementation
 uses uUtils, uVariables;
+{$ENDIF}
 
-{$IFNDEF PAS2C}
-// pas2c unable to parse this section???
-
-function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
+function PHYSFS_init(argv: PChar): LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit: LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
@@ -61,6 +57,11 @@ function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 
 procedure hedgewarsMountPackages; cdecl; external PhysfsLibName;
+
+{$IFDEF PAS2C}
+implementation
+uses uUtils, uVariables;
+{$ENDIF}
 
 (*****************************************************************)
 
@@ -137,6 +138,5 @@ procedure freeModule;
 begin
     PHYSFS_deinit;
 end;
-{$ENDIF}
 
 end.
