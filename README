@@ -5,3 +5,10 @@ Images and sounds are distributed under the terms of the GNU FDL licence.
 Source:
 Copyright 2004-2011 Andrey Korotaev <unC0Rr@gmail.com>
 Portions copyright 2006-2008 Igor Ulyanov aka Displacer <iulyanov@gmail.com>
+
+Instructions:
+depending on your system, consult our wiki at:
+- http://code.google.com/p/hedgewars/wiki/BuildingOnLinux
+- http://code.google.com/p/hedgewars/wiki/BuildingOnWindows
+- http://code.google.com/p/hedgewars/wiki/BuildingOnMac
+
