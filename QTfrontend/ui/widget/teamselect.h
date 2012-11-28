@@ -20,6 +20,7 @@
 #ifndef _TEAM_SELECT_INCLUDED
 #define _TEAM_SELECT_INCLUDED
 
+#include <QLabel>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QColor>
@@ -74,6 +75,7 @@ class TeamSelWidget : public QGroupBox
         FrameTeams* framePlaying;
 
         QVBoxLayout mainLayout;
+        QLabel *numTeamNotice;
         bool m_acceptOuter;
 
         QList<HWTeam> curPlayingTeams;
