@@ -59,6 +59,7 @@ void TeamSelWidget::addTeam(HWTeam team)
                     this, SLOT(changeTeamStatus(HWTeam)));
         }
     }
+
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
@@ -168,6 +169,12 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         m_curNotPlayingTeams.push_back(*itPlay);
         emit teamNotPlaying(*itPlay);
         curPlayingTeams.erase(itPlay);
+
+        // Show team notice if less than two teams.
+        if (curPlayingTeams.size() < 2)
+        {
+            numTeamNotice->show();
+        }
     }
     else
     {
@@ -179,6 +186,12 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         curPlayingTeams.push_back(*itDontPlay);
         if(!m_acceptOuter) emit teamWillPlay(*itDontPlay);
         m_curNotPlayingTeams.erase(itDontPlay);
+
+        // Hide team notice if at least two teams.
+        if (curPlayingTeams.size() >= 2)
+        {
+            numTeamNotice->hide();
+        }
     }
 
     FrameTeams* pRemoveTeams;
@@ -253,6 +266,10 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
     setTitle(QGroupBox::tr("Playing teams"));
     framePlaying = new FrameTeams();
     frameDontPlaying = new FrameTeams();
+
+    // Add notice about number of required teams.
+    numTeamNotice = new QLabel("Two teams are required to play!");
+    mainLayout.addWidget((QWidget*)numTeamNotice);
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
