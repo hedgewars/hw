@@ -146,7 +146,7 @@ class HWForm : public QMainWindow
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
-        void UpdateTeamsLists(const QStringList* editable_teams=0);
+        void UpdateTeamsLists();
         void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
         void closeEvent(QCloseEvent *event);
         void CustomizePalettes();

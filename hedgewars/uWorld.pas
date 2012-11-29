@@ -961,7 +961,7 @@ begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
         end
-{$IFNDEF S3D_DISABLED}
+{$IFDEF USE_S3D_RENDERING}
     else if (cStereoMode = smAFR) then
         begin
         AFRToggle:= not AFRToggle;
@@ -1074,7 +1074,7 @@ end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
-{$IFDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; d:= d; // avoid hint
     exit;
 {$ELSE}
@@ -1092,7 +1092,7 @@ end;
  
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; // avoid hint
     exit;
 {$ELSE}
