@@ -439,23 +439,16 @@ void HWForm::UpdateWeapons()
     }
 }
 
-void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
+void HWForm::UpdateTeamsLists()
 {
-    QStringList teamslist;
-    if(editable_teams)
-    {
-        teamslist =* editable_teams;
-    }
-    else
-    {
-        teamslist = config->GetTeamsList();
-    }
+    QStringList teamslist = config->GetTeamsList();
 
     if(teamslist.empty())
     {
         QString currentNickName = gameSettings->value("net/nick","").toString().toUtf8();
         QString teamName;
-        if (currentNickName == "")
+
+        if (currentNickName.isEmpty())
         {
             teamName = tr("DefaultTeam");
         }
@@ -463,6 +456,7 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
         {
             teamName = tr("%1's Team").arg(currentNickName);
         }
+
         HWTeam defaultTeam(teamName);
         defaultTeam.saveToFile();
         teamslist.push_back(teamName);
