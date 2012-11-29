@@ -437,7 +437,7 @@ if not reload then
 IMG_Quit();
 end;
 
-{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
+{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
@@ -539,7 +539,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
     if defaultFrame <> 0 then
         DeleteFramebuffer(defaultFrame, depthv, texv);
 {$ENDIF}
-{$IFNDEF S3D_DISABLED}
+{$IFDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
         DeleteFramebuffer(framel, depthl, texl);
@@ -805,7 +805,7 @@ begin
     end;
 {$ENDIF}
 
-{$IFNDEF S3D_DISABLED}
+{$IFDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         // prepare left and right frame buffers and associated textures
