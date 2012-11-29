@@ -15,6 +15,7 @@ const
 {$IFDEF WIN32}
     PhysfsLibName = 'libphysfs';
 {$ELSE}
+    {$LINKLIB ../bin/libphysfs.a}
     PhysfsLibName = 'physfs';
 {$ENDIF}
 
