@@ -453,9 +453,19 @@ void HWForm::UpdateTeamsLists(const QStringList* editable_teams)
 
     if(teamslist.empty())
     {
-        HWTeam defaultTeam(tr("DefaultTeam"));
+        QString currentNickName = gameSettings->value("net/nick","").toString().toUtf8();
+        QString teamName;
+        if (currentNickName == "")
+        {
+            teamName = tr("DefaultTeam");
+        }
+        else
+        {
+            teamName = tr("%1's Team").arg(currentNickName);
+        }
+        HWTeam defaultTeam(teamName);
         defaultTeam.saveToFile();
-        teamslist.push_back(tr("DefaultTeam"));
+        teamslist.push_back(teamName);
     }
 
     ui.pageOptions->CBTeamName->clear();
