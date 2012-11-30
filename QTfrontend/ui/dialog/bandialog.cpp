@@ -51,6 +51,8 @@ BanDialog::BanDialog(QWidget *parent) :
 
     connect(btnOk, SIGNAL(clicked()), this, SLOT(okClicked()));
     connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    this->setWindowModality(Qt::WindowModal);
 }
 
 bool BanDialog::byIP()
