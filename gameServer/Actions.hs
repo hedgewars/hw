@@ -572,7 +572,7 @@ processAction CheckBanned = do
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
         checkBan ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan _ n (BanByNick bn _ _) = bn == n
+        checkBan _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 
