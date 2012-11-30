@@ -155,7 +155,7 @@ processAction (ByeClient msg) = do
 
     when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
 
-    mapM processAction
+    mapM_ processAction
         [
         AnswerClients [chan] ["BYE", msg]
         , ModifyClient (\c -> c{nick = "", logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
