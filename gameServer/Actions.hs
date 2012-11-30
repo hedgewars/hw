@@ -512,13 +512,17 @@ processAction (BanNick n seconds reason) = do
         AddNick2Bans n msg (addUTCTime seconds currentTime)
 
 processAction BanList = do
+    time <- io $ getCurrentTime
     ch <- client's sendChan
-    b <- gets (B.pack . unlines . map show . bans . serverInfo)
+    b <- gets (B.intercalate "\n" . concatMap (ban2Str time) . bans . serverInfo)
     processAction $
         AnswerClients [ch] ["BANLIST", b]
+    where
+        ban2Str time (BanByIP b r t) = ["I", b, r, B.pack . show $ t `diffUTCTime` time]
+        ban2Str time (BanByNick b r t) = ["N", b, r, B.pack . show $ t `diffUTCTime` time]
 
 processAction (Unban entry) = do
-    processAction $ ModifyServerInfo (\s -> s{bans = filter f $ bans s})
+    processAction $ ModifyServerInfo (\s -> s{bans = filter (not . f) $ bans s})
     where
         f (BanByIP bip _ _) = bip == entry
         f (BanByNick bn _ _) = bn == entry

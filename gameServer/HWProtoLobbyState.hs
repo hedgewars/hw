@@ -150,11 +150,11 @@ handleCmd_lobby ["KICK", kickNick] = do
     return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
 
 
-handleCmd_lobby ["BAN", banNick, reason] = do
+handleCmd_lobby ["BAN", banNick, reason, duration] = do
     (ci, _) <- ask
     cl <- thisClient
     banId <- clientByNick banNick
-    return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
+    return [BanClient (readInt_ duration) reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
 
 handleCmd_lobby ["BANIP", ip, reason, duration] = do
     cl <- thisClient
