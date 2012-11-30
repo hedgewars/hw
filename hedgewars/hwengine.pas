@@ -536,39 +536,18 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-///////////////////////////////////////////////////////////////////////////////
-procedure DisplayUsage;
-var i: LongInt;
-begin
-    WriteLn(stdout, 'Wrong argument format: correct configurations is');
-    WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'where [options] must be specified either as:');
-    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
-    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
-    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
-    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
-    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
-    WriteLn(stdout, '');
-    Write(stdout, 'PARSED COMMAND: ');
-    
-    for i:=0 to ParamCount do
-        Write(stdout, ParamStr(i) + ' ');
-        
-    WriteLn(stdout, '');
-end;
 
 ///////////////////////////////////////////////////////////////////////////////
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
+var tmpInt: LongInt;
 begin
     if (ParamCount < 3) then
-        GameType:= gmtSyntax
+        begin
+        DisplayUsage();
+        GameType:= gmtSyntax;
+        end
     else
         if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
             begin
@@ -601,7 +580,7 @@ begin
     if GameType = gmtLandPreview then
         GenLandPreview()
     else if GameType = gmtSyntax then
-        DisplayUsage()
+        //Exit cleanly
     else Game();
 
     // return 1 when engine is not called correctly
