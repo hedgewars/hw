@@ -37,6 +37,7 @@ uses uStore, uConsts, uConsole, uRandom, uSound, GLunit
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
+      cThemeCFGFilename = 'theme.cfg';
 
 type TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;

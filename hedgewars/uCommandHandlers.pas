@@ -30,6 +30,8 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
 procedure chGenCmd(var s: shortstring);
 begin
