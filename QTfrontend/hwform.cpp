@@ -1180,11 +1180,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(serverMessageNew(const QString&)), ui.pageAdmin, SLOT(serverMessageNew(const QString &)));
     connect(hwnet, SIGNAL(serverMessageOld(const QString&)), ui.pageAdmin, SLOT(serverMessageOld(const QString &)));
     connect(hwnet, SIGNAL(latestProtocolVar(int)), ui.pageAdmin, SLOT(protocol(int)));
+    connect(hwnet, SIGNAL(bansList(const QStringList &)), ui.pageAdmin, SLOT(setBansList(const QStringList &)));
     connect(ui.pageAdmin, SIGNAL(setServerMessageNew(const QString&)), hwnet, SLOT(setServerMessageNew(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
     connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
     connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
+    connect(ui.pageAdmin, SIGNAL(bansListRequest()), hwnet, SLOT(getBanList()));
+    connect(ui.pageAdmin, SIGNAL(removeBan(QString)), hwnet, SLOT(removeBan(QString)));
+    connect(ui.pageAdmin, SIGNAL(banIP(QString,QString,int)), hwnet, SLOT(banIP(QString,QString,int)));
+    connect(ui.pageAdmin, SIGNAL(banNick(QString,QString,int)), hwnet, SLOT(banNick(QString,QString,int)));
 
 // disconnect
     connect(hwnet, SIGNAL(disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);

@@ -108,7 +108,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/campaign.h \
     ../QTfrontend/model/playerslistmodel.h \
     ../QTfrontend/util/LibavInteraction.h \
-    ../QTfrontend/util/FileEngine.h
+    ../QTfrontend/util/FileEngine.h \
+    ../QTfrontend/ui/dialog/bandialog.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -199,7 +200,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/campaign.cpp \
     ../QTfrontend/model/playerslistmodel.cpp \
     ../QTfrontend/util/LibavInteraction.cpp \
-    ../QTfrontend/util/FileEngine.cpp
+    ../QTfrontend/util/FileEngine.cpp \
+    ../QTfrontend/ui/dialog/bandialog.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
