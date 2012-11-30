@@ -52,6 +52,7 @@ data Action =
     | KickRoomClient ClientIndex
     | BanClient NominalDiffTime B.ByteString ClientIndex
     | BanIP B.ByteString NominalDiffTime B.ByteString
+    | BanNick B.ByteString NominalDiffTime B.ByteString
     | BanList
     | Unban B.ByteString
     | ChangeMaster
@@ -499,6 +500,16 @@ processAction (BanIP ip seconds reason) = do
     let msg = B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
     processAction $
         AddIP2Bans ip msg (addUTCTime seconds currentTime)
+
+processAction (BanNick n seconds reason) = do
+    currentTime <- io getCurrentTime
+    let msg = 
+            if seconds > 60 * 60 * 24 * 365 then
+                B.concat ["Permanent ban (", reason, ")"]
+                else
+                B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
+    processAction $
+        AddNick2Bans n msg (addUTCTime seconds currentTime)
 
 processAction BanList = do
     ch <- client's sendChan

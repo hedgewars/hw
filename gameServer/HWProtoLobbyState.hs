@@ -160,6 +160,10 @@ handleCmd_lobby ["BANIP", ip, reason, duration] = do
     cl <- thisClient
     return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
 
+handleCmd_lobby ["BANNICK", n, reason, duration] = do
+    cl <- thisClient
+    return [BanNick n (readInt_ duration) reason | isAdministrator cl]
+
 handleCmd_lobby ["BANLIST"] = do
     cl <- thisClient
     return [BanList | isAdministrator cl]
