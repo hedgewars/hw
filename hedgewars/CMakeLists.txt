@@ -102,11 +102,11 @@ endif(BUILD_ENGINE_LIBRARY)
 
 
 #PASCAL DETECTION SECTION
-IF(FPC)
+if(FPC)
     set(fpc_executable ${FPC})
-ELSE()
+else()
     find_program(fpc_executable fpc)
-ENDIF()
+endif()
 
 message(STATUS "Check for working FPC compiler: ${fpc_executable}")
 execute_process(COMMAND ${fpc_executable} -iV OUTPUT_VARIABLE fpc_output ERROR_VARIABLE fpc_error)
@@ -241,7 +241,7 @@ set(pascal_flags "-Fl${LIBRARY_OUTPUT_PATH}" ${pascal_flags})
 
 set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
 
-IF(NOT APPLE)
+if(NOT APPLE)
     #here is the command for standard executables or for shared library
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
         COMMAND "${fpc_executable}"
@@ -249,7 +249,7 @@ IF(NOT APPLE)
         MAIN_DEPENDENCY ${hwengine_project}
         DEPENDS ${engine_sources}
         )
-ELSE()
+else()
     #these are the dependencies for building a universal binary on Mac OS X
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
         set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
@@ -267,7 +267,7 @@ ELSE()
         ARGS ${lipo_args_list} -create -output ${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}
         DEPENDS ${lipo_args_list}
         )
-ENDIF()
+endif()
 
 
 add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
