@@ -64,97 +64,139 @@ begin
 end;
 {$ENDIF}
 
-procedure setVideo(screenWidth: LongInt; screenHeight: LongInt; bitsStr: LongInt);
+procedure DisplayUsage;
 begin
-    cScreenWidth:= screenWidth;
-    cScreenHeight:= screenHeight;
-    cBits:= bitsStr
+    WriteLn(stdout, 'Usage:');
+    WriteLn(stdout, '');
+    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'where [options] are any of the following:');
+    WriteLn(stdout, ' --locale [path to language file]');
+    WriteLn(stdout, ' --width  [screen width in pixels]');
+    WriteLn(stdout, ' --height [screen height in pixels]');
+    WriteLn(stdout, ' --depth  [color depth]');
+    WriteLn(stdout, ' --volume [sound level]');
+    WriteLn(stdout, ' --time   [number of seconds]');
+    WriteLn(stdout, ' --nomusic');
+    WriteLn(stdout, ' --nosound');
+    WriteLn(stdout, ' --fullscreen');
+    WriteLn(stdout, ' --showfps');
+    WriteLn(stdout, ' --altdmg');
+    WriteLn(stdout, ' --lowquality');
+    WriteLn(stdout, ' --stats-only');
+    WriteLn(stdout, ' --help');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Deprecated options:');
+    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
+    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
+    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
+    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
+    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'For a more detailed help and examples go to:');
+    WriteLn(stdout, 'http://code.google.com/p/hedgewars/wiki/CommandLineOptions');
 end;
 
-procedure setVideoWithParameters(screenWidthParam: string; screenHeightParam: string; bitsParam: string);
-var screenWidthAsInt, screenHeightAsInt, bitsStrAsInt, c: LongInt;
+function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
+var tmpInt, c: LongInt;
 begin
-    val(screenWidthParam, screenWidthAsInt, c);
-    val(screenHeightParam, screenHeightAsInt, c);
-    val(bitsParam, bitsStrAsInt, c);
-    setVideo(screenWidthAsInt,screenHeightAsInt,bitsStrAsInt)
+    paramIndex:= paramIndex + 1;
+    val(str, tmpInt, c);
+    wrongParameter:= c <> 0;
+    if wrongParameter then
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+    getLongIntParameter:= tmpInt;
 end;
 
-procedure setOtherOptions(languageFile: string; fullScreen: boolean);
+function getStringParameter(str:String; var paramIndex:LongInt): String;
 begin
-    cLocaleFName:= languageFile;
-    cFullScreen:= fullScreen
+    paramIndex:= paramIndex + 1;
+    getStringParameter:= str;
 end;
 
-procedure setShowFPS(showFPS: boolean);
+procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt); Forward;
+
+function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
+const videoArray: Array [1..3] of String = ('--width','--height','--depth');
+const audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
+const otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
+const mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
+const allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--time','--lowquality');
 begin
-    cShowFPS:= showFPS
+    parseParameter:= false;
+    case cmd of
+        '--locale'     : cLocaleFName   := getStringParameter (arg, paramIndex);
+        '--width'      : cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter);
+        '--height'     : cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter);
+        '--depth'      : cBits          := getLongIntParameter(arg, paramIndex, parseParameter);
+        '--time'       : cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter);
+        '--volume'     : SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        '--nomusic'    : SetMusic        ( false );
+        '--nosound'    : SetSound        ( false );
+        '--fullscreen' : cFullScreen    := true;
+        '--showfps'    : cShowFPS       := true;
+        '--altdmg'     : cAltDamage     := true;
+        '--lowquality' : cReducedQuality:= ($FFFFFFFF * getLongIntParameter(arg, paramIndex, parseParameter)) xor rqLowRes; //HACK!
+        '--set-video'      : parseClassicParameter(videoArray,3,paramIndex);
+        '--set-audio'      : parseClassicParameter(audioArray,3,paramIndex);
+        '--set-other'      : parseClassicParameter(otherArray,3,paramIndex);
+        '--set-multimedia' : parseClassicParameter(mediaArray,8,paramIndex);
+        '--set-everything' : parseClassicParameter(allArray,12,paramIndex);
+        '--stats-only' : begin
+                         cOnlyStats:= true;
+                         SetSound(false);
+                         SetMusic(false);
+                         cReducedQuality:= $FFFFFFFF xor rqLowRes;
+                         end;
+        '--gci' : begin            //     We had to make up all this saved space some how...     \\
+                  WriteLn(stdout, '                                                                ');
+                  WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
+                  WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
+                  WriteLn(stdout, '     /\\\               /\\\/               \/\\\               ');
+                  WriteLn(stdout, '     \/\\\    /\\\\\\\  /\\\                 \/\\\              ');
+                  WriteLn(stdout, '      \/\\\   \/////\\\ \/\\\                 \/\\\             ');
+                  WriteLn(stdout, '       \/\\\       \/\\\ \//\\\                \/\\\            ');
+                  WriteLn(stdout, '        \/\\\       \/\\\  \///\\\              \/\\\           ');
+                  WriteLn(stdout, '         \//\\\\\\\\\\\\/     \////\\\\\\\\\  /\\\\\\\\\\\      ');
+                  WriteLn(stdout, '          \////////////           \/////////  \///////////      ');
+                  WriteLn(stdout, '                                                                ');
+                  WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
+                  WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
+                  WriteLn(stdout, '                                                                ');
+                  end;
+        '--help' : begin
+                   DisplayUsage();
+                   GameType:= gmtSyntax;
+                   end;
+    else
+        begin
+        WriteLn(stderr, 'ERROR: '+cmd+' is not a valid argument');
+        parseParameter:= true;
+        end
+    end;
 end;
 
-procedure setOtherOptionsWithParameters(languageFileParam: string; fullScreenParam: string; showFPSParam: string);
-var fullScreen, showFPS: boolean;
+procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
+var index, tmpInt: LongInt;
+    isBool: Boolean;
 begin
-    fullScreen:= fullScreenParam = '1';
-    showFPS:= showFPSParam = '1';
-    setOtherOptions(languageFileParam,fullScreen);
-    setShowFPS(showFPS)
-end;
-
-procedure setAudio(initialVolume: LongInt; musicEnabled: boolean; soundEnabled: boolean);
-begin
-    SetVolume(initialVolume);
-    SetMusic(musicEnabled);
-    SetSound(soundEnabled);
-end;
-
-procedure setAudioWithParameters(initialVolumeParam: string; musicEnabledParam: string; soundEnabledParam: string);
-var initialVolumeAsInt, c: LongInt;
-    musicEnabled, soundEnabled: boolean;
-begin
-    val(initialVolumeParam, initialVolumeAsInt, c);
-    musicEnabled:= musicEnabledParam = '1';
-    soundEnabled:= soundEnabledParam = '1';
-    setAudio(initialVolumeAsInt,musicEnabled, soundEnabled)
-end;
-
-procedure setMultimediaOptionsWithParameters(screenWidthParam, screenHeightParam, bitsParam: string;
-                                             initialVolumeParam, musicEnabledParam, soundEnabledParam: string;
-                                             languageFileParam, fullScreenParam: string);
-begin
-    setVideoWithParameters(screenWidthParam,screenHeightParam, bitsParam);
-    setAudioWithParameters(initialVolumeParam,musicEnabledParam,soundEnabledParam);
-    setOtherOptions(languageFileParam,fullScreenParam = '1')
-end;
-
-procedure setAltDamageTimerValueAndQuality(altDamage: boolean; timeIterval: LongInt; reducedQuality: boolean);
-begin
-    cAltDamage:= altDamage;
-    cTimerInterval:= timeIterval;
-    if (reducedQuality) then        //HACK
-        cReducedQuality:= $FFFFFFFF xor rqLowRes
-end;
-
-procedure setAllOptionsWithParameters(screenWidthParam:string; screenHeightParam:string; bitsParam:string;
-                                      initialVolumeParam:string; musicEnabledParam:string; soundEnabledParam:string;
-                                      languageFileParam:string; fullScreenParam:string; showFPSParam:string;
-                                      altDamageParam:string; timeItervalParam:string; reducedQualityParam: string);
-var showFPS, altDamage, reducedQuality: boolean;
-    timeIterval, c: LongInt;
-begin
-    setMultimediaOptionsWithParameters(screenWidthParam,screenHeightParam, bitsParam,
-                                       initialVolumeParam,musicEnabledParam,soundEnabledParam,
-                                       languageFileParam,fullScreenParam);
-    showFPS := showFPSParam = '1';
-    setShowFPS(showFPS);
-
-    altDamage:= altDamageParam = '1';
-    val(timeItervalParam, timeIterval, c);
-    reducedQuality:= reducedQualityParam = '1';
-    setAltDamageTimerValueAndQuality(altDamage,timeIterval,reducedQuality);
+    index:= 0;
+    tmpInt:= 1;
+    while (index < size) do
+        begin
+        paramIndex:= paramIndex+1;
+        //This next line is a really strange (but short), way to check if the parameter is a boolean one
+        isBool:= true; case cmdArray[index] of '--nomusic':;'--nosound':;'--fullscreen':;'--showfps':;'--altdmg':;'--lowquality':; else isBool:= false; end;
+        if (not isBool) or ((ParamStr(paramIndex)='1') and (cmdArray[index]<>'--nomusic') and (cmdArray[index]<>'--nosound')) then
+            parseParameter(cmdArray[index], ParamStr(paramIndex), tmpInt);
+        //if isBool then
+        //  paramIndex:= paramIndex+1;
+        index:= index+1;
+        end;
 end;
 
 procedure playReplayFileWithParameters();
-var paramIndex: LongInt;
+var paramIndex, tmpInt: LongInt;
     wrongParameter: boolean;
 begin
     UserPathPrefix:= ParamStr(1);
@@ -162,86 +204,15 @@ begin
     recordFileName:= ParamStr(3);
     paramIndex:= 4;
     wrongParameter:= false;
-    while (paramIndex <= ParamCount) and (not wrongParameter) do
+    while (paramIndex <= ParamCount) do
         begin
-        if ParamStr(paramIndex) = '--set-video'  then
-//--set-video [screen width] [screen height] [color dept]
-            begin
-            if(ParamCount-paramIndex < 3) then
-                begin
-                wrongParameter:= true;
-                GameType:= gmtSyntax
-                end;
-            setVideoWithParameters(ParamStr(paramIndex+1), ParamStr(paramIndex+2), ParamStr(paramIndex+3));
-            paramIndex:= paramIndex + 4
-            end
-        else
-//--set-audio [volume] [enable music] [enable sounds]
-            if ParamStr(paramIndex) = '--set-audio'  then
-                begin
-                if(ParamCount-paramIndex < 3) then
-                    begin
-                    wrongParameter := true;
-                    GameType:= gmtSyntax
-                    end;
-                setAudioWithParameters(ParamStr(paramIndex+1),ParamStr(paramIndex+2), ParamStr(paramIndex+3));
-                paramIndex:= paramIndex + 4
-                end
-            else
-// --set-other [language file] [full screen] [show FPS]
-                if ParamStr(paramIndex) = '--set-other'  then
-                    begin
-                    if(ParamCount-paramIndex < 3) then
-                        begin
-                        wrongParameter:= true;
-                        GameType:= gmtSyntax
-                        end;
-                    setOtherOptionsWithParameters(ParamStr(paramIndex+1),ParamStr(paramIndex+2), ParamStr(paramIndex+3));
-                    paramIndex:= paramIndex + 4
-                    end
-                else
-//--set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]
-                    if ParamStr(paramIndex) = '--set-multimedia'  then
-                        begin
-                        if ParamCount-paramIndex < 8  then
-                            begin
-                            wrongParameter:= true;
-                            GameType:= gmtSyntax
-                            end;
-                        setMultimediaOptionsWithParameters(ParamStr(paramIndex+1),ParamStr(paramIndex+2),ParamStr(paramIndex+3),
-                                                           ParamStr(paramIndex+4),ParamStr(paramIndex+5),ParamStr(paramIndex+6),
-                                                           ParamStr(paramIndex+7),ParamStr(paramIndex+8));
-                        paramIndex:= paramIndex + 9
-                        end
-                    else
-//--set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
-                        if ParamStr(paramIndex) = '--set-everything'  then
-                            begin
-                            if ParamCount-paramIndex < 12  then
-                                begin
-                                wrongParameter:= true;
-                                GameType:= gmtSyntax
-                                end;
-                            setAllOptionsWithParameters(ParamStr(paramIndex+1),ParamStr(paramIndex+2),ParamStr(paramIndex+3),
-                                                        ParamStr(paramIndex+4),ParamStr(paramIndex+5),ParamStr(paramIndex+6),
-                                                        ParamStr(paramIndex+7),ParamStr(paramIndex+8),ParamStr(paramIndex+9),
-                                                        ParamStr(paramIndex+10),ParamStr(paramIndex+11),ParamStr(paramIndex+12));
-                            paramIndex:= paramIndex + 13
-                            end
-                        else
-                            if ParamStr(paramIndex) = '--stats-only'  then
-                                begin
-                                cOnlyStats:= true;
-                                SetSound(false);
-                                SetMusic(false);
-                                cReducedQuality:= $FFFFFFFF xor rqLowRes; // HACK
-                                paramIndex:= paramIndex + 1
-                                end
-                            else
-                                begin
-                                wrongParameter:= true;
-                                GameType:= gmtSyntax
-                                end
-    end
+        if parseParameter( ParamStr(paramIndex), ParamStr(paramIndex+1), paramIndex) then
+            wrongParameter:= true;
+        paramIndex:= paramIndex+1;
+        end;
+    if wrongParameter = true then
+        begin
+        WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
+        GameType:= gmtSyntax;
+        end
 end;
-
