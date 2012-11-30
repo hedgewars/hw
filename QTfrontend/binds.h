@@ -21,7 +21,7 @@
 
 #include <QString>
 
-#ifdef USE_VIDEO_RECORDING
+#ifdef VIDEOREC
 #define BINDS_NUMBER 46
 #else
 #define BINDS_NUMBER 45
