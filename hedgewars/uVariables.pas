@@ -2479,7 +2479,6 @@ var
 {$ENDIF}
     cOffsetY: LongInt;
     AFRToggle: Boolean;
-    bAFRRight: Boolean;
 
 
     PauseTexture,

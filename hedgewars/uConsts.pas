@@ -122,8 +122,6 @@ const
     cifMap       = $00000002; // either theme or map (or map+theme)
     cifAllInited = cifRandomize or cifTheme or cifMap;
 
-    cTransparentColor: Longword = $00000000;
-
     RGB_LUMINANCE_RED    = 0.212671;
     RGB_LUMINANCE_GREEN  = 0.715160;
     RGB_LUMINANCE_BLUE   = 0.072169;
@@ -131,7 +129,6 @@ const
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
     cMaxHHs          = 48;
-    cMaxSpawnPoints  = 1024;
 
     cMaxEdgePoints = 16384;
 
@@ -162,7 +159,6 @@ const
     cDefaultZoomLevel = 2.0;
 
     cSendEmptyPacketTime = 1000;
-    trigTurns = $80000001;
 
     // game flags
     gfAny                = $FFFFFFFF;
