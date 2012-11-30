@@ -39,6 +39,14 @@ var RopePoints: record
 implementation
 uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
 
+const
+    // hog tag mask
+    htNone        = $00;
+    htTeamName    = $01;
+    htName        = $02;
+    htHealth      = $04;
+    htTransparent = $08;
+
 procedure DrawRopeLinesRQ(Gear: PGear);
 begin
 with RopePoints do

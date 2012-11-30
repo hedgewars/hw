@@ -60,6 +60,16 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode, closeKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
+    ControllerNumControllers: Integer;
+    ControllerEnabled: Integer;
+    ControllerNumAxes: array[0..5] of Integer;
+    //ControllerNumBalls: array[0..5] of Integer;
+    ControllerNumHats: array[0..5] of Integer;
+    ControllerNumButtons: array[0..5] of Integer;
+    ControllerAxes: array[0..5] of array[0..19] of Integer;
+    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
+    ControllerHats: array[0..5] of array[0..19] of Byte;
+    ControllerButtons: array[0..5] of array[0..19] of Byte;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
 begin

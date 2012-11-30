@@ -112,9 +112,7 @@ const
     GL_TEXTURE_PRIORITY = $8066;
     {$ENDIF}
 
-    cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
-    cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
 
     cifRandomize = $00000001;
@@ -135,11 +133,8 @@ const
     cHHRadius = 9;
     cHHStepTicks = 29;
 
-    cUsualZ = 500;
-    cSmokeZ = 499;
     cHHZ = 1000;
     cCurrHHZ = Succ(cHHZ);
-    cOnHHZ = 2000;
 
     cBarrelHealth = 60;
     cShotgunRadius = 22;
@@ -149,16 +144,10 @@ const
     cKeyMaxIndex = 1023;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
-    cHHFileName = 'Hedgehog';
-    cCHFileName = 'Crosshair';
-    cThemeCFGFilename = 'theme.cfg';
-
     cFontBorder = 2;
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
-
-    cSendEmptyPacketTime = 1000;
 
     // game flags
     gfAny                = $FFFFFFFF;
@@ -286,40 +275,6 @@ const
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
 
-    // hog tag mask
-    htNone        = $00;
-    htTeamName    = $01;
-    htName        = $02;
-    htHealth      = $04;
-    htTransparent = $08;
-
-    AMAnimDuration = 200;
-    AMHidden    = 0;//AMState values
-    AMShowingUp = 1;
-    AMShowing   = 2;
-    AMHiding    = 3;
-
-    AMTypeMaskX     = $00000001;
-    AMTypeMaskY     = $00000002;
-    AMTypeMaskAlpha = $00000004;
-    AMTypeMaskSlide = $00000008;
-
-{$IFDEF MOBILE}
-    AMSlotSize = 48;
-    AMTITLE = 30;
-{$ELSE}
-    AMSlotSize = 32;
-{$ENDIF}
-    AMSlotPadding = (AMSlotSize - 32) shr 1;
-
-{$IFDEF USE_TOUCH_INTERFACE}
-    FADE_ANIM_TIME = 500;
-    MOVE_ANIM_TIME = 500;
-{$ENDIF}
-
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
-       
 implementation
 
 end.
