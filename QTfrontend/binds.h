@@ -21,7 +21,11 @@
 
 #include <QString>
 
+#ifdef USE_VIDEO_RECORDING
 #define BINDS_NUMBER 46
+#else
+#define BINDS_NUMBER 45
+#endif
 
 struct BindAction
 {
