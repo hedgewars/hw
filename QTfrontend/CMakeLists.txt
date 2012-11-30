@@ -21,7 +21,7 @@ find_package(SDL_net REQUIRED)   #network frontlib
 if(NOT NOVIDEOREC)
     find_package(FFMPEG)
     if(${FFMPEG_FOUND})
-        add_definitions(-DUSE_VIDEO_RECORDING)
+        add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
     endif()
 endif()
 
@@ -68,10 +68,6 @@ file(GLOB NetCpp net/*.cpp)
 file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
-
-if(${FFMPEG_FOUND})
-    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-endif()
 
 set(hwfr_src
     ${ModelCpp}
