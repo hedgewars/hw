@@ -41,6 +41,7 @@ type TChatLine = record
     Width: LongInt;
     s: shortstring;
     end;
+    TChatCmd = (quit, pause, finish, fullscreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -52,15 +53,25 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatReady: boolean;
     showAll: boolean;
 
-const colors: array[#0..#6] of TSDL_Color = (
-    (r:$FF; g:$FF; b:$FF; unused:$FF), // unused, feel free to take it for anything
-    (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
-    (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
-    (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
-    (r:$FF; g:$FF; b:$A0; unused:$FF), // team message [Light Yellow]
-    (r:$FF; g:$00; b:$00; unused:$FF), // error messages [Red]
-    (r:$00; g:$FF; b:$FF; unused:$FF)  // input line [Light Blue]
-    );
+const
+    colors: array[#0..#6] of TSDL_Color = (
+            (r:$FF; g:$FF; b:$FF; unused:$FF), // unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
+            (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
+            (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
+            (r:$FF; g:$FF; b:$A0; unused:$FF), // team message [Light Yellow]
+            (r:$FF; g:$00; b:$00; unused:$FF), // error messages [Red]
+            (r:$00; g:$FF; b:$FF; unused:$FF)  // input line [Light Blue]
+            );
+    ChatCommandz: array [TChatCmd] of record
+            ChatCmd: string[31];
+            ProcedureCallChatCmd: string[31];
+            end = (
+            (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
+            (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
+            (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
+            (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
+            );
 
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var strSurface, resSurface: PSDL_Surface;
@@ -197,6 +208,7 @@ end;
 
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
+    j: TChatCmd;
     c, t: LongInt;
     x: byte;
 begin
@@ -265,6 +277,13 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
         if (s = Wavez[i].cmd) then
             begin
             ParseCommand('/taunt ' + char(i), true);
+            exit
+            end;
+
+	for j:= Low(TChatCmd) to High(TChatCmd) do
+        if (s = ChatCommandz[j].ChatCmd) then
+            begin
+            ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
             exit
             end;
     end
