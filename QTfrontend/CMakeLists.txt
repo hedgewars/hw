@@ -20,6 +20,9 @@ find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
 find_package(SDL_net REQUIRED)   #network frontlib
 if(NOT NOVIDEOREC)
     find_package(FFMPEG)
+    if(${FFMPEG_FOUND})
+        add_definitions(-DUSE_VIDEO_RECORDING)
+    endif()
 endif()
 
 include_directories(.)
