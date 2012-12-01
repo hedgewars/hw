@@ -1,26 +1,3 @@
-
-#only Clang is supported
-if(CLANG)
-    set(clang_executable ${CLANG})
-else()
-    find_program(clang_executable
-        NAMES clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang
-        PATHS /opt/local/bin /usr/local/bin /usr/bin)
-endif()
-
-if (clang_executable)
-    exec_program(${clang_executable} ARGS "-v" OUTPUT_VARIABLE clang_version_full)
-    string(REGEX MATCH "[0-9]+\\.[0-9]+" clang_version_long "${clang_version_full}")
-    string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" clang_version "${clang_version_long}")
-    #TODO: check version >= 3.0
-    message(STATUS "Found CLANG: ${clang_executable} (version ${clang_version})")
-else()
-    message(FATAL_ERROR "No LLVM/Clang compiler found (required for engine_c target)")
-endif()
-
-set(CMAKE_C_COMPILER ${clang_executable})
-
-
 #the usual set of dependencies
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
