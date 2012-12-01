@@ -11,7 +11,7 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 #SOURCE AND PROGRAMS SECTION
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 set(engine_output_name "hwengine")
-SET(REQUIRED_FPC_VERSION 2.2)
+set(required_fpc_version 2.2)
 
 set(engine_sources
     ${hwengine_project}
@@ -103,34 +103,20 @@ endif(BUILD_ENGINE_LIBRARY)
 
 
 # Check Freepascal version
-FIND_PACKAGE(Freepascal)
+find_package(Freepascal)
 
-IF (FPC_VERSION VERSION_GREATER REQUIRED_FPC_VERSION
-    OR FPC_VERSION VERSION_EQUAL REQUIRED_FPC_VERSION)
-    MESSAGE(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
-ELSEIF (APPLE AND FPC_VERSION VERSION_LESS 2.6)
-    MESSAGE(FATAL_ERROR "Necessary FPC version not found (version >= 2.6 required)")
-ELSE()
-    MESSAGE(FATAL_ERROR "Necessary FPC version not found (version >= ${REQUIRED_FPC_VERSION} required)")
-ENDIF()
+if (NOT APPLE)
+    if (FPC_VERSION VERSION_LESS required_fpc_version)
+        message(FATAL_ERROR "Necessary FPC version not found (version >= ${required_fpc_version} required)")
+    endif()
+elseif (APPLE)
+    if (FPC_VERSION VERSION_LESS 2.6)
+        message(FATAL_ERROR "Necessary FPC version not found (version >= 2.6 required)")
+    endif()
+endif()
 
+message(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
 
-message(STATUS "Checking whether linker supports noexecstack flag")
-set(noexecstack_flags "-k-z" "-knoexecstack")
-file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
-
-execute_process(COMMAND ${fpc_executable} ${noexecstack_flags} checkstack.pas
-    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
-    RESULT_VARIABLE testnoexecstack
-    OUTPUT_QUIET ERROR_QUIET
-    )
-
-if(${testnoexecstack})
-    set (noexecstack_flags "")
-    message(STATUS "Checking whether linker supports noexecstack flag -- no")
-else(${testnoexecstack})
-    message(STATUS "Checking whether linker supports noexecstack flag -- yes")
-endif(${testnoexecstack})
 
 #DEPENDECIES AND EXECUTABLES SECTION
 if(APPLE)
