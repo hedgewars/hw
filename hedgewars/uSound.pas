@@ -441,7 +441,7 @@ begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then
         exit;
     i:= 0;
-    while (i<8) and (VoiceList[i].snd = sndNone) do
+    while (i<7) and (VoiceList[i].snd = sndNone) do
         inc(i);
     
     if (VoiceList[i].snd <> sndNone) then
