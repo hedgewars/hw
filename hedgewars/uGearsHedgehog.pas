@@ -374,7 +374,7 @@ with Gear^,
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtResurrector, 0, _0, _0, 0);
                                  newGear^.SoundChannel := LoopSound(sndResurrector);
                                  end;
-                    amStructure: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
+                    //amStructure: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
              end;
@@ -404,7 +404,7 @@ with Gear^,
                     amSeduction, amBallgun,
                       amJetpack, amBirdy,
                  amFlamethrower, amLandGun,
-                  amResurrector, amStructure,
+                  amResurrector, //amStructure,
                        amTardis, amPiano,
                        amIceGun: CurAmmoGear:= newGear;
              end;
