@@ -66,18 +66,17 @@ set(CPACK_PACKAGE_VERSION_MINOR 9)
 set(CPACK_PACKAGE_VERSION_PATCH 19${version_suffix})
 set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
-SET(REQUIRED_CLANG_VERSION 3.0)
+set(required_clang_version 3.0)
 
 
 # Check LLVM/Clang version
-FIND_PACKAGE(Clang)
+find_package(Clang)
 
-IF (CLANG_VERSION VERSION_GREATER REQUIRED_CLANG_VERSION
-    OR CLANG_VERSION VERSION_EQUAL REQUIRED_CLANG_VERSION)
-    MESSAGE(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
-ELSE()
-    MESSAGE(FATAL_ERROR "Necessary LLVM/Clang version not found (version >= ${REQUIRED_CLANG_VERSION} required)")
-ENDIF()
+if (CLANG_VERSION VERSION_LESS required_clang_version)
+    message(FATAL_ERROR "Necessary LLVM/Clang version not found (version >= ${REQUIRED_CLANG_VERSION} required)")
+else()
+    message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
+endif()
 
 
 #bundle .app setup
