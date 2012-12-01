@@ -11,6 +11,7 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 #SOURCE AND PROGRAMS SECTION
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 set(engine_output_name "hwengine")
+SET(REQUIRED_FPC_VERSION 2.2)
 
 set(engine_sources
     ${hwengine_project}
@@ -101,37 +102,18 @@ if(BUILD_ENGINE_LIBRARY)
 endif(BUILD_ENGINE_LIBRARY)
 
 
-#PASCAL DETECTION SECTION
-if(FPC)
-    set(fpc_executable ${FPC})
-else()
-    find_program(fpc_executable fpc)
-endif()
+# Check Freepascal version
+FIND_PACKAGE(Freepascal)
 
-message(STATUS "Check for working FPC compiler: ${fpc_executable}")
-execute_process(COMMAND ${fpc_executable} -iV OUTPUT_VARIABLE fpc_output ERROR_VARIABLE fpc_error)
-if(fpc_error)
-    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- broken")
-else(fpc_error)
-    message(STATUS "Check for working FPC compiler: ${fpc_executable} -- works")
-endif(fpc_error)
+IF (FPC_VERSION VERSION_GREATER REQUIRED_FPC_VERSION
+    OR FPC_VERSION VERSION_EQUAL REQUIRED_FPC_VERSION)
+    MESSAGE(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
+ELSEIF (APPLE AND FPC_VERSION VERSION_LESS 2.6)
+    MESSAGE(FATAL_ERROR "Necessary FPC version not found (version >= 2.6 required)")
+ELSE()
+    MESSAGE(FATAL_ERROR "Necessary FPC version not found (version >= ${REQUIRED_FPC_VERSION} required)")
+ENDIF()
 
-string(REGEX MATCH "[0-9]+\\.[0-9]+\\.[0-9]+" fpc_version "${fpc_output}")
-if(fpc_version)
-    string(REGEX REPLACE "([0-9]+)\\.[0-9]+\\.[0-9]+" "\\1" fpc_vers_major "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.([0-9]+)\\.[0-9]+" "\\1" fpc_vers_minor "${fpc_version}")
-    string(REGEX REPLACE "[0-9]+\\.[0-9]+\\.([0-9]+)" "\\1" fpc_vers_patch "${fpc_version}")
-    message(STATUS "Found Freepascal: ${fpc_executable} (version ${fpc_vers_major}.${fpc_vers_minor})")
-    math(EXPR fpc_version "${fpc_vers_major}*10000 + ${fpc_vers_minor}*100 + ${fpc_vers_patch}")
-
-    if(fpc_version LESS "020200")
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.2.0")
-    elseif(APPLE AND (fpc_version LESS "020600"))
-        message(FATAL_ERROR "Minimum required version of FreePascal is 2.6.0 on Mac OS X")
-    endif()
-else()
-    message(FATAL_ERROR "No FreePascal compiler found!")
-endif()
 
 message(STATUS "Checking whether linker supports noexecstack flag")
 set(noexecstack_flags "-k-z" "-knoexecstack")
