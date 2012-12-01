@@ -541,9 +541,11 @@ end;
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
-var tmpInt: LongInt;
+var startIndex: LongInt;
+    tmpInt: LongInt;
 begin
     if (ParamCount < 2) then
+        DisplayUsage();
         GameType:= gmtSyntax
     else
         if (ParamCount >= 2) then
