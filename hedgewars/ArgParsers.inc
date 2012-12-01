@@ -124,56 +124,74 @@ const mediaArray: Array [1..8] of String = ('--width','--height','--depth','--vo
 const allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--time','--lowquality');
 begin
     parseParameter:= false;
-    case cmd of
-        '--locale'     : cLocaleFName   := getStringParameter (arg, paramIndex);
-        '--width'      : cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter);
-        '--height'     : cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter);
-        '--depth'      : cBits          := getLongIntParameter(arg, paramIndex, parseParameter);
-        '--time'       : cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter);
-        '--volume'     : SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        '--nomusic'    : SetMusic        ( false );
-        '--nosound'    : SetSound        ( false );
-        '--fullscreen' : cFullScreen    := true;
-        '--showfps'    : cShowFPS       := true;
-        '--altdmg'     : cAltDamage     := true;
-        '--lowquality' : cReducedQuality:= ($FFFFFFFF * getLongIntParameter(arg, paramIndex, parseParameter)) xor rqLowRes; //HACK!
-        '--set-video'      : parseClassicParameter(videoArray,3,paramIndex);
-        '--set-audio'      : parseClassicParameter(audioArray,3,paramIndex);
-        '--set-other'      : parseClassicParameter(otherArray,3,paramIndex);
-        '--set-multimedia' : parseClassicParameter(mediaArray,8,paramIndex);
-        '--set-everything' : parseClassicParameter(allArray,12,paramIndex);
-        '--stats-only' : begin
-                         cOnlyStats:= true;
-                         SetSound(false);
-                         SetMusic(false);
-                         cReducedQuality:= $FFFFFFFF xor rqLowRes;
-                         end;
-        '--gci' : begin            //     We had to make up all this saved space some how...     \\
-                  WriteLn(stdout, '                                                                ');
-                  WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
-                  WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
-                  WriteLn(stdout, '     /\\\               /\\\/               \/\\\               ');
-                  WriteLn(stdout, '     \/\\\    /\\\\\\\  /\\\                 \/\\\              ');
-                  WriteLn(stdout, '      \/\\\   \/////\\\ \/\\\                 \/\\\             ');
-                  WriteLn(stdout, '       \/\\\       \/\\\ \//\\\                \/\\\            ');
-                  WriteLn(stdout, '        \/\\\       \/\\\  \///\\\              \/\\\           ');
-                  WriteLn(stdout, '         \//\\\\\\\\\\\\/     \////\\\\\\\\\  /\\\\\\\\\\\      ');
-                  WriteLn(stdout, '          \////////////           \/////////  \///////////      ');
-                  WriteLn(stdout, '                                                                ');
-                  WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
-                  WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
-                  WriteLn(stdout, '                                                                ');
-                  end;
-        '--help' : begin
-                   DisplayUsage();
-                   GameType:= gmtSyntax;
-                   end;
+    if cmd = '--locale' then
+        cLocaleFName   := getStringParameter (arg, paramIndex)
+    else if cmd = '--width' then
+        cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter)
+    else if cmd = '--height' then
+        cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter)
+    else if cmd = '--depth' then
+        cBits          := getLongIntParameter(arg, paramIndex, parseParameter)
+    else if cmd = '--time' then
+        cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter)
+    else if cmd = '--volume' then
+        SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) )
+    else if cmd = '--nomusic' then
+        SetMusic        ( false )
+    else if cmd = '--nosound' then
+        SetSound        ( false )
+    else if cmd = '--fullscreen' then
+        cFullScreen    := true
+    else if cmd = '--showfps' then
+        cShowFPS       := true
+    else if cmd = '--altdmg' then
+        cAltDamage     := true
+    else if cmd = '--lowquality' then
+        cReducedQuality:= ($FFFFFFFF * getLongIntParameter(arg, paramIndex, parseParameter)) xor rqLowRes //HACK
+    else if cmd = '--set-video' then
+        parseClassicParameter(videoArray,3,paramIndex)
+    else if cmd = '--set-audio' then
+        parseClassicParameter(audioArray,3,paramIndex)
+    else if cmd = '--set-other' then
+        parseClassicParameter(otherArray,3,paramIndex)
+    else if cmd = '--set-multimedia' then
+        parseClassicParameter(mediaArray,8,paramIndex)
+    else if cmd = '--set-everything' then
+        parseClassicParameter(allArray,12,paramIndex)
+    else if cmd = '--stats-only' then
+        begin
+        cOnlyStats:= true;
+        SetSound(false);
+        SetMusic(false);
+        cReducedQuality:= $FFFFFFFF xor rqLowRes
+        end
+    else if cmd = '--gci' then
+        begin            //     We had to make up all this saved space some how...     \\
+        WriteLn(stdout, '                                                                ');
+        WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
+        WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
+        WriteLn(stdout, '     /\\\               /\\\/               \/\\\               ');
+        WriteLn(stdout, '     \/\\\    /\\\\\\\  /\\\                 \/\\\              ');
+        WriteLn(stdout, '      \/\\\   \/////\\\ \/\\\                 \/\\\             ');
+        WriteLn(stdout, '       \/\\\       \/\\\ \//\\\                \/\\\            ');
+        WriteLn(stdout, '        \/\\\       \/\\\  \///\\\              \/\\\           ');
+        WriteLn(stdout, '         \//\\\\\\\\\\\\/     \////\\\\\\\\\  /\\\\\\\\\\\      ');
+        WriteLn(stdout, '          \////////////           \/////////  \///////////      ');
+        WriteLn(stdout, '                                                                ');
+        WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
+        WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
+        WriteLn(stdout, '                                                                ')
+        end
+    else if cmd = '--help' then
+        begin
+        DisplayUsage();
+        GameType:= gmtSyntax
+        end
     else
         begin
         WriteLn(stderr, 'ERROR: '+cmd+' is not a valid argument');
-        parseParameter:= true;
-        end
-    end;
+        parseParameter:= true
+        end;
 end;
 
 procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
@@ -185,8 +203,12 @@ begin
     while (index < size) do
         begin
         paramIndex:= paramIndex+1;
-        //This next line is a really strange (but short), way to check if the parameter is a boolean one
-        isBool:= true; case cmdArray[index] of '--nomusic':;'--nosound':;'--fullscreen':;'--showfps':;'--altdmg':;'--lowquality':; else isBool:= false; end;
+        isBool:= not ((cmdArray[index] = '--nomusic') or
+                      (cmdArray[index] = '--nosound') or
+                      (cmdArray[index] = '--fullscreen') or
+                      (cmdArray[index] = '--showfps') or
+                      (cmdArray[index] = '--altdmg') or
+                      (cmdArray[index] = '--lowquality'));
         if (not isBool) or ((ParamStr(paramIndex)='1') and (cmdArray[index]<>'--nomusic') and (cmdArray[index]<>'--nosound')) then
             parseParameter(cmdArray[index], ParamStr(paramIndex), tmpInt);
         //if isBool then
@@ -198,7 +220,6 @@ end;
 procedure playReplayFileWithParameters(paramIndex: LongInt);
 var wrongParameter: boolean;
 begin
-    paramIndex:= 4;
     wrongParameter:= false;
     while (paramIndex <= ParamCount) do
         begin

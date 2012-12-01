@@ -545,16 +545,20 @@ var startIndex: LongInt;
     tmpInt: LongInt;
 begin
     if (ParamCount < 2) then
+        begin
         DisplayUsage();
         GameType:= gmtSyntax
+        end
     else
         if (ParamCount >= 2) then
             begin
             UserPathPrefix:= ParamStr(1);
             PathPrefix:= ParamStr(2)
             end;
+
         if (ParamCount >= 3) then
             recordFileName:= ParamStr(3);
+
         if (ParamCount = 2) or
            ((ParamCount >= 3) and (Copy(recordFileName,1,2) = '--')) then
             begin
@@ -565,27 +569,24 @@ begin
             end
         else
             startIndex := 4;
+
         if (ParamCount = startIndex) and 
            (ParamStr(startIndex) = 'landpreview') then
             begin
             ipcPort:= StrToInt(ParamStr(2));
             GameType:= gmtLandPreview;
             end
-        else
-            begin
-            if (ParamCount = startIndex) and 
-               (ParamStr(startIndex) = '--stats-only') then
-                playReplayFileWithParameters(startIndex)
-            else
-                if ParamCount = cDefaultParamNum then
-                    internalStartGameWithParameters()
+        else if (ParamCount = startIndex) and 
+                (ParamStr(startIndex) = '--stats-only') then
+            playReplayFileWithParameters(startIndex)
+        else if ParamCount = cDefaultParamNum then
+            internalStartGameWithParameters()
 {$IFDEF USE_VIDEO_RECORDING}
-                else if ParamCount = cVideorecParamNum then
-                    internalStartVideoRecordingWithParameters()
+        else if ParamCount = cVideorecParamNum then
+            internalStartVideoRecordingWithParameters()
 {$ENDIF}
-                else
-                    playReplayFileWithParameters(startIndex);
-            end
+        else
+            playReplayFileWithParameters(startIndex)
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
