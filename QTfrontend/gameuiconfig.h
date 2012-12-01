@@ -58,6 +58,7 @@ class GameUIConfig : public QSettings
         bool isFrontendFullscreen() const;
         void resizeToConfigValues();
         quint32 stereoMode() const;
+        void setValue(const QString & key, const QVariant & value);
 
         QString AVFormat();
         QString videoCodec();
