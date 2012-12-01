@@ -30,7 +30,7 @@ BanDialog::BanDialog(QWidget *parent) :
     cbTime->addItem(tr("3 days"), 72 * 60 * 60);
     cbTime->addItem(tr("7 days"), 168 * 60 * 60);
     cbTime->addItem(tr("14 days"), 336 * 60 * 60);
-    cbTime->addItem(tr("permanent"), 3650 * 60 * 60);
+    cbTime->addItem(tr("permanent"), 3650 * 24 * 60 * 60);
     cbTime->setCurrentIndex(0);
 
     formLayout->addRow(tr("IP"), rbIP);
