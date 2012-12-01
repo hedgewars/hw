@@ -11,7 +11,12 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 #SOURCE AND PROGRAMS SECTION
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
 set(engine_output_name "hwengine")
-set(required_fpc_version 2.2)
+
+if (APPLE)
+    set(required_fpc_version 2.6)
+else()
+    set(required_fpc_version 2.2)
+endif()
 
 set(engine_sources
     ${hwengine_project}
@@ -105,17 +110,11 @@ endif(BUILD_ENGINE_LIBRARY)
 # Check Freepascal version
 find_package(Freepascal)
 
-if (NOT APPLE)
-    if (FPC_VERSION VERSION_LESS required_fpc_version)
-        message(FATAL_ERROR "Necessary FPC version not found (version >= ${required_fpc_version} required)")
-    endif()
-elseif (APPLE)
-    if (FPC_VERSION VERSION_LESS 2.6)
-        message(FATAL_ERROR "Necessary FPC version not found (version >= 2.6 required)")
-    endif()
+if (FPC_VERSION VERSION_LESS required_fpc_version)
+    message(FATAL_ERROR "Necessary FPC version not found (version >= ${required_fpc_version} required)")
+else()
+    message(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
 endif()
-
-message(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
