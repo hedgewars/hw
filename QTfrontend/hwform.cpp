@@ -959,35 +959,26 @@ void HWForm::NetConnectOfficialServer()
 
 void HWForm::NetPassword(const QString & nick)
 {
-    int passLength = config->value("net/passwordlength", 0).toInt();
-    QString hash = QString::fromLatin1(config->value("net/passwordhash", "").toByteArray());
+    //Get hashes
+    QString hash =  config->value("net/passwordhash", "").toString();
+    QString temphash =  config->value("net/temppasswordhash", "").toString();
 
-    // If the password is blank, ask the user to enter one in
-    if (passLength == 0)
-    {
-        HWPasswordDialog hpd(this, tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick));
-        hpd.cbSave->setChecked(config->value("net/savepassword", true).toBool());
-        if (hpd.exec() != QDialog::Accepted)
-        {
-            ForcedDisconnect(tr("No password supplied."));
-            return;
-        }
+    //Check them
 
-        QString password = hpd.lePassword->text();
-        hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
-
-        bool save = hpd.cbSave->isChecked();
-        config->setValue("net/savepassword", save);
-        if (save) // user wants to save password
-        {
-            config->setValue("net/passwordhash", hash.toLatin1());
-            config->setValue("net/passwordlength", password.size());
-            config->setNetPasswordLength(password.size());
-            config->sync();
-        }
+    if (temphash.isEmpty() && hash.isEmpty()) { //If the user enters a registered nick with no password, sends a bogus hash
+        hwnet->SendPasswordHash("THISISNOHASH");
+    }
+    else if (temphash.isEmpty()) { //Send saved hash as default
+        hwnet->SendPasswordHash(hash);
+    }
+    else { //Send the hash
+        hwnet->SendPasswordHash(temphash);
     }
 
-    hwnet->SendPasswordHash(hash);
+    //Remove temporary hash from config
+    QString key = "net/temppasswordhash";
+    config->setValue(key, "");
+    config->remove(key);
 }
 
 void HWForm::NetNickTaken(const QString & nick)
@@ -1186,23 +1177,87 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
-
-    while (nick.isEmpty())
+   
+//nick and pass stuff
+    
+    //remove temppasswordhash just in case
+    config->value("net/temppasswordhash", "");
+    config->remove("net/temppasswordhash");
+    
+    //initialize
+    QString hash = config->value("net/passwordhash", "").toString();
+    QString temphash = config->value("net/temppasswordhash", "").toString();
+    QString nickname = config->value("net/nick", "").toString();
+    QString password;
+    
+    if (nickname.isEmpty() || hash.isEmpty()) { //if something from login is missing, start dialog loop
+    
+    while (nickname.isEmpty() || (hash.isEmpty() && temphash.isEmpty())) //while a nickname, or both hashes are missing
     {
-        nick = QInputDialog::getText(this,
-                                     QObject::tr("Nickname"),
-                                     QObject::tr("Please enter your nickname"),
-                                     QLineEdit::Normal,
-                                     QDir::home().dirName());
-        config->setValue("net/nick",nick);
+	//open dialog
+        HWPasswordDialog * hpd = new HWPasswordDialog(this);
+        hpd->cbSave->setChecked(config->value("net/savepassword", true).toBool());
+
+	//if nickname is present, put it into the field
+	if (!nickname.isEmpty()) {
+	    hpd->leNickname->setText(nickname);
+	    hpd->lePassword->setFocus();
+	}
+
+	//if dialog close, create an error message
+        if (hpd->exec() != QDialog::Accepted)
+        {
+            ForcedDisconnect(tr("Login info not supplied."));
+            delete hpd;
+            return;
+        }
+
+	//set nick and pass from the dialog
+	nickname = hpd->leNickname->text();
+        password = hpd->lePassword->text();
+
+	//calculate temphash and set it into config
+	temphash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
+	config->setValue("net/temppasswordhash", temphash);
+
+	//if user wants to save password
+        bool save = hpd->cbSave->isChecked();
+        config->setValue("net/savepassword", save);
+        if (save) // user wants to save password
+        {
+            config->setValue("net/passwordhash", temphash);
+            config->setValue("net/passwordlength", password.size());
+            config->setNetPasswordLength(password.size());
+        }
+
+        delete hpd;
+
+
+	//update nickname
+        config->setValue("net/nick", nickname);
         config->updNetNick();
+	
+	//and all the variables
+	hash = config->value("net/passwordhash", "").toString();
+	temphash = config->value("net/temppasswordhash", "").toString();
+	nickname = config->value("net/nick", "").toString();
+    }
+    
+    
+	//if pass is none (hash is generated anyway), remove the hash
+	if (password.size() <= 0) {
+	    config->setValue("net/temppasswordhash", "");
+	    config->remove("net/temppasswordhash");
+	}
     }
 
-    ui.pageRoomsList->setUser(nick);
-    ui.pageNetGame->setUser(nick);
+    ui.pageRoomsList->setUser(nickname);
+    ui.pageNetGame->setUser(nickname);
 
-    hwnet->Connect(hostName, port, nick);
+    hwnet->Connect(hostName, port, nickname);
 }
+
+
 
 void HWForm::NetConnect()
 {
