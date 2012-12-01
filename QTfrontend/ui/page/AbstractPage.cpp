@@ -41,8 +41,9 @@ void AbstractPage::initPage()
     QGridLayout * pageLayout = new QGridLayout(this);
 
     // stretch grid space for body and footer
-    pageLayout->setColumnStretch(0,0);
-    pageLayout->setColumnStretch(1,1);
+    pageLayout->setColumnStretch(0,1);
+    pageLayout->setColumnStretch(1,2);
+    pageLayout->setColumnStretch(2,1);
     pageLayout->setRowStretch(0,1);
     pageLayout->setRowStretch(1,0);
 
