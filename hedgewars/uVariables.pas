@@ -2127,6 +2127,7 @@ var
             ejectY: 0),
 
 // Structure      
+{
             (NameId: sidStructure;
             NameTex: nil;
             Probability: 0;
@@ -2152,6 +2153,7 @@ var
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
+}
             
 // Land Gun
             (NameId: sidLandGun;

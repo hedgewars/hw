@@ -96,7 +96,7 @@ const
 (*    gtPoisonCloud *) , amNothing
 (*       gtSnowball *) , amSnowball
 (*          gtFlake *) , amNothing
-(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
+//(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
 (*        gtLandGun *) , amLandGun
 (*         gtTardis *) , amTardis
 (*         gtIceGun *) , amIceGun
@@ -536,6 +536,7 @@ gtFlamethrower: begin
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;
                 end;
+{
    gtStructure: begin
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
@@ -546,6 +547,7 @@ gtFlamethrower: begin
                 gear^.Tag:= TotalRounds + 3;
                 gear^.Pos:= 1;
                 end;
+}
       gtIceGun: gear^.Health:= 1000;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
