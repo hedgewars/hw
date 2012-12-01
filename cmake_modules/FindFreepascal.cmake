@@ -28,7 +28,7 @@ execute_process(COMMAND ${FPC_EXECUTABLE} ${NOEXECSTACK_FLAGS} checkstack.pas
 
 if (TEST_NOEXECSTACK)
     set(NOEXECSTACK_FLAGS "")
-    message(STATUS "Checking whether linker supports noexecstack flag -- no")
+    message(STATUS "Checking whether linker needs explicit noexecstack -- no")
 else()
-    message(STATUS "Checking whether linker supports noexecstack flag -- yes")
+    message(STATUS "Checking whether linker needs explicit noexecstack -- yes")
 endif()
