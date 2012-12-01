@@ -536,28 +536,69 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
+///////////////////////////////////////////////////////////////////////////////
+procedure DisplayUsage;
+var i: LongInt;
+begin
+    WriteLn(stdout, 'Wrong argument format: correct configurations is');
+    WriteLn(stdout, '');
+    WriteLn(stdout, '  hwengine [path to user hedgewars folder] <path to global data folder> <path to replay file> [options]');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'where [options] must be specified either as:');
+    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
+    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
+    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
+    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
+    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
+    WriteLn(stdout, ' --stats-only');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
+    WriteLn(stdout, '');
+    Write(stdout, 'PARSED COMMAND: ');
+    
+    for i:=0 to ParamCount do
+        Write(stdout, ParamStr(i) + ' ');
+        
+    WriteLn(stdout, '');
+end;
 
 ///////////////////////////////////////////////////////////////////////////////
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
-var tmpInt: LongInt;
+var startIndex : LongInt;
 begin
-    if (ParamCount < 3) then
-        begin
-        DisplayUsage();
-        GameType:= gmtSyntax;
-        end
+    if (ParamCount < 2) then
+        GameType:= gmtSyntax
     else
-        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+        if (ParamCount >= 2) then
+            begin
+            UserPathPrefix:= ParamStr(1);
+            PathPrefix:= ParamStr(2)
+            end;
+        if (ParamCount >= 3) then
+            recordFileName:= ParamStr(3);
+        if (ParamCount = 2) or
+           ((ParamCount >= 3) and (Copy(recordFileName,1,2) = '--')) then
+            begin
+            recordFileName := PathPrefix;
+            PathPrefix := UserPathPrefix;
+            startIndex := 3;
+            WriteLn(stdout,'defaulting UserPathPrefix')
+            end
+        else
+            startIndex := 4;
+        if (ParamCount = startIndex) and 
+           (ParamStr(startIndex) = 'landpreview') then
             begin
             ipcPort:= StrToInt(ParamStr(2));
             GameType:= gmtLandPreview;
             end
         else
             begin
-            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
-                playReplayFileWithParameters()
+            if (ParamCount = startIndex) and 
+               (ParamStr(startIndex) = '--stats-only') then
+                playReplayFileWithParameters(startIndex)
             else
                 if ParamCount = cDefaultParamNum then
                     internalStartGameWithParameters()
@@ -566,7 +607,7 @@ begin
                     internalStartVideoRecordingWithParameters()
 {$ENDIF}
                 else
-                    playReplayFileWithParameters();
+                    playReplayFileWithParameters(startIndex);
             end
 end;
 
@@ -580,7 +621,7 @@ begin
     if GameType = gmtLandPreview then
         GenLandPreview()
     else if GameType = gmtSyntax then
-        //Exit cleanly
+        DisplayUsage()
     else Game();
 
     // return 1 when engine is not called correctly
