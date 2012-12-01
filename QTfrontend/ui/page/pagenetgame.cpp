@@ -37,10 +37,10 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     pageLayout->setColumnStretch(1, 50);
 
     // chatwidget
-    pChatWidget = new HWChatWidget(this, m_gameSettings, true);
-    pChatWidget->setShowFollow(false); // don't show follow in nicks' context menus
-    pChatWidget->setIgnoreListKick(true); // kick ignored players automatically
-    pageLayout->addWidget(pChatWidget, 2, 0, 1, 2);
+    chatWidget = new HWChatWidget(this, true);
+    chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
+    chatWidget->setIgnoreListKick(true); // kick ignored players automatically
+    pageLayout->addWidget(chatWidget, 2, 0, 1, 2);
     pageLayout->setRowStretch(1, 100);
     pageLayout->setRowStretch(2, 100);
 
@@ -96,10 +96,8 @@ void PageNetGame::connectSignals()
     connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
 }
 
-PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings) : AbstractPage(parent)
+PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
 {
-    m_gameSettings = gameSettings;
-
     initPage();
 
     QMenu * menu = new QMenu(BtnMaster);
@@ -113,24 +111,23 @@ PageNetGame::PageNetGame(QWidget* parent, QSettings * gameSettings) : AbstractPa
     menu->addAction(restrictTeamAdds);
 
     BtnMaster->setMenu(menu);
-
 }
 
 
 void PageNetGame::displayError(const QString & message)
 {
-    pChatWidget->displayError(message);
+    chatWidget->displayError(message);
 }
 
 
 void PageNetGame::displayNotice(const QString & message)
 {
-    pChatWidget->displayNotice(message);
+    chatWidget->displayNotice(message);
 }
 
 void PageNetGame::displayWarning(const QString & message)
 {
-    pChatWidget->displayWarning(message);
+    chatWidget->displayWarning(message);
 }
 
 
@@ -178,5 +175,5 @@ void PageNetGame::setMasterMode(bool isMaster)
 
 void PageNetGame::setUser(const QString & nickname)
 {
-    pChatWidget->setUser(nickname);
+    chatWidget->setUser(nickname);
 }

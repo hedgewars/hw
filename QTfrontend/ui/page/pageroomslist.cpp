@@ -95,7 +95,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
 
     pageLayout->addLayout(filterLayout, 4, 0, 1, 2);
 
-    chatWidget = new HWChatWidget(this, m_gameSettings, false);
+    chatWidget = new HWChatWidget(this, false);
     pageLayout->addWidget(chatWidget, 5, 0, 1, 3);
     pageLayout->setRowStretch(5, 350);
 
@@ -156,11 +156,9 @@ void PageRoomsList::connectSignals()
 }
 
 
-PageRoomsList::PageRoomsList(QWidget* parent, QSettings * gameSettings) :
+PageRoomsList::PageRoomsList(QWidget* parent) :
     AbstractPage(parent)
 {
-    m_gameSettings = gameSettings;
-
     roomsModel = NULL;
     stateFilteredModel = NULL;
     schemeFilteredModel = NULL;
@@ -612,13 +610,17 @@ void PageRoomsList::onFilterChanged()
             QString("*%1*").arg(CBWeapons->currentText()));
 }
 
+void PageRoomsList::setSettings(QSettings *settings)
+{
+    m_gameSettings = settings;
+}
 
 bool PageRoomsList::restoreHeaderState()
 {
     if (!m_gameSettings->contains("frontend/roomslist_header"))
         return false;
     return roomsList->horizontalHeader()->restoreState(QByteArray::fromBase64(
-        (m_gameSettings->value("frontend/roomslist_header").toString().toAscii())));
+        (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
 }
 
 void PageRoomsList::saveHeaderState()
