@@ -156,7 +156,7 @@ void PageAdmin::protocol(int proto)
 
 void PageAdmin::onAddClicked()
 {
-    BanDialog dialog;
+    BanDialog dialog(this);
 
     if(dialog.exec())
     {
