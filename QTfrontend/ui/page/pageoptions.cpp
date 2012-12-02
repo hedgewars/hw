@@ -33,10 +33,12 @@
 #include <QStandardItemModel>
 
 #include "pageoptions.h"
+#include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
 #include "igbox.h"
 #include "DataManager.h"
+#include "LibavInteraction.h"
 
 // TODO cleanup
 QLayout * PageOptions::bodyLayoutDefinition()
@@ -49,6 +51,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
     QWidget * page2 = new QWidget(this);
     tabs->addTab(page1, tr("General"));
     tabs->addTab(page2, tr("Advanced"));
+
+#ifdef VIDEOREC
+    QWidget * page3 = new QWidget(this);
+    tabs->addTab(page3, tr("Video Recording"));
+#endif
 
     { // page 1
         QGridLayout * page1Layout = new QGridLayout(page1);
@@ -477,6 +484,119 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         page2Layout->addWidget(new QWidget(this), 2, 0);
     }
+#ifdef VIDEOREC
+    { // page 3
+        QGridLayout * page3Layout = new QGridLayout(page3);
+
+        IconedGroupBox* pOptionsGroup = new IconedGroupBox(this);
+        pOptionsGroup->setIcon(QIcon(":/res/Settings.png")); // FIXME
+        pOptionsGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        pOptionsGroup->setTitle(QGroupBox::tr("Video recording options"));
+        QGridLayout * pOptLayout = new QGridLayout(pOptionsGroup);
+
+        // label for format
+        QLabel *labelFormat = new QLabel(pOptionsGroup);
+        labelFormat->setText(QLabel::tr("Format"));
+        pOptLayout->addWidget(labelFormat, 0, 0);
+
+        // list of supported formats
+        comboAVFormats = new QComboBox(pOptionsGroup);
+        pOptLayout->addWidget(comboAVFormats, 0, 1, 1, 4);
+        LibavInteraction::instance().fillFormats(comboAVFormats);
+
+        // separator
+        QFrame * hr = new QFrame(pOptionsGroup);
+        hr->setFrameStyle(QFrame::HLine);
+        hr->setLineWidth(3);
+        hr->setFixedHeight(10);
+        pOptLayout->addWidget(hr, 1, 0, 1, 5);
+
+        // label for audio codec
+        QLabel *labelACodec = new QLabel(pOptionsGroup);
+        labelACodec->setText(QLabel::tr("Audio codec"));
+        pOptLayout->addWidget(labelACodec, 2, 0);
+
+        // list of supported audio codecs
+        comboAudioCodecs = new QComboBox(pOptionsGroup);
+        pOptLayout->addWidget(comboAudioCodecs, 2, 1, 1, 3);
+
+        // checkbox 'record audio'
+        checkRecordAudio = new QCheckBox(pOptionsGroup);
+        checkRecordAudio->setText(QCheckBox::tr("Record audio"));
+        pOptLayout->addWidget(checkRecordAudio, 2, 4);
+
+        // separator
+        hr = new QFrame(pOptionsGroup);
+        hr->setFrameStyle(QFrame::HLine);
+        hr->setLineWidth(3);
+        hr->setFixedHeight(10);
+        pOptLayout->addWidget(hr, 3, 0, 1, 5);
+
+        // label for video codec
+        QLabel *labelVCodec = new QLabel(pOptionsGroup);
+        labelVCodec->setText(QLabel::tr("Video codec"));
+        pOptLayout->addWidget(labelVCodec, 4, 0);
+
+        // list of supported video codecs
+        comboVideoCodecs = new QComboBox(pOptionsGroup);
+        pOptLayout->addWidget(comboVideoCodecs, 4, 1, 1, 4);
+
+        // label for resolution
+        QLabel *labelRes = new QLabel(pOptionsGroup);
+        labelRes->setText(QLabel::tr("Resolution"));
+        pOptLayout->addWidget(labelRes, 5, 0);
+
+        // width
+        widthEdit = new QLineEdit(pOptionsGroup);
+        widthEdit->setValidator(new QIntValidator(this));
+        pOptLayout->addWidget(widthEdit, 5, 1);
+
+        // x
+        QLabel *labelX = new QLabel(pOptionsGroup);
+        labelX->setText("X");
+        pOptLayout->addWidget(labelX, 5, 2);
+
+        // height
+        heightEdit = new QLineEdit(pOptionsGroup);
+        heightEdit->setValidator(new QIntValidator(pOptionsGroup));
+        pOptLayout->addWidget(heightEdit, 5, 3);
+
+        // checkbox 'use game resolution'
+        checkUseGameRes = new QCheckBox(pOptionsGroup);
+        checkUseGameRes->setText(QCheckBox::tr("Use game resolution"));
+        pOptLayout->addWidget(checkUseGameRes, 5, 4);
+
+        // label for framerate
+        QLabel *labelFramerate = new QLabel(pOptionsGroup);
+        labelFramerate->setText(QLabel::tr("Framerate"));
+        pOptLayout->addWidget(labelFramerate, 6, 0);
+
+        // framerate
+        framerateBox = new QSpinBox(pOptionsGroup);
+        framerateBox->setRange(1, 200);
+        framerateBox->setSingleStep(1);
+        pOptLayout->addWidget(framerateBox, 6, 1);
+
+        // label for Bitrate
+        QLabel *labelBitrate = new QLabel(pOptionsGroup);
+        labelBitrate->setText(QLabel::tr("Bitrate (Kbps)"));
+        pOptLayout->addWidget(labelBitrate, 6, 2);
+
+        // bitrate
+        bitrateBox = new QSpinBox(pOptionsGroup);
+        bitrateBox->setRange(100, 5000);
+        bitrateBox->setSingleStep(100);
+        pOptLayout->addWidget(bitrateBox, 6, 3);
+
+        // button 'set default options'
+        btnDefaults = new QPushButton(pOptionsGroup);
+        btnDefaults->setText(QPushButton::tr("Set default options"));
+        btnDefaults->setWhatsThis(QPushButton::tr("Restore default coding parameters"));
+        pOptLayout->addWidget(btnDefaults, 7, 0, 1, 5);
+
+        page3Layout->addWidget(pOptionsGroup, 1, 0);
+    }
+#endif
 
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();
@@ -492,6 +612,13 @@ QLayout * PageOptions::footerLayoutDefinition()
 
 void PageOptions::connectSignals()
 {
+#ifdef VIDEOREC
+    connect(checkUseGameRes, SIGNAL(stateChanged(int)), this, SLOT(changeUseGameRes(int)));
+    connect(checkRecordAudio, SIGNAL(stateChanged(int)), this, SLOT(changeRecordAudio(int)));
+    connect(comboAVFormats, SIGNAL(currentIndexChanged(int)), this, SLOT(changeAVFormat(int)));
+    connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
+#endif
+
     connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
     connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
     connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
@@ -500,7 +627,7 @@ void PageOptions::connectSignals()
     connect(CBSavePassword, SIGNAL(stateChanged(int)), this, SLOT(savePwdChanged(int)));
 }
 
-PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent)
+PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
 {
     initPage();
 }
@@ -618,4 +745,129 @@ void PageOptions::onProxyTypeChanged()
     leProxy->setEnabled(b);
     leProxyLogin->setEnabled(b);
     leProxyPassword->setEnabled(b);
+}
+
+// Video Recording
+
+void PageOptions::setConfig(GameUIConfig * config)
+{
+    this->config = config;
+}
+
+// user changed file format, we need to update list of codecs
+void PageOptions::changeAVFormat(int index)
+{
+    // remember selected codecs
+    QString prevVCodec = videoCodec();
+    QString prevACodec = audioCodec();
+
+    // clear lists of codecs
+    comboVideoCodecs->clear();
+    comboAudioCodecs->clear();
+
+    // get list of codecs for specified format
+    LibavInteraction::instance().fillCodecs(comboAVFormats->itemData(index).toString(), comboVideoCodecs, comboAudioCodecs);
+
+    // disable audio if there is no audio codec
+    if (comboAudioCodecs->count() == 0)
+    {
+        checkRecordAudio->setChecked(false);
+        checkRecordAudio->setEnabled(false);
+    }
+    else
+        checkRecordAudio->setEnabled(true);
+
+    // restore selected codecs if possible
+    int iVCodec = comboVideoCodecs->findData(prevVCodec);
+    if (iVCodec != -1)
+        comboVideoCodecs->setCurrentIndex(iVCodec);
+    int iACodec = comboAudioCodecs->findData(prevACodec);
+    if (iACodec != -1)
+        comboAudioCodecs->setCurrentIndex(iACodec);
+}
+
+// user switched checkbox 'use game resolution'
+void PageOptions::changeUseGameRes(int state)
+{
+    if (state && config)
+    {
+        // set resolution to game resolution
+        QRect resolution = config->vid_Resolution();
+        widthEdit->setText(QString::number(resolution.width()));
+        heightEdit->setText(QString::number(resolution.height()));
+    }
+    widthEdit->setEnabled(!state);
+    heightEdit->setEnabled(!state);
+}
+
+// user switched checkbox 'record audio'
+void PageOptions::changeRecordAudio(int state)
+{
+    comboAudioCodecs->setEnabled(!!state);
+}
+
+void PageOptions::setDefaultCodecs()
+{
+    // VLC should be able to handle any of these configurations
+    // Quicktime X only opens the first one
+    // Windows Media Player TODO
+    if (tryCodecs("mp4", "libx264", "aac"))
+        return;
+    if (tryCodecs("mp4", "libx264", "libfaac"))
+        return;
+    if (tryCodecs("mp4", "libx264", "libmp3lame"))
+        return;
+    if (tryCodecs("mp4", "libx264", "mp2"))
+        return;
+    if (tryCodecs("avi", "libxvid", "libmp3lame"))
+        return;
+    if (tryCodecs("avi", "libxvid", "ac3_fixed"))
+        return;
+    if (tryCodecs("avi", "libxvid", "mp2"))
+        return;
+    if (tryCodecs("avi", "mpeg4", "libmp3lame"))
+        return;
+    if (tryCodecs("avi", "mpeg4", "ac3_fixed"))
+        return;
+    if (tryCodecs("avi", "mpeg4", "mp2"))
+        return;
+
+    // this shouldn't happen, just in case
+    if (tryCodecs("ogg", "libtheora", "libvorbis"))
+        return;
+    tryCodecs("ogg", "libtheora", "flac");
+}
+
+void PageOptions::setDefaultOptions()
+{
+    framerateBox->setValue(30);
+    bitrateBox->setValue(1000);
+    checkRecordAudio->setChecked(true);
+    checkUseGameRes->setChecked(true);
+    setDefaultCodecs();
+}
+
+bool PageOptions::tryCodecs(const QString & format, const QString & vcodec, const QString & acodec)
+{
+    // first we should change format
+    int iFormat = comboAVFormats->findData(format);
+    if (iFormat == -1)
+        return false;
+    comboAVFormats->setCurrentIndex(iFormat);
+    // format was changed, so lists of codecs were automatically updated to codecs supported by this format
+
+    // try to find video codec
+    int iVCodec = comboVideoCodecs->findData(vcodec);
+    if (iVCodec == -1)
+        return false;
+    comboVideoCodecs->setCurrentIndex(iVCodec);
+
+    // try to find audio codec
+    int iACodec = comboAudioCodecs->findData(acodec);
+    if (iACodec == -1 && checkRecordAudio->isChecked())
+        return false;
+    if (iACodec != -1)
+        comboAudioCodecs->setCurrentIndex(iACodec);
+
+    return true;
 }

@@ -141,7 +141,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, "physfs://hedgewars.ini");
 
-    ui.pageVideos->init(config);
+#ifdef VIDEOREC
+    ui.pageOptions->setConfig(config);
+#endif
 
 #ifdef __APPLE__
     panel = new M3Panel;
