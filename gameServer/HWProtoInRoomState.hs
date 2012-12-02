@@ -308,8 +308,8 @@ handleCmd_inRoom ["BAN", banNick] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc banId
     if master && isJust maybeClientId && (banId /= thisClientId) && sameRoom then
         return [
-                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
-              , KickRoomClient banId
+--                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
+                KickRoomClient banId
             ]
         else
         return []
