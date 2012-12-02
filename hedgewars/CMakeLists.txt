@@ -111,7 +111,7 @@ endif(BUILD_ENGINE_LIBRARY)
 find_package(Freepascal)
 
 if (FPC_VERSION VERSION_LESS required_fpc_version)
-    message(FATAL_ERROR "Necessary FPC version not found (version >= ${required_fpc_version} required)")
+    message(FATAL_ERROR "Necessary FPC version not found (required version = ${required_fpc_version})")
 else()
     message(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
 endif()
@@ -165,7 +165,7 @@ endif()
 
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if(fpc_version LESS "020600")
+if(FPC_VERSION LESS "020600")
     #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
     #TODO: check if this is needed on windows too
     if(UNIX)
@@ -206,12 +206,12 @@ endif()
 
 set(pascal_flags "-Fl${LIBRARY_OUTPUT_PATH}" ${pascal_flags})
 
-set(fpc_flags ${noexecstack_flags} ${pascal_flags} ${hwengine_project})
+set(fpc_flags ${NOEXECSTACK_FLAGS} ${pascal_flags} ${hwengine_project})
 
 if(NOT APPLE)
     #here is the command for standard executables or for shared library
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
-        COMMAND "${fpc_executable}"
+        COMMAND "${FPC_EXECUTABLE}"
         ARGS ${fpc_flags}
         MAIN_DEPENDENCY ${hwengine_project}
         DEPENDS ${engine_sources}
@@ -221,7 +221,7 @@ else()
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
         set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
         add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
-            COMMAND "${fpc_executable}"
+            COMMAND "${FPC_EXECUTABLE}"
             ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
             MAIN_DEPENDENCY ${hwengine_project}
             DEPENDS ${engine_sources}
@@ -254,7 +254,7 @@ if(${FFMPEG_FOUND})
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if((fpc_version LESS "020600") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
+if((FPC_VERSION LESS "020600") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
     add_dependencies(${engine_output_name} ENGINECLEAN)
 endif()
 
