@@ -141,9 +141,16 @@ void GameUIConfig::reloadValues(void)
 
 void GameUIConfig::reloadVideosValues(void)
 {
-    Form->ui.pageOptions->framerateBox->setValue(value("videorec/fps",25).toUInt());
-    Form->ui.pageOptions->bitrateBox->setValue(value("videorec/bitrate",400).toUInt());
-    bool useGameRes = value("videorec/usegameres",true).toBool();
+    // one pass with default values
+    Form->ui.pageOptions->setDefaultOptions();
+
+    // then load user configuration
+    Form->ui.pageOptions->framerateBox->setCurrentIndex(
+            Form->ui.pageOptions->framerateBox->findData(
+                        value("videorec/framerate", rec_Framerate()).toString() + " fps",
+                    Qt::MatchExactly) );
+    Form->ui.pageOptions->bitrateBox->setValue(value("videorec/bitrate", rec_Bitrate()).toUInt());
+    bool useGameRes = value("videorec/usegameres",Form->ui.pageOptions->checkUseGameRes->isChecked()).toBool();
     if (useGameRes)
     {
         QRect res = vid_Resolution();
@@ -156,7 +163,8 @@ void GameUIConfig::reloadVideosValues(void)
         Form->ui.pageOptions->heightEdit->setText(value("videorec/height","600").toString());
     }
     Form->ui.pageOptions->checkUseGameRes->setChecked(useGameRes);
-    Form->ui.pageOptions->checkRecordAudio->setChecked(value("videorec/audio",true).toBool());
+    Form->ui.pageOptions->checkRecordAudio->setChecked(
+            value("videorec/audio",Form->ui.pageOptions->checkRecordAudio->isChecked()).toBool() );
     if (!Form->ui.pageOptions->tryCodecs(value("videorec/format","no").toString(),
                                         value("videorec/videocodec","no").toString(),
                                         value("videorec/audiocodec","no").toString()))
@@ -179,7 +187,16 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::resizeToConfigValues()
 {
-    Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
+    // fill 2/3 of the screen desktop
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    Form->resize(value("frontend/width", deskSize.width()*2/3).toUInt(),
+                 value("frontend/height", deskSize.height()*2/3).toUInt());
+
+    // move the window to the center of the screen
+    QPoint center = QApplication::desktop()->availableGeometry(-1).center();
+    center.setX(center.x() - (Form->width()/2));
+    center.setY(center.y() - (Form->height()/2));
+    Form->move(center);
 }
 
 void GameUIConfig::SaveOptions()
@@ -281,7 +298,7 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/format", AVFormat());
     setValue("videorec/videocodec", videoCodec());
     setValue("videorec/audiocodec", audioCodec());
-    setValue("videorec/fps", rec_Framerate());
+    setValue("videorec/framerate", rec_Framerate());
     setValue("videorec/bitrate", rec_Bitrate());
     setValue("videorec/width", res.width());
     setValue("videorec/height", res.height());
@@ -520,7 +537,10 @@ QRect GameUIConfig::rec_Resolution()
 
 int GameUIConfig::rec_Framerate()
 {
-    return Form->ui.pageOptions->framerateBox->value();
+    // remove the "fps" label
+    QString fpsText = Form->ui.pageOptions->framerateBox->currentText();
+    QStringList fpsList = fpsText.split(" ");
+    return fpsList.first().toInt();
 }
 
 int GameUIConfig::rec_Bitrate()
