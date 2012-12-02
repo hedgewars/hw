@@ -198,9 +198,12 @@ QLayout * PageVideos::bodyLayoutDefinition()
         pOptLayout->addWidget(labelFramerate, 6, 0);
 
         // framerate
-        framerateBox = new QSpinBox(pOptionsGroup);
-        framerateBox->setRange(1, 200);
-        framerateBox->setSingleStep(1);
+        framerateBox = new QComboBox(pOptionsGroup);
+        framerateBox->addItem("24 fps", 24);
+        framerateBox->addItem("25 fps", 25);
+        framerateBox->addItem("30 fps", 30);
+        framerateBox->addItem("50 fps", 50);
+        framerateBox->addItem("60 fps", 60);
         pOptLayout->addWidget(framerateBox, 6, 1);
 
         // label for Bitrate
@@ -448,7 +451,7 @@ void PageVideos::setDefaultCodecs()
 
 void PageVideos::setDefaultOptions()
 {
-    framerateBox->setValue(30);
+    framerateBox->setCurrentIndex(2); //set to 30fps
     bitrateBox->setValue(1000);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);

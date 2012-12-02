@@ -141,7 +141,8 @@ void GameUIConfig::reloadValues(void)
 
 void GameUIConfig::reloadVideosValues(void)
 {
-    Form->ui.pageVideos->framerateBox->setValue(value("videorec/fps",25).toUInt());
+    Form->ui.pageVideos->framerateBox->setCurrentIndex(1); //set to 25 fps
+
     Form->ui.pageVideos->bitrateBox->setValue(value("videorec/bitrate",400).toUInt());
     bool useGameRes = value("videorec/usegameres",true).toBool();
     if (useGameRes)
@@ -529,7 +530,7 @@ QRect GameUIConfig::rec_Resolution()
 
 int GameUIConfig::rec_Framerate()
 {
-    return Form->ui.pageVideos->framerateBox->value();
+    return Form->ui.pageVideos->framerateBox->itemData(Form->ui.pageVideos->framerateBox->currentIndex()).toUInt();
 }
 
 int GameUIConfig::rec_Bitrate()
