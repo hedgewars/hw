@@ -179,7 +179,16 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::resizeToConfigValues()
 {
-    Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
+    // fill 2/3 of the screen desktop
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    Form->resize(value("frontend/width", deskSize.width()*2/3).toUInt(),
+                 value("frontend/height", deskSize.height()*2/3).toUInt());
+
+    // move the window to the center of the screen
+    QPoint center = QApplication::desktop()->availableGeometry(-1).center();
+    center.setX(center.x() - (Form->width()/2));
+    center.setY(center.y() - (Form->height()/2));
+    Form->move(center);
 }
 
 void GameUIConfig::SaveOptions()
