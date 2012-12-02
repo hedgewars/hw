@@ -154,7 +154,6 @@ QLayout * PageVideos::bodyLayoutDefinition()
         pDescGroup->setTitle(QGroupBox::tr("Description"));
 
         QVBoxLayout* pDescLayout = new QVBoxLayout(pDescGroup);
-        QHBoxLayout* pTopDescLayout = new QHBoxLayout(0);    // picture and text
         QHBoxLayout* pBottomDescLayout = new QHBoxLayout(0); // buttons
 
         // label with thumbnail picture
@@ -169,7 +168,6 @@ QLayout * PageVideos::bodyLayoutDefinition()
                     "border-radius: 4px;"
                     "}" );
         clearThumbnail();
-        pTopDescLayout->addWidget(labelThumbnail, 2);
 
         // label with file description
         labelDesc = new QLabel(pDescGroup);
@@ -180,7 +178,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
                                            Qt::LinksAccessibleByKeyboard);
         labelDesc->setTextFormat(Qt::RichText);
         labelDesc->setOpenExternalLinks(true);
-        pTopDescLayout->addWidget(labelDesc, 1);
+        //pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
         btnPlay = new QPushButton(QPushButton::tr("Play"), pDescGroup);
@@ -197,7 +195,9 @@ QLayout * PageVideos::bodyLayoutDefinition()
         pBottomDescLayout->addWidget(btnToYouTube);
 
         pDescLayout->addStretch(1);
-        pDescLayout->addLayout(pTopDescLayout, 0);
+        pDescLayout->addWidget(labelThumbnail, 0);
+        pDescLayout->addStretch(1);
+        pDescLayout->addWidget(labelDesc, 0);
         pDescLayout->addStretch(1);
         pDescLayout->addLayout(pBottomDescLayout, 0);
 
