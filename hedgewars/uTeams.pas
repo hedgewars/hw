@@ -46,6 +46,7 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
 
 var MaxTeamHealth: LongInt;
     GameOver: boolean;
+    NextClan: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;

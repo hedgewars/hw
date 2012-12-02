@@ -33,7 +33,7 @@ procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 
-// loads an image from the game's data files
+// loads an image from the games data files
 function  LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 // like LoadDataImage but uses altPath as fallback-path if file not found/loadable in path
 function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -71,6 +71,13 @@ var MaxTextureSize: LongInt;
 {$ELSE}
     SDLPrimSurface: PSDL_Surface;
 {$ENDIF}
+    squaresize : LongInt;
+    numsquares : LongInt;
+    ProgrTex: PTexture;
+
+const 
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;

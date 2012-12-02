@@ -39,6 +39,14 @@ var RopePoints: record
 implementation
 uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
 
+const
+    // hog tag mask
+    htNone        = $00;
+    htTeamName    = $01;
+    htName        = $02;
+    htHealth      = $04;
+    htTransparent = $08;
+
 procedure DrawRopeLinesRQ(Gear: PGear);
 begin
 with RopePoints do
@@ -1178,7 +1186,7 @@ begin
                         if Gear^.FlightTime > 0 then
                             Tint($FF, $FF, $FF, $FF);
                         end;
-       gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
+       //gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
           gtTardis: if Gear^.Pos <> 4 then
                         begin
                         if Gear^.Pos = 2 then

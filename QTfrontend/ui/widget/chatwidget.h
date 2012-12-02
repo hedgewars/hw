@@ -54,7 +54,7 @@ class HWChatWidget : public QWidget
         Q_OBJECT
 
     public:
-        HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
+        HWChatWidget(QWidget* parent, bool notify);
         void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
         void setShowFollow(bool enabled);
         static const QString & styleSheet();
@@ -63,6 +63,7 @@ class HWChatWidget : public QWidget
         void displayWarning(const QString & message);
         void setUser(const QString & nickname);
         void setUsersModel(QAbstractItemModel * model);
+        void setSettings(QSettings * settings);
 
     protected:
         virtual void dragEnterEvent(QDragEnterEvent * event);

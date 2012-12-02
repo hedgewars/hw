@@ -596,7 +596,7 @@ begin
             begin
             map:= cPathz[ptMapCurrent] + '/map.png';
             mask:= cPathz[ptMapCurrent] + '/mask.png';
-            if (not(FileExists(map)) and FileExists(mask)) then
+            if (not(pfsExists(map)) and pfsExists(mask)) then
                 begin
                 maskOnly:= true;
                 LoadMask;

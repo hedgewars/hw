@@ -12,6 +12,7 @@ FileEngine::FileEngine(const QString& filename)
     : m_handle(NULL)
     , m_flags(0)
     , m_bufferSet(false)
+    , m_readWrite(false)
 {
     setFileName(filename);
 }
@@ -25,7 +26,13 @@ bool FileEngine::open(QIODevice::OpenMode openMode)
 {
     close();
 
-    if (openMode & QIODevice::WriteOnly) {
+    if ((openMode & QIODevice::ReadWrite) == QIODevice::ReadWrite) {
+        m_handle = PHYSFS_openAppend(m_fileName.toUtf8().constData());
+        m_readWrite = true;
+        seek(0);
+    }
+
+    else if (openMode & QIODevice::WriteOnly) {
         m_handle = PHYSFS_openWrite(m_fileName.toUtf8().constData());
         m_flags = QAbstractFileEngine::WriteOwnerPerm | QAbstractFileEngine::WriteUserPerm | QAbstractFileEngine::FileType;
     }
@@ -76,9 +83,22 @@ qint64 FileEngine::pos() const
     return PHYSFS_tell(m_handle);
 }
 
+bool FileEngine::setSize(qint64 size)
+{
+    if(size == 0)
+    {
+        m_size = 0;
+        return open(QIODevice::WriteOnly);
+    }
+    else
+        return false;
+}
+
 bool FileEngine::seek(qint64 pos)
 {
-    return PHYSFS_seek(m_handle, pos) != 0;
+    bool ok = PHYSFS_seek(m_handle, pos) != 0;
+
+    return ok;
 }
 
 bool FileEngine::isSequential() const
@@ -110,7 +130,7 @@ bool FileEngine::caseSensitive() const
 
 bool FileEngine::isRelativePath() const
 {
-    return true;
+    return false;
 }
 
 QAbstractFileEngineIterator * FileEngine::beginEntryList(QDir::Filters filters, const QStringList &filterNames)
@@ -189,7 +209,7 @@ void FileEngine::setFileName(const QString &file)
         m_fileName = file;
 
     PHYSFS_Stat stat;
-    if (PHYSFS_stat(m_fileName.toUtf8().constData(), &stat) != 0) {
+    if (PHYSFS_stat(m_fileName.toUtf8().constData(), &stat) != 0) {        
         m_size = stat.filesize;
         m_date = QDateTime::fromTime_t(stat.modtime);
 //        _flags |= QAbstractFileEngine::WriteUserPerm;
@@ -220,7 +240,16 @@ bool FileEngine::atEnd() const
 
 qint64 FileEngine::read(char *data, qint64 maxlen)
 {
-    return PHYSFS_readBytes(m_handle, data, maxlen);
+    if(m_readWrite)
+    {
+        if(pos() == 0)
+            open(QIODevice::ReadOnly);
+        else
+            return -1;
+    }
+
+    qint64 len = PHYSFS_readBytes(m_handle, data, maxlen);
+    return len;
 }
 
 qint64 FileEngine::readLine(char *data, qint64 maxlen)
@@ -286,7 +315,7 @@ FileEngineHandler::~FileEngineHandler()
 QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 {
     if (filename.startsWith(scheme))
-        return new FileEngine(filename.mid(scheme.size()));
+        return new FileEngine(filename);
     else
         return NULL;
 }

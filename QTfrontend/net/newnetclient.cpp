@@ -364,6 +364,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if (lst[0] == "BANLIST")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        emit bansList(tmp);
+        return;
+    }
+
     if (lst[0] == "CLIENT_FLAGS")
     {
         if(lst.size() < 3 || lst[1].size() < 2)
@@ -861,6 +869,26 @@ void HWNewNet::gameFinished(bool correctly)
 void HWNewNet::banPlayer(const QString & nick)
 {
     RawSendNet(QString("BAN%1%2").arg(delimeter).arg(nick));
+}
+
+void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANIP%1%2%1%3%1%4").arg(delimeter).arg(ip).arg(reason).arg(seconds));
+}
+
+void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANNICK%1%2%1%3%1%4").arg(delimeter).arg(nick).arg(reason).arg(seconds));
+}
+
+void HWNewNet::getBanList()
+{
+    RawSendNet(QByteArray("BANLIST"));
+}
+
+void HWNewNet::removeBan(const QString & b)
+{
+    RawSendNet(QString("UNBAN%1%2").arg(delimeter).arg(b));
 }
 
 void HWNewNet::kickPlayer(const QString & nick)

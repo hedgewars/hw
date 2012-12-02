@@ -25,28 +25,44 @@
 
 #include "input_password.h"
 
-HWPasswordDialog::HWPasswordDialog(QWidget* parent, const QString & label) : QDialog(parent)
+HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
 {
-    setWindowTitle(tr("Password"));
+    setWindowTitle(tr("Login"));
+    
+    QString titleLabelText = "To connect to the server, please log in.\n\nIf you don't have an account on www.hedgewars.org,\njust enter your nickname.";
+    QString nickLabelText = "Nickname:";
+    QString passLabelText = "Password:";
 
     QGridLayout * layout = new QGridLayout(this);
 
-    QLabel * lbLabel = new QLabel(this);
-    lbLabel->setText(label);
-    layout->addWidget(lbLabel, 0, 0);
+    QLabel * titleLabel = new QLabel(this);
+    titleLabel->setText(titleLabelText);
+    layout->addWidget(titleLabel, 0, 0);
+    
+    QLabel * nickLabel = new QLabel(this);
+    nickLabel->setText(nickLabelText);
+    layout->addWidget(nickLabel, 1, 0);
+    
+    leNickname = new QLineEdit(this);
+    leNickname->setEchoMode(QLineEdit::Normal);
+    layout->addWidget(leNickname, 2, 0);
+    
+    QLabel * passLabel = new QLabel(this);
+    passLabel->setText(passLabelText);
+    layout->addWidget(passLabel, 3, 0);
 
     lePassword = new QLineEdit(this);
     lePassword->setEchoMode(QLineEdit::Password);
-    layout->addWidget(lePassword, 1, 0);
+    layout->addWidget(lePassword, 4, 0);
 
     cbSave = new QCheckBox(this);
     cbSave->setText(QCheckBox::tr("Save password"));
-    layout->addWidget(cbSave, 2, 0);
+    layout->addWidget(cbSave, 5, 0);
 
     QDialogButtonBox* dbbButtons = new QDialogButtonBox(this);
     QPushButton * pbOK = dbbButtons->addButton(QDialogButtonBox::Ok);
     QPushButton * pbCancel = dbbButtons->addButton(QDialogButtonBox::Cancel);
-    layout->addWidget(dbbButtons, 3, 0);
+    layout->addWidget(dbbButtons, 6, 0);
 
     connect(pbOK, SIGNAL(clicked()), this, SLOT(accept()));
     connect(pbCancel, SIGNAL(clicked()), this, SLOT(reject()));

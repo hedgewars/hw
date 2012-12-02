@@ -86,7 +86,7 @@ class Ui_HWForm
 
         void setupUi(HWForm *HWForm);
         void SetupFonts();
-        void SetupPages(QWidget *Parent, HWForm *HWForm);
+        void SetupPages(QWidget *Parent);
 };
 
 #endif // UI_HWFORM_H

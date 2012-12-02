@@ -123,6 +123,7 @@ class HWNewNet : public QObject
         void serverMessageNew(const QString &);
         void serverMessageOld(const QString &);
         void latestProtocolVar(int);
+        void bansList(const QStringList &);
 
         void setMyReadyStatus(bool isReady);
 
@@ -156,7 +157,11 @@ class HWNewNet : public QObject
         void toggleRestrictJoins();
         void toggleRestrictTeamAdds();
         void partRoom();
-        void clearAccountsCache();
+        void clearAccountsCache();        
+        void getBanList();
+        void removeBan(const QString &);
+        void banIP(const QString & ip, const QString & reason, int seconds);
+        void banNick(const QString & nick, const QString & reason, int seconds);
 
     private slots:
         void ClientRead();

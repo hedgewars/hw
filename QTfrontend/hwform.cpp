@@ -111,7 +111,6 @@ bool frontendEffects = true;
 QString playerHash;
 
 GameUIConfig* HWForm::config = NULL;
-QSettings* HWForm::gameSettings = NULL;
 
 HWForm::HWForm(QWidget *parent, QString styleSheet)
     : QMainWindow(parent)
@@ -127,10 +126,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #ifdef USE_XFIRE
     xfire_init();
 #endif
-    gameSettings = new QSettings("physfs://hedgewars.ini", QSettings::IniFormat);
-    frontendEffects = gameSettings->value("frontend/effects", true).toBool();
-    playerHash = QString(QCryptographicHash::hash(gameSettings->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
-
     this->setStyleSheet(styleSheet);
     ui.setupUi(this);
     setMinimumSize(760, 580);
@@ -140,7 +135,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageOptions->CBResolution->addItems(SDLInteraction::instance().getResolutions());
 
     config = new GameUIConfig(this, "physfs://hedgewars.ini");
+    frontendEffects = config->value("frontend/effects", true).toBool();
+    playerHash = QString(QCryptographicHash::hash(config->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
+    ui.pageRoomsList->setSettings(config);
+    ui.pageNetGame->chatWidget->setSettings(config);
+    ui.pageRoomsList->chatWidget->setSettings(config);
 #ifdef VIDEOREC
     ui.pageOptions->setConfig(config);
 #endif
@@ -447,7 +447,7 @@ void HWForm::UpdateTeamsLists()
 
     if(teamslist.empty())
     {
-        QString currentNickName = gameSettings->value("net/nick","").toString().toUtf8();
+        QString currentNickName = config->value("net/nick","").toString().toUtf8();
         QString teamName;
 
         if (currentNickName.isEmpty())
@@ -616,16 +616,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_MAIN)
     {
         ui.pageOptions->setTeamOptionsEnabled(true);
-    }
-
-    if (id == ID_PAGE_SETUP)
-    {
-        config->reloadValues();
-    }
-
-    if (id == ID_PAGE_VIDEOS )
-    {
-        config->reloadVideosValues();
     }
 }
 
@@ -971,37 +961,26 @@ void HWForm::NetConnectOfficialServer()
 
 void HWForm::NetPassword(const QString & nick)
 {
-    int passLength = config->value("net/passwordlength", 0).toInt();
-    QString hash = config->value("net/passwordhash", "").toString();
+    //Get hashes
+    QString hash =  config->value("net/passwordhash", "").toString();
+    QString temphash =  config->value("net/temppasswordhash", "").toString();
 
-    // If the password is blank, ask the user to enter one in
-    if (passLength == 0)
-    {
-        HWPasswordDialog * hpd = new HWPasswordDialog(this, tr("Your nickname %1 is\nregistered on Hedgewars.org\nPlease provide your password below\nor pick another nickname in game config:").arg(nick));
-        hpd->cbSave->setChecked(config->value("net/savepassword", true).toBool());
-        if (hpd->exec() != QDialog::Accepted)
-        {
-            ForcedDisconnect(tr("No password supplied."));
-            delete hpd;
-            return;
-        }
+    //Check them
 
-        QString password = hpd->lePassword->text();
-        hash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
-
-        bool save = hpd->cbSave->isChecked();
-        config->setValue("net/savepassword", save);
-        if (save) // user wants to save password
-        {
-            config->setValue("net/passwordhash", hash);
-            config->setValue("net/passwordlength", password.size());
-            config->setNetPasswordLength(password.size());
-        }
-
-        delete hpd;
+    if (temphash.isEmpty() && hash.isEmpty()) { //If the user enters a registered nick with no password, sends a bogus hash
+        hwnet->SendPasswordHash("THISISNOHASH");
+    }
+    else if (temphash.isEmpty()) { //Send saved hash as default
+        hwnet->SendPasswordHash(hash);
+    }
+    else { //Send the hash
+        hwnet->SendPasswordHash(temphash);
     }
 
-    hwnet->SendPasswordHash(hash);
+    //Remove temporary hash from config
+    QString key = "net/temppasswordhash";
+    config->setValue(key, "");
+    config->remove(key);
 }
 
 void HWForm::NetNickTaken(const QString & nick)
@@ -1086,7 +1065,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
 
     ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
-    ui.pageNetGame->pChatWidget->setUsersModel(hwnet->roomPlayersModel());
+    ui.pageNetGame->chatWidget->setUsersModel(hwnet->roomPlayersModel());
 
 // rooms list page stuff
     ui.pageRoomsList->setModel(hwnet->roomsListModel());
@@ -1115,26 +1094,26 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
 // net page stuff
     connect(hwnet, SIGNAL(chatStringFromNet(const QString&)),
-            ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
+            ui.pageNetGame->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
 
     connect(hwnet, SIGNAL(chatStringFromMe(const QString&)),
-            ui.pageNetGame->pChatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
+            ui.pageNetGame->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(roomMaster(bool)),
-            ui.pageNetGame->pChatWidget, SLOT(adminAccess(bool)), Qt::QueuedConnection);
-    connect(ui.pageNetGame->pChatWidget, SIGNAL(chatLine(const QString&)),
+            ui.pageNetGame->chatWidget, SLOT(adminAccess(bool)), Qt::QueuedConnection);
+    connect(ui.pageNetGame->chatWidget, SIGNAL(chatLine(const QString&)),
             hwnet, SLOT(chatLineToNet(const QString&)));
     connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
     connect(hwnet, SIGNAL(setMyReadyStatus(bool)),
             ui.pageNetGame, SLOT(setReadyStatus(bool)), Qt::QueuedConnection);
 
 // chat widget actions
-    connect(ui.pageNetGame->pChatWidget, SIGNAL(kick(const QString&)),
+    connect(ui.pageNetGame->chatWidget, SIGNAL(kick(const QString&)),
             hwnet, SLOT(kickPlayer(const QString&)));
-    connect(ui.pageNetGame->pChatWidget, SIGNAL(ban(const QString&)),
+    connect(ui.pageNetGame->chatWidget, SIGNAL(ban(const QString&)),
             hwnet, SLOT(banPlayer(const QString&)));
-    connect(ui.pageNetGame->pChatWidget, SIGNAL(info(const QString&)),
+    connect(ui.pageNetGame->chatWidget, SIGNAL(info(const QString&)),
             hwnet, SLOT(infoPlayer(const QString&)));
-    connect(ui.pageNetGame->pChatWidget, SIGNAL(follow(const QString&)),
+    connect(ui.pageNetGame->chatWidget, SIGNAL(follow(const QString&)),
             hwnet, SLOT(followPlayer(const QString&)));
     connect(ui.pageRoomsList->chatWidget, SIGNAL(kick(const QString&)),
             hwnet, SLOT(kickPlayer(const QString&)));
@@ -1157,9 +1136,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
 // nick list stuff
     connect(hwnet, SIGNAL(nickAdded(const QString&, bool)),
-            ui.pageNetGame->pChatWidget, SLOT(nickAdded(const QString&, bool)), Qt::QueuedConnection);
+            ui.pageNetGame->chatWidget, SLOT(nickAdded(const QString&, bool)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(nickRemoved(const QString&)),
-            ui.pageNetGame->pChatWidget, SLOT(nickRemoved(const QString&)), Qt::QueuedConnection);
+            ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(nickAddedLobby(const QString&, bool)),
             ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&, bool)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(nickRemovedLobby(const QString&)),
@@ -1182,11 +1161,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(serverMessageNew(const QString&)), ui.pageAdmin, SLOT(serverMessageNew(const QString &)));
     connect(hwnet, SIGNAL(serverMessageOld(const QString&)), ui.pageAdmin, SLOT(serverMessageOld(const QString &)));
     connect(hwnet, SIGNAL(latestProtocolVar(int)), ui.pageAdmin, SLOT(protocol(int)));
+    connect(hwnet, SIGNAL(bansList(const QStringList &)), ui.pageAdmin, SLOT(setBansList(const QStringList &)));
     connect(ui.pageAdmin, SIGNAL(setServerMessageNew(const QString&)), hwnet, SLOT(setServerMessageNew(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setServerMessageOld(const QString&)), hwnet, SLOT(setServerMessageOld(const QString &)));
     connect(ui.pageAdmin, SIGNAL(setProtocol(int)), hwnet, SLOT(setLatestProtocolVar(int)));
     connect(ui.pageAdmin, SIGNAL(askServerVars()), hwnet, SLOT(askServerVars()));
     connect(ui.pageAdmin, SIGNAL(clearAccountsCache()), hwnet, SLOT(clearAccountsCache()));
+    connect(ui.pageAdmin, SIGNAL(bansListRequest()), hwnet, SLOT(getBanList()));
+    connect(ui.pageAdmin, SIGNAL(removeBan(QString)), hwnet, SLOT(removeBan(QString)));
+    connect(ui.pageAdmin, SIGNAL(banIP(QString,QString,int)), hwnet, SLOT(banIP(QString,QString,int)));
+    connect(ui.pageAdmin, SIGNAL(banNick(QString,QString,int)), hwnet, SLOT(banNick(QString,QString,int)));
 
 // disconnect
     connect(hwnet, SIGNAL(disconnected(const QString&)), this, SLOT(ForcedDisconnect(const QString&)), Qt::QueuedConnection);
@@ -1195,23 +1179,87 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(paramChanged(const QString &, const QStringList &)), ui.pageNetGame->pGameCFG, SLOT(setParam(const QString &, const QStringList &)));
     connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
-
-    while (nick.isEmpty())
+   
+//nick and pass stuff
+    
+    //remove temppasswordhash just in case
+    config->value("net/temppasswordhash", "");
+    config->remove("net/temppasswordhash");
+    
+    //initialize
+    QString hash = config->value("net/passwordhash", "").toString();
+    QString temphash = config->value("net/temppasswordhash", "").toString();
+    QString nickname = config->value("net/nick", "").toString();
+    QString password;
+    
+    if (nickname.isEmpty() || hash.isEmpty()) { //if something from login is missing, start dialog loop
+    
+    while (nickname.isEmpty() || (hash.isEmpty() && temphash.isEmpty())) //while a nickname, or both hashes are missing
     {
-        nick = QInputDialog::getText(this,
-                                     QObject::tr("Nickname"),
-                                     QObject::tr("Please enter your nickname"),
-                                     QLineEdit::Normal,
-                                     QDir::home().dirName());
-        config->setValue("net/nick",nick);
+	//open dialog
+        HWPasswordDialog * hpd = new HWPasswordDialog(this);
+        hpd->cbSave->setChecked(config->value("net/savepassword", true).toBool());
+
+	//if nickname is present, put it into the field
+	if (!nickname.isEmpty()) {
+	    hpd->leNickname->setText(nickname);
+	    hpd->lePassword->setFocus();
+	}
+
+	//if dialog close, create an error message
+        if (hpd->exec() != QDialog::Accepted)
+        {
+            ForcedDisconnect(tr("Login info not supplied."));
+            delete hpd;
+            return;
+        }
+
+	//set nick and pass from the dialog
+	nickname = hpd->leNickname->text();
+        password = hpd->lePassword->text();
+
+	//calculate temphash and set it into config
+	temphash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
+	config->setValue("net/temppasswordhash", temphash);
+
+	//if user wants to save password
+        bool save = hpd->cbSave->isChecked();
+        config->setValue("net/savepassword", save);
+        if (save) // user wants to save password
+        {
+            config->setValue("net/passwordhash", temphash);
+            config->setValue("net/passwordlength", password.size());
+            config->setNetPasswordLength(password.size());
+        }
+
+        delete hpd;
+
+
+	//update nickname
+        config->setValue("net/nick", nickname);
         config->updNetNick();
+	
+	//and all the variables
+	hash = config->value("net/passwordhash", "").toString();
+	temphash = config->value("net/temppasswordhash", "").toString();
+	nickname = config->value("net/nick", "").toString();
+    }
+    
+    
+	//if pass is none (hash is generated anyway), remove the hash
+	if (password.size() <= 0) {
+	    config->setValue("net/temppasswordhash", "");
+	    config->remove("net/temppasswordhash");
+	}
     }
 
-    ui.pageRoomsList->setUser(nick);
-    ui.pageNetGame->setUser(nick);
+    ui.pageRoomsList->setUser(nickname);
+    ui.pageNetGame->setUser(nickname);
 
-    hwnet->Connect(hostName, port, nick);
+    hwnet->Connect(hostName, port, nickname);
 }
+
+
 
 void HWForm::NetConnect()
 {
@@ -1300,7 +1348,7 @@ void HWForm::NetConnected()
 
 void HWForm::NetGameEnter()
 {
-    ui.pageNetGame->pChatWidget->clear();
+    ui.pageNetGame->chatWidget->clear();
     GoToPage(ID_PAGE_NETGAME);
 }
 

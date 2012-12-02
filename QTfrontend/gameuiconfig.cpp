@@ -94,11 +94,13 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->editNetPassword->installEventFilter(this);
 
     int passLength = value("net/passwordlength", 0).toInt();
-    setNetPasswordLength(passLength);
-    if (savePwd == false) {
-        Form->ui.pageOptions->editNetPassword->setEnabled(savePwd);
+    if (!savePwd) {
+        Form->ui.pageOptions->editNetPassword->setEnabled(false);
         Form->ui.pageOptions->editNetPassword->setText("");
         setNetPasswordLength(0);
+    } else
+    {
+        setNetPasswordLength(passLength);
     }
 
     delete netHost;
@@ -270,7 +272,7 @@ void GameUIConfig::SaveOptions()
             setValue(QString("colors/color%1").arg(i), model->item(i)->data());
     }
 
-    Form->gameSettings->sync();
+    sync();
 }
 
 void GameUIConfig::SaveVideosOptions()
@@ -286,7 +288,13 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/usegameres", Form->ui.pageOptions->checkUseGameRes->isChecked());
     setValue("videorec/audio", recordAudio());
 
-    Form->gameSettings->sync();
+    sync();
+}
+
+void GameUIConfig::setValue(const QString &key, const QVariant &value)
+{
+    qDebug() << "[settings]" << key << value;
+    QSettings::setValue(key, value);
 }
 
 QString GameUIConfig::language()
@@ -447,7 +455,7 @@ int GameUIConfig::netPasswordLength()
 
 bool GameUIConfig::netPasswordIsValid()
 {
-    return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '\0'));
+    return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '*'));
 }
 
 // When hedgewars launches, the password field is set with null characters. If the user tries to edit the field and there are such characters, then clear the field
@@ -472,7 +480,7 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 {
     if (passwordLength > 0)
     {
-        Form->ui.pageOptions->editNetPassword->setText(QString(passwordLength, '\0'));
+        Form->ui.pageOptions->editNetPassword->setText(QString(passwordLength, '*'));
     }
     else
     {

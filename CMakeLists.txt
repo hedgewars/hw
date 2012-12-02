@@ -2,11 +2,11 @@ project(hedgewars)
 
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0)
-FOREACH(hwpolicy CMP0003 CMP0012 CMP0017)
-    IF(POLICY ${hwpolicy})
-        CMAKE_POLICY(SET ${hwpolicy} NEW)
-    ENDIF()
-ENDFOREACH()
+foreach(hwpolicy CMP0003 CMP0012 CMP0017)
+    if(POLICY ${hwpolicy})
+        cmake_policy(SET ${hwpolicy} NEW)
+    endif()
+endforeach()
 #use available modules, fallback to ours if not present (CMP0017 helps)
 set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
@@ -27,34 +27,34 @@ option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" O
 
 
 #detect Mercurial revision (if present)
-IF(NOT NOREVISION)
+if(NOT NOREVISION)
     set(default_build_type "DEBUG")
     set(version_suffix "-development_version")
     set(HW_DEV true)
-    FIND_PROGRAM(HGCOMMAND hg)
-    IF(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
+    find_program(HGCOMMAND hg)
+    if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
         execute_process(COMMAND ${HGCOMMAND} identify -in
                         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                         OUTPUT_VARIABLE internal_version
                         ERROR_QUIET
                     )
         #check local repo status
-        STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
+        string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
 
-        STRING(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
-        STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
+        string(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
+        string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
 
-        MESSAGE(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
-        IF(HGCHANGED)
+        message(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
+        if(HGCHANGED)
             MESSAGE(WARNING "Notice: you have uncommitted changes in your repository")
-        ENDIF()
+        endif()
         set(version_suffix "-${revision_number}${HGCHANGED}")
-    ENDIF()
-ELSE(NOT NOREVISION)
+    endif()
+else(NOT NOREVISION)
     set(default_build_type "RELEASE")
     set(HWDEV false)
-    MESSAGE(STATUS "Building distributable version")
-ENDIF(NOT NOREVISION)
+    message(STATUS "Building distributable version")
+endif(NOT NOREVISION)
 
 
 #versioning

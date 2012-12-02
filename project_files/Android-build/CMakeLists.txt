@@ -18,7 +18,7 @@
 
 find_program(ANT ant DOC "Path to the java package creator: ant")
 if(NOT EXISTS ${ANT})
-    MESSAGE(FATAL_ERROR "Couldn't detect the Ant build tool")
+    message(FATAL_ERROR "Couldn't detect the Ant build tool")
 endif()
 
 if(NOT ANDROID_NDK)
@@ -26,9 +26,9 @@ if(NOT ANDROID_NDK)
 endif()
 
 if(IS_DIRECTORY "${ANDROID_NDK}")
-    MESSAGE(STATUS "Detected the android NDK directory at: " ${ANDROID_NDK}) 
+    message(STATUS "Detected the android NDK directory at: " ${ANDROID_NDK}) 
 else ()
-    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK directory")
+    message(FATAL_ERROR "Couldn't detect the Android NDK directory")
 endif()
 
 if(NOT ANDROID_NDK_TOOLCHAINDIR)
@@ -39,9 +39,9 @@ if(NOT ANDROID_NDK_TOOLCHAINDIR)
 endif()
 
 if(IS_DIRECTORY "${ANDROID_NDK_TOOLCHAINDIR}")
-    MESSAGE(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}") 
+    message(STATUS "Detected the Android NDK toolchain at: ${ANDROID_NDK_TOOLCHAINDIR}") 
 else ()
-    MESSAGE(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory: ${ANDROID_NDK_TOOLCHAINDIR}")
+    message(FATAL_ERROR "Couldn't detect the Android NDK toolchain directory: ${ANDROID_NDK_TOOLCHAINDIR}")
 endif()
 
 if(NOT ANDROID_SDK)#Check if its defined at the cmdline
@@ -52,9 +52,9 @@ if(NOT ANDROID_SDK)#Check if its defined at the cmdline
 endif()
 
 if( IS_DIRECTORY "${ANDROID_SDK}")
-    MESSAGE(STATUS "Detected the android SDK directory at: " ${ANDROID_SDK}) 
+    message(STATUS "Detected the android SDK directory at: " ${ANDROID_SDK}) 
 else ()
-    MESSAGE(FATAL_ERROR "Couldn't detect the Android SDK directory")
+    message(FATAL_ERROR "Couldn't detect the Android SDK directory")
 endif()
 
 if( NOT FPC_DIR)
@@ -66,9 +66,9 @@ if( NOT FPC_DIR)
 endif()
 
 if( IS_DIRECTORY "${FPC_DIR}")
-    MESSAGE(STATUS "Detected the FreePascal directory at: " "${FPC_DIR}") 
+    message(STATUS "Detected the FreePascal directory at: " "${FPC_DIR}") 
 else ()
-    MESSAGE(FATAL_ERROR "Couldn't detect the FreePascal directory")
+    message(FATAL_ERROR "Couldn't detect the FreePascal directory")
 endif()
 
 set(SDL_DIR /home/richard/Downloads/android-project)
@@ -77,7 +77,7 @@ set(SDL_DIR /home/richard/Downloads/android-project)
 set(ANDROID_SDK_API_LVL 16)
 set(ANDROID_NDK_API_LVL 5)
 
-MESSAGE(STATUS "Creating Makefile.android...")
+message(STATUS "Creating Makefile.android...")
 
 configure_file(Templates/Makefile.android .)
 
@@ -89,9 +89,9 @@ if(ANDROID_EXEC)
                  "--target android-${ANDROID_SDK_API_LVL}"
                  OUTPUT_VARIABLE androidoutput
                 )
-    MESSAGE(STATUS "Updating android project config...\n" ${androidoutput})
+    message(STATUS "Updating android project config...\n" ${androidoutput})
 else()
-    MESSAGE(FATAL_ERROR "Couldn't find the android executable in ${ANDROID_SDK}/platform-tools or ${ANDROID_SDK}/tools.")
+    message(FATAL_ERROR "Couldn't find the android executable in ${ANDROID_SDK}/platform-tools or ${ANDROID_SDK}/tools.")
 endif()
 
 exec_program(${HGCOMMAND}

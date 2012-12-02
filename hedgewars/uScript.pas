@@ -2319,6 +2319,7 @@ ScriptSetInteger('gstLoser'          ,$00080000);
 ScriptSetInteger('gstHHGone'         ,$00100000);
 ScriptSetInteger('gstInvisible'      ,$00200000);
 
+// ai hints
 ScriptSetInteger('aihUsualProcessing' ,$00000000);
 ScriptSetInteger('aihDoesntMatter'    ,$00000001);
 

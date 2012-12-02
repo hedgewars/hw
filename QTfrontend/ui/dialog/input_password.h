@@ -28,9 +28,10 @@ class HWPasswordDialog : public QDialog
 {
         Q_OBJECT
     public:
-        HWPasswordDialog(QWidget* parent, const QString & label);
+        HWPasswordDialog(QWidget* parent);
 
         QLineEdit* lePassword;
+        QLineEdit* leNickname;
         QCheckBox* cbSave;
 };
 
