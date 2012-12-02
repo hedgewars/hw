@@ -141,10 +141,16 @@ void GameUIConfig::reloadValues(void)
 
 void GameUIConfig::reloadVideosValues(void)
 {
-    Form->ui.pageVideos->framerateBox->setCurrentIndex(1); //set to 25 fps
+    // one pass with default values
+    Form->ui.pageVideos->setDefaultOptions();
 
-    Form->ui.pageVideos->bitrateBox->setValue(value("videorec/bitrate",400).toUInt());
-    bool useGameRes = value("videorec/usegameres",true).toBool();
+    // then load user configuration
+    Form->ui.pageVideos->framerateBox->setCurrentIndex(
+            Form->ui.pageVideos->framerateBox->findData(
+                        value("videorec/framerate", rec_Framerate()).toString() + " fps",
+                    Qt::MatchExactly) );
+    Form->ui.pageVideos->bitrateBox->setValue(value("videorec/bitrate", rec_Bitrate()).toUInt());
+    bool useGameRes = value("videorec/usegameres",Form->ui.pageVideos->checkUseGameRes->isChecked()).toBool();
     if (useGameRes)
     {
         QRect res = vid_Resolution();
@@ -157,7 +163,8 @@ void GameUIConfig::reloadVideosValues(void)
         Form->ui.pageVideos->heightEdit->setText(value("videorec/height","600").toString());
     }
     Form->ui.pageVideos->checkUseGameRes->setChecked(useGameRes);
-    Form->ui.pageVideos->checkRecordAudio->setChecked(value("videorec/audio",true).toBool());
+    Form->ui.pageVideos->checkRecordAudio->setChecked(
+            value("videorec/audio",Form->ui.pageVideos->checkRecordAudio->isChecked()).toBool() );
     if (!Form->ui.pageVideos->tryCodecs(value("videorec/format","no").toString(),
                                         value("videorec/videocodec","no").toString(),
                                         value("videorec/audiocodec","no").toString()))
@@ -291,7 +298,7 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/format", AVFormat());
     setValue("videorec/videocodec", videoCodec());
     setValue("videorec/audiocodec", audioCodec());
-    setValue("videorec/fps", rec_Framerate());
+    setValue("videorec/framerate", rec_Framerate());
     setValue("videorec/bitrate", rec_Bitrate());
     setValue("videorec/width", res.width());
     setValue("videorec/height", res.height());
@@ -530,7 +537,10 @@ QRect GameUIConfig::rec_Resolution()
 
 int GameUIConfig::rec_Framerate()
 {
-    return Form->ui.pageVideos->framerateBox->itemData(Form->ui.pageVideos->framerateBox->currentIndex()).toUInt();
+    // remove the "fps" label
+    QString fpsText = Form->ui.pageVideos->framerateBox->currentText();
+    QStringList fpsList = fpsText.split(" ");
+    return fpsList.first().toInt();
 }
 
 int GameUIConfig::rec_Bitrate()

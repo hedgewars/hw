@@ -108,7 +108,6 @@ class PageVideos : public AbstractPage
         void changeAVFormat(int index);
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
-        void setDefaultOptions();
         void encodingFinished(bool success);
         void updateProgress(float value);
         void cellDoubleClicked(int row, int column);
@@ -121,6 +120,9 @@ class PageVideos : public AbstractPage
         void uploadToYouTube();
         void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
         void uploadFinished();
+
+    public slots:
+        void setDefaultOptions();
 };
 
 #endif // PAGE_VIDEOS_H
