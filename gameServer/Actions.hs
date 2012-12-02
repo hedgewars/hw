@@ -441,17 +441,25 @@ processAction ClearAccountsCache = do
     return ()
 
 
-processAction (ProcessAccountInfo info) =
+processAction (ProcessAccountInfo info) = do
     case info of
         HasAccount passwd isAdmin -> do
-            chan <- client's sendChan
-            mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd, isAdministrator = isAdmin})]
-        Guest ->
-            processAction JoinLobby
+            b <- isBanned
+            when (not b) $ do
+                chan <- client's sendChan
+                mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd, isAdministrator = isAdmin})]
+        Guest -> do
+            b <- isBanned
+            when (not b) $
+                processAction JoinLobby
         Admin -> do
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
             processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
+    where
+    isBanned = do
+        processAction CheckBanned
+        liftM B.null $ client's nick
 
 
 processAction JoinLobby = do
