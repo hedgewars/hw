@@ -105,8 +105,28 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
+#ifdef __APPLE__
+static CocoaInitializer *cocoaInit = NULL;
+// Function to be called at end of program's termination on OS X to release
+// the NSAutoReleasePool contained within the CocoaInitializer.
+void releaseCocoaPool(void)
+{
+    if (cocoaInit != NULL)
+    {
+        delete cocoaInit;
+        cocoaInit = NULL;
+    }
+}
+#endif
+
 int main(int argc, char *argv[])
 {
+#ifdef __APPLE__
+    // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
+    cocoaInit = new CocoaInitializer();
+    atexit(releaseCocoaPool);
+#endif
+
     HWApplication app(argc, argv);
 
     FileEngineHandler engine(argv[0]);
@@ -253,10 +273,6 @@ int main(int argc, char *argv[])
         registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
         registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
-#endif
-#ifdef __APPLE__
-    // this creates the autoreleasepool that prevents leaking
-    CocoaInitializer initializer;
 #endif
 
     QString style = "";
