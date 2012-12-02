@@ -86,7 +86,7 @@ class PageOptions : public AbstractPage
         QLineEdit * leProxyPassword;
 
 #ifdef VIDEOREC
-        QSpinBox  *framerateBox;
+        QComboBox  *framerateBox;
         QSpinBox  *bitrateBox;
         QLineEdit *widthEdit;
         QLineEdit *heightEdit;
@@ -153,6 +153,8 @@ class PageOptions : public AbstractPage
         void changeAVFormat(int index);
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
+
+    public slots:
         void setDefaultOptions();
 #endif
 };

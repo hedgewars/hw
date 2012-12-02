@@ -490,7 +490,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
         IconedGroupBox* pOptionsGroup = new IconedGroupBox(this);
         pOptionsGroup->setIcon(QIcon(":/res/Settings.png")); // FIXME
-        pOptionsGroup->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        pOptionsGroup->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         pOptionsGroup->setTitle(QGroupBox::tr("Video recording options"));
         QGridLayout * pOptLayout = new QGridLayout(pOptionsGroup);
 
@@ -571,10 +571,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
         labelFramerate->setText(QLabel::tr("Framerate"));
         pOptLayout->addWidget(labelFramerate, 6, 0);
 
-        // framerate
-        framerateBox = new QSpinBox(pOptionsGroup);
-        framerateBox->setRange(1, 200);
-        framerateBox->setSingleStep(1);
+        framerateBox = new QComboBox(pOptionsGroup);
+        framerateBox->addItem("24 fps", 24);
+        framerateBox->addItem("25 fps", 25);
+        framerateBox->addItem("30 fps", 30);
+        framerateBox->addItem("50 fps", 50);
+        framerateBox->addItem("60 fps", 60);
         pOptLayout->addWidget(framerateBox, 6, 1);
 
         // label for Bitrate
@@ -840,7 +842,7 @@ void PageOptions::setDefaultCodecs()
 
 void PageOptions::setDefaultOptions()
 {
-    framerateBox->setValue(30);
+    framerateBox->setCurrentIndex(2);
     bitrateBox->setValue(1000);
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
