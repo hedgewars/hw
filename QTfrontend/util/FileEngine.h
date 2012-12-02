@@ -22,6 +22,7 @@ class FileEngine : public QAbstractFileEngine
         virtual bool flush();
         virtual qint64 size() const;
         virtual qint64 pos() const;
+        virtual bool setSize(qint64 size);
         virtual bool seek(qint64 pos);
         virtual bool isSequential() const;
         virtual bool remove();
@@ -55,6 +56,7 @@ class FileEngine : public QAbstractFileEngine
         QString m_fileName;
         QDateTime m_date;
         bool m_bufferSet;
+        bool m_readWrite;
 };
 
 class FileEngineHandler : public QAbstractFileEngineHandler

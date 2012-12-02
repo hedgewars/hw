@@ -115,7 +115,7 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
     }
     else
     {
-        setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!"));
+        setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
     }
 
 }

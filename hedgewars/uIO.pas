@@ -41,6 +41,9 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
+const
+    cSendEmptyPacketTime = 1000;
+
 type PCmd = ^TCmd;
      TCmd = packed record
             Next: PCmd;

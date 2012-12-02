@@ -32,7 +32,7 @@ class PageNetGame : public AbstractPage
         Q_OBJECT
 
     public:
-        PageNetGame(QWidget* parent, QSettings * gameSettings);
+        PageNetGame(QWidget* parent);
 
         /**
          * Sets the room name to display.
@@ -52,7 +52,7 @@ class PageNetGame : public AbstractPage
         QAction * restrictJoins;
         QAction * restrictTeamAdds;
 
-        HWChatWidget* pChatWidget;
+        HWChatWidget* chatWidget;
 
         TeamSelWidget* pNetTeamsWidget;
         GameCFGWidget* pGameCFG;
@@ -71,8 +71,6 @@ class PageNetGame : public AbstractPage
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         void connectSignals();
-
-        QSettings * m_gameSettings;
 
         HistoryLineEdit * leRoomName;
         QPushButton * btnSetup;

@@ -52,6 +52,7 @@ data Action =
     | KickRoomClient ClientIndex
     | BanClient NominalDiffTime B.ByteString ClientIndex
     | BanIP B.ByteString NominalDiffTime B.ByteString
+    | BanNick B.ByteString NominalDiffTime B.ByteString
     | BanList
     | Unban B.ByteString
     | ChangeMaster
@@ -154,7 +155,7 @@ processAction (ByeClient msg) = do
 
     when loggedIn $ processAction $ AnswerClients clientsChans ["LOBBY:LEFT", clNick, msg]
 
-    mapM processAction
+    mapM_ processAction
         [
         AnswerClients [chan] ["BYE", msg]
         , ModifyClient (\c -> c{nick = "", logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
@@ -500,14 +501,28 @@ processAction (BanIP ip seconds reason) = do
     processAction $
         AddIP2Bans ip msg (addUTCTime seconds currentTime)
 
+processAction (BanNick n seconds reason) = do
+    currentTime <- io getCurrentTime
+    let msg = 
+            if seconds > 60 * 60 * 24 * 365 then
+                B.concat ["Permanent ban (", reason, ")"]
+                else
+                B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
+    processAction $
+        AddNick2Bans n msg (addUTCTime seconds currentTime)
+
 processAction BanList = do
+    time <- io $ getCurrentTime
     ch <- client's sendChan
-    b <- gets (B.pack . unlines . map show . bans . serverInfo)
+    b <- gets (B.intercalate "\n" . concatMap (ban2Str time) . bans . serverInfo)
     processAction $
         AnswerClients [ch] ["BANLIST", b]
+    where
+        ban2Str time (BanByIP b r t) = ["I", b, r, B.pack . show $ t `diffUTCTime` time]
+        ban2Str time (BanByNick b r t) = ["N", b, r, B.pack . show $ t `diffUTCTime` time]
 
 processAction (Unban entry) = do
-    processAction $ ModifyServerInfo (\s -> s{bans = filter f $ bans s})
+    processAction $ ModifyServerInfo (\s -> s{bans = filter (not . f) $ bans s})
     where
         f (BanByIP bip _ _) = bip == entry
         f (BanByNick bn _ _) = bn == entry
@@ -561,7 +576,7 @@ processAction CheckBanned = do
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
         checkBan ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan _ n (BanByNick bn _ _) = bn == n
+        checkBan _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 

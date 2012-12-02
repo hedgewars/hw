@@ -177,7 +177,7 @@ void HWChatWidget::displayWarning(const QString & message)
 }
 
 
-HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
+HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     QWidget(parent),
     mainLayout(this)
 {
@@ -187,7 +187,6 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     m_isAdmin = false;
     m_autoKickEnabled = false;
 
-    if(gameSettings->value("frontend/sound", true).toBool())
     {
         QStringList vpList =
              QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
@@ -281,6 +280,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     clear();
 }
 
+void HWChatWidget::setSettings(QSettings * settings)
+{
+    gameSettings = settings;
+}
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
