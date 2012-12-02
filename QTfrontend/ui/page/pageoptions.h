@@ -21,6 +21,7 @@
 
 #include "AbstractPage.h"
 
+class GameUIConfig;
 class FPSEdit;
 class IconedGroupBox;
 class QSignalMapper;
@@ -84,6 +85,28 @@ class PageOptions : public AbstractPage
         QLineEdit * leProxyLogin;
         QLineEdit * leProxyPassword;
 
+#ifdef VIDEOREC
+        QSpinBox  *framerateBox;
+        QSpinBox  *bitrateBox;
+        QLineEdit *widthEdit;
+        QLineEdit *heightEdit;
+        QCheckBox *checkUseGameRes;
+        QCheckBox *checkRecordAudio;
+
+        QString format()
+        { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
+
+        QString videoCodec()
+        { return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex()).toString(); }
+
+        QString audioCodec()
+        { return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex()).toString(); }
+
+        void setDefaultCodecs();
+        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
+        void setConfig(GameUIConfig * config);
+#endif
+
         void setTeamOptionsEnabled(bool enabled);
 
     signals:
@@ -106,6 +129,14 @@ class PageOptions : public AbstractPage
         QPushButton *BtnDeleteTeam;
         QList<QPushButton *> m_colorButtons;
 
+#ifdef VIDEOREC
+        QComboBox *comboAVFormats;
+        QComboBox *comboVideoCodecs;
+        QComboBox *comboAudioCodecs;
+        QPushButton *btnDefaults;
+        GameUIConfig * config;
+#endif
+
     private slots:
         void forceFullscreen(int index);
         void setFullscreen(int state);
@@ -118,6 +149,12 @@ class PageOptions : public AbstractPage
         void colorButtonClicked(int i);
         void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
         void onProxyTypeChanged();
+#ifdef VIDEOREC
+        void changeAVFormat(int index);
+        void changeUseGameRes(int state);
+        void changeRecordAudio(int state);
+        void setDefaultOptions();
+#endif
 };
 
 #endif
