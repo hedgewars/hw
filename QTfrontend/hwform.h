@@ -177,8 +177,8 @@ class HWForm : public QMainWindow
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,
             ID_PAGE_FEEDBACK	   ,
-            ID_PAGE_VIDEOS,
-	    MAX_PAGE
+            ID_PAGE_VIDEOS	   ,
+            MAX_PAGE
         };
         QPointer<HWGame> game;
         QPointer<HWNetServer> pnetserver;
