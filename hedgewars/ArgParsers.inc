@@ -68,7 +68,7 @@ procedure DisplayUsage;
 begin
     WriteLn(stdout, 'Usage:');
     WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
+    WriteLn(stdout, '  hwengine [path to user hedgewars folder] <path to global data folder> <path to replay file> [options]');
     WriteLn(stdout, '');
     WriteLn(stdout, 'where [options] are any of the following:');
     WriteLn(stdout, ' --locale [path to language file]');
@@ -206,14 +206,10 @@ begin
         end;
 end;
 
-procedure playReplayFileWithParameters();
-var paramIndex, tmpInt: LongInt;
+procedure playReplayFileWithParameters(paramIndex: LongInt);
+var tmpInt: LongInt;
     wrongParameter: boolean;
 begin
-    UserPathPrefix:= ParamStr(1);
-    PathPrefix:= ParamStr(2);
-    recordFileName:= ParamStr(3);
-    paramIndex:= 4;
     wrongParameter:= false;
     while (paramIndex <= ParamCount) do
         begin

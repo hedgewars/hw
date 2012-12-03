@@ -541,23 +541,44 @@ end;
 {$INCLUDE "ArgParsers.inc"}
 
 procedure GetParams;
-var tmpInt: LongInt;
+var startIndex,tmpInt: LongInt;
+    debug: string;
 begin
-    if (ParamCount < 3) then
+    if (ParamCount < 2) then
         begin
         DisplayUsage();
         GameType:= gmtSyntax;
         end
     else
-        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+        begin
+        if (ParamCount >= 2) then
+            begin
+            UserPathPrefix := ParamStr(1);
+            PathPrefix     := ParamStr(2)
+            end;
+        if (ParamCount >= 3) then
+            recordFilename := ParamStr(3);
+        if (ParamCount = 2) or
+           ((ParamCount >= 3) and (Copy(recordFileName,1,2) = '--')) then
+            begin
+            recordFileName := PathPrefix;
+            PathPrefix     := UserPathPrefix;
+            UserPathPrefix := '.';
+            startIndex := 3;
+            end
+        else
+            startIndex := 4;
+        if (ParamCount = startIndex) and 
+           (ParamStr(startIndex) = 'landpreview') then
             begin
             ipcPort:= StrToInt(ParamStr(2));
             GameType:= gmtLandPreview;
             end
         else
             begin
-            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
-                playReplayFileWithParameters()
+            if (ParamCount = startIndex) and 
+               (ParamStr(startIndex) = '--stats-only') then
+                playReplayFileWithParameters(startIndex)
             else
                 if ParamCount = cDefaultParamNum then
                     internalStartGameWithParameters()
@@ -566,8 +587,12 @@ begin
                     internalStartVideoRecordingWithParameters()
 {$ENDIF}
                 else
-                    playReplayFileWithParameters();
+                    playReplayFileWithParameters(startIndex);
             end
+        end;
+    WriteLn(stdout,recordFilename);
+    WriteLn(stdout,PathPrefix);
+    WriteLn(stdout,UserPathPrefix);
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
