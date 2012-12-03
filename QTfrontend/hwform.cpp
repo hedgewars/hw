@@ -141,7 +141,10 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageRoomsList->setSettings(config);
     ui.pageNetGame->chatWidget->setSettings(config);
     ui.pageRoomsList->chatWidget->setSettings(config);
+#ifdef VIDEOREC
     ui.pageVideos->init(config);
+    ui.pageOptions->setConfig(config);
+#endif
 
 #ifdef __APPLE__
     panel = new M3Panel;
