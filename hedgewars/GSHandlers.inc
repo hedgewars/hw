@@ -2223,7 +2223,9 @@ begin
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
-        performRumble();
+        with mobileRecord do
+            if (performRumble <> nil) and (not fastUntilLag) then
+                performRumble(kSystemSoundID_Vibrate);
         exit
         end;
     if (GameTicks and $3F) = 0 then
@@ -4308,7 +4310,9 @@ begin
     Gear^.dY.isNegative := not Gear^.dY.isNegative;
 
     Gear^.doStep := @doStepSineGunShotWork;
-    performRumble();
+    with mobileRecord do
+        if (performRumble <> nil) and (not fastUntilLag) then
+            performRumble(kSystemSoundID_Vibrate);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

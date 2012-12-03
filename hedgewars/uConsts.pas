@@ -275,6 +275,8 @@ const
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
 
+    kSystemSoundID_Vibrate = $00000FFF;
+
 implementation
 
 end.

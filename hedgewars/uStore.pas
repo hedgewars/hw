@@ -56,7 +56,7 @@ procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
+uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
     , uPhysFSLayer
     , uDebug
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
@@ -886,8 +886,10 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
-
-        uMobile.GameLoading();
+        with mobileRecord do
+            if GameLoading <> nil then
+                GameLoading();
+        
         end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -910,7 +912,9 @@ end;
 
 procedure FinishProgress;
 begin
-    uMobile.GameLoaded();
+    with mobileRecord do
+        if GameLoaded <> nil then
+            GameLoaded();
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     ProgrTex:= nil;

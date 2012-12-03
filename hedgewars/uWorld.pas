@@ -60,7 +60,6 @@ uses
     , uCaptions
     , uCursor
     , uCommands
-    , uMobile
 {$IFDEF USE_VIDEO_RECORDING}    
     , uVideoRec
 {$ENDIF}    
@@ -246,7 +245,7 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 
 //positioning of the buttons
-buttonScale:= uMobile.getScreenDPI/cDefaultZoomLevel;
+buttonScale:= mobileRecord.getScreenDPI()/cDefaultZoomLevel;
 
 
 with JumpWidget do
