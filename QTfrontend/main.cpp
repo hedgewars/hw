@@ -90,9 +90,9 @@ void checkSeason()
 
 bool checkForDir(const QString & dir)
 {
-    QDir tmpdir;
-    if (!tmpdir.exists(dir))
-        if (!tmpdir.mkdir(dir))
+    QDir tmpdir(dir);
+    if (!tmpdir.exists())
+        if (!tmpdir.mkpath(dir))
         {
             QMessageBox directoryMsg(QApplication::activeWindow());
             directoryMsg.setIcon(QMessageBox::Warning);
@@ -103,6 +103,15 @@ bool checkForDir(const QString & dir)
             return false;
         }
     return true;
+}
+
+bool checkForFile(const QString & file)
+{
+    QFile tmpfile(file);
+    if (!tmpfile.exists())
+        return tmpfile.open(QFile::WriteOnly);
+    else
+        return true;
 }
 
 #ifdef __APPLE__
@@ -251,6 +260,8 @@ int main(int argc, char *argv[])
     engine.mount(cfgdir->absolutePath());
     engine.setWriteDir(cfgdir->absolutePath());
     engine.mountPacks();
+
+    checkForFile("physfs://hedgewars.ini");
 
     QTranslator Translator;
     {
