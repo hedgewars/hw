@@ -178,6 +178,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
                                            Qt::LinksAccessibleByKeyboard);
         labelDesc->setTextFormat(Qt::RichText);
         labelDesc->setOpenExternalLinks(true);
+        labelDesc->setMinimumSize(ThumbnailSize);
         //pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
