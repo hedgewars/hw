@@ -243,7 +243,7 @@ begin
             end;
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);    
         end;
-    end;
+    end else
     //else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         Gear^.Hedgehog:= AttackerHog;
     inc(Gear^.Damage, Damage);
