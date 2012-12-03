@@ -111,9 +111,13 @@ endif(BUILD_ENGINE_LIBRARY)
 find_package(Freepascal)
 
 if (FPC_VERSION VERSION_LESS required_fpc_version)
+<<<<<<< local
     message(FATAL_ERROR "Necessary FPC version not found (required version = ${required_fpc_version})")
 else()
     message(STATUS "Found FPC: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
+=======
+    message(FATAL_ERROR "Freepascal is too old, minimum version required is ${required_fpc_version}")
+>>>>>>> other
 endif()
 
 
@@ -165,9 +169,12 @@ endif()
 
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
+<<<<<<< local
 if(FPC_VERSION LESS "020600")
+=======
+if(FPC_VERSION VERSION_LESS "2.6")
+>>>>>>> other
     #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
-    #TODO: check if this is needed on windows too
     if(UNIX)
         set(SAFE_BUILD_TOOL $(MAKE))
     else()
@@ -254,7 +261,7 @@ if(${FFMPEG_FOUND})
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if((FPC_VERSION LESS "020600") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
+if((FPC_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
     add_dependencies(${engine_output_name} ENGINECLEAN)
 endif()
 
