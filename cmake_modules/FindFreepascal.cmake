@@ -13,8 +13,9 @@ if (FPC_EXECUTABLE)
 
     string(REGEX MATCH "[0-9]+\\.[0-9]+" FPC_VERSION_LONG "${FPC_VERSION_FULL}")
     string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" FPC_VERSION "${FPC_VERSION_LONG}")
+    message(STATUS "Found Freepascal: ${FPC_EXECUTABLE} (version ${FPC_VERSION}")
 else()
-    message(FATAL_ERROR "Freepascal not found (required for hedgewars)")
+    message(FATAL_ERROR "Could NOT find Freepascal")
 endif()
 
 # Check for noexecstack flag support
@@ -32,3 +33,4 @@ if (TEST_NOEXECSTACK)
 else(TEST_NOEXECSTACK)
     message(STATUS "Checking whether linker needs explicit noexecstack -- yes")
 endif(TEST_NOEXECSTACK)
+
