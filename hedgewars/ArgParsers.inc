@@ -202,8 +202,6 @@ begin
             or (cmdArray[index] = '--lowquality');
         if (not isBool) or ((ParamStr(paramIndex)='1') and (cmdArray[index]<>'--nomusic') and (cmdArray[index]<>'--nosound')) then
             parseParameter(cmdArray[index], ParamStr(paramIndex), tmpInt);
-        //if isBool then
-        //  paramIndex:= paramIndex+1;
         index:= index+1;
         end;
 end;

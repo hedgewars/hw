@@ -73,6 +73,17 @@ procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 {$ENDIF}
 
+function  isPhone: Boolean; inline;
+function  getScreenDPI: Double; inline; //cdecl; external;
+
+{$IFDEF IPHONEOS}
+procedure startLoadingIndicator; cdecl; external;
+procedure stopLoadingIndicator; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
+function  isApplePhone: Boolean; cdecl; external;
+procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
+{$ENDIF}
+
 procedure initModule(isNotPreview: boolean);
 procedure freeModule;
 
@@ -400,6 +411,31 @@ begin
 system.writeln(f, s)
 end;
 {$ENDIF}
+
+// this function is just to determine whether we are running on a limited screen device
+function isPhone: Boolean; inline;
+begin
+    isPhone:= false;
+{$IFDEF IPHONEOS}
+    isPhone:= isApplePhone();
+{$ENDIF}
+{$IFDEF ANDROID}
+    //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
+    if (cScreenWidth < 1000) and (cScreenHeight < 500) then
+        isPhone:= true;
+{$ENDIF}
+end;
+
+//This dummy function should be reimplemented (externally).
+function getScreenDPI: Double; inline;
+begin
+{$IFDEF ANDROID}
+//    getScreenDPI:= Android_JNI_getDensity();
+    getScreenDPI:= 1;
+{$ELSE}
+    getScreenDPI:= 1;
+{$ENDIF}
+end;
 
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}

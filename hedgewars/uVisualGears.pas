@@ -53,7 +53,7 @@ procedure ChangeToSDFlakes;
 procedure KickFlakes(Radius, X, Y: LongInt);
 
 implementation
-uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
+uses uSound, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
 
 const 
     cExplFrameTicks = 110;

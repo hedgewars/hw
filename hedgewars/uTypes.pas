@@ -399,6 +399,18 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Flawless: boolean;
             end;
 
+     cdeclPtr = procedure; cdecl;
+     cdeclIntPtr = procedure(num: LongInt); cdecl;
+     functionDoublePtr = function: Double;
+
+     TMobileRecord = record
+                     getScreenDPI: functionDoublePtr;
+                     PerformRumble: cdeclIntPtr;
+                     GameLoading: cdeclPtr;
+                     GameLoaded: cdeclPtr;
+                     SaveLoadingEnded: cdeclPtr;
+                     end;
+
      TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
             sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
             sidDynamite, sidBaseballBat, sidFirePunch, sidSeconds,

@@ -59,7 +59,6 @@ set(engine_sources
     uLandTexture.pas
     uLocale.pas
     uMisc.pas
-    uMobile.pas
     uPhysFSLayer.pas
     uRandom.pas
     uRender.pas

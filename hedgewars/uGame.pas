@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uMobile, 
+uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, 
     uVisualGears, uTypes, uVariables, uCommands, uConsts
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
@@ -96,7 +96,9 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         AddVisualGear(0, 0, vgtSmoothWindBar);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
-                        uMobile.SaveLoadingEnded();
+                        with mobileRecord do
+                            if SaveLoadingEnded <> nil then
+                                SaveLoadingEnded();
                         end;
                 end
         else ProcessGears

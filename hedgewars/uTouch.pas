@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld, uMobile;
+uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
 
 
 procedure initModule;
@@ -558,7 +558,7 @@ begin
     isOnCrosshair:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
     printFinger(finger);
     WriteLnToConsole(inttostr(finger.x) + '   ' + inttostr(x));
-    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(uMobile.getScreenDPI * 10)));
+    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(mobileRecord.getScreenDPI() * 10)));
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
@@ -640,7 +640,7 @@ begin
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
 
-    rectSize:= round(baseRectSize * uMobile.getScreenDPI);
+    rectSize:= round(baseRectSize * mobileRecord.getScreenDPI());
     halfRectSize:= rectSize shl 1;
 end;
 
