@@ -36,24 +36,6 @@ class PageVideos : public AbstractPage
     public:
         PageVideos(QWidget* parent = 0);
 
-        QComboBox  *framerateBox;
-        QSpinBox  *bitrateBox;
-        QLineEdit *widthEdit;
-        QLineEdit *heightEdit;
-        QCheckBox *checkUseGameRes;
-        QCheckBox *checkRecordAudio;
-
-        QString format()
-        { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
-
-        QString videoCodec()
-        { return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex()).toString(); }
-
-        QString audioCodec()
-        { return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex()).toString(); }
-
-        void setDefaultCodecs();
-        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
         void addRecorder(HWRecorder* pRecorder);
         bool tryQuit(HWForm *form);
         QString getVideosInProgress(); // get multi-line string with list of videos in progress
@@ -83,12 +65,6 @@ class PageVideos : public AbstractPage
         GameUIConfig * config;
         QNetworkAccessManager* netManager;
 
-        // options group
-        QComboBox *comboAVFormats;
-        QComboBox *comboVideoCodecs;
-        QComboBox *comboAudioCodecs;
-        QPushButton *btnDefaults;
-
         // file list group
         QTableWidget *filesTable;
         QPushButton *btnOpenDir;
@@ -105,9 +81,6 @@ class PageVideos : public AbstractPage
         int numRecorders, numUploads;
 
     private slots:
-        void changeAVFormat(int index);
-        void changeUseGameRes(int state);
-        void changeRecordAudio(int state);
         void encodingFinished(bool success);
         void updateProgress(float value);
         void cellDoubleClicked(int row, int column);
@@ -120,9 +93,6 @@ class PageVideos : public AbstractPage
         void uploadToYouTube();
         void uploadProgress(qint64 bytesSent, qint64 bytesTotal);
         void uploadFinished();
-
-    public slots:
-        void setDefaultOptions();
 };
 
 #endif // PAGE_VIDEOS_H
