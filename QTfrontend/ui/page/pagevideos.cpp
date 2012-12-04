@@ -862,7 +862,7 @@ void PageVideos::uploadToYouTube()
     int row = filesTable->currentRow();
     VideoItem * item = nameItem(row);
 
-    if (item->pUploading)
+    if (item->pUploading) //Act as 'cancel uploading' button
     {
         // ask user if (s)he is serious
         QMessageBox reallyStopMsg(this);
@@ -874,9 +874,10 @@ void PageVideos::uploadToYouTube()
 
         if (reallyStopMsg.exec() != QMessageBox::Ok)
             return;
-        item->pUploading->deleteLater();
+        item->pUploading->abort();
+        btnToYouTube->setText(QPushButton::tr("Upload to YouTube"));
         filesTable->setCellWidget(row, vcProgress, NULL); // remove progress bar
-        numUploads--;
+        //numUploads--;
         return;
     }
 
