@@ -544,6 +544,37 @@ procedure GetParams;
 var startIndex,tmpInt: LongInt;
     debug: string;
 begin
+    (*
+    tmpInt:=0;
+    while (tmpInt <= ParamCount) do
+        begin
+        WriteLn(stdout,inttostr(tmpInt) + ': ' + ParamStr(tmpInt));
+        inc(tmpInt);
+        end;
+    *)
+
+    if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+    begin
+        PathPrefix := ParamStr(1);
+        ipcPort    := StrToInt(ParamStr(2));
+        GameType   := gmtLandPreview;
+        exit;
+    end;
+
+    //TODO: prepend something so that we can use a cDefaultParamNum of parameters
+    if ParamCount = cDefaultParamNum then
+    begin
+        internalStartGameWithParameters();
+        exit;
+    end
+{$IFDEF USE_VIDEO_RECORDING}
+    else if ParamCount = cVideorecParamNum then
+    begin
+        internalStartVideoRecordingWithParameters();
+        exit;
+    end
+{$ENDIF};
+
     if (ParamCount < 2) then
         begin
         DisplayUsage();
@@ -554,45 +585,28 @@ begin
         if (ParamCount >= 2) then
             begin
             UserPathPrefix := ParamStr(1);
-            PathPrefix     := ParamStr(2)
+            PathPrefix     := ParamStr(2);
             end;
         if (ParamCount >= 3) then
             recordFilename := ParamStr(3);
         if (ParamCount = 2) or
            ((ParamCount >= 3) and (Copy(recordFileName,1,2) = '--')) then
             begin
-            recordFileName := PathPrefix;
-            PathPrefix     := UserPathPrefix;
             UserPathPrefix := '.';
-            startIndex := 3;
+            PathPrefix     := ParamStr(1);
+            recordFileName := ParamStr(2);
+            startIndex     := 3;
             end
         else
             startIndex := 4;
-        if (ParamCount = startIndex) and 
-           (ParamStr(startIndex) = 'landpreview') then
-            begin
-            ipcPort:= StrToInt(ParamStr(2));
-            GameType:= gmtLandPreview;
-            end
-        else
-            begin
-            if (ParamCount = startIndex) and 
-               (ParamStr(startIndex) = '--stats-only') then
-                playReplayFileWithParameters(startIndex)
-            else
-                if ParamCount = cDefaultParamNum then
-                    internalStartGameWithParameters()
-{$IFDEF USE_VIDEO_RECORDING}
-                else if ParamCount = cVideorecParamNum then
-                    internalStartVideoRecordingWithParameters()
-{$ENDIF}
-                else
-                    playReplayFileWithParameters(startIndex);
-            end
+
+        playReplayFileWithParameters(startIndex);
         end;
+    (*
     WriteLn(stdout,recordFilename);
     WriteLn(stdout,PathPrefix);
     WriteLn(stdout,UserPathPrefix);
+    *)
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
