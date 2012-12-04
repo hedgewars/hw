@@ -40,9 +40,9 @@ struct _flib_netconn {
 	char *playerName;
 	char *dataDirPath;
 
-	int netconnState;			// One of the NETCONN_STATE constants
+	int netconnState;			//! One of the NETCONN_STATE constants
 
-	bool isChief;				// Player can modify the current room
+	bool isChief;				//! Player can modify the current room
 	flib_map *map;
 	flib_teamlist pendingTeamlist;
 	flib_teamlist teamlist;

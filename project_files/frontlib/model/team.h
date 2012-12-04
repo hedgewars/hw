@@ -49,18 +49,18 @@ typedef struct {
 
 typedef struct {
 	char *name;
-	char *hat;			// e.g. hair_yellow; References a .png file in Data/Graphics/Hats
+	char *hat;			//! e.g. hair_yellow; References a .png file in Data/Graphics/Hats
 
-	// Statistics. They are irrelevant for the engine or server,
-	// but provided for ini reading/writing by the frontend.
+	//! Statistics. They are irrelevant for the engine or server,
+	//! but provided for ini reading/writing by the frontend.
 	int rounds;
 	int kills;
 	int deaths;
 	int suicides;
 
-	int difficulty;		// 0 = human, 1 = most difficult bot ... 5 = least difficult bot (somewhat counterintuitive)
+	int difficulty;		//! 0 = human, 1 = most difficult bot ... 5 = least difficult bot (somewhat counterintuitive)
 
-	// Transient setting used in game setup
+	//! Transient setting used in game setup
 	int initialHealth;
 	flib_weaponset *weaponset;
 } flib_hog;
@@ -68,25 +68,25 @@ typedef struct {
 typedef struct {
 	flib_hog hogs[HEDGEHOGS_PER_TEAM];
 	char *name;
-	char *grave;		// e.g. "Bone"; References a .png file in Data/Graphics/Graves
-	char *fort;			// e.g. "Castle"; References a series of files in Data/Forts
-	char *voicepack;	// e.g. "Classic"; References a directory in Data/Sounds/voices
-	char *flag;			// e.g. "hedgewars"; References a .png file in Data/Graphics/Flags
+	char *grave;		//! e.g. "Bone"; References a .png file in Data/Graphics/Graves
+	char *fort;			//! e.g. "Castle"; References a series of files in Data/Forts
+	char *voicepack;	//! e.g. "Classic"; References a directory in Data/Sounds/voices
+	char *flag;			//! e.g. "hedgewars"; References a .png file in Data/Graphics/Flags
 
 	flib_binding *bindings;
 	int bindingCount;
 
-	// Statistics. They are irrelevant for the engine or server,
-	// but provided for ini reading/writing by the frontend.
+	//! Statistics. They are irrelevant for the engine or server,
+	//! but provided for ini reading/writing by the frontend.
 	int rounds;
 	int wins;
 	int campaignProgress;
 
-	// Transient settings used in game setup
-	int colorIndex;		// Index into a color table
-	int hogsInGame;		// The number of hogs that will actually play
-	bool remoteDriven;	// true for non-local teams in a network game
-	char *ownerName;	// Username of the owner of a team in a network game
+	//! Transient settings used in game setup
+	int colorIndex;		//! Index into a color table
+	int hogsInGame;		//! The number of hogs that will actually play
+	bool remoteDriven;	//! true for non-local teams in a network game
+	char *ownerName;	//! Username of the owner of a team in a network game
 } flib_team;
 
 /**
