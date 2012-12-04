@@ -50,7 +50,7 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     setIniCodec("UTF-8");
 
-    connect(Form->ui.pageOptions->CBEnableFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
+    connect(Form->ui.pageOptions->CBFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
     //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
@@ -80,10 +80,10 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
     Form->ui.pageOptions->CBFrontendEffects->setChecked(value("frontend/effects", true).toBool());
-    Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
-    Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("frontend/music", true).toBool());
+    Form->ui.pageOptions->CBSound->setChecked(value("audio/sound", true).toBool());
+    Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
+    Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
+    Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
     Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
@@ -397,20 +397,20 @@ bool GameUIConfig::isFrontendFullscreen() const
 
 bool GameUIConfig::isSoundEnabled()
 {
-    return Form->ui.pageOptions->CBEnableSound->isChecked();
+    return Form->ui.pageOptions->CBSound->isChecked();
 }
 bool GameUIConfig::isFrontendSoundEnabled()
 {
-    return Form->ui.pageOptions->CBEnableFrontendSound->isChecked();
+    return Form->ui.pageOptions->CBFrontendSound->isChecked();
 }
 
 bool GameUIConfig::isMusicEnabled()
 {
-    return Form->ui.pageOptions->CBEnableMusic->isChecked();
+    return Form->ui.pageOptions->CBMusic->isChecked();
 }
 bool GameUIConfig::isFrontendMusicEnabled()
 {
-    return Form->ui.pageOptions->CBEnableFrontendMusic->isChecked();
+    return Form->ui.pageOptions->CBFrontendMusic->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()
