@@ -310,6 +310,7 @@ void GameUIConfig::SaveVideosOptions()
 
 void GameUIConfig::setValue(const QString &key, const QVariant &value)
 {
+    //qDebug() << "[settings]" << key << value;
     QSettings::setValue(key, value);
 }
 
