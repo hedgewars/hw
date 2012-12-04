@@ -68,19 +68,19 @@
 #define NETCONN_STATE_ROOM 2
 #define NETCONN_STATE_DISCONNECTED 10
 
-#define NETCONN_DISCONNECT_NORMAL 0				// The connection was closed normally
-#define NETCONN_DISCONNECT_SERVER_TOO_OLD 1		// The server has a lower protocol version than we do
-#define NETCONN_DISCONNECT_AUTH_FAILED 2		// You sent a password with flib_netconn_send_password that was not accepted
-#define NETCONN_DISCONNECT_CONNLOST 3			// The network connection was lost
-#define NETCONN_DISCONNECT_INTERNAL_ERROR 100	// Something went wrong in frontlib itself
+#define NETCONN_DISCONNECT_NORMAL 0				//! The connection was closed normally
+#define NETCONN_DISCONNECT_SERVER_TOO_OLD 1		//! The server has a lower protocol version than we do
+#define NETCONN_DISCONNECT_AUTH_FAILED 2		//! You sent a password with flib_netconn_send_password that was not accepted
+#define NETCONN_DISCONNECT_CONNLOST 3			//! The network connection was lost
+#define NETCONN_DISCONNECT_INTERNAL_ERROR 100	//! Something went wrong in frontlib itself
 
-#define NETCONN_ROOMLEAVE_ABANDONED 0			// The room was closed because the chief left
-#define NETCONN_ROOMLEAVE_KICKED 1				// You have been kicked from the room
+#define NETCONN_ROOMLEAVE_ABANDONED 0			//! The room was closed because the chief left
+#define NETCONN_ROOMLEAVE_KICKED 1				//! You have been kicked from the room
 
-#define NETCONN_MSG_TYPE_PLAYERINFO 0			// A response to flib_netconn_send_playerInfo
-#define NETCONN_MSG_TYPE_SERVERMESSAGE 1		// The welcome message when connecting to the lobby
-#define NETCONN_MSG_TYPE_WARNING 2				// A general warning message
-#define NETCONN_MSG_TYPE_ERROR 3				// A general error message
+#define NETCONN_MSG_TYPE_PLAYERINFO 0			//! A response to flib_netconn_send_playerInfo
+#define NETCONN_MSG_TYPE_SERVERMESSAGE 1		//! The welcome message when connecting to the lobby
+#define NETCONN_MSG_TYPE_WARNING 2				//! A general warning message
+#define NETCONN_MSG_TYPE_ERROR 3				//! A general error message
 
 #define NETCONN_MAPCHANGE_FULL 0
 #define NETCONN_MAPCHANGE_MAP 1
