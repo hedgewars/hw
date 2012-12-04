@@ -21,7 +21,7 @@
 unit uSound;
 (*
  * This unit controls the sounds and music of the game.
- * Doesn't really do anything if isSoundEnabled = false.
+ * Doesn't really do anything if isSoundEnabled = false and isMusicEnabled = false
  *
  * There are three basic types of sound controls:
  *    Music        - The background music of the game:
@@ -287,19 +287,24 @@ end;
 
 procedure InitSound;
 const channels: LongInt = {$IFDEF MOBILE}1{$ELSE}2{$ENDIF};
+var success: boolean;
 begin
-    if not isSoundEnabled then
+    if not (isSoundEnabled or isMusicEnabled) then
         exit;
     WriteToConsole('Init sound...');
-    isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
+    success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
-    if isSoundEnabled then
-        isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
+    if success then
+        success:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
 
-    if isSoundEnabled then
+    if success then
         WriteLnToConsole(msgOK)
     else
+    begin
         WriteLnToConsole(msgFailed);
+        isSoundEnabled:= false;
+        isMusicEnabled:= false;
+    end;
 
     WriteToConsole('Init SDL_mixer... ');
     SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
@@ -543,7 +548,7 @@ end;
 procedure PlayMusic;
 var s: shortstring;
 begin
-    if (not isSoundEnabled) or (MusicFN = '') or (not isMusicEnabled) then
+    if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
     s:= '/Music/' + MusicFN;
@@ -564,7 +569,7 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
-    if (not isSoundEnabled) or ((voldelta = 0) and (not (cInitVolume = 0))) then
+    if not (isSoundEnabled or isMusicEnabled) or ((voldelta = 0) and (not (cInitVolume = 0))) then
         exit;
 
     inc(Volume, voldelta);
@@ -604,7 +609,7 @@ end;
 
 procedure MuteAudio;
 begin
-    if not isSoundEnabled then
+    if not (isSoundEnabled or isMusicEnabled) then
         exit;
 
     if (isAudioMuted) then
@@ -727,7 +732,7 @@ end;
 
 procedure freeModule;
 begin
-    if isSoundEnabled then
+    if isSoundEnabled or isMusicEnabled then
         ReleaseSound(true);
 end;
 
