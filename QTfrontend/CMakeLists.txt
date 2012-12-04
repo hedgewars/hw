@@ -38,7 +38,6 @@ include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
 include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
-include_directories(${CMAKE_SOURCE_DIR}/project_files/frontlib)
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -178,11 +177,9 @@ add_executable(hedgewars ${console_access}
 
 set(HW_LINK_LIBS
     physfs
-    frontlib
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
-    ${SDLNET_LIBRARY}
     ${FFMPEG_LIBRARIES}
     ${HW_LINK_LIBS}
     )

@@ -26,10 +26,6 @@
 #ifndef FRONTLIB_H_
 #define FRONTLIB_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include "ipc/gameconn.h"
 #include "ipc/mapconn.h"
 #include "net/netconn.h"
@@ -48,9 +44,5 @@ int flib_init();
  * flib_init again.
  */
 void flib_quit();
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* FRONTLIB_H_ */
