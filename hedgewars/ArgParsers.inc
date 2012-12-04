@@ -37,15 +37,22 @@ begin
     cReducedQuality:= StrToInt(ParamStr(15));
     tmp:= StrToInt(ParamStr(16));
     GrayScale:= false;
-    if (tmp > 9) and (tmp < 16) then 
+{$IFDEF USE_S3D_RENDERING}
+    if (tmp > 9) and (tmp < 16) then
         begin
+        // set the gray anaglyph rendering
         GrayScale:= true;
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-9)))
         end
-    else if tmp <= 9 then 
+    else if tmp <= 9 then
+        // set the fullcolor anaglyph
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)))
-    else 
+    else
+        // any other mode
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
+{$ELSE}
+	cStereoMode:= smNone;
+{$ENDIF}
     cLocaleFName:= ParamStr(17);
 end;
 
