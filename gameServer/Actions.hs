@@ -74,7 +74,7 @@ data Action =
     | RestartServer
     | AddNick2Bans B.ByteString B.ByteString UTCTime
     | AddIP2Bans B.ByteString B.ByteString UTCTime
-    | CheckBanned
+    | CheckBanned Bool
     | SaveReplay
 
 
@@ -424,17 +424,14 @@ processAction CheckRegistered = do
     haveSameNick <- liftM (not . null . tail . filter (\c -> caseInsensitiveCompare (nick c) n)) allClientsS
     if haveSameNick then
         if p < 38 then
-            mapM_ processAction [ByeClient "Nickname is already in use", removeNick]
+            processAction $ ByeClient "Nickname is already in use"
             else
-            mapM_ processAction [NoticeMessage NickAlreadyInUse, removeNick]
+            processAction $ NoticeMessage NickAlreadyInUse
         else
         do
         db <- gets (dbQueries . serverInfo)
         io $ writeChan db $ CheckAccount ci (hashUnique uid) n h
         return ()
-   where
-       removeNick = ModifyClient (\c -> c{nick = ""})
-
 
 processAction ClearAccountsCache = do
     dbq <- gets (dbQueries . serverInfo)
@@ -459,7 +456,7 @@ processAction (ProcessAccountInfo info) = do
             processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
     where
     isBanned = do
-        processAction CheckBanned
+        processAction $ CheckBanned False
         liftM B.null $ client's nick
 
 
@@ -557,7 +554,7 @@ processAction (AddClient cl) = do
     mapM_ processAction
         [
             AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
-            , CheckBanned
+            , CheckBanned True
             , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
         ]
 
@@ -571,21 +568,22 @@ processAction (AddIP2Bans ip reason expiring) = do
     when (not $ ci `Set.member` rc)
         $ processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
 
-processAction CheckBanned = do
+processAction (CheckBanned byIP) = do
     clTime <- client's connectTime
     clNick <- client's nick
     clHost <- client's host
     si <- gets serverInfo
     let validBans = filter (checkNotExpired clTime) $ bans si
-    let ban = L.find (checkBan clHost clNick) $ validBans
+    let ban = L.find (checkBan byIP clHost clNick) $ validBans
     mapM_ processAction $
         ModifyServerInfo (\s -> s{bans = validBans})
         : [ByeClient (getBanReason $ fromJust ban) | isJust ban]
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
-        checkBan ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
-        checkBan _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
+        checkBan True ip _ (BanByIP bip _ _) = bip `B.isPrefixOf` ip
+        checkBan False _ n (BanByNick bn _ _) = caseInsensitiveCompare bn n
+        checkBan _ _ _ _ = False
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
 
