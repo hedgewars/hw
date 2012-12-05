@@ -96,7 +96,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
             ++ answerTeams cl jRoom
-            ++ watchRound cl jRoom
+            ++ watchRound cl jRoom chans
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
@@ -122,11 +122,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
 
         answerTeams cl jRoom = let f = if isJust $ gameInfo jRoom then teamsAtStart . fromJust . gameInfo else teams in answerAllTeams cl $ f jRoom
 
-        watchRound cl jRoom = if isNothing $ gameInfo jRoom then
+        watchRound cl jRoom chans = if isNothing $ gameInfo jRoom then
                     []
                 else
-                    [AnswerClients [sendChan cl]  ["RUN_GAME"],
-                    AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
+                    [AnswerClients [sendChan cl]  ["RUN_GAME"]
+                    , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
+                    , ModifyClient (\c -> c{isInGame = True})
+                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
