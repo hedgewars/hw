@@ -32,7 +32,7 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer
+     , uPhysFSLayer, uCursor
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
@@ -217,7 +217,13 @@ begin
                         ProcessKey(event.key);
                     
                 SDL_MOUSEBUTTONDOWN:
-                    ProcessMouse(event.button, true);
+                    if GameState = gsConfirm then
+                    begin
+                        resetPosition();
+                        ParseCommand('quit', true);
+                    end
+                    else
+                        ProcessMouse(event.button, true);
                     
                 SDL_MOUSEBUTTONUP:
                     ProcessMouse(event.button, false); 
