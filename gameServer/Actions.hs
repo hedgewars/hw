@@ -363,6 +363,7 @@ processAction FinishGame = do
             )
         : UnreadyRoomClients
         : SendUpdateOnThisRoom
+        : AnswerClients thisRoomChans ["ROUND_FINISHED"]
         : answerRemovedTeams
 
 
