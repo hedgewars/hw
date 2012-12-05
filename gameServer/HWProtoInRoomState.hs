@@ -301,6 +301,16 @@ handleCmd_inRoom ["KICK", kickNick] = do
         [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
 
 
+handleCmd_inRoom ["DELEGATE", newAdmin] = do
+    (thisClientId, rnc) <- ask
+    maybeClientId <- clientByNick newAdmin
+    master <- liftM isMaster thisClient
+    let newAdminId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
+    return
+        [ChangeMaster (Just newAdminId) | master && isJust maybeClientId && (newAdminId /= thisClientId) && sameRoom]
+
+
 handleCmd_inRoom ["TEAMCHAT", msg] = do
     cl <- thisClient
     chans <- roomSameClanChans
