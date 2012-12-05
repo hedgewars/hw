@@ -80,6 +80,8 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
+            else if isRegisteredOnly jRoom then
+            [Warning "Registered users only"]
             else if isBanned then
             [Warning "You are banned in this room"]
             else if roomPassword /= password jRoom then
