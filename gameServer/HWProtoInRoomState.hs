@@ -264,6 +264,14 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
 
+handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
+    cl <- thisClient
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+            [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos

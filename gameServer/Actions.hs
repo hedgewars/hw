@@ -267,6 +267,7 @@ processAction ChangeMaster = do
                 , name = newRoomName
                 , isRestrictedJoins = False
                 , isRestrictedTeams = False
+                , isRegisteredOnly = False
                 , readyPlayers = if isReady newMaster then readyPlayers r else readyPlayers r + 1})
         , ModifyClient2 newMasterId (\c -> c{isMaster = True, isReady = True})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
