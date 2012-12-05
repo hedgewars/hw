@@ -1463,7 +1463,7 @@ void HWForm::GameStateChanged(GameState gameState)
             //setVisible(true);
             setFocusPolicy(Qt::StrongFocus);
             if (id == ID_PAGE_INGAME) GoBack();
-            Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
+            Music(ui.pageOptions->CBFrontendMusic->isChecked());
             if (wBackground) wBackground->startAnimation();
             GoToPage(ID_PAGE_GAMESTATS);
             if (hwnet && (!game || !game->netSuspend)) hwnet->gameFinished(true);
@@ -1481,7 +1481,7 @@ void HWForm::GameStateChanged(GameState gameState)
                      (gameState == gsInterrupted || gameState == gsStopped || gameState == gsDestroyed || gameState == gsHalted)))
             {
                 if (id == ID_PAGE_INGAME) GoBack();
-                Music(ui.pageOptions->CBEnableFrontendMusic->isChecked());
+                Music(ui.pageOptions->CBFrontendMusic->isChecked());
                 if (wBackground) wBackground->startAnimation();
                 if (hwnet) hwnet->gameFinished(false);
             }
