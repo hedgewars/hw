@@ -3,6 +3,7 @@ unit uCursor;
 interface
 
 procedure init;
+procedure resetPosition;
 procedure updatePosition;
 
 implementation
@@ -10,6 +11,11 @@ implementation
 uses SDLh, uVariables;
 
 procedure init;
+begin
+    resetPosition();
+end;
+
+procedure resetPosition;
 begin
     SDL_WarpMouse(cScreenWidth div 2, cScreenHeight div 2);
 end;
