@@ -260,8 +260,9 @@ processAction ChangeMaster = do
     newMaster <- io $ client'sM rnc id newMasterId
     oldRoomName <- io $ room'sM rnc name ri
     oldMaster <- client's nick
+    kicked <- client's isKickedFromServer
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    let newRoomName = if proto < 42 then nick newMaster else oldRoomName
+    let newRoomName = if (proto < 42) || kicked then nick newMaster else oldRoomName
     mapM_ processAction [
         ModifyRoom (\r -> r{masterID = newMasterId
                 , name = newRoomName
@@ -271,7 +272,6 @@ processAction ChangeMaster = do
                 , readyPlayers = if isReady newMaster then readyPlayers r else readyPlayers r + 1})
         , ModifyClient2 newMasterId (\c -> c{isMaster = True, isReady = True})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
-        , AnswerClients thisRoomChans ["WARNING", "New room admin is " `B.append` nick newMaster]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+hr", nick newMaster]
         ]
@@ -487,8 +487,9 @@ processAction (KickClient kickId) = do
     clHost <- client's host
     currentTime <- io getCurrentTime
     mapM_ processAction [
-        AddIP2Bans clHost "60 seconds cooldown after kick" (addUTCTime 60 currentTime),
-        ByeClient "Kicked"
+        AddIP2Bans clHost "60 seconds cooldown after kick" (addUTCTime 60 currentTime)
+        , ModifyClient (\c -> c{isKickedFromServer = True})
+        , ByeClient "Kicked"
         ]
 
 
@@ -502,11 +503,13 @@ processAction (BanClient seconds reason banId) = do
         , KickClient banId
         ]
 
+
 processAction (BanIP ip seconds reason) = do
     currentTime <- io getCurrentTime
     let msg = B.concat ["Ban for ", B.pack . show $ seconds, " (", reason, ")"]
     processAction $
         AddIP2Bans ip msg (addUTCTime seconds currentTime)
+
 
 processAction (BanNick n seconds reason) = do
     currentTime <- io getCurrentTime
@@ -518,6 +521,7 @@ processAction (BanNick n seconds reason) = do
     processAction $
         AddNick2Bans n msg (addUTCTime seconds currentTime)
 
+
 processAction BanList = do
     time <- io $ getCurrentTime
     ch <- client's sendChan
@@ -528,11 +532,13 @@ processAction BanList = do
         ban2Str time (BanByIP b r t) = ["I", b, r, B.pack . show $ t `diffUTCTime` time]
         ban2Str time (BanByNick b r t) = ["N", b, r, B.pack . show $ t `diffUTCTime` time]
 
+
 processAction (Unban entry) = do
     processAction $ ModifyServerInfo (\s -> s{bans = filter (not . f) $ bans s})
     where
         f (BanByIP bip _ _) = bip == entry
         f (BanByNick bn _ _) = bn == entry
+
 
 processAction (KickRoomClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
