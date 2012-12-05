@@ -124,6 +124,7 @@ case s[1] of
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
      'M': ParseCommand('landcheck ' + s, true);
+     'o': if fastUntilLag then ParseCommand('forcequit', true);
      'T': case s[2] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;

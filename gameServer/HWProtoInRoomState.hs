@@ -264,6 +264,14 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
 
+handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
+    cl <- thisClient
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+            [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos
@@ -291,6 +299,16 @@ handleCmd_inRoom ["KICK", kickNick] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
     return
         [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
+
+
+handleCmd_inRoom ["DELEGATE", newAdmin] = do
+    (thisClientId, rnc) <- ask
+    maybeClientId <- clientByNick newAdmin
+    master <- liftM isMaster thisClient
+    let newAdminId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
+    return
+        [ChangeMaster (Just newAdminId) | master && isJust maybeClientId && (newAdminId /= thisClientId) && sameRoom]
 
 
 handleCmd_inRoom ["TEAMCHAT", msg] = do
