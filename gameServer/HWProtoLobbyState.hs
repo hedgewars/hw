@@ -91,20 +91,21 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 MoveToRoom jRI
                 , AnswerClients [sendChan cl] $ "JOINED" : nicks
                 , AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
-                , AnswerClients [sendChan cl] $ ["WARNING", "Room admin is " `B.append` ownerNick]
                 , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
-            ++ map (readynessMessage cl) jRoomClients
+            ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] $
-                if clientProto cl < 38 then
-                    [if isReady c then "READY" else "NOT_READY", nick c]
-                    else
-                    ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
+        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+        sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
+                [f "+r" ready, f "-r" unready, f "+g" ingame, f "-g" inroomlobby]
+            where
+            (ready, unready) = partition isReady clients
+            (ingame, inroomlobby) = partition isInGame clients
+            f fl lst = ["CLIENT_FLAGS" : fl : map nick lst | not $ null lst]
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
