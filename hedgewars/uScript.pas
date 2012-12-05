@@ -690,7 +690,7 @@ begin
     else
         begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
@@ -723,7 +723,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
@@ -805,7 +805,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
             end
@@ -826,7 +826,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
             end
@@ -1648,7 +1648,7 @@ begin
         LuaError('Lua: Wrong number of parameters passed to GetHogHat!')
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Hat))
         else
             lua_pushnil(L);
