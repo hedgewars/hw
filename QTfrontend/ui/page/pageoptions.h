@@ -58,10 +58,10 @@ class PageOptions : public AbstractPage
         IconedGroupBox *AGGroupBox;
         QComboBox *CBResolution;
         QComboBox *CBStereoMode;
-        QCheckBox *CBEnableSound;
-        QCheckBox *CBEnableFrontendSound;
-        QCheckBox *CBEnableMusic;
-        QCheckBox *CBEnableFrontendMusic;
+        QCheckBox *CBFrontendSound;
+        QCheckBox *CBFrontendMusic;
+        QCheckBox *CBSound;
+        QCheckBox *CBMusic;
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;

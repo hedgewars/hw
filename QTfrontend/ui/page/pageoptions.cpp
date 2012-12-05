@@ -245,25 +245,33 @@ QLayout * PageOptions::bodyLayoutDefinition()
             AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
+            QGridLayout * GBAfrontendlayout = new QGridLayout(0);
             QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
             QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
+            QLabel * frontend = new QLabel(AGGroupBox);
+            frontend->setText(QLabel::tr("Frontend"));
+            frontend->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            GBAfrontendlayout->addWidget(frontend, 0, 0, 1, 2);
+
             CBFrontendFullscreen = new QCheckBox(AGGroupBox);
-            CBFrontendFullscreen->setText(QCheckBox::tr("Frontend fullscreen"));
-            GBAlayout->addWidget(CBFrontendFullscreen);
+            CBFrontendFullscreen->setText(QCheckBox::tr("Fullscreen"));
+            GBAfrontendlayout->addWidget(CBFrontendFullscreen, 1, 0);
 
             CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Frontend effects"));
-            GBAlayout->addWidget(CBFrontendEffects);
+            CBFrontendEffects->setText(QCheckBox::tr("Visual effects"));
+            GBAfrontendlayout->addWidget(CBFrontendEffects, 2, 0);
 
-            CBEnableFrontendSound = new QCheckBox(AGGroupBox);
-            CBEnableFrontendSound->setText(QCheckBox::tr("Enable frontend sounds"));
-            GBAlayout->addWidget(CBEnableFrontendSound);
+            CBFrontendSound = new QCheckBox(AGGroupBox);
+            CBFrontendSound->setText(QCheckBox::tr("Sound"));
+            GBAfrontendlayout->addWidget(CBFrontendSound, 1, 1);
 
-            CBEnableFrontendMusic = new QCheckBox(AGGroupBox);
-            CBEnableFrontendMusic->setText(QCheckBox::tr("Enable frontend music"));
-            GBAlayout->addWidget(CBEnableFrontendMusic);
+            CBFrontendMusic = new QCheckBox(AGGroupBox);
+            CBFrontendMusic->setText(QCheckBox::tr("Music"));
+            GBAfrontendlayout->addWidget(CBFrontendMusic, 2, 1);
+
+            GBAlayout->addLayout(GBAfrontendlayout);
 
             QFrame * hr = new QFrame(AGGroupBox);
             hr->setFrameStyle(QFrame::HLine);
@@ -337,13 +345,15 @@ QLayout * PageOptions::bodyLayoutDefinition()
             volumeBox->setSingleStep(5);
             GBAvollayout->addWidget(volumeBox, 0, 2);
 
-            CBEnableSound = new QCheckBox(AGGroupBox);
-            CBEnableSound->setText(QCheckBox::tr("Enable sound"));
-            GBAvollayout->addWidget(CBEnableSound, 1, 0, 1, 1);
+            CBSound = new QCheckBox(AGGroupBox);
+            CBSound->setText(QCheckBox::tr("Sound"));
+            CBSound->setWhatsThis(QCheckBox::tr("In-game sound effects"));
+            GBAvollayout->addWidget(CBSound, 1, 0);
 
-            CBEnableMusic = new QCheckBox(AGGroupBox);
-            CBEnableMusic->setText(QCheckBox::tr("Enable music"));
-            GBAvollayout->addWidget(CBEnableMusic, 1, 1, 1, 2);
+            CBMusic = new QCheckBox(AGGroupBox);
+            CBMusic->setText(QCheckBox::tr("Music"));
+            CBMusic->setWhatsThis(QCheckBox::tr("In-game music"));
+            GBAvollayout->addWidget(CBMusic, 1, 1, 1, 2);
 
             GBAvollayout->setSizeConstraint(QLayout::SetMinimumSize);
 
