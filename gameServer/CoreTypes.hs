@@ -36,6 +36,7 @@ data ClientInfo =
         isReady :: !Bool,
         isInGame :: Bool,
         isAdministrator :: Bool,
+        isKickedFromServer :: Bool,
         clientClan :: Maybe B.ByteString,
         teamsInGame :: Word
     }
@@ -100,6 +101,7 @@ data RoomInfo =
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
+        isRegisteredOnly :: Bool,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -116,6 +118,7 @@ newRoom =
         Nothing
         0
         0
+        False
         False
         False
         []
