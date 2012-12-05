@@ -55,7 +55,7 @@ data Action =
     | BanNick B.ByteString NominalDiffTime B.ByteString
     | BanList
     | Unban B.ByteString
-    | ChangeMaster
+    | ChangeMaster (Maybe ClientIndex)
     | RemoveClientTeams ClientIndex
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
@@ -235,7 +235,7 @@ processAction (MoveToLobby msg) = do
 
     if master then
         if playersNum > 1 then
-            mapM_ processAction [ChangeMaster, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
+            mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
         else
@@ -251,12 +251,12 @@ processAction (MoveToLobby msg) = do
         moveClientToLobby rnc ci
 
 
-processAction ChangeMaster = do
+processAction (ChangeMaster delegateId)= do
     (Just ci) <- gets clientIndex
     proto <- client's clientProto
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM (last . filter (/= ci)) . io $ roomClientsIndicesM rnc ri
+    newMasterId <- liftM (\ids -> fromMaybe (last . filter (/= ci) $ ids) delegateId) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
     oldRoomName <- io $ room'sM rnc name ri
     oldMaster <- client's nick
