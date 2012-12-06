@@ -39,6 +39,8 @@
 #include <sys/sysctl.h>
 #endif
 
+#include <stdint.h>
+
 #include "pagefeedback.h"
 #include "hwconsts.h"
 
