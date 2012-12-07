@@ -56,7 +56,9 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
     resizeToConfigValues();
 
     reloadValues();
+#ifdef VIDEOREC
     reloadVideosValues();
+#endif
 }
 
 void GameUIConfig::reloadValues(void)

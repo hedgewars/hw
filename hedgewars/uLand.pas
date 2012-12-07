@@ -631,7 +631,7 @@ else
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
-                if c > 1000 then // avoid accidental triggering
+                if c > (LAND_WIDTH div 2) then // avoid accidental triggering
                     begin
                     hasBorder:= true;
                     break;

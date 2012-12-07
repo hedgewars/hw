@@ -1598,7 +1598,9 @@ void HWForm::closeEvent(QCloseEvent *event)
     xfire_free();
 #endif
     config->SaveOptions();
+#if VIDEOREC
     config->SaveVideosOptions();
+#endif
     event->accept();
 }
 
