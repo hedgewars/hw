@@ -163,7 +163,8 @@ o scegli un altro nickname:</translation>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualcun altro sta già usando il tuo nickname %1 sul server.
+Per favore scegli un altro nickname:</translation>
     </message>
 </context>
 <context>
@@ -348,19 +349,19 @@ Please pick another nickname:</source>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation type="unfinished">Durata: %1m %2s</translation>
+        <translation>Durata: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation type="unfinished">Video: %1x%2, </translation>
+        <translation>Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation type="unfinished">%1 fps, </translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished">Audio:</translation>
+        <translation>Audio:</translation>
     </message>
 </context>
 <context>
@@ -935,35 +936,35 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Proxy host</source>
-        <translation type="unfinished"></translation>
+        <translation>Server proxy</translation>
     </message>
     <message>
         <source>Proxy port</source>
-        <translation type="unfinished"></translation>
+        <translation>Porta proxy</translation>
     </message>
     <message>
         <source>Proxy login</source>
-        <translation type="unfinished"></translation>
+        <translation>Login Proxy</translation>
     </message>
     <message>
         <source>Proxy password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password proxy</translation>
     </message>
     <message>
         <source>No proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun proxy</translation>
     </message>
     <message>
         <source>Socks5 proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy Socks5</translation>
     </message>
     <message>
         <source>HTTP proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy HTTP</translation>
     </message>
     <message>
         <source>System proxy settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Impostazioni proxy di sistema</translation>
     </message>
 </context>
 <context>
@@ -1872,195 +1873,198 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Squadre - Sei sicuro?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi davvero cancellare la squadra &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso cancellare lo schema di default &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Per favore scegli una voce dalla lista</translation>
     </message>
     <message>
         <source>Unable to start server</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile avviare il server</translation>
     </message>
     <message>
         <source>Hedgewars - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Errore</translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Completato</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutte le associazioni di file sono state impostate</translation>
     </message>
     <message>
         <source>Successfully posted the issue on hedgewars.googlecode.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Problema inviato correttamente a hedgewars.googlecode.com</translation>
     </message>
     <message>
         <source>Error during authentication at google.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore durante l'autenticazione a google.com</translation>
     </message>
     <message>
         <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore nell'invio del problema, si prega di provare più tardi (o visitare hedgewars.googlecode.com direttamente)</translation>
     </message>
     <message>
         <source>Main - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Main - Errore</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Impossibile creare la directory %1</translation>
+        <translation>Impossibile creare la directory %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile creare la directory dati:
+%1
+
+Per favore controlla l'installazione!</translation>
     </message>
     <message>
         <source>TCP - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>TCP - Errore</translation>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation type="unfinished">Impossibile avviare il server: %1.</translation>
+        <translation>Impossibile avviare il server: %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile avviare il motore a </translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Codice di errore: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamento video - Errore</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioco in rete - Errore</translation>
     </message>
     <message>
         <source>Please select a server from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Per favore scegli un server dalla lista</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation type="unfinished">Inserisci il nome della stanza</translation>
+        <translation>Inserisci il nome della stanza</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrazione gioco - Errore</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
-        <translation type="unfinished">Seleziona un record dalla lista</translation>
+        <translation>Seleziona un record dalla lista</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile rinominare a </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile cancellare il file </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome stanza - Errore</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation type="unfinished">Seleziona la stanza dalla lista</translation>
+        <translation>Seleziona la stanza dalla lista</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome stanza - Sei sicuro?</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished">La partita a cui stai cercando di unirti è già iniziata.
+        <translation>La partita a cui stai cercando di unirti è già iniziata.
 Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Schemi - Attenzione</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Schemi - Sei sicuro?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi davvero cancellare lo schema di gioco &apos;%1&apos;?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Video - Sei sicuro?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi davvero cancellare il video &apos;%1&apos;?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Vuoi davvero cancellare il file?</numerusform>
+            <numerusform>Vuoi davvero cancellare %1 file?</numerusform>
         </translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi davvero terminare di caricare %1?</translation>
     </message>
     <message>
         <source>File error</source>
-        <translation type="unfinished">Errore con il file</translation>
+        <translation>Errore con il file</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso aprire &apos;%1&apos; in scrittura</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso aprire &apos;%1&apos; in lettura</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso usare le munizioni &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Armi - Attenzione</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso sovrascrivere l'insieme base di armi &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Non posso cancellare l'insieme base di armi &apos;%1&apos;!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Armi - Sei sicuro?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vuoi davvero cancellare l'insieme di armi &apos;%1&apos;?</translation>
     </message>
 </context>
 <context>
@@ -2174,23 +2178,23 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina i parametri di base della codifica</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>Apri la directory video sul tuo sistema</translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Riproduci questo video</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancella questo video</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished"></translation>
+        <translation>Cariva questo video nel tuo account Youtube</translation>
     </message>
 </context>
 <context>
