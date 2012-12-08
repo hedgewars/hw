@@ -127,11 +127,8 @@ class HWForm : public QMainWindow
         void SendFeedback();
         //Make a xml representation of the issue to be created
         bool CreateIssueXml();
-        //Called the first time when receiving authorization token from google,
-        //second time when receiving the response after posting the issue
+        //Called after posting a new issue
         void finishedSlot(QNetworkReply* reply);
-        //Filter the auth token from the reply from google
-        bool getAuthToken(QString str);
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
@@ -194,7 +191,6 @@ class HWForm : public QMainWindow
         QByteArray m_lastDemo;
         QNetworkAccessManager * nam;
         QString issueXml;
-        QString authToken;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;

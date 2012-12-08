@@ -681,6 +681,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     {
         ui.pageOptions->setTeamOptionsEnabled(true);
     }
+
+    if (id == ID_PAGE_FEEDBACK)
+    {
+        ui.pageFeedback->LoadCaptchaImage();
+    }
 }
 
 void HWForm::GoToPage(int id)
@@ -1853,22 +1858,37 @@ void HWForm::SendFeedback()
         return;
     }
 
-    //Google login using fake account (feedback.hedgewars@gmail.com)
+    //Submit issue to PHP script
+    QString source = "HedgewarsFoundation-Hedgewars-";
+    source += (cVersionString?(*cVersionString):QString(""));
+    QString captchaCode = ui.pageFeedback->captcha_code->text();
+    QString captchaID = QString::number(ui.pageFeedback->captchaID);
+    
+    QByteArray body;
+    body.append("captcha=");
+    body.append(captchaID);
+    body.append("&code=");
+    body.append(captchaCode);
+    body.append("&source=");
+    body.append(source);
+    body.append("&issue=");
+    body.append(QUrl::toPercentEncoding(issueXml));
+    
     nam = new QNetworkAccessManager(this);
     connect(nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(finishedSlot(QNetworkReply*)));
-
-    QUrl url(QString("https://www.google.com/accounts/ClientLogin?"
-                     "accountType=GOOGLE&Email=feedback.hedgewars@gmail.com&Passwd=hwfeedback&service=code&source=HedgewarsFoundation-Hedgewars-")
-                    + (cVersionString?(*cVersionString):QString("")));
-    nam->get(QNetworkRequest(url));
-
+            
+    QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
+    header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
+    
+    nam->post(header, body);
 }
 
 bool HWForm::CreateIssueXml()
 {
     QString summary = ui.pageFeedback->summary->text();
     QString description = ui.pageFeedback->description->toPlainText();
+    QString email = ui.pageFeedback->email->text();
 
     //Check if all necessary information is entered
     if (summary.isEmpty() || description.isEmpty())
@@ -1881,7 +1901,19 @@ bool HWForm::CreateIssueXml()
     issueXml.append(summary);
     issueXml.append("</title><content type='html'>");
     issueXml.append(description);
-    issueXml.append("</content><author><name>feedback.hedgewars</name></author></entry>");
+    issueXml.append("</content><author><name>feedback.hedgewars</name></author>");
+
+    if (!email.isEmpty())
+    {
+        issueXml.append("<issues:owner><issues:username>");
+        issueXml.append(email);
+        issueXml.append("</issues:username></issues:owner>");
+        issueXml.append("<issues:cc><issues:username>");
+        issueXml.append(email);
+        issueXml.append("</issues:username></issues:cc>");
+    }
+
+    issueXml.append("</entry>");
 
     return true;
 }
@@ -1890,12 +1922,6 @@ void HWForm::finishedSlot(QNetworkReply* reply)
 {
     if (reply && reply->error() == QNetworkReply::NoError)
     {
-        QByteArray array = reply->readAll();
-        QString str(array);
-
-        if (authToken.length() != 0)
-        {
-
             QMessageBox infoMsg(this);
             infoMsg.setIcon(QMessageBox::Information);
             infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
@@ -1905,46 +1931,15 @@ void HWForm::finishedSlot(QNetworkReply* reply)
 
             ui.pageFeedback->summary->clear();
             ui.pageFeedback->description->clear();
-            authToken = "";
+            ui.pageFeedback->EmbedSystemInfo();
+            ui.pageFeedback->LoadCaptchaImage();
+            
             return;
-        }
-
-        if (!getAuthToken(str))
-        {
-            ShowErrorMessage(QMessageBox::tr("Error during authentication at google.com"));
-            return;
-        }
-
-        QByteArray body(issueXml.toUtf8());
-        QNetworkRequest header(QUrl("https://code.google.com/feeds/issues/p/hedgewars/issues/full"));
-        header.setRawHeader("Content-Length", QString::number(issueXml.length()).toAscii());
-        header.setRawHeader("Content-Type", "application/atom+xml");
-        header.setRawHeader("Authorization", QString("GoogleLogin auth=%1").arg(authToken).toUtf8());
-        nam->post(header, body);
-
     }
-    else if (authToken.length() == 0)
-        ShowErrorMessage(QMessageBox::tr("Error during authentication at google.com"));
     else
     {
-        ShowErrorMessage(QMessageBox::tr("Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)"));
-        authToken = "";
+        ShowErrorMessage(QString("Error: ") + reply->readAll());
+        ui.pageFeedback->LoadCaptchaImage();
     }
-
 }
-
-bool HWForm::getAuthToken(QString str)
-{
-    QRegExp ex("Auth=(.+)");
-
-    if (-1 == ex.indexIn(str))
-        return false;
-
-    authToken = ex.cap(1);
-    authToken.remove(QChar('\n'));
-
-    return true;
-}
-
-
 
