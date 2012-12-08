@@ -86,8 +86,8 @@ QLayout * PageFeedback::bodyLayoutDefinition()
     //  It's sent in the XML as a <issues:cc> , the <entry>, but it doesn't seem
     //  to actually do anything. If you figure out how to fix that, uncomment these lines
     //  and the line above in the 'info' QLabel to re-enable this feature.
-    //combinedTopLayout->addLayout(emailLayout);
-    //combinedTopLayout->insertSpacing(1, 50);
+    combinedTopLayout->addLayout(emailLayout);
+    combinedTopLayout->insertSpacing(1, 50);
 
     pageLayout->addLayout(combinedTopLayout);
 
@@ -111,7 +111,6 @@ void PageFeedback::EmbedSystemInfo()
     QString os_version = "Operating system: ";
     QString qt_version = QString("Qt version: ") + QT_VERSION_STR + QString("\n");
     QString total_ram = "Total RAM: ";
-    QString available_ram = "Available RAM: ";
     QString number_of_cores = "Number of cores: ";
     QString compiler_bits = "Compiler architecture: ";
     QString compiler_version = "Compiler version: ";
@@ -125,20 +124,15 @@ void PageFeedback::EmbedSystemInfo()
 #ifdef Q_WS_MACX
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
 
-    uint64_t memsize, memavail;
+    uint64_t memsize;
     size_t len = sizeof(memsize);
     static int mib_s[2] = { CTL_HW, HW_MEMSIZE };
-    static int mib_a[2] = { CTL_HW, HW_USERMEM };
     if (sysctl (mib_s, 2, &memsize, &len, NULL, 0) == 0)
         total_ram += QString::number(memsize/1024/1024) + " MB\n";
     else
         total_ram += "Error getting total RAM information\n";
-    if (sysctl (mib_a, 2, &memavail, &len, NULL, 0) == 0)
-        available_ram += QString::number(memavail/1024/1024) + " MB\n";
-    else
-        available_ram += "Error getting available RAM information\n";
 
-        int mib[] = {CTL_KERN, KERN_OSRELEASE};
+    int mib[] = {CTL_KERN, KERN_OSRELEASE};
     sysctl(mib, sizeof mib / sizeof(int), NULL, &len, NULL, 0);
 
     char *kernelVersion = (char *)malloc(sizeof(char)*len);
@@ -167,7 +161,7 @@ void PageFeedback::EmbedSystemInfo()
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    total_ram = QString::number(status.ullTotalPhys);
+    total_ram += QString::number(status.ullTotalPhys);
 
     switch(QSysInfo::WinVersion())
     {
@@ -185,7 +179,6 @@ void PageFeedback::EmbedSystemInfo()
          available_pages = sysconf(_SC_AVPHYS_PAGES),
          page_size = sysconf(_SC_PAGE_SIZE);
     total_ram += QString::number(pages * page_size) + "\n";
-    available_ram += QString::number(available_pages * page_size) + "\n";
     os_version += "GNU/Linux or BSD\n";
 #endif
 
@@ -242,12 +235,12 @@ void PageFeedback::EmbedSystemInfo()
 
     // add everything to the field of text
     description->setText(
+        "Don't forget to mention your email or you won't be able to receive updates on this topic!"
         "\n\n\n\n\n"
         "System information:\n"
         + qt_version
         + os_version
         + total_ram
-        + available_ram
         + screen_size
         + number_of_screens
         + QString::fromStdString(processor_name + "\n")
