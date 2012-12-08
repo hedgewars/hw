@@ -176,7 +176,11 @@ void PageFeedback::EmbedSystemInfo()
 #ifdef Q_WS_X11
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     long pages = sysconf(_SC_PHYS_PAGES),
+#ifndef Q_OS_FREEBSD
          available_pages = sysconf(_SC_AVPHYS_PAGES),
+#else
+         available_pages = 0,
+#endif
          page_size = sysconf(_SC_PAGE_SIZE);
     total_ram += QString::number(pages * page_size) + "\n";
     os_version += "GNU/Linux or BSD\n";
