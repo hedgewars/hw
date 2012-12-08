@@ -203,7 +203,7 @@ if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
 else()
     message(STATUS "Building Release flavour")
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
-    set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
+    set(pascal_flags "-Os" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
 endif()
 
