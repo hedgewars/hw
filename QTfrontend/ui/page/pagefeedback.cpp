@@ -59,11 +59,13 @@ QLayout * PageFeedback::bodyLayoutDefinition()
     info = new QLabel();
     info->setText(
         "<style type=\"text/css\">"
-        "a { color: #ffcc00; }"
+        "a { color: #fc0; }"
+        "b { color: #0df; }"
         "</style>"
         "<div align=\"center\"><h1>Please give us a feedback!</h1>"
         "<h3>We are always happy about suggestions, ideas or bug reports.<h3>"
-        "<h4>The feedback will be posted as a new issue on our Google Code page.<h4>"
+        "<h4>The feedback will be posted as a new issue on our Google Code page.<br />"
+        "<b>Don't forget to mention your email or you won't be able to receive updates on this topic!</b><br /></h4>"
         //"<h4>Your email is optional, but if given, you will be notified of responses.<h4>"
         "</div>"
     );
@@ -86,8 +88,12 @@ QLayout * PageFeedback::bodyLayoutDefinition()
     //  It's sent in the XML as a <issues:cc> , the <entry>, but it doesn't seem
     //  to actually do anything. If you figure out how to fix that, uncomment these lines
     //  and the line above in the 'info' QLabel to re-enable this feature.
+    //  UPDATE: I found out that CC only works if that email is a member of the
+    //  Google Code project. So this feature is pretty much useless atm.
+    /*
     combinedTopLayout->addLayout(emailLayout);
     combinedTopLayout->insertSpacing(1, 50);
+    */
 
     pageLayout->addLayout(combinedTopLayout);
 
@@ -239,7 +245,6 @@ void PageFeedback::EmbedSystemInfo()
 
     // add everything to the field of text
     description->setText(
-        "Don't forget to mention your email or you won't be able to receive updates on this topic!"
         "\n\n\n\n\n"
         "System information:\n"
         + qt_version

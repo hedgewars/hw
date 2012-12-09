@@ -59,10 +59,12 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
     BtnFeedback = addButton("Feedback", pageLayout, 4, 0, 1, 4, false);
+    BtnFeedback->setFixedSize(86, 27);
     BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
     pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
+    BtnDataDownload->setFixedSize(176, 27);
     //BtnDataDownload->setToolTip(tr(Downloadable Content"));
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
