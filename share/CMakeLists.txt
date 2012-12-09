@@ -9,6 +9,14 @@ if(APPLE OR CROSSAPPLE)
         set(HEDGEWARS_REVISION ${HEDGEWARS_VERSION})
     endif()
 
+    #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
+    if(NOT NOVIDEOREC)
+        find_package(FFMPEG QUIET)
+        if(${FFMPEG_FOUND} AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
+            set(minimum_macosx_version "10.6.3")
+        endif()
+    endif()
+
     configure_file(${hedgewars_SOURCE_DIR}/share/Info.plist.in
                    ${CMAKE_CURRENT_BINARY_DIR}/Info.plist)
     #path here should be Hedgewars.app/Contents/MacOS

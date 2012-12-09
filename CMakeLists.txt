@@ -105,12 +105,12 @@ if(APPLE)
     endif()
 
     #lower systems don't have enough processing power anyway
-    if (minimum_macosx_version LESS "10.4")
+    if (minimum_macosx_version VERSION_LESS "10.4")
         message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
     endif()
 
     #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-    if(current_macosx_version MATCHES "10.4")
+    if(current_macosx_version VERSION_EQUAL "10.4")
         find_package(SDL_mixer REQUIRED)
         set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
         set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
@@ -120,7 +120,7 @@ if(APPLE)
 
     #CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
     if(NOT CMAKE_OSX_ARCHITECTURES)
-        if(current_macosx_version LESS "10.6")
+        if(current_macosx_version VERSION_LESS "10.6")
             if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
                 set(CMAKE_OSX_ARCHITECTURES "ppc7400")
             else()
@@ -133,8 +133,8 @@ if(APPLE)
 
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
-    if(NOT ${minimum_macosx_version} MATCHES ${current_macosx_version})
-        if(minimum_macosx_version MATCHES "10.4")
+    if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
+        if(minimum_macosx_version VERSION_EQUAL "10.4")
             set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
             set(CMAKE_C_COMPILER "gcc-4.0")
             set(CMAKE_CXX_COMPILER "g++-4.0")
@@ -149,8 +149,10 @@ if(APPLE)
     #set deployment target
     set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
 
-    message(STATUS "Build system: Mac OS X ${current_macosx_version} with C compiler: ${CMAKE_C_COMPILER}")
-    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s): ${CMAKE_OSX_ARCHITECTURES}")
+    #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
+    if(NOT NOVIDEOREC AND ${minimum_macosx_version} VERSION_LESS "10.6")
+        set(WARNING "Video recording support before OS X 10.6 is experimental")
+    endif()
 endif(APPLE)
 
 
@@ -158,7 +160,7 @@ endif(APPLE)
 if (CMAKE_BUILD_TYPE)
     string (TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if ( NOT( (CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "DEBUG") ) )
-        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Only 'Debug' or 'Release' options are allowed." FORCE)
+        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
         message (STATUS "Unknown build type, using default (${default_build_type})")
     endif ()
 else (CMAKE_BUILD_TYPE)
@@ -183,25 +185,24 @@ endif()
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
-    math(EXPR cmake_version "${CMAKE_MAJOR_VERSION}*10000 + ${CMAKE_MINOR_VERSION}*100 + ${CMAKE_PATCH_VERSION}")
-    if(cmake_version LESS "020800")
-        message(STATUS "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
+    set(cmake_version "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+    if(cmake_version VERSION_LESS "2.8")
+        message(WARNING "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     else()
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed} "-vm4079,4080,4081" "-B" "-FE../bin" "-Cs2000000" "-vewnq" "-dDEBUGFILE" ${pascal_flags})
+set(pascal_flags ${fpflags_parsed} "-vm4079,4080,4081" "-B" "-FE${PROJECT_BINARY_DIR}/bin" "-Cs2000000" "-vewnq" "-dDEBUGFILE" ${pascal_flags})
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
+message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    message(STATUS "Building Debug flavour")
     set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 else()
-    message(STATUS "Building Release flavour")
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
     set(pascal_flags "-Os" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
@@ -215,11 +216,12 @@ else()
     set(SHAREPATH share/hedgewars/)
 endif()
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 if(WIN32)
     set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
     link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
 endif(WIN32)
+
 
 #server discovery
 if(NOT NOSERVER)

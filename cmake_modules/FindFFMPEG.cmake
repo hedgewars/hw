@@ -74,10 +74,6 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
       ${FFMPEG_LIBAVFORMAT}
       ${FFMPEG_LIBAVUTIL}
     )
-    if (APPLE)
-      set(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} "bz2" "-framework CoreVideo" "-framework VideoDecodeAcceleration")
-    endif(APPLE)
-
   endif (FFMPEG_FOUND)
 
   if (FFMPEG_FOUND)

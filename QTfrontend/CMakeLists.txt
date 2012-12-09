@@ -142,9 +142,14 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
 if(APPLE OR CROSSAPPLE)
-    set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-    set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
-
+    find_library(iokit_framework NAMES IOKit)
+    set(HW_LINK_LIBS ${iokit_framework} ${HW_LINK_LIBS})
+    set(hwfr_src ${hwfr_src} CocoaInitializer.mm
+                             InstallController.cpp
+                             M3Panel.mm
+                             M3InstallController.m
+                             NSWorkspace_RBAdditions.m
+                             )
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)
         if(SPARKLE_FOUND)
