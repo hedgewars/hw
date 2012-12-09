@@ -11,7 +11,8 @@ if(APPLE OR CROSSAPPLE)
 
     #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
     if(NOT NOVIDEOREC)
-        find_package(FFMPEG QUIET)
+        set(FFMPEG_FIND_QUIETLY true)
+        find_package(FFMPEG)
         if(${FFMPEG_FOUND} AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
             set(minimum_macosx_version "10.6.3")
         endif()

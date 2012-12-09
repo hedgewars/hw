@@ -19,6 +19,7 @@ else()
 endif()
 
 # Check for noexecstack flag support
+message(STATUS "Checking whether linker needs explicit noexecstack")
 set(NOEXECSTACK_FLAGS "-k-z" "-knoexecstack")
 file(WRITE ${EXECUTABLE_OUTPUT_PATH}/checkstack.pas "begin end.")
 
