@@ -143,7 +143,6 @@ if(APPLE)
 
         set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
     endif()
-    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
 endif(APPLE)
 
 if(NOT NOPNG)
@@ -200,7 +199,6 @@ else()
     message(STATUS "Video recording disabled by user")
 endif()
 
-set(pascal_flags "-Fl${LIBRARY_OUTPUT_PATH}" ${pascal_flags})
 
 set(fpc_flags ${NOEXECSTACK_FLAGS} ${pascal_flags} ${hwengine_project})
 

@@ -194,7 +194,16 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed} "-vm4079,4080,4081" "-B" "-FE${PROJECT_BINARY_DIR}/bin" "-Cs2000000" "-vewnq" "-dDEBUGFILE" ${pascal_flags})
+set(pascal_flags ${fpflags_parsed}              # user flags
+                 "-vm4079,4080,4081"            # fpc output format
+                 "-B"                           # compile all units
+                 "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
+                 "-Fl${PROJECT_BINARY_DIR}/bin" # fpc linking directory
+                 "-Cs2000000"                   # stack size
+                 "-vewnq"                       # fpc output verbosity
+                 "-dDEBUGFILE"                  # macro for engine output
+                 ${pascal_flags}                # adding to list
+                 )
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
@@ -257,11 +266,15 @@ else()
 endif()
 
 
+#physfs library (static on unix, dll on win32)
+add_subdirectory(misc/physfs)
+if(NOT WIN32)
+    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
+endif()
+
+
 #main engine
 add_subdirectory(hedgewars)
-
-#physfs library
-add_subdirectory(misc/physfs)
 
 #Android related build scripts
 if(ANDROID)

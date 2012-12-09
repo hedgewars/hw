@@ -95,9 +95,9 @@ endif(WIN32)
 if(MINGW)
     # resource compilation for mingw
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o
-    COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
-    -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
-    -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+                       COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
+                               -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
+                               -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
     set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
     set(hwfr_src ${hwfr_src} hedgewars.rc)
@@ -204,9 +204,7 @@ if(WIN32 AND NOT UNIX)
 endif()
 
 
-if (CROSSAPPLE)
-
-else()
+if (NOT CROSSAPPLE)
     target_link_libraries(hedgewars ${HW_LINK_LIBS})
 endif()
 
