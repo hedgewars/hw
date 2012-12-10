@@ -90,7 +90,7 @@ class HWNewNet : public QObject
         void disconnected(const QString & reason);
         void Error(const QString & errmsg);
         void Warning(const QString & wrnmsg);
-        void AskForPassword(const QString & nick);
+        void NickRegistered(const QString & nick);
         void NickTaken(const QString & nick);
         void AuthFailed();
         void EnteredGame();
