@@ -13,7 +13,7 @@ if (FPC_EXECUTABLE)
 
     string(REGEX MATCH "[0-9]+\\.[0-9]+" FPC_VERSION_LONG "${FPC_VERSION_FULL}")
     string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" FPC_VERSION "${FPC_VERSION_LONG}")
-    message(STATUS "Found Freepascal: ${FPC_EXECUTABLE} (version ${FPC_VERSION}")
+    message(STATUS "Found Freepascal: ${FPC_EXECUTABLE} (version ${FPC_VERSION})")
 else()
     message(FATAL_ERROR "Could NOT find Freepascal")
 endif()
