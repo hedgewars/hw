@@ -16,9 +16,6 @@ IF(WIN32 AND NOT WINDOWS)
     SET(WINDOWS TRUE)
 ENDIF(WIN32 AND NOT WINDOWS)
 
-if(WINDOWS)
-    find_package(SDL REQUIRED)
-endif(WINDOWS)
 
 # Bleh, let's do it for "APPLE" too.
 IF(APPLE AND NOT MACOSX)
@@ -38,6 +35,7 @@ INCLUDE(CheckIncludeFile)
 INCLUDE(CheckLibraryExists)
 INCLUDE(CheckCSourceCompiles)
 
+find_package(SDL REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${SDL_INCLUDE_DIR}) #hw
 include_directories(${LUA_INCLUDE_DIR}) #hw
@@ -282,7 +280,6 @@ IF(PHYSFS_BUILD_STATIC)
 ENDIF(PHYSFS_BUILD_STATIC)
 
 IF(PHYSFS_BUILD_SHARED)
-    find_package(SDL REQUIRED)
     ADD_LIBRARY(physfs SHARED ${PHYSFS_SRCS})
     SET_TARGET_PROPERTIES(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
     SET_TARGET_PROPERTIES(physfs PROPERTIES SOVERSION ${PHYSFS_SOVERSION})
