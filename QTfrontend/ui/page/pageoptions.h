@@ -70,6 +70,7 @@ class PageOptions : public AbstractPage
         QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
         QCheckBox *CBAutoUpdate;
+        QPushButton *BtnUpdateNow;
 #endif
 
         FPSEdit *fpsedit;
@@ -131,6 +132,7 @@ class PageOptions : public AbstractPage
         QComboBox *comboVideoCodecs;
         QComboBox *comboAudioCodecs;
         QPushButton *btnDefaults;
+        QPushButton *btnUpdateNow;
         GameUIConfig * config;
 
     private slots:
@@ -148,6 +150,7 @@ class PageOptions : public AbstractPage
         void changeAVFormat(int index);
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
+        void checkForUpdates();
 
     public slots:
         void setDefaultOptions();
