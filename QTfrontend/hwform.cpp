@@ -1057,9 +1057,53 @@ void HWForm::NetPassword(const QString & nick)
     }
 
     //Remove temporary hash from config
-    QString key = "net/temppasswordhash";
-    config->setValue(key, "");
-    config->remove(key);
+    clearPasswordHashes(true, false);
+}
+
+inline void HWForm::clearPasswordHashes(bool clearTempHash, bool clearHash) 
+{
+    if (clearTempHash) {
+      QString key = "net/temppasswordhash";
+      config->setValue(key, "");
+      config->remove(key);
+    }
+    if (clearHash) {
+      config->setValue("net/passwordhash", "");
+      config->setValue("net/passwordlength", 0);
+    }
+}
+
+void HWForm::NetNickRegistered(const QString & nick)
+{
+    //Get hashes
+    QString hash =  config->value("net/passwordhash", "").toString();
+    QString temphash =  config->value("net/temppasswordhash", "").toString();
+    
+    if (hash.isEmpty()) {
+      if (temphash.isEmpty()) { //If the user enters a registered nick with no password
+	  QString suppliedpass;
+	  while (suppliedpass.isEmpty()) {
+	      QInputDialog nickRegedDialog(this);
+	      nickRegedDialog.setWindowModality(Qt::WindowModal);
+	      nickRegedDialog.setInputMode(QInputDialog::TextInput);
+	      nickRegedDialog.setWindowTitle(tr("Hedgewars - Nick registered"));
+	      nickRegedDialog.setLabelText(tr("This nick is registered, and you haven't specified a password.\n\nIf this nick isn't yours, please register your own nick at www.hedgewars.org\n\nPassword:"));
+	      nickRegedDialog.setTextEchoMode(QLineEdit::Password);
+	      nickRegedDialog.exec();
+      
+	      suppliedpass = nickRegedDialog.textValue();
+
+	      if (nickRegedDialog.result() == QDialog::Rejected) {
+		clearPasswordHashes(true, true);
+		GoBack();
+		return;
+	      }
+	      temphash = QCryptographicHash::hash(suppliedpass.toUtf8(), QCryptographicHash::Md5).toHex();
+	      config->setValue("net/temppasswordhash", temphash);	    
+	  }
+      }
+    }    
+    NetPassword(nick);
 }
 
 void HWForm::NetNickTaken(const QString & nick)
@@ -1069,7 +1113,12 @@ void HWForm::NetNickTaken(const QString & nick)
 
     if (!ok || newNick.isEmpty())
     {
-        ForcedDisconnect(tr("No nickname supplied."));
+        //ForcedDisconnect(tr("No nickname supplied."));
+	int retry = RetryDialog("Hedgewars - Empty nickname", "No nickname supplied.");
+	GoBack();
+        if (retry) {
+       	   NetConnectOfficialServer();
+        }
         return;
     }
 
@@ -1084,8 +1133,37 @@ void HWForm::NetNickTaken(const QString & nick)
 void HWForm::NetAuthFailed()
 {
     // Set the password blank if case the user tries to join and enter his password again
-    config->setValue("net/passwordlength", 0);
-    config->setNetPasswordLength(0);
+    clearPasswordHashes(false, true);
+    
+    //Try to login again
+    bool retry = RetryDialog("Hedgewars - Wrong password", "You entered a wrong password.");
+    GoBack();
+
+    if (retry) {
+       NetConnectOfficialServer();
+    }
+}
+
+bool HWForm::RetryDialog(const QString & title, const QString & label)
+{
+    QMessageBox retryMsg(this);
+    retryMsg.setIcon(QMessageBox::Warning);
+    retryMsg.setWindowTitle(title);
+    retryMsg.setText(label);
+    retryMsg.setWindowModality(Qt::WindowModal);
+
+    retryMsg.addButton(QMessageBox::Cancel);
+
+    QPushButton *retryButton = retryMsg.addButton(QMessageBox::Ok);
+    retryButton->setText("Try Again");
+    retryButton->setFocus();
+
+    retryMsg.exec();
+
+    if (retryMsg.clickedButton() == retryButton) {
+       return true;
+    }
+    return false;
 }
 
 void HWForm::NetTeamAccepted(const QString & team)
@@ -1138,7 +1216,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(AskForPassword(const QString&)), this, SLOT(NetPassword(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(NickRegistered(const QString&)), this, SLOT(NetNickRegistered(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
@@ -1262,8 +1340,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 //nick and pass stuff
     
     //remove temppasswordhash just in case
-    config->value("net/temppasswordhash", "");
-    config->remove("net/temppasswordhash");
+    clearPasswordHashes(true, false);
     
     //initialize
     QString hash = config->value("net/passwordhash", "").toString();
@@ -1288,8 +1365,16 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 	//if dialog close, create an error message
         if (hpd->exec() != QDialog::Accepted)
         {
-            ForcedDisconnect(tr("Login info not supplied."));
-            delete hpd;
+            /*//ForcedDisconnect(tr("Login info not supplied."));
+            int retry = RetryDialog("Hedgewars - Empty login info", "Login info not supplied.");
+	    GoBack();
+	    delete hpd;
+    	    if (retry) {
+	    	NetConnectOfficialServer();
+	    }
+	    //delete hpd;*/
+	    delete hpd;
+	    GoBack();
             return;
         }
 
@@ -1297,22 +1382,39 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 	nickname = hpd->leNickname->text();
         password = hpd->lePassword->text();
 
-	//calculate temphash and set it into config
-	temphash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
-	config->setValue("net/temppasswordhash", temphash);
-
-	//if user wants to save password
-        bool save = hpd->cbSave->isChecked();
-        config->setValue("net/savepassword", save);
-        if (save) // user wants to save password
-        {
-            config->setValue("net/passwordhash", temphash);
-            config->setValue("net/passwordlength", password.size());
-            config->setNetPasswordLength(password.size());
-        }
+	//check the nickname variable
+	if (nickname.isEmpty()) {
+	    //ForcedDisconnect(tr("No nickname supplied."));
+	    int retry = RetryDialog("Hedgewars - Empty nickname", "No nickname supplied.");
+	    GoBack();
+            delete hpd;
+            if (retry) {
+                NetConnectOfficialServer();
+            }
+	    //delete hpd;
+	    return;
+	}
+	
+	if (!password.isEmpty()) {
+	  //calculate temphash and set it into config
+	  temphash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
+	  config->setValue("net/temppasswordhash", temphash);
+	  
+	  //if user wants to save password
+	  bool save = hpd->cbSave->isChecked();
+	  config->setValue("net/savepassword", save);
+	  if (save) // user wants to save password
+	  {
+	    config->setValue("net/passwordhash", temphash);
+	    config->setValue("net/passwordlength", password.size());
+	    config->setNetPasswordLength(password.size());
+	  }
+	}
+	else {
+	  config->setValue("net/temppasswordhash", "EMPTY");
+	}
 
         delete hpd;
-
 
 	//update nickname
         config->setValue("net/nick", nickname);
@@ -1327,8 +1429,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     
 	//if pass is none (hash is generated anyway), remove the hash
 	if (password.size() <= 0) {
-	    config->setValue("net/temppasswordhash", "");
-	    config->remove("net/temppasswordhash");
+	    clearPasswordHashes(true, false);
 	}
     }
 

@@ -233,11 +233,16 @@ void GameUIConfig::SaveOptions()
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
     setValue("net/nick", netNick());
-    if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked())
+    if ((netPasswordLength()==0)) {
+	setValue("net/passwordhash", "");
+        setValue("net/passwordlength", 0);
+    }
+    else if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked())
     {
         setValue("net/passwordhash", netPasswordHash());
         setValue("net/passwordlength", netPasswordLength());
     }
+
     setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
     setValue("net/ip", *netHost);
     setValue("net/port", netPort);

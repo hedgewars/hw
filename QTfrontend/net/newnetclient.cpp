@@ -538,7 +538,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ASKPASSWORD")
     {
-        emit AskForPassword(mynick);
+        emit NickRegistered(mynick);
         return;
     }
 
@@ -573,6 +573,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (lst[1] == "Authentication failed")
         {
             emit AuthFailed();
+	    m_game_connected = false;
+	    Disconnect();
+	    //omitted 'emit disconnected()', we don't want the error message
+	    return;
         }
         m_game_connected = false;
         Disconnect();
