@@ -96,6 +96,7 @@
 #include "playerslistmodel.h"
 
 #include "DataManager.h"
+#include "AutoUpdater.h"
 
 #ifdef __APPLE__
 #include "M3Panel.h"
@@ -146,16 +147,23 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageOptions->setConfig(config);
 #endif
 
+    AutoUpdater* updater = NULL;
+    if (config->isAutoUpdateEnabled())
+    {
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
+        updater = new SparkleAutoUpdater();
+#endif
+#endif
+        if (updater)
+        {
+            updater->checkForUpdates();
+            delete updater;
+        }
+    }
+
 #ifdef __APPLE__
     panel = new M3Panel;
-
-#ifdef SPARKLE_ENABLED
-    AutoUpdater* updater;
-
-    updater = new SparkleAutoUpdater();
-    if (updater && config->isAutoUpdateEnabled())
-        updater->checkForUpdates();
-#endif
 
     QShortcut *hideFrontend = new QShortcut(QKeySequence("Ctrl+M"), this);
     connect (hideFrontend, SIGNAL(activated()), this, SLOT(showMinimized()));

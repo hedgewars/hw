@@ -39,6 +39,13 @@
 #include "igbox.h"
 #include "DataManager.h"
 #include "LibavInteraction.h"
+#include "AutoUpdater.h"
+
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
+#include "SparkleAutoUpdater.h"
+#endif
+#endif
 
 // TODO cleanup
 QLayout * PageOptions::bodyLayoutDefinition()
@@ -231,7 +238,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
     #ifdef SPARKLE_ENABLED
             CBAutoUpdate = new QCheckBox(groupMisc);
             CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 7, 0, 1, 3);
+            MiscLayout->addWidget(CBAutoUpdate, 7, 0, 1, 1);
+
+            btnUpdateNow = new QPushButton(groupMisc);
+            connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
+            btnUpdateNow->setToolTip(tr("Check for updates"));
+            btnUpdateNow->setText("Check now");
+            btnUpdateNow->setFixedSize(130, 30);
+            MiscLayout->addWidget(btnUpdateNow, 7, 1, 1, 1);
     #endif
     #endif
             page1Layout->addWidget(groupMisc, 2, 0);
@@ -857,6 +871,23 @@ void PageOptions::setDefaultOptions()
     checkRecordAudio->setChecked(true);
     checkUseGameRes->setChecked(true);
     setDefaultCodecs();
+}
+
+void PageOptions::checkForUpdates()
+{
+    AutoUpdater *updater = NULL;
+
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
+    updater = new SparkleAutoUpdater();
+#endif
+#endif
+
+    if (updater)
+    {
+        updater->checkForUpdatesNow();
+        delete updater;
+    }
 }
 
 bool PageOptions::tryCodecs(const QString & format, const QString & vcodec, const QString & acodec)
