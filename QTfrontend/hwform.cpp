@@ -147,6 +147,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageOptions->setConfig(config);
 #endif
 
+#ifdef __APPLE__
     AutoUpdater* updater = NULL;
     if (config->isAutoUpdateEnabled())
     {
@@ -161,6 +162,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
             delete updater;
         }
     }
+#endif
 
 #ifdef __APPLE__
     panel = new M3Panel;
