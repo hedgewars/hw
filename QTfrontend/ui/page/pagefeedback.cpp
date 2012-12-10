@@ -203,8 +203,8 @@ void PageFeedback::EmbedSystemInfo()
 #endif
 
     // cpu info
-    uint32_t registers[4];
-    uint32_t i;
+    quint32 registers[4];
+    quint32 i;
 
     i = 0x80000002;
     asm volatile
