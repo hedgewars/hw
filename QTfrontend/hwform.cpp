@@ -1365,15 +1365,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 	//if dialog close, create an error message
         if (hpd->exec() != QDialog::Accepted)
         {
-            /*//ForcedDisconnect(tr("Login info not supplied."));
-            int retry = RetryDialog("Hedgewars - Empty login info", "Login info not supplied.");
-	    GoBack();
-	    delete hpd;
-    	    if (retry) {
-	    	NetConnectOfficialServer();
-	    }
-	    //delete hpd;*/
-	    delete hpd;
+            delete hpd;
 	    GoBack();
             return;
         }
