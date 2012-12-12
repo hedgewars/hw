@@ -1057,7 +1057,7 @@ void HWForm::NetPassword(const QString & nick)
     }
 
     //Remove temporary hash from config
-    config->clearPasswordHash();
+    config->clearTempHash();
 }
 
 void HWForm::NetNickRegistered(const QString & nick)
@@ -1065,11 +1065,9 @@ void HWForm::NetNickRegistered(const QString & nick)
     //Get hashes
     QString hash =  config->passwordHash();
     QString temphash =  config->tempHash();
-    qDebug("NETNICKREGISTERED");
+
     if (hash.isEmpty()) {
-        qDebug("NNR - HASH EMPTY");
         if (temphash.isEmpty()) { //If the user enters a registered nick with no password
-            qDebug("NNR - TEMPHASH EMTPY");
             QString suppliedpass;
             while (suppliedpass.isEmpty()) {
                 QInputDialog nickRegedDialog(this);
@@ -1385,7 +1383,6 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             if (save) // user wants to save password
             {
                 config->setPasswordHash(temphash);
-                config->setNetPasswordLength(password.size());
             }
         }
         else {

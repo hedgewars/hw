@@ -491,7 +491,7 @@ void GameUIConfig::setPasswordHash(const QString & passwordhash)
 {
     setValue("net/passwordhash", passwordhash);
     setValue("net/passwordlength", passwordhash.size());
-    netPasswordLength();
+    setNetPasswordLength(passwordhash.size());
 }
 
 QString GameUIConfig::passwordHash()
