@@ -150,7 +150,6 @@ class HWForm : public QMainWindow
         void CustomizePalettes();
         void resizeEvent(QResizeEvent * event);
         //void keyReleaseEvent(QKeyEvent *event);
-        inline void clearPasswordHashes(bool clearTempHash, bool clearHash);
 
         enum PageIDs
         {

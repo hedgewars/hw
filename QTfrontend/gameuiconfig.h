@@ -52,6 +52,12 @@ class GameUIConfig : public QSettings
         QString netNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
+        void clearPasswordHash();
+        void setPasswordHash(const QString & passwordhash);
+        QString passwordHash();
+        void clearTempHash();
+        void setTempHash(const QString & temphash);
+        QString tempHash();
         void setNetPasswordLength(int passwordLength);
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
@@ -87,6 +93,7 @@ class GameUIConfig : public QSettings
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
         quint8 depth;
+	QString temphash;
 };
 
 #endif
