@@ -237,10 +237,9 @@ void GameUIConfig::SaveOptions()
 	setValue("net/passwordhash", "");
         setValue("net/passwordlength", 0);
     }
-    else if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked())
-    {
-        setValue("net/passwordhash", netPasswordHash());
-        setValue("net/passwordlength", netPasswordLength());
+    else if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
+	setValue("net/passwordhash", "");
+	setValue("net/passwordlength", 0);
     }
 
     setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
@@ -480,6 +479,38 @@ int GameUIConfig::netPasswordLength()
 bool GameUIConfig::netPasswordIsValid()
 {
     return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '*'));
+}
+
+void GameUIConfig::clearPasswordHash() 
+{
+    setValue("net/passwordhash", QString());
+    setValue("net/passwordlength", 0);
+}
+
+void GameUIConfig::setPasswordHash(const QString & passwordhash)
+{
+    setValue("net/passwordhash", passwordhash);
+    setValue("net/passwordlength", passwordhash.size());
+    netPasswordLength();
+}
+
+QString GameUIConfig::passwordHash()
+{
+    return value("net/passwordhash").toString();
+}
+
+void GameUIConfig::clearTempHash() 
+{
+    setTempHash(QString());
+}
+
+void GameUIConfig::setTempHash(const QString & temphash)
+{
+    this->temphash = temphash;
+}
+
+QString GameUIConfig::tempHash() {
+    return this->temphash;
 }
 
 // When hedgewars launches, the password field is set with null characters. If the user tries to edit the field and there are such characters, then clear the field
