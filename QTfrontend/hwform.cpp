@@ -1102,7 +1102,7 @@ void HWForm::NetNickTaken(const QString & nick)
     if (!ok || newNick.isEmpty())
     {
         //ForcedDisconnect(tr("No nickname supplied."));
-	int retry = RetryDialog("Hedgewars - Empty nickname", "No nickname supplied.");
+	bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
 	GoBack();
         if (retry) {
        	   NetConnectOfficialServer();
@@ -1124,7 +1124,7 @@ void HWForm::NetAuthFailed()
     config->clearTempHash();
 
     //Try to login again
-    bool retry = RetryDialog("Hedgewars - Wrong password", "You entered a wrong password.");
+    bool retry = RetryDialog(tr("Hedgewars - Wrong password"), tr("You entered a wrong password."));
     GoBack();
 
     if (retry) {
@@ -1143,7 +1143,7 @@ bool HWForm::RetryDialog(const QString & title, const QString & label)
     retryMsg.addButton(QMessageBox::Cancel);
 
     QPushButton *retryButton = retryMsg.addButton(QMessageBox::Ok);
-    retryButton->setText("Try Again");
+    retryButton->setText(tr("Try Again"));
     retryButton->setFocus();
 
     retryMsg.exec();
@@ -1363,7 +1363,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
         //check the nickname variable
         if (nickname.isEmpty()) {
-            int retry = RetryDialog("Hedgewars - Empty nickname", "No nickname supplied.");
+            int retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
             GoBack();
             delete pwDialog;
             if (retry) {
@@ -1478,6 +1478,21 @@ void HWForm::NetDisconnect()
 
 void HWForm::ForcedDisconnect(const QString & reason)
 {
+    if (reason == "Reconnected too fast") { //TODO: this is a hack, which should be remade
+        bool retry = RetryDialog(tr("Hedgewars - Connection error"), tr("You reconnected too fast.\nPlease wait a few seconds and try again."));
+        if (retry) {
+            NetConnectOfficialServer();
+        }
+        else {
+            while (ui.Pages->currentIndex() != ID_PAGE_NET
+                && ui.Pages->currentIndex() != ID_PAGE_NETTYPE
+                && ui.Pages->currentIndex() != ID_PAGE_MAIN) 
+            {
+                GoBack();
+            }
+        }
+        return;
+    }
     if (pnetserver)
         return; // we have server - let it care of all things
     if (hwnet)
