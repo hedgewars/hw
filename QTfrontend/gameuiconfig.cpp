@@ -192,7 +192,7 @@ void GameUIConfig::resizeToConfigValues()
     // fill 2/3 of the screen desktop
     const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
     Form->resize(value("frontend/width", qMin(qMax(deskSize.width()*2/3,800),deskSize.width())).toUInt(),
-                 value("frontend/height", qMax(qMin(deskSize.height()*2/3,600),deskSize.height())).toUInt());
+                 value("frontend/height", qMin(qMax(deskSize.height()*2/3,600),deskSize.height())).toUInt());
 
     // move the window to the center of the screen
     QPoint center = QApplication::desktop()->availableGeometry(-1).center();
