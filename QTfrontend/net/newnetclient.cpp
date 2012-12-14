@@ -241,6 +241,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     {
         mynick = lst[1];
         m_playersModel->setNickname(mynick);
+        m_nick_registered = false;
         return ;
     }
 
@@ -304,6 +305,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QStringList tmp = lst;
         tmp.removeFirst();
         m_roomsListModel->setRoomsList(tmp);
+        if (m_nick_registered == false)
+        {
+            emit NickNotRegistered(mynick);
+        }
         return;
     }
 
@@ -539,6 +544,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "ASKPASSWORD")
     {
         emit NickRegistered(mynick);
+        m_nick_registered = true;
         return;
     }
 

@@ -69,6 +69,7 @@ class HWNewNet : public QObject
         QTcpSocket NetSocket;
         QString seed;
         bool m_game_connected;
+        bool m_nick_registered;
         RoomsListModel * m_roomsListModel;
         PlayersListModel * m_playersModel;
         QSortFilterProxyModel * m_lobbyPlayersModel;
@@ -91,6 +92,7 @@ class HWNewNet : public QObject
         void Error(const QString & errmsg);
         void Warning(const QString & wrnmsg);
         void NickRegistered(const QString & nick);
+        void NickNotRegistered(const QString & nick);
         void NickTaken(const QString & nick);
         void AuthFailed();
         void EnteredGame();
