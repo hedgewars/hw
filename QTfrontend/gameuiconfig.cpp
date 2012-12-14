@@ -233,13 +233,11 @@ void GameUIConfig::SaveOptions()
     setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
 
     setValue("net/nick", netNick());
-    if ((netPasswordLength()==0)) {
-	setValue("net/passwordhash", "");
-        setValue("net/passwordlength", 0);
+    if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
+	setPasswordHash(netPasswordHash());
     }
-    else if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
-	setValue("net/passwordhash", "");
-	setValue("net/passwordlength", 0);
+    else if(!Form->ui.pageOptions->CBSavePassword->isChecked()) {
+        clearPasswordHash();
     }
 
     setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
@@ -490,8 +488,8 @@ void GameUIConfig::clearPasswordHash()
 void GameUIConfig::setPasswordHash(const QString & passwordhash)
 {
     setValue("net/passwordhash", passwordhash);
-    setValue("net/passwordlength", passwordhash.size());
-    setNetPasswordLength(passwordhash.size());
+    setValue("net/passwordlength", passwordhash.size()/4);
+    setNetPasswordLength(passwordhash.size()/4);  //the hash.size() is divided by 4 let PAGE_SETUP use a reasonable number of stars to display the PW
 }
 
 QString GameUIConfig::passwordHash()
