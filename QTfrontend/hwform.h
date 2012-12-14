@@ -106,6 +106,7 @@ class HWForm : public QMainWindow
         void NetGameEnter();
         void NetPassword(const QString & nick);
         void NetNickRegistered(const QString & nick);
+        void NetNickNotRegistered(const QString & nick);
         void NetNickTaken(const QString & nick);
         void NetAuthFailed();
 	bool RetryDialog(const QString & title, const QString & label);

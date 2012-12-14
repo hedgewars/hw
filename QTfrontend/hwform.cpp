@@ -1094,6 +1094,26 @@ void HWForm::NetNickRegistered(const QString & nick)
     NetPassword(nick);
 }
 
+void HWForm::NetNickNotRegistered(const QString & nick)
+{
+    QMessageBox noRegMsg(this);
+    noRegMsg.setIcon(QMessageBox::Information);
+    noRegMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Nick not registered"));
+    noRegMsg.setWindowModality(Qt::WindowModal);
+    noRegMsg.setText(tr("Your nickname is not registered.\nTo prevent someone else from using it,\nplease register it at www.hedgewars.org"));
+
+    if (!config->passwordHash().isEmpty())
+    {
+        config->clearPasswordHash();
+        noRegMsg.setText(noRegMsg.text()+tr("\n\nYour password wasn't saved either."));
+    }
+    if (!config->tempHash().isEmpty())
+    {
+        config->clearTempHash();
+    }
+    noRegMsg.exec();
+}
+
 void HWForm::NetNickTaken(const QString & nick)
 {
     bool ok = false;
@@ -1207,6 +1227,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(NickRegistered(const QString&)), this, SLOT(NetNickRegistered(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(NickNotRegistered(const QString&)), this, SLOT(NetNickNotRegistered(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
