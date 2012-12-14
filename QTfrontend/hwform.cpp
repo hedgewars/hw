@@ -1127,6 +1127,8 @@ void HWForm::NetAuthFailed()
     bool retry = RetryDialog(tr("Hedgewars - Wrong password"), tr("You entered a wrong password."));
     GoBack();
 
+    config->clearPasswordHash();
+    config->clearTempHash();
     if (retry) {
        NetConnectOfficialServer();
     }
