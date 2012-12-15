@@ -483,8 +483,8 @@ void GameUIConfig::clearPasswordHash()
 {
     setValue("net/passwordhash", QString());
     setValue("net/passwordlength", 0);
-    setValue("net/savepassword", false);
-    reloadValues();
+    setValue("net/savepassword", false); //changes the savepassword value to false in order to not let the user save an empty password in PAGE_SETUP
+    reloadValues(); //reloads the values of PAGE_SETUP
 }
 
 void GameUIConfig::setPasswordHash(const QString & passwordhash)
