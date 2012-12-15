@@ -484,6 +484,7 @@ void GameUIConfig::clearPasswordHash()
     setValue("net/passwordhash", QString());
     setValue("net/passwordlength", 0);
     setValue("net/savepassword", false);
+    reloadValues();
 }
 
 void GameUIConfig::setPasswordHash(const QString & passwordhash)
