@@ -75,10 +75,11 @@ procedure DisplayUsage;
 begin
     WriteLn(stdout, 'Usage:');
     WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to global data folder> <path to replay file> [options]');
+    WriteLn(stdout, '  hwengine <path to replay file> [options]');
     WriteLn(stdout, '');
     WriteLn(stdout, 'where [options] are any of the following:');
-    WriteLn(stdout, ' --user-dir [path to user data folder]');
+    WriteLn(stdout, ' --prefix [path to folder]');
+    WriteLn(stdout, ' --user-prefix [path to folder]');
     WriteLn(stdout, ' --locale [name of language file]');
     WriteLn(stdout, ' --width [screen width in pixels]');
     WriteLn(stdout, ' --height [screen height in pixels]');
@@ -127,8 +128,8 @@ const audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
 const otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
 const mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
 const allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--time','--lowquality');
-const reallyAll: array[0..21] of shortstring = (
-                '--user-dir', '--locale', '--width', '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
+const reallyAll: array[0..22] of shortstring = (
+                '--prefix', '--user-prefix', '--locale', '--width', '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
                 '--stats-only', '--gci', '--help');
@@ -142,33 +143,34 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--user-dir}        0 : UserPathPrefix := getStringParameter (arg, paramIndex, parseParameter);
-        {--locale}          1 : cLocaleFName   := getStringParameter (arg, paramIndex, parseParameter);
-        {--width}           2 : cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}          3 : cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--frame-interval}  4 : cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--volume}          5 : SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nomusic}         6 : SetMusic        ( false );
-        {--nosound}         7 : SetSound        ( false );
-        {--fullscreen}      8 : cFullScreen    := true;
-        {--showfps}         9 : cShowFPS       := true;
-        {--altdmg}         10 : cAltDamage     := true;
-        {--low-quality}    11 : cReducedQuality:= $FFFFFFFF xor rqLowRes;
-        {--raw-quality}    12 : cReducedQuality:= getLongIntParameter(arg, paramIndex, parseParameter);
+        {--prefix}          0 : PathPrefix     := getStringParameter (arg, paramIndex, parseParameter);
+        {--user-prefix}     1 : UserPathPrefix := getStringParameter (arg, paramIndex, parseParameter);
+        {--locale}          2 : cLocaleFName   := getStringParameter (arg, paramIndex, parseParameter);
+        {--width}           3 : cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--height}          4 : cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--frame-interval}  5 : cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--volume}          6 : SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nomusic}         7 : SetMusic        ( false );
+        {--nosound}         8 : SetSound        ( false );
+        {--fullscreen}      9 : cFullScreen    := true;
+        {--showfps}        10 : cShowFPS       := true;
+        {--altdmg}         11 : cAltDamage     := true;
+        {--low-quality}    12 : cReducedQuality:= $FFFFFFFF xor rqLowRes;
+        {--raw-quality}    13 : cReducedQuality:= getLongIntParameter(arg, paramIndex, parseParameter);
         {deprecated options}
-        {--depth}          13 : cBits          := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--set-video}      14 : parseClassicParameter(videoArray,3,paramIndex);
-        {--set-audio}      15 : parseClassicParameter(audioArray,3,paramIndex);
-        {--set-other}      16 : parseClassicParameter(otherArray,3,paramIndex);
-        {--set-multimedia} 17 : parseClassicParameter(mediaArray,8,paramIndex);
-        {--set-everything} 18 : parseClassicParameter(allArray,12,paramIndex);
+        {--depth}          14 : cBits          := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--set-video}      15 : parseClassicParameter(videoArray,3,paramIndex);
+        {--set-audio}      16 : parseClassicParameter(audioArray,3,paramIndex);
+        {--set-other}      17 : parseClassicParameter(otherArray,3,paramIndex);
+        {--set-multimedia} 18 : parseClassicParameter(mediaArray,8,paramIndex);
+        {--set-everything} 19 : parseClassicParameter(allArray,12,paramIndex);
         {anything else}
-        {--stats-only}     19 : begin
+        {--stats-only}     20 : begin
                                 cOnlyStats:= true;
                                 cReducedQuality:= $FFFFFFFF xor rqLowRes;
                                 SetSound(false);
                                 end;
-        {--gci}            20 : begin            //     We had to make up all this saved space some how...     \\
+        {--gci}            21 : begin            //     We had to make up all this saved space some how...     \\
                                 WriteLn(stdout, '                                                                ');
                                 WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
                                 WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
@@ -184,15 +186,21 @@ begin
                                 WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
                                 WriteLn(stdout, '                                                                ');
                                 end;
-        {--help}           21 : begin
+        {--help}           22 : begin
                                 DisplayUsage();
                                 GameType:= gmtSyntax;
                                 end;
     else
         begin
-        WriteLn(stderr, 'ERROR: '+cmd+' is not a valid argument');
-        parseParameter:= true;
-        end
+        //Asusme the first "non parameter" is the replay file, anything else is invalid
+        if recordFileName = '' then
+            recordFileName := cmd
+        else
+            begin
+            WriteLn(stderr, 'ERROR: '+cmd+' is not a valid argument');
+            parseParameter:= true;
+            end;
+        end;
     end;
 end;
 

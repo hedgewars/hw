@@ -1879,14 +1879,17 @@ void HWForm::UpdateCampaignPageProgress(int index)
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
 QString HWForm::getDemoArguments()
 {
+
+    QString prefix = datadir->absolutePath();
+    QString userPrefix = cfgdir->absolutePath();
 #ifdef Q_WS_WIN
-    QString userdir = cfgdir->absolutePath().replace("/","\\");
-#else
-    QString userdir = cfgdir->absolutePath();
+    prefix = prefix.replace("/","\\");
+    userPrefix = userPrefix.replace("/","\\");
 #endif
 
     QRect resolution = config->vid_Resolution();
-    return QString("--user-dir " + userdir
+    return QString("--prefix " + prefix
+                   + " --user-prefix " + userPrefix
                    + " --width " + QString::number(resolution.width())
                    + " --height " + QString::number(resolution.height())
                    + " --volume " + QString::number(config->volume())
@@ -1912,8 +1915,8 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
-    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" "+arguments);
-    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" "+arguments);
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"%1\" "+arguments);
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"%1\" "+arguments);
 #elif defined __APPLE__
     // only useful when other apps have taken precedence over our file extensions and you want to reset it
     system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hwd</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");

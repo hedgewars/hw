@@ -581,27 +581,21 @@ begin
     end
 {$ENDIF};
 
-    if (ParamCount < 2) then
+    UserPathPrefix := '.';
+    PathPrefix     := cDefaultPathPrefix;
+    recordFileName := '';
+    startIndex     := 1;
+    playReplayFileWithParameters(startIndex);
+
+    if (recordFileName = '') then
         begin
         DisplayUsage();
         GameType:= gmtSyntax;
-        end
-    else
-        begin
-        if (ParamCount >= 2) then
-            begin
-            UserPathPrefix := '.';
-            PathPrefix     := ParamStr(1);
-            recordFileName := ParamStr(2);
-            startIndex     := 3;
-            end;
-
-        playReplayFileWithParameters(startIndex);
         end;
     (*
-    WriteLn(stdout,recordFilename);
-    WriteLn(stdout,PathPrefix);
-    WriteLn(stdout,UserPathPrefix);
+    WriteLn(stdout,'PathPrefix:     ' + PathPrefix);
+    WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
+    WriteLn(stdout,'recordFilename: ' + recordFilename);
     *)
 end;
 
