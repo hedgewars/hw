@@ -590,21 +590,11 @@ begin
         begin
         if (ParamCount >= 2) then
             begin
-            UserPathPrefix := ParamStr(1);
-            PathPrefix     := ParamStr(2);
-            end;
-        if (ParamCount >= 3) then
-            recordFilename := ParamStr(3);
-        if (ParamCount = 2) or
-           ((ParamCount >= 3) and (Copy(recordFileName,1,2) = '--')) then
-            begin
             UserPathPrefix := '.';
             PathPrefix     := ParamStr(1);
             recordFileName := ParamStr(2);
             startIndex     := 3;
-            end
-        else
-            startIndex := 4;
+            end;
 
         playReplayFileWithParameters(startIndex);
         end;

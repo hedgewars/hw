@@ -1879,19 +1879,25 @@ void HWForm::UpdateCampaignPageProgress(int index)
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]
 QString HWForm::getDemoArguments()
 {
+#ifdef Q_WS_WIN
+    QString userdir = cfgdir->absolutePath().replace("/","\\");
+#else
+    QString userdir = cfgdir->absolutePath();
+#endif
+
     QRect resolution = config->vid_Resolution();
-    return QString(QString::number(resolution.width()) + " "
-                   + QString::number(resolution.height()) + " "
-                   + QString::number(config->bitDepth()) + " " // bpp
-                   + QString::number(config->volume()) + " " // sound volume
-                   + (config->isMusicEnabled() ? "1" : "0") + " "
-                   + (config->isSoundEnabled() ? "1" : "0") + " "
-                   + config->language() + ".txt "
-                   + (config->vid_Fullscreen() ? "1" : "0") + " "
-                   + (config->isShowFPSEnabled() ? "1" : "0") + " "
-                   + (config->isAltDamageEnabled() ? "1" : "0") + " "
-                   + QString::number(config->timerInterval()) + " "
-                   + QString::number(config->translateQuality()));
+    return QString("--user-dir " + userdir
+                   + " --width " + QString::number(resolution.width())
+                   + " --height " + QString::number(resolution.height())
+                   + " --volume " + QString::number(config->volume())
+                   + (config->isMusicEnabled() ? "" : " --nomusic")
+                   + (config->isSoundEnabled() ? "" : " --nosound")
+                   + " --locale " + config->language() + ".txt"
+                   + (config->vid_Fullscreen() ? " --fullscreen" : "")
+                   + (config->isShowFPSEnabled() ? " --showfps" : "")
+                   + (config->isAltDamageEnabled() ? " --altdmg" : "")
+                   + " --frame-interval " + QString::number(config->timerInterval())
+                   + " --raw-quality " + QString::number(config->translateQuality()));
 }
 
 void HWForm::AssociateFiles()
@@ -1906,8 +1912,8 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
-    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
-    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + cfgdir->absolutePath().replace("/","\\") + "\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" --set-everything "+arguments);
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" "+arguments);
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"" + datadir->absolutePath().replace("/", "\\") + "\" \"%1\" "+arguments);
 #elif defined __APPLE__
     // only useful when other apps have taken precedence over our file extensions and you want to reset it
     system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hwd</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");
@@ -1928,7 +1934,7 @@ void HWForm::AssociateFiles()
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
-    if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 "+cfgdir->absolutePath().replace(" ","\\\\ ").replace("/","\\/")+" \\2 --set-everything "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
+    if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 \\2 "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
     if (success)
     {
