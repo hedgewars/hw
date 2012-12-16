@@ -639,6 +639,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
+        if (lst[0] == "ROUND_FINISHED")
+        {
+            emit FromNet(QByteArray("\x01o"));
+            return;
+        }
+
         if (lst[0] == "ADD_TEAM")
         {
             if(lst.size() != 24)
