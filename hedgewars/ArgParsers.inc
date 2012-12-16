@@ -73,11 +73,9 @@ end;
 
 procedure DisplayUsage;
 begin
-    WriteLn(stdout, 'Usage:');
+    WriteLn(stdout, 'Usage: hwengine <path to replay file> [options]');
     WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to replay file> [options]');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'where [options] are any of the following:');
+    WriteLn(stdout, 'where [options] can be any of the following:');
     WriteLn(stdout, ' --prefix [path to folder]');
     WriteLn(stdout, ' --user-prefix [path to folder]');
     WriteLn(stdout, ' --locale [name of language file]');
@@ -102,7 +100,7 @@ end;
 function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
 var tmpInt, c: LongInt;
 begin
-    paramIndex:= paramIndex + 1;
+    inc(paramIndex);
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
@@ -112,7 +110,7 @@ end;
 
 function getStringParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): String;
 begin
-    paramIndex:= paramIndex + 1;
+    inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
     if wrongParameter then
          WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
@@ -208,6 +206,11 @@ procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var par
 var index, tmpInt: LongInt;
     isBool: Boolean;
 begin
+    WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
+    WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
+    WriteLn(stdout, '         Run `hwegine --help` to learn it!');
+    WriteLn(stdout, '');
+
     index:= 0;
     tmpInt:= 1;
     while (index < size) do
@@ -222,20 +225,21 @@ begin
             or (cmdArray[index] = '--low-quality');
         if (not isBool) or ((ParamStr(paramIndex)='1') and (cmdArray[index]<>'--nomusic') and (cmdArray[index]<>'--nosound')) then
             parseParameter(cmdArray[index], ParamStr(paramIndex), tmpInt);
-        index:= index+1;
+        inc(index);
         end;
 end;
 
-procedure playReplayFileWithParameters(paramIndex: LongInt);
-var tmpInt: LongInt;
+procedure playReplayFileWithParameters;
+var paramIndex: LongInt;
     wrongParameter: boolean;
 begin
+    paramIndex:= 1;
     wrongParameter:= false;
     while (paramIndex <= ParamCount) do
         begin
         if parseParameter( ParamStr(paramIndex), ParamStr(paramIndex+1), paramIndex) then
             wrongParameter:= true;
-        paramIndex:= paramIndex+1;
+        inc(paramIndex);
         end;
     if wrongParameter = true then
         begin
@@ -243,3 +247,55 @@ begin
         GameType:= gmtSyntax;
         end
 end;
+
+procedure GetParams;
+begin
+    (*
+    tmpInt:=0;
+    while (tmpInt <= ParamCount) do
+        begin
+        WriteLn(stdout,inttostr(tmpInt) + ': ' + ParamStr(tmpInt));
+        inc(tmpInt);
+        end;
+    *)
+
+    if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
+    begin
+        PathPrefix := ParamStr(1);
+        ipcPort    := StrToInt(ParamStr(2));
+        GameType   := gmtLandPreview;
+        exit;
+    end;
+
+    //TODO: prepend something so that we can use a cDefaultParamNum of parameters
+    if ParamCount = cDefaultParamNum then
+    begin
+        internalStartGameWithParameters();
+        exit;
+    end
+{$IFDEF USE_VIDEO_RECORDING}
+    else if ParamCount = cVideorecParamNum then
+    begin
+        internalStartVideoRecordingWithParameters();
+        exit;
+    end
+{$ENDIF};
+
+    UserPathPrefix := '.';
+    PathPrefix     := cDefaultPathPrefix;
+    recordFileName := '';
+    playReplayFileWithParameters();
+
+    if (recordFileName = '') then
+        begin
+        DisplayUsage();
+        GameType:= gmtSyntax;
+        end;
+    (*
+    WriteLn(stdout,'PathPrefix:     ' + PathPrefix);
+    WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
+    WriteLn(stdout,'recordFilename: ' + recordFilename);
+    *)
+end;
+
+
