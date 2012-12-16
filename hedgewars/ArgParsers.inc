@@ -23,7 +23,7 @@ begin
     UserPathPrefix:= ParamStr(1);
     cScreenWidth:= StrToInt(ParamStr(2));
     cScreenHeight:= StrToInt(ParamStr(3));
-    cBits:= StrToInt(ParamStr(4));
+    //cBits:= StrToInt(ParamStr(4));
     ipcPort:= StrToInt(ParamStr(5));
     cFullScreen:= ParamStr(6) = '1';
     SetSound(ParamStr(7) = '1');
@@ -156,7 +156,7 @@ begin
         {--low-quality}    12 : cReducedQuality:= $FFFFFFFF xor rqLowRes;
         {--raw-quality}    13 : cReducedQuality:= getLongIntParameter(arg, paramIndex, parseParameter);
         {deprecated options}
-        {--depth}          14 : cBits          := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--depth}          14 : {do nothing};
         {--set-video}      15 : parseClassicParameter(videoArray,3,paramIndex);
         {--set-audio}      16 : parseClassicParameter(audioArray,3,paramIndex);
         {--set-other}      17 : parseClassicParameter(otherArray,3,paramIndex);

@@ -1234,7 +1234,7 @@ begin
         s:= SDL_getenv('SDL_VIDEO_CENTERED');
         SDL_putenv('SDL_VIDEO_CENTERED=1');
     {$ENDIF}
-        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
         SDLTry(SDLPrimSurface <> nil, true);
     {$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;

@@ -34,7 +34,6 @@ var
     cNewScreenWidth    : LongInt;
     cNewScreenHeight   : LongInt;
     cScreenResizeDelay : LongWord;
-    cBits              : LongInt;
     ipcPort            : Word;
     cFullScreen        : boolean;
     cLocaleFName       : shortstring;
@@ -2327,7 +2326,6 @@ begin
 
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
-    cBits           := 32;
     cShowFPS        := false;
     cAltDamage      := true;
     cTimerInterval  := 8;
