@@ -338,11 +338,12 @@ begin
     SetMusic(gameArgs[7] = '1');
     cAltDamage:= gameArgs[8] = '1';
     PathPrefix:= gameArgs[9];
+{$IFDEF IPHONEOS}
     UserPathPrefix:= '../Documents';
+{$ENDIF}
     recordFileName:= gameArgs[10];
 {$ENDIF}
     initEverything(true);
-
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
