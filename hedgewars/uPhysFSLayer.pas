@@ -40,7 +40,7 @@ function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; e
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 
 implementation
-uses uUtils, uVariables;
+uses uUtils, uVariables, sysutils;
 
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
@@ -135,8 +135,16 @@ end;
 
 procedure initModule;
 var i: LongInt;
+    cPhysfsId: shortstring;
 begin
-    i:= PHYSFS_init(Str2PChar(ParamStr(0)));
+{$IFDEF HWLIBRARY}
+    //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
+    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF} ' hedgewars';
+{$ELSE}
+    cPhysfsId:= ParamStr(0);
+{$ENDIF}
+
+    i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
     i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, true);

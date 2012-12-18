@@ -136,6 +136,12 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
+if(BUILD_ENGINE_LIBRARY)
+    add_definitions(-DHWLIBRARY)
+    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
+    link_directories(${EXECUTABLE_OUTPUT_PATH})
+endif()
+
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
@@ -158,12 +164,6 @@ if(APPLE OR CROSSAPPLE)
             set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
         endif()
     endif()
-endif()
-
-if(BUILD_ENGINE_LIBRARY)
-    add_definitions(-DHWLIBRARY)
-    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
-    link_directories(${EXECUTABLE_OUTPUT_PATH})
 endif()
 
 #when debugging, always prompt a console to see fronted messages
