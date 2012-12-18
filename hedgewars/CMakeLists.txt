@@ -10,7 +10,7 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 
 #SOURCE AND PROGRAMS SECTION
 set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
-set(engine_output_name "hwengine")
+set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
 
 if (APPLE)
     set(required_fpc_version 2.6)
@@ -86,7 +86,7 @@ set(engine_sources
     )
 
 if(BUILD_ENGINE_LIBRARY)
-    message(STATUS "Engine will be built as library (experimental)")
+    message(WARNING "Engine will be built as library (experimental)")
     set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
     set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
 
@@ -96,13 +96,22 @@ if(BUILD_ENGINE_LIBRARY)
     endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
 
     # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-    if(APPLE AND current_macosx_version GREATER "10.5")
+    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
         set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
 
-    if(APPLE)
-        set(engine_output_name "libhwengine.dylib")
-    endif (APPLE)
+    if (WIN32)
+        # windows is silly and takes the name specified in hwLibrary.pas
+        set(engine_output_name "hwLibrary.dll")
+        #set(pascal_flags "-D" "-Dv'${HEDGEWARS_VERSION}'" "-Dd'Hedgewars engine'" ${pascal_flags})
+    elseif (WIN32)
+        if (APPLE)
+            set(engine_output_name "libhwengine.dylib")
+        else (APPLE)
+            set(engine_output_name "libhwengine.so")
+        endif (APPLE)
+    endif (WIN32)
+
 endif(BUILD_ENGINE_LIBRARY)
 
 
@@ -204,7 +213,7 @@ set(fpc_flags ${NOEXECSTACK_FLAGS} ${pascal_flags} ${hwengine_project})
 
 if(NOT APPLE)
     #here is the command for standard executables or for shared library
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}"
+    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
         COMMAND "${FPC_EXECUTABLE}"
         ARGS ${fpc_flags}
         MAIN_DEPENDENCY ${hwengine_project}
@@ -231,7 +240,7 @@ else()
 endif()
 
 
-add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}")
+add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
 
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
@@ -252,4 +261,4 @@ if((FPC_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
     add_dependencies(${engine_output_name} ENGINECLEAN)
 endif()
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${target_dir})

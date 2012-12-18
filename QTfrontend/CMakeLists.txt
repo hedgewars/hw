@@ -138,7 +138,12 @@ set(hwfr_rez hedgewars.qrc)
 
 if(BUILD_ENGINE_LIBRARY)
     add_definitions(-DHWLIBRARY)
-    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
+    if (WIN32)
+        set (hwlibname ${EXECUTABLE_OUTPUT_PATH}/hwLibrary.dll)
+    else (WIN32)
+        set (hwlibname hwengine)
+    endif (WIN32)
+    set(HW_LINK_LIBS ${hwlibname} ${HW_LINK_LIBS})
     link_directories(${EXECUTABLE_OUTPUT_PATH})
 endif()
 
