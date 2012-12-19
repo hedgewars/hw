@@ -24,6 +24,8 @@ option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+set(FPFLAGS "" CACHE STRING "Additional Freepascal flags" FORCE)
+set(GHFLAGS "" CACHE STRING "Additional Haskell flags" FORCE)
 
 
 #detect Mercurial revision (if present)
