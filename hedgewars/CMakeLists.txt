@@ -10,7 +10,7 @@ configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_B
 
 #SOURCE AND PROGRAMS SECTION
 if(${BUILD_ENGINE_LIBRARY})
-    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwLibrary${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
 else()
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
@@ -206,7 +206,7 @@ if(NOT APPLE)
     #here is the command for standard executables or for shared library
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
         COMMAND "${FPC_EXECUTABLE}"
-        ARGS ${fpc_flags}
+        ARGS ${fpc_flags} -o${engine_output_name}
         MAIN_DEPENDENCY ${hwengine_project}
         DEPENDS ${engine_sources}
         )

@@ -137,14 +137,9 @@ set(hwfr_hdrs
 set(hwfr_rez hedgewars.qrc)
 
 if(BUILD_ENGINE_LIBRARY)
-    add_definitions(-DHWLIBRARY)
-    if (APPLE)
-        set (hwlibname hwengine)
-    else (APPLE)
-        set (hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwLibrary${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    endif (APPLE)
+    add_definitions(-DHWLIBRARY=1)
+    set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     set(HW_LINK_LIBS ${hwlibname} ${HW_LINK_LIBS})
-    link_directories(${EXECUTABLE_OUTPUT_PATH})
 endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
