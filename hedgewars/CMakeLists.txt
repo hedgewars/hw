@@ -9,8 +9,13 @@ include(${CMAKE_SOURCE_DIR}/cmake_modules/FindSDL_Extras.cmake)
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
-set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
-set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+if(${BUILD_ENGINE_LIBRARY})
+    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwLibrary${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
+else()
+    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
+endif()
 
 if (APPLE)
     set(required_fpc_version 2.6)
@@ -87,7 +92,6 @@ set(engine_sources
 
 if(BUILD_ENGINE_LIBRARY)
     message(WARNING "Engine will be built as library (experimental)")
-    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
     set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
@@ -99,19 +103,6 @@ if(BUILD_ENGINE_LIBRARY)
     if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
         set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
-
-    if (WIN32)
-        # windows is silly and takes the name specified in hwLibrary.pas
-        set(engine_output_name "hwLibrary.dll")
-        #set(pascal_flags "-D" "-Dv'${HEDGEWARS_VERSION}'" "-Dd'Hedgewars engine'" ${pascal_flags})
-    elseif (WIN32)
-        if (APPLE)
-            set(engine_output_name "libhwengine.dylib")
-        else (APPLE)
-            set(engine_output_name "libhwengine.so")
-        endif (APPLE)
-    endif (WIN32)
-
 endif(BUILD_ENGINE_LIBRARY)
 
 
