@@ -30,7 +30,6 @@
 #include "pagefeedback.h"
 #include "pageingame.h"
 #include "pagescheme.h"
-#include "pagenettype.h"
 #include "pageroomslist.h"
 #include "pageinfo.h"
 #include "pagenetgame.h"
@@ -131,9 +130,6 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
     pageAdmin = new PageAdmin();
     Pages->addWidget(pageAdmin);
-
-    pageNetType = new PageNetType();
-    Pages->addWidget(pageNetType);
 
     pageCampaign = new PageCampaign();
     Pages->addWidget(pageCampaign);

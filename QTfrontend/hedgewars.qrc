@@ -44,6 +44,7 @@
         <file>res/HedgewarsTitle.png</file>
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
+        <file>res/NetworkPlayDisabled.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
         <file>res/new.png</file>
