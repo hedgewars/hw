@@ -1,6 +1,6 @@
 add_subdirectory(hedgewars)
 
-if(APPLE OR CROSSAPPLE)
+if(APPLE)
     #needed for CFBundleVersion and CFBundleShortVersionString
         #should reuse the variables set in main CMakeLists.txt
     if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
@@ -29,4 +29,4 @@ if(APPLE OR CROSSAPPLE)
             DESTINATION ../Resources/)
     install(PROGRAMS "${hedgewars_SOURCE_DIR}/share/dsa_pub.pem"
             DESTINATION ../Resources/)
-endif(APPLE OR CROSSAPPLE)
+endif(APPLE)

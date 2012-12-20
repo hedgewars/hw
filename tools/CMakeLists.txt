@@ -36,6 +36,8 @@ if (APPLE)
         string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
     endif()
 
+    set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
+
     #this tool is present in qt 4.5 but only if you compile from sources
     #from qt 4.6 is present also in the binary version
     find_program(macdeployqt_executable NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin)
