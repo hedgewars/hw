@@ -46,10 +46,35 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
     pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
+    //BtnNet = addButton(":/res/NetworkPlay.png", (QBoxLayout*)netLayout, 1, true);
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
     BtnNet->setToolTip(tr("Network Game"));
     BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
+    connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    
+    originalNetworkIcon = BtnNet->icon();
+    disabledNetworkIcon = QIcon(":/res/NetworkPlayDisabled.png");
+
+    //QWidget *netLayoutWidget = new QWidget();
+    QVBoxLayout *netLayout = new QVBoxLayout(BtnNet);
+    //pageLayout->addWidget(netLayoutWidget, 2, 2, 1, 2);
+    //netLayoutWidget->setStyleSheet("background: green;");
+    //netLayoutWidget->setFixedSize(314, 260);
+    netLayout->setSpacing(20);
+    netLayout->setAlignment(Qt::AlignHCenter);
+
+    BtnNetLocal = addButton("Play local network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetLocal->setToolTip(tr("Play a local network game"));
+    BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
+    BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
+    BtnNetLocal->setVisible(false);
+
+    BtnNetOfficial = addButton("Play official network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetOfficial->setToolTip(tr("Play a network game"));
+    BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
+    BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
+    BtnNetOfficial->setVisible(false);
 
     // button order matters for overlapping (what's on top and what isn't)
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
@@ -183,4 +208,13 @@ QString PageMain::randomTip() const
 #endif
 
     return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
+}
+
+void PageMain::toggleNetworkChoice()
+{
+    bool visible = BtnNetLocal->isVisible();
+    BtnNetLocal->setVisible(!visible);
+    BtnNetOfficial->setVisible(!visible);
+    if (visible)    BtnNet->setIcon(originalNetworkIcon);
+    else            BtnNet->setIcon(disabledNetworkIcon);
 }

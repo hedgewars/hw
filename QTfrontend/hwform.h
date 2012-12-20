@@ -172,7 +172,6 @@ class HWForm : public QMainWindow
             ID_PAGE_CONNECTING     ,
             ID_PAGE_SCHEME         ,
             ID_PAGE_ADMIN          ,
-            ID_PAGE_NETTYPE        ,
             ID_PAGE_CAMPAIGN       ,
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,

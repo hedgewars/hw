@@ -41,7 +41,6 @@ class PageRoomsList;
 class PageConnecting;
 class PageScheme;
 class PageAdmin;
-class PageNetType;
 class PageDrawMap;
 class PageVideos;
 class QStackedLayout;
@@ -76,7 +75,6 @@ class Ui_HWForm
         PageConnecting *pageConnecting;
         PageScheme *pageScheme;
         PageAdmin *pageAdmin;
-        PageNetType *pageNetType;
         PageCampaign *pageCampaign;
         PageDrawMap *pageDrawMap;
         PageVideos *pageVideos;

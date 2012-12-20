@@ -73,7 +73,6 @@
 #include "pagefeedback.h"
 #include "pagenetserver.h"
 #include "pagedrawmap.h"
-#include "pagenettype.h"
 #include "pagegamestats.h"
 #include "pageplayrecord.h"
 #include "pagedata.h"
@@ -203,9 +202,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnFeedback, ID_PAGE_FEEDBACK);
 
-    connect(ui.pageMain->BtnNet, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
-    pageSwitchMapper->setMapping(ui.pageMain->BtnNet, ID_PAGE_NETTYPE);
-
     connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
 
@@ -304,8 +300,8 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //    this, SLOT(GoBack())); // executed third
 
 
-    connect(ui.pageNetType->BtnLAN, SIGNAL(clicked()), this, SLOT(GoToNet()));
-    connect(ui.pageNetType->BtnOfficialServer, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
+    connect(ui.pageMain->BtnNetLocal, SIGNAL(clicked()), this, SLOT(GoToNet()));
+    connect(ui.pageMain->BtnNetOfficial, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
 
     connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
 
@@ -573,7 +569,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
       case ID_PAGE_CONNECTING :	qDebug("%sPAGE_CONNECTING%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
       case ID_PAGE_SCHEME :		qDebug("%sPAGE_SCHEME%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
       case ID_PAGE_ADMIN :		qDebug("%sPAGE_ADMIN%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_NETTYPE :		qDebug("%sPAGE_NETTYPE%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
       case ID_PAGE_CAMPAIGN :		qDebug("%sPAGE_CAMPAIGN%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
       case ID_PAGE_DRAWMAP :		qDebug("%sPAGE_DRAWMAP%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
       case ID_PAGE_DATADOWNLOAD :	qDebug("%sPAGE_DATADOWNLOAD%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
@@ -601,7 +596,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
       case ID_PAGE_CONNECTING :	qDebug("%sPAGE_CONNECTING%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
       case ID_PAGE_SCHEME :		qDebug("%sPAGE_SCHEME%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
       case ID_PAGE_ADMIN :		qDebug("%sPAGE_ADMIN%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_NETTYPE :		qDebug("%sPAGE_NETTYPE%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
       case ID_PAGE_CAMPAIGN :		qDebug("%sPAGE_CAMPAIGN%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
       case ID_PAGE_DRAWMAP :		qDebug("%sPAGE_DRAWMAP%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
       case ID_PAGE_DATADOWNLOAD :	qDebug("%sPAGE_DATADOWNLOAD%s", qPrintable(openPrefix), qPrintable(openSuffix));	break;      
@@ -1508,7 +1502,6 @@ void HWForm::ForcedDisconnect(const QString & reason)
         }
         else {
             while (ui.Pages->currentIndex() != ID_PAGE_NET
-                && ui.Pages->currentIndex() != ID_PAGE_NETTYPE
                 && ui.Pages->currentIndex() != ID_PAGE_MAIN) 
             {
                 GoBack();
@@ -1525,7 +1518,6 @@ void HWForm::ForcedDisconnect(const QString & reason)
     }
 
     while (ui.Pages->currentIndex() != ID_PAGE_NET
-        && ui.Pages->currentIndex() != ID_PAGE_NETTYPE
         && ui.Pages->currentIndex() != ID_PAGE_MAIN)
     {
         GoBack();
