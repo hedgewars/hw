@@ -189,7 +189,8 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<HWTeam>("HWTeam");
 
-    bindir->cd("bin"); // workaround over NSIS installer
+    // workaround over NSIS installer which modifies the install path
+    bindir->cd("./");
 
     if(cConfigDir->length() == 0)
         cfgdir->setPath(cfgdir->homePath());
@@ -237,14 +238,14 @@ int main(int argc, char *argv[])
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("hedgewars/Data"))
+    if(!datadir->cd("Data"))
     {
         QMessageBox missingMsg(QApplication::activeWindow());
         missingMsg.setIcon(QMessageBox::Critical);
         missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
         missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
                                            "Please check your installation!").
-                                            arg(datadir->absolutePath()+"/hedgewars/Data"));
+                                            arg(datadir->absolutePath()+"/Data"));
         missingMsg.setWindowModality(Qt::WindowModal);
         missingMsg.exec();
         return 1;
