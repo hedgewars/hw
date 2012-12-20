@@ -11,9 +11,7 @@ set(QT_USE_QTOPENGL FALSE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
-if (NOT CROSSAPPLE)
-    include(${QT_USE_FILE})
-endif()
+include(${QT_USE_FILE})
 
 find_package(SDL REQUIRED)       #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
@@ -144,7 +142,7 @@ qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
-if(APPLE OR CROSSAPPLE)
+if(APPLE)
     find_library(iokit_framework NAMES IOKit)
     set(HW_LINK_LIBS ${iokit_framework} ${HW_LINK_LIBS})
     set(hwfr_src ${hwfr_src} CocoaInitializer.mm
@@ -203,10 +201,7 @@ if(WIN32 AND NOT UNIX)
         )
 endif()
 
-
-if (NOT CROSSAPPLE)
-    target_link_libraries(hedgewars ${HW_LINK_LIBS})
-endif()
+target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
