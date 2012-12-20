@@ -67,17 +67,34 @@ set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 
-#bundle .app setup
-if(APPLE OR CROSSAPPLE)
-    #paths for creating the bundle
-    set(bundle_name Hedgewars.app)
-    set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
-    set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
-    set(DATA_INSTALL_DIR "../Resources/")
-    set(target_dir ".")
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+if(UNIX AND NOT APPLE)
+    set(target_binary_install_dir "bin")
+    set(target_library_install_dir "lib")
+    if(DEFINED DATA_INSTALL_DIR)
+        set(SHAREPATH "${DATA_INSTALL_DIR}")
+    else()
+        set(SHAREPATH "share/hedgewars/")
+    endif()
 else()
-    set(target_dir "bin")
+    set(target_binary_install_dir "./")
+
+    if(APPLE OR ${CROSSAPPLE})
+        set(target_library_install_dir "Hedgewars.app/Contents/Frameworks/")
+        set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/")
+        set(SHAREPATH "../Resources/")
+    else()
+        if(WIN32)
+            set(target_library_install_dir "./")
+            set(SHAREPATH "./")
+            set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
+            link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
+        endif(WIN32)
+    endif()
 endif()
+
 
 if(APPLE)
     set(CMAKE_FIND_FRAMEWORK "FIRST")
@@ -220,20 +237,6 @@ else()
 endif()
 
 
-#finish setting paths
-if(DEFINED DATA_INSTALL_DIR)
-    set(SHAREPATH ${DATA_INSTALL_DIR}/hedgewars/)
-else()
-    set(SHAREPATH share/hedgewars/)
-endif()
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-if(WIN32)
-    set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
-    link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
-endif(WIN32)
-
-
 #server discovery
 if(NOT NOSERVER)
     if(GHC)
@@ -309,6 +312,7 @@ if(WIN32 AND NOT UNIX)
     set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
     set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")
     set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY "${target_binary_install_dir}")
     set(CPACK_GENERATOR "ZIP;NSIS")
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "hedgewars")
 else(WIN32 AND NOT UNIX)

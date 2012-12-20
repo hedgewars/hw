@@ -29,7 +29,7 @@ if (APPLE)
     string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
 
     #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
 
     if(NOT NOPNG)
         #get the neme of the library (harmelss if it is static)

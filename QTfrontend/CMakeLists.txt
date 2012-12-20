@@ -43,23 +43,20 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-
-if(WIN32 AND NOT UNIX)
-    set(HEDGEWARS_BINDIR ".")
-    set(HEDGEWARS_DATADIR "../share/")
-    add_definitions(-DUSE_XFIRE)
+#directory containing hw executables
+set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX}/${target_binary_install_dir})
+#directory for resources, relative to the one above on certain platforms/configurations
+if(DEFINED DATA_INSTALL_DIR OR WIN32 OR APPLE)
+    set(HEDGEWARS_DATADIR ${SHAREPATH})
 else()
-    set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
-    if(DEFINED DATA_INSTALL_DIR)
-        set(HEDGEWARS_DATADIR ${DATA_INSTALL_DIR})
-    else()
-        set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
-    endif()
-    #only the cocoa version of qt supports building 64 bit apps
-    if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
-        message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
-    endif()
+    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH}/)
 endif()
+
+#only the cocoa version of qt supports building 64 bit apps
+if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
+    message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
+endif()
+#endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
@@ -136,7 +133,7 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
-if(BUILD_ENGINE_LIBRARY)
+if(${BUILD_ENGINE_LIBRARY})
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     set(HW_LINK_LIBS ${hwlibname} ${HW_LINK_LIBS})
@@ -180,7 +177,7 @@ add_executable(hedgewars ${console_access}
     )
 
 if((UNIX AND NOT APPLE) AND ${BUILD_ENGINE_LIBRARY})
-    set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_dir}")
+    set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}")
 endif()
 
 set(HW_LINK_LIBS
@@ -212,5 +209,5 @@ if (NOT CROSSAPPLE)
 endif()
 
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
 

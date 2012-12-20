@@ -90,7 +90,7 @@ set(engine_sources
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
-if(BUILD_ENGINE_LIBRARY)
+if(${BUILD_ENGINE_LIBRARY})
     message(WARNING "Engine will be built as library (experimental)")
     set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
 
@@ -103,7 +103,10 @@ if(BUILD_ENGINE_LIBRARY)
     if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
         set(pascal_flags "-k-no_order_inits" ${pascal_flags})
     endif()
-endif(BUILD_ENGINE_LIBRARY)
+    set(destination_dir ${target_library_install_dir})
+else(${BUILD_ENGINE_LIBRARY})
+    set(destination_dir ${target_binary_install_dir})
+endif(${BUILD_ENGINE_LIBRARY})
 
 
 # Check Freepascal version
@@ -125,13 +128,13 @@ if(APPLE)
     endif()
 
     #on OSX we need to provide the SDL_main() function when building as executable
-    if(NOT BUILD_ENGINE_LIBRARY)
+    if(NOT ${BUILD_ENGINE_LIBRARY})
         #let's look for the installed sdlmain file; if it is not found, let's build our own
         find_package(SDL REQUIRED)
         #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-        string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+        string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
         #find libsdmain.a
-        find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_dir}/Resources/)
+        find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_library_only}/Resources/)
 
         if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
             include_directories(${SDL_INCLUDE_DIR})
@@ -187,7 +190,7 @@ if(NOT NOVIDEOREC)
             # there are some problems with linking our avwrapper as static lib, so link it as shared
             add_library(avwrapper SHARED avwrapper.c)
             target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
-            install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_dir})
+            install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
         ELSE()
             add_library(avwrapper STATIC avwrapper.c)
             set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
@@ -252,4 +255,4 @@ if((FPC_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
     add_dependencies(${engine_output_name} ENGINECLEAN)
 endif()
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${target_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})

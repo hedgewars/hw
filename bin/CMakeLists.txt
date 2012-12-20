@@ -5,5 +5,5 @@ if(WIN32 AND NOT UNIX)
 	install(FILES
 		${DLLs}
 		${ICOs}
-		DESTINATION bin)
+		DESTINATION ${target_library_install_dir})
 endif(WIN32 AND NOT UNIX)
