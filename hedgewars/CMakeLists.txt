@@ -224,6 +224,11 @@ else()
             DEPENDS ${engine_sources}
             )
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
+        add_custom_command(TARGET hwengine.${build_arch} POST_BUILD
+            COMMAND "install_name_tool"
+            ARGS -id @executable_path/../Frameworks/${engine_output_name}
+                ${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}
+            )
     endforeach()
 
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"

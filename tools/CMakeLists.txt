@@ -37,6 +37,11 @@ if (APPLE)
     endif()
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
+    if(${BUILD_ENGINE_LIBRARY})
+        set(engine_full_path "${frameworks_dir}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    else()
+        set(engine_full_path "${CMAKE_INSTALL_PREFIX}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+    endif()
 
     #this tool is present in qt 4.5 but only if you compile from sources
     #from qt 4.6 is present also in the binary version
