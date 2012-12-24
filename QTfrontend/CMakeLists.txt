@@ -41,8 +41,6 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-#directory containing hw executables
-set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX}/${target_binary_install_dir})
 #directory for resources, relative to the one above on certain platforms/configurations
 if(DEFINED DATA_INSTALL_DIR OR WIN32 OR APPLE)
     set(HEDGEWARS_DATADIR ${SHAREPATH})

@@ -175,8 +175,13 @@ int main(int argc, char *argv[])
     if(parsedArgs.contains("config-dir"))
     {
         QFileInfo f(parsedArgs["config-dir"]);
-        *cConfigDir = f.absoluteFilePath();
+        cfgdir->setPath(f.absoluteFilePath());
         custom_config = true;
+    }
+    else
+    {
+        cfgdir->setPath(QDir::homePath());
+        custom_config = false;
     }
 
     app.setStyle(new QPlastiqueStyle());
@@ -190,14 +195,10 @@ int main(int argc, char *argv[])
     qRegisterMetaType<HWTeam>("HWTeam");
 
     // workaround over NSIS installer which modifies the install path
-    bindir->cd("./");
+    //bindir->cd("./");
+    bindir->cd(QCoreApplication::applicationDirPath());
 
-    if(cConfigDir->length() == 0)
-        cfgdir->setPath(cfgdir->homePath());
-    else
-        cfgdir->setPath(*cConfigDir);
-
-    if(cConfigDir->length() == 0)
+    if(custom_config == false)
     {
 #ifdef __APPLE__
         checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
