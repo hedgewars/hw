@@ -314,23 +314,43 @@ QStringList HWGame::getArguments()
 {
     QStringList arguments;
     QRect resolution = config->vid_Resolution();
-    arguments << cfgdir->absolutePath();
-    arguments << QString::number(resolution.width());
-    arguments << QString::number(resolution.height());
-    arguments << QString::number(config->bitDepth()); // bpp
+    QString nick = config->netNick().toUtf8().toBase64();
+
+    arguments << "--internal"; //Must be passed as first argument
+    arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
-    arguments << (config->vid_Fullscreen() ? "1" : "0");
-    arguments << (config->isSoundEnabled() ? "1" : "0");
-    arguments << (config->isMusicEnabled() ? "1" : "0");
-    arguments << QString::number(config->volume()); // sound volume
-    arguments << QString::number(config->timerInterval());
+    arguments << "--prefix";
     arguments << datadir->absolutePath();
-    arguments << (config->isShowFPSEnabled() ? "1" : "0");
-    arguments << (config->isAltDamageEnabled() ? "1" : "0");
-    arguments << config->netNick().toUtf8().toBase64();
-    arguments << QString::number(config->translateQuality());
-    arguments << QString::number(config->stereoMode());
+    arguments << "--user-prefix";
+    arguments << cfgdir->absolutePath();
+    arguments << "--locale";
     arguments << tr("en.txt");
+    arguments << "--frame-interval";
+    arguments << QString::number(config->timerInterval());
+    arguments << "--volume";
+    arguments << QString::number(config->volume());
+    arguments << "--width";
+    arguments << QString::number(resolution.width());
+    arguments << "--height";
+    arguments << QString::number(resolution.height());
+    arguments << "--raw-quality";
+    arguments << QString::number(config->translateQuality());
+    arguments << "--stereo";
+    arguments << QString::number(config->stereoMode());
+    if (config->vid_Fullscreen())
+        arguments << "--fullscreen";
+    if (config->isShowFPSEnabled())
+        arguments << "--showfps";
+    if (config->isAltDamageEnabled())
+        arguments << "--altdmg";
+    if (!config->isSoundEnabled())
+        arguments << "--nosound";
+    if (!config->isMusicEnabled())
+        arguments << "--nomusic";
+    if (!nick.isEmpty()) {
+        arguments << "--nick";
+        arguments << nick;
+    }
 
     return arguments;
 }

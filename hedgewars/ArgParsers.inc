@@ -16,26 +16,91 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
 
-
-procedure internalStartGameWithParameters();
-var tmp: LongInt;
+procedure GciEasterEgg;
 begin
-    UserPathPrefix:= ParamStr(1);
-    cScreenWidth:= StrToInt(ParamStr(2));
-    cScreenHeight:= StrToInt(ParamStr(3));
-    //cBits:= StrToInt(ParamStr(4));
-    ipcPort:= StrToInt(ParamStr(5));
-    cFullScreen:= ParamStr(6) = '1';
-    SetSound(ParamStr(7) = '1');
-    SetMusic(ParamStr(8) = '1');
-    SetVolume(StrToInt(ParamStr(9)));
-    cTimerInterval:= StrToInt(ParamStr(10));
-    PathPrefix:= ParamStr(11);
-    cShowFPS:= ParamStr(12) = '1';
-    cAltDamage:= ParamStr(13) = '1';
-    UserNick:= DecodeBase64(ParamStr(14));
-    cReducedQuality:= StrToInt(ParamStr(15));
-    tmp:= StrToInt(ParamStr(16));
+    WriteLn(stdout, '                                                                ');
+    WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
+    WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
+    WriteLn(stdout, '     /\\\               /\\\/               \/\\\               ');
+    WriteLn(stdout, '     \/\\\    /\\\\\\\  /\\\                 \/\\\              ');
+    WriteLn(stdout, '      \/\\\   \/////\\\ \/\\\                 \/\\\             ');
+    WriteLn(stdout, '       \/\\\       \/\\\ \//\\\                \/\\\            ');
+    WriteLn(stdout, '        \/\\\       \/\\\  \///\\\              \/\\\           ');
+    WriteLn(stdout, '         \/\\\\\\\\\\\\\/     \////\\\\\\\\\  /\\\\\\\\\\\      ');
+    WriteLn(stdout, '          \/////////////          \/////////  \///////////      ');
+    WriteLn(stdout, '                                                                ');
+    WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
+    WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
+    WriteLn(stdout, '                                                                ');
+end;
+
+procedure DisplayUsage;
+begin
+    WriteLn(stdout, 'Usage: hwengine <path to replay file> [options]');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'where [options] can be any of the following:');
+    WriteLn(stdout, ' --prefix [path to folder]');
+    WriteLn(stdout, ' --user-prefix [path to folder]');
+    WriteLn(stdout, ' --locale [name of language file]');
+    WriteLn(stdout, ' --nick [string]');
+    WriteLn(stdout, ' --width [screen width in pixels]');
+    WriteLn(stdout, ' --height [screen height in pixels]');
+    WriteLn(stdout, ' --volume [sound level]');
+    WriteLn(stdout, ' --frame-interval [milliseconds]');
+    Writeln(stdout, ' --stereo [value]');
+    WriteLn(stdout, ' --raw-quality [flags]');
+    WriteLn(stdout, ' --low-quality');
+    WriteLn(stdout, ' --nomusic');
+    WriteLn(stdout, ' --nosound');
+    WriteLn(stdout, ' --fullscreen');
+    WriteLn(stdout, ' --showfps');
+    WriteLn(stdout, ' --altdmg');
+    WriteLn(stdout, ' --stats-only');
+    WriteLn(stdout, ' --help');
+    WriteLn(stdout, '');
+    WriteLn(stdout, 'For more detailed help and examples go to:');
+    WriteLn(stdout, 'http://code.google.com/p/hedgewars/wiki/CommandLineOptions');
+    GameType:= gmtSyntax;
+end;
+
+procedure setDepth(var paramIndex: LongInt);
+begin
+    WriteLn(stdout, 'WARNING: --depth is a deprecated command, which could be removed in a future version!');
+    WriteLn(stdout, '         This option no longer does anything, please consider removing it');
+    WriteLn(stdout, '');
+   inc(ParamIndex);
+end;
+
+procedure statsOnlyGame;
+begin
+    cOnlyStats:= true;
+    cReducedQuality:= $FFFFFFFF xor rqLowRes;
+    SetSound(false);
+    SetMusic(false);
+    SetVolume(0);
+end;
+
+procedure setIpcPort(port: LongInt; var wrongParameter:Boolean);
+begin
+    if isInternal then
+        ipcPort := port
+    else
+        begin
+        WriteLn(stderr, 'ERROR: use of --port is not allowed');
+        wrongParameter := true;
+        end
+end;
+
+function parseNick(nick: String): String;
+begin
+    if isInternal then
+        parseNick:= DecodeBase64(nick)
+    else
+        parseNick:= nick;
+end;
+
+procedure setStereoMode(tmp: LongInt);
+begin
     GrayScale:= false;
 {$IFDEF USE_S3D_RENDERING}
     if (tmp > 9) and (tmp < 16) then
@@ -51,50 +116,23 @@ begin
         // any other mode
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
 {$ELSE}
-	cStereoMode:= smNone;
+    cStereoMode:= smNone;
 {$ENDIF}
-    cLocaleFName:= ParamStr(17);
 end;
 
+procedure startVideoRecording(var paramIndex: LongInt);
+begin
 {$IFDEF USE_VIDEO_RECORDING}
-procedure internalStartVideoRecordingWithParameters();
-begin
-    internalStartGameWithParameters();
     GameType:= gmtRecord;
-    cVideoFramerateNum:= StrToInt(ParamStr(18));
-    cVideoFramerateDen:= StrToInt(ParamStr(19));
-    RecPrefix:= ParamStr(20);
-    cAVFormat:= ParamStr(21);
-    cVideoCodec:= ParamStr(22);
-    cVideoQuality:= StrToInt(ParamStr(23));
-    cAudioCodec:= ParamStr(24);
-end;
+    inc(paramIndex);
+    cVideoFramerateNum:= StrToInt(ParamStr(paramIndex)); inc(paramIndex);
+    cVideoFramerateDen:= StrToInt(ParamStr(paramIndex)); inc(paramIndex);
+    RecPrefix:= ParamStr(paramIndex);                    inc(paramIndex);
+    cAVFormat:= ParamStr(paramIndex);                    inc(paramIndex);
+    cVideoCodec:= ParamStr(paramIndex);                  inc(paramIndex);
+    cVideoQuality:= StrToInt(ParamStr(paramIndex));      inc(paramIndex);
+    cAudioCodec:= ParamStr(paramIndex);                  inc(paramIndex);
 {$ENDIF}
-
-procedure DisplayUsage;
-begin
-    WriteLn(stdout, 'Usage: hwengine <path to replay file> [options]');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'where [options] can be any of the following:');
-    WriteLn(stdout, ' --prefix [path to folder]');
-    WriteLn(stdout, ' --user-prefix [path to folder]');
-    WriteLn(stdout, ' --locale [name of language file]');
-    WriteLn(stdout, ' --width [screen width in pixels]');
-    WriteLn(stdout, ' --height [screen height in pixels]');
-    WriteLn(stdout, ' --volume [sound level]');
-    WriteLn(stdout, ' --frame-interval [milliseconds]');
-    WriteLn(stdout, ' --raw-quality [flags]');
-    WriteLn(stdout, ' --low-quality');
-    WriteLn(stdout, ' --nomusic');
-    WriteLn(stdout, ' --nosound');
-    WriteLn(stdout, ' --fullscreen');
-    WriteLn(stdout, ' --showfps');
-    WriteLn(stdout, ' --altdmg');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, ' --help');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'For more detailed help and examples go to:');
-    WriteLn(stdout, 'http://code.google.com/p/hedgewars/wiki/CommandLineOptions');
 end;
 
 function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
@@ -122,15 +160,16 @@ procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var par
 
 function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
 const videoArray: Array [1..3] of String = ('--width','--height','--depth');
-const audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
-const otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-const mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
-const allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--time','--lowquality');
-const reallyAll: array[0..22] of shortstring = (
+      audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
+      otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
+      mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
+      reallyAll: array[0..28] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--width', '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
-                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality',
+                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
-                '--stats-only', '--gci', '--help');
+  {internal}    '--internal', '--port', '--recorder', '--landpreview',
+  {misc}        '--stats-only', '--gci', '--help');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -155,47 +194,32 @@ begin
         {--altdmg}         11 : cAltDamage     := true;
         {--low-quality}    12 : cReducedQuality:= $FFFFFFFF xor rqLowRes;
         {--raw-quality}    13 : cReducedQuality:= getLongIntParameter(arg, paramIndex, parseParameter);
+        {--stereo}         14 : setStereoMode   ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nick}           15 : UserNick       := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
-        {--depth}          14 : {do nothing};
-        {--set-video}      15 : parseClassicParameter(videoArray,3,paramIndex);
-        {--set-audio}      16 : parseClassicParameter(audioArray,3,paramIndex);
-        {--set-other}      17 : parseClassicParameter(otherArray,3,paramIndex);
-        {--set-multimedia} 18 : parseClassicParameter(mediaArray,8,paramIndex);
-        {--set-everything} 19 : parseClassicParameter(allArray,12,paramIndex);
+        {--depth}          16 : setDepth(paramIndex);
+        {--set-video}      17 : parseClassicParameter(videoArray,3,paramIndex);
+        {--set-audio}      18 : parseClassicParameter(audioArray,3,paramIndex);
+        {--set-other}      19 : parseClassicParameter(otherArray,3,paramIndex);
+        {--set-multimedia} 20 : parseClassicParameter(mediaArray,8,paramIndex);
+        {--set-everything} 21 : parseClassicParameter(allArray,12,paramIndex);
+        {"internal" options}
+        {--internal}       22 : {note it, but do nothing};
+        {--port}            23 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
+        {--recorder}       24 : startVideoRecording(paramIndex);
+        {--landpreview}    25 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}     20 : begin
-                                cOnlyStats:= true;
-                                cReducedQuality:= $FFFFFFFF xor rqLowRes;
-                                SetSound(false);
-                                end;
-        {--gci}            21 : begin            //     We had to make up all this saved space some how...     \\
-                                WriteLn(stdout, '                                                                ');
-                                WriteLn(stdout, '      /\\\\\\\\\\\\        /\\\\\\\\\  /\\\\\\\\\\\             ');
-                                WriteLn(stdout, '     /\\\//////////      /\\\////////  \/////\\\///             ');
-                                WriteLn(stdout, '     /\\\               /\\\/               \/\\\               ');
-                                WriteLn(stdout, '     \/\\\    /\\\\\\\  /\\\                 \/\\\              ');
-                                WriteLn(stdout, '      \/\\\   \/////\\\ \/\\\                 \/\\\             ');
-                                WriteLn(stdout, '       \/\\\       \/\\\ \//\\\                \/\\\            ');
-                                WriteLn(stdout, '        \/\\\       \/\\\  \///\\\              \/\\\           ');
-                                WriteLn(stdout, '         \/\\\\\\\\\\\\\/     \////\\\\\\\\\  /\\\\\\\\\\\      ');
-                                WriteLn(stdout, '          \/////////////          \/////////  \///////////      ');
-                                WriteLn(stdout, '                                                                ');
-                                WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
-                                WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
-                                WriteLn(stdout, '                                                                ');
-                                end;
-        {--help}           22 : begin
-                                DisplayUsage();
-                                GameType:= gmtSyntax;
-                                end;
+        {--stats-only}     26 : statsOnlyGame();
+        {--gci}            27 : GciEasterEgg();
+        {--help}           28 : DisplayUsage();
     else
         begin
         //Asusme the first "non parameter" is the replay file, anything else is invalid
-        if recordFileName = '' then
+        if (recordFileName = '') and (Copy(cmd,1,2) <> '--') then
             recordFileName := cmd
         else
             begin
-            WriteLn(stderr, 'ERROR: '+cmd+' is not a valid argument');
+            WriteLn(stderr, '"'+cmd+'" is not a valid option');
             parseParameter:= true;
             end;
         end;
@@ -204,7 +228,8 @@ end;
 
 procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
-    isBool: Boolean;
+    isBool, isValid: Boolean;
+    cmd, arg, newSyntax: String;
 begin
     WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
@@ -215,18 +240,31 @@ begin
     tmpInt:= 1;
     while (index < size) do
         begin
-        paramIndex:= paramIndex+1;
+        inc(paramIndex);
+        cmd:= cmdArray[index];
+        arg:= ParamStr(paramIndex);
+        isValid:= (cmd<>'--depth');
+
         // check if the parameter is a boolean one
-        isBool:= (cmdArray[index] = '--nomusic')
-            or (cmdArray[index] = '--nosound')
-            or (cmdArray[index] = '--fullscreen')
-            or (cmdArray[index] = '--showfps')
-            or (cmdArray[index] = '--altdmg')
-            or (cmdArray[index] = '--low-quality');
-        if (not isBool) or ((ParamStr(paramIndex)='1') and (cmdArray[index]<>'--nomusic') and (cmdArray[index]<>'--nosound')) then
-            parseParameter(cmdArray[index], ParamStr(paramIndex), tmpInt);
+        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg');
+        if isBool and (arg='0') then
+            isValid:= false;
+        if (cmd='--nomusic') or (cmd='--nosound') then
+            isValid:= not isValid;
+
+        if isValid then
+            begin
+            parseParameter(cmd, arg, tmpInt);
+            newSyntax += cmd + ' ';
+            if not isBool then
+                newSyntax += arg + ' ';
+            end;
         inc(index);
         end;
+    
+    WriteLn(stdout, 'Attempted to automatically convert to the new syntax:');
+    WriteLn(stdout, newSyntax);
+    WriteLn(stdout, '');
 end;
 
 procedure playReplayFileWithParameters;
@@ -242,60 +280,47 @@ begin
         inc(paramIndex);
         end;
     if wrongParameter = true then
-        begin
-        WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
         GameType:= gmtSyntax;
-        end
 end;
 
 procedure GetParams;
+//var tmpInt: LongInt;
 begin
     (*
     tmpInt:=0;
     while (tmpInt <= ParamCount) do
         begin
-        WriteLn(stdout,inttostr(tmpInt) + ': ' + ParamStr(tmpInt));
+        WriteLn(stdout, inttostr(tmpInt) + ': ' + ParamStr(tmpInt));
         inc(tmpInt);
         end;
     *)
 
-    if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
-    begin
-        PathPrefix := ParamStr(1);
-        ipcPort    := StrToInt(ParamStr(2));
-        GameType   := gmtLandPreview;
-        exit;
-    end;
-
-    //TODO: prepend something so that we can use a cDefaultParamNum of parameters
-    if ParamCount = cDefaultParamNum then
-    begin
-        internalStartGameWithParameters();
-        exit;
-    end
-{$IFDEF USE_VIDEO_RECORDING}
-    else if ParamCount = cVideorecParamNum then
-    begin
-        internalStartVideoRecordingWithParameters();
-        exit;
-    end
-{$ENDIF};
+    isInternal:= (ParamStr(1) = '--internal');
 
     UserPathPrefix := '.';
     PathPrefix     := cDefaultPathPrefix;
     recordFileName := '';
     playReplayFileWithParameters();
 
-    if (recordFileName = '') then
+    if (isInternal) and (ParamCount<=1) then
         begin
-        DisplayUsage();
-        GameType:= gmtSyntax;
+        WriteLn(stderr, '--internal should not be manually used');
+        GameType := gmtSyntax;
         end;
+
+    if (not isInternal) and (recordFileName = '') then
+        begin
+        WriteLn(stderr, 'You must specify a replay file');
+        GameType := gmtSyntax;
+        end
+    else if (recordFileName <> '') then
+        WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+
+    if (GameType = gmtSyntax) then
+        WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
+
     (*
     WriteLn(stdout,'PathPrefix:     ' + PathPrefix);
     WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
-    WriteLn(stdout,'recordFilename: ' + recordFilename);
     *)
 end;
-
-

@@ -48,7 +48,6 @@ class GameUIConfig : public QSettings
         bool appendDateTimeToRecordName();
         quint8 volume();
         quint8 timerInterval();
-        quint8 bitDepth();
         QString netNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
@@ -92,7 +91,6 @@ class GameUIConfig : public QSettings
     private:
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
-        quint8 depth;
 	QString temphash;
 };
 

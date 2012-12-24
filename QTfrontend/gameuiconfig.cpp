@@ -130,10 +130,6 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->leProxyLogin->setText(value("proxy/login", "").toString());
     Form->ui.pageOptions->leProxyPassword->setText(value("proxy/password", "").toString());
 
-    depth = HWApplication::desktop()->depth();
-    if (depth < 16) depth = 16;
-    else if (depth > 16) depth = 32;
-
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
@@ -447,11 +443,6 @@ bool GameUIConfig::isAutoUpdateEnabled()
 quint8 GameUIConfig::timerInterval()
 {
     return 35 - Form->ui.pageOptions->fpsedit->value();
-}
-
-quint8 GameUIConfig::bitDepth()
-{
-    return depth;
 }
 
 QString GameUIConfig::netNick()
