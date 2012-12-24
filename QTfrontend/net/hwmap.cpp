@@ -47,9 +47,12 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
 QStringList HWMap::getArguments()
 {
     QStringList arguments;
-    arguments << cfgdir->absolutePath();
+    arguments << "--internal";
+    arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
-    arguments << "landpreview";
+    arguments << "--user-prefix";
+    arguments << cfgdir->absolutePath();
+    arguments << "--landpreview";
     return arguments;
 }
 

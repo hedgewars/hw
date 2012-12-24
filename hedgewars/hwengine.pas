@@ -38,6 +38,7 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
 
+var isInternal: Boolean;
 
 {$IFDEF HWLIBRARY}
 procedure preInitEverything();
