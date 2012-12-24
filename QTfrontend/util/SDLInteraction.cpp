@@ -25,6 +25,8 @@
 #include "SDL_mixer.h"
 
 #include "HWApplication.h"
+#include "hwform.h" /* you know, we could just put a config singleton lookup function in gameuiconfig or something... */
+#include "gameuiconfig.h"
 
 #include "SDLInteraction.h"
 
@@ -186,14 +188,16 @@ void SDLInteraction::SDLAudioInit()
         return;
 
     SDL_Init(SDL_INIT_AUDIO);
-    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024);
-    m_audioInitialized = true;
+    if(!Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)) /* should we keep trying, or just turn off permanently? */
+        m_audioInitialized = true;
 }
 
 
 void SDLInteraction::playSoundFile(const QString & soundFile)
 {
+    if (!HWForm::config || !HWForm::config->isFrontendSoundEnabled()) return;
     SDLAudioInit();
+    if (!m_audioInitialized) return;
     if (!m_soundMap->contains(soundFile))
         m_soundMap->insert(soundFile, Mix_LoadWAV_RW(PHYSFSRWOPS_openRead(soundFile.toLocal8Bit().constData()), 1));
 
@@ -232,6 +236,7 @@ void SDLInteraction::startMusic()
         return;
 
     SDLAudioInit();
+    if (!m_audioInitialized) return;
 
     if (m_music == NULL)
         m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()));
