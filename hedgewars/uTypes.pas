@@ -103,7 +103,7 @@ type
             gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
-            gtNapalmBomb, gtSnowball, gtFlake, gtStructure, gtLandGun, gtTardis, // 61
+            gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
             gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
@@ -152,7 +152,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, amStructure, amLandGun, amIceGun, amKnife); // 54
+            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife); // 54
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -393,14 +393,26 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TClan = record
             Color: Longword;
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
-	    TeamsNumber: LongInt;{xymeng, org:LongWord}
+        TeamsNumber: LongInt;{xymeng, org:LongWord}
             TagTeamIndex: Longword;
             CurrTeam: LongWord;
             ClanHealth: LongInt;
             ClanIndex: LongInt;
-	    TurnNumber: LongInt;{xymeng, org:LongWord}
+        TurnNumber: LongInt;{xymeng, org:LongWord}
             Flawless: boolean;
             end;
+
+     cdeclPtr = procedure; cdecl;
+     cdeclIntPtr = procedure(num: LongInt); cdecl;
+     functionDoublePtr = function: Double;
+
+     TMobileRecord = record
+                     getScreenDPI: functionDoublePtr;
+                     PerformRumble: cdeclIntPtr;
+                     GameLoading: cdeclPtr;
+                     GameLoaded: cdeclPtr;
+                     SaveLoadingEnded: cdeclPtr;
+                     end;
 
      TAmmoStrId = (sidGrenade, sidClusterBomb, sidBazooka, sidBee, sidShotgun,
             sidPickHammer, sidSkip, sidRope, sidMine, sidDEagle,
@@ -414,11 +426,11 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            sidStructure, sidLandGun, sidIceGun, sidKnife);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
-            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady, 
+            sidNoEndTurn, sidNotYetAvailable, sidRoundSD, sidRoundsSD, sidReady,
             sidBounce1, sidBounce2, sidBounce3, sidBounce4, sidBounce5, sidBounce,
             sidMute);
 
@@ -429,17 +441,17 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     TGoalStrId = (gidCaption, gidSubCaption, gidForts, gidLowGravity, gidInvulnerable,
             gidVampiric, gidKarma, gidKing, gidPlaceHog, gidArtillery,
-            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer, 
-            gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival, 
+            gidSolidLand, gidSharedAmmo, gidMineTimer, gidNoMineTimer,
+            gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
 
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
     TDirtyTag = packed array of array of byte;
-				 
+
     TPreview  = packed array[0..127, 0..31] of byte;
-  
+
     PWidgetMovement = ^TWidgetMovement;
     TWidgetMovement = record
         animate   : Boolean;

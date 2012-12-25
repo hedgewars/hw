@@ -22,7 +22,6 @@ initDefines = Map.fromList [
 --    , ("WEBGL", "")
 --    , ("AI_MAINTHREAD", "")
     , ("ENDIAN_LITTLE", "")
-    , ("S3D_DISABLED", "")
     ]
 
 preprocess :: String -> String -> String -> IO String

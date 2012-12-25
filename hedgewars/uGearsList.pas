@@ -35,7 +35,82 @@ uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uTextures, uScript, uRenderUtils, uAI, uCollisions,
     uGearsRender, uGearsUtils, uDebug;
 
+const
+    GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (
+(*          gtFlame *)   amNothing
+(*       gtHedgehog *) , amNothing
+(*           gtMine *) , amMine
+(*           gtCase *) , amNothing
+(*     gtExplosives *) , amNothing
+(*        gtGrenade *) , amGrenade
+(*          gtShell *) , amBazooka
+(*          gtGrave *) , amNothing
+(*            gtBee *) , amBee
+(*    gtShotgunShot *) , amShotgun
+(*     gtPickHammer *) , amPickHammer
+(*           gtRope *) , amRope
+(*     gtDEagleShot *) , amDEagle
+(*       gtDynamite *) , amDynamite
+(*    gtClusterBomb *) , amClusterBomb
+(*        gtCluster *) , amClusterBomb
+(*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
+(*      gtFirePunch *) , amFirePunch
+(*    gtATStartGame *) , amNothing
+(*   gtATFinishGame *) , amNothing
+(*      gtParachute *) , amParachute
+(*      gtAirAttack *) , amAirAttack
+(*        gtAirBomb *) , amAirAttack
+(*      gtBlowTorch *) , amBlowTorch
+(*         gtGirder *) , amGirder
+(*       gtTeleport *) , amTeleport
+(*       gtSwitcher *) , amSwitch
+(*         gtTarget *) , amNothing
+(*         gtMortar *) , amMortar
+(*           gtWhip *) , amWhip
+(*       gtKamikaze *) , amKamikaze
+(*           gtCake *) , amCake
+(*      gtSeduction *) , amSeduction
+(*     gtWatermelon *) , amWatermelon
+(*     gtMelonPiece *) , amWatermelon
+(*    gtHellishBomb *) , amHellishBomb
+(*        gtWaterUp *) , amNothing
+(*          gtDrill *) , amDrill
+(*        gtBallGun *) , amBallgun
+(*           gtBall *) , amBallgun
+(*        gtRCPlane *) , amRCPlane
+(*gtSniperRifleShot *) , amSniperRifle
+(*        gtJetpack *) , amJetpack
+(*        gtMolotov *) , amMolotov
+(*          gtBirdy *) , amBirdy
+(*            gtEgg *) , amBirdy
+(*         gtPortal *) , amPortalGun
+(*          gtPiano *) , amPiano
+(*        gtGasBomb *) , amGasBomb
+(*    gtSineGunShot *) , amSineGun
+(*   gtFlamethrower *) , amFlamethrower
+(*          gtSMine *) , amSMine
+(*    gtPoisonCloud *) , amNothing
+(*         gtHammer *) , amHammer
+(*      gtHammerHit *) , amHammer
+(*    gtResurrector *) , amResurrector
+(*    gtPoisonCloud *) , amNothing
+(*       gtSnowball *) , amSnowball
+(*          gtFlake *) , amNothing
+//(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
+(*        gtLandGun *) , amLandGun
+(*         gtTardis *) , amTardis
+(*         gtIceGun *) , amIceGun
+(*        gtAddAmmo *) , amNothing
+(*  gtGenericFaller *) , amNothing
+(*          gtKnife *) , amKnife
+    );
+
+
 var GCounter: LongWord = 0; // this does not get re-initialized, but should be harmless
+
+const
+    cUsualZ = 500;
+    cOnHHZ = 2000;
 
 procedure InsertGearToList(Gear: PGear);
 var tmp, ptmp: PGear;
@@ -86,7 +161,7 @@ inc(GCounter);
 
 AddFileLog('AddGear: #' + inttostr(GCounter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
 
-   
+
 New(gear);
 FillChar(gear^, sizeof(TGear), 0);
 gear^.X:= int2hwFloat(X);
@@ -108,7 +183,7 @@ gear^.Density:= _1;
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
 
-if CurrentHedgehog <> nil then 
+if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
@@ -119,7 +194,7 @@ if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
-    
+
 case Kind of
      gtGrenade,
      gtClusterBomb,
@@ -463,6 +538,7 @@ gtFlamethrower: begin
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;
                 end;
+{
    gtStructure: begin
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
@@ -473,6 +549,7 @@ gtFlamethrower: begin
                 gear^.Tag:= TotalRounds + 3;
                 gear^.Pos:= 1;
                 end;
+}
       gtIceGun: gear^.Health:= 1000;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
@@ -570,7 +647,7 @@ else if Gear^.Kind = gtHedgehog then
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
         //(Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
         (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan) then
-            with CurrentHedgehog^ do 
+            with CurrentHedgehog^ do
                 begin
                 inc(Team^.stats.AIKills);
                 FreeTexture(Team^.AIKillsTex);

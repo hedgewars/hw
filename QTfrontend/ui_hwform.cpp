@@ -30,7 +30,6 @@
 #include "pagefeedback.h"
 #include "pageingame.h"
 #include "pagescheme.h"
-#include "pagenettype.h"
 #include "pageroomslist.h"
 #include "pageinfo.h"
 #include "pagenetgame.h"
@@ -60,7 +59,7 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
     centralWidget = new QWidget(HWForm);
     centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
 
-    SetupPages(centralWidget, HWForm);
+    SetupPages(centralWidget);
 
     HWForm->setCentralWidget(centralWidget);
 
@@ -74,7 +73,7 @@ void Ui_HWForm::SetupFonts()
     font14 = new QFont("MS Shell Dlg", 14);
 }
 
-void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
+void Ui_HWForm::SetupPages(QWidget *Parent)
 {
     Pages = new QStackedLayout(Parent);
 
@@ -93,7 +92,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
     pageNet = new PageNet();
     Pages->addWidget(pageNet);
 
-    pageNetGame = new PageNetGame(Parent, HWForm->gameSettings);
+    pageNetGame = new PageNetGame(Parent);
     Pages->addWidget(pageNetGame);
 
     pageInfo = new PageInfo();
@@ -120,7 +119,7 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
     pageInGame = new PageInGame();
     Pages->addWidget(pageInGame);
 
-    pageRoomsList = new PageRoomsList(Parent, HWForm->gameSettings);
+    pageRoomsList = new PageRoomsList(Parent);
     Pages->addWidget(pageRoomsList);
 
     pageConnecting = new PageConnecting();
@@ -131,9 +130,6 @@ void Ui_HWForm::SetupPages(QWidget *Parent, HWForm *HWForm)
 
     pageAdmin = new PageAdmin();
     Pages->addWidget(pageAdmin);
-
-    pageNetType = new PageNetType();
-    Pages->addWidget(pageNetType);
 
     pageCampaign = new PageCampaign();
     Pages->addWidget(pageCampaign);

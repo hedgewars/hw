@@ -33,7 +33,7 @@ QPushButtonWithSound::QPushButtonWithSound(QWidget *parent) :
 
 void QPushButtonWithSound::buttonClicked()
 {
-    if ( !isSoundEnabled || !HWForm::config->isFrontendSoundEnabled())
+    if ( !isSoundEnabled )
         return;
 
     if (this->isEnabled())

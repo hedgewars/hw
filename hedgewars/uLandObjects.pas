@@ -37,6 +37,7 @@ uses uStore, uConsts, uConsole, uRandom, uSound, GLunit
 const MaxRects = 512;
       MAXOBJECTRECTS = 16;
       MAXTHEMEOBJECTS = 32;
+      cThemeCFGFilename = 'theme.cfg';
 
 type TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;
@@ -73,7 +74,7 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
 end;
-    
+
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
 var p: PLongwordArray;
     x, y: Longword;
@@ -103,7 +104,7 @@ for y:= 0 to Pred(Image^.h) do
                     LandPixels[cpY + y, cpX + x]:= p^[x];
                 end
             else
-                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
+                if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
             if ((Land[cpY + y, cpX + x] and $FF00) = 0) and ((p^[x] and AMask) <> 0) then
@@ -202,7 +203,7 @@ repeat
         inc(x2, 2);
         k:= CountNonZeroz(x2, y)
         until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
-        
+
         if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
@@ -219,7 +220,7 @@ begin
     while rr.x < x2 do
         begin
         // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
-        if (Theme = 'Snow') or (Theme = 'Christmas') then 
+        if (Theme = 'Snow') or (Theme = 'Christmas') then
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
         else
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
@@ -394,9 +395,9 @@ end;
 
 procedure CheckRect(Width, Height, x, y, w, h: LongWord);
 begin
-    if (x + w > Width) then 
+    if (x + w > Width) then
         OutError('Object''s rectangle exceeds image: x + w (' + inttostr(x) + ' + ' + inttostr(w) + ') > Width (' + inttostr(Width) + ')', true);
-    if (y + h > Height) then 
+    if (y + h > Height) then
         OutError('Object''s rectangle exceeds image: y + h (' + inttostr(y) + ' + ' + inttostr(h) + ') > Height (' + inttostr(Height) + ')', true);
 end;
 
@@ -494,7 +495,7 @@ while not pfsEOF(f) do
             c2.g:= t;
             c2.b:= t
             end;
-        ExplosionBorderColor:= (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift) or AMask; 
+        ExplosionBorderColor:= (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift) or AMask;
         end
     else if key = 'water-top' then
         begin

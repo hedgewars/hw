@@ -41,6 +41,9 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 implementation
 uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
+const
+    cSendEmptyPacketTime = 1000;
+
 type PCmd = ^TCmd;
      TCmd = packed record
             Next: PCmd;
@@ -122,6 +125,7 @@ case s[1] of
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
      'M': ParseCommand('landcheck ' + s, true);
+     'o': if fastUntilLag then ParseCommand('forcequit', true);
      'T': case s[2] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;
@@ -194,7 +198,7 @@ repeat
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-	       Delete(ss, 1, Succ(byte(ss[1])));
+           Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
 until i = 0;
@@ -219,7 +223,7 @@ if IPCSock <> nil then
     SendEmptyPacketTicks:= 0;
     if s[0]>#251 then
         s[0]:= #251;
-        
+
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
     AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
@@ -428,7 +432,7 @@ begin
     lastcmd:= nil;
     isPonged:= false;
     SocketString:= '';
-    
+
     hiTicks:= 0;
     SendEmptyPacketTicks:= 0;
 

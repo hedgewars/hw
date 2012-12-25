@@ -29,21 +29,23 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler,
-     uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uLandTexture, uCollisions,
-     uAILandMarks, SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers,
-     uLandPainted, uFloat, uPhysFSLayer
+uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
+     , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
+     , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
+     , uPhysFSLayer, uCursor
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      {$IFDEF WEBGL}, uWeb{$ENDIF}
      ;
 
+var isInternal: Boolean;
+
 {$IFDEF HWLIBRARY}
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(gameArgs: PPChar); cdecl; export;
+procedure Game(argc: LongInt; argv: PPChar); cdecl; export;
 procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
@@ -52,6 +54,8 @@ procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
+
+{$INCLUDE "ArgParsers.inc"}
 
 {$IFDEF WEBGL}
 procedure playFile(path: PChar); forward;
@@ -185,7 +189,7 @@ begin
 {$ENDIF}
 
         SDL_PumpEvents();
- 
+
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
@@ -199,7 +203,7 @@ begin
                 SDL_KEYUP:
                     if GameState <> gsChat then
                         ProcessKey(event.key);
-                    
+
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin
@@ -225,13 +229,13 @@ begin
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
                     end;
-                        
+
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
-                
+
                 SDL_FINGERDOWN:
                     onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-                
+
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 {$ELSE}
@@ -243,13 +247,19 @@ begin
                 SDL_KEYUP:
                     if GameState <> gsChat then
                         ProcessKey(event.key);
-                    
+
                 SDL_MOUSEBUTTONDOWN:
-                    ProcessMouse(event.button, true);
-                    
+                    if GameState = gsConfirm then
+                    begin
+                        resetPosition();
+                        ParseCommand('quit', true);
+                    end
+                    else
+                        ProcessMouse(event.button, true);
+
                 SDL_MOUSEBUTTONUP:
-                    ProcessMouse(event.button, false); 
-                    
+                    ProcessMouse(event.button, false);
+
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                     begin
@@ -258,7 +268,7 @@ begin
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
                     end;
-                        
+
                 SDL_VIDEORESIZE:
                 begin
                     // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
@@ -354,7 +364,7 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
+procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
@@ -365,24 +375,11 @@ var p: TPathType;
 begin
 {$IFDEF HWLIBRARY}
     preInitEverything();
-    cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
-    ipcPort:= StrToInt(gameArgs[0]);
-    cScreenWidth:= StrToInt(gameArgs[1]);
-    cScreenHeight:= StrToInt(gameArgs[2]);
-    cReducedQuality:= StrToInt(gameArgs[3]);
-    cLocaleFName:= gameArgs[4];
-    UserNick:= gameArgs[5];
-    SetSound(gameArgs[6] = '1');
-    SetMusic(gameArgs[7] = '1');
-    cAltDamage:= gameArgs[8] = '1';
-    PathPrefix:= gameArgs[9];
-    UserPathPrefix:= '../Documents';
-    recordFileName:= gameArgs[10];
+    parseCommandLine(argc, argv);
 {$ENDIF}
     initEverything(true);
-
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-    
+
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
@@ -402,7 +399,7 @@ begin
         InitOffscreenOpenGL()
     else
 {$ENDIF}
-        begin            
+        begin
         // show main window
         if cFullScreen then
             ParseCommand('fullscr 1', true)
@@ -460,7 +457,7 @@ begin
         exit;
     end;
 {$ENDIF}
-	
+
 {$IFDEF WEBGL}
     l := generateResourceList();
     clear_filelist_hook();
@@ -592,60 +589,6 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-///////////////////////////////////////////////////////////////////////////////
-procedure DisplayUsage;
-var i: LongInt;
-begin
-    WriteLn(stdout, 'Wrong argument format: correct configurations is');
-    WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'where [options] must be specified either as:');
-    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
-    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
-    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
-    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
-    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
-    WriteLn(stdout, '');
-    Write(stdout, 'PARSED COMMAND: ');
-    
-    for i:=0 to ParamCount do
-        Write(stdout, ParamStr(i) + ' ');
-        
-    WriteLn(stdout, '');
-end;
-
-///////////////////////////////////////////////////////////////////////////////
-{$INCLUDE "ArgParsers.inc"}
-
-procedure GetParams;
-begin
-    if (ParamCount < 3) then
-        GameType:= gmtSyntax
-    else
-        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
-            begin
-            ipcPort:= StrToInt(ParamStr(2));
-            GameType:= gmtLandPreview;
-            end
-        else
-            begin
-            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
-                playReplayFileWithParameters()
-            else
-                if ParamCount = cDefaultParamNum then
-                    internalStartGameWithParameters()
-{$IFDEF USE_VIDEO_RECORDING}
-                else if ParamCount = cVideorecParamNum then
-                    internalStartVideoRecordingWithParameters()
-{$ENDIF}
-                else
-                    playReplayFileWithParameters();
-            end
-end;
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
@@ -667,9 +610,8 @@ begin
 
     if GameType = gmtLandPreview then
         GenLandPreview()
-    else if GameType = gmtSyntax then
-        DisplayUsage()
-    else Game();
+    else if GameType <> gmtSyntax then
+        Game();
 
     // return 1 when engine is not called correctly
     {$IFDEF PAS2C}

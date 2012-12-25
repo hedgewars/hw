@@ -44,6 +44,7 @@
         <file>res/HedgewarsTitle.png</file>
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
+        <file>res/NetworkPlayDisabled.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
         <file>res/new.png</file>
@@ -145,5 +146,6 @@
         <file>res/chat/serveradmin_gray.png</file>
         <file>res/chat/lamp_off.png</file>
         <file>res/chat/ingame.png</file>
+	<file>res/html/about.html</file>
     </qresource>
 </RCC>

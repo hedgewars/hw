@@ -29,31 +29,39 @@
 
 #ifdef HWLIBRARY
 extern "C" void Game(char**arguments);
+extern "C" void GenLandPreview(int port);
 
-//NOTE: most likely subclassing QThread is wrong
-class EngineThread : public QThread
-{
-protected:
-    void run();
-};
 
-void EngineThread::run()
+EngineInstance::EngineInstance(QObject *parent)
+    : QObject(parent)
 {
-    char *args[12];
-    args[0] = "1";      //cShowFPS
-    args[1] = "65000";  //ipcPort
-    args[2] = "1024";   //cScreenWidth
-    args[3] = "768";    //cScreenHeight
-    args[4] = "0";      //cReducedQuality
-    args[5] = "en.txt"; //cLocaleFName
-    args[6] = "koda";   //UserNick
-    args[7] = "1";      //SetSound
-    args[8] = "1";      //SetMusic
-    args[9] = "0";      //cAltDamage
-    args[10]= "../Resources/hedgewars/Data";   //cPathPrefix
-    args[11]= NULL;     //recordFileName
-    Game(args);
+    port = 0;
 }
+
+EngineInstance::~EngineInstance()
+{
+}
+
+void EngineInstance::start()
+{
+#if 0
+    char *args[11];
+    args[0] = "65000";  //ipcPort
+    args[1] = "1024";   //cScreenWidth
+    args[2] = "768";    //cScreenHeight
+    args[3] = "0";      //cReducedQuality
+    args[4] = "en.txt"; //cLocaleFName
+    args[5] = "koda";   //UserNick
+    args[6] = "1";      //SetSound
+    args[7] = "1";      //SetMusic
+    args[8] = "0";      //cAltDamage
+    args[9]= datadir->absolutePath().toAscii().data(); //cPathPrefix
+    args[10]= NULL;     //recordFileName
+    Game(args);
+#endif
+    GenLandPreview(port);
+}
+
 #endif
 
 QList<TCPBase*> srvsList;
@@ -66,6 +74,7 @@ TCPBase::~TCPBase()
 
     if (IPCSocket)
         IPCSocket->deleteLater();
+
 }
 
 TCPBase::TCPBase(bool demoMode, QObject *parent) :
@@ -90,11 +99,8 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
             exit(0); // FIXME - should be graceful exit here (lower Critical -> Warning above when implemented)
         }
     }
-#ifdef HWLIBRARY
-    ipc_port=65000; //HACK
-#else
+
     ipc_port=IPCServer->serverPort();
-#endif
 }
 
 void TCPBase::NewConnection()
@@ -118,8 +124,17 @@ void TCPBase::RealStart()
     IPCSocket = 0;
 
 #ifdef HWLIBRARY
-    EngineThread engineThread;// = new EngineThread(this);
-    engineThread.start();
+    QThread *thread = new QThread;
+    EngineInstance *instance = new EngineInstance;
+    instance->port = IPCServer->serverPort();
+
+    instance->moveToThread(thread);
+
+    connect(thread, SIGNAL(started()), instance, SLOT(start(void)));
+    connect(instance, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(instance, SIGNAL(finished()), instance, SLOT(deleteLater()));
+    connect(instance, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    thread->start();
 #else
     QProcess * process;
     process = new QProcess();

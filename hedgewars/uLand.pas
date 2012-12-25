@@ -37,7 +37,7 @@ var digest: shortstring;
 
 procedure ResizeLand(width, height: LongWord);
 var potW, potH: LongInt;
-begin 
+begin
 potW:= toPowerOf2(width);
 potH:= toPowerOf2(height);
 if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
@@ -240,7 +240,7 @@ begin
     rightX:= (playWidth + ((LAND_WIDTH - playWidth) div 2)) - 1;
     topY:= LAND_HEIGHT - playHeight;
 
-    
+
     // HACK: force to only cavern even if a cavern map is invertable if cTemplateFilter = 4 ?
     if (cTemplateFilter = 4)
     or (Template.canInvert and (getrandom(2) = 0))
@@ -340,7 +340,7 @@ begin
     SDL_FreeSurface(tmpsurf);
     for x:= leftX+2 to rightX-2 do
         for y:= topY+2 to LAND_HEIGHT-3 do
-            if (Land[y, x] = 0) and 
+            if (Land[y, x] = 0) and
                (((Land[y, x-1] = lfBasic) and ((Land[y+1,x] = lfBasic)) or (Land[y-1,x] = lfBasic)) or
                ((Land[y, x+1] = lfBasic) and ((Land[y-1,x] = lfBasic) or (Land[y+1,x] = lfBasic)))) then
             begin
@@ -348,16 +348,16 @@ begin
                     begin
                     if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x-1]
-                        
+
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x+1]
-                        
+
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y-1, x]
-                        
+
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y+1, x];
-                        
+
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
                         LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
                     end;
@@ -372,25 +372,25 @@ begin
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x+1] = lfBasic) and (Land[y,x+2] = lfBasic)) or
                     ((Land[y+1, x] = lfBasic) and (Land[y+1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic)) or
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic))) then
-                    
+
                 begin
-                
+
                 if (cReducedQuality and rqBlurryLand) = 0 then
-                
+
                     begin
-                    
+
                     if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x-1]
-                        
+
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x+1]
-                        
+
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y+1, x]
-                        
+
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y-1, x];
-                        
+
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
                         LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
                     end;
@@ -488,7 +488,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
             for x:= 0 to Pred(tmpsurf^.w) do
             begin
                 // this an if instead of masking colours to avoid confusing map creators
-                if ((AMask and p^[x]) = 0) then 
+                if ((AMask and p^[x]) = 0) then
                     Land[cpY + y, cpX + x]:= 0
                 else if p^[x] = $FFFFFFFF then                  // white
                     Land[cpY + y, cpX + x]:= lfObject
@@ -524,8 +524,8 @@ end;
 
 procedure LoadMap;
 var tmpsurf : PSDL_Surface;
-    s	    : shortstring;
-    f	    : textfile;
+    s       : shortstring;
+    f       : textfile;
     mapName : shortstring = '';
 
 begin
@@ -556,7 +556,7 @@ BlitImageAndGenerateCollisionInfo(
     LAND_HEIGHT - tmpsurf^.h,
     tmpsurf^.w,
     tmpsurf);
-   
+
 SDL_FreeSurface(tmpsurf);
 
 LoadMask;
@@ -601,7 +601,7 @@ begin
             begin
             map:= cPathz[ptMapCurrent] + '/map.png';
             mask:= cPathz[ptMapCurrent] + '/mask.png';
-            if (not(FileExists(map)) and FileExists(mask)) then
+            if (not(pfsExists(map)) and pfsExists(mask)) then
                 begin
                 maskOnly:= true;
                 LoadMask;
@@ -635,7 +635,7 @@ else
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
-                if c > 1000 then // avoid accidental triggering
+                if c > (LAND_WIDTH div 2) then // avoid accidental triggering
                     begin
                     hasBorder:= true;
                     break;
@@ -697,7 +697,7 @@ if (GameFlags and gfDisableGirders) <> 0 then
 
 if (GameFlags and gfForts = 0) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
     AddObjects
-    
+
 else
     AddProgress();
 
@@ -753,7 +753,7 @@ begin
         rw:= rh*2;
         end;
     if rh < rw div 2 then rh:= rw * 2;
-    
+
     ox:= (rw-LAND_WIDTH) div 2;
     oy:= rh-LAND_HEIGHT;
 
@@ -769,7 +769,7 @@ begin
                 cbit:= bit * 8;
                 for yy:= y * lh to y * lh + 7 do
                     for xx:= x * lw + cbit to x * lw + cbit + 7 do
-                        if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0) 
+                        if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0)
                            and (Land[yy-oy, xx-ox] <> 0) then
                             inc(t);
                 if t > 8 then

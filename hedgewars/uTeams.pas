@@ -46,6 +46,7 @@ uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDeb
 
 var MaxTeamHealth: LongInt;
     GameOver: boolean;
+    NextClan: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
@@ -95,7 +96,7 @@ if not GameOver then
                             if (Gear <> nil) then
                                 Gear^.State:= gstWinner;
             if Flawless then
-                AddVoice(sndFlawless, Teams[0]^.voicepack) 
+                AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
@@ -577,8 +578,8 @@ end;
 
 procedure chBind(var id: shortstring);
 var KeyName, Modifier, tmp : shortstring;
-    b			   : LongInt;
-    i			   : Integer;
+    b              : LongInt;
+    i              : Integer;
 begin
 KeyName:= '';
 Modifier:= '';

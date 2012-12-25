@@ -21,7 +21,7 @@
 unit uSound;
 (*
  * This unit controls the sounds and music of the game.
- * Doesn't really do anything if isSoundEnabled = false.
+ * Doesn't really do anything if isSoundEnabled = false and isMusicEnabled = false
  *
  * There are three basic types of sound controls:
  *    Music        - The background music of the game:
@@ -120,6 +120,136 @@ var Volume: LongInt;
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
     isSEBackup: boolean;
+    VoiceList : array[0..7] of TVoice =  (
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil),
+                    ( snd: sndNone; voicepack: nil));
+    Soundz: array[TSound] of record
+            FileName: string[31];
+            Path    : TPathType;
+            end = (
+            (FileName:                         ''; Path: ptNone  ),// sndNone
+            (FileName:        'grenadeimpact.ogg'; Path: ptSounds),// sndGrenadeImpact
+            (FileName:            'explosion.ogg'; Path: ptSounds),// sndExplosion
+            (FileName:         'throwpowerup.ogg'; Path: ptSounds),// sndThrowPowerUp
+            (FileName:         'throwrelease.ogg'; Path: ptSounds),// sndThrowRelease
+            (FileName:               'splash.ogg'; Path: ptSounds),// sndSplash
+            (FileName:        'shotgunreload.ogg'; Path: ptSounds),// sndShotgunReload
+            (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndShotgunFire
+            (FileName:          'graveimpact.ogg'; Path: ptSounds),// sndGraveImpact
+            (FileName:           'mineimpact.ogg'; Path: ptSounds),// sndMineImpact
+            (FileName:             'minetick.ogg'; Path: ptSounds),// sndMineTicks
+            (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndMudballImpact
+            (FileName:           'pickhammer.ogg'; Path: ptSounds),// sndPickhammer
+            (FileName:                  'gun.ogg'; Path: ptSounds),// sndGun
+            (FileName:                  'bee.ogg'; Path: ptSounds),// sndBee
+            (FileName:                'Jump1.ogg'; Path: ptVoices),// sndJump1
+            (FileName:                'Jump2.ogg'; Path: ptVoices),// sndJump2
+            (FileName:                'Jump3.ogg'; Path: ptVoices),// sndJump3
+            (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
+            (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
+            (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
+            (FileName:          'JustYouWait.ogg'; Path: ptVoices),// sndJustYouWait
+            (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
+            (FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
+            (FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
+            (FileName:           'Firstblood.ogg'; Path: ptVoices),// sndFirstBlood
+            (FileName:               'Boring.ogg'; Path: ptVoices),// sndBoring
+            (FileName:               'Byebye.ogg'; Path: ptVoices),// sndByeBye
+            (FileName:             'Sameteam.ogg'; Path: ptVoices),// sndSameTeam
+            (FileName:               'Nutter.ogg'; Path: ptVoices),// sndNutter
+            (FileName:       'Reinforcements.ogg'; Path: ptVoices),// sndReinforce
+            (FileName:              'Traitor.ogg'; Path: ptVoices),// sndTraitor
+            (FileName:      'Youllregretthat.ogg'; Path: ptVoices),// sndRegret
+            (FileName:            'Enemydown.ogg'; Path: ptVoices),// sndEnemyDown
+            (FileName:               'Coward.ogg'; Path: ptVoices),// sndCoward
+            (FileName:                'Hurry.ogg'; Path: ptVoices),// sndHurry
+            (FileName:              'Watchit.ogg'; Path: ptVoices),// sndWatchIt
+            (FileName:             'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
+            (FileName:                'cake2.ogg'; Path: ptSounds),// sndCake
+            (FileName:                  'Ow1.ogg'; Path: ptVoices),// sndOw1
+            (FileName:                  'Ow2.ogg'; Path: ptVoices),// sndOw2
+            (FileName:                  'Ow3.ogg'; Path: ptVoices),// sndOw3
+            (FileName:                  'Ow4.ogg'; Path: ptVoices),// sndOw4
+            (FileName:           'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
+            (FileName:           'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
+            (FileName:           'Firepunch3.ogg'; Path: ptVoices),// sndFirepunch3
+            (FileName:           'Firepunch4.ogg'; Path: ptVoices),// sndFirepunch4
+            (FileName:           'Firepunch5.ogg'; Path: ptVoices),// sndFirepunch5
+            (FileName:           'Firepunch6.ogg'; Path: ptVoices),// sndFirepunch6
+            (FileName:                'Melon.ogg'; Path: ptVoices),// sndMelon
+            (FileName:              'Hellish.ogg'; Path: ptSounds),// sndHellish
+            (FileName:               'Yoohoo.ogg'; Path: ptSounds),// sndYoohoo
+            (FileName:              'rcplane.ogg'; Path: ptSounds),// sndRCPlane
+            (FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhipCrack
+            (FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds),// sndRideOfTheValkyries
+            (FileName:               'denied.ogg'; Path: ptSounds),// sndDenied
+            (FileName:               'placed.ogg'; Path: ptSounds),// sndPlaced
+            (FileName:          'baseballbat.ogg'; Path: ptSounds),// sndBaseballBat
+            (FileName:                'steam.ogg'; Path: ptSounds),// sndVaporize
+            (FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
+            (FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
+            (FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
+            (FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
+            (FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
+            (FileName:              'molotov.ogg'; Path: ptSounds),// sndMolotov
+            (FileName:            'Takecover.ogg'; Path: ptVoices),// sndCover
+            (FileName:                'Uh-oh.ogg'; Path: ptVoices),// sndUhOh
+            (FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
+            (FileName:                 'Nooo.ogg'; Path: ptVoices),// sndNooo
+            (FileName:                'Hello.ogg'; Path: ptVoices),// sndHello
+            (FileName:             'ropeshot.ogg'; Path: ptSounds),// sndRopeShot
+            (FileName:           'ropeattach.ogg'; Path: ptSounds),// sndRopeAttach
+            (FileName:          'roperelease.ogg'; Path: ptSounds),// sndRopeRelease
+            (FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
+            (FileName:              'Victory.ogg'; Path: ptVoices),// sndVictory
+            (FileName:             'Flawless.ogg'; Path: ptVoices),// sndFlawless
+            (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
+            (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
+            (FileName:           'lowgravity.ogg'; Path: ptSounds),// sndLowGravity
+            (FileName:           'hell_growl.ogg'; Path: ptSounds),// sndHellishImpact1
+            (FileName:            'hell_ooff.ogg'; Path: ptSounds),// sndHellishImpact2
+            (FileName:              'hell_ow.ogg'; Path: ptSounds),// sndHellishImpact3
+            (FileName:             'hell_ugh.ogg'; Path: ptSounds),// sndHellishImpact4
+            (FileName:          'melonimpact.ogg'; Path: ptSounds),// sndMelonImpact
+            (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndDroplet1
+            (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
+            (FileName:             'Droplet3.ogg'; Path: ptSounds),// sndDroplet3
+            (FileName:                  'egg.ogg'; Path: ptSounds),// sndEggBreak
+            (FileName:             'drillgun.ogg'; Path: ptSounds),// sndDrillRocket
+            (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
+            (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
+            (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
+            (FileName:              'Whistle.ogg'; Path: ptSounds),// sndWhistle
+            (FileName:             'beewater.ogg'; Path: ptSounds),// sndBeeWater
+            (FileName:                   '1C.ogg'; Path: ptSounds),// sndPiano0
+            (FileName:                   '2D.ogg'; Path: ptSounds),// sndPiano1
+            (FileName:                   '3E.ogg'; Path: ptSounds),// sndPiano2
+            (FileName:                   '4F.ogg'; Path: ptSounds),// sndPiano3
+            (FileName:                   '5G.ogg'; Path: ptSounds),// sndPiano4
+            (FileName:                   '6A.ogg'; Path: ptSounds),// sndPiano5
+            (FileName:                   '7B.ogg'; Path: ptSounds),// sndPiano6
+            (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
+            (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
+            (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
+            (FileName:              'sinegun.ogg'; Path: ptSounds),// sndSineGun
+            (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
+            (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
+            (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
+            (FileName:               'hammer.ogg'; Path: ptSounds),// sndWhack
+            (FileName:           'Comeonthen.ogg'; Path: ptVoices),// sndComeonthen
+            (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
+            (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
+            (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
+            (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
+            (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
+            );
+
 
 
 function  AskForVoicepack(name: shortstring): Pointer;
@@ -157,26 +287,31 @@ end;
 
 procedure InitSound;
 const channels: LongInt = {$IFDEF MOBILE}1{$ELSE}2{$ENDIF};
+var success: boolean;
 begin
-    if not isSoundEnabled then
+    if not (isSoundEnabled or isMusicEnabled) then
         exit;
     WriteToConsole('Init sound...');
-    isSoundEnabled:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
+    success:= SDL_InitSubSystem(SDL_INIT_AUDIO) >= 0;
 
-    if isSoundEnabled then
-        isSoundEnabled:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
+    if success then
+        success:= Mix_OpenAudio(44100, $8010, channels, 1024) = 0;
 
-    if isSoundEnabled then
+    if success then
         WriteLnToConsole(msgOK)
     else
+    begin
         WriteLnToConsole(msgFailed);
+        isSoundEnabled:= false;
+        isMusicEnabled:= false;
+    end;
 
     WriteToConsole('Init SDL_mixer... ');
     SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
-    ChangeVolume(cInitVolume);	
+    ChangeVolume(cInitVolume);
 end;
 
 procedure ResetSound;
@@ -256,7 +391,7 @@ begin
         if (voicepack^.chunks[snd] = nil) and (Soundz[snd].Path = ptVoices) and (Soundz[snd].FileName <> '') then
             begin
             s:= cPathz[Soundz[snd].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
-            if (not FileExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
+            if (not pfsExists(s)) and (snd in [sndFirePunch2, sndFirePunch3, sndFirePunch4, sndFirePunch5, sndFirePunch6]) then
                 s:= cPathz[Soundz[sndFirePunch1].Path] + '/' + voicepack^.name + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             voicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
@@ -289,7 +424,7 @@ begin
     if (snd = sndVictory) or (snd = sndFlawless) then
         begin
         Mix_FadeOutChannel(-1, 800);
-        for i:= 0 to 7 do
+        for i:= 0 to High(VoiceList) do
             VoiceList[i].snd:= sndNone;
         LastVoice.snd:= sndNone;
         end;
@@ -311,9 +446,9 @@ begin
     if (not isSoundEnabled) or fastUntilLag or ((LastVoice.snd <> sndNone) and (lastChan[LastVoice.snd] <> -1) and (Mix_Playing(lastChan[LastVoice.snd]) <> 0)) then
         exit;
     i:= 0;
-    while (i<8) and (VoiceList[i].snd = sndNone) do
+    while (i<High(VoiceList)) and (VoiceList[i].snd = sndNone) do
         inc(i);
-    
+
     if (VoiceList[i].snd <> sndNone) then
         begin
         LastVoice.snd:= VoiceList[i].snd;
@@ -413,7 +548,7 @@ end;
 procedure PlayMusic;
 var s: shortstring;
 begin
-    if (not isSoundEnabled) or (MusicFN = '') or (not isMusicEnabled) then
+    if (MusicFN = '') or (not isMusicEnabled) then
         exit;
 
     s:= '/Music/' + MusicFN;
@@ -434,7 +569,7 @@ end;
 function ChangeVolume(voldelta: LongInt): LongInt;
 begin
     ChangeVolume:= 0;
-    if (not isSoundEnabled) or ((voldelta = 0) and (not (cInitVolume = 0))) then
+    if not (isSoundEnabled or isMusicEnabled) or ((voldelta = 0) and (not (cInitVolume = 0))) then
         exit;
 
     inc(Volume, voldelta);
@@ -474,7 +609,7 @@ end;
 
 procedure MuteAudio;
 begin
-    if not isSoundEnabled then
+    if not (isSoundEnabled or isMusicEnabled) then
         exit;
 
     if (isAudioMuted) then
@@ -589,7 +724,7 @@ begin
                 voicepacks[t].chunks[i]:= nil;
 
     (* on MOBILE SDL_mixer has to be compiled against Tremor (USE_OGG_TREMOR)
-       or sound files bigger than 32k will lockup the game *)
+       or sound files bigger than 32k will lockup the game on slow cpu *)
     for i:= Low(TSound) to High(TSound) do
         defVoicepack^.chunks[i]:= nil;
 
@@ -597,7 +732,7 @@ end;
 
 procedure freeModule;
 begin
-    if isSoundEnabled then
+    if isSoundEnabled or isMusicEnabled then
         ReleaseSound(true);
 end;
 

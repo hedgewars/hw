@@ -36,7 +36,7 @@ procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 
-// loads an image from the game's data files
+// loads an image from the games data files
 function  LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 // like LoadDataImage but uses altPath as fallback-path if file not found/loadable in path
 function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -70,7 +70,7 @@ procedure BeginWater;
 procedure EndWater;
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
+uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
     , uPhysFSLayer
     , uDebug
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
@@ -85,6 +85,9 @@ var MaxTextureSize: LongInt;
 {$ELSE}
     SDLPrimSurface: PSDL_Surface;
 {$ENDIF}
+    squaresize : LongInt;
+    numsquares : LongInt;
+    ProgrTex: PTexture;
 
 {$IFDEF GL2}
     shaderMain: GLuint;
@@ -96,6 +99,10 @@ var MaxTextureSize: LongInt;
 {$IFDEF WEBGL}
     OpenGLSetupedBefore : boolean;
 {$ENDIF}
+
+const
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -219,7 +226,7 @@ for t:= 0 to Pred(TeamsCount) do
                     foundBot:= true;
                     // initially was going to do the highest botlevel of the team, but for now, just apply if entire team has same bot level
                     if maxLevel = -1 then maxLevel:= BotLevel
-                    else if (maxLevel > 0) and (maxLevel <> BotLevel) then maxLevel:= 0; 
+                    else if (maxLevel > 0) and (maxLevel <> BotLevel) then maxLevel:= 0;
                     //if (maxLevel > 0) and (BotLevel < maxLevel) then maxLevel:= BotLevel
                     end
                 else if Gear <> nil then  maxLevel:= 0;
@@ -227,7 +234,7 @@ for t:= 0 to Pred(TeamsCount) do
         if foundBot then
             begin
             // disabled the plain flag - I think it looks ok even w/ full bars obscuring CPU
-            //if (maxLevel > 0) and (maxLevel < 3) then Flag:= 'cpu_plain' else 
+            //if (maxLevel > 0) and (maxLevel < 3) then Flag:= 'cpu_plain' else
             Flag:= 'cpu'
             end
         else if (Flag = 'cpu') or (Flag = 'cpu_plain') then
@@ -237,10 +244,10 @@ for t:= 0 to Pred(TeamsCount) do
         TryDo(flagsurf <> nil, 'Failed to load flag "' + Flag + '" as well as the default flag', true);
 
         case maxLevel of
-            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0); 
-            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2); 
-            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5); 
-            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9); 
+            1: copyToXY(SpritesData[sprBotlevels].Surface, flagsurf, 0, 0);
+            2: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 5, 2, 17, 13, 5, 2);
+            3: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 9, 5, 13, 10, 9, 5);
+            4: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 13, 9, 9, 6, 13, 9);
             5: copyToXYFromRect(SpritesData[sprBotlevels].Surface, flagsurf, 17, 11, 5, 4, 17, 11)
             end;
 
@@ -402,7 +409,7 @@ for ii:= Low(TSprite) to High(TSprite) do
                 if not reload then
                     begin
 {$IFDEF USE_CONTEXT_RESTORE}
-                    Surface:= tmpsurf 
+                    Surface:= tmpsurf
 {$ELSE}
                     if saveSurf then
                         Surface:= tmpsurf
@@ -464,7 +471,7 @@ IMG_Quit();
 WriteLnToConsole('Leaving StoreLoad');
 end;
 
-{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
+{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
@@ -566,7 +573,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
     if defaultFrame <> 0 then
         DeleteFramebuffer(defaultFrame, depthv, texv);
 {$ENDIF}
-{$IFNDEF S3D_DISABLED}
+{$IFDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
         begin
         DeleteFramebuffer(framel, depthl, texl);
@@ -748,7 +755,7 @@ begin
         ReadLn(f, line);
         source:= source + line + #10;
     end;
-    
+
     Close(f);
 
     WriteLnToConsole('Compiling shader: ' + Pathz[ptShaders] + '/' + shaderFile);
@@ -872,7 +879,7 @@ begin
         end
     else if (MaxTextureSize < 1024) and (MaxTextureSize >= 512) then
         begin
-        cReducedQuality := cReducedQuality or rqNoBackground;  
+        cReducedQuality := cReducedQuality or rqNoBackground;
         AddFileLog('Texture size too small for backgrounds, disabling.');
         end;
 
@@ -988,7 +995,7 @@ begin
     UpdateModelviewProjection;
 {$ENDIF}
 
-{$IFNDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
         // prepare left and right frame buffers and associated textures
@@ -1017,7 +1024,7 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
     hglTranslatef(0, -cScreenHeight / 2, 0);
 
     EnableTexture(True);
-    
+
     glEnableVertexAttribArray(aVertex);
     glEnableVertexAttribArray(aTexCoord);
     glGenBuffers(1, @vBuffer);
@@ -1120,7 +1127,7 @@ begin
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(@mProjection[0, 0]);
     glMatrixMode(GL_MODELVIEW);
-    {$ENDIF}    
+    {$ENDIF}
 end;
 *)
 
@@ -1203,8 +1210,10 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
+        with mobileRecord do
+            if GameLoading <> nil then
+                GameLoading();
 
-        uMobile.GameLoading();
         end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1228,7 +1237,9 @@ end;
 
 procedure FinishProgress;
 begin
-    uMobile.GameLoaded();
+    with mobileRecord do
+        if GameLoaded <> nil then
+            GameLoaded();
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     ProgrTex:= nil;
@@ -1502,7 +1513,7 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
-    {$IFNDEF SDL13}        
+    {$IFNDEF SDL13}
     {$IFNDEF WEBGL}
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
@@ -1550,7 +1561,7 @@ begin
         s:= SDL_getenv('SDL_VIDEO_CENTERED');
         SDL_putenv('SDL_VIDEO_CENTERED=1');
     {$ENDIF}
-        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
         SDLTry(SDLPrimSurface <> nil, true);
     {$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;
@@ -1564,7 +1575,7 @@ begin
         glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
             glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
-        else if ((cReducedQuality and rqNoBackground) = 0) then 
+        else if ((cReducedQuality and rqNoBackground) = 0) then
             glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
         else
             glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);

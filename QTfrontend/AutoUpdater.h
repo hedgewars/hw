@@ -11,6 +11,7 @@ class AutoUpdater
         virtual ~AutoUpdater();
 
         virtual void checkForUpdates() = 0;
+        virtual void checkForUpdatesNow() = 0;
 };
 
 #endif

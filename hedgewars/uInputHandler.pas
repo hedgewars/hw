@@ -54,12 +54,22 @@ const
     LALT   = $0800;
     RALT   = $1000;
     LCTRL  = $2000;
-    RCTRL  = $4000; 
+    RCTRL  = $4000;
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode, closeKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
+    ControllerNumControllers: Integer;
+    ControllerEnabled: Integer;
+    ControllerNumAxes: array[0..5] of Integer;
+    //ControllerNumBalls: array[0..5] of Integer;
+    ControllerNumHats: array[0..5] of Integer;
+    ControllerNumButtons: array[0..5] of Integer;
+    ControllerAxes: array[0..5] of array[0..19] of Integer;
+    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
+    ControllerHats: array[0..5] of array[0..19] of Byte;
+    ControllerButtons: array[0..5] of array[0..19] of Byte;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
 begin
@@ -79,12 +89,12 @@ end;
 (*
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
-    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT; 
-    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT; 
-    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT; 
-    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT; 
-    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL; 
-    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL; 
+    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT;
+    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT;
+    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT;
+    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT;
+    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL;
+    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL;
 end;
 *)
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
@@ -100,7 +110,7 @@ for i:= 1 to Length(Modifier) do
 SplitByChar(Modifier, mod_, ':');//remove the first mod: part
 Modifier:= mod_;
 for i:= 0 to ModifierCount do
-    begin 
+    begin
     mod_:= '';
     SplitByChar(Modifier, mod_, ':');
     if (Modifier = 'lshift')                    then code:= code or LSHIFT;
@@ -221,7 +231,7 @@ for i:= 6 to cKeyMaxIndex do
     s:= shortstring(sdl_getkeyname(i));
     //WriteLnToConsole('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
-    else 
+    else
         begin
         for t:= 1 to Length(s) do
             if s[t] = ' ' then
@@ -381,10 +391,10 @@ if ControllerNumControllers > 0 then
             if ControllerNumAxes[j] > 20 then
                 ControllerNumAxes[j]:= 20;
             //if ControllerNumBalls[j] > 20 then ControllerNumBalls[j]:= 20;
-            
+
             if ControllerNumHats[j] > 20 then
                 ControllerNumHats[j]:= 20;
-                
+
             if ControllerNumButtons[j] > 20 then
                 ControllerNumButtons[j]:= 20;
 

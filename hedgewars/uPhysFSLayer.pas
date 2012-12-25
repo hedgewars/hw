@@ -30,6 +30,7 @@ function pfsOpenRead(fname: shortstring): PFSFile;
 function pfsClose(f: PFSFile): boolean;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
+procedure pfsReadLnA(f: PFSFile; var s: ansistring);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
@@ -41,7 +42,7 @@ procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
 {$IFNDEF PAS2C}
 //apparently pas2c doesn't render the functions below if it finds 'implementation' first
 implementation
-uses uUtils, uVariables;
+uses uUtils, uVariables, sysutils;
 {$ENDIF}
 
 function PHYSFS_init(argv: PChar): LongInt; cdecl; external PhysfsLibName;
@@ -109,6 +110,28 @@ while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
         end
 end;
 
+procedure pfsReadLnA(f: PFSFile; var s: ansistring);
+var c: char;
+    b: shortstring;
+begin
+s:= '';
+b[0]:= #0;
+
+while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
+    if (c <> #13) then
+        begin
+        inc(b[0]);
+        b[byte(b[0])]:= c;
+        if b[0] = #255 then
+            begin
+            s:= s + b;
+            b[0]:= #0
+            end
+        end;
+
+s:= s + b
+end;
+
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 var r: Int64;
 begin
@@ -122,8 +145,16 @@ end;
 
 procedure initModule;
 var i: LongInt;
+    cPhysfsId: shortstring;
 begin
-    i:= PHYSFS_init(Str2PChar(ParamStr(0)));
+{$IFDEF HWLIBRARY}
+    //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
+    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF} ' hedgewars';
+{$ELSE}
+    cPhysfsId:= ParamStr(0);
+{$ENDIF}
+
+    i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
     i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, true);

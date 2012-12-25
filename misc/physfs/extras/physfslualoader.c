@@ -5,7 +5,7 @@
 
 void *physfsReaderBuffer;
 
-const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
+PHYSFS_DECL const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
 {
 
     if(PHYSFS_eof(f))
@@ -23,7 +23,7 @@ const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
     }
 }
 
-void physfsReaderSetBuffer(void *buffer)
+PHYSFS_DECL void physfsReaderSetBuffer(void *buffer)
 {
     physfsReaderBuffer = buffer;
 }

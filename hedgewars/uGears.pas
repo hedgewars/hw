@@ -56,7 +56,7 @@ procedure doStepDrowningGear(Gear: PGear);
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
-    uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
+    uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
 
@@ -172,7 +172,7 @@ begin
                         dec(Gear^.Hedgehog^.InitialHealth, 5)
                     end
                 end;
-            if tmp > 0 then 
+            if tmp > 0 then
                 begin
                 inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
                 HHHurt(Gear^.Hedgehog, dsPoison);
@@ -212,7 +212,7 @@ while t <> nil do
         DeleteGear(curHandledGear)
     else
         begin
-        if curHandledGear^.Message and gmRemoveFromList <> 0 then 
+        if curHandledGear^.Message and gmRemoveFromList <> 0 then
             begin
             RemoveGearFromList(curHandledGear);
             // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
@@ -246,13 +246,13 @@ case step of
         if delay = 0 then
             inc(step)
         end;
-        
+
     stChDmg:
     if CheckNoDamage then
         inc(step)
     else
         step:= stDelay;
-        
+
     stSweep:
     if SweepDirty then
         begin
@@ -261,7 +261,7 @@ case step of
         end
     else
         inc(step);
-        
+
     stTurnReact:
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
@@ -272,7 +272,7 @@ case step of
         else
             inc(step, 2);
         end;
-        
+
     stAfterDelay:
         begin
         if delay = 0 then
@@ -315,12 +315,12 @@ case step of
                 if cHealthDecrease <> 0 then
                     begin
                     SuddenDeathDmg:= true;
-                        
+
                     // flash
                     ScreenFade:= sfFromWhite;
                     ScreenFadeValue:= sfMax;
                     ScreenFadeSpeed:= 1;
-                    
+
                     ChangeToSDClouds;
                     ChangeToSDFlakes;
                     glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99);
@@ -530,7 +530,7 @@ begin
             end;
         t:= t^.NextGear
         end;
-   
+
     if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) then
         ResetWeapons;
 
@@ -677,8 +677,8 @@ while t <> nil do
             gtKnife,
             gtCase,
             gtTarget,
-            gtExplosives,
-            gtStructure: begin
+            gtExplosives: begin//,
+//            gtStructure: begin
 //addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
                     dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
@@ -760,7 +760,7 @@ while i > 0 do
     if (Gear^.State and gstNoDamage) = 0 then
         begin
 
-        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then 
+        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then
             begin
             VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
             if VGear <> nil then
@@ -777,8 +777,8 @@ while i > 0 do
             gtKnife,
             gtTarget,
             gtCase,
-            gtExplosives,
-            gtStructure:
+            gtExplosives: //,
+            //gtStructure:
             begin
             if (Ammo^.Kind = gtDrill) then
                 begin
@@ -810,7 +810,7 @@ while i > 0 do
                 end
             else
                 Gear^.State:= Gear^.State or gstWinner;
-            if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
+            if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then
                 begin
                 if (Ammo^.Hedgehog^.Gear <> nil) then
                     Ammo^.Hedgehog^.Gear^.State:= (Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable));
@@ -906,10 +906,6 @@ if (GameFlags and gfDivideTeams) <> 0 then
                     inc(Count)
                     end;
         end;
-    // unC0Rr, while it is true user can watch value on map screen, IMO this (and check above) should be enforced in UI
-    // - is there a good place to put values for the different widgets to check?  Right now they are kind of disconnected.
-    //it would be nice if divide teams, forts mode and hh per map could all be checked by the team widget, or maybe disable start button
-    TryDo(Count <= MaxHedgehogs, 'Too many hedgehogs for this map! (max # is ' + inttostr(MaxHedgehogs) + ')', true);
     while (Count > 0) do
         begin
         i:= GetRandom(Count);
@@ -938,9 +934,9 @@ begin
     s:= 0;
     SetLength(GearsNearArray, s);
     t := GearsList;
-    while t <> nil do 
+    while t <> nil do
         begin
-        if (t^.Kind = Kind) 
+        if (t^.Kind = Kind)
             and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
             begin
             inc(s);
@@ -1032,7 +1028,7 @@ begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
     FollowGear^.Pos := posCaseDummy;
-    
+
     if explode then
         FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
     if poison then
@@ -1271,7 +1267,7 @@ begin
             // if team matches current hedgehog team, default to current hedgehog
             if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then
                 hh:= CurrentHedgehog
-            else 
+            else
                 begin
             // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
                 j:= 0;
@@ -1287,7 +1283,7 @@ begin
                     inc(j)
                     end
                 end;
-        if hh <> nil then 
+        if hh <> nil then
             begin
             Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
             if Gear <> nil then
@@ -1367,7 +1363,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            @doStepStructure,
+            //@doStepStructure,
             @doStepLandGun,
             @doStepTardis,
             @doStepIceGun,

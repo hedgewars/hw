@@ -48,16 +48,22 @@ class GameUIConfig : public QSettings
         bool appendDateTimeToRecordName();
         quint8 volume();
         quint8 timerInterval();
-        quint8 bitDepth();
         QString netNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
+        void clearPasswordHash();
+        void setPasswordHash(const QString & passwordhash);
+        QString passwordHash();
+        void clearTempHash();
+        void setTempHash(const QString & temphash);
+        QString tempHash();
         void setNetPasswordLength(int passwordLength);
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
         bool isFrontendFullscreen() const;
         void resizeToConfigValues();
         quint32 stereoMode() const;
+        void setValue(const QString & key, const QVariant & value);
 
         QString AVFormat();
         QString videoCodec();
@@ -85,7 +91,7 @@ class GameUIConfig : public QSettings
     private:
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
-        quint8 depth;
+    QString temphash;
 };
 
 #endif

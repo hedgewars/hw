@@ -29,11 +29,18 @@ if (APPLE)
     string(REGEX REPLACE "(.*)/include.*" "\\1" qt_base_dir "${QT_INCLUDE_DIR}")
 
     #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
+    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
 
     if(NOT NOPNG)
         #get the neme of the library (harmelss if it is static)
         string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
+    endif()
+
+    set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
+    if(${BUILD_ENGINE_LIBRARY})
+        set(engine_full_path "${frameworks_dir}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    else()
+        set(engine_full_path "${CMAKE_INSTALL_PREFIX}/hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     endif()
 
     #this tool is present in qt 4.5 but only if you compile from sources

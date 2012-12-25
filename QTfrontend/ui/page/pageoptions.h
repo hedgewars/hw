@@ -21,6 +21,7 @@
 
 #include "AbstractPage.h"
 
+class GameUIConfig;
 class FPSEdit;
 class IconedGroupBox;
 class QSignalMapper;
@@ -57,10 +58,10 @@ class PageOptions : public AbstractPage
         IconedGroupBox *AGGroupBox;
         QComboBox *CBResolution;
         QComboBox *CBStereoMode;
-        QCheckBox *CBEnableSound;
-        QCheckBox *CBEnableFrontendSound;
-        QCheckBox *CBEnableMusic;
-        QCheckBox *CBEnableFrontendMusic;
+        QCheckBox *CBFrontendSound;
+        QCheckBox *CBFrontendMusic;
+        QCheckBox *CBSound;
+        QCheckBox *CBMusic;
         QCheckBox *CBFullscreen;
         QCheckBox *CBFrontendFullscreen;
         QCheckBox *CBShowFPS;
@@ -69,6 +70,7 @@ class PageOptions : public AbstractPage
         QCheckBox *CBNameWithDate;
 #ifdef __APPLE__
         QCheckBox *CBAutoUpdate;
+        QPushButton *BtnUpdateNow;
 #endif
 
         FPSEdit *fpsedit;
@@ -83,6 +85,26 @@ class PageOptions : public AbstractPage
         QLineEdit * leProxy;
         QLineEdit * leProxyLogin;
         QLineEdit * leProxyPassword;
+
+        QComboBox  *framerateBox;
+        QSpinBox  *bitrateBox;
+        QLineEdit *widthEdit;
+        QLineEdit *heightEdit;
+        QCheckBox *checkUseGameRes;
+        QCheckBox *checkRecordAudio;
+
+        QString format()
+        { return comboAVFormats->itemData(comboAVFormats->currentIndex()).toString(); }
+
+        QString videoCodec()
+        { return comboVideoCodecs->itemData(comboVideoCodecs->currentIndex()).toString(); }
+
+        QString audioCodec()
+        { return comboAudioCodecs->itemData(comboAudioCodecs->currentIndex()).toString(); }
+
+        void setDefaultCodecs();
+        bool tryCodecs(const QString & format, const QString & vcodec, const QString & acodec);
+        void setConfig(GameUIConfig * config);
 
         void setTeamOptionsEnabled(bool enabled);
 
@@ -106,6 +128,13 @@ class PageOptions : public AbstractPage
         QPushButton *BtnDeleteTeam;
         QList<QPushButton *> m_colorButtons;
 
+        QComboBox *comboAVFormats;
+        QComboBox *comboVideoCodecs;
+        QComboBox *comboAudioCodecs;
+        QPushButton *btnDefaults;
+        QPushButton *btnUpdateNow;
+        GameUIConfig * config;
+
     private slots:
         void forceFullscreen(int index);
         void setFullscreen(int state);
@@ -118,6 +147,13 @@ class PageOptions : public AbstractPage
         void colorButtonClicked(int i);
         void onColorModelDataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
         void onProxyTypeChanged();
+        void changeAVFormat(int index);
+        void changeUseGameRes(int state);
+        void changeRecordAudio(int state);
+        void checkForUpdates();
+
+    public slots:
+        void setDefaultOptions();
 };
 
 #endif

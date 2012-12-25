@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-/*
+/*!
  * Data structure and functions for accessing the map.cfg of named maps.
  */
 
@@ -25,8 +25,8 @@
 #define MAPCFG_H_
 
 typedef struct {
-	char theme[256];
-	int hogLimit;
+    char theme[256];
+    int hogLimit;
 } flib_mapcfg;
 
 /**

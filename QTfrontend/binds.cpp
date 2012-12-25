@@ -66,5 +66,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"fullscr",   "f12",        QT_TRANSLATE_NOOP("binds", "change mode"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
     {"capture",   "c",          QT_TRANSLATE_NOOP("binds", "capture"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
     {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")},
+#ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}
+#endif
 };

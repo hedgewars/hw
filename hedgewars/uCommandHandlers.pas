@@ -30,11 +30,13 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-    'R': if ReadyTimeLeft > 1 then 
+    'R': if ReadyTimeLeft > 1 then
         begin
         ReadyTimeLeft:= 1;
         if not isExternalSource then
@@ -479,7 +481,7 @@ bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmSlot and InputMask);
-    MsgParam:= slot; 
+    MsgParam:= slot;
     ScriptCall('onSlot', MsgParam);
     end
 end;
@@ -516,7 +518,7 @@ if not isExternalSource then
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmAnimate and InputMask);
-    MsgParam:= byte(s[1]) ; 
+    MsgParam:= byte(s[1]) ;
     ScriptCall('onTaunt', MsgParam);
     end
 end;

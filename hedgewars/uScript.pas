@@ -80,7 +80,7 @@ uses LuaPas,
     uTextures,
     uLandGraphics,
     SDLh,
-    SysUtils, 
+    SysUtils,
     uIO,
     uPhysFSLayer
     ;
@@ -111,7 +111,7 @@ end;
 
 function lc_band(L: PLua_State): LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 2 then 
+    if lua_gettop(L) <> 2 then
         begin
         LuaError('Lua: Wrong number of parameters passed to band!');
         lua_pushnil(L);
@@ -123,7 +123,7 @@ end;
 
 function lc_bor(L: PLua_State): LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 2 then 
+    if lua_gettop(L) <> 2 then
         begin
         LuaError('Lua: Wrong number of parameters passed to bor!');
         lua_pushnil(L);
@@ -135,7 +135,7 @@ end;
 
 function lc_bnot(L: PLua_State): LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 1 then 
+    if lua_gettop(L) <> 1 then
         begin
         LuaError('Lua: Wrong number of parameters passed to bnot!');
         lua_pushnil(L);
@@ -147,7 +147,7 @@ end;
 
 function lc_div(L: PLua_State): LongInt; Cdecl;
 begin
-    if lua_gettop(L) <> 2 then 
+    if lua_gettop(L) <> 2 then
         begin
         LuaError('Lua: Wrong number of parameters passed to div!');
         lua_pushnil(L);
@@ -273,7 +273,7 @@ begin
         HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
         end;
-    lc_spawnfakehealthcrate := 1;        
+    lc_spawnfakehealthcrate := 1;
 end;
 
 function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
@@ -302,7 +302,7 @@ begin
         lua_pushnil(L);
         end
     else
-        begin  
+        begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
         lua_pushinteger(L, gear^.uid);
@@ -331,7 +331,7 @@ begin
         else
             lua_pushnil(L);
         end;
-    lc_spawnhealthcrate := 1;        
+    lc_spawnhealthcrate := 1;
 end;
 
 function lc_spawnammocrate(L: PLua_State): LongInt; Cdecl;
@@ -344,7 +344,7 @@ begin
         end
     else
         begin
-        if (lua_gettop(L) = 3) then 
+        if (lua_gettop(L) = 3) then
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
@@ -440,7 +440,7 @@ begin
         c:= lua_toboolean(L, 5);
 
         vg:= AddVisualGear(x, y, vgt, s, c);
-        if vg <> nil then 
+        if vg <> nil then
             begin
             lastVisualGearByUID:= vg;
             lua_pushinteger(L, vg^.uid)
@@ -690,7 +690,7 @@ begin
     else
         begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
@@ -723,7 +723,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
@@ -764,7 +764,7 @@ begin
             for j:= 0 to 7 do
                 begin
                 hh:= team^.Hedgehogs[j];
-                if (hh.Gear <> nil) or (hh.GearHidden <> nil) then 
+                if (hh.Gear <> nil) or (hh.GearHidden <> nil) then
                     begin
                     FreeTexture(hh.NameTagTex);
                     hh.NameTagTex:= RenderStringTex(hh.Name, clan^.Color, fnt16);
@@ -805,7 +805,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
             end
@@ -826,7 +826,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
             end
@@ -1023,7 +1023,7 @@ begin
                 prevgear^.Z := cHHZ;
                 prevgear^.Message:= prevgear^.Message or gmRemoveFromList or gmAddToList;
                 end;
-            
+
             SwitchCurrentHedgehog(gear^.Hedgehog);
             CurrentTeam:= CurrentHedgehog^.Team;
 
@@ -1046,7 +1046,7 @@ begin
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
             AddAmmoAmount(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L,3) );
     end else
-    
+
     if lua_gettop(L) = 2 then
     begin
     gear:= GearByUID(lua_tointeger(L, 1));
@@ -1084,7 +1084,7 @@ begin
     if (lua_gettop(L) = 2) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then 
+        if (gear <> nil) and (gear^.Hedgehog <> nil) then
             begin
             ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
             if ammo^.AmmoType = amNothing then
@@ -1094,7 +1094,7 @@ begin
             end
         else lua_pushinteger(L, 0)
         end
-    else 
+    else
         begin
         LuaError('Lua: Wrong number of parameters passed to GetAmmoCount!');
         lua_pushnil(L)
@@ -1117,7 +1117,7 @@ begin
             gear^.Health:= lua_tointeger(L, 2);
 
         if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            begin  
+            begin
             RenderHealth(gear^.Hedgehog^);
             RecountTeamHealth(gear^.Hedgehog^.Team)
             end;
@@ -1650,7 +1650,7 @@ begin
         LuaError('Lua: Wrong number of parameters passed to GetHogHat!')
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Hat))
         else
             lua_pushnil(L);
@@ -1942,7 +1942,7 @@ else if (GameFlags and gfPerHogAmmo) <> 0 then
             if StoreCnt-1 < k then AddAmmoStore;
             inc(k)
             end
-else 
+else
     for i:= 0 to Pred(TeamsCount) do
         begin
         for j:= 0 to Pred(TeamsArray[i]^.HedgehogsNumber) do
@@ -1994,7 +1994,7 @@ if not pfsExists(s) then
     exit;
 
 f:= pfsOpenRead(s);
-if f = nil then 
+if f = nil then
     exit;
 
 physfsReaderSetBuffer(@buf);
@@ -2191,7 +2191,7 @@ else if (GameFlags and gfPerHogAmmo) <> 0 then
             AddAmmoStore;
             TeamsArray[i]^.Hedgehogs[j].AmmoStore:= StoreCnt - 1
             end
-else 
+else
     for i:= 0 to Pred(TeamsCount) do
         begin
         if ScriptExists('onNewAmmoStore') then
@@ -2321,6 +2321,7 @@ ScriptSetInteger('gstLoser'          ,$00080000);
 ScriptSetInteger('gstHHGone'         ,$00100000);
 ScriptSetInteger('gstInvisible'      ,$00200000);
 
+// ai hints
 ScriptSetInteger('aihUsualProcessing' ,$00000000);
 ScriptSetInteger('aihDoesntMatter'    ,$00000001);
 

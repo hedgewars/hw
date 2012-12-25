@@ -64,7 +64,7 @@
 01:02=%1 wins!
 01:03=Volume %1%
 01:04=Paused
-01:05=Really quit (Y/Esc)?
+01:05=Really quit? (Y/Esc) (Click to resume)
 01:06=Sudden Death!
 01:07=%1 remaining
 01:08=Fuel
@@ -508,7 +508,7 @@
 04:51=Get in a free shot by hurling a ball of mud.|Stings a bit, and knocks hogs back.
 04:52=UNUSED
 04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.
-04:54=INCOMPLETE                                                                                                                                     
+04:54=INCOMPLETE
 04:55=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!
 
 ; Game goal strings

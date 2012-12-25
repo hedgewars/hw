@@ -56,7 +56,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         roomChans <- roomClientsChans
         cl <- thisClient
         teamColor <-
-            if clientProto cl < 42 then 
+            if clientProto cl < 42 then
                 return color
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
@@ -264,6 +264,14 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
 
+handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
+    cl <- thisClient
+    return $
+        if not $ isMaster cl then
+            [ProtocolError "Not room master"]
+        else
+            [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos
@@ -293,6 +301,16 @@ handleCmd_inRoom ["KICK", kickNick] = do
         [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
 
 
+handleCmd_inRoom ["DELEGATE", newAdmin] = do
+    (thisClientId, rnc) <- ask
+    maybeClientId <- clientByNick newAdmin
+    master <- liftM isMaster thisClient
+    let newAdminId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
+    return
+        [ChangeMaster (Just newAdminId) | master && isJust maybeClientId && (newAdminId /= thisClientId) && sameRoom]
+
+
 handleCmd_inRoom ["TEAMCHAT", msg] = do
     cl <- thisClient
     chans <- roomSameClanChans
@@ -308,8 +326,8 @@ handleCmd_inRoom ["BAN", banNick] = do
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc banId
     if master && isJust maybeClientId && (banId /= thisClientId) && sameRoom then
         return [
-                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
-              , KickRoomClient banId
+--                ModifyRoom (\r -> r{roomBansList = let h = host $ rnc `client` banId in h `deepseq` h : roomBansList r})
+                KickRoomClient banId
             ]
         else
         return []
