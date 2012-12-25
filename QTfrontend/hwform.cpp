@@ -39,6 +39,8 @@
 #include <QSignalMapper>
 #include <QShortcut>
 #include <QDesktopServices>
+#include <QDesktopWidget>
+#include <QApplication>
 #include <QInputDialog>
 #include <QPropertyAnimation>
 #include <QSettings>
@@ -96,6 +98,18 @@
 
 #include "DataManager.h"
 #include "AutoUpdater.h"
+
+#ifdef Q_WS_WIN
+#define WINVER 0x0500
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#endif
+
+#ifdef Q_WS_MAC
+#include <sys/sysctl.h>
+#endif
 
 #ifdef __APPLE__
 #include "M3Panel.h"
@@ -1974,28 +1988,41 @@ void HWForm::saveDemoWithCustomName()
 
 void HWForm::SendFeedback()
 {
-    //Create Xml representation of google code issue first
-    if (!CreateIssueXml())
+    // Get form data
+    
+    QString summary = ui.pageFeedback->summary->text();
+    QString description = ui.pageFeedback->description->toPlainText();
+    QString email = ui.pageFeedback->email->text();
+    QString captchaCode = ui.pageFeedback->captcha_code->text();
+    QString captchaID = QString::number(ui.pageFeedback->captchaID);
+    QString version = "HedgewarsFoundation-Hedgewars-" + (cVersionString?(*cVersionString):QString(""));
+
+    if (summary.isEmpty() || description.isEmpty())
     {
-        ShowErrorMessage(QMessageBox::tr("Please fill out all fields"));
+        ShowErrorMessage(QMessageBox::tr("Please fill out all fields. Email is optional."));
         return;
     }
 
-    //Submit issue to PHP script
-    QString source = "HedgewarsFoundation-Hedgewars-";
-    source += (cVersionString?(*cVersionString):QString(""));
-    QString captchaCode = ui.pageFeedback->captcha_code->text();
-    QString captchaID = QString::number(ui.pageFeedback->captchaID);
+    // Submit issue to PHP script
     
     QByteArray body;
     body.append("captcha=");
     body.append(captchaID);
     body.append("&code=");
     body.append(captchaCode);
-    body.append("&source=");
-    body.append(source);
-    body.append("&issue=");
-    body.append(QUrl::toPercentEncoding(issueXml));
+    body.append("&version=");
+    body.append(QUrl::toPercentEncoding(version));
+    body.append("&title=");
+    body.append(QUrl::toPercentEncoding(summary));
+    body.append("&body=");
+    body.append(QUrl::toPercentEncoding(description));
+    body.append("&email=");
+    body.append(QUrl::toPercentEncoding(email));
+    if (ui.pageFeedback->CheckSendSpecs->isChecked())
+    {
+        body.append("&specs=");
+        body.append(QUrl::toPercentEncoding(ui.pageFeedback->specs));
+    }
     
     nam = new QNetworkAccessManager(this);
     connect(nam, SIGNAL(finished(QNetworkReply*)),
@@ -2007,40 +2034,6 @@ void HWForm::SendFeedback()
     nam->post(header, body);
 }
 
-bool HWForm::CreateIssueXml()
-{
-    QString summary = ui.pageFeedback->summary->text();
-    QString description = ui.pageFeedback->description->toPlainText();
-    QString email = ui.pageFeedback->email->text();
-
-    //Check if all necessary information is entered
-    if (summary.isEmpty() || description.isEmpty())
-        return false;
-
-    issueXml =
-        "<?xml version='1.0' encoding='UTF-8'?>"
-        "<entry xmlns='http://www.w3.org/2005/Atom' xmlns:issues='http://code.google.com/p/hedgewars/issues/list'>"
-        "<title>";
-    issueXml.append(summary);
-    issueXml.append("</title><content type='html'>");
-    issueXml.append(description);
-    issueXml.append("</content><author><name>feedback.hedgewars</name></author>");
-
-    if (!email.isEmpty())
-    {
-        issueXml.append("<issues:owner><issues:username>");
-        issueXml.append(email);
-        issueXml.append("</issues:username></issues:owner>");
-        issueXml.append("<issues:cc><issues:username>");
-        issueXml.append(email);
-        issueXml.append("</issues:username></issues:cc>");
-    }
-
-    issueXml.append("</entry>");
-
-    return true;
-}
-
 void HWForm::finishedSlot(QNetworkReply* reply)
 {
     if (reply && reply->error() == QNetworkReply::NoError)
@@ -2048,13 +2041,13 @@ void HWForm::finishedSlot(QNetworkReply* reply)
             QMessageBox infoMsg(this);
             infoMsg.setIcon(QMessageBox::Information);
             infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
-            infoMsg.setText(QMessageBox::tr("Successfully posted the issue on hedgewars.googlecode.com"));
+            infoMsg.setText(reply->readAll());
             infoMsg.setWindowModality(Qt::WindowModal);
             infoMsg.exec();
 
             ui.pageFeedback->summary->clear();
+            ui.pageFeedback->email->clear();
             ui.pageFeedback->description->clear();
-            ui.pageFeedback->EmbedSystemInfo();
             ui.pageFeedback->LoadCaptchaImage();
             
             return;
