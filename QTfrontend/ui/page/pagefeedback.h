@@ -34,6 +34,8 @@ class PageFeedback : public AbstractPage
         void LoadCaptchaImage();
 
         QPushButton * BtnSend;
+        QPushButton * BtnViewInfo;
+        QCheckBox * CheckSendSpecs;
         QLineEdit * summary;
         QTextBrowser * description;
         QLabel * info;
@@ -45,12 +47,15 @@ class PageFeedback : public AbstractPage
         QLineEdit * captcha_code;
         QLineEdit * email;
         int captchaID;
+        QString specs;
         
     private slots:
     
         virtual void NetReply(QNetworkReply*);
+        virtual void ShowSpecs();
 
     private:
+        void GenerateSpecs();
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         QNetworkAccessManager * GetNetManager();

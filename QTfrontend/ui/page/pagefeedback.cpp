@@ -29,6 +29,7 @@
 #include <QNetworkReply>
 #include <QProcess>
 #include <QMessageBox>
+#include <QCheckBox>
 
 #include <string>
 
@@ -54,7 +55,9 @@ QLayout * PageFeedback::bodyLayoutDefinition()
     QVBoxLayout * pageLayout = new QVBoxLayout();
     QHBoxLayout * summaryLayout = new QHBoxLayout();
     QHBoxLayout * emailLayout = new QHBoxLayout();
+    QHBoxLayout * descriptionLayout = new QHBoxLayout();
     QHBoxLayout * combinedTopLayout = new QHBoxLayout();
+    QHBoxLayout * systemLayout = new QHBoxLayout();
 
     info = new QLabel();
     info->setText(
@@ -62,55 +65,161 @@ QLayout * PageFeedback::bodyLayoutDefinition()
         "a { color: #fc0; }"
         "b { color: #0df; }"
         "</style>"
-        "<div align=\"center\"><h1>Please give us a feedback!</h1>"
-        "<h3>We are always happy about suggestions, ideas or bug reports.<h3>"
-        "<h4>The feedback will be posted as a new issue on our Google Code page.<br />"
-        "<b>Don't forget to mention your email or you won't be able to receive updates on this topic!</b><br /></h4>"
-        //"<h4>Your email is optional, but if given, you will be notified of responses.<h4>"
+        "<div align=\"center\"><h1>Please give us feedback!</h1>"
+        "<h3>We are always happy about suggestions, ideas, or bug reports.<h3>"
+        "<h4>Your email address is optional, but we may want to contact you.<h4>"
         "</div>"
     );
     pageLayout->addWidget(info);
 
-    label_summary = new QLabel();
-    label_summary->setText(QLabel::tr("Summary"));
-    summaryLayout->addWidget(label_summary);
-    summary = new QLineEdit();
-    summaryLayout->addWidget(summary);
-    combinedTopLayout->addLayout(summaryLayout);
+    QVBoxLayout * summaryEmailLayout = new QVBoxLayout();
+
+    const int labelWidth = 90;
 
     label_email = new QLabel();
     label_email->setText(QLabel::tr("Your Email"));
+    label_email->setFixedWidth(labelWidth);
     emailLayout->addWidget(label_email);
     email = new QLineEdit();
     emailLayout->addWidget(email);
+    summaryEmailLayout->addLayout(emailLayout);
     
-    //  Email -- although implemented -- doesn't seem to work as intended.
-    //  It's sent in the XML as a <issues:cc> , the <entry>, but it doesn't seem
-    //  to actually do anything. If you figure out how to fix that, uncomment these lines
-    //  and the line above in the 'info' QLabel to re-enable this feature.
-    //  UPDATE: I found out that CC only works if that email is a member of the
-    //  Google Code project. So this feature is pretty much useless atm.
-    /*
-    combinedTopLayout->addLayout(emailLayout);
-    combinedTopLayout->insertSpacing(1, 50);
-    */
+    label_summary = new QLabel();
+    label_summary->setText(QLabel::tr("Summary"));
+    label_summary->setFixedWidth(labelWidth);
+    summaryLayout->addWidget(label_summary);
+    summary = new QLineEdit();
+    summaryLayout->addWidget(summary);
+    summaryEmailLayout->addLayout(summaryLayout);
+    
+    combinedTopLayout->addLayout(summaryEmailLayout);
+
+
+    CheckSendSpecs = new QCheckBox();
+    CheckSendSpecs->setText(QLabel::tr("Send system information"));
+    CheckSendSpecs->setChecked(true);
+    systemLayout->addWidget(CheckSendSpecs);
+    BtnViewInfo = addButton("View", systemLayout, 1, false);
+    BtnViewInfo->setFixedSize(60, 30);
+    connect(BtnViewInfo, SIGNAL(clicked()), this, SLOT(ShowSpecs()));
+    combinedTopLayout->addLayout(systemLayout);
+
+    combinedTopLayout->setStretch(0, 1);
+    combinedTopLayout->insertSpacing(1, 20);
 
     pageLayout->addLayout(combinedTopLayout);
 
     label_description = new QLabel();
     label_description->setText(QLabel::tr("Description"));
-    pageLayout->addWidget(label_description, 0, Qt::AlignHCenter);
+    label_description->setFixedWidth(labelWidth);
+    descriptionLayout->addWidget(label_description, 0, Qt::AlignTop);
     description = new QTextBrowser();
-
-    EmbedSystemInfo();
-    
     description->setReadOnly(false);
-    pageLayout->addWidget(description);
+    descriptionLayout->addWidget(description);
+    pageLayout->addLayout(descriptionLayout);
 
     return pageLayout;
 }
 
-void PageFeedback::EmbedSystemInfo()
+QNetworkAccessManager * PageFeedback::GetNetManager()
+{
+    if (netManager) return netManager;
+    netManager = new QNetworkAccessManager(this);
+    connect(netManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(NetReply(QNetworkReply*)));
+    return netManager;
+}
+
+void PageFeedback::LoadCaptchaImage()
+{
+        QNetworkAccessManager *netManager = GetNetManager();
+        QUrl captchaURL("http://hedgewars.org/feedback/?gencaptcha");
+        QNetworkRequest req(captchaURL);
+        genCaptchaRequest = netManager->get(req);
+}
+
+void PageFeedback::NetReply(QNetworkReply *reply)
+{
+    if (reply == genCaptchaRequest)
+    {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error generating captcha image: " << reply->errorString();
+            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            return;
+        }
+
+        bool okay;
+        QByteArray body = reply->readAll();
+        captchaID = QString(body).toInt(&okay);
+
+        if (!okay)
+        {
+            qDebug() << "Failed to get captcha ID: " << body;
+            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            return;
+        }
+
+        QString url = "http://hedgewars.org/feedback/?captcha&id=";
+        url += QString::number(captchaID);
+        
+        QNetworkAccessManager *netManager = GetNetManager();
+        QUrl captchaURL(url);
+        QNetworkRequest req(captchaURL);
+        captchaImageRequest = netManager->get(req);
+    }
+    else if (reply == captchaImageRequest)
+    {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error loading captcha image: " << reply->errorString();
+            ShowErrorMessage(QMessageBox::tr("Failed to download captcha"));
+            return;
+        }
+
+        QByteArray imageData = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(imageData);
+        label_captcha->setPixmap(pixmap);
+        captcha_code->setText("");
+    }
+}
+
+QLayout * PageFeedback::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+    QHBoxLayout * captchaLayout = new QHBoxLayout();
+    QVBoxLayout * captchaInputLayout = new QVBoxLayout();
+
+    label_captcha = new QLabel();
+    label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
+    label_captcha->setText("<div style='width: 200px; height: 100px;'>loading<br>captcha</div>");
+    captchaLayout->addWidget(label_captcha);
+
+    label_captcha_input = new QLabel();
+    label_captcha_input->setText(QLabel::tr("Type the security code:"));
+    captchaInputLayout->addWidget(label_captcha_input);
+    captchaInputLayout->setAlignment(label_captcha, Qt::AlignBottom);
+    captcha_code = new QLineEdit();
+    captcha_code->setFixedSize(165, 30);
+    captchaInputLayout->addWidget(captcha_code);
+    captchaInputLayout->setAlignment(captcha_code, Qt::AlignTop);
+    captchaLayout->addLayout(captchaInputLayout);
+    captchaLayout->setAlignment(captchaInputLayout, Qt::AlignLeft);
+
+    captchaLayout->insertSpacing(-1, 40);
+    bottomLayout->addLayout(captchaLayout);
+    
+    //TODO: create logo for send button
+    BtnSend = addButton("Send Feedback", bottomLayout, 0, false);
+    BtnSend->setFixedSize(120, 40);
+
+    bottomLayout->setStretchFactor(captchaLayout, 0);
+    bottomLayout->setStretchFactor(BtnSend, 1);
+
+    return bottomLayout;
+}
+
+void PageFeedback::GenerateSpecs()
 {
     // Gather some information about the system and embed it into the report
     QDesktopWidget* screen = QApplication::desktop();
@@ -243,11 +352,8 @@ void PageFeedback::EmbedSystemInfo()
     else if(sizeof(void*) == 8)
         compiler_bits += "x86_64\n";
 
-    // add everything to the field of text
-    description->setText(
-        "\n\n\n\n\n"
-        "System information:\n"
-        + qt_version
+    // concat system info
+    specs = qt_version
         + os_version
         + total_ram
         + screen_size
@@ -256,106 +362,7 @@ void PageFeedback::EmbedSystemInfo()
         + number_of_cores
         + compiler_version
         + compiler_bits
-        + kernel_line
-    );
-}
-
-QNetworkAccessManager * PageFeedback::GetNetManager()
-{
-    if (netManager) return netManager;
-    netManager = new QNetworkAccessManager(this);
-    connect(netManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(NetReply(QNetworkReply*)));
-    return netManager;
-}
-
-void PageFeedback::LoadCaptchaImage()
-{
-        QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL("http://hedgewars.org/feedback/?gencaptcha");
-        QNetworkRequest req(captchaURL);
-        genCaptchaRequest = netManager->get(req);
-}
-
-void PageFeedback::NetReply(QNetworkReply *reply)
-{
-    if (reply == genCaptchaRequest)
-    {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qDebug() << "Error generating captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
-            return;
-        }
-
-        bool okay;
-        QByteArray body = reply->readAll();
-        captchaID = QString(body).toInt(&okay);
-
-        if (!okay)
-        {
-            qDebug() << "Failed to get captcha ID: " << body;
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
-            return;
-        }
-
-        QString url = "http://hedgewars.org/feedback/?captcha&id=";
-        url += QString::number(captchaID);
-        
-        QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL(url);
-        QNetworkRequest req(captchaURL);
-        captchaImageRequest = netManager->get(req);
-    }
-    else if (reply == captchaImageRequest)
-    {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qDebug() << "Error loading captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to download captcha"));
-            return;
-        }
-
-        QByteArray imageData = reply->readAll();
-        QPixmap pixmap;
-        pixmap.loadFromData(imageData);
-        label_captcha->setPixmap(pixmap);
-        captcha_code->setText("");
-    }
-}
-
-QLayout * PageFeedback::footerLayoutDefinition()
-{
-    QHBoxLayout * bottomLayout = new QHBoxLayout();
-    QHBoxLayout * captchaLayout = new QHBoxLayout();
-    QVBoxLayout * captchaInputLayout = new QVBoxLayout();
-
-    label_captcha = new QLabel();
-    label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
-    label_captcha->setText("<div style='width: 200px; height: 100px;'>loading<br>captcha</div>");
-    captchaLayout->addWidget(label_captcha);
-
-    label_captcha_input = new QLabel();
-    label_captcha_input->setText(QLabel::tr("Type the security code:"));
-    captchaInputLayout->addWidget(label_captcha_input);
-    captchaInputLayout->setAlignment(label_captcha, Qt::AlignBottom);
-    captcha_code = new QLineEdit();
-    captcha_code->setFixedSize(165, 30);
-    captchaInputLayout->addWidget(captcha_code);
-    captchaInputLayout->setAlignment(captcha_code, Qt::AlignTop);
-    captchaLayout->addLayout(captchaInputLayout);
-    captchaLayout->setAlignment(captchaInputLayout, Qt::AlignLeft);
-
-    captchaLayout->insertSpacing(-1, 40);
-    bottomLayout->addLayout(captchaLayout);
-    
-    //TODO: create logo for send button
-    BtnSend = addButton("Send Feedback", bottomLayout, 0, false);
-    BtnSend->setFixedSize(120, 40);
-
-    bottomLayout->setStretchFactor(captchaLayout, 0);
-    bottomLayout->setStretchFactor(BtnSend, 1);
-
-    return bottomLayout;
+        + kernel_line;
 }
 
 void PageFeedback::connectSignals()
@@ -373,8 +380,21 @@ void PageFeedback::ShowErrorMessage(const QString & msg)
     msgMsg.exec();
 }
 
+void PageFeedback::ShowSpecs()
+{
+    QMessageBox msgMsg(this);
+    msgMsg.setIcon(QMessageBox::Information);
+    msgMsg.setWindowTitle(QMessageBox::tr("System Information Preview"));
+    msgMsg.setText(specs);
+    msgMsg.setTextFormat(Qt::PlainText);
+    msgMsg.setWindowModality(Qt::WindowModal);
+    msgMsg.setStyleSheet("background: #0A0533;");
+    msgMsg.exec();
+}
+
 PageFeedback::PageFeedback(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
     netManager = NULL;
+    GenerateSpecs();
 }

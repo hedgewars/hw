@@ -128,9 +128,7 @@ class HWForm : public QMainWindow
         void InitCampaignPage();
         //Starts the transmission process for the feedback
         void SendFeedback();
-        //Make a xml representation of the issue to be created
-        bool CreateIssueXml();
-        //Called after posting a new issue
+        //Called after submitting new feedback
         void finishedSlot(QNetworkReply* reply);
 
         void NetGameChangeStatus(bool isMaster);
@@ -192,7 +190,6 @@ class HWForm : public QMainWindow
         QSignalMapper * pageSwitchMapper;
         QByteArray m_lastDemo;
         QNetworkAccessManager * nam;
-        QString issueXml;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;
