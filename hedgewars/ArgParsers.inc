@@ -267,22 +267,28 @@ begin
     WriteLn(stdout, '');
 end;
 
-procedure playReplayFileWithParameters;
+procedure parseCommandLine{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar){$ENDIF};
 var paramIndex: LongInt;
+    paramTotal: LongInt;
     wrongParameter: boolean;
 begin
     paramIndex:= 1;
+    paramTotal:={$IFDEF HWLIBRARY}argc{$ELSE}ParamCount{$ENDIF};
     wrongParameter:= false;
-    while (paramIndex <= ParamCount) do
+    while (paramIndex <= paramTotal) do
         begin
-        if parseParameter( ParamStr(paramIndex), ParamStr(paramIndex+1), paramIndex) then
-            wrongParameter:= true;
+        {$IFDEF HWLIBRARY}
+        wrongParameter:= parseParameter( argv[paramIndex], argv[paramIndex+1], paramIndex);
+        {$ELSE}
+        wrongParameter:= parseParameter( ParamStr(paramIndex), ParamStr(paramIndex+1), paramIndex);
+        {$ENDIF}
         inc(paramIndex);
         end;
     if wrongParameter = true then
         GameType:= gmtSyntax;
 end;
 
+{$IFNDEF HWLIBRARY}
 procedure GetParams;
 //var tmpInt: LongInt;
 begin
@@ -300,7 +306,7 @@ begin
     UserPathPrefix := '.';
     PathPrefix     := cDefaultPathPrefix;
     recordFileName := '';
-    playReplayFileWithParameters();
+    parseCommandLine();
 
     if (isInternal) and (ParamCount<=1) then
         begin
@@ -324,3 +330,5 @@ begin
     WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
     *)
 end;
+{$ENDIF}
+

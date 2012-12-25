@@ -44,7 +44,7 @@ var isInternal: Boolean;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(gameArgs: PPChar); cdecl; export;
+procedure Game(argc: LongInt; argv: PPChar); cdecl; export;
 procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
@@ -53,6 +53,8 @@ procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
+
+{$INCLUDE "ArgParsers.inc"}
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
@@ -321,28 +323,14 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
+procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
 var p: TPathType;
     s: shortstring;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
     preInitEverything();
-    cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
-    ipcPort:= StrToInt(gameArgs[0]);
-    cScreenWidth:= StrToInt(gameArgs[1]);
-    cScreenHeight:= StrToInt(gameArgs[2]);
-    cReducedQuality:= StrToInt(gameArgs[3]);
-    cLocaleFName:= gameArgs[4];
-    UserNick:= gameArgs[5];
-    SetSound(gameArgs[6] = '1');
-    SetMusic(gameArgs[7] = '1');
-    cAltDamage:= gameArgs[8] = '1';
-    PathPrefix:= gameArgs[9];
-{$IFDEF IPHONEOS}
-    UserPathPrefix:= '../Documents';
-{$ENDIF}
-    recordFileName:= gameArgs[10];
+    parseCommandLine(argc, argv);
 {$ENDIF}
     initEverything(true);
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
@@ -544,8 +532,6 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-
-{$INCLUDE "ArgParsers.inc"}
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
