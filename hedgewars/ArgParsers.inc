@@ -155,15 +155,14 @@ begin
     getStringParameter:= str;
 end;
 
-
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt); Forward;
+procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt); forward;
 
 function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: Array [1..3] of String = ('--width','--height','--depth');
-      audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
-      otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
+const videoArray: array [1..3] of String = ('--width','--height','--depth');
+      audioArray: array [1..3] of String = ('--volume','--nomusic','--nosound');
+      otherArray: array [1..3] of String = ('--locale','--fullscreen','--showfps');
+      mediaArray: array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allArray: array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
       reallyAll: array[0..28] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--width', '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
@@ -226,7 +225,7 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
     cmd, arg, newSyntax: String;
@@ -255,9 +254,9 @@ begin
         if isValid then
             begin
             parseParameter(cmd, arg, tmpInt);
-            newSyntax += cmd + ' ';
+            newSyntax:= newSyntax + cmd + ' ';
             if not isBool then
-                newSyntax += arg + ' ';
+                newSyntax:= newSyntax + arg + ' ';
             end;
         inc(index);
         end;
