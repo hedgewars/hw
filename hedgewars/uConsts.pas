@@ -27,8 +27,6 @@ uses    SDLh, uFloat, GLunit;
 
 const
     sfMax = 1000;
-    cDefaultParamNum = 17;
-    cVideorecParamNum = cDefaultParamNum + 7;
 
     // message constants
     errmsgCreateSurface   = 'Error creating SDL surface';
@@ -92,7 +90,7 @@ const
 // lfObject and lfBasic are only to be different *graphically*  in all other ways they should be treated the same
     lfBasic          = $8000;  // white
     lfIndestructible = $4000;  // red
-    lfObject         = $2000;  
+    lfObject         = $2000;
     lfDamaged        = $1000;  //
     lfIce            = $0800;  // blue
     lfBouncy         = $0400;  // green
@@ -112,17 +110,13 @@ const
     GL_TEXTURE_PRIORITY = $8066;
     {$ENDIF}
 
-    cSendCursorPosTime  : LongWord = 50;
     cVisibleWater       : LongInt = 128;
-    cCursorEdgesDist    : LongInt = 100;
     cTeamHealthWidth    : LongInt = 128;
 
     cifRandomize = $00000001;
     cifTheme     = $00000002;
     cifMap       = $00000002; // either theme or map (or map+theme)
     cifAllInited = cifRandomize or cifTheme or cifMap;
-
-    cTransparentColor: Longword = $00000000;
 
     RGB_LUMINANCE_RED    = 0.212671;
     RGB_LUMINANCE_GREEN  = 0.715160;
@@ -131,18 +125,14 @@ const
     cMaxTeams        = 8;
     cMaxHHIndex      = 7;
     cMaxHHs          = 48;
-    cMaxSpawnPoints  = 1024;
 
     cMaxEdgePoints = 16384;
 
     cHHRadius = 9;
     cHHStepTicks = 29;
 
-    cUsualZ = 500;
-    cSmokeZ = 499;
     cHHZ = 1000;
     cCurrHHZ = Succ(cHHZ);
-    cOnHHZ = 2000;
 
     cBarrelHealth = 60;
     cShotgunRadius = 22;
@@ -152,17 +142,10 @@ const
     cKeyMaxIndex = 1600;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
-    cHHFileName = 'Hedgehog';
-    cCHFileName = 'Crosshair';
-    cThemeCFGFilename = 'theme.cfg';
-
     cFontBorder = 2;
 
     // do not change this value
     cDefaultZoomLevel = 2.0;
-
-    cSendEmptyPacketTime = 1000;
-    trigTurns = $80000001;
 
     // game flags
     gfAny                = $FFFFFFFF;
@@ -242,11 +225,11 @@ const
 
     cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;
-    
+
     // ai hints
     aihUsualProcessing    = $00000000;
     aihDoesntMatter       = $00000001;
-    
+
     // ammo properties
     ammoprop_Timerable    = $00000001;
     ammoprop_Power        = $00000002;
@@ -262,7 +245,7 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
-    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
+    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
     ammoprop_Track        = $00040000;
@@ -290,40 +273,8 @@ const
     NoPointX = Low(LongInt);
     cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
 
-    // hog tag mask
-    htNone        = $00;
-    htTeamName    = $01;
-    htName        = $02;
-    htHealth      = $04;
-    htTransparent = $08;
+    kSystemSoundID_Vibrate = $00000FFF;
 
-    AMAnimDuration = 200;
-    AMHidden    = 0;//AMState values
-    AMShowingUp = 1;
-    AMShowing   = 2;
-    AMHiding    = 3;
-
-    AMTypeMaskX     = $00000001;
-    AMTypeMaskY     = $00000002;
-    AMTypeMaskAlpha = $00000004;
-    AMTypeMaskSlide = $00000008;
-
-{$IFDEF MOBILE}
-    AMSlotSize = 48;
-    AMTITLE = 30;
-{$ELSE}
-    AMSlotSize = 32;
-{$ENDIF}
-    AMSlotPadding = (AMSlotSize - 32) shr 1;
-
-{$IFDEF USE_TOUCH_INTERFACE}
-    FADE_ANIM_TIME = 500;
-    MOVE_ANIM_TIME = 500;
-{$ENDIF}
-
-    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
-    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
-       
 implementation
 
 end.

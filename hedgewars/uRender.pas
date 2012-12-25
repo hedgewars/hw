@@ -55,6 +55,12 @@ procedure Tint                  (c: Longword); inline;
 implementation
 uses uVariables;
 
+{$IFDEF USE_TOUCH_INTERFACE}
+const
+    FADE_ANIM_TIME = 500;
+    MOVE_ANIM_TIME = 500;
+{$ENDIF}
+
 var LastTint: LongWord = 0;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
@@ -120,7 +126,7 @@ end;
 }
 
 procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-var 
+var
     rr: TSDL_Rect;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     //VertexBuffer, TextureBuffer: TVertexRect;
@@ -479,9 +485,9 @@ begin
     SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
     Tint($FF, $FF, $FF, $FF);
-    
+
     glPopMatrix;
-    
+
     glEnable(GL_TEXTURE_2D);
 
 {$ELSE}
@@ -550,14 +556,14 @@ glEnable(GL_TEXTURE_2D)
 
 end;
 
-procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte); 
+procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 begin
     Tint(r, g, b, a);
-    DrawCircle(X, Y, Radius, Width); 
+    DrawCircle(X, Y, Radius, Width);
     Tint($FF, $FF, $FF, $FF);
 end;
 
-procedure DrawCircle(X, Y, Radius, Width: LongInt); 
+procedure DrawCircle(X, Y, Radius, Width: LongInt);
 var
     i: LongInt;
     CircleVertex: array [0..59] of TVertex2f;
@@ -670,9 +676,9 @@ with widget^ do
         if RealTicks > (fadeAnimStart + FADE_ANIM_TIME) then
             fadeAnimStart:= 0
         else
-            if show then 
+            if show then
                 alpha:= Byte(trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF))
-            else 
+            else
                 alpha:= Byte($FF - trunc((RealTicks - fadeAnimStart)/FADE_ANIM_TIME * $FF));
         end;
 

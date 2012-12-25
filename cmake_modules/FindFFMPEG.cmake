@@ -16,17 +16,23 @@
 #  BSD license.
 #
 
+set(FFMPEG_FOUND FALSE)
+
 if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
   # in cache already
   set(FFMPEG_FOUND TRUE)
 else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
+  # silence output option
+  if (FFMPEG_FIND_QUIETLY)
+    set(VERBOSITY "QUIET")
+  endif ()
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
   find_package(PkgConfig)
   if (PKG_CONFIG_FOUND)
-    pkg_check_modules(_FFMPEG_AVCODEC libavcodec)
-    pkg_check_modules(_FFMPEG_AVFORMAT libavformat)
-    pkg_check_modules(_FFMPEG_AVUTIL libavutil)
+    pkg_check_modules(_FFMPEG_AVCODEC libavcodec ${VERBOSITY})
+    pkg_check_modules(_FFMPEG_AVFORMAT libavformat ${VERBOSITY})
+    pkg_check_modules(_FFMPEG_AVUTIL libavutil ${VERBOSITY})
   endif (PKG_CONFIG_FOUND)
 
   find_path(FFMPEG_AVCODEC_INCLUDE_DIR
@@ -74,10 +80,6 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
       ${FFMPEG_LIBAVFORMAT}
       ${FFMPEG_LIBAVUTIL}
     )
-    if (APPLE)
-      set(FFMPEG_LIBRARIES ${FFMPEG_LIBRARIES} "bz2" "-framework CoreVideo" "-framework VideoDecodeAcceleration")
-    endif(APPLE)
-
   endif (FFMPEG_FOUND)
 
   if (FFMPEG_FOUND)

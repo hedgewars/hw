@@ -169,7 +169,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     m_name = teamfile.value("Team/Name", m_name).toString();
     m_grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -202,7 +202,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-    QFile f(QString("physfs://config/Teams/%1.hwt").arg(m_name));
+    QFile f(QString("physfs://Teams/%1.hwt").arg(m_name));
     return f.exists();
 }
 
@@ -210,7 +210,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(m_name));
+    QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(m_name));
     cfgfile.remove();
     return true;
 }
@@ -219,11 +219,12 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-        QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(OldTeamName));
+        QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(OldTeamName));
         cfgfile.remove();
         OldTeamName = m_name;
     }
-    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Team/Name", m_name);
     teamfile.setValue("Team/Grave", m_grave);
@@ -234,6 +235,7 @@ bool HWTeam::saveToFile()
     teamfile.setValue("Team/Rounds", m_rounds);
     teamfile.setValue("Team/Wins", m_wins);
     teamfile.setValue("Team/CampaignProgress", m_campaignProgress);
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
@@ -251,6 +253,7 @@ bool HWTeam::saveToFile()
             teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
         else
             break;
+
     return true;
 }
 

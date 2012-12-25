@@ -35,8 +35,6 @@
 #include "DataManager.h"
 #include "FileEngine.h"
 
-#include "frontlib.h"
-
 #ifdef _WIN32
 #include <Shlobj.h>
 #endif
@@ -90,9 +88,9 @@ void checkSeason()
 
 bool checkForDir(const QString & dir)
 {
-    QDir tmpdir;
-    if (!tmpdir.exists(dir))
-        if (!tmpdir.mkdir(dir))
+    QDir tmpdir(dir);
+    if (!tmpdir.exists())
+        if (!tmpdir.mkpath(dir))
         {
             QMessageBox directoryMsg(QApplication::activeWindow());
             directoryMsg.setIcon(QMessageBox::Warning);
@@ -105,13 +103,40 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
+bool checkForFile(const QString & file)
+{
+    QFile tmpfile(file);
+    if (!tmpfile.exists())
+        return tmpfile.open(QFile::WriteOnly);
+    else
+        return true;
+}
+
+#ifdef __APPLE__
+static CocoaInitializer *cocoaInit = NULL;
+// Function to be called at end of program's termination on OS X to release
+// the NSAutoReleasePool contained within the CocoaInitializer.
+void releaseCocoaPool(void)
+{
+    if (cocoaInit != NULL)
+    {
+        delete cocoaInit;
+        cocoaInit = NULL;
+    }
+}
+#endif
+
 int main(int argc, char *argv[])
 {
+#ifdef __APPLE__
+    // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
+    cocoaInit = new CocoaInitializer();
+    atexit(releaseCocoaPool);
+#endif
+
     HWApplication app(argc, argv);
 
     FileEngineHandler engine(argv[0]);
-
-    flib_init();
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -150,8 +175,13 @@ int main(int argc, char *argv[])
     if(parsedArgs.contains("config-dir"))
     {
         QFileInfo f(parsedArgs["config-dir"]);
-        *cConfigDir = f.absoluteFilePath();
+        cfgdir->setPath(f.absoluteFilePath());
         custom_config = true;
+    }
+    else
+    {
+        cfgdir->setPath(QDir::homePath());
+        custom_config = false;
     }
 
     app.setStyle(new QPlastiqueStyle());
@@ -164,14 +194,11 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<HWTeam>("HWTeam");
 
-    bindir->cd("bin"); // workaround over NSIS installer
+    // workaround over NSIS installer which modifies the install path
+    //bindir->cd("./");
+    bindir->cd(QCoreApplication::applicationDirPath());
 
-    if(cConfigDir->length() == 0)
-        cfgdir->setPath(cfgdir->homePath());
-    else
-        cfgdir->setPath(*cConfigDir);
-
-    if(cConfigDir->length() == 0)
+    if(custom_config == false)
     {
 #ifdef __APPLE__
         checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
@@ -212,14 +239,14 @@ int main(int argc, char *argv[])
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("hedgewars/Data"))
+    if(!datadir->cd("Data"))
     {
         QMessageBox missingMsg(QApplication::activeWindow());
         missingMsg.setIcon(QMessageBox::Critical);
         missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
         missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
                                            "Please check your installation!").
-                                            arg(datadir->absolutePath()+"/hedgewars/Data"));
+                                            arg(datadir->absolutePath()+"/Data"));
         missingMsg.setWindowModality(Qt::WindowModal);
         missingMsg.exec();
         return 1;
@@ -228,13 +255,15 @@ int main(int argc, char *argv[])
     // setup PhysFS
     engine.mount(datadir->absolutePath());
     engine.mount(cfgdir->absolutePath() + "/Data");
-    engine.mount(cfgdir->absolutePath(), "/config");
+    engine.mount(cfgdir->absolutePath());
     engine.setWriteDir(cfgdir->absolutePath());
     engine.mountPacks();
 
+    checkForFile("physfs://hedgewars.ini");
+
     QTranslator Translator;
     {
-        QSettings settings("physfs://config/hedgewars.ini", QSettings::IniFormat);
+        QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
@@ -253,10 +282,6 @@ int main(int argc, char *argv[])
         registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
         registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
-#endif
-#ifdef __APPLE__
-    // this creates the autoreleasepool that prevents leaking
-    CocoaInitializer initializer;
 #endif
 
     QString style = "";
@@ -294,9 +319,5 @@ int main(int argc, char *argv[])
 
     app.form = new HWForm(NULL, style);
     app.form->show();
-    int r = app.exec();
-
-    flib_quit();
-
-    return r;
+    return app.exec();
 }

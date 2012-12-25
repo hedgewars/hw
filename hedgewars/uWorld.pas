@@ -60,10 +60,9 @@ uses
     , uCaptions
     , uCursor
     , uCommands
-    , uMobile
-{$IFDEF USE_VIDEO_RECORDING}    
+{$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
-{$ENDIF}    
+{$ENDIF}
 {$IFDEF GL2}
     , uMatrix
 {$ENDIF}
@@ -87,6 +86,10 @@ var cWaveWidth, cWaveHeight: LongInt;
     isFirstFrame: boolean;
     AMAnimType: LongInt;
     recTexture: PTexture;
+    AmmoMenuTex     : PTexture;
+    HorizontOffset: LongInt;
+    cOffsetY: LongInt;
+    AFRToggle: Boolean;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -95,6 +98,28 @@ const cStereo_Sky           = 0.0500;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
       cStereo_Outside       = -0.0400;
+
+      AMAnimDuration = 200;
+      AMHidden    = 0;//AMState values
+      AMShowingUp = 1;
+      AMShowing   = 2;
+      AMHiding    = 3;
+
+      AMTypeMaskX     = $00000001;
+      AMTypeMaskY     = $00000002;
+      AMTypeMaskAlpha = $00000004;
+      AMTypeMaskSlide = $00000008;
+
+{$IFDEF MOBILE}
+      AMSlotSize = 48;
+      AMTITLE    = 30;
+{$ELSE}
+      AMSlotSize = 32;
+{$ENDIF}
+      AMSlotPadding = (AMSlotSize - 32) shr 1;
+
+      cSendCursorPosTime = 50;
+      cCursorEdgesDist   = 100;
 
 // helper functions to create the goal/game mode string
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
@@ -223,7 +248,7 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 
 //positioning of the buttons
-buttonScale:= uMobile.getScreenDPI/cDefaultZoomLevel;
+buttonScale:= mobileRecord.getScreenDPI()/cDefaultZoomLevel;
 
 
 with JumpWidget do
@@ -418,14 +443,14 @@ begin
     AmmoRect.w:= (BORDERSIZE*2) + (SlotsNumX * AMSlotSize) + (SlotsNumX-1);
     AmmoRect.h:= (BORDERSIZE*2) + (SlotsNumY * AMSlotSize) + (SlotsNumY-1);
     amSurface := SDL_CreateRGBSurface(SDL_SWSURFACE, AmmoRect.w, AmmoRect.h, 32, RMask, GMask, BMask, AMask);
-    
+
     AMRect.x:= BORDERSIZE;
     AMRect.y:= BORDERSIZE;
     AMRect.w:= AmmoRect.w - (BORDERSIZE*2);
     AMRect.h:= AmmoRect.h - (BORDERSIZE*2);
 
     SDL_FillRect(amSurface, @AMRect, SDL_MapRGB(amSurface^.format, 0,0,0));
-    
+
     x:= AMRect.x;
     y:= AMRect.y;
     for i:= 0 to cMaxSlotIndex do
@@ -459,25 +484,25 @@ begin
                     AMFrame:= LongInt(Ammo^[i,t].AmmoType) - 1;
                     if STurns >= 0 then //weapon not usable yet, draw grayed out with turns remaining
                         begin
-                        DrawSpriteFrame2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding, 
+                        DrawSpriteFrame2Surf(sprAMAmmosBW, amSurface, x + AMSlotPadding,
                                                                  y + AMSlotPadding, AMFrame);
                         if STurns < 100 then
-                            DrawSpriteFrame2Surf(sprTurnsLeft, amSurface, 
-                                x + AMSlotSize-16, 
+                            DrawSpriteFrame2Surf(sprTurnsLeft, amSurface,
+                                x + AMSlotSize-16,
                                 y + AMSlotSize + 1 - 16, STurns);
                         end
                     else //draw colored version
                         begin
-                        DrawSpriteFrame2Surf(sprAMAmmos, amSurface, x + AMSlotPadding, 
+                        DrawSpriteFrame2Surf(sprAMAmmos, amSurface, x + AMSlotPadding,
                                                                y + AMSlotPadding, AMFrame);
                         end;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
-	    inc(y, AMSlotSize + 1); //the plus one is for the border
+        inc(y, AMSlotSize + 1); //the plus one is for the border
 {$ELSE}
-	    inc(x, AMSlotSize + 1);
+        inc(x, AMSlotSize + 1);
 {$ENDIF}
-	    end;
-	end;
+        end;
+    end;
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
     inc(x, AMSlotSize + 1);
 {$ELSE}
@@ -486,7 +511,7 @@ begin
     end;
 
 for i:= 1 to SlotsNumX -1 do
-DrawLine2Surf(amSurface, i * (AMSlotSize+1)+1, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.h + BORDERSIZE - AMSlotSize - 2,160,160,160);            
+DrawLine2Surf(amSurface, i * (AMSlotSize+1)+1, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.h + BORDERSIZE - AMSlotSize - 2,160,160,160);
 for i:= 1 to SlotsNumY -1 do
 DrawLine2Surf(amSurface, BORDERSIZE, i * (AMSlotSize+1)+1, AMRect.w + BORDERSIZE, i * (AMSlotSize+1)+1,160,160,160);
 
@@ -531,8 +556,8 @@ if Ammo = nil then
     exit
     end;
 
-//Init the menu 
-if(AmmoMenuInvalidated) then 
+//Init the menu
+if(AmmoMenuInvalidated) then
     begin
     AmmoMenuInvalidated:= false;
     FreeTexture(AmmoMenuTex);
@@ -588,7 +613,7 @@ if AMState = AMShowingUp then // show ammo menu
             begin
             AMShiftX:= Round(AMShiftTargetX * (1 - AMAnimState));
             AMShiftY:= Round(AMShiftTargetY * (1 - AMAnimState));
-            if (AMAnimType and AMTypeMaskAlpha) <> 0 then 
+            if (AMAnimType and AMTypeMaskAlpha) <> 0 then
                 Tint($FF, $ff, $ff, Round($ff * AMAnimState));
             end
         else
@@ -613,10 +638,10 @@ if AMState = AMHiding then // hide ammo menu
             begin
             AMShiftX:= Round(AMShiftTargetX * AMAnimState);
             AMShiftY:= Round(AMShiftTargetY * AMAnimState);
-            if (AMAnimType and AMTypeMaskAlpha) <> 0 then 
+            if (AMAnimType and AMTypeMaskAlpha) <> 0 then
                 Tint($FF, $ff, $ff, Round($ff * (1-AMAnimState)));
             end
-         else 
+         else
             begin
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
@@ -624,10 +649,10 @@ if AMState = AMHiding then // hide ammo menu
             AMState:= AMHidden;
             end;
     end;
-    
+
 DrawTexture(AmmoRect.x + AMShiftX, AmmoRect.y + AMShiftY, AmmoMenuTex);
 
-if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMTypeMaskAlpha) <> 0 )then 
+if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMTypeMaskAlpha) <> 0 )then
     Tint($FF, $ff, $ff, $ff);
 
 Pos:= -1;
@@ -648,15 +673,15 @@ c:= -1;
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( g    * (AMSlotSize+1))) and
                        (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((g+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >  AmmoRect.x                   + ( c    * (AMSlotSize+1))) and 
+                       (CursorPoint.X >  AmmoRect.x                   + ( c    * (AMSlotSize+1))) and
                        (CursorPoint.X <= AmmoRect.x                   + ((c+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
                         Pos:= t;
                         STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
-                            DrawSprite(sprAMSlot, 
-                                       AmmoRect.x + BORDERSIZE + (c * (AMSlotSize+1)) + AMSlotPadding, 
+                            DrawSprite(sprAMSlot,
+                                       AmmoRect.x + BORDERSIZE + (c * (AMSlotSize+1)) + AMSlotPadding,
                                        AmmoRect.y + BORDERSIZE + (g  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
@@ -678,15 +703,15 @@ c:= -1;
                     begin
                     if (CursorPoint.Y <= (cScreenHeight - AmmoRect.y) - ( c    * (AMSlotSize+1))) and
                        (CursorPoint.Y >  (cScreenHeight - AmmoRect.y) - ((c+1) * (AMSlotSize+1))) and
-                       (CursorPoint.X >  AmmoRect.x                   + ( g    * (AMSlotSize+1))) and 
+                       (CursorPoint.X >  AmmoRect.x                   + ( g    * (AMSlotSize+1))) and
                        (CursorPoint.X <= AmmoRect.x                   + ((g+1) * (AMSlotSize+1))) then
                         begin
                         Slot:= i;
                         Pos:= t;
                         STurns:= Ammoz[Ammo^[i, t].AmmoType].SkipTurns - CurrentTeam^.Clan^.TurnNumber;
                         if (STurns < 0) and (AMShiftX = 0) and (AMShiftY = 0) then
-                            DrawSprite(sprAMSlot, 
-                                       AmmoRect.x + BORDERSIZE + (g * (AMSlotSize+1)) + AMSlotPadding, 
+                            DrawSprite(sprAMSlot,
+                                       AmmoRect.x + BORDERSIZE + (g * (AMSlotSize+1)) + AMSlotPadding,
                                        AmmoRect.y + BORDERSIZE + (c  * (AMSlotSize+1)) + AMSlotPadding -1, 0);
                         end;
                         inc(g);
@@ -759,8 +784,8 @@ end;
 
 procedure DrawWater(Alpha: byte; OffsetY: LongInt);
 var VertexBuffer : array [0..3] of TVertex2f;
-    r		 : TSDL_Rect;
-    lw, lh	 : GLfloat;
+    r        : TSDL_Rect;
+    lw, lh   : GLfloat;
 begin
 if SuddenDeathDmg then
     begin
@@ -786,7 +811,7 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
     begin
         if r.y < 0 then
             r.y:= 0;
- 
+
         glDisable(GL_TEXTURE_2D);
         VertexBuffer[0].X:= -lw;
         VertexBuffer[0].Y:= r.y;
@@ -991,7 +1016,7 @@ begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
         end
-{$IFNDEF S3D_DISABLED}
+{$IFDEF USE_S3D_RENDERING}
     else if (cStereoMode = smAFR) then
         begin
         AFRToggle:= (not AFRToggle);
@@ -1104,7 +1129,7 @@ end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
-{$IFDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; d:= d; // avoid hint
     exit;
 {$ELSE}
@@ -1126,16 +1151,19 @@ begin
     {$ENDIF}
 {$ENDIF}
 end;
- 
+
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFNDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; // avoid hint
+    exit;
+{$ELSE}
     if rm = rmDefault then
         exit;
     {$IFDEF GL2}
     hglMatrixMode(MATRIX_PROJECTION);
     hglTranslatef(-stereoDepth, 0, 0);
-    hglMatrixMode(MATRIX_MODELVIEW);    
+    hglMatrixMode(MATRIX_MODELVIEW);
     {$ELSE}
     glMatrixMode(GL_PROJECTION);
     glTranslatef(-stereoDepth, 0, 0);
@@ -1144,7 +1172,7 @@ begin
     cStereoDepth:= 0;
 {$ENDIF}
 end;
- 
+
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t, h: LongInt;
     r: TSDL_Rect;
@@ -1182,7 +1210,7 @@ DrawVisualGears(4);
 if (cReducedQuality and rq2DWater) = 0 then
     begin
         // Waves
-        DrawWater(255, SkyOffset); 
+        DrawWater(255, SkyOffset);
         ChangeDepth(RM, -cStereo_Water_distant);
         DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
         ChangeDepth(RM, -cStereo_Water_distant);
@@ -1299,7 +1327,7 @@ if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) th
         i:= Succ(Pred(ReadyTimeLeft) div 1000)
     else
         i:= Succ(Pred(TurnTimeLeft) div 1000);
-   
+
     if i>99 then
         t:= 112
     else if i>9 then
@@ -1479,7 +1507,7 @@ if (not bShowAmmoMenu) and ((AMstate = AMShowing) or (AMState = AMShowingUp)) th
     else
         AMAnimStartTime:= RealTicks - (AMAnimDuration - (RealTicks - AMAnimStartTime));
     AMState:= AMHiding;
-    end; 
+    end;
 
 if bShowAmmoMenu or (AMState = AMHiding) then
     ShowAmmoMenu;
@@ -1533,8 +1561,8 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         if t < 10 then
             s:= '0' + s;
         s:= inttostr(i div 60) + ':' + s;
-   
-    
+
+
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
         FreeTexture(timeTexture);
@@ -1639,7 +1667,7 @@ if flagPrerecording then
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
     // draw red circle
-    glDisable(GL_TEXTURE_2D); 
+    glDisable(GL_TEXTURE_2D);
     Tint($FF, $00, $00, Byte(Round(127*(1 + sin(SDL_GetTicks()*0.007)))));
     glBegin(GL_POLYGON);
     for i:= 0 to 20 do
@@ -1748,7 +1776,7 @@ begin
     {$ENDIF}
 
 {$ENDIF}
-    if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left 
+    if CursorPoint.X < AmmoRect.x + amNumOffsetX + 3 then//check left
         CursorPoint.X:= AmmoRect.x + amNumOffsetX + 3;
     if CursorPoint.X > AmmoRect.x + AmmoRect.w - 3 then//check right
         CursorPoint.X:= AmmoRect.x + AmmoRect.w - 3;
@@ -1895,7 +1923,7 @@ if(CurrentHedgehog <> nil)then
         begin
         utilityWidget.sprite:= sprTimerButton;
         animateWidget(@utilityWidget, true, true);
-        end 
+        end
     else if (Ammoz[ammoType].Ammo.Propz and ammoprop_NeedTarget) <> 0 then
         begin
         utilityWidget.sprite:= sprTargetButton;
@@ -1919,7 +1947,7 @@ with widget^ do
     begin
     show:= showWidget;
     if fade then fadeAnimStart:= RealTicks;
-    
+
     with moveAnim do
         begin
         animate:= true;

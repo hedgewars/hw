@@ -241,6 +241,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     {
         mynick = lst[1];
         m_playersModel->setNickname(mynick);
+        m_nick_registered = false;
         return ;
     }
 
@@ -304,6 +305,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QStringList tmp = lst;
         tmp.removeFirst();
         m_roomsListModel->setRoomsList(tmp);
+        if (m_nick_registered == false)
+        {
+            emit NickNotRegistered(mynick);
+        }
         return;
     }
 
@@ -361,6 +366,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             tmp.removeFirst();
             tmp.removeFirst();
         }
+        return;
+    }
+
+    if (lst[0] == "BANLIST")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        emit bansList(tmp);
         return;
     }
 
@@ -530,7 +543,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ASKPASSWORD")
     {
-        emit AskForPassword(mynick);
+        emit NickRegistered(mynick);
+        m_nick_registered = true;
         return;
     }
 
@@ -565,6 +579,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (lst[1] == "Authentication failed")
         {
             emit AuthFailed();
+        m_game_connected = false;
+        Disconnect();
+        //omitted 'emit disconnected()', we don't want the error message
+        return;
         }
         m_game_connected = false;
         Disconnect();
@@ -618,6 +636,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
                 emit FromNet(em);
             }
+            return;
+        }
+
+        if (lst[0] == "ROUND_FINISHED")
+        {
+            emit FromNet(QByteArray("\x01o"));
             return;
         }
 
@@ -861,6 +885,26 @@ void HWNewNet::gameFinished(bool correctly)
 void HWNewNet::banPlayer(const QString & nick)
 {
     RawSendNet(QString("BAN%1%2").arg(delimeter).arg(nick));
+}
+
+void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANIP%1%2%1%3%1%4").arg(delimeter).arg(ip).arg(reason).arg(seconds));
+}
+
+void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANNICK%1%2%1%3%1%4").arg(delimeter).arg(nick).arg(reason).arg(seconds));
+}
+
+void HWNewNet::getBanList()
+{
+    RawSendNet(QByteArray("BANLIST"));
+}
+
+void HWNewNet::removeBan(const QString & b)
+{
+    RawSendNet(QString("UNBAN%1%2").arg(delimeter).arg(b));
 }
 
 void HWNewNet::kickPlayer(const QString & nick)

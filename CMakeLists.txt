@@ -1,19 +1,20 @@
 project(hedgewars)
 
 #initialise cmake environment
-cmake_minimum_required(VERSION 2.6.0 FATAL_ERROR)
-cmake_policy(VERSION 2.6)
-FOREACH(hwpolicy CMP0003 CMP0012 CMP0017)
-    IF(POLICY ${hwpolicy})
-        CMAKE_POLICY(SET ${hwpolicy} NEW)
-    ENDIF()
-ENDFOREACH()
+cmake_minimum_required(VERSION 2.6.0)
+foreach(hwpolicy CMP0003 CMP0012 CMP0017)
+    if(POLICY ${hwpolicy})
+        cmake_policy(SET ${hwpolicy} NEW)
+    endif()
+endforeach()
 #use available modules, fallback to ours if not present (CMP0017 helps)
 set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
-#set some default values
-option(NOREVISION "Build Hedgewars without revision information" OFF)
 
+#usually this is set at release time
+option(NOREVISION "Build Hedgewars without revision information [default: off]" OFF)
+
+#set other default values
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
@@ -25,39 +26,40 @@ option(LIBENGINE "Enable hwengine library [default: off]" OFF)
 
 option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
-option(CROSSAPPLE "Enable OSX when not on OSX [default: off]" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+set(FPFLAGS "" CACHE STRING "Additional Freepascal flags" FORCE)
+set(GHFLAGS "" CACHE STRING "Additional Haskell flags" FORCE)
 
 
 #detect Mercurial revision (if present)
-IF(NOT NOREVISION)
+if(NOT NOREVISION)
     set(default_build_type "DEBUG")
     set(version_suffix "-development_version")
     set(HW_DEV true)
-    FIND_PROGRAM(HGCOMMAND hg)
-    IF(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
+    find_program(HGCOMMAND hg)
+    if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
         execute_process(COMMAND ${HGCOMMAND} identify -in
                         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                         OUTPUT_VARIABLE internal_version
                         ERROR_QUIET
                     )
         #check local repo status
-        STRING(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
+        string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
 
-        STRING(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
-        STRING(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
+        string(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
+        string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" revision_hash ${internal_version})
 
-        MESSAGE(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
-        IF(HGCHANGED)
+        message(STATUS "Building revision ${revision_number} from hash ${revision_hash} ${HGCHANGED}")
+        if(HGCHANGED)
             MESSAGE(WARNING "Notice: you have uncommitted changes in your repository")
-        ENDIF()
+        endif()
         set(version_suffix "-${revision_number}${HGCHANGED}")
-    ENDIF()
-ELSE(NOT NOREVISION)
+    endif()
+else(NOT NOREVISION)
     set(default_build_type "RELEASE")
     set(HWDEV false)
-    MESSAGE(STATUS "Building distributable version")
-ENDIF(NOT NOREVISION)
+    message(STATUS "Building distributable version")
+endif(NOT NOREVISION)
 
 
 #versioning
@@ -79,18 +81,34 @@ else()
 endif()
 
 
-#bundle .app setup
-if(APPLE OR CROSSAPPLE)
-    #paths for creating the bundle
-    set(bundle_name Hedgewars.app)
-    set(frameworks_dir ${bundle_name}/Contents/Frameworks/)
-    set(CMAKE_INSTALL_PREFIX ${bundle_name}/Contents/MacOS/)
-    set(DATA_INSTALL_DIR "../Resources/")
-    set(target_dir ".")
-    set(minimum_macosx_version "10.6")
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+
+if(UNIX AND NOT APPLE)
+    set(target_binary_install_dir "bin")
+    set(target_library_install_dir "lib")
+    if(DEFINED DATA_INSTALL_DIR)
+        set(SHAREPATH "${DATA_INSTALL_DIR}")
+    else()
+        set(SHAREPATH "share/hedgewars/")
+    endif()
 else()
-    set(target_dir "bin")
+    set(target_binary_install_dir "./")
+
+    if(APPLE)
+        set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/")
+        set(SHAREPATH "../Resources/")
+        set(target_library_install_dir "../Frameworks/")
+    else()
+        if(WIN32)
+            set(target_library_install_dir "./")
+            set(SHAREPATH "./")
+            set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
+            link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
+        endif(WIN32)
+    endif()
 endif()
+
 
 if(APPLE)
     set(CMAKE_FIND_FRAMEWORK "FIRST")
@@ -120,12 +138,12 @@ if(APPLE)
     endif()
 
     #lower systems don't have enough processing power anyway
-    if (minimum_macosx_version LESS "10.4")
+    if (minimum_macosx_version VERSION_LESS "10.4")
         message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
     endif()
 
     #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-    if(current_macosx_version MATCHES "10.4")
+    if(current_macosx_version VERSION_EQUAL "10.4")
         find_package(SDL_mixer REQUIRED)
         set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
         set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
@@ -135,7 +153,7 @@ if(APPLE)
 
     #CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
     if(NOT CMAKE_OSX_ARCHITECTURES)
-        if(current_macosx_version LESS "10.6")
+        if(current_macosx_version VERSION_LESS "10.6")
             if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
                 set(CMAKE_OSX_ARCHITECTURES "ppc7400")
             else()
@@ -148,8 +166,8 @@ if(APPLE)
 
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
-    if(NOT ${minimum_macosx_version} MATCHES ${current_macosx_version})
-        if(minimum_macosx_version MATCHES "10.4")
+    if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
+        if(minimum_macosx_version VERSION_EQUAL "10.4")
             set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
             set(CMAKE_C_COMPILER "gcc-4.0")
             set(CMAKE_CXX_COMPILER "g++-4.0")
@@ -164,8 +182,10 @@ if(APPLE)
     #set deployment target
     set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
 
-    message(STATUS "Build system: Mac OS X ${current_macosx_version} with C compiler: ${CMAKE_C_COMPILER}")
-    message(STATUS "Target system: Mac OS X ${minimum_macosx_version} for architecture(s): ${CMAKE_OSX_ARCHITECTURES}")
+    #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
+    if(NOT NOVIDEOREC AND ${minimum_macosx_version} VERSION_LESS "10.6")
+        set(WARNING "Video recording support before OS X 10.6 is experimental")
+    endif()
 endif(APPLE)
 
 
@@ -173,7 +193,7 @@ endif(APPLE)
 if (CMAKE_BUILD_TYPE)
     string (TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if ( NOT( (CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "DEBUG") ) )
-        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Only 'Debug' or 'Release' options are allowed." FORCE)
+        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
         message (STATUS "Unknown build type, using default (${default_build_type})")
     endif ()
 else (CMAKE_BUILD_TYPE)
@@ -198,43 +218,37 @@ endif()
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
-    math(EXPR cmake_version "${CMAKE_MAJOR_VERSION}*10000 + ${CMAKE_MINOR_VERSION}*100 + ${CMAKE_PATCH_VERSION}")
-    if(cmake_version LESS "020800")
-        message(STATUS "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
+    set(cmake_version "${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}.${CMAKE_PATCH_VERSION}")
+    if(cmake_version VERSION_LESS "2.8")
+        message(WARNING "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     else()
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed} "-vm4079,4080,4081" "-B" "-FE../bin" "-Cs2000000" "-vewnq" "-dDEBUGFILE" ${pascal_flags})
+set(pascal_flags ${fpflags_parsed}              # user flags
+                 "-vm4079,4080,4081"            # fpc output format
+                 "-B"                           # compile all units
+                 "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
+                 "-Fl${PROJECT_BINARY_DIR}/bin" # fpc linking directory
+                 "-Cs2000000"                   # stack size
+                 "-vewnq"                       # fpc output verbosity
+                 "-dDEBUGFILE"                  # macro for engine output
+                 ${pascal_flags}                # adding to list
+                 )
 set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
 
 #get BUILD_TYPE and enable/disable optimisation
+message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    message(STATUS "Building Debug flavour")
     set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
     set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
 else()
-    message(STATUS "Building Release flavour")
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
-    set(pascal_flags "-Os" "-Ooregvar" "-Xs" "-Si" ${pascal_flags})
+    set(pascal_flags "-Os" "-Xs" "-Si" ${pascal_flags})
     set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
 endif()
-
-
-#finish setting paths
-if(DEFINED DATA_INSTALL_DIR)
-    set(SHAREPATH ${DATA_INSTALL_DIR}/hedgewars/)
-else()
-    set(SHAREPATH share/hedgewars/)
-endif()
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${EXECUTABLE_OUTPUT_PATH})
-if(WIN32)
-    set(CMAKE_PREFIX_PATH "${CMAKE_SOURCE_DIR}/misc/winutils/")
-    link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
-endif(WIN32)
 
 
 #Haskell compiler discovery (for server and engine in c)
@@ -277,8 +291,12 @@ else()
 endif()
 
 
-#physfs library
+#physfs library (static on unix, dll on win32)
 add_subdirectory(misc/physfs)
+if(NOT WIN32)
+    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
+endif()
+
 
 #frontend library
 add_subdirectory(project_files/frontlib)
@@ -331,6 +349,7 @@ if(WIN32 AND NOT UNIX)
     set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
     set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")
     set(CPACK_NSIS_MODIFY_PATH OFF)
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY "${target_binary_install_dir}")
     set(CPACK_GENERATOR "ZIP;NSIS")
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "hedgewars")
 else(WIN32 AND NOT UNIX)

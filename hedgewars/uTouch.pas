@@ -22,7 +22,7 @@ unit uTouch;
 
 interface
 
-uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld, uMobile;
+uses SysUtils, uConsole, uVariables, SDLh, uFloat, uConsts, uCommands, GLUnit, uTypes, uCaptions, uAmmos, uWorld;
 
 
 procedure initModule;
@@ -76,20 +76,20 @@ var
     xTouchClick,yTouchClick : LongInt;
     timeSinceClick : Longword;
 
-    //Pinch to zoom 
+    //Pinch to zoom
     pinchSize : LongInt;
     baseZoomValue: GLFloat;
 
     //aiming
     aimingCrosshair: boolean;
-    aimingUp, aimingDown: boolean; 
+    aimingUp, aimingDown: boolean;
     targetAngle: LongInt;
 
     buttonsDown: Longword;
     targetting, targetted: boolean; //true when targetting an airstrike or the like
 
 procedure onTouchDown(x,y: Longword; pointerId: TSDL_FingerId);
-var 
+var
     finger: PTouch_Data;
 begin
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -161,7 +161,7 @@ if isOnWidget(utilityWidget, finger^) then
             ParseTeamCommand('/timer ' + inttostr((GetCurAmmoEntry(CurrentHedgeHog^)^.Timer div 1000) mod 5 + 1));
         end;
     exit;
-    end; 
+    end;
 dec(buttonsDown);//no buttonsDown, undo the inc() above
 if buttonsDown = 0 then
     begin
@@ -201,8 +201,8 @@ if moveCursor then
         end;
         exit //todo change into switch rather than ugly ifs
     end;
-    
-if aimingCrosshair then 
+
+if aimingCrosshair then
     begin
         aim(finger^);
         exit
@@ -252,10 +252,10 @@ widget:= finger^.pressedWidget;
 if (buttonsDown > 0) and (widget <> nil) then
     begin
     dec(buttonsDown);
-    
+
     if widget = @arrowLeft then
         ParseTeamCommand('-left');
-    
+
     if widget = @arrowRight then
         ParseTeamCommand('-right');
 
@@ -267,7 +267,7 @@ if (buttonsDown > 0) and (widget <> nil) then
 
     if widget = @fireButton then
         ParseTeamCommand('-attack');
-    
+
     if widget = @utilityWidget then
         if (CurrentHedgehog <> nil)then
             if(Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0)then
@@ -279,10 +279,10 @@ if (buttonsDown > 0) and (widget <> nil) then
                 ParseTeamCommand('switch')
             else WriteLnToConsole(inttostr(ord(Ammoz[CurrentHedgehog^.CurAmmoType].NameId)) + ' ' + inttostr(ord(sidSwitch)));
     end;
-        
+
 if targetting then
     AddCaption('Press the target button to mark the target', cWhiteColor, capgrpAmmoInfo);
- 
+
 deleteFinger(pointerId);
 {$ENDIF}
 end;
@@ -309,8 +309,8 @@ begin
 //if (RealTicks - timeSinceClick < 300) and (sqrt(sqr(finger.X-xTouchClick) + sqr(finger.Y-yTouchClick)) < 30) then
 //    begin
 //    onTouchDoubleClick(finger);
-//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds) 
-//    exit; 
+//    timeSinceClick:= 0;//we make an assumption there won't be an 'click' in the first 300 ticks(milliseconds)
+//    exit;
 //    end;
 
 xTouchClick:= finger.x;
@@ -318,12 +318,12 @@ yTouchClick:= finger.y;
 timeSinceClick:= RealTicks;
 
 if bShowAmmoMenu then
-    begin 
+    begin
     if isOnRect(AmmoRect, finger) then
         begin
         CursorPoint.X:= finger.x;
         CursorPoint.Y:= finger.y;
-        ParseTeamCommand('put'); 
+        ParseTeamCommand('put');
         end
     else
         bShowAmmoMenu:= false;
@@ -339,28 +339,28 @@ if isOnCurrentHog(finger) or isOnWidget(AMWidget, finger) then
 
 if isOnWidget(jumpWidget, finger) then
     begin
-    ParseTeamCommand('hjump');    
+    ParseTeamCommand('hjump');
     exit;
     end;
 {$ENDIF}
 end;
 
 function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
-var 
+var
     xCursor, yCursor, index : LongInt;
 begin
     //Check array sizes
-    if length(fingers) < Integer(pointerCount) then 
+    if length(fingers) < Integer(pointerCount) then
     begin
         setLength(fingers, length(fingers)*2);
         for index := length(fingers) div 2 to length(fingers) do
             fingers[index].id := nilFingerId;
     end;
-    
-    
+
+
     xCursor := convertToCursorX(x);
     yCursor := convertToCursorY(y);
-    
+
     //on removing fingers, all fingers are moved to the left
     //with dynamic arrays being zero based, the new position of the finger is the old pointerCount
     fingers[pointerCount].id := id;
@@ -372,7 +372,7 @@ begin
     fingers[pointerCount].dy := 0;
     fingers[pointerCount].timeSinceDown:= RealTicks;
     fingers[pointerCount].pressedWidget:= nil;
- 
+
     addFinger:= @fingers[pointerCount];
     inc(pointerCount);
 end;
@@ -391,22 +391,22 @@ procedure deleteFinger(id: TSDL_FingerId);
 var
     index : Longword;
 begin
-    
+
     dec(pointerCount);
     for index := 0 to pointerCount do
     begin
         if fingers[index].id = id then
         begin
- 
-            //put the last finger into the spot of the finger to be removed, 
+
+            //put the last finger into the spot of the finger to be removed,
             //so that all fingers are packed to the far left
             if  pointerCount <> index then
                 begin
-                fingers[index].id := fingers[pointerCount].id;    
-                fingers[index].x := fingers[pointerCount].x;    
-                fingers[index].y := fingers[pointerCount].y;    
-                fingers[index].historicalX := fingers[pointerCount].historicalX;    
-                fingers[index].historicalY := fingers[pointerCount].historicalY;    
+                fingers[index].id := fingers[pointerCount].id;
+                fingers[index].x := fingers[pointerCount].x;
+                fingers[index].y := fingers[pointerCount].y;
+                fingers[index].historicalX := fingers[pointerCount].historicalX;
+                fingers[index].historicalY := fingers[pointerCount].historicalY;
                 fingers[index].timeSinceDown := fingers[pointerCount].timeSinceDown;
 
                 fingers[pointerCount].id := nilFingerId;
@@ -430,12 +430,12 @@ procedure ProcessTouch;
 var
     deltaAngle: LongInt;
 begin
-invertCursor := not(bShowAmmoMenu or targetting); 
+invertCursor := not(bShowAmmoMenu or targetting);
 if aimingCrosshair then
     if CurrentHedgehog^.Gear <> nil then
         begin
         deltaAngle:= CurrentHedgehog^.Gear^.Angle - targetAngle;
-        if (deltaAngle > -5) and (deltaAngle < 5) then 
+        if (deltaAngle > -5) and (deltaAngle < 5) then
             begin
                 if(aimingUp)then
                     begin
@@ -475,10 +475,10 @@ if aimingCrosshair then
                     aimingUp:= true;
                     ParseTeamCommand('+up');
                     end;
-                end; 
+                end;
             end;
         end
-    else  
+    else
         begin
         if aimingUp then
             begin
@@ -498,7 +498,7 @@ var
     index: LongWord;
 begin
     for index := 0 to High(fingers) do
-        if fingers[index].id = id then 
+        if fingers[index].id = id then
             begin
             findFinger := @fingers[index];
             break;
@@ -506,7 +506,7 @@ begin
 end;
 
 procedure aim(finger: TTouch_Data);
-var 
+var
     hogX, hogY, touchX, touchY, deltaX, deltaY: LongInt;
 begin
     if CurrentHedgehog^.Gear <> nil then
@@ -519,7 +519,7 @@ begin
         convertToWorldCoord(touchX, touchY, finger);
         deltaX := abs(TouchX-HogX);
         deltaY := TouchY-HogY;
-        
+
         targetAngle:= (Round(DeltaY / sqrt(sqr(deltaX) + sqr(deltaY)) * 2048) + 2048) div 2;
         end; //if CurrentHedgehog^.Gear <> nil
 end;
@@ -558,7 +558,7 @@ begin
     isOnCrosshair:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
     printFinger(finger);
     WriteLnToConsole(inttostr(finger.x) + '   ' + inttostr(x));
-    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(uMobile.getScreenDPI * 10)));
+    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(mobileRecord.getScreenDPI() * 10)));
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
@@ -579,9 +579,9 @@ end;
 
 procedure convertToWorldCoord(var x,y: LongInt; finger: TTouch_Data);
 begin
-//if x <> nil then 
+//if x <> nil then
     x := finger.x-WorldDx;
-//if y <> nil then 
+//if y <> nil then
     y := (cScreenHeight - finger.y)-WorldDy;
 end;
 
@@ -637,10 +637,10 @@ begin
     buttonsDown:= 0;
 
     setLength(fingers, 4);
-    for index := 0 to High(fingers) do 
+    for index := 0 to High(fingers) do
         fingers[index].id := nilFingerId;
 
-    rectSize:= round(baseRectSize * uMobile.getScreenDPI);
+    rectSize:= round(baseRectSize * mobileRecord.getScreenDPI());
     halfRectSize:= rectSize shl 1;
 end;
 

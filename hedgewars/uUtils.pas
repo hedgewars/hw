@@ -76,6 +76,17 @@ procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 {$ENDIF}
 
+function  isPhone: Boolean; inline;
+function  getScreenDPI: Double; inline; //cdecl; external;
+
+{$IFDEF IPHONEOS}
+procedure startLoadingIndicator; cdecl; external;
+procedure stopLoadingIndicator; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
+function  isApplePhone: Boolean; cdecl; external;
+procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
+{$ENDIF}
+
 procedure initModule(isNotPreview: boolean);
 procedure freeModule;
 
@@ -368,7 +379,7 @@ while i < l do
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
-       then 
+       then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
             exit;
@@ -418,10 +429,35 @@ system.writeln(f, s)
 end;
 {$ENDIF}
 
+// this function is just to determine whether we are running on a limited screen device
+function isPhone: Boolean; inline;
+begin
+    isPhone:= false;
+{$IFDEF IPHONEOS}
+    isPhone:= isApplePhone();
+{$ENDIF}
+{$IFDEF ANDROID}
+    //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
+    if (cScreenWidth < 1000) and (cScreenHeight < 500) then
+        isPhone:= true;
+{$ENDIF}
+end;
+
+//This dummy function should be reimplemented (externally).
+function getScreenDPI: Double; inline;
+begin
+{$IFDEF ANDROID}
+//    getScreenDPI:= Android_JNI_getDensity();
+    getScreenDPI:= 1;
+{$ELSE}
+    getScreenDPI:= 1;
+{$ENDIF}
+end;
+
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
-{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
+    i: LongInt;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -440,26 +476,25 @@ begin
 {$I-}
 {$IFDEF MOBILE}
     {$IFDEF IPHONEOS} Assign(f, UserPathPrefix + '/hw-' + logfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
-    Rewrite(f);
+    {$IFDEF ANDROID} Assign(f, pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
+    i:= i; // avoid hint
 {$ELSE}
+    f:= stdout; // if everything fails, write to stderr
     if (UserPathPrefix <> '') then
         begin
-            i:= 0;
-            while(i < 7) do
+        if not FileExists(UserPathPrefix + '/Logs/') then
+            CreateDir(UserPathPrefix + '/Logs/');
+        i:= 0;
+        while(i < 7) do
             begin
-                assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
-                rewrite(f);
-                if IOResult = 0 then
-                    break;
-                inc(i)
+            assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            if IOResult = 0 then
+                break;
+            inc(i)
             end;
-            if i = 7 then
-                f:= stderr; // if everything fails, write to stderr
-        end
-    else
-        f:= stderr;
+        end;
 {$ENDIF}
+    Rewrite(f);
 {$I+}
 {$ENDIF}
 

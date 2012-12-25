@@ -80,6 +80,8 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning "Joining restricted"]
+            else if isRegisteredOnly jRoom then
+            [Warning "Registered users only"]
             else if isBanned then
             [Warning "You are banned in this room"]
             else if roomPassword /= password jRoom then
@@ -89,20 +91,21 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 MoveToRoom jRI
                 , AnswerClients [sendChan cl] $ "JOINED" : nicks
                 , AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
-                , AnswerClients [sendChan cl] $ ["WARNING", "Room admin is " `B.append` ownerNick]
                 , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
-            ++ map (readynessMessage cl) jRoomClients
+            ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
             ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
             ++ answerTeams cl jRoom
-            ++ watchRound cl jRoom
+            ++ watchRound cl jRoom chans
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] $
-                if clientProto cl < 38 then
-                    [if isReady c then "READY" else "NOT_READY", nick c]
-                    else
-                    ["CLIENT_FLAGS", if isReady c then "+r" else "-r", nick c]
+        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
+        sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
+                [f "+r" ready, f "-r" unready, f "+g" ingame, f "-g" inroomlobby]
+            where
+            (ready, unready) = partition isReady clients
+            (ingame, inroomlobby) = partition isInGame clients
+            f fl lst = ["CLIENT_FLAGS" : fl : map nick lst | not $ null lst]
 
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
@@ -119,11 +122,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
 
         answerTeams cl jRoom = let f = if isJust $ gameInfo jRoom then teamsAtStart . fromJust . gameInfo else teams in answerAllTeams cl $ f jRoom
 
-        watchRound cl jRoom = if isNothing $ gameInfo jRoom then
+        watchRound cl jRoom chans = if isNothing $ gameInfo jRoom then
                     []
                 else
-                    [AnswerClients [sendChan cl]  ["RUN_GAME"],
-                    AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
+                    [AnswerClients [sendChan cl]  ["RUN_GAME"]
+                    , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
+                    , ModifyClient (\c -> c{isInGame = True})
+                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
@@ -150,15 +155,19 @@ handleCmd_lobby ["KICK", kickNick] = do
     return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
 
 
-handleCmd_lobby ["BAN", banNick, reason] = do
+handleCmd_lobby ["BAN", banNick, reason, duration] = do
     (ci, _) <- ask
     cl <- thisClient
     banId <- clientByNick banNick
-    return [BanClient 60 reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
+    return [BanClient (readInt_ duration) reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
 
 handleCmd_lobby ["BANIP", ip, reason, duration] = do
     cl <- thisClient
     return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
+
+handleCmd_lobby ["BANNICK", n, reason, duration] = do
+    cl <- thisClient
+    return [BanNick n (readInt_ duration) reason | isAdministrator cl]
 
 handleCmd_lobby ["BANLIST"] = do
     cl <- thisClient
