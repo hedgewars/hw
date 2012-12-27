@@ -210,8 +210,6 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<HWTeam>("HWTeam");
 
-    // workaround over NSIS installer which modifies the install path
-    //bindir->cd("./");
     bindir->cd(QCoreApplication::applicationDirPath());
 
     if(custom_config == false)
