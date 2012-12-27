@@ -27,6 +27,8 @@
 #include <QSettings>
 #include <QStringListModel>
 #include <QDate>
+#include <QDesktopWidget>
+#include <QLabel>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -135,6 +137,19 @@ int main(int argc, char *argv[])
 #endif
 
     HWApplication app(argc, argv);
+
+    QLabel *splash = NULL;
+#ifdef Q_WS_WIN | Q_WS_X11 | Q_WS_MAC //enabled on all platforms, disable if it doesn't look good
+    QPixmap pixmap(":res/splash.png");
+    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    splash->setAttribute(Qt::WA_TranslucentBackground);
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
+                                  (deskSize.height() - pixmap.height())/2 );
+    splash->move(splashCenter);
+    splash->setPixmap(pixmap);
+    splash->show();
+#endif
 
     FileEngineHandler engine(argv[0]);
 
@@ -305,6 +320,7 @@ int main(int argc, char *argv[])
             break;
         default :
             fname = "qt.css";
+            break;
     }
 
     // load external stylesheet if there is any
@@ -319,5 +335,7 @@ int main(int argc, char *argv[])
 
     app.form = new HWForm(NULL, style);
     app.form->show();
+    if(splash)
+        splash->close();
     return app.exec();
 }
