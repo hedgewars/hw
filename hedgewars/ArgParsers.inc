@@ -255,9 +255,9 @@ begin
         if isValid then
             begin
             parseParameter(cmd, arg, tmpInt);
-            newSyntax += cmd + ' ';
+            newSyntax := newSyntax + cmd + ' ';
             if not isBool then
-                newSyntax += arg + ' ';
+                newSyntax := newSyntax + arg + ' ';
             end;
         inc(index);
         end;
