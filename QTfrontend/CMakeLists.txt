@@ -41,11 +41,12 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-#directory for resources, relative to the one above on certain platforms/configurations
-if(DEFINED DATA_INSTALL_DIR OR WIN32 OR APPLE)
+#directory for resources, relative to bindir unless absolute path is used
+string(FIND "${SHAREPATH}" "/" sharepath_is_absolute)
+if(${sharepath_is_absolute} EQUAL 0)
     set(HEDGEWARS_DATADIR ${SHAREPATH})
 else()
-    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH}/)
+    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH})
 endif()
 
 #only the cocoa version of qt supports building 64 bit apps
