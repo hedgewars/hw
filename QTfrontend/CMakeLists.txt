@@ -41,9 +41,9 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-#directory for resources, relative to bindir unless absolute path is used
+#directory for resources, relative to bindir (on linux an absolute path is always used)
 string(FIND "${SHAREPATH}" "/" sharepath_is_absolute)
-if(${sharepath_is_absolute} EQUAL 0)
+if(APPLE OR WIN32 OR ${sharepath_is_absolute} EQUAL 0)
     set(HEDGEWARS_DATADIR ${SHAREPATH})
 else()
     set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH})
