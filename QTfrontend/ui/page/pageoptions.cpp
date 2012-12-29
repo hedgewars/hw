@@ -260,7 +260,9 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QGridLayout * GBAfrontendlayout = new QGridLayout(0);
-            QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            QGridLayout * GBAreslayout = new QGridLayout(0);
+            QHBoxLayout * GBAfullreslayout = new QHBoxLayout(0);
+            QHBoxLayout * GBAwindowedreslayout = new QHBoxLayout(0);
             QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
@@ -295,16 +297,36 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             QLabel * resolution = new QLabel(AGGroupBox);
             resolution->setText(QLabel::tr("Resolution"));
-            GBAreslayout->addWidget(resolution);
+            GBAreslayout->addWidget(resolution, 0, 0);
 
             CBResolution = new QComboBox(AGGroupBox);
-            GBAreslayout->addWidget(CBResolution);
-            GBAlayout->addLayout(GBAreslayout);
+            GBAfullreslayout->addWidget(CBResolution);
 
             CBFullscreen = new QCheckBox(AGGroupBox);
             CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAreslayout->addWidget(CBFullscreen);
-
+            GBAfullreslayout->addWidget(CBFullscreen);
+            GBAreslayout->addLayout(GBAfullreslayout, 0, 1);
+            
+            QLabel * windowedResolution = new QLabel(AGGroupBox);
+            windowedResolution->setText(QLabel::tr("Windowed Resolution"));
+            GBAreslayout->addWidget(windowedResolution, 1, 0);
+            
+            // decorational X
+            QLabel *winLabelX = new QLabel(AGGroupBox);
+            winLabelX->setText("X");
+            
+            windowWidthEdit = new QLineEdit(AGGroupBox);
+            windowWidthEdit->setValidator(new QIntValidator(this));
+            windowHeightEdit = new QLineEdit(AGGroupBox);
+            windowHeightEdit->setValidator(new QIntValidator(this));
+            
+            GBAwindowedreslayout->addWidget(windowWidthEdit);
+            GBAwindowedreslayout->addWidget(winLabelX);
+            GBAwindowedreslayout->addWidget(windowHeightEdit);
+            GBAreslayout->addLayout(GBAwindowedreslayout, 1, 1);
+            
+            GBAlayout->addLayout(GBAreslayout);
+            
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
             quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -627,6 +649,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();
     previousFullscreenValue = this->CBFullscreen->isChecked();
+    // mutually exclude window and fullscreen resolution
+    CBResolution->setEnabled(this->CBFullscreen->isChecked());
+    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
+    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
 
     return pageLayout;
 }
@@ -661,7 +687,10 @@ PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
 void PageOptions::forceFullscreen(int index)
 {
     bool forced = (index == 7 || index == 8 || index == 9);
-
+    CBResolution->setEnabled(this->CBFullscreen->isChecked());
+    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
+    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
+    
     if (index != 0)
     {
         this->SLQuality->setValue(this->SLQuality->maximum());
@@ -692,7 +721,10 @@ void PageOptions::setQuality(int value)
 void PageOptions::setFullscreen(int state)
 {
     Q_UNUSED(state);
-
+    CBResolution->setEnabled(this->CBFullscreen->isChecked());
+    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
+    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
+    
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
         previousFullscreenValue = this->CBFullscreen->isChecked();
