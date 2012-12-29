@@ -30,6 +30,7 @@
 #include <QDebug>
 #include "SquareLabel.h"
 #include "HWApplication.h"
+#include "keybinder.h"
 
 #include "DataManager.h"
 #include "HatModel.h"
@@ -39,16 +40,16 @@
 QLayout * PageEditTeam::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
-    QTabWidget * tbw = new QTabWidget();
+    tbw = new QTabWidget();
     QWidget * page1 = new QWidget(this);
-    QWidget * page2 = new QWidget(this);
+    binder = new KeyBinder(this, tr("Select an action to choose a custom key bind for this team"), tr("Use my default"), tr("Reset all binds"));
+    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
     tbw->addTab(page1, tr("General"));
-    tbw->addTab(page2, tr("Advanced"));
+    tbw->addTab(binder, tr("Custom Controls"));
     pageLayout->addWidget(tbw, 0, 0, 1, 3);
 
     QHBoxLayout * page1Layout = new QHBoxLayout(page1);
     page1Layout->setAlignment(Qt::AlignTop);
-    QGridLayout * page2Layout = new QGridLayout(page2);
 
 // ====== Page 1 ======
     QVBoxLayout * vbox1 = new QVBoxLayout();
@@ -156,52 +157,6 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     vbox1->addStretch();
     vbox2->addStretch();
-
-// ====== Page 2 ======
-    GBoxBinds = new QGroupBox(this);
-    GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
-    QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
-    BindsBox = new QToolBox(GBoxBinds);
-    BindsBox->setLineWidth(0);
-    GBBLayout->addWidget(BindsBox);
-    page2Layout->addWidget(GBoxBinds, 0, 0);
-
-    quint16 i = 0;
-    quint16 num = 0;
-    QWidget * curW = NULL;
-    QGridLayout * pagelayout = NULL;
-    QLabel* l = NULL;
-    while (i < BINDS_NUMBER)
-    {
-        if(cbinds[i].category != NULL)
-        {
-            if(curW != NULL)
-            {
-                l = new QLabel(curW);
-                l->setText("");
-                pagelayout->addWidget(l, num++, 0, 1, 2);
-            }
-            curW = new QWidget(this);
-            BindsBox->addItem(curW, HWApplication::translate("binds (categories)", cbinds[i].category));
-            pagelayout = new QGridLayout(curW);
-            num = 0;
-        }
-        if(cbinds[i].description != NULL)
-        {
-            l = new QLabel(curW);
-            l->setText((num > 0 ? QString("\n") : QString("")) + HWApplication::translate("binds (descriptions)", cbinds[i].description));
-            pagelayout->addWidget(l, num++, 0, 1, 2);
-        }
-
-        l = new QLabel(curW);
-        l->setText(HWApplication::translate("binds", cbinds[i].name));
-        l->setAlignment(Qt::AlignRight);
-        pagelayout->addWidget(l, num, 0);
-
-        CBBind[i] = new QComboBox(curW);
-        CBBind[i]->setModel(DataManager::instance().bindsModel());
-        pagelayout->addWidget(CBBind[i++], num++, 1);
-    }
 
     return pageLayout;
 }
@@ -407,6 +362,9 @@ void PageEditTeam::setRandomName(int hh_index)
 
 void PageEditTeam::loadTeam(const HWTeam & team)
 {
+    tbw->setCurrentIndex(0);
+    binder->resetInterface();
+    
     TeamNameEdit->setText(team.name());
     CBTeamLvl->setCurrentIndex(team.difficulty());
 
@@ -431,10 +389,12 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        if (team.keyBind(i).isEmpty()) continue;
+        
         QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, team.keyBind(i), 1, Qt::MatchExactly);
 
         if(mdl.size() == 1)
-            CBBind[i]->setCurrentIndex(mdl[0].row());
+            binder->setBindIndex(i, mdl[0].row());
         else
             qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
@@ -465,7 +425,7 @@ HWTeam PageEditTeam::data()
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        team.bindKey(i, binds->index(CBBind[i]->currentIndex(), 0).data(Qt::UserRole + 1).toString());
+        team.bindKey(i, binds->index(binder->bindIndex(i), 0).data(Qt::UserRole + 1).toString());
     }
 
     return team;
@@ -474,4 +434,11 @@ HWTeam PageEditTeam::data()
 void PageEditTeam::saveTeam()
 {
     data().saveToFile();
+}
+
+// When the "Use default for all binds" is pressed...
+void PageEditTeam::resetAllBinds()
+{
+    for (int i = 0; i < BINDS_NUMBER; i++)
+        binder->setBindIndex(i, 0);
 }

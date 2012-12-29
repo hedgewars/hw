@@ -25,6 +25,7 @@ class GameUIConfig;
 class FPSEdit;
 class IconedGroupBox;
 class QSignalMapper;
+class KeyBinder;
 
 class PageOptions : public AbstractPage
 {
@@ -118,6 +119,7 @@ class PageOptions : public AbstractPage
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         void connectSignals();
+        int resetBindToDefault(int bindID);
 
         bool previousFullscreenValue;
         int previousResolutionIndex;
@@ -134,6 +136,9 @@ class PageOptions : public AbstractPage
         QPushButton *btnDefaults;
         QPushButton *btnUpdateNow;
         GameUIConfig * config;
+        KeyBinder * binder;
+        int currentTab;
+        int binderTab;
 
     private slots:
         void forceFullscreen(int index);
@@ -151,6 +156,9 @@ class PageOptions : public AbstractPage
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
         void checkForUpdates();
+        void tabIndexChanged(int);
+        void bindUpdated(int bindID);
+        void resetAllBinds();
 
     public slots:
         void setDefaultOptions();

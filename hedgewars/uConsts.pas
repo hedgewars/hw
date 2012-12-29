@@ -43,6 +43,9 @@ const
     msgFailedSize        = 'failed due to size';
     msgGettingConfig     = 'Getting game config...';
 
+    // camera movement multipliers
+    cameraKeyboardSpeed : ShortInt = 10;
+
     // color constants
     cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
     cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);

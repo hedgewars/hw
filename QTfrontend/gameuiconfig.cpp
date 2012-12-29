@@ -52,6 +52,13 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     connect(Form->ui.pageOptions->CBFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        m_binds.append(BindAction());
+        m_binds[i].action = cbinds[i].action;
+        m_binds[i].strbind = cbinds[i].strbind;
+    }
+
     //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
 
@@ -134,6 +141,15 @@ void GameUIConfig::reloadValues(void)
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
             model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
+    }
+
+    { // load binds
+        QStandardItemModel * binds = DataManager::instance().bindsModel();
+        for(int i = 0; i < BINDS_NUMBER; i++)
+        {
+            m_binds[i].strbind = value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
+            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default") m_binds[i].strbind = cbinds[i].strbind;
+        }
     }
 }
 
@@ -580,4 +596,17 @@ int GameUIConfig::rec_Bitrate()
 bool GameUIConfig::recordAudio()
 {
     return Form->ui.pageOptions->checkRecordAudio->isChecked();
+}
+
+// Gets a bind for a bindID
+QString GameUIConfig::bind(int bindID)
+{
+    return m_binds[bindID].strbind;
+}
+
+// Sets a bind for a bindID and saves it
+void GameUIConfig::setBind(int bindID, QString & strbind)
+{
+    m_binds[bindID].strbind = strbind;
+    setValue(QString("Binds/%1").arg(m_binds[bindID].action), strbind);
 }
