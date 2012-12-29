@@ -135,6 +135,11 @@ QStandardItemModel * DataManager::bindsModel()
     {
         m_bindsModel = new QStandardItemModel();
 
+        QStandardItem * firstItem = new QStandardItem();
+        firstItem->setData(tr("Use Default"), Qt::DisplayRole);
+        firstItem->setData("default", Qt::UserRole + 1);
+        m_bindsModel->appendRow(firstItem);
+
         for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
         {
             QStandardItem * item = new QStandardItem();

@@ -23,14 +23,17 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QTableWidget>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTextBrowser>
-#include <QTableWidget>
+#include <QScrollArea>
+#include <QHeaderView>
 #include <QSlider>
 #include <QSignalMapper>
 #include <QColorDialog>
 #include <QStandardItemModel>
+#include <QDebug>
 
 #include "pageoptions.h"
 #include "gameuiconfig.h"
@@ -40,6 +43,8 @@
 #include "DataManager.h"
 #include "LibavInteraction.h"
 #include "AutoUpdater.h"
+#include "HWApplication.h"
+#include "keybinder.h"
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
@@ -56,8 +61,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
     pageLayout->addWidget(tabs);
     QWidget * page1 = new QWidget(this);
     QWidget * page2 = new QWidget(this);
+    binder = new KeyBinder(this, tr("Select an action to change what key controls it"), tr("Reset to default"), tr("Reset all binds"));
+    connect(binder, SIGNAL(bindUpdate(int)), this, SLOT(bindUpdated(int)));
+    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
     tabs->addTab(page1, tr("General"));
+    binderTab = tabs->addTab(binder, tr("Controls"));
     tabs->addTab(page2, tr("Advanced"));
+
+    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
 
 #ifdef VIDEOREC
     QWidget * page3 = new QWidget(this);
@@ -913,4 +924,58 @@ bool PageOptions::tryCodecs(const QString & format, const QString & vcodec, cons
         comboAudioCodecs->setCurrentIndex(iACodec);
 
     return true;
+}
+
+// When the current tab is switched
+void PageOptions::tabIndexChanged(int index)
+{
+    if (index == binderTab) // Switched to bind tab
+    {
+        binder->resetInterface();
+
+        if (!config) return;
+
+        QStandardItemModel * binds = DataManager::instance().bindsModel();
+        for(int i = 0; i < BINDS_NUMBER; i++)
+        {
+            QString value = config->bind(i);
+            QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, value, 1, Qt::MatchExactly);
+            if(mdl.size() == 1) binder->setBindIndex(i, mdl[0].row());
+        }
+    }
+
+    currentTab = index;
+}
+
+// When a key bind combobox is changed
+void PageOptions::bindUpdated(int bindID)
+{
+    int bindIndex = binder->bindIndex(bindID);
+    
+    if (bindIndex == 0) bindIndex = resetBindToDefault(bindID);
+
+    // Save bind
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
+    QString strbind = binds->index(binder->bindIndex(bindID), 0).data(Qt::UserRole + 1).toString();
+    config->setBind(bindID, strbind);
+}
+
+// Changes a key bind (bindID) to its default value. This updates the bind's combo-box in the UI.
+// Returns: The bind model index of the default.
+int PageOptions::resetBindToDefault(int bindID)
+{
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
+    QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, cbinds[bindID].strbind, 1, Qt::MatchExactly);
+    if(mdl.size() == 1) binder->setBindIndex(bindID, mdl[0].row());
+    return mdl[0].row();
+}
+
+// Called when "reset all binds" button is pressed
+void PageOptions::resetAllBinds()
+{
+    for (int i = 0; i < BINDS_NUMBER; i++)
+    {
+        resetBindToDefault(i);
+        bindUpdated(i);
+    }
 }

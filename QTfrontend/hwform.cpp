@@ -155,9 +155,9 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageRoomsList->setSettings(config);
     ui.pageNetGame->chatWidget->setSettings(config);
     ui.pageRoomsList->chatWidget->setSettings(config);
+    ui.pageOptions->setConfig(config);
 #ifdef VIDEOREC
     ui.pageVideos->init(config);
-    ui.pageOptions->setConfig(config);
 #endif
 
 #ifdef __APPLE__
@@ -975,18 +975,8 @@ void HWForm::AfterTeamEdit()
 
 void HWForm::DeleteTeam(const QString & teamName)
 {
-    QMessageBox reallyDeleteMsg(this);
-    reallyDeleteMsg.setIcon(QMessageBox::Question);
-    reallyDeleteMsg.setWindowTitle(QMessageBox::tr("Teams - Are you sure?"));
-    reallyDeleteMsg.setText(QMessageBox::tr("Do you really want to delete the team '%1'?").arg(teamName));
-    reallyDeleteMsg.setWindowModality(Qt::WindowModal);
-    reallyDeleteMsg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-
-    if (reallyDeleteMsg.exec() == QMessageBox::Ok)
-    {
-        ui.pageEditTeam->deleteTeam(teamName);
-        UpdateTeamsLists();
-    }
+    ui.pageEditTeam->deleteTeam(teamName);
+    UpdateTeamsLists();
 }
 
 void HWForm::DeleteScheme()
