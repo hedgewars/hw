@@ -276,6 +276,7 @@ begin
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();

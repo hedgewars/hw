@@ -23,6 +23,8 @@
 #include <QStringListModel>
 #include <QTextStream>
 
+#include "hwform.h"
+#include "ui/page/pageoptions.h"
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
@@ -272,6 +274,16 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 sendCampaignVar(msg.right(msg.size() - 3));
             else if (msg.at(2) == '!')
                 writeCampaignVar(msg.right(msg.size() - 3));
+            break;
+        }
+        case 'W':
+        {
+            // fetch new window resolution via IPC and save it in the settings
+            int size = msg.size();
+            QString newResolution = QString().append(msg.mid(2)).left(size - 4);
+            QStringList wh = newResolution.split('x');
+            config->Form->ui.pageOptions->windowWidthEdit->setText(wh[0]);
+            config->Form->ui.pageOptions->windowHeightEdit->setText(wh[1]);
             break;
         }
         default:
