@@ -110,6 +110,11 @@ else(${LIBENGINE})
 endif(${LIBENGINE})
 
 
+#opengl 2
+IF(${GL2})
+    set(pascal_flags "-dGL2" ${pascal_flags})
+    message(STATUS "Building using OpenGL 2")
+ENDIF(${GL2})
 # Check Freepascal version
 find_package(Freepascal)
 
