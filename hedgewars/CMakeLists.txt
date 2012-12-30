@@ -92,16 +92,16 @@ set(engine_sources
 
 if(${BUILD_ENGINE_LIBRARY})
     message(WARNING "Engine will be built as library (experimental)")
-    set(pascal_flags "-dHWLIBRARY" ${pascal_flags})
+    list(APPEND pascal_flags "-dHWLIBRARY")
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
     if(CMAKE_SIZEOF_VOID_P MATCHES "8")
-        set(pascal_flags "-Cg" ${pascal_flags})
+        list(APPEND pascal_flags "-Cg")
     endif(CMAKE_SIZEOF_VOID_P MATCHES "8")
 
     # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
     if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
-        set(pascal_flags "-k-no_order_inits" ${pascal_flags})
+        list(APPEND pascal_flags "-k-no_order_inits")
     endif()
     set(destination_dir ${target_library_install_dir})
 else(${BUILD_ENGINE_LIBRARY})
@@ -140,20 +140,20 @@ if(APPLE)
             include_directories(${SDL_INCLUDE_DIR})
             add_library (SDLmain STATIC SDLMain.m)
             #add a dependency to the hwengine target
-            set(engine_sources ${engine_sources} SDLmain)
+            list(APPEND engine_sources SDLmain)
             set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
         endif()
 
-        set(pascal_flags "-k${SDLMAIN_LIB}" ${pascal_flags})
+        list(APPEND pascal_flags "-k${SDLMAIN_LIB}")
     endif()
 endif(APPLE)
 
 if(NOT NOPNG)
     find_package(PNG)
     if(${PNG_FOUND})
-        set(pascal_flags "-dPNG_SCREENSHOTS" ${pascal_flags})
+        list(APPEND pascal_flags "-dPNG_SCREENSHOTS")
         if(APPLE)  # fpc png unit doesn't pull the library (see bug 21833)
-            set(pascal_flags "-k${PNG_LIBRARY}" ${pascal_flags})
+            list(APPEND pascal_flags "-k${PNG_LIBRARY}")
         endif()
     else()
         message(WARNING "Screenshots will be in BMP format because libpng was not found")
@@ -185,7 +185,7 @@ if(NOT NOVIDEOREC)
 
         #TODO: convert avwrapper to .pas unit so we can skip this step
         include_directories(${FFMPEG_INCLUDE_DIR})
-        set(pascal_flags "-dUSE_VIDEO_RECORDING" ${pascal_flags})
+        list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
         IF (WIN32)
             # there are some problems with linking our avwrapper as static lib, so link it as shared
             add_library(avwrapper SHARED avwrapper.c)
@@ -193,7 +193,7 @@ if(NOT NOVIDEOREC)
             install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
         ELSE()
             add_library(avwrapper STATIC avwrapper.c)
-            set(pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}" ${pascal_flags})
+            list(APPEND pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}")
         ENDIF()
     else()
         message(WARNING "Could NOT find FFMPEG/LibAV, video recording will be disabled")
@@ -216,7 +216,7 @@ if(NOT APPLE)
 else()
     #these are the dependencies for building a universal binary on Mac OS X
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
-        set(lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}" ${lipo_args_list})
+        list(APPEND lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
         add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
             COMMAND "${FPC_EXECUTABLE}"
             ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
