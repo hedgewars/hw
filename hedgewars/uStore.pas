@@ -740,7 +740,7 @@ var
     logLength: GLint;
     log: PChar;
 begin
-    Assign(f, Pathz[ptShaders] + '/' + shaderFile);
+    Assign(f, PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
     filemode:= 0; // readonly
     Reset(f);
     if IOResult <> 0 then
@@ -758,7 +758,7 @@ begin
 
     Close(f);
 
-    WriteLnToConsole('Compiling shader: ' + Pathz[ptShaders] + '/' + shaderFile);
+    WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
 
     sourceA:=PChar(source);
     lengthA:=Length(source);
