@@ -27,6 +27,7 @@ option(LIBENGINE "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+option(GL2 "Enable OpenGL 2 rendering [default: off]" OFF)
 set(FPFLAGS "" CACHE STRING "Additional Freepascal flags" FORCE)
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags" FORCE)
 
@@ -73,12 +74,13 @@ set(required_clang_version 3.0)
 
 # Check LLVM/Clang version
 find_package(Clang)
-
-if (CLANG_VERSION VERSION_LESS required_clang_version)
-    message(FATAL_ERROR "Necessary LLVM/Clang version not found (version >= ${REQUIRED_CLANG_VERSION} required)")
-else()
-    message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
-endif()
+if (NOPASCAL)
+	if (CLANG_VERSION VERSION_LESS required_clang_version)
+		message(FATAL_ERROR "LLVM/Clang compiler required version is ${REQUIRED_CLANG_VERSION} but version ${CLANG_VERSION} was found!")
+	else()
+		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
+	endif()
+endif(NOPASCAL)
 
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
