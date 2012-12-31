@@ -139,8 +139,7 @@ int main(int argc, char *argv[])
     HWApplication app(argc, argv);
 
     QLabel *splash = NULL;
-    //enabled on win and osx, disable if it doesn't look good
-#if defined Q_WS_WIN || defined Q_WS_MAC
+#if defined Q_WS_WIN
     QPixmap pixmap(":res/splash.png");
     splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     splash->setAttribute(Qt::WA_TranslucentBackground);

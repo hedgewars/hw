@@ -28,6 +28,7 @@
 #include "team.h"
 
 class SquareLabel;
+class KeyBinder;
 
 class PageEditTeam : public AbstractPage
 {
@@ -44,6 +45,7 @@ class PageEditTeam : public AbstractPage
         void CBFort_activated(const QString & gravename);
 
     private:
+        QTabWidget * tbw;
         QSignalMapper* signalMapper1;
         QSignalMapper* signalMapper2;
         QGroupBox *GBoxHedgehogs;
@@ -60,9 +62,9 @@ class PageEditTeam : public AbstractPage
         QLineEdit * TeamNameEdit;
         QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
         QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
-        QComboBox * CBBind[BINDS_NUMBER];
         HWTeam data();
         QString m_playerHash;
+        KeyBinder * binder;
 
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
@@ -85,6 +87,7 @@ class PageEditTeam : public AbstractPage
         void testSound();
 
         void fixHHname(int idx);
+        void resetAllBinds();
 };
 
 #endif

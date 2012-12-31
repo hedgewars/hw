@@ -264,6 +264,9 @@ begin
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
 
+        if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
+            handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
+
         if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
            ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
         begin
