@@ -31,6 +31,7 @@
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "proto.h"
+#include "binds.h"
 #include "campaign.h"
 
 #include <QTextStream>
@@ -75,6 +76,18 @@ void HWGame::onClientDisconnect()
     SetGameState(gsStopped);
 }
 
+void HWGame::addKeyBindings(QByteArray * buf)
+{
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        QString value = config->value(QString("Binds/%1").arg(cbinds[i].action), cbinds[i].strbind).toString();
+        if (value.isEmpty() || value == "default") continue;
+        
+        QString bind = QString("edbind " + value + " " + cbinds[i].action);
+        HWProto::addStringToBuffer(*buf, bind);
+    }
+}
+
 void HWGame::commonConfig()
 {
     QByteArray buf;
@@ -92,6 +105,8 @@ void HWGame::commonConfig()
     }
     HWProto::addStringToBuffer(buf, gt);
 
+    addKeyBindings(&buf);
+
     buf += gamecfg->getFullConfig();
 
     if (m_pTeamSelWidget)
@@ -104,10 +119,11 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             if(gamecfg->schemeData(15).toBool() || !gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
-                                           team.teamGameConfig(gamecfg->getInitHealth()));
+                                           team.teamGameConfig(gamecfg->getInitHealth(), config));
             ;
         }
     }
+    
     RawSendIPC(buf);
 }
 
@@ -120,6 +136,8 @@ void HWGame::SendQuickConfig()
 {
     QByteArray teamscfg;
     ThemeModel * themeModel = DataManager::instance().themeModel();
+
+    addKeyBindings(&teamscfg);
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
@@ -134,7 +152,7 @@ void HWGame::SendQuickConfig()
     team1.setNumHedgehogs(4);
     HWNamegen::teamRandomNames(team1,true);
     HWProto::addStringListToBuffer(teamscfg,
-                                   team1.teamGameConfig(100));
+                                   team1.teamGameConfig(100, config));
 
     HWTeam team2;
     team2.setDifficulty(4);
@@ -144,7 +162,7 @@ void HWGame::SendQuickConfig()
         HWNamegen::teamRandomNames(team2,true);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     HWProto::addStringListToBuffer(teamscfg,
-                                   team2.teamGameConfig(100));
+                                   team2.teamGameConfig(100, config));
 
     HWProto::addStringToBuffer(teamscfg, QString("eammloadt %1").arg(cDefaultAmmoStore->mid(0, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammprob %1").arg(cDefaultAmmoStore->mid(cAmmoNumber, cAmmoNumber)));
@@ -152,6 +170,7 @@ void HWGame::SendQuickConfig()
     HWProto::addStringToBuffer(teamscfg, QString("eammreinf %1").arg(cDefaultAmmoStore->mid(3 * cAmmoNumber, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
+    
     RawSendIPC(teamscfg);
 }
 
@@ -161,6 +180,8 @@ void HWGame::SendTrainingConfig()
     HWProto::addStringToBuffer(traincfg, "TL");
     HWProto::addStringToBuffer(traincfg, "eseed " + QUuid::createUuid().toString());
     HWProto::addStringToBuffer(traincfg, "escript " + training);
+
+    addKeyBindings(&traincfg);
 
     RawSendIPC(traincfg);
 }
@@ -172,6 +193,8 @@ void HWGame::SendCampaignConfig()
     HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(campaigncfg, "escript " + campaignScript);
+
+    addKeyBindings(&campaigncfg);
 
     RawSendIPC(campaigncfg);
 }

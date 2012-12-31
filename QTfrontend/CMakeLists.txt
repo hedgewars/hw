@@ -62,7 +62,7 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
-set(hwfr_src
+list(APPEND hwfr_src
     ${ModelCpp}
     ${NetCpp}
     ${UIcpp}
@@ -83,7 +83,7 @@ set(hwfr_src
 
 #xfire integration
 if(WIN32)
-    set(hwfr_src ${hwfr_src} xfire.cpp ../misc/xfire/xfiregameclient.cpp)
+    list(APPEND hwfr_src xfire.cpp ../misc/xfire/xfiregameclient.cpp)
 endif(WIN32)
 
 if(MINGW)
@@ -92,9 +92,9 @@ if(MINGW)
                        COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
                                -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
                                -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
-    set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+    list(APPEND hwfr_src ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
-    set(hwfr_src ${hwfr_src} hedgewars.rc)
+    list(APPEND hwfr_src hedgewars.rc)
 endif(MINGW)
 
 file(GLOB ModelHdr model/*.h)
@@ -133,7 +133,7 @@ set(hwfr_rez hedgewars.qrc)
 if(${BUILD_ENGINE_LIBRARY})
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(HW_LINK_LIBS ${hwlibname} ${HW_LINK_LIBS})
+    list(APPEND HW_LINK_LIBS ${hwlibname})
 endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
@@ -143,8 +143,8 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 if(APPLE)
     find_library(iokit_framework NAMES IOKit)
-    set(HW_LINK_LIBS ${iokit_framework} ${HW_LINK_LIBS})
-    set(hwfr_src ${hwfr_src} CocoaInitializer.mm
+    list(APPEND HW_LINK_LIBS ${iokit_framework})
+    list(APPEND hwfr_src CocoaInitializer.mm
                              InstallController.cpp
                              M3Panel.mm
                              M3InstallController.m
@@ -154,8 +154,8 @@ if(APPLE)
         find_package(Sparkle)
         if(SPARKLE_FOUND)
             add_definitions(-DSPARKLE_ENABLED)
-            set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
-            set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
+            list(APPEND hwfr_src AutoUpdater.cpp SparkleAutoUpdater.mm)
+            list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
         endif()
     endif()
 endif()
@@ -177,22 +177,20 @@ if((UNIX AND NOT APPLE) AND ${BUILD_ENGINE_LIBRARY})
     set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}")
 endif()
 
-set(HW_LINK_LIBS
+list(APPEND HW_LINK_LIBS
     physfs
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${FFMPEG_LIBRARIES}
-    ${HW_LINK_LIBS}
     )
 
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
-        set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
+        list(APPEND HW_LINK_LIBS SDL)
     endif()
 
-    set(HW_LINK_LIBS
-        ${HW_LINK_LIBS}
+    list(APPEND HW_LINK_LIBS
         ole32
         oleaut32
         winspool
