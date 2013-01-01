@@ -325,7 +325,6 @@ else
 {$IFDEF SDL13}
 uTouch.NewTurnBeginning();
 {$ENDIF}
-ScriptCall('onNewTurn');
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
