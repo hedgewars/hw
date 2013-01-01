@@ -1,11 +1,11 @@
 -- Library for localizing strings in lua scripts
 
-local lang = loadfile(GetUserDataPath() .. "Locale/" .. tostring(L) .. ".lua")
+local lang = HedgewarsScriptLoad("Locale/" .. tostring(L) .. ".lua")
 
 if lang ~= nil then
     lang()
 else
-    lang = loadfile(GetDataPath() .. "Locale/" .. tostring(L) .. ".lua")
+    lang = HedgewarsScriptLoad("Locale/" .. tostring(L) .. ".lua")
     if lang ~= nil then
         lang()
     end
