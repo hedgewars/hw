@@ -148,6 +148,7 @@ class HWForm : public QMainWindow
         void closeEvent(QCloseEvent *event);
         void CustomizePalettes();
         void resizeEvent(QResizeEvent * event);
+        QString stringifyPageId(quint32 id);
         //void keyReleaseEvent(QKeyEvent *event);
 
         enum PageIDs
