@@ -148,5 +148,6 @@
         <file>res/chat/ingame.png</file>
         <file>res/splash.png</file>
         <file>res/html/about.html</file>
+        <file>res/xml/tips.xml</file>
     </qresource>
 </RCC>
