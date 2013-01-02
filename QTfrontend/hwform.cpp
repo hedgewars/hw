@@ -553,72 +553,49 @@ void HWForm::GoToVideos()
     GoToPage(ID_PAGE_VIDEOS);
 }
 
+//TODO: maybe find a better place for this?
+QString HWForm::stringifyPageId(quint32 id)
+{
+    QString pageName;
+    switch (id)
+    {
+      case ID_PAGE_SETUP_TEAM :   pageName = "PAGE_SETUP_TEAM"; break;
+      case ID_PAGE_SETUP :        pageName = "PAGE_SETUP"; break;
+      case ID_PAGE_MULTIPLAYER :  pageName = "PAGE_MULTIPLAYER"; break;
+      case ID_PAGE_DEMOS :        pageName = "PAGE_DEMOS"; break;
+      case ID_PAGE_NET :          pageName = "PAGE_NET"; break;
+      case ID_PAGE_NETGAME :      pageName = "PAGE_NETGAME"; break;
+      case ID_PAGE_INFO :         pageName = "PAGE_INFO"; break;
+      case ID_PAGE_MAIN :         pageName = "PAGE_MAIN"; break;
+      case ID_PAGE_GAMESTATS :    pageName = "PAGE_GAMESTATS"; break;
+      case ID_PAGE_SINGLEPLAYER : pageName = "PAGE_SINGLEPLAYER"; break;
+      case ID_PAGE_TRAINING :     pageName = "PAGE_TRAINING"; break;
+      case ID_PAGE_SELECTWEAPON : pageName = "PAGE_SELECTWEAPON"; break;
+      case ID_PAGE_NETSERVER :    pageName = "PAGE_NETSERVER"; break;
+      case ID_PAGE_INGAME :       pageName = "PAGE_INGAME"; break;
+      case ID_PAGE_ROOMSLIST :    pageName = "PAGE_ROOMSLIST"; break;
+      case ID_PAGE_CONNECTING :   pageName = "PAGE_CONNECTING"; break;
+      case ID_PAGE_SCHEME :       pageName = "PAGE_SCHEME"; break;
+      case ID_PAGE_ADMIN :        pageName = "PAGE_ADMIN"; break;
+      case ID_PAGE_CAMPAIGN :     pageName = "PAGE_CAMPAIGN"; break;
+      case ID_PAGE_DRAWMAP :      pageName = "PAGE_DRAWMAP"; break;
+      case ID_PAGE_DATADOWNLOAD : pageName = "PAGE_DATADOWNLOAD"; break;
+      case ID_PAGE_FEEDBACK :     pageName = "PAGE_FEEDBACK"; break;
+      case ID_PAGE_VIDEOS :       pageName = "PAGE_VIDEOS"; break;
+      case MAX_PAGE :             pageName = "MAX_PAGE"; break;
+      default :                   pageName = "UNKNOWN_PAGE"; break;
+    }
+    return pageName;
+}
+
 void HWForm::OnPageShown(quint8 id, quint8 lastid)
 {
 #ifdef USE_XFIRE
     updateXfire();
 #endif
     
-    QString openPrefix = "Debug:   (PAGE_OPENED: ";
-    QString openSuffix = ")";
-    QString closePrefix = "Debug:   (PAGE_LEFT: ";
-    QString closeSuffix = ")";
-    
-    switch (lastid) { //Print the id of the page we're leaving      
-      case ID_PAGE_SETUP_TEAM :	qDebug("%sPAGE_SETUP_TEAM%s", qPrintable(closePrefix), qPrintable(closeSuffix)); 	break;      
-      case ID_PAGE_SETUP :		qDebug("%sPAGE_SETUP%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_MULTIPLAYER :	qDebug("%sPAGE_MULTIPLAYER%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
-      case ID_PAGE_DEMOS :		qDebug("%sPAGE_DEMOS%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_NET :		qDebug("%sPAGE_NET%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_NETGAME :		qDebug("%sPAGE_NETGAME%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_INFO :		qDebug("%sPAGE_INFO%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_MAIN :		qDebug("%sPAGE_MAIN%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_GAMESTATS :		qDebug("%sPAGE_GAMESTATS%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_SINGLEPLAYER :	qDebug("%sPAGE_SINGLEPLAYER%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
-      case ID_PAGE_TRAINING :		qDebug("%sPAGE_TRAINING%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_SELECTWEAPON :	qDebug("%sPAGE_SELECTWEAPON%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
-      case ID_PAGE_NETSERVER :		qDebug("%sPAGE_NETSERVER%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_INGAME :		qDebug("%sPAGE_INGAME%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_ROOMSLIST :		qDebug("%sPAGE_ROOMSLIST%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_CONNECTING :	qDebug("%sPAGE_CONNECTING%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
-      case ID_PAGE_SCHEME :		qDebug("%sPAGE_SCHEME%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_ADMIN :		qDebug("%sPAGE_ADMIN%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_CAMPAIGN :		qDebug("%sPAGE_CAMPAIGN%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_DRAWMAP :		qDebug("%sPAGE_DRAWMAP%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_DATADOWNLOAD :	qDebug("%sPAGE_DATADOWNLOAD%s", qPrintable(closePrefix), qPrintable(closeSuffix));	break;      
-      case ID_PAGE_FEEDBACK :		qDebug("%sPAGE_FEEDBACK%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;      
-      case ID_PAGE_VIDEOS :		qDebug("%sPAGE_VIDEOS%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;
-      case MAX_PAGE :			qDebug("%sMAX_PAGE%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break; 
-      default :			qDebug("%sUNKNOWN PAGE%s", qPrintable(closePrefix), qPrintable(closeSuffix));		break;
-    } //end switch(lastid)
-    switch (id) { //Print the id of the opened page
-      case ID_PAGE_SETUP_TEAM :	qDebug("%sPAGE_SETUP_TEAM%s", qPrintable(openPrefix), qPrintable(openSuffix)); 		break;      
-      case ID_PAGE_SETUP :		qDebug("%sPAGE_SETUP%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_MULTIPLAYER :	qDebug("%sPAGE_MULTIPLAYER%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_DEMOS :		qDebug("%sPAGE_DEMOS%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_NET :		qDebug("%sPAGE_NET%s", qPrintable(openPrefix), qPrintable(openSuffix));			break;      
-      case ID_PAGE_NETGAME :		qDebug("%sPAGE_NETGAME%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_INFO :		qDebug("%sPAGE_INFO%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_MAIN :		qDebug("%sPAGE_MAIN%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_GAMESTATS :		qDebug("%sPAGE_GAMESTATS%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_SINGLEPLAYER :	qDebug("%sPAGE_SINGLEPLAYER%s", qPrintable(openPrefix), qPrintable(openSuffix));	break;      
-      case ID_PAGE_TRAINING :		qDebug("%sPAGE_TRAINING%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_SELECTWEAPON :	qDebug("%sPAGE_SELECTWEAPON%s", qPrintable(openPrefix), qPrintable(openSuffix));	break;      
-      case ID_PAGE_NETSERVER :		qDebug("%sPAGE_NETSERVER%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_INGAME :		qDebug("%sPAGE_INGAME%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_ROOMSLIST :		qDebug("%sPAGE_ROOMSLIST%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_CONNECTING :	qDebug("%sPAGE_CONNECTING%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_SCHEME :		qDebug("%sPAGE_SCHEME%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_ADMIN :		qDebug("%sPAGE_ADMIN%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_CAMPAIGN :		qDebug("%sPAGE_CAMPAIGN%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_DRAWMAP :		qDebug("%sPAGE_DRAWMAP%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_DATADOWNLOAD :	qDebug("%sPAGE_DATADOWNLOAD%s", qPrintable(openPrefix), qPrintable(openSuffix));	break;      
-      case ID_PAGE_FEEDBACK :		qDebug("%sPAGE_FEEDBACK%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;      
-      case ID_PAGE_VIDEOS :		qDebug("%sPAGE_VIDEOS%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;
-      case MAX_PAGE :			qDebug("%sMAX_PAGE%s", qPrintable(openPrefix), qPrintable(openSuffix));			break; 
-      default :			qDebug("%sUNKNOWN PAGE%s", qPrintable(openPrefix), qPrintable(openSuffix));		break;
-    } //end switch(id)
-    
+    qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
+
     if (id == ID_PAGE_DATADOWNLOAD)
     {
         ui.pageDataDownload->fetchList();
