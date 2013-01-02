@@ -39,9 +39,11 @@
 
 #ifdef _WIN32
 #include <Shlobj.h>
-#endif
-#ifdef __APPLE__
+#elif defined __APPLE__
 #include "CocoaInitializer.h"
+#endif
+#ifndef _WIN32
+#include <signal.h>
 #endif
 
 
@@ -87,6 +89,12 @@ void checkSeason()
     else
         season = SEASON_NONE;
 }
+#ifndef _WIN32
+void terminateFrontend(int signal)
+{
+    QCoreApplication::exit(0);
+}
+#endif
 
 bool checkForDir(const QString & dir)
 {
@@ -134,6 +142,10 @@ int main(int argc, char *argv[])
     // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
     cocoaInit = new CocoaInitializer();
     atexit(releaseCocoaPool);
+#endif
+
+#ifndef _WIN32
+    signal(SIGINT, &terminateFrontend);
 #endif
 
     HWApplication app(argc, argv);
