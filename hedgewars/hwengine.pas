@@ -19,7 +19,7 @@
 {$INCLUDE "options.inc"}
 
 {$IFDEF WIN32}
-{$R hwengine.rc}
+{$R res/hwengine.rc}
 {$ENDIF}
 
 {$IFDEF HWLIBRARY}
