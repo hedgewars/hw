@@ -33,7 +33,7 @@ set(GHFLAGS "" CACHE STRING "Additional Haskell flags" FORCE)
 
 
 #detect Mercurial revision (if present)
-if(NOT NOREVISION)
+if(NOT ${NOREVISION})
     set(default_build_type "DEBUG")
     set(version_suffix "-development_version")
     set(HW_DEV true)
@@ -56,11 +56,11 @@ if(NOT NOREVISION)
         endif()
         set(version_suffix "-${revision_number}${HGCHANGED}")
     endif()
-else(NOT NOREVISION)
+else(NOT ${NOREVISION})
     set(default_build_type "RELEASE")
     set(HWDEV false)
     message(STATUS "Building distributable version")
-endif(NOT NOREVISION)
+endif(NOT ${NOREVISION})
 
 
 #versioning
@@ -72,15 +72,15 @@ set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MI
 set(required_clang_version 3.0)
 
 
-# Check LLVM/Clang version
-find_package(Clang)
-if (NOPASCAL)
+if (${NOPASCAL})
+    find_package(Clang)
+    # Check LLVM/Clang version
 	if (CLANG_VERSION VERSION_LESS required_clang_version)
 		message(FATAL_ERROR "LLVM/Clang compiler required version is ${REQUIRED_CLANG_VERSION} but version ${CLANG_VERSION} was found!")
 	else()
 		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
 	endif()
-endif(NOPASCAL)
+endif(${NOPASCAL})
 
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
