@@ -321,10 +321,6 @@ else
         end;
     ReadyTimeLeft:= 0
     end;
-
-{$IFDEF SDL13}
-uTouch.NewTurnBeginning();
-{$ENDIF}
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;

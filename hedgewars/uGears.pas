@@ -192,7 +192,13 @@ var t: PGear;
 begin
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
-if GameTicks = NewTurnTick then ScriptCall('onNewTurn');
+if GameTicks = NewTurnTick then
+    begin
+    ScriptCall('onNewTurn');
+{$IFDEF SDL13}
+    uTouch.NewTurnBeginning();
+{$ENDIF}
+    end;
 
 PrvInactive:= AllInactive;
 AllInactive:= true;
