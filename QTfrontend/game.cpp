@@ -22,6 +22,7 @@
 #include <QColor>
 #include <QStringListModel>
 #include <QTextStream>
+#include <utility>
 
 #include "hwform.h"
 #include "ui/page/pageoptions.h"
@@ -348,7 +349,7 @@ void HWGame::onClientRead()
 QStringList HWGame::getArguments()
 {
     QStringList arguments;
-    QRect resolution = config->vid_Resolution();
+    std::pair<QRect, QRect> resolutions = config->vid_ResolutionPair();
     QString nick = config->netNick().toUtf8().toBase64();
 
     arguments << "--internal"; //Must be passed as first argument
@@ -364,10 +365,14 @@ QStringList HWGame::getArguments()
     arguments << QString::number(config->timerInterval());
     arguments << "--volume";
     arguments << QString::number(config->volume());
+    arguments << "--fullscreen-width";
+    arguments << QString::number(resolutions.first.width());
+    arguments << "--fullscreen-height";
+    arguments << QString::number(resolutions.first.height());
     arguments << "--width";
-    arguments << QString::number(resolution.width());
+    arguments << QString::number(resolutions.second.width());
     arguments << "--height";
-    arguments << QString::number(resolution.height());
+    arguments << QString::number(resolutions.second.height());
     arguments << "--raw-quality";
     arguments << QString::number(config->translateQuality());
     arguments << "--stereo";
