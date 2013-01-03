@@ -368,15 +368,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBStereoMode->addItem(QComboBox::tr("Blue/Red"));
             CBStereoMode->addItem(QComboBox::tr("Red/Green"));
             CBStereoMode->addItem(QComboBox::tr("Green/Red"));
-            CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
-            CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
-            CBStereoMode->addItem(QComboBox::tr("Wiggle"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Cyan/Red grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Red/Blue grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Blue/Red grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Red/Green grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Green/Red grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
+            CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
 
             GBAstereolayout->addWidget(CBStereoMode);
             GBAlayout->addLayout(GBAstereolayout);

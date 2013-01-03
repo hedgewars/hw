@@ -547,7 +547,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
         DeleteFramebuffer(defaultFrame, depthv, texv);
 {$ENDIF}
 {$IFDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
         begin
         DeleteFramebuffer(framel, depthl, texl);
         DeleteFramebuffer(framer, depthr, texr);
@@ -813,7 +813,7 @@ begin
 {$ENDIF}
 
 {$IFDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
     begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
