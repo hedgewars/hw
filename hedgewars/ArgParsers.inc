@@ -105,13 +105,13 @@ procedure setStereoMode(tmp: LongInt);
 begin
     GrayScale:= false;
 {$IFDEF USE_S3D_RENDERING}
-    if (tmp > 9) and (tmp < 16) then
+    if (tmp > 6) and (tmp < 13) then
         begin
         // set the gray anaglyph rendering
         GrayScale:= true;
-        cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-9)))
+        cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)))
         end
-    else if tmp <= 9 then
+    else if tmp <= 6 then
         // set the fullcolor anaglyph
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp)))
     else

@@ -987,15 +987,6 @@ begin
         DrawWorldStereo(Lag, rmDefault)
         end
 {$IFDEF USE_S3D_RENDERING}
-    else if (cStereoMode = smAFR) then
-        begin
-        AFRToggle:= not AFRToggle;
-        glClear(GL_COLOR_BUFFER_BIT);
-        if AFRToggle then
-            DrawWorldStereo(Lag, rmLeftEye)
-        else
-            DrawWorldStereo(Lag, rmRightEye)
-        end
     else if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
         begin
         // create left fb
