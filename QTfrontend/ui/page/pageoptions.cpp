@@ -272,8 +272,8 @@ QLayout * PageOptions::bodyLayoutDefinition()
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QGridLayout * GBAfrontendlayout = new QGridLayout(0);
             QGridLayout * GBAreslayout = new QGridLayout(0);
-            QHBoxLayout * GBAfullreslayout = new QHBoxLayout(0);
-            QHBoxLayout * GBAwindowedreslayout = new QHBoxLayout(0);
+            QHBoxLayout * GBAfslayout = new QHBoxLayout(0);
+            QVBoxLayout * GBArescolumn = new QVBoxLayout(0);
             QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
@@ -306,24 +306,19 @@ QLayout * PageOptions::bodyLayoutDefinition()
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
-            QLabel * resolutionLabel = new QLabel(AGGroupBox);
-            resolutionLabel->setText(QLabel::tr("Resolution"));
-            GBAreslayout->addWidget(resolutionLabel, 0, 0);
+            CBFullscreen = new QCheckBox(AGGroupBox);
+            GBAreslayout->addWidget(CBFullscreen, 0, 0);
+            CBFullscreen->setText(QLabel::tr("Fullscreen"));
+                        
+            CBResolution = new QComboBox(AGGroupBox);
+            GBArescolumn->addWidget(CBResolution);
             
             QLabel * fullscreenResolution = new QLabel(AGGroupBox);
-            fullscreenResolution->setText(QLabel::tr("Fullscreen"));
-            GBAreslayout->addWidget(fullscreenResolution, 1, 0);
-
-            CBResolution = new QComboBox(AGGroupBox);
-            GBAfullreslayout->addWidget(CBResolution);
-
-            CBFullscreen = new QCheckBox(AGGroupBox);
-            GBAfullreslayout->addWidget(CBFullscreen);
-            CBFullscreen->setText(QLabel::tr("Fullscreen"));
-            GBAreslayout->addLayout(GBAfullreslayout, 1, 1);
+            fullscreenResolution->setText(QLabel::tr("Fullscreen Resolution"));
+            GBAreslayout->addWidget(fullscreenResolution,1, 0);
             
             QLabel * windowedResolution = new QLabel(AGGroupBox);
-            windowedResolution->setText(QLabel::tr("Windowed"));
+            windowedResolution->setText(QLabel::tr("Windowed Resolution"));
             GBAreslayout->addWidget(windowedResolution, 2, 0);
             
             // decorational X
@@ -335,10 +330,16 @@ QLayout * PageOptions::bodyLayoutDefinition()
             windowHeightEdit = new QLineEdit(AGGroupBox);
             windowHeightEdit->setValidator(new QIntValidator(this));
             
-            GBAwindowedreslayout->addWidget(windowWidthEdit);
-            GBAwindowedreslayout->addWidget(winLabelX);
-            GBAwindowedreslayout->addWidget(windowHeightEdit);
-            GBAreslayout->addLayout(GBAwindowedreslayout, 2, 1);
+            GBAfslayout->addWidget(windowWidthEdit);
+            GBAfslayout->addWidget(winLabelX);
+            GBAfslayout->addWidget(windowHeightEdit);
+            
+            GBAfslayout->setAlignment(windowHeightEdit, Qt::AlignRight);
+            GBAfslayout->setAlignment(windowWidthEdit, Qt::AlignRight);
+            GBAfslayout->setAlignment(winLabelX, Qt::AlignRight);
+            GBArescolumn->addLayout(GBAfslayout);
+            GBAreslayout->addLayout(GBArescolumn, 1, 1, 2, 1);
+            GBAreslayout->setAlignment(GBArescolumn, Qt::AlignRight);
             
             GBAlayout->addLayout(GBAreslayout);
             
