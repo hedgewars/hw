@@ -1142,6 +1142,17 @@ begin
     if Length(s) = 0 then
          cFullScreen:= (not cFullScreen)
     else cFullScreen:= s = '1';
+    
+    if cFullScreen then
+        begin
+        cScreenWidth:= cFullscreenWidth;
+        cScreenHeight:= cFullscreenHeight;
+        end
+    else
+        begin
+        cScreenWidth:= cWindowedWidth;
+        cScreenHeight:= cWindowedHeight;
+        end;
 
     AddFileLog('Preparing to change video parameters...');
 {$IFDEF SDL13}
@@ -1219,15 +1230,18 @@ begin
 
     if SDLwindow = nil then
         if cFullScreen then
-            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
         else
+            begin
             SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+            end;
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
+        begin
         flags:= flags or SDL_FULLSCREEN;
-
+        end;
     if not cOnlyStats then
         begin
     {$IFDEF WIN32}

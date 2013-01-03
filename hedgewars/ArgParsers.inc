@@ -43,8 +43,10 @@ begin
     WriteLn(stdout, ' --user-prefix [path to folder]');
     WriteLn(stdout, ' --locale [name of language file]');
     WriteLn(stdout, ' --nick [string]');
-    WriteLn(stdout, ' --width [screen width in pixels]');
-    WriteLn(stdout, ' --height [screen height in pixels]');
+    WriteLn(stdout, ' --fullscreen-width [fullscreen width in pixels]');
+    WriteLn(stdout, ' --fullscreen-height [fullscreen height in pixels]');
+    WriteLn(stdout, ' --width [window width in pixels]');
+    WriteLn(stdout, ' --height [window height in pixels]');
     WriteLn(stdout, ' --volume [sound level]');
     WriteLn(stdout, ' --frame-interval [milliseconds]');
     Writeln(stdout, ' --stereo [value]');
@@ -159,14 +161,15 @@ end;
 procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt); Forward;
 
 function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: Array [1..3] of String = ('--width','--height','--depth');
+const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
       audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
       otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: Array [1..8] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..12] of String = ('--width','--height','--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
-      reallyAll: array[0..28] of shortstring = (
-                '--prefix', '--user-prefix', '--locale', '--width', '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
-                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
+      mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allArray: Array [1..14] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
+      reallyAll: array[0..30] of shortstring = (
+                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width', 
+                '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
+                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick', 
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
   {misc}        '--stats-only', '--gci', '--help');
@@ -180,38 +183,40 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--prefix}          0 : PathPrefix     := getStringParameter (arg, paramIndex, parseParameter);
-        {--user-prefix}     1 : UserPathPrefix := getStringParameter (arg, paramIndex, parseParameter);
-        {--locale}          2 : cLocaleFName   := getStringParameter (arg, paramIndex, parseParameter);
-        {--width}           3 : cScreenWidth   := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}          4 : cScreenHeight  := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--frame-interval}  5 : cTimerInterval := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--volume}          6 : SetVolume       ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nomusic}         7 : SetMusic        ( false );
-        {--nosound}         8 : SetSound        ( false );
-        {--fullscreen}      9 : cFullScreen    := true;
-        {--showfps}        10 : cShowFPS       := true;
-        {--altdmg}         11 : cAltDamage     := true;
-        {--low-quality}    12 : cReducedQuality:= $FFFFFFFF xor rqLowRes;
-        {--raw-quality}    13 : cReducedQuality:= getLongIntParameter(arg, paramIndex, parseParameter);
-        {--stereo}         14 : setStereoMode   ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}           15 : UserNick       := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
+        {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
+        {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
+        {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--width}       5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--height}      6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nomusic}              9 : SetMusic           ( false );
+        {--nosound}             10 : SetSound           ( false );
+        {--fullscreen}          11 : cFullScreen       := true;
+        {--showfps}             12 : cShowFPS          := true;
+        {--altdmg}              13 : cAltDamage        := true;
+        {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
+        {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nick}                17 : UserNick          := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
-        {--depth}          16 : setDepth(paramIndex);
-        {--set-video}      17 : parseClassicParameter(videoArray,3,paramIndex);
-        {--set-audio}      18 : parseClassicParameter(audioArray,3,paramIndex);
-        {--set-other}      19 : parseClassicParameter(otherArray,3,paramIndex);
-        {--set-multimedia} 20 : parseClassicParameter(mediaArray,8,paramIndex);
-        {--set-everything} 21 : parseClassicParameter(allArray,12,paramIndex);
+        {--depth}               18 : setDepth(paramIndex);
+        {--set-video}           19 : parseClassicParameter(videoArray,5,paramIndex);
+        {--set-audio}           20 : parseClassicParameter(audioArray,3,paramIndex);
+        {--set-other}           21 : parseClassicParameter(otherArray,3,paramIndex);
+        {--set-multimedia}      22 : parseClassicParameter(mediaArray,10,paramIndex);
+        {--set-everything}      23 : parseClassicParameter(allArray,14,paramIndex);
         {"internal" options}
-        {--internal}       22 : {note it, but do nothing};
-        {--port}            23 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
-        {--recorder}       24 : startVideoRecording(paramIndex);
-        {--landpreview}    25 : GameType := gmtLandPreview;
+        {--internal}            24 : {note it, but do nothing};
+        {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
+        {--recorder}            26 : startVideoRecording(paramIndex);
+        {--landpreview}         27 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}     26 : statsOnlyGame();
-        {--gci}            27 : GciEasterEgg();
-        {--help}           28 : DisplayUsage();
+        {--stats-only}          28 : statsOnlyGame();
+        {--gci}                 29 : GciEasterEgg();
+        {--help}                30 : DisplayUsage();
     else
         begin
         //Asusme the first "non parameter" is the replay file, anything else is invalid
