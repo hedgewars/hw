@@ -306,21 +306,25 @@ QLayout * PageOptions::bodyLayoutDefinition()
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
-            QLabel * resolution = new QLabel(AGGroupBox);
-            resolution->setText(QLabel::tr("Resolution"));
-            GBAreslayout->addWidget(resolution, 0, 0);
+            QLabel * resolutionLabel = new QLabel(AGGroupBox);
+            resolutionLabel->setText(QLabel::tr("Resolution"));
+            GBAreslayout->addWidget(resolutionLabel, 0, 0);
+            
+            QLabel * fullscreenResolution = new QLabel(AGGroupBox);
+            fullscreenResolution->setText(QLabel::tr("Fullscreen"));
+            GBAreslayout->addWidget(fullscreenResolution, 1, 0);
 
             CBResolution = new QComboBox(AGGroupBox);
             GBAfullreslayout->addWidget(CBResolution);
 
             CBFullscreen = new QCheckBox(AGGroupBox);
-            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
             GBAfullreslayout->addWidget(CBFullscreen);
-            GBAreslayout->addLayout(GBAfullreslayout, 0, 1);
+            CBFullscreen->setText(QLabel::tr("Fullscreen"));
+            GBAreslayout->addLayout(GBAfullreslayout, 1, 1);
             
             QLabel * windowedResolution = new QLabel(AGGroupBox);
-            windowedResolution->setText(QLabel::tr("Windowed Resolution"));
-            GBAreslayout->addWidget(windowedResolution, 1, 0);
+            windowedResolution->setText(QLabel::tr("Windowed"));
+            GBAreslayout->addWidget(windowedResolution, 2, 0);
             
             // decorational X
             QLabel *winLabelX = new QLabel(AGGroupBox);
@@ -334,7 +338,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBAwindowedreslayout->addWidget(windowWidthEdit);
             GBAwindowedreslayout->addWidget(winLabelX);
             GBAwindowedreslayout->addWidget(windowHeightEdit);
-            GBAreslayout->addLayout(GBAwindowedreslayout, 1, 1);
+            GBAreslayout->addLayout(GBAwindowedreslayout, 2, 1);
             
             GBAlayout->addLayout(GBAreslayout);
             
@@ -661,10 +665,6 @@ QLayout * PageOptions::bodyLayoutDefinition()
     previousResolutionIndex = this->CBResolution->currentIndex();
     previousFullscreenValue = this->CBFullscreen->isChecked();
     // mutually exclude window and fullscreen resolution
-    CBResolution->setEnabled(this->CBFullscreen->isChecked());
-    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
-    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
-
     return pageLayout;
 }
 
@@ -698,22 +698,17 @@ PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
 void PageOptions::forceFullscreen(int index)
 {
     bool forced = (index == 7 || index == 8 || index == 9);
-    CBResolution->setEnabled(this->CBFullscreen->isChecked());
-    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
-    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
     
     if (index != 0)
     {
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
-        this->CBFullscreen->setEnabled(!forced);
         this->CBFullscreen->setChecked(forced ? true : previousFullscreenValue);
         this->CBResolution->setCurrentIndex(forced ? 0 : previousResolutionIndex);
     }
     else
     {
         this->SLQuality->setEnabled(true);
-        this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
         this->CBFullscreen->setChecked(previousFullscreenValue);
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
@@ -732,9 +727,7 @@ void PageOptions::setQuality(int value)
 void PageOptions::setFullscreen(int state)
 {
     Q_UNUSED(state);
-    CBResolution->setEnabled(this->CBFullscreen->isChecked());
-    windowHeightEdit->setEnabled(!this->CBFullscreen->isChecked());
-    windowWidthEdit->setEnabled(!this->CBFullscreen->isChecked());
+
     
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
