@@ -22,7 +22,10 @@
 #include <QColor>
 #include <QStringListModel>
 #include <QTextStream>
+#include <utility>
 
+#include "hwform.h"
+#include "ui/page/pageoptions.h"
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
@@ -297,6 +300,16 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 writeCampaignVar(msg.right(msg.size() - 3));
             break;
         }
+        case 'W':
+        {
+            // fetch new window resolution via IPC and save it in the settings
+            int size = msg.size();
+            QString newResolution = QString().append(msg.mid(2)).left(size - 4);
+            QStringList wh = newResolution.split('x');
+            config->Form->ui.pageOptions->windowWidthEdit->setText(wh[0]);
+            config->Form->ui.pageOptions->windowHeightEdit->setText(wh[1]);
+            break;
+        }
         default:
         {
             if (gameType == gtNet && !netSuspend)
@@ -336,7 +349,7 @@ void HWGame::onClientRead()
 QStringList HWGame::getArguments()
 {
     QStringList arguments;
-    QRect resolution = config->vid_Resolution();
+    std::pair<QRect, QRect> resolutions = config->vid_ResolutionPair();
     QString nick = config->netNick().toUtf8().toBase64();
 
     arguments << "--internal"; //Must be passed as first argument
@@ -352,10 +365,14 @@ QStringList HWGame::getArguments()
     arguments << QString::number(config->timerInterval());
     arguments << "--volume";
     arguments << QString::number(config->volume());
+    arguments << "--fullscreen-width";
+    arguments << QString::number(resolutions.first.width());
+    arguments << "--fullscreen-height";
+    arguments << QString::number(resolutions.first.height());
     arguments << "--width";
-    arguments << QString::number(resolution.width());
+    arguments << QString::number(resolutions.second.width());
     arguments << "--height";
-    arguments << QString::number(resolution.height());
+    arguments << QString::number(resolutions.second.height());
     arguments << "--raw-quality";
     arguments << QString::number(config->translateQuality());
     arguments << "--stereo";

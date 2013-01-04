@@ -271,14 +271,17 @@ begin
            ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
         begin
             cScreenResizeDelay:= 0;
-            cScreenWidth:= cNewScreenWidth;
-            cScreenHeight:= cNewScreenHeight;
+            cWindowedWidth:= cNewScreenWidth;
+            cWindowedHeight:= cNewScreenHeight;
+            cScreenWidth:= cWindowedWidth;
+            cScreenHeight:= cWindowedHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
             WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();
