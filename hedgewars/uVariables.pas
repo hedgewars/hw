@@ -27,10 +27,12 @@ var
 /////// init flags ///////
     cMinScreenWidth    : LongInt;
     cMinScreenHeight   : LongInt;
+    cFullscreenWidth   : LongInt;
+    cFullscreenHeight  : LongInt;
+    cWindowedWidth     : LongInt;
+    cWindowedHeight    : LongInt;
     cScreenWidth       : LongInt;
     cScreenHeight      : LongInt;
-    cOrigScreenWidth   : LongInt;
-    cOrigScreenHeight  : LongInt;
     cNewScreenWidth    : LongInt;
     cNewScreenHeight   : LongInt;
     cScreenResizeDelay : LongWord;
@@ -2326,6 +2328,10 @@ begin
 
     cScreenWidth    := 1024;
     cScreenHeight   := 768;
+    cFullscreenWidth    := 1024;
+    cFullscreenHeight   := 768;
+    cWindowedWidth    := 1024;
+    cWindowedHeight   := 768;
     cShowFPS        := false;
     cAltDamage      := true;
     cTimerInterval  := 8;
@@ -2508,8 +2514,6 @@ begin
 
     cMinScreenWidth:= min(cScreenWidth, 640);
     cMinScreenHeight:= min(cScreenHeight, 480);
-    cOrigScreenWidth:= cScreenWidth;
-    cOrigScreenHeight:= cScreenHeight;
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;

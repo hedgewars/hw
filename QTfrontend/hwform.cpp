@@ -1860,11 +1860,13 @@ QString HWForm::getDemoArguments()
     userPrefix = userPrefix.replace("/","\\");
 #endif
 
-    QRect resolution = config->vid_Resolution();
+    std::pair<QRect, QRect> resolutions = config->vid_ResolutionPair();
     return QString("--prefix " + prefix
                    + " --user-prefix " + userPrefix
-                   + " --width " + QString::number(resolution.width())
-                   + " --height " + QString::number(resolution.height())
+                   + " --fullscreen-width " + QString::number(resolutions.first.width())
+                   + " --fullscreen-height " + QString::number(resolutions.first.height())
+                   + " --width " + QString::number(resolutions.second.width())
+                   + " --height " + QString::number(resolutions.second.height())
                    + " --volume " + QString::number(config->volume())
                    + (config->isMusicEnabled() ? "" : " --nomusic")
                    + (config->isSoundEnabled() ? "" : " --nosound")

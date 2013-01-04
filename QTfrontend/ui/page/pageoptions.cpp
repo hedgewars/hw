@@ -271,7 +271,9 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
             QGridLayout * GBAfrontendlayout = new QGridLayout(0);
-            QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
+            QGridLayout * GBAreslayout = new QGridLayout(0);
+            QHBoxLayout * GBAfslayout = new QHBoxLayout(0);
+            QVBoxLayout * GBArescolumn = new QVBoxLayout(0);
             QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
             QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
 
@@ -304,18 +306,43 @@ QLayout * PageOptions::bodyLayoutDefinition()
             hr->setFixedHeight(10);
             GBAlayout->addWidget(hr);
 
-            QLabel * resolution = new QLabel(AGGroupBox);
-            resolution->setText(QLabel::tr("Resolution"));
-            GBAreslayout->addWidget(resolution);
-
-            CBResolution = new QComboBox(AGGroupBox);
-            GBAreslayout->addWidget(CBResolution);
-            GBAlayout->addLayout(GBAreslayout);
-
             CBFullscreen = new QCheckBox(AGGroupBox);
-            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAreslayout->addWidget(CBFullscreen);
-
+            GBAreslayout->addWidget(CBFullscreen, 0, 0);
+            CBFullscreen->setText(QLabel::tr("Fullscreen"));
+                        
+            CBResolution = new QComboBox(AGGroupBox);
+            GBArescolumn->addWidget(CBResolution);
+            
+            QLabel * fullscreenResolution = new QLabel(AGGroupBox);
+            fullscreenResolution->setText(QLabel::tr("Fullscreen Resolution"));
+            GBAreslayout->addWidget(fullscreenResolution,1, 0);
+            
+            QLabel * windowedResolution = new QLabel(AGGroupBox);
+            windowedResolution->setText(QLabel::tr("Windowed Resolution"));
+            GBAreslayout->addWidget(windowedResolution, 2, 0);
+            
+            // decorational X
+            QLabel *winLabelX = new QLabel(AGGroupBox);
+            winLabelX->setText("X");
+            
+            windowWidthEdit = new QLineEdit(AGGroupBox);
+            windowWidthEdit->setValidator(new QIntValidator(this));
+            windowHeightEdit = new QLineEdit(AGGroupBox);
+            windowHeightEdit->setValidator(new QIntValidator(this));
+            
+            GBAfslayout->addWidget(windowWidthEdit);
+            GBAfslayout->addWidget(winLabelX);
+            GBAfslayout->addWidget(windowHeightEdit);
+            
+            GBAfslayout->setAlignment(windowHeightEdit, Qt::AlignRight);
+            GBAfslayout->setAlignment(windowWidthEdit, Qt::AlignRight);
+            GBAfslayout->setAlignment(winLabelX, Qt::AlignRight);
+            GBArescolumn->addLayout(GBAfslayout);
+            GBAreslayout->addLayout(GBArescolumn, 1, 1, 2, 1);
+            GBAreslayout->setAlignment(GBArescolumn, Qt::AlignRight);
+            
+            GBAlayout->addLayout(GBAreslayout);
+            
             QLabel * quality = new QLabel(AGGroupBox);
             quality->setText(QLabel::tr("Quality"));
             quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -638,7 +665,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
     previousQuality = this->SLQuality->value();
     previousResolutionIndex = this->CBResolution->currentIndex();
     previousFullscreenValue = this->CBFullscreen->isChecked();
-
+    // mutually exclude window and fullscreen resolution
     return pageLayout;
 }
 
@@ -672,19 +699,17 @@ PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
 void PageOptions::forceFullscreen(int index)
 {
     bool forced = (index == 7 || index == 8 || index == 9);
-
+    
     if (index != 0)
     {
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
-        this->CBFullscreen->setEnabled(!forced);
         this->CBFullscreen->setChecked(forced ? true : previousFullscreenValue);
         this->CBResolution->setCurrentIndex(forced ? 0 : previousResolutionIndex);
     }
     else
     {
         this->SLQuality->setEnabled(true);
-        this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
         this->CBFullscreen->setChecked(previousFullscreenValue);
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
@@ -704,6 +729,7 @@ void PageOptions::setFullscreen(int state)
 {
     Q_UNUSED(state);
 
+    
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
         previousFullscreenValue = this->CBFullscreen->isChecked();

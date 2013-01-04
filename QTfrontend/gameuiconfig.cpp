@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
+#include <utility>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -34,6 +35,7 @@
 #include "fpsedit.h"
 #include "HWApplication.h"
 #include "DataManager.h"
+#include "SDL.h"
 
 
 const QNetworkProxy::ProxyType proxyTypesMap[] = {
@@ -81,6 +83,20 @@ void GameUIConfig::reloadValues(void)
             Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
+    
+    // Default the windowed resolution to 2/3 of the screen size
+    int screenWidth = SDL_GetVideoInfo()->current_w * 2 / 3; 
+    int screenHeight = SDL_GetVideoInfo()->current_h * 2 / 3; 
+    QString widthStr; widthStr.setNum(screenWidth);
+    QString heightStr; heightStr.setNum(screenHeight);
+    QString wWidth = value("video/windowedWidth", widthStr).toString();
+    QString wHeight = value("video/windowedHeight", heightStr).toString();
+    // If left blank reset the resolution to the default
+    wWidth = (wWidth == "" ? widthStr : wWidth);
+    wHeight = (wHeight == "" ? heightStr : wHeight);
+    Form->ui.pageOptions->windowWidthEdit->setText(wWidth);
+    Form->ui.pageOptions->windowHeightEdit->setText(wHeight);
+    
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
     bool ffscr=value("frontend/fullscreen", false).toBool();
@@ -216,6 +232,8 @@ void GameUIConfig::resizeToConfigValues()
 void GameUIConfig::SaveOptions()
 {
     setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
+    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
@@ -335,16 +353,28 @@ QString GameUIConfig::language()
     return Form->ui.pageOptions->CBLanguage->itemData(Form->ui.pageOptions->CBLanguage->currentIndex()).toString();
 }
 
-QRect GameUIConfig::vid_Resolution()
-{
-    QRect result(0, 0, 640, 480);
+std::pair<QRect, QRect> GameUIConfig::vid_ResolutionPair() {
+    // returns a pair of both the fullscreen and the windowed resolution
+    QRect full(0, 0, 640, 480);
+    QRect windowed(0, 0, 640, 480);
     QStringList wh = Form->ui.pageOptions->CBResolution->currentText().split('x');
     if (wh.size() == 2)
     {
-        result.setWidth(wh[0].toInt());
-        result.setHeight(wh[1].toInt());
+        full.setWidth(wh[0].toInt());
+        full.setHeight(wh[1].toInt());
     }
-    return result;
+    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->text().toInt());
+    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->text().toInt());
+    return std::make_pair(full, windowed);
+}
+
+QRect GameUIConfig::vid_Resolution()
+{
+    std::pair<QRect, QRect> result = vid_ResolutionPair();
+    if(Form->ui.pageOptions->CBFullscreen->isChecked())
+        return result.first;
+    else 
+        return result.second;
 }
 
 bool GameUIConfig::vid_Fullscreen()

@@ -24,6 +24,7 @@
 #include <QRect>
 #include <QEvent>
 #include <QList>
+#include <utility>
 #include "binds.h"
 
 class HWForm;
@@ -38,6 +39,7 @@ class GameUIConfig : public QSettings
         GameUIConfig(HWForm * FormWidgets, const QString & fileName);
         QStringList GetTeamsList();
         QRect vid_Resolution();
+        std::pair<QRect, QRect> vid_ResolutionPair();
         bool vid_Fullscreen();
         quint32 translateQuality();
         bool isSoundEnabled();
