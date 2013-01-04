@@ -302,7 +302,7 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         else
             continue;
         AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
-        desc += pDecoder? pDecoder->name : "unknown";
+        desc += pDecoder? pDecoder->name : tr("unknown");
         desc += "\n";
     }
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);

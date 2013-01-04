@@ -26,7 +26,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/page/pagetraining.h \
     ../QTfrontend/ui/page/pageselectweapon.h \
     ../QTfrontend/ui/page/pagesingleplayer.h \
-    ../QTfrontend/ui/page/pagenettype.h \
     ../QTfrontend/ui/page/pageingame.h \
     ../QTfrontend/ui/page/pageadmin.h \
     ../QTfrontend/ui/page/pagescheme.h \
@@ -108,7 +107,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/playerslistmodel.h \
     ../QTfrontend/util/LibavInteraction.h \
     ../QTfrontend/util/FileEngine.h \
-    ../QTfrontend/ui/dialog/bandialog.h
+    ../QTfrontend/ui/dialog/bandialog.h \
+    ../QTfrontend/ui/widget/keybinder.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -121,7 +121,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/page/pageroomslist.cpp \
     ../QTfrontend/ui/page/pagemultiplayer.cpp \
     ../QTfrontend/ui/page/pagegamestats.cpp \
-    ../QTfrontend/ui/page/pagenettype.cpp \
     ../QTfrontend/ui/page/pageeditteam.cpp \
     ../QTfrontend/ui/page/pagenetgame.cpp \
     ../QTfrontend/ui/page/pagedata.cpp \
@@ -200,7 +199,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/playerslistmodel.cpp \
     ../QTfrontend/util/LibavInteraction.cpp \
     ../QTfrontend/util/FileEngine.cpp \
-    ../QTfrontend/ui/dialog/bandialog.cpp
+    ../QTfrontend/ui/dialog/bandialog.cpp \
+    ../QTfrontend/ui/widget/keybinder.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
