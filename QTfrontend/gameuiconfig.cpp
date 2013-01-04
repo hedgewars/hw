@@ -74,7 +74,7 @@ void GameUIConfig::reloadValues(void)
 {
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
-    int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
+    int t = Form->ui.pageOptions->CBResolution->findText(value("video/fullscreenResolution").toString());
     if (t < 0)
     {
         if (Form->ui.pageOptions->CBResolution->count() > 1)
@@ -84,9 +84,9 @@ void GameUIConfig::reloadValues(void)
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
     
-    // Default the windowed resolution to 2/3 of the screen size
-    int screenWidth = SDL_GetVideoInfo()->current_w * 2 / 3; 
-    int screenHeight = SDL_GetVideoInfo()->current_h * 2 / 3; 
+    // Default the windowed resolution to 5/6 of the screen size
+    int screenWidth = SDL_GetVideoInfo()->current_w * 5 / 6;
+    int screenHeight = SDL_GetVideoInfo()->current_h * 5 / 6;
     QString widthStr; widthStr.setNum(screenWidth);
     QString heightStr; heightStr.setNum(screenHeight);
     QString wWidth = value("video/windowedWidth", widthStr).toString();
@@ -231,7 +231,7 @@ void GameUIConfig::resizeToConfigValues()
 
 void GameUIConfig::SaveOptions()
 {
-    setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
     setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
     setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
     setValue("video/fullscreen", vid_Fullscreen());

@@ -2326,12 +2326,13 @@ procedure preInitModule;
 begin
     // initialisation flags - they are going to be overwritten by program args
 
-    cScreenWidth    := 1024;
-    cScreenHeight   := 768;
-    cFullscreenWidth    := 1024;
-    cFullscreenHeight   := 768;
+    cFullscreenWidth  := 0;
+    cFullscreenHeight := 0;
     cWindowedWidth    := 1024;
     cWindowedHeight   := 768;
+    cScreenWidth      := cWindowedWidth;
+    cScreenHeight     := cWindowedHeight;
+
     cShowFPS        := false;
     cAltDamage      := true;
     cTimerInterval  := 8;
@@ -2512,12 +2513,19 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    cMinScreenWidth:= min(cScreenWidth, 640);
-    cMinScreenHeight:= min(cScreenHeight, 480);
+    cMinScreenWidth  := min(cScreenWidth, 640);
+    cMinScreenHeight := min(cScreenHeight, 480);
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;
     cScreenResizeDelay := 0;
+
+    // make sure fullscreen resolution is always initialised somehow
+    if cFullscreenWidth = 0 then
+        cFullscreenWidth:= min(cWindowedWidth, 640);
+    if cFullscreenHeight = 0 then
+        cFullscreenHeight:= min(cWindowedHeight, 480);
+
 
     LuaGoals:= '';
     cMapName:= '';
