@@ -37,6 +37,7 @@ procedure ScriptClearStack;
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -222,6 +223,30 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) = 0 then
+            GameFlags += lua_tointeger(L, i);
+    ScriptSetInteger('GameFlags', GameFlags);
+end;
+
+function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) <> 0 then
+            GameFlags -= lua_tointeger(L, i);
+    ScriptSetInteger('GameFlags', GameFlags);
+end;
+
+function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
+begin
+    GameFlags:= 0;
+    ScriptSetInteger('GameFlags', GameFlags);
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
@@ -2335,6 +2360,9 @@ lua_register(luaState, _P'div', @lc_div);
 lua_register(luaState, _P'GetInputMask', @lc_getinputmask);
 lua_register(luaState, _P'SetInputMask', @lc_setinputmask);
 lua_register(luaState, _P'AddGear', @lc_addgear);
+lua_register(luaState, _P'EnableGameFlags', @lc_enablegameflags);
+lua_register(luaState, _P'DisableGameFlags', @lc_disablegameflags);
+lua_register(luaState, _P'ClearGameFlags', @lc_cleargameflags);
 lua_register(luaState, _P'DeleteGear', @lc_deletegear);
 lua_register(luaState, _P'AddVisualGear', @lc_addvisualgear);
 lua_register(luaState, _P'DeleteVisualGear', @lc_deletevisualgear);
