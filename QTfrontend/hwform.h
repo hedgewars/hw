@@ -140,6 +140,7 @@ class HWForm : public QMainWindow
         void selectFirstNetScheme();
 
         void saveDemoWithCustomName();
+        void openRegistrationPage();
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
