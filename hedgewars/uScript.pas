@@ -230,7 +230,7 @@ var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
         if (GameFlags and lua_tointeger(L, i)) = 0 then
-            GameFlags += lua_tointeger(L, i);
+            GameFlags := GameFlags + lua_tointeger(L, i);
     ScriptSetInteger('GameFlags', GameFlags);
 end;
 
@@ -239,7 +239,7 @@ var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
         if (GameFlags and lua_tointeger(L, i)) <> 0 then
-            GameFlags -= lua_tointeger(L, i);
+            GameFlags := GameFlags - lua_tointeger(L, i);
     ScriptSetInteger('GameFlags', GameFlags);
 end;
 
