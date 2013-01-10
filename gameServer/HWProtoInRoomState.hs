@@ -2,13 +2,11 @@
 module HWProtoInRoomState where
 
 import qualified Data.Map as Map
-import Data.Sequence((|>))
 import Data.List as L
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
 import Control.Monad
 import Control.Monad.Reader
-import Control.DeepSeq
 --------------------------------------
 import CoreTypes
 import Actions
@@ -214,7 +212,8 @@ handleCmd_inRoom ["EM", msg] = do
     chans <- roomOthersChans
 
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && isLegal then
-        return $ AnswerClients chans ["EM", msg] : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = roundMsgs g |> msg}) $ gameInfo r}) | not isKeepAlive]
+        return $ AnswerClients chans ["EM", msg]
+            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = msg : roundMsgs g}) $ gameInfo r}) | not isKeepAlive]
         else
         return []
     where

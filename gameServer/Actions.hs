@@ -4,7 +4,6 @@ module Actions where
 
 import Control.Concurrent
 import qualified Data.Set as Set
-import qualified Data.Sequence as Seq
 import qualified Data.List as L
 import qualified Control.Exception as Exception
 import System.Log.Logger
@@ -374,7 +373,7 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                    , roundMsgs = rmTeamMsg : roundMsgs g
                 }) $ gameInfo r
             })
         ]

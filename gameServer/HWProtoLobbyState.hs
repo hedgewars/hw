@@ -2,11 +2,9 @@
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map
-import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
-import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -128,7 +126,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                     [AnswerClients [sendChan cl]  ["RUN_GAME"]
                     , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
                     , ModifyClient (\c -> c{isInGame = True})
-                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
+                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
