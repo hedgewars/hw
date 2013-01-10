@@ -57,7 +57,7 @@ uses uSound, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
 
 const 
     cExplFrameTicks = 110;
-    cSmokeZ = 499;
+    //cSmokeZ = 499;
 var VGCounter: LongWord;
     VisualGearLayers: array[0..6] of PVisualGear;
 

@@ -67,10 +67,10 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     //ControllerNumBalls: array[0..5] of Integer;
     ControllerNumHats: array[0..5] of Integer;
     ControllerNumButtons: array[0..5] of Integer;
-    ControllerAxes: array[0..5] of array[0..19] of Integer;
+    //ControllerAxes: array[0..5] of array[0..19] of Integer;
     //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
-    ControllerHats: array[0..5] of array[0..19] of Byte;
-    ControllerButtons: array[0..5] of array[0..19] of Byte;
+    //ControllerHats: array[0..5] of array[0..19] of Byte;
+    //ControllerButtons: array[0..5] of array[0..19] of Byte;
     usingDBinds: boolean;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
@@ -355,7 +355,7 @@ end;
 var Controller: array [0..5] of PSDL_Joystick;
 
 procedure ControllerInit;
-var i, j: Integer;
+var j: Integer;
 begin
 ControllerEnabled:= 0;
 {$IFDEF IPHONE}
@@ -400,18 +400,18 @@ if ControllerNumControllers > 0 then
             if ControllerNumButtons[j] > 20 then
                 ControllerNumButtons[j]:= 20;
 
-            // reset all buttons/axes
+            (*// reset all buttons/axes
             for i:= 0 to pred(ControllerNumAxes[j]) do
                 ControllerAxes[j][i]:= 0;
-            (*for i:= 0 to pred(ControllerNumBalls[j]) do
+            for i:= 0 to pred(ControllerNumBalls[j]) do
                 begin
                 ControllerBalls[j][i][0]:= 0;
                 ControllerBalls[j][i][1]:= 0;
-                end;*)
+                end;
             for i:= 0 to pred(ControllerNumHats[j]) do
                 ControllerHats[j][i]:= SDL_HAT_CENTERED;
             for i:= 0 to pred(ControllerNumButtons[j]) do
-                ControllerButtons[j][i]:= 0;
+                ControllerButtons[j][i]:= 0;*)
             end;
         end;
     // enable event generation/controller updating

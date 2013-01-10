@@ -124,6 +124,8 @@ end;
 
 procedure startVideoRecording(var paramIndex: LongInt);
 begin
+    // Silence the hint that appears when USE_VIDEO_RECORDING is not defined
+    paramIndex:= paramIndex;
 {$IFDEF USE_VIDEO_RECORDING}
     GameType:= gmtRecord;
     inc(paramIndex);
@@ -245,6 +247,7 @@ begin
     tmpInt:= 1;
     while (index < size) do
         begin
+        newSyntax:= '';
         inc(paramIndex);
         cmd:= cmdArray[index];
         arg:= ParamStr(paramIndex);

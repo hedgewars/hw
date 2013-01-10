@@ -230,8 +230,9 @@ var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
         if (GameFlags and lua_tointeger(L, i)) = 0 then
-            GameFlags := GameFlags + lua_tointeger(L, i);
+            GameFlags := GameFlags + LongWord(lua_tointeger(L, i));
     ScriptSetInteger('GameFlags', GameFlags);
+    lc_enablegameflags:= 0;
 end;
 
 function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
@@ -239,14 +240,18 @@ var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
         if (GameFlags and lua_tointeger(L, i)) <> 0 then
-            GameFlags := GameFlags - lua_tointeger(L, i);
+            GameFlags := GameFlags - LongWord(lua_tointeger(L, i));
     ScriptSetInteger('GameFlags', GameFlags);
+    lc_disablegameflags:= 0;
 end;
 
 function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
 begin
+    // Silence hint
+    L:= L;
     GameFlags:= 0;
     ScriptSetInteger('GameFlags', GameFlags);
+    lc_cleargameflags:= 0;
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
@@ -1760,8 +1765,7 @@ begin
 end;
 
 function lc_restorehog(L: Plua_State): LongInt; Cdecl;
-var hog: PHedgehog;
-    i, h: LongInt;
+var i, h: LongInt;
     uid: LongWord;
 begin
     if lua_gettop(L) <> 1 then

@@ -188,7 +188,11 @@ end;
 function  StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
-val(s, StrToInt, c)
+val(s, StrToInt, c);
+{$IFDEF DEBUGFILE}
+if c <> 0 then
+    writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 end;
 
 function FloatToStr(n: hwFloat): shortstring;

@@ -86,7 +86,6 @@ var cWaveWidth, cWaveHeight: LongInt;
     AmmoMenuTex     : PTexture;
     HorizontOffset: LongInt;
     cOffsetY: LongInt;
-    AFRToggle: Boolean;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -105,7 +104,7 @@ const cStereo_Sky           = 0.0500;
       AMTypeMaskX     = $00000001;
       AMTypeMaskY     = $00000002;
       AMTypeMaskAlpha = $00000004;
-      AMTypeMaskSlide = $00000008;
+      //AMTypeMaskSlide = $00000008;
 
 {$IFDEF MOBILE}
       AMSlotSize = 48;
