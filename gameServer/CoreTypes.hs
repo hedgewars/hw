@@ -4,7 +4,6 @@ module CoreTypes where
 import Control.Concurrent
 import Data.Word
 import qualified Data.Map as Map
-import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
 import Data.Function
@@ -68,7 +67,7 @@ data TeamInfo =
 data GameInfo =
     GameInfo
     {
-        roundMsgs :: Seq B.ByteString,
+        roundMsgs :: [B.ByteString],
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
@@ -85,7 +84,7 @@ newGameInfo :: [TeamInfo]
                 -> GameInfo
 newGameInfo =
     GameInfo
-        Data.Sequence.empty
+        []
         []
 
 data RoomInfo =
