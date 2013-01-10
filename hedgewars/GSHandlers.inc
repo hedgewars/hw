@@ -5174,7 +5174,7 @@ if Gear^.Timer < $FFFFFFFF then
 if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     begin
     doStepFallingGear(Gear);
-    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and ((hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < topY)) then
+    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
         begin
         Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
         Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
@@ -5267,9 +5267,9 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKnife(Gear: PGear);
-var ox, oy: LongInt;
-    la: hwFloat;
-    a: real;
+//var ox, oy: LongInt;
+//    la: hwFloat;
+var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
     if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
@@ -5291,14 +5291,14 @@ begin
         end
     else if (Gear^.CollisionIndex = -1) and (Gear^.Timer = 0) then
         begin
-        ox:= 0; oy:= 0;
+        (*ox:= 0; oy:= 0;
         if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
         if TestCollisionXwithGear(Gear, 1)       then ox:=  1;
         if TestCollisionXwithGear(Gear, -1)      then ox:= -1;
         if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
         if Gear^.Health > 0 then
             PlaySound(sndRopeAttach);
-(*
+
         la:= _10000;
         if (ox <> 0) or (oy <> 0) then
             la:= CalcSlopeNearGear(Gear, ox, oy);

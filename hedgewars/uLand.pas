@@ -523,7 +523,6 @@ end;
 
 procedure LoadMap;
 var tmpsurf: PSDL_Surface;
-    s: shortstring;
     mapName: shortstring = '';
 begin
 WriteLnToConsole('Loading land from file...');
@@ -631,7 +630,7 @@ else
             if Land[y, x] <> 0 then
                 begin
                 inc(c);
-                if c > (LAND_WIDTH div 2) then // avoid accidental triggering
+                if c > LongWord((LAND_WIDTH div 2)) then // avoid accidental triggering
                     begin
                     hasBorder:= true;
                     break;

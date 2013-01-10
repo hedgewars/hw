@@ -41,7 +41,7 @@ uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
 
 const
     // hog tag mask
-    htNone        = $00;
+    //htNone        = $00;
     htTeamName    = $01;
     htName        = $02;
     htHealth      = $04;

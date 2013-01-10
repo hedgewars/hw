@@ -605,6 +605,8 @@ var tmpsurf: PSDL_Surface;
 begin
     // check for file in user dir (never critical)
     tmpsurf:= LoadImage(cPathz[path] + '/' + filename, imageFlags);
+    
+    LoadDataImage:= tmpsurf;
 end;
 
 

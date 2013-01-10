@@ -1140,7 +1140,7 @@ procedure checkCakeWalk(Me, Gear: PGear; var ap: TAttackParams);
 var i: Longword;
     v: LongInt;
 begin
-while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LAND_HEIGHT) do
+while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LongWord(LAND_HEIGHT)) do
     Gear^.Y:= Gear^.Y + _1;
 
 for i:= 0 to 2040 do

@@ -330,8 +330,8 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
-var p: TPathType;
-    s: shortstring;
+//var p: TPathType;
+var s: shortstring;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
