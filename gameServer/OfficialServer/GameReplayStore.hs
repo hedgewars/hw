@@ -14,7 +14,7 @@ import CoreTypes
 
 
 saveReplay :: RoomInfo -> IO ()
-saveReplay r = do
+saveReplay r = when allPlayersHaveRegisteredAccounts $ do
     time <- getCurrentTime
     u <- liftM hashUnique newUnique
     let fileName = "replays/" ++ show time ++ "-" ++ show u
@@ -23,4 +23,3 @@ saveReplay r = do
     E.catch
         (writeFile fileName (show replayInfo))
         (\(e :: IOException) -> warningM "REPLAYS" $ "Couldn't write to " ++ fileName ++ ": " ++ show e)
-                   
