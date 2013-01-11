@@ -48,4 +48,17 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
         return [ByeClient "Authentication failed"]
 
 
+handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+
+    if parsedProto == 0 then return [ProtocolError "Bad number"]
+        else
+        return $ [
+            ModifyClient (\c -> c{clientProto = parsedProto, nick = newNick, webPassword = password, isChecker = True})
+            , CheckRegistered]
+    where
+        parsedProto = readInt_ protoNum
+
+
 handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]

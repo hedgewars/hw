@@ -420,9 +420,11 @@ processAction CheckRegistered = do
     n <- client's nick
     h <- client's host
     p <- client's clientProto
+    checker <- client's isChecker
     uid <- client's clUID
-    haveSameNick <- liftM (not . null . tail . filter (\c -> caseInsensitiveCompare (nick c) n)) allClientsS
-    if haveSameNick then
+    -- allow multiple checker logins
+    haveSameNick <- liftM (not . null . tail . filter (\c -> (not $ isChecker c) && caseInsensitiveCompare (nick c) n)) allClientsS
+    if haveSameNick && (not checker) then
         if p < 38 then
             processAction $ ByeClient "Nickname is already in use"
             else
@@ -636,6 +638,7 @@ processAction RestartServer = do
 processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
+
     io $ do
         r <- room'sM rnc id ri
         saveReplay r
