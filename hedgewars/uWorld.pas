@@ -75,7 +75,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     FPS: Longword;
     CountTicks: Longword;
     SoundTimerTicks: Longword;
-    prevPoint: TPoint;
+    prevPoint, prevTargetPoint: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -223,6 +223,8 @@ InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
+prevTargetPoint.X:= 0;
+prevTargetPoint.Y:= 0;
 WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
@@ -642,6 +644,7 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
+            prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
@@ -1630,6 +1633,7 @@ if isCursorVisible then
     begin
     if not bShowAmmoMenu then
         begin
+        if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
         with CurrentHedgehog^ do
             if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
                 begin
@@ -1638,9 +1642,9 @@ if isCursorVisible then
             i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
-                    DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
+                    DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
                 end;
-        DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+        DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
         end
     end;
 isFirstFrame:= false
@@ -1652,7 +1656,7 @@ procedure MoveCamera;
 var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
 begin
 {$IFNDEF MOBILE}
-if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and autoCameraOn)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
@@ -1723,7 +1727,8 @@ else
     EdgesDist:= cGearScrEdgesDist;
 
 // this generates the border around the screen that moves the camera when cursor is near it
-if isCursorVisible or ((FollowGear <> nil) and autoCameraOn) then
+if (CurrentTeam^.ExtDriven and isCursorVisible and autoCameraOn) or
+   (not CurrentTeam^.ExtDriven and isCursorVisible) or ((FollowGear <> nil) and autoCameraOn) then
     begin
     if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
         begin
