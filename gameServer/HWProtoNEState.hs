@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, CPP #-}
 module HWProtoNEState where
 
 import Control.Monad.Reader
@@ -48,6 +48,7 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
         return [ByeClient "Authentication failed"]
 
 
+#if defined(OFFICIAL_SERVER)
 handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
@@ -59,6 +60,6 @@ handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do
             , CheckRegistered]
     where
         parsedProto = readInt_ protoNum
-
+#endif
 
 handleCmd_NotEntered _ = return [ProtocolError "Incorrect command (state: not entered)"]

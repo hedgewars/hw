@@ -142,13 +142,13 @@ processAction (ByeClient msg) = do
 
     chan <- client's sendChan
     clNick <- client's nick
-    loggedIn <- client's logonPassed
+    loggedIn <- client's isVisible
 
     when (ri /= lobbyId) $ do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
         return ()
 
-    clientsChans <- liftM (Prelude.map sendChan . Prelude.filter logonPassed) $! allClientsS
+    clientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
     io $
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
@@ -157,7 +157,7 @@ processAction (ByeClient msg) = do
     mapM_ processAction
         [
         AnswerClients [chan] ["BYE", msg]
-        , ModifyClient (\c -> c{nick = "", logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
+        , ModifyClient (\c -> c{nick = "", isVisible = False}) -- this will effectively hide client from others while he isn't deleted from list
         ]
 
     s <- get
@@ -445,9 +445,8 @@ processAction (ProcessAccountInfo info) = do
     case info of
         HasAccount passwd isAdmin -> do
             b <- isBanned
-            when (not b) $ do
-                chan <- client's sendChan
-                mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd, isAdministrator = isAdmin})]
+            c <- client's isChecker
+            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
         Guest -> do
             b <- isBanned
             when (not b) $
@@ -460,14 +459,21 @@ processAction (ProcessAccountInfo info) = do
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-
+    checkerLogin p False = processAction $ ByeClient "No checker rights"
+    checkerLogin p True = do
+        wp <- client's webPassword
+        processAction $
+            if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient "Authentication failed"
+    playerLogin p a = do
+        chan <- client's sendChan
+        mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = p, isAdministrator = a})]
 
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
-    loggedInClients <- liftM (Prelude.filter logonPassed) $! allClientsS
+    loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
     let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
@@ -478,7 +484,7 @@ processAction JoinLobby = do
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
-        , [ModifyClient (\cl -> cl{logonPassed = True})]
+        , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]
         ]
 

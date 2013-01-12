@@ -28,6 +28,7 @@ data ClientInfo =
         nick :: B.ByteString,
         webPassword :: B.ByteString,
         logonPassed :: Bool,
+        isVisible :: Bool,
         clientProto :: !Word16,
         roomID :: RoomIndex,
         pingsQueue :: !Word,
