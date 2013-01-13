@@ -30,9 +30,9 @@
 #include <QSortFilterProxyModel>
 #include <QDebug>
 
-#include "datamanager.h"
+#include "DataManager.h"
 #include "lineeditcursor.h"
-#include "hatmodel.h"
+#include "HatModel.h"
 #include "hatprompt.h"
 
 HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
