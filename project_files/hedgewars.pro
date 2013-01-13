@@ -189,6 +189,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/roomslistmodel.cpp \
     ../QTfrontend/ui/dialog/input_password.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
+    ../QTfrontend/ui/widget/hatbutton.cpp \
+    ../QTfrontend/ui/widget/hatprompt.cpp \
     ../QTfrontend/model/HatModel.cpp \
     ../QTfrontend/model/GameStyleModel.cpp \
     ../QTfrontend/ui/page/pagevideos.cpp \

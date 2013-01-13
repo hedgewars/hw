@@ -16,30 +16,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-/**
- * @file
- * @brief HatModel class definition
- */
+#ifndef LINEEDITCURSOR_H
+#define LINEEDITCURSOR_H
 
-#ifndef HEDGEWARS_HATMODEL_H
-#define HEDGEWARS_HATMODEL_H
+#include <QLineEdit>
 
-#include <QStandardItemModel>
-#include <QStringList>
-#include <QVector>
-#include <QPair>
-#include <QIcon>
-
-class HatModel : public QStandardItemModel
+class LineEditCursor : public QLineEdit
 {
         Q_OBJECT
 
     public:
-        HatModel(QObject *parent = 0);
+        LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {};
 
-    public slots:
-        /// Reloads hats using the DataManager.
-        void loadHats();
+    signals:
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
+
+    private:
+        void keyPressEvent(QKeyEvent * event);
 };
 
-#endif // HEDGEWARS_HATMODEL_H
+#endif // LINEEDITCURSOR_H
