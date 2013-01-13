@@ -20,7 +20,7 @@
 
 #include "hatprompt.h"
 #include "DataManager.h"
-#include "hatmodel.h"
+#include "HatModel.h"
 #include "hatbutton.h"
 
 HatButton::HatButton(QWidget* parent) : QPushButton(parent)
