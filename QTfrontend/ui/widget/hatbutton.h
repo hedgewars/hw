@@ -16,30 +16,40 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-/**
- * @file
- * @brief HatModel class definition
- */
+#ifndef HATBUTTON_H
+#define HATBUTTON_H
 
-#ifndef HEDGEWARS_HATMODEL_H
-#define HEDGEWARS_HATMODEL_H
+#include <QPushButton>
+#include <QString>
+#include <QModelIndex>
 
-#include <QStandardItemModel>
-#include <QStringList>
-#include <QVector>
-#include <QPair>
-#include <QIcon>
+class HatModel;
 
-class HatModel : public QStandardItemModel
+class HatButton : public QPushButton
 {
         Q_OBJECT
+        Q_PROPERTY(int currentIndex READ currentIndex WRITE setCurrentIndex)
+        Q_PROPERTY(QString currentHat READ currentHat WRITE setCurrentHat)
 
     public:
-        HatModel(QObject *parent = 0);
+        HatButton(QWidget* parent);
+        int currentIndex();
+        QString currentHat() const;
+
+    private:
+    	QModelIndex m_hat;
+    	HatModel * m_hatModel;
+
+    signals:
+    	void currentIndexChanged(int);
+    	void currentHatChanged(const QString &);
 
     public slots:
-        /// Reloads hats using the DataManager.
-        void loadHats();
+    	void setCurrentIndex(int index);
+    	void setCurrentHat(const QString & name);
+
+    private slots:
+        void showPrompt();
 };
 
-#endif // HEDGEWARS_HATMODEL_H
+#endif // HATBUTTON_H

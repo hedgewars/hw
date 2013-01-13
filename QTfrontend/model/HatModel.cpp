@@ -26,26 +26,28 @@
 #include <QDir>
 #include <QPixmap>
 #include <QPainter>
+#include <QList>
 #include "hwform.h" // player hash
 
 #include "DataManager.h"
 
 HatModel::HatModel(QObject* parent) :
-    QAbstractListModel(parent)
-{
-    hats = QVector<QPair<QString, QIcon> >();
-}
+    QStandardItemModel(parent)
+{}
 
 void HatModel::loadHats()
 {
     // this method resets the contents of this model (important to know for views).
-    beginResetModel();
+    QStandardItemModel::beginResetModel();
+    QStandardItemModel::clear();
 
-    // prepare hats Vector
-    hats.clear();
+    // New hats to add to model
+    QList<QStandardItem *> hats;
 
+    // we'll need the DataManager a few times, so let's get a reference to it
     DataManager & dataMgr = DataManager::instance();
 
+    // Default hat icon
     QPixmap hhpix = QPixmap("physfs://Graphics/Hedgehog/Idle.png").copy(0, 0, 32, 32);
 
     // my reserved hats
@@ -54,7 +56,6 @@ void HatModel::loadHats()
                                QDir::Files,
                                QStringList(playerHash+"*.png")
                            );
-
     int nReserved = hatsList.size();
 
     // regular hats
@@ -64,13 +65,14 @@ void HatModel::loadHats()
                         QStringList("*.png")
                     )
                    );
-
-
     int nHats = hatsList.size();
 
+    // Add each hat
     for (int i = 0; i < nHats; i++)
     {
         bool isReserved = (i < nReserved);
+
+        if (isReserved) continue; // For some reason, reserved hats were added in 9.19-dev, so this will hide them. Uncomment to show them.
 
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
@@ -94,51 +96,11 @@ void HatModel::loadHats()
         painter.end();
 
         if (str == "NoHat")
-            hats.prepend(qMakePair(str, QIcon(tmppix)));
+            hats.prepend(new QStandardItem(QIcon(tmppix), str));
         else
-            hats.append(qMakePair(str, QIcon(tmppix)));
+            hats.append(new QStandardItem(QIcon(tmppix), str));
     }
 
-
-    endResetModel();
-}
-
-QVariant HatModel::headerData(int section,
-                               Qt::Orientation orientation, int role) const
-{
-    Q_UNUSED(section);
-    Q_UNUSED(orientation);
-    Q_UNUSED(role);
-
-    return QVariant();
-}
-
-int HatModel::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return 0;
-    else
-        return hats.size();
-}
-
-/*int HatModel::columnCount(const QModelIndex & parent) const
-{
-    if (parent.isValid())
-        return 0;
-    else
-        return 2;
-}
-*/
-QVariant HatModel::data(const QModelIndex &index,
-                         int role) const
-{
-    if (!index.isValid() || index.row() < 0
-            || index.row() >= hats.size()
-            || (role != Qt::DisplayRole && role != Qt::DecorationRole))
-        return QVariant();
-
-    if (role == Qt::DisplayRole)
-        return hats.at(index.row()).first;
-    else // role == Qt::DecorationRole
-        return hats.at(index.row()).second;
+    QStandardItemModel::appendColumn(hats);
+    QStandardItemModel::endResetModel();
 }

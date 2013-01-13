@@ -33,7 +33,7 @@
 #include "keybinder.h"
 
 #include "DataManager.h"
-#include "HatModel.h"
+#include "hatbutton.h"
 
 #include "pageeditteam.h"
 
@@ -64,25 +64,32 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
 
     HatModel * hatModel = DataManager::instance().hatModel();
 
+    GBHLayout->addWidget(new QLabel(tr("Hat")), 0, 0);
+    GBHLayout->addWidget(new QLabel(tr("Name")), 0, 1);
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        HHHats[i] = new QComboBox(GBoxHedgehogs);
-        HHHats[i]->setModel(hatModel);
-        HHHats[i]->setIconSize(QSize(32, 37));
-        //HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        //HHHats[i]->setModelColumn(1);
-        //HHHats[i]->setMinimumWidth(132);
-        GBHLayout->addWidget(HHHats[i], i, 0);
+        HHHats[i] = new HatButton(GBoxHedgehogs);
+        GBHLayout->addWidget(HHHats[i], i + 1, 0);
 
         HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
         HHNameEdit[i]->setMaxLength(64);
         HHNameEdit[i]->setMinimumWidth(120);
-        GBHLayout->addWidget(HHNameEdit[i], i, 1);
+        HHNameEdit[i]->setFixedHeight(36);
+        HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
+        HHNameEdit[i]->setStyleSheet("padding: 6px;");
+        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1);
 
-        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, 1, 1, true);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 3, 1, 1, true);
+        btnRandomHogName[i]->setFixedHeight(HHNameEdit[i]->height());
+        btnRandomHogName[i]->setWhatsThis(tr("Randomize this hedgehog's name"));
     }
 
-    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, 0);
+    btnRandomTeam = new QPushButton();
+    btnRandomTeam->setText(tr("Random Team"));
+    btnRandomTeam->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomTeam, 9, 0, 1, 4, Qt::AlignCenter);
+    btnRandomTeam->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     vbox1->addWidget(GBoxHedgehogs);
 
@@ -377,7 +384,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
         if (hh.Hat.startsWith("Reserved"))
             hh.Hat = "Reserved "+hh.Hat.remove(0,40);
 
-        HHHats[i]->setCurrentIndex(HHHats[i]->findData(hh.Hat, Qt::DisplayRole));
+        HHHats[i]->setCurrentHat(hh.Hat);
     }
 
     CBGrave->setCurrentIndex(CBGrave->findText(team.grave()));
@@ -409,7 +416,7 @@ HWTeam PageEditTeam::data()
     {
         HWHog hh;
         hh.Name = HHNameEdit[i]->text();
-        hh.Hat = HHHats[i]->currentText();
+        hh.Hat = HHHats[i]->currentHat();
 
         if (hh.Hat.startsWith("Reserved"))
             hh.Hat = "Reserved"+m_playerHash+hh.Hat.remove(0,9);

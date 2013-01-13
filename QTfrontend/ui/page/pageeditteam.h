@@ -29,6 +29,7 @@
 
 class SquareLabel;
 class KeyBinder;
+class HatButton;
 
 class PageEditTeam : public AbstractPage
 {
@@ -61,7 +62,7 @@ class PageEditTeam : public AbstractPage
         QToolBox *BindsBox;
         QLineEdit * TeamNameEdit;
         QLineEdit * HHNameEdit[HEDGEHOGS_PER_TEAM];
-        QComboBox * HHHats[HEDGEHOGS_PER_TEAM];
+        HatButton * HHHats[HEDGEHOGS_PER_TEAM];
         HWTeam data();
         QString m_playerHash;
         KeyBinder * binder;

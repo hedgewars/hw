@@ -16,30 +16,46 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-/**
- * @file
- * @brief HatModel class definition
- */
+#ifndef HATPROMPT_H
+#define HATPROMPT_H
 
-#ifndef HEDGEWARS_HATMODEL_H
-#define HEDGEWARS_HATMODEL_H
+#include <QWidget>
+#include <QDialog>
+#include <QListView>
 
-#include <QStandardItemModel>
-#include <QStringList>
-#include <QVector>
-#include <QPair>
-#include <QIcon>
+class QLineEdit;
+class QModelIndex;
+class QSortFilterProxyModel;
+class LineEditCursor;
 
-class HatModel : public QStandardItemModel
+class HatListView : public QListView
+{
+	friend class HatPrompt;
+
+	public:
+		HatListView(QWidget* parent = 0) {};
+};
+
+class HatPrompt : public QDialog
 {
         Q_OBJECT
 
     public:
-        HatModel(QObject *parent = 0);
+        HatPrompt(int currentIndex = 0, QWidget* parent = 0);
 
-    public slots:
-        /// Reloads hats using the DataManager.
-        void loadHats();
+    private:
+        LineEditCursor * txtFilter;
+        HatListView * list;
+        QSortFilterProxyModel * filterModel;
+
+    private slots:
+    	void onAccepted();
+        void hatChosen(const QModelIndex & index);
+        void filterChanged(const QString & text);
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
 };
 
-#endif // HEDGEWARS_HATMODEL_H
+#endif // HATPROMPT_H
