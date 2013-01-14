@@ -99,7 +99,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBTlayout->addWidget(CBTeamName, 0, 0);
 
             BtnNewTeam = new QPushButton(teamsBox);
-            BtnNewTeam->setToolTip(tr("New team"));
+            BtnNewTeam->setWhatsThis(tr("New team"));
             BtnNewTeam->setIconSize(pmNew.size());
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
@@ -107,7 +107,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBTlayout->addWidget(BtnNewTeam, 0, 1);
 
             BtnEditTeam = new QPushButton(teamsBox);
-            BtnEditTeam->setToolTip(tr("Edit team"));
+            BtnEditTeam->setWhatsThis(tr("Edit team"));
             BtnEditTeam->setIconSize(pmEdit.size());
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
@@ -115,7 +115,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             GBTlayout->addWidget(BtnEditTeam, 0, 2);
 
             BtnDeleteTeam = new QPushButton(teamsBox);
-            BtnDeleteTeam->setToolTip(tr("Delete team"));
+            BtnDeleteTeam->setWhatsThis(tr("Delete team"));
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
@@ -253,7 +253,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             btnUpdateNow = new QPushButton(groupMisc);
             connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
-            btnUpdateNow->setToolTip(tr("Check for updates"));
+            btnUpdateNow->setWhatsThis(tr("Check for updates"));
             btnUpdateNow->setText("Check now");
             btnUpdateNow->setFixedSize(130, 30);
             MiscLayout->addWidget(btnUpdateNow, 7, 1, 1, 1);
