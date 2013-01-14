@@ -1340,6 +1340,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
         {
         //open dialog
             HWPasswordDialog * pwDialog = new HWPasswordDialog(this);
+            // make the "new account" button dialog open a browser with the registration page
+            connect(pwDialog->pbNewAccount, SIGNAL(clicked()), this, SLOT(openRegistrationPage()));
             pwDialog->cbSave->setChecked(config->value("net/savepassword", true).toBool());
 
         //if nickname is present, put it into the field
@@ -1926,6 +1928,11 @@ void HWForm::AssociateFiles()
     else
         ShowErrorMessage(QMessageBox::tr("File association failed."));
 }
+
+void HWForm::openRegistrationPage() 
+{
+    QDesktopServices::openUrl(QUrl("http://www.hedgewars.org/user/register"));
+}    
 
 void HWForm::saveDemoWithCustomName()
 {

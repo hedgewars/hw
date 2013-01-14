@@ -23,6 +23,7 @@
 
 class QLineEdit;
 class QCheckBox;
+class QPushButton;
 
 class HWPasswordDialog : public QDialog
 {
@@ -33,6 +34,7 @@ class HWPasswordDialog : public QDialog
         QLineEdit* lePassword;
         QLineEdit* leNickname;
         QCheckBox* cbSave;
+        QPushButton * pbNewAccount;
 };
 
 
