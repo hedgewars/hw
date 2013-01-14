@@ -96,6 +96,7 @@
 #include "recorder.h"
 #include "playerslistmodel.h"
 
+#include "MessageDialog.h"
 #include "DataManager.h"
 #include "AutoUpdater.h"
 
@@ -961,7 +962,7 @@ void HWForm::DeleteScheme()
     ui.pageScheme->selectScheme->setCurrentIndex(ui.pageOptions->SchemesName->currentIndex());
     if (ui.pageOptions->SchemesName->currentIndex() < ammoSchemeModel->numberOfDefaultSchemes)
     {
-        ShowErrorMessage(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()));
+        MessageDialog::ShowErrorMessage(QMessageBox::tr("Cannot delete default scheme '%1'!").arg(ui.pageOptions->SchemesName->currentText()), this);
     }
     else
     {
@@ -987,7 +988,7 @@ void HWForm::PlayDemo()
     QListWidgetItem * curritem = ui.pagePlayDemo->DemosList->currentItem();
     if (!curritem)
     {
-        ShowErrorMessage(QMessageBox::tr("Please select a record from the list"));
+        MessageDialog::ShowErrorMessage(QMessageBox::tr("Please select a record from the list"), this);
         return;
     }
     CreateGame(0, 0, 0);
@@ -1161,7 +1162,7 @@ void HWForm::NetError(const QString & errmsg)
     switch (ui.Pages->currentIndex())
     {
         case ID_PAGE_INGAME:
-            ShowErrorMessage(errmsg);
+            MessageDialog::ShowErrorMessage(errmsg, this);
             // no break
         case ID_PAGE_NETGAME:
             ui.pageNetGame->displayError(errmsg);
@@ -1438,7 +1439,7 @@ void HWForm::NetStartServer()
     pnetserver = new HWNetServer;
     if (!pnetserver->StartServer(ui.pageNetServer->sbPort->value()))
     {
-        ShowErrorMessage(QMessageBox::tr("Unable to start server"));
+        MessageDialog::ShowErrorMessage(QMessageBox::tr("Unable to start server"), this);
 
         delete pnetserver;
         pnetserver = 0;
@@ -1497,7 +1498,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
     if (hwnet)
     {
         QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
-        ShowErrorMessage(errorStr);
+        MessageDialog::ShowErrorMessage(errorStr, this);
     }
 
     while (ui.Pages->currentIndex() != ID_PAGE_NET
@@ -1603,16 +1604,6 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
     m_lastDemo = QByteArray();
 }
 
-void HWForm::ShowErrorMessage(const QString & msg)
-{
-    QMessageBox msgMsg(this);
-    msgMsg.setIcon(QMessageBox::Warning);
-    msgMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Error"));
-    msgMsg.setText(msg);
-    msgMsg.setWindowModality(Qt::WindowModal);
-    msgMsg.exec();
-}
-
 void HWForm::GetRecord(RecordType type, const QByteArray & record)
 {
     if (type != rtNeither)
@@ -1645,7 +1636,7 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
 
         QFile demofile(filename);
         if (!demofile.open(QIODevice::WriteOnly))
-            ShowErrorMessage(tr("Cannot save record to file %1").arg(filename));
+            MessageDialog::ShowErrorMessage(tr("Cannot save record to file %1").arg(filename), this);
         else
         {
             demofile.write(demo);
@@ -1926,7 +1917,7 @@ void HWForm::AssociateFiles()
         infoMsg.exec();
     }
     else
-        ShowErrorMessage(QMessageBox::tr("File association failed."));
+        MessageDialog::ShowErrorMessage(QMessageBox::tr("File association failed."), this);
 }
 
 void HWForm::openRegistrationPage() 
@@ -1950,7 +1941,7 @@ void HWForm::saveDemoWithCustomName()
                 QFile demofile(filePath);
                 ok = demofile.open(QIODevice::WriteOnly);
                 if (!ok)
-                    ShowErrorMessage(tr("Cannot save record to file %1").arg(filePath));
+                    MessageDialog::ShowErrorMessage(tr("Cannot save record to file %1").arg(filePath), this);
                 else
                 {
                     ok = -1 != demofile.write(m_lastDemo);
@@ -1975,7 +1966,7 @@ void HWForm::SendFeedback()
 
     if (summary.isEmpty() || description.isEmpty())
     {
-        ShowErrorMessage(QMessageBox::tr("Please fill out all fields. Email is optional."));
+        MessageDialog::ShowErrorMessage(QMessageBox::tr("Please fill out all fields. Email is optional."), this);
         return;
     }
 
@@ -2030,8 +2021,12 @@ void HWForm::finishedSlot(QNetworkReply* reply)
     }
     else
     {
-        ShowErrorMessage(QString("Error: ") + reply->readAll());
+        MessageDialog::ShowErrorMessage(QString("Error: ") + reply->readAll(), this);
         ui.pageFeedback->LoadCaptchaImage();
     }
 }
 
+void HWForm::ShowErrorMessage(const QString & msg)
+{
+    MessageDialog::ShowErrorMessage(msg, this);
+}
