@@ -78,11 +78,34 @@ class AbstractPage : public QWidget
         QString * getDefautDescription();
 
     signals:
+
         /**
          * @brief This signal is emitted when going back to the previous is
          * requested - e.g. when the back-button is clicked.
          */
         void goBack();
+
+        /**
+         * @brief This signal is emitted when the page is displayed
+         */
+        void pageEnter();
+
+        /**
+         * @brief This signal is emitted when this page is left
+         */
+        void pageLeave();
+
+    public slots:
+
+        /**
+         * @brief This slot is called to trigger this page's pageEnter signal
+         */
+        void triggerPageEnter();
+
+        /**
+         * @brief This slot is called to trigger this page's pageLeave signal
+         */
+        void triggerPageLeave();
 
     protected:
         /**

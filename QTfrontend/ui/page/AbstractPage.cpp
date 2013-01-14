@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QSize>
 #include <QFontMetricsF>
+#include <qDebug>
 
 #include "qpushbuttonwithsound.h"
 
@@ -162,4 +163,14 @@ void AbstractPage::setDefautDescription(QString text)
 QString * AbstractPage::getDefautDescription()
 {
     return defautDesc;
+}
+
+void AbstractPage::triggerPageEnter()
+{
+    emit pageEnter();
+}
+
+void AbstractPage::triggerPageLeave()
+{
+    emit pageLeave();
 }
