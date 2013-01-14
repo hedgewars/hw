@@ -478,6 +478,7 @@ void FeedbackDialog::SendFeedback()
             
     QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
     header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
+    header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
     
     nam->post(header, body);
 }
