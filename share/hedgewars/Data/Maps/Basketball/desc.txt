@@ -1,1 +1,1 @@
-en_US=Please give me a description.|Multiline is supported.|See Basketball/desc.txt
+en_US=Who said hedgehogs can't|play basketball?
