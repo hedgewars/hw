@@ -9,6 +9,7 @@ INCLUDEPATH += ../QTfrontend/ui/page
 INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
+INCLUDEPATH += ../QTfrontend/util/platform
 INCLUDEPATH += ../misc/physfs/src
 INCLUDEPATH += ../misc/physfs/extras
 
@@ -243,13 +244,11 @@ macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
     QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
 
-    OBJECTIVE_SOURCES += ../QTfrontend/*.m ../QTfrontend/*.mm
-    SOURCES += ../QTfrontend/AutoUpdater.cpp ../QTfrontend/InstallController.cpp \
+    OBJECTIVE_SOURCES += ../QTfrontend/util/platform/*.m ../QTfrontend/util/platform/*.mm
+    SOURCES += ../QTfrontend/util/platform/AutoUpdater.cpp
+			   ../QTfrontend/util/platform/InstallController.cpp \
                ../../build/QTfrontend/hwconsts.cpp
-    HEADERS += ../QTfrontend/M3InstallController.h ../QTfrontend/M3Panel.h \
-               ../QTfrontend/NSWorkspace_RBAdditions.h ../QTfrontend/AutoUpdater.h \
-               ../QTfrontend/CocoaInitializer.h ../QTfrontend/InstallController.h \
-               ../QTfrontend/SparkleAutoUpdater.h
+    HEADERS += ../QTfrontend/util/platform/*.h
 
     LIBS += -lobjc -framework AppKit -framework IOKit -framework Foundation -framework SDL -framework SDL_Mixer -framework Sparkle -DSPARKLE_ENABLED
     INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
@@ -259,9 +258,9 @@ macx {
 
 win32 {
     RC_FILE = ../QTfrontend/hedgewars.rc
-    SOURCES += ../QTfrontend/xfire.cpp
-    INCLUDEPATH += ../misc/winutils/include
+    SOURCES += ../QTfrontend/util/platform/xfire.cpp ../QTfrontend/util/platform/xfiregameclient.cpp
     LIBS += -L../misc/winutils/lib
+    INCLUDEPATH += ../misc/winutils/include
 }
 
 !macx {

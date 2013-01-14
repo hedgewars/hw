@@ -21,7 +21,7 @@
 #include <stdio.h>
 
 #include "xfire.h"
-#include "../misc/xfire/xfiregameclient.h"
+#include "xfiregameclient.h"
 
 #ifdef USE_XFIRE
 // use_xfire: stores if xfire is loaded and functions should do something at all
