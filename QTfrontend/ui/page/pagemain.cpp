@@ -42,13 +42,11 @@ QLayout * PageMain::bodyLayoutDefinition()
     pageLayout->setRowStretch(4, 1);
 
     BtnSinglePlayer = addButton(":/res/LocalPlay.png", pageLayout, 2, 0, 1, 2, true);
-    BtnSinglePlayer->setToolTip(tr("Local Game"));
     BtnSinglePlayer->setWhatsThis(tr("Play a game on a single computer"));
     pageLayout->setAlignment(BtnSinglePlayer, Qt::AlignHCenter);
 
     //BtnNet = addButton(":/res/NetworkPlay.png", (QBoxLayout*)netLayout, 1, true);
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
-    BtnNet->setToolTip(tr("Network Game"));
     BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
@@ -65,13 +63,11 @@ QLayout * PageMain::bodyLayoutDefinition()
     netLayout->setAlignment(Qt::AlignHCenter);
 
     BtnNetLocal = addButton("Play local network game", (QBoxLayout*)netLayout, 0, false);
-    BtnNetLocal->setToolTip(tr("Play a local network game"));
     BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
     BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetLocal->setVisible(false);
 
     BtnNetOfficial = addButton("Play official network game", (QBoxLayout*)netLayout, 0, false);
-    BtnNetOfficial->setToolTip(tr("Play a network game"));
     BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
     BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetOfficial->setVisible(false);
@@ -79,7 +75,6 @@ QLayout * PageMain::bodyLayoutDefinition()
     // button order matters for overlapping (what's on top and what isn't)
     BtnInfo = addButton(":/res/HedgewarsTitle.png", pageLayout, 0, 0, 1, 4, true);
     BtnInfo->setStyleSheet("border: transparent;background: transparent;");
-    //BtnInfo->setToolTip(tr("Credits")); //tooltip looks horrible with transparent background buttons
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
@@ -90,7 +85,6 @@ QLayout * PageMain::bodyLayoutDefinition()
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
     BtnDataDownload->setFixedSize(176, 27);
-    //BtnDataDownload->setToolTip(tr(Downloadable Content"));
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 

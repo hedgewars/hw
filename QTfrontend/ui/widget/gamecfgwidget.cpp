@@ -82,7 +82,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     QPixmap pmEdit(":/res/edit.png");
 
     QPushButton * goToSchemePage = new QPushButton(SchemeWidget);
-    goToSchemePage->setToolTip(tr("Edit schemes"));
+    goToSchemePage->setWhatsThis(tr("Edit schemes"));
     goToSchemePage->setIconSize(pmEdit.size());
     goToSchemePage->setIcon(pmEdit);
     goToSchemePage->setMaximumWidth(pmEdit.width() + 6);
@@ -97,7 +97,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(WeaponsName, SIGNAL(currentIndexChanged(int)), this, SLOT(ammoChanged(int)));
 
     QPushButton * goToWeaponPage = new QPushButton(SchemeWidget);
-    goToWeaponPage->setToolTip(tr("Edit weapons"));
+    goToWeaponPage->setWhatsThis(tr("Edit weapons"));
     goToWeaponPage->setIconSize(pmEdit.size());
     goToWeaponPage->setIcon(pmEdit);
     goToWeaponPage->setMaximumWidth(pmEdit.width() + 6);
@@ -105,7 +105,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(goToWeaponPage, SIGNAL(clicked()), this, SLOT(jumpToWeapons()));
 
     bindEntries = new QCheckBox(SchemeWidget);
-    bindEntries->setToolTip(tr("When this option is enabled selecting a game scheme will auto-select a weapon"));
+    bindEntries->setWhatsThis(tr("Game scheme will auto-select a weapon"));
     bindEntries->setChecked(true);
     bindEntries->setMaximumWidth(42);
     bindEntries->setStyleSheet( "QCheckBox::indicator:checked   { image: url(\":/res/lock.png\"); }"
