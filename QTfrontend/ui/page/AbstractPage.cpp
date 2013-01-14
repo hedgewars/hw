@@ -25,7 +25,7 @@
 #include <QLabel>
 #include <QSize>
 #include <QFontMetricsF>
-#include <qDebug>
+#include <QDebug>
 
 #include "qpushbuttonwithsound.h"
 

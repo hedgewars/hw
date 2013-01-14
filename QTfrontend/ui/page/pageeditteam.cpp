@@ -62,7 +62,6 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    HatModel * hatModel = DataManager::instance().hatModel();
 
     GBHLayout->addWidget(new QLabel(tr("Hat")), 0, 0);
     GBHLayout->addWidget(new QLabel(tr("Name")), 0, 1);

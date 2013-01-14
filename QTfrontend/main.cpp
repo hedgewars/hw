@@ -92,6 +92,8 @@ void checkSeason()
 #ifndef _WIN32
 void terminateFrontend(int signal)
 {
+    Q_UNUSED(signal);
+
     QCoreApplication::exit(0);
 }
 #endif

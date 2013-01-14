@@ -33,7 +33,7 @@ class HatListView : public QListView
 	friend class HatPrompt;
 
 	public:
-		HatListView(QWidget* parent = 0) {};
+        HatListView(QWidget* parent = 0) : QListView(parent){}
 };
 
 class HatPrompt : public QDialog

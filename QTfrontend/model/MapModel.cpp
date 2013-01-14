@@ -21,10 +21,10 @@
  * @brief MapModel class implementation
  */
 
-#include "MapModel.h"
-#include "hwapplication.h"
-
 #include <QSettings>
+
+#include "MapModel.h"
+#include "HWApplication.h"
 
 MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", ""};
 MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", ""};

@@ -72,7 +72,6 @@
 #include "pagemultiplayer.h"
 #include "pagenet.h"
 #include "pagemain.h"
-#include "pagefeedback.h"
 #include "pagenetserver.h"
 #include "pagedrawmap.h"
 #include "pagegamestats.h"
@@ -95,6 +94,7 @@
 #include "roomslistmodel.h"
 #include "recorder.h"
 #include "playerslistmodel.h"
+#include "feedbackdialog.h"
 
 #include "MessageDialog.h"
 #include "DataManager.h"
@@ -214,8 +214,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnSetup, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnSetup, ID_PAGE_SETUP);
 
-    connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
-    pageSwitchMapper->setMapping(ui.pageMain->BtnFeedback, ID_PAGE_FEEDBACK);
+    connect(ui.pageMain->BtnFeedback, SIGNAL(clicked()), this, SLOT(showFeedbackDialog()));
 
     connect(ui.pageMain->BtnInfo, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
     pageSwitchMapper->setMapping(ui.pageMain->BtnInfo, ID_PAGE_INFO);
@@ -231,8 +230,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     //connect(ui.pageMain->BtnExit, SIGNAL(pressed()), this, SLOT(btnExitPressed()));
     //connect(ui.pageMain->BtnExit, SIGNAL(clicked()), this, SLOT(btnExitClicked()));
-
-    connect(ui.pageFeedback->BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
 
     connect(ui.pageEditTeam, SIGNAL(goBack()), this, SLOT(AfterTeamEdit()));
 
@@ -582,7 +579,6 @@ QString HWForm::stringifyPageId(quint32 id)
       case ID_PAGE_CAMPAIGN :     pageName = "PAGE_CAMPAIGN"; break;
       case ID_PAGE_DRAWMAP :      pageName = "PAGE_DRAWMAP"; break;
       case ID_PAGE_DATADOWNLOAD : pageName = "PAGE_DATADOWNLOAD"; break;
-      case ID_PAGE_FEEDBACK :     pageName = "PAGE_FEEDBACK"; break;
       case ID_PAGE_VIDEOS :       pageName = "PAGE_VIDEOS"; break;
       case MAX_PAGE :             pageName = "MAX_PAGE"; break;
       default :                   pageName = "UNKNOWN_PAGE"; break;
@@ -677,11 +673,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     if (id == ID_PAGE_MAIN)
     {
         ui.pageOptions->setTeamOptionsEnabled(true);
-    }
-
-    if (id == ID_PAGE_FEEDBACK)
-    {
-        ui.pageFeedback->LoadCaptchaImage();
     }
 }
 
@@ -1019,6 +1010,7 @@ void HWForm::NetConnectOfficialServer()
 
 void HWForm::NetPassword(const QString & nick)
 {
+    Q_UNUSED(nick);
     //Get hashes
     QString hash =  config->passwordHash();
     QString temphash =  config->tempHash();
@@ -1075,6 +1067,8 @@ void HWForm::NetNickRegistered(const QString & nick)
 
 void HWForm::NetNickNotRegistered(const QString & nick)
 {
+    Q_UNUSED(nick);
+
     QMessageBox noRegMsg(this);
     noRegMsg.setIcon(QMessageBox::Information);
     noRegMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Nick not registered"));
@@ -1185,6 +1179,8 @@ void HWForm::NetWarning(const QString & wrnmsg)
 
 void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 {
+    Q_UNUSED(nick);
+
     if(hwnet)
     {
         hwnet->Disconnect();
@@ -1956,80 +1952,14 @@ void HWForm::saveDemoWithCustomName()
     }
 }
 
-void HWForm::SendFeedback()
-{
-    // Get form data
-    
-    QString summary = ui.pageFeedback->summary->text();
-    QString description = ui.pageFeedback->description->toPlainText();
-    QString email = ui.pageFeedback->email->text();
-    QString captchaCode = ui.pageFeedback->captcha_code->text();
-    QString captchaID = QString::number(ui.pageFeedback->captchaID);
-    QString version = "HedgewarsFoundation-Hedgewars-" + (cVersionString?(*cVersionString):QString(""));
-
-    if (summary.isEmpty() || description.isEmpty())
-    {
-        MessageDialog::ShowErrorMessage(QMessageBox::tr("Please fill out all fields. Email is optional."), this);
-        return;
-    }
-
-    // Submit issue to PHP script
-    
-    QByteArray body;
-    body.append("captcha=");
-    body.append(captchaID);
-    body.append("&code=");
-    body.append(captchaCode);
-    body.append("&version=");
-    body.append(QUrl::toPercentEncoding(version));
-    body.append("&title=");
-    body.append(QUrl::toPercentEncoding(summary));
-    body.append("&body=");
-    body.append(QUrl::toPercentEncoding(description));
-    body.append("&email=");
-    body.append(QUrl::toPercentEncoding(email));
-    if (ui.pageFeedback->CheckSendSpecs->isChecked())
-    {
-        body.append("&specs=");
-        body.append(QUrl::toPercentEncoding(ui.pageFeedback->specs));
-    }
-    
-    nam = new QNetworkAccessManager(this);
-    connect(nam, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(finishedSlot(QNetworkReply*)));
-            
-    QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
-    header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
-    
-    nam->post(header, body);
-}
-
-void HWForm::finishedSlot(QNetworkReply* reply)
-{
-    if (reply && reply->error() == QNetworkReply::NoError)
-    {
-            QMessageBox infoMsg(this);
-            infoMsg.setIcon(QMessageBox::Information);
-            infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
-            infoMsg.setText(reply->readAll());
-            infoMsg.setWindowModality(Qt::WindowModal);
-            infoMsg.exec();
-
-            ui.pageFeedback->summary->clear();
-            ui.pageFeedback->email->clear();
-            ui.pageFeedback->description->clear();
-            ui.pageFeedback->LoadCaptchaImage();
-            
-            return;
-    }
-    else
-    {
-        MessageDialog::ShowErrorMessage(QString("Error: ") + reply->readAll(), this);
-        ui.pageFeedback->LoadCaptchaImage();
-    }
-}
 
 void HWForm::ShowErrorMessage(const QString & msg)
 {
     MessageDialog::ShowErrorMessage(msg, this);
+}
+
+void HWForm::showFeedbackDialog()
+{
+    FeedbackDialog dialog(this);
+    dialog.exec();
 }
