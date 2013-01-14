@@ -239,25 +239,25 @@ else()
 endif()
 
 
-add_custom_target(${engine_output_name} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
+add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
 
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
-    add_dependencies(${engine_output_name} lua)
+    add_dependencies(hwengine lua)
 endif()
 
 # compile physfs before engine
-add_dependencies(${engine_output_name} physfs)
+add_dependencies(hwengine physfs)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
 if(${FFMPEG_FOUND})
-    add_dependencies(${engine_output_name} avwrapper)
+    add_dependencies(hwengine avwrapper)
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if((FPC_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
-    add_dependencies(${engine_output_name} ENGINECLEAN)
+    add_dependencies(hwengine ENGINECLEAN)
 endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})
