@@ -45,6 +45,8 @@
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
         <file>res/NetworkPlayDisabled.png</file>
+        <file>res/audio.png</file>
+        <file>res/camera.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
         <file>res/new.png</file>
