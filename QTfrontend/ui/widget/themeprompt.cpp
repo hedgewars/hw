@@ -26,8 +26,8 @@
 #include <QLabel>
 
 #include "flowlayout.h"
-#include "datamanager.h"
-#include "thememodel.h"
+#include "DataManager.h"
+#include "ThemeModel.h"
 #include "themeprompt.h"
 
 ThemePrompt::ThemePrompt(QWidget* parent) : QDialog(parent)

@@ -126,10 +126,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPage(int index);
         void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
-        //Starts the transmission process for the feedback
-        void SendFeedback();
-        //Called after submitting new feedback
-        void finishedSlot(QNetworkReply* reply);
+        void showFeedbackDialog();
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
@@ -175,7 +172,6 @@ class HWForm : public QMainWindow
             ID_PAGE_CAMPAIGN       ,
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,
-            ID_PAGE_FEEDBACK	   ,
             ID_PAGE_VIDEOS	   ,
             MAX_PAGE
         };
@@ -191,7 +187,6 @@ class HWForm : public QMainWindow
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
         QByteArray m_lastDemo;
-        QNetworkAccessManager * nam;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;

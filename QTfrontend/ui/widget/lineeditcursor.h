@@ -26,7 +26,7 @@ class LineEditCursor : public QLineEdit
         Q_OBJECT
 
     public:
-        LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {};
+        LineEditCursor(QWidget* parent = 0) : QLineEdit(parent) {}
 
     signals:
         void moveUp();

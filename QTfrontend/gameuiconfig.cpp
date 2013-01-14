@@ -160,7 +160,6 @@ void GameUIConfig::reloadValues(void)
     }
 
     { // load binds
-        QStandardItemModel * binds = DataManager::instance().bindsModel();
         for(int i = 0; i < BINDS_NUMBER; i++)
         {
             m_binds[i].strbind = value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();

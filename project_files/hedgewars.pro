@@ -109,7 +109,15 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/util/LibavInteraction.h \
     ../QTfrontend/util/FileEngine.h \
     ../QTfrontend/ui/dialog/bandialog.h \
-    ../QTfrontend/ui/widget/keybinder.h
+    ../QTfrontend/ui/widget/keybinder.h \
+    ../QTfrontend/ui/widget/seedprompt.h \
+    ../QTfrontend/ui/widget/themeprompt.h \
+    ../QTfrontend/ui/widget/hatbutton.h \
+    ../QTfrontend/util/MessageDialog.h \
+    ../QTfrontend/ui/widget/hatprompt.h \
+    ../QTfrontend/ui/widget/feedbackdialog.h \
+    ../QTfrontend/ui/widget/flowlayout.h \
+    ../QTfrontend/ui/widget/lineeditcursor.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -186,7 +194,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/hwconsts.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
-    ../QTfrontend/ui/page/pagefeedback.cpp \
     ../QTfrontend/model/roomslistmodel.cpp \
     ../QTfrontend/ui/dialog/input_password.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
@@ -203,7 +210,13 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/util/LibavInteraction.cpp \
     ../QTfrontend/util/FileEngine.cpp \
     ../QTfrontend/ui/dialog/bandialog.cpp \
-    ../QTfrontend/ui/widget/keybinder.cpp
+    ../QTfrontend/ui/widget/keybinder.cpp \
+    ../QTfrontend/ui/widget/seedprompt.cpp \
+    ../QTfrontend/ui/widget/themeprompt.cpp \
+    ../QTfrontend/util/MessageDialog.cpp \
+    ../QTfrontend/ui/widget/feedbackdialog.cpp \
+    ../QTfrontend/ui/widget/flowlayout.cpp \
+    ../QTfrontend/ui/widget/lineeditcursor.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
@@ -269,5 +282,3 @@ win32 {
         INCLUDEPATH += /usr/local/include/SDL /usr/include/SDL
     }
 }
-
-FORMS +=
