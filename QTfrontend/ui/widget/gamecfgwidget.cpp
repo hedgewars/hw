@@ -25,6 +25,8 @@
 #include <QMessageBox>
 #include <QTableView>
 #include <QPushButton>
+#include <QDebug>
+#include <QList>
 
 #include "gamecfgwidget.h"
 #include "igbox.h"
@@ -33,6 +35,7 @@
 #include "ammoSchemeModel.h"
 #include "proto.h"
 #include "GameStyleModel.h"
+#include "themeprompt.h"
 
 GameCFGWidget::GameCFGWidget(QWidget* parent) :
     QGroupBox(parent)
@@ -40,13 +43,16 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
 {
     mainLayout.setMargin(0);
-//  mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
 
     pMapContainer = new HWMapContainer(this);
-    mainLayout.addWidget(pMapContainer, 0, 0);
+    mainLayout.addWidget(pMapContainer, 0, 0, Qt::AlignHCenter | Qt::AlignTop);
+    pMapContainer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    pMapContainer->setFixedSize(460, 275);
 
     IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
-    GBoxOptions->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_childWidgets << GBoxOptions;
+    GBoxOptions->setFixedWidth(pMapContainer->width());
+    GBoxOptions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
     mainLayout.addWidget(GBoxOptions, 1, 0);
 
     QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
@@ -174,7 +180,7 @@ quint32 GameCFGWidget::getGameFlags() const
     if (schemeData(18).toBool())
         result |= 0x00080000;       // ai survival
     if (schemeData(19).toBool())
-        result |= 0x00100000;       // infinite attacks
+        result |= 0x00100000;       // infinite attacks 
     if (schemeData(20).toBool())
         result |= 0x00200000;       // reset weaps
     if (schemeData(21).toBool())
@@ -186,7 +192,7 @@ quint32 GameCFGWidget::getGameFlags() const
     if (schemeData(24).toBool())
         result |= 0x02000000;       // tag team
     if (schemeData(25).toBool())
-        result |= 0x04000000;       // bottom border
+        result |= 0x04000000;       // bottom
 
     return result;
 }
@@ -235,6 +241,8 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
 
+
+
     switch (mapgen)
     {
         case MAPGEN_MAZE:
@@ -271,7 +279,7 @@ void GameCFGWidget::setNetAmmo(const QString& name, const QString& ammo)
     bool illegal = ammo.size() != cDefaultAmmoStore->size();
     if (illegal)
     {
-        QMessageBox illegalMsg(this);
+        QMessageBox illegalMsg(parentWidget());
         illegalMsg.setIcon(QMessageBox::Warning);
         illegalMsg.setWindowTitle(QMessageBox::tr("Error"));
         illegalMsg.setText(QMessageBox::tr("Cannot use the ammo '%1'!").arg(name));
@@ -325,10 +333,6 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         if (param == "SEED")
         {
             pMapContainer->setSeed(value);
-            if (!seedRegexp.exactMatch(value))
-            {
-                pMapContainer->seedEdit->setVisible(true);
-            }
             return;
         }
         if (param == "THEME")
@@ -377,8 +381,6 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         if (param == "FULLMAPCONFIG")
         {
             QString seed = slValue[3];
-            if (!seedRegexp.exactMatch(seed))
-                pMapContainer->seedEdit->setVisible(true);
 
             pMapContainer->setAllMapParameters(
                 slValue[0],
@@ -585,4 +587,20 @@ void GameCFGWidget::updateModelViews()
         else
             Scripts->setCurrentIndex(0);
     }
+}
+
+bool GameCFGWidget::isMaster()
+{
+    return m_master;
+}
+
+void GameCFGWidget::setMaster(bool master)
+{
+    if (master == m_master) return;
+    m_master = master;
+
+    pMapContainer->setMaster(master);
+
+    foreach (QWidget *widget, m_childWidgets)
+        widget->setEnabled(master);
 }

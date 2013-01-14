@@ -121,6 +121,17 @@ class AbstractPage : public QWidget
          * @brief Used during page construction.
          * You can implement this method in your subclass.
          *
+         * Use it to define layout (not behavior) of the page's footer to the left of the help text.
+         */
+        virtual QLayout * footerLayoutLeftDefinition()
+        {
+            return NULL;
+        };
+
+        /**
+         * @brief Used during page construction.
+         * You can implement this method in your subclass.
+         *
          * This is a good place to connect signals within your page in order
          * to get the desired page behavior.<br />
          * Keep in mind not to expose twidgets as public!

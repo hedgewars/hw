@@ -73,11 +73,16 @@ void ThemeModel::loadThemes()
 
         QMap<int, QVariant> dataset;
 
+        // set icon path
+        dataset.insert(Qt::UserRole + 1, iconpath);
+
         // set name
         dataset.insert(Qt::DisplayRole, theme);
 
         // load and set icon
-        QIcon icon(iconpath);
+        QIcon icon;
+        icon.addPixmap(QPixmap(iconpath), QIcon::Normal);
+        icon.addPixmap(QPixmap(iconpath), QIcon::Disabled);
 
         dataset.insert(Qt::DecorationRole, icon);
 

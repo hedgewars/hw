@@ -41,9 +41,10 @@ void AbstractPage::initPage()
     QGridLayout * pageLayout = new QGridLayout(this);
 
     // stretch grid space for body and footer
-    pageLayout->setColumnStretch(0,1);
-    pageLayout->setColumnStretch(1,2);
+    pageLayout->setColumnStretch(0,0);
+    pageLayout->setColumnStretch(1,0);
     pageLayout->setColumnStretch(2,1);
+    pageLayout->setColumnStretch(3,0);
     pageLayout->setRowStretch(0,1);
     pageLayout->setRowStretch(1,0);
 
@@ -53,7 +54,12 @@ void AbstractPage::initPage()
     pageLayout->addWidget(btnBack, 1, 0, 1, 1, Qt::AlignLeft | Qt::AlignBottom);
 
     // add body layout as defined by the subclass
-    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 3);
+    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 4);
+
+    // add left footer layout
+    QLayout * flld = footerLayoutLeftDefinition();
+    if (flld != NULL)
+        pageLayout->addLayout(flld, 1, 1);
 
     descLabel = new QLabel();
     descLabel->setAlignment(Qt::AlignCenter);
@@ -61,12 +67,12 @@ void AbstractPage::initPage()
     descLabel->setOpenExternalLinks(true);
     descLabel->setFixedHeight(50);
     descLabel->setStyleSheet("font-size: 16px");
-    pageLayout->addWidget(descLabel, 1, 1);
+    pageLayout->addWidget(descLabel, 1, 2);
 
     // add footer layout
     QLayout * fld = footerLayoutDefinition();
     if (fld != NULL)
-        pageLayout->addLayout(fld, 1, 2);
+        pageLayout->addLayout(fld, 1, 3);
 
     // connect signals
     connect(btnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));

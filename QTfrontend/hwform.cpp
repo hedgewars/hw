@@ -1714,7 +1714,7 @@ void HWForm::Music(bool checked)
 
 void HWForm::NetGameChangeStatus(bool isMaster)
 {
-    ui.pageNetGame->pGameCFG->setEnabled(isMaster);
+    ui.pageNetGame->pGameCFG->setMaster(isMaster);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(isMaster);
 
     if (isMaster)
@@ -1729,7 +1729,7 @@ void HWForm::NetGameMaster()
     ui.pageNetGame->restrictJoins->setChecked(false);
     ui.pageNetGame->restrictTeamAdds->setChecked(false);
     ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
-    ui.pageNetGame->pGameCFG->setEnabled(true);
+    ui.pageNetGame->pGameCFG->setMaster(true);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
 
     if (hwnet)
@@ -1757,7 +1757,7 @@ void HWForm::NetGameMaster()
 
 void HWForm::NetGameSlave()
 {
-    ui.pageNetGame->pGameCFG->setEnabled(false);
+    ui.pageNetGame->pGameCFG->setMaster(false);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(false);
 
     if (hwnet)

@@ -70,6 +70,7 @@ class PageNetGame : public AbstractPage
     private:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
+        QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
         HistoryLineEdit * leRoomName;

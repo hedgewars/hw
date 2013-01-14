@@ -16,37 +16,28 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGE_MULTIPLAYER_H
-#define PAGE_MULTIPLAYER_H
+#ifndef SEEDPROMPT_H
+#define SEEDPROMPT_H
 
-#include "AbstractPage.h"
+#include <QDialog>
 
-class GameCFGWidget;
-class TeamSelWidget;
+class QLineEdit;
 
-class PageMultiplayer : public AbstractPage
+class SeedPrompt : public QDialog
 {
         Q_OBJECT
 
     public:
-        PageMultiplayer(QWidget* parent = 0);
-
-        GameCFGWidget *gameCFG;
-        TeamSelWidget *teamsSelect;
-        QPushButton *BtnStartMPGame;
+        SeedPrompt(QWidget* parent, const QString & seed, bool editable);
 
     signals:
-        void SetupClicked();
+    	void seedSelected(const QString & seed);
+
+    private slots:
+    	void setSeed();
 
     private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        QLayout * footerLayoutLeftDefinition();
-        void connectSignals();
-
-        QPushButton * btnSetup;
+    	QLineEdit * editBox;
 };
 
-#endif
-
-
+#endif // SEEDPROMPT_H

@@ -88,13 +88,22 @@ class DataManager: public QObject
         HatModel * hatModel();
 
         /**
-         * @brief Returns pointer to a model of available maps.
+         * @brief Returns pointer to a model of available static maps.
          *
          * The model is updated automatically on data reload.
          *
          * @return map model pointer.
          */
-        MapModel * mapModel();
+        MapModel * staticMapModel();
+
+        /**
+         * @brief Returns pointer to a model of available mission maps.
+         *
+         * The model is updated automatically on data reload.
+         *
+         * @return map model pointer.
+         */
+        MapModel * missionMapModel();
 
         /**
          * @brief Returns pointer to a model of available themes.
@@ -132,7 +141,8 @@ class DataManager: public QObject
 
         GameStyleModel * m_gameStyleModel; ///< game style model instance
         HatModel * m_hatModel; ///< hat model instance
-        MapModel * m_mapModel; ///< map model instance
+        MapModel * m_staticMapModel; ///< static map model instance
+        MapModel * m_missionMapModel; ///< mission map model instance
         ThemeModel * m_themeModel; ///< theme model instance
         QStandardItemModel * m_colorsModel;
         QStandardItemModel * m_bindsModel;
