@@ -31,6 +31,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/dialog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
@@ -83,7 +84,7 @@ list(APPEND hwfr_src
 
 #xfire integration
 if(WIN32)
-    list(APPEND hwfr_src xfire.cpp ../misc/xfire/xfiregameclient.cpp)
+    list(APPEND hwfr_src util/platform/xfire.cpp util/platform/xfiregameclient.cpp)
 endif(WIN32)
 
 if(MINGW)
@@ -144,17 +145,18 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 if(APPLE)
     find_library(iokit_framework NAMES IOKit)
     list(APPEND HW_LINK_LIBS ${iokit_framework})
-    list(APPEND hwfr_src CocoaInitializer.mm
-                             InstallController.cpp
-                             M3Panel.mm
-                             M3InstallController.m
-                             NSWorkspace_RBAdditions.m
-                             )
+    list(APPEND hwfr_src util/platform/CocoaInitializer.mm
+                         util/platform/InstallController.cpp
+                         util/platform/M3Panel.mm
+                         util/platform/M3InstallController.m
+                         util/platform/NSWorkspace_RBAdditions.m
+                         )
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)
         if(SPARKLE_FOUND)
             add_definitions(-DSPARKLE_ENABLED)
-            list(APPEND hwfr_src AutoUpdater.cpp SparkleAutoUpdater.mm)
+            list(APPEND hwfr_src util/platform/AutoUpdater.cpp
+                                 util/platform/SparkleAutoUpdater.mm)
             list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
         endif()
     endif()
