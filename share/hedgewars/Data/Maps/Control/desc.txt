@@ -1,1 +1,1 @@
-en_US=Please give me a description.|Multiline is supported.|See TrophyRace/desc.txt
+en_US=Islands scattered everywhere, full set of|weapons.
