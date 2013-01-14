@@ -109,7 +109,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
-    Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
+    Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
@@ -259,7 +259,7 @@ void GameUIConfig::SaveOptions()
     setValue("frontend/sound", isFrontendSoundEnabled());
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
-    setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
+    setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
 
     setValue("net/nick", netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
@@ -581,7 +581,7 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 
 quint8 GameUIConfig::volume()
 {
-    return Form->ui.pageOptions->volumeBox->value() * 128 / 100;
+    return Form->ui.pageOptions->SLVolume->value() * 128 / 100;
 }
 
 QString GameUIConfig::AVFormat()

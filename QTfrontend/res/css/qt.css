@@ -101,6 +101,14 @@ IconedGroupBox, QTabWidget::pane, QTabBar::tab:selected, QToolBox::tab QWidget{
 background-color: #130f2c;
 }
 
+QTabWidget::pane {
+border-bottom-left-radius: 8px;
+border-bottom-right-radius: 8px;
+}
+
+QLineEdit:disabled {
+border-color: gray;
+}
 
 QPushButton {
 border-radius: 8px;
@@ -252,10 +260,11 @@ background-color: #ffcc00;
 
 QSlider::handle::horizontal {
 border: 0px;
-margin: -2px 0px;
-border-radius: 3px;
+margin: -8px 0px;
 background-color: #ffcc00;
-width: 8px;
+width: 12px;
+height: 6px;
+border-radius: 3px;
 }
 
 HatButton {
