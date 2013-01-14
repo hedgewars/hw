@@ -177,8 +177,9 @@ var
     SDWaterColorArray : array[0..3] of HwColor4f;
     SDTint          : LongInt;
 
-    CursorPoint     : TPoint;
-    TargetPoint     : TPoint;
+    TargetCursorPoint     : TPoint;
+    CursorPoint           : TPoint;
+    TargetPoint           : TPoint;
 
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;

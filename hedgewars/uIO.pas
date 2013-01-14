@@ -339,10 +339,12 @@ while (headcmd <> nil)
             // these are equations solved for CursorPoint
             // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
-            if not (CurrentTeam^.ExtDriven and bShowAmmoMenu) then
+            if CurrentTeam^.ExtDriven then
                begin
-               CursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
-               CursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy
+               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy;
+               if not bShowAmmoMenu and autoCameraOn then
+                    CursorPoint:= TargetCursorPoint
                end
              end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
