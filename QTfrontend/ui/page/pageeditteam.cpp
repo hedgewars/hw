@@ -175,7 +175,7 @@ QLayout * PageEditTeam::footerLayoutDefinition()
 
 void PageEditTeam::connectSignals()
 {
-    connect(this, SIGNAL(goBack()), this, SLOT(saveTeam()));
+    connect(this, SIGNAL(pageLeave()), this, SLOT(saveTeam()));
 
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);

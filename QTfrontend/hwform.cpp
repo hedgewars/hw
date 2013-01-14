@@ -352,6 +352,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     }
 
     PagesStack.push(ID_PAGE_MAIN);
+    ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
 }
 
@@ -597,6 +598,10 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     
     qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
 
+    // pageEnter and pageLeave events
+    ((AbstractPage*)ui.Pages->widget(lastid))->triggerPageLeave();    
+    ((AbstractPage*)ui.Pages->widget(id))->triggerPageEnter();
+
     if (id == ID_PAGE_DATADOWNLOAD)
     {
         ui.pageDataDownload->fetchList();
@@ -668,10 +673,6 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
             curTeamSelWidget->resetPlayingTeams(teamsList);
         }
     }
-    else if (id == ID_PAGE_GAMESTATS)
-    {
-        ui.pageGameStats->renderStats();
-    }
 
     if (id == ID_PAGE_MAIN)
     {
@@ -700,6 +701,7 @@ void HWForm::GoToPage(int id)
     This were disabled due to broken flake animations.  I believe the more general problems w/ opacity that forced its disable makes blocking these
     unnecessary.
    */
+
 
 #if (QT_VERSION >= 0x040600)
     if (!stopAnim)
@@ -768,6 +770,7 @@ void HWForm::GoBack()
     int curid = ui.Pages->currentIndex();
     if (curid == ID_PAGE_MAIN)
     {
+        ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageLeave();
         if (!ui.pageVideos->tryQuit(this))
             return;
         stopAnim = true;
