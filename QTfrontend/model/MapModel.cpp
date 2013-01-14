@@ -49,18 +49,14 @@ void MapModel::loadMaps(MapType maptype)
     //QList<QStandardItem *> missionMaps;
     QList<QStandardItem *> mapList;
 
-    // only 2 map relate files are relevant:
-    // - the cfg file that contains the settings/info of the map
-    // - the lua file - if it exists it's a mission, otherwise it isn't
-    QFile mapLuaFile;
-    QFile mapCfgFile;
-
     // add mission/static maps to lists
     foreach (QString map, maps)
     {
-        mapCfgFile.setFileName(QString("physfs://Maps/%1/map.cfg").arg(map));
-        mapLuaFile.setFileName(QString("physfs://Maps/%1/map.lua").arg(map));
-        QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
+        // only 2 map relate files are relevant:
+        // - the cfg file that contains the settings/info of the map
+        // - the lua file - if it exists it's a mission, otherwise it isn't
+        QFile mapLuaFile(QString("physfs://Maps/%1/map.lua").arg(map));
+        QFile mapCfgFile(QString("physfs://Maps/%1/map.cfg").arg(map));
 
         if (mapCfgFile.open(QFile::ReadOnly))
         {
@@ -92,6 +88,8 @@ void MapModel::loadMaps(MapType maptype)
             if (isMission)
             {
                 QString locale = HWApplication::keyboardInputLocale().name();
+
+                QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
                 desc = descSettings.value(locale, QString()).toString().replace("|", "\n");
             }
 

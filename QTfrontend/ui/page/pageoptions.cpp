@@ -682,7 +682,7 @@ void PageOptions::connectSignals()
     connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
 #endif
 
-    connect(this, SIGNAL(pageEnter()), this, SLOT(setTeamOptionsEnabled()));
+    //connect(this, SIGNAL(pageEnter()), this, SLOT(setTeamOptionsEnabled()));
     connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
     connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
     connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));

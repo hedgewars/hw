@@ -156,7 +156,7 @@ void GameUIConfig::reloadValues(void)
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
+            model->item(i)->setData(value(QString("colors/color%1").arg(i), model->item(i)->data()));
     }
 
     { // load binds
