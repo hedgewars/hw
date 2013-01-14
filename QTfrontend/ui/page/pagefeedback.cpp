@@ -48,6 +48,7 @@
 #include <stdint.h>
 
 #include "pagefeedback.h"
+#include "MessageDialog.h"
 #include "hwconsts.h"
 
 QLayout * PageFeedback::bodyLayoutDefinition()
@@ -144,7 +145,7 @@ void PageFeedback::NetReply(QNetworkReply *reply)
         if (reply->error() != QNetworkReply::NoError)
         {
             qDebug() << "Error generating captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            MessageDialog::ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"), this);
             return;
         }
 
@@ -155,7 +156,7 @@ void PageFeedback::NetReply(QNetworkReply *reply)
         if (!okay)
         {
             qDebug() << "Failed to get captcha ID: " << body;
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            MessageDialog::ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"), this);
             return;
         }
 
@@ -172,7 +173,7 @@ void PageFeedback::NetReply(QNetworkReply *reply)
         if (reply->error() != QNetworkReply::NoError)
         {
             qDebug() << "Error loading captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to download captcha"));
+            MessageDialog::ShowErrorMessage(QMessageBox::tr("Failed to download captcha"), this);
             return;
         }
 
@@ -368,16 +369,6 @@ void PageFeedback::GenerateSpecs()
 void PageFeedback::connectSignals()
 {
     //TODO
-}
-
-void PageFeedback::ShowErrorMessage(const QString & msg)
-{
-    QMessageBox msgMsg(this);
-    msgMsg.setIcon(QMessageBox::Warning);
-    msgMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Error"));
-    msgMsg.setText(msg);
-    msgMsg.setWindowModality(Qt::WindowModal);
-    msgMsg.exec();
 }
 
 void PageFeedback::ShowSpecs()
