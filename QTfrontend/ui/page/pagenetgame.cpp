@@ -40,22 +40,29 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     chatWidget = new HWChatWidget(this, true);
     chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     chatWidget->setIgnoreListKick(true); // kick ignored players automatically
-    pageLayout->addWidget(chatWidget, 2, 0, 1, 2);
-    pageLayout->setRowStretch(1, 100);
-    pageLayout->setRowStretch(2, 100);
+    pageLayout->addWidget(chatWidget, 1, 0, 1, 2);
+    pageLayout->setRowStretch(0, 0);
+    pageLayout->setRowStretch(1, 0);
 
     pGameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(pGameCFG, 0, 0);
 
-    btnSetup = new QPushButton(this);
-    btnSetup->setText(QPushButton::tr("Setup"));
-    pageLayout->addWidget(btnSetup, 1, 0);
-
     pNetTeamsWidget = new TeamSelWidget(this);
     pNetTeamsWidget->setAcceptOuter(true);
-    pageLayout->addWidget(pNetTeamsWidget, 0, 1, 2, 1);
+    pNetTeamsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    pageLayout->addWidget(pNetTeamsWidget, 0, 1, 1, 1);
 
     return pageLayout;
+}
+
+QLayout * PageNetGame::footerLayoutLeftDefinition()
+{
+    QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
+    
+    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true);
+    btnSetup->setWhatsThis(tr("Edit game preferences"));
+
+    return bottomLeftLayout;
 }
 
 QLayout * PageNetGame::footerLayoutDefinition()
@@ -84,7 +91,17 @@ QLayout * PageNetGame::footerLayoutDefinition()
     BtnMaster = addButton(tr("Control"), bottomLayout, 3);
     bottomLayout->insertStretch(3, 100);
 
-    BtnStart = addButton(QAction::tr("Start"), bottomLayout, 3);
+    const QIcon& lp = QIcon(":/res/Start.png");
+    QSize sz = lp.actualSize(QSize(65535, 65535));
+    BtnStart = new QPushButton();
+    BtnStart->setText(tr("Start"));
+    BtnStart->setMinimumWidth(sz.width() + 60);
+    BtnStart->setIcon(lp);
+    BtnStart->setFixedHeight(50);
+    BtnStart->setIconSize(sz);
+    BtnStart->setFlat(true);
+    BtnStart->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    bottomLayout->addWidget(BtnStart);
 
     return bottomLayout;
 }

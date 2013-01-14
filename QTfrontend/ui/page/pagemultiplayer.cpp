@@ -36,10 +36,6 @@ QLayout * PageMultiplayer::bodyLayoutDefinition()
     gameCFG = new GameCFGWidget(this);
     pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
 
-    btnSetup = new QPushButton(this);
-    btnSetup->setText(QPushButton::tr("Setup"));
-    pageLayout->addWidget(btnSetup, 1, 0, 1, 2);
-
     pageLayout->setRowStretch(2, 1);
 
     teamsSelect = new TeamSelWidget(this);
@@ -48,12 +44,30 @@ QLayout * PageMultiplayer::bodyLayoutDefinition()
     return pageLayout;
 }
 
+QLayout * PageMultiplayer::footerLayoutLeftDefinition()
+{
+    QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
+    
+    btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true);
+    btnSetup->setWhatsThis(tr("Edit game preferences"));
+
+    return bottomLeftLayout;
+}
+
 QLayout * PageMultiplayer::footerLayoutDefinition()
 {
     QHBoxLayout * footerLayout = new QHBoxLayout();
 
-    BtnStartMPGame = formattedButton(tr("Start"));
-    BtnStartMPGame->setMinimumWidth(180);
+    const QIcon& lp = QIcon(":/res/Start.png");
+    QSize sz = lp.actualSize(QSize(65535, 65535));
+    BtnStartMPGame = new QPushButton();
+    BtnStartMPGame->setText(tr("Start"));
+    BtnStartMPGame->setMinimumWidth(sz.width() + 60);
+    BtnStartMPGame->setIcon(lp);
+    BtnStartMPGame->setFixedHeight(50);
+    BtnStartMPGame->setIconSize(sz);
+    BtnStartMPGame->setFlat(true);
+    BtnStartMPGame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     footerLayout->addStretch();
     footerLayout->addWidget(BtnStartMPGame);

@@ -64,7 +64,8 @@ private:
     const int c_nColumns;
     QList<QStringList> m_data;
     QStringList m_headerData;
-    MapModel * m_mapModel;
+    MapModel * m_staticMapModel;
+    MapModel * m_missionMapModel;
 
     QStringList roomInfo2RoomRecord(const QStringList & info);
 };

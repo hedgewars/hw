@@ -36,6 +36,8 @@ class GameCFGWidget : public QGroupBox
 {
         Q_OBJECT
 
+        Q_PROPERTY(bool master READ isMaster WRITE setMaster)
+
     public:
         GameCFGWidget(QWidget* parent);
         quint32 getGameFlags() const;
@@ -47,11 +49,13 @@ class GameCFGWidget : public QGroupBox
         HWMapContainer* pMapContainer;
         QTableView * tv;
         QVariant schemeData(int column) const;
+        bool isMaster();
 
     public slots:
         void setParam(const QString & param, const QStringList & value);
         void fullNetConfig();
         void resendSchemeData();
+        void setMaster(bool master);
 
     signals:
         void paramChanged(const QString & param, const QStringList & value);
@@ -81,6 +85,8 @@ class GameCFGWidget : public QGroupBox
         QString curNetAmmo;
         QRegExp seedRegexp;
         QString m_curScript;
+        bool m_master;
+        QList<QWidget *> m_childWidgets;
 
         void setNetAmmo(const QString& name, const QString& ammo);
 

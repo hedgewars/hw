@@ -45,7 +45,7 @@ QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
 QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget,
-QTabWidget::pane, QTabBar::tab {
+QTabWidget::pane, QTabBar::tab, #mapPreview {
 border: solid;
 border-width: 3px;
 border-color: #ffcc00;
@@ -56,8 +56,20 @@ QSpinBox:hover, QToolBox:hover, QComboBox:hover {
 border-color: yellow;
 }
 
+QToolButton {
+background-color: #11084A;
+}
+
+QToolButton:hover {
+background-color: #150A61;
+}
+
+QToolButton:pressed {
+background-color: #100744;
+}
+
 QLineEdit, QListWidget, QListView, QTableView, QTextBrowser,
-QSpinBox, QToolBox, QPlainTextEdit {
+QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview {
 border-radius: 10px;
 }
 
@@ -97,7 +109,7 @@ background-position: top left;
 background-color: rgba(18, 42, 5, 70%);
 }
 
-QPushButton:pressed{
+QPushButton:pressed, QToolButton:pressed {
 border-color: white;
 }
 

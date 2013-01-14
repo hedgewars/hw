@@ -43,7 +43,8 @@ RoomsListModel::RoomsListModel(QObject *parent) :
      << tr("Rules")
      << tr("Weapons");
 
-    m_mapModel = DataManager::instance().mapModel();
+    m_staticMapModel = DataManager::instance().staticMapModel();
+    m_missionMapModel = DataManager::instance().missionMapModel();
 }
 
 
@@ -134,7 +135,8 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             }
 
             // prefix ? if map not available
-            if ((m_mapModel->indexOf(content) < 0))
+            if (!m_staticMapModel->mapExists(content) &&
+                !m_missionMapModel->mapExists(content))
                 return QString ("? %1").arg(content);
         }
 
@@ -144,10 +146,14 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     // dye map names red if map not available
     if (role == Qt::ForegroundRole)
     {
-        if ((m_mapModel->indexOf(content) < 0))
-            return QBrush(QColor("darkred"));
-        else
+        if (content == "+rnd+" ||
+            content == "+maze+" ||
+            content == "+drawn+" ||
+            m_staticMapModel->mapExists(content) ||
+            m_missionMapModel->mapExists(content))
             return QVariant();
+        else
+            return QBrush(QColor("darkred"));
     }
 
     if (role == Qt::TextAlignmentRole)

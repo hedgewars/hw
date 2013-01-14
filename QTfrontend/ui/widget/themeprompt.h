@@ -16,37 +16,26 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGE_MULTIPLAYER_H
-#define PAGE_MULTIPLAYER_H
+#ifndef THEMEPROMPT_H
+#define THEMEPROMPT_H
 
-#include "AbstractPage.h"
+#include <QWidget>
+#include <QDialog>
 
-class GameCFGWidget;
-class TeamSelWidget;
+class QLabel;
 
-class PageMultiplayer : public AbstractPage
+class ThemePrompt : public QDialog
 {
         Q_OBJECT
 
     public:
-        PageMultiplayer(QWidget* parent = 0);
-
-        GameCFGWidget *gameCFG;
-        TeamSelWidget *teamsSelect;
-        QPushButton *BtnStartMPGame;
-
-    signals:
-        void SetupClicked();
+        ThemePrompt(QWidget* parent);
 
     private:
-        QLayout * bodyLayoutDefinition();
-        QLayout * footerLayoutDefinition();
-        QLayout * footerLayoutLeftDefinition();
-        void connectSignals();
+        QLabel * lblToolTip;
 
-        QPushButton * btnSetup;
+    private slots:
+        void themeClicked();
 };
 
-#endif
-
-
+#endif // THEMEPROMPT_H

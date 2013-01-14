@@ -22,9 +22,15 @@
  */
 
 #include "MapModel.h"
+#include "hwapplication.h"
 
+#include <QSettings>
 
-void MapModel::loadMaps()
+MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", ""};
+MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", ""};
+MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", ""};
+
+void MapModel::loadMaps(MapType maptype)
 {
     // this method resets the contents of this model (important to know for views).
     beginResetModel();
@@ -39,19 +45,9 @@ void MapModel::loadMaps()
     // empty list, so that we can (re)fill it
     QStandardItemModel::clear();
 
-    QList<QStandardItem *> genMaps;
-    QList<QStandardItem *> missionMaps;
-    QList<QStandardItem *> staticMaps;
-
-    // add generated/handdrawn maps to list
-    // TODO: icons for these
-
-    genMaps.append(
-        infoToItem(QIcon(), QComboBox::tr("generated map..."), GeneratedMap, "+rnd+"));
-    genMaps.append(
-        infoToItem(QIcon(), QComboBox::tr("generated maze..."), GeneratedMaze, "+maze+"));
-    genMaps.append(
-        infoToItem(QIcon(), QComboBox::tr("hand drawn map..."), HandDrawnMap, "+drawn+"));
+    //QList<QStandardItem *> staticMaps;
+    //QList<QStandardItem *> missionMaps;
+    QList<QStandardItem *> mapList;
 
     // only 2 map relate files are relevant:
     // - the cfg file that contains the settings/info of the map
@@ -64,7 +60,7 @@ void MapModel::loadMaps()
     {
         mapCfgFile.setFileName(QString("physfs://Maps/%1/map.cfg").arg(map));
         mapLuaFile.setFileName(QString("physfs://Maps/%1/map.lua").arg(map));
-
+        QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
 
         if (mapCfgFile.open(QFile::ReadOnly))
         {
@@ -73,24 +69,35 @@ void MapModel::loadMaps()
             quint32 limit = 0;
             QString scheme;
             QString weapons;
+            QString desc;
+
             // if there is a lua file for this map, then it's a mission
             bool isMission = mapLuaFile.exists();
-            MapType type = isMission?MissionMap:StaticMap;
+            MapType type = isMission ? MissionMap : StaticMap;
+
+            // If we're supposed to ignore this type, continue
+            if (type != maptype) continue;
 
             // load map info from file
             QTextStream input(&mapCfgFile);
-            input >> theme;
-            input >> limit;
+            theme = input.readLine();
+            limit = input.readLine().toInt();
             if (isMission) { // scheme and weapons are only relevant for missions
-                input >> scheme;
-                input >> weapons;
+                scheme = input.readLine();
+                weapons = input.readLine();
             }
             mapCfgFile.close();
+
+            // Load description (if applicable)
+            if (isMission)
+            {
+                QString locale = HWApplication::keyboardInputLocale().name();
+                desc = descSettings.value(locale, QString()).toString().replace("|", "\n");
+            }
 
             // let's use some semi-sane hedgehog limit, rather than none
             if (limit == 0)
                 limit = 18;
-
 
             // the default scheme/weaponset for missions.
             // if empty we assume the map sets these internally -> locked
@@ -107,97 +114,54 @@ void MapModel::loadMaps()
                     weapons.replace("_", " ");
             }
 
-            // add a mission caption prefix to missions
-            if (isMission)
-            {
-                // TODO: icon
-                caption = QComboBox::tr("Mission") + ": " + map;
-            }
-            else
-                caption = map;
+            // caption
+            caption = map;
 
             // we know everything there is about the map, let's get am item for it
-            QStandardItem * item = infoToItem(
-                QIcon(), caption, type, map, theme, limit, scheme, weapons);
+            QStandardItem * item = MapModel::infoToItem(
+                QIcon(), caption, type, map, theme, limit, scheme, weapons, desc);
 
             // append item to the list
-            if (isMission)
-                missionMaps.append(item);
-            else
-                staticMaps.append(item);
-        
+            mapList.append(item);
         }
 
     }
 
-
-    // define a separator item
-    QStandardItem separator("---");
-    separator.setData(QLatin1String("separator"), Qt::AccessibleDescriptionRole);
-    separator.setFlags(separator.flags() & ~( Qt::ItemIsEnabled | Qt::ItemIsSelectable ) );
-
-    // create list:
-    // generated+handdrawn maps, 2 saperators, missions, 1 separator, static maps
-    QList<QStandardItem * > items;
-    items.append(genMaps);
-    items.append(separator.clone());
-    items.append(separator.clone());
-    items.append(missionMaps);
-    items.append(separator.clone());
-    items.append(staticMaps);
-
-
-    // create row-index lookup table
+    // Create column-index lookup table
 
     m_mapIndexes.clear();
 
-    int count = items.size();
 
+    int count = mapList.size();
     for (int i = 0; i < count; i++)
     {
-        QStandardItem * si = items.at(i);
+        QStandardItem * si = mapList.at(i);
         QVariant v = si->data(Qt::UserRole + 1);
         if (v.canConvert<MapInfo>())
             m_mapIndexes.insert(v.value<MapInfo>().name, i);
     }
 
-
-    // store start-index and count of relevant types
-
-    m_typeLoc.insert(GeneratedMap, QPair<int,int>(0, 1));
-    m_typeLoc.insert(GeneratedMaze, QPair<int,int>(1, 1));
-    m_typeLoc.insert(HandDrawnMap, QPair<int,int>(2, 1));
-    // mission maps
-    int startIdx = genMaps.size() + 2; // start after genMaps and 2 separators
-    count = missionMaps.size();
-    m_typeLoc.insert(MissionMap, QPair<int,int>(startIdx, count));
-    // static maps
-    startIdx += count + 1; // start after missions and 2 separators
-    count = staticMaps.size();
-    m_typeLoc.insert(StaticMap, QPair<int,int>(startIdx, count));
-
-    // store list contents in the item model
-    QStandardItemModel::appendColumn(items);
-
+    QStandardItemModel::appendColumn(mapList);
 
     endResetModel();
 }
 
-
-int MapModel::randomMap(MapType type) const
+bool MapModel::mapExists(const QString & map) const
 {
-    // return a random index for this type or -1 if none available
-    QPair<int,int> loc = m_typeLoc.value(type, QPair<int,int>(-1,0));
-
-    int startIdx = loc.first;
-    int count = loc.second;
-
-    if (count < 1)
-        return -1;
-    else
-        return startIdx + (rand() % count);
+    return findMap(map) >= 0;
 }
 
+int MapModel::findMap(const QString & map) const
+{
+    return m_mapIndexes.value(map, -1);
+}
+
+QStandardItem * MapModel::getMap(const QString & map)
+{
+    int loc = findMap(map);
+    if (loc < 0) return NULL;
+    return item(loc);
+}
 
 QStandardItem * MapModel::infoToItem(
     const QIcon & icon,
@@ -207,8 +171,8 @@ QStandardItem * MapModel::infoToItem(
     QString theme,
     quint32 limit,
     QString scheme,
-    QString weapons)
-const
+    QString weapons,
+    QString desc)
 {
     QStandardItem * item = new QStandardItem(icon, caption);
     MapInfo mapInfo;
@@ -220,17 +184,10 @@ const
     mapInfo.limit = limit;
     mapInfo.scheme = scheme;
     mapInfo.weapons = weapons;
-
+    mapInfo.desc = desc.isEmpty() ? tr("No description available.") : desc;
 
     qvar.setValue(mapInfo);
     item->setData(qvar, Qt::UserRole + 1);
 
     return item;
 }
-
-
-int MapModel::indexOf(const QString & map) const
-{
-    return m_mapIndexes.value(map, -1);
-}
-
