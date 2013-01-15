@@ -33,7 +33,10 @@
 #include "physfs.h"
 
 #ifdef VIDEOREC
-#include "libavutil/version.h"
+extern "C"
+{
+#include "libavutil/avutil.h"
+}
 #endif
 
 #include "about.h"
