@@ -23,10 +23,18 @@
 #include <QRegExp>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
+#include <QMessageBox>
 #include <QNetworkReply>
 #include <QDebug>
 #include "hwconsts.h"
 #include "SDLInteraction.h"
+#include "SDL.h"
+#include "SDL_version.h"
+#include "physfs.h"
+
+#ifdef VIDEOREC
+#include "libavutil/version.h"
+#endif
 
 #include "about.h"
 
@@ -62,10 +70,54 @@ About::About(QWidget * parent) :
     lbl1->setWordWrap(true);
     mainLayout->addWidget(lbl1, 0, 1);
 
+    QString html;
+    QFile file(":/res/html/about.html");
+    if(!file.open(QIODevice::ReadOnly))
+        QMessageBox::information(0, "Error loading about page", file.errorString());
+
+    QTextStream in(&file);
+
+    while(!in.atEnd())
+        html.append(in.readLine());
+
+    file.close();
+
+    /* Get information */
+
+    QString compilerText, compilerOpen, compilerClose;
+    #ifdef __GNUC__
+        compilerText = "GCC " + QString(__VERSION__) + "\n";
+        compilerOpen = "<a href=\"http://gcc.gnu.org\">";
+        compilerClose = "</a>";
+    #else
+        compilerText = "Unknown\n";
+        compilerOpen = compilerClose = "";
+    #endif
+
+    /* Add information */
+
+    html.replace("%COMPILER_A_OPEN%", compilerOpen);
+    html.replace("%COMPILER_A_CLOSE%", compilerClose);
+    html.replace("%COMPILER%", compilerText);
+    html.replace("%SDL%", QString("version: %1.%2.%3")
+        .arg(SDL_MAJOR_VERSION)
+        .arg(SDL_MINOR_VERSION)
+        .arg(SDL_PATCHLEVEL));
+    html.replace("%QT%", QT_VERSION_STR);
+#ifdef VIDEOREC
+    html.replace("%LIBAV%", QString("<a href=\"http://libav.org\">Libav</a> version: %1.%2.%3")
+        .arg(LIBAVUTIL_VERSION_MAJOR)
+        .arg(LIBAVUTIL_VERSION_MINOR)
+        .arg(LIBAVUTIL_VERSION_MICRO));
+#endif
+    html.replace("%PHYSFS%", QString("version: %1.%2.%3")
+        .arg(PHYSFS_VER_MAJOR)
+        .arg(PHYSFS_VER_MINOR)
+        .arg(PHYSFS_VER_PATCH));
+
     lbl2 = new QTextBrowser(this);
     lbl2->setOpenExternalLinks(true);
-    QUrl localpage = QUrl::fromLocalFile(":/res/html/about.html"); 
-    lbl2->setSource(localpage); //sets the source of the label from the file above
+    lbl2->setHtml(html);
     mainLayout->addWidget(lbl2, 1, 1);
     
     setAcceptDrops(true);
