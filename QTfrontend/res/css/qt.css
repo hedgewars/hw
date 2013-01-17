@@ -73,6 +73,10 @@ QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview {
 border-radius: 10px;
 }
 
+#mapPreview {
+background-color: #0d0544;
+}
+
 QLineEdit, QLabel, QHeaderView, QListWidget, QListView, QTableView,
 QSpinBox, QToolBox::tab, QComboBox, QComboBox QAbstractItemView,
 IconedGroupBox, .QGroupBox, GameCFGWidget, TeamSelWidget,
