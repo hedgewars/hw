@@ -187,18 +187,15 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     m_isAdmin = false;
     m_autoKickEnabled = false;
 
+    QStringList vpList =
+         QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
+
+    foreach (const QString & vp, vpList)
     {
-        QStringList vpList =
-             QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
-
-        foreach (QString vp, vpList)
-        {
-            m_helloSounds.append(QString("physfs://Sounds/voices/%1/Hello.ogg").arg(vp));
-        }
-
-        m_hilightSound = "physfs://Sounds/beep.ogg";
-
+        m_helloSounds.append(QString("/Sounds/voices/%1/Hello.ogg").arg(vp));
     }
+
+    m_hilightSound = "/Sounds/beep.ogg";
 
     mainLayout.setSpacing(1);
     mainLayout.setMargin(1);
@@ -500,7 +497,7 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
+    if (notifyNick && notify && (m_helloSounds.size() > 0))
     {
         SDLInteraction::instance().playSoundFile(
                             m_helloSounds.at(rand() % m_helloSounds.size()));
