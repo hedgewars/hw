@@ -798,11 +798,7 @@ bool HWChatWidget::parseCommand(const QString & line)
         else if (tline == "/saveStyleSheet")
             saveStyleSheet();
         else
-        {
-            static QRegExp post("\\s.*$");
-            tline.remove(post);
-            displayWarning(tr("%1 is not a valid command!").arg(tline));
-        }
+            emit consoleCommand(tline.mid(1));
 
         return true;
     }

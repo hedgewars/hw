@@ -926,6 +926,11 @@ void HWNewNet::followPlayer(const QString & nick)
     }
 }
 
+void HWNewNet::consoleCommand(const QString & cmd)
+{
+    RawSendNet(QString("CMD%1%2").arg(delimeter).arg(cmd));
+}
+
 void HWNewNet::startGame()
 {
     RawSendNet(QString("START_GAME"));

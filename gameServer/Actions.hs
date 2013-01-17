@@ -459,7 +459,7 @@ processAction (ProcessAccountInfo info) = do
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-    checkerLogin p False = processAction $ ByeClient "No checker rights"
+    checkerLogin _ False = processAction $ ByeClient "No checker rights"
     checkerLogin p True = do
         wp <- client's webPassword
         processAction $

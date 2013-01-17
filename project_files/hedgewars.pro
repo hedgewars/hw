@@ -92,7 +92,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
     ../QTfrontend/ui/mouseoverfilter.h \
-    ../QTfrontend/ui/qpushbuttonwithsound.h \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
     ../QTfrontend/ui/page/pagefeedback.h \
     ../QTfrontend/model/roomslistmodel.h \
