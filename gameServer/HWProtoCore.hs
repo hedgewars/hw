@@ -4,6 +4,7 @@ module HWProtoCore where
 import Control.Monad.Reader
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
+import qualified Data.List as L
 --------------------------------------
 import CoreTypes
 import Actions
@@ -31,6 +32,16 @@ handleCmd ["PONG"] = do
         return [ProtocolError "Protocol violation"]
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
+
+handleCmd ("CMD" : params) =
+    let c = concatMap B.words params in
+        if not $ null c then
+            h $ (upperCase . head $ c) : tail c
+            else
+            return []
+    where
+        h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
+        h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
 
 handleCmd cmd = do
     (ci, irnc) <- ask
