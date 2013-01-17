@@ -228,9 +228,10 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lblDesc->setWordWrap(true);
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lblDesc->setAlignment(Qt::AlignTop | Qt::AlignLeft);
-    bottomLeftLayout->addWidget(lblDesc, 100);
+    lblDesc->setStyleSheet("font: 10px;");
+    bottomLeftLayout->addWidget(lblDesc, 1);
 
-    /* Spacing above theme chooser */
+    /* Add stretch above theme button */
 
     bottomLeftLayout->addStretch(1);
 
@@ -239,7 +240,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     btnTheme = new QPushButton();
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
-    bottomLeftLayout->addWidget(btnTheme, 1);
+    bottomLeftLayout->addWidget(btnTheme, 0);
 
     /* Add everything to main layout */
 
@@ -254,7 +255,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     staticMapChanged(m_staticMapModel->index(0, 0));
     missionMapChanged(m_missionMapModel->index(0, 0));
     updateTheme(m_themeModel->index(0, 0));
-    mapTypeChanged(0);
+    changeMapType(MapModel::GeneratedMap);
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -434,6 +435,8 @@ void HWMapContainer::setTheme(const QString & theme)
 
     if(mdl.size())
         updateTheme(mdl.at(0));
+    else
+        intSetIconlessTheme(theme);
 }
 
 void HWMapContainer::setRandomMap()
@@ -455,7 +458,6 @@ void HWMapContainer::setRandomMap()
             break;
     }
 }
-
 
 void HWMapContainer::setRandomSeed()
 {
@@ -668,7 +670,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     generationStyles->hide();
     mazeStyles->hide();
     lblDesc->hide();
-    btnTheme->hide();
     btnLoadMap->hide();
     btnEditMap->hide();
     btnRandomize->hide();
@@ -682,7 +683,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->show();
             generationStyles->show();
             btnRandomize->show();
-            btnTheme->show();
             break;
         case MapModel::GeneratedMaze:
             mapgen = MAPGEN_MAZE;
@@ -691,12 +691,10 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->show();
             mazeStyles->show();
             btnRandomize->show();
-            btnTheme->show();
             break;
         case MapModel::HandDrawnMap:
             mapgen = MAPGEN_DRAWN;
             setMapInfo(MapModel::MapInfoDrawn);
-            btnTheme->show();
             btnLoadMap->show();
             btnEditMap->show();
             break;
@@ -724,6 +722,9 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             break;
     }
 
+    // Update theme button size
+    updateThemeButtonSize();
+
     // Update cType combobox
     for (int i = 0; i < cType->count(); i++)
     {
@@ -737,6 +738,21 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     emit mapgenChanged(mapgen);
 }
 
+void HWMapContainer::updateThemeButtonSize()
+{
+    if (m_mapInfo.type == MapModel::MissionMap)
+    {
+        btnTheme->setIconSize(QSize(30, 30));
+        btnTheme->setFixedHeight(30);
+    }
+    else
+    {
+        QSize iconSize = btnTheme->icon().actualSize(QSize(65535, 65535));
+        btnTheme->setIconSize(iconSize);
+        btnTheme->setFixedHeight(64);
+    }
+}
+
 void HWMapContainer::showThemePrompt()
 {
     ThemePrompt prompt(this);
@@ -745,7 +761,6 @@ void HWMapContainer::showThemePrompt()
 
     QModelIndex current = m_themeModel->index(theme, 0);
     updateTheme(current);
-    
     emit themeChanged(m_theme);
 }
 
@@ -754,11 +769,11 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     m_theme = selectedTheme = current.data().toString();
     QIcon icon = qVariantValue<QIcon>(current.data(Qt::UserRole));
     QSize iconSize = icon.actualSize(QSize(65535, 65535));
-    btnTheme->setFixedHeight(iconSize.height());
+    btnTheme->setFixedHeight(64);
     btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
     btnTheme->setText(tr("Theme: ") + current.data(Qt::DisplayRole).toString());
-    emit themeChanged(m_theme);
+    updateThemeButtonSize();
 }
 
 void HWMapContainer::staticMapChanged(const QModelIndex & map, const QModelIndex & old)
@@ -815,13 +830,20 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
 {
     m_mapInfo = mapInfo;
     m_curMap = m_mapInfo.name;
-    m_theme = m_mapInfo.theme;
 
     // the map has no pre-defined theme, so let's use the selected one
     if (m_mapInfo.theme.isEmpty())
     {
-        m_theme = selectedTheme;
-        emit themeChanged(m_theme);
+        if (!selectedTheme.isEmpty())
+        {
+            setTheme(selectedTheme);
+            emit themeChanged(selectedTheme);
+        }
+    }
+    else
+    {
+        setTheme(m_mapInfo.theme);
+        emit themeChanged(m_mapInfo.theme);
     }
 
     lblDesc->setText(mapInfo.desc);
@@ -832,13 +854,9 @@ void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
 
 void HWMapContainer::loadDrawing()
 {
-
-
     QString fileName = QFileDialog::getOpenFileName(NULL, tr("Load drawn map"), ".", tr("Drawn Maps") + " (*.hwmap);;" + tr("All files") + " (*)");
 
     if(fileName.isEmpty()) return;
-
-
 
     QFile f(fileName);
 
@@ -877,4 +895,13 @@ void HWMapContainer::setMaster(bool master)
     
     foreach (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);
+}
+
+void HWMapContainer::intSetIconlessTheme(const QString & name)
+{
+    if (name.isEmpty()) return;
+
+    m_theme = name;
+    btnTheme->setIcon(QIcon());
+    btnTheme->setText(tr("Theme: ") + name);
 }

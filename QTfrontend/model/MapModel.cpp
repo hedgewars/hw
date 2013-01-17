@@ -90,7 +90,7 @@ void MapModel::loadMaps(MapType maptype)
                 QString locale = HWApplication::keyboardInputLocale().name();
 
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
-                desc = descSettings.value(locale, QString()).toString().replace("|", "\n");
+                desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");
             }
 
             // let's use some semi-sane hedgehog limit, rather than none
