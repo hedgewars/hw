@@ -41,7 +41,7 @@ handleCmd_lobby ["CHAT", msg] = do
     return [AnswerClients s ["CHAT", n, msg]]
 
 handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
-    | illegalName rName = return [Warning "Illegal room name"]
+    | illegalName rName = return [Warning $ loc "Illegal room name"]
     | otherwise = do
         rs <- allRoomInfos
         cl <- thisClient
@@ -75,13 +75,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let isBanned = host cl `elem` roomBansList jRoom
     return $
         if isNothing maybeRI || not sameProto then
-            [Warning "No such room"]
+            [Warning $ loc "No such room"]
             else if isRestrictedJoins jRoom then
-            [Warning "Joining restricted"]
+            [Warning $ loc "Joining restricted"]
             else if isRegisteredOnly jRoom then
-            [Warning "Registered users only"]
+            [Warning $ loc "Registered users only"]
             else if isBanned then
-            [Warning "You are banned in this room"]
+            [Warning $ loc "You are banned in this room"]
             else if roomPassword /= password jRoom then
             [NoticeMessage WrongPassword]
             else

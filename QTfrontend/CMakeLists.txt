@@ -23,6 +23,27 @@ if(NOT NOVIDEOREC)
     endif()
 endif()
 
+# server messages localization
+file(GLOB ServerSources ${CMAKE_SOURCE_DIR}/gameServer/*.hs)
+foreach(hsfile ${ServerSources})
+    file(READ ${hsfile} hs)
+    string(REGEX MATCHALL "loc *\"[^\n\"]+\"" locs ${hs})
+    foreach(str ${locs})
+        string(REGEX REPLACE "loc *\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"server\", \"\\1\")" s ${str})
+        list(APPEND serverlocs ${s})
+    endforeach(str)
+endforeach(hsfile)
+
+list(REMOVE_DUPLICATES serverlocs)
+list(GET serverlocs 0 firstline)
+list(REMOVE_AT serverlocs 0)
+set(locsout "const char * serverMessages[] = {\n")
+foreach(l ${serverlocs})
+    list(APPEND locsout ${l} ",\n")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
+
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/net)
@@ -128,6 +149,7 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)

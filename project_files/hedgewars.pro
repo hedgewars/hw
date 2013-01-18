@@ -116,7 +116,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/hatprompt.h \
     ../QTfrontend/ui/widget/feedbackdialog.h \
     ../QTfrontend/ui/widget/flowlayout.h \
-    ../QTfrontend/ui/widget/lineeditcursor.h
+    ../QTfrontend/ui/widget/lineeditcursor.h \
+    ../QTfrontend/servermessages.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -254,11 +255,11 @@ LIBS += -L../bin -lphysfs
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
-    QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
+    QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
 
     OBJECTIVE_SOURCES += ../QTfrontend/util/platform/*.m ../QTfrontend/util/platform/*.mm
-    SOURCES += ../QTfrontend/util/platform/AutoUpdater.cpp
-			   ../QTfrontend/util/platform/InstallController.cpp \
+    SOURCES += ../QTfrontend/util/platform/AutoUpdater.cpp \
+               ../QTfrontend/util/platform/InstallController.cpp \
                ../../build/QTfrontend/hwconsts.cpp
     HEADERS += ../QTfrontend/util/platform/*.h
 

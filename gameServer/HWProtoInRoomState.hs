@@ -27,7 +27,7 @@ handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
 
 handleCmd_inRoom ("CFG" : paramName : paramStrs)
-    | null paramStrs = return [ProtocolError "Empty config entry"]
+    | null paramStrs = return [ProtocolError $ loc "Empty config entry"]
     | otherwise = do
         chans <- roomOthersChans
         cl <- thisClient
@@ -36,7 +36,7 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
                 ModifyRoom f,
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
             else
-            return [ProtocolError "Not room master"]
+            return [ProtocolError $ loc "Not room master"]
     where
         f r = if paramName `Map.member` (mapParams r) then
                 r{mapParams = Map.insert paramName (head paramStrs) (mapParams r)}
@@ -44,7 +44,7 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
                 r{params = Map.insert paramName paramStrs (params r)}
 
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
-    | length hhsInfo /= 16 = return [ProtocolError "Corrupted hedgehogs info"]
+    | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info"]
     | otherwise = do
         (ci, _) <- ask
         rm <- thisRoom
@@ -61,15 +61,15 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif (newTeamHHNum rm) (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ teams rm then
-                [Warning "too many teams"]
+                [Warning $ loc "too many teams"]
             else if canAddNumber rm <= 0 then
-                [Warning "too many hedgehogs"]
+                [Warning $ loc "too many hedgehogs"]
             else if isJust $ findTeam rm then
-                [Warning "There's already a team with same name in the list"]
+                [Warning $ loc "There's already a team with same name in the list"]
             else if isJust $ gameInfo rm then
-                [Warning "round in progress"]
+                [Warning $ loc "round in progress"]
             else if isRestrictedTeams rm then
-                [Warning "restricted"]
+                [Warning $ loc "restricted"]
             else
                 [ModifyRoom (\r -> r{teams = teams r ++ [newTeam]}),
                 SendUpdateOnThisRoom,
@@ -101,9 +101,9 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
 
         return $
             if isNothing $ findTeam r then
-                [Warning "REMOVE_TEAM: no such team"]
+                [Warning $ loc "REMOVE_TEAM: no such team"]
             else if clNick /= teamowner team then
-                [ProtocolError "Not team owner!"]
+                [ProtocolError $ loc "Not team owner!"]
             else
                 [RemoveTeam tName,
                 ModifyClient
@@ -127,7 +127,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
 
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > canAddNumber r + hhnum team then
             []
         else
@@ -150,7 +150,7 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else if isNothing maybeTeam then
             []
         else
@@ -199,7 +199,7 @@ handleCmd_inRoom ["START_GAME"] = do
                 , ModifyRoomClients (\c -> c{isInGame = True})
                 ]
             else
-            return [Warning "Less than two clans!"]
+            return [Warning $ loc "Less than two clans!"]
         else
         return []
     where
@@ -249,7 +249,7 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = do
     cl <- thisClient
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else
             [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
 
@@ -258,7 +258,7 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
     cl <- thisClient
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else
             [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
@@ -267,7 +267,7 @@ handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
     cl <- thisClient
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else
             [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
 
@@ -279,10 +279,10 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
 
     return $
         if not $ isMaster cl then
-            [ProtocolError "Not room master"]
+            [ProtocolError $ loc "Not room master"]
         else
         if isJust $ find (\r -> newName == name r) rs then
-            [Warning "Room with such name already exists"]
+            [Warning $ loc "Room with such name already exists"]
         else
             [ModifyRoom roomUpdate,
             AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (nick cl) (roomUpdate rm))]

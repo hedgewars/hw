@@ -134,3 +134,6 @@ roomInfo n r = [
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
+
+loc :: B.ByteString -> B.ByteString
+loc = id
