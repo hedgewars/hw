@@ -276,7 +276,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Conexão rejeitada</translation>
+        <translation>Ligação rejeitada</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -284,7 +284,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Motivo de saída: </translation>
+        <translation>Motivo: </translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -349,19 +349,20 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Duração: %1m %2s
+</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation type="unfinished">Vídeo:  %1x%2, </translation>
+        <translation>Vídeo: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation type="unfinished">%1 fps, </translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished">Audio: </translation>
+        <translation>Audio: </translation>
     </message>
 </context>
 <context>
@@ -492,8 +493,8 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.</numerusform>
-            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.</numerusform>
+            <numerusform>O exterminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.</numerusform>
+            <numerusform>O exterminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -543,7 +544,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Abrir a pasta com as capturas de ecrã</translation>
+        <translation>Abrir a pasta de capturas de ecrã</translation>
     </message>
 </context>
 <context>
@@ -561,7 +562,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
         <comment>Tips</comment>
-        <translation>Se não tens a certeza do que fazer a seguir não desperdiçes munições, passa o turno. Mas não desperdices muito tempo, a Morte Súbita aproxima-se.</translation>
+        <translation>Se não tens a certeza do que fazer a seguir, não desperdiçes munições, passa o turno. Mas não percas muito tempo, a Morte Súbita aproxima-se!</translation>
     </message>
     <message>
         <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
@@ -641,7 +642,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
         <comment>Tips</comment>
-        <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer.</translation>
+        <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer!</translation>
     </message>
     <message>
         <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
@@ -666,7 +667,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
         <comment>Tips</comment>
-        <translation>Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
+        <translation>Cria uma conta em %1 para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
     </message>
     <message>
         <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
@@ -756,7 +757,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
         <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
+        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documents\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os modifiques.</translation>
     </message>
     <message>
         <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
@@ -876,7 +877,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Join or host your own game server in a Local Area Network.</source>
-        <translation>Cria ou junta-te a jogo numa Rede Local</translation>
+        <translation>Cria ou junta-te a jogo na Rede Local.</translation>
     </message>
 </context>
 <context>
@@ -997,11 +998,11 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Regras</translation>
+        <translation>Regras:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Armas:</translation>
+        <translation>Armamento:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1777,11 +1778,11 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Descrição do vídeo</translation>
+        <translation>Descrição do vídeo: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tags\Etiquetas (separados por virgula)</translation>
+        <translation>Tags\Etiquetas (separados por virgula): </translation>
     </message>
     <message>
         <source>Summary   </source>
@@ -1842,7 +1843,7 @@ Deseja mesmo sair?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Conexão com o servidor perdida</translation>
+        <translation>Ligação com o servidor perdida</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1922,7 +1923,7 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Não foi possível criar o directório %1</translation>
+        <translation>Não foi possível criar o diretório %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
@@ -2163,7 +2164,7 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
     <message>
         <source>Open videos directory</source>
-        <translation>Abrir o directório dos vídeos</translation>
+        <translation>Abrir o diretório de vídeos</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2179,23 +2180,23 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar os parametros de conversão por omisão</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir o diretório de vídeos do teu sistema</translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproduzir este vídeo</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar este vídeo</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar este vídeo para a tua conta do Youtube</translation>
     </message>
 </context>
 <context>
