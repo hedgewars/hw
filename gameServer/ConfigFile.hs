@@ -58,4 +58,3 @@ writeServerConfig ServerInfo{
             , ("sv_message", sm)
             , ("sv_messageOld", smo)
             ]
-        

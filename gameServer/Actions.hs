@@ -426,7 +426,7 @@ processAction CheckRegistered = do
     haveSameNick <- liftM (not . null . tail . filter (\c -> (not $ isChecker c) && caseInsensitiveCompare (nick c) n)) allClientsS
     if haveSameNick && (not checker) then
         if p < 38 then
-            processAction $ ByeClient "Nickname is already in use"
+            processAction $ ByeClient $ loc "Nickname is already in use"
             else
             processAction $ NoticeMessage NickAlreadyInUse
         else
@@ -459,11 +459,11 @@ processAction (ProcessAccountInfo info) = do
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-    checkerLogin _ False = processAction $ ByeClient "No checker rights"
+    checkerLogin _ False = processAction $ ByeClient $ loc "No checker rights"
     checkerLogin p True = do
         wp <- client's webPassword
         processAction $
-            if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient "Authentication failed"
+            if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient $ loc "Authentication failed"
     playerLogin p a = do
         chan <- client's sendChan
         mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = p, isAdministrator = a})]
@@ -494,7 +494,7 @@ processAction (KickClient kickId) = do
     clHost <- client's host
     currentTime <- io getCurrentTime
     mapM_ processAction [
-        AddIP2Bans clHost "60 seconds cooldown after kick" (addUTCTime 60 currentTime)
+        AddIP2Bans clHost (loc "60 seconds cooldown after kick") (addUTCTime 60 currentTime)
         , ModifyClient (\c -> c{isKickedFromServer = True})
         , ByeClient "Kicked"
         ]
@@ -550,7 +550,7 @@ processAction (Unban entry) = do
 processAction (KickRoomClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
     ch <- client's sendChan
-    mapM_ processAction [AnswerClients [ch] ["KICKED"], MoveToLobby "kicked"]
+    mapM_ processAction [AnswerClients [ch] ["KICKED"], MoveToLobby $ loc "kicked"]
 
 
 processAction (AddClient cl) = do
@@ -613,7 +613,7 @@ processAction PingAll = do
             pq <- io $ client'sM rnc pingsQueue ci
             when (pq > 0) $ do
                 withStateT (\as -> as{clientIndex = Just ci}) $
-                    processAction (ByeClient "Ping timeout")
+                    processAction (ByeClient $ loc "Ping timeout")
 --                when (pq > 1) $
 --                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
 
