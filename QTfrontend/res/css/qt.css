@@ -310,3 +310,7 @@ background-color: #150A61;
 #hatList::item:selected {
 background-color: #150A61;
 }
+
+QDialogButtonBox QPushButton {
+padding: 3px 5px;
+}
