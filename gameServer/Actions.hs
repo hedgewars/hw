@@ -1,9 +1,10 @@
-{-# LANGUAGE CPP, OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings, ScopedTypeVariables #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Actions where
 
 import Control.Concurrent
 import qualified Data.Set as Set
+import qualified Data.Map as Map
 import qualified Data.List as L
 import qualified Control.Exception as Exception
 import System.Log.Logger
@@ -75,6 +76,7 @@ data Action =
     | AddIP2Bans B.ByteString B.ByteString UTCTime
     | CheckBanned Bool
     | SaveReplay
+    | Stats
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -639,6 +641,15 @@ processAction RestartServer = do
             _ <- createProcess (proc "./hedgewars-server" args)
             return ()
         processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
+
+processAction Stats = do
+    cls <- allClientsS
+    let stats = versions cls
+    processAction $ Warning stats
+    where
+        versions = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
+            . concatMap (\(p, n :: Int) -> ["<tr><td>", protoNumber2ver p, "</td><td>", showB n, "</td></tr>"])
+            . Map.toList . Map.fromListWith (+) . map (\c -> (clientProto c, 1))
 
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
