@@ -149,10 +149,11 @@ void closeResources(void)
 
 int main(int argc, char *argv[])
 {
-#ifdef __APPLE__
-    // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
-    cocoaInit = new CocoaInitializer();
+    // Since we're calling this first, closeResources() will be the last thing called after main() returns.
     atexit(closeResources);
+
+#ifdef __APPLE__
+    cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
 
 #ifndef _WIN32
