@@ -304,10 +304,15 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick newAdmin
     master <- liftM isMaster thisClient
+    serverAdmin <- liftM isAdministrator thisClient
     let newAdminId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
     return
-        [ChangeMaster (Just newAdminId) | master && isJust maybeClientId && (newAdminId /= thisClientId) && sameRoom]
+        [ChangeMaster (Just newAdminId) |
+            (master || serverAdmin)
+                && isJust maybeClientId
+                && ((newAdminId /= thisClientId) || (serverAdmin && not master))
+                && sameRoom]
 
 
 handleCmd_inRoom ["TEAMCHAT", msg] = do

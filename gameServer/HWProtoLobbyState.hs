@@ -203,5 +203,8 @@ handleCmd_lobby ["RESTART_SERVER"] = do
     cl <- thisClient
     return [RestartServer | isAdministrator cl]
 
+handleCmd_lobby ["STATS"] = do
+    cl <- thisClient
+    return [Stats | isAdministrator cl]
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
