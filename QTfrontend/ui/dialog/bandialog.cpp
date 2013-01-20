@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QMessageBox>
+#include "HWApplication.h"
 
 #include "bandialog.h"
 
@@ -21,15 +22,16 @@ BanDialog::BanDialog(QWidget *parent) :
     leReason = new QLineEdit(this);
     cbTime = new QComboBox(this);
 
-    cbTime->addItem(tr("10 minutes"), 5 * 60);
-    cbTime->addItem(tr("30 minutes"), 10 * 60);
-    cbTime->addItem(tr("1 hour"), 60 * 60);
-    cbTime->addItem(tr("3 hours"), 3 * 60 * 60);
-    cbTime->addItem(tr("5 hours"), 5 * 60 * 60);
-    cbTime->addItem(tr("24 hours"), 24 * 60 * 60);
-    cbTime->addItem(tr("3 days"), 72 * 60 * 60);
-    cbTime->addItem(tr("7 days"), 168 * 60 * 60);
-    cbTime->addItem(tr("14 days"), 336 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 minutes").arg("10"), 5 * 60);
+    cbTime->addItem(HWApplication::tr("%1 minutes").arg("30"), 10 * 60);
+    cbTime->addItem(HWApplication::tr("%1 hour").arg("10"), 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 hours").arg("3"), 3 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 hours").arg("5"), 5 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 hours").arg("12"), 12 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 day").arg("1"), 24 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 days").arg("3"), 72 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 days").arg("7"), 168 * 60 * 60);
+    cbTime->addItem(HWApplication::tr("%1 days").arg("14"), 336 * 60 * 60);
     cbTime->addItem(tr("permanent"), 3650 * 24 * 60 * 60);
     cbTime->setCurrentIndex(0);
 
