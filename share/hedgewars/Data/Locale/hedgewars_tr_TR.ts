@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">IP</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -157,6 +121,29 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -322,18 +309,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWMapContainer</name>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Harita</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">Temalar</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">Filtre</translation>
-    </message>
     <message>
         <source>All</source>
         <translation>Tümü</translation>
@@ -527,10 +502,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Parola</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -734,10 +705,6 @@ Please wait a few seconds and try again.</source>
         <translation>Genel</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Gelişmiş</translation>
-    </message>
-    <message>
         <source>Select an action to choose a custom key bind for this team</source>
         <translation type="unfinished"></translation>
     </message>
@@ -917,17 +884,6 @@ Please wait a few seconds and try again.</source>
     </message>
 </context>
 <context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation type="obsolete">LAN oyunu</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation type="obsolete">Resmi sunucu</translation>
-    </message>
-</context>
-<context>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
@@ -968,10 +924,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Genel</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1319,10 +1271,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation type="obsolete">Yükle</translation>
-    </message>
-    <message>
         <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1396,10 +1344,6 @@ Please wait a few seconds and try again.</source>
         <translation>Bilgi</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">Başla</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>Katılmaları Kısıtla</translation>
     </message>
@@ -1441,18 +1385,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
-    </message>
-    <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">Oyun girişi tam ekran</translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">Sesleri etkinleştir</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation type="obsolete">Müziği etkinleştir</translation>
     </message>
     <message>
         <source>Show FPS</source>
@@ -1525,10 +1457,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>QComboBox</name>
-    <message>
-        <source>generated map...</source>
-        <translation type="obsolete">rastgele harita...</translation>
-    </message>
     <message>
         <source>Human</source>
         <translation>İnsan</translation>
@@ -1629,18 +1557,6 @@ Please wait a few seconds and try again.</source>
         <translation>Kale</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="obsolete">Tuşlar</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">Takımlar</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">Ses/Görüntü seçenekleri</translation>
-    </message>
-    <message>
         <source>Net game</source>
         <translation>Ağ oyunu</translation>
     </message>
@@ -1684,26 +1600,6 @@ Please wait a few seconds and try again.</source>
         <translation>Sürüm</translation>
     </message>
     <message>
-        <source>Developers:</source>
-        <translation type="obsolete">Geliştiriciler:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">Sanat:</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">Sesler:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">Çeviriler:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">Özel teşekkür:</translation>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Silahlar</translation>
     </message>
@@ -1734,10 +1630,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Initial sound volume</source>
         <translation>Başlangıçtaki ses seviyesi</translation>
-    </message>
-    <message>
-        <source>Game scheme</source>
-        <translation type="obsolete">Oyun teması</translation>
     </message>
     <message>
         <source>Damage Modifier</source>
@@ -2250,14 +2142,6 @@ Do you still want to join the room?</source>
         <translation>Yükle</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="obsolete">Ayarla</translation>
-    </message>
-    <message>
-        <source>Ready</source>
-        <translation type="obsolete">Hazır</translation>
-    </message>
-    <message>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2418,49 +2302,6 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>ToggleButtonWidget</name>
-    <message>
-        <source>Vampirism</source>
-        <translation type="obsolete">Vampircilik</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation type="obsolete">Karma</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation type="obsolete">Topçuluk</translation>
-    </message>
-    <message>
-        <source>Fort Mode</source>
-        <translation type="obsolete">Kale Modu</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation type="obsolete">Takımları Böl</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation type="obsolete">Parçalanmaz Yüzey</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">Sınır Ekle</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">Azaltılmış Yerçekimi</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">Lazer Görüşü</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">Ölümsüzlük</translation>
-    </message>
-</context>
-<context>
     <name>binds</name>
     <message>
         <source>up</source>
@@ -2591,12 +2432,6 @@ Do you still want to join the room?</source>
         <translation>yakala</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">kirpi
-bilgileri</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>çıkış</translation>
     </message>
@@ -2639,10 +2474,6 @@ bilgileri</translation>
 </context>
 <context>
     <name>binds (categories)</name>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Diğer</translation>
-    </message>
     <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
@@ -3047,121 +2878,6 @@ bilgileri</translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">IP</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -154,15 +118,34 @@
         <translation>Editovat schémata</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="obsolete">Pokud je tato volba aktivována, výběr herního schématu vybere automaticky i zbraňové schéma</translation>
-    </message>
-    <message>
         <source>Game Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -249,16 +232,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation type="obsolete">Tvoje přezdívka %1 je
-registrovaná na Hedgewars.org
-Prosím, zadej své heslo
-nebo si v konfiguraci vyber jinou přezdívku:</translation>
-    </message>
-    <message>
         <source>Nickname</source>
         <translation type="unfinished">Přezdívka</translation>
     </message>
@@ -339,18 +312,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HWMapContainer</name>
     <message>
-        <source>Map</source>
-        <translation type="obsolete">Mapa</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">Témata</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">Filtr</translation>
-    </message>
-    <message>
         <source>All</source>
         <translation>Vše</translation>
     </message>
@@ -375,10 +336,6 @@ Please wait a few seconds and try again.</source>
         <translation>Šílená</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="obsolete">Typ</translation>
-    </message>
-    <message>
         <source>Small tunnels</source>
         <translation>Malé tunely</translation>
     </message>
@@ -387,28 +344,8 @@ Please wait a few seconds and try again.</source>
         <translation>Střední tunely</translation>
     </message>
     <message>
-        <source>Large tunnels</source>
-        <translation type="obsolete">Velké tunely</translation>
-    </message>
-    <message>
-        <source>Small floating islands</source>
-        <translation type="obsolete">Malé plovoucí ostrovy</translation>
-    </message>
-    <message>
-        <source>Medium floating islands</source>
-        <translation type="obsolete">Střední plovoucí ostrovy</translation>
-    </message>
-    <message>
-        <source>Large floating islands</source>
-        <translation type="obsolete">Velké plovoucí ostrovy</translation>
-    </message>
-    <message>
         <source>Seed</source>
         <translation>Semínko</translation>
-    </message>
-    <message>
-        <source>Set</source>
-        <translation type="obsolete">Sada</translation>
     </message>
     <message>
         <source>Map type:</source>
@@ -567,10 +504,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Heslo</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -774,10 +707,6 @@ Please wait a few seconds and try again.</source>
         <translation>Obecné</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Rozšířené</translation>
-    </message>
-    <message>
         <source>Select an action to choose a custom key bind for this team</source>
         <translation type="unfinished"></translation>
     </message>
@@ -898,246 +827,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>PageMain</name>
     <message>
-        <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Jednoduše zvol stejnou barvu jako spoluhráč, abys hrál ve stejném týmu. Každý z vás bude mít kontrolu nad svými vlastními ježky, ale vyhraje nebo prohraje společně.</translation>
-    </message>
-    <message>
-        <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Některé zbraně mohou způsobovat jen malé poškození, ale mohou být devastující v pravé chvíli. Zkus použít pistoli Desert Eagle ke sražení několika nepřátelských ježků do vody.</translation>
-    </message>
-    <message>
-        <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Pokud si nejsi jistý, co dělat a nechceš plýtvat municí, přeskoč tah. Ale nenech uběhnout moc času, protože pak přijde Náhlá smrt!</translation>
-    </message>
-    <message>
-        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Pokud chceš zabránit ostatním, aby používali tvoji oblíbenou přezdívku na oficiálním serveru, zaregistruj se na http://www.hedgewars.org/.</translation>
-    </message>
-    <message>
-        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Jsi znuděn standardní hrou? Vyzkoušej některou misi - nabídnou jiný herní zážitek v závislosti na tom, kterou si vybereš.</translation>
-    </message>
-    <message>
-        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Standardně hra vždycky nahrává poslední odehraný zápas jako ukázku. Vyber si &apos;Místní hru&apos; a zvol tlačítko &apos;Ukázky&apos; v pravém spodním rohu k jejich přehrávání a správě.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Pokud máš problémy, zeptej se na našem fóru, ale neočekávej prosím nonstop podporu!</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Pokud se ti líbí, pomož nám malým příspěvkem, nebo se podílej na práci!</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Sdílej ho se svoji rodinou a přáteli dle libosti!</translation>
-    </message>
-    <message>
-        <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Čas od času se konají oficiální turnaje. Nadcházející události budou publikovány na http://www.hedgewars.org/ s několika denním předstihem.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars je k dispozici v mnoha jazycích. Pokud překlad do tvého jazyka vypadá zastaralý nebo chybí, neváhej nás kontaktovat!</translation>
-    </message>
-    <message>
-        <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars může být spuštěno na mnoha různých operačních systémech včetně Microsoft Windows, Mac OS X a Linuxu.</translation>
-    </message>
-    <message>
-        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Vždycky si pamatuj, že můžeš vytvořit vlastní hru na místní síti i internetu. Nejsi odkázán jen na možnost &apos;Prostá hra&apos;.</translation>
-    </message>
-    <message>
-        <source>While playing you should give yourself a short break at least once an hour.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Během hraní bys měl dělat krátké přestávky alespoň jednou za hodinu.</translation>
-    </message>
-    <message>
-        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Pokud tvoje grafická karta nepodporuje hardwarovou akceleraci OpenGL, zkus zapnout nízkou kvalitu pro zlepšení výkonu.</translation>
-    </message>
-    <message>
-        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Jsme otevřeni návrhům a konstruktivní kritice. Pokud se ti něco nelíbí, nebo máš skvělý nápad, dej nám vědět!</translation>
-    </message>
-    <message>
-        <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Obzvláště při hře online buď slušný a vždy pamatuj na to, že s tebou nebo proti tobě může hrát někdo z nějaké menšiny!</translation>
-    </message>
-    <message>
-        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Speciální herní módy jako třeba &apos;Vampyrismus&apos; nebo &apos;Karma&apos; ti dovolují vymýšlet úplně jiné herní taktiky. Vyzkoušej je v nějaké hře!</translation>
-    </message>
-    <message>
-        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Nikdy bys neměl instalovat Hedgewars na počítači, který ti nepatří (škola, univerzita, práce a jiné). Prosím, zeptej se nejprve zodpovědné osoby!</translation>
-    </message>
-    <message>
-        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars mohou být perfektní pro krátkou hru během pauzy. Jen se ujisti, že jsi nepřidal příliš mnoho ježků nebo nezvolil velkou mapu. Zmenšit čas nebo zdraví také urychlí hru.</translation>
-    </message>
-    <message>
-        <source>No hedgehogs were harmed in making this game.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Žádný ježek nebyl zraněn během vytváření této hry.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Hedgewars je Open Source a Freeware, který jsme vytvořili v našem volném čase. Pokud ti tuto hru někdo prodal, měl bys chtít vrátit peníze!</translation>
-    </message>
-    <message>
-        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Připojenim jednoho nebo více gamepadů před začátkem hry ti umožní nastavit je jako ovladač pro tvé týmy.</translation>
-    </message>
-    <message>
-        <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Vytvoř si účet na %1, abys zabránil ostatním používat tvoji oblíbenou přezdívku na oficiálním serveru.</translation>
-    </message>
-    <message>
-        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Pokud tvoje grafická karta nepodporuje hardwarovou akceleraci OpenGL, zkus aktualizovat ovladače.</translation>
-    </message>
-    <message>
-        <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">K dispozici jsou tři různé druhy skoků. Zmáčkni [Vysoký skok] dvakrát, abys udělal skok do větší výšky a dozadu.</translation>
-    </message>
-    <message>
-        <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Bojíš se pádu z útesu? Stiskni [přesnost], aby ses otočil [vlevo], či [vpravo] bez jakéhokoliv pohybu.</translation>
-    </message>
-    <message>
-        <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Některé zbraně vyžadují speciální strategii, nebo jen spoustu cvičení. Nezavrhuj hned některou zbraň, pokud jednou mineš cíl.</translation>
-    </message>
-    <message>
-        <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Většina zbraní nefunguje, jakmile se ponoří do vody. Naváděná včela nebo dort jsou vyjímka z tohoto pravidla.</translation>
-    </message>
-    <message>
-        <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Olomoucké tvarůžky vybuchují jen málo, ale vítr ovlivňuje oblak smradu, který může nakazit mnoho ježků najednou.</translation>
-    </message>
-    <message>
-        <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Útok pianem je nejničivější letecký útok. Na druhé straně ale ztratíš ježka, který tento útok vykoná.</translation>
-    </message>
-    <message>
-        <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Přisavné miny jsou perfektní nástroj na vytváření malých řetězových reakcí, které mohou nepřátelské ježky dostat do divokých situací ... nebo vody.</translation>
-    </message>
-    <message>
-        <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Kladivo je nejefektivnější při použitǐ na mostech a traverzách. Zasažený ježek prostě prorazí skrz zem.</translation>
-    </message>
-    <message>
-        <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Pokud jsi zaseklý za nepřátelským ježkem, použij kladivo, aby ses osvobodil a nemusel riskovat zranění z exploze.</translation>
-    </message>
-    <message>
-        <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Maximální vzdálenost, do které dort dojde, je ovlivněna terénem, kterým musí jít. Použij [útok] k dřívější explozi.</translation>
-    </message>
-    <message>
-        <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Plamenomet je zbraň, ale dá se použít i pro kopání tunelů.</translation>
-    </message>
-    <message>
-        <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Chceš vědět, kdo stojí za touto hrou? Klikni na logo Hedgewars v hlavním menu a podívej se.</translation>
-    </message>
-    <message>
-        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Líbí se ti Hedgewars? Staň se fanouškem na %1 nebo nás sleduj na %2!</translation>
-    </message>
-    <message>
-        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Neboj se kreslit vlastní hroby, čepice, vlajky nebo mapy a témata! Ale pamatuj, že je musíš někde sdílet, abys je mohl používat online.</translation>
-    </message>
-    <message>
-        <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Opravdu chceš nosit specifickou čepici? Daruj nám něco a dostaneš exklusivní čepici dle svého výběru!</translation>
-    </message>
-    <message>
-        <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Udržuj ovladače grafické karty aktuální, aby ses vyhnul problémům při hře.</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Své nastavení Hedgewars najdeš v &quot;Dokumenty\Hedgewars&quot;. Vytvoř si zálohu nebo si je přenášej s sebou, ale needituj je ručně.</translation>
-    </message>
-    <message>
-        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Můžeš si asociovat Hedgewars soubory (uložené hry a nahrávky) tak, abys je mohl ihned spouštět z internetového prohlížeče nebo prúzkumníka souborů.</translation>
-    </message>
-    <message>
-        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Chceš ušetřit lana? Uvolni ho ve vzduchu a vystřel znovu. Dokud se nedotkneš země, využíváš ho bez plýtvání munice!</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Konfigurace Hedgewars je k nalezení ve tvém domovském adresáři pod &quot;Library/Application Support/Hedgewars&quot;. Vytvoř si zálohu, přenášej ho s sebou, ale neměň ho ručně.</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Konfigurace Hedgewars je k nalezení ve tvém domovském adresáři pod &quot;.hedgewars&quot;. Vytvoř si zálohu, přenášej ho s sebou, ale neměň ho ručně.</translation>
-    </message>
-    <message>
-        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Windows verze Hedgewars podporuje Xfire. Přidej si Hedgewars do jeho seznamu her, abys viděl přátele, kteří ho hrají.</translation>
-    </message>
-    <message>
-        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
-        <comment>Tips</comment>
-        <translation type="obsolete">Použij Molotov nebo plamenomet, abys dočasně zamezil ježkům v přechodu terénu jako jsou tunely nebo plošiny.</translation>
-    </message>
-    <message>
         <source>Downloadable Content</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1209,17 +898,6 @@ Please wait a few seconds and try again.</source>
     </message>
 </context>
 <context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation type="obsolete">Hra po místní síti</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation type="obsolete">Oficiální server</translation>
-    </message>
-</context>
-<context>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
@@ -1260,10 +938,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Delete weapon set</source>
         <translation>Smazat sadu zbraní</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Obecné</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1613,10 +1287,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation type="obsolete">Nahrát</translation>
-    </message>
-    <message>
         <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1692,10 +1362,6 @@ Please wait a few seconds and try again.</source>
         <translation>Info</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">Start</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>Omezit připojení</translation>
     </message>
@@ -1743,18 +1409,6 @@ Please wait a few seconds and try again.</source>
         <translation>Celá obrazovka</translation>
     </message>
     <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">Celá obrazovka v menu</translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">Zapnout zvuky</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation type="obsolete">Zapnout hudbu</translation>
-    </message>
-    <message>
         <source>Show FPS</source>
         <translation>Zobrazovat FPS</translation>
     </message>
@@ -1769,18 +1423,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Show ammo menu tooltips</source>
         <translation>Ukazovat tipy ke zbraním</translation>
-    </message>
-    <message>
-        <source>Enable frontend sounds</source>
-        <translation type="obsolete">Zapnout zvuky v menu</translation>
-    </message>
-    <message>
-        <source>Enable frontend music</source>
-        <translation type="obsolete">Zapnout hudbu v menu</translation>
-    </message>
-    <message>
-        <source>Frontend effects</source>
-        <translation type="obsolete">Efekty v menu</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -1834,10 +1476,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>QComboBox</name>
     <message>
-        <source>generated map...</source>
-        <translation type="obsolete">generovaná mapa...</translation>
-    </message>
-    <message>
         <source>Human</source>
         <translation>Člověk</translation>
     </message>
@@ -1848,14 +1486,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>(System default)</source>
         <translation>(Podle systému)</translation>
-    </message>
-    <message>
-        <source>generated maze...</source>
-        <translation type="obsolete">generovaný labyrint...</translation>
-    </message>
-    <message>
-        <source>Mission</source>
-        <translation type="obsolete">Mise</translation>
     </message>
     <message>
         <source>Community</source>
@@ -1872,10 +1502,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>In progress</source>
         <translation>Probíhá</translation>
-    </message>
-    <message>
-        <source>hand drawn map...</source>
-        <translation type="obsolete">ručně kreslená mapa...</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1914,10 +1540,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished">Shora-Dolu</translation>
     </message>
     <message>
-        <source>Wiggle</source>
-        <translation type="obsolete">Kývat se</translation>
-    </message>
-    <message>
         <source>Red/Cyan grayscale</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1953,18 +1575,6 @@ Please wait a few seconds and try again.</source>
         <translation>Pevnost</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="obsolete">Nastavení kláves</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">Týmy</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">Nastavení audio/video</translation>
-    </message>
-    <message>
         <source>Net game</source>
         <translation>Síťová hra</translation>
     </message>
@@ -1985,14 +1595,6 @@ Please wait a few seconds and try again.</source>
         <translation>Týmová nastavení</translation>
     </message>
     <message>
-        <source>Misc</source>
-        <translation type="obsolete">Ostatní</translation>
-    </message>
-    <message>
-        <source>Schemes and Weapons</source>
-        <translation type="obsolete">Schémata a zbraně</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2006,26 +1608,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Version</source>
         <translation>Verze</translation>
-    </message>
-    <message>
-        <source>Developers:</source>
-        <translation type="obsolete">Vývojáři:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">Grafika:</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">Zvuky:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">Překlady:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">Speciální poděkování:</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -2092,10 +1674,6 @@ Please wait a few seconds and try again.</source>
         <translation>Shazování beden</translation>
     </message>
     <message>
-        <source>Game scheme</source>
-        <translation type="obsolete">Herní schéma</translation>
-    </message>
-    <message>
         <source>% Dud Mines</source>
         <translation>% falešných min</translation>
     </message>
@@ -2130,10 +1708,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Tip: </source>
         <translation>Tip: </translation>
-    </message>
-    <message>
-        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation type="obsolete">Tato vývojová verze je &apos;v průběhu práce&apos; a může být kompatibilní s jinými verzemi hry. Některé možnosti mohou být rozbité nebo nekompletní. Používej na vlastní riziko!</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2535,17 +2109,6 @@ Ještě stále se chceš připojit do místosti?</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">Přezdívka</translation>
-    </message>
-    <message>
-        <source>Please enter your nickname</source>
-        <translation type="obsolete">Prosím zadej svou přezdívku</translation>
-    </message>
-</context>
-<context>
     <name>QPushButton</name>
     <message>
         <source>default</source>
@@ -2580,10 +2143,6 @@ Ještě stále se chceš připojit do místosti?</translation>
         <translation>Start</translation>
     </message>
     <message>
-        <source>Ready</source>
-        <translation type="obsolete">Připraven</translation>
-    </message>
-    <message>
         <source>Go!</source>
         <translation>Jedem!</translation>
     </message>
@@ -2604,20 +2163,8 @@ Ještě stále se chceš připojit do místosti?</translation>
         <translation>Nahrát</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="obsolete">Nastavení</translation>
-    </message>
-    <message>
-        <source>Random Team</source>
-        <translation type="obsolete">Náhodný tým</translation>
-    </message>
-    <message>
         <source>Associate file extensions</source>
         <translation>Asociovat přípony souborů</translation>
-    </message>
-    <message>
-        <source>more</source>
-        <translation type="obsolete">více</translation>
     </message>
     <message>
         <source>More info</source>
@@ -2776,101 +2323,6 @@ Ještě stále se chceš připojit do místosti?</translation>
     </message>
 </context>
 <context>
-    <name>ToggleButtonWidget</name>
-    <message>
-        <source>Vampirism</source>
-        <translation type="obsolete">Vampyrismus</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation type="obsolete">Karma</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation type="obsolete">Dělostřelectvo</translation>
-    </message>
-    <message>
-        <source>Fort Mode</source>
-        <translation type="obsolete">Pevnosti</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation type="obsolete">Rozděl týmy</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation type="obsolete">Pevná zem</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">Přidej hranice</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">Nízká gravitace</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">Laserové zaměřování</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">Nesmrtelnost</translation>
-    </message>
-    <message>
-        <source>Random Order</source>
-        <translation type="obsolete">Náhodné pořadí</translation>
-    </message>
-    <message>
-        <source>King</source>
-        <translation type="obsolete">Král</translation>
-    </message>
-    <message>
-        <source>Place Hedgehogs</source>
-        <translation type="obsolete">Umísti ježky</translation>
-    </message>
-    <message>
-        <source>Clan Shares Ammo</source>
-        <translation type="obsolete">Klan sdílí munici</translation>
-    </message>
-    <message>
-        <source>Disable Girders</source>
-        <translation type="obsolete">Vypni traverzy</translation>
-    </message>
-    <message>
-        <source>Disable Land Objects</source>
-        <translation type="obsolete">Vypni teréní objekty</translation>
-    </message>
-    <message>
-        <source>AI Survival Mode</source>
-        <translation type="obsolete">Mód &apos;Počítač přežívá&apos;</translation>
-    </message>
-    <message>
-        <source>Reset Health</source>
-        <translation type="obsolete">Obnova zdraví</translation>
-    </message>
-    <message>
-        <source>Unlimited Attacks</source>
-        <translation type="obsolete">Neomezeně útoků</translation>
-    </message>
-    <message>
-        <source>Reset Weapons</source>
-        <translation type="obsolete">Obnova zbraní</translation>
-    </message>
-    <message>
-        <source>Per Hedgehog Ammo</source>
-        <translation type="obsolete">Individuální munice</translation>
-    </message>
-    <message>
-        <source>Disable Wind</source>
-        <translation type="obsolete">Vypni vítr</translation>
-    </message>
-    <message>
-        <source>More Wind</source>
-        <translation type="obsolete">Více větru</translation>
-    </message>
-</context>
-<context>
     <name>binds</name>
     <message>
         <source>up</source>
@@ -3001,11 +2453,6 @@ Ještě stále se chceš připojit do místosti?</translation>
         <translation>sejmout</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">info o ježkovi</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>ukončit</translation>
     </message>
@@ -3049,22 +2496,6 @@ info</source>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation type="obsolete">Základní ovládání</translation>
-    </message>
-    <message>
-        <source>Weapon controls</source>
-        <translation type="obsolete">Ovládání zbraní</translation>
-    </message>
-    <message>
-        <source>Camera and cursor controls</source>
-        <translation type="obsolete">Ovládání kamery a kurzoru</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Ostatní</translation>
-    </message>
-    <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3083,10 +2514,6 @@ info</source>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation type="obsolete">Pohybuj ježkem a miř:</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation>Překonej mezery a překážky skokem:</translation>
@@ -3472,121 +2899,6 @@ info</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

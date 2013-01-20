@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">IP</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -153,15 +117,34 @@
         <translation>Редактиране на оръжията</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="obsolete">Когато тази настройка е включена, при избирането на игрова схема автоматично ще се избере оръжие</translation>
-    </message>
-    <message>
         <source>Game Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -248,16 +231,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation type="obsolete">Прякорът ви %1 е
-регистриран на Hedgewars.org
-Моля въдете паролата си по-долу
-или изберете друг прякор в настройките на играта:</translation>
-    </message>
-    <message>
         <source>Nickname</source>
         <translation type="unfinished">Прякор</translation>
     </message>
@@ -338,18 +311,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HWMapContainer</name>
     <message>
-        <source>Map</source>
-        <translation type="obsolete">Карта</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">Тема</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">Филтър</translation>
-    </message>
-    <message>
         <source>All</source>
         <translation>Всички</translation>
     </message>
@@ -374,32 +335,12 @@ Please wait a few seconds and try again.</source>
         <translation>Щура</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation type="obsolete">Тип</translation>
-    </message>
-    <message>
         <source>Small tunnels</source>
         <translation>Малки тунели</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
         <translation>Средни тунели</translation>
-    </message>
-    <message>
-        <source>Large tunnels</source>
-        <translation type="obsolete">Големи тунели</translation>
-    </message>
-    <message>
-        <source>Small floating islands</source>
-        <translation type="obsolete">Малки плаващи острови</translation>
-    </message>
-    <message>
-        <source>Medium floating islands</source>
-        <translation type="obsolete">Средни плаващи острови</translation>
-    </message>
-    <message>
-        <source>Large floating islands</source>
-        <translation type="obsolete">Големи плаващи острови</translation>
     </message>
     <message>
         <source>Seed</source>
@@ -562,10 +503,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Парола</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -769,10 +706,6 @@ Please wait a few seconds and try again.</source>
         <translation>Общи</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation type="obsolete">За напреднали</translation>
-    </message>
-    <message>
         <source>Select an action to choose a custom key bind for this team</source>
         <translation type="unfinished"></translation>
     </message>
@@ -958,17 +891,6 @@ Please wait a few seconds and try again.</source>
     </message>
 </context>
 <context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation type="obsolete">Игра по локална мрежа</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation type="obsolete">Официален сървър</translation>
-    </message>
-</context>
-<context>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
@@ -1009,10 +931,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Delete weapon set</source>
         <translation>Изтриване на комплекта оръжия</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Общи</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1361,10 +1279,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation type="obsolete">Зареждане</translation>
-    </message>
-    <message>
         <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1439,10 +1353,6 @@ Please wait a few seconds and try again.</source>
         <translation>Забраняване</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">Старт</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>Ограничи присъединяване</translation>
     </message>
@@ -1486,10 +1396,6 @@ Please wait a few seconds and try again.</source>
         <translation>Проверяване за обновления при стартиране</translation>
     </message>
     <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">Включване на звука</translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation>Пълен екран</translation>
     </message>
@@ -1502,32 +1408,12 @@ Please wait a few seconds and try again.</source>
         <translation>Показване на алтернативен режим на щетите</translation>
     </message>
     <message>
-        <source>Enable music</source>
-        <translation type="obsolete">Включване на музиката</translation>
-    </message>
-    <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">Пълен екран</translation>
-    </message>
-    <message>
         <source>Append date and time to record file name</source>
         <translation>Добави дата и час към името на записаното демо</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
         <translation>Показване на подсказки за боеприпасите</translation>
-    </message>
-    <message>
-        <source>Enable frontend sounds</source>
-        <translation type="obsolete">Включване на звуци</translation>
-    </message>
-    <message>
-        <source>Enable frontend music</source>
-        <translation type="obsolete">Включване на музика</translation>
-    </message>
-    <message>
-        <source>Frontend effects</source>
-        <translation type="obsolete">Ефекти</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -1581,10 +1467,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>QComboBox</name>
     <message>
-        <source>generated map...</source>
-        <translation type="obsolete">Случайна карта...</translation>
-    </message>
-    <message>
         <source>Human</source>
         <translation>Човек</translation>
     </message>
@@ -1595,14 +1477,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>(System default)</source>
         <translation>(Стандартно за системата)</translation>
-    </message>
-    <message>
-        <source>generated maze...</source>
-        <translation type="obsolete">генериран лабиринт...</translation>
-    </message>
-    <message>
-        <source>Mission</source>
-        <translation type="obsolete">Мисия</translation>
     </message>
     <message>
         <source>Community</source>
@@ -1619,10 +1493,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>In progress</source>
         <translation>В прогрес</translation>
-    </message>
-    <message>
-        <source>hand drawn map...</source>
-        <translation type="obsolete">Ръчно нарисувана карта...</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1704,18 +1574,6 @@ Please wait a few seconds and try again.</source>
         <translation>Форт</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="obsolete">Клавиши</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">Отбори</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">Настройки на Звук/Графика</translation>
-    </message>
-    <message>
         <source>Playing teams</source>
         <translation>Играещи отбори</translation>
     </message>
@@ -1728,14 +1586,6 @@ Please wait a few seconds and try again.</source>
         <translation>Настройки на отборите</translation>
     </message>
     <message>
-        <source>Misc</source>
-        <translation type="obsolete">Разни</translation>
-    </message>
-    <message>
-        <source>Schemes and Weapons</source>
-        <translation type="obsolete">Схеми и оръжия</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1746,10 +1596,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>QLabel</name>
-    <message>
-        <source>Game scheme</source>
-        <translation type="obsolete">Игрови схеми</translation>
-    </message>
     <message>
         <source>Damage Modifier</source>
         <translation>Модификатор на щетите</translation>
@@ -1791,22 +1637,6 @@ Please wait a few seconds and try again.</source>
         <translation>Ограничение на брой кадри за секунда</translation>
     </message>
     <message>
-        <source>Developers:</source>
-        <translation type="obsolete">Разработчици:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">Графика:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">Преводи:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">Специални благодарности на:</translation>
-    </message>
-    <message>
         <source>Server name:</source>
         <translation>Име на сървъра:</translation>
     </message>
@@ -1829,10 +1659,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Version</source>
         <translation>Версия</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">Звуци:</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -2273,22 +2099,7 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">Прякор</translation>
-    </message>
-    <message>
-        <source>Please enter your nickname</source>
-        <translation type="obsolete">Моля въведете прякорът си</translation>
-    </message>
-</context>
-<context>
     <name>QPushButton</name>
-    <message>
-        <source>Setup</source>
-        <translation type="obsolete">Настройки</translation>
-    </message>
     <message>
         <source>Play demo</source>
         <translation>Пускане на демо</translation>
@@ -2342,20 +2153,8 @@ Do you still want to join the room?</source>
         <translation>Изтриване</translation>
     </message>
     <message>
-        <source>Ready</source>
-        <translation type="obsolete">Готово</translation>
-    </message>
-    <message>
-        <source>Random Team</source>
-        <translation type="obsolete">Случаен отбор</translation>
-    </message>
-    <message>
         <source>Associate file extensions</source>
         <translation>Асоцииране на файлови разширения</translation>
-    </message>
-    <message>
-        <source>more</source>
-        <translation type="obsolete">повече</translation>
     </message>
     <message>
         <source>More info</source>
@@ -2514,101 +2313,6 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>ToggleButtonWidget</name>
-    <message>
-        <source>Fort Mode</source>
-        <translation type="obsolete">Режим на фортове</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation type="obsolete">Разделяне на отборите</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation type="obsolete">Твърда земя</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">Добави гранична ивица</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">Ниска гравитация</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">Лазерен мерник</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">Неуязвимост</translation>
-    </message>
-    <message>
-        <source>Vampirism</source>
-        <translation type="obsolete">Вампиризъм</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation type="obsolete">Карма</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation type="obsolete">Артилерия</translation>
-    </message>
-    <message>
-        <source>Random Order</source>
-        <translation type="obsolete">Произволен ред</translation>
-    </message>
-    <message>
-        <source>King</source>
-        <translation type="obsolete">Крал</translation>
-    </message>
-    <message>
-        <source>Place Hedgehogs</source>
-        <translation type="obsolete">Поставяне на таралежи</translation>
-    </message>
-    <message>
-        <source>Clan Shares Ammo</source>
-        <translation type="obsolete">Кланът споделя оръжията</translation>
-    </message>
-    <message>
-        <source>Disable Girders</source>
-        <translation type="obsolete">Изкбючване на греди</translation>
-    </message>
-    <message>
-        <source>Disable Land Objects</source>
-        <translation type="obsolete">Изключване на обекти по земята</translation>
-    </message>
-    <message>
-        <source>AI Survival Mode</source>
-        <translation type="obsolete">Режим ИИ оцеляване</translation>
-    </message>
-    <message>
-        <source>Reset Health</source>
-        <translation type="obsolete">Изчистване на здрането</translation>
-    </message>
-    <message>
-        <source>Unlimited Attacks</source>
-        <translation type="obsolete">Неограничени атаки</translation>
-    </message>
-    <message>
-        <source>Reset Weapons</source>
-        <translation type="obsolete">Изчистване на оръжията</translation>
-    </message>
-    <message>
-        <source>Per Hedgehog Ammo</source>
-        <translation type="obsolete">Боеприпаси за всеки таралеж поотделно</translation>
-    </message>
-    <message>
-        <source>Disable Wind</source>
-        <translation type="obsolete">Изключване на вятъра</translation>
-    </message>
-    <message>
-        <source>More Wind</source>
-        <translation type="obsolete">Още вятър</translation>
-    </message>
-</context>
-<context>
     <name>binds</name>
     <message>
         <source>up</source>
@@ -2727,12 +2431,6 @@ Do you still want to join the room?</source>
         <translation>Слот 9</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">Информация
-за играта</translation>
-    </message>
-    <message>
         <source>chat</source>
         <translation>Чат</translation>
     </message>
@@ -2788,22 +2486,6 @@ info</source>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation type="obsolete">Основни контроли</translation>
-    </message>
-    <message>
-        <source>Weapon controls</source>
-        <translation type="obsolete">Контроли за оръжията</translation>
-    </message>
-    <message>
-        <source>Camera and cursor controls</source>
-        <translation type="obsolete">Контроли за камерата и показалеца</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Друго</translation>
-    </message>
-    <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2822,10 +2504,6 @@ info</source>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation type="obsolete">Преместете таралежите си и се прицелете:</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation>Преодолявайте празнини и препятствия чрез скачане:</translation>
@@ -3211,121 +2889,6 @@ info</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
