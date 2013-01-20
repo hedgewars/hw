@@ -40,27 +40,28 @@ AbstractPage::AbstractPage(QWidget* parent)
 void AbstractPage::initPage()
 {
     QGridLayout * pageLayout = new QGridLayout(this);
+    QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
+    pageLayout->addLayout(bottomLeftLayout, 1, 0);
 
     // stretch grid space for body and footer
-    pageLayout->setColumnStretch(0,0);
-    pageLayout->setColumnStretch(1,0);
+    pageLayout->setColumnStretch(0,1);
+    pageLayout->setColumnStretch(1,2);
     pageLayout->setColumnStretch(2,1);
-    pageLayout->setColumnStretch(3,0);
     pageLayout->setRowStretch(0,1);
     pageLayout->setRowStretch(1,0);
 
     // add back/exit button
     btnBack = formattedButton(":/res/Exit.png", true);
     btnBack->setWhatsThis(tr("Go back"));
-    pageLayout->addWidget(btnBack, 1, 0, 1, 1, Qt::AlignLeft | Qt::AlignBottom);
+    bottomLeftLayout->addWidget(btnBack, 0);
 
     // add body layout as defined by the subclass
-    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 4);
+    pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 3);
 
     // add left footer layout
     QLayout * flld = footerLayoutLeftDefinition();
     if (flld != NULL)
-        pageLayout->addLayout(flld, 1, 1);
+        bottomLeftLayout->addLayout(flld, 0);
 
     descLabel = new QLabel();
     descLabel->setAlignment(Qt::AlignCenter);
@@ -68,12 +69,15 @@ void AbstractPage::initPage()
     descLabel->setOpenExternalLinks(true);
     descLabel->setFixedHeight(50);
     descLabel->setStyleSheet("font-size: 16px");
-    pageLayout->addWidget(descLabel, 1, 2);
+    bottomLeftLayout->addWidget(descLabel);
+    pageLayout->addWidget(descLabel, 1, 1);
 
     // add footer layout
     QLayout * fld = footerLayoutDefinition();
     if (fld != NULL)
-        pageLayout->addLayout(fld, 1, 3);
+        pageLayout->addLayout(fld, 1, 2);
+
+    bottomLeftLayout->addStretch(1);
 
     // connect signals
     connect(btnBack, SIGNAL(clicked()), this, SIGNAL(goBack()));
