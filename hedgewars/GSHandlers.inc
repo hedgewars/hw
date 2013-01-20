@@ -298,7 +298,7 @@ end;
 procedure doStepBomb(Gear: PGear);
 var 
     i, x, y: LongInt;
-    dX, dY: hwFloat;
+    dX, dY, gdX: hwFloat;
     vg: PVisualGear;
 begin
     AllInactive := false;
@@ -338,10 +338,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _3) * _0_08;
                     FollowGear := AddGear(x, y, gtCluster, 0, dX, dY, 25)
                     end
@@ -350,10 +351,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _1_5) * _0_3;
                     FollowGear:= AddGear(x, y, gtMelonPiece, 0, dX, dY, 75);
                     FollowGear^.DirAngle := i * 60
@@ -2414,7 +2416,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMortar(Gear: PGear);
 var 
-    dX, dY: hwFloat;
+    dX, dY, gdX, gdY: hwFloat;
     i: LongInt;
     dxn, dyn: boolean;
 begin
@@ -2425,14 +2427,16 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
+        gdX := Gear^.dX;
+        gdY := Gear^.dY;
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
 
-        Gear^.dX.isNegative := not dxn;
-        Gear^.dY.isNegative := not dyn;
+        gdX.isNegative := not dxn;
+        gdY.isNegative := not dyn;
         for i:= 0 to 4 do
             begin
-            dX := Gear^.dX + (GetRandomf - _0_5) * _0_03;
-            dY := Gear^.dY + (GetRandomf - _0_5) * _0_03;
+            dX := gdX + (GetRandomf - _0_5) * _0_03;
+            dY := gdY + (GetRandomf - _0_5) * _0_03;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
             end;
 
