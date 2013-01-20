@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">IP</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -157,6 +121,29 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -323,14 +310,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HWMapContainer</name>
     <message>
-        <source>Map</source>
-        <translation type="obsolete">地圖</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">過濾</translation>
-    </message>
-    <message>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -353,10 +332,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Wacky</source>
         <translation>曲折</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">主題</translation>
     </message>
     <message>
         <source>Small tunnels</source>
@@ -527,10 +502,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">密碼</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -734,10 +705,6 @@ Please wait a few seconds and try again.</source>
         <translation>常規</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation type="obsolete">進階</translation>
-    </message>
-    <message>
         <source>Select an action to choose a custom key bind for this team</source>
         <translation type="unfinished"></translation>
     </message>
@@ -917,17 +884,6 @@ Please wait a few seconds and try again.</source>
     </message>
 </context>
 <context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation type="obsolete">局域網遊戲</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation type="obsolete">官方伺服器</translation>
-    </message>
-</context>
-<context>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
@@ -968,10 +924,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">常規</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1319,10 +1271,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation type="obsolete">讀取</translation>
-    </message>
-    <message>
         <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1396,10 +1344,6 @@ Please wait a few seconds and try again.</source>
         <translation>信息</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">開始</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>限制參與</translation>
     </message>
@@ -1439,10 +1383,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>QCheckBox</name>
     <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">開啟遊戲音效</translation>
-    </message>
-    <message>
         <source>Fullscreen</source>
         <translation>遊戲全螢幕</translation>
     </message>
@@ -1455,14 +1395,6 @@ Please wait a few seconds and try again.</source>
         <translation>另一種傷害顯示方式</translation>
     </message>
     <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">介面全螢幕</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation type="obsolete">開啟遊戲音樂</translation>
-    </message>
-    <message>
         <source>Append date and time to record file name</source>
         <translation>記錄名稱中包含具體時間日期</translation>
     </message>
@@ -1473,14 +1405,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Show ammo menu tooltips</source>
         <translation type="unfinished">顯示武器提示訊息</translation>
-    </message>
-    <message>
-        <source>Enable frontend sounds</source>
-        <translation type="obsolete">啟用菜單音效</translation>
-    </message>
-    <message>
-        <source>Enable frontend music</source>
-        <translation type="obsolete">啟用菜單音樂</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -1533,10 +1457,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>QComboBox</name>
-    <message>
-        <source>generated map...</source>
-        <translation type="obsolete">生成地圖...</translation>
-    </message>
     <message>
         <source>Human</source>
         <translation>玩家</translation>
@@ -1637,18 +1557,6 @@ Please wait a few seconds and try again.</source>
         <translation>城堡模式</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="obsolete">鍵位綁定</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">隊伍</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">音訊/視頻選項</translation>
-    </message>
-    <message>
         <source>Playing teams</source>
         <translation>玩家隊伍</translation>
     </message>
@@ -1688,22 +1596,6 @@ Please wait a few seconds and try again.</source>
         <translation>FPS 上限</translation>
     </message>
     <message>
-        <source>Developers:</source>
-        <translation type="obsolete">開發者:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">藝術:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">翻譯:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">特別感謝:</translation>
-    </message>
-    <message>
         <source>Server name:</source>
         <translation>伺服器名:</translation>
     </message>
@@ -1726,10 +1618,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Version</source>
         <translation>版本</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">聲音:</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -1758,10 +1646,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Crate Drops</source>
         <translation>箱子降落</translation>
-    </message>
-    <message>
-        <source>Game scheme</source>
-        <translation type="obsolete">遊戲設置</translation>
     </message>
     <message>
         <source>Mines Time</source>
@@ -2204,22 +2088,7 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">匿稱</translation>
-    </message>
-    <message>
-        <source>Please enter your nickname</source>
-        <translation type="obsolete">請輸入您的匿稱</translation>
-    </message>
-</context>
-<context>
     <name>QPushButton</name>
-    <message>
-        <source>Setup</source>
-        <translation type="obsolete">設置</translation>
-    </message>
     <message>
         <source>Play demo</source>
         <translation>播放 demo</translation>
@@ -2271,14 +2140,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Delete</source>
         <translation>刪除</translation>
-    </message>
-    <message>
-        <source>Ready</source>
-        <translation type="obsolete">準備好了</translation>
-    </message>
-    <message>
-        <source>Random Team</source>
-        <translation type="obsolete">隨機隊伍分配</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
@@ -2441,61 +2302,6 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>ToggleButtonWidget</name>
-    <message>
-        <source>Vampirism</source>
-        <translation type="obsolete">吸血鬼</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation type="obsolete">因果報應</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation type="obsolete">射術</translation>
-    </message>
-    <message>
-        <source>Fort Mode</source>
-        <translation type="obsolete">城堡模式</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation type="obsolete">團體行動</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation type="obsolete">固實地面</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">添加邊界</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">低重力</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">鐳射瞄準</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">刀槍不入</translation>
-    </message>
-    <message>
-        <source>Random Order</source>
-        <translation type="obsolete">隨機順序</translation>
-    </message>
-    <message>
-        <source>King</source>
-        <translation type="obsolete">國王模式</translation>
-    </message>
-    <message>
-        <source>Place Hedgehogs</source>
-        <translation type="obsolete">手動放置</translation>
-    </message>
-</context>
-<context>
     <name>binds</name>
     <message>
         <source>up</source>
@@ -2630,12 +2436,6 @@ Do you still want to join the room?</source>
         <translation>確認</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">刺蝟大作戰
-信息</translation>
-    </message>
-    <message>
         <source>zoom in</source>
         <translation type="unfinished">放大</translation>
     </message>
@@ -2675,22 +2475,6 @@ info</source>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation type="obsolete">基本控制</translation>
-    </message>
-    <message>
-        <source>Weapon controls</source>
-        <translation type="obsolete">武器控制</translation>
-    </message>
-    <message>
-        <source>Camera and cursor controls</source>
-        <translation type="obsolete">鏡頭和遊標控制</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">其他</translation>
-    </message>
-    <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2709,10 +2493,6 @@ info</source>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation type="obsolete">移動、瞄準：</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation type="unfinished">越過障礙：</translation>
@@ -3098,121 +2878,6 @@ info</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

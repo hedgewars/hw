@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">IP</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -149,14 +113,6 @@
         <translation>Editar os armamentos</translation>
     </message>
     <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>Illegal ammo scheme</source>
-        <translation type="obsolete">Non se permite ese armamento</translation>
-    </message>
-    <message>
         <source>Edit schemes</source>
         <translation>Editar os modos de xogo</translation>
     </message>
@@ -166,6 +122,29 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -222,28 +201,8 @@
 <context>
     <name>HWForm</name>
     <message>
-        <source>new</source>
-        <translation type="obsolete">novo</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Aceptar</translation>
-    </message>
-    <message>
-        <source>Unable to start the server</source>
-        <translation type="obsolete">Non se puido iniciar o servidor</translation>
-    </message>
-    <message>
         <source>Cannot save record to file %1</source>
         <translation>Non se pode gardar a gravación no ficheiro %1</translation>
-    </message>
-    <message>
-        <source>Please select record from the list above</source>
-        <translation type="obsolete">Selecciona unha gravación da seguinte lista</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -341,10 +300,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HWGame</name>
     <message>
-        <source>Error reading training config file</source>
-        <translation type="obsolete">Houbo un erro ao ler o ficheiro de configuración do adestramento</translation>
-    </message>
-    <message>
         <source>en.txt</source>
         <translation>gl.txt</translation>
     </message>
@@ -355,18 +310,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWMapContainer</name>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Mapa</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">Temas visuais</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">Filtro</translation>
-    </message>
     <message>
         <source>All</source>
         <translation>Todos</translation>
@@ -530,20 +473,6 @@ Please wait a few seconds and try again.</source>
         <translation>Botáronte</translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="obsolete">Contrasinal</translation>
-    </message>
-    <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password
-or pick another nickname:</source>
-        <translation type="obsolete">O teu alcume, «%1»
-está rexistrado en Hedgewars.org
-Introduce o contrasinal ou
-escolle outro alcume:</translation>
-    </message>
-    <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 entrou na sala</translation>
     </message>
@@ -574,10 +503,6 @@ escolle outro alcume:</translation>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">Contrasinal</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -667,14 +592,6 @@ escolle outro alcume:</translation>
 </context>
 <context>
     <name>PageAdmin</name>
-    <message>
-        <source>Server message:</source>
-        <translation type="obsolete">Mensaxe do servidor:</translation>
-    </message>
-    <message>
-        <source>Set message</source>
-        <translation type="obsolete">Establecer a mensaxe</translation>
-    </message>
     <message>
         <source>Clear Accounts Cache</source>
         <translation>Borrar a caché das contas</translation>
@@ -789,10 +706,6 @@ escolle outro alcume:</translation>
         <translation>Xeral</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Avanzado</translation>
-    </message>
-    <message>
         <source>Select an action to choose a custom key bind for this team</source>
         <translation type="unfinished"></translation>
     </message>
@@ -831,24 +744,6 @@ escolle outro alcume:</translation>
 </context>
 <context>
     <name>PageGameStats</name>
-    <message>
-        <source>&lt;p&gt;The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;O mellor tirador foi &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; puntos.&lt;/p&gt;</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.&lt;/p&gt;</source>
-        <translation type="obsolete">
-            <numerusform>&lt;p&gt;O mellor asasino é &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; vítima nunha rolda.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;O mellor asasino é &lt;b&gt;%1&lt;/b&gt;, con &lt;b&gt;%2&lt;/b&gt; vítimas nunha rolda.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;p&gt;A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.&lt;/p&gt;</source>
-        <translation type="obsolete">
-            <numerusform>&lt;p&gt;Nesta rolda morrereu &lt;b&gt;un&lt;/b&gt; ourizo.&lt;/p&gt;</numerusform>
-            <numerusform>&lt;p&gt;Nesta rolda morreron &lt;b&gt;%1&lt;/b&gt; ourizos.&lt;/p&gt;</numerusform>
-        </translation>
-    </message>
     <message>
         <source>Details</source>
         <translation type="unfinished"></translation>
@@ -925,14 +820,6 @@ escolle outro alcume:</translation>
 <context>
     <name>PageMain</name>
     <message>
-        <source>Local Game (Play a game on a single computer)</source>
-        <translation type="obsolete">Partida local (xoga unha partida nun só computador)</translation>
-    </message>
-    <message>
-        <source>Network Game (Play a game across a network)</source>
-        <translation type="obsolete">Partida na rede (xoga unha partida na rede)</translation>
-    </message>
-    <message>
         <source>Play a game on a single computer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -989,17 +876,6 @@ escolle outro alcume:</translation>
     </message>
 </context>
 <context>
-    <name>PageNet</name>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>Please select server from the list above</source>
-        <translation type="obsolete">Selecciona un servidor da seguinte lista</translation>
-    </message>
-</context>
-<context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
@@ -1015,17 +891,6 @@ escolle outro alcume:</translation>
     </message>
 </context>
 <context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation type="obsolete">Partida na rede local</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation type="obsolete">Servidor oficial</translation>
-    </message>
-</context>
-<context>
     <name>PageOptions</name>
     <message>
         <source>New team</source>
@@ -1034,18 +899,6 @@ escolle outro alcume:</translation>
     <message>
         <source>Edit team</source>
         <translation>Editar o equipo</translation>
-    </message>
-    <message>
-        <source>Weapons set</source>
-        <translation type="obsolete">Armamento</translation>
-    </message>
-    <message>
-        <source>Edit</source>
-        <translation type="obsolete">Editar</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Xeral</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1211,32 +1064,12 @@ escolle outro alcume:</translation>
 <context>
     <name>PagePlayDemo</name>
     <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Aceptar</translation>
-    </message>
-    <message>
         <source>Rename dialog</source>
         <translation>Diálogo de cambio de nome</translation>
     </message>
     <message>
         <source>Enter new file name:</source>
         <translation>Introduce un novo nome para o ficheiro:</translation>
-    </message>
-    <message>
-        <source>Cannot rename to</source>
-        <translation type="obsolete">Non se pode cambiar o nome a</translation>
-    </message>
-    <message>
-        <source>Cannot delete file</source>
-        <translation type="obsolete">Non se pode borrar o ficheiro</translation>
-    </message>
-    <message>
-        <source>Please select record from the list</source>
-        <translation type="obsolete">Selecciona unha gravación da lista</translation>
     </message>
 </context>
 <context>
@@ -1250,78 +1083,12 @@ escolle outro alcume:</translation>
         <translation>Entrar</translation>
     </message>
     <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Actualizar</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Aceptar</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Administración</translation>
     </message>
     <message>
         <source>Room Name:</source>
         <translation>Nome da sala:</translation>
-    </message>
-    <message>
-        <source>This game is in lobby.
-You may join and start playing once the game starts.</source>
-        <translation type="obsolete">Aínda non comezou a partida.
-Podes entrar e empezar a xogar cando comece.</translation>
-    </message>
-    <message>
-        <source>This game is in progress.
-You may join and spectate now but you&apos;ll have to wait for the game to end to start playing.</source>
-        <translation type="obsolete">A partida estase xogando.
-Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</translation>
-    </message>
-    <message>
-        <source>%1 is the host. He may adjust settings and start the game.</source>
-        <translation type="obsolete">%1 é o anfitrión. Pode configurar e iniciar a partida.</translation>
-    </message>
-    <message>
-        <source>Random Map</source>
-        <translation type="obsolete">Mapa ao chou</translation>
-    </message>
-    <message>
-        <source>Games may be played on precreated or randomized maps.</source>
-        <translation type="obsolete">Pódese xogar en mapas elaborados ou mapas xerados ao chou.</translation>
-    </message>
-    <message>
-        <source>The Game Scheme defines general options and preferences like Round Time, Sudden Death or Vampirism.</source>
-        <translation type="obsolete">O modo de xogo establece as opcións xerais tales coma &quot;tempo por rolda&quot;, &quot;morte súbita&quot; ou &quot;vampirismo&quot;.</translation>
-    </message>
-    <message>
-        <source>The Weapon Scheme defines available weapons and their ammunition count.</source>
-        <translation type="obsolete">O armamento establece as armas dispoñibles e a cantidade de munición para cada unha.</translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 clients connected to this room.</source>
-        <translation type="obsolete">
-            <numerusform>Hai un cliente conectado a esta sala.</numerusform>
-            <numerusform>Hai %1 clientes conectados a esta sala.</numerusform>
-        </translation>
-    </message>
-    <message numerus="yes">
-        <source>There are %1 teams participating in this room.</source>
-        <translation type="obsolete">
-            <numerusform>Hai un equipo participando nesta sala.</numerusform>
-            <numerusform>Hai %1 equipos participando nesta sala.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Please enter room name</source>
-        <translation type="obsolete">Introduce o nome da sala</translation>
-    </message>
-    <message>
-        <source>Please select room from the list</source>
-        <translation type="obsolete">Selecciona unha sala da lista</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1362,10 +1129,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
         <translation>Non se pode destruír o terreo!</translation>
     </message>
     <message>
-        <source>Add an indestructable border around the terrain</source>
-        <translation type="obsolete">Engade un bordo indestructible arredor do terreo</translation>
-    </message>
-    <message>
         <source>Lower gravity</source>
         <translation>Baixa gravidade</translation>
     </message>
@@ -1376,10 +1139,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
     <message>
         <source>All hogs have a personal forcefield</source>
         <translation>Todos os ourizos teñen un escudo protector</translation>
-    </message>
-    <message>
-        <source>Enable random mines</source>
-        <translation type="obsolete">Activar as minas esparexidas</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
@@ -1500,26 +1259,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game (a quick game against the computer, settings are chosen for you)</source>
-        <translation type="obsolete">Partida simple (unha partida rápida xa configurada contra a intelixencia artificial)</translation>
-    </message>
-    <message>
-        <source>Multiplayer (play a hotseat game against your friends, or AI teams)</source>
-        <translation type="obsolete">Partida colectiva (xoga no teu computador contra os teus amigos ou contra a intelixencia artificial)</translation>
-    </message>
-    <message>
-        <source>Training Mode (Practice your skills in a range of training missions). IN DEVELOPMENT</source>
-        <translation type="obsolete">Adestramento (practica as túas habilidades nunha serie de misións de adestramento). EN DESENVOLVEMENTO</translation>
-    </message>
-    <message>
-        <source>Demos (Watch recorded demos)</source>
-        <translation type="obsolete">Demostracións (reproduce demostracións gravadas)</translation>
-    </message>
-    <message>
-        <source>Load (Load a previously saved game)</source>
-        <translation type="obsolete">Cargar (carga unha partida gardada)</translation>
-    </message>
-    <message>
         <source>Play a quick game against the computer with random settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1538,10 +1277,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
     <message>
         <source>Watch recorded demos</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation type="obsolete">Cargar</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
@@ -1618,10 +1353,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
         <translation>Información</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">Iniciar</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>Restrinxir a entrada</translation>
     </message>
@@ -1669,18 +1400,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
         <translation>Partidas a pantalla completa</translation>
     </message>
     <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">Interface a pantalla completa</translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">Activar os sons</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation type="obsolete">Activar a música</translation>
-    </message>
-    <message>
         <source>Show FPS</source>
         <translation>Amosar as FPS</translation>
     </message>
@@ -1691,14 +1410,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
     <message>
         <source>Append date and time to record file name</source>
         <translation>Engadir a data e maila hora ao nome dos ficheiros de gravación</translation>
-    </message>
-    <message>
-        <source>Frontend effects (requires restart)</source>
-        <translation type="obsolete">Efectos na interface (hai que reiniciar)</translation>
-    </message>
-    <message>
-        <source>Reduced quality</source>
-        <translation type="obsolete">Baixa calidade</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -1755,10 +1466,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
 </context>
 <context>
     <name>QComboBox</name>
-    <message>
-        <source>generated map...</source>
-        <translation type="obsolete">Mapa xerado...</translation>
-    </message>
     <message>
         <source>Human</source>
         <translation>Xogador</translation>
@@ -1855,28 +1562,8 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
         <translation>Membros do equipo</translation>
     </message>
     <message>
-        <source>Team</source>
-        <translation type="obsolete">Equipo</translation>
-    </message>
-    <message>
         <source>Fort</source>
         <translation>Forte</translation>
-    </message>
-    <message>
-        <source>Key binds</source>
-        <translation type="obsolete">Controis</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">Equipos</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armamento</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">Configuración audiovisual</translation>
     </message>
     <message>
         <source>Net game</source>
@@ -1922,30 +1609,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
         <translation>Versión</translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License</source>
-        <translation type="obsolete">Esta aplicación distribúese baixo a GNU General Public License</translation>
-    </message>
-    <message>
-        <source>Developers:</source>
-        <translation type="obsolete">Desenvolvedores:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">Gráficos:</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">Sons:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">Traducións:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">Un especial agradecemento a:</translation>
-    </message>
-    <message>
         <source>Weapons</source>
         <translation>Armamento</translation>
     </message>
@@ -1956,10 +1619,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
     <message>
         <source>Port:</source>
         <translation>Porto:</translation>
-    </message>
-    <message>
-        <source>Net nick</source>
-        <translation type="obsolete">Alcume</translation>
     </message>
     <message>
         <source>Resolution</source>
@@ -2004,10 +1663,6 @@ Poder entrar a ver, pero terás que agardar a que remate para xogar ti.</transla
     <message>
         <source>Crate Drops</source>
         <translation>Caída de caixas</translation>
-    </message>
-    <message>
-        <source>Game scheme</source>
-        <translation type="obsolete">Modo de xogo</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -2205,40 +1860,12 @@ Do you really want to quit?</source>
 <context>
     <name>QMessageBox</name>
     <message>
-        <source>Network</source>
-        <translation type="obsolete">Rede</translation>
-    </message>
-    <message>
         <source>Connection to server is lost</source>
         <translation>Perdeuse a conexión co servidor</translation>
     </message>
     <message>
         <source>Error</source>
         <translation>Erro</translation>
-    </message>
-    <message>
-        <source>Failed to open data directory:
-%1
-Please check your installation</source>
-        <translation type="obsolete">Non se puido abrir o directorio dos datos:
- %1
-Verifica a instalación</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armamento</translation>
-    </message>
-    <message>
-        <source>Can not edit default weapon set</source>
-        <translation type="obsolete">Non se pode editar o armamento por defecto</translation>
-    </message>
-    <message>
-        <source>Can not delete default weapon set</source>
-        <translation type="obsolete">Non se pode borrar o armamento por defecto</translation>
-    </message>
-    <message>
-        <source>Really delete this weapon set?</source>
-        <translation type="obsolete">Seguro que queres borrar este armamento?</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
@@ -2471,29 +2098,6 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>QObject</name>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation type="obsolete">Non se puido crear o directorio %1</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">Aceptar</translation>
-    </message>
-    <message>
-        <source>Nickname</source>
-        <translation type="obsolete">Alcume</translation>
-    </message>
-    <message>
-        <source>Please enter your nickname</source>
-        <translation type="obsolete">Introduce o teu alcume</translation>
-    </message>
-</context>
-<context>
     <name>QPushButton</name>
     <message>
         <source>default</source>
@@ -2548,14 +2152,6 @@ Do you still want to join the room?</source>
         <translation>Cargar</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="obsolete">Configuración</translation>
-    </message>
-    <message>
-        <source>Ready</source>
-        <translation type="obsolete">Preparado</translation>
-    </message>
-    <message>
         <source>More info</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2602,37 +2198,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Cancel uploading</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QTableWidget</name>
-    <message>
-        <source>Room Name</source>
-        <translation type="obsolete">Nome da sala</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>T</source>
-        <translation type="obsolete">T</translation>
-    </message>
-    <message>
-        <source>Owner</source>
-        <translation type="obsolete">Dono</translation>
-    </message>
-    <message>
-        <source>Map</source>
-        <translation type="obsolete">Mapa</translation>
-    </message>
-    <message>
-        <source>Rules</source>
-        <translation type="obsolete">Regras</translation>
-    </message>
-    <message>
-        <source>Weapons</source>
-        <translation type="obsolete">Armamento</translation>
     </message>
 </context>
 <context>
@@ -2729,21 +2294,6 @@ Do you still want to join the room?</source>
     </message>
 </context>
 <context>
-    <name>TCPBase</name>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Erro</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="obsolete">Non se puido iniciar o servidor: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine: %1 (</source>
-        <translation type="obsolete">Non se puido executar o motor: %1 (</translation>
-    </message>
-</context>
-<context>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
@@ -2759,53 +2309,6 @@ Do you still want to join the room?</source>
     <message>
         <source>Cancel</source>
         <translation type="unfinished">Cancelar</translation>
-    </message>
-</context>
-<context>
-    <name>ToggleButtonWidget</name>
-    <message>
-        <source>Vampirism</source>
-        <translation type="obsolete">Vampirismo</translation>
-    </message>
-    <message>
-        <source>Karma</source>
-        <translation type="obsolete">Karma</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation type="obsolete">Artillería</translation>
-    </message>
-    <message>
-        <source>Fort Mode</source>
-        <translation type="obsolete">Modo fortaleza</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation type="obsolete">Equipos divididos</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation type="obsolete">Terreo indestructible</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation type="obsolete">Con bordos</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation type="obsolete">Baixa gravidade</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation type="obsolete">Mira láser</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation type="obsolete">Invulnerable</translation>
-    </message>
-    <message>
-        <source>Add Mines</source>
-        <translation type="obsolete">Engadir minas</translation>
     </message>
 </context>
 <context>
@@ -2939,12 +2442,6 @@ Do you still want to join the room?</source>
         <translation>capturar</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">información
-dos ourizos</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>saír</translation>
     </message>
@@ -2988,22 +2485,6 @@ dos ourizos</translation>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation type="obsolete">Controis básicos</translation>
-    </message>
-    <message>
-        <source>Weapon controls</source>
-        <translation type="obsolete">Controis das armas</translation>
-    </message>
-    <message>
-        <source>Camera and cursor controls</source>
-        <translation type="obsolete">Controis da cámara e mailo cursor</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Outros</translation>
-    </message>
-    <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3022,10 +2503,6 @@ dos ourizos</translation>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation type="obsolete">Move os teus ourizos e apunta:</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation>Supera os obstáculos saltando:</translation>
@@ -3412,121 +2889,6 @@ dos ourizos</translation>
     <message>
         <source>DPad</source>
         <translation>Mando</translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -4,7 +4,7 @@
 <context>
     <name>AbstractPage</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/AbstractPage.cpp" line="54"/>
+        <location filename="../../../../QTfrontend/ui/page/AbstractPage.cpp" line="55"/>
         <source>Go back</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25,108 +25,63 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="24"/>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="25"/>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="26"/>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="27"/>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="28"/>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="29"/>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="30"/>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="31"/>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="32"/>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="33"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="35"/>
         <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="36"/>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="82"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="38"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="84"/>
         <source>IP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="37"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="39"/>
         <source>Nick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="38"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="40"/>
         <source>IP/Nick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="39"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="41"/>
         <source>Reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="40"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="42"/>
         <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="46"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="48"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="47"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="49"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="75"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="77"/>
         <source>you know why</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="82"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="84"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="82"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="84"/>
         <source>Please, specify %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="82"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="84"/>
         <source>nickname</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,6 +149,39 @@
     <message>
         <location filename="../../../../QTfrontend/ui/widget/gamecfgwidget.cpp" line="108"/>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="25"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="26"/>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="27"/>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="28"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="29"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="30"/>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="31"/>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="32"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="33"/>
+        <location filename="../../../../QTfrontend/ui/dialog/bandialog.cpp" line="34"/>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -277,7 +265,7 @@
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="1098"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1368"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1369"/>
         <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -322,7 +310,7 @@ Your password wasn&apos;t saved either.</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="1098"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1368"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1369"/>
         <source>Hedgewars - Empty nickname</source>
         <translation type="unfinished"></translation>
     </message>
@@ -342,41 +330,41 @@ Your password wasn&apos;t saved either.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1484"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1486"/>
         <source>Hedgewars - Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1484"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1486"/>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1640"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1945"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1642"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1947"/>
         <source>Cannot save record to file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1883"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1885"/>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1884"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1886"/>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1937"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1939"/>
         <source>Demo name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1937"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1939"/>
         <source>Demo name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -633,7 +621,7 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1501"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1503"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1996,12 +1984,12 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>QLabel</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="68"/>
+        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="71"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="70"/>
+        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="73"/>
         <source>This program is distributed under the GNU General Public License v2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2349,12 +2337,12 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1443"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1445"/>
         <source>Unable to start server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1501"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1503"/>
         <source>Connection to server is lost</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2385,18 +2373,18 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1915"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1917"/>
         <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="421"/>
         <source>Hedgewars - Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1916"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1918"/>
         <source>All file associations have been set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1921"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1923"/>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2434,18 +2422,18 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="109"/>
-        <location filename="../../../../QTfrontend/main.cpp" line="273"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="114"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="283"/>
         <source>Main - Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="110"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="115"/>
         <source>Cannot create directory %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/main.cpp" line="274"/>
+        <location filename="../../../../QTfrontend/main.cpp" line="284"/>
         <source>Failed to open data directory:
 %1
 
@@ -3635,149 +3623,6 @@ Do you still want to join the room?</source>
     <message>
         <location filename="../../../../QTfrontend/sdlkeys.h" line="182"/>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="2"/>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="3"/>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="4"/>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="5"/>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="6"/>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="7"/>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="8"/>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="9"/>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="10"/>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="11"/>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="12"/>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="13"/>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="14"/>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="15"/>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="16"/>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="17"/>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="18"/>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="19"/>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="20"/>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="21"/>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="22"/>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="23"/>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="24"/>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="25"/>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="26"/>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="27"/>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="28"/>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../../QTfrontend/servermessages.h" line="29"/>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -22,46 +22,6 @@
 <context>
     <name>BanDialog</name>
     <message>
-        <source>10 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>30 minutes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>1 hour</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>5 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>24 hours</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>3 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>7 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>14 days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>permanent</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>IP</source>
         <translation type="unfinished">ホスト名／ＩＰ</translation>
     </message>
@@ -103,6 +63,10 @@
     </message>
     <message>
         <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -152,15 +116,34 @@
         <translation>しくみを編集</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation type="obsolete">このオプションを有効にして、しくみを選ぶと武器を自動選択</translation>
-    </message>
-    <message>
         <source>Game Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -247,17 +230,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation type="obsolete">あなたの「%1」というニック名は
-Hedgewars.orgに登録されました。
-下にパスワードを入力して、または
-ゲーム構成に別の名を選択してください：
-</translation>
-    </message>
-    <message>
         <source>Nickname</source>
         <translation type="unfinished"></translation>
     </message>
@@ -338,18 +310,6 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HWMapContainer</name>
     <message>
-        <source>Map</source>
-        <translation type="obsolete">地図</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation type="obsolete">テーマ</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation type="obsolete">濾過</translation>
-    </message>
-    <message>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -380,22 +340,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Medium tunnels</source>
         <translation>中トンネル</translation>
-    </message>
-    <message>
-        <source>Large tunnels</source>
-        <translation type="obsolete">大トンネル</translation>
-    </message>
-    <message>
-        <source>Small floating islands</source>
-        <translation type="obsolete">子浮く島</translation>
-    </message>
-    <message>
-        <source>Medium floating islands</source>
-        <translation type="obsolete">中浮く島</translation>
-    </message>
-    <message>
-        <source>Large floating islands</source>
-        <translation type="obsolete">大浮く島</translation>
     </message>
     <message>
         <source>Seed</source>
@@ -558,10 +502,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>HWPasswordDialog</name>
-    <message>
-        <source>Password</source>
-        <translation type="obsolete">パスワード</translation>
-    </message>
     <message>
         <source>Login</source>
         <translation type="unfinished"></translation>
@@ -763,10 +703,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>General</source>
         <translation>一般</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">高級</translation>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
@@ -988,10 +924,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Delete weapon set</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">一般</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1339,10 +1271,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Load</source>
-        <translation type="obsolete">ロード</translation>
-    </message>
-    <message>
         <source>Load a previously saved game</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1416,10 +1344,6 @@ Please wait a few seconds and try again.</source>
         <translation>情報</translation>
     </message>
     <message>
-        <source>Start</source>
-        <translation type="obsolete">スタート</translation>
-    </message>
-    <message>
         <source>Restrict Joins</source>
         <translation>Restrict Joins</translation>
     </message>
@@ -1465,18 +1389,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Fullscreen</source>
         <translation>フルスクリーン</translation>
-    </message>
-    <message>
-        <source>Frontend fullscreen</source>
-        <translation type="obsolete">フルスクリーン　メニュー</translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation type="obsolete">サウンド</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation type="obsolete">音楽</translation>
     </message>
     <message>
         <source>Show FPS</source>
@@ -1545,10 +1457,6 @@ Please wait a few seconds and try again.</source>
 </context>
 <context>
     <name>QComboBox</name>
-    <message>
-        <source>generated map...</source>
-        <translation type="obsolete">生成地図...</translation>
-    </message>
     <message>
         <source>Human</source>
         <translation>人間</translation>
@@ -1649,18 +1557,6 @@ Please wait a few seconds and try again.</source>
         <translation>台場</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation type="obsolete">キー binds</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation type="obsolete">チーム</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation type="obsolete">オディオ/画面 設定</translation>
-    </message>
-    <message>
         <source>Net game</source>
         <translation>ネットゲーム</translation>
     </message>
@@ -1702,26 +1598,6 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Version</source>
         <translation>バーション</translation>
-    </message>
-    <message>
-        <source>Developers:</source>
-        <translation type="obsolete">開発者:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation type="obsolete">アート:</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation type="obsolete">音楽・音:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation type="obsolete">通訳者:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation type="obsolete">特別感謝:</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -2266,10 +2142,6 @@ Do you still want to join the room?</source>
         <translation>ロード</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation type="obsolete">設定</translation>
-    </message>
-    <message>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2560,12 +2432,6 @@ Do you still want to join the room?</source>
         <translation>録画</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation type="obsolete">針鼠
-情報</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>退出</translation>
     </message>
@@ -2609,22 +2475,6 @@ info</source>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation type="obsolete">基本コントロール</translation>
-    </message>
-    <message>
-        <source>Weapon controls</source>
-        <translation type="obsolete">武器コントロール</translation>
-    </message>
-    <message>
-        <source>Camera and cursor controls</source>
-        <translation type="obsolete">カメラとカーソルのコントロール</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">その他</translation>
-    </message>
-    <message>
         <source>Movement</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2643,10 +2493,6 @@ info</source>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation type="obsolete">‘ズミをうごかすとねらう：</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation>穴と障害を跳んで超える：</translation>
@@ -3032,121 +2878,6 @@ info</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
