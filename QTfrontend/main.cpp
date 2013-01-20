@@ -46,6 +46,11 @@
 #include <signal.h>
 #endif
 
+// Program resources
+#ifdef __APPLE__
+static CocoaInitializer * cocoaInit = NULL;
+#endif
+static FileEngineHandler * engine = NULL;
 
 //Determines the day of easter in year
 //from http://aa.usno.navy.mil/faq/docs/easter.php,adapted to C/C++
@@ -124,26 +129,31 @@ bool checkForFile(const QString & file)
         return true;
 }
 
-#ifdef __APPLE__
-static CocoaInitializer *cocoaInit = NULL;
-// Function to be called at end of program's termination on OS X to release
-// the NSAutoReleasePool contained within the CocoaInitializer.
-void releaseCocoaPool(void)
+// Guaranteed to be the last thing ran in the application's life time.
+// Closes resources that need to exist as long as possible.
+void closeResources(void)
 {
+#ifdef __APPLE__
     if (cocoaInit != NULL)
     {
         delete cocoaInit;
         cocoaInit = NULL;
     }
-}
 #endif
+    if (engine != NULL)
+    {
+        delete engine;
+        engine = NULL;
+    }
+}
 
 int main(int argc, char *argv[])
 {
+    // Since we're calling this first, closeResources() will be the last thing called after main() returns.
+    atexit(closeResources);
+
 #ifdef __APPLE__
-    // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
-    cocoaInit = new CocoaInitializer();
-    atexit(releaseCocoaPool);
+    cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
 
 #ifndef _WIN32
@@ -165,7 +175,7 @@ int main(int argc, char *argv[])
     splash->show();
 #endif
 
-    FileEngineHandler engine(argv[0]);
+    engine = new FileEngineHandler(argv[0]);
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -280,11 +290,11 @@ int main(int argc, char *argv[])
     }
 
     // setup PhysFS
-    engine.mount(datadir->absolutePath());
-    engine.mount(cfgdir->absolutePath() + "/Data");
-    engine.mount(cfgdir->absolutePath());
-    engine.setWriteDir(cfgdir->absolutePath());
-    engine.mountPacks();
+    engine->mount(datadir->absolutePath());
+    engine->mount(cfgdir->absolutePath() + "/Data");
+    engine->mount(cfgdir->absolutePath());
+    engine->setWriteDir(cfgdir->absolutePath());
+    engine->mountPacks();
 
     checkForFile("physfs://hedgewars.ini");
 
