@@ -81,9 +81,10 @@ ThemePrompt::ThemePrompt(QWidget* parent) : QDialog(parent)
 	{
 		QModelIndex index = themes->index(i, 0);
 		QToolButton * btn = new QToolButton();
+		bool dlc = themes->data(index, Qt::UserRole + 2).toBool();
 		btn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 		btn->setIcon(qVariantValue<QIcon>(themes->data(index, Qt::UserRole)));
-		btn->setText(themes->data(index, Qt::DisplayRole).toString());
+		btn->setText((dlc ? "*" : "") + themes->data(index, Qt::DisplayRole).toString());
 		btn->setIconSize(QSize(60, 60));
 		btn->setProperty("themeID", QVariant(i));
 		btn->setStyleSheet("padding: 2px;");

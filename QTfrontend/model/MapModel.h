@@ -64,6 +64,7 @@ class MapModel : public QStandardItemModel
             QString scheme; ///< Default scheme name or "locked", for mission-maps.
             QString weapons; ///< Default weaponset name or "locked", for missions-maps.
             QString desc; ///< The brief 1-2 sentence description of the mission, for mission-maps.
+            bool dlc; ///< True if this map was not packaged with the game
         };
 
         /**
@@ -131,7 +132,8 @@ class MapModel : public QStandardItemModel
             quint32 limit = 0,
             QString scheme = "",
             QString weapons = "",
-            QString desc = "");
+            QString desc = "",
+            bool dlc = false);
 };
 
 Q_DECLARE_METATYPE(MapModel::MapInfo)

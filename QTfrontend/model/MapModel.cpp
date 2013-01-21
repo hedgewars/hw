@@ -23,6 +23,7 @@
 
 #include <QSettings>
 
+#include "physfs.h"
 #include "MapModel.h"
 #include "HWApplication.h"
 
@@ -32,6 +33,8 @@ MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "
 
 void MapModel::loadMaps(MapType maptype)
 {
+    const QString appDir = QString(PHYSFS_getBaseDir());
+
     // this method resets the contents of this model (important to know for views).
     beginResetModel();
 
@@ -66,12 +69,13 @@ void MapModel::loadMaps(MapType maptype)
             QString scheme;
             QString weapons;
             QString desc;
+            bool dlc;
 
             // if there is a lua file for this map, then it's a mission
             bool isMission = mapLuaFile.exists();
             MapType type = isMission ? MissionMap : StaticMap;
 
-            // If we're supposed to ignore this type, continue
+            // if we're supposed to ignore this type, continue
             if (type != maptype) continue;
 
             // load map info from file
@@ -84,7 +88,7 @@ void MapModel::loadMaps(MapType maptype)
             }
             mapCfgFile.close();
 
-            // Load description (if applicable)
+            // load description (if applicable)
             if (isMission)
             {
                 QString locale = HWApplication::keyboardInputLocale().name();
@@ -92,6 +96,10 @@ void MapModel::loadMaps(MapType maptype)
                 QSettings descSettings(QString("physfs://Maps/%1/desc.txt").arg(map), QSettings::IniFormat);
                 desc = descSettings.value(locale, QString()).toString().replace("|", "\n").replace("\\,", ",");
             }
+
+            // detect if map is dlc
+            QString mapDir = PHYSFS_getRealDir(QString("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
+            dlc = !mapDir.startsWith(appDir);
 
             // let's use some semi-sane hedgehog limit, rather than none
             if (limit == 0)
@@ -117,7 +125,7 @@ void MapModel::loadMaps(MapType maptype)
 
             // we know everything there is about the map, let's get am item for it
             QStandardItem * item = MapModel::infoToItem(
-                QIcon(), caption, type, map, theme, limit, scheme, weapons, desc);
+                QIcon(), caption, type, map, theme, limit, scheme, weapons, desc, dlc);
 
             // append item to the list
             mapList.append(item);
@@ -170,9 +178,10 @@ QStandardItem * MapModel::infoToItem(
     quint32 limit,
     QString scheme,
     QString weapons,
-    QString desc)
+    QString desc,
+    bool dlc)
 {
-    QStandardItem * item = new QStandardItem(icon, caption);
+    QStandardItem * item = new QStandardItem(icon, (dlc ? "*" : "") + caption);
     MapInfo mapInfo;
     QVariant qvar(QVariant::UserType);
 
@@ -183,6 +192,7 @@ QStandardItem * MapModel::infoToItem(
     mapInfo.scheme = scheme;
     mapInfo.weapons = weapons;
     mapInfo.desc = desc.isEmpty() ? tr("No description available.") : desc;
+    mapInfo.dlc = dlc;
 
     qvar.setValue(mapInfo);
     item->setData(qvar, Qt::UserRole + 1);
