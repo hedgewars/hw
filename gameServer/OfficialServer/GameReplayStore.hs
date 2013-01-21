@@ -14,12 +14,13 @@ import CoreTypes
 
 
 saveReplay :: RoomInfo -> IO ()
-saveReplay r = when allPlayersHaveRegisteredAccounts $ do
-    time <- getCurrentTime
-    u <- liftM hashUnique newUnique
-    let fileName = "replays/" ++ show time ++ "-" ++ show u
+saveReplay r = do
     let gi = fromJust $ gameInfo r
-    let replayInfo = (teamsAtStart gi, Map.toList $ mapParams r, Map.toList $ params r, roundMsgs gi)
-    E.catch
-        (writeFile fileName (show replayInfo))
-        (\(e :: IOException) -> warningM "REPLAYS" $ "Couldn't write to " ++ fileName ++ ": " ++ show e)
+    when (allPlayersHaveRegisteredAccounts gi) $ do
+        time <- getCurrentTime
+        u <- liftM hashUnique newUnique
+        let fileName = "replays/" ++ show time ++ "-" ++ show u
+        let replayInfo = (teamsAtStart gi, Map.toList $ mapParams r, Map.toList $ params r, roundMsgs gi)
+        E.catch
+            (writeFile fileName (show replayInfo))
+            (\(e :: IOException) -> warningM "REPLAYS" $ "Couldn't write to " ++ fileName ++ ": " ++ show e)
