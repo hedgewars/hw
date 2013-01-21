@@ -58,11 +58,13 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 return color
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
-        let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif (newTeamHHNum rm) (hhsList hhsInfo)
+        let roomTeams = teams rm
+        let hhNum = let p = if not $ null roomTeams then hhnum $ head roomTeams else 4 in newTeamHHNum roomTeams p
+        let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif hhNum (hhsList hhsInfo)
         return $
-            if not . null . drop (maxTeams rm - 1) $ teams rm then
+            if not . null . drop (maxTeams rm - 1) $ roomTeams then
                 [Warning $ loc "too many teams"]
-            else if canAddNumber rm <= 0 then
+            else if canAddNumber roomTeams <= 0 then
                 [Warning $ loc "too many hedgehogs"]
             else if isJust $ findTeam rm then
                 [Warning $ loc "There's already a team with same name in the list"]
@@ -75,17 +77,18 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
+                AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam],
                 AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
                 ]
         where
-        canAddNumber r = 48 - (sum . map hhnum $ teams r)
+        canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
         findTeam = find (\t -> tName == teamname t) . teams
         dif = readInt_ difStr
         hhsList [] = []
         hhsList [_] = error "Hedgehogs list with odd elements number"
         hhsList (n:h:hhs) = HedgehogInfo n h : hhsList hhs
-        newTeamHHNum r = min 4 (canAddNumber r)
+        newTeamHHNum rt p = min p (canAddNumber rt)
         maxTeams r
             | roomProto r < 38 = 6
             | otherwise = 8
@@ -119,8 +122,9 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
 
 handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     cl <- thisClient
-    others <- roomOthersChans
     r <- thisRoom
+    clChan <- thisClientChans
+    roomChans <- roomClientsChans
 
     let maybeTeam = findTeam r
     let team = fromJust maybeTeam
@@ -129,10 +133,10 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
         else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > canAddNumber r + hhnum team then
-            []
+            [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
-            AnswerClients others ["HH_NUM", teamName, showB hhNumber]]
+            AnswerClients roomChans ["HH_NUM", teamName, showB hhNumber]]
     where
         hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
