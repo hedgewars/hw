@@ -177,7 +177,7 @@ void BGWidget::animate()
         update(oldPos.x(), oldPos.y(), xdiff+sprite.width(), ydiff+sprite.height());
     }
 
-    repaint(); // Repaint every frame. Prevents ghosting of widgets if widgets resize in runtime.
+    //repaint(); // Repaint every frame. Prevents ghosting of widgets if widgets resize in runtime.
 }
 
 void BGWidget::startAnimation()
