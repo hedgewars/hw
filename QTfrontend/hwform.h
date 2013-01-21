@@ -139,6 +139,8 @@ class HWForm : public QMainWindow
         void saveDemoWithCustomName();
         void openRegistrationPage();
 
+        void startGame();
+
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
         void UpdateTeamsLists();

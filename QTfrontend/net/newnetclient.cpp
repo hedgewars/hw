@@ -933,6 +933,15 @@ void HWNewNet::consoleCommand(const QString & cmd)
     RawSendNet(QString("CMD%1%2").arg(delimeter).arg(cmd));
 }
 
+bool HWNewNet::allPlayersReady()
+{
+    int ready = 0;
+    for (int i = 0; i < m_roomPlayersModel->rowCount(); i++)
+        if (m_roomPlayersModel->index(i, 0).data(PlayersListModel::Ready).toBool()) ready++;
+
+    return (ready == m_roomPlayersModel->rowCount());
+}
+
 void HWNewNet::startGame()
 {
     RawSendNet(QString("START_GAME"));
