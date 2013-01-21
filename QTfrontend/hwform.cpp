@@ -21,6 +21,7 @@
 #include <QTextStream>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QListWidget>
 #include <QStackedLayout>
 #include <QLineEdit>
@@ -143,7 +144,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
     this->setStyleSheet(styleSheet);
     ui.setupUi(this);
-    setMinimumSize(760, 580);
+    setMinimumSize(760, 610);
     //setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 
@@ -1733,6 +1734,7 @@ void HWForm::NetGameMaster()
         // disconnect connections first to ensure their inexistance and not to connect twice
         ui.pageNetGame->BtnStart->disconnect(hwnet);
         ui.pageNetGame->BtnUpdate->disconnect(hwnet);
+        ui.pageNetGame->leRoomName->disconnect(hwnet);
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
         ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString&)));
@@ -1761,6 +1763,8 @@ void HWForm::NetGameSlave()
         NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
         connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)), netAmmo, SLOT(setNetSchemeConfig(QStringList &)));
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
+
+        ui.pageNetGame->setRoomName(hwnet->getRoom());
 
         ui.pageNetGame->pGameCFG->GameSchemes->view()->disconnect(hwnet);
         connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)),

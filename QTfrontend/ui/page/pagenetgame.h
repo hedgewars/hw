@@ -48,6 +48,7 @@ class PageNetGame : public AbstractPage
         QPushButton *BtnMaster;
         QPushButton *BtnStart;
         QPushButton *BtnUpdate;
+        HistoryLineEdit *leRoomName;
 
         QAction * restrictJoins;
         QAction * restrictTeamAdds;
@@ -63,6 +64,9 @@ class PageNetGame : public AbstractPage
         void onUpdateClick();
         void setMasterMode(bool isMaster);
 
+    private slots:
+        void onRoomNameEdited();
+
     signals:
         void SetupClicked();
         void askForUpdateRoomName(const QString &);
@@ -73,8 +77,8 @@ class PageNetGame : public AbstractPage
         QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
-        HistoryLineEdit * leRoomName;
         QPushButton * btnSetup;
+        QLabel * lblRoomNameReadOnly;
 };
 
 #endif
