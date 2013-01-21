@@ -33,7 +33,7 @@ selection-color: #00351d;
 a { color:#c8c8ff; }
 
 QLineEdit, QListWidget, QListView, QTableView, QTextBrowser, QSpinBox, QComboBox,
-QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item {
+QComboBox QAbstractItemView, QPlainTextEdit, QMenu::item, #labelLikeLineEdit {
 background-color: rgba(13, 5, 68, 70%);
 }
 
@@ -45,7 +45,7 @@ QPushButton, QListWidget, QListView, QTableView, QLineEdit, QHeaderView,
 QTextBrowser, QSpinBox, QToolBox, QComboBox, QPlainTextEdit,
 QComboBox QAbstractItemView, IconedGroupBox,
 .QGroupBox, GameCFGWidget, TeamSelWidget, SelWeaponWidget,
-QTabWidget::pane, QTabBar::tab, #mapPreview {
+QTabWidget::pane, QTabBar::tab, #mapPreview, #labelLikeLineEdit {
 border: solid;
 border-width: 3px;
 border-color: #ffcc00;
@@ -69,7 +69,7 @@ background-color: #100744;
 }
 
 QLineEdit, QListWidget, QListView, QTableView, QTextBrowser,
-QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview {
+QSpinBox, QToolBox, QPlainTextEdit, QToolButton, #mapPreview, #labelLikeLineEdit {
 border-radius: 10px;
 }
 

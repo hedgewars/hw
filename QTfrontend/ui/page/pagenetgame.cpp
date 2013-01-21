@@ -32,25 +32,76 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setSizeConstraint(QLayout::SetMinimumSize);
-    //pageLayout->setSpacing(1);
-    pageLayout->setColumnStretch(0, 50);
-    pageLayout->setColumnStretch(1, 50);
-
-    // chatwidget
-    chatWidget = new HWChatWidget(this, true);
-    chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
-    chatWidget->setIgnoreListKick(true); // kick ignored players automatically
-    pageLayout->addWidget(chatWidget, 1, 0, 1, 2);
+    pageLayout->setColumnStretch(0, 1);
+    pageLayout->setColumnStretch(1, 1);
     pageLayout->setRowStretch(0, 0);
-    pageLayout->setRowStretch(1, 0);
+    pageLayout->setRowStretch(1, 1);
+    pageLayout->setRowStretch(2, 1);
+
+    // Room config
+
+    QHBoxLayout * roomConfigLayout = new QHBoxLayout();
+    pageLayout->addLayout(roomConfigLayout, 0, 0, 1, 2);
+    roomConfigLayout->setSpacing(0);
+
+    leRoomName = new HistoryLineEdit(this, 10);
+    leRoomName->setMaxLength(60);
+    leRoomName->setMinimumWidth(400);
+    leRoomName->setMaximumWidth(600);
+    leRoomName->setFixedHeight(30);
+    leRoomName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    roomConfigLayout->addWidget(leRoomName, 100);
+
+    QLabel * lblRoomName = new QLabel(tr("Room name: "), leRoomName);
+    lblRoomName->setStyleSheet("font: 12px; font-weight: bold;");
+    lblRoomName->setStyleSheet(QString("font: 12px; font-weight: bold; background: none; margin-left: -%1px; margin-top: 8px;").arg(lblRoomName->width() - 20));
+    leRoomName->setStyleSheet(QString("font: 12px; border-right: 0; padding-left: %1px; padding-bottom: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;").arg(lblRoomName->width() - 14));
+
+    BtnUpdate = new QPushButton();
+    BtnUpdate->setEnabled(false);
+    BtnUpdate->setText(tr("Update"));
+    BtnUpdate->setFixedHeight(leRoomName->height() - 0);
+    BtnUpdate->setStyleSheet("border-top-left-radius: 0px; border-bottom-left-radius: 0px; padding: auto 4px;");
+    roomConfigLayout->addWidget(BtnUpdate, 0);
+
+    lblRoomNameReadOnly = new QLabel();
+    lblRoomNameReadOnly->setMinimumWidth(400);
+    lblRoomNameReadOnly->setMaximumWidth(600);
+    lblRoomNameReadOnly->setFixedHeight(30);
+    lblRoomNameReadOnly->setObjectName("labelLikeLineEdit");
+    lblRoomNameReadOnly->setStyleSheet("font: 12px;");
+    lblRoomNameReadOnly->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    lblRoomNameReadOnly->setVisible(false);
+    roomConfigLayout->addWidget(lblRoomNameReadOnly, 100);
+
+    roomConfigLayout->addSpacing(10);
+
+    BtnMaster = new QPushButton();
+    BtnMaster->setText(tr("Room controls"));
+    BtnMaster->setFixedHeight(leRoomName->height() - 0);
+    BtnMaster->setStyleSheet("QPushButton { padding: auto 4px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
+    roomConfigLayout->addWidget(BtnMaster, 0);
+
+    roomConfigLayout->addStretch(1);
+
+    // Game config
 
     pGameCFG = new GameCFGWidget(this);
-    pageLayout->addWidget(pGameCFG, 0, 0);
+    pageLayout->addWidget(pGameCFG, 1, 0);
+
+    // Teams
 
     pNetTeamsWidget = new TeamSelWidget(this);
     pNetTeamsWidget->setAcceptOuter(true);
     pNetTeamsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    pageLayout->addWidget(pNetTeamsWidget, 0, 1, 1, 1);
+    pageLayout->addWidget(pNetTeamsWidget, 1, 1, 1, 1);
+
+    // Chat
+    
+    chatWidget = new HWChatWidget(this, true);
+    chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
+    chatWidget->setIgnoreListKick(true); // kick ignored players automatically
+    pageLayout->addWidget(chatWidget, 2, 0, 1, 2);
 
     return pageLayout;
 }
@@ -69,26 +120,18 @@ QLayout * PageNetGame::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout;
 
-    leRoomName = new HistoryLineEdit(this,10);
-    leRoomName->setMaxLength(60);
-    leRoomName->setMinimumWidth(200);
-    leRoomName->setMaximumWidth(400);
+    // Ready button
 
-    //Button to signify whether the player is ready to start playing
     BtnGo = new QPushButton(this);
     BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
     BtnGo->setIconSize(QSize(25, 34));
     BtnGo->setMinimumWidth(50);
     BtnGo->setMinimumHeight(50);
 
-    bottomLayout->addWidget(leRoomName);
-    BtnUpdate = addButton(QAction::tr("Update"), bottomLayout, 1);
-
     bottomLayout->addStretch();
     bottomLayout->addWidget(BtnGo);
 
-    BtnMaster = addButton(tr("Control"), bottomLayout, 3);
-    bottomLayout->insertStretch(3, 100);
+    // Start button
 
     const QIcon& lp = QIcon(":/res/Start.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
@@ -110,6 +153,9 @@ void PageNetGame::connectSignals()
     connect(btnSetup, SIGNAL(clicked()), this, SIGNAL(SetupClicked()));
 
     connect(BtnUpdate, SIGNAL(clicked()), this, SLOT(onUpdateClick()));
+    connect(leRoomName, SIGNAL(returnPressed()), this, SLOT(onUpdateClick()));
+
+    connect(leRoomName, SIGNAL(textChanged(const QString &)), this, SLOT(onRoomNameEdited()));
 }
 
 PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
@@ -122,7 +168,6 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
     restrictJoins->setCheckable(true);
     restrictTeamAdds = new QAction(QAction::tr("Restrict Team Additions"), menu);
     restrictTeamAdds->setCheckable(true);
-    //menu->addAction(startGame);
     menu->addAction(restrictJoins);
     menu->addAction(restrictTeamAdds);
 
@@ -155,12 +200,18 @@ void PageNetGame::setReadyStatus(bool isReady)
         BtnGo->setIcon(QIcon(":/res/lightbulb_off.png"));
 }
 
+void PageNetGame::onRoomNameEdited()
+{
+    BtnUpdate->setEnabled(true);
+}
+
 void PageNetGame::onUpdateClick()
 {
     if (!leRoomName->text().trimmed().isEmpty())
     {
         emit askForUpdateRoomName(leRoomName->text());
         leRoomName->rememberCurrentText();
+        BtnUpdate->setEnabled(false);
     }
     else
     {
@@ -179,6 +230,8 @@ void PageNetGame::setRoomName(const QString & roomName)
 {
     leRoomName->setText(roomName);
     leRoomName->rememberCurrentText();
+    lblRoomNameReadOnly->setText(roomName);
+    BtnUpdate->setEnabled(false);
 }
 
 void PageNetGame::setMasterMode(bool isMaster)
@@ -187,6 +240,7 @@ void PageNetGame::setMasterMode(bool isMaster)
     BtnStart->setVisible(isMaster);
     BtnUpdate->setVisible(isMaster);
     leRoomName->setVisible(isMaster);
+    lblRoomNameReadOnly->setVisible(!isMaster);
 }
 
 void PageNetGame::setUser(const QString & nickname)
