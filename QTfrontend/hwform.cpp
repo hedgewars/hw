@@ -1732,7 +1732,7 @@ void HWForm::NetGameMaster()
     if (hwnet)
     {
         // disconnect connections first to ensure their inexistance and not to connect twice
-        ui.pageNetGame->BtnStart->disconnect(hwnet);
+        ui.pageNetGame->BtnStart->disconnect(this);
         ui.pageNetGame->BtnUpdate->disconnect(hwnet);
         ui.pageNetGame->leRoomName->disconnect(hwnet);
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
@@ -1741,7 +1741,7 @@ void HWForm::NetGameMaster()
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
 
-        connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), hwnet, SLOT(startGame()));
+        connect(ui.pageNetGame->BtnStart, SIGNAL(clicked()), this, SLOT(startGame()));
         connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
         connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
         connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
@@ -1970,4 +1970,18 @@ void HWForm::showFeedbackDialog()
 {
     FeedbackDialog dialog(this);
     dialog.exec();
+}
+
+void HWForm::startGame()
+{
+    QMessageBox questionMsg(this);
+    questionMsg.setIcon(QMessageBox::Question);
+    questionMsg.setWindowTitle(QMessageBox::tr("Not all players are ready"));
+    questionMsg.setText(QMessageBox::tr("Are you sure you want to start this game?\nNot all players are ready."));
+    questionMsg.setWindowModality(Qt::WindowModal);
+    questionMsg.addButton(QMessageBox::Yes);
+    questionMsg.addButton(QMessageBox::Cancel);
+
+    if (hwnet->allPlayersReady() || questionMsg.exec() == QMessageBox::Yes)
+        hwnet->startGame();
 }

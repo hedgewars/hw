@@ -185,7 +185,7 @@ handleCmd_inRoom ["START_GAME"] = do
     let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
     let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
 
-    if isMaster cl && playersIn rm == readyPlayers rm && not (isJust $ gameInfo rm) then
+    if isMaster cl && not (isJust $ gameInfo rm) then
         if enoughClans rm then
             return [
                 ModifyRoom
