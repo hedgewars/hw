@@ -234,10 +234,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
 
     if isInGame cl then
         if isJust $ gameInfo rm then
-            if (isMaster cl && isCorrect) then
-                return $ FinishGame : unsetInGameState
-                else
-                return $ unsetInGameState ++ map SendTeamRemovalMessage clTeams
+            return $ unsetInGameState ++ map SendTeamRemovalMessage clTeams
             else
             return unsetInGameState
         else

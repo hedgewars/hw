@@ -383,7 +383,7 @@ processAction (SendTeamRemovalMessage teamName) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     gi <- io $ room'sM rnc gameInfo ri
-    when (isJust gi && 0 == teamsInGameNumber (fromJust gi)) $
+    when (0 == teamsInGameNumber (fromJust gi)) $
         processAction FinishGame
     where
         rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
