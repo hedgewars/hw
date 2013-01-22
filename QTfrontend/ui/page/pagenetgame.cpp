@@ -28,6 +28,9 @@
 #include "teamselect.h"
 #include "chatwidget.h"
 
+const int cutoffHeight = 688; /* Don't make this number below 605, or else it'll
+                                 let the GameCFGWidget shrink too much before switching to tabbed mode. */
+
 QLayout * PageNetGame::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
@@ -35,7 +38,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
     pageLayout->setRowStretch(0, 0);
-    pageLayout->setRowStretch(1, 1);
+    pageLayout->setRowStretch(1, 0);
     pageLayout->setRowStretch(2, 1);
 
     // Room config
@@ -93,14 +96,16 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 
     pNetTeamsWidget = new TeamSelWidget(this);
     pNetTeamsWidget->setAcceptOuter(true);
-    pNetTeamsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    pageLayout->addWidget(pNetTeamsWidget, 1, 1, 1, 1);
+    pNetTeamsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    pageLayout->addWidget(pNetTeamsWidget, 1, 1);
 
     // Chat
     
     chatWidget = new HWChatWidget(this, true);
     chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     chatWidget->setIgnoreListKick(true); // kick ignored players automatically
+    chatWidget->setMinimumHeight(350);
+    chatWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     pageLayout->addWidget(chatWidget, 2, 0, 1, 2);
 
     return pageLayout;
@@ -172,8 +177,21 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
     menu->addAction(restrictTeamAdds);
 
     BtnMaster->setMenu(menu);
+
+    if (height() < cutoffHeight)
+        pGameCFG->setTabbed(true);
 }
 
+void PageNetGame::resizeEvent(QResizeEvent * event)
+{
+    int oldHeight = event->oldSize().height();
+    int newHeight = event->size().height();
+
+    if (newHeight < cutoffHeight && oldHeight >= cutoffHeight)
+        pGameCFG->setTabbed(true);
+    else if (newHeight >= cutoffHeight && oldHeight < cutoffHeight)
+        pGameCFG->setTabbed(false);
+}
 
 void PageNetGame::displayError(const QString & message)
 {

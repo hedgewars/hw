@@ -71,6 +71,9 @@ class PageNetGame : public AbstractPage
         void SetupClicked();
         void askForUpdateRoomName(const QString &);
 
+    protected:
+        void resizeEvent(QResizeEvent * event);
+
     private:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();

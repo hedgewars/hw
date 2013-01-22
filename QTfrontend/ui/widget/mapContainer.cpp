@@ -65,7 +65,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     linearGrad.setColorAt(0, QColor(66, 115, 225));
 
     mainLayout.setContentsMargins(HWApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin),
-                                  1,
+                                  10,
                                   HWApplication::style()->pixelMetric(QStyle::PM_LayoutRightMargin),
                                   HWApplication::style()->pixelMetric(QStyle::PM_LayoutBottomMargin));
 
@@ -131,7 +131,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     QLabel * lblMapPreviewText = new QLabel(this);
     lblMapPreviewText->setText(tr("Map preview:"));
-    leftLayout->addWidget(lblMapPreviewText, 0, Qt::AlignLeft);
+    leftLayout->addWidget(lblMapPreviewText, 0);
+    leftLayout->addSpacing(2);
 
     /* Map Preview */
 

@@ -31,6 +31,7 @@ class QCheckBox;
 class QVBoxLayout;
 class QLabel;
 class QTableView;
+class QTabWidget;
 
 class GameCFGWidget : public QGroupBox
 {
@@ -56,6 +57,7 @@ class GameCFGWidget : public QGroupBox
         void fullNetConfig();
         void resendSchemeData();
         void setMaster(bool master);
+        void setTabbed(bool tabbed);
 
     signals:
         void paramChanged(const QString & param, const QStringList & value);
@@ -79,7 +81,7 @@ class GameCFGWidget : public QGroupBox
         void updateModelViews();
 
     private:
-        QGridLayout mainLayout;
+        QVBoxLayout mainLayout;
         QCheckBox * bindEntries;
         QString curNetAmmoName;
         QString curNetAmmo;
@@ -87,6 +89,16 @@ class GameCFGWidget : public QGroupBox
         QString m_curScript;
         bool m_master;
         QList<QWidget *> m_childWidgets;
+        QGridLayout * GBoxOptionsLayout;
+        QWidget * OptionsInnerContainer;
+        QWidget * StackContainer;
+
+        QWidget * mapContainerFree;
+        QWidget * mapContainerTabbed;
+        QWidget * optionsContainerFree;
+        QWidget * optionsContainerTabbed;
+        bool tabbed;
+        QTabWidget * tabs;
 
         void setNetAmmo(const QString& name, const QString& ammo);
 
