@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTableView>
+#include <QTabWidget>
 #include <QPushButton>
 #include <QDebug>
 #include <QList>
@@ -43,31 +44,75 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     , seedRegexp("\\{[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\\}")
 {
     mainLayout.setMargin(0);
+    setMinimumHeight(310);
+    setMaximumHeight(447);
+    setMinimumWidth(470);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    pMapContainer = new HWMapContainer(this);
-    mainLayout.addWidget(pMapContainer, 0, 0, Qt::AlignHCenter | Qt::AlignTop);
-    pMapContainer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    pMapContainer->setFixedSize(460, 275);
+    // Easy containers for the map/game options in either stacked or tabbed mode
 
-    IconedGroupBox *GBoxOptions = new IconedGroupBox(this);
-    m_childWidgets << GBoxOptions;
-    GBoxOptions->setFixedWidth(pMapContainer->width());
-    GBoxOptions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Minimum);
-    mainLayout.addWidget(GBoxOptions, 1, 0);
+    mapContainerFree = new QWidget();
+    mapContainerTabbed = new QWidget();
+    optionsContainerFree = new QWidget();
+    optionsContainerTabbed = new QWidget();
+    tabbed = false;
 
-    QGridLayout *GBoxOptionsLayout = new QGridLayout(GBoxOptions);
+    // Container for when in tabbed mode
 
-    GBoxOptions->setTitle(tr("Game Options"));
-    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), GBoxOptions), 1, 0);
+    tabs = new QTabWidget(this);
+    tabs->setFixedWidth(470);
+    tabs->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    tabs->addTab(mapContainerTabbed, tr("Map"));
+    tabs->addTab(optionsContainerTabbed, tr("Game options"));
+    tabs->setObjectName("gameCfgWidgetTabs");
+    mainLayout.addWidget(tabs, 1);
+    tabs->setVisible(false);
 
-    Scripts = new QComboBox(GBoxOptions);
+    // Container for when in stacked mode
+
+    StackContainer = new QWidget();
+    StackContainer->setObjectName("gameStackContainer");
+    mainLayout.addWidget(StackContainer, 1);
+    QVBoxLayout * stackLayout = new QVBoxLayout(StackContainer);
+
+    // Map options
+
+    pMapContainer = new HWMapContainer(mapContainerFree);
+    stackLayout->addWidget(mapContainerFree, 0, Qt::AlignHCenter);
+    pMapContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    pMapContainer->setFixedSize(width() - 14, 278);
+    mapContainerFree->setFixedSize(pMapContainer->width(), pMapContainer->height());
+
+    // Horizontal divider
+
+    QFrame * divider = new QFrame();
+    divider->setFrameShape(QFrame::HLine);
+    divider->setFrameShadow(QFrame::Plain);
+    stackLayout->addWidget(divider, 0, Qt::AlignBottom);
+    //stackLayout->setRowMinimumHeight(1, 10);
+
+    // Game options
+
+    optionsContainerTabbed->setContentsMargins(0, 0, 0, 0);
+    optionsContainerFree->setFixedSize(width() - 14, 140);
+    stackLayout->addWidget(optionsContainerFree, 0, Qt::AlignHCenter);
+
+    OptionsInnerContainer = new QWidget(optionsContainerFree);
+    m_childWidgets << OptionsInnerContainer;
+    OptionsInnerContainer->setFixedSize(optionsContainerFree->width(), optionsContainerFree->height());
+    OptionsInnerContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    GBoxOptionsLayout = new QGridLayout(OptionsInnerContainer);
+
+    GBoxOptionsLayout->addWidget(new QLabel(QLabel::tr("Style"), this), 1, 0);
+
+    Scripts = new QComboBox(this);
     GBoxOptionsLayout->addWidget(Scripts, 1, 1);
 
     Scripts->setModel(DataManager::instance().gameStyleModel());
     m_curScript = Scripts->currentText();
     connect(Scripts, SIGNAL(currentIndexChanged(int)), this, SLOT(scriptChanged(int)));
 
-    QWidget *SchemeWidget = new QWidget(GBoxOptions);
+    QWidget *SchemeWidget = new QWidget(this);
     GBoxOptionsLayout->addWidget(SchemeWidget, 2, 0, 1, 2);
 
     QGridLayout *SchemeWidgetLayout = new QGridLayout(SchemeWidget);
@@ -122,6 +167,31 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(drawnMapChanged(const QByteArray &)), this, SLOT(onDrawnMapChanged(const QByteArray &)));
 
     connect(&DataManager::instance(), SIGNAL(updated()), this, SLOT(updateModelViews()));
+}
+
+void GameCFGWidget::setTabbed(bool tabbed)
+{
+    if (tabbed && !this->tabbed)
+    { // Make tabbed
+        tabs->setCurrentIndex(0);
+        StackContainer->setVisible(false);
+        tabs->setVisible(true);
+        pMapContainer->setParent(mapContainerTabbed);
+        OptionsInnerContainer->setParent(optionsContainerTabbed);
+        pMapContainer->setVisible(true);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        this->tabbed = true;
+    }
+    else if (!tabbed && this->tabbed)
+    { // Make stacked
+        pMapContainer->setParent(mapContainerFree);
+        OptionsInnerContainer->setParent(optionsContainerFree);
+        tabs->setVisible(false);
+        StackContainer->setVisible(true);
+        pMapContainer->setVisible(true);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        this->tabbed = false;
+    }
 }
 
 void GameCFGWidget::jumpToSchemes()

@@ -144,7 +144,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
     this->setStyleSheet(styleSheet);
     ui.setupUi(this);
-    setMinimumSize(760, 610);
+    setMinimumSize(760, 580);
     //setFocusPolicy(Qt::StrongFocus);
     CustomizePalettes();
 

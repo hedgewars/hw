@@ -273,7 +273,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
-    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 250);
+    addScrArea(framePlaying, p.color(QPalette::Window).light(105), 150);
     addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
 }
 
