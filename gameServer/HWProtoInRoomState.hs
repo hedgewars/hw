@@ -132,8 +132,8 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     return $
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
-        else if isNothing maybeTeam
-            return []
+        else if isNothing maybeTeam then
+            []
         else if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber r + hhnum team then
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
