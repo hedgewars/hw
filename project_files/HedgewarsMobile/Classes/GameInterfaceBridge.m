@@ -160,6 +160,10 @@ static UIViewController *callingController;
     if([[settings objectForKey:@"alternate"] boolValue] == YES)
         [gameParameters addObject:@"--altdmg"];
 
+#ifdef DEBUG
+    [gameParameters addObject:@"--showfps"];
+#endif
+
     if ([HWUtils gameType] == gtSave)
         [gameParameters addObject:self.savePath];
 
