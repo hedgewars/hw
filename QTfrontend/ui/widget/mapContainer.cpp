@@ -630,7 +630,6 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
     intSetMap(map);
 }
 
-
 void HWMapContainer::updateModelViews()
 {
     // restore theme selection
@@ -673,7 +672,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     lblDesc->hide();
     btnLoadMap->hide();
     btnEditMap->hide();
-    btnRandomize->hide();
 
     switch (type)
     {
@@ -683,7 +681,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Map size:"));
             lblMapList->show();
             generationStyles->show();
-            btnRandomize->show();
             break;
         case MapModel::GeneratedMaze:
             mapgen = MAPGEN_MAZE;
@@ -691,7 +688,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Maze style:"));
             lblMapList->show();
             mazeStyles->show();
-            btnRandomize->show();
             break;
         case MapModel::HandDrawnMap:
             mapgen = MAPGEN_DRAWN;
@@ -707,7 +703,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             missionMapList->show();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
-            btnRandomize->show();
             emit mapChanged(m_curMap);
             break;
         case MapModel::StaticMap:
@@ -716,7 +711,6 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
             staticMapList->show();
-            btnRandomize->show();
             emit mapChanged(m_curMap);
             break;
         default:
@@ -749,9 +743,11 @@ void HWMapContainer::updateThemeButtonSize()
     else
     {
         QSize iconSize = btnTheme->icon().actualSize(QSize(65535, 65535));
-        btnTheme->setIconSize(iconSize);
         btnTheme->setFixedHeight(64);
+        btnTheme->setIconSize(iconSize);
     }
+
+    repaint();
 }
 
 void HWMapContainer::showThemePrompt()

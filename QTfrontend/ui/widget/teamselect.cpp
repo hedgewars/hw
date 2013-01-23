@@ -237,6 +237,8 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
         pRemoveTeams->resize(pRemoveTeams->size().width(), szh1.height());
     }
 
+    repaint();
+
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
 
@@ -297,7 +299,9 @@ void TeamSelWidget::resetPlayingTeams(const QList<HWTeam>& teamslist)
     m_curNotPlayingTeams.clear();
 
     foreach(HWTeam team, teamslist)
-    addTeam(team);
+        addTeam(team);
+
+    repaint();
 }
 
 bool TeamSelWidget::isPlaying(const HWTeam &team) const
@@ -319,4 +323,11 @@ void TeamSelWidget::pre_changeTeamStatus(const HWTeam & team)
 {
     //team.setColor(framePlaying->getNextColor());
     emit acceptRequested(team);
+}
+
+void TeamSelWidget::repaint()
+{
+    QWidget::repaint();
+    framePlaying->repaint();
+    frameDontPlaying->repaint();
 }

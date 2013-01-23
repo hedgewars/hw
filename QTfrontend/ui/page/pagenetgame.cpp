@@ -104,7 +104,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     chatWidget = new HWChatWidget(this, true);
     chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     chatWidget->setIgnoreListKick(true); // kick ignored players automatically
-    chatWidget->setMinimumHeight(350);
+    chatWidget->setMinimumHeight(50);
     chatWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     pageLayout->addWidget(chatWidget, 2, 0, 1, 2);
 
