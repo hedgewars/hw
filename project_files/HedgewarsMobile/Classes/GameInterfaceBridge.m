@@ -96,7 +96,6 @@ static UIViewController *callingController;
 
 // main routine for calling the actual game engine
 -(void) engineLaunch {
-    const char *gameArgs[11];
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
@@ -127,34 +126,60 @@ static UIViewController *callingController;
     // disable tooltips on iPhone
     if (IS_IPAD() == NO)
         tmpQuality = tmpQuality | 0x00000400;
+    NSString *rawQuality = [NSString stringWithFormat:@"%d",tmpQuality];
+    NSString *documentsDirectory = DOCUMENTS_FOLDER();
 
-    // prevents using an empty nickname
-    NSString *username = [settings objectForKey:@"username"];
-    if ([username length] == 0)
-        username = [NSString stringWithFormat:@"MobileUser-%@",ipcString];
-
-    gameArgs[ 0] = [ipcString UTF8String];                                                      //ipcPort
-    gameArgs[ 1] = [horizontalSize UTF8String];                                                 //cScreenWidth
-    gameArgs[ 2] = [verticalSize UTF8String];                                                   //cScreenHeight
-    gameArgs[ 3] = [[NSString stringWithFormat:@"%d",tmpQuality] UTF8String];                   //quality
-    gameArgs[ 4] = [localeString UTF8String];                                                   //cLocaleFName
-    gameArgs[ 5] = [username UTF8String];                                                       //UserNick
-    gameArgs[ 6] = [[[settings objectForKey:@"sound"] stringValue] UTF8String];                 //isSoundEnabled
-    gameArgs[ 7] = [[[settings objectForKey:@"music"] stringValue] UTF8String];                 //isMusicEnabled
-    gameArgs[ 8] = [[[settings objectForKey:@"alternate"] stringValue] UTF8String];             //cAltDamage
-    gameArgs[ 9] = [resourcePath UTF8String];                                                   //PathPrefix
-    gameArgs[10] = ([HWUtils gameType] == gtSave) ? [self.savePath UTF8String] : NULL;          //recordFileName
-
+    NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
+                                      @"--internal",
+                                      @"--port", ipcString,
+                                      @"--width", horizontalSize,
+                                      @"--height", verticalSize,
+                                      @"--raw-quality", rawQuality,
+                                      @"--locale", localeString,
+                                      @"--prefix", resourcePath,
+                                      @"--user-prefix", documentsDirectory,
+                                      nil];
     [verticalSize release];
     [horizontalSize release];
     [resourcePath release];
     [localeString release];
     [ipcString release];
 
+    NSString *username = [settings objectForKey:@"username"];
+    if ([username length] > 0) {
+        [gameParameters addObject:@"--nick"];
+        [gameParameters addObject: username];
+    }
+
+    if ([[settings objectForKey:@"sound"] boolValue] == NO)
+        [gameParameters addObject:@"--nosound"];
+
+    if ([[settings objectForKey:@"music"] boolValue] == NO)
+        [gameParameters addObject:@"--nomusic"];
+
+    if([[settings objectForKey:@"alternate"] boolValue] == YES)
+        [gameParameters addObject:@"--altdmg"];
+
+    if ([HWUtils gameType] == gtSave)
+        [gameParameters addObject:self.savePath];
+
     [HWUtils setGameStatus:gsLoading];
 
+    int argc = [gameParameters count];
+    const char **argv = (const char **)malloc(sizeof(const char*)*argc);
+    for (int i = 0; i < argc; i++)
+        argv[i] = strdup([[gameParameters objectAtIndex:i] UTF8String]);
+    [gameParameters release];
+
     // this is the pascal function that starts the game
-    Game(gameArgs);
+    Game(argc, argv);
+
+    // cleanup
+    for (int i = 0; i < argc; i++)
+        free((void *)argv[i]);
+    free(argv);
+
+    // moar cleanup
     [self lateEngineLaunch];
 }
 
