@@ -103,7 +103,7 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         let team = fromJust maybeTeam
 
         return $
-            if isNothing $ findTeam r then
+            if isNothing $ maybeTeam then
                 [Warning $ loc "REMOVE_TEAM: no such team"]
             else if clNick /= teamowner team then
                 [ProtocolError $ loc "Not team owner!"]
@@ -132,7 +132,9 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     return $
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
-        else if hhNumber < 1 || hhNumber > 8 || isNothing maybeTeam || hhNumber > canAddNumber r + hhnum team then
+        else if isNothing maybeTeam
+            return []
+        else if hhNumber < 1 || hhNumber > 8 || hhNumber > canAddNumber r + hhnum team then
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
