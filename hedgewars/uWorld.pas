@@ -108,7 +108,6 @@ const cStereo_Sky           = 0.0500;
 
 {$IFDEF MOBILE}
       AMSlotSize = 48;
-      AMTITLE    = 30;
 {$ELSE}
       AMSlotSize = 32;
 {$ENDIF}

@@ -118,6 +118,7 @@ begin
         // any other mode
         cStereoMode:= TStereoMode(max(0, min(ord(high(TStereoMode)), tmp-6)));
 {$ELSE}
+    tmp:= tmp;
     cStereoMode:= smNone;
 {$ENDIF}
 end;
@@ -190,8 +191,8 @@ begin
         {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
         {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--width}       5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}      6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--width}                5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--height}               6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
         {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
         {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
         {--nomusic}              9 : SetMusic           ( false );
@@ -211,7 +212,7 @@ begin
         {--set-multimedia}      22 : parseClassicParameter(mediaArray,10,paramIndex);
         {--set-everything}      23 : parseClassicParameter(allArray,14,paramIndex);
         {"internal" options}
-        {--internal}            24 : {note it, but do nothing};
+        {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
         {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
         {--recorder}            26 : startVideoRecording(paramIndex);
         {--landpreview}         27 : GameType := gmtLandPreview;
@@ -278,17 +279,32 @@ end;
 procedure parseCommandLine{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar){$ENDIF};
 var paramIndex: LongInt;
     paramTotal: LongInt;
+    index, nextIndex: LongInt;
     wrongParameter: boolean;
+//var tmpInt: LongInt;
 begin
-    paramIndex:= 1;
-    paramTotal:={$IFDEF HWLIBRARY}argc{$ELSE}ParamCount{$ENDIF};
+    paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
+    paramTotal:= {$IFDEF HWLIBRARY}argc-1{$ELSE}ParamCount{$ENDIF}; //-1 because pascal enumeration is inclusive
+    (*
+    WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
+    tmpInt:= 0;
+    while (tmpInt <= paramTotal) do
+        begin
+        WriteLn(stdout, inttostr(tmpInt) + ': ' + {$IFDEF HWLIBRARY}argv[tmpInt]{$ELSE}paramCount(tmpInt){$ENDIF});
+        inc(tmpInt);
+        end;
+    *)
     wrongParameter:= false;
     while (paramIndex <= paramTotal) do
         begin
+        // avoid going past the number of paramTotal (esp. w/ library)
+        index:= paramIndex;
+        if index = paramTotal then nextIndex:= index
+        else nextIndex:= index+1;
         {$IFDEF HWLIBRARY}
-        wrongParameter:= parseParameter( argv[paramIndex], argv[paramIndex+1], paramIndex);
+        wrongParameter:= parseParameter( argv[index], argv[nextIndex], paramIndex);
         {$ELSE}
-        wrongParameter:= parseParameter( ParamStr(paramIndex), ParamStr(paramIndex+1), paramIndex);
+        wrongParameter:= parseParameter( ParamStr(index), ParamStr(nextIndex), paramIndex);
         {$ENDIF}
         inc(paramIndex);
         end;
@@ -298,17 +314,7 @@ end;
 
 {$IFNDEF HWLIBRARY}
 procedure GetParams;
-//var tmpInt: LongInt;
 begin
-    (*
-    tmpInt:=0;
-    while (tmpInt <= ParamCount) do
-        begin
-        WriteLn(stdout, inttostr(tmpInt) + ': ' + ParamStr(tmpInt));
-        inc(tmpInt);
-        end;
-    *)
-
     isInternal:= (ParamStr(1) = '--internal');
 
     UserPathPrefix := '.';
