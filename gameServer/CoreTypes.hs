@@ -73,7 +73,7 @@ data GameInfo =
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
-        allPlayersHaveRegisteredAccounts :: Bool,
+        allPlayersHaveRegisteredAccounts :: !Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
