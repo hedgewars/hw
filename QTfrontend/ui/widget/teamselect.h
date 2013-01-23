@@ -77,6 +77,7 @@ class TeamSelWidget : public QGroupBox
         QVBoxLayout mainLayout;
         QLabel *numTeamNotice;
         bool m_acceptOuter;
+        void repaint();
 
         QList<HWTeam> curPlayingTeams;
         QList<HWTeam> m_curNotPlayingTeams;

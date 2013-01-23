@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTableView>
+#include <QScrollBar>
 #include <QTabWidget>
 #include <QPushButton>
 #include <QDebug>
@@ -192,6 +193,17 @@ void GameCFGWidget::setTabbed(bool tabbed)
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         this->tabbed = false;
     }
+
+    // Restore scrollbar palettes, since Qt seems to forget them easily when switching parents
+    QList<QScrollBar *> allSBars = findChildren<QScrollBar *>();
+    QPalette pal = palette();
+    pal.setColor(QPalette::WindowText, QColor(0xff, 0xcc, 0x00));
+    pal.setColor(QPalette::Button, QColor(0x00, 0x35, 0x1d));
+    pal.setColor(QPalette::Base, QColor(0x00, 0x35, 0x1d));
+    pal.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
+
+    for (int i = 0; i < allSBars.size(); ++i)
+        allSBars.at(i)->setPalette(pal);
 }
 
 void GameCFGWidget::jumpToSchemes()
