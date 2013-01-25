@@ -97,7 +97,6 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
         r <- thisRoom
-        clNick <- clientNick
 
         let maybeTeam = findTeam r
         let team = fromJust maybeTeam
@@ -105,7 +104,7 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         return $
             if isNothing $ maybeTeam then
                 [Warning $ loc "REMOVE_TEAM: no such team"]
-            else if clNick /= teamowner team then
+            else if ci /= teamownerId team then
                 [ProtocolError $ loc "Not team owner!"]
             else
                 [RemoveTeam tName,
@@ -116,7 +115,7 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                     })
                 ]
     where
-        anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
+        anotherTeamClan ci = teamcolor . fromJust . find (\t -> (teamownerId t == ci) && (t /= team)) . teams
         findTeam = find (\t -> tName == teamname t) . teams
 
 
