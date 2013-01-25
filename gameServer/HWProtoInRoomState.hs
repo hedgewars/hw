@@ -111,11 +111,11 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
-                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci r
+                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci team r
                     })
                 ]
     where
-        anotherTeamClan ci = teamcolor . fromJust . find (\t -> (teamownerId t == ci) && (t /= team)) . teams
+        anotherTeamClan ci team = teamcolor . fromMaybe (error "CHECKPOINT 011") . find (\t -> (teamownerId t == ci) && (t /= team)) . teams
         findTeam = find (\t -> tName == teamname t) . teams
 
 

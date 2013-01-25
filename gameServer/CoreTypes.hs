@@ -38,7 +38,7 @@ data ClientInfo =
         isAdministrator :: Bool,
         isChecker :: Bool,
         isKickedFromServer :: Bool,
-        clientClan :: !Maybe B.ByteString,
+        clientClan :: !(Maybe B.ByteString),
         teamsInGame :: Word
     }
 
