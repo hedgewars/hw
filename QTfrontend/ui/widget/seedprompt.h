@@ -31,13 +31,13 @@ class SeedPrompt : public QDialog
         SeedPrompt(QWidget* parent, const QString & seed, bool editable);
 
     signals:
-    	void seedSelected(const QString & seed);
+        void seedSelected(const QString & seed);
 
     private slots:
-    	void setSeed();
+        void setSeed();
 
     private:
-    	QLineEdit * editBox;
+        QLineEdit * editBox;
 };
 
 #endif // SEEDPROMPT_H

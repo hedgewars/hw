@@ -26,10 +26,10 @@ class QWidget;
 
 class MessageDialog
 {
-	public:
-		static int ShowErrorMessage(const QString & msg, QWidget * parent = 0);
-		static int ShowInfoMessage(const QString & msg, QWidget * parent = 0);
-		static int ShowMessage(const QString & msg, const QString & title = QString(), QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
+    public:
+        static int ShowErrorMessage(const QString & msg, QWidget * parent = 0);
+        static int ShowInfoMessage(const QString & msg, QWidget * parent = 0);
+        static int ShowMessage(const QString & msg, const QString & title = QString(), QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
 };
 
 #endif

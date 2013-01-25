@@ -889,7 +889,7 @@ void HWMapContainer::setMaster(bool master)
 {
     if (master == m_master) return;
     m_master = master;
-    
+
     foreach (QWidget *widget, m_childWidgets)
         widget->setEnabled(master);
 }

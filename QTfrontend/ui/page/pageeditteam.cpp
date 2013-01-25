@@ -370,7 +370,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
 {
     tbw->setCurrentIndex(0);
     binder->resetInterface();
-    
+
     TeamNameEdit->setText(team.name());
     CBTeamLvl->setCurrentIndex(team.difficulty());
 
@@ -396,7 +396,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
         if (team.keyBind(i).isEmpty()) continue;
-        
+
         QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, team.keyBind(i), 1, Qt::MatchExactly);
 
         if(mdl.size() == 1)

@@ -109,7 +109,7 @@ class HWForm : public QMainWindow
         void NetNickNotRegistered(const QString & nick);
         void NetNickTaken(const QString & nick);
         void NetAuthFailed();
-	bool RetryDialog(const QString & title, const QString & label);
+        bool RetryDialog(const QString & title, const QString & label);
         void NetTeamAccepted(const QString& team);
         void AddNetTeam(const HWTeam& team);
         void RemoveNetTeam(const HWTeam& team);
@@ -174,7 +174,7 @@ class HWForm : public QMainWindow
             ID_PAGE_CAMPAIGN       ,
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,
-            ID_PAGE_VIDEOS	   ,
+            ID_PAGE_VIDEOS         ,
             MAX_PAGE
         };
         QPointer<HWGame> game;

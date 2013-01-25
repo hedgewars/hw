@@ -37,31 +37,31 @@
 
 HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 {
-	setModal(true);
-	setWindowFlags(Qt::Sheet);
-	setWindowModality(Qt::WindowModal);
-	setMinimumSize(550, 430);
-	resize(550, 430);
-	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    setModal(true);
+    setWindowFlags(Qt::Sheet);
+    setWindowModality(Qt::WindowModal);
+    setMinimumSize(550, 430);
+    resize(550, 430);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-	setStyleSheet("QPushButton { padding: 5px; margin-top: 10px; }");
+    setStyleSheet("QPushButton { padding: 5px; margin-top: 10px; }");
 
-	// Hat model, and a model for setting a filter
-	HatModel * hatModel = DataManager::instance().hatModel();
-	filterModel = new QSortFilterProxyModel();
-	filterModel->setSourceModel(hatModel);
-	filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    // Hat model, and a model for setting a filter
+    HatModel * hatModel = DataManager::instance().hatModel();
+    filterModel = new QSortFilterProxyModel();
+    filterModel->setSourceModel(hatModel);
+    filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-	// Grid
-	QGridLayout * dialogLayout = new QGridLayout(this);
-	dialogLayout->setSpacing(0);
-	dialogLayout->setColumnStretch(1, 1);
+    // Grid
+    QGridLayout * dialogLayout = new QGridLayout(this);
+    dialogLayout->setSpacing(0);
+    dialogLayout->setColumnStretch(1, 1);
 
-	QHBoxLayout * topLayout = new QHBoxLayout();
+    QHBoxLayout * topLayout = new QHBoxLayout();
 
-	// Help/prompt message at top
-	QLabel * lblDesc = new QLabel(tr("Select a hat"));
-	lblDesc->setObjectName("lblDesc");
+    // Help/prompt message at top
+    QLabel * lblDesc = new QLabel(tr("Select a hat"));
+    lblDesc->setObjectName("lblDesc");
     lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblDesc->setFixedHeight(24);
@@ -99,71 +99,71 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     topLayout->addWidget(corner, 0, Qt::AlignBottom);
     topLayout->addStretch(1);
 
-	// Cancel button (closes dialog)
-	QPushButton * btnCancel = new QPushButton(tr("Cancel"));
-	connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    // Cancel button (closes dialog)
+    QPushButton * btnCancel = new QPushButton(tr("Cancel"));
+    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
 
-	// Select button
-	QPushButton * btnSelect = new QPushButton(tr("Use selected hat"));
-	btnSelect->setDefault(true);
-	connect(btnSelect, SIGNAL(clicked()), this, SLOT(onAccepted()));
+    // Select button
+    QPushButton * btnSelect = new QPushButton(tr("Use selected hat"));
+    btnSelect->setDefault(true);
+    connect(btnSelect, SIGNAL(clicked()), this, SLOT(onAccepted()));
 
-	// Add hats
-	list = new HatListView();
-	list->setModel(filterModel);
-	list->setViewMode(QListView::IconMode);
-	list->setResizeMode(QListView::Adjust);
-	list->setMovement(QListView::Static);
-	list->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	list->setSpacing(8);
-	list->setWordWrap(true);
-	list->setSelectionMode(QAbstractItemView::SingleSelection);
-	list->setObjectName("hatList");
-	list->setCurrentIndex(filterModel->index(currentIndex, 0));
-	connect(list, SIGNAL(activated(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
-	connect(list, SIGNAL(clicked(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
+    // Add hats
+    list = new HatListView();
+    list->setModel(filterModel);
+    list->setViewMode(QListView::IconMode);
+    list->setResizeMode(QListView::Adjust);
+    list->setMovement(QListView::Static);
+    list->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    list->setSpacing(8);
+    list->setWordWrap(true);
+    list->setSelectionMode(QAbstractItemView::SingleSelection);
+    list->setObjectName("hatList");
+    list->setCurrentIndex(filterModel->index(currentIndex, 0));
+    connect(list, SIGNAL(activated(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
+    connect(list, SIGNAL(clicked(const QModelIndex &)), this, SLOT(hatChosen(const QModelIndex &)));
 
-	// Add elements to layouts
-	dialogLayout->addLayout(topLayout, 0, 0, 1, 3);
-	dialogLayout->addWidget(list, 1, 0, 1, 3);
-	dialogLayout->addWidget(btnCancel, 2, 0, 1, 1, Qt::AlignLeft);
-	dialogLayout->addWidget(btnSelect, 2, 2, 1, 1, Qt::AlignRight);
+    // Add elements to layouts
+    dialogLayout->addLayout(topLayout, 0, 0, 1, 3);
+    dialogLayout->addWidget(list, 1, 0, 1, 3);
+    dialogLayout->addWidget(btnCancel, 2, 0, 1, 1, Qt::AlignLeft);
+    dialogLayout->addWidget(btnSelect, 2, 2, 1, 1, Qt::AlignRight);
 }
 
 void HatPrompt::moveUp()
 {
-	list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
 }
 
 void HatPrompt::moveDown()
 {
-	list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
 }
 
 void HatPrompt::moveLeft()
 {
-	list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
 }
 
 void HatPrompt::moveRight()
 {
-	list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
 }
 
 void HatPrompt::onAccepted()
 {
-	hatChosen(list->currentIndex());
+    hatChosen(list->currentIndex());
 }
 
 // When a hat is selected
 void HatPrompt::hatChosen(const QModelIndex & index)
 {
-	done(filterModel->mapToSource(index).row() + 1); // Since returning 0 means canceled
+    done(filterModel->mapToSource(index).row() + 1); // Since returning 0 means canceled
 }
 
 // When the text in the filter text box is changed
 void HatPrompt::filterChanged(const QString & text)
 {
-	filterModel->setFilterFixedString(text);
-	list->setCurrentIndex(filterModel->index(0, 0));
+    filterModel->setFilterFixedString(text);
+    list->setCurrentIndex(filterModel->index(0, 0));
 }

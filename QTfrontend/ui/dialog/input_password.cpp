@@ -28,7 +28,7 @@
 HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
 {
     setWindowTitle(tr("Login"));
-    
+
     QString titleLabelText = "To connect to the server, please log in.\n\nIf you don't have an account on www.hedgewars.org,\njust enter your nickname.";
     QString nickLabelText = "Nickname:";
     QString passLabelText = "Password:";
@@ -38,15 +38,15 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
     QLabel * titleLabel = new QLabel(this);
     titleLabel->setText(titleLabelText);
     layout->addWidget(titleLabel, 0, 0);
-    
+
     QLabel * nickLabel = new QLabel(this);
     nickLabel->setText(nickLabelText);
     layout->addWidget(nickLabel, 1, 0);
-    
+
     leNickname = new QLineEdit(this);
     leNickname->setEchoMode(QLineEdit::Normal);
     layout->addWidget(leNickname, 2, 0);
-    
+
     QLabel * passLabel = new QLabel(this);
     passLabel->setText(passLabelText);
     layout->addWidget(passLabel, 3, 0);

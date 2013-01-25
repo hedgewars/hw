@@ -173,7 +173,7 @@ QLayout * PageVideos::bodyLayoutDefinition()
         labelDesc = new QLabel(pDescGroup);
         labelDesc->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         labelDesc->setTextInteractionFlags(Qt::TextSelectableByMouse |
-                                           Qt::TextSelectableByKeyboard	|
+                                           Qt::TextSelectableByKeyboard |
                                            Qt::LinksAccessibleByMouse |
                                            Qt::LinksAccessibleByKeyboard);
         labelDesc->setTextFormat(Qt::RichText);

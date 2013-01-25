@@ -100,7 +100,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     pageLayout->addWidget(pNetTeamsWidget, 1, 1);
 
     // Chat
-    
+
     chatWidget = new HWChatWidget(this, true);
     chatWidget->setShowFollow(false); // don't show follow in nicks' context menus
     chatWidget->setIgnoreListKick(true); // kick ignored players automatically
@@ -114,7 +114,7 @@ QLayout * PageNetGame::bodyLayoutDefinition()
 QLayout * PageNetGame::footerLayoutLeftDefinition()
 {
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
-    
+
     btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
 

@@ -76,9 +76,9 @@ void HatModel::loadHats()
 
         QString str = hatsList.at(i);
         str = str.remove(QRegExp("\\.png$"));
-        QPixmap pix(            
+        QPixmap pix(
                 "physfs://Graphics/Hats/" + QString(isReserved?"Reserved/":"") + str +
-                ".png"           
+                ".png"
         );
 
         // rename properly

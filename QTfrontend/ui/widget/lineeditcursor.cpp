@@ -22,14 +22,14 @@
 
 void LineEditCursor::keyPressEvent(QKeyEvent * event)
 {
-	if (event->key() == Qt::Key_Up)
-		emit moveUp();
-	else if (event->key() == Qt::Key_Down)
-		emit moveDown();
-	else if (event->key() == Qt::Key_Left)
-		emit moveLeft();
-	else if (event->key() == Qt::Key_Right)
-		emit moveRight();
-	else
-		QLineEdit::keyPressEvent(event);
+    if (event->key() == Qt::Key_Up)
+        emit moveUp();
+    else if (event->key() == Qt::Key_Down)
+        emit moveDown();
+    else if (event->key() == Qt::Key_Left)
+        emit moveLeft();
+    else if (event->key() == Qt::Key_Right)
+        emit moveRight();
+    else
+        QLineEdit::keyPressEvent(event);
 }

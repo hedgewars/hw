@@ -60,7 +60,7 @@ void HWGame::onClientDisconnect()
     switch (gameType)
     {
         case gtDemo:
-            // for video recording we need demo anyway 
+            // for video recording we need demo anyway
             emit HaveRecord(rtNeither, demo);
             break;
         case gtNet:
@@ -83,7 +83,7 @@ void HWGame::addKeyBindings(QByteArray * buf)
     {
         QString value = config->value(QString("Binds/%1").arg(cbinds[i].action), cbinds[i].strbind).toString();
         if (value.isEmpty() || value == "default") continue;
-        
+
         QString bind = QString("edbind " + value + " " + cbinds[i].action);
         HWProto::addStringToBuffer(*buf, bind);
     }
@@ -124,7 +124,7 @@ void HWGame::commonConfig()
             ;
         }
     }
-    
+
     RawSendIPC(buf);
 }
 
@@ -171,7 +171,7 @@ void HWGame::SendQuickConfig()
     HWProto::addStringToBuffer(teamscfg, QString("eammreinf %1").arg(cDefaultAmmoStore->mid(3 * cAmmoNumber, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
-    
+
     RawSendIPC(teamscfg);
 }
 
