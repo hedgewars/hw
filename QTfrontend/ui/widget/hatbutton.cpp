@@ -25,48 +25,48 @@
 
 HatButton::HatButton(QWidget* parent) : QPushButton(parent)
 {
-	setIconSize(QSize(32, 37));
-	setFixedSize(44, 44);
+    setIconSize(QSize(32, 37));
+    setFixedSize(44, 44);
 
-	m_hatModel = DataManager::instance().hatModel();
-	connect(this, SIGNAL(clicked()), this, SLOT(showPrompt()));
+    m_hatModel = DataManager::instance().hatModel();
+    connect(this, SIGNAL(clicked()), this, SLOT(showPrompt()));
 
-	setCurrentIndex(0);
+    setCurrentIndex(0);
 }
 
 void HatButton::setCurrentIndex(int index)
 {
-	m_hat = m_hatModel->index(index, 0);
-	setWhatsThis(QString(tr("Change hat (%1)")).arg(m_hat.data(Qt::DisplayRole).toString()));
-	setToolTip(m_hat.data(Qt::DisplayRole).toString());
-	setIcon(m_hat.data(Qt::DecorationRole).value<QIcon>());
+    m_hat = m_hatModel->index(index, 0);
+    setWhatsThis(QString(tr("Change hat (%1)")).arg(m_hat.data(Qt::DisplayRole).toString()));
+    setToolTip(m_hat.data(Qt::DisplayRole).toString());
+    setIcon(m_hat.data(Qt::DecorationRole).value<QIcon>());
 }
 
 int HatButton::currentIndex()
 {
-	return m_hat.row();
+    return m_hat.row();
 }
 
 void HatButton::setCurrentHat(const QString & name)
 {
-	QList<QStandardItem *> hats = m_hatModel->findItems(name);
+    QList<QStandardItem *> hats = m_hatModel->findItems(name);
 
-	if (hats.count() > 0)
-		setCurrentIndex(hats[0]->row());
+    if (hats.count() > 0)
+        setCurrentIndex(hats[0]->row());
 }
 
 QString HatButton::currentHat() const
 {
-	return m_hat.data(Qt::DisplayRole).toString();
+    return m_hat.data(Qt::DisplayRole).toString();
 }
 
 void HatButton::showPrompt()
 {
-	HatPrompt prompt(currentIndex(), this);
-	int hatID = prompt.exec() - 1; // Since 0 means canceled, so all indexes are +1'd
-	if (hatID < 0) return;
+    HatPrompt prompt(currentIndex(), this);
+    int hatID = prompt.exec() - 1; // Since 0 means canceled, so all indexes are +1'd
+    if (hatID < 0) return;
 
-	setCurrentIndex(hatID);
-	emit currentIndexChanged(hatID);
-	emit currentHatChanged(currentHat());
+    setCurrentIndex(hatID);
+    emit currentIndexChanged(hatID);
+    emit currentHatChanged(currentHat());
 }

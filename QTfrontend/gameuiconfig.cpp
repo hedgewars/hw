@@ -83,7 +83,7 @@ void GameUIConfig::reloadValues(void)
             Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
-    
+
     // Default the windowed resolution to 5/6 of the screen size
     int screenWidth = SDL_GetVideoInfo()->current_w * 5 / 6;
     int screenHeight = SDL_GetVideoInfo()->current_h * 5 / 6;
@@ -96,7 +96,7 @@ void GameUIConfig::reloadValues(void)
     wHeight = (wHeight == "" ? heightStr : wHeight);
     Form->ui.pageOptions->windowWidthEdit->setText(wWidth);
     Form->ui.pageOptions->windowHeightEdit->setText(wHeight);
-    
+
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
     bool ffscr=value("frontend/fullscreen", false).toBool();
@@ -263,7 +263,7 @@ void GameUIConfig::SaveOptions()
 
     setValue("net/nick", netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
-	setPasswordHash(netPasswordHash());
+        setPasswordHash(netPasswordHash());
     }
     else if(!Form->ui.pageOptions->CBSavePassword->isChecked()) {
         clearPasswordHash();
@@ -372,7 +372,7 @@ QRect GameUIConfig::vid_Resolution()
     std::pair<QRect, QRect> result = vid_ResolutionPair();
     if(Form->ui.pageOptions->CBFullscreen->isChecked())
         return result.first;
-    else 
+    else
         return result.second;
 }
 
@@ -515,7 +515,7 @@ bool GameUIConfig::netPasswordIsValid()
     return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '*'));
 }
 
-void GameUIConfig::clearPasswordHash() 
+void GameUIConfig::clearPasswordHash()
 {
     setValue("net/passwordhash", QString());
     setValue("net/passwordlength", 0);
@@ -535,7 +535,7 @@ QString GameUIConfig::passwordHash()
     return value("net/passwordhash").toString();
 }
 
-void GameUIConfig::clearTempHash() 
+void GameUIConfig::clearTempHash()
 {
     setTempHash(QString());
 }

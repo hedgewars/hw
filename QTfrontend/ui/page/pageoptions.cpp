@@ -199,7 +199,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
         { // group: weapons
             OptionGroupBox * groupWeapons = new OptionGroupBox(":/res/weaponsicon.png", tr("Weapons"), this);
             leftColumn->addWidget(groupWeapons);
-            
+
             groupWeapons->layout()->setColumnStretch(0, 1);
 
             WeaponsName = new QComboBox(groupWeapons);
@@ -250,7 +250,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBFullscreen->setText(QLabel::tr("Fullscreen"));
 
             // Fullscreen resolution
-            
+
             lblFullScreenRes = new QLabel(groupGame);
             lblFullScreenRes->setText(QLabel::tr("Fullscreen Resolution"));
             groupGame->layout()->addWidget(lblFullScreenRes, 1, 0);
@@ -260,28 +260,28 @@ QLayout * PageOptions::bodyLayoutDefinition()
             groupGame->layout()->addWidget(CBResolution, 1, 1, Qt::AlignLeft);
 
             // Windowed resolution
-            
+
             lblWinScreenRes = new QLabel(groupGame);
             lblWinScreenRes->setText(QLabel::tr("Windowed Resolution"));
             groupGame->layout()->addWidget(lblWinScreenRes, 2, 0);
-                        
+
             winResContainer = new QWidget();
             QHBoxLayout * winResLayout = new QHBoxLayout(winResContainer);
             winResLayout->setSpacing(0);
             groupGame->layout()->addWidget(winResContainer, 2, 1);
-            
+
             QLabel *winLabelX = new QLabel(groupGame);
             winLabelX->setText("x"); // decorational x
             winLabelX->setFixedWidth(40);
             winLabelX->setAlignment(Qt::AlignCenter);
-            
+
             windowWidthEdit = new QLineEdit(groupGame);
             windowWidthEdit->setValidator(new QIntValidator(this));
             windowWidthEdit->setFixedSize(55, CBResolution->height());
             windowHeightEdit = new QLineEdit(groupGame);
             windowHeightEdit->setValidator(new QIntValidator(this));
             windowHeightEdit->setFixedSize(55, CBResolution->height());
-            
+
             winResLayout->addWidget(windowWidthEdit, 0);
             winResLayout->addWidget(winLabelX, 0);
             winResLayout->addWidget(windowHeightEdit, 0);
@@ -830,7 +830,7 @@ PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
 void PageOptions::forceFullscreen(int index)
 {
     bool forced = (index == 7 || index == 8 || index == 9);
-    
+
     if (index != 0)
     {
         this->SLQuality->setValue(this->SLQuality->maximum());
@@ -1114,7 +1114,7 @@ void PageOptions::tabIndexChanged(int index)
 void PageOptions::bindUpdated(int bindID)
 {
     int bindIndex = binder->bindIndex(bindID);
-    
+
     if (bindIndex == 0) bindIndex = resetBindToDefault(bindID);
 
     // Save bind

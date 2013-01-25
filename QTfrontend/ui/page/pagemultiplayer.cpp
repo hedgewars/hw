@@ -47,7 +47,7 @@ QLayout * PageMultiplayer::bodyLayoutDefinition()
 QLayout * PageMultiplayer::footerLayoutLeftDefinition()
 {
     QHBoxLayout * bottomLeftLayout = new QHBoxLayout();
-    
+
     btnSetup = addButton(":/res/Settings.png", bottomLeftLayout, 0, true);
     btnSetup->setWhatsThis(tr("Edit game preferences"));
 

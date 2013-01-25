@@ -11,7 +11,7 @@ class BanDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit BanDialog(QWidget *parent = 0);    
+    explicit BanDialog(QWidget *parent = 0);
 
     bool byIP();
     int duration();

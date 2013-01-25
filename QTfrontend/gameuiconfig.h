@@ -97,7 +97,7 @@ class GameUIConfig : public QSettings
     private:
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
-	    QString temphash;
+        QString temphash;
         QList<BindAction> m_binds;
 };
 

@@ -53,19 +53,19 @@
 
 FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 {
-	setModal(true);
-	setWindowFlags(Qt::Sheet);
-	setWindowModality(Qt::WindowModal);
-	setMinimumSize(700, 460);
-	resize(700, 460);
-	setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    setModal(true);
+    setWindowFlags(Qt::Sheet);
+    setWindowModality(Qt::WindowModal);
+    setMinimumSize(700, 460);
+    resize(700, 460);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
-	netManager = NULL;
-	GenerateSpecs();
+    netManager = NULL;
+    GenerateSpecs();
 
-	/* Top layout */
+    /* Top layout */
 
-	QVBoxLayout * pageLayout = new QVBoxLayout();
+    QVBoxLayout * pageLayout = new QVBoxLayout();
     QHBoxLayout * summaryLayout = new QHBoxLayout();
     QHBoxLayout * emailLayout = new QHBoxLayout();
     QHBoxLayout * descriptionLayout = new QHBoxLayout();
@@ -96,7 +96,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     email = new QLineEdit();
     emailLayout->addWidget(email);
     summaryEmailLayout->addLayout(emailLayout);
-    
+
     label_summary = new QLabel();
     label_summary->setText(QLabel::tr("Summary"));
     label_summary->setFixedWidth(labelWidth);
@@ -104,7 +104,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     summary = new QLineEdit();
     summaryLayout->addWidget(summary);
     summaryEmailLayout->addLayout(summaryLayout);
-    
+
     combinedTopLayout->addLayout(summaryEmailLayout);
 
     CheckSendSpecs = new QCheckBox();
@@ -163,7 +163,7 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 
     bottomLayout->addLayout(captchaLayout);
     bottomLayout->addSpacing(40);
-    
+
     // TODO: Set green arrow icon for send button (:/res/Start.png)
     BtnSend = new QPushButton(tr("Send Feedback"));
     bottomLayout->addWidget(BtnSend, 0);
@@ -373,7 +373,7 @@ void FeedbackDialog::NetReply(QNetworkReply *reply)
 
         QString url = "http://hedgewars.org/feedback/?captcha&id=";
         url += QString::number(captchaID);
-        
+
         QNetworkAccessManager *netManager = GetNetManager();
         QUrl captchaURL(url);
         QNetworkRequest req(captchaURL);
@@ -424,7 +424,7 @@ void FeedbackDialog::finishedSlot(QNetworkReply* reply)
             infoMsg.exec();
 
             accept();
-            
+
             return;
     }
     else
@@ -437,7 +437,7 @@ void FeedbackDialog::finishedSlot(QNetworkReply* reply)
 void FeedbackDialog::SendFeedback()
 {
     // Get form data
-    
+
     QString summary = this->summary->text();
     QString description = this->description->toPlainText();
     QString email = this->email->text();
@@ -452,7 +452,7 @@ void FeedbackDialog::SendFeedback()
     }
 
     // Submit issue to PHP script
-    
+
     QByteArray body;
     body.append("captcha=");
     body.append(captchaID);
@@ -471,14 +471,14 @@ void FeedbackDialog::SendFeedback()
         body.append("&specs=");
         body.append(QUrl::toPercentEncoding(specs));
     }
-    
+
     nam = new QNetworkAccessManager(this);
     connect(nam, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(finishedSlot(QNetworkReply*)));
-            
+
     QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
     header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
     header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
-    
+
     nam->post(header, body);
 }

@@ -592,11 +592,11 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #ifdef USE_XFIRE
     updateXfire();
 #endif
-    
+
     qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
 
     // pageEnter and pageLeave events
-    ((AbstractPage*)ui.Pages->widget(lastid))->triggerPageLeave();    
+    ((AbstractPage*)ui.Pages->widget(lastid))->triggerPageLeave();
     ((AbstractPage*)ui.Pages->widget(id))->triggerPageEnter();
 
     if (id == ID_PAGE_DATADOWNLOAD)
@@ -1096,10 +1096,10 @@ void HWForm::NetNickTaken(const QString & nick)
     if (!ok || newNick.isEmpty())
     {
         //ForcedDisconnect(tr("No nickname supplied."));
-	bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
-	GoBack();
+    bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
+    GoBack();
         if (retry) {
-       	   NetConnectOfficialServer();
+            NetConnectOfficialServer();
         }
         return;
     }
@@ -1490,7 +1490,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
         }
         else {
             while (ui.Pages->currentIndex() != ID_PAGE_NET
-                && ui.Pages->currentIndex() != ID_PAGE_MAIN) 
+                && ui.Pages->currentIndex() != ID_PAGE_MAIN)
             {
                 GoBack();
             }
@@ -1927,10 +1927,10 @@ void HWForm::AssociateFiles()
         MessageDialog::ShowErrorMessage(QMessageBox::tr("File association failed."), this);
 }
 
-void HWForm::openRegistrationPage() 
+void HWForm::openRegistrationPage()
 {
     QDesktopServices::openUrl(QUrl("http://www.hedgewars.org/user/register"));
-}    
+}
 
 void HWForm::saveDemoWithCustomName()
 {

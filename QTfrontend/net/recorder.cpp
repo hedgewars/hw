@@ -136,7 +136,7 @@ QStringList HWRecorder::getArguments()
     arguments << prefix;
     arguments << config->AVFormat();
     arguments << config->videoCodec();
-// Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both. 
+// Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both.
 // The library does support using both at once after all.
     arguments << QString::number(config->rec_Bitrate()*1024);
     arguments << (config->recordAudio() ? config->audioCodec() : "no");

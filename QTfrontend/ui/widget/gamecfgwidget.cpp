@@ -262,7 +262,7 @@ quint32 GameCFGWidget::getGameFlags() const
     if (schemeData(18).toBool())
         result |= 0x00080000;       // ai survival
     if (schemeData(19).toBool())
-        result |= 0x00100000;       // infinite attacks 
+        result |= 0x00100000;       // infinite attacks
     if (schemeData(20).toBool())
         result |= 0x00200000;       // reset weaps
     if (schemeData(21).toBool())

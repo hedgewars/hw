@@ -13,7 +13,7 @@ class QStandardItemModel;
 class ColorWidget : public QFrame
 {
     Q_OBJECT
-    
+
 public:
     explicit ColorWidget(QStandardItemModel *colorsModel, QWidget *parent = 0);
     ~ColorWidget();
@@ -24,7 +24,7 @@ public:
 
 signals:
     void colorChanged(int color);
-    
+
 private:
     int m_color;
     QStandardItemModel * m_colorsModel;

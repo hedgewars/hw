@@ -78,7 +78,7 @@ About::About(QWidget * parent) :
 
     lbl2 = new QTextBrowser(this);
     lbl2->setOpenExternalLinks(true);
-    QUrl localpage = QUrl::fromLocalFile(":/res/html/about.html"); 
+    QUrl localpage = QUrl::fromLocalFile(":/res/html/about.html");
     lbl2->setSource(localpage); //sets the source of the label from the file above
     mainLayout->addWidget(lbl2, 1, 1);
 

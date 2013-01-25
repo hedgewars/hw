@@ -38,12 +38,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
 {
     this->defaultText = defaultText;
     enableSignal = false;
-    
+
     // Two-column tab layout
     QHBoxLayout * pageKeysLayout = new QHBoxLayout(this);
     pageKeysLayout->setSpacing(0);
     pageKeysLayout->setContentsMargins(0, 0, 0, 0);
-    
+
     // Table for category list
     QVBoxLayout * catListContainer = new QVBoxLayout();
     catListContainer->setContentsMargins(10, 10, 10, 10);
@@ -122,12 +122,12 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         {
             // Add stretch at end of previous layout
             if (curLayout != NULL) curLayout->insertStretch(-1, 1);
-            
+
             // Category list item
             QListWidgetItem * catItem = new QListWidgetItem(HWApplication::translate("binds (categories)", cbinds[i].category));
             catItem->setSizeHint(catSize);
             catList->addItem(catItem);
-            
+
             // Create new page
             curPage = new QWidget();
             curLayout = new QVBoxLayout(curPage);
@@ -170,7 +170,7 @@ KeyBinder::KeyBinder(QWidget * parent, const QString & helpText, const QString &
         comboBox->setModel((QAbstractItemModel*)DataManager::instance().bindsModel());
         comboBox->setVisible(false);
         comboBox->setFixedWidth(200);
-        
+
         // Table row
         int row = curTable->rowCount();
         QTableWidgetItem * nameCell = new QTableWidgetItem(HWApplication::translate("binds", cbinds[i].name));
@@ -241,7 +241,7 @@ void KeyBinder::bindCellClicked(QTableWidgetItem * item)
     QComboBox * box = bindCellComboBoxMappings->value(item);
     QTableWidget * table = item->tableWidget();
     QFrame * frame = box->findChild<QFrame*>();
-    
+
     box->showPopup();
     frame->move(
         frame->x() + table->horizontalHeader()->sectionSize(0),
@@ -279,7 +279,7 @@ int KeyBinder::bindIndex(int keyIndex)
 void KeyBinder::resetInterface()
 {
     enableSignal = false;
-    
+
     catList->setCurrentItem(catList->item(1));
     changeBindingsPage(1);
     if (selectedBindTable != NULL)
@@ -287,7 +287,7 @@ void KeyBinder::resetInterface()
         selectedBindTable->clearSelection();
         selectedBindTable = NULL;
     }
-    
+
     // Default bind text
     DataManager::instance().bindsModel()->item(0)->setData(defaultText, Qt::DisplayRole);
     for (int i = 0; i < BINDS_NUMBER; i++)

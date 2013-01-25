@@ -50,7 +50,7 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    
+
     originalNetworkIcon = BtnNet->icon();
     disabledNetworkIcon = QIcon(":/res/NetworkPlayDisabled.png");
 
@@ -163,8 +163,8 @@ QString PageMain::randomTip() const
             tip_platform = 2;
         if(line.contains("<linux-only>", Qt::CaseSensitive))
             tip_platform = 3;
-        if(line.contains("</windows-only>", Qt::CaseSensitive) || 
-                line.contains("</mac-only>", Qt::CaseSensitive) || 
+        if(line.contains("</windows-only>", Qt::CaseSensitive) ||
+                line.contains("</mac-only>", Qt::CaseSensitive) ||
                 line.contains("</linux-only>", Qt::CaseSensitive)) {
             tip_platform = 0;
         }

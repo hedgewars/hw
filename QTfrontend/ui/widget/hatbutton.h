@@ -37,16 +37,16 @@ class HatButton : public QPushButton
         QString currentHat() const;
 
     private:
-    	QModelIndex m_hat;
-    	HatModel * m_hatModel;
+        QModelIndex m_hat;
+        HatModel * m_hatModel;
 
     signals:
-    	void currentIndexChanged(int);
-    	void currentHatChanged(const QString &);
+        void currentIndexChanged(int);
+        void currentHatChanged(const QString &);
 
     public slots:
-    	void setCurrentIndex(int index);
-    	void setCurrentHat(const QString & name);
+        void setCurrentIndex(int index);
+        void setCurrentHat(const QString & name);
 
     private slots:
         void showPrompt();

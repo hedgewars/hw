@@ -30,7 +30,7 @@ int MessageDialog::ShowInfoMessage(const QString & msg, QWidget * parent)
 
 int MessageDialog::ShowMessage(const QString & msg, const QString & title, QMessageBox::Icon icon, QWidget * parent)
 {
-	QMessageBox msgMsg(parent);
+    QMessageBox msgMsg(parent);
     msgMsg.setIcon(icon);
     msgMsg.setWindowTitle(title.isEmpty() ? QMessageBox::tr("Hedgewars") : title);
     msgMsg.setText(msg);

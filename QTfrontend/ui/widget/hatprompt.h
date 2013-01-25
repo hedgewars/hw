@@ -30,9 +30,9 @@ class LineEditCursor;
 
 class HatListView : public QListView
 {
-	friend class HatPrompt;
+    friend class HatPrompt;
 
-	public:
+    public:
         HatListView(QWidget* parent = 0) : QListView(parent){}
 };
 
@@ -49,7 +49,7 @@ class HatPrompt : public QDialog
         QSortFilterProxyModel * filterModel;
 
     private slots:
-    	void onAccepted();
+        void onAccepted();
         void hatChosen(const QModelIndex & index);
         void filterChanged(const QString & text);
         void moveUp();
