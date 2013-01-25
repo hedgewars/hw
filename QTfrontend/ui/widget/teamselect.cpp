@@ -36,8 +36,6 @@ void TeamSelWidget::addTeam(HWTeam team)
     {
         framePlaying->addTeam(team, true);
         curPlayingTeams.push_back(team);
-        connect(framePlaying->getTeamWidget(team), SIGNAL(teamStatusChanged(HWTeam)),
-                this, SLOT(netTeamStatusChanged(const HWTeam&)));
         connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
         dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
@@ -144,17 +142,6 @@ void TeamSelWidget::removeNetTeam(const HWTeam& team)
     }
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }
-
-void TeamSelWidget::netTeamStatusChanged(const HWTeam& team)
-{
-    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-
-}
-
-//void TeamSelWidget::removeTeam(__attribute__ ((unused)) HWTeam team)
-//{
-//curDontPlayingTeams.erase(std::find(curDontPlayingTeams.begin(), curDontPlayingTeams.end(), team));
-//}
 
 void TeamSelWidget::changeTeamStatus(HWTeam team)
 {

@@ -51,7 +51,6 @@ class TeamSelWidget : public QGroupBox
 
     public slots:
         void addTeam(HWTeam team);
-        void netTeamStatusChanged(const HWTeam& team);
         void changeHHNum(const HWTeam&);
         void changeTeamColor(const HWTeam&);
         void changeTeamStatus(HWTeam team);
