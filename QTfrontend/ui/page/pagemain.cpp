@@ -49,7 +49,6 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnNet = addButton(":/res/NetworkPlay.png", pageLayout, 2, 2, 1, 2, true);
     BtnNet->setWhatsThis(tr("Play a game across a network"));
     pageLayout->setAlignment(BtnNet, Qt::AlignHCenter);
-    connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
 
     originalNetworkIcon = BtnNet->icon();
     disabledNetworkIcon = QIcon(":/res/NetworkPlayDisabled.png");
@@ -120,7 +119,8 @@ QLayout * PageMain::footerLayoutDefinition()
 
 void PageMain::connectSignals()
 {
-    //TODO
+    connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    // TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 
 PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
