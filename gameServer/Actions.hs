@@ -85,7 +85,7 @@ instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
     rnf a = a `seq` ()
 
-instance NFData B.ByteString
+--instance NFData B.ByteString
 instance NFData (Chan a)
 
 
