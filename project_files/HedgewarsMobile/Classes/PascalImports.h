@@ -44,7 +44,7 @@ extern "C" {
     int  HW_getMaxNumberOfTeams(void);
 
     void HW_memoryWarningCallback(void);
-    
+
 #ifdef __cplusplus
 }
 #endif

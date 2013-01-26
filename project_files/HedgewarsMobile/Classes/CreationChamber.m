@@ -390,7 +390,7 @@
     [basicArray release];
 
     NSString *schemeFile = [[NSString alloc] initWithFormat:@"%@/%@.plist", schemesDirectory, nameWithoutExt];
-    
+
     [theScheme writeToFile:schemeFile atomically:YES];
     [schemeFile release];
     [theScheme release];

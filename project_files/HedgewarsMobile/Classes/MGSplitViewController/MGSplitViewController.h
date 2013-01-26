@@ -9,28 +9,28 @@
 #import <UIKit/UIKit.h>
 
 typedef enum _MGSplitViewDividerStyle {
-	// These names have been chosen to be conceptually similar to those of NSSplitView on Mac OS X.
-	MGSplitViewDividerStyleThin			= 0, // Thin divider, like UISplitViewController (default).
-	MGSplitViewDividerStylePaneSplitter	= 1  // Thick divider, drawn with a grey gradient and a grab-strip.
+    // These names have been chosen to be conceptually similar to those of NSSplitView on Mac OS X.
+    MGSplitViewDividerStyleThin         = 0, // Thin divider, like UISplitViewController (default).
+    MGSplitViewDividerStylePaneSplitter = 1  // Thick divider, drawn with a grey gradient and a grab-strip.
 } MGSplitViewDividerStyle;
 
 @class MGSplitDividerView;
 @protocol MGSplitViewControllerDelegate;
 @interface MGSplitViewController : UIViewController <UIPopoverControllerDelegate> {
-	BOOL _showsMasterInPortrait;
-	BOOL _showsMasterInLandscape;
-	float _splitWidth;
-	id _delegate;
-	BOOL _vertical;
-	BOOL _masterBeforeDetail;
-	NSMutableArray *_viewControllers;
-	UIBarButtonItem *_barButtonItem; // To be compliant with wacky UISplitViewController behaviour.
+    BOOL _showsMasterInPortrait;
+    BOOL _showsMasterInLandscape;
+    float _splitWidth;
+    id _delegate;
+    BOOL _vertical;
+    BOOL _masterBeforeDetail;
+    NSMutableArray *_viewControllers;
+    UIBarButtonItem *_barButtonItem; // To be compliant with wacky UISplitViewController behaviour.
     UIPopoverController *_hiddenPopoverController; // Popover used to hold the master view if it's not always visible.
-	MGSplitDividerView *_dividerView; // View that draws the divider between the master and detail views.
-	NSArray *_cornerViews; // Views to draw the inner rounded corners between master and detail views.
-	float _splitPosition;
-	BOOL _reconfigurePopup;
-	MGSplitViewDividerStyle _dividerStyle; // Meta-setting which configures several aspects of appearance and behaviour.
+    MGSplitDividerView *_dividerView; // View that draws the divider between the master and detail views.
+    NSArray *_cornerViews; // Views to draw the inner rounded corners between master and detail views.
+    float _splitPosition;
+    BOOL _reconfigurePopup;
+    MGSplitViewDividerStyle _dividerStyle; // Meta-setting which configures several aspects of appearance and behaviour.
 }
 
 @property (nonatomic, assign) IBOutlet id <MGSplitViewControllerDelegate> delegate;
@@ -60,14 +60,14 @@ typedef enum _MGSplitViewDividerStyle {
 // Conveniences for you, because I care.
 - (BOOL)isShowingMaster;
 - (void)setSplitPosition:(float)posn animated:(BOOL)animate; // Allows for animation of splitPosition changes. The property's regular setter is not animated.
-/* Note:	splitPosition is the width (in a left/right split, or height in a top/bottom split) of the master view.
-			It is relative to the appropriate side of the splitView, which can be any of the four sides depending on the values in isMasterBeforeDetail and isVertical:
-				isVertical = YES, isMasterBeforeDetail = YES: splitPosition is relative to the LEFT edge. (Default)
-				isVertical = YES, isMasterBeforeDetail = NO: splitPosition is relative to the RIGHT edge.
- 				isVertical = NO, isMasterBeforeDetail = YES: splitPosition is relative to the TOP edge.
- 				isVertical = NO, isMasterBeforeDetail = NO: splitPosition is relative to the BOTTOM edge.
+/* Note:    splitPosition is the width (in a left/right split, or height in a top/bottom split) of the master view.
+            It is relative to the appropriate side of the splitView, which can be any of the four sides depending on the values in isMasterBeforeDetail and isVertical:
+                isVertical = YES, isMasterBeforeDetail = YES: splitPosition is relative to the LEFT edge. (Default)
+                isVertical = YES, isMasterBeforeDetail = NO: splitPosition is relative to the RIGHT edge.
+                isVertical = NO, isMasterBeforeDetail = YES: splitPosition is relative to the TOP edge.
+                isVertical = NO, isMasterBeforeDetail = NO: splitPosition is relative to the BOTTOM edge.
 
-			This implementation was chosen so you don't need to recalculate equivalent splitPositions if the user toggles masterBeforeDetail themselves.
+            This implementation was chosen so you don't need to recalculate equivalent splitPositions if the user toggles masterBeforeDetail themselves.
  */
 - (void)setDividerStyle:(MGSplitViewDividerStyle)newStyle animated:(BOOL)animate; // Allows for animation of dividerStyle changes. The property's regular setter is not animated.
 - (NSArray *)cornerViews;
@@ -76,8 +76,8 @@ typedef enum _MGSplitViewDividerStyle {
  The first view is the "leading" corners (top edge of screen for left/right split, left edge of screen for top/bottom split).
  The second view is the "trailing" corners (bottom edge of screen for left/right split, right edge of screen for top/bottom split).
  Do NOT modify them, except to:
-	1. Change their .cornerBackgroundColor
-	2. Change their .cornerRadius
+    1. Change their .cornerBackgroundColor
+    2. Change their .cornerRadius
  */
 
 @end
@@ -88,19 +88,19 @@ typedef enum _MGSplitViewDividerStyle {
 @optional
 
 // Called when a button should be added to a toolbar for a hidden view controller.
-- (void)splitViewController:(MGSplitViewController*)svc 
-	 willHideViewController:(UIViewController *)aViewController 
-		  withBarButtonItem:(UIBarButtonItem*)barButtonItem 
-	   forPopoverController: (UIPopoverController*)pc;
+- (void)splitViewController:(MGSplitViewController*)svc
+     willHideViewController:(UIViewController *)aViewController
+          withBarButtonItem:(UIBarButtonItem*)barButtonItem
+       forPopoverController: (UIPopoverController*)pc;
 
 // Called when the master view is shown again in the split view, invalidating the button and popover controller.
-- (void)splitViewController:(MGSplitViewController*)svc 
-	 willShowViewController:(UIViewController *)aViewController 
+- (void)splitViewController:(MGSplitViewController*)svc
+     willShowViewController:(UIViewController *)aViewController
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem;
 
 // Called when the master view is shown in a popover, so the delegate can take action like hiding other popovers.
-- (void)splitViewController:(MGSplitViewController*)svc 
-		  popoverController:(UIPopoverController*)pc 
+- (void)splitViewController:(MGSplitViewController*)svc
+          popoverController:(UIPopoverController*)pc
   willPresentViewController:(UIViewController *)aViewController;
 
 // Called when the split orientation will change (from vertical to horizontal, or vice versa).

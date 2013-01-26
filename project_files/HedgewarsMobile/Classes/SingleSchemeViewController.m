@@ -151,7 +151,7 @@
             editableCell.selectionStyle = UITableViewCellSelectionStyleNone;
             editableCell.imageView.image = nil;
             editableCell.detailTextLabel.text = nil;
-         
+
             if (row == 0) {
                 editableCell.textField.text = self.schemeName;
                 editableCell.textField.font = [UIFont boldSystemFontOfSize:[UIFont labelFontSize]];
@@ -199,7 +199,7 @@
                 if ([oneView isMemberOfClass:[UISlider class]]) {
                     cellSlider = (UISlider *)oneView;
                     break;
-                } 
+                }
             }
             cellSlider.tag = SLIDER_TAG + row;
             cellSlider.maximumValue = [[detail objectForKey:@"max"] floatValue];
@@ -244,7 +244,7 @@
             UISwitch *switcher = (UISwitch *)cell.accessoryView;
             switcher.tag = SWITCH_TAG + row;
             [switcher setOn:[[[self.schemeDictionary objectForKey:@"gamemod"] objectAtIndex:row] boolValue] animated:NO];
-            
+
             UIImage *image = [[UIImage alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/btn%@.png",ICONS_DIRECTORY(),
                                                                       [[self.gameModifierArray objectAtIndex:row] objectForKey:@"image"]]];
             cell.imageView.image = image;

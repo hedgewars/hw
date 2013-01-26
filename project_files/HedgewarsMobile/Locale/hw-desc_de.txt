@@ -4,7 +4,7 @@ Hedgewars, einfach Bombastisch!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 Hedgewars ist jetzt auch im Mac Appstore verfügbar! Suche Hedgewars von deinem Mac und bekomme deine GRATIS Kopie!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
-✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 
 Der iOS-Port hat einige exklusiven Features, wie z.B.:
 * iPad VGA-Ausgabe: Schließe einen externen Bildschirm an und spiele mit voller Auflösung;

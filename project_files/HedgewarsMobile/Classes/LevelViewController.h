@@ -26,7 +26,7 @@
     NSArray *levelArray;
     NSArray *levelSprites;
     NSIndexPath *lastIndexPath;
-    
+
     NSInteger numberOfSections;
 }
 
