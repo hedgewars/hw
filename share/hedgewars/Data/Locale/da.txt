@@ -505,7 +505,7 @@
 04:51=Få et skud lige ind med en Mudderklat.|Bider en smule og slår fjender omkuld.
 04:52=UBRUGT
 04:53=Tag på et eventyr gennem tid og rum,|mens du efterlader kampen til dine kammerater.|Vær klar til at vende tilbage når som helst,|eller hvis Pludselig Død indtræder|eller alle dine andre pindsvin dør.|Advarsel! Virker ikke under Pludselig Død,|hvis du er alene eller er Konge.
-04:54=UFÆRDIG                                                                                                                                    
+04:54=UFÆRDIG
 04:55=Sprøjt rundt med klistrende flammer.|Byg broer, begrav fjender, luk tunneler af.|Pas på ikke selv at få noget på dig.
 
 ; Game goal strings

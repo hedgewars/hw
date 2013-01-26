@@ -108,7 +108,7 @@
 02:00=%1 lejárt a szavatossága
 02:00=Nyugodj békében, %1
 02:00=%1 nem bírta a kiképzést
-02:00=%1 nem volt macska, hogy kilenc élete legyen 
+02:00=%1 nem volt macska, hogy kilenc élete legyen
 02:00=Van itt orvos?
 
 ; Hog (%1) drowned

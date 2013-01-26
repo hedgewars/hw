@@ -37,5 +37,5 @@ Youllregretthat.ogg
 )
 
 install(FILES
-	${VoiceSounds}
-	DESTINATION ${SHAREPATH}Data/Sounds/voices/HillBilly)
+    ${VoiceSounds}
+    DESTINATION ${SHAREPATH}Data/Sounds/voices/HillBilly)
