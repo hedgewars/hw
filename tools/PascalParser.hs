@@ -45,7 +45,7 @@ reference = buildExpressionParser table term <?> "reference"
         parens pas (liftM RefExpression expression >>= postfixes) >>= postfixes
         , try $ typeCast >>= postfixes
         , char '@' >> liftM Address reference >>= postfixes
-        , liftM SimpleReference iD >>= postfixes 
+        , liftM SimpleReference iD >>= postfixes
         ] <?> "simple reference"
 
     table = [
@@ -149,7 +149,7 @@ typeDecl = choice [
         if null r then
             return $ ArrayDecl Nothing t
             else
-            return $ foldr (\a b -> ArrayDecl (Just a) b) (ArrayDecl (Just $ head r) t) (tail r) 
+            return $ foldr (\a b -> ArrayDecl (Just a) b) (ArrayDecl (Just $ head r) t) (tail r)
     recordDecl = do
         try $ do
             optional $ (try $ string "packed") >> comments
@@ -401,7 +401,7 @@ expression = do
         {-, [  Infix (try $ string "shl" >> return (BinOp "shl")) AssocNone
              , Infix (try $ string "shr" >> return (BinOp "shr")) AssocNone
           ]
-        , [ 
+        , [
              Infix (try $ string "or" >> return (BinOp "or")) AssocLeft
            , Infix (try $ string "xor" >> return (BinOp "xor")) AssocLeft
           ]-}
@@ -497,7 +497,7 @@ forCycle = do
             optionMaybe $ choice [
                 try $ string "to"
                 , try $ string "downto"
-                ]   
+                ]
     --choice [string "to", string "downto"]
     comments
     e2 <- expression
@@ -563,7 +563,7 @@ uses = liftM Uses (option [] u)
 initExpression = buildExpressionParser table term <?> "initialization expression"
     where
     term = comments >> choice [
-        liftM (uncurry BuiltInFunction) $ builtInFunction initExpression 
+        liftM (uncurry BuiltInFunction) $ builtInFunction initExpression
         , try $ brackets pas (commaSep pas $ initExpression) >>= return . InitSet
         , try $ parens pas (commaSep pas $ initExpression) >>= \ia -> when (null $ tail ia) mzero >> return (InitArray ia)
         , try $ parens pas (sepEndBy recField (char ';' >> comments)) >>= return . InitRecord
