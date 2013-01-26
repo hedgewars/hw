@@ -23,7 +23,29 @@ if(NOT NOVIDEOREC)
     endif()
 endif()
 
-include_directories(.)
+# server messages localization
+file(GLOB ServerSources ${CMAKE_SOURCE_DIR}/gameServer/*.hs)
+foreach(hsfile ${ServerSources})
+    file(READ ${hsfile} hs)
+    string(REGEX MATCHALL "loc *\"[^\n\"]+\"" locs ${hs})
+    foreach(str ${locs})
+        string(REGEX REPLACE "loc *\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"server\", \"\\1\")" s ${str})
+        list(APPEND serverlocs ${s})
+    endforeach(str)
+endforeach(hsfile)
+
+list(REMOVE_DUPLICATES serverlocs)
+list(GET serverlocs 0 firstline)
+list(REMOVE_AT serverlocs 0)
+set(locsout "const char * serverMessages[] = {\n")
+foreach(l ${serverlocs})
+    list(APPEND locsout ${l} ",\n")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/net)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui)
@@ -31,6 +53,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/dialog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
@@ -41,11 +64,12 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-#directory for resources, relative to the one above on certain platforms/configurations
-if(DEFINED DATA_INSTALL_DIR OR WIN32 OR APPLE)
+#directory for resources, relative to bindir (on linux an absolute path is always used)
+string(SUBSTRING "${SHAREPATH}" 0 1 sharepath_start)
+if(APPLE OR WIN32 OR ${sharepath_start} MATCHES "/")
     set(HEDGEWARS_DATADIR ${SHAREPATH})
 else()
-    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH}/)
+    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH})
 endif()
 
 #only the cocoa version of qt supports building 64 bit apps
@@ -61,7 +85,7 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
-set(hwfr_src
+list(APPEND hwfr_src
     ${ModelCpp}
     ${NetCpp}
     ${UIcpp}
@@ -82,7 +106,7 @@ set(hwfr_src
 
 #xfire integration
 if(WIN32)
-    set(hwfr_src ${hwfr_src} xfire.cpp ../misc/xfire/xfiregameclient.cpp)
+    list(APPEND hwfr_src util/platform/xfire.cpp util/platform/xfiregameclient.cpp)
 endif(WIN32)
 
 if(MINGW)
@@ -91,9 +115,9 @@ if(MINGW)
                        COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
                                -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
                                -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
-    set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+    list(APPEND hwfr_src ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
-    set(hwfr_src ${hwfr_src} hedgewars.rc)
+    list(APPEND hwfr_src hedgewars.rc)
 endif(MINGW)
 
 file(GLOB ModelHdr model/*.h)
@@ -114,6 +138,7 @@ set(hwfr_moc_hdrs
     team.h
     util/DataManager.h
     util/LibavInteraction.h
+    util/MessageDialog.h
     )
 
 set(hwfr_hdrs
@@ -125,6 +150,7 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)
@@ -132,7 +158,7 @@ set(hwfr_rez hedgewars.qrc)
 if(${BUILD_ENGINE_LIBRARY})
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(HW_LINK_LIBS ${hwlibname} ${HW_LINK_LIBS})
+    list(APPEND HW_LINK_LIBS ${hwlibname})
 endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
@@ -142,19 +168,20 @@ qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 if(APPLE)
     find_library(iokit_framework NAMES IOKit)
-    set(HW_LINK_LIBS ${iokit_framework} ${HW_LINK_LIBS})
-    set(hwfr_src ${hwfr_src} CocoaInitializer.mm
-                             InstallController.cpp
-                             M3Panel.mm
-                             M3InstallController.m
-                             NSWorkspace_RBAdditions.m
-                             )
+    list(APPEND HW_LINK_LIBS ${iokit_framework})
+    list(APPEND hwfr_src util/platform/CocoaInitializer.mm
+                         util/platform/InstallController.cpp
+                         util/platform/M3Panel.mm
+                         util/platform/M3InstallController.m
+                         util/platform/NSWorkspace_RBAdditions.m
+                         )
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)
         if(SPARKLE_FOUND)
             add_definitions(-DSPARKLE_ENABLED)
-            set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
-            set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
+            list(APPEND hwfr_src util/platform/AutoUpdater.cpp
+                                 util/platform/SparkleAutoUpdater.mm)
+            list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
         endif()
     endif()
 endif()
@@ -181,22 +208,20 @@ if((UNIX AND NOT APPLE) AND ${LIBENGINE})
     set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}")
 endif()
 
-set(HW_LINK_LIBS
+list(APPEND HW_LINK_LIBS
     physfs
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${FFMPEG_LIBRARIES}
-    ${HW_LINK_LIBS}
     )
 
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
-        set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
+        list(APPEND HW_LINK_LIBS SDL)
     endif()
 
-    set(HW_LINK_LIBS
-        ${HW_LINK_LIBS}
+    list(APPEND HW_LINK_LIBS
         ole32
         oleaut32
         winspool

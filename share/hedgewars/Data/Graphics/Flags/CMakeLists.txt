@@ -1,5 +1,5 @@
-file(GLOB FlagTemplates *.png) 
+file(GLOB FlagTemplates *.png)
 
 install(FILES
-	${FlagTemplates}
-	DESTINATION ${SHAREPATH}Data/Graphics/Flags)
+    ${FlagTemplates}
+    DESTINATION ${SHAREPATH}Data/Graphics/Flags)

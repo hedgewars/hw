@@ -1,4 +1,4 @@
 install(FILES
-	DejaVuSans-Bold.ttf
+    DejaVuSans-Bold.ttf
     wqy-zenhei.ttc
-	DESTINATION ${SHAREPATH}Data/Fonts)
+    DESTINATION ${SHAREPATH}Data/Fonts)

@@ -1,5 +1,5 @@
 install(FILES
-	map.png
-	map.cfg
-	preview.png
-	DESTINATION ${SHAREPATH}Data/Maps/Hammock)
+    map.png
+    map.cfg
+    preview.png
+    DESTINATION ${SHAREPATH}Data/Maps/Hammock)

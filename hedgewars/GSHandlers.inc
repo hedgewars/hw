@@ -298,7 +298,7 @@ end;
 procedure doStepBomb(Gear: PGear);
 var
     i, x, y: LongInt;
-    dX, dY: hwFloat;
+    dX, dY, gdX: hwFloat;
     vg: PVisualGear;
 begin
     AllInactive := false;
@@ -338,10 +338,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _3) * _0_08;
                     FollowGear := AddGear(x, y, gtCluster, 0, dX, dY, 25)
                     end
@@ -350,10 +351,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _1_5) * _0_3;
                     FollowGear:= AddGear(x, y, gtMelonPiece, 0, dX, dY, 75);
                     FollowGear^.DirAngle := i * 60
@@ -2414,8 +2416,8 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMortar(Gear: PGear);
-var
-    dX, dY: hwFloat;
+var 
+    dX, dY, gdX, gdY: hwFloat;
     i: LongInt;
     dxn, dyn: boolean;
 begin
@@ -2426,14 +2428,16 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
+        gdX := Gear^.dX;
+        gdY := Gear^.dY;
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
 
-        Gear^.dX.isNegative := not dxn;
-        Gear^.dY.isNegative := not dyn;
+        gdX.isNegative := not dxn;
+        gdY.isNegative := not dyn;
         for i:= 0 to 4 do
             begin
-            dX := Gear^.dX + (GetRandomf - _0_5) * _0_03;
-            dY := Gear^.dY + (GetRandomf - _0_5) * _0_03;
+            dX := gdX + (GetRandomf - _0_5) * _0_03;
+            dY := gdY + (GetRandomf - _0_5) * _0_03;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
             end;
 
@@ -5182,7 +5186,7 @@ if Gear^.Timer < $FFFFFFFF then
 if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
     begin
     doStepFallingGear(Gear);
-    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and ((hwRound(Gear^.X) < leftX) or (hwRound(Gear^.X) > rightX) or (hwRound(Gear^.Y) < topY)) then
+    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
         begin
         Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
         Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
@@ -5275,9 +5279,9 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKnife(Gear: PGear);
-var ox, oy: LongInt;
-    la: hwFloat;
-    a: real;
+//var ox, oy: LongInt;
+//    la: hwFloat;
+var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
     if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
@@ -5299,14 +5303,14 @@ begin
         end
     else if (Gear^.CollisionIndex = -1) and (Gear^.Timer = 0) then
         begin
-        ox:= 0; oy:= 0;
+        (*ox:= 0; oy:= 0;
         if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
         if TestCollisionXwithGear(Gear, 1)       then ox:=  1;
         if TestCollisionXwithGear(Gear, -1)      then ox:= -1;
         if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
         if Gear^.Health > 0 then
             PlaySound(sndRopeAttach);
-(*
+
         la:= _10000;
         if (ox <> 0) or (oy <> 0) then
             la:= CalcSlopeNearGear(Gear, ox, oy);

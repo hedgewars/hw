@@ -44,7 +44,7 @@ uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
 
 const
     // hog tag mask
-    htNone        = $00;
+    //htNone        = $00;
     htTeamName    = $01;
     htName        = $02;
     htHealth      = $04;
@@ -1110,8 +1110,8 @@ begin
                                 startX:= max(max(LAND_WIDTH,4096) + 1024, endX + 2048)
                             else
                                 startX:= max(-max(LAND_WIDTH,4096) - 1024, endX - 2048);
-                            startY:= endY - 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            startY:= endY - 1024;
+                            DrawTextureF(SpritesData[sprBirdy].Texture, min(Gear^.Timer/750,1), startX + WorldDx + LongInt(round((endX - startX) * (-power(2, -10 * LongInt(Gear^.Timer)/2000) + 1))), startY + WorldDy + LongInt(round((endY - startY) * sqrt(1 - power((LongInt(Gear^.Timer)/2000)-1, 2)))), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end
                         else // Disappearing
                             begin
@@ -1121,8 +1121,8 @@ begin
                                 endX:= max(max(LAND_WIDTH,4096) + 1024, startX + 2048)
                             else
                                 endX:= max(-max(LAND_WIDTH,4096) - 1024, startX - 2048);
-                            endY:= startY + 256;
-                            DrawTextureF(SpritesData[sprBirdy].Texture, 1, startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
+                            endY:= startY + 1024;
+                            DrawTextureF(SpritesData[sprBirdy].Texture, min((2000-Gear^.Timer)/750,1), startX + WorldDx + LongInt(round((endX - startX) * power(2, 10 * (LongInt(Gear^.Timer)/2000 - 1)))) + hwRound(Gear^.dX * Gear^.Timer), startY + WorldDy + LongInt(round((endY - startY) * cos(LongInt(Gear^.Timer)/2000 * (Pi/2)) - (endY - startY))) + hwRound(Gear^.dY * Gear^.Timer), ((Gear^.Pos shr 6) or (RealTicks shr 8)) mod 2, Gear^.Tag, 75, 75);
                             end;
                         end
                     else

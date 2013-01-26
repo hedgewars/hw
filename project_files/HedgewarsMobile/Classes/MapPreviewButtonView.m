@@ -52,7 +52,7 @@
 }
 
 #pragma mark -
-#pragma mark preview 
+#pragma mark preview
 -(int) sendToEngine:(NSString *)string {
     unsigned char length = [string length];
 
@@ -157,7 +157,7 @@
     [self performSelectorOnMainThread:@selector(removeIndicator)
                            withObject:nil
                         waitUntilDone:NO];
-    
+
     [pool release];
 }
 
@@ -165,12 +165,12 @@
     // remove the current preview and title
     [self setImage:nil forState:UIControlStateNormal];
     [self setTitle:nil forState:UIControlStateNormal];
-    
+
     // don't display preview on slower device, too slow and memory hog
     if (IS_NOT_POWERFUL([HWUtils modelType])) {
         [self setTitle:NSLocalizedString(@"Preview not available",@"") forState:UIControlStateNormal];
         [self turnOnWidgets];
-    } else {        
+    } else {
         // add a very nice spinning wheel
         UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc]
                                               initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -179,7 +179,7 @@
         [indicator startAnimating];
         [self addSubview:indicator];
         [indicator release];
-        
+
         // let's draw in a separate thread so the gui can work; at the end it restore other widgets
         [NSThread detachNewThreadSelector:@selector(drawingThread) toTarget:self withObject:nil];
     }

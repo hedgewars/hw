@@ -118,10 +118,10 @@ cutHost :: B.ByteString -> B.ByteString
 cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
 
 caseInsensitiveCompare :: B.ByteString -> B.ByteString -> Bool
-caseInsensitiveCompare a b = f a == f b
-    where
-        f = map Char.toUpper . UTF8.toString
+caseInsensitiveCompare a b = upperCase a == upperCase b
 
+upperCase :: B.ByteString -> B.ByteString
+upperCase = UTF8.fromString . map Char.toUpper . UTF8.toString
 
 roomInfo :: B.ByteString -> RoomInfo -> [B.ByteString]
 roomInfo n r = [
@@ -134,3 +134,6 @@ roomInfo n r = [
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
+
+loc :: B.ByteString -> B.ByteString
+loc = id

@@ -298,7 +298,7 @@
 02:07=Tai Gali Praversti...
 02:07=Naudingi Irankiai!
 02:07=Išnaudok Šia Dėže
-02:07=Atsargiai Žemiau  
+02:07=Atsargiai Žemiau
 02:07=Dar Daugiau Naudingu Irankiu!
 02:07=Irankiai tau!
 02:07=Tai Turėtu Buti Gera!
@@ -364,7 +364,7 @@
 02:09=%1 artėja prie savizudybės
 02:09=%1 padeda priešui
 02:09=Tai buvo kvaila %1
-02:09=%1 Palauk KA?? 
+02:09=%1 Palauk KA??
 02:09=%1 susimaišė
 02:09=%1 sužaloja save
 02:09=%1 myli žeminti save
@@ -406,7 +406,7 @@
 03:11=Bonk!
 03:12=Kovos Menai
 03:13=UNUSED
-03:14=Transporto Priemonė 
+03:14=Transporto Priemonė
 03:15=Aviacinė Ataka
 03:16=Aviacinė Ataka
 03:17=Kasimosi Irankis
@@ -455,7 +455,7 @@
 04:02=Atakuok savo priešus paleisdamas balistini objekta|kuris gali buti valdomas vėjo.|Ataka: Laikyk kad šautum stipriau
 04:03=Paleisk sprogstančia bite kuri seks prieša|arba pasirinkta taikini. Nešauk su pilna jėga|nes tai gadina taikluma.|Pelė: Pasirink taikini|Ataka: Laikyk kad šautum stipriau
 04:04=Atakuok savo priešus naudodamas šratini šautuva.|Ačiu jo pasiskirstimui tau nereikia nusitaikity tiesiai i prieša|kad padarytum žalos.|Ataka: Šauna (Keleta Kartu)
-04:05=Judėk po žeme naudok kasimo iranga|kad galėtum nusileisti i tuneli arba i kita vietove.|Ataka: Pradėti ir nustoti kasima 
+04:05=Judėk po žeme naudok kasimo iranga|kad galėtum nusileisti i tuneli arba i kita vietove.|Ataka: Pradėti ir nustoti kasima
 04:06=Nusibodo? Nėra Kaip Pulti? Taupai Kulkas?|Jokiu Problemu! Tiesiog praleisk savo eile, baily!|Ataka: Praleidžia tavo eile be veiksmo
 04:07=Nuvaryk toli ir greitai|su virve. Numesk ežius i vandeni|arba numesk ant ju granata arba panašius ginklus.|Ataka: Šauk arba atleisk virve|Ilgas Šuolis: Meta granatas arba panašius ginklus
 04:08=Laikyk savo priešus kuo toliau numesdamas|mina siauruose praėjimuose arba prie ju kojiu. Tik|buk tikras kad pabėgsi kad pats jos neaktyvuotum!|Ataka: Meta mina tau prie kojiu

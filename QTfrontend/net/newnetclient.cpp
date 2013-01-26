@@ -28,6 +28,8 @@
 #include "game.h"
 #include "roomslistmodel.h"
 #include "playerslistmodel.h"
+#include "servermessages.h"
+#include "HWApplication.h"
 
 char delimeter='\n';
 
@@ -251,7 +253,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "ERROR")
     {
         if (lst.size() == 2)
-            emit Error(lst[1]);
+            emit Error(HWApplication::translate("server", lst[1].toAscii().constData()));
         else
             emit Error("Unknown error");
         return;
@@ -260,7 +262,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "WARNING")
     {
         if (lst.size() == 2)
-            emit Warning(lst[1]);
+            emit Warning(HWApplication::translate("server", lst[1].toAscii().constData()));
         else
             emit Warning("Unknown warning");
         return;
@@ -579,14 +581,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (lst[1] == "Authentication failed")
         {
             emit AuthFailed();
-        m_game_connected = false;
-        Disconnect();
-        //omitted 'emit disconnected()', we don't want the error message
-        return;
+            m_game_connected = false;
+            Disconnect();
+            //omitted 'emit disconnected()', we don't want the error message
+            return;
         }
         m_game_connected = false;
         Disconnect();
-        emit disconnected(lst[1]);
+        emit disconnected(HWApplication::translate("server", lst[1].toAscii().constData()));
         return;
     }
 
@@ -924,6 +926,20 @@ void HWNewNet::followPlayer(const QString & nick)
         RawSendNet(QString("FOLLOW%1%2").arg(delimeter).arg(nick));
         isChief = false;
     }
+}
+
+void HWNewNet::consoleCommand(const QString & cmd)
+{
+    RawSendNet(QString("CMD%1%2").arg(delimeter).arg(cmd));
+}
+
+bool HWNewNet::allPlayersReady()
+{
+    int ready = 0;
+    for (int i = 0; i < m_roomPlayersModel->rowCount(); i++)
+        if (m_roomPlayersModel->index(i, 0).data(PlayersListModel::Ready).toBool()) ready++;
+
+    return (ready == m_roomPlayersModel->rowCount());
 }
 
 void HWNewNet::startGame()

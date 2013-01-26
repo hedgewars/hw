@@ -27,7 +27,6 @@
 #include "pagetraining.h"
 #include "pagenetserver.h"
 #include "pageoptions.h"
-#include "pagefeedback.h"
 #include "pageingame.h"
 #include "pagescheme.h"
 #include "pageroomslist.h"
@@ -139,9 +138,6 @@ void Ui_HWForm::SetupPages(QWidget *Parent)
 
     pageDataDownload = new PageDataDownload();
     Pages->addWidget(pageDataDownload);
-
-    pageFeedback = new PageFeedback();
-    Pages->addWidget(pageFeedback);
 
     pageVideos = new PageVideos();
     Pages->addWidget(pageVideos);

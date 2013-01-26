@@ -47,11 +47,24 @@
 
 #include <stdint.h>
 
-#include "pagefeedback.h"
+#include "AbstractPage.h"
 #include "hwconsts.h"
+#include "feedbackdialog.h"
 
-QLayout * PageFeedback::bodyLayoutDefinition()
+FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
 {
+    setModal(true);
+    setWindowFlags(Qt::Sheet);
+    setWindowModality(Qt::WindowModal);
+    setMinimumSize(700, 460);
+    resize(700, 460);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    netManager = NULL;
+    GenerateSpecs();
+
+    /* Top layout */
+
     QVBoxLayout * pageLayout = new QVBoxLayout();
     QHBoxLayout * summaryLayout = new QHBoxLayout();
     QHBoxLayout * emailLayout = new QHBoxLayout();
@@ -94,12 +107,12 @@ QLayout * PageFeedback::bodyLayoutDefinition()
 
     combinedTopLayout->addLayout(summaryEmailLayout);
 
-
     CheckSendSpecs = new QCheckBox();
     CheckSendSpecs->setText(QLabel::tr("Send system information"));
     CheckSendSpecs->setChecked(true);
     systemLayout->addWidget(CheckSendSpecs);
-    BtnViewInfo = addButton("View", systemLayout, 1, false);
+    BtnViewInfo = new QPushButton(tr("View"));
+    systemLayout->addWidget(BtnViewInfo, 1);
     BtnViewInfo->setFixedSize(60, 30);
     connect(BtnViewInfo, SIGNAL(clicked()), this, SLOT(ShowSpecs()));
     combinedTopLayout->addLayout(systemLayout);
@@ -118,81 +131,23 @@ QLayout * PageFeedback::bodyLayoutDefinition()
     descriptionLayout->addWidget(description);
     pageLayout->addLayout(descriptionLayout);
 
-    return pageLayout;
-}
+    /* Bottom layout */
 
-QNetworkAccessManager * PageFeedback::GetNetManager()
-{
-    if (netManager) return netManager;
-    netManager = new QNetworkAccessManager(this);
-    connect(netManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(NetReply(QNetworkReply*)));
-    return netManager;
-}
-
-void PageFeedback::LoadCaptchaImage()
-{
-        QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL("http://hedgewars.org/feedback/?gencaptcha");
-        QNetworkRequest req(captchaURL);
-        genCaptchaRequest = netManager->get(req);
-}
-
-void PageFeedback::NetReply(QNetworkReply *reply)
-{
-    if (reply == genCaptchaRequest)
-    {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qDebug() << "Error generating captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
-            return;
-        }
-
-        bool okay;
-        QByteArray body = reply->readAll();
-        captchaID = QString(body).toInt(&okay);
-
-        if (!okay)
-        {
-            qDebug() << "Failed to get captcha ID: " << body;
-            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
-            return;
-        }
-
-        QString url = "http://hedgewars.org/feedback/?captcha&id=";
-        url += QString::number(captchaID);
-
-        QNetworkAccessManager *netManager = GetNetManager();
-        QUrl captchaURL(url);
-        QNetworkRequest req(captchaURL);
-        captchaImageRequest = netManager->get(req);
-    }
-    else if (reply == captchaImageRequest)
-    {
-        if (reply->error() != QNetworkReply::NoError)
-        {
-            qDebug() << "Error loading captcha image: " << reply->errorString();
-            ShowErrorMessage(QMessageBox::tr("Failed to download captcha"));
-            return;
-        }
-
-        QByteArray imageData = reply->readAll();
-        QPixmap pixmap;
-        pixmap.loadFromData(imageData);
-        label_captcha->setPixmap(pixmap);
-        captcha_code->setText("");
-    }
-}
-
-QLayout * PageFeedback::footerLayoutDefinition()
-{
     QHBoxLayout * bottomLayout = new QHBoxLayout();
     QHBoxLayout * captchaLayout = new QHBoxLayout();
     QVBoxLayout * captchaInputLayout = new QVBoxLayout();
 
+    QPushButton * BtnCancel = new QPushButton(tr("Cancel"));
+    bottomLayout->addWidget(BtnCancel, 0);
+    BtnCancel->setFixedSize(100, 40);
+    connect(BtnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+    bottomLayout->insertStretch(1);
+
     label_captcha = new QLabel();
     label_captcha->setStyleSheet("border: 3px solid #ffcc00; border-radius: 4px");
-    label_captcha->setText("<div style='width: 200px; height: 100px;'>loading<br>captcha</div>");
+    label_captcha->setText("loading<br>captcha");
+    label_captcha->setFixedSize(200, 50);
     captchaLayout->addWidget(label_captcha);
 
     label_captcha_input = new QLabel();
@@ -206,20 +161,26 @@ QLayout * PageFeedback::footerLayoutDefinition()
     captchaLayout->addLayout(captchaInputLayout);
     captchaLayout->setAlignment(captchaInputLayout, Qt::AlignLeft);
 
-    captchaLayout->insertSpacing(-1, 40);
     bottomLayout->addLayout(captchaLayout);
+    bottomLayout->addSpacing(40);
 
-    //TODO: create logo for send button
-    BtnSend = addButton("Send Feedback", bottomLayout, 0, false);
+    // TODO: Set green arrow icon for send button (:/res/Start.png)
+    BtnSend = new QPushButton(tr("Send Feedback"));
+    bottomLayout->addWidget(BtnSend, 0);
     BtnSend->setFixedSize(120, 40);
+    connect(BtnSend, SIGNAL(clicked()), this, SLOT(SendFeedback()));
 
     bottomLayout->setStretchFactor(captchaLayout, 0);
     bottomLayout->setStretchFactor(BtnSend, 1);
 
-    return bottomLayout;
+    QVBoxLayout * dialogLayout = new QVBoxLayout(this);
+    dialogLayout->addLayout(pageLayout, 1);
+    dialogLayout->addLayout(bottomLayout);
+
+    LoadCaptchaImage();
 }
 
-void PageFeedback::GenerateSpecs()
+void FeedbackDialog::GenerateSpecs()
 {
     // Gather some information about the system and embed it into the report
     QDesktopWidget* screen = QApplication::desktop();
@@ -291,11 +252,12 @@ void PageFeedback::GenerateSpecs()
 #ifdef Q_WS_X11
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     long pages = sysconf(_SC_PHYS_PAGES),
+/*
 #ifndef Q_OS_FREEBSD
          available_pages = sysconf(_SC_AVPHYS_PAGES),
 #else
          available_pages = 0,
-#endif
+#endif*/
          page_size = sysconf(_SC_PAGE_SIZE);
     total_ram += QString::number(pages * page_size) + "\n";
     os_version += "GNU/Linux or BSD\n";
@@ -365,12 +327,7 @@ void PageFeedback::GenerateSpecs()
         + kernel_line;
 }
 
-void PageFeedback::connectSignals()
-{
-    //TODO
-}
-
-void PageFeedback::ShowErrorMessage(const QString & msg)
+void FeedbackDialog::ShowErrorMessage(const QString & msg)
 {
     QMessageBox msgMsg(this);
     msgMsg.setIcon(QMessageBox::Warning);
@@ -380,7 +337,7 @@ void PageFeedback::ShowErrorMessage(const QString & msg)
     msgMsg.exec();
 }
 
-void PageFeedback::ShowSpecs()
+void FeedbackDialog::ShowSpecs()
 {
     QMessageBox msgMsg(this);
     msgMsg.setIcon(QMessageBox::Information);
@@ -392,9 +349,136 @@ void PageFeedback::ShowSpecs()
     msgMsg.exec();
 }
 
-PageFeedback::PageFeedback(QWidget* parent) : AbstractPage(parent)
+void FeedbackDialog::NetReply(QNetworkReply *reply)
 {
-    initPage();
-    netManager = NULL;
-    GenerateSpecs();
+    if (reply == genCaptchaRequest)
+    {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error generating captcha image: " << reply->errorString();
+            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            return;
+        }
+
+        bool okay;
+        QByteArray body = reply->readAll();
+        captchaID = QString(body).toInt(&okay);
+
+        if (!okay)
+        {
+            qDebug() << "Failed to get captcha ID: " << body;
+            ShowErrorMessage(QMessageBox::tr("Failed to generate captcha"));
+            return;
+        }
+
+        QString url = "http://hedgewars.org/feedback/?captcha&id=";
+        url += QString::number(captchaID);
+
+        QNetworkAccessManager *netManager = GetNetManager();
+        QUrl captchaURL(url);
+        QNetworkRequest req(captchaURL);
+        captchaImageRequest = netManager->get(req);
+    }
+    else if (reply == captchaImageRequest)
+    {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            qDebug() << "Error loading captcha image: " << reply->errorString();
+            ShowErrorMessage(QMessageBox::tr("Failed to download captcha"));
+            return;
+        }
+
+        QByteArray imageData = reply->readAll();
+        QPixmap pixmap;
+        pixmap.loadFromData(imageData);
+        label_captcha->setPixmap(pixmap);
+        captcha_code->setText("");
+    }
+}
+
+QNetworkAccessManager * FeedbackDialog::GetNetManager()
+{
+    if (netManager) return netManager;
+    netManager = new QNetworkAccessManager(this);
+    connect(netManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(NetReply(QNetworkReply*)));
+    return netManager;
+}
+
+void FeedbackDialog::LoadCaptchaImage()
+{
+        QNetworkAccessManager *netManager = GetNetManager();
+        QUrl captchaURL("http://hedgewars.org/feedback/?gencaptcha");
+        QNetworkRequest req(captchaURL);
+        genCaptchaRequest = netManager->get(req);
+}
+
+void FeedbackDialog::finishedSlot(QNetworkReply* reply)
+{
+    if (reply && reply->error() == QNetworkReply::NoError)
+    {
+            QMessageBox infoMsg(this);
+            infoMsg.setIcon(QMessageBox::Information);
+            infoMsg.setWindowTitle(QMessageBox::tr("Hedgewars - Success"));
+            infoMsg.setText(reply->readAll());
+            infoMsg.setWindowModality(Qt::WindowModal);
+            infoMsg.exec();
+
+            accept();
+
+            return;
+    }
+    else
+    {
+        ShowErrorMessage(QString("Error: ") + reply->readAll());
+        LoadCaptchaImage();
+    }
+}
+
+void FeedbackDialog::SendFeedback()
+{
+    // Get form data
+
+    QString summary = this->summary->text();
+    QString description = this->description->toPlainText();
+    QString email = this->email->text();
+    QString captchaCode = this->captcha_code->text();
+    QString captchaID = QString::number(this->captchaID);
+    QString version = "HedgewarsFoundation-Hedgewars-" + (cVersionString?(*cVersionString):QString(""));
+
+    if (summary.isEmpty() || description.isEmpty())
+    {
+        ShowErrorMessage(QMessageBox::tr("Please fill out all fields. Email is optional."));
+        return;
+    }
+
+    // Submit issue to PHP script
+
+    QByteArray body;
+    body.append("captcha=");
+    body.append(captchaID);
+    body.append("&code=");
+    body.append(captchaCode);
+    body.append("&version=");
+    body.append(QUrl::toPercentEncoding(version));
+    body.append("&title=");
+    body.append(QUrl::toPercentEncoding(summary));
+    body.append("&body=");
+    body.append(QUrl::toPercentEncoding(description));
+    body.append("&email=");
+    body.append(QUrl::toPercentEncoding(email));
+    if (CheckSendSpecs->isChecked())
+    {
+        body.append("&specs=");
+        body.append(QUrl::toPercentEncoding(specs));
+    }
+
+    nam = new QNetworkAccessManager(this);
+    connect(nam, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(finishedSlot(QNetworkReply*)));
+
+    QNetworkRequest header(QUrl("http://hedgewars.org/feedback/?submit"));
+    header.setRawHeader("Content-Length", QString::number(body.size()).toAscii());
+    header.setRawHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    nam->post(header, body);
 }

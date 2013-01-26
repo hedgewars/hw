@@ -38,7 +38,7 @@ class GameStyleModel : public QStandardItemModel
         Q_OBJECT
 
     public:
-        enum DataRoles { ScriptRole = Qt::UserRole+1, SchemeRole, WeaponsRole };
+        enum DataRoles { ScriptRole = Qt::UserRole+1, SchemeRole, WeaponsRole, IsDlcRole };
 
     public slots:
         /// reloads the themes from the DataManager

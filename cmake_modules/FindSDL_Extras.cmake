@@ -13,7 +13,7 @@ if(sdlmixer_h)
 
     if(sdlmixer_version GREATER "10209")
         message(STATUS "Mix_Init() is present")
-        set(pascal_flags "-dSDL_MIXER_NEWER" ${pascal_flags})
+        list(APPEND pascal_flags "-dSDL_MIXER_NEWER")
     endif()
 endif()
 
@@ -30,7 +30,7 @@ if(sdlimage_h)
 
     if(sdlimage_version GREATER "010207")
         message(STATUS "IMG_Init() is present")
-        set(pascal_flags "-dSDL_IMAGE_NEWER" ${pascal_flags})
+        list(APPEND pascal_flags "-dSDL_IMAGE_NEWER")
     endif()
 endif()
 

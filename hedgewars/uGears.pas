@@ -55,7 +55,7 @@ function  GearByUID(uid : Longword) : PGear;
 procedure doStepDrowningGear(Gear: PGear);
 
 implementation
-uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
+uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{$ENDIF}
     uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
@@ -77,6 +77,7 @@ var delay: LongWord;
     stSpawn, stNTurn);
     upd: Longword;
     snowLeft,snowRight: LongInt;
+    NewTurnTick: LongWord;
     //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
@@ -188,6 +189,16 @@ var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
 begin
+ScriptCall('onGameTick');
+if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
+if GameTicks = NewTurnTick then
+    begin
+    ScriptCall('onNewTurn');
+{$IFDEF SDL13}
+    uTouch.NewTurnBeginning();
+{$ENDIF}
+    end;
+
 PrvInactive:= AllInactive;
 AllInactive:= true;
 
@@ -382,7 +393,8 @@ case step of
                 SwitchHedgehog;
 
                 AfterSwitchHedgehog;
-                bBetweenTurns:= false
+                bBetweenTurns:= false;
+                NewTurnTick:= GameTicks + 1
                 end;
             step:= Low(step)
             end;
@@ -469,8 +481,6 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 AddRandomness(CheckSum);
-ScriptCall('onGameTick');
-if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 
 inc(GameTicks)
 end;
@@ -1396,6 +1406,7 @@ begin
     upd:= 0;
 
     //SDMusic:= 'hell.ogg';
+    NewTurnTick:= $FFFFFFFF;
 end;
 
 procedure freeModule;

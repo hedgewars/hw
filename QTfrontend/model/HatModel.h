@@ -24,30 +24,22 @@
 #ifndef HEDGEWARS_HATMODEL_H
 #define HEDGEWARS_HATMODEL_H
 
-#include <QAbstractListModel>
+#include <QStandardItemModel>
 #include <QStringList>
 #include <QVector>
 #include <QPair>
 #include <QIcon>
 
-class HatModel : public QAbstractListModel
+class HatModel : public QStandardItemModel
 {
         Q_OBJECT
 
     public:
         HatModel(QObject *parent = 0);
 
-        QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-        int rowCount(const QModelIndex & parent) const;
-        //int columnCount(const QModelIndex & parent) const;
-
     public slots:
         /// Reloads hats using the DataManager.
         void loadHats();
-
-        QVariant data(const QModelIndex &index, int role) const;
-    protected:
-        QVector<QPair<QString, QIcon> > hats;
 };
 
 #endif // HEDGEWARS_HATMODEL_H

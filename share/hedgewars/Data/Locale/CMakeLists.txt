@@ -6,17 +6,17 @@ file(GLOB missionfiles missions_*.txt)
 
 QT4_ADD_TRANSLATION(QM ${tsfiles})
 
-add_custom_target (release-translation ALL 
-		DEPENDS ${QM}
-		COMMENT "Compiling ts files"
+add_custom_target (release-translation ALL
+        DEPENDS ${QM}
+        COMMENT "Compiling ts files"
 )
 
 install(FILES
-	${txttrans2}
-	${txttrans5}
-	${QM}
-	${luafiles}
-	${missionfiles}
-	DESTINATION ${SHAREPATH}Data/Locale
+    ${txttrans2}
+    ${txttrans5}
+    ${QM}
+    ${luafiles}
+    ${missionfiles}
+    DESTINATION ${SHAREPATH}Data/Locale
 )
 

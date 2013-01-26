@@ -19,12 +19,32 @@
 #ifndef PAGE_OPTIONS_H
 #define PAGE_OPTIONS_H
 
+#include "igbox.h"
 #include "AbstractPage.h"
+
+#include <QString>
 
 class GameUIConfig;
 class FPSEdit;
-class IconedGroupBox;
 class QSignalMapper;
+class KeyBinder;
+class QGridLayout;
+
+// Let's stay D-R-Y
+class OptionGroupBox : public IconedGroupBox
+{
+    Q_OBJECT
+
+    public:
+        OptionGroupBox(const QString & iconName,
+                       const QString & title,
+                       QWidget * parent = 0);
+        QGridLayout * layout();
+        void addDivider();
+
+    private:
+        QGridLayout * m_layout;
+};
 
 class PageOptions : public AbstractPage
 {
@@ -57,6 +77,8 @@ class PageOptions : public AbstractPage
         QComboBox *CBTeamName;
         IconedGroupBox *AGGroupBox;
         QComboBox *CBResolution;
+        QLineEdit *windowWidthEdit;
+        QLineEdit *windowHeightEdit;
         QComboBox *CBStereoMode;
         QCheckBox *CBFrontendSound;
         QCheckBox *CBFrontendMusic;
@@ -75,7 +97,8 @@ class PageOptions : public AbstractPage
 
         FPSEdit *fpsedit;
         QLabel *labelNN;
-        QSpinBox * volumeBox;
+        QSlider *SLVolume;
+        QLabel *lblVolumeLevel;
         QLineEdit *editNetNick;
         QLineEdit *editNetPassword;
         QSlider *SLQuality;
@@ -118,6 +141,8 @@ class PageOptions : public AbstractPage
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         void connectSignals();
+        int resetBindToDefault(int bindID);
+        void setupTabPage(QWidget * tabpage, QVBoxLayout ** leftColumn, QVBoxLayout ** rightColumn);
 
         bool previousFullscreenValue;
         int previousResolutionIndex;
@@ -134,6 +159,13 @@ class PageOptions : public AbstractPage
         QPushButton *btnDefaults;
         QPushButton *btnUpdateNow;
         GameUIConfig * config;
+        KeyBinder * binder;
+        int currentTab;
+        int binderTab;
+
+        QLabel * lblFullScreenRes;
+        QLabel * lblWinScreenRes;
+        QWidget * winResContainer;
 
     private slots:
         void forceFullscreen(int index);
@@ -151,6 +183,10 @@ class PageOptions : public AbstractPage
         void changeUseGameRes(int state);
         void changeRecordAudio(int state);
         void checkForUpdates();
+        void tabIndexChanged(int);
+        void bindUpdated(int bindID);
+        void resetAllBinds();
+        void setVolume(int);
 
     public slots:
         void setDefaultOptions();

@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
+#include <utility>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -34,6 +35,7 @@
 #include "fpsedit.h"
 #include "HWApplication.h"
 #include "DataManager.h"
+#include "SDL.h"
 
 
 const QNetworkProxy::ProxyType proxyTypesMap[] = {
@@ -52,6 +54,13 @@ GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
 
     connect(Form->ui.pageOptions->CBFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
 
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        m_binds.append(BindAction());
+        m_binds[i].action = cbinds[i].action;
+        m_binds[i].strbind = cbinds[i].strbind;
+    }
+
     //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
 
@@ -65,7 +74,7 @@ void GameUIConfig::reloadValues(void)
 {
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
-    int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
+    int t = Form->ui.pageOptions->CBResolution->findText(value("video/fullscreenResolution").toString());
     if (t < 0)
     {
         if (Form->ui.pageOptions->CBResolution->count() > 1)
@@ -74,6 +83,20 @@ void GameUIConfig::reloadValues(void)
             Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
+
+    // Default the windowed resolution to 5/6 of the screen size
+    int screenWidth = SDL_GetVideoInfo()->current_w * 5 / 6;
+    int screenHeight = SDL_GetVideoInfo()->current_h * 5 / 6;
+    QString widthStr; widthStr.setNum(screenWidth);
+    QString heightStr; heightStr.setNum(screenHeight);
+    QString wWidth = value("video/windowedWidth", widthStr).toString();
+    QString wHeight = value("video/windowedHeight", heightStr).toString();
+    // If left blank reset the resolution to the default
+    wWidth = (wWidth == "" ? widthStr : wWidth);
+    wHeight = (wHeight == "" ? heightStr : wHeight);
+    Form->ui.pageOptions->windowWidthEdit->setText(wWidth);
+    Form->ui.pageOptions->windowHeightEdit->setText(wHeight);
+
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
     bool ffscr=value("frontend/fullscreen", false).toBool();
@@ -86,7 +109,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
     Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
-    Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
+    Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
@@ -133,7 +156,15 @@ void GameUIConfig::reloadValues(void)
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
+            model->item(i)->setData(value(QString("colors/color%1").arg(i), model->item(i)->data()));
+    }
+
+    { // load binds
+        for(int i = 0; i < BINDS_NUMBER; i++)
+        {
+            m_binds[i].strbind = value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
+            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default") m_binds[i].strbind = cbinds[i].strbind;
+        }
     }
 }
 
@@ -199,7 +230,9 @@ void GameUIConfig::resizeToConfigValues()
 
 void GameUIConfig::SaveOptions()
 {
-    setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
+    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
@@ -226,11 +259,11 @@ void GameUIConfig::SaveOptions()
     setValue("frontend/sound", isFrontendSoundEnabled());
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
-    setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
+    setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
 
     setValue("net/nick", netNick());
     if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
-    setPasswordHash(netPasswordHash());
+        setPasswordHash(netPasswordHash());
     }
     else if(!Form->ui.pageOptions->CBSavePassword->isChecked()) {
         clearPasswordHash();
@@ -319,16 +352,28 @@ QString GameUIConfig::language()
     return Form->ui.pageOptions->CBLanguage->itemData(Form->ui.pageOptions->CBLanguage->currentIndex()).toString();
 }
 
-QRect GameUIConfig::vid_Resolution()
-{
-    QRect result(0, 0, 640, 480);
+std::pair<QRect, QRect> GameUIConfig::vid_ResolutionPair() {
+    // returns a pair of both the fullscreen and the windowed resolution
+    QRect full(0, 0, 640, 480);
+    QRect windowed(0, 0, 640, 480);
     QStringList wh = Form->ui.pageOptions->CBResolution->currentText().split('x');
     if (wh.size() == 2)
     {
-        result.setWidth(wh[0].toInt());
-        result.setHeight(wh[1].toInt());
+        full.setWidth(wh[0].toInt());
+        full.setHeight(wh[1].toInt());
     }
-    return result;
+    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->text().toInt());
+    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->text().toInt());
+    return std::make_pair(full, windowed);
+}
+
+QRect GameUIConfig::vid_Resolution()
+{
+    std::pair<QRect, QRect> result = vid_ResolutionPair();
+    if(Form->ui.pageOptions->CBFullscreen->isChecked())
+        return result.first;
+    else
+        return result.second;
 }
 
 bool GameUIConfig::vid_Fullscreen()
@@ -536,7 +581,7 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 
 quint8 GameUIConfig::volume()
 {
-    return Form->ui.pageOptions->volumeBox->value() * 128 / 100;
+    return Form->ui.pageOptions->SLVolume->value() * 128 / 100;
 }
 
 QString GameUIConfig::AVFormat()
@@ -580,4 +625,17 @@ int GameUIConfig::rec_Bitrate()
 bool GameUIConfig::recordAudio()
 {
     return Form->ui.pageOptions->checkRecordAudio->isChecked();
+}
+
+// Gets a bind for a bindID
+QString GameUIConfig::bind(int bindID)
+{
+    return m_binds[bindID].strbind;
+}
+
+// Sets a bind for a bindID and saves it
+void GameUIConfig::setBind(int bindID, QString & strbind)
+{
+    m_binds[bindID].strbind = strbind;
+    setValue(QString("Binds/%1").arg(m_binds[bindID].action), strbind);
 }

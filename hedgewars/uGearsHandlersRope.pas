@@ -196,10 +196,10 @@ begin
         ly := hwRound(ny);
         if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
             begin
-            ny := _1 / Distance(ropeDx, ropeDy);
+            tx := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
-            nx := ropeDx * ny;
-            ny := ropeDy * ny;
+            nx := ropeDx * tx;
+            ny := ropeDy * tx;
 
             with RopePoints.ar[RopePoints.Count] do
                 begin
@@ -210,7 +210,7 @@ begin
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
                 dLen := len
                 end;
-                
+
             with RopePoints.rounded[RopePoints.Count] do
                 begin
                 X := hwRound(Gear^.X);

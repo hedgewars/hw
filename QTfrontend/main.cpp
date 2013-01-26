@@ -27,6 +27,8 @@
 #include <QSettings>
 #include <QStringListModel>
 #include <QDate>
+#include <QDesktopWidget>
+#include <QLabel>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -37,11 +39,18 @@
 
 #ifdef _WIN32
 #include <Shlobj.h>
-#endif
-#ifdef __APPLE__
+#elif defined __APPLE__
 #include "CocoaInitializer.h"
 #endif
+#ifndef _WIN32
+#include <signal.h>
+#endif
 
+// Program resources
+#ifdef __APPLE__
+static CocoaInitializer * cocoaInit = NULL;
+#endif
+static FileEngineHandler * engine = NULL;
 
 //Determines the day of easter in year
 //from http://aa.usno.navy.mil/faq/docs/easter.php,adapted to C/C++
@@ -85,6 +94,14 @@ void checkSeason()
     else
         season = SEASON_NONE;
 }
+#ifndef _WIN32
+void terminateFrontend(int signal)
+{
+    Q_UNUSED(signal);
+
+    QCoreApplication::exit(0);
+}
+#endif
 
 bool checkForDir(const QString & dir)
 {
@@ -112,31 +129,53 @@ bool checkForFile(const QString & file)
         return true;
 }
 
-#ifdef __APPLE__
-static CocoaInitializer *cocoaInit = NULL;
-// Function to be called at end of program's termination on OS X to release
-// the NSAutoReleasePool contained within the CocoaInitializer.
-void releaseCocoaPool(void)
+// Guaranteed to be the last thing ran in the application's life time.
+// Closes resources that need to exist as long as possible.
+void closeResources(void)
 {
+#ifdef __APPLE__
     if (cocoaInit != NULL)
     {
         delete cocoaInit;
         cocoaInit = NULL;
     }
-}
 #endif
+    if (engine != NULL)
+    {
+        delete engine;
+        engine = NULL;
+    }
+}
 
 int main(int argc, char *argv[])
 {
+    // Since we're calling this first, closeResources() will be the last thing called after main() returns.
+    atexit(closeResources);
+
 #ifdef __APPLE__
-    // This creates the autoreleasepool that prevents leaking, and destroys it only on exit
-    cocoaInit = new CocoaInitializer();
-    atexit(releaseCocoaPool);
+    cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
+#endif
+
+#ifndef _WIN32
+    signal(SIGINT, &terminateFrontend);
 #endif
 
     HWApplication app(argc, argv);
 
-    FileEngineHandler engine(argv[0]);
+    QLabel *splash = NULL;
+#if defined Q_WS_WIN
+    QPixmap pixmap(":res/splash.png");
+    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    splash->setAttribute(Qt::WA_TranslucentBackground);
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
+                                  (deskSize.height() - pixmap.height())/2 );
+    splash->move(splashCenter);
+    splash->setPixmap(pixmap);
+    splash->show();
+#endif
+
+    engine = new FileEngineHandler(argv[0]);
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -194,8 +233,6 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<HWTeam>("HWTeam");
 
-    // workaround over NSIS installer which modifies the install path
-    //bindir->cd("./");
     bindir->cd(QCoreApplication::applicationDirPath());
 
     if(custom_config == false)
@@ -253,11 +290,11 @@ int main(int argc, char *argv[])
     }
 
     // setup PhysFS
-    engine.mount(datadir->absolutePath());
-    engine.mount(cfgdir->absolutePath() + "/Data");
-    engine.mount(cfgdir->absolutePath());
-    engine.setWriteDir(cfgdir->absolutePath());
-    engine.mountPacks();
+    engine->mount(datadir->absolutePath());
+    engine->mount(cfgdir->absolutePath() + "/Data");
+    engine->mount(cfgdir->absolutePath());
+    engine->setWriteDir(cfgdir->absolutePath());
+    engine->mountPacks();
 
     checkForFile("physfs://hedgewars.ini");
 
@@ -305,6 +342,7 @@ int main(int argc, char *argv[])
             break;
         default :
             fname = "qt.css";
+            break;
     }
 
     // load external stylesheet if there is any
@@ -319,5 +357,7 @@ int main(int argc, char *argv[])
 
     app.form = new HWForm(NULL, style);
     app.form->show();
+    if(splash)
+        splash->close();
     return app.exec();
 }

@@ -49,6 +49,6 @@ sameProtoClientsS :: Word16 -> StateT ServerState IO [ClientInfo]
 sameProtoClientsS p = liftM f allClientsS
     where
         f = filter (\c -> clientProto c == p)
-    
+
 io :: IO a -> StateT ServerState IO a
 io = liftIO

@@ -23,6 +23,9 @@
 #include <QStringList>
 #include <QRect>
 #include <QEvent>
+#include <QList>
+#include <utility>
+#include "binds.h"
 
 class HWForm;
 class QSettings;
@@ -36,6 +39,7 @@ class GameUIConfig : public QSettings
         GameUIConfig(HWForm * FormWidgets, const QString & fileName);
         QStringList GetTeamsList();
         QRect vid_Resolution();
+        std::pair<QRect, QRect> vid_ResolutionPair();
         bool vid_Fullscreen();
         quint32 translateQuality();
         bool isSoundEnabled();
@@ -64,6 +68,8 @@ class GameUIConfig : public QSettings
         void resizeToConfigValues();
         quint32 stereoMode() const;
         void setValue(const QString & key, const QVariant & value);
+        QString bind(int bindID);
+        void setBind(int bindID, QString & strbind);
 
         QString AVFormat();
         QString videoCodec();
@@ -91,7 +97,8 @@ class GameUIConfig : public QSettings
     private:
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
-    QString temphash;
+        QString temphash;
+        QList<BindAction> m_binds;
 };
 
 #endif

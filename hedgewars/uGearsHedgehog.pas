@@ -365,7 +365,7 @@ with Gear^,
                                  Unplaced:= true;
                                  X:= _0;
                                  Y:= _0;
-                                 newGear:= AddGear(TargetPoint.X, 0, gtPiano, 0, _0, _0, 0);
+                                 newGear:= AddGear(TargetPoint.X, -1024, gtPiano, 0, _0, _0, 0);
                                  PauseMusic
                                  end;
                  amFlamethrower: newGear:= AddGear(hwRound(X), hwRound(Y), gtFlamethrower,  0, xx * _0_5, yy * _0_5, 0);

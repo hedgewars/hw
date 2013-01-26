@@ -2,9 +2,9 @@
   octorama
 
 :: TYPE
-  custom hedgewars map 
- 
-:: VERSION 
+  custom hedgewars map
+
+:: VERSION
   RC3
 
 :: CHANGELOG
@@ -27,13 +27,13 @@
    - shades on upper left bubbles are now correct
    - removed the theme for now since the theme didn't
      bring anything new but the music (tiyuri)
- 
-:: DESCRIPTION 
-  just a fun map similar to bubbleflow 
- 
-:: CREATOR 
+
+:: DESCRIPTION
+  just a fun map similar to bubbleflow
+
+:: CREATOR
   jesse/jessor - http://geekosphere.org
- 
+
 :: RIGHTZ
   Octopod Vector Art: http://iconicon.net/ (CC)
 

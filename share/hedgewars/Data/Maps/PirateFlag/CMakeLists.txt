@@ -1,6 +1,6 @@
 install(FILES
-	map.png
-	map.cfg
-	preview.png
-	DESTINATION ${SHAREPATH}Data/Maps/PirateFlag)
+    map.png
+    map.cfg
+    preview.png
+    DESTINATION ${SHAREPATH}Data/Maps/PirateFlag)
 

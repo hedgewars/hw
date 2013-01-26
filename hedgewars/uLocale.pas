@@ -40,14 +40,12 @@ var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s: ansistring;
+var s: ansistring = '';
     f: pfsFile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;
     e: TEventId;
-    loaded: boolean;
 begin
-loaded:= false;
 for e:= Low(TEventId) to High(TEventId) do
     first[e]:= true;
 

@@ -21,61 +21,26 @@
 unit uConsole;
 interface
 
-procedure initModule;
-procedure freeModule;
+
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
-function  GetLastConsoleLine: shortstring;
 function  ShortStringAsPChar(s: shortstring): PChar;
 
+var lastConsoleline : shortstring;
+
 implementation
-uses Types, uVariables, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
+uses Types, uUtils {$IFDEF ANDROID}, log in 'log.pas'{$ENDIF};
 
-const cLinesCount = 8;
-var   cLineWidth: LongInt;
-
-type
-    TTextLine = record
-        s: shortstring
-        end;
-
-var   ConsoleLines: array[byte] of TTextLine;
-      CurrLine: LongInt;
-
-procedure SetLine(var tl: TTextLine; str: shortstring);
-begin
-with tl do
-    s:= str;
-end;
 
 procedure WriteToConsole(s: shortstring);
-{$IFNDEF NOCONSOLE}
-var Len: LongInt;
-    done: boolean;
-{$ENDIF}
 begin
 {$IFNDEF NOCONSOLE}
-AddFileLog('[Con] ' + s);
+    AddFileLog('[Con] ' + s);
 {$IFDEF ANDROID}
+    //TODO integrate this function in the uMobile record
     Log.__android_log_write(Log.Android_LOG_DEBUG, 'HW_Engine', ShortStringAsPChar('[Con]' + s));
 {$ELSE}
-Write(stderr, s);
-done:= false;
-
-while not done do
-    begin
-    Len:= cLineWidth - Length(ConsoleLines[CurrLine].s);
-    SetLine(ConsoleLines[CurrLine], ConsoleLines[CurrLine].s + copy(s, 1, Len));
-    Delete(s, 1, Len);
-    if byte(ConsoleLines[CurrLine].s[0]) = cLineWidth then
-        begin
-        inc(CurrLine);
-        if CurrLine = cLinesCount then
-            CurrLine:= 0;
-        PByte(@ConsoleLines[CurrLine].s)^:= 0
-        end;
-    done:= (Length(s) = 0);
-    end;
+    Write(stderr, s);
 {$ENDIF}
 {$ENDIF}
 end;
@@ -83,13 +48,10 @@ end;
 procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
-WriteToConsole(s);
+    WriteToConsole(s);
+    lastConsoleline:= s;
 {$IFNDEF ANDROID}
-WriteLn(stderr, '');
-inc(CurrLine);
-if CurrLine = cLinesCount then
-    CurrLine:= 0;
-PByte(@ConsoleLines[CurrLine].s)^:= 0
+    WriteLn(stderr, '');
 {$ENDIF}
 {$ENDIF}
 end;
@@ -102,37 +64,5 @@ begin
     ShortStringAsPChar:= @s[1];
 end;
 
-function GetLastConsoleLine: shortstring;
-var valueStr: shortstring;
-    i: LongWord;
-begin
-i:= (CurrLine + cLinesCount - 2) mod cLinesCount;
-valueStr:= ConsoleLines[i].s;
-
-valueStr:= valueStr + #10;
-
-i:= (CurrLine + cLinesCount - 1) mod cLinesCount;
-valueStr:= valueStr + ConsoleLines[i].s;
-
-GetLastConsoleLine:= valueStr;
-end;
-
-procedure initModule;
-var i: LongInt;
-begin
-    CurrLine:= 0;
-
-    // initConsole
-    cLineWidth:= cScreenWidth div 10;
-    if cLineWidth > 255 then
-        cLineWidth:= 255;
-    for i:= 0 to Pred(cLinesCount) do
-        PByte(@ConsoleLines[i])^:= 0;
-end;
-
-procedure freeModule;
-begin
-
-end;
 
 end.

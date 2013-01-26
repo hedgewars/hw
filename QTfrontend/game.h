@@ -103,6 +103,7 @@ class HWGame : public TCPBase
         TeamSelWidget* m_pTeamSelWidget;
         GameType gameType;
 
+        void addKeyBindings(QByteArray * buf);
         void commonConfig();
         void SendConfig();
         void SendQuickConfig();

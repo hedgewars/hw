@@ -100,10 +100,11 @@ class HWChatWidget : public QWidget
         void info(const QString & str);
         void follow(const QString &);
         void nickCountUpdate(int cnt);
+        void consoleCommand(const QString & command);
 
     private:
         bool m_isAdmin;
-        QGridLayout mainLayout;
+        QHBoxLayout mainLayout;
         QTextBrowser* chatText;
         QStringList chatStrings;
         QListView* chatNicks;
