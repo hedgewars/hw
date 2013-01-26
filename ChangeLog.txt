@@ -28,7 +28,7 @@
  * Fix all knowns bugs which caused network game hang when players close engine or quit
  * Fix drill strike bug when drill's timer gets ridiculously high value instead of explosion
  * Fix some crashes, freezes and memory leaks in frontend and engine
- 
+
 0.9.16 -> 0.9.17:
  + New theme, Cave
  + New voicepack, Hillbilly
@@ -401,7 +401,7 @@ Frontend/Menu and Netgame:
  + AI updates
  + Teams now work in fort mode, i.e. 2v2
  + Ability to attack whilst jumping/rope swinging
- + Some weapons can only be used after a certain number of turns 
+ + Some weapons can only be used after a certain number of turns
  + Lots of new graphics
  * Many network/gameplay bug fixes
 
