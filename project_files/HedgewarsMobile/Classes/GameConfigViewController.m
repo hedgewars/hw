@@ -62,7 +62,7 @@
                 }
             }
             [self startGame:theButton];
-            
+
             break;
         case 2:
             [[AudioManagerController mainManager] playClickSound];

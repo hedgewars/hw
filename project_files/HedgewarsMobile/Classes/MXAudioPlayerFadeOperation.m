@@ -10,7 +10,7 @@
 #define SKVolumeChangesPerSecond 15
 
 @interface MXAudioPlayerFadeOperation ()
-@property (nonatomic, retain, readwrite) AVAudioPlayer *audioPlayer; 
+@property (nonatomic, retain, readwrite) AVAudioPlayer *audioPlayer;
 - (void)beginFadeOperation;
 - (void)finishFadeOperation;
 @end
@@ -87,21 +87,21 @@
   else {
     ALog(@"AudioPlayerFadeOperation began with invalid AVAudioPlayer");
   }
-  
+
   [pool release];
 }
 
 - (void)beginFadeOperation {
   if (![self.audioPlayer isPlaying] && _playBeforeFade) [self.audioPlayer play];
-  
+
   if (_fadeDuration != 0.0) {
-    
+
     NSTimeInterval sleepInterval = (1.0 / SKVolumeChangesPerSecond);
     NSTimeInterval startTime = [[NSDate date] timeIntervalSinceReferenceDate];
     NSTimeInterval now = startTime;
-    
+
     float startVolume = [self.audioPlayer volume];
-    
+
     while (now < (startTime + _fadeDuration)) {
       float ratioOfFadeCompleted = (now - startTime)/_fadeDuration;
       float volume = (_finishVolume * ratioOfFadeCompleted) + (startVolume * (1-ratioOfFadeCompleted));
@@ -109,7 +109,7 @@
       [NSThread sleepForTimeInterval:sleepInterval];
       now = [[NSDate date] timeIntervalSinceReferenceDate];
     }
-    
+
     [self.audioPlayer setVolume:_finishVolume];
     [self finishFadeOperation];
   }

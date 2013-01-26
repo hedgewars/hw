@@ -10,8 +10,8 @@
 
 @class MGSplitViewController;
 @interface MGSplitDividerView : UIView {
-	MGSplitViewController *splitViewController;
-	BOOL allowsDragging;
+    MGSplitViewController *splitViewController;
+    BOOL allowsDragging;
 }
 
 @property (nonatomic, assign) MGSplitViewController *splitViewController; // weak ref.

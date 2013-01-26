@@ -149,7 +149,7 @@
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
                 editableCell.textField.textColor = [UIColor blackColor];
             }
-            
+
             if (row == 0) {
                 editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"from the settings table");
@@ -163,7 +163,7 @@
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
             }
-            
+
             editableCell.accessoryView = nil;
             cell = editableCell;
             break;
@@ -176,7 +176,7 @@
                 cell.accessoryView = theSwitch;
                 [theSwitch release];
             }
-            
+
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
                 cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"from the settings table");
@@ -197,7 +197,7 @@
                 cell.accessoryView = theSwitch;
                 [theSwitch release];
             }
-            
+
             switchContent = (UISwitch *)cell.accessoryView;
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             switch (row) {
@@ -221,7 +221,7 @@
         default:
             break;
     }
-    
+
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.image = nil;

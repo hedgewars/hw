@@ -4,7 +4,7 @@ Hedgewars, it's a Blast!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 Hedgewars is available for the Mac Appstore! Search Hedgewars on your Mac and get your FREE copy today!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
-✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 
 The iOS port has some exclusive features, such as
 * iPad VGA Out: hook an external display and play at full resolution;

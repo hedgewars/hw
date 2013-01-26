@@ -4,7 +4,7 @@ Hedgewars, é um Estrondo!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 O Hedgewars está disponível na Mac App Store! Pesquisa Hedgewars no teu MacBook e obtém a tua cópia GRATUITA hoje!
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
-✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭ 
+✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 
 A versão para iOS tem algumas funcionalidades exclusivas, como
 * Saída VGA no iPad: liga-o a um ecrã externo e joga em resolução completa;
