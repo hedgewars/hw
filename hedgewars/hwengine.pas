@@ -439,7 +439,6 @@ procedure initEverything (complete:boolean);
 begin
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
-    uConsole.initModule;            // opens stdout
     uCommands.initModule;           // helps below
     uCommandHandlers.initModule;    // registers all messages from frontend
 
@@ -510,7 +509,6 @@ begin
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
-    uConsole.freeModule;            // closes stdout
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
 end;
