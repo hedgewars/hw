@@ -51,30 +51,14 @@
 #pragma mark -
 -(void) switchValueChanged:(id) sender {
     UISwitch *theSwitch = (UISwitch *)sender;
-    UISwitch *theOtherSwitch = nil;
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     switch (theSwitch.tag) {
         case 10:    //soundSwitch
-            // setting this off will turn off also the switch below (music)
             [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"sound"];
-            [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
-            theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
-            [theOtherSwitch setOn:NO animated:YES];
-
-            // since switching sound on won't turn music on anyways, we can always turn off music
-            [[AudioManagerController mainManager]pauseBackgroundMusic];
-            [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
             break;
         case 20:    //musicSwitch
-            // if switch above (sound) is off, never turn on
-            if (NO == [[settings objectForKey:@"sound"] boolValue]) {
-                [settings setObject:[NSNumber numberWithBool:NO] forKey:@"music"];
-                theOtherSwitch = (UISwitch *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]].accessoryView;
-                [theOtherSwitch setOn:NO animated:YES];
-            } else
-                [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
-
+            [settings setObject:[NSNumber numberWithBool:theSwitch.on] forKey:@"music"];
             if (theSwitch.on)
                 [[AudioManagerController mainManager] playBackgroundMusic];
             else
@@ -165,7 +149,7 @@
                 editableCell.textField.font = [UIFont systemFontOfSize:[UIFont systemFontSize]];
                 editableCell.textField.textColor = [UIColor blackColor];
             }
-            
+
             if (row == 0) {
                 editableCell.titleLabel.text = NSLocalizedString(@"Nickname","from the settings table");
                 editableCell.textField.placeholder = NSLocalizedString(@"Insert your username (if you have one)",@"from the settings table");
@@ -179,7 +163,7 @@
                 editableCell.textField.secureTextEntry = YES;
                 editableCell.tag = 50;
             }
-            
+
             editableCell.accessoryView = nil;
             cell = editableCell;
             break;
@@ -192,10 +176,10 @@
                 cell.accessoryView = theSwitch;
                 [theSwitch release];
             }
-            
+
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
+                cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
@@ -213,7 +197,7 @@
                 cell.accessoryView = theSwitch;
                 [theSwitch release];
             }
-            
+
             switchContent = (UISwitch *)cell.accessoryView;
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             switch (row) {
@@ -237,7 +221,7 @@
         default:
             break;
     }
-    
+
     cell.accessoryType = UITableViewCellAccessoryNone;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.imageView.image = nil;

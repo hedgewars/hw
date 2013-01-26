@@ -51,7 +51,6 @@ class TeamSelWidget : public QGroupBox
 
     public slots:
         void addTeam(HWTeam team);
-        void netTeamStatusChanged(const HWTeam& team);
         void changeHHNum(const HWTeam&);
         void changeTeamColor(const HWTeam&);
         void changeTeamStatus(HWTeam team);
@@ -77,6 +76,7 @@ class TeamSelWidget : public QGroupBox
         QVBoxLayout mainLayout;
         QLabel *numTeamNotice;
         bool m_acceptOuter;
+        void repaint();
 
         QList<HWTeam> curPlayingTeams;
         QList<HWTeam> m_curNotPlayingTeams;

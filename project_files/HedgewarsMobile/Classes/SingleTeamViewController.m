@@ -69,7 +69,7 @@
                       NSLocalizedString(@"Level",@""),nil];
     self.secondaryItems = array;
     [array release];
-    
+
     // labels for the subtitles
     NSArray *moreArray = [[NSArray alloc] initWithObjects:
                           NSLocalizedString(@"Mark the death of your fallen warriors",@""),
@@ -295,35 +295,35 @@
             case 0: // grave
                 if (nil == gravesViewController)
                     gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 [gravesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:gravesViewController animated:YES];
                 break;
             case 1: // voice
                 if (nil == voicesViewController)
                     voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 [voicesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:voicesViewController animated:YES];
                 break;
             case 2: // fort
                 if (nil == fortsViewController)
                     fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 [fortsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:fortsViewController animated:YES];
                 break;
             case 3: // flag
                 if (nil == flagsViewController)
                     flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 [flagsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:flagsViewController animated:YES];
                 break;
             case 4: // level
                 if (nil == levelViewController)
                     levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                
+
                 [levelViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:levelViewController animated:YES];
                 break;

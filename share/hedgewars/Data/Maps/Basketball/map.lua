@@ -1,6 +1,6 @@
 -- Hedgewars - Basketball for 2+ Players
 
-loadfile(GetDataPath() .. "Scripts/Locale.lua")()
+HedgewarsScriptLoad("Scripts/Locale.lua")()
 
 local score = {[0] = 0, [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0}
 

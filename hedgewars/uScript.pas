@@ -37,6 +37,7 @@ procedure ScriptClearStack;
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -222,6 +223,35 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) = 0 then
+            GameFlags := GameFlags + LongWord(lua_tointeger(L, i));
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_enablegameflags:= 0;
+end;
+
+function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) <> 0 then
+            GameFlags := GameFlags - LongWord(lua_tointeger(L, i));
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_disablegameflags:= 0;
+end;
+
+function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
+begin
+    // Silence hint
+    L:= L;
+    GameFlags:= 0;
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_cleargameflags:= 0;
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
@@ -1737,8 +1767,7 @@ begin
 end;
 
 function lc_restorehog(L: Plua_State): LongInt; Cdecl;
-var hog: PHedgehog;
-    i, h: LongInt;
+var i, h: LongInt;
     uid: LongWord;
 begin
     if lua_gettop(L) <> 1 then
@@ -2337,6 +2366,9 @@ lua_register(luaState, _P'div', @lc_div);
 lua_register(luaState, _P'GetInputMask', @lc_getinputmask);
 lua_register(luaState, _P'SetInputMask', @lc_setinputmask);
 lua_register(luaState, _P'AddGear', @lc_addgear);
+lua_register(luaState, _P'EnableGameFlags', @lc_enablegameflags);
+lua_register(luaState, _P'DisableGameFlags', @lc_disablegameflags);
+lua_register(luaState, _P'ClearGameFlags', @lc_cleargameflags);
 lua_register(luaState, _P'DeleteGear', @lc_deletegear);
 lua_register(luaState, _P'AddVisualGear', @lc_addvisualgear);
 lua_register(luaState, _P'DeleteVisualGear', @lc_deletevisualgear);

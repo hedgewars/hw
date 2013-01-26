@@ -107,7 +107,7 @@
         [imgView release];
     }
     [img release];
-    
+
     return cell;
 }
 
@@ -150,7 +150,7 @@
         imgView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         [footer addSubview:imgView];
         [imgView release];
-        
+
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         label.textAlignment = UITextAlignmentCenter;
@@ -159,7 +159,7 @@
         label.center = CGPointMake(self.tableView.frame.size.width/2, 250);
         [footer addSubview:label];
         [label release];
-        
+
         return [footer autorelease];
     } else
         return nil;

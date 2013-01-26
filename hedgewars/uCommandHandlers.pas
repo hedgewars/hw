@@ -89,11 +89,11 @@ begin
 end;
 
 procedure chCheckProto(var s: shortstring);
-var i, c: LongInt;
+var i: LongInt;
 begin
     if isDeveloperMode then
         begin
-        val(s, i, c);
+        i:= StrToInt(s);
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         end

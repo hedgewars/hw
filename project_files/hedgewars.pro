@@ -9,6 +9,7 @@ INCLUDEPATH += ../QTfrontend/ui/page
 INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
+INCLUDEPATH += ../QTfrontend/util/platform
 INCLUDEPATH += ../misc/physfs/src
 INCLUDEPATH += ../misc/physfs/extras
 
@@ -26,7 +27,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/page/pagetraining.h \
     ../QTfrontend/ui/page/pageselectweapon.h \
     ../QTfrontend/ui/page/pagesingleplayer.h \
-    ../QTfrontend/ui/page/pagenettype.h \
     ../QTfrontend/ui/page/pageingame.h \
     ../QTfrontend/ui/page/pageadmin.h \
     ../QTfrontend/ui/page/pagescheme.h \
@@ -92,9 +92,7 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
     ../QTfrontend/ui/mouseoverfilter.h \
-    ../QTfrontend/ui/qpushbuttonwithsound.h \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.h \
-    ../QTfrontend/ui/page/pagefeedback.h \
     ../QTfrontend/model/roomslistmodel.h \
     ../QTfrontend/ui/dialog/input_password.h \
     ../QTfrontend/ui/widget/colorwidget.h \
@@ -108,7 +106,17 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/model/playerslistmodel.h \
     ../QTfrontend/util/LibavInteraction.h \
     ../QTfrontend/util/FileEngine.h \
-    ../QTfrontend/ui/dialog/bandialog.h
+    ../QTfrontend/ui/dialog/bandialog.h \
+    ../QTfrontend/ui/widget/keybinder.h \
+    ../QTfrontend/ui/widget/seedprompt.h \
+    ../QTfrontend/ui/widget/themeprompt.h \
+    ../QTfrontend/ui/widget/hatbutton.h \
+    ../QTfrontend/util/MessageDialog.h \
+    ../QTfrontend/ui/widget/hatprompt.h \
+    ../QTfrontend/ui/widget/feedbackdialog.h \
+    ../QTfrontend/ui/widget/flowlayout.h \
+    ../QTfrontend/ui/widget/lineeditcursor.h \
+    ../QTfrontend/servermessages.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -121,7 +129,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/page/pageroomslist.cpp \
     ../QTfrontend/ui/page/pagemultiplayer.cpp \
     ../QTfrontend/ui/page/pagegamestats.cpp \
-    ../QTfrontend/ui/page/pagenettype.cpp \
     ../QTfrontend/ui/page/pageeditteam.cpp \
     ../QTfrontend/ui/page/pagenetgame.cpp \
     ../QTfrontend/ui/page/pagedata.cpp \
@@ -186,10 +193,11 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/hwconsts.cpp \
     ../QTfrontend/ui/mouseoverfilter.cpp \
     ../QTfrontend/ui/widget/qpushbuttonwithsound.cpp \
-    ../QTfrontend/ui/page/pagefeedback.cpp \
     ../QTfrontend/model/roomslistmodel.cpp \
     ../QTfrontend/ui/dialog/input_password.cpp \
     ../QTfrontend/ui/widget/colorwidget.cpp \
+    ../QTfrontend/ui/widget/hatbutton.cpp \
+    ../QTfrontend/ui/widget/hatprompt.cpp \
     ../QTfrontend/model/HatModel.cpp \
     ../QTfrontend/model/GameStyleModel.cpp \
     ../QTfrontend/ui/page/pagevideos.cpp \
@@ -200,7 +208,14 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/playerslistmodel.cpp \
     ../QTfrontend/util/LibavInteraction.cpp \
     ../QTfrontend/util/FileEngine.cpp \
-    ../QTfrontend/ui/dialog/bandialog.cpp
+    ../QTfrontend/ui/dialog/bandialog.cpp \
+    ../QTfrontend/ui/widget/keybinder.cpp \
+    ../QTfrontend/ui/widget/seedprompt.cpp \
+    ../QTfrontend/ui/widget/themeprompt.cpp \
+    ../QTfrontend/util/MessageDialog.cpp \
+    ../QTfrontend/ui/widget/feedbackdialog.cpp \
+    ../QTfrontend/ui/widget/flowlayout.cpp \
+    ../QTfrontend/ui/widget/lineeditcursor.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
@@ -239,15 +254,13 @@ LIBS += -L../bin -lphysfs
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
-    QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.6.sdk
+    QMAKE_MAC_SDK = /Developer/SDKs/MacOSX10.6.sdk
 
-    OBJECTIVE_SOURCES += ../QTfrontend/*.m ../QTfrontend/*.mm
-    SOURCES += ../QTfrontend/AutoUpdater.cpp ../QTfrontend/InstallController.cpp \
+    OBJECTIVE_SOURCES += ../QTfrontend/util/platform/*.m ../QTfrontend/util/platform/*.mm
+    SOURCES += ../QTfrontend/util/platform/AutoUpdater.cpp \
+               ../QTfrontend/util/platform/InstallController.cpp \
                ../../build/QTfrontend/hwconsts.cpp
-    HEADERS += ../QTfrontend/M3InstallController.h ../QTfrontend/M3Panel.h \
-               ../QTfrontend/NSWorkspace_RBAdditions.h ../QTfrontend/AutoUpdater.h \
-               ../QTfrontend/CocoaInitializer.h ../QTfrontend/InstallController.h \
-               ../QTfrontend/SparkleAutoUpdater.h
+    HEADERS += ../QTfrontend/util/platform/*.h
 
     LIBS += -lobjc -framework AppKit -framework IOKit -framework Foundation -framework SDL -framework SDL_Mixer -framework Sparkle -DSPARKLE_ENABLED
     INCLUDEPATH += /Library/Frameworks/SDL.framework/Headers /Library/Frameworks/SDL_Mixer.framework/Headers
@@ -257,9 +270,9 @@ macx {
 
 win32 {
     RC_FILE = ../QTfrontend/hedgewars.rc
-    SOURCES += ../QTfrontend/xfire.cpp
-    INCLUDEPATH += ../misc/winutils/include
+    SOURCES += ../QTfrontend/util/platform/xfire.cpp ../QTfrontend/util/platform/xfiregameclient.cpp
     LIBS += -L../misc/winutils/lib
+    INCLUDEPATH += ../misc/winutils/include
 }
 
 !macx {
@@ -268,5 +281,3 @@ win32 {
         INCLUDEPATH += /usr/local/include/SDL /usr/include/SDL
     }
 }
-
-FORMS +=

@@ -1,6 +1,6 @@
 Terms and Conditions
 AGREEMENT BETWEEN USER AND XFIRE INC.
-This is a legal agreement between you and Xfire Inc. ("Xfire") with respect to your access and use of the Xfire Service, which may also include Xfire software, content and related documentation and information (collectively, the "Service"). You must accept without modification all of the terms, conditions, and notices contained in these Terms of Use in order to access and/or use the Service (collectively, the "Terms of Use" or "Agreement"). If you do not accept these Terms of Use in their entirety, you may not access or use the Service. 
+This is a legal agreement between you and Xfire Inc. ("Xfire") with respect to your access and use of the Xfire Service, which may also include Xfire software, content and related documentation and information (collectively, the "Service"). You must accept without modification all of the terms, conditions, and notices contained in these Terms of Use in order to access and/or use the Service (collectively, the "Terms of Use" or "Agreement"). If you do not accept these Terms of Use in their entirety, you may not access or use the Service.
 
 Portions of the Service may be governed by posted guidelines, rules, or other terms and conditions. All such guidelines, rules, terms and conditions are hereby incorporated by reference into these Terms of Use. In the event of a conflict between such other guidelines, rules, terms and conditions and these Terms of Use, the Terms of Use shall control, except that the Xfire Service Privacy Policy, referenced below, supersedes any conflicting language in these Terms of Use and/or any other guidelines, rules, terms and conditions published in connection with the Service with respect to the subject matter covered by such privacy policy.
 
@@ -20,29 +20,29 @@ Subject to these Terms of Use, you may use the Service within your commercial or
 You agree to use the Service only to send, receive, and transfer appropriate messages and material. By way of example, and not as a limitation, you agree that when using the Service, you will not:
 
 
-• Use the Service in connection with surveys, contests, pyramid schemes, chain letters, junk email, spamming or any duplicative, bulk or unsolicited messages (commercial or otherwise). 
+• Use the Service in connection with surveys, contests, pyramid schemes, chain letters, junk email, spamming or any duplicative, bulk or unsolicited messages (commercial or otherwise).
 
-• Defame, abuse, harass, stalk, threaten or otherwise violate the legal rights (such as rights of privacy and publicity) of others. 
+• Defame, abuse, harass, stalk, threaten or otherwise violate the legal rights (such as rights of privacy and publicity) of others.
 
-• Create a false identity for the purpose of misleading others. 
+• Create a false identity for the purpose of misleading others.
 
-• Publish, transfer, distribute or disseminate any inappropriate, profane, defamatory, obscene, indecent or unlawful topic, name, material or information. 
+• Publish, transfer, distribute or disseminate any inappropriate, profane, defamatory, obscene, indecent or unlawful topic, name, material or information.
 
-• Transfer, stream, or otherwise make available, files or other material that contain images, photographs, software or other material protected by intellectual property laws, including, by way of example, and not as limitation, copyright or trademark laws (or by rights of privacy or publicity) unless you own or control the rights thereto or have received all necessary consents to do the same. 
+• Transfer, stream, or otherwise make available, files or other material that contain images, photographs, software or other material protected by intellectual property laws, including, by way of example, and not as limitation, copyright or trademark laws (or by rights of privacy or publicity) unless you own or control the rights thereto or have received all necessary consents to do the same.
 
-• Use any material or information, including images or photographs, which is made available through the Service in any manner that infringes any copyright, trademark, patent, trade secret, or other proprietary right of any party. 
+• Use any material or information, including images or photographs, which is made available through the Service in any manner that infringes any copyright, trademark, patent, trade secret, or other proprietary right of any party.
 
-• Transfer, stream or otherwise make available, files or other material that contain viruses, Trojan horses, worms, time bombs, cancelbots, corrupted files, or any other similar software or programs that may damage the operation of another's computer or property of another. 
+• Transfer, stream or otherwise make available, files or other material that contain viruses, Trojan horses, worms, time bombs, cancelbots, corrupted files, or any other similar software or programs that may damage the operation of another's computer or property of another.
 
-• Download any file or other material transferred by another user of the Service that you know, or reasonably should know, cannot be legally distributed in such manner. 
+• Download any file or other material transferred by another user of the Service that you know, or reasonably should know, cannot be legally distributed in such manner.
 
-• Use, download or otherwise copy, or provide (whether or not for a fee) to a person or entity any directory of users of the Service or other user or usage information or any portion thereof. 
+• Use, download or otherwise copy, or provide (whether or not for a fee) to a person or entity any directory of users of the Service or other user or usage information or any portion thereof.
 
-• Falsify or delete any author attributions, legal or other proper notices or proprietary designations or labels of the origin or source of software or other material contained in a file that is transferred. 
+• Falsify or delete any author attributions, legal or other proper notices or proprietary designations or labels of the origin or source of software or other material contained in a file that is transferred.
 
-• Violate any code of conduct or other guidelines which may be applicable to the Service. 
+• Violate any code of conduct or other guidelines which may be applicable to the Service.
 
-• Use any portion of the Service to harvest or otherwise collect information about others, including e-mail addresses. 
+• Use any portion of the Service to harvest or otherwise collect information about others, including e-mail addresses.
 
 Xfire reserves the right at all times to monitor communications on the Service and disclose any information Xfire deems necessary to (i) ensure your compliance with this Agreement; (ii) satisfy any applicable law, regulation or legal process; or (iii) protect the rights, property, and interests of Xfire, its employees or the public. Xfire also reserves the right to edit, refuse to transfer or to remove any information or materials, in whole or in part, in Xfire's sole discretion.
 

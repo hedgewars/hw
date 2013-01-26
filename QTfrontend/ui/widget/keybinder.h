@@ -1,0 +1,68 @@
+/*
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
+
+#ifndef _KEY_BINDER_H
+#define _KEY_BINDER_H
+
+#include <QWidget>
+#include <QHash>
+
+#include "binds.h"
+
+class QListWidget;
+class QTableWidgetItem;
+class QTableWidget;
+class QBoxLayout;
+class QComboBox;
+
+// USAGE NOTE: Every time the widget comes into view, you must call resetInterface()
+
+class KeyBinder : public QWidget
+{
+    Q_OBJECT
+
+    public:
+        KeyBinder(QWidget * parent = NULL, const QString & helpText = QString(), const QString & defaultText = QString(), const QString & resetButtonText = QString());
+        ~KeyBinder();
+
+        void setBindIndex(int keyIndex, int bindIndex);
+        int bindIndex(int keyIndex);
+        void resetInterface();
+
+    private:
+        QHash<QObject *, QTableWidgetItem *> * bindComboBoxCellMappings;
+        QHash<QTableWidgetItem *, QComboBox *> * bindCellComboBoxMappings;
+        QTableWidget * selectedBindTable;
+        QListWidget * catList;
+        QBoxLayout *bindingsPages;
+        QComboBox * CBBind[BINDS_NUMBER];
+        QString defaultText;
+        bool enableSignal;
+
+    signals:
+        void bindUpdate(int bindID);
+        void resetAllBinds();
+
+    private slots:
+        void changeBindingsPage(int page);
+        void bindChanged(const QString &);
+        void bindCellClicked(QTableWidgetItem * item);
+        void bindSelectionChanged();
+};
+
+#endif // _KEY_BINDER_H

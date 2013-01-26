@@ -110,6 +110,7 @@ QLayout * PageGameStats::footerLayoutDefinition()
 
 void PageGameStats::connectSignals()
 {
+    connect(this, SIGNAL(pageEnter()), this, SLOT(renderStats()));
     connect(btnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
 }
 

@@ -100,7 +100,7 @@ MACRO(FIND_LIBRARY_WITH_DEBUG var_name win32_dbg_postfix_name dgb_postfix libnam
           SET(${var_name} ${${var_name}_DEBUG})
 
         ENDIF(${var_name}_RELEASE)
-       
+
       ENDIF(${var_name}_RELEASE AND ${var_name}_DEBUG)
 
       MARK_AS_ADVANCED(${var_name}_RELEASE)

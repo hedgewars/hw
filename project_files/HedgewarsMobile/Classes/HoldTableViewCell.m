@@ -35,8 +35,8 @@
 
 -(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-    
-    time = touch.timestamp; 
+
+    time = touch.timestamp;
     [self performSelector:@selector(holdAction) withObject:nil afterDelay:0.25];
 
     [super touchesBegan:touches withEvent:event];
@@ -44,12 +44,12 @@
 
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [[event allTouches] anyObject];
-    
+
     if ( touch.timestamp - time < 0.25 ) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self
                                                  selector:@selector(holdAction)
                                                    object:nil];
-        
+
         [super touchesEnded:touches withEvent:event];
     } else
         [super touchesCancelled:touches withEvent:event];

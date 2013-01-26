@@ -40,7 +40,7 @@ procedure TeamGoneEffect(var Team: TTeam);
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
-uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug, uScript,
+uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
     uGearsUtils, uGearsList
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
@@ -321,16 +321,11 @@ else
         end;
     ReadyTimeLeft:= 0
     end;
-
-{$IFDEF SDL13}
-uTouch.NewTurnBeginning();
-{$ENDIF}
-ScriptCall('onNewTurn');
 end;
 
 function AddTeam(TeamColor: Longword): PTeam;
 var team: PTeam;
-    c: LongInt;
+    c, t: LongInt;
 begin
 TryDo(TeamsCount < cMaxTeams, 'Too many teams', true);
 New(team);
@@ -342,6 +337,9 @@ team^.Flag:= 'hedgewars';
 
 TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
+
+for t:= 0 to cKbdMaxIndex do
+    team^.Binds[t]:= '';
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -505,7 +503,6 @@ end;
 procedure chAddHH(var id: shortstring);
 var s: shortstring;
     Gear: PGear;
-    c: LongInt;
 begin
 s:= '';
 if (not isDeveloperMode) or (CurrentTeam = nil) then
@@ -514,10 +511,10 @@ with CurrentTeam^ do
     begin
     SplitBySpace(id, s);
     SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
-    val(id, CurrentHedgehog^.BotLevel, c);
+    CurrentHedgehog^.BotLevel:= StrToInt(id);
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
-    val(s, Gear^.Health, c);
+    Gear^.Health:= StrToInt(s);
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
     Gear^.Hedgehog^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then
@@ -538,7 +535,6 @@ end;
 
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
-    c: LongInt;
     ts, cs: shortstring;
 begin
 cs:= '';
@@ -547,7 +543,7 @@ if isDeveloperMode then
     begin
     SplitBySpace(s, cs);
     SplitBySpace(cs, ts);
-    val(cs, Color, c);
+    Color:= StrToInt(cs);
     TryDo(Color <> 0, 'Error: black team color', true);
 
     // color is always little endian so the mask must be constant also in big endian archs
@@ -564,16 +560,16 @@ end;
 
 procedure chSetHHCoords(var x: shortstring);
 var y: shortstring;
-    t, c: Longint;
+    t: Longint;
 begin
-y:= '';
-if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then
-    exit;
-SplitBySpace(x, y);
-val(x, t, c);
-CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
-val(y, t, c);
-CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
+    y:= '';
+    if (not isDeveloperMode) or (CurrentHedgehog = nil) or (CurrentHedgehog^.Gear = nil) then
+        exit;
+    SplitBySpace(x, y);
+    t:= StrToInt(x);
+    CurrentHedgehog^.Gear^.X:= int2hwFloat(t);
+    t:= StrToInt(y);
+    CurrentHedgehog^.Gear^.Y:= int2hwFloat(t)
 end;
 
 procedure chBind(var id: shortstring);

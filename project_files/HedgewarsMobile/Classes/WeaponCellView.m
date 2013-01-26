@@ -159,7 +159,7 @@
 
     weaponIcon.frame = CGRectMake(5, 5, 32, 32);
     weaponName.frame = CGRectMake(45, 8, 200, 25);
-    
+
     helpLabel.frame = CGRectMake(200 + helpLabelOffset, 11, helpLabelLength, 20);
 
     // second line
@@ -212,7 +212,7 @@
 -(void) startDragging:(id) sender {
     UISlider *slider = (UISlider *)sender;
     NSString *str = nil;
-    
+
     switch (slider.tag) {
         case 100:
             str = NSLocalizedString(@"Initial quantity",@"ammo selection");

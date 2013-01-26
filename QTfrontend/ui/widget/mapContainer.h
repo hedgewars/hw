@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QGridLayout>
+#include <QVBoxLayout>
 #include <QComboBox>
 #include <QLabel>
 #include <QByteArray>
@@ -37,6 +38,7 @@ class QPushButton;
 class IconedGroupBox;
 class QListView;
 class SeparatorPainter;
+class QListWidget;
 
 class MapFileErrorException
 {
@@ -45,6 +47,8 @@ class MapFileErrorException
 class HWMapContainer : public QWidget
 {
         Q_OBJECT
+
+        Q_PROPERTY(bool master READ isMaster WRITE setMaster)
 
     public:
         HWMapContainer(QWidget * parent=0);
@@ -62,6 +66,7 @@ class HWMapContainer : public QWidget
         DrawMapScene * getDrawMapScene();
         void mapDrawingFinished();
         QLineEdit* seedEdit;
+        bool isMaster();
 
     public slots:
         void askForGeneratedPreview();
@@ -75,6 +80,7 @@ class HWMapContainer : public QWidget
         void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
+        void setMaster(bool master);
 
     signals:
         void seedChanged(const QString & seed);
@@ -89,22 +95,28 @@ class HWMapContainer : public QWidget
     private slots:
         void setImage(const QImage newImage);
         void setHHLimit(int hhLimit);
-        void mapChanged(int index);
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void themeSelected(const QModelIndex & current, const QModelIndex &);
         void addInfoToPreview(QPixmap image);
-        void seedEdited();
+        void setNewSeed(const QString & newSeed);
+        void mapTypeChanged(int);
+        void showThemePrompt();
+        void updateTheme(const QModelIndex & current);
+        void staticMapChanged(const QModelIndex & map, const QModelIndex & old = QModelIndex());
+        void missionMapChanged(const QModelIndex & map, const QModelIndex & old = QModelIndex());
+        void loadDrawing();
+        void showSeedPrompt();
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );
 
     private:
-        QGridLayout mainLayout;
-        QPushButton* imageButt;
+        QVBoxLayout mainLayout;
+        QLabel* mapPreview;
         QComboBox* chooseMap;
-        MapModel * m_mapModel;
+        MapModel * m_staticMapModel;
+        MapModel * m_missionMapModel;
         IconedGroupBox* gbThemes;
         QListView* lvThemes;
         ThemeModel * m_themeModel;
@@ -121,13 +133,33 @@ class HWMapContainer : public QWidget
         QComboBox *cbMazeSize;
         MapGenerator mapgen;
         DrawMapScene drawMapScene;
+        QComboBox * cType;
+        QListView * staticMapList;
+        QListView * missionMapList;
+        QListWidget * generationStyles;
+        QListWidget * mazeStyles;
+        QLabel * lblMapList;
+        QLabel * lblDesc;
+        QPushButton * btnTheme;
+        QPushButton * btnLoadMap;
+        QPushButton * btnEditMap;
+        QPushButton * btnRandomize;
+        QString selectedTheme;
+        QPushButton * btnSeed;
+        bool m_master;
+        QList<QWidget *> m_childWidgets;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
         void intSetMapgen(MapGenerator m);
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
+        void intSetIconlessTheme(const QString & name);
+        void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
+        void setMapInfo(MapModel::MapInfo mapInfo);
+        void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updatePreview();
+        void updateThemeButtonSize();
 
         MapModel::MapInfo m_mapInfo;
         QString m_theme;

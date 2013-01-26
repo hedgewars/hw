@@ -1,10 +1,10 @@
-{-# LANGUAGE CPP, OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings, ScopedTypeVariables #-}
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 module Actions where
 
 import Control.Concurrent
 import qualified Data.Set as Set
-import qualified Data.Sequence as Seq
+import qualified Data.Map as Map
 import qualified Data.List as L
 import qualified Control.Exception as Exception
 import System.Log.Logger
@@ -56,7 +56,7 @@ data Action =
     | BanList
     | Unban B.ByteString
     | ChangeMaster (Maybe ClientIndex)
-    | RemoveClientTeams ClientIndex
+    | RemoveClientTeams
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
     | ModifyRoomClients (ClientInfo -> ClientInfo)
@@ -76,6 +76,7 @@ data Action =
     | AddIP2Bans B.ByteString B.ByteString UTCTime
     | CheckBanned Bool
     | SaveReplay
+    | Stats
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -84,7 +85,7 @@ instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
     rnf a = a `seq` ()
 
-instance NFData B.ByteString
+--instance NFData B.ByteString
 instance NFData (Chan a)
 
 
@@ -143,13 +144,13 @@ processAction (ByeClient msg) = do
 
     chan <- client's sendChan
     clNick <- client's nick
-    loggedIn <- client's logonPassed
+    loggedIn <- client's isVisible
 
     when (ri /= lobbyId) $ do
         processAction $ MoveToLobby ("quit: " `B.append` msg)
         return ()
 
-    clientsChans <- liftM (Prelude.map sendChan . Prelude.filter logonPassed) $! allClientsS
+    clientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
     io $
         infoM "Clients" (show ci ++ " quits: " ++ B.unpack msg)
 
@@ -158,7 +159,7 @@ processAction (ByeClient msg) = do
     mapM_ processAction
         [
         AnswerClients [chan] ["BYE", msg]
-        , ModifyClient (\c -> c{nick = "", logonPassed = False}) -- this will effectively hide client from others while he isn't deleted from list
+        , ModifyClient (\c -> c{nick = "", isVisible = False}) -- this will effectively hide client from others while he isn't deleted from list
         ]
 
     s <- get
@@ -235,11 +236,11 @@ processAction (MoveToLobby msg) = do
 
     if master then
         if playersNum > 1 then
-            mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
+            mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
         else
-        mapM_ processAction [RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
+        mapM_ processAction [RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
 
     -- when not removing room
     ready <- client's isReady
@@ -374,7 +375,7 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = roundMsgs g Seq.|> rmTeamMsg
+                    , roundMsgs = rmTeamMsg : roundMsgs g
                 }) $ gameInfo r
             })
         ]
@@ -382,16 +383,20 @@ processAction (SendTeamRemovalMessage teamName) = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     gi <- io $ room'sM rnc gameInfo ri
-    when (isJust gi && 0 == teamsInGameNumber (fromJust gi)) $
+    when (0 == teamsInGameNumber (fromJust gi)) $
         processAction FinishGame
     where
         rmTeamMsg = toEngineMsg $ 'F' `B.cons` teamName
 
 
 processAction (RemoveTeam teamName) = do
+    (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     ri <- clientRoomA
-    inGame <- io $ room'sM rnc (isJust . gameInfo) ri
+    inGame <- io $ do
+        r <- room'sM rnc (isJust . gameInfo) ri
+        c <- client'sM rnc isInGame ci
+        return $ r && c
     chans <- othersChans
     mapM_ processAction $
         ModifyRoom (\r -> r{
@@ -403,14 +408,14 @@ processAction (RemoveTeam teamName) = do
         : [SendTeamRemovalMessage teamName | inGame]
 
 
-processAction (RemoveClientTeams clId) = do
+processAction RemoveClientTeams = do
+    (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
 
     removeTeamActions <- io $ do
-        clNick <- client'sM rnc nick clId
-        rId <- clientRoomM rnc clId
+        rId <- clientRoomM rnc ci
         roomTeams <- room'sM rnc teams rId
-        return . Prelude.map (RemoveTeam . teamname) . Prelude.filter (\t -> teamowner t == clNick) $ roomTeams
+        return . Prelude.map (RemoveTeam . teamname) . Prelude.filter (\t -> teamownerId t == ci) $ roomTeams
 
     mapM_ processAction removeTeamActions
 
@@ -421,11 +426,13 @@ processAction CheckRegistered = do
     n <- client's nick
     h <- client's host
     p <- client's clientProto
+    checker <- client's isChecker
     uid <- client's clUID
-    haveSameNick <- liftM (not . null . tail . filter (\c -> caseInsensitiveCompare (nick c) n)) allClientsS
-    if haveSameNick then
+    -- allow multiple checker logins
+    haveSameNick <- liftM (not . null . tail . filter (\c -> (not $ isChecker c) && caseInsensitiveCompare (nick c) n)) allClientsS
+    if haveSameNick && (not checker) then
         if p < 38 then
-            processAction $ ByeClient "Nickname is already in use"
+            processAction $ ByeClient $ loc "Nickname is already in use"
             else
             processAction $ NoticeMessage NickAlreadyInUse
         else
@@ -444,9 +451,8 @@ processAction (ProcessAccountInfo info) = do
     case info of
         HasAccount passwd isAdmin -> do
             b <- isBanned
-            when (not b) $ do
-                chan <- client's sendChan
-                mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = passwd, isAdministrator = isAdmin})]
+            c <- client's isChecker
+            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
         Guest -> do
             b <- isBanned
             when (not b) $
@@ -459,14 +465,21 @@ processAction (ProcessAccountInfo info) = do
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-
+    checkerLogin _ False = processAction $ ByeClient $ loc "No checker rights"
+    checkerLogin p True = do
+        wp <- client's webPassword
+        processAction $
+            if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient $ loc "Authentication failed"
+    playerLogin p a = do
+        chan <- client's sendChan
+        mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = p, isAdministrator = a})]
 
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
-    loggedInClients <- liftM (Prelude.filter logonPassed) $! allClientsS
+    loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
     let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
@@ -477,7 +490,7 @@ processAction JoinLobby = do
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
-        , [ModifyClient (\cl -> cl{logonPassed = True})]
+        , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]
         ]
 
@@ -487,7 +500,7 @@ processAction (KickClient kickId) = do
     clHost <- client's host
     currentTime <- io getCurrentTime
     mapM_ processAction [
-        AddIP2Bans clHost "60 seconds cooldown after kick" (addUTCTime 60 currentTime)
+        AddIP2Bans clHost (loc "60 seconds cooldown after kick") (addUTCTime 60 currentTime)
         , ModifyClient (\c -> c{isKickedFromServer = True})
         , ByeClient "Kicked"
         ]
@@ -543,7 +556,7 @@ processAction (Unban entry) = do
 processAction (KickRoomClient kickId) = do
     modify (\s -> s{clientIndex = Just kickId})
     ch <- client's sendChan
-    mapM_ processAction [AnswerClients [ch] ["KICKED"], MoveToLobby "kicked"]
+    mapM_ processAction [AnswerClients [ch] ["KICKED"], MoveToLobby $ loc "kicked"]
 
 
 processAction (AddClient cl) = do
@@ -606,7 +619,7 @@ processAction PingAll = do
             pq <- io $ client'sM rnc pingsQueue ci
             when (pq > 0) $ do
                 withStateT (\as -> as{clientIndex = Just ci}) $
-                    processAction (ByeClient "Ping timeout")
+                    processAction (ByeClient $ loc "Ping timeout")
 --                when (pq > 1) $
 --                    processAction $ DeleteClient ci -- smth went wrong with client io threads, issue DeleteClient here
 
@@ -633,10 +646,20 @@ processAction RestartServer = do
             return ()
         processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
 
+processAction Stats = do
+    cls <- allClientsS
+    let stats = versions cls
+    processAction $ Warning stats
+    where
+        versions = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
+            . concatMap (\(p, n :: Int) -> ["<tr><td>", protoNumber2ver p, "</td><td>", showB n, "</td></tr>"])
+            . Map.toList . Map.fromListWith (+) . map (\c -> (clientProto c, 1))
+
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
+
     io $ do
         r <- room'sM rnc id ri
         saveReplay r

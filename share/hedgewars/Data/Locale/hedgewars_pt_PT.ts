@@ -20,6 +20,79 @@
     </message>
 </context>
 <context>
+    <name>BanDialog</name>
+    <message>
+        <source>IP</source>
+        <translation type="unfinished">IP</translation>
+    </message>
+    <message>
+        <source>Nick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IP/Nick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reason</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>you know why</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please, specify %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>permanent</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataManager</name>
+    <message>
+        <source>Use Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FeedbackDialog</name>
+    <message>
+        <source>View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Send Feedback</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
@@ -44,12 +117,35 @@
         <translation>Editar esquemas</translation>
     </message>
     <message>
-        <source>When this option is enabled selecting a game scheme will auto-select a weapon</source>
-        <translation>Com esta opção activada o esquema de jogo irá automaticamente seleccionar uma arma</translation>
-    </message>
-    <message>
         <source>Game Options</source>
         <translation>Opções de Jogo</translation>
+    </message>
+    <message>
+        <source>Game scheme will auto-select a weapon</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HWApplication</name>
+    <message>
+        <source>%1 minutes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hour</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 hours</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 day</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 days</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -101,10 +197,6 @@
         <source>Failed to save StyleSheet to %1</source>
         <translation>Não foi possível gravar o StyleSheet em %1</translation>
     </message>
-    <message>
-        <source>%1 is not a valid command!</source>
-        <translation>%1 não é um comando valido!</translation>
-    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -139,20 +231,6 @@
         <translation>Jogo abortado</translation>
     </message>
     <message>
-        <source>Your nickname %1 is
-registered on Hedgewars.org
-Please provide your password below
-or pick another nickname in game config:</source>
-        <translation>O nome de utilizador %1 está
-registado em Hedgewars.org
-Por favor digita a tua palavra passe ou escolhe
-outro nome de utilizador no menu de configuração:</translation>
-    </message>
-    <message>
-        <source>No password supplied.</source>
-        <translation>Não foi fornecida uma palavra passe.</translation>
-    </message>
-    <message>
         <source>Nickname</source>
         <translation>Nome de utilizador</translation>
     </message>
@@ -165,6 +243,59 @@ outro nome de utilizador no menu de configuração:</translation>
 Please pick another nickname:</source>
         <translation>Alguem já está a utilizar o teu nome de utilizador %1 no servidor.
 Por favor escolhe outro nome de utilizador:</translation>
+    </message>
+    <message>
+        <source>%1&apos;s Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Nick registered</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This nick is registered, and you haven&apos;t specified a password.
+
+If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
+
+Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your nickname is not registered.
+To prevent someone else from using it,
+please register it at www.hedgewars.org</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>
+
+Your password wasn&apos;t saved either.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Empty nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Wrong password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You entered a wrong password.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Try Again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Connection error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You reconnected too fast.
+Please wait a few seconds and try again.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -180,18 +311,6 @@ Por favor escolhe outro nome de utilizador:</translation>
 </context>
 <context>
     <name>HWMapContainer</name>
-    <message>
-        <source>Map</source>
-        <translation>Mapa</translation>
-    </message>
-    <message>
-        <source>Themes</source>
-        <translation>Temas</translation>
-    </message>
-    <message>
-        <source>Filter</source>
-        <translation>Filtro</translation>
-    </message>
     <message>
         <source>All</source>
         <translation>Todos</translation>
@@ -217,10 +336,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Invulgar</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation>Tipo</translation>
-    </message>
-    <message>
         <source>Small tunnels</source>
         <translation>Túneis pequenos</translation>
     </message>
@@ -229,28 +344,96 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Túneis medios</translation>
     </message>
     <message>
-        <source>Large tunnels</source>
-        <translation>Túneis grandes</translation>
-    </message>
-    <message>
-        <source>Small floating islands</source>
-        <translation>Ilhas flutuantes pequenas</translation>
-    </message>
-    <message>
-        <source>Medium floating islands</source>
-        <translation>Ilhas flutuantes médias</translation>
-    </message>
-    <message>
-        <source>Large floating islands</source>
-        <translation>Ilhas flutuantes grandes</translation>
-    </message>
-    <message>
         <source>Seed</source>
         <translation>Semente</translation>
     </message>
     <message>
-        <source>Set</source>
-        <translation>Definir</translation>
+        <source>Map type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Image map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hand-drawn</source>
+        <translation type="unfinished">Desenhado à mão</translation>
+    </message>
+    <message>
+        <source>Randomly generated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random maze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random</source>
+        <translation type="unfinished">Aleatório</translation>
+    </message>
+    <message>
+        <source>Map preview:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load map drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit map drawing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Largetunnels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Large islands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Maze style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mission:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load drawn map</source>
+        <translation type="unfinished">Carregar mapa desenhado</translation>
+    </message>
+    <message>
+        <source>Drawn Maps</source>
+        <translation type="unfinished">Mapas Desenhados</translation>
+    </message>
+    <message>
+        <source>All files</source>
+        <translation type="unfinished">Todos os ficheiros</translation>
     </message>
 </context>
 <context>
@@ -276,7 +459,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Connection refused</source>
-        <translation>Conexão rejeitada</translation>
+        <translation>Ligação rejeitada</translation>
     </message>
     <message>
         <source>Room destroyed</source>
@@ -284,7 +467,7 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Motivo de saída: </translation>
+        <translation>Motivo: </translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -322,8 +505,8 @@ Por favor escolhe outro nome de utilizador:</translation>
 <context>
     <name>HWPasswordDialog</name>
     <message>
-        <source>Password</source>
-        <translation>Palavra-passe</translation>
+        <source>Login</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -338,6 +521,32 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
 </context>
 <context>
+    <name>HatButton</name>
+    <message>
+        <source>Change hat (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HatPrompt</name>
+    <message>
+        <source>Select a hat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Use selected hat</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
@@ -345,42 +554,42 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
 </context>
 <context>
+    <name>KeyBinder</name>
+    <message>
+        <source>Category</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LibavInteraction</name>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Duração: %1m %2s
+</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation type="unfinished">Vídeo:  %1x%2, </translation>
+        <translation>Vídeo: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation type="unfinished">%1 fps, </translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished">Audio: </translation>
+        <translation>Audio: </translation>
+    </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>LibavIteraction</name>
+    <name>MapModel</name>
     <message>
-        <source>Duration: %1m %2s</source>
-        <translation type="obsolete">Duração: %1m %2s</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2, </source>
-        <translation type="obsolete">Vídeo:  %1x%2, </translation>
-    </message>
-    <message>
-        <source>%1 fps, </source>
-        <translation type="obsolete">%1 fps, </translation>
-    </message>
-    <message>
-        <source>Audio: </source>
-        <translation type="obsolete">Audio: </translation>
+        <source>No description available.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -412,6 +621,38 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Set data</source>
         <translation>Gravar modificações</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Geral</translation>
+    </message>
+    <message>
+        <source>Bans</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IP/Nick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expiration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reason</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -467,8 +708,40 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Geral</translation>
     </message>
     <message>
-        <source>Advanced</source>
-        <translation>Avançado</translation>
+        <source>Select an action to choose a custom key bind for this team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use my default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset all binds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hat</source>
+        <translation type="unfinished">Chapéu</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation type="unfinished">Nome</translation>
+    </message>
+    <message>
+        <source>This hedgehog&apos;s name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Randomize this hedgehog&apos;s name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Team</source>
+        <translation type="unfinished">Equipa aleatória</translation>
     </message>
 </context>
 <context>
@@ -492,8 +765,8 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation>
-            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.</numerusform>
-            <numerusform>O extreminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.</numerusform>
+            <numerusform>O exterminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; morto num unico turno.</numerusform>
+            <numerusform>O exterminador da ronda foi &lt;b&gt;%1&lt;/b&gt; com &lt;b&gt;%2&lt;/b&gt; mortes num unico turno.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -543,271 +816,18 @@ Por favor escolhe outro nome de utilizador:</translation>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Abrir a pasta com as capturas de ecrã</translation>
+        <translation>Abrir a pasta de capturas de ecrã</translation>
     </message>
 </context>
 <context>
     <name>PageMain</name>
     <message>
-        <source>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they&apos;ll win or lose together.</source>
-        <comment>Tips</comment>
-        <translation>Simplesmente selecciona a mesma cor de outro jogador para jogarem em equipa. Continuas a ter total controlo dos teus ouriços, mas ganham ou perdem juntos.</translation>
-    </message>
-    <message>
-        <source>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</source>
-        <comment>Tips</comment>
-        <translation>Algumas armas podem não fazer muito dano, mas em ocasiões especificas podem-se demonstrar bastante mais letais. Experimenta usar a Desert Eagle para empurrar varios ouriços para a água.</translation>
-    </message>
-    <message>
-        <source>If you&apos;re unsure what to do and don&apos;t want to waste ammo, skip one round. But don&apos;t let too much time pass as there will be Sudden Death!</source>
-        <comment>Tips</comment>
-        <translation>Se não tens a certeza do que fazer a seguir não desperdiçes munições, passa o turno. Mas não desperdices muito tempo, a Morte Súbita aproxima-se.</translation>
-    </message>
-    <message>
-        <source>If you&apos;d like to keep others from using your preferred nickname on the official server, register an account at http://www.hedgewars.org/.</source>
-        <comment>Tips</comment>
-        <translation>Se não queres que outros usem o teu nome de utilizador preferido no servidor oficial, regista-o em http://www.hedgewars.org/.</translation>
-    </message>
-    <message>
-        <source>You&apos;re bored of default gameplay? Try one of the missions - they&apos;ll offer different gameplay depending on the one you picked.</source>
-        <comment>Tips</comment>
-        <translation>Estás cansado do modo de jogo habitual? Experimenta uma das missões - existem várias por onde escolher, e todas com objectivos um pouco diferentes.</translation>
-    </message>
-    <message>
-        <source>By default the game will always record the last game played as a demo. Select &apos;Local Game&apos; and pick the &apos;Demos&apos; button on the lower right corner to play or manage them.</source>
-        <comment>Tips</comment>
-        <translation>Por defeito, o ultimo jogo em que participaste é sempre gravado como &apos;demo&apos;. Selecciona &apos;Jogo Local&apos; e aí a opção &apos;Demos&apos; no canto inferior direito para os gerir ou reproduzir.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you&apos;ve got problems, ask on our forums but please don&apos;t expect 24/7 support!</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Se tiveres algum problema pergunta nos fóruns, mas por favor não esperes suporte 24/7!</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If you like it, help us with a small donation or contribute your own work!</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Se gostares do jogo podes contribuir com uma pequena doação ou o teu próprio trabalho!</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. Share it with your family and friends as you like!</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars é Open Source e Freeware, desenvolvido nos tempos livres. Partilha-o com a família e amigos como quiseres!</translation>
-    </message>
-    <message>
-        <source>From time to time there will be official tournaments. Upcoming events will be announced at http://www.hedgewars.org/ some days in advance.</source>
-        <comment>Tips</comment>
-        <translation>De tempos a tempos realizam-se torneios oficiais. Todos estes eventos são anunciados em http://www.hedgewars.org/ com alguns dias de antecedência.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is available in many languages. If the translation in your language seems to be missing or outdated, feel free to contact us!</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars está disponível em vários idiomas. Se a tradução do teu idioma está desactualizada ou em falta, não hesites em contactar-nos!</translation>
-    </message>
-    <message>
-        <source>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and Linux.</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars está disponível para vários sistemas operativos incluindo Microsoft Windows, Mac OS X e Linux.</translation>
-    </message>
-    <message>
-        <source>Always remember you&apos;re able to set up your own games in local and network/online play. You&apos;re not restricted to the &apos;Simple Game&apos; option.</source>
-        <comment>Tips</comment>
-        <translation>Lembra-te que tens sempre a opção de poder jogar na tua rede local ou online. Não estás restrito ao modo de Jogo Local.</translation>
-    </message>
-    <message>
-        <source>While playing you should give yourself a short break at least once an hour.</source>
-        <comment>Tips</comment>
-        <translation>Lembra-te de fazer pequenos intervalos durante sessões de jogo prolongadas.</translation>
-    </message>
-    <message>
-        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</source>
-        <comment>Tips</comment>
-        <translation>Se a tua placa gráfica não é capaz de fornecer aceleração por hardware para OpenGL experimenta activar o modo de baixa qualidade para melhorar a performance.</translation>
-    </message>
-    <message>
-        <source>We&apos;re open to suggestions and constructive feedback. If you don&apos;t like something or got a great idea, let us know!</source>
-        <comment>Tips</comment>
-        <translation>Estamos abertos a sugestões e críticas construtivas. Se há algo que não gostas em particular ou tiveste uma boa ideia, deixa-nos saber!</translation>
-    </message>
-    <message>
-        <source>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</source>
-        <comment>Tips</comment>
-        <translation>Especialmente durante partidas online é importante ser educado. Lembra-te que podem haver menores a jogar com ou contra ti!</translation>
-    </message>
-    <message>
-        <source>Special game modes such as &apos;Vampirism&apos; or &apos;Karma&apos; allow you to develop completely new tactics. Try them in a custom game!</source>
-        <comment>Tips</comment>
-        <translation>Modos de jogo especiais como &apos;Vampirismo&apos; ou &apos;Karma&apos; permitem-te desenvolver tácticas completamente novas! Experimenta-os num jogo personalizado!</translation>
-    </message>
-    <message>
-        <source>You should never install Hedgewars on computers you don&apos;t own (school, university, work, etc.). Please ask the responsible person instead!</source>
-        <comment>Tips</comment>
-        <translation>Não deves instalar o Hedgewars em computadores que não te pertençam (escola, universidade, trabalho, etc.). Por favor contacta o responsável caso o pretendas fazer.</translation>
-    </message>
-    <message>
-        <source>Hedgewars can be perfect for short games during breaks. Just ensure you don&apos;t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars é perfeito para pequenos jogos durante intervalos. Tem apenas a certeza que não adicionas muitos ouriços ou usas um mapa muito grande. Reduzir o tempo e pontos de vida pode ajudar também.</translation>
-    </message>
-    <message>
-        <source>No hedgehogs were harmed in making this game.</source>
-        <comment>Tips</comment>
-        <translation>Nenhum ouriço foi mal tratado durante a produção deste jogo.</translation>
-    </message>
-    <message>
-        <source>Hedgewars is Open Source and Freeware we create in our spare time. If someone sold you the game, you should try get a refund!</source>
-        <comment>Tips</comment>
-        <translation>O Hedgewars é Open Source e Freeware desenvolvido durante o tempo livre. Se alguem te vendeu o jogo, tente obter o reembolso!</translation>
-    </message>
-    <message>
-        <source>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</source>
-        <comment>Tips</comment>
-        <translation>Conecta um ou mais comandos antes de lançar o jogo para que seja possível configura-los com as tuas equipas.</translation>
-    </message>
-    <message>
-        <source>Create an account on %1 to keep others from using your most favourite nickname while playing on the official server.</source>
-        <comment>Tips</comment>
-        <translation>Cria uma conta em http://www.hedgewars.org/ para prevenir que outros usem o teu nome de utilizador favorito no servidor oficial.</translation>
-    </message>
-    <message>
-        <source>If your graphics card isn&apos;t able to provide hardware accelerated OpenGL, try to update the associated drivers.</source>
-        <comment>Tips</comment>
-        <translation>Se a tua placa gráfica se está a demonstrar incapaz de fornecer aceleração gráfica em OpenGL, experimenta actualizar os drivers da mesma.</translation>
-    </message>
-    <message>
-        <source>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</source>
-        <comment>Tips</comment>
-        <translation>Existem três diferentes tipos de salto. Pressiona [salto alto] duas vezes para fazer um salto muito alto para trás.</translation>
-    </message>
-    <message>
-        <source>Afraid of falling off a cliff? Hold down [precise] to turn [left] or [right] without actually moving.</source>
-        <comment>Tips</comment>
-        <translation>Com medo de cair de um penhasco? Deixa o [botão de precisão] pressionado e vira-te para a [direita] ou [esquerda] sem sair do sitio.</translation>
-    </message>
-    <message>
-        <source>Some weapons require special strategies or just lots of training, so don&apos;t give up on a particular tool if you miss an enemy once.</source>
-        <comment>Tips</comment>
-        <translation>Algumas armas requerem estratégias especiais ou imensa prática, por isso não desistas imediatamente dessa ferramenta em particular se falhares o alvo.</translation>
-    </message>
-    <message>
-        <source>Most weapons won&apos;t work once they touch the water. The Homing Bee as well as the Cake are exceptions to this.</source>
-        <comment>Tips</comment>
-        <translation>A maiora das armas deixa de funcionar se tocarem na água. A Abelha Teleguiada e o Bolo são excepções a esta regra.</translation>
-    </message>
-    <message>
-        <source>The Old Limbuger only causes a small explosion. However the wind affected smelly cloud can poison lots of hogs at once.</source>
-        <comment>Tips</comment>
-        <translation>O Limburger Venho causa apenas uma pequena explosão. No entanto a pequena nuvem malcheirosa, afectada pelo vento, pode envenenar vários ouriços de uma vez.</translation>
-    </message>
-    <message>
-        <source>The Piano Strike is the most damaging air strike. You&apos;ll lose the hedgehog performing it, so there&apos;s a huge downside as well.</source>
-        <comment>Tips</comment>
-        <translation>O Piano é o ataque aéreo que mais potencial dano causa. No entanto uma enorme desvantagem, é necessario sacrificar um ouriço para o utilizar.</translation>
-    </message>
-    <message>
-        <source>Sticky Mines are a perfect tool to create small chain reactions knocking enemy hedgehogs into dire situations ... or water.</source>
-        <comment>Tips</comment>
-        <translation>As Minas Pegajosas são a arma ideal para com pequenas explosões em cadeia empurrar ouriços para situações terríveis... ou para a água.</translation>
-    </message>
-    <message>
-        <source>The Hammer is most effective when used on bridges or girders. Hit hogs will just break through the ground.</source>
-        <comment>Tips</comment>
-        <translation>O melhor local para usar o Martelo é em pontes ou vigas. Os ouriços atingidos nestes locais vão simplesmente furar pelo chão.</translation>
-    </message>
-    <message>
-        <source>If you&apos;re stuck behind an enemy hedgehog, use the Hammer to free yourself without getting damaged by an explosion.</source>
-        <comment>Tips</comment>
-        <translation>Se ficares preso atrás de um ouriço inimigo utiliza o Martelo para te libertares sem ser necessário levar dano de uma explosão.</translation>
-    </message>
-    <message>
-        <source>The Cake&apos;s maximum walking distance depends on the ground it has to pass. Use [attack] to detonate it early.</source>
-        <comment>Tips</comment>
-        <translation>A distancia máxima que o Bolo é capaz de alcançar depende do terreno que tenha de ultrapassar. Podes também utilizar [ataque] para o detonar a qualquer altura.</translation>
-    </message>
-    <message>
-        <source>The Flame Thrower is a weapon but it can be used for tunnel digging as well.</source>
-        <comment>Tips</comment>
-        <translation>Embora o Lança-chamas seja uma arma, pode também ser usado para escavar túneis.</translation>
-    </message>
-    <message>
-        <source>Want to know who&apos;s behind the game? Click on the Hedgewars logo in the main menu to see the credits.</source>
-        <comment>Tips</comment>
-        <translation>Gostavas de saber quem está por traz deste jogo? Clica no logótipo do Hedgewars no menu inicial para aceder aos créditos.</translation>
-    </message>
-    <message>
-        <source>Like Hedgewars? Become a fan on %1 or follow us on %2!</source>
-        <comment>Tips</comment>
-        <translation>Gostas do Hedgewars? Torna-te fã no %1 ou segue-nos pelo %2!</translation>
-    </message>
-    <message>
-        <source>Feel free to draw your own graves, hats, flags or even maps and themes! But note that you&apos;ll have to share them somewhere to use them online.</source>
-        <comment>Tips</comment>
-        <translation>Está à vontade para desenhar as tuas próprias sepulturas, chapéus, bandeiras ou mesmo mapas e temas! Tem em nota que vai ser necessário partilha-los algures para que os consigas usar online.</translation>
-    </message>
-    <message>
-        <source>Really want to wear a specific hat? Donate to us and receive an exclusive hat of your choice!</source>
-        <comment>Tips</comment>
-        <translation>Gostavas poder usar um chapéu em particular que ainda não existe? Faz uma pequena doação para este projecto e recebe um chapéu exclusivo à tua escolha!</translation>
-    </message>
-    <message>
-        <source>Keep your video card drivers up to date to avoid issues playing the game.</source>
-        <comment>Tips</comment>
-        <translation>Mantém os drivers da placa gráfica actualizados de forma a evitar problemas com o jogo.</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;My Documents\Hedgewars&quot;. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Documentos\Hedgewars&quot;. Cria cópias de segurança ou leva os ficheiros contigo, apenas não os edites.</translation>
-    </message>
-    <message>
-        <source>You&apos;re able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</source>
-        <comment>Tips</comment>
-        <translation>É possivel associar os ficheiros relacionados com o Hedgewars (partidas e demonstrações) directamente com o jogo para que seja possivel lançalos directamente do teu explorador de ficheiros ou internet favorito.</translation>
-    </message>
-    <message>
-        <source>Want to save ropes? Release the rope in mid air and then shoot again. As long as you don&apos;t touch the ground you&apos;ll reuse your rope without wasting ammo!</source>
-        <comment>Tips</comment>
-        <translation>Gostavas de poupar algumas cordas? Solta a corda enquanto no ar e dispara-a novamente. Desde que não toques no solo podes reutilizar a usar a mesma corda quantas vezes quiseres!</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;Library/Application Support/Hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;Library/Application Support/Hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
-    </message>
-    <message>
-        <source>You can find your Hedgewars configuration files under &quot;.hedgewars&quot; in your home directory. Create backups or take the files with you, but don&apos;t edit them by hand.</source>
-        <comment>Tips</comment>
-        <translation>Podes encontrar os ficheiros de configuração do Hedgewars em &quot;.hedgewars&quot; dentro da tua &quot;Pasta Pessoal&quot;. Cria cópias de segurança ou leva os ficheiros contigo, mas não os edites manualmente.</translation>
-    </message>
-    <message>
-        <source>The Windows version of Hedgewars supports Xfire. Make sure to add Hedgewars to its game list so your friends can see you playing.</source>
-        <comment>Tips</comment>
-        <translation>A versão do Hedgewars para Windows suporta Xfire. Não te esqueças de adicionar o Hedgewars à tua lista de jogos para que os teus amigos te possam ver a jogar.</translation>
-    </message>
-    <message>
-        <source>Use the Molotov or Flame Thrower to temporary keep hedgehogs from passing terrain such as tunnels or platforms.</source>
-        <comment>Tips</comment>
-        <translation>Utiliza um Molotov ou o Lança-chamas para temporariamente impedir outros ouriços de passar por áreas no terreno como túneis ou plataformas.</translation>
-    </message>
-    <message>
-        <source>The Homing Bee can be tricky to use. Its turn radius depends on its velocity, so try to not use full power.</source>
-        <comment>Tips</comment>
-        <translation>A Abelha Teleguiada pode-se demonstrar complicada de utilizar. O grau a que consegue virar depende da sua velocidade, por isso experimenta lança-la com diferentes níveis de força.</translation>
-    </message>
-    <message>
         <source>Downloadable Content</source>
         <translation>Conteúdo Transferível (DLC)</translation>
     </message>
     <message>
-        <source>Local Game</source>
-        <translation>Jogo Local</translation>
-    </message>
-    <message>
         <source>Play a game on a single computer</source>
         <translation>Joga num único computador</translation>
-    </message>
-    <message>
-        <source>Network Game</source>
-        <translation>Jogo em Rede</translation>
     </message>
     <message>
         <source>Play a game across a network</source>
@@ -837,12 +857,24 @@ Por favor escolhe outro nome de utilizador:</translation>
         <source>Edit game preferences</source>
         <translation>Editar as preferencias de jogo</translation>
     </message>
+    <message>
+        <source>Play a game across a local area network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play a game on an official server</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
     <message>
         <source>Start</source>
         <translation>Iniciar</translation>
+    </message>
+    <message>
+        <source>Edit game preferences</source>
+        <translation type="unfinished">Editar as preferencias de jogo</translation>
     </message>
 </context>
 <context>
@@ -852,31 +884,12 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Controlo</translation>
     </message>
     <message>
-        <source>DLC</source>
-        <translation type="obsolete">DLC</translation>
+        <source>Edit game preferences</source>
+        <translation type="unfinished">Editar as preferencias de jogo</translation>
     </message>
     <message>
-        <source>Downloadable Content</source>
-        <translation type="obsolete">Conteúdo Transferível</translation>
-    </message>
-</context>
-<context>
-    <name>PageNetType</name>
-    <message>
-        <source>LAN game</source>
-        <translation>Jogo em LAN</translation>
-    </message>
-    <message>
-        <source>Official server</source>
-        <translation>Servidor oficial</translation>
-    </message>
-    <message>
-        <source>Join hundreds of players online!</source>
-        <translation>Junta-te a centenas de jogadores online!</translation>
-    </message>
-    <message>
-        <source>Join or host your own game server in a Local Area Network.</source>
-        <translation>Cria ou junta-te a jogo numa Rede Local</translation>
+        <source>Start</source>
+        <translation type="unfinished">Iniciar</translation>
     </message>
 </context>
 <context>
@@ -922,10 +935,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Apagar esquema de armas</translation>
     </message>
     <message>
-        <source>General</source>
-        <translation>Geral</translation>
-    </message>
-    <message>
         <source>Advanced</source>
         <translation>Avançado</translation>
     </message>
@@ -965,6 +974,94 @@ Por favor escolhe outro nome de utilizador:</translation>
         <source>System proxy settings</source>
         <translation>Configuração proxy do sistema</translation>
     </message>
+    <message>
+        <source>Select an action to change what key controls it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reset all binds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video Recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Teams</source>
+        <translation type="unfinished">Equipas</translation>
+    </message>
+    <message>
+        <source>Schemes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Weapons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom colors</source>
+        <translation type="unfinished">Cores personalizadas</translation>
+    </message>
+    <message>
+        <source>Game audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend audio</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Proxy settings</source>
+        <translation type="unfinished">Definições do Proxy</translation>
+    </message>
+    <message>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Outras opções</translation>
+    </message>
+    <message>
+        <source>Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video recording options</source>
+        <translation type="unfinished">Opções de criação de vídeo</translation>
+    </message>
 </context>
 <context>
     <name>PagePlayDemo</name>
@@ -997,11 +1094,11 @@ Por favor escolhe outro nome de utilizador:</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Regras</translation>
+        <translation>Regras:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Armas:</translation>
+        <translation>Armamento:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1164,16 +1261,8 @@ Por favor escolhe outro nome de utilizador:</translation>
 <context>
     <name>PageSinglePlayer</name>
     <message>
-        <source>Simple Game</source>
-        <translation>Jogo Simples</translation>
-    </message>
-    <message>
         <source>Play a quick game against the computer with random settings</source>
         <translation>Joga um jogo rápido contra o computador com configurações aleatórias</translation>
-    </message>
-    <message>
-        <source>Multiplayer</source>
-        <translation>Multi-jogador</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
@@ -1184,24 +1273,12 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Modo Campanha</translation>
     </message>
     <message>
-        <source>Training Mode</source>
-        <translation>Modo Treino</translation>
-    </message>
-    <message>
         <source>Practice your skills in a range of training missions</source>
         <translation>Pratica as tuas habilidades numa variedade de missões de treino</translation>
     </message>
     <message>
-        <source>Demos</source>
-        <translation>Demos</translation>
-    </message>
-    <message>
         <source>Watch recorded demos</source>
         <translation>Assistir aos demos guardados</translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation>Carregar</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
@@ -1249,20 +1326,22 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>(em progresso...)</translation>
     </message>
     <message>
-        <source>Date: </source>
-        <translation>Data: </translation>
-    </message>
-    <message>
-        <source>Size: </source>
-        <translation>Tamanho: </translation>
-    </message>
-    <message>
         <source>encoding</source>
         <translation>a converter</translation>
     </message>
     <message>
         <source>uploading</source>
         <translation>a enviar</translation>
+    </message>
+    <message>
+        <source>Date: %1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size: %1
+</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1274,10 +1353,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Info</source>
         <translation>Informação</translation>
-    </message>
-    <message>
-        <source>Start</source>
-        <translation>Iniciar</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
@@ -1327,18 +1402,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Ecrã completo</translation>
     </message>
     <message>
-        <source>Frontend fullscreen</source>
-        <translation>Menu em ecrã completo</translation>
-    </message>
-    <message>
-        <source>Enable sound</source>
-        <translation>Activar som</translation>
-    </message>
-    <message>
-        <source>Enable music</source>
-        <translation>Activar música</translation>
-    </message>
-    <message>
         <source>Show FPS</source>
         <translation>Mostrar FPS</translation>
     </message>
@@ -1353,18 +1416,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Show ammo menu tooltips</source>
         <translation>Mostrar a ajuda no menu das armas</translation>
-    </message>
-    <message>
-        <source>Enable frontend sounds</source>
-        <translation>Activar os sons no frontend</translation>
-    </message>
-    <message>
-        <source>Enable frontend music</source>
-        <translation>Activar a musica no frontend</translation>
-    </message>
-    <message>
-        <source>Frontend effects</source>
-        <translation>Efeitos no frontend</translation>
     </message>
     <message>
         <source>Save password</source>
@@ -1386,13 +1437,37 @@ Por favor escolhe outro nome de utilizador:</translation>
         <source>Use game resolution</source>
         <translation>Utilizar a resolução do jogo</translation>
     </message>
+    <message>
+        <source>Visual effects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sound</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In-game sound effects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In-game music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend sound effects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
-    <message>
-        <source>generated map...</source>
-        <translation>mapa gerado...</translation>
-    </message>
     <message>
         <source>Human</source>
         <translation>Humano</translation>
@@ -1404,14 +1479,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>(System default)</source>
         <translation>(Definições por omissão)</translation>
-    </message>
-    <message>
-        <source>Mission</source>
-        <translation>Missão</translation>
-    </message>
-    <message>
-        <source>generated maze...</source>
-        <translation>labirinto gerado...</translation>
     </message>
     <message>
         <source>Community</source>
@@ -1428,10 +1495,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>In progress</source>
         <translation>Em progresso</translation>
-    </message>
-    <message>
-        <source>hand drawn map...</source>
-        <translation>mapa desenhado à mão...</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1470,10 +1533,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Cima-baixo</translation>
     </message>
     <message>
-        <source>Wiggle</source>
-        <translation>&quot;Wiggle&quot;</translation>
-    </message>
-    <message>
         <source>Red/Cyan grayscale</source>
         <translation>Vermelho/Ciano (tons de cinza)</translation>
     </message>
@@ -1509,18 +1568,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Forte</translation>
     </message>
     <message>
-        <source>Key binds</source>
-        <translation>Associação de teclas</translation>
-    </message>
-    <message>
-        <source>Teams</source>
-        <translation>Equipas</translation>
-    </message>
-    <message>
-        <source>Audio/Graphic options</source>
-        <translation>Opções de Áudio/Gráficos</translation>
-    </message>
-    <message>
         <source>Net game</source>
         <translation>Jogo em rede</translation>
     </message>
@@ -1541,36 +1588,12 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Configurações de Equipa</translation>
     </message>
     <message>
-        <source>Misc</source>
-        <translation>Diversos</translation>
-    </message>
-    <message>
-        <source>Schemes and Weapons</source>
-        <translation>Esquemas e Armamento</translation>
-    </message>
-    <message>
-        <source>Custom colors</source>
-        <translation>Cores personalizadas</translation>
-    </message>
-    <message>
-        <source>Miscellaneous</source>
-        <translation>Outras opções</translation>
-    </message>
-    <message>
-        <source>Video recording options</source>
-        <translation>Opções de criação de vídeo</translation>
-    </message>
-    <message>
         <source>Videos</source>
         <translation>Vídeos</translation>
     </message>
     <message>
         <source>Description</source>
         <translation>Descrição</translation>
-    </message>
-    <message>
-        <source>Proxy settings</source>
-        <translation>Definições do Proxy</translation>
     </message>
 </context>
 <context>
@@ -1586,26 +1609,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Version</source>
         <translation>Versão</translation>
-    </message>
-    <message>
-        <source>Developers:</source>
-        <translation>Programadores:</translation>
-    </message>
-    <message>
-        <source>Art:</source>
-        <translation>Arte:</translation>
-    </message>
-    <message>
-        <source>Sounds:</source>
-        <translation>Som:</translation>
-    </message>
-    <message>
-        <source>Translations:</source>
-        <translation>Tradutores:</translation>
-    </message>
-    <message>
-        <source>Special thanks:</source>
-        <translation>Agradecimentos especiais:</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -1664,10 +1667,6 @@ Por favor escolhe outro nome de utilizador:</translation>
         <translation>Queda de Caixas</translation>
     </message>
     <message>
-        <source>Game scheme</source>
-        <translation>Esquema de jogo</translation>
-    </message>
-    <message>
         <source>% Dud Mines</source>
         <translation>% Minas Falsas</translation>
     </message>
@@ -1702,10 +1701,6 @@ Por favor escolhe outro nome de utilizador:</translation>
     <message>
         <source>Tip: </source>
         <translation>Dica: </translation>
-    </message>
-    <message>
-        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</source>
-        <translation>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game. Some features might be broken or incomplete. Use at your own risk!</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1777,15 +1772,11 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation>Descrição do vídeo</translation>
+        <translation>Descrição do vídeo: </translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation>Tags\Etiquetas (separados por virgula)</translation>
-    </message>
-    <message>
-        <source>Summary   </source>
-        <translation>Sumário   </translation>
+        <translation>Tags\Etiquetas (separados por virgula): </translation>
     </message>
     <message>
         <source>Description</source>
@@ -1815,6 +1806,38 @@ Deseja mesmo sair?</translation>
         <source>Bitrate (Kbps)</source>
         <translation>Bitrate (Kbps)</translation>
     </message>
+    <message>
+        <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished">Ecrã completo</translation>
+    </message>
+    <message>
+        <source>Fullscreen Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Windowed Resolution</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your Email</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summary</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send system information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type the security code:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1842,7 +1865,7 @@ Deseja mesmo sair?</translation>
     <name>QMessageBox</name>
     <message>
         <source>Connection to server is lost</source>
-        <translation>Conexão com o servidor perdida</translation>
+        <translation>Ligação com o servidor perdida</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1851,10 +1874,6 @@ Deseja mesmo sair?</translation>
     <message>
         <source>File association failed.</source>
         <translation>Não foi possivel associar os ficheiros.</translation>
-    </message>
-    <message>
-        <source>Please fill out all fields</source>
-        <translation>Por favor preencha todos os campos</translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
@@ -1905,24 +1924,12 @@ Deseja mesmo sair?</translation>
         <translation>Todos os ficheiros foram corretamente associados</translation>
     </message>
     <message>
-        <source>Successfully posted the issue on hedgewars.googlecode.com</source>
-        <translation>Problema publicado com sucesso em hedgewars.googlecode.com</translation>
-    </message>
-    <message>
-        <source>Error during authentication at google.com</source>
-        <translation>Ocorreu um erro durante a autenticação em google.com</translation>
-    </message>
-    <message>
-        <source>Error reporting the issue, please try again later (or visit hedgewars.googlecode.com directly)</source>
-        <translation>Erro ao reportar o problema, por favor tenta novamente mais tarde (ou visita hedgewars.googlecode.com diretamente)</translation>
-    </message>
-    <message>
         <source>Main - Error</source>
         <translation>Main - Erro</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Não foi possível criar o directório %1</translation>
+        <translation>Não foi possível criar o diretório %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
@@ -2067,16 +2074,37 @@ Desejas entrar na sala de qualquer maneira?</translation>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
         <translation>Desejas mesmo apagar o esquema de armas &apos;%1&apos;?</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>Nickname</source>
-        <translation>Nome de utilizador</translation>
+        <source>Hedgewars - Nick not registered</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please enter your nickname</source>
-        <translation>Por favor insira o seu nome de utilizador</translation>
+        <source>System Information Preview</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to generate captcha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to download captcha</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Please fill out all fields. Email is optional.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars - Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2134,24 +2162,8 @@ Desejas entrar na sala de qualquer maneira?</translation>
         <translation>Carregar</translation>
     </message>
     <message>
-        <source>Setup</source>
-        <translation>Configurar</translation>
-    </message>
-    <message>
-        <source>Ready</source>
-        <translation>Preparado</translation>
-    </message>
-    <message>
-        <source>Random Team</source>
-        <translation>Equipa aleatória</translation>
-    </message>
-    <message>
         <source>Associate file extensions</source>
         <translation>Associar com as extensões dos ficheiros</translation>
-    </message>
-    <message>
-        <source>more</source>
-        <translation>mais</translation>
     </message>
     <message>
         <source>More info</source>
@@ -2163,7 +2175,7 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
     <message>
         <source>Open videos directory</source>
-        <translation>Abrir o directório dos vídeos</translation>
+        <translation>Abrir o diretório de vídeos</translation>
     </message>
     <message>
         <source>Play</source>
@@ -2179,23 +2191,23 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar os parametros de conversão por omisão</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir o diretório de vídeos do teu sistema</translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Reproduzir este vídeo</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Apagar este vídeo</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished"></translation>
+        <translation>Enviar este vídeo para a tua conta do Youtube</translation>
     </message>
 </context>
 <context>
@@ -2246,6 +2258,25 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
 </context>
 <context>
+    <name>SeedPrompt</name>
+    <message>
+        <source>The map seed is the basis for all random values generated by the game.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Set seed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
@@ -2273,106 +2304,21 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
 </context>
 <context>
-    <name>ToggleButtonWidget</name>
+    <name>TeamShowWidget</name>
     <message>
-        <source>Vampirism</source>
-        <translation>Vampirismo</translation>
+        <source>%1&apos;s team</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ThemePrompt</name>
+    <message>
+        <source>Select a theme for this map</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Karma</source>
-        <translation>Karma</translation>
-    </message>
-    <message>
-        <source>Artillery</source>
-        <translation>Artilharia</translation>
-    </message>
-    <message>
-        <source>Fort Mode</source>
-        <translation>Modo Forte</translation>
-    </message>
-    <message>
-        <source>Divide Teams</source>
-        <translation>Separar Equipas</translation>
-    </message>
-    <message>
-        <source>Solid Land</source>
-        <translation>Terreno Sólido</translation>
-    </message>
-    <message>
-        <source>Add Border</source>
-        <translation>Adicionar Limites</translation>
-    </message>
-    <message>
-        <source>Low Gravity</source>
-        <translation>Baixa Gravidade</translation>
-    </message>
-    <message>
-        <source>Laser Sight</source>
-        <translation>Mira Laser</translation>
-    </message>
-    <message>
-        <source>Invulnerable</source>
-        <translation>Invulnerabilidade</translation>
-    </message>
-    <message>
-        <source>Random Order</source>
-        <translation>Ordem Aleatória</translation>
-    </message>
-    <message>
-        <source>King</source>
-        <translation>Rei</translation>
-    </message>
-    <message>
-        <source>Place Hedgehogs</source>
-        <translation>Posicionar Ouriços</translation>
-    </message>
-    <message>
-        <source>Clan Shares Ammo</source>
-        <translation>Clãs Partilham Armamento</translation>
-    </message>
-    <message>
-        <source>Disable Girders</source>
-        <translation>Desactivar Vigas</translation>
-    </message>
-    <message>
-        <source>Disable Land Objects</source>
-        <translation>Desactivar Objectos no Terreno</translation>
-    </message>
-    <message>
-        <source>AI Survival Mode</source>
-        <translation>Modo de Sobrevivência</translation>
-    </message>
-    <message>
-        <source>Reset Health</source>
-        <translation>Restaurar Vida</translation>
-    </message>
-    <message>
-        <source>Unlimited Attacks</source>
-        <translation>Ataques Ilimitados</translation>
-    </message>
-    <message>
-        <source>Reset Weapons</source>
-        <translation>Restaurar o Armamento</translation>
-    </message>
-    <message>
-        <source>Per Hedgehog Ammo</source>
-        <translation>Armamento Por Ouriço</translation>
-    </message>
-    <message>
-        <source>Disable Wind</source>
-        <translation>Desactivar Vento</translation>
-    </message>
-    <message>
-        <source>More Wind</source>
-        <translation>Mais Vento</translation>
-    </message>
-    <message>
-        <source>Tag Team</source>
-        <translation>Tag Team</translation>
-    </message>
-    <message>
-        <source>Add Bottom Border</source>
-        <translation>Adicionar limite inferior</translation>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
     </message>
 </context>
 <context>
@@ -2506,12 +2452,6 @@ Desejas entrar na sala de qualquer maneira?</translation>
         <translation>capturar</translation>
     </message>
     <message>
-        <source>hedgehogs
-info</source>
-        <translation>informação dos
-ouriços</translation>
-    </message>
-    <message>
         <source>quit</source>
         <translation>sair</translation>
     </message>
@@ -2547,32 +2487,32 @@ ouriços</translation>
         <source>record</source>
         <translation>gravar</translation>
     </message>
+    <message>
+        <source>hedgehog info</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
-        <source>Basic controls</source>
-        <translation>Controlos basicos</translation>
+        <source>Movement</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Weapon controls</source>
-        <translation>Controlos de armas</translation>
+        <source>Weapons</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Camera and cursor controls</source>
-        <translation>Controlos de camara e cursor</translation>
+        <source>Camera</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Other</source>
-        <translation>Outros</translation>
+        <source>Miscellaneous</source>
+        <translation type="unfinished">Outras opções</translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
-    <message>
-        <source>Move your hogs and aim:</source>
-        <translation>Movimentar os teus ouriços e apontar:</translation>
-    </message>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
         <translation>Ultrapassar fendas e obstaculos saltando:</translation>
@@ -2636,6 +2576,10 @@ ouriços</translation>
     <message>
         <source>Record video:</source>
         <translation>Gravar vídeo:</translation>
+    </message>
+    <message>
+        <source>Hedgehog movement</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

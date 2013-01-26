@@ -293,18 +293,24 @@ begin
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
 
+        if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
+            handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
+
         if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
            ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
         begin
             cScreenResizeDelay:= 0;
-            cScreenWidth:= cNewScreenWidth;
-            cScreenHeight:= cNewScreenHeight;
+            cWindowedWidth:= cNewScreenWidth;
+            cWindowedHeight:= cNewScreenHeight;
+            cScreenWidth:= cWindowedWidth;
+            cScreenHeight:= cWindowedHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
             WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();
@@ -365,8 +371,8 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
-var p: TPathType;
-    s: shortstring;
+//var p: TPathType;
+var s: shortstring;
     i: LongInt;
 {$IFDEF WEBGL}
     l:TResourceList;
@@ -490,7 +496,6 @@ procedure initEverything (complete:boolean);
 begin
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
-    uConsole.initModule;            // opens stdout
     uCommands.initModule;           // helps below
     uCommandHandlers.initModule;    // registers all messages from frontend
 
@@ -561,7 +566,6 @@ begin
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
-    uConsole.freeModule;            // closes stdout
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
 end;

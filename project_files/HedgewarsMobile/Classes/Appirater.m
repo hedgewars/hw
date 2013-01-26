@@ -1,9 +1,9 @@
 /*
  This file is part of Appirater, http://arashpayan.com
- 
+
  Copyright (c) 2010, Arash Payan
  All rights reserved.
- 
+
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
  files (the "Software"), to deal in the Software without
@@ -12,10 +12,10 @@
  copies of the Software, and to permit persons to whom the
  Software is furnished to do so, subject to the following
  conditions:
- 
+
  The above copyright notice and this permission notice shall be
  included in all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -66,7 +66,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
         trackingVersion = version;
         [userDefaults setObject:version forKey:kAppiraterCurrentVersion];
     }
-    
+
     if (APPIRATER_DEBUG)
         DLog(@"APPIRATER Tracking version: %@", trackingVersion);
 
@@ -98,7 +98,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
              launchCount > LAUNCHES_UNTIL_PROMPT &&
              !declinedToRate &&
              !ratedApp) {
-            if ([HWUtils isNetworkReachable]) {	// check if they can reach the app store
+            if ([HWUtils isNetworkReachable]) { // check if they can reach the app store
                 willShowPrompt = YES;
                 [self performSelectorOnMainThread:@selector(showPrompt) withObject:nil waitUntilDone:NO];
             }
@@ -141,7 +141,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
             // they want to rate it
             [[UIApplication sharedApplication] openURL:
              [NSURL URLWithString:[templateReviewURL stringByReplacingOccurrencesOfString:@"APP_ID" withString:[NSString stringWithFormat:@"%d", APPIRATER_APP_ID]]]];
-            
+
             [userDefaults setBool:YES forKey:kAppiraterRatedCurrentVersion];
             break;
         case 2:

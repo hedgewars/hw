@@ -24,7 +24,6 @@ class PageEditTeam;
 class PageMultiplayer;
 class PagePlayDemo;
 class PageOptions;
-class PageFeedback;
 class PageNet;
 class PageNetServer;
 class PageNetChat;
@@ -59,7 +58,6 @@ class Ui_HWForm
         PageMultiplayer *pageMultiplayer;
         PagePlayDemo *pagePlayDemo;
         PageOptions *pageOptions;
-        PageFeedback *pageFeedback;
         PageNet *pageNet;
         PageNetServer * pageNetServer;
         PageNetChat *pageNetChat;

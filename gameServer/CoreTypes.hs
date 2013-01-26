@@ -4,7 +4,6 @@ module CoreTypes where
 import Control.Concurrent
 import Data.Word
 import qualified Data.Map as Map
-import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
 import Data.Function
@@ -29,6 +28,7 @@ data ClientInfo =
         nick :: B.ByteString,
         webPassword :: B.ByteString,
         logonPassed :: Bool,
+        isVisible :: Bool,
         clientProto :: !Word16,
         roomID :: RoomIndex,
         pingsQueue :: !Word,
@@ -36,6 +36,7 @@ data ClientInfo =
         isReady :: !Bool,
         isInGame :: Bool,
         isAdministrator :: Bool,
+        isChecker :: Bool,
         isKickedFromServer :: Bool,
         clientClan :: Maybe B.ByteString,
         teamsInGame :: Word
@@ -68,11 +69,11 @@ data TeamInfo =
 data GameInfo =
     GameInfo
     {
-        roundMsgs :: Seq B.ByteString,
+        roundMsgs :: [B.ByteString],
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
-        allPlayersHaveRegisteredAccounts :: Bool,
+        allPlayersHaveRegisteredAccounts :: !Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
@@ -85,7 +86,7 @@ newGameInfo :: [TeamInfo]
                 -> GameInfo
 newGameInfo =
     GameInfo
-        Data.Sequence.empty
+        []
         []
 
 data RoomInfo =

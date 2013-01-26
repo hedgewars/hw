@@ -23,29 +23,62 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QLabel>
+#include <QTableWidget>
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QTextBrowser>
-#include <QTableWidget>
+#include <QScrollArea>
+#include <QHeaderView>
 #include <QSlider>
 #include <QSignalMapper>
 #include <QColorDialog>
 #include <QStandardItemModel>
+#include <QDebug>
 
 #include "pageoptions.h"
 #include "gameuiconfig.h"
 #include "hwconsts.h"
 #include "fpsedit.h"
-#include "igbox.h"
 #include "DataManager.h"
 #include "LibavInteraction.h"
 #include "AutoUpdater.h"
+#include "HWApplication.h"
+#include "keybinder.h"
 
 #ifdef __APPLE__
 #ifdef SPARKLE_ENABLED
 #include "SparkleAutoUpdater.h"
 #endif
 #endif
+
+const int OPTION_BOX_SPACING = 10;
+
+OptionGroupBox::OptionGroupBox(const QString & iconName,
+                               const QString & title,
+                               QWidget * parent) : IconedGroupBox(parent)
+{
+    setIcon(QIcon(iconName));
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setTitle(title);
+    setMinimumWidth(300);
+    m_layout = new QGridLayout(this);
+    m_layout->setColumnStretch(0, 0);
+    m_layout->setColumnStretch(1, 1);
+}
+
+QGridLayout * OptionGroupBox::layout()
+{
+    return m_layout;
+}
+
+void OptionGroupBox::addDivider()
+{
+    QFrame * hr = new QFrame(this);
+    hr->setFrameStyle(QFrame::HLine);
+    hr->setLineWidth(3);
+    hr->setFixedHeight(10);
+    m_layout->addWidget(hr, m_layout->rowCount(), 0, 1, m_layout->columnCount());
+}
 
 // TODO cleanup
 QLayout * PageOptions::bodyLayoutDefinition()
@@ -54,275 +87,227 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
     QTabWidget * tabs = new QTabWidget(this);
     pageLayout->addWidget(tabs);
-    QWidget * page1 = new QWidget(this);
-    QWidget * page2 = new QWidget(this);
-    tabs->addTab(page1, tr("General"));
-    tabs->addTab(page2, tr("Advanced"));
+
+    binder = new KeyBinder(this, tr("Select an action to change what key controls it"), tr("Reset to default"), tr("Reset all binds"));
+    connect(binder, SIGNAL(bindUpdate(int)), this, SLOT(bindUpdated(int)));
+    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
+
+    QWidget * pageGame = new QWidget(this);
+    tabs->addTab(pageGame, tr("Game"));
+
+    QWidget * pageGraphics = new QWidget(this);
+    tabs->addTab(pageGraphics, tr("Graphics"));
+
+    QWidget * pageAudio = new QWidget(this);
+    tabs->addTab(pageAudio, tr("Audio"));
+
+    binderTab = tabs->addTab(binder, tr("Controls"));
 
 #ifdef VIDEOREC
-    QWidget * page3 = new QWidget(this);
-    tabs->addTab(page3, tr("Video Recording"));
+    QWidget * pageVideoRec = new QWidget(this);
+    tabs->addTab(pageVideoRec, tr("Video Recording"));
 #endif
 
-    { // page 1
-        QGridLayout * page1Layout = new QGridLayout(page1);
-        //gbTBLayout->setMargin(0);
-        page1Layout->setSpacing(0);
-        page1Layout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    QWidget * pageNetwork = new QWidget(this);
+    tabs->addTab(pageNetwork, tr("Network"));
 
-        QPixmap pmNew(":/res/new.png");
-        QPixmap pmEdit(":/res/edit.png");
-        QPixmap pmDelete(":/res/delete.png");
+    QWidget * pageAdvanced = new QWidget(this);
+    tabs->addTab(pageAdvanced, tr("Advanced"));
 
-        {
-            teamsBox = new IconedGroupBox(this);
-            //teamsBox->setContentTopPadding(0);
-            //teamsBox->setAttribute(Qt::WA_PaintOnScreen, true);
-            teamsBox->setIcon(QIcon(":/res/teamicon.png"));
-            teamsBox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            teamsBox->setTitle(QGroupBox::tr("Teams"));
+    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
 
-            QGridLayout * GBTlayout = new QGridLayout(teamsBox);
+    QPixmap pmNew(":/res/new.png");
+    QPixmap pmEdit(":/res/edit.png");
+    QPixmap pmDelete(":/res/delete.png");
 
-            CBTeamName = new QComboBox(teamsBox);
-            GBTlayout->addWidget(CBTeamName, 0, 0);
+    { // game page
+        QVBoxLayout * leftColumn, * rightColumn;
+        setupTabPage(pageGame, &leftColumn, &rightColumn);
 
-            BtnNewTeam = new QPushButton(teamsBox);
-            BtnNewTeam->setToolTip(tr("New team"));
+        { // group: Teams
+            OptionGroupBox * groupTeams = new OptionGroupBox(":/res/teamicon.png", tr("Teams"), this);
+            groupTeams->setMinimumWidth(400);
+            rightColumn->addWidget(groupTeams);
+
+            groupTeams->layout()->setColumnStretch(0, 1);
+
+            CBTeamName = new QComboBox(groupTeams);
+            groupTeams->layout()->addWidget(CBTeamName, 0, 0);
+
+            BtnNewTeam = new QPushButton(groupTeams);
+            BtnNewTeam->setWhatsThis(tr("New team"));
             BtnNewTeam->setIconSize(pmNew.size());
             BtnNewTeam->setIcon(pmNew);
             BtnNewTeam->setMaximumWidth(pmNew.width() + 6);
             connect(BtnNewTeam, SIGNAL(clicked()), this, SIGNAL(newTeamRequested()));
-            GBTlayout->addWidget(BtnNewTeam, 0, 1);
+            groupTeams->layout()->addWidget(BtnNewTeam, 0, 1);
 
-            BtnEditTeam = new QPushButton(teamsBox);
-            BtnEditTeam->setToolTip(tr("Edit team"));
+            BtnEditTeam = new QPushButton(groupTeams);
+            BtnEditTeam->setWhatsThis(tr("Edit team"));
             BtnEditTeam->setIconSize(pmEdit.size());
             BtnEditTeam->setIcon(pmEdit);
             BtnEditTeam->setMaximumWidth(pmEdit.width() + 6);
             connect(BtnEditTeam, SIGNAL(clicked()), this, SLOT(requestEditSelectedTeam()));
-            GBTlayout->addWidget(BtnEditTeam, 0, 2);
+            groupTeams->layout()->addWidget(BtnEditTeam, 0, 2);
 
-            BtnDeleteTeam = new QPushButton(teamsBox);
-            BtnDeleteTeam->setToolTip(tr("Delete team"));
+            BtnDeleteTeam = new QPushButton(groupTeams);
+            BtnDeleteTeam->setWhatsThis(tr("Delete team"));
             BtnDeleteTeam->setIconSize(pmDelete.size());
             BtnDeleteTeam->setIcon(pmDelete);
             BtnDeleteTeam->setMaximumWidth(pmDelete.width() + 6);
             connect(BtnDeleteTeam, SIGNAL(clicked()), this, SLOT(requestDeleteSelectedTeam()));
-            GBTlayout->addWidget(BtnDeleteTeam, 0, 3);
+            groupTeams->layout()->addWidget(BtnDeleteTeam, 0, 3);
 
-            LblNoEditTeam = new QLabel(teamsBox);
+            LblNoEditTeam = new QLabel(groupTeams);
             LblNoEditTeam->setText(tr("You can't edit teams from team selection. Go back to main menu to add, edit or delete teams."));
             LblNoEditTeam->setWordWrap(true);
             LblNoEditTeam->setVisible(false);
-            GBTlayout->addWidget(LblNoEditTeam, 0, 0);
-
-            page1Layout->addWidget(teamsBox, 0, 0);
+            groupTeams->layout()->addWidget(LblNoEditTeam, 1, 0, 1, 4);
         }
 
-        {
-            IconedGroupBox* groupWeapons = new IconedGroupBox(this);
+        { // group: schemes
+            OptionGroupBox * groupSchemes = new OptionGroupBox(":/res/weaponsicon.png", tr("Schemes"), this);
+            leftColumn->addWidget(groupSchemes);
 
-            //groupWeapons->setContentTopPadding(0);
-            //groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-            groupWeapons->setIcon(QIcon(":/res/weaponsicon.png"));
-            groupWeapons->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            groupWeapons->setTitle(QGroupBox::tr("Schemes and Weapons"));
-            QGridLayout * WeaponsLayout = new QGridLayout(groupWeapons);
+            groupSchemes->layout()->setColumnStretch(0, 1);
 
-            QLabel* SchemeLabel = new QLabel(groupWeapons);
-            SchemeLabel->setText(QLabel::tr("Game scheme"));
-            WeaponsLayout->addWidget(SchemeLabel, 1, 0);
+            SchemesName = new QComboBox(groupSchemes);
+            groupSchemes->layout()->addWidget(SchemesName, 0, 0);
 
-            SchemesName = new QComboBox(groupWeapons);
-            WeaponsLayout->addWidget(SchemesName, 1, 1);
-
-            SchemeNew = new QPushButton(groupWeapons);
+            SchemeNew = new QPushButton(groupSchemes);
             SchemeNew->setWhatsThis(tr("New scheme"));
             SchemeNew->setIconSize(pmNew.size());
             SchemeNew->setIcon(pmNew);
             SchemeNew->setMaximumWidth(pmNew.width() + 6);
-            WeaponsLayout->addWidget(SchemeNew, 1, 2);
+            groupSchemes->layout()->addWidget(SchemeNew, 0, 1);
 
-            SchemeEdit = new QPushButton(groupWeapons);
+            SchemeEdit = new QPushButton(groupSchemes);
             SchemeEdit->setWhatsThis(tr("Edit scheme"));
             SchemeEdit->setIconSize(pmEdit.size());
             SchemeEdit->setIcon(pmEdit);
             SchemeEdit->setMaximumWidth(pmEdit.width() + 6);
-            WeaponsLayout->addWidget(SchemeEdit, 1, 3);
+            groupSchemes->layout()->addWidget(SchemeEdit, 0, 2);
 
-            SchemeDelete = new QPushButton(groupWeapons);
+            SchemeDelete = new QPushButton(groupSchemes);
             SchemeDelete->setWhatsThis(tr("Delete scheme"));
             SchemeDelete->setIconSize(pmDelete.size());
             SchemeDelete->setIcon(pmDelete);
             SchemeDelete->setMaximumWidth(pmDelete.width() + 6);
-            WeaponsLayout->addWidget(SchemeDelete, 1, 4);
+            groupSchemes->layout()->addWidget(SchemeDelete, 0, 3);
+        }
 
-            QLabel* WeaponLabel = new QLabel(groupWeapons);
-            WeaponLabel->setText(QLabel::tr("Weapons"));
-            WeaponsLayout->addWidget(WeaponLabel, 2, 0);
+        { // group: weapons
+            OptionGroupBox * groupWeapons = new OptionGroupBox(":/res/weaponsicon.png", tr("Weapons"), this);
+            leftColumn->addWidget(groupWeapons);
+
+            groupWeapons->layout()->setColumnStretch(0, 1);
 
             WeaponsName = new QComboBox(groupWeapons);
-            WeaponsLayout->addWidget(WeaponsName, 2, 1);
+            groupWeapons->layout()->addWidget(WeaponsName, 0, 0);
 
             WeaponNew = new QPushButton(groupWeapons);
             WeaponNew->setWhatsThis(tr("New weapon set"));
             WeaponNew->setIconSize(pmNew.size());
             WeaponNew->setIcon(pmNew);
             WeaponNew->setMaximumWidth(pmNew.width() + 6);
-            WeaponsLayout->addWidget(WeaponNew, 2, 2);
+            groupWeapons->layout()->addWidget(WeaponNew, 0, 1);
 
             WeaponEdit = new QPushButton(groupWeapons);
             WeaponEdit->setWhatsThis(tr("Edit weapon set"));
             WeaponEdit->setIconSize(pmEdit.size());
             WeaponEdit->setIcon(pmEdit);
             WeaponEdit->setMaximumWidth(pmEdit.width() + 6);
-            WeaponsLayout->addWidget(WeaponEdit, 2, 3);
+            groupWeapons->layout()->addWidget(WeaponEdit, 0, 2);
 
             WeaponDelete = new QPushButton(groupWeapons);
             WeaponDelete->setWhatsThis(tr("Delete weapon set"));
             WeaponDelete->setIconSize(pmDelete.size());
             WeaponDelete->setIcon(pmDelete);
             WeaponDelete->setMaximumWidth(pmDelete.width() + 6);
-            WeaponsLayout->addWidget(WeaponDelete, 2, 4);
-
-            page1Layout->addWidget(groupWeapons, 1, 0);
+            groupWeapons->layout()->addWidget(WeaponDelete, 0, 3);
         }
 
-        {
-            IconedGroupBox* groupMisc = new IconedGroupBox(this);
-            //groupMisc->setContentTopPadding(0);
-            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-            groupMisc->setIcon(QIcon(":/res/miscicon.png"));
-            //groupMisc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            groupMisc->setTitle(QGroupBox::tr("Misc"));
-            QGridLayout * MiscLayout = new QGridLayout(groupMisc);
+        leftColumn->addStretch(1);
+        rightColumn->addStretch(1);
+    }
 
-            // Label for "Language"
-            QLabel *labelLanguage = new QLabel(groupMisc);
-            labelLanguage->setText(QLabel::tr("Locale") + " *");
-            MiscLayout->addWidget(labelLanguage, 0, 0);
+    { // graphics page
+        QVBoxLayout * leftColumn, * rightColumn;
+        setupTabPage(pageGraphics, &leftColumn, &rightColumn);
 
-            // List of installed languages
-            CBLanguage = new QComboBox(groupMisc);
-            QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
-            CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
-            for(int i = 0; i < locs.count(); i++)
-            {
-                QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
-            }
+        { // group: game
+            OptionGroupBox * groupGame = new OptionGroupBox(":/res/graphicsicon.png", tr("Game"), this);
+            leftColumn->addWidget(groupGame);
 
-            MiscLayout->addWidget(CBLanguage, 0, 1);
+            groupGame->layout()->setColumnStretch(0, 0);
+            groupGame->layout()->setColumnStretch(1, 0);
+            groupGame->layout()->setColumnStretch(2, 1);
 
-            // Label and field for net nick
-            labelNN = new QLabel(groupMisc);
-            labelNN->setText(QLabel::tr("Nickname"));
-            MiscLayout->addWidget(labelNN, 1, 0);
+            // Fullscreen
 
-            editNetNick = new QLineEdit(groupMisc);
-            editNetNick->setMaxLength(20);
-            editNetNick->setText(QLineEdit::tr("anonymous"));
-            MiscLayout->addWidget(editNetNick, 1, 1);
+            CBFullscreen = new QCheckBox(groupGame);
+            groupGame->layout()->addWidget(CBFullscreen, 0, 0, 1, 2);
+            CBFullscreen->setText(QLabel::tr("Fullscreen"));
 
-            // checkbox and field for password
-            CBSavePassword = new QCheckBox(groupMisc);
-            CBSavePassword->setText(QCheckBox::tr("Save password"));
-            MiscLayout->addWidget(CBSavePassword, 2, 0);
+            // Fullscreen resolution
 
-            editNetPassword = new QLineEdit(groupMisc);
-            editNetPassword->setEchoMode(QLineEdit::Password);
-            MiscLayout->addWidget(editNetPassword, 2, 1);
+            lblFullScreenRes = new QLabel(groupGame);
+            lblFullScreenRes->setText(QLabel::tr("Fullscreen Resolution"));
+            groupGame->layout()->addWidget(lblFullScreenRes, 1, 0);
 
-    #ifdef __APPLE__
-    #ifdef SPARKLE_ENABLED
-            CBAutoUpdate = new QCheckBox(groupMisc);
-            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
-            MiscLayout->addWidget(CBAutoUpdate, 7, 0, 1, 1);
+            CBResolution = new QComboBox(groupGame);
+            CBResolution->setFixedWidth(200);
+            groupGame->layout()->addWidget(CBResolution, 1, 1, Qt::AlignLeft);
 
-            btnUpdateNow = new QPushButton(groupMisc);
-            connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
-            btnUpdateNow->setToolTip(tr("Check for updates"));
-            btnUpdateNow->setText("Check now");
-            btnUpdateNow->setFixedSize(130, 30);
-            MiscLayout->addWidget(btnUpdateNow, 7, 1, 1, 1);
-    #endif
-    #endif
-            page1Layout->addWidget(groupMisc, 2, 0);
-        }
+            // Windowed resolution
 
-        {
-            AGGroupBox = new IconedGroupBox(this);
-            //AGGroupBox->setContentTopPadding(0);
-            AGGroupBox->setIcon(QIcon(":/res/graphicsicon.png"));
-            //AGGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-            AGGroupBox->setTitle(QGroupBox::tr("Audio/Graphic options"));
+            lblWinScreenRes = new QLabel(groupGame);
+            lblWinScreenRes->setText(QLabel::tr("Windowed Resolution"));
+            groupGame->layout()->addWidget(lblWinScreenRes, 2, 0);
 
-            QVBoxLayout * GBAlayout = new QVBoxLayout(AGGroupBox);
-            QGridLayout * GBAfrontendlayout = new QGridLayout(0);
-            QHBoxLayout * GBAreslayout = new QHBoxLayout(0);
-            QHBoxLayout * GBAstereolayout = new QHBoxLayout(0);
-            QHBoxLayout * GBAqualayout = new QHBoxLayout(0);
+            winResContainer = new QWidget();
+            QHBoxLayout * winResLayout = new QHBoxLayout(winResContainer);
+            winResLayout->setSpacing(0);
+            groupGame->layout()->addWidget(winResContainer, 2, 1);
 
-            QLabel * frontend = new QLabel(AGGroupBox);
-            frontend->setText(QLabel::tr("Frontend"));
-            frontend->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            GBAfrontendlayout->addWidget(frontend, 0, 0, 1, 2);
+            QLabel *winLabelX = new QLabel(groupGame);
+            winLabelX->setText("x"); // decorational x
+            winLabelX->setFixedWidth(40);
+            winLabelX->setAlignment(Qt::AlignCenter);
 
-            CBFrontendFullscreen = new QCheckBox(AGGroupBox);
-            CBFrontendFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAfrontendlayout->addWidget(CBFrontendFullscreen, 1, 0);
+            windowWidthEdit = new QLineEdit(groupGame);
+            windowWidthEdit->setValidator(new QIntValidator(this));
+            windowWidthEdit->setFixedSize(55, CBResolution->height());
+            windowHeightEdit = new QLineEdit(groupGame);
+            windowHeightEdit->setValidator(new QIntValidator(this));
+            windowHeightEdit->setFixedSize(55, CBResolution->height());
 
-            CBFrontendEffects = new QCheckBox(AGGroupBox);
-            CBFrontendEffects->setText(QCheckBox::tr("Visual effects"));
-            GBAfrontendlayout->addWidget(CBFrontendEffects, 2, 0);
+            winResLayout->addWidget(windowWidthEdit, 0);
+            winResLayout->addWidget(winLabelX, 0);
+            winResLayout->addWidget(windowHeightEdit, 0);
+            winResLayout->addStretch(1);
 
-            CBFrontendSound = new QCheckBox(AGGroupBox);
-            CBFrontendSound->setText(QCheckBox::tr("Sound"));
-            GBAfrontendlayout->addWidget(CBFrontendSound, 1, 1);
+            // Quality
 
-            CBFrontendMusic = new QCheckBox(AGGroupBox);
-            CBFrontendMusic->setText(QCheckBox::tr("Music"));
-            GBAfrontendlayout->addWidget(CBFrontendMusic, 2, 1);
+            QLabel * lblQuality = new QLabel(groupGame);
+            lblQuality->setText(QLabel::tr("Quality"));
+            lblQuality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+            groupGame->layout()->addWidget(lblQuality, 3, 0);
 
-            GBAlayout->addLayout(GBAfrontendlayout);
-
-            QFrame * hr = new QFrame(AGGroupBox);
-            hr->setFrameStyle(QFrame::HLine);
-            hr->setLineWidth(3);
-            hr->setFixedHeight(10);
-            GBAlayout->addWidget(hr);
-
-            QLabel * resolution = new QLabel(AGGroupBox);
-            resolution->setText(QLabel::tr("Resolution"));
-            GBAreslayout->addWidget(resolution);
-
-            CBResolution = new QComboBox(AGGroupBox);
-            GBAreslayout->addWidget(CBResolution);
-            GBAlayout->addLayout(GBAreslayout);
-
-            CBFullscreen = new QCheckBox(AGGroupBox);
-            CBFullscreen->setText(QCheckBox::tr("Fullscreen"));
-            GBAreslayout->addWidget(CBFullscreen);
-
-            QLabel * quality = new QLabel(AGGroupBox);
-            quality->setText(QLabel::tr("Quality"));
-            quality->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-            GBAqualayout->addWidget(quality);
-
-            SLQuality = new QSlider(Qt::Horizontal, AGGroupBox);
+            SLQuality = new QSlider(Qt::Horizontal, groupGame);
             SLQuality->setTickPosition(QSlider::TicksBelow);
             SLQuality->setMaximum(5);
             SLQuality->setMinimum(0);
             SLQuality->setFixedWidth(150);
-            GBAqualayout->addWidget(SLQuality);
-            GBAlayout->addLayout(GBAqualayout);
+            groupGame->layout()->addWidget(SLQuality, 3, 1, Qt::AlignLeft);
 
-            QLabel * stereo = new QLabel(AGGroupBox);
-            stereo->setText(QLabel::tr("Stereo rendering"));
-            GBAstereolayout->addWidget(stereo);
+            // Stereo spacing
 
-            CBStereoMode = new QComboBox(AGGroupBox);
+            QLabel * lblStereo = new QLabel(groupGame);
+            lblStereo->setText(QLabel::tr("Stereo rendering"));
+            groupGame->layout()->addWidget(lblStereo, 4, 0);
+
+            CBStereoMode = new QComboBox(groupGame);
             CBStereoMode->addItem(QComboBox::tr("Disabled"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan"));
             CBStereoMode->addItem(QComboBox::tr("Cyan/Red"));
@@ -330,76 +315,84 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBStereoMode->addItem(QComboBox::tr("Blue/Red"));
             CBStereoMode->addItem(QComboBox::tr("Red/Green"));
             CBStereoMode->addItem(QComboBox::tr("Green/Red"));
-            CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
-            CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
-            CBStereoMode->addItem(QComboBox::tr("Wiggle"));
             CBStereoMode->addItem(QComboBox::tr("Red/Cyan grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Cyan/Red grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Red/Blue grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Blue/Red grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Red/Green grayscale"));
             CBStereoMode->addItem(QComboBox::tr("Green/Red grayscale"));
+            CBStereoMode->addItem(QComboBox::tr("Side-by-side"));
+            CBStereoMode->addItem(QComboBox::tr("Top-Bottom"));
+            CBStereoMode->setFixedWidth(CBResolution->width());
+            groupGame->layout()->addWidget(CBStereoMode, 4, 1);
 
-            GBAstereolayout->addWidget(CBStereoMode);
-            GBAlayout->addLayout(GBAstereolayout);
+            // Divider
 
-            hr = new QFrame(AGGroupBox);
-            hr->setFrameStyle(QFrame::HLine);
-            hr->setLineWidth(3);
-            hr->setFixedHeight(10);
-            GBAlayout->addWidget(hr);
+            groupGame->addDivider(); // row 5
 
-            QGridLayout * GBAvollayout = new QGridLayout();
-            QLabel * vol = new QLabel(AGGroupBox);
-            vol->setText(QLabel::tr("Initial sound volume"));
-            GBAvollayout->addWidget(vol, 0, 0, 1, 2);
-            GBAlayout->addLayout(GBAvollayout);
-            volumeBox = new QSpinBox(AGGroupBox);
-            volumeBox->setRange(0, 100);
-            volumeBox->setSingleStep(5);
-            GBAvollayout->addWidget(volumeBox, 0, 2);
+            // FPS limit
 
-            CBSound = new QCheckBox(AGGroupBox);
-            CBSound->setText(QCheckBox::tr("Sound"));
-            CBSound->setWhatsThis(QCheckBox::tr("In-game sound effects"));
-            GBAvollayout->addWidget(CBSound, 1, 0);
+            QHBoxLayout * fpsLayout = new QHBoxLayout();
+            groupGame->layout()->addLayout(fpsLayout, 6, 0, 1, 2);
+            QLabel * maxfps = new QLabel(groupGame);
+            maxfps->setText(QLabel::tr("FPS limit"));
+            fpsLayout->addWidget(maxfps);
+            fpsLayout->addSpacing(30);
+            fpsedit = new FPSEdit(groupGame);
+            fpsLayout->addWidget(fpsedit);
 
-            CBMusic = new QCheckBox(AGGroupBox);
-            CBMusic->setText(QCheckBox::tr("Music"));
-            CBMusic->setWhatsThis(QCheckBox::tr("In-game music"));
-            GBAvollayout->addWidget(CBMusic, 1, 1, 1, 2);
+            // Show FPS
 
-            GBAvollayout->setSizeConstraint(QLayout::SetMinimumSize);
+            CBShowFPS = new QCheckBox(groupGame);
+            CBShowFPS->setText(QCheckBox::tr("Show FPS"));
+            fpsLayout->addWidget(CBShowFPS);
+            fpsLayout->addStretch(1);
 
-            hr = new QFrame(AGGroupBox);
-            hr->setFrameStyle(QFrame::HLine);
-            hr->setLineWidth(3);
-            hr->setFixedHeight(10);
-            GBAlayout->addWidget(hr);
+            // Divider
 
-            CBAltDamage = new QCheckBox(AGGroupBox);
+            groupGame->addDivider(); // row 7
+
+            // Alternative damage show
+
+            CBAltDamage = new QCheckBox(groupGame);
             CBAltDamage->setText(QCheckBox::tr("Alternative damage show"));
-            GBAlayout->addWidget(CBAltDamage);
+            groupGame->layout()->addWidget(CBAltDamage, 8, 0, 1, 2);
 
-            page1Layout->addWidget(AGGroupBox, 0, 1, 3, 1);
+            // Show ammo menu tooltips
+
+            WeaponTooltip = new QCheckBox(groupGame);
+            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
+            groupGame->layout()->addWidget(WeaponTooltip, 9, 0, 1, 2);
         }
 
-        page1Layout->addWidget(new QWidget(this), 3, 0);
+        { // group: frontend
+            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/graphicsicon.png", tr("Frontend"), this);
+            rightColumn->addWidget(groupFrontend);
 
-    }
+            // Fullscreen
 
-    { // page 2
-        QGridLayout * page2Layout = new QGridLayout(page2);
+            CBFrontendFullscreen = new QCheckBox(groupFrontend);
+            CBFrontendFullscreen->setText(QCheckBox::tr("Fullscreen"));
+            groupFrontend->layout()->addWidget(CBFrontendFullscreen, 0, 0);
 
-        {
-            IconedGroupBox * gbColors = new IconedGroupBox(this);
-            gbColors->setIcon(QIcon(":/res/lightbulb_on.png"));
-            gbColors->setTitle(QGroupBox::tr("Custom colors"));
-            page2Layout->addWidget(gbColors, 0, 0);
-            QGridLayout * gbCLayout = new QGridLayout(gbColors);
+            // Visual effects
+
+            CBFrontendEffects = new QCheckBox(groupFrontend);
+            CBFrontendEffects->setText(QCheckBox::tr("Visual effects"));
+            groupFrontend->layout()->addWidget(CBFrontendEffects, 1, 0);
+        }
+
+        { // group: colors
+            OptionGroupBox * groupColors = new OptionGroupBox(":/res/lightbulb_on.png", tr("Custom colors"), this);
+            rightColumn->addWidget(groupColors);
+
+            groupColors->layout()->setColumnStretch(0, 1);
+            groupColors->layout()->setColumnStretch(1, 1);
+            groupColors->layout()->setColumnStretch(2, 1);
+
+            // Color buttons
 
             QSignalMapper * mapper = new QSignalMapper(this);
-
             QStandardItemModel * model = DataManager::instance().colorsModel();
 
             connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onColorModelDataChanged(QModelIndex,QModelIndex)));
@@ -407,7 +400,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             {
                 QPushButton * btn = new QPushButton(this);
                 btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-                gbCLayout->addWidget(btn, i / 3, i % 3);
+                groupColors->layout()->addWidget(btn, i / 3, i % 3);
                 btn->setStyleSheet(QString("background: %1").arg(model->item(i)->data().value<QColor>().name()));
                 m_colorButtons.append(btn);
                 connect(btn, SIGNAL(clicked()), mapper, SLOT(map()));
@@ -416,211 +409,362 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             connect(mapper, SIGNAL(mapped(int)), this, SLOT(colorButtonClicked(int)));
 
+            // Reset default colors
+
             QPushButton * btn = new QPushButton(this);
-            gbCLayout->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
+            groupColors->layout()->addWidget(btn, (model->rowCount() - 1) / 3 + 1, 0, 1, 3);
             btn->setText(tr("Reset to default colors"));
             connect(btn, SIGNAL(clicked()), &DataManager::instance(), SLOT(resetColors()));
         }
 
-        {
-            IconedGroupBox * gbMisc = new IconedGroupBox(this);
-            gbMisc->setIcon(QIcon(":/res/Settings.png"));
-            gbMisc->setTitle(QGroupBox::tr("Miscellaneous"));
-            page2Layout->addWidget(gbMisc, 0, 1);
-            QVBoxLayout * gbCLayout = new QVBoxLayout(gbMisc);
+        leftColumn->addStretch(1);
+        rightColumn->addStretch(1);
+    }
 
-            QHBoxLayout * GBAfpslayout = new QHBoxLayout(0);
-            QLabel * maxfps = new QLabel(AGGroupBox);
-            maxfps->setText(QLabel::tr("FPS limit"));
-            GBAfpslayout->addWidget(maxfps);
-            fpsedit = new FPSEdit(AGGroupBox);
-            GBAfpslayout->addWidget(fpsedit);
+    { // audio page
+        QVBoxLayout * leftColumn, * rightColumn;
+        setupTabPage(pageAudio, &leftColumn, &rightColumn);
 
-            CBShowFPS = new QCheckBox(AGGroupBox);
-            CBShowFPS->setText(QCheckBox::tr("Show FPS"));
-            GBAfpslayout->addWidget(CBShowFPS);
+        { // group: game
+            OptionGroupBox * groupGame = new OptionGroupBox(":/res/audio.png", tr("Game audio"), this);
+            leftColumn->addWidget(groupGame);
+            groupGame->layout()->setColumnStretch(1, 0);
+            groupGame->layout()->setColumnStretch(2, 1);
 
-            gbCLayout->addLayout(GBAfpslayout);
+            // Initial sound volume
 
+            QLabel * vol = new QLabel(groupGame);
+            vol->setText(QLabel::tr("Initial sound volume"));
+            groupGame->layout()->addWidget(vol, 0, 0);
 
-            WeaponTooltip = new QCheckBox(this);
-            WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
-            gbCLayout->addWidget(WeaponTooltip);
+            SLVolume = new QSlider(Qt::Horizontal, groupGame);
+            SLVolume->setTickPosition(QSlider::TicksBelow);
+            SLVolume->setMaximum(100);
+            SLVolume->setMinimum(0);
+            SLVolume->setFixedWidth(150);
+            groupGame->layout()->addWidget(SLVolume, 0, 1, 1, 2);
 
+            lblVolumeLevel = new QLabel(groupGame);
+            lblVolumeLevel->setFixedWidth(40);
+            groupGame->layout()->addWidget(lblVolumeLevel, 0, 3);
 
-            CBNameWithDate = new QCheckBox(this);
-            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            gbCLayout->addWidget(CBNameWithDate);
+            // Sound
 
-            BtnAssociateFiles = new QPushButton(this);
-            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
-            BtnAssociateFiles->setVisible(!custom_data && !custom_config);
-            gbCLayout->addWidget(BtnAssociateFiles);
+            CBSound = new QCheckBox(groupGame);
+            CBSound->setText(QCheckBox::tr("Sound"));
+            CBSound->setWhatsThis(QCheckBox::tr("In-game sound effects"));
+            groupGame->layout()->addWidget(CBSound, 1, 1);
+
+            // Music
+
+            CBMusic = new QCheckBox(groupGame);
+            CBMusic->setText(QCheckBox::tr("Music"));
+            CBMusic->setWhatsThis(QCheckBox::tr("In-game music"));
+            groupGame->layout()->addWidget(CBMusic, 1, 2, 1, 2, Qt::AlignLeft);
         }
 
-        {
-            IconedGroupBox * gbProxy = new IconedGroupBox(this);
-            gbProxy->setIcon(QIcon(":/res/Settings.png"));
-            gbProxy->setTitle(QGroupBox::tr("Proxy settings"));
-            page2Layout->addWidget(gbProxy, 1, 0);
-            QGridLayout * gbLayout = new QGridLayout(gbProxy);
+        { // group: frontend
+            OptionGroupBox * groupFrontend = new OptionGroupBox(":/res/audio.png", tr("Frontend audio"), this);
+            rightColumn->addWidget(groupFrontend);
+
+            CBFrontendSound = new QCheckBox(groupFrontend);
+            CBFrontendSound->setText(QCheckBox::tr("Sound"));
+            CBFrontendSound->setWhatsThis(QCheckBox::tr("Frontend sound effects"));
+            groupFrontend->layout()->addWidget(CBFrontendSound, 0, 0);
+
+            CBFrontendMusic = new QCheckBox(groupFrontend);
+            CBFrontendMusic->setText(QCheckBox::tr("Music"));
+            CBFrontendMusic->setWhatsThis(QCheckBox::tr("Frontend music"));
+            groupFrontend->layout()->addWidget(CBFrontendMusic, 0, 1);
+        }
+
+        leftColumn->addStretch(1);
+        rightColumn->addStretch(1);
+    }
+
+    { // network page
+        QVBoxLayout * leftColumn, * rightColumn;
+        setupTabPage(pageNetwork, &leftColumn, &rightColumn);
+
+        { // group: account
+            OptionGroupBox * groupAccount = new OptionGroupBox(":/res/teamicon.png", tr("Account"), this);
+            leftColumn->addWidget(groupAccount);
+
+            // Label and field for net nick
+
+            labelNN = new QLabel(groupAccount);
+            labelNN->setText(QLabel::tr("Nickname"));
+            groupAccount->layout()->addWidget(labelNN, 0, 0);
+
+            editNetNick = new QLineEdit(groupAccount);
+            editNetNick->setMaxLength(20);
+            editNetNick->setText(QLineEdit::tr("anonymous"));
+            groupAccount->layout()->addWidget(editNetNick, 0, 1);
+
+            // Checkbox and field for password
+
+            CBSavePassword = new QCheckBox(groupAccount);
+            CBSavePassword->setText(QCheckBox::tr("Save password"));
+            groupAccount->layout()->addWidget(CBSavePassword, 1, 0);
+
+            editNetPassword = new QLineEdit(groupAccount);
+            editNetPassword->setEchoMode(QLineEdit::Password);
+            groupAccount->layout()->addWidget(editNetPassword, 1, 1);
+        }
+
+        { // group: proxy
+            OptionGroupBox * groupProxy = new OptionGroupBox(":/res/net.png", tr("Proxy settings"), this);
+            rightColumn->addWidget(groupProxy);
+
+            // Labels
 
             QStringList sl;
-            sl
-                    << tr("Proxy host")
-                    << tr("Proxy port")
-                    << tr("Proxy login")
-                    << tr("Proxy password")
-                       ;
+            sl << tr("Proxy host")
+               << tr("Proxy port")
+               << tr("Proxy login")
+               << tr("Proxy password");
+
             for(int i = 0; i < sl.size(); ++i)
             {
-                QLabel * l = new QLabel(gbProxy);
+                QLabel * l = new QLabel(groupProxy);
                 l->setText(sl[i]);
-                gbLayout->addWidget(l, i + 1, 0);
+                groupProxy->layout()->addWidget(l, i + 1, 0);
             }
 
-            cbProxyType = new QComboBox(gbProxy);
+            // Proxy type
+
+            cbProxyType = new QComboBox(groupProxy);
             cbProxyType->addItems(QStringList()
                                   << tr("No proxy")
                                   << tr("System proxy settings")
                                   << tr("Socks5 proxy")
                                   << tr("HTTP proxy"));
-            gbLayout->addWidget(cbProxyType, 0, 1);
+            groupProxy->layout()->addWidget(cbProxyType, 0, 0, 1, 2);
 
-            leProxy = new QLineEdit(gbProxy);
-            gbLayout->addWidget(leProxy, 1, 1);
+            // Proxy
 
-            sbProxyPort = new QSpinBox(gbProxy);
+            leProxy = new QLineEdit(groupProxy);
+            groupProxy->layout()->addWidget(leProxy, 1, 1);
+
+            // Proxy
+
+            sbProxyPort = new QSpinBox(groupProxy);
             sbProxyPort->setMaximum(65535);
-            gbLayout->addWidget(sbProxyPort, 2, 1);
+            groupProxy->layout()->addWidget(sbProxyPort, 2, 1);
 
-            leProxyLogin = new QLineEdit(gbProxy);
-            gbLayout->addWidget(leProxyLogin, 3, 1);
+            leProxyLogin = new QLineEdit(groupProxy);
+            groupProxy->layout()->addWidget(leProxyLogin, 3, 1);
 
-            leProxyPassword = new QLineEdit(gbProxy);
+            leProxyPassword = new QLineEdit(groupProxy);
             leProxyPassword->setEchoMode(QLineEdit::Password);
-            gbLayout->addWidget(leProxyPassword, 4, 1);
+            groupProxy->layout()->addWidget(leProxyPassword, 4, 1);
 
 
             connect(cbProxyType, SIGNAL(currentIndexChanged(int)), this, SLOT(onProxyTypeChanged()));
             onProxyTypeChanged();
         }
 
-        page2Layout->addWidget(new QWidget(this), 2, 0);
+        leftColumn->addStretch(1);
+        rightColumn->addStretch(1);
     }
-#ifdef VIDEOREC
-    { // page 3
-        QGridLayout * page3Layout = new QGridLayout(page3);
 
-        IconedGroupBox* pOptionsGroup = new IconedGroupBox(this);
-        pOptionsGroup->setIcon(QIcon(":/res/Settings.png")); // FIXME
-        pOptionsGroup->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        pOptionsGroup->setTitle(QGroupBox::tr("Video recording options"));
-        QGridLayout * pOptLayout = new QGridLayout(pOptionsGroup);
+    { // advanced page
+        QVBoxLayout * leftColumn, * rightColumn;
+        setupTabPage(pageAdvanced, &leftColumn, &rightColumn);
+
+        { // group: miscellaneous
+            OptionGroupBox * groupMisc = new OptionGroupBox(":/res/Settings.png", tr("Miscellaneous"), this);
+            leftColumn->addWidget(groupMisc);
+
+            // Language
+
+            QLabel *labelLanguage = new QLabel(groupMisc);
+            labelLanguage->setText(QLabel::tr("Locale"));
+            groupMisc->layout()->addWidget(labelLanguage, 0, 0);
+
+            CBLanguage = new QComboBox(groupMisc);
+            groupMisc->layout()->addWidget(CBLanguage, 0, 1);
+            QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
+            CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
+            for(int i = 0; i < locs.count(); i++)
+            {
+                QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
+                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
+            }
+
+            // Divider
+
+            groupMisc->addDivider(); // row 1
+
+            // Append date and time to record file name
+
+            CBNameWithDate = new QCheckBox(groupMisc);
+            CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
+            groupMisc->layout()->addWidget(CBNameWithDate, 2, 0, 1, 2);
+
+            // Associate file extensions
+
+            BtnAssociateFiles = new QPushButton(groupMisc);
+            BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
+            BtnAssociateFiles->setVisible(!custom_data && !custom_config);
+            groupMisc->layout()->addWidget(BtnAssociateFiles, 3, 0, 1, 2);
+        }
+
+#ifdef __APPLE__
+#ifdef SPARKLE_ENABLED
+        { // group: updates
+            OptionGroupBox * groupUpdates = new OptionGroupBox(":/res/net.png", tr("Updates"), this);
+            rightColumn->addWidget(groupUpdates);
+
+            // Check for updates at startup
+
+            CBAutoUpdate = new QCheckBox(groupUpdates);
+            CBAutoUpdate->setText(QCheckBox::tr("Check for updates at startup"));
+            groupUpdates->layout()->addWidget(CBAutoUpdate, 0, 0);
+
+            // Check for updates now
+
+            btnUpdateNow = new QPushButton(groupUpdates);
+            connect(btnUpdateNow, SIGNAL(clicked()), this, SLOT(checkForUpdates()));
+            btnUpdateNow->setWhatsThis(tr("Check for updates"));
+            btnUpdateNow->setText("Check now");
+            btnUpdateNow->setFixedSize(130, 30);
+            groupUpdates->layout()->addWidget(btnUpdateNow, 0, 1);
+        }
+#endif
+#endif
+
+        leftColumn->addStretch(1);
+        rightColumn->addStretch(1);
+    }
+
+#ifdef VIDEOREC
+    { // video recording page
+        OptionGroupBox * groupVideoRec = new OptionGroupBox(":/res/camera.png", tr("Video recording options"), this);
+        groupVideoRec->setMinimumWidth(500);
+        groupVideoRec->setMaximumWidth(650);
+        QHBoxLayout * layoutVideoRec = new QHBoxLayout(pageVideoRec);
+        layoutVideoRec->addWidget(groupVideoRec, 1, Qt::AlignTop | Qt::AlignHCenter);
 
         // label for format
-        QLabel *labelFormat = new QLabel(pOptionsGroup);
+
+        QLabel *labelFormat = new QLabel(groupVideoRec);
         labelFormat->setText(QLabel::tr("Format"));
-        pOptLayout->addWidget(labelFormat, 0, 0);
+        groupVideoRec->layout()->addWidget(labelFormat, 0, 0);
 
         // list of supported formats
-        comboAVFormats = new QComboBox(pOptionsGroup);
-        pOptLayout->addWidget(comboAVFormats, 0, 1, 1, 4);
+
+        comboAVFormats = new QComboBox(groupVideoRec);
+        groupVideoRec->layout()->addWidget(comboAVFormats, 0, 1, 1, 4);
         LibavInteraction::instance().fillFormats(comboAVFormats);
 
         // separator
-        QFrame * hr = new QFrame(pOptionsGroup);
+
+        QFrame * hr = new QFrame(groupVideoRec);
         hr->setFrameStyle(QFrame::HLine);
         hr->setLineWidth(3);
         hr->setFixedHeight(10);
-        pOptLayout->addWidget(hr, 1, 0, 1, 5);
+        groupVideoRec->layout()->addWidget(hr, 1, 0, 1, 5);
 
         // label for audio codec
-        QLabel *labelACodec = new QLabel(pOptionsGroup);
+
+        QLabel *labelACodec = new QLabel(groupVideoRec);
         labelACodec->setText(QLabel::tr("Audio codec"));
-        pOptLayout->addWidget(labelACodec, 2, 0);
+        groupVideoRec->layout()->addWidget(labelACodec, 2, 0);
 
         // list of supported audio codecs
-        comboAudioCodecs = new QComboBox(pOptionsGroup);
-        pOptLayout->addWidget(comboAudioCodecs, 2, 1, 1, 3);
+
+        comboAudioCodecs = new QComboBox(groupVideoRec);
+        groupVideoRec->layout()->addWidget(comboAudioCodecs, 2, 1, 1, 3);
 
         // checkbox 'record audio'
-        checkRecordAudio = new QCheckBox(pOptionsGroup);
+
+        checkRecordAudio = new QCheckBox(groupVideoRec);
         checkRecordAudio->setText(QCheckBox::tr("Record audio"));
-        pOptLayout->addWidget(checkRecordAudio, 2, 4);
+        groupVideoRec->layout()->addWidget(checkRecordAudio, 2, 4);
 
         // separator
-        hr = new QFrame(pOptionsGroup);
+
+        hr = new QFrame(groupVideoRec);
         hr->setFrameStyle(QFrame::HLine);
         hr->setLineWidth(3);
         hr->setFixedHeight(10);
-        pOptLayout->addWidget(hr, 3, 0, 1, 5);
+        groupVideoRec->layout()->addWidget(hr, 3, 0, 1, 5);
 
         // label for video codec
-        QLabel *labelVCodec = new QLabel(pOptionsGroup);
+
+        QLabel *labelVCodec = new QLabel(groupVideoRec);
         labelVCodec->setText(QLabel::tr("Video codec"));
-        pOptLayout->addWidget(labelVCodec, 4, 0);
+        groupVideoRec->layout()->addWidget(labelVCodec, 4, 0);
 
         // list of supported video codecs
-        comboVideoCodecs = new QComboBox(pOptionsGroup);
-        pOptLayout->addWidget(comboVideoCodecs, 4, 1, 1, 4);
+
+        comboVideoCodecs = new QComboBox(groupVideoRec);
+        groupVideoRec->layout()->addWidget(comboVideoCodecs, 4, 1, 1, 4);
 
         // label for resolution
-        QLabel *labelRes = new QLabel(pOptionsGroup);
+
+        QLabel *labelRes = new QLabel(groupVideoRec);
         labelRes->setText(QLabel::tr("Resolution"));
-        pOptLayout->addWidget(labelRes, 5, 0);
+        groupVideoRec->layout()->addWidget(labelRes, 5, 0);
 
         // width
-        widthEdit = new QLineEdit(pOptionsGroup);
+
+        widthEdit = new QLineEdit(groupVideoRec);
         widthEdit->setValidator(new QIntValidator(this));
-        pOptLayout->addWidget(widthEdit, 5, 1);
+        groupVideoRec->layout()->addWidget(widthEdit, 5, 1);
 
         // x
-        QLabel *labelX = new QLabel(pOptionsGroup);
+
+        QLabel *labelX = new QLabel(groupVideoRec);
         labelX->setText("X");
-        pOptLayout->addWidget(labelX, 5, 2);
+        groupVideoRec->layout()->addWidget(labelX, 5, 2);
 
         // height
-        heightEdit = new QLineEdit(pOptionsGroup);
-        heightEdit->setValidator(new QIntValidator(pOptionsGroup));
-        pOptLayout->addWidget(heightEdit, 5, 3);
+
+        heightEdit = new QLineEdit(groupVideoRec);
+        heightEdit->setValidator(new QIntValidator(groupVideoRec));
+        groupVideoRec->layout()->addWidget(heightEdit, 5, 3);
 
         // checkbox 'use game resolution'
-        checkUseGameRes = new QCheckBox(pOptionsGroup);
+
+        checkUseGameRes = new QCheckBox(groupVideoRec);
         checkUseGameRes->setText(QCheckBox::tr("Use game resolution"));
-        pOptLayout->addWidget(checkUseGameRes, 5, 4);
+        groupVideoRec->layout()->addWidget(checkUseGameRes, 5, 4);
 
         // label for framerate
-        QLabel *labelFramerate = new QLabel(pOptionsGroup);
-        labelFramerate->setText(QLabel::tr("Framerate"));
-        pOptLayout->addWidget(labelFramerate, 6, 0);
 
-        framerateBox = new QComboBox(pOptionsGroup);
+        QLabel *labelFramerate = new QLabel(groupVideoRec);
+        labelFramerate->setText(QLabel::tr("Framerate"));
+        groupVideoRec->layout()->addWidget(labelFramerate, 6, 0);
+
+        framerateBox = new QComboBox(groupVideoRec);
         framerateBox->addItem("24 fps", 24);
         framerateBox->addItem("25 fps", 25);
         framerateBox->addItem("30 fps", 30);
         framerateBox->addItem("50 fps", 50);
         framerateBox->addItem("60 fps", 60);
-        pOptLayout->addWidget(framerateBox, 6, 1);
+        groupVideoRec->layout()->addWidget(framerateBox, 6, 1);
 
         // label for Bitrate
-        QLabel *labelBitrate = new QLabel(pOptionsGroup);
+
+        QLabel *labelBitrate = new QLabel(groupVideoRec);
         labelBitrate->setText(QLabel::tr("Bitrate (Kbps)"));
-        pOptLayout->addWidget(labelBitrate, 6, 2);
+        groupVideoRec->layout()->addWidget(labelBitrate, 6, 2);
 
         // bitrate
-        bitrateBox = new QSpinBox(pOptionsGroup);
+
+        bitrateBox = new QSpinBox(groupVideoRec);
         bitrateBox->setRange(100, 5000);
         bitrateBox->setSingleStep(100);
-        pOptLayout->addWidget(bitrateBox, 6, 3);
+        groupVideoRec->layout()->addWidget(bitrateBox, 6, 3);
 
         // button 'set default options'
-        btnDefaults = new QPushButton(pOptionsGroup);
+
+        btnDefaults = new QPushButton(groupVideoRec);
         btnDefaults->setText(QPushButton::tr("Set default options"));
         btnDefaults->setWhatsThis(QPushButton::tr("Restore default coding parameters"));
-        pOptLayout->addWidget(btnDefaults, 7, 0, 1, 5);
-
-        page3Layout->addWidget(pOptionsGroup, 1, 0);
+        groupVideoRec->layout()->addWidget(btnDefaults, 7, 0, 1, 5);
     }
 #endif
 
@@ -628,6 +772,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
     previousResolutionIndex = this->CBResolution->currentIndex();
     previousFullscreenValue = this->CBFullscreen->isChecked();
 
+    setFullscreen(CBFullscreen->isChecked());
+    setVolume(SLVolume->value());
+
+    // mutually exclude window and fullscreen resolution
     return pageLayout;
 }
 
@@ -644,13 +792,34 @@ void PageOptions::connectSignals()
     connect(comboAVFormats, SIGNAL(currentIndexChanged(int)), this, SLOT(changeAVFormat(int)));
     connect(btnDefaults, SIGNAL(clicked()), this, SLOT(setDefaultOptions()));
 #endif
-
+    //connect(this, SIGNAL(pageEnter()), this, SLOT(setTeamOptionsEnabled()));
+    connect(SLVolume, SIGNAL(valueChanged(int)), this, SLOT(setVolume(int)));
     connect(SLQuality, SIGNAL(valueChanged(int)), this, SLOT(setQuality(int)));
     connect(CBResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(setResolution(int)));
     connect(CBFullscreen, SIGNAL(stateChanged(int)), this, SLOT(setFullscreen(int)));
     connect(CBStereoMode, SIGNAL(currentIndexChanged(int)), this, SLOT(forceFullscreen(int)));
     connect(editNetNick, SIGNAL(editingFinished()), this, SLOT(trimNetNick()));
     connect(CBSavePassword, SIGNAL(stateChanged(int)), this, SLOT(savePwdChanged(int)));
+}
+
+void PageOptions::setVolume(int volume)
+{
+    lblVolumeLevel->setText(QString("%1\%").arg(volume));
+}
+
+void PageOptions::setupTabPage(QWidget * tabpage, QVBoxLayout ** leftColumn, QVBoxLayout ** rightColumn)
+{
+    QHBoxLayout * twoColumns = new QHBoxLayout(tabpage);
+    twoColumns->setSpacing(0);
+    *leftColumn = new QVBoxLayout();
+    *rightColumn = new QVBoxLayout();
+    (*leftColumn)->setSpacing(OPTION_BOX_SPACING);
+    (*rightColumn)->setSpacing(OPTION_BOX_SPACING);
+    twoColumns->addStretch(4);
+    twoColumns->addLayout(*leftColumn, 0);
+    twoColumns->addStretch(1);
+    twoColumns->addLayout(*rightColumn, 0);
+    twoColumns->addStretch(4);
 }
 
 PageOptions::PageOptions(QWidget* parent) : AbstractPage(parent), config(0)
@@ -666,16 +835,16 @@ void PageOptions::forceFullscreen(int index)
     {
         this->SLQuality->setValue(this->SLQuality->maximum());
         this->SLQuality->setEnabled(false);
-        this->CBFullscreen->setEnabled(!forced);
         this->CBFullscreen->setChecked(forced ? true : previousFullscreenValue);
+        setFullscreen(forced ? true : previousFullscreenValue);
         this->CBResolution->setCurrentIndex(forced ? 0 : previousResolutionIndex);
     }
     else
     {
         this->SLQuality->setEnabled(true);
-        this->CBFullscreen->setEnabled(true);
         this->SLQuality->setValue(previousQuality);
         this->CBFullscreen->setChecked(previousFullscreenValue);
+        setFullscreen(previousFullscreenValue);
         this->CBResolution->setCurrentIndex(previousResolutionIndex);
     }
 }
@@ -692,6 +861,11 @@ void PageOptions::setQuality(int value)
 void PageOptions::setFullscreen(int state)
 {
     Q_UNUSED(state);
+
+    lblFullScreenRes->setVisible(state);
+    CBResolution->setVisible(state);
+    lblWinScreenRes->setVisible(!state);
+    winResContainer->setVisible(!state);
 
     int index = this->CBStereoMode->currentIndex();
     if (index != 7 && index != 8 && index != 9)
@@ -913,4 +1087,58 @@ bool PageOptions::tryCodecs(const QString & format, const QString & vcodec, cons
         comboAudioCodecs->setCurrentIndex(iACodec);
 
     return true;
+}
+
+// When the current tab is switched
+void PageOptions::tabIndexChanged(int index)
+{
+    if (index == binderTab) // Switched to bind tab
+    {
+        binder->resetInterface();
+
+        if (!config) return;
+
+        QStandardItemModel * binds = DataManager::instance().bindsModel();
+        for(int i = 0; i < BINDS_NUMBER; i++)
+        {
+            QString value = config->bind(i);
+            QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, value, 1, Qt::MatchExactly);
+            if(mdl.size() == 1) binder->setBindIndex(i, mdl[0].row());
+        }
+    }
+
+    currentTab = index;
+}
+
+// When a key bind combobox is changed
+void PageOptions::bindUpdated(int bindID)
+{
+    int bindIndex = binder->bindIndex(bindID);
+
+    if (bindIndex == 0) bindIndex = resetBindToDefault(bindID);
+
+    // Save bind
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
+    QString strbind = binds->index(binder->bindIndex(bindID), 0).data(Qt::UserRole + 1).toString();
+    config->setBind(bindID, strbind);
+}
+
+// Changes a key bind (bindID) to its default value. This updates the bind's combo-box in the UI.
+// Returns: The bind model index of the default.
+int PageOptions::resetBindToDefault(int bindID)
+{
+    QStandardItemModel * binds = DataManager::instance().bindsModel();
+    QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, cbinds[bindID].strbind, 1, Qt::MatchExactly);
+    if(mdl.size() == 1) binder->setBindIndex(bindID, mdl[0].row());
+    return mdl[0].row();
+}
+
+// Called when "reset all binds" button is pressed
+void PageOptions::resetAllBinds()
+{
+    for (int i = 0; i < BINDS_NUMBER; i++)
+    {
+        resetBindToDefault(i);
+        bindUpdated(i);
+    }
 }

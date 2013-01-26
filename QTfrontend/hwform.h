@@ -109,7 +109,7 @@ class HWForm : public QMainWindow
         void NetNickNotRegistered(const QString & nick);
         void NetNickTaken(const QString & nick);
         void NetAuthFailed();
-    bool RetryDialog(const QString & title, const QString & label);
+        bool RetryDialog(const QString & title, const QString & label);
         void NetTeamAccepted(const QString& team);
         void AddNetTeam(const HWTeam& team);
         void RemoveNetTeam(const HWTeam& team);
@@ -126,10 +126,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPage(int index);
         void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
-        //Starts the transmission process for the feedback
-        void SendFeedback();
-        //Called after submitting new feedback
-        void finishedSlot(QNetworkReply* reply);
+        void showFeedbackDialog();
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
@@ -140,6 +137,9 @@ class HWForm : public QMainWindow
         void selectFirstNetScheme();
 
         void saveDemoWithCustomName();
+        void openRegistrationPage();
+
+        void startGame();
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
@@ -148,6 +148,7 @@ class HWForm : public QMainWindow
         void closeEvent(QCloseEvent *event);
         void CustomizePalettes();
         void resizeEvent(QResizeEvent * event);
+        QString stringifyPageId(quint32 id);
         //void keyReleaseEvent(QKeyEvent *event);
 
         enum PageIDs
@@ -173,8 +174,7 @@ class HWForm : public QMainWindow
             ID_PAGE_CAMPAIGN       ,
             ID_PAGE_DRAWMAP        ,
             ID_PAGE_DATADOWNLOAD   ,
-            ID_PAGE_FEEDBACK       ,
-            ID_PAGE_VIDEOS     ,
+            ID_PAGE_VIDEOS         ,
             MAX_PAGE
         };
         QPointer<HWGame> game;
@@ -189,7 +189,6 @@ class HWForm : public QMainWindow
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
         QByteArray m_lastDemo;
-        QNetworkAccessManager * nam;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;

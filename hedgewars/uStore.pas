@@ -21,10 +21,7 @@
 
 unit uStore;
 interface
-uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat
-     {$IFDEF GL2}, uMatrix{$ENDIF}
-     {$IFNDEF PAS2C}, StrUtils{$ENDIF}
-     ;
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -574,7 +571,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
         DeleteFramebuffer(defaultFrame, depthv, texv);
 {$ENDIF}
 {$IFDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
         begin
         DeleteFramebuffer(framel, depthl, texl);
         DeleteFramebuffer(framer, depthr, texr);
@@ -632,6 +629,8 @@ var tmpsurf: PSDL_Surface;
 begin
     // check for file in user dir (never critical)
     tmpsurf:= LoadImage(cPathz[path] + '/' + filename, imageFlags);
+    
+    LoadDataImage:= tmpsurf;
 end;
 
 
@@ -1467,6 +1466,17 @@ begin
     if Length(s) = 0 then
          cFullScreen:= (not cFullScreen)
     else cFullScreen:= s = '1';
+    
+    if cFullScreen then
+        begin
+        cScreenWidth:= cFullscreenWidth;
+        cScreenHeight:= cFullscreenHeight;
+        end
+    else
+        begin
+        cScreenWidth:= cWindowedWidth;
+        cScreenHeight:= cWindowedHeight;
+        end;
 
     AddFileLog('Preparing to change video parameters...');
 {$IFDEF SDL13}
@@ -1546,15 +1556,18 @@ begin
 
     if SDLwindow = nil then
         if cFullScreen then
-            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
         else
+            begin
             SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+            end;
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
+        begin
         flags:= flags or SDL_FULLSCREEN;
-
+        end;
     if not cOnlyStats then
         begin
     {$IFDEF WIN32}

@@ -106,7 +106,7 @@ function  AskForVoicepack(name: shortstring): Pointer;
 
 
 implementation
-uses uVariables, uConsole, uUtils, uCommands, uDebug, uPhysFSLayer;
+uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
 var Volume: LongInt;

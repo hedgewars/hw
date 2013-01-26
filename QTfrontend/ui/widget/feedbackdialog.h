@@ -16,20 +16,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef PAGE_FEEDBACK_H
-#define PAGE_FEEDBACK_H
+#ifndef FEEDBACKDIALOG_H
+#define FEEDBACKDIALOG_H
 
-#include "AbstractPage.h"
+#include <QDialog>
 
 class QNetworkReply;
 class QNetworkAccessManager;
+class QCheckBox;
+class QLineEdit;
+class QTextBrowser;
+class QLabel;
 
-class PageFeedback : public AbstractPage
+class FeedbackDialog : public QDialog
 {
         Q_OBJECT
 
     public:
-        PageFeedback(QWidget * parent = 0);
+        FeedbackDialog(QWidget * parent = 0);
         void EmbedSystemInfo();
         void LoadCaptchaImage();
 
@@ -49,22 +53,23 @@ class PageFeedback : public AbstractPage
         int captchaID;
         QString specs;
 
-    private slots:
-
-        virtual void NetReply(QNetworkReply*);
-        virtual void ShowSpecs();
-
     private:
         void GenerateSpecs();
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         QNetworkAccessManager * GetNetManager();
         void ShowErrorMessage(const QString & msg);
-        void connectSignals();
 
         QNetworkAccessManager * netManager;
         QNetworkReply * captchaImageRequest;
         QNetworkReply * genCaptchaRequest;
+        QNetworkAccessManager * nam;
+
+    private slots:
+        virtual void NetReply(QNetworkReply*);
+        virtual void ShowSpecs();
+        void SendFeedback();
+        void finishedSlot(QNetworkReply* reply);
 };
 
-#endif
+#endif // FEEDBACKDIALOG_H

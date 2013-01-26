@@ -177,8 +177,9 @@ QLayout * PageVideos::bodyLayoutDefinition()
                                            Qt::LinksAccessibleByMouse |
                                            Qt::LinksAccessibleByKeyboard);
         labelDesc->setTextFormat(Qt::RichText);
+        labelDesc->setWordWrap(true);
         labelDesc->setOpenExternalLinks(true);
-        labelDesc->setMinimumSize(ThumbnailSize);
+        //labelDesc->setMinimumSize(ThumbnailSize);
         //pTopDescLayout->addWidget(labelDesc, 1);
 
         // buttons: play and delete
@@ -195,12 +196,10 @@ QLayout * PageVideos::bodyLayoutDefinition()
         btnToYouTube->setWhatsThis(QPushButton::tr("Upload this video to your Youtube account"));
         pBottomDescLayout->addWidget(btnToYouTube);
 
-        pDescLayout->addStretch(1);
         pDescLayout->addWidget(labelThumbnail, 0);
-        pDescLayout->addStretch(1);
         pDescLayout->addWidget(labelDesc, 0);
-        pDescLayout->addStretch(1);
         pDescLayout->addLayout(pBottomDescLayout, 0);
+        pDescLayout->addStretch(1);
 
         pPageLayout->addWidget(pDescGroup, 0, 0);
     }
@@ -509,8 +508,8 @@ void PageVideos::updateDescription()
     else
     {
         QString path = item->path();
-        desc += tr("Date: ") + QFileInfo(path).created().toString(Qt::DefaultLocaleLongDate) + '\n';
-        desc += tr("Size: ") + FileSizeStr(path) + '\n';
+        desc += tr("Date: %1\n").arg(QFileInfo(path).created().toString(Qt::DefaultLocaleLongDate));
+        desc += tr("Size: %1\n").arg(FileSizeStr(path));
         if (item->desc.isEmpty())
         {
             // Extract description from file;

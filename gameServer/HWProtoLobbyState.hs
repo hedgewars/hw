@@ -2,11 +2,9 @@
 module HWProtoLobbyState where
 
 import qualified Data.Map as Map
-import qualified Data.Foldable as Foldable
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
-import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -43,7 +41,7 @@ handleCmd_lobby ["CHAT", msg] = do
     return [AnswerClients s ["CHAT", n, msg]]
 
 handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
-    | illegalName rName = return [Warning "Illegal room name"]
+    | illegalName rName = return [Warning $ loc "Illegal room name"]
     | otherwise = do
         rs <- allRoomInfos
         cl <- thisClient
@@ -77,13 +75,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let isBanned = host cl `elem` roomBansList jRoom
     return $
         if isNothing maybeRI || not sameProto then
-            [Warning "No such room"]
+            [Warning $ loc "No such room"]
             else if isRestrictedJoins jRoom then
-            [Warning "Joining restricted"]
+            [Warning $ loc "Joining restricted"]
             else if isRegisteredOnly jRoom then
-            [Warning "Registered users only"]
+            [Warning $ loc "Registered users only"]
             else if isBanned then
-            [Warning "You are banned in this room"]
+            [Warning $ loc "You are banned in this room"]
             else if roomPassword /= password jRoom then
             [NoticeMessage WrongPassword]
             else
@@ -128,7 +126,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                     [AnswerClients [sendChan cl]  ["RUN_GAME"]
                     , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
                     , ModifyClient (\c -> c{isInGame = True})
-                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : Foldable.toList (roundMsgs . fromJust . gameInfo $ jRoom)]
+                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
@@ -205,5 +203,8 @@ handleCmd_lobby ["RESTART_SERVER"] = do
     cl <- thisClient
     return [RestartServer | isAdministrator cl]
 
+handleCmd_lobby ["STATS"] = do
+    cl <- thisClient
+    return [Stats | isAdministrator cl]
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]

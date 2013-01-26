@@ -45,6 +45,8 @@
         <file>res/LocalPlay.png</file>
         <file>res/NetworkPlay.png</file>
         <file>res/NetworkPlayDisabled.png</file>
+        <file>res/audio.png</file>
+        <file>res/camera.png</file>
         <file>res/Settings.png</file>
         <file>res/dropdown.png</file>
         <file>res/new.png</file>
@@ -103,6 +105,7 @@
         <file>res/iconRope.png</file>
         <file>res/dice.png</file>
         <file>res/Star.png</file>
+        <file>res/inverse-corner-bl.png</file>
         <file>res/Flake.png</file>
         <file>res/Egg.png</file>
         <file>res/Confetti.png</file>
@@ -130,6 +133,7 @@
         <file>res/StatsMostSelfDamage.png</file>
         <file>res/StatsSelfKilled.png</file>
         <file>res/StatsSkipped.png</file>
+        <file>res/Start.png</file>
         <file>res/mapRandom.png</file>
         <file>res/mapMaze.png</file>
         <file>res/mapMissing.png</file>
@@ -146,6 +150,8 @@
         <file>res/chat/serveradmin_gray.png</file>
         <file>res/chat/lamp_off.png</file>
         <file>res/chat/ingame.png</file>
-	<file>res/html/about.html</file>
+        <file>res/splash.png</file>
+        <file>res/html/about.html</file>
+        <file>res/xml/tips.xml</file>
     </qresource>
 </RCC>

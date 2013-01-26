@@ -28,9 +28,11 @@ option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
 option(GL2 "Enable OpenGL 2 rendering [default: off]" OFF)
-set(FPFLAGS "" CACHE STRING "Additional Freepascal flags" FORCE)
-set(GHFLAGS "" CACHE STRING "Additional Haskell flags" FORCE)
-
+set(FPFLAGS "" CACHE STRING "Additional Freepascal flags")
+set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
+if(UNIX AND NOT APPLE)
+    set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
+endif()
 
 #detect Mercurial revision (if present)
 if(NOT ${NOREVISION})
@@ -89,11 +91,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 if(UNIX AND NOT APPLE)
     set(target_binary_install_dir "bin")
     set(target_library_install_dir "lib")
-    if(DEFINED DATA_INSTALL_DIR)
-        set(SHAREPATH "${DATA_INSTALL_DIR}")
-    else()
-        set(SHAREPATH "share/hedgewars/")
-    endif()
+    set(SHAREPATH "${DATA_INSTALL_DIR}/")
 else()
     set(target_binary_install_dir "./")
 
@@ -149,8 +147,8 @@ if(APPLE)
         find_package(SDL_mixer REQUIRED)
         set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
         set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-        set(pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}" ${pascal_flags})
-        set(CMAKE_C_FLAGS "${DYLIB_SMPEG}" "${DYLIB_MIKMOD}" ${CMAKE_C_FLAGS})
+        set(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
+        list(APPEND pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}")
     endif()
 
     #CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
@@ -180,9 +178,9 @@ if(APPLE)
     endif()
 
     #add user framework directory, other paths can be passed via FPFLAGS
-    set(pascal_flags "-Ff~/Library/Frameworks" ${pascal_flags})
+    list(APPEND pascal_flags "-Ff~/Library/Frameworks")
     #set deployment target
-    set(pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}" ${pascal_flags})
+    list(APPEND pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}")
 
     #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
     if(NOT NOVIDEOREC AND ${minimum_macosx_version} VERSION_LESS "10.6")
@@ -203,10 +201,10 @@ else (CMAKE_BUILD_TYPE)
 endif (CMAKE_BUILD_TYPE)
 
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
-if(NOT MINIMAL_FLAGS)
-    set(CMAKE_C_FLAGS "-pipe")
-    set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG")
+if(NOT ${MINIMAL_FLAGS})
+    set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
+    set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
     set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
     set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
     set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
@@ -229,7 +227,7 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-set(pascal_flags ${fpflags_parsed}              # user flags
+list(APPEND pascal_flags ${fpflags_parsed}              # user flags
                  "-vm4079,4080,4081"            # fpc output format
                  "-B"                           # compile all units
                  "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
@@ -237,19 +235,18 @@ set(pascal_flags ${fpflags_parsed}              # user flags
                  "-Cs2000000"                   # stack size
                  "-vewnq"                       # fpc output verbosity
                  "-dDEBUGFILE"                  # macro for engine output
-                 ${pascal_flags}                # adding to list
                  )
-set(haskell_flags "-O2" ${ghflags_parsed} ${haskell_flags})
+list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    set(pascal_flags "-O-" "-g" "-gl" "-gv" ${pascal_flags})
-    set(haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind" ${haskell_flags})
+    list(APPEND pascal_flags "-O-" "-g" "-gl" "-gv")
+    list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 else()
 #    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
-    set(pascal_flags "-Os" "-Xs" "-Si" ${pascal_flags})
-    set(haskell_flags "-w" "-fno-warn-unused-do-bind" ${haskell_flags})
+    list(APPEND pascal_flags "-Os" "-Xs" "-Si")
+    list(APPEND haskell_flags "-w" "-fno-warn-unused-do-bind")
 endif()
 
 
@@ -289,14 +286,14 @@ else()
     message(STATUS "Using internal LUA library")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline
-    set(pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline" ${pascal_flags})
+    list(APPEND pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline")
 endif()
 
 
 #physfs library (static on unix, dll on win32)
 add_subdirectory(misc/physfs)
 if(NOT WIN32)
-    set(pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a" ${pascal_flags})
+    list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a")
 endif()
 
 

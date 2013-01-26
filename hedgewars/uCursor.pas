@@ -5,6 +5,7 @@ interface
 procedure init;
 procedure resetPosition;
 procedure updatePosition;
+procedure handlePositionUpdate(x, y: LongInt);
 
 implementation
 
@@ -40,9 +41,8 @@ begin
 {$ENDIF}
 
     if(x <> cScreenWidth div 2) or (y <> cScreenHeight div 2) then
-        begin
-        CursorPoint.X:= CursorPoint.X + x - cScreenWidth div 2;
-        CursorPoint.Y:= CursorPoint.Y - y + cScreenHeight div 2;
+    begin
+        handlePositionUpdate(x - cScreenWidth div 2, y - cScreenHeight div 2);
 
         if cHasFocus then
             begin
@@ -54,6 +54,12 @@ begin
             {$ENDIF}
             end;
         end
+end;
+
+procedure handlePositionUpdate(x, y: LongInt);
+begin
+    CursorPoint.X:= CursorPoint.X + x;
+    CursorPoint.Y:= CursorPoint.Y - y;
 end;
 
 end.

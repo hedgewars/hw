@@ -39,12 +39,12 @@
 #define rotationManager(x) (IS_IPAD() ? YES : (x == UIInterfaceOrientationLandscapeRight) || (x == UIInterfaceOrientationLandscapeLeft))
 
 #define START_TIMER()   NSTimeInterval start = [NSDate timeIntervalSinceReferenceDate];
-#define END_TIMER(msg) 	NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; DLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
+#define END_TIMER(msg)  NSTimeInterval stop = [NSDate timeIntervalSinceReferenceDate]; DLog([NSString stringWithFormat:@"%@ Time = %f", msg, stop-start]);
 
 
 #define DOCUMENTS_FOLDER()      [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 
-#define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/hw-game.log"]
+#define DEBUG_FILE()            [DOCUMENTS_FOLDER() stringByAppendingString:@"/Logs/game0.log"]
 #define BASICFLAGS_FILE()       [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/basicFlags.plist"]
 #define GAMEMODS_FILE()         [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/gameMods.plist"]
 #define CREDITS_FILE()          [[[NSBundle mainBundle] resourcePath] stringByAppendingString:@"/credits.plist"]

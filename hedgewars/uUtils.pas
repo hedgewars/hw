@@ -196,7 +196,11 @@ end;
 function  StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
-val(s, StrToInt, c)
+val(s, StrToInt, c);
+{$IFDEF DEBUGFILE}
+if c <> 0 then
+    writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 end;
 
 function FloatToStr(n: hwFloat): shortstring;
@@ -474,16 +478,14 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
-{$IFDEF MOBILE}
-    {$IFDEF IPHONEOS} Assign(f, UserPathPrefix + '/hw-' + logfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f, pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
-    i:= i; // avoid hint
-{$ELSE}
-    f:= stdout; // if everything fails, write to stderr
+    f:= stderr; // if everything fails, write to stderr
     if (UserPathPrefix <> '') then
         begin
+        // create directory if it doesn't exist
         if not FileExists(UserPathPrefix + '/Logs/') then
             CreateDir(UserPathPrefix + '/Logs/');
+
+        // if log is locked, write to the next one
         i:= 0;
         while(i < 7) do
             begin
@@ -493,7 +495,6 @@ begin
             inc(i)
             end;
         end;
-{$ENDIF}
     Rewrite(f);
 {$I+}
 {$ENDIF}

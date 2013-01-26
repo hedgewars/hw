@@ -170,7 +170,7 @@ type
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
-    TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical, smAFR);
+    TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
 
     THHFont = record
             Handle: PTTF_Font;

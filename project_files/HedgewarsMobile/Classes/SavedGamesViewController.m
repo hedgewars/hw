@@ -203,12 +203,12 @@
         [self updateTable];
     NSString *oldFilePath = [NSString stringWithFormat:@"%@/%@",SAVES_DIRECTORY(),[self.listOfSavegames objectAtIndex:tagValue]];
     NSString *newFilePath = [NSString stringWithFormat:@"%@/%@.hws",SAVES_DIRECTORY(),textString];
-    
+
     if ([oldFilePath isEqualToString:newFilePath] == NO) {
         [[NSFileManager defaultManager] moveItemAtPath:oldFilePath toPath:newFilePath error:nil];
         [self.listOfSavegames replaceObjectAtIndex:tagValue withObject:[textString stringByAppendingString:@".hws"]];
     }
-    
+
 }
 
 #pragma mark -
