@@ -56,7 +56,7 @@ data Action =
     | BanList
     | Unban B.ByteString
     | ChangeMaster (Maybe ClientIndex)
-    | RemoveClientTeams ClientIndex
+    | RemoveClientTeams
     | ModifyClient (ClientInfo -> ClientInfo)
     | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
     | ModifyRoomClients (ClientInfo -> ClientInfo)
@@ -236,11 +236,11 @@ processAction (MoveToLobby msg) = do
 
     if master then
         if playersNum > 1 then
-            mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
+            mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
         else
-        mapM_ processAction [RemoveClientTeams ci, AnswerClients chans ["LEFT", clNick, msg]]
+        mapM_ processAction [RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
 
     -- when not removing room
     ready <- client's isReady
@@ -390,9 +390,13 @@ processAction (SendTeamRemovalMessage teamName) = do
 
 
 processAction (RemoveTeam teamName) = do
+    (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
     ri <- clientRoomA
-    inGame <- io $ room'sM rnc (isJust . gameInfo) ri
+    inGame <- io $ do
+        r <- room'sM rnc (isJust . gameInfo) ri
+        c <- client'sM rnc isInGame ci
+        return $ r && c
     chans <- othersChans
     mapM_ processAction $
         ModifyRoom (\r -> r{
@@ -404,14 +408,14 @@ processAction (RemoveTeam teamName) = do
         : [SendTeamRemovalMessage teamName | inGame]
 
 
-processAction (RemoveClientTeams clId) = do
+processAction RemoveClientTeams = do
+    (Just ci) <- gets clientIndex
     rnc <- gets roomsClients
 
     removeTeamActions <- io $ do
-        clNick <- client'sM rnc nick clId
-        rId <- clientRoomM rnc clId
+        rId <- clientRoomM rnc ci
         roomTeams <- room'sM rnc teams rId
-        return . Prelude.map (RemoveTeam . teamname) . Prelude.filter (\t -> teamowner t == clNick) $ roomTeams
+        return . Prelude.map (RemoveTeam . teamname) . Prelude.filter (\t -> teamownerId t == ci) $ roomTeams
 
     mapM_ processAction removeTeamActions
 
