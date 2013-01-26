@@ -213,7 +213,7 @@ void FileEngine::setFileName(const QString &file)
     else
         m_fileName = file;
     PHYSFS_Stat stat;
-    if (PHYSFS_stat(m_fileName.toUtf8().constData(), &stat) != 0) {        
+    if (PHYSFS_stat(m_fileName.toUtf8().constData(), &stat) != 0) {
         m_size = stat.filesize;
         m_date = QDateTime::fromTime_t(stat.modtime);
 //        m_flags |= QAbstractFileEngine::WriteOwnerPerm;
