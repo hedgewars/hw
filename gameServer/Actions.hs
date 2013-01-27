@@ -85,7 +85,7 @@ instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
     rnf a = a `seq` ()
 
---instance NFData B.ByteString
+instance NFData B.ByteString
 instance NFData (Chan a)
 
 
@@ -648,12 +648,19 @@ processAction RestartServer = do
 
 processAction Stats = do
     cls <- allClientsS
-    let stats = versions cls
-    processAction $ Warning stats
-    where
-        versions = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
-            . concatMap (\(p, n :: Int) -> ["<tr><td>", protoNumber2ver p, "</td><td>", showB n, "</td></tr>"])
-            . Map.toList . Map.fromListWith (+) . map (\c -> (clientProto c, 1))
+    rms <- allRoomsS
+    let clientsMap = Map.fromListWith (+) . map (\c -> (clientProto c, 1 :: Int)) $ cls
+    let roomsMap = Map.fromListWith (+) . map (\c -> (roomProto c, 1 :: Int)) . filter ((/=) 0 . roomProto) $ rms
+    let keys = Map.keysSet clientsMap `Set.union` Map.keysSet roomsMap
+    let versionsStats = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
+            . concatMap (\p -> [
+                    "<tr><td>", protoNumber2ver p
+                    , "</td><td>", showB $ Map.findWithDefault 0 p clientsMap
+                    , "</td><td>", showB $ Map.findWithDefault 0 p roomsMap
+                    , "</td></tr>"])
+            . Set.toList $ keys
+    processAction $ Warning versionsStats
+
 
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
