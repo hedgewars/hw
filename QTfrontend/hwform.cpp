@@ -1278,7 +1278,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(chatStringLobby(const QString&)),
             ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringLobby(const QString&, const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&, const QString&)));
+            ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&, const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringFromMeLobby(const QString&)),
             ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
 

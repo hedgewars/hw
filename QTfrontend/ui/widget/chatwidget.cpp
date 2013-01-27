@@ -31,6 +31,7 @@
 #include <QModelIndexList>
 #include <QSortFilterProxyModel>
 #include <QMenu>
+#include <QScrollBar>
 
 #include "DataManager.h"
 #include "hwconsts.h"
@@ -156,24 +157,18 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 void HWChatWidget::displayError(const QString & message)
 {
     addLine("msg_Error", " !!! " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
 void HWChatWidget::displayNotice(const QString & message)
 {
     addLine("msg_Notice", " *** " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
 void HWChatWidget::displayWarning(const QString & message)
 {
     addLine("msg_Warning", " *!* " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
@@ -451,6 +446,8 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     if (s_displayNone->contains(cssClass))
         return; // the css forbids us to display this line
 
+    beforeContentAdd();
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
@@ -473,11 +470,13 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
 
     chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
-    chatText->moveCursor(QTextCursor::End);
+    afterContentAdd();
 }
 
 void HWChatWidget::onServerMessage(const QString& str)
 {
+    beforeContentAdd();
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
@@ -485,7 +484,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
     chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
-    chatText->moveCursor(QTextCursor::End);
+    afterContentAdd();
 }
 
 
@@ -900,4 +899,22 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
         m_nicksMenu->addAction(action);
 
     m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
+}
+
+void HWChatWidget::beforeContentAdd()
+{
+    m_scrollBarPos = chatText->verticalScrollBar()->value();
+    m_scrollToBottom = m_scrollBarPos == chatText->verticalScrollBar()->maximum();
+}
+
+void HWChatWidget::afterContentAdd()
+{
+    if(m_scrollToBottom)
+    {
+        chatText->verticalScrollBar()->setValue(chatText->verticalScrollBar()->maximum());
+        chatText->moveCursor(QTextCursor::End);
+    } else
+    {
+        chatText->verticalScrollBar()->setValue(m_scrollBarPos);
+    }
 }
