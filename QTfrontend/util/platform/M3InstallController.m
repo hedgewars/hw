@@ -70,21 +70,43 @@
 
     //Delete the app that is installed
     if ([[NSFileManager defaultManager] fileExistsAtPath:appsPath]) {
-        [[NSFileManager defaultManager] removeFileAtPath:appsPath handler:nil];
+        if ([NSFileManager instancesRespondToSelector:@selector(removeItemAtPath:error:)])
+            [[NSFileManager defaultManager] removeItemAtPath:appsPath error:nil];
+        else
+            //casting hides the deprecation warning
+            [(id)[NSFileManager defaultManager] removeFileAtPath:appsPath handler:nil];
     }
     //Delete the app that is installed
-    if ([[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath] toPath:appsPath
-                                          handler:nil]) {
+    BOOL success = NO;
+    if ([NSFileManager instancesRespondToSelector:@selector(copyItemAtPath:toPath:error:)])
+        success = [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] bundlePath]
+                                                          toPath:appsPath
+                                                           error:nil];
+    else
+        success = [(id)[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath]
+                                                        toPath:appsPath
+                                                       handler:nil];
+    if (success) {
         NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"App Name installed successfully"), appName],
                         [NSString stringWithFormat:NSLocalizedString(@"%@ was installed in /Applications", @"App Name was installed in /Applications"), appName],
                         NSLocalizedString(@"Quit", @"Quit"), nil, nil);
     } else {
         if ([[NSFileManager defaultManager] fileExistsAtPath:userAppsPath]) {
-            [[NSFileManager defaultManager] removeFileAtPath:userAppsPath handler:nil];
+            if ([NSFileManager instancesRespondToSelector:@selector(removeItemAtPath:error:)])
+                [[NSFileManager defaultManager] removeItemAtPath:userAppsPath error:nil];
+            else
+                [(id)[NSFileManager defaultManager] removeFileAtPath:userAppsPath handler:nil];
         }
-        if ([[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath] toPath:userAppsPath
-                                                handler:nil]) {
-        NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"AppName installed successfully"), appName],
+        if ([NSFileManager instancesRespondToSelector:@selector(copyItemAtPath:toPath:error:)])
+            success = [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] bundlePath]
+                                                              toPath:userAppsPath
+                                                               error:nil];
+        else
+            success = [(id)[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath]
+                                                            toPath:userAppsPath
+                                                           handler:nil];
+        if (success) {
+            NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"AppName installed successfully"), appName],
                 [NSString stringWithFormat:NSLocalizedString(@"%@ was installed in %@", @"App Name was installed in %@"), appName, [[NSString stringWithString:@"~/Applications"] stringByExpandingTildeInPath]],
                         NSLocalizedString(@"Quit", @"Quit"), nil, nil);
         } else {
