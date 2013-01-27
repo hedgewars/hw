@@ -83,6 +83,8 @@ class HWChatWidget : public QWidget
         void discardStyleSheet();
         void saveStyleSheet();
         QString linkedNick(const QString & nickname);
+        void beforeContentAdd();
+        void afterContentAdd();
 
     public slots:
         void onChatString(const QString& str);
@@ -124,6 +126,8 @@ class HWChatWidget : public QWidget
         QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
         bool notify;
         bool m_autoKickEnabled;
+        bool m_scrollToBottom;
+        int m_scrollBarPos;
 
     private slots:
         void returnPressed();
