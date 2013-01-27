@@ -123,6 +123,7 @@ endif(MINGW)
 file(GLOB ModelHdr model/*.h)
 file(GLOB NetHdr net/*.h)
 file(GLOB_RECURSE UIhdr ui/*.h)
+list(REMOVE_ITEM UIhdr "${CMAKE_CURRENT_SOURCE_DIR}/ui/widget/flowlayout.h")
 file(GLOB UtilHdr util/*.h)
 
 
@@ -138,7 +139,6 @@ set(hwfr_moc_hdrs
     team.h
     util/DataManager.h
     util/LibavInteraction.h
-    util/MessageDialog.h
     )
 
 set(hwfr_hdrs
