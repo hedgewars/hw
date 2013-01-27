@@ -87,9 +87,9 @@ About::About(QWidget * parent) :
     QString libinfo = "<style type=text/css>a:link { color: #FFFF6E; }</style>";
 
 #ifdef __GNUC__
-    libinfo.append(QString("Compiler: <a href=\"http://gcc.gnu.org\">GCC</a> %1<br>").arg(__VERSION__));
+    libinfo.append(QString("<a href=\"http://gcc.gnu.org\">GCC</a> %1<br>").arg(__VERSION__));
 #else
-    libinfo.append(QString("Compiler: Unknown<br>").arg(__VERSION__));
+    libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
@@ -115,7 +115,7 @@ About::About(QWidget * parent) :
     lblLibInfo->setText(libinfo);
     lblLibInfo->setWordWrap(true);
     lblLibInfo->setMaximumWidth(280);
-    leftLayout->addWidget(lblLibInfo, 0, Qt::AlignTop | Qt::AlignHCenter);
+    leftLayout->addWidget(lblLibInfo, 0, Qt::AlignHCenter);
     leftLayout->addStretch(1);
 
     setAcceptDrops(true);
