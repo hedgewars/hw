@@ -37,7 +37,7 @@ listenLoop sock chan ci = receiveWithBufferLoop B.empty
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket
-                receiveWithBufferLoop newrecvBuf
+                receiveWithBufferLoop $ B.copy newrecvBuf
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
