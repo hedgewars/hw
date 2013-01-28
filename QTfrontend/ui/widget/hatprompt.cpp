@@ -28,6 +28,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QSortFilterProxyModel>
+#include <QFontMetrics>
 #include <QDebug>
 
 #include "DataManager.h"
@@ -85,8 +86,10 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
     // Filter label
     QLabel * lblFilter = new QLabel(tr("Filter: "), txtFilter);
-    lblFilter->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 4px;").arg(lblFilter->width() / 2 - 3));
-    txtFilter->setStyleSheet(QString("border-width: 0px; background-color: rgb(13, 5, 68); border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: %1px; padding-bottom: 2px;").arg(lblFilter->width() / 2));
+    QFontMetrics lblMetrics(lblFilter->font());
+    int lblFilterWidth = lblMetrics.width(lblFilter->text());
+    lblFilter->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 4px;").arg(lblFilterWidth + 5));
+    txtFilter->setStyleSheet(QString("LineEditCursor, QLabel { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: %1px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }").arg(lblFilterWidth + 5));
 
     // Corner widget
     QLabel * corner = new QLabel();
