@@ -26,6 +26,7 @@
 class HWChatWidget;
 class TeamSelWidget;
 class GameCFGWidget;
+class QSettings;
 
 class PageNetGame : public AbstractPage
 {
@@ -39,6 +40,8 @@ class PageNetGame : public AbstractPage
          * @param roomName room name to be displayed.
          */
         void setRoomName(const QString & roomName);
+
+        void setSettings(QSettings * settings);
 
         void displayError(const QString & message);
         void displayNotice(const QString & message);
@@ -80,6 +83,7 @@ class PageNetGame : public AbstractPage
         QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
+        QSettings * m_gameSettings;
         QPushButton * btnSetup;
         QLabel * lblRoomNameReadOnly;
 };

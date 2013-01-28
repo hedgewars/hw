@@ -155,6 +155,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     ui.pageRoomsList->setSettings(config);
+    ui.pageNetGame->setSettings(config);
     ui.pageNetGame->chatWidget->setSettings(config);
     ui.pageRoomsList->chatWidget->setSettings(config);
     ui.pageOptions->setConfig(config);

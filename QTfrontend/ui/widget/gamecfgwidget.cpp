@@ -678,7 +678,6 @@ bool GameCFGWidget::isMaster()
 
 void GameCFGWidget::setMaster(bool master)
 {
-    if (master == m_master) return;
     m_master = master;
 
     pMapContainer->setMaster(master);

@@ -22,6 +22,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMessageBox>
+#include <QSettings>
 
 #include "pagenetgame.h"
 #include "gamecfgwidget.h"
@@ -56,9 +57,12 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     roomConfigLayout->addWidget(leRoomName, 100);
 
     QLabel * lblRoomName = new QLabel(tr("Room name: "), leRoomName);
-    lblRoomName->setStyleSheet("font: 12px; font-weight: bold;");
-    lblRoomName->setStyleSheet(QString("font: 12px; font-weight: bold; background: none; margin-left: -%1px; margin-top: 8px;").arg(lblRoomName->width() - 20));
-    leRoomName->setStyleSheet(QString("font: 12px; border-right: 0; padding-left: %1px; padding-bottom: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;").arg(lblRoomName->width() - 14));
+    lblRoomName->setFont(QFont("Arial", 12, QFont::Black));
+    QFontMetrics lblMetrics(lblRoomName->font());
+    int lblRoomNameWidth = lblMetrics.width(lblRoomName->text());
+    lblRoomName->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 6px;").arg(lblRoomNameWidth + 12));
+    leRoomName->setFont(QFont("Arial", 12, QFont::Normal));
+    leRoomName->setStyleSheet(QString("HistoryLineEdit, QLabel { border-right: 0; padding-left: %1px; padding-bottom: 2px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }").arg(lblRoomNameWidth + 16));
 
     BtnUpdate = new QPushButton();
     BtnUpdate->setEnabled(false);
@@ -188,9 +192,13 @@ void PageNetGame::resizeEvent(QResizeEvent * event)
     int newHeight = event->size().height();
 
     if (newHeight < cutoffHeight && oldHeight >= cutoffHeight)
+    {
         pGameCFG->setTabbed(true);
+    }
     else if (newHeight >= cutoffHeight && oldHeight < cutoffHeight)
+    {
         pGameCFG->setTabbed(false);
+    }
 }
 
 void PageNetGame::displayError(const QString & message)
@@ -227,9 +235,10 @@ void PageNetGame::onUpdateClick()
 {
     if (!leRoomName->text().trimmed().isEmpty())
     {
-        emit askForUpdateRoomName(leRoomName->text());
+        m_gameSettings->setValue("frontend/lastroomname", leRoomName->text());
         leRoomName->rememberCurrentText();
         BtnUpdate->setEnabled(false);
+        emit askForUpdateRoomName(leRoomName->text());
     }
     else
     {
@@ -240,6 +249,7 @@ void PageNetGame::onUpdateClick()
         roomMsg.setText(QMessageBox::tr("Please enter room name"));
         roomMsg.setWindowModality(Qt::WindowModal);
         roomMsg.exec();
+        leRoomName->setFocus();
     }
 }
 
@@ -259,9 +269,16 @@ void PageNetGame::setMasterMode(bool isMaster)
     BtnUpdate->setVisible(isMaster);
     leRoomName->setVisible(isMaster);
     lblRoomNameReadOnly->setVisible(!isMaster);
+    pGameCFG->setMaster(isMaster);
+    repaint();
 }
 
 void PageNetGame::setUser(const QString & nickname)
 {
     chatWidget->setUser(nickname);
+}
+
+void PageNetGame::setSettings(QSettings *settings)
+{
+    m_gameSettings = settings;
 }
