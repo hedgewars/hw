@@ -6,7 +6,7 @@ LOCAL_MODULE    := physfs
 
 LOCAL_CFLAGS := -O2 -DPHYSFS_NO_CDROM_SUPPORT 
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_C_INCLUDES := $(LOCAL_PATH) $(MISC_DIR)/liblua $(MISC_DIR)/liblua $(JNI_DIR)/SDL/include
 
 LOCAL_SRC_FILES :=    physfs.c \
     physfs_byteorder.c \
@@ -26,5 +26,7 @@ LOCAL_SRC_FILES :=    physfs.c \
     ../extras/hwpacksmounter.c \
     ../extras/physfslualoader.c \
     ../extras/physfsrwops.c \
+
+LOCAL_SHARED_LIBRARIES += SDL lua
     
 include $(BUILD_SHARED_LIBRARY)
