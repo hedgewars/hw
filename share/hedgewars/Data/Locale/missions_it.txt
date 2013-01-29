@@ -4,7 +4,7 @@ Basic_Training_-_Bazooka.desc="Utilizzare il vento a proprio vantaggio costituis
 Basic_Training_-_Grenade.name=Addestramento base sull'utilizzo delle Granate
 Basic_Training_-_Grenade.desc="Ricorda, toglierai PRIMA la sicura e POI lancerai la granata!"
 
-Basic_Training_-_Cluster_Bomb.name=ddestramento base sull'utilizzo delle Granate a Grappolo
+Basic_Training_-_Cluster_Bomb.name=Addestramento base sull'utilizzo delle Granate a Grappolo
 Basic_Training_-_Cluster_Bomb.desc="Qualcuno ha bisogno di una doccia (molto) calda!"
 
 Basic_Training_-_Shotgun.name=Addestramento base sull'utilizzo del Fucile a Pompa

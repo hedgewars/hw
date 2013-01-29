@@ -23,51 +23,51 @@
     <name>BanDialog</name>
     <message>
         <source>IP</source>
-        <translation type="unfinished">IP</translation>
+        <translation>IP</translation>
     </message>
     <message>
         <source>Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>Soprannome</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Soprannome</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Motivo</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Durata</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annulla</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <source>you know why</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Avviso</translation>
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Per favore, specifica %1</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>soprannome</translation>
     </message>
     <message>
         <source>permanent</source>
-        <translation type="unfinished"></translation>
+        <translation>permanente</translation>
     </message>
 </context>
 <context>
@@ -81,7 +81,7 @@
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Leggi</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -89,7 +89,7 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Invia Commento</translation>
     </message>
 </context>
 <context>
@@ -129,23 +129,23 @@
     <name>HWApplication</name>
     <message>
         <source>%1 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 minuti</translation>
     </message>
     <message>
         <source>%1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ora</translation>
     </message>
     <message>
         <source>%1 hours</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ore</translation>
     </message>
     <message>
         <source>%1 day</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 giorno</translation>
     </message>
     <message>
         <source>%1 days</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 giorni</translation>
     </message>
 </context>
 <context>
@@ -246,11 +246,11 @@ Per favore scegli un altro nickname:</translation>
     </message>
     <message>
         <source>%1&apos;s Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Squadra di %1</translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Nome registrato</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -258,7 +258,7 @@ Per favore scegli un altro nickname:</translation>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Questo nome &egrave;</translation>
     </message>
     <message>
         <source>Your nickname is not registered.
@@ -808,7 +808,7 @@ Please wait a few seconds and try again.</source>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation>In Game....</translation>
+        <translation>In gioco...</translation>
     </message>
 </context>
 <context>
@@ -884,11 +884,11 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation type="unfinished">Modifica preferenze</translation>
+        <translation>Modifica preferenze</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Gioca</translation>
+        <translation>Gioca</translation>
     </message>
 </context>
 <context>
@@ -1316,8 +1316,8 @@ Please wait a few seconds and try again.</source>
     <message numerus="yes">
         <source>%1 bytes</source>
         <translation>
-            <numerusform>%1 bytes</numerusform>
-            <numerusform>%1 bytes</numerusform>
+            <numerusform>%1 byte</numerusform>
+            <numerusform>%1 byte</numerusform>
         </translation>
     </message>
     <message>
@@ -2026,7 +2026,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Vuoi davvero cancellare il file?</numerusform>
             <numerusform>Vuoi davvero cancellare %1 file?</numerusform>
         </translation>
