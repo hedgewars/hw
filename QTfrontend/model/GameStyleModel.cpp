@@ -25,12 +25,11 @@
 
 #include "physfs.h"
 #include "GameStyleModel.h"
+#include "hwconsts.h"
 
 
 void GameStyleModel::loadGameStyles()
 {
-    const QString appDir = QString(PHYSFS_getBaseDir());
-
     beginResetModel();
 
     // empty list, so that we can (re)fill it
@@ -81,7 +80,7 @@ void GameStyleModel::loadGameStyles()
 
         // detect if script is dlc
         QString scriptPath = PHYSFS_getRealDir(QString("Scripts/Multiplayer/%1.lua").arg(script).toLocal8Bit().data());
-        bool isDLC = !scriptPath.startsWith(appDir);
+        bool isDLC = !scriptPath.startsWith(datadir->absolutePath());
 
         QStandardItem * item = new QStandardItem((isDLC ? "*" : "") + name);
 
