@@ -430,7 +430,7 @@ processAction CheckRegistered = do
     uid <- client's clUID
     -- allow multiple checker logins
     haveSameNick <- liftM (not . null . tail . filter (\c -> (not $ isChecker c) && caseInsensitiveCompare (nick c) n)) allClientsS
-    if haveSameNick && (not checker) then
+    if (not checker) && haveSameNick then
         if p < 38 then
             processAction $ ByeClient $ loc "Nickname is already in use"
             else
