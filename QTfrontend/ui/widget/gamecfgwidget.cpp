@@ -49,6 +49,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     setMaximumHeight(447);
     setMinimumWidth(470);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_master = true;
 
     // Easy containers for the map/game options in either stacked or tabbed mode
 
@@ -678,6 +679,7 @@ bool GameCFGWidget::isMaster()
 
 void GameCFGWidget::setMaster(bool master)
 {
+    if (master == m_master) return;
     m_master = master;
 
     pMapContainer->setMaster(master);
