@@ -132,14 +132,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     QLabel * lblMapPreviewText = new QLabel(this);
     lblMapPreviewText->setText(tr("Map preview:"));
     leftLayout->addWidget(lblMapPreviewText, 0);
-    leftLayout->addSpacing(2);
 
     /* Map Preview */
 
-    mapPreview = new QLabel(this);
+    mapPreview = new QPushButton(this);
     mapPreview->setObjectName("mapPreview");
     mapPreview->setFixedSize(256, 128);
+    mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
+    connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
 
     /* Bottom-Left layout */
 
@@ -230,7 +231,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lblDesc->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lblDesc->setStyleSheet("font: 10px;");
-    bottomLeftLayout->addWidget(lblDesc, 1);
+    bottomLeftLayout->addWidget(lblDesc, 100);
 
     /* Add stretch above theme button */
 
@@ -270,7 +271,7 @@ void HWMapContainer::setImage(const QImage newImage)
     px.setMask(bm);
 
     p.fillRect(pxres.rect(), linearGrad);
-    p.drawPixmap(QPoint(0, 0), px);
+    p.drawPixmap(0, 0, px);
 
     addInfoToPreview(pxres);
     pMap = 0;
@@ -300,7 +301,14 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
     p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
     p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
-    mapPreview->setPixmap(finalImage);
+    // Shrink, crop, and center preview image
+    QPixmap centered(QSize(m_previewSize.width() - 6, m_previewSize.height() - 6));
+    QPainter pc(&centered);
+    pc.fillRect(centered.rect(), linearGrad);
+    pc.drawPixmap(-3, -3, finalImage);
+
+    mapPreview->setIcon(QIcon(centered));
+    mapPreview->setIconSize(centered.size());
 }
 
 void HWMapContainer::askForGeneratedPreview()
@@ -331,6 +339,19 @@ void HWMapContainer::askForGeneratedPreview()
     addInfoToPreview(waitImage);
 
     cType->setEnabled(false);
+}
+
+void HWMapContainer::previewClicked()
+{
+    switch (m_mapInfo.type)
+    {
+        case MapModel::HandDrawnMap:
+            emit drawMapRequested();
+            break;
+        default:
+            setRandomMap();
+            break;
+    }
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -594,7 +615,8 @@ void HWMapContainer::updatePreview()
     {
         case MapModel::Invalid:
             failIcon = QPixmap(":/res/btnDisabled.png");
-            mapPreview->setPixmap(failIcon);
+            mapPreview->setIcon(QIcon(failIcon));
+            mapPreview->setIconSize(failIcon.size());
             break;
         case MapModel::GeneratedMap:
             askForGeneratedPreview();
@@ -611,7 +633,7 @@ void HWMapContainer::updatePreview()
 
             if(!success)
             {
-                mapPreview->setPixmap(QPixmap());
+                mapPreview->setIcon(QIcon());
                 return;
             }
 
@@ -729,6 +751,8 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             break;
         }
     }
+
+    repaint();
 
     emit mapgenChanged(mapgen);
 }
@@ -887,6 +911,7 @@ bool HWMapContainer::isMaster()
 
 void HWMapContainer::setMaster(bool master)
 {
+    if (master == m_master) return;
     m_master = master;
 
     foreach (QWidget *widget, m_childWidgets)
