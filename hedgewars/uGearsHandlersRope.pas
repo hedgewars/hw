@@ -164,12 +164,12 @@ begin
     ty := HHGear^.Y;
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-        if not (TestCollisionXwithXYShift(HHGear, _0, -1, hwSign(ropeDx))
+        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
         or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
-        if not (TestCollisionXwithXYShift(HHGear, _0, -1, -hwSign(ropeDx))
+        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
         or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, -hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
@@ -264,7 +264,7 @@ begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
         end;
-    if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0 then
+    if TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(HHGear^.dY)) then
         begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true
