@@ -1,1 +1,1 @@
-en_US=Islands scattered everywhere\, full set of|weapons.
+en_US=Islands scattered everywhere\, full set of weapons.

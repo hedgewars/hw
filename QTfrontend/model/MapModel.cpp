@@ -26,6 +26,7 @@
 #include "physfs.h"
 #include "MapModel.h"
 #include "HWApplication.h"
+#include "hwconsts.h"
 
 MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", ""};
 MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", ""};
@@ -33,8 +34,6 @@ MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "
 
 void MapModel::loadMaps(MapType maptype)
 {
-    const QString appDir = QString(PHYSFS_getBaseDir());
-
     // this method resets the contents of this model (important to know for views).
     beginResetModel();
 
@@ -99,7 +98,7 @@ void MapModel::loadMaps(MapType maptype)
 
             // detect if map is dlc
             QString mapDir = PHYSFS_getRealDir(QString("Maps/%1/map.cfg").arg(map).toLocal8Bit().data());
-            dlc = !mapDir.startsWith(appDir);
+            dlc = !mapDir.startsWith(datadir->absolutePath());
 
             // let's use some semi-sane hedgehog limit, rather than none
             if (limit == 0)
