@@ -123,7 +123,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     cl <- thisClient
     r <- thisRoom
     clChan <- thisClientChans
-    roomChans <- roomClientsChans
+    others <- roomOthersChans
 
     let maybeTeam = findTeam r
     let team = fromJust maybeTeam
@@ -137,7 +137,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
-            AnswerClients roomChans ["HH_NUM", teamName, showB hhNumber]]
+            AnswerClients others ["HH_NUM", teamName, showB hhNumber]]
     where
         hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
