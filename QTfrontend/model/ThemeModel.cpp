@@ -23,6 +23,7 @@
 
 #include "physfs.h"
 #include "ThemeModel.h"
+#include "hwconsts.h"
 
 ThemeModel::ThemeModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -50,8 +51,6 @@ QVariant ThemeModel::data(const QModelIndex &index, int role) const
 
 void ThemeModel::loadThemes()
 {
-    const QString appDir = QString(PHYSFS_getBaseDir());
-
     beginResetModel();
 
     DataManager & datamgr = DataManager::instance();
@@ -77,7 +76,7 @@ void ThemeModel::loadThemes()
 
         // detect if theme is dlc
         QString themeDir = PHYSFS_getRealDir(QString("Themes/%1/icon.png").arg(theme).toLocal8Bit().data());
-        dataset.insert(Qt::UserRole + 2, !themeDir.startsWith(appDir));
+        dataset.insert(Qt::UserRole + 2, !themeDir.startsWith(datadir->absolutePath()));
 
         // set icon path
         dataset.insert(Qt::UserRole + 1, iconpath);
