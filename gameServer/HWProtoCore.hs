@@ -42,6 +42,8 @@ handleCmd ("CMD" : params) =
     where
         h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
         h ["STATS"] = handleCmd ["STATS"]
+        h ["PART", msg] = handleCmd ["PART", msg]
+        h ["QUIT", msg] = handleCmd ["QUIT", msg]
         h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
 
 handleCmd cmd = do
