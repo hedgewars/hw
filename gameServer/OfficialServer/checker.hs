@@ -72,7 +72,9 @@ session l p s = do
         debugM "Network" $ "Send: " ++ show p
         sendAll s $ B.unlines p `B.snoc` '\n'
     onPacket :: [B.ByteString] -> IO ()
-    onPacket ("CONNECTED":_) = answer ["CHECKER", protocolNumber, l, p]
+    onPacket ("CONNECTED":_) = do
+        answer ["CHECKER", protocolNumber, l, p]
+        answer ["READY"]
     onPacket ["PING"] = answer ["PONG"]
     onPacket ("BYE" : xs) = error $ show xs
     onPacket _ = return ()

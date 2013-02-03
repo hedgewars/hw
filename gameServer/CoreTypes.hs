@@ -68,7 +68,7 @@ data TeamInfo =
 
 instance Eq TeamInfo where
     (==) = (==) `on` teamname
-    
+
 data GameInfo =
     GameInfo
     {

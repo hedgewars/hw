@@ -11,6 +11,7 @@ import Actions
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
+import HWProtoChecker
 import HandlerUtils
 import RoomsAndClients
 import Utils
@@ -48,8 +49,12 @@ handleCmd ("CMD" : params) =
 
 handleCmd cmd = do
     (ci, irnc) <- ask
-    if logonPassed (irnc `client` ci) then
-        handleCmd_loggedin cmd
+    let cl = irnc `client` ci
+    if logonPassed cl then
+        if isChecker cl then
+            handleCmd_checker cmd
+            else
+            handleCmd_loggedin cmd
         else
         handleCmd_NotEntered cmd
 

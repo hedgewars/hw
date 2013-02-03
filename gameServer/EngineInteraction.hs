@@ -5,6 +5,7 @@ import Control.Monad
 import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
+import qualified Data.Map as Map
 -------------
 import CoreTypes
 
@@ -31,8 +32,13 @@ checkNetCmd msg = check decoded
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
 
-gameInfo2Replay :: GameInfo -> B.ByteString
-gameInfo2Replay GameInfo{roundMsgs = rm,
-        teamsAtStart = teams,
-        giMapParams = params1,
-        giParams = params2} = undefined
+replayToDemo :: [TeamInfo]
+        -> Map.Map B.ByteString B.ByteString
+        -> Map.Map B.ByteString [B.ByteString]
+        -> [B.ByteString]
+        -> [B.ByteString]
+replayToDemo teams mapParams params msgs = undefined
+
+
+
+
