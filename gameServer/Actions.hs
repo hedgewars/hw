@@ -77,6 +77,7 @@ data Action =
     | CheckBanned Bool
     | SaveReplay
     | Stats
+    | CheckRecord
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -670,6 +671,17 @@ processAction SaveReplay = do
     io $ do
         r <- room'sM rnc id ri
         saveReplay r
+
+
+processAction CheckRecord = do
+    p <- client's clientProto
+    c <- client's clChan
+    l <- loadReplay p
+    when (not $ null l) $
+        processAction $ AnswerClients [c] ("REPLAY" : l)
+
+
 #else
 processAction SaveReplay = return ()
+processAction CheckRecord = return ()
 #endif
