@@ -26,12 +26,13 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, 
+uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
     uVisualGears, uTypes, uVariables, uCommands, uConsts
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
-var i: LongInt;
+var i,j : LongInt;
+    s: shortstring;
 begin
 if isPaused then
     exit;
@@ -60,6 +61,23 @@ if GameType <> gmtRecord then
             end
         else if cOnlyStats then
             Lag:= High(LongInt)
+    end;
+inc(SoundTimerTicks, Lag);
+if SoundTimerTicks >= 50 then
+    begin
+    SoundTimerTicks:= 0;
+    if cVolumeDelta <> 0 then
+        begin
+        j:= Volume;
+        i:= ChangeVolume(cVolumeDelta);
+        if isAudioMuted and (j<>i) then
+            AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
+        else if not isAudioMuted then
+            begin
+            str(i, s);
+            AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
+            end
+        end;
     end;
 PlayNextVoice;
 i:= 1;

@@ -74,7 +74,6 @@ var cWaveWidth, cWaveHeight: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    SoundTimerTicks: Longword;
     prevPoint, prevTargetPoint: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
@@ -1514,22 +1513,8 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         if fpsTexture <> nil then
             DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
         end;
-
-    // lag warning (?)
-    inc(SoundTimerTicks, Lag);
 end;
 
-if SoundTimerTicks >= 50 then
-begin
-    SoundTimerTicks:= 0;
-    if cVolumeDelta <> 0 then
-    begin
-        str(ChangeVolume(cVolumeDelta), s);
-        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
-    end;
-    if isAudioMuted then
-        AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
-end;
 
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
