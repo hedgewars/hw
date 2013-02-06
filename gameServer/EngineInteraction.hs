@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module EngineInteraction where
 
 import qualified Data.Set as Set
@@ -6,8 +8,11 @@ import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
 import qualified Data.Map as Map
+import Data.Word
+import Data.Bits
 -------------
 import CoreTypes
+import Utils
 
 
 toEngineMsg :: B.ByteString -> B.ByteString
@@ -37,8 +42,80 @@ replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString [B.ByteString]
         -> [B.ByteString]
         -> [B.ByteString]
-replayToDemo teams mapParams params msgs = undefined
+replayToDemo teams mapParams params msgs = concat [
+        [em "TD"]
+        , maybeScript
+        , maybeMap
+        , [eml ["etheme ", head $ params Map.! "THEME"]]
+        , [eml ["eseed ", mapParams Map.! "SEED"]]
+        , [eml ["e$gmflags ", showB gameFlags]]
+        , schemeFlags
+        , [eml ["e$template_filter ", mapParams Map.! "TEMPLATE"]]
+        , [eml ["e$mapgen ", mapParams Map.! "MAPGEN"]]
+        , msgs
+        ]
+    where
+        em = toEngineMsg
+        eml = em . B.concat
+        mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
+        maybeScript = let s = head $ params Map.! "SCRIPT" in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
+        maybeMap = let m = mapParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
+        scheme = tail $ params Map.! "SCHEME"
+        gameFlags :: Word32
+        gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
+        schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])
+            $ filter (\(_, (n, _)) -> not $ B.null n)
+            $ zip (drop (length gameFlagConsts) scheme) schemeParams
 
+
+schemeParams :: [(B.ByteString, Int)]
+schemeParams = [
+      ("e$damagepct", 1)
+    , ("e$turntime", 1000)
+    , ("", 0)
+    , ("e$sd_turns", 1)
+    , ("e$casefreq", 1)
+    , ("e$minestime", 1000)
+    , ("e$minesnum", 1)
+    , ("e$minedudpct", 1)
+    , ("e$explosives", 1)
+    , ("e$healthprob", 1)
+    , ("e$hcaseamount", 1)
+    , ("e$waterrise", 1)
+    , ("e$healthdec", 1)
+    , ("e$ropepct", 1)
+    , ("e$getawaytime", 1)
+    ]
+
+
+gameFlagConsts :: [Word32]
+gameFlagConsts = [
+          0x00001000
+        , 0x00000010
+        , 0x00000004
+        , 0x00000008
+        , 0x00000020
+        , 0x00000040
+        , 0x00000080
+        , 0x00000100
+        , 0x00000200
+        , 0x00000400
+        , 0x00000800
+        , 0x00002000
+        , 0x00004000
+        , 0x00008000
+        , 0x00010000
+        , 0x00020000
+        , 0x00040000
+        , 0x00080000
+        , 0x00100000
+        , 0x00200000
+        , 0x00400000
+        , 0x00800000
+        , 0x01000000
+        , 0x02000000
+        , 0x04000000
+        ]
 
 
 
