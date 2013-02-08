@@ -56,6 +56,7 @@ replayToDemo teams mapParams params msgs = concat [
         , mapgenSpecific
         , concatMap teamSetup teams
         , msgs
+        , [em "!"]
         ]
     where
         em = toEngineMsg
@@ -77,12 +78,18 @@ replayToDemo teams mapParams params msgs = concat [
         ammoStr :: B.ByteString
         ammoStr = head . tail $ params Map.! "AMMO"
         ammo = let l = B.length ammoStr `div` 4; ((a, b), (c, d)) = (B.splitAt l . fst &&& B.splitAt l . snd) . B.splitAt (l * 2) $ ammoStr in
-                   map (\(x, y) -> eml [x, " ", y]) $ zip ["eammloadt", "eammprob", "eammdelay", "eammreinf"] [a, b, c, d]
+                   (map (\(x, y) -> eml [x, " ", y]) $ zip ["eammloadt", "eammprob", "eammdelay", "eammreinf"] [a, b, c, d])
+                   ++ [em "eammstore" | scheme !! 14 == "true" || scheme !! 20 == "false"]
+        initHealth = scheme !! 27
         teamSetup :: TeamInfo -> [B.ByteString]
-        teamSetup _ = ammo
+        teamSetup t = 
+                eml ["eaddteam ", teamcolor t, " ", teamowner t, " <hash>"]
+                : em "erdriven"
+                : eml ["efort ", teamfort t]
+                : replicate (hhnum t) (eml ["eaddhh 0 ", initHealth, " hedgehog"])
 
 drawnMapData :: B.ByteString -> [B.ByteString]
-drawnMapData = undefined
+drawnMapData = error "drawnMapData"
 
 schemeParams :: [(B.ByteString, Int)]
 schemeParams = [
