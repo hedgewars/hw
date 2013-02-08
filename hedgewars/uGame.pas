@@ -36,12 +36,14 @@ var i,j : LongInt;
 begin
 if isPaused then
     exit;
+
 if (not CurrentTeam^.ExtDriven) then
     begin
     NetGetNextCmd; // its for the case of receiving "/say" message
     isInLag:= false;
-    SendKeepAliveMessage(Lag)
+    FlushMessages(Lag)
     end;
+
 if GameType <> gmtRecord then
     begin
     if Lag > 100 then
