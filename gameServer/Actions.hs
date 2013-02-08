@@ -675,8 +675,8 @@ processAction SaveReplay = do
 
 processAction CheckRecord = do
     p <- client's clientProto
-    c <- client's clChan
-    l <- loadReplay p
+    c <- client's sendChan
+    l <- io $ loadReplay (fromIntegral p)
     when (not $ null l) $
         processAction $ AnswerClients [c] ("REPLAY" : l)
 

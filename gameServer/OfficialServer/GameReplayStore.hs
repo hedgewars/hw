@@ -10,6 +10,8 @@ import Data.Maybe
 import Data.Unique
 import Control.Monad
 import Data.List
+import qualified Data.ByteString as B
+import System.Directory
 ---------------
 import CoreTypes
 import EngineInteraction
@@ -29,13 +31,14 @@ saveReplay r = do
 
 
 loadReplay :: Int -> IO [B.ByteString]
-loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" $ "Problems reading replay") $ do
-    files <- liftM (isSuffixOf ('.' : show p)) getDirectoryContents
+loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems reading replay" >> return []) $ do
+    files <- liftM (filter (isSuffixOf ('.' : show p))) $ getDirectoryContents "replays"
     if (not $ null files) then
         loadFile $ head files
         else
         return []
     where
-        loadFile fileName = E.handle (\(e :: SomeException) -> warningM "REPLAYS" $ "Problems reading " ++ fileName) $ do
+        loadFile :: String -> IO [B.ByteString]
+        loadFile fileName = E.handle (\(e :: SomeException) -> warningM "REPLAYS" ("Problems reading " ++ fileName) >> return []) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
             return $ replayToDemo teams (Map.fromList params1) (Map.fromList params2) roundMsgs
