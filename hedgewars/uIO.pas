@@ -30,7 +30,7 @@ procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
-procedure SendKeepAliveMessage(Lag: Longword);
+procedure FlushMessages(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
@@ -43,6 +43,7 @@ uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
 
 const
     cSendEmptyPacketTime = 1000;
+    cSendBufferSize = 1024;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -63,7 +64,11 @@ var IPCSock: PTCPSocket;
     headcmd: PCmd;
     lastcmd: PCmd;
 
-    SendEmptyPacketTicks: LongWord;
+    flushDelayTicks: LongWord;
+    sendBuffer: record
+                buf: array[0..Pred(cSendBufferSize)] of byte;
+                count: Word;
+                end;
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
@@ -214,19 +219,38 @@ buf:= 'i' + stc[sit] + s;
 SendIPCRaw(@buf[0], length(buf) + 1)
 end;
 
+function isSyncedCommand(c: char): boolean;
+begin
+    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 's', 'b', 'F', 'N', 'p', 'P', 'w', 't', 'h', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+end;
+
+procedure flushBuffer();
+begin
+    SDLNet_TCP_Send(IPCSock, @sendBuffer.buf, sendBuffer.count);
+    flushDelayTicks:= 0;
+    sendBuffer.count:= 0
+end;
 
 procedure SendIPC(s: shortstring);
 begin
 if IPCSock <> nil then
     begin
-    SendEmptyPacketTicks:= 0;
-    if s[0]>#251 then
+    if s[0] > #251 then
         s[0]:= #251;
         
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
     AddFileLog('[IPC out] '+ s[1]);
     inc(s[0], 2);
-    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+    
+    if isSyncedCommand(s[1]) then
+        begin
+        if sendBuffer.count + byte(s[0]) >= cSendBufferSize then
+            flushBuffer();
+            
+        Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
+        inc(sendBuffer.count, byte(s[0]) + 1)
+        end else
+        SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
     end
 end;
 
@@ -264,11 +288,16 @@ SendIPC(_S'?');
 IPCWaitPongEvent
 end;
 
-procedure SendKeepAliveMessage(Lag: Longword);
+procedure FlushMessages(Lag: Longword);
 begin
-inc(SendEmptyPacketTicks, Lag);
-if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPC(_S'+')
+inc(flushDelayTicks, Lag);
+if (flushDelayTicks >= cSendEmptyPacketTime) then
+    begin
+    if sendBuffer.count = 0 then
+        SendIPC(_S'+');
+        
+     flushBuffer()    
+    end
 end;
 
 procedure NetGetNextCmd;
@@ -434,7 +463,8 @@ begin
     SocketString:= '';
     
     hiTicks:= 0;
-    SendEmptyPacketTicks:= 0;
+    flushDelayTicks:= 0;
+    sendBuffer.count:= 0;
 end;
 
 procedure freeModule;

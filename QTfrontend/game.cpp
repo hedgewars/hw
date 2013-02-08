@@ -313,9 +313,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
         default:
         {
             if (gameType == gtNet && !netSuspend)
-            {
-                emit SendNet(msg);
-            }
+                m_netSendBuffer.append(msg);
+
             demo.append(msg);
         }
     }
@@ -343,6 +342,17 @@ void HWGame::onClientRead()
         QByteArray msg = readbuffer.left(msglen + 1);
         readbuffer.remove(0, msglen + 1);
         ParseMessage(msg);
+    }
+    
+    flushNetBuffer();
+}
+
+void HWGame::flushNetBuffer()
+{
+    if(m_netSendBuffer.size())
+    {
+        emit SendNet(m_netSendBuffer);
+                m_netSendBuffer.clear();
     }
 }
 
