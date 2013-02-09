@@ -54,15 +54,8 @@ QLayout * PageNetGame::bodyLayoutDefinition()
     leRoomName->setMaximumWidth(600);
     leRoomName->setFixedHeight(30);
     leRoomName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    leRoomName->setStyleSheet("border-right: 0; padding-left: 4px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;");
     roomConfigLayout->addWidget(leRoomName, 100);
-
-    QLabel * lblRoomName = new QLabel(tr("Room name: "), leRoomName);
-    lblRoomName->setFont(QFont("Arial", 12, QFont::Black));
-    QFontMetrics lblMetrics(lblRoomName->font());
-    int lblRoomNameWidth = lblMetrics.width(lblRoomName->text());
-    lblRoomName->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 6px;").arg(lblRoomNameWidth + 12));
-    leRoomName->setFont(QFont("Arial", 12, QFont::Normal));
-    leRoomName->setStyleSheet(QString("HistoryLineEdit, QLabel { border-right: 0; padding-left: %1px; padding-bottom: 2px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }").arg(lblRoomNameWidth + 16));
 
     BtnUpdate = new QPushButton();
     BtnUpdate->setEnabled(false);

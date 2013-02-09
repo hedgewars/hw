@@ -26,7 +26,6 @@
 #include <QMessageBox>
 #include <QHeaderView>
 #include <QGroupBox>
-#include <QFontMetrics>
 #include <QMenu>
 #include <QDebug>
 
@@ -51,7 +50,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     pageLayout->addLayout(topLayout, 0);
 
     // Help/prompt message at top
-    QLabel * lblDesc = new QLabel(tr("Join a room"));
+    QLabel * lblDesc = new QLabel(tr("Search for a room:"));
     lblDesc->setObjectName("lblDesc");
     lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -63,18 +62,12 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     searchContainer->setFixedHeight(24);
     searchContainer->setObjectName("searchContainer");
     searchContainer->setStyleSheet("#searchContainer { background: #F6CB1C; border-top-right-radius: 10px; padding: 3px; }");
-    searchContainer->setFixedWidth(250);
+    searchContainer->setFixedWidth(200);
     searchText = new LineEditCursor(searchContainer);
-    searchText->setFixedWidth(250);
+    searchText->setFixedWidth(200);
     searchText->setMaxLength(60);
     searchText->setFixedHeight(22);
-
-    // Search label
-    QLabel * lblSearch = new QLabel(tr("Search: "), searchText);
-    QFontMetrics lblMetrics(lblSearch->font());
-    int lblSearchWidth = lblMetrics.width(lblSearch->text());
-    lblSearch->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 4px;").arg(lblSearchWidth + 5));
-    searchText->setStyleSheet(QString("LineEditCursor, QLabel { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: %1px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }").arg(lblSearchWidth + 5));
+    searchText->setStyleSheet("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }");
 
     // Corner widget
     QLabel * corner = new QLabel();
