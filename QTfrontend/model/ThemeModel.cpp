@@ -76,24 +76,21 @@ void ThemeModel::loadThemes()
 
         // detect if theme is dlc
         QString themeDir = PHYSFS_getRealDir(QString("Themes/%1/icon.png").arg(theme).toLocal8Bit().data());
-        dataset.insert(Qt::UserRole + 2, !themeDir.startsWith(datadir->absolutePath()));
+        bool isDLC = !themeDir.startsWith(datadir->absolutePath());
+        dataset.insert(IsDlcRole, isDLC);
 
         // set icon path
-        dataset.insert(Qt::UserRole + 1, iconpath);
+        dataset.insert(IconPathRole, iconpath);
 
         // set name
-        dataset.insert(Qt::DisplayRole, theme);
+        dataset.insert(ActualNameRole, theme);
 
-        // load and set icon
-        QIcon icon;
-        icon.addPixmap(QPixmap(iconpath), QIcon::Normal);
-        icon.addPixmap(QPixmap(iconpath), QIcon::Disabled);
-
-        dataset.insert(Qt::DecorationRole, icon);
+        // set displayed name
+        dataset.insert(Qt::DisplayRole, (isDLC ? "*" : "") + theme);
 
         // load and set preview icon
         QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
-        dataset.insert(Qt::UserRole, preview);
+        dataset.insert(Qt::DecorationRole, preview);
 
         m_data.append(dataset);
     }
