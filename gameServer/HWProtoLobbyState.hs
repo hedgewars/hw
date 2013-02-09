@@ -135,13 +135,14 @@ handleCmd_lobby ["JOIN_ROOM", roomName] =
 
 handleCmd_lobby ["FOLLOW", asknick] = do
     (_, rnc) <- ask
+    clChan <- liftM sendChan thisClient
     ci <- clientByNick asknick
     let ri = clientRoom rnc $ fromJust ci
-    let clRoom = room rnc ri
+    let roomName = name $ room rnc ri
     if isNothing ci || ri == lobbyId then
         return []
         else
-        handleCmd_lobby ["JOIN_ROOM", name clRoom]
+        liftM ((:) (AnswerClients [clChan] ["JOINING", roomName])) $ handleCmd_lobby ["JOIN_ROOM", roomName]
 
     ---------------------------
     -- Administrator's stuff --
