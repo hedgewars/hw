@@ -35,12 +35,6 @@ class PageNetGame : public AbstractPage
     public:
         PageNetGame(QWidget* parent);
 
-        /**
-         * Sets the room name to display.
-         * @param roomName room name to be displayed.
-         */
-        void setRoomName(const QString & roomName);
-
         void setSettings(QSettings * settings);
 
         void displayError(const QString & message);
@@ -62,6 +56,7 @@ class PageNetGame : public AbstractPage
         GameCFGWidget* pGameCFG;
 
     public slots:
+        void setRoomName(const QString & roomName);
         void setReadyStatus(bool isReady);
         void setUser(const QString & nickname);
         void onUpdateClick();
