@@ -1238,6 +1238,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             this, SLOT(NetGameChangeStatus(bool)), Qt::QueuedConnection);
 
 // net page stuff
+    connect(hwnet, SIGNAL(roomNameUpdated(const QString &)),
+            ui.pageNetGame, SLOT(setRoomName(const QString &)));
     connect(hwnet, SIGNAL(chatStringFromNet(const QString&)),
             ui.pageNetGame->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
 

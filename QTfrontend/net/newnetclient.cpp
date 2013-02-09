@@ -512,9 +512,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QString roomName = tmp.takeFirst();
         m_roomsListModel->updateRoom(roomName, tmp);
 
-        // keep track of room name so correct name is displayed when you become room admin
+        // keep track of room name so correct name is displayed
         if(myroom == roomName)
+        {
             myroom = tmp[1];
+            emit roomNameUpdated(myroom);
+        }
 
         return;
     }
@@ -596,6 +599,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     {
         // obsolete, see +a client flag
         return;
+    }
+
+    if(lst[0] == "JOINING")
+    {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Bad JOINING message");
+            return;
+        }
+
+        myroom = lst[1];
+        emit roomNameUpdated(myroom);
     }
 
     if(netClientState == InLobby && lst[0] == "JOINED")
