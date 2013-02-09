@@ -216,13 +216,13 @@ handleCmd_inRoom ["EM", msg] = do
     rm <- thisRoom
     chans <- roomOthersChans
 
-    if teamsInGame cl > 0 && (isJust $ gameInfo rm) && isLegal then
-        return $ AnswerClients chans ["EM", msg]
-            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = msg : roundMsgs g}) $ gameInfo r}) | not isKeepAlive]
+    if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
+        return $ AnswerClients chans ["EM", legalMsgs]
+            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = nonEmptyMsgs : roundMsgs g}) $ gameInfo r}) | not $ B.null nonEmptyMsgs]
         else
         return []
     where
-        (isLegal, isKeepAlive) = checkNetCmd msg
+        (legalMsgs, nonEmptyMsgs) = checkNetCmd msg
 
 
 handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
@@ -272,6 +272,7 @@ handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
             [ProtocolError $ loc "Not room master"]
         else
             [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+
 
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
@@ -323,6 +324,7 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
         engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
+
 
 handleCmd_inRoom ["BAN", banNick] = do
     (thisClientId, rnc) <- ask
