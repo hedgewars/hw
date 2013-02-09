@@ -8,6 +8,7 @@ import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
 import qualified Data.Map as Map
+import qualified Data.List as L
 import Data.Word
 import Data.Bits
 import Control.Arrow
@@ -27,13 +28,19 @@ fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength
         removeLength _ = Nothing
 
 
-checkNetCmd :: B.ByteString -> (Bool, Bool)
+splitMessages :: B.ByteString -> [B.ByteString]
+splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt (1 + fromIntegral (BW.head b)) b)
+
+
+checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString)
 checkNetCmd msg = check decoded
     where
-        decoded = fromEngineMsg msg
-        check Nothing = (False, False)
-        check (Just ms) | B.length ms > 0 = let m = B.head ms in (m `Set.member` legalMessages, m == '+')
-                        | otherwise        = (False, False)
+        decoded = liftM splitMessages $ fromEngineMsg msg
+        check Nothing = (B.empty, B.empty)
+        check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b)
+        encode = B.pack . Base64.encode . BW.unpack . B.concat
+        isLegal = flip Set.member legalMessages . B.head
+        isNonEmpty = (/=) '+' . B.head
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 
