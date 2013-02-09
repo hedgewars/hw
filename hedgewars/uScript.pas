@@ -2046,7 +2046,6 @@ procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
-ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if GameTicks = 0 then
