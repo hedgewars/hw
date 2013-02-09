@@ -250,14 +250,13 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Set defaults */
 
-    setRandomTheme();
     setRandomSeed();
     setMazeSize(0);
     setTemplateFilter(0);
     staticMapChanged(m_staticMapModel->index(0, 0));
     missionMapChanged(m_missionMapModel->index(0, 0));
-    updateTheme(m_themeModel->index(0, 0));
     changeMapType(MapModel::GeneratedMap);
+    setRandomTheme();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -453,7 +452,7 @@ void HWMapContainer::setMap(const QString & map)
 
 void HWMapContainer::setTheme(const QString & theme)
 {
-    QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), Qt::DisplayRole, theme);
+    QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, theme);
 
     if(mdl.size())
         updateTheme(mdl.at(0));
@@ -492,6 +491,7 @@ void HWMapContainer::setRandomTheme()
     if(!m_themeModel->rowCount()) return;
     quint32 themeNum = rand() % m_themeModel->rowCount();
     updateTheme(m_themeModel->index(themeNum));
+    qDebug() << "RANDOM THEME:" << themeNum;
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)
@@ -776,7 +776,7 @@ void HWMapContainer::updateThemeButtonSize()
 
 void HWMapContainer::showThemePrompt()
 {
-    ThemePrompt prompt(this);
+    ThemePrompt prompt(m_themeID, this);
     int theme = prompt.exec() - 1; // Since 0 means canceled, so all indexes are +1'd
     if (theme < 0) return;
 
@@ -787,8 +787,9 @@ void HWMapContainer::showThemePrompt()
 
 void HWMapContainer::updateTheme(const QModelIndex & current)
 {
-    m_theme = selectedTheme = current.data().toString();
-    QIcon icon = qVariantValue<QIcon>(current.data(Qt::UserRole));
+    m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
+    m_themeID = current.row();
+    QIcon icon = qVariantValue<QIcon>(current.data(Qt::DecorationRole));
     QSize iconSize = icon.actualSize(QSize(65535, 65535));
     btnTheme->setFixedHeight(64);
     btnTheme->setIconSize(iconSize);
