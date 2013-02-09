@@ -35,11 +35,11 @@ splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt 
 checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString)
 checkNetCmd msg = check decoded
     where
-        decoded = liftM splitMessages $ fromEngineMsg msg
+        decoded = liftM (splitMessages . BW.pack) $ Base64.decode $ B.unpack msg
         check Nothing = (B.empty, B.empty)
         check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b)
         encode = B.pack . Base64.encode . BW.unpack . B.concat
-        isLegal = flip Set.member legalMessages . B.head
+        isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
         isNonEmpty = (/=) '+' . B.head
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
