@@ -163,6 +163,7 @@ class HWMapContainer : public QWidget
         void updateThemeButtonSize();
 
         MapModel::MapInfo m_mapInfo;
+        int m_themeID;
         QString m_theme;
         QString m_curMap;
 
