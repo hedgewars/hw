@@ -54,8 +54,8 @@
 00:51=Purvo Kamuolys
 00:52=Joks Ginklas Nepasirinktas
 00:53=TARDIS
-00:54=Struktūra
-00:55=Žemės Purškimas
+; 00:54=Struktūra
+00:54=Žemės Purškimas
 
 01:00=Kaukimės!
 01:01=Lygiosios

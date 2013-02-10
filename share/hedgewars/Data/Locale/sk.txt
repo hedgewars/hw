@@ -54,10 +54,10 @@
 00:51=Blatová guľa
 00:52=Žiadna zbraň nie je vybraná
 00:53=TARDIS
-00:54=Budova
-00:55=Postrek zeme
-00:56=Zmrazovač
-00:57=Sekáčik
+; 00:54=Budova
+00:54=Postrek zeme
+00:55=Zmrazovač
+00:56=Sekáčik
 
 01:00=Do boja!
 01:01=Remíza

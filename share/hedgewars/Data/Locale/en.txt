@@ -54,10 +54,10 @@
 00:51=Mudball
 00:52=No weapon selected
 00:53=TimeBox
-00:54=Structure
-00:55=Land Spray
-00:56=Freezer
-00:57=Cleaver
+; 00:54=Structure
+00:54=Land Spray
+00:55=Freezer
+00:56=Cleaver
 
 01:00=Let's fight!
 01:01=Round draw

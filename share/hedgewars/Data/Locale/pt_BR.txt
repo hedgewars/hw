@@ -54,10 +54,10 @@
 00:51=Bola de Lama
 00:52=Arma não selecionada
 00:53=Máquina do tempo
-00:54=Estrutura
-00:55=Spray de terra
-00:56=Freezer
-00:57=Machadinha
+; 00:54=Estrutura
+00:54=Spray de terra
+00:55=Freezer
+00:56=Machadinha
 
 
 01:00=Hora de lutar!
