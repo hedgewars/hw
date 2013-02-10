@@ -90,7 +90,7 @@ replayToDemo teams mapParams params msgs = concat [
         initHealth = scheme !! 27
         teamSetup :: TeamInfo -> [B.ByteString]
         teamSetup t = 
-                eml ["eaddteam ", teamcolor t, " ", teamowner t, " <hash>"]
+                eml ["eaddteam 20", teamcolor t, " ", teamowner t, " <hash>"]
                 : em "erdriven"
                 : eml ["efort ", teamfort t]
                 : replicate (hhnum t) (eml ["eaddhh 0 ", initHealth, " hedgehog"])
