@@ -54,10 +54,10 @@
 00:51=Bola de Lama
 00:52=Nenhuma arma selecionada
 00:53=Caixote do Tempo
-00:54=Estrutura
-00:55=Terreno-instantâneo
-00:56=Congelador
-00:57=Cutelo
+; 00:54=Estrutura
+00:54=Terreno-instantâneo
+00:55=Congelador
+00:56=Cutelo
 
 01:00=Vamos lutar!
 01:01=Ronda empatada

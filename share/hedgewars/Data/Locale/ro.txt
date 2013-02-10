@@ -54,8 +54,8 @@
 00:51=Bila de noroi
 00:52=Nici o armă selectată
 00:53=Cutia timpului
-00:54=Structură
-00:55=Spray de teren
+; 00:54=Structură
+00:54=Spray de teren
 
 01:00=Hai să ne batem!
 01:01=Remizăr

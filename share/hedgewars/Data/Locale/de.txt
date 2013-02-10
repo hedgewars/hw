@@ -54,10 +54,10 @@
 00:51=Schlammball
 00:52=Keine Waffe ausgewählt
 00:53=ZeitBox
-00:54=Bauwerk
-00:55=Landkanone
-00:56=Gefrierer
-00:57=Hackbeil
+; 00:54=Bauwerk
+00:54=Landkanone
+00:55=Gefrierer
+00:56=Hackbeil
 
 
 01:00=Auf in die Schlacht!

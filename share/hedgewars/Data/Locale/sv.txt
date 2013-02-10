@@ -54,8 +54,8 @@
 00:51=Jordboll
 00:52=Inget vapen valt
 00:53=Tidslåda
-00:54=Struktur
-00:55=Markspruta
+; 00:54=Struktur
+00:54=Markspruta
 
 01:00=Nu kör vi!
 01:01=Oavgjort
