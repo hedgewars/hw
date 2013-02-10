@@ -455,7 +455,7 @@ with Gear^,
             if (CurAmmoGear <> nil)
                 and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
                 begin
-                //Message:= Message or gmAttack;
+                if CurAmmoType = amRope then Message:= Message or gmAttack;
                 CurAmmoGear^.Message:= Message
                 end
             else
