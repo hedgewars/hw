@@ -327,7 +327,7 @@ case Kind of
                 end;
        gtKnife: begin
                 gear^.Density:= _4;
-                gear^.Radius:= 16
+                gear^.Radius:= 7
                 end;
         gtCase: begin
                 gear^.ImpactSound:= sndGraveImpact;

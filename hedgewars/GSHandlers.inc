@@ -5276,7 +5276,7 @@ procedure doStepKnife(Gear: PGear);
 var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
-    if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
+    if (Gear^.Radius = 4) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 7;
     if Gear^.Damage > 100 then Gear^.CollisionMask:= 0
     else if Gear^.Damage > 30 then
         if GetRandom(max(4,18-Gear^.Damage div 10)) < 3 then Gear^.CollisionMask:= 0;
@@ -5285,8 +5285,9 @@ begin
     if (Gear^.State and gstMoving <> 0) and (Gear^.State and gstCollision = 0) then
         begin
         DeleteCI(Gear);
+        Gear^.Radius:= 7;
         // used for damage and impact calc. needs balancing I think
-        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
+        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_3_2));
         doStepFallingGear(Gear);
         AllInactive := false;
         a:= Gear^.DirAngle;
@@ -5320,9 +5321,8 @@ begin
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving) or gstCollision;
-        Gear^.Radius:= 20;
-        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Radius:= 16;
+        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Health:= 0;
         Gear^.Timer:= 500;
         AddGearCI(Gear)

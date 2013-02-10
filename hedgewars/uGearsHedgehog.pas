@@ -279,7 +279,7 @@ with Gear^,
                         amKnife: begin 
                                  newGear:= AddGear(hwRound(lx), hwRound(ly), gtKnife,    0, xx*Power/cPowerDivisor, yy*Power/cPowerDivisor, 0);
                                  newGear^.State:= newGear^.State or gstMoving; 
-                                 newGear^.Radius:= 6 // temporarily shrink so it doesn't instantly embed in the ground
+                                 newGear^.Radius:= 4 // temporarily shrink so it doesn't instantly embed in the ground
                                  end;
                        amDEagle: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtDEagleShot, 0, xx * _0_5, yy * _0_5, 0);
                       amSineGun: newGear:= AddGear(hwRound(lx + xx * cHHRadius), hwRound(ly + yy * cHHRadius), gtSineGunShot, 0, xx * _0_5, yy * _0_5, 0);
@@ -1015,6 +1015,8 @@ else if not isInMultiShoot then
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
+    if (Hedgehog^.CurAmmoType = amKnife) then
+       LoadHedgehogHat(Hedgehog^, Hedgehog^.Hat);
     if TagTurnTimeLeft = 0 then
         TagTurnTimeLeft:= TurnTimeLeft;
     TurnTimeLeft:= 0;
