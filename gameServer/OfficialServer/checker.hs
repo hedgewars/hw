@@ -15,6 +15,10 @@ import Network.BSD
 import Network.Socket hiding (recv)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
+import qualified Data.ByteString as BW
+import qualified Codec.Binary.Base64 as Base64
+import System.Process
+import Data.Maybe
 #if !defined(mingw32_HOST_OS)
 import System.Posix
 #endif
@@ -23,6 +27,22 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 protocolNumber = "43"
+
+checkReplay :: [B.ByteString] -> IO ()
+checkReplay msgs = do
+    tempDir <- getTemporaryDirectory
+    (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
+    B.hPut h . BW.pack . concat . map (fromJust . Base64.decode . B.unpack) $ msgs
+    hFlush h
+    hClose h
+
+    (_, _, Just hErr, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
+                ["/usr/home/unC0Rr/.hedgewars"
+                , "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/share/hedgewars/Data"
+                , fileName])
+            {std_err = CreatePipe}
+    hSetBuffering hErr LineBuffering
+
 
 takePacks :: State B.ByteString [[B.ByteString]]
 takePacks = do
@@ -76,6 +96,7 @@ session l p s = do
         answer ["CHECKER", protocolNumber, l, p]
         answer ["READY"]
     onPacket ["PING"] = answer ["PONG"]
+    onPacket ("REPLAY":msgs) = checkReplay msgs
     onPacket ("BYE" : xs) = error $ show xs
     onPacket _ = return ()
 
