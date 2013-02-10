@@ -34,11 +34,11 @@ loadReplay :: Int -> IO [B.ByteString]
 loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems reading replay" >> return []) $ do
     files <- liftM (filter (isSuffixOf ('.' : show p))) $ getDirectoryContents "replays"
     if (not $ null files) then
-        loadFile $ head files
+        loadFile $ "replays/" ++ head files
         else
         return []
     where
         loadFile :: String -> IO [B.ByteString]
-        loadFile fileName = E.handle (\(e :: SomeException) -> warningM "REPLAYS" ("Problems reading " ++ fileName) >> return []) $ do
+        loadFile fileName = E.handle (\(e :: SomeException) -> warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return []) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
             return $ replayToDemo teams (Map.fromList params1) (Map.fromList params2) roundMsgs
