@@ -144,7 +144,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     AddFileLog('[IPC in] '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));
+     AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
      end
 end;
 
@@ -239,7 +239,8 @@ if IPCSock <> nil then
         s[0]:= #251;
         
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    AddFileLog('[IPC out] '+ s[1]);
+    
+    AddFileLog('[IPC out] '+ sanitizeCharForLog(s[1]));
     inc(s[0], 2);
     
     if isSyncedCommand(s[1]) then
