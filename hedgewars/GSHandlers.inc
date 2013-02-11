@@ -5287,7 +5287,7 @@ begin
         DeleteCI(Gear);
         Gear^.Radius:= 7;
         // used for damage and impact calc. needs balancing I think
-        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_3_2));
+        Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
         doStepFallingGear(Gear);
         AllInactive := false;
         a:= Gear^.DirAngle;
