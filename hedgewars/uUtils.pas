@@ -84,6 +84,9 @@ function  isApplePhone: Boolean; cdecl; external;
 procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
 {$ENDIF}
 
+function  sanitizeForLog(s: shortstring): shortstring;
+function  sanitizeCharForLog(c: char): shortstring;
+
 procedure initModule(isNotPreview: boolean);
 procedure freeModule;
 
@@ -439,6 +442,31 @@ begin
 {$ELSE}
     getScreenDPI:= 1;
 {$ENDIF}
+end;
+
+function  sanitizeForLog(s: shortstring): shortstring;
+var i: byte;
+    r: shortstring;
+begin
+    r[0]:= s[0];
+    for i:= 1 to length(s) do
+        if (s[i] < #32) or (s[i] > #127) then
+            r[i]:= '?'
+            else
+            r[i]:= s[i];
+            
+    sanitizeForLog:= r
+end;
+
+function  sanitizeCharForLog(c: char): shortstring;
+var r: shortstring;
+begin
+    if (c < #32) or (c > #127) then
+        r:= '#' + inttostr(byte(c))
+        else
+        r:= c;
+            
+    sanitizeCharForLog:= r
 end;
 
 procedure initModule(isNotPreview: boolean);
