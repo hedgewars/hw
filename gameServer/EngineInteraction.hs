@@ -89,8 +89,8 @@ replayToDemo teams mapParams params msgs = concat [
                    ++ [em "eammstore" | scheme !! 14 == "true" || scheme !! 20 == "false"]
         initHealth = scheme !! 27
         teamSetup :: TeamInfo -> [B.ByteString]
-        teamSetup t = 
-                eml ["eaddteam 20", teamcolor t, " ", teamowner t, " <hash>"]
+        teamSetup t = (++) ammo $
+                eml ["eaddteam <hash> ", showB $ (1 + (readInt_ $ teamcolor t) :: Int) * 1234, " ", teamname t]
                 : em "erdriven"
                 : eml ["efort ", teamfort t]
                 : replicate (hhnum t) (eml ["eaddhh 0 ", initHealth, " hedgehog"])
