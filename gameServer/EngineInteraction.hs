@@ -93,7 +93,13 @@ replayToDemo teams mapParams params msgs = concat [
                 eml ["eaddteam <hash> ", showB $ (1 + (readInt_ $ teamcolor t) :: Int) * 1234, " ", teamname t]
                 : em "erdriven"
                 : eml ["efort ", teamfort t]
-                : replicate (hhnum t) (eml ["eaddhh 0 ", initHealth, " hedgehog"])
+                : take (hhnum t) (
+                    concatMap (\(HedgehogInfo hname hhat) -> [
+                            eml ["eaddhh ", showB $ difficulty t, " ", initHealth, " ", hname]
+                            , eml ["ehat ", hhat]
+                            ])
+                        $ hedgehogs t
+                        )
 
 drawnMapData :: B.ByteString -> [B.ByteString]
 drawnMapData = error "drawnMapData"
