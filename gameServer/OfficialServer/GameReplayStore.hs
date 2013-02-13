@@ -41,4 +41,4 @@ loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems r
         loadFile :: String -> IO [B.ByteString]
         loadFile fileName = E.handle (\(e :: SomeException) -> warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return []) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
-            return $ replayToDemo teams (Map.fromList params1) (Map.fromList params2) roundMsgs
+            return $ replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
