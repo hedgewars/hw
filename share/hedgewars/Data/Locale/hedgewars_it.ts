@@ -258,7 +258,7 @@ Per favore scegli un altro nickname:</translation>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Questo nome &egrave;</translation>
+        <translation>Questo nome è</translation>
     </message>
     <message>
         <source>Your nickname is not registered.
