@@ -40,7 +40,7 @@ checkNetCmd msg = check decoded
         check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b)
         encode = B.pack . Base64.encode . BW.unpack . B.concat
         isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
-        isNonEmpty = (/=) '+' . B.head
+        isNonEmpty = (/=) '+' . B.head . B.tail
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
 

@@ -39,7 +39,12 @@ checkReplay msgs = do
     (_, _, Just hErr, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
                 ["/usr/home/unC0Rr/.hedgewars"
                 , "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/share/hedgewars/Data"
-                , fileName])
+                , fileName
+                , "--set-audio"
+                , "0"
+                , "0"
+                , "0"
+                ])
             {std_err = CreatePipe}
     hSetBuffering hErr LineBuffering
 
