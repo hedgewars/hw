@@ -17,6 +17,13 @@ import RoomsAndClients
 
 type ClientChan = Chan [B.ByteString]
 
+data CheckInfo =
+    CheckInfo
+    {
+        recordFileName :: B.ByteString,
+        recordTeams :: [TeamInfo]
+    }
+
 data ClientInfo =
     ClientInfo
     {
@@ -39,6 +46,7 @@ data ClientInfo =
         isChecker :: Bool,
         isKickedFromServer :: Bool,
         clientClan :: !(Maybe B.ByteString),
+        checkInfo :: Maybe CheckInfo,
         teamsInGame :: Word
     }
 

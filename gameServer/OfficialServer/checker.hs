@@ -109,7 +109,8 @@ session l p s = do
 main :: IO ()
 main = withSocketsDo $ do
 #if !defined(mingw32_HOST_OS)
-    installHandler sigPIPE Ignore Nothing;
+    installHandler sigPIPE Ignore Nothing
+    installHandler sigCHLD Ignore Nothing
 #endif
 
     updateGlobalLogger "Core" (setLevel DEBUG)
