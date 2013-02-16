@@ -117,6 +117,8 @@ class DataManager: public QObject
         QStandardItemModel * colorsModel();
         QStandardItemModel * bindsModel();
 
+        static bool ensureFileExists(const QString & fileName);
+
     public slots:
         /// Reloads data from storage.
         void reload();

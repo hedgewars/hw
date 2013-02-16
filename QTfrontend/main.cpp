@@ -120,15 +120,6 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
-bool checkForFile(const QString & file)
-{
-    QFile tmpfile(file);
-    if (!tmpfile.exists())
-        return tmpfile.open(QFile::WriteOnly);
-    else
-        return true;
-}
-
 // Guaranteed to be the last thing ran in the application's life time.
 // Closes resources that need to exist as long as possible.
 void closeResources(void)
@@ -296,7 +287,7 @@ int main(int argc, char *argv[])
     engine->setWriteDir(cfgdir->absolutePath());
     engine->mountPacks();
 
-    checkForFile("physfs://hedgewars.ini");
+    DataManager::ensureFileExists("physfs://hedgewars.ini");
 
     QTranslator Translator;
     {

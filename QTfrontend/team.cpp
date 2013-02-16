@@ -226,7 +226,9 @@ bool HWTeam::saveToFile()
         OldTeamName = m_name;
     }
 
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+    QString fileName = QString("physfs://Teams/%1.hwt").arg(m_name);
+    DataManager::ensureFileExists(fileName);
+    QSettings teamfile(fileName, QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Team/Name", m_name);
     teamfile.setValue("Team/Grave", m_grave);
