@@ -78,6 +78,8 @@ data Action =
     | SaveReplay
     | Stats
     | CheckRecord
+    | CheckFailed B.ByteString
+    | CheckSuccess [B.ByteString]
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
@@ -681,7 +683,20 @@ processAction CheckRecord = do
         processAction $ AnswerClients [c] ("REPLAY" : l)
 
 
+processAction CheckRecord = do
+    p <- client's clientProto
+    c <- client's sendChan
+    l <- io $ loadReplay (fromIntegral p)
+    when (not $ null l) $
+        processAction $ AnswerClients [c] ("REPLAY" : l)
+
+processAction (CheckFailed msg) = return ()
+
+processAction (CheckSuccess info) = return ()
+
 #else
 processAction SaveReplay = return ()
 processAction CheckRecord = return ()
+processAction (CheckFailed _) = return ()
+processAction (CheckSuccess _) = return ()
 #endif
