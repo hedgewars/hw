@@ -88,7 +88,10 @@ instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
     rnf a = a `seq` ()
 
+#if __GLASGOW_HASKELL__ < 706
 instance NFData B.ByteString
+#endif
+
 instance NFData (Chan a)
 
 
