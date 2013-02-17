@@ -20,7 +20,7 @@ type ClientChan = Chan [B.ByteString]
 data CheckInfo =
     CheckInfo
     {
-        recordFileName :: B.ByteString,
+        recordFileName :: String,
         recordTeams :: [TeamInfo]
     }
 
