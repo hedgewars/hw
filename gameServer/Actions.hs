@@ -678,21 +678,20 @@ processAction SaveReplay = do
 processAction CheckRecord = do
     p <- client's clientProto
     c <- client's sendChan
-    l <- io $ loadReplay (fromIntegral p)
-    when (not $ null l) $
-        processAction $ AnswerClients [c] ("REPLAY" : l)
+    (cinfo, l) <- io $ loadReplay (fromIntegral p)
+    when (not . null $ l) $
+        mapM_ processAction [
+            AnswerClients [c] ("REPLAY" : l)
+            , ModifyClient $ \c -> c{checkInfo = cinfo}
+            ]
 
+processAction (CheckFailed msg) = do
+    Just (CheckInfo fileName _) <- client's checkInfo
+    io $ moveFailedRecord fileName
 
-processAction CheckRecord = do
-    p <- client's clientProto
-    c <- client's sendChan
-    l <- io $ loadReplay (fromIntegral p)
-    when (not $ null l) $
-        processAction $ AnswerClients [c] ("REPLAY" : l)
-
-processAction (CheckFailed msg) = return ()
-
-processAction (CheckSuccess info) = return ()
+processAction (CheckSuccess info) = do
+    Just (CheckInfo fileName _) <- client's checkInfo
+    io $ moveCheckedRecord fileName
 
 #else
 processAction SaveReplay = return ()
