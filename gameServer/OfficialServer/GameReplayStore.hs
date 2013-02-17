@@ -56,8 +56,10 @@ loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems r
                 )
 
 moveFailedRecord :: String -> IO ()
-moveFailedRecord fn = renameFile fn ("failed/" ++ drop 8 fn)
+moveFailedRecord fn = E.handle (\(e :: SomeException) -> warningM "REPLAYS" $ show e) $
+    renameFile fn ("failed/" ++ drop 8 fn)
 
 
 moveCheckedRecord :: String -> IO ()
-moveCheckedRecord fn = renameFile fn ("checked/" ++ drop 8 fn)
+moveCheckedRecord fn = E.handle (\(e :: SomeException) -> warningM "REPLAYS" $ show e) $
+    renameFile fn ("checked/" ++ drop 8 fn)
