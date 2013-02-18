@@ -19,24 +19,39 @@ import qualified Data.ByteString as BW
 import qualified Codec.Binary.Base64 as Base64
 import System.Process
 import Data.Maybe
+import qualified Data.List as L
 #if !defined(mingw32_HOST_OS)
 import System.Posix
 #endif
 
 data Message = Packet [B.ByteString]
+             | CheckFailed B.ByteString
+             | CheckSuccess [B.ByteString]
     deriving Show
 
 protocolNumber = "43"
 
-checkReplay :: [B.ByteString] -> IO ()
-checkReplay msgs = do
+
+engineListener :: Chan Message -> Handle -> IO ()
+engineListener coreChan h = do
+    output <- liftM lines $ hGetContents h
+    debugM "Engine" $ show output
+    if isNothing $ L.find start output then
+        writeChan coreChan $ CheckFailed "No stats msg"
+        else
+        writeChan coreChan $ CheckSuccess []
+    where
+        start = flip L.elem ["WINNERS", "DRAW"]
+
+checkReplay :: Chan Message -> [B.ByteString] -> IO ()
+checkReplay coreChan msgs = do
     tempDir <- getTemporaryDirectory
     (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
     B.hPut h . BW.pack . concat . map (fromJust . Base64.decode . B.unpack) $ msgs
     hFlush h
     hClose h
 
-    (_, _, Just hErr, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
+    (_, Just hErr, _, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
                 ["/usr/home/unC0Rr/.hedgewars"
                 , "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/share/hedgewars/Data"
                 , fileName
@@ -45,8 +60,9 @@ checkReplay msgs = do
                 , "0"
                 , "0"
                 ])
-            {std_err = CreatePipe}
+            {std_out = CreatePipe}
     hSetBuffering hErr LineBuffering
+    void $ forkIO $ engineListener coreChan hErr
 
 
 takePacks :: State B.ByteString [[B.ByteString]]
@@ -90,20 +106,28 @@ session l p s = do
         case p of
             Packet p -> do
                 debugM "Network" $ "Recv: " ++ show p
-                onPacket p
+                onPacket coreChan p
+            CheckFailed msg -> do
+                warningM "Check" "Check failed"
+                answer ["CHECKED", "FAIL", msg]
+                answer ["READY"]
+            CheckSuccess msgs -> do
+                warningM "Check" "Check succeeded"
+                answer ("CHECKED" : "OK" : msgs)
+                answer ["READY"]
     where
     answer :: [B.ByteString] -> IO ()
     answer p = do
         debugM "Network" $ "Send: " ++ show p
         sendAll s $ B.unlines p `B.snoc` '\n'
-    onPacket :: [B.ByteString] -> IO ()
-    onPacket ("CONNECTED":_) = do
+    onPacket :: Chan Message -> [B.ByteString] -> IO ()
+    onPacket _ ("CONNECTED":_) = do
         answer ["CHECKER", protocolNumber, l, p]
         answer ["READY"]
-    onPacket ["PING"] = answer ["PONG"]
-    onPacket ("REPLAY":msgs) = checkReplay msgs
-    onPacket ("BYE" : xs) = error $ show xs
-    onPacket _ = return ()
+    onPacket _ ["PING"] = answer ["PONG"]
+    onPacket chan ("REPLAY":msgs) = checkReplay chan msgs
+    onPacket _ ("BYE" : xs) = error $ show xs
+    onPacket _ _ = return ()
 
 
 main :: IO ()
@@ -115,6 +139,8 @@ main = withSocketsDo $ do
 
     updateGlobalLogger "Core" (setLevel DEBUG)
     updateGlobalLogger "Network" (setLevel DEBUG)
+    updateGlobalLogger "Check" (setLevel DEBUG)
+    updateGlobalLogger "Engine" (setLevel DEBUG)
 
     Right (login, password) <- runErrorT $ do
         d <- liftIO $ getHomeDirectory
