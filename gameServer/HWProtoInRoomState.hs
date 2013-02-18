@@ -181,6 +181,7 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
                     ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
             ]
 
+
 handleCmd_inRoom ["START_GAME"] = do
     (ci, rnc) <- ask
     cl <- thisClient
@@ -297,10 +298,19 @@ handleCmd_inRoom ["KICK", kickNick] = do
     (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick kickNick
     master <- liftM isMaster thisClient
+    rm <- thisRoom
     let kickId = fromJust maybeClientId
+    let kickCl = rnc `client` kickId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
+    let notOnly2Clans = (length . group . sort . map teamcolor . teams $ rm) > 2
     return
-        [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
+        [KickRoomClient kickId |
+            master
+            && isJust maybeClientId
+            && (kickId /= thisClientId)
+            && sameRoom
+            && ((isNothing $ gameInfo rm) || notOnly2Clans || teamsInGame kickCl = 0)
+        ]
 
 
 handleCmd_inRoom ["DELEGATE", newAdmin] = do
