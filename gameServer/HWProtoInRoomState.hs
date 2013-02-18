@@ -309,7 +309,7 @@ handleCmd_inRoom ["KICK", kickNick] = do
             && isJust maybeClientId
             && (kickId /= thisClientId)
             && sameRoom
-            && ((isNothing $ gameInfo rm) || notOnly2Clans || teamsInGame kickCl = 0)
+            && ((isNothing $ gameInfo rm) || notOnly2Clans || teamsInGame kickCl == 0)
         ]
 
 
