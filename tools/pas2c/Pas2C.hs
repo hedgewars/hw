@@ -786,7 +786,7 @@ phrase2C (IfThenElse (expr) phrase1 mphrase2) = do
     where
     elsePart | isNothing mphrase2 = return $ empty
              | otherwise = liftM (text "else" $$) $ (phrase2C . wrapPhrase) (fromJust mphrase2)
-phrase2C (Assignment ref expr) = do
+phrase2C asgn@(Assignment ref expr) = do
     r <- ref2C ref
     t <- gets lastType
     case (t, expr) of
@@ -804,7 +804,7 @@ phrase2C (Assignment ref expr) = do
                 BTString -> do
                     e <- expr2C expr
                     return $ r <+> text "=" <+> e <> semi
-                _ -> error $ "Assignment to string from " ++ show lt
+                _ -> error $ "Assignment to string from " ++ show asgn
         (BTArray _ _ _, _) -> do
             case expr of
                 Reference er -> do

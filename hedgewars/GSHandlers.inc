@@ -2226,9 +2226,11 @@ begin
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
+        {$IFNDEF PAS2C}
         with mobileRecord do
             if (performRumble <> nil) and (not fastUntilLag) then
                 performRumble(kSystemSoundID_Vibrate);
+        {$ENDIF}
         exit
         end;
     if (GameTicks and $3F) = 0 then
@@ -4318,9 +4320,11 @@ begin
     Gear^.dY.isNegative := not Gear^.dY.isNegative;
 
     Gear^.doStep := @doStepSineGunShotWork;
+    {$IFNDEF PAS2C}
     with mobileRecord do
         if (performRumble <> nil) and (not fastUntilLag) then
             performRumble(kSystemSoundID_Vibrate);
+    {$ENDIF}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////

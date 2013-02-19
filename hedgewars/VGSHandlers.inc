@@ -704,9 +704,12 @@ for i:= 0 to 15 do
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then
     Gear^.doStep(Gear, Steps-1);
+
+{$IFNDEF PAS2C}
 with mobileRecord do
     if (performRumble <> nil) and (not fastUntilLag) then
         performRumble(kSystemSoundID_Vibrate);
+{$ENDIF}
 end;
 
 procedure doStepChunk(Gear: PVisualGear; Steps: Longword);

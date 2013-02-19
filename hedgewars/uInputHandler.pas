@@ -464,7 +464,7 @@ Modifier:= '';
 if (not usingDBinds) then
     begin
     usingDBinds:= true;
-    FillByte(DefaultBinds, SizeOf(DefaultBinds), 0);
+    FillChar(DefaultBinds, SizeOf(DefaultBinds), 0);
     end;
 
 if (Pos('mod:', id) <> 0) then
