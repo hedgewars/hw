@@ -160,14 +160,14 @@ begin
     getStringParameter:= str;
 end;
 
-procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt); forward;
+procedure parseClassicParameter(cmdarray: array of String; size:LongInt; var paramIndex:LongInt); forward;
 
 function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
-      audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
-      otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..14] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
+const videoarray: array [0..4] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
+      audioarray: array [0..2] of String = ('--volume','--nomusic','--nosound');
+      otherarray: array [0..2] of String = ('--locale','--fullscreen','--showfps');
+      mediaarray: array [0..9] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allarray: array [0..13] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
       reallyAll: array[0..30] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width', 
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
@@ -205,11 +205,11 @@ begin
         {--nick}                17 : UserNick          := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
         {--depth}               18 : setDepth(paramIndex);
-        {--set-video}           19 : parseClassicParameter(videoArray,5,paramIndex);
-        {--set-audio}           20 : parseClassicParameter(audioArray,3,paramIndex);
-        {--set-other}           21 : parseClassicParameter(otherArray,3,paramIndex);
-        {--set-multimedia}      22 : parseClassicParameter(mediaArray,10,paramIndex);
-        {--set-everything}      23 : parseClassicParameter(allArray,14,paramIndex);
+        {--set-video}           19 : parseClassicParameter(videoarray,5,paramIndex);
+        {--set-audio}           20 : parseClassicParameter(audioarray,3,paramIndex);
+        {--set-other}           21 : parseClassicParameter(otherarray,3,paramIndex);
+        {--set-multimedia}      22 : parseClassicParameter(mediaarray,10,paramIndex);
+        {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
         {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
         {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
@@ -233,7 +233,7 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdarray: array of String; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
     cmd, arg, newSyntax: String;
@@ -249,7 +249,7 @@ begin
         begin
         newSyntax:= '';
         inc(paramIndex);
-        cmd:= cmdArray[index];
+        cmd:= cmdarray[index];
         arg:= ParamStr(paramIndex);
         isValid:= (cmd<>'--depth');
 
@@ -316,7 +316,7 @@ procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
 
-    UserPathPrefix := '.';
+    UserPathPrefix := _S'.';
     PathPrefix     := cDefaultPathPrefix;
     recordFileName := '';
     parseCommandLine();

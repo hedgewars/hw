@@ -468,6 +468,7 @@ IMG_Quit();
 WriteLnToConsole('Leaving StoreLoad');
 end;
 
+{$IFNDEF PAS2C}
 {$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
@@ -491,6 +492,7 @@ begin
     glDeleteRenderbuffersEXT(1, @depth);
     glDeleteFramebuffersEXT(1, @frame);
 end;
+{$ENDIF}
 {$ENDIF}
 
 procedure StoreRelease(reload: boolean);
@@ -566,6 +568,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
+{$IFNDEF PAS2C}
 {$IFDEF USE_VIDEO_RECORDING}
     if defaultFrame <> 0 then
         DeleteFramebuffer(defaultFrame, depthv, texv);
@@ -576,6 +579,7 @@ for i:= Low(CountTexz) to High(CountTexz) do
         DeleteFramebuffer(framel, depthl, texl);
         DeleteFramebuffer(framer, depthr, texr);
         end
+{$ENDIF}
 {$ENDIF}
 end;
 
@@ -994,6 +998,7 @@ begin
     UpdateModelviewProjection;
 {$ENDIF}
 
+{$IFNDEF PAS2C}
 {$IFNDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
@@ -1009,6 +1014,7 @@ begin
         else
             cStereoMode:= smNone;
     end;
+{$ENDIF}
 {$ENDIF}
 
 // set view port to whole window
@@ -1209,10 +1215,11 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
+        {$IFNDEF PAS2C}
         with mobileRecord do
             if GameLoading <> nil then
                 GameLoading();
-
+        {$ENDIF}
         end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -1236,9 +1243,11 @@ end;
 
 procedure FinishProgress;
 begin
+    {$IFNDEF PAS2C}
     with mobileRecord do
         if GameLoaded <> nil then
             GameLoaded();
+    {$ENDIF}
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     ProgrTex:= nil;
