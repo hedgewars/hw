@@ -32,10 +32,22 @@ data Message = Packet [B.ByteString]
 serverAddress = "netserver.hedgewars.org"
 protocolNumber = "43"
 
+getLines :: Handle -> IO [String]
+getLines h = g
+    where
+        g = do
+            l <- liftM Just (hGetLine h) `Exception.catch` (\(_ :: Exception.IOException) -> return Nothing)
+            if isNothing l then
+                return []
+                else
+                do
+                lst <- g
+                return $ fromJust l : lst
+
 
 engineListener :: Chan Message -> Handle -> IO ()
 engineListener coreChan h = do
-    output <- liftM lines $ hGetContents h
+    output <- getLines h
     debugM "Engine" $ show output
     if isNothing $ L.find start output then
         writeChan coreChan $ CheckFailed "No stats msg"
