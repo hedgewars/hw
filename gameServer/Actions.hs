@@ -32,67 +32,8 @@ import Consts
 import ConfigFile
 import EngineInteraction
 
-data Action =
-    AnswerClients ![ClientChan] ![B.ByteString]
-    | SendServerMessage
-    | SendServerVars
-    | MoveToRoom RoomIndex
-    | MoveToLobby B.ByteString
-    | RemoveTeam B.ByteString
-    | SendTeamRemovalMessage B.ByteString
-    | RemoveRoom
-    | FinishGame
-    | UnreadyRoomClients
-    | JoinLobby
-    | ProtocolError B.ByteString
-    | Warning B.ByteString
-    | NoticeMessage Notice
-    | ByeClient B.ByteString
-    | KickClient ClientIndex
-    | KickRoomClient ClientIndex
-    | BanClient NominalDiffTime B.ByteString ClientIndex
-    | BanIP B.ByteString NominalDiffTime B.ByteString
-    | BanNick B.ByteString NominalDiffTime B.ByteString
-    | BanList
-    | Unban B.ByteString
-    | ChangeMaster (Maybe ClientIndex)
-    | RemoveClientTeams
-    | ModifyClient (ClientInfo -> ClientInfo)
-    | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
-    | ModifyRoomClients (ClientInfo -> ClientInfo)
-    | ModifyRoom (RoomInfo -> RoomInfo)
-    | ModifyServerInfo (ServerInfo -> ServerInfo)
-    | AddRoom B.ByteString B.ByteString
-    | SendUpdateOnThisRoom
-    | CheckRegistered
-    | ClearAccountsCache
-    | ProcessAccountInfo AccountInfo
-    | AddClient ClientInfo
-    | DeleteClient ClientIndex
-    | PingAll
-    | StatsAction
-    | RestartServer
-    | AddNick2Bans B.ByteString B.ByteString UTCTime
-    | AddIP2Bans B.ByteString B.ByteString UTCTime
-    | CheckBanned Bool
-    | SaveReplay
-    | Stats
-    | CheckRecord
-    | CheckFailed B.ByteString
-    | CheckSuccess [B.ByteString]
-
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
-
-instance NFData Action where
-    rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
-    rnf a = a `seq` ()
-
-#if __GLASGOW_HASKELL__ < 706
-instance NFData B.ByteString
-#endif
-
-instance NFData (Chan a)
 
 
 othersChans :: StateT ServerState IO [ClientChan]
@@ -594,6 +535,7 @@ processAction (AddIP2Bans ip reason expiring) = do
     when (not $ ci `Set.member` rc)
         $ processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
 
+
 processAction (CheckBanned byIP) = do
     clTime <- client's connectTime
     clNick <- client's nick
@@ -612,6 +554,7 @@ processAction (CheckBanned byIP) = do
         checkBan _ _ _ _ = False
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
+
 
 processAction PingAll = do
     rnc <- gets roomsClients

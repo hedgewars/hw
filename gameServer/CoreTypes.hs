@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
+{-# LANGUAGE CPP, OverloadedStrings, DeriveDataTypeable #-}
 module CoreTypes where
 
 import Control.Concurrent
@@ -12,8 +12,69 @@ import Data.Unique
 import Control.Exception
 import Data.Typeable
 import Data.TConfig
+import Control.DeepSeq
 -----------------------
 import RoomsAndClients
+
+
+#if __GLASGOW_HASKELL__ < 706
+instance NFData B.ByteString
+#endif
+
+instance NFData (Chan a)
+
+instance NFData Action where
+    rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
+    rnf a = a `seq` ()
+
+data Action =
+    AnswerClients ![ClientChan] ![B.ByteString]
+    | SendServerMessage
+    | SendServerVars
+    | MoveToRoom RoomIndex
+    | MoveToLobby B.ByteString
+    | RemoveTeam B.ByteString
+    | SendTeamRemovalMessage B.ByteString
+    | RemoveRoom
+    | FinishGame
+    | UnreadyRoomClients
+    | JoinLobby
+    | ProtocolError B.ByteString
+    | Warning B.ByteString
+    | NoticeMessage Notice
+    | ByeClient B.ByteString
+    | KickClient ClientIndex
+    | KickRoomClient ClientIndex
+    | BanClient NominalDiffTime B.ByteString ClientIndex
+    | BanIP B.ByteString NominalDiffTime B.ByteString
+    | BanNick B.ByteString NominalDiffTime B.ByteString
+    | BanList
+    | Unban B.ByteString
+    | ChangeMaster (Maybe ClientIndex)
+    | RemoveClientTeams
+    | ModifyClient (ClientInfo -> ClientInfo)
+    | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
+    | ModifyRoomClients (ClientInfo -> ClientInfo)
+    | ModifyRoom (RoomInfo -> RoomInfo)
+    | ModifyServerInfo (ServerInfo -> ServerInfo)
+    | AddRoom B.ByteString B.ByteString
+    | SendUpdateOnThisRoom
+    | CheckRegistered
+    | ClearAccountsCache
+    | ProcessAccountInfo AccountInfo
+    | AddClient ClientInfo
+    | DeleteClient ClientIndex
+    | PingAll
+    | StatsAction
+    | RestartServer
+    | AddNick2Bans B.ByteString B.ByteString UTCTime
+    | AddIP2Bans B.ByteString B.ByteString UTCTime
+    | CheckBanned Bool
+    | SaveReplay
+    | Stats
+    | CheckRecord
+    | CheckFailed B.ByteString
+    | CheckSuccess [B.ByteString]
 
 type ClientChan = Chan [B.ByteString]
 
@@ -47,7 +108,8 @@ data ClientInfo =
         isKickedFromServer :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
-        teamsInGame :: Word
+        teamsInGame :: Word,
+        actionsPending :: [Action]
     }
 
 instance Eq ClientInfo where
