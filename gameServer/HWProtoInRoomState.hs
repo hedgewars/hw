@@ -77,9 +77,11 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
-                AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam],
                 AnswerClients othChans $ teamToNet $ newTeam,
-                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
+                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
+                ModifyClient $ \c -> c{actionsPending = actionsPending cl
+                    ++ AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]},
+                AnswerClients [sendChan cl] ["PING"]
                 ]
         where
         canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
