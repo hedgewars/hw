@@ -3,7 +3,7 @@ if (CLANG)
     set(CLANG_EXECUTABLE ${CLANG})
 else()
     find_program(CLANG_EXECUTABLE
-        NAMES clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang
+        NAMES clang-mp-3.3 clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang
         PATHS /opt/local/bin /usr/local/bin /usr/bin)
 endif()
 
