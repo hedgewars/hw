@@ -80,7 +80,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
                 ModifyClient $ \c -> c{actionsPending = actionsPending cl
-                    ++ AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]},
+                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]]},
                 AnswerClients [sendChan cl] ["PING"]
                 ]
         where
