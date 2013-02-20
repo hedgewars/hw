@@ -1202,7 +1202,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(LeftRoom(const QString&)), this, SLOT(NetLeftRoom(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(AddNetTeam(const HWTeam&)), this, SLOT(AddNetTeam(const HWTeam&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(RemoveNetTeam(const HWTeam&)), this, SLOT(RemoveNetTeam(const HWTeam&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)), Qt::QueuedConnection);
+    connect(hwnet, SIGNAL(TeamAccepted(const QString&)), this, SLOT(NetTeamAccepted(const QString&)));
     connect(hwnet, SIGNAL(NickRegistered(const QString&)), this, SLOT(NetNickRegistered(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(NickNotRegistered(const QString&)), this, SLOT(NetNickNotRegistered(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
