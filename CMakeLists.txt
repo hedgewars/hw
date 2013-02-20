@@ -78,7 +78,7 @@ if (${NOPASCAL})
     find_package(Clang)
     # Check LLVM/Clang version
 	if (CLANG_VERSION VERSION_LESS required_clang_version)
-		message(FATAL_ERROR "LLVM/Clang compiler required version is ${REQUIRED_CLANG_VERSION} but version ${CLANG_VERSION} was found!")
+		message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
 	else()
 		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
 	endif()
