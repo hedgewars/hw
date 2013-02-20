@@ -402,8 +402,12 @@ processAction (ProcessAccountInfo info) = do
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
         Guest -> do
             b <- isBanned
+            c <- client's isChecker
             when (not b) $
-                processAction JoinLobby
+                if c then
+                    checkerLogin "" False
+                    else
+                    processAction JoinLobby
         Admin -> do
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
