@@ -146,6 +146,10 @@ if(APPLE)
 
         list(APPEND pascal_flags "-k${SDLMAIN_LIB}")
     endif()
+
+    #when you have multiple ld installation make sure you get the one bundled with the compiler
+    get_filename_component(compiler_dir ${CMAKE_C_COMPILER} PATH)
+    list(APPEND pascal_flags "-FD${compiler_dir}")
 endif(APPLE)
 
 if(NOT NOPNG)
