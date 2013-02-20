@@ -3,17 +3,17 @@
 # Once done this will define
 #
 # GLEW_FOUND
-# GLEW_INCLUDE_PATH
+# GLEW_INCLUDE_DIRS
 # GLEW_LIBRARY
 # 
 
-if (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+if (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
   # in cache already
   set(GLEW_FOUND TRUE)
-else (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+else (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
 
     IF (WIN32)
-        FIND_PATH( GLEW_INCLUDE_PATH GL/glew.h
+        FIND_PATH( GLEW_INCLUDE_DIRS GL/glew.h
             $ENV{PROGRAMFILES}/GLEW/include
             ${PROJECT_SOURCE_DIR}/src/nvgl/glew/include
             DOC "The directory where GL/glew.h resides")
@@ -25,7 +25,7 @@ else (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
             ${PROJECT_SOURCE_DIR}/src/nvgl/glew/lib
         DOC "The GLEW library")
     ELSE (WIN32)
-        FIND_PATH( GLEW_INCLUDE_PATH GL/glew.h
+        FIND_PATH( GLEW_INCLUDE_DIRS GL/glew.h
             /usr/include
             /usr/local/include
             /sw/include
@@ -43,17 +43,17 @@ else (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
             DOC "The GLEW library")
     ENDIF (WIN32)
 
-    IF (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+    IF (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
         SET( GLEW_FOUND 1 CACHE STRING "Set to 1 if GLEW is found, 0 otherwise")
-    ELSE (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+    ELSE (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
         SET( GLEW_FOUND 0 CACHE STRING "Set to 1 if GLEW is found, 0 otherwise")
-    ENDIF (GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+    ENDIF (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
 
-endif(GLEW_LIBRARY AND GLEW_INCLUDE_PATH)
+endif(GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
 
 if (GLEW_FOUND)
     if (NOT GLEW_FIND_QUIETLY)
-        message(STATUS "Found GLEW: ${GLEW_LIBRARY}, ${GLEW_INCLUDE_PATH}")
+        message(STATUS "Found GLEW: ${GLEW_LIBRARY}, ${GLEW_INCLUDE_DIRS}")
     endif (NOT GLEW_FIND_QUIETLY)
 else (GLEW_FOUND)
     if (GLEW_FIND_REQUIRED)
@@ -62,3 +62,4 @@ else (GLEW_FOUND)
 endif (GLEW_FOUND)
 
 #MARK_AS_ADVANCED( GLEW_FOUND )
+
