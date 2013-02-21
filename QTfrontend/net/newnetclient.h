@@ -131,6 +131,8 @@ class HWNewNet : public QObject
 
         void setMyReadyStatus(bool isReady);
 
+        void messageProcessed();
+
     public slots:
         void ToggleReady();
         void chatLineToNet(const QString& str);
