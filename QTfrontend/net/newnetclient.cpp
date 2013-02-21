@@ -63,6 +63,8 @@ HWNewNet::HWNewNet() :
     connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
     connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(displayError(QAbstractSocket::SocketError)));
+
+    connect(this, SIGNAL(messageProcessed()), this, SLOT(ClientRead()), Qt::QueuedConnection);
 }
 
 HWNewNet::~HWNewNet()
@@ -186,6 +188,8 @@ void HWNewNet::ClientRead()
         {
             ParseCmd(cmdbuf);
             cmdbuf.clear();
+            emit messageProcessed();
+            return ;
         }
         else
             cmdbuf << s;
