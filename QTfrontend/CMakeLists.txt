@@ -58,7 +58,7 @@ include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${PHYSFS_INCLUDE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
+include_directories(${PHYSLAYER_INCLUDE_DIR})
 
 
 if(UNIX)
@@ -206,6 +206,7 @@ endif()
 
 list(APPEND HW_LINK_LIBS
     ${PHYSFS_LIBRARY}
+    ${PHYSLAYER_LIBRARY}
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
