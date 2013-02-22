@@ -251,7 +251,7 @@ if IPCSock <> nil then
         Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
         inc(sendBuffer.count, byte(s[0]) + 1);
         
-        if s[1] = 'N' then
+        if (s[1] = 'N') or (s[1] = '#') then
             flushBuffer();
         end else
         SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
