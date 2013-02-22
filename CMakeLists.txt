@@ -268,10 +268,13 @@ endif()
 
 
 #physfs library (static on unix, dll on win32)
-add_subdirectory(misc/physfs)
-if(NOT WIN32)
-    list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a")
+find_package(PhysFS)
+if(PHYSFS_FOUND EQUAL FALSE)
+    add_subdirectory(misc/physfs)
 endif()
+#    if(NOT WIN32)
+#        list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a")
+#    endif()
 
 
 #main engine
