@@ -35,7 +35,7 @@
 
     NSMutableArray *array_na = [[NSMutableArray alloc] init];
     NSMutableArray *array_cm = [[NSMutableArray alloc] init];
-    
+
     for (NSString *name in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:FLAGS_DIRECTORY() error:NULL]) {
         if ([name hasPrefix:@"cm_"]) {
             NSString *processed = [name substringFromIndex:3];
@@ -43,7 +43,7 @@
         } else
              [array_na addObject:name];
     }
-    
+
     self.flagArray = array_na;
     [array_na release];
     self.communityArray = array_cm;
@@ -135,14 +135,14 @@
     int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     int newSection = [indexPath section];
     int oldSection = (lastIndexPath != nil) ? [lastIndexPath section] : -1;
-    
+
     if (newRow != oldRow || newSection != oldSection) {
         NSString *flag = nil;
         if ([indexPath section] == 0)
             flag = [self.flagArray objectAtIndex:newRow];
         else
             flag = [NSString stringWithFormat:@"cm_%@",[self.communityArray objectAtIndex:newRow]];
-        
+
         // if the two selected rows differ update data on the hog dictionary and reload table content
         [self.teamDictionary setValue:[flag stringByDeletingPathExtension] forKey:@"flag"];
 

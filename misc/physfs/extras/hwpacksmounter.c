@@ -1,11 +1,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <physfs.h>
 
 #include "hwpacksmounter.h"
 
-void hedgewarsMountPackages()
+PHYSFS_DECL void hedgewarsMountPackages()
 {
     char ** filesList = PHYSFS_enumerateFiles("/");
     char **i;

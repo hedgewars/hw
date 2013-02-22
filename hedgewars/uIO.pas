@@ -30,7 +30,7 @@ procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
 procedure SendIPCAndWaitReply(s: shortstring);
-procedure SendKeepAliveMessage(Lag: Longword);
+procedure FlushMessages(Lag: Longword);
 procedure LoadRecordFromFile(fileName: shortstring);
 procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
@@ -40,6 +40,10 @@ procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
 uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
+
+const
+    cSendEmptyPacketTime = 1000;
+    cSendBufferSize = 1024;
 
 type PCmd = ^TCmd;
      TCmd = packed record
@@ -60,7 +64,11 @@ var IPCSock: PTCPSocket;
     headcmd: PCmd;
     lastcmd: PCmd;
 
-    SendEmptyPacketTicks: LongWord;
+    flushDelayTicks: LongWord;
+    sendBuffer: record
+                buf: array[0..Pred(cSendBufferSize)] of byte;
+                count: Word;
+                end;
 
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
@@ -121,6 +129,7 @@ case s[1] of
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
      'M': ParseCommand('landcheck ' + s, true);
+     'o': if fastUntilLag then ParseCommand('forcequit', true);
      'T': case s[2] of
                'L': GameType:= gmtLocal;
                'D': GameType:= gmtDemo;
@@ -135,7 +144,7 @@ case s[1] of
      else
      loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
      AddCmd(loTicks, s);
-     AddFileLog('[IPC in] '+s[1]+' ticks '+IntToStr(lastcmd^.loTime));
+     AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
      end
 end;
 
@@ -210,19 +219,39 @@ buf:= 'i' + stc[sit] + s;
 SendIPCRaw(@buf[0], length(buf) + 1)
 end;
 
+function isSyncedCommand(c: char): boolean;
+begin
+    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 's', 'b', 'F', 'N', 'p', 'P', 'w', 't', 'h', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+end;
+
+procedure flushBuffer();
+begin
+    SDLNet_TCP_Send(IPCSock, @sendBuffer.buf, sendBuffer.count);
+    flushDelayTicks:= 0;
+    sendBuffer.count:= 0
+end;
 
 procedure SendIPC(s: shortstring);
 begin
 if IPCSock <> nil then
     begin
-    SendEmptyPacketTicks:= 0;
-    if s[0]>#251 then
+    if s[0] > #251 then
         s[0]:= #251;
         
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    AddFileLog('[IPC out] '+ s[1]);
+    
+    AddFileLog('[IPC out] '+ sanitizeCharForLog(s[1]));
     inc(s[0], 2);
-    SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
+    
+    if isSyncedCommand(s[1]) then
+        begin
+        if sendBuffer.count + byte(s[0]) >= cSendBufferSize then
+            flushBuffer();
+            
+        Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
+        inc(sendBuffer.count, byte(s[0]) + 1)
+        end else
+        SDLNet_TCP_Send(IPCSock, @s, Succ(byte(s[0])))
     end
 end;
 
@@ -237,10 +266,10 @@ end;
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
 var s: shortstring;
 begin
-s[0]:= #5;
+s[0]:= #9;
 s[1]:= cmd;
 SDLNet_Write32(X, @s[2]);
-SDLNet_Write32(Y, @s[4]);
+SDLNet_Write32(Y, @s[6]);
 SendIPC(s)
 end;
 
@@ -260,11 +289,16 @@ SendIPC(_S'?');
 IPCWaitPongEvent
 end;
 
-procedure SendKeepAliveMessage(Lag: Longword);
+procedure FlushMessages(Lag: Longword);
 begin
-inc(SendEmptyPacketTicks, Lag);
-if (SendEmptyPacketTicks >= cSendEmptyPacketTime) then
-    SendIPC(_S'+')
+inc(flushDelayTicks, Lag);
+if (flushDelayTicks >= cSendEmptyPacketTime) then
+    begin
+    if sendBuffer.count = 0 then
+        SendIPC(_S'+');
+        
+     flushBuffer()    
+    end
 end;
 
 procedure NetGetNextCmd;
@@ -335,10 +369,12 @@ while (headcmd <> nil)
             // these are equations solved for CursorPoint
             // SDLNet_Read16(@(headcmd^.X)) == CursorPoint.X - WorldDx;
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
-            if not (CurrentTeam^.ExtDriven and bShowAmmoMenu) then
+            if CurrentTeam^.ExtDriven then
                begin
-               CursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
-               CursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy
+               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy;
+               if not bShowAmmoMenu and autoCameraOn then
+                    CursorPoint:= TargetCursorPoint
                end
              end;
         'w': ParseCommand('setweap ' + headcmd^.str[2], true);
@@ -428,7 +464,8 @@ begin
     SocketString:= '';
     
     hiTicks:= 0;
-    SendEmptyPacketTicks:= 0;
+    flushDelayTicks:= 0;
+    sendBuffer.count:= 0;
 end;
 
 procedure freeModule;

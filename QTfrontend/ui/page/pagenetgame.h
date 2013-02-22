@@ -26,19 +26,16 @@
 class HWChatWidget;
 class TeamSelWidget;
 class GameCFGWidget;
+class QSettings;
 
 class PageNetGame : public AbstractPage
 {
         Q_OBJECT
 
     public:
-        PageNetGame(QWidget* parent, QSettings * gameSettings);
+        PageNetGame(QWidget* parent);
 
-        /**
-         * Sets the room name to display.
-         * @param roomName room name to be displayed.
-         */
-        void setRoomName(const QString & roomName);
+        void setSettings(QSettings * settings);
 
         void displayError(const QString & message);
         void displayNotice(const QString & message);
@@ -48,34 +45,42 @@ class PageNetGame : public AbstractPage
         QPushButton *BtnMaster;
         QPushButton *BtnStart;
         QPushButton *BtnUpdate;
+        HistoryLineEdit *leRoomName;
 
         QAction * restrictJoins;
         QAction * restrictTeamAdds;
 
-        HWChatWidget* pChatWidget;
+        HWChatWidget* chatWidget;
 
         TeamSelWidget* pNetTeamsWidget;
         GameCFGWidget* pGameCFG;
 
     public slots:
+        void setRoomName(const QString & roomName);
         void setReadyStatus(bool isReady);
         void setUser(const QString & nickname);
         void onUpdateClick();
         void setMasterMode(bool isMaster);
 
+    private slots:
+        void onRoomNameEdited();
+
     signals:
         void SetupClicked();
         void askForUpdateRoomName(const QString &);
 
+    protected:
+        void resizeEvent(QResizeEvent * event);
+
     private:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
+        QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
         QSettings * m_gameSettings;
-
-        HistoryLineEdit * leRoomName;
         QPushButton * btnSetup;
+        QLabel * lblRoomNameReadOnly;
 };
 
 #endif

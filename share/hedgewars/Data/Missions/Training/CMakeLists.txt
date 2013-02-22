@@ -1,5 +1,5 @@
 file(GLOB Scripts *.lua)
 
 install(FILES
-	${Scripts}
-	DESTINATION ${SHAREPATH}Data/Missions/Training)
+    ${Scripts}
+    DESTINATION ${SHAREPATH}Data/Missions/Training)

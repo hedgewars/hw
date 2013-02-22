@@ -17,26 +17,26 @@
   BOOL _playBeforeFade;
 }
 
-// The AVAudioPlayer that the volume fade will be applied to. 
+// The AVAudioPlayer that the volume fade will be applied to.
 // Retained until the fade is completed.
 // Must be set with init method.
-@property (nonatomic, retain, readonly) AVAudioPlayer *audioPlayer; 
+@property (nonatomic, retain, readonly) AVAudioPlayer *audioPlayer;
 
-// The duration of the volume fade. 
+// The duration of the volume fade.
 // Default value is 1.0
-@property (nonatomic, assign) NSTimeInterval fadeDuration; 
+@property (nonatomic, assign) NSTimeInterval fadeDuration;
 
-// The delay before the volume fade begins. 
+// The delay before the volume fade begins.
 // Default value is 0.0
-@property (nonatomic, assign) NSTimeInterval delay; 
+@property (nonatomic, assign) NSTimeInterval delay;
 
-// The volume that will be faded to. 
+// The volume that will be faded to.
 // Default value is 0.0
-@property (nonatomic, assign) float finishVolume; 
+@property (nonatomic, assign) float finishVolume;
 
-// If YES, audio player will be sent a pause message when the fade has completed. 
+// If YES, audio player will be sent a pause message when the fade has completed.
 // Default value is NO, however, if finishVolume is 0.0, default is YES
-@property (nonatomic, assign) BOOL pauseAfterFade; 
+@property (nonatomic, assign) BOOL pauseAfterFade;
 
 // If YES, when the fade has completed the audio player will be sent a stop message.
 // Default value is NO.

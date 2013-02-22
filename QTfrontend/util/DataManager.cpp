@@ -40,7 +40,8 @@
 DataManager::DataManager()
 {
     m_hatModel = NULL;
-    m_mapModel = NULL;
+    m_staticMapModel = NULL;
+    m_missionMapModel = NULL;
     m_themeModel = NULL;
     m_colorsModel = NULL;
     m_bindsModel = NULL;
@@ -92,13 +93,22 @@ HatModel * DataManager::hatModel()
     return m_hatModel;
 }
 
-MapModel * DataManager::mapModel()
+MapModel * DataManager::staticMapModel()
 {
-    if (m_mapModel == NULL) {
-        m_mapModel = new MapModel();
-        m_mapModel->loadMaps();
+    if (m_staticMapModel == NULL) {
+        m_staticMapModel = new MapModel();
+        m_staticMapModel->loadMaps(MapModel::StaticMap);
     }
-    return m_mapModel;
+    return m_staticMapModel;
+}
+
+MapModel * DataManager::missionMapModel()
+{
+    if (m_missionMapModel == NULL) {
+        m_missionMapModel = new MapModel();
+        m_missionMapModel->loadMaps(MapModel::MissionMap);
+    }
+    return m_missionMapModel;
 }
 
 ThemeModel * DataManager::themeModel()
@@ -135,6 +145,11 @@ QStandardItemModel * DataManager::bindsModel()
     {
         m_bindsModel = new QStandardItemModel();
 
+        QStandardItem * firstItem = new QStandardItem();
+        firstItem->setData(tr("Use Default"), Qt::DisplayRole);
+        firstItem->setData("default", Qt::UserRole + 1);
+        m_bindsModel->appendRow(firstItem);
+
         for(int j = 0; sdlkeys[j][1][0] != '\0'; j++)
         {
             QStandardItem * item = new QStandardItem();
@@ -160,4 +175,13 @@ void DataManager::resetColors()
     {
         m_colorsModel->item(i)->setData(QColor(colors[i]));
     }
+}
+
+bool DataManager::ensureFileExists(const QString &fileName)
+{
+    QFile tmpfile(fileName);
+    if (!tmpfile.exists())
+        return tmpfile.open(QFile::WriteOnly);
+    else
+        return true;
 }

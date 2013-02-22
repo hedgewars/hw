@@ -20,6 +20,7 @@
 #ifndef _TEAM_SELECT_INCLUDED
 #define _TEAM_SELECT_INCLUDED
 
+#include <QLabel>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QColor>
@@ -50,7 +51,6 @@ class TeamSelWidget : public QGroupBox
 
     public slots:
         void addTeam(HWTeam team);
-        void netTeamStatusChanged(const HWTeam& team);
         void changeHHNum(const HWTeam&);
         void changeTeamColor(const HWTeam&);
         void changeTeamStatus(HWTeam team);
@@ -74,7 +74,9 @@ class TeamSelWidget : public QGroupBox
         FrameTeams* framePlaying;
 
         QVBoxLayout mainLayout;
+        QLabel *numTeamNotice;
         bool m_acceptOuter;
+        void repaint();
 
         QList<HWTeam> curPlayingTeams;
         QList<HWTeam> m_curNotPlayingTeams;

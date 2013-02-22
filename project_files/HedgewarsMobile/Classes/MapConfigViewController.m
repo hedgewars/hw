@@ -150,8 +150,8 @@
 // this set details for a static map (called by didSelectRowAtIndexPath)
 -(void) setDetailsForStaticMap:(NSInteger) index {
     NSArray *source = [self.dataSourceArray objectAtIndex:scIndex];
-    
-    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg", 
+
+    NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",
                          (scIndex == 1) ? MAPS_DIRECTORY() : MISSIONS_DIRECTORY(),[source objectAtIndex:index]];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
     [fileCfg release];
@@ -166,7 +166,7 @@
     else
         max = @"18";
     [self setMaxLabelText:max];
-    
+
     self.themeCommand = [NSString stringWithFormat:@"etheme %@", [split objectAtIndex:0]];
     self.staticMapCommand = [NSString stringWithFormat:@"emap %@", [source objectAtIndex:index]];
 
@@ -357,7 +357,7 @@
 -(NSArray *) dataSourceArray {
     if (dataSourceArray == nil) {
         NSString *model = [HWUtils modelType];
-        
+
         // only folders containing icon.png are a valid theme
         NSArray *themeArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:THEMES_DIRECTORY() error:NULL];
         NSMutableArray *themeArray = [[NSMutableArray alloc] init];
@@ -367,7 +367,7 @@
                 [themeArray addObject:themeName];
             [checkPath release];
         }
-        
+
         // remove images that are too big for certain devices without loading the whole image
         NSArray *mapArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
         NSMutableArray *mapArray = [[NSMutableArray alloc] init];
@@ -379,7 +379,7 @@
                 continue;
             [mapArray addObject:str];
         }
-        
+
         NSArray *missionArrayFull = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MISSIONS_DIRECTORY() error:NULL];
         NSMutableArray *missionArray = [[NSMutableArray alloc] init];
         for (NSString *str in missionArrayFull) {
@@ -394,7 +394,7 @@
         [missionArray release];
         [themeArray release];
         [mapArray release];
-        
+
         self.dataSourceArray = array;
         [array release];
     }
@@ -404,7 +404,7 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     srandom(time(NULL));
-    
+
     // initialize some "default" values
     self.slider.value = 0.05f;
     self.slider.enabled = NO;

@@ -59,7 +59,7 @@ QStringList getCampMissionList(QString & campaign)
     QSettings campfile("physfs://Missions/Campaign/" + campaign + "/campaign.ini", QSettings::IniFormat, 0);
     campfile.setIniCodec("UTF-8");
     unsigned int mNum = campfile.value("MissionNum", 0).toInt();
-    
+
     QStringList missionList;
     for (unsigned int i = 0; i < mNum; i++)
     {
@@ -67,7 +67,7 @@ QStringList getCampMissionList(QString & campaign)
     }
     return missionList;
 }
-  
+
 unsigned int getCampProgress(QString & teamName, QString & campName)
 {
     QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
@@ -81,10 +81,3 @@ QString getCampaignScript(QString campaign, unsigned int mNum)
     campfile.setIniCodec("UTF-8");
     return campfile.value(QString("Mission %1/Script").arg(mNum)).toString();
 }
-
-
-    
-
-
-
-    

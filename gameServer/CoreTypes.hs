@@ -4,7 +4,6 @@ module CoreTypes where
 import Control.Concurrent
 import Data.Word
 import qualified Data.Map as Map
-import Data.Sequence(Seq, empty)
 import Data.Time
 import Network
 import Data.Function
@@ -18,6 +17,13 @@ import RoomsAndClients
 
 type ClientChan = Chan [B.ByteString]
 
+data CheckInfo =
+    CheckInfo
+    {
+        recordFileName :: String,
+        recordTeams :: [TeamInfo]
+    }
+
 data ClientInfo =
     ClientInfo
     {
@@ -29,6 +35,7 @@ data ClientInfo =
         nick :: B.ByteString,
         webPassword :: B.ByteString,
         logonPassed :: Bool,
+        isVisible :: Bool,
         clientProto :: !Word16,
         roomID :: RoomIndex,
         pingsQueue :: !Word,
@@ -36,7 +43,10 @@ data ClientInfo =
         isReady :: !Bool,
         isInGame :: Bool,
         isAdministrator :: Bool,
-        clientClan :: Maybe B.ByteString,
+        isChecker :: Bool,
+        isKickedFromServer :: Bool,
+        clientClan :: !(Maybe B.ByteString),
+        checkInfo :: Maybe CheckInfo,
         teamsInGame :: Word
     }
 
@@ -64,14 +74,17 @@ data TeamInfo =
     }
     deriving (Show, Read)
 
+instance Eq TeamInfo where
+    (==) = (==) `on` teamname
+
 data GameInfo =
     GameInfo
     {
-        roundMsgs :: Seq B.ByteString,
+        roundMsgs :: [B.ByteString],
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
-        allPlayersHaveRegisteredAccounts :: Bool,
+        allPlayersHaveRegisteredAccounts :: !Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
         giParams :: Map.Map B.ByteString [B.ByteString]
     } deriving (Show, Read)
@@ -84,7 +97,7 @@ newGameInfo :: [TeamInfo]
                 -> GameInfo
 newGameInfo =
     GameInfo
-        Data.Sequence.empty
+        []
         []
 
 data RoomInfo =
@@ -100,6 +113,7 @@ data RoomInfo =
         readyPlayers :: !Int,
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
+        isRegisteredOnly :: Bool,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -116,6 +130,7 @@ newRoom =
         Nothing
         0
         0
+        False
         False
         False
         []

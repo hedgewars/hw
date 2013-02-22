@@ -1,0 +1,1 @@
+This library is part of JNA and just needs to be copied into the libs/armeabi folder. However, putting it there directly will get it cleaned away on build.

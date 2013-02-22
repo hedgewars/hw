@@ -23,15 +23,18 @@
 
 class QLineEdit;
 class QCheckBox;
+class QPushButton;
 
 class HWPasswordDialog : public QDialog
 {
         Q_OBJECT
     public:
-        HWPasswordDialog(QWidget* parent, const QString & label);
+        HWPasswordDialog(QWidget* parent);
 
         QLineEdit* lePassword;
+        QLineEdit* leNickname;
         QCheckBox* cbSave;
+        QPushButton * pbNewAccount;
 };
 
 

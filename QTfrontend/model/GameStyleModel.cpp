@@ -23,13 +23,14 @@
 
 #include <QTextStream>
 
+#include "physfs.h"
 #include "GameStyleModel.h"
+#include "hwconsts.h"
 
 
 void GameStyleModel::loadGameStyles()
 {
     beginResetModel();
-
 
     // empty list, so that we can (re)fill it
     QStandardItemModel::clear();
@@ -77,11 +78,16 @@ void GameStyleModel::loadGameStyles()
                 weapons.replace("_", " ");
         }
 
-        QStandardItem * item = new QStandardItem(name);
+        // detect if script is dlc
+        QString scriptPath = PHYSFS_getRealDir(QString("Scripts/Multiplayer/%1.lua").arg(script).toLocal8Bit().data());
+        bool isDLC = !scriptPath.startsWith(datadir->absolutePath());
+
+        QStandardItem * item = new QStandardItem((isDLC ? "*" : "") + name);
 
         item->setData(script, ScriptRole);
         item->setData(scheme, SchemeRole);
         item->setData(weapons, WeaponsRole);
+        item->setData(isDLC, IsDlcRole);
 
         items.append(item);
     }

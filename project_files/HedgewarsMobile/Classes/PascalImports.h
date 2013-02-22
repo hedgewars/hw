@@ -28,7 +28,7 @@ extern "C" {
      * that you want to use in your non-Pascal code
      */
 
-    void Game(const char *args[]);
+    void Game(const int argc, const char *argv[]);
     void GenLandPreview(void);
     void LoadLocaleWrapper(const char *filename);
 
@@ -44,7 +44,7 @@ extern "C" {
     int  HW_getMaxNumberOfTeams(void);
 
     void HW_memoryWarningCallback(void);
-    
+
 #ifdef __cplusplus
 }
 #endif

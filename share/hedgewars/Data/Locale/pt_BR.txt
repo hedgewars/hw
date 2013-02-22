@@ -52,6 +52,13 @@
 00:49=Ressucitador
 00:50=Ataque Perfurador
 00:51=Bola de Lama
+00:52=Arma não selecionada
+00:53=Máquina do tempo
+; 00:54=Estrutura
+00:54=Spray de terra
+00:55=Freezer
+00:56=Machadinha
+
 
 01:00=Hora de lutar!
 01:01=Partida empatou
@@ -63,11 +70,18 @@
 01:07=%1 Remanescente
 01:08=Combustível
 01:09=Sincronizando...
-01:10=Usar esta ultilidade não encerrará o turno
+01:10=Usar esta utilidade não encerrará o turno
 01:11=Esta arma ou utilidade ainda não está disponível
 01:12=Último round antes da Morte Súbita!
 01:13=%1 rounds até a Morte Súbita
 01:14=Se prepare, %1!
+01:15=Mínimo
+01:16=Baixo
+01:17=Normal
+01:18=Alto
+01:19=Extremo
+01:20=%1 Quique
+01:21=Áudio mudo
 
 ; Event messages
 ; Hog (%1) died
@@ -122,7 +136,7 @@
 02:02=Armado e preparado!
 02:02=3..2..1...!
 02:02=Cúpula do Trovão!Cúpula do Trovão!Cúpula do Trovão!
-02:02=Abrem-se as curtinas e começa o espetáculo
+02:02=Abrem-se as cortinas e começa o espetáculo
 02:02=A bola está em jogo!
 02:02=Bobeou....dançou!
 02:02=Só os melhores sobrevivem!
@@ -134,6 +148,11 @@
 02:02=Começa a partida
 02:02=Vamos a luta companheiros
 02:02=Pela Pátria!
+02:02=Vitória ou morte!
+02:02=Esmague seu inimigo!
+02:02=Solte os cães de batalha!
+02:02=Apiiiita o árbitro!
+02:02=Ao vencedor as batatas!
 
 ; Round ends (win; unused atm)
 02:03=...
@@ -148,10 +167,13 @@
 02:05=Mais um suspiro!
 02:05=Chamando doutor Hans Chucrutes
 02:05=Colírio para os olhos!
-02:05=O Motoboy da farmácia chegou!
+02:05=O motoboy da farmácia chegou!
 02:05=Curativos!
 02:05=Energia extra!
 02:05=Energéticos!
+02:05=Um Hi-Potion! Uuups, jogo errado
+02:05=Posologia: Tantos quanto possas conseguir!
+
 
 ; New ammo crate
 02:06=Mais armas!
@@ -168,6 +190,10 @@
 02:06=Suprimentos
 02:06=O que faltava para você vencer!
 02:06=Qual será a surpresa?
+02:06=Uma caixinha de surpresas!
+02:06=Não sabes o pesadelo que foi atravessar a fronteira com isso!
+02:06=Cuidado! Volátil!
+02:06=Brinquedinhos destrutivos do Céu!
 
 ; New utility crate
 02:07=Hora das compras
@@ -193,7 +219,7 @@
 02:08=%1 está se balançando na rede
 02:08=%1 prefere só ficar olhando
 02:08=%1 desaponta a todos
-02:08=%1 ficou filosofando 
+02:08=%1 ficou filosofando
 02:08=%1 amarelou
 02:08=%1 tá de boa
 02:08=%1 pegou no sono
@@ -201,11 +227,17 @@
 02:08=%1 prefere Gandhi a Mandela
 02:08=%1 foi ler um livro
 02:08=%1 está procurando algo melhor para fazer
+02:08=%1 é um franguinho!
+02:08=%1 decidiu que o melhor a fazer é ... nada!
+02:08=%1 está fora de forma!
+02:08=%1 é um pacifista
+02:08=%1 está paralizado de terror
+02:08=%1 está pedindo para sair
 
 ; Hog (%1) hurts himself only
 02:09=%1 se machucou
 02:09=%1 fez dodói
-02:09=%1 é uma anta 
+02:09=%1 é uma anta
 02:09=%1 não sabe quem é o inimigo
 02:09=%1 não gosta de si mesmo
 02:09=%1 não tem amor próprio
@@ -220,6 +252,12 @@
 02:09=%1 mudou de equipe
 02:09=%1 acha que ninguém viu
 02:09=%1 devia procurar outro jogo
+02:09=%1 deveria mudar de profissão
+02:09=%1 não tem instinto de sobrevivência
+02:09=%1 deveria praticar pontaria
+02:09=%1 acaba de demonstrar ao inimigo do que é capaz
+02:09=As armas de %1 estão obviamente defeituosas!
+02:09=Não, não, não, %1, deves atirar no INIMIGO!
 
 ; Hog shot an home run (using the bat and another hog)
 02:10=Humilhooooouuu!
@@ -227,12 +265,12 @@
 02:10=Esse aí está fora!
 02:10=Home Run!
 02:10=Ouriço perdido!
+02:10=Bolinha perdida!
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 foi nanar
 02:11=%1 abandonou o jogo
 02:11=%1 estava borrando as calças
-02:11=Beam him up, Scotty!
 02:11=%1 teve que sair
 
 ; Weapon Categories
@@ -259,7 +297,7 @@
 03:20=Ação
 03:21=Arma Balística
 03:22=Me chame Indiana!
-03:23=Artes Marciais (Realmente) 
+03:23=Artes Marciais (Realmente)
 03:24=O Bolo não é de brinquedo!
 03:25=Disfarce
 03:26=Granada Suculenta
@@ -276,18 +314,23 @@
 03:37=Efeito Temporário
 03:38=Arma de Fogo (múltiplos tiros)
 03:39=Utilidade de Transporte
-03:40=Granada Inceneradora
+03:40=Granada Incendiária
 03:41=Grande fan de Squawks
-03:42=Última tecnologia
+03:42=Eu irei fazer uma nota aqui ...
 03:43=Musical
-03:44=Velho e fedorento
+03:44=Data de validade: 1923
 03:45=Trigonometria pura
-03:46=Incendiário
+03:46=Quente! Quente! Quente!
 03:47=Grudenta
 03:48=Tanto bate até que fura!
 03:49=Faz o que você imagina
 03:50=Contra covardes
-03:51=Devagar, e sempre....
+03:51=Encontrei no chão
+03:52=Sem uso
+03:53=Tipo 40
+03:54=Constrói algo
+03:55=Utilidade
+
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataque seus inimigos usando uma granada simples|Ela explodirá assim que o tempo passar|1-5: Escolha o tempo da granada|Ataque: Quanto mais tempo, mais forte o lançamento.
@@ -310,7 +353,7 @@
 04:15=Chame um avião para bombadear seus inimigos.|Esquerda/Direita: Determina a direção do ataque|Cursor: Seleciona a região do ataque
 04:16=Chame um avião para lançar diversas minas|na área alvo.|Esquerda/Direita: Determina a direção do ataque|Cursor: Seleciona a região do ataque
 04:17=Precisa de abrigo? Use o maçarico para|cavar um túnel que te de cobertura.|Ataque:Liga/Desliga o maçarico
-04:18=Precisa de proteção adicional ou quer atravessar|um lugar difícil? Coloque algumas vigas.|Esquerda/Direita: Seleciona a viga a colocar|Cursor: Coloca a viga em uma posição válida. 
+04:18=Precisa de proteção adicional ou quer atravessar|um lugar difícil? Coloque algumas vigas.|Esquerda/Direita: Seleciona a viga a colocar|Cursor: Coloca a viga em uma posição válida.
 04:19=Usada no momento certo, teleportar-se pode ser mais|poderosa que todas as outras armas, permitindo|salvar alguns ouriços em situação perigosa|Cursor: Seleciona o destino do teletransporte.
 
 04:20=Permite você jogar este turno com um ouriço diferente.|Ataque: Ativa|Tab: Alterna o ouriço
@@ -345,6 +388,12 @@
 04:47=Uma simples mina não basta? A mina aderente pode|ser arremessada e ficará aderida ao tocar no solo,|em um objeto, e até em um ouriço!|Ataque:Quanto mais tempo, mais forte o lançamento (duas vezes).
 04:48=Vamos a obra? Use esta arma para martelar|o inimigo no solo, ou através dele e tirando um terço da vida dele!|Ataque: Ativa
 04:49=Ressucite seus amigos, mas preste atenção|para não ressucitar seus inimigos!|Ataque: Mantenha pressionado para transferir|sua vida|Acima:Acelera a transferência de vida
+04:50=Alguém está se escondendo embaixo da terra?|Desenterre-os com um Ataque Perfurador!|O timer controla a profundidade alcançada.
+04:51=Ganhe um tiro de graça, atirando uma bola de barro.|Fará com que o inimigo saia voando|e arde a vista.
+04:52=Sem Uso
+04:53=Viage através do tempo e espaço,|deixando seus camaradas na mão.|Esteja preparado para retornar a qualquer momento,|ou para a Morte Súbita se todos os aliados foram mortos.|Aviso. Não funciona na Morte Súbita,|se você estiversozinho, ou se você for o Rei.
+04:54=INCOMPLETO
+04:55=Atira um jorro de barro pegajoso.|Constrói pontes, enterra inimigos, sela túneis.|Cuidado para que não pegue em você!
 
 ; Game goal strings
 05:00=Modos de Jogo
@@ -355,16 +404,17 @@
 05:05=Vampirismo: Ouriços serão curados pelos danos causados
 05:06=Carma: Ouriços serão machucados pelos danos causados
 05:07=Proteja o rei: Não deixe o seu Rei morrer!|Colocar o Rei: Escolha um lugar protegido para posicionar o seu Rei
-05:08=Colocar Ouriços: Permite posicionar os ouriços antes dapartida começar 
+05:08=Colocar Ouriços: Permite posicionar os ouriços antes da partida começar
 05:09=Artilharia: Ouriços não podem andar para mudar de lugar
 05:10=Terreno Indestrutível: Maioria das armas não destrói o terreno
-05:11=Armas Compartilhadas: Todos as equipes de mesma cor compratilham a munição
+05:11=Munição Compartilhada: Todos as equipes de mesma cor compartilham a munição
 05:12=Temporizador de mina: Minas detonarão após %1 segundo(s)
 05:13=Temporizador de mina: Minas detonarão imediatamente
-05:14=Temporizador de mina: Minas detonarão em 0 - 3 segundos
+05:14=Temporizador de mina: Minas detonarão em 0 - 5 segundos
 05:15=Modificador de Dano: Todas as armas farão %1% danos
 05:16=A vida dos ouriços é reiniciada ao fim de cada turno
 05:17=Ouriços da IA renascem após morrerem
 05:18=Ataque ilimitado
 05:19=Armas são reiniciadas ao fim do turno
 05:20=Armas não são compartilhadas entre os ouriços
+05:21=Tag Team: Equipes do mesmo clan se revezam entre si.|Turno compartilhado: Equipes do mesmo clan compartilham a duração do turno.

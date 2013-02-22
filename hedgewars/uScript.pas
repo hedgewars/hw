@@ -37,6 +37,7 @@ procedure ScriptClearStack;
 procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
+procedure ScriptSetInteger(name : shortstring; value : LongInt);
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -222,6 +223,35 @@ begin
     L:= L; // avoid compiler hint
     HideMission;
     lc_hidemission:= 0;
+end;
+
+function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) = 0 then
+            GameFlags := GameFlags + LongWord(lua_tointeger(L, i));
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_enablegameflags:= 0;
+end;
+
+function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
+var i : integer;
+begin
+    for i:= 1 to lua_gettop(L) do
+        if (GameFlags and lua_tointeger(L, i)) <> 0 then
+            GameFlags := GameFlags - LongWord(lua_tointeger(L, i));
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_disablegameflags:= 0;
+end;
+
+function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
+begin
+    // Silence hint
+    L:= L;
+    GameFlags:= 0;
+    ScriptSetInteger('GameFlags', GameFlags);
+    lc_cleargameflags:= 0;
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
@@ -690,7 +720,7 @@ begin
     else
         begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushinteger(L, gear^.Hedgehog^.BotLevel)
         else
             lua_pushnil(L);
@@ -723,7 +753,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushinteger(L, gear^.Hedgehog^.Team^.Clan^.ClanIndex)
             end
@@ -805,7 +835,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.TeamName))
             end
@@ -826,7 +856,7 @@ begin
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             begin
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Name))
             end
@@ -1251,7 +1281,7 @@ end;
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
     L:= L; // avoid compiler hint
-    GameState:= gsExit;
+    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
     lc_endgame:= 0
 end;
 
@@ -1648,7 +1678,7 @@ begin
         LuaError('Lua: Wrong number of parameters passed to GetHogHat!')
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
             lua_pushstring(L, str2pchar(gear^.Hedgehog^.Hat))
         else
             lua_pushnil(L);
@@ -1735,8 +1765,7 @@ begin
 end;
 
 function lc_restorehog(L: Plua_State): LongInt; Cdecl;
-var hog: PHedgehog;
-    i, h: LongInt;
+var i, h: LongInt;
     uid: LongWord;
 begin
     if lua_gettop(L) <> 1 then
@@ -1980,9 +2009,6 @@ end;
 
 // custom script loader via physfs, passed to lua_load
 const BUFSIZE = 1024;
-var physfsReaderBuffer: pointer; external;
-function physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external;
-
 
 procedure ScriptLoad(name : shortstring);
 var ret : LongInt;
@@ -1998,7 +2024,7 @@ f:= pfsOpenRead(s);
 if f = nil then 
     exit;
 
-physfsReaderBuffer:= @buf;
+physfsReaderSetBuffer(@buf);
 ret:= lua_load(luaState, @physfsReader, f, Str2PChar(s));
 pfsClose(f);
 
@@ -2020,7 +2046,6 @@ procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
-ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if GameTicks = 0 then
@@ -2322,6 +2347,7 @@ ScriptSetInteger('gstLoser'          ,$00080000);
 ScriptSetInteger('gstHHGone'         ,$00100000);
 ScriptSetInteger('gstInvisible'      ,$00200000);
 
+// ai hints
 ScriptSetInteger('aihUsualProcessing' ,$00000000);
 ScriptSetInteger('aihDoesntMatter'    ,$00000001);
 
@@ -2337,6 +2363,9 @@ lua_register(luaState, _P'div', @lc_div);
 lua_register(luaState, _P'GetInputMask', @lc_getinputmask);
 lua_register(luaState, _P'SetInputMask', @lc_setinputmask);
 lua_register(luaState, _P'AddGear', @lc_addgear);
+lua_register(luaState, _P'EnableGameFlags', @lc_enablegameflags);
+lua_register(luaState, _P'DisableGameFlags', @lc_disablegameflags);
+lua_register(luaState, _P'ClearGameFlags', @lc_cleargameflags);
 lua_register(luaState, _P'DeleteGear', @lc_deletegear);
 lua_register(luaState, _P'AddVisualGear', @lc_addvisualgear);
 lua_register(luaState, _P'DeleteVisualGear', @lc_deletevisualgear);

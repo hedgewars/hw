@@ -60,6 +60,7 @@ class HWNewNet : public QObject
         RoomsListModel * roomsListModel();
         QAbstractItemModel * lobbyPlayersModel();
         QAbstractItemModel * roomPlayersModel();
+        bool allPlayersReady();
 
     private:
         bool isChief;
@@ -69,6 +70,7 @@ class HWNewNet : public QObject
         QTcpSocket NetSocket;
         QString seed;
         bool m_game_connected;
+        bool m_nick_registered;
         RoomsListModel * m_roomsListModel;
         PlayersListModel * m_playersModel;
         QSortFilterProxyModel * m_lobbyPlayersModel;
@@ -90,7 +92,8 @@ class HWNewNet : public QObject
         void disconnected(const QString & reason);
         void Error(const QString & errmsg);
         void Warning(const QString & wrnmsg);
-        void AskForPassword(const QString & nick);
+        void NickRegistered(const QString & nick);
+        void NickNotRegistered(const QString & nick);
         void NickTaken(const QString & nick);
         void AuthFailed();
         void EnteredGame();
@@ -102,6 +105,7 @@ class HWNewNet : public QObject
         void FromNet(const QByteArray & buf);
         void adminAccess(bool);
         void roomMaster(bool);
+        void roomNameUpdated(const QString & name);
 
         void netSchemeConfig(QStringList &);
         void paramChanged(const QString & param, const QStringList & value);
@@ -123,6 +127,7 @@ class HWNewNet : public QObject
         void serverMessageNew(const QString &);
         void serverMessageOld(const QString &);
         void latestProtocolVar(int);
+        void bansList(const QStringList &);
 
         void setMyReadyStatus(bool isReady);
 
@@ -152,11 +157,16 @@ class HWNewNet : public QObject
         void kickPlayer(const QString &);
         void infoPlayer(const QString &);
         void followPlayer(const QString &);
+        void consoleCommand(const QString &);
         void startGame();
         void toggleRestrictJoins();
         void toggleRestrictTeamAdds();
         void partRoom();
         void clearAccountsCache();
+        void getBanList();
+        void removeBan(const QString &);
+        void banIP(const QString & ip, const QString & reason, int seconds);
+        void banNick(const QString & nick, const QString & reason, int seconds);
 
     private slots:
         void ClientRead();

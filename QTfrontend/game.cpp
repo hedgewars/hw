@@ -22,13 +22,17 @@
 #include <QColor>
 #include <QStringListModel>
 #include <QTextStream>
+#include <utility>
 
+#include "hwform.h"
+#include "ui/page/pageoptions.h"
 #include "game.h"
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 #include "gamecfgwidget.h"
 #include "teamselect.h"
 #include "proto.h"
+#include "binds.h"
 #include "campaign.h"
 
 #include <QTextStream>
@@ -37,7 +41,7 @@
 QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
-    TCPBase(true),
+    TCPBase(true, 0),
     ammostr(ammo),
     m_pTeamSelWidget(pTeamSelWidget)
 {
@@ -56,7 +60,7 @@ void HWGame::onClientDisconnect()
     switch (gameType)
     {
         case gtDemo:
-            // for video recording we need demo anyway 
+            // for video recording we need demo anyway
             emit HaveRecord(rtNeither, demo);
             break;
         case gtNet:
@@ -71,6 +75,18 @@ void HWGame::onClientDisconnect()
                 emit HaveRecord(rtNeither, demo);
     }
     SetGameState(gsStopped);
+}
+
+void HWGame::addKeyBindings(QByteArray * buf)
+{
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        QString value = config->value(QString("Binds/%1").arg(cbinds[i].action), cbinds[i].strbind).toString();
+        if (value.isEmpty() || value == "default") continue;
+
+        QString bind = QString("edbind " + value + " " + cbinds[i].action);
+        HWProto::addStringToBuffer(*buf, bind);
+    }
 }
 
 void HWGame::commonConfig()
@@ -90,6 +106,8 @@ void HWGame::commonConfig()
     }
     HWProto::addStringToBuffer(buf, gt);
 
+    addKeyBindings(&buf);
+
     buf += gamecfg->getFullConfig();
 
     if (m_pTeamSelWidget)
@@ -102,10 +120,11 @@ void HWGame::commonConfig()
             HWProto::addStringToBuffer(buf, QString("eammreinf %1").arg(ammostr.mid(3 * cAmmoNumber, cAmmoNumber)));
             if(gamecfg->schemeData(15).toBool() || !gamecfg->schemeData(21).toBool()) HWProto::addStringToBuffer(buf, QString("eammstore"));
             HWProto::addStringListToBuffer(buf,
-                                           team.teamGameConfig(gamecfg->getInitHealth()));
+                                           team.teamGameConfig(gamecfg->getInitHealth(), config));
             ;
         }
     }
+
     RawSendIPC(buf);
 }
 
@@ -118,6 +137,8 @@ void HWGame::SendQuickConfig()
 {
     QByteArray teamscfg;
     ThemeModel * themeModel = DataManager::instance().themeModel();
+
+    addKeyBindings(&teamscfg);
 
     HWProto::addStringToBuffer(teamscfg, "TL");
     HWProto::addStringToBuffer(teamscfg, QString("etheme %1")
@@ -132,7 +153,7 @@ void HWGame::SendQuickConfig()
     team1.setNumHedgehogs(4);
     HWNamegen::teamRandomNames(team1,true);
     HWProto::addStringListToBuffer(teamscfg,
-                                   team1.teamGameConfig(100));
+                                   team1.teamGameConfig(100, config));
 
     HWTeam team2;
     team2.setDifficulty(4);
@@ -142,7 +163,7 @@ void HWGame::SendQuickConfig()
         HWNamegen::teamRandomNames(team2,true);
     while(!team2.name().compare(team1.name()) || !team2.hedgehog(0).Hat.compare(team1.hedgehog(0).Hat));
     HWProto::addStringListToBuffer(teamscfg,
-                                   team2.teamGameConfig(100));
+                                   team2.teamGameConfig(100, config));
 
     HWProto::addStringToBuffer(teamscfg, QString("eammloadt %1").arg(cDefaultAmmoStore->mid(0, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammprob %1").arg(cDefaultAmmoStore->mid(cAmmoNumber, cAmmoNumber)));
@@ -150,6 +171,7 @@ void HWGame::SendQuickConfig()
     HWProto::addStringToBuffer(teamscfg, QString("eammreinf %1").arg(cDefaultAmmoStore->mid(3 * cAmmoNumber, cAmmoNumber)));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
     HWProto::addStringToBuffer(teamscfg, QString("eammstore"));
+
     RawSendIPC(teamscfg);
 }
 
@@ -159,6 +181,8 @@ void HWGame::SendTrainingConfig()
     HWProto::addStringToBuffer(traincfg, "TL");
     HWProto::addStringToBuffer(traincfg, "eseed " + QUuid::createUuid().toString());
     HWProto::addStringToBuffer(traincfg, "escript " + training);
+
+    addKeyBindings(&traincfg);
 
     RawSendIPC(traincfg);
 }
@@ -170,6 +194,8 @@ void HWGame::SendCampaignConfig()
     HWProto::addStringToBuffer(campaigncfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(campaigncfg, "escript " + campaignScript);
+
+    addKeyBindings(&campaigncfg);
 
     RawSendIPC(campaigncfg);
 }
@@ -274,12 +300,21 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 writeCampaignVar(msg.right(msg.size() - 3));
             break;
         }
+        case 'W':
+        {
+            // fetch new window resolution via IPC and save it in the settings
+            int size = msg.size();
+            QString newResolution = QString().append(msg.mid(2)).left(size - 4);
+            QStringList wh = newResolution.split('x');
+            config->Form->ui.pageOptions->windowWidthEdit->setText(wh[0]);
+            config->Form->ui.pageOptions->windowHeightEdit->setText(wh[1]);
+            break;
+        }
         default:
         {
             if (gameType == gtNet && !netSuspend)
-            {
-                emit SendNet(msg);
-            }
+                m_netSendBuffer.append(msg);
+
             demo.append(msg);
         }
     }
@@ -308,29 +343,64 @@ void HWGame::onClientRead()
         readbuffer.remove(0, msglen + 1);
         ParseMessage(msg);
     }
+    
+    flushNetBuffer();
+}
+
+void HWGame::flushNetBuffer()
+{
+    if(m_netSendBuffer.size())
+    {
+        emit SendNet(m_netSendBuffer);
+                m_netSendBuffer.clear();
+    }
 }
 
 QStringList HWGame::getArguments()
 {
     QStringList arguments;
-    QRect resolution = config->vid_Resolution();
-    arguments << cfgdir->absolutePath();
-    arguments << QString::number(resolution.width());
-    arguments << QString::number(resolution.height());
-    arguments << QString::number(config->bitDepth()); // bpp
+    std::pair<QRect, QRect> resolutions = config->vid_ResolutionPair();
+    QString nick = config->netNick().toUtf8().toBase64();
+
+    arguments << "--internal"; //Must be passed as first argument
+    arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
-    arguments << (config->vid_Fullscreen() ? "1" : "0");
-    arguments << (config->isSoundEnabled() ? "1" : "0");
-    arguments << (config->isMusicEnabled() ? "1" : "0");
-    arguments << QString::number(config->volume()); // sound volume
-    arguments << QString::number(config->timerInterval());
+    arguments << "--prefix";
     arguments << datadir->absolutePath();
-    arguments << (config->isShowFPSEnabled() ? "1" : "0");
-    arguments << (config->isAltDamageEnabled() ? "1" : "0");
-    arguments << config->netNick().toUtf8().toBase64();
-    arguments << QString::number(config->translateQuality());
-    arguments << QString::number(config->stereoMode());
+    arguments << "--user-prefix";
+    arguments << cfgdir->absolutePath();
+    arguments << "--locale";
     arguments << tr("en.txt");
+    arguments << "--frame-interval";
+    arguments << QString::number(config->timerInterval());
+    arguments << "--volume";
+    arguments << QString::number(config->volume());
+    arguments << "--fullscreen-width";
+    arguments << QString::number(resolutions.first.width());
+    arguments << "--fullscreen-height";
+    arguments << QString::number(resolutions.first.height());
+    arguments << "--width";
+    arguments << QString::number(resolutions.second.width());
+    arguments << "--height";
+    arguments << QString::number(resolutions.second.height());
+    arguments << "--raw-quality";
+    arguments << QString::number(config->translateQuality());
+    arguments << "--stereo";
+    arguments << QString::number(config->stereoMode());
+    if (config->vid_Fullscreen())
+        arguments << "--fullscreen";
+    if (config->isShowFPSEnabled())
+        arguments << "--showfps";
+    if (config->isAltDamageEnabled())
+        arguments << "--altdmg";
+    if (!config->isSoundEnabled())
+        arguments << "--nosound";
+    if (!config->isMusicEnabled())
+        arguments << "--nomusic";
+    if (!nick.isEmpty()) {
+        arguments << "--nick";
+        arguments << nick;
+    }
 
     return arguments;
 }
@@ -350,7 +420,7 @@ void HWGame::PlayDemo(const QString & demofilename, bool isSave)
 
     // run engine
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -358,7 +428,7 @@ void HWGame::StartNet()
 {
     gameType = gtNet;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -366,7 +436,7 @@ void HWGame::StartLocal()
 {
     gameType = gtLocal;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -374,7 +444,7 @@ void HWGame::StartQuick()
 {
     gameType = gtQLocal;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -383,7 +453,7 @@ void HWGame::StartTraining(const QString & file)
     gameType = gtTraining;
     training = "Missions/Training/" + file + ".lua";
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 
@@ -394,7 +464,7 @@ void HWGame::StartCampaign(const QString & camp, const QString & campScript, con
     campaignScript = "Missions/Campaign/" + camp + "/" + campScript;
     campaignTeam = campTeam;
     demo.clear();
-    Start();
+    Start(false);
     SetGameState(gsStarted);
 }
 

@@ -165,12 +165,12 @@ begin
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, -hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -196,10 +196,10 @@ begin
         ly := hwRound(ny);
         if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
             begin
-            ny := _1 / Distance(ropeDx, ropeDy);
+            tx := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
-            nx := ropeDx * ny;
-            ny := ropeDy * ny;
+            nx := ropeDx * tx;
+            ny := ropeDy * tx;
 
             with RopePoints.ar[RopePoints.Count] do
                 begin
@@ -210,7 +210,7 @@ begin
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
                 dLen := len
                 end;
-                
+
             with RopePoints.rounded[RopePoints.Count] do
                 begin
                 X := hwRound(Gear^.X);
@@ -264,7 +264,7 @@ begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
         end;
-    if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0 then
+    if TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(HHGear^.dY)) then
         begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true

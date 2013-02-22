@@ -4,12 +4,14 @@ module HWProtoCore where
 import Control.Monad.Reader
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
+import qualified Data.List as L
 --------------------------------------
 import CoreTypes
 import Actions
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
+import HWProtoChecker
 import HandlerUtils
 import RoomsAndClients
 import Utils
@@ -22,7 +24,7 @@ handleCmd ["PING"] = answerClient ["PONG"]
 
 handleCmd ("QUIT" : xs) = return [ByeClient msg]
     where
-        msg = if not $ null xs then head xs else "bye"
+        msg = if not $ null xs then head xs else loc "bye"
 
 
 handleCmd ["PONG"] = do
@@ -32,10 +34,27 @@ handleCmd ["PONG"] = do
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
+handleCmd ("CMD" : params) =
+    let c = concatMap B.words params in
+        if not $ null c then
+            h $ (upperCase . head $ c) : tail c
+            else
+            return []
+    where
+        h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
+        h ["STATS"] = handleCmd ["STATS"]
+        h ["PART", msg] = handleCmd ["PART", msg]
+        h ["QUIT", msg] = handleCmd ["QUIT", msg]
+        h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
+
 handleCmd cmd = do
     (ci, irnc) <- ask
-    if logonPassed (irnc `client` ci) then
-        handleCmd_loggedin cmd
+    let cl = irnc `client` ci
+    if logonPassed cl then
+        if isChecker cl then
+            handleCmd_checker cmd
+            else
+            handleCmd_loggedin cmd
         else
         handleCmd_NotEntered cmd
 

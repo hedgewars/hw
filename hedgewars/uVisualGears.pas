@@ -53,10 +53,13 @@ procedure ChangeToSDFlakes;
 procedure KickFlakes(Radius, X, Y: LongInt);
 
 implementation
-uses uSound, uMobile, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
+uses uSound, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils;
 
-const cExplFrameTicks = 110;
+const 
+    cExplFrameTicks = 110;
+    //cSmokeZ = 499;
 var VGCounter: LongWord;
+    VisualGearLayers: array[0..6] of PVisualGear;
 
 // For better maintainability the step handlers of visual gears are stored
 // in a separate file.

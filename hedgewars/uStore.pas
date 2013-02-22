@@ -33,7 +33,7 @@ procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 
-// loads an image from the game's data files
+// loads an image from the games data files
 function  LoadDataImage(const path: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 // like LoadDataImage but uses altPath as fallback-path if file not found/loadable in path
 function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -56,7 +56,7 @@ procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 
 implementation
-uses uMisc, uConsole, uMobile, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
+uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
     , uPhysFSLayer
     , uDebug
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
@@ -71,6 +71,13 @@ var MaxTextureSize: LongInt;
 {$ELSE}
     SDLPrimSurface: PSDL_Surface;
 {$ENDIF}
+    squaresize : LongInt;
+    numsquares : LongInt;
+    ProgrTex: PTexture;
+
+const 
+    cHHFileName = 'Hedgehog';
+    cCHFileName = 'Crosshair';
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
 var w, h: LongInt;
@@ -148,6 +155,7 @@ var t: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
 begin
+    if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
@@ -436,7 +444,7 @@ if not reload then
 IMG_Quit();
 end;
 
-{$IF NOT DEFINED(S3D_DISABLED) OR DEFINED(USE_VIDEO_RECORDING)}
+{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
@@ -538,8 +546,8 @@ for i:= Low(CountTexz) to High(CountTexz) do
     if defaultFrame <> 0 then
         DeleteFramebuffer(defaultFrame, depthv, texv);
 {$ENDIF}
-{$IFNDEF S3D_DISABLED}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+{$IFDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
         begin
         DeleteFramebuffer(framel, depthl, texl);
         DeleteFramebuffer(framer, depthr, texr);
@@ -575,7 +583,7 @@ begin
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
     begin
         SDL_FreeSurface(tmpsurf);
-        OutError(msgFailedSize, (imageFlags and ifCritical) <> 0);
+        OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
@@ -597,6 +605,8 @@ var tmpsurf: PSDL_Surface;
 begin
     // check for file in user dir (never critical)
     tmpsurf:= LoadImage(cPathz[path] + '/' + filename, imageFlags);
+    
+    LoadDataImage:= tmpsurf;
 end;
 
 
@@ -804,8 +814,8 @@ begin
     end;
 {$ENDIF}
 
-{$IFNDEF S3D_DISABLED}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+{$IFDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
     begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
@@ -867,6 +877,7 @@ procedure AddProgress;
 var r: TSDL_Rect;
     texsurf: PSDL_Surface;
 begin
+    if cOnlyStats then exit;
     if Step = 0 then
     begin
         WriteToConsole(msgLoading + 'progress sprite: ');
@@ -877,8 +888,10 @@ begin
         squaresize:= texsurf^.w shr 1;
         numsquares:= texsurf^.h div squaresize;
         SDL_FreeSurface(texsurf);
-
-        uMobile.GameLoading();
+        with mobileRecord do
+            if GameLoading <> nil then
+                GameLoading();
+        
         end;
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
@@ -901,7 +914,9 @@ end;
 
 procedure FinishProgress;
 begin
-    uMobile.GameLoaded();
+    with mobileRecord do
+        if GameLoaded <> nil then
+            GameLoaded();
     WriteLnToConsole('Freeing progress surface... ');
     FreeTexture(ProgrTex);
     ProgrTex:= nil;
@@ -1121,10 +1136,25 @@ var flags: Longword = 0;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
     {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
 begin
+    if cOnlyStats then
+        begin
+        MaxTextureSize:= 1024;
+        exit
+        end;
     if Length(s) = 0 then
-        cFullScreen:= (not cFullScreen)
+         cFullScreen:= (not cFullScreen)
+    else cFullScreen:= s = '1';
+    
+    if cFullScreen then
+        begin
+        cScreenWidth:= cFullscreenWidth;
+        cScreenHeight:= cFullscreenHeight;
+        end
     else
-        cFullScreen:= s = '1';
+        begin
+        cScreenWidth:= cWindowedWidth;
+        cScreenHeight:= cWindowedHeight;
+        end;
 
     AddFileLog('Preparing to change video parameters...');
 {$IFDEF SDL13}
@@ -1202,22 +1232,25 @@ begin
 
     if SDLwindow = nil then
         if cFullScreen then
-            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cOrigScreenWidth, cOrigScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
+            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
         else
+            begin
             SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
+            end;
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
+        begin
         flags:= flags or SDL_FULLSCREEN;
-
+        end;
     if not cOnlyStats then
         begin
     {$IFDEF WIN32}
         s:= SDL_getenv('SDL_VIDEO_CENTERED');
         SDL_putenv('SDL_VIDEO_CENTERED=1');
     {$ENDIF}
-        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, cBits, flags);
+        SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
         SDLTry(SDLPrimSurface <> nil, true);
     {$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
         end;

@@ -44,6 +44,7 @@ var
 
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
+    if cOnlyStats then exit;
     if Captions[Group].Text <> s then
         begin
         FreeTexture(Captions[Group].Tex);

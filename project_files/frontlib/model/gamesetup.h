@@ -31,7 +31,7 @@
 #include "teamlist.h"
 
 typedef struct {
-    char *style;				// e.g. "Capture the Flag"
+    char *style;				//!< e.g. "Capture the Flag"
     flib_scheme *gamescheme;
     flib_map *map;
 	flib_teamlist *teamlist;

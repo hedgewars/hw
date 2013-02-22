@@ -23,6 +23,9 @@
 #include <QStringList>
 #include <QRect>
 #include <QEvent>
+#include <QList>
+#include <utility>
+#include "binds.h"
 
 class HWForm;
 class QSettings;
@@ -36,6 +39,7 @@ class GameUIConfig : public QSettings
         GameUIConfig(HWForm * FormWidgets, const QString & fileName);
         QStringList GetTeamsList();
         QRect vid_Resolution();
+        std::pair<QRect, QRect> vid_ResolutionPair();
         bool vid_Fullscreen();
         quint32 translateQuality();
         bool isSoundEnabled();
@@ -48,16 +52,24 @@ class GameUIConfig : public QSettings
         bool appendDateTimeToRecordName();
         quint8 volume();
         quint8 timerInterval();
-        quint8 bitDepth();
         QString netNick();
         QByteArray netPasswordHash();
         int netPasswordLength();
+        void clearPasswordHash();
+        void setPasswordHash(const QString & passwordhash);
+        QString passwordHash();
+        void clearTempHash();
+        void setTempHash(const QString & temphash);
+        QString tempHash();
         void setNetPasswordLength(int passwordLength);
         bool isReducedQuality() const;
         bool isFrontendEffects() const;
         bool isFrontendFullscreen() const;
         void resizeToConfigValues();
         quint32 stereoMode() const;
+        void setValue(const QString & key, const QVariant & value);
+        QString bind(int bindID);
+        void setBind(int bindID, QString & strbind);
 
         QString AVFormat();
         QString videoCodec();
@@ -85,7 +97,8 @@ class GameUIConfig : public QSettings
     private:
         bool netPasswordIsValid();
         bool eventFilter(QObject *object, QEvent *event);
-        quint8 depth;
+        QString temphash;
+        QList<BindAction> m_binds;
 };
 
 #endif

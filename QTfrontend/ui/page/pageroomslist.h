@@ -19,6 +19,7 @@
 #ifndef PAGE_ROOMLIST_H
 #define PAGE_ROOMLIST_H
 
+#include <QTableView>
 #include "AbstractPage.h"
 
 class HWChatWidget;
@@ -27,19 +28,27 @@ class QTableView;
 class RoomsListModel;
 class QSortFilterProxyModel;
 
+class RoomTableView : public QTableView
+{
+    friend class PageRoomsList;
+
+    public:
+        RoomTableView(QWidget* parent = 0) : QTableView(parent){}
+};
+
 class PageRoomsList : public AbstractPage
 {
         Q_OBJECT
 
     public:
-        PageRoomsList(QWidget* parent, QSettings * config);
+        PageRoomsList(QWidget* parent);
         void displayError(const QString & message);
         void displayNotice(const QString & message);
         void displayWarning(const QString & message);
+        void setSettings(QSettings * settings);
 
-        QLineEdit * roomName;
         QLineEdit * searchText;
-        QTableView * roomsList;
+        RoomTableView * roomsList;
         QPushButton * BtnCreate;
         QPushButton * BtnJoin;
         QPushButton * BtnAdmin;
@@ -77,6 +86,10 @@ class PageRoomsList : public AbstractPage
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
         void saveHeaderState();
+        void onRoomNameChosen(const QString &);
+        void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
+        void moveSelectionUp();
+        void moveSelectionDown();
 
     private:
         QSettings * m_gameSettings;
@@ -84,6 +97,8 @@ class PageRoomsList : public AbstractPage
         QSortFilterProxyModel * stateFilteredModel;
         QSortFilterProxyModel * schemeFilteredModel;
         QSortFilterProxyModel * weaponsFilteredModel;
+        QAction * showGamesInLobby;
+        QAction * showGamesInProgress;
 
         AmmoSchemeModel * ammoSchemeModel;
 

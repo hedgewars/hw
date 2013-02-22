@@ -1,5 +1,5 @@
-file(GLOB BaseMusic *.ogg) 
+file(GLOB BaseMusic *.ogg)
 
 install(FILES
-	${BaseMusic}
-	DESTINATION ${SHAREPATH}Data/Music)
+    ${BaseMusic}
+    DESTINATION ${SHAREPATH}Data/Music)

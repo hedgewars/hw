@@ -21,15 +21,19 @@
 
 #include "AbstractPage.h"
 
+class QIcon;
+
 class PageMain : public AbstractPage
 {
-        Q_OBJECT
+    Q_OBJECT
 
     public:
         PageMain(QWidget * parent = 0);
 
         QPushButton * BtnSinglePlayer;
         QPushButton * BtnNet;
+        QPushButton * BtnNetLocal;
+        QPushButton * BtnNetOfficial;
         QPushButton * BtnSetup;
         QPushButton * BtnFeedback;
         QPushButton * BtnInfo;
@@ -41,8 +45,12 @@ class PageMain : public AbstractPage
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
         void connectSignals();
+        QIcon originalNetworkIcon, disabledNetworkIcon;
 
         QString randomTip() const;
+
+    private slots:
+        void toggleNetworkChoice();
 };
 
 #endif

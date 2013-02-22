@@ -1,4 +1,4 @@
-Basic_Training_-_Bazooka.name=Training: Bazooka - Grundlagen 
+Basic_Training_-_Bazooka.name=Training: Bazooka - Grundlagen
 Basic_Training_-_Bazooka.desc="Nutze den Wind zu deinem Vorteil aus!"
 
 Basic_Training_-_Grenade.name=Training: Granate - Grundlagen

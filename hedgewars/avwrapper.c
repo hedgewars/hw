@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include "libavformat/avformat.h"
+#include "libavutil/mathematics.h"
 
 #ifndef AVIO_FLAG_WRITE
 #define AVIO_FLAG_WRITE AVIO_WRONLY
@@ -47,13 +48,6 @@ static FILE* g_pSoundFile;
 static int16_t* g_pSamples;
 static int g_NumSamples;
 
-/*
-Initially I wrote code for latest ffmpeg, but on Linux (Ubuntu)
-only older version is available from repository. That's why you see here
-all of this #if LIBAVCODEC_VERSION_MAJOR < 54.
-Actually, it may be possible to remove code for newer version
-and use only code for older version.
-*/
 
 #if LIBAVCODEC_VERSION_MAJOR < 54
 #define OUTBUFFER_SIZE 200000
@@ -65,7 +59,7 @@ static void (*AddFileLogRaw)(const char* pString);
 
 static void FatalError(const char* pFmt, ...)
 {
-    const char Buffer[1024];
+    char Buffer[1024];
     va_list VaArgs;
 
     va_start(VaArgs, pFmt);
@@ -83,7 +77,7 @@ static void FatalError(const char* pFmt, ...)
 // (there is mutex in AddFileLogRaw).
 static void LogCallback(void* p, int Level, const char* pFmt, va_list VaArgs)
 {
-    const char Buffer[1024];
+    char Buffer[1024];
 
     vsnprintf(Buffer, 1024, pFmt, VaArgs);
     AddFileLogRaw(Buffer);
@@ -91,7 +85,7 @@ static void LogCallback(void* p, int Level, const char* pFmt, va_list VaArgs)
 
 static void Log(const char* pFmt, ...)
 {
-    const char Buffer[1024];
+    char Buffer[1024];
     va_list VaArgs;
 
     va_start(VaArgs, pFmt);
@@ -103,7 +97,7 @@ static void Log(const char* pFmt, ...)
 
 static void AddAudioStream()
 {
-#if LIBAVFORMAT_VERSION_MAJOR >= 54
+#if LIBAVFORMAT_VERSION_MAJOR >= 53
     g_pAStream = avformat_new_stream(g_pContainer, g_pACodec);
 #else
     g_pAStream = av_new_stream(g_pContainer, 1);
@@ -175,7 +169,7 @@ static int WriteAudioFrame()
 
     int NumSamples = fread(g_pSamples, 2*g_Channels, g_NumSamples, g_pSoundFile);
 
-#if LIBAVCODEC_VERSION_MAJOR >= 54
+#if LIBAVCODEC_VERSION_MAJOR >= 53
     AVFrame* pFrame = NULL;
     if (NumSamples > 0)
     {
@@ -215,7 +209,7 @@ static int WriteAudioFrame()
 // add a video output stream
 static void AddVideoStream()
 {
-#if LIBAVFORMAT_VERSION_MAJOR >= 54
+#if LIBAVFORMAT_VERSION_MAJOR >= 53
     g_pVStream = avformat_new_stream(g_pContainer, g_pVCodec);
 #else
     g_pVStream = av_new_stream(g_pContainer, 0);
@@ -254,7 +248,7 @@ static void AddVideoStream()
     if (g_pFormat->flags & AVFMT_GLOBALHEADER)
         g_pVideo->flags |= CODEC_FLAG_GLOBAL_HEADER;
 
-#if LIBAVCODEC_VERSION_MAJOR < 54
+#if LIBAVCODEC_VERSION_MAJOR < 53
     // for some versions of ffmpeg x264 options must be set explicitly
     if (strcmp(g_pVCodec->name, "libx264") == 0)
     {

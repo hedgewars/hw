@@ -34,6 +34,8 @@
 		610C8E3714E018D200CF5C4C /* MNEValueTrackingSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */; };
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
+		610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */ = {isa = PBXBuildFile; fileRef = 610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */; };
+		610FB81A166139DF002FB2A7 /* libPhysfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 610FB7F8166139A4002FB2A7 /* libPhysfs.a */; };
 		61156521147F48B6006729A9 /* About.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156520147F48B6006729A9 /* About.strings */; };
 		61156523147F48B7006729A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156522147F48B7006729A9 /* Localizable.strings */; };
 		61156525147F48B8006729A9 /* Scheme.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156524147F48B8006729A9 /* Scheme.strings */; };
@@ -65,7 +67,6 @@
 		6129B9F711EFB04D0017E305 /* denied.png in Resources */ = {isa = PBXBuildFile; fileRef = 6129B9F611EFB04D0017E305 /* denied.png */; };
 		612CABAB1391CE68005E9596 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 612CABAA1391CE68005E9596 /* AVFoundation.framework */; };
 		61370653117B1D50004EE44A /* Entitlements-Distribution.plist in Resources */ = {isa = PBXBuildFile; fileRef = 61370652117B1D50004EE44A /* Entitlements-Distribution.plist */; };
-		61399013125D19C0003C2DC0 /* uMobile.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61399012125D19C0003C2DC0 /* uMobile.pas */; };
 		6147DAD31253DCDE0010357E /* savesButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 6147DAD21253DCDE0010357E /* savesButton.png */; };
 		61536DF411CEAE7100D87A7E /* GameConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924A11CA9CB400D6E256 /* GameConfigViewController-iPhone.xib */; };
 		615AD96212073B4D00F2FF04 /* startGameButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD96112073B4D00F2FF04 /* startGameButton.png */; };
@@ -255,6 +256,76 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		610FB7E116613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = libFreetype;
+		};
+		610FB7E316613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BE48FF6507AFA9A800BB41DA;
+			remoteInfo = "Static Library";
+		};
+		610FB7E516613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = libLua;
+		};
+		610FB7E716613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FD6526620DE8FCCB002AD96B;
+			remoteInfo = libSDL;
+		};
+		610FB7E916613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BE1FA90707AF96B2004B6283;
+			remoteInfo = "Static Library";
+		};
+		610FB7EB16613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BE48FD6807AFA17000BB41DA;
+			remoteInfo = "Static Library";
+		};
+		610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = libTremor;
+		};
+		610FB7EF16613980002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BE1FA72F07AF4C45004B6283;
+			remoteInfo = libSDL_image;
+		};
+		610FB7F7166139A4002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = Physfs;
+		};
+		610FB81B166139EC002FB2A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = Physfs;
+		};
 		6162456614E6159C00CC97FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
@@ -346,6 +417,8 @@
 		610782951440EE5C00645B29 /* gameMods.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = gameMods.plist; path = Resources/gameMods.plist; sourceTree = "<group>"; };
 		610C8E3514E018D200CF5C4C /* MNEValueTrackingSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNEValueTrackingSlider.h; path = Classes/MNEValueTrackingSlider.h; sourceTree = "<group>"; };
 		610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNEValueTrackingSlider.m; path = Classes/MNEValueTrackingSlider.m; sourceTree = "<group>"; };
+		610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uPhysFSLayer.pas; path = ../../hedgewars/uPhysFSLayer.pas; sourceTree = SOURCE_ROOT; };
+		610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Physfs.xcodeproj; path = ../../misc/physfs/Xcode/Physfs.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6115651A147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/About.strings; sourceTree = "<group>"; };
 		6115651B147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6115651C147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -382,7 +455,6 @@
 		6129B9F611EFB04D0017E305 /* denied.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = denied.png; path = Resources/denied.png; sourceTree = "<group>"; };
 		612CABAA1391CE68005E9596 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
-		61399012125D19C0003C2DC0 /* uMobile.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uMobile.pas; path = ../../hedgewars/uMobile.pas; sourceTree = SOURCE_ROOT; };
 		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/Frontend/savesButton.png; sourceTree = "<group>"; };
 		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		6154A53114C37E4A00F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/About.strings; sourceTree = "<group>"; };
@@ -649,6 +721,7 @@
 				616245D114E6160200CC97FB /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
+				610FB81A166139DF002FB2A7 /* libPhysfs.a in Frameworks */,
 				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
 				61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */,
 				61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */,
@@ -757,6 +830,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */,
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
@@ -778,6 +852,14 @@
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		610FB7F4166139A4002FB2A7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				610FB7F8166139A4002FB2A7 /* libPhysfs.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		61156510147F481B006729A9 /* Locale */ = {
@@ -1133,6 +1215,7 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */,
 				619349C5160BAF3E00A08518 /* uAILandMarks.pas */,
 				619349C6160BAF3E00A08518 /* uGearsHandlers.pas */,
 				619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */,
@@ -1158,7 +1241,6 @@
 				61A4A39112A5CCC2004D81E6 /* uTypes.pas */,
 				61A4A39212A5CCC2004D81E6 /* uUtils.pas */,
 				61A4A39312A5CCC2004D81E6 /* uVariables.pas */,
-				61399012125D19C0003C2DC0 /* uMobile.pas */,
 				619C5AF3124F7E3100D041AE /* LuaPas.pas */,
 				61E1F4F711D004240016A5AA /* adler32.pas */,
 				617987E7114AA34C00BA94A9 /* hwengine.pas */,
@@ -1213,6 +1295,15 @@
 			);
 			dependencies = (
 				9283015A0F10E41300CC5A3C /* PBXTargetDependency */,
+				610FB7E216613980002FB2A7 /* PBXTargetDependency */,
+				610FB7E416613980002FB2A7 /* PBXTargetDependency */,
+				610FB7E616613980002FB2A7 /* PBXTargetDependency */,
+				610FB7E816613980002FB2A7 /* PBXTargetDependency */,
+				610FB7EA16613980002FB2A7 /* PBXTargetDependency */,
+				610FB7EC16613980002FB2A7 /* PBXTargetDependency */,
+				610FB7EE16613980002FB2A7 /* PBXTargetDependency */,
+				610FB7F016613980002FB2A7 /* PBXTargetDependency */,
+				610FB81C166139EC002FB2A7 /* PBXTargetDependency */,
 			);
 			name = Hedgewars;
 			productName = HedgewarsMobile;
@@ -1273,6 +1364,10 @@
 					ProjectRef = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
 				},
 				{
+					ProductGroup = 610FB7F4166139A4002FB2A7 /* Products */;
+					ProjectRef = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
+				},
+				{
 					ProductGroup = 61A19AE414D2010A004B1E6D /* Products */;
 					ProjectRef = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
 				},
@@ -1307,6 +1402,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		610FB7F8166139A4002FB2A7 /* libPhysfs.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPhysfs.a;
+			remoteRef = 610FB7F7166139A4002FB2A7 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		6162456714E6159C00CC97FB /* libFreetype.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1606,7 +1708,6 @@
 				611D9BFB12497E9800008271 /* SavedGamesViewController.m in Sources */,
 				619C5AF4124F7E3100D041AE /* LuaPas.pas in Sources */,
 				619C5BA2124FA59000D041AE /* MapPreviewButtonView.m in Sources */,
-				61399013125D19C0003C2DC0 /* uMobile.pas in Sources */,
 				61D205A1127CDD1100ABD83E /* ObjcExports.m in Sources */,
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
 				61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */,
@@ -1647,12 +1748,58 @@
 				619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */,
 				619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */,
 				619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */,
+				610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		610FB7E216613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libFreetype;
+			targetProxy = 610FB7E116613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7E416613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Static Library";
+			targetProxy = 610FB7E316613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7E616613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libLua;
+			targetProxy = 610FB7E516613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7E816613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libSDL;
+			targetProxy = 610FB7E716613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7EA16613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Static Library";
+			targetProxy = 610FB7E916613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7EC16613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Static Library";
+			targetProxy = 610FB7EB16613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7EE16613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libTremor;
+			targetProxy = 610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB7F016613980002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libSDL_image;
+			targetProxy = 610FB7EF16613980002FB2A7 /* PBXContainerItemProxy */;
+		};
+		610FB81C166139EC002FB2A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Physfs;
+			targetProxy = 610FB81B166139EC002FB2A7 /* PBXContainerItemProxy */;
+		};
 		9283015A0F10E41300CC5A3C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 928301160F10CAFC00CC5A3C /* fpc */;

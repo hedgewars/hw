@@ -23,10 +23,12 @@
 #include <QCryptographicHash>
 #include <QSettings>
 #include <QStandardItemModel>
+#include <QDebug>
 
 #include "team.h"
 #include "hwform.h"
 #include "DataManager.h"
+#include "gameuiconfig.h"
 
 HWTeam::HWTeam(const QString & teamname) :
     QObject(0)
@@ -50,7 +52,7 @@ HWTeam::HWTeam(const QString & teamname) :
     {
         m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
-        m_binds[i].strbind = cbinds[i].strbind;
+        m_binds[i].strbind = QString();
     }
     m_rounds = 0;
     m_wins = 0;
@@ -110,7 +112,7 @@ HWTeam::HWTeam() :
     {
         m_binds.append(BindAction());
         m_binds[i].action = cbinds[i].action;
-        m_binds[i].strbind = cbinds[i].strbind;
+        m_binds[i].strbind = QString();
     }
     m_rounds = 0;
     m_wins = 0;
@@ -169,7 +171,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     m_name = teamfile.value("Team/Name", m_name).toString();
     m_grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -191,7 +193,7 @@ bool HWTeam::loadFromFile()
         m_hedgehogs[i].Suicides = teamfile.value(hh + "Suicides", 0).toInt();
     }
     for(int i = 0; i < BINDS_NUMBER; i++)
-        m_binds[i].strbind = teamfile.value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
+        m_binds[i].strbind = teamfile.value(QString("Binds/%1").arg(m_binds[i].action), QString()).toString();
     for(int i = 0; i < MAX_ACHIEVEMENTS; i++)
         if(achievements[i][0][0])
             AchievementProgress[i] = teamfile.value(QString("Achievements/%1").arg(achievements[i][0]), 0).toUInt();
@@ -202,7 +204,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-    QFile f(QString("physfs://config/Teams/%1.hwt").arg(m_name));
+    QFile f(QString("physfs://Teams/%1.hwt").arg(m_name));
     return f.exists();
 }
 
@@ -210,7 +212,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(m_name));
+    QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(m_name));
     cfgfile.remove();
     return true;
 }
@@ -219,11 +221,14 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-        QFile cfgfile(QString("physfs://config/Teams/%1.hwt").arg(OldTeamName));
+        QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(OldTeamName));
         cfgfile.remove();
         OldTeamName = m_name;
     }
-    QSettings teamfile(QString("physfs://config/Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+
+    QString fileName = QString("physfs://Teams/%1.hwt").arg(m_name);
+    DataManager::ensureFileExists(fileName);
+    QSettings teamfile(fileName, QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Team/Name", m_name);
     teamfile.setValue("Team/Grave", m_grave);
@@ -234,6 +239,7 @@ bool HWTeam::saveToFile()
     teamfile.setValue("Team/Rounds", m_rounds);
     teamfile.setValue("Team/Wins", m_wins);
     teamfile.setValue("Team/CampaignProgress", m_campaignProgress);
+
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
         QString hh = QString("Hedgehog%1/").arg(i);
@@ -251,10 +257,11 @@ bool HWTeam::saveToFile()
             teamfile.setValue(QString("Achievements/%1").arg(achievements[i][0]), AchievementProgress[i]);
         else
             break;
+
     return true;
 }
 
-QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
+QStringList HWTeam::teamGameConfig(quint32 InitHealth, GameUIConfig * config) const
 {
     QStringList sl;
     if (m_isNetTeam)
@@ -270,9 +277,15 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     sl.push_back(QString("eflag " + m_flag));
 
     if (!m_isNetTeam)
+    {
         for(int i = 0; i < BINDS_NUMBER; i++)
-            if(!m_binds[i].strbind.isEmpty())
+        {
+            if(m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default")
+                sl.push_back(QString("ebind " + config->bind(i) + " " + m_binds[i].action));
+            else
                 sl.push_back(QString("ebind " + m_binds[i].strbind + " " + m_binds[i].action));
+        }
+    }
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {

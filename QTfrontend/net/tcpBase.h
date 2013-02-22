@@ -38,16 +38,19 @@ class TCPBase : public QObject
         Q_OBJECT
 
     public:
-        TCPBase(bool demoMode);
+        TCPBase(bool demoMode, QObject * parent = 0);
         virtual ~TCPBase();
+
+        virtual bool couldBeRemoved();
 
     signals:
         void isReadyNow();
 
     protected:
+        bool m_hasStarted;
         quint16 ipc_port;
 
-        void Start();
+        void Start(bool couldCancelPreviousRequest);
 
         QByteArray readbuffer;
 
@@ -77,5 +80,22 @@ class TCPBase : public QObject
 
         void tcpServerReady();
 };
+
+#ifdef HWLIBRARY
+class EngineInstance : public QObject
+{
+    Q_OBJECT
+public:
+    EngineInstance(QObject *parent = 0);
+    ~EngineInstance();
+
+    int port;
+public slots:
+    void start(void);
+signals:
+    void finished(void);
+private:
+};
+#endif
 
 #endif // _TCPBASE_INCLUDED

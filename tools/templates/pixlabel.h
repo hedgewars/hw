@@ -5,17 +5,17 @@
 
 class PixLabel : public QLabel
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 
-	PixLabel();
-	QList<QRect> rects;
+    PixLabel();
+    QList<QRect> rects;
 
 public slots:
-	void AddRect();
+    void AddRect();
 
 private:
-	void paintEvent(QPaintEvent * event);
-	void mousePressEvent(QMouseEvent * e);
+    void paintEvent(QPaintEvent * event);
+    void mousePressEvent(QMouseEvent * e);
 };

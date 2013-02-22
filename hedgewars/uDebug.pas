@@ -34,7 +34,7 @@ begin
 WriteLnToConsole(Msg);
 if isFatalError then
     begin
-    ParseCommand('fatal ' + GetLastConsoleLine, true);
+    ParseCommand('fatal ' + lastConsoleline, true);
     SDL_Quit;
     halt(1)
     end

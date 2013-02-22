@@ -54,8 +54,8 @@
 00:51=Jordboll
 00:52=Inget vapen valt
 00:53=Tidslåda
-00:54=Struktur
-00:55=Markspruta
+; 00:54=Struktur
+00:54=Markspruta
 
 01:00=Nu kör vi!
 01:01=Oavgjort
@@ -535,7 +535,7 @@
 04:51=Få till en gratisträff genom att kasta en boll med|jord. Känns lite gran, och knuffar tillbaka|igelkottar.
 04:52=UNUSED
 04:53=Åk på ett äventyr genom tid och rymd, medan dina|kamrater blir kvar själva att slåss. Var beredd|att komma tillbaka när som helst, eller till|Sudden Death eller om de andra blir besegrade.|Varning. Fungerar inte under Sudden Death, om du|är ensam, eller om du är en kung.
-04:54=INCOMPLETE                                                                                                                                     
+04:54=INCOMPLETE
 04:55=Spruta en ström av fästande jord.|Bygg broar, gräv ner fienden, stäng igen tunnlar.|Var försiktig så att du inte får något på dig!
 
 ; Game goal strings

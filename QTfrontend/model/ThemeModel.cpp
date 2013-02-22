@@ -21,7 +21,9 @@
  * @brief ThemeModel class implementation
  */
 
+#include "physfs.h"
 #include "ThemeModel.h"
+#include "hwconsts.h"
 
 ThemeModel::ThemeModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -51,7 +53,6 @@ void ThemeModel::loadThemes()
 {
     beginResetModel();
 
-
     DataManager & datamgr = DataManager::instance();
 
     QStringList themes =
@@ -73,17 +74,23 @@ void ThemeModel::loadThemes()
 
         QMap<int, QVariant> dataset;
 
+        // detect if theme is dlc
+        QString themeDir = PHYSFS_getRealDir(QString("Themes/%1/icon.png").arg(theme).toLocal8Bit().data());
+        bool isDLC = !themeDir.startsWith(datadir->absolutePath());
+        dataset.insert(IsDlcRole, isDLC);
+
+        // set icon path
+        dataset.insert(IconPathRole, iconpath);
+
         // set name
-        dataset.insert(Qt::DisplayRole, theme);
+        dataset.insert(ActualNameRole, theme);
 
-        // load and set icon
-        QIcon icon(iconpath);
-
-        dataset.insert(Qt::DecorationRole, icon);
+        // set displayed name
+        dataset.insert(Qt::DisplayRole, (isDLC ? "*" : "") + theme);
 
         // load and set preview icon
         QIcon preview(QString("physfs://Themes/%1/icon@2x.png").arg(theme));
-        dataset.insert(Qt::UserRole, preview);
+        dataset.insert(Qt::DecorationRole, preview);
 
         m_data.append(dataset);
     }
@@ -91,7 +98,3 @@ void ThemeModel::loadThemes()
 
     endResetModel();
 }
-
-
-
-
