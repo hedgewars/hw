@@ -267,15 +267,15 @@ else()
 endif()
 
 
-#physfs library (static on unix, dll on win32)
-find_package(PhysFS)
-if(PHYSFS_FOUND EQUAL FALSE)
-    add_subdirectory(misc/physfs)
+#physfs library and its layer
+if(NOT DEFINED PHYSFS_BUNDLE)
+    find_package(PhysFS)
 endif()
-#    if(NOT WIN32)
-#        list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a")
-#    endif()
-
+if(NOT PHYSFS_FOUND)
+    message(STATUS "PhysFS will be provided by the bundled sources")
+    add_subdirectory(misc/libphysfs)
+endif()
+add_subdirectory(misc/libphyslayer)
 
 #main engine
 add_subdirectory(hedgewars)

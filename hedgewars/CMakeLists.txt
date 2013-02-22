@@ -250,8 +250,12 @@ if(NOT LUA_FOUND)
     add_dependencies(hwengine lua)
 endif()
 
-# compile physfs before engine
-add_dependencies(hwengine physfs)
+# same for physfs
+if(NOT PHYSFS_FOUND)
+    add_dependencies(hwengine physfs)
+endif()
+
+add_dependencies(hwengine physlayer)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
