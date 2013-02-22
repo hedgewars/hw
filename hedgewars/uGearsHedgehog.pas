@@ -53,7 +53,6 @@ with HHGear^.Hedgehog^ do
     prevAmmo:= CurAmmoType;
     ammoidx:= 0;
     if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0)
-    or ((MultiShootAttacks > 0) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0))
     or ((HHGear^.State and gstHHDriven) = 0) then
         exit;
     ChangeAmmo:= true;
@@ -61,8 +60,12 @@ with HHGear^.Hedgehog^ do
     while (ammoidx < cMaxSlotAmmoIndex) and (Ammo^[slot, ammoidx].AmmoType <> CurAmmoType) do
         inc(ammoidx);
 
-    if ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) <> 0) and (MultiShootAttacks > 0) then
-        OnUsedAmmo(HHGear^.Hedgehog^);
+    if (MultiShootAttacks > 0) then
+        begin
+        if (CurAmmoType = amSniperRifle) and ((GameFlags and gfArtillery) = 0) then
+            cArtillery := false;
+        OnUsedAmmo(HHGear^.Hedgehog^)
+        end;
 
     MultiShootAttacks:= 0;
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
