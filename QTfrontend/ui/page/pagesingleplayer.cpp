@@ -36,22 +36,18 @@ QLayout * PageSinglePlayer::bodyLayoutDefinition()
 
     topLine->addStretch();
     BtnSimpleGamePage = addButton(":/res/SimpleGame.png", topLine, 0, true);
-    BtnSimpleGamePage->setToolTip(tr("Simple Game"));
     BtnSimpleGamePage->setWhatsThis(tr("Play a quick game against the computer with random settings"));
     topLine->addSpacing(60);
     BtnMultiplayer = addButton(":/res/Multiplayer.png", topLine, 1, true);
-    BtnMultiplayer->setToolTip(tr("Multiplayer"));
     BtnMultiplayer->setWhatsThis(tr("Play a hotseat game against your friends, or AI teams"));
     topLine->addStretch();
 
 
     BtnCampaignPage = addButton(":/res/Campaign.png", middleLine, 0, true);
-    BtnCampaignPage->setToolTip(tr("Campaign Mode"));
     BtnCampaignPage->setWhatsThis(tr("Campaign Mode"));
     BtnCampaignPage->setVisible(true);
 
     BtnTrainPage = addButton(":/res/Trainings.png", middleLine, 1, true);
-    BtnTrainPage->setToolTip(tr("Training Mode"));
     BtnTrainPage->setWhatsThis(tr("Practice your skills in a range of training missions"));
 
     return vLayout;
@@ -63,11 +59,9 @@ QLayout * PageSinglePlayer::footerLayoutDefinition()
     bottomLine->addStretch();
 
     BtnDemos = addButton(":/res/Record.png", bottomLine, 1, true);
-    BtnDemos->setToolTip(tr("Demos"));
     BtnDemos->setWhatsThis(tr("Watch recorded demos"));
     BtnLoad = addButton(":/res/Load.png", bottomLine, 2, true);
     BtnLoad->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    BtnLoad->setToolTip(tr("Load"));
     BtnLoad->setWhatsThis(tr("Load a previously saved game"));
 
     bottomLine->setStretch(1,0);

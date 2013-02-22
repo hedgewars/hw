@@ -20,17 +20,15 @@
 
 const BindAction cbinds[BINDS_NUMBER] =
 {
-    {"+up",       "up",         QT_TRANSLATE_NOOP("binds", "up"),              QT_TRANSLATE_NOOP("binds (categories)", "Basic controls"), QT_TRANSLATE_NOOP("binds (descriptions)", "Move your hogs and aim:")},
+    {"+up",       "up",         QT_TRANSLATE_NOOP("binds", "up"),              QT_TRANSLATE_NOOP("binds (categories)", "Movement"), QT_TRANSLATE_NOOP("binds (descriptions)", "Hedgehog movement")},
     {"+left",     "left",       QT_TRANSLATE_NOOP("binds", "left"),            NULL, NULL},
     {"+right",    "right",      QT_TRANSLATE_NOOP("binds", "right"),           NULL, NULL},
     {"+down",     "down",       QT_TRANSLATE_NOOP("binds", "down"),            NULL, NULL},
     {"+precise",  "left_shift", QT_TRANSLATE_NOOP("binds", "precise aim"),     NULL, NULL},
     {"ljump",     "return",     QT_TRANSLATE_NOOP("binds", "long jump"),       NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Traverse gaps and obstacles by jumping:")},
     {"hjump",     "backspace",  QT_TRANSLATE_NOOP("binds", "high jump"),       NULL, NULL},
-    {"+attack",   "space",      QT_TRANSLATE_NOOP("binds", "attack"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Fire your selected weapon or trigger an utility item:")},
-    {"put",       "mousel",     QT_TRANSLATE_NOOP("binds", "put"),             NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or a target location under the cursor:")},
     {"switch",    "tab",        QT_TRANSLATE_NOOP("binds", "switch"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Switch your currently active hog (if possible):")},
-    {"ammomenu",  "mouser",     QT_TRANSLATE_NOOP("binds", "ammo menu"),       QT_TRANSLATE_NOOP("binds (categories)", "Weapon controls"), QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or utility item:")},
+    {"ammomenu",  "mouser",     QT_TRANSLATE_NOOP("binds", "ammo menu"),       QT_TRANSLATE_NOOP("binds (categories)", "Weapons"), QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or utility item:")},
     {"slot 1",    "f1",         QT_TRANSLATE_NOOP("binds", "slot 1"),          NULL, NULL},
     {"slot 2",    "f2",         QT_TRANSLATE_NOOP("binds", "slot 2"),          NULL, NULL},
     {"slot 3",    "f3",         QT_TRANSLATE_NOOP("binds", "slot 3"),          NULL, NULL},
@@ -46,7 +44,9 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"timer 3",   "3",          QT_TRANSLATE_NOOP("binds", "timer 3 sec"),     NULL, NULL},
     {"timer 4",   "4",          QT_TRANSLATE_NOOP("binds", "timer 4 sec"),     NULL, NULL},
     {"timer 5",   "5",          QT_TRANSLATE_NOOP("binds", "timer 5 sec"),     NULL, NULL},
-    {"findhh",    "h",          QT_TRANSLATE_NOOP("binds", "find hedgehog"),   QT_TRANSLATE_NOOP("binds (categories)", "Camera and cursor controls"), QT_TRANSLATE_NOOP("binds (descriptions)", "Move the camera to the active hog:")},
+    {"+attack",   "space",      QT_TRANSLATE_NOOP("binds", "attack"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Fire your selected weapon or trigger an utility item:")},
+    {"put",       "mousel",     QT_TRANSLATE_NOOP("binds", "put"),             NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pick a weapon or a target location under the cursor:")},
+    {"findhh",    "h",          QT_TRANSLATE_NOOP("binds", "find hedgehog"),   QT_TRANSLATE_NOOP("binds (categories)", "Camera"), QT_TRANSLATE_NOOP("binds (descriptions)", "Move the camera to the active hog:")},
     {"+cur_u",    "[8]",        QT_TRANSLATE_NOOP("binds", "up"),              NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Move the cursor or camera without using the mouse:")},
     {"+cur_l",    "[4]",        QT_TRANSLATE_NOOP("binds", "left"),            NULL, NULL},
     {"+cur_r",    "[6]",        QT_TRANSLATE_NOOP("binds", "right"),           NULL, NULL},
@@ -55,7 +55,7 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"zoomin",    "wheelup",    QT_TRANSLATE_NOOP("binds", "zoom in"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Modify the camera's zoom level:")},
     {"zoomout",   "wheeldown",  QT_TRANSLATE_NOOP("binds", "zoom out"),        NULL, NULL},
     {"zoomreset", "mousem",     QT_TRANSLATE_NOOP("binds", "reset zoom"),      NULL, NULL},
-    {"chat",      "t",          QT_TRANSLATE_NOOP("binds", "chat"),            QT_TRANSLATE_NOOP("binds (categories)", "Other"), QT_TRANSLATE_NOOP("binds (descriptions)", "Talk to your team or all participants:")},
+    {"chat",      "t",          QT_TRANSLATE_NOOP("binds", "chat"),            QT_TRANSLATE_NOOP("binds (categories)", "Miscellaneous"), QT_TRANSLATE_NOOP("binds (descriptions)", "Talk to your team or all participants:")},
     {"history",   "`",          QT_TRANSLATE_NOOP("binds", "chat history"),    NULL, NULL},
     {"pause",     "p",          QT_TRANSLATE_NOOP("binds", "pause"),           NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Pause, continue or leave your game:")},
     {"quit",      "escape",     QT_TRANSLATE_NOOP("binds", "quit"),            NULL, NULL},
@@ -65,6 +65,8 @@ const BindAction cbinds[BINDS_NUMBER] =
     {"mute",      "8",          QT_TRANSLATE_NOOP("binds", "mute audio"),      NULL, NULL},
     {"fullscr",   "f12",        QT_TRANSLATE_NOOP("binds", "change mode"),     NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle fullscreen mode:")},
     {"capture",   "c",          QT_TRANSLATE_NOOP("binds", "capture"),         NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Take a screenshot:")},
-    {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "hedgehogs\ninfo"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")},
+    {"rotmask",   "delete",     QT_TRANSLATE_NOOP("binds", "hedgehog info"), NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Toggle labels above hedgehogs:")},
+#ifdef VIDEOREC
     {"record",    "r",          QT_TRANSLATE_NOOP("binds", "record"),          NULL, QT_TRANSLATE_NOOP("binds (descriptions)", "Record video:")}
+#endif
 };

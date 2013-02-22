@@ -93,7 +93,7 @@ class HWTeam : public QObject
         void incWins();
 
         // convert team info into strings for further computation
-        QStringList teamGameConfig(quint32 InitHealth) const;
+        QStringList teamGameConfig(quint32 InitHealth, GameUIConfig * config) const;
 
         // comparison operators
         bool operator == (const HWTeam& t1) const;

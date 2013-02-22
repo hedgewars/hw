@@ -1,11 +1,11 @@
-#include <lua.h>
-#include <physfs.h>
+#include "lua.h"
+#include "physfs.h"
 
 #define BUFSIZE 1024
 
-void * physfsReaderBuffer;
+void *physfsReaderBuffer;
 
-const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
+PHYSFS_DECL const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
 {
 
     if(PHYSFS_eof(f))
@@ -22,3 +22,9 @@ const char * physfsReader(lua_State *L, PHYSFS_File *f, size_t *size)
             return physfsReaderBuffer;
     }
 }
+
+PHYSFS_DECL void physfsReaderSetBuffer(void *buffer)
+{
+    physfsReaderBuffer = buffer;
+}
+

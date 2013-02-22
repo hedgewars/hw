@@ -30,25 +30,26 @@
 #include <QDebug>
 #include "SquareLabel.h"
 #include "HWApplication.h"
+#include "keybinder.h"
 
 #include "DataManager.h"
-#include "HatModel.h"
+#include "hatbutton.h"
 
 #include "pageeditteam.h"
 
 QLayout * PageEditTeam::bodyLayoutDefinition()
 {
     QGridLayout * pageLayout = new QGridLayout();
-    QTabWidget * tbw = new QTabWidget();
+    tbw = new QTabWidget();
     QWidget * page1 = new QWidget(this);
-    QWidget * page2 = new QWidget(this);
+    binder = new KeyBinder(this, tr("Select an action to choose a custom key bind for this team"), tr("Use my default"), tr("Reset all binds"));
+    connect(binder, SIGNAL(resetAllBinds()), this, SLOT(resetAllBinds()));
     tbw->addTab(page1, tr("General"));
-    tbw->addTab(page2, tr("Advanced"));
+    tbw->addTab(binder, tr("Custom Controls"));
     pageLayout->addWidget(tbw, 0, 0, 1, 3);
 
     QHBoxLayout * page1Layout = new QHBoxLayout(page1);
     page1Layout->setAlignment(Qt::AlignTop);
-    QGridLayout * page2Layout = new QGridLayout(page2);
 
 // ====== Page 1 ======
     QVBoxLayout * vbox1 = new QVBoxLayout();
@@ -61,27 +62,33 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     GBoxHedgehogs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     QGridLayout * GBHLayout = new QGridLayout(GBoxHedgehogs);
 
-    HatModel * hatModel = DataManager::instance().hatModel();
+
+    GBHLayout->addWidget(new QLabel(tr("Hat")), 0, 0);
+    GBHLayout->addWidget(new QLabel(tr("Name")), 0, 1);
 
     for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
     {
-        HHHats[i] = new QComboBox(GBoxHedgehogs);
-        HHHats[i]->setModel(hatModel);
-        HHHats[i]->setIconSize(QSize(32, 37));
-        //HHHats[i]->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-        //HHHats[i]->setModelColumn(1);
-        //HHHats[i]->setMinimumWidth(132);
-        GBHLayout->addWidget(HHHats[i], i, 0);
+        HHHats[i] = new HatButton(GBoxHedgehogs);
+        GBHLayout->addWidget(HHHats[i], i + 1, 0);
 
         HHNameEdit[i] = new QLineEdit(GBoxHedgehogs);
         HHNameEdit[i]->setMaxLength(64);
         HHNameEdit[i]->setMinimumWidth(120);
-        GBHLayout->addWidget(HHNameEdit[i], i, 1);
+        HHNameEdit[i]->setFixedHeight(36);
+        HHNameEdit[i]->setWhatsThis(tr("This hedgehog's name"));
+        HHNameEdit[i]->setStyleSheet("padding: 6px;");
+        GBHLayout->addWidget(HHNameEdit[i], i + 1, 1);
 
-        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i, 3, 1, 1, true);
+        btnRandomHogName[i] = addButton(":/res/dice.png", GBHLayout, i + 1, 3, 1, 1, true);
+        btnRandomHogName[i]->setFixedHeight(HHNameEdit[i]->height());
+        btnRandomHogName[i]->setWhatsThis(tr("Randomize this hedgehog's name"));
     }
 
-    btnRandomTeam = addButton(QPushButton::tr("Random Team"), GBHLayout, 9, 0);
+    btnRandomTeam = new QPushButton();
+    btnRandomTeam->setText(tr("Random Team"));
+    btnRandomTeam->setStyleSheet("padding: 6px 10px;");
+    GBHLayout->addWidget(btnRandomTeam, 9, 0, 1, 4, Qt::AlignCenter);
+    btnRandomTeam->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     vbox1->addWidget(GBoxHedgehogs);
 
@@ -157,52 +164,6 @@ QLayout * PageEditTeam::bodyLayoutDefinition()
     vbox1->addStretch();
     vbox2->addStretch();
 
-// ====== Page 2 ======
-    GBoxBinds = new QGroupBox(this);
-    GBoxBinds->setTitle(QGroupBox::tr("Key binds"));
-    QGridLayout * GBBLayout = new QGridLayout(GBoxBinds);
-    BindsBox = new QToolBox(GBoxBinds);
-    BindsBox->setLineWidth(0);
-    GBBLayout->addWidget(BindsBox);
-    page2Layout->addWidget(GBoxBinds, 0, 0);
-
-    quint16 i = 0;
-    quint16 num = 0;
-    QWidget * curW = NULL;
-    QGridLayout * pagelayout = NULL;
-    QLabel* l = NULL;
-    while (i < BINDS_NUMBER)
-    {
-        if(cbinds[i].category != NULL)
-        {
-            if(curW != NULL)
-            {
-                l = new QLabel(curW);
-                l->setText("");
-                pagelayout->addWidget(l, num++, 0, 1, 2);
-            }
-            curW = new QWidget(this);
-            BindsBox->addItem(curW, HWApplication::translate("binds (categories)", cbinds[i].category));
-            pagelayout = new QGridLayout(curW);
-            num = 0;
-        }
-        if(cbinds[i].description != NULL)
-        {
-            l = new QLabel(curW);
-            l->setText((num > 0 ? QString("\n") : QString("")) + HWApplication::translate("binds (descriptions)", cbinds[i].description));
-            pagelayout->addWidget(l, num++, 0, 1, 2);
-        }
-
-        l = new QLabel(curW);
-        l->setText(HWApplication::translate("binds", cbinds[i].name));
-        l->setAlignment(Qt::AlignRight);
-        pagelayout->addWidget(l, num, 0);
-
-        CBBind[i] = new QComboBox(curW);
-        CBBind[i]->setModel(DataManager::instance().bindsModel());
-        pagelayout->addWidget(CBBind[i++], num++, 1);
-    }
-
     return pageLayout;
 }
 
@@ -213,7 +174,7 @@ QLayout * PageEditTeam::footerLayoutDefinition()
 
 void PageEditTeam::connectSignals()
 {
-    connect(this, SIGNAL(goBack()), this, SLOT(saveTeam()));
+    connect(this, SIGNAL(pageLeave()), this, SLOT(saveTeam()));
 
     signalMapper1 = new QSignalMapper(this);
     signalMapper2 = new QSignalMapper(this);
@@ -407,6 +368,9 @@ void PageEditTeam::setRandomName(int hh_index)
 
 void PageEditTeam::loadTeam(const HWTeam & team)
 {
+    tbw->setCurrentIndex(0);
+    binder->resetInterface();
+
     TeamNameEdit->setText(team.name());
     CBTeamLvl->setCurrentIndex(team.difficulty());
 
@@ -419,7 +383,7 @@ void PageEditTeam::loadTeam(const HWTeam & team)
         if (hh.Hat.startsWith("Reserved"))
             hh.Hat = "Reserved "+hh.Hat.remove(0,40);
 
-        HHHats[i]->setCurrentIndex(HHHats[i]->findData(hh.Hat, Qt::DisplayRole));
+        HHHats[i]->setCurrentHat(hh.Hat);
     }
 
     CBGrave->setCurrentIndex(CBGrave->findText(team.grave()));
@@ -431,10 +395,12 @@ void PageEditTeam::loadTeam(const HWTeam & team)
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
+        if (team.keyBind(i).isEmpty()) continue;
+
         QModelIndexList mdl = binds->match(binds->index(0, 0), Qt::UserRole + 1, team.keyBind(i), 1, Qt::MatchExactly);
 
         if(mdl.size() == 1)
-            CBBind[i]->setCurrentIndex(mdl[0].row());
+            binder->setBindIndex(i, mdl[0].row());
         else
             qDebug() << "Binds: cannot find" << team.keyBind(i);
     }
@@ -449,7 +415,7 @@ HWTeam PageEditTeam::data()
     {
         HWHog hh;
         hh.Name = HHNameEdit[i]->text();
-        hh.Hat = HHHats[i]->currentText();
+        hh.Hat = HHHats[i]->currentHat();
 
         if (hh.Hat.startsWith("Reserved"))
             hh.Hat = "Reserved"+m_playerHash+hh.Hat.remove(0,9);
@@ -465,7 +431,7 @@ HWTeam PageEditTeam::data()
     QStandardItemModel * binds = DataManager::instance().bindsModel();
     for(int i = 0; i < BINDS_NUMBER; i++)
     {
-        team.bindKey(i, binds->index(CBBind[i]->currentIndex(), 0).data(Qt::UserRole + 1).toString());
+        team.bindKey(i, binds->index(binder->bindIndex(i), 0).data(Qt::UserRole + 1).toString());
     }
 
     return team;
@@ -474,4 +440,11 @@ HWTeam PageEditTeam::data()
 void PageEditTeam::saveTeam()
 {
     data().saveToFile();
+}
+
+// When the "Use default for all binds" is pressed...
+void PageEditTeam::resetAllBinds()
+{
+    for (int i = 0; i < BINDS_NUMBER; i++)
+        binder->setBindIndex(i, 0);
 }

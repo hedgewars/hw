@@ -23,7 +23,6 @@
 #include <QDropEvent>
 #include <QTextBrowser>
 
-
 class About : public QWidget
 {
         Q_OBJECT

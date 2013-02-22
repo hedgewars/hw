@@ -106,8 +106,8 @@ while Gear <> nil do
                 gtTarget,
                 gtFlame,
                 gtKnife,
-                gtExplosives,
-                gtStructure: begin
+                gtExplosives: begin //,
+                //gtStructure: begin
 // Run the calcs only once we know we have a type that will need damage
                         tdX:= Gear^.X-fX;
                         tdY:= Gear^.Y-fY;
@@ -243,8 +243,8 @@ begin
             end;
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);    
         end;
-    end
-    else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
+    end else
+    //else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         Gear^.Hedgehog:= AttackerHog;
     inc(Gear^.Damage, Damage);
     

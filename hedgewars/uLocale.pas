@@ -40,14 +40,12 @@ var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s: shortstring;
+var s: ansistring = '';
     f: pfsFile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;
     e: TEventId;
-    loaded: boolean;
 begin
-loaded:= false;
 for e:= Low(TEventId) to High(TEventId) do
     first[e]:= true;
 
@@ -58,7 +56,7 @@ if f <> nil then
     begin
     while not pfsEof(f) do
         begin
-        pfsReadLn(f, s);
+        pfsReadLnA(f, s);
         if Length(s) = 0 then
             continue;
         if (s[1] < '0') or (s[1] > '9') then

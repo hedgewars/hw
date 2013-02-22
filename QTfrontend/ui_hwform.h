@@ -24,7 +24,6 @@ class PageEditTeam;
 class PageMultiplayer;
 class PagePlayDemo;
 class PageOptions;
-class PageFeedback;
 class PageNet;
 class PageNetServer;
 class PageNetChat;
@@ -41,7 +40,6 @@ class PageRoomsList;
 class PageConnecting;
 class PageScheme;
 class PageAdmin;
-class PageNetType;
 class PageDrawMap;
 class PageVideos;
 class QStackedLayout;
@@ -60,7 +58,6 @@ class Ui_HWForm
         PageMultiplayer *pageMultiplayer;
         PagePlayDemo *pagePlayDemo;
         PageOptions *pageOptions;
-        PageFeedback *pageFeedback;
         PageNet *pageNet;
         PageNetServer * pageNetServer;
         PageNetChat *pageNetChat;
@@ -76,7 +73,6 @@ class Ui_HWForm
         PageConnecting *pageConnecting;
         PageScheme *pageScheme;
         PageAdmin *pageAdmin;
-        PageNetType *pageNetType;
         PageCampaign *pageCampaign;
         PageDrawMap *pageDrawMap;
         PageVideos *pageVideos;
@@ -86,7 +82,7 @@ class Ui_HWForm
 
         void setupUi(HWForm *HWForm);
         void SetupFonts();
-        void SetupPages(QWidget *Parent, HWForm *HWForm);
+        void SetupPages(QWidget *Parent);
 };
 
 #endif // UI_HWFORM_H

@@ -20,13 +20,18 @@
 #include "hwconsts.h"
 #include "hwmap.h"
 
-HWMap::HWMap() :
-    TCPBase(false)
+HWMap::HWMap(QObject * parent) :
+    TCPBase(false, parent)
 {
 }
 
 HWMap::~HWMap()
 {
+}
+
+bool HWMap::couldBeRemoved()
+{
+    return !m_hasStarted;
 }
 
 void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
@@ -36,15 +41,18 @@ void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int 
     m_mapgen = mapgen;
     m_maze_size = maze_size;
     if(mapgen == MAPGEN_DRAWN) m_drawMapData = drawMapData;
-    Start();
+    Start(true);
 }
 
 QStringList HWMap::getArguments()
 {
     QStringList arguments;
-    arguments << cfgdir->absolutePath();
+    arguments << "--internal";
+    arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
-    arguments << "landpreview";
+    arguments << "--user-prefix";
+    arguments << cfgdir->absolutePath();
+    arguments << "--landpreview";
     return arguments;
 }
 

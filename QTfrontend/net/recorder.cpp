@@ -47,7 +47,7 @@ HWRecorder::~HWRecorder()
     if (queue.empty())
         numRecorders--;
     else
-        queue.takeFirst()->Start();
+        queue.takeFirst()->Start(false);
 }
 
 void HWRecorder::onClientDisconnect()
@@ -89,7 +89,7 @@ void HWRecorder::EncodeVideo(const QByteArray & record)
     if (numRecorders < maxRecorders)
     {
         numRecorders++;
-        Start(); // run engine
+        Start(false); // run engine
     }
     else
         queue.push_back(this);
@@ -99,29 +99,44 @@ QStringList HWRecorder::getArguments()
 {
     QStringList arguments;
     QRect resolution = config->rec_Resolution();
-    arguments << cfgdir->absolutePath();
-    arguments << QString::number(resolution.width());
-    arguments << QString::number(resolution.height());
-    arguments << "32"; // bpp
+    QString nick = config->netNick().toUtf8().toBase64();
+
+    arguments << "--internal";
+    arguments << "--port";
     arguments << QString("%1").arg(ipc_port);
-    arguments << "0"; // fullscreen
-    arguments << "0"; // sound
-    arguments << "0"; // music
-    arguments << "0"; // sound volume
-    arguments << QString::number(config->timerInterval());
+    arguments << "--prefix";
     arguments << datadir->absolutePath();
-    arguments << "0"; // fps
-    arguments << (config->isAltDamageEnabled() ? "1" : "0");
-    arguments << config->netNick().toUtf8().toBase64();
-    arguments << QString::number(config->translateQuality());
-    arguments << QString::number(config->stereoMode());
+    arguments << "--user-prefix";
+    arguments << cfgdir->absolutePath();
+    arguments << "--locale";
     arguments << HWGame::tr("en.txt");
-    arguments << QString::number(config->rec_Framerate()); // framerate numerator
-    arguments << "1";  // framerate denominator
+    arguments << "--frame-interval";
+    arguments << QString::number(config->timerInterval());
+    arguments << "--width";
+    arguments << QString::number(resolution.width());
+    arguments << "--height";
+    arguments << QString::number(resolution.height());
+    arguments << "--nosound";
+    arguments << "--raw-quality";
+    arguments << QString::number(config->translateQuality());
+    arguments << "--stereo";
+    arguments << QString::number(config->stereoMode());
+    arguments << "--nomusic";
+    arguments << "--volume";
+    arguments << "0";
+    if (config->isAltDamageEnabled())
+        arguments << "--altdmg";
+    if (!nick.isEmpty()) {
+        arguments << "--nick";
+        arguments << nick;
+    }
+    arguments << "--recorder";
+    arguments << QString::number(config->rec_Framerate()); //cVideoFramerateNum
+    arguments << "1"; //cVideoFramerateDen
     arguments << prefix;
     arguments << config->AVFormat();
     arguments << config->videoCodec();
-// Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both. 
+// Could use a field to use quality instead. maybe quality could override bitrate - or just pass (and set) both.
 // The library does support using both at once after all.
     arguments << QString::number(config->rec_Bitrate()*1024);
     arguments << (config->recordAudio() ? config->audioCodec() : "no");

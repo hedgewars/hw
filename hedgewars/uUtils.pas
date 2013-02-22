@@ -73,6 +73,20 @@ procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 {$ENDIF}
 
+function  isPhone: Boolean; inline;
+function  getScreenDPI: Double; inline; //cdecl; external;
+
+{$IFDEF IPHONEOS}
+procedure startLoadingIndicator; cdecl; external;
+procedure stopLoadingIndicator; cdecl; external;
+procedure saveFinishedSynching; cdecl; external;
+function  isApplePhone: Boolean; cdecl; external;
+procedure AudioServicesPlaySystemSound(num: LongInt); cdecl; external;
+{$ENDIF}
+
+function  sanitizeForLog(s: shortstring): shortstring;
+function  sanitizeCharForLog(c: char): shortstring;
+
 procedure initModule(isNotPreview: boolean);
 procedure freeModule;
 
@@ -177,7 +191,11 @@ end;
 function  StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
-val(s, StrToInt, c)
+val(s, StrToInt, c);
+{$IFDEF DEBUGFILE}
+if c <> 0 then
+    writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 end;
 
 function FloatToStr(n: hwFloat): shortstring;
@@ -401,10 +419,60 @@ system.writeln(f, s)
 end;
 {$ENDIF}
 
+// this function is just to determine whether we are running on a limited screen device
+function isPhone: Boolean; inline;
+begin
+    isPhone:= false;
+{$IFDEF IPHONEOS}
+    isPhone:= isApplePhone();
+{$ENDIF}
+{$IFDEF ANDROID}
+    //nasty nasty hack. TODO: implement callback to java to have a unified way of determining if it is a tablet
+    if (cScreenWidth < 1000) and (cScreenHeight < 500) then
+        isPhone:= true;
+{$ENDIF}
+end;
+
+//This dummy function should be reimplemented (externally).
+function getScreenDPI: Double; inline;
+begin
+{$IFDEF ANDROID}
+//    getScreenDPI:= Android_JNI_getDensity();
+    getScreenDPI:= 1;
+{$ELSE}
+    getScreenDPI:= 1;
+{$ENDIF}
+end;
+
+function  sanitizeForLog(s: shortstring): shortstring;
+var i: byte;
+    r: shortstring;
+begin
+    r[0]:= s[0];
+    for i:= 1 to length(s) do
+        if (s[i] < #32) or (s[i] > #127) then
+            r[i]:= '?'
+            else
+            r[i]:= s[i];
+            
+    sanitizeForLog:= r
+end;
+
+function  sanitizeCharForLog(c: char): shortstring;
+var r: shortstring;
+begin
+    if (c < #32) or (c > #127) then
+        r:= '#' + inttostr(byte(c))
+        else
+        r:= c;
+            
+    sanitizeCharForLog:= r
+end;
+
 procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
-{$IFNDEF MOBILE}var i: LongInt;{$ENDIF}
+    i: LongInt;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -421,28 +489,24 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
-{$IFDEF MOBILE}
-    {$IFDEF IPHONEOS} Assign(f, UserPathPrefix + '/hw-' + logfileBase + '.log'); {$ENDIF}
-    {$IFDEF ANDROID} Assign(f,pathPrefix + '/' + logfileBase + '.log'); {$ENDIF}
-    Rewrite(f);
-{$ELSE}
+    f:= stderr; // if everything fails, write to stderr
     if (UserPathPrefix <> '') then
         begin
-            i:= 0;
-            while(i < 7) do
+        // create directory if it doesn't exist
+        if not FileExists(UserPathPrefix + '/Logs/') then
+            CreateDir(UserPathPrefix + '/Logs/');
+
+        // if log is locked, write to the next one
+        i:= 0;
+        while(i < 7) do
             begin
-                assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
-                rewrite(f);
-                if IOResult = 0 then
-                    break;
-                inc(i)
+            assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            if IOResult = 0 then
+                break;
+            inc(i)
             end;
-            if i = 7 then
-                f:= stderr; // if everything fails, write to stderr
-        end
-    else
-        f:= stderr;
-{$ENDIF}
+        end;
+    Rewrite(f);
 {$I+}
 {$ENDIF}
 

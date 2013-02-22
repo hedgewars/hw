@@ -41,6 +41,7 @@ class PageMultiplayer : public AbstractPage
     private:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
+        QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
         QPushButton * btnSetup;

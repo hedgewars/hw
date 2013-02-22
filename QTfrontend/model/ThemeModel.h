@@ -39,6 +39,7 @@ class ThemeModel : public QAbstractListModel
         Q_OBJECT
 
     public:
+        enum Roles { ActualNameRole = Qt::UserRole, IsDlcRole, IconPathRole };
         explicit ThemeModel(QObject *parent = 0);
 
         int rowCount(const QModelIndex &parent = QModelIndex()) const;

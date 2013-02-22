@@ -22,6 +22,7 @@ class FileEngine : public QAbstractFileEngine
         virtual bool flush();
         virtual qint64 size() const;
         virtual qint64 pos() const;
+        virtual bool setSize(qint64 size);
         virtual bool seek(qint64 pos);
         virtual bool isSequential() const;
         virtual bool remove();
@@ -38,6 +39,7 @@ class FileEngine : public QAbstractFileEngine
         bool atEnd() const;
 
         virtual qint64 read(char *data, qint64 maxlen);
+        virtual qint64 readLine(char *data, qint64 maxlen);
         virtual qint64 write(const char *data, qint64 len);
 
         bool isOpened() const;
@@ -48,11 +50,13 @@ class FileEngine : public QAbstractFileEngine
         virtual bool supportsExtension(Extension extension) const;
 
     private:
-        PHYSFS_file *_handler;
-        qint64 _size;
-        FileFlags _flags;
-        QString _filename;
-        QDateTime _datetime;
+        PHYSFS_file *m_handle;
+        qint64 m_size;
+        FileFlags m_flags;
+        QString m_fileName;
+        QDateTime m_date;
+        bool m_bufferSet;
+        bool m_readWrite;
 };
 
 class FileEngineHandler : public QAbstractFileEngineHandler

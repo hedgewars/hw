@@ -27,6 +27,8 @@
 #include <QSettings>
 #include <QStringListModel>
 #include <QDate>
+#include <QDesktopWidget>
+#include <QLabel>
 
 #include "hwform.h"
 #include "hwconsts.h"
@@ -37,11 +39,18 @@
 
 #ifdef _WIN32
 #include <Shlobj.h>
-#endif
-#ifdef __APPLE__
+#elif defined __APPLE__
 #include "CocoaInitializer.h"
 #endif
+#ifndef _WIN32
+#include <signal.h>
+#endif
 
+// Program resources
+#ifdef __APPLE__
+static CocoaInitializer * cocoaInit = NULL;
+#endif
+static FileEngineHandler * engine = NULL;
 
 //Determines the day of easter in year
 //from http://aa.usno.navy.mil/faq/docs/easter.php,adapted to C/C++
@@ -85,12 +94,20 @@ void checkSeason()
     else
         season = SEASON_NONE;
 }
+#ifndef _WIN32
+void terminateFrontend(int signal)
+{
+    Q_UNUSED(signal);
+
+    QCoreApplication::exit(0);
+}
+#endif
 
 bool checkForDir(const QString & dir)
 {
-    QDir tmpdir;
-    if (!tmpdir.exists(dir))
-        if (!tmpdir.mkdir(dir))
+    QDir tmpdir(dir);
+    if (!tmpdir.exists())
+        if (!tmpdir.mkpath(dir))
         {
             QMessageBox directoryMsg(QApplication::activeWindow());
             directoryMsg.setIcon(QMessageBox::Warning);
@@ -103,11 +120,53 @@ bool checkForDir(const QString & dir)
     return true;
 }
 
+// Guaranteed to be the last thing ran in the application's life time.
+// Closes resources that need to exist as long as possible.
+void closeResources(void)
+{
+#ifdef __APPLE__
+    if (cocoaInit != NULL)
+    {
+        delete cocoaInit;
+        cocoaInit = NULL;
+    }
+#endif
+    if (engine != NULL)
+    {
+        delete engine;
+        engine = NULL;
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    // Since we're calling this first, closeResources() will be the last thing called after main() returns.
+    atexit(closeResources);
+
+#ifdef __APPLE__
+    cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
+#endif
+
+#ifndef _WIN32
+    signal(SIGINT, &terminateFrontend);
+#endif
+
     HWApplication app(argc, argv);
 
-    FileEngineHandler engine(argv[0]);
+    QLabel *splash = NULL;
+#if defined Q_WS_WIN
+    QPixmap pixmap(":res/splash.png");
+    splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    splash->setAttribute(Qt::WA_TranslucentBackground);
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
+                                  (deskSize.height() - pixmap.height())/2 );
+    splash->move(splashCenter);
+    splash->setPixmap(pixmap);
+    splash->show();
+#endif
+
+    engine = new FileEngineHandler(argv[0]);
 
     app.setAttribute(Qt::AA_DontShowIconsInMenus,false);
 
@@ -146,8 +205,13 @@ int main(int argc, char *argv[])
     if(parsedArgs.contains("config-dir"))
     {
         QFileInfo f(parsedArgs["config-dir"]);
-        *cConfigDir = f.absoluteFilePath();
+        cfgdir->setPath(f.absoluteFilePath());
         custom_config = true;
+    }
+    else
+    {
+        cfgdir->setPath(QDir::homePath());
+        custom_config = false;
     }
 
     app.setStyle(new QPlastiqueStyle());
@@ -160,14 +224,9 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<HWTeam>("HWTeam");
 
-    bindir->cd("bin"); // workaround over NSIS installer
+    bindir->cd(QCoreApplication::applicationDirPath());
 
-    if(cConfigDir->length() == 0)
-        cfgdir->setPath(cfgdir->homePath());
-    else
-        cfgdir->setPath(*cConfigDir);
-
-    if(cConfigDir->length() == 0)
+    if(custom_config == false)
     {
 #ifdef __APPLE__
         checkForDir(cfgdir->absolutePath() + "/Library/Application Support/Hedgewars");
@@ -208,29 +267,31 @@ int main(int argc, char *argv[])
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("hedgewars/Data"))
+    if(!datadir->cd("Data"))
     {
         QMessageBox missingMsg(QApplication::activeWindow());
         missingMsg.setIcon(QMessageBox::Critical);
         missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
         missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
                                            "Please check your installation!").
-                                            arg(datadir->absolutePath()+"/hedgewars/Data"));
+                                            arg(datadir->absolutePath()+"/Data"));
         missingMsg.setWindowModality(Qt::WindowModal);
         missingMsg.exec();
         return 1;
     }
 
     // setup PhysFS
-    engine.mount(datadir->absolutePath());
-    engine.mount(cfgdir->absolutePath() + "/Data");
-    engine.mount(cfgdir->absolutePath(), "/config");
-    engine.setWriteDir(cfgdir->absolutePath());
-    engine.mountPacks();
+    engine->mount(datadir->absolutePath());
+    engine->mount(cfgdir->absolutePath() + "/Data");
+    engine->mount(cfgdir->absolutePath());
+    engine->setWriteDir(cfgdir->absolutePath());
+    engine->mountPacks();
+
+    DataManager::ensureFileExists("physfs://hedgewars.ini");
 
     QTranslator Translator;
     {
-        QSettings settings("physfs://config/hedgewars.ini", QSettings::IniFormat);
+        QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
         QString cc = settings.value("misc/locale", QString()).toString();
         if(cc.isEmpty())
             cc = QLocale::system().name();
@@ -249,10 +310,6 @@ int main(int argc, char *argv[])
         registry_hklm.setValue("Software/Hedgewars/Frontend", bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe");
         registry_hklm.setValue("Software/Hedgewars/Path", bindir->absolutePath().replace("/", "\\"));
     }
-#endif
-#ifdef __APPLE__
-    // this creates the autoreleasepool that prevents leaking
-    CocoaInitializer initializer;
 #endif
 
     QString style = "";
@@ -276,6 +333,7 @@ int main(int argc, char *argv[])
             break;
         default :
             fname = "qt.css";
+            break;
     }
 
     // load external stylesheet if there is any
@@ -290,5 +348,7 @@ int main(int argc, char *argv[])
 
     app.form = new HWForm(NULL, style);
     app.form->show();
+    if(splash)
+        splash->close();
     return app.exec();
 }

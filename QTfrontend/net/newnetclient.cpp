@@ -28,6 +28,8 @@
 #include "game.h"
 #include "roomslistmodel.h"
 #include "playerslistmodel.h"
+#include "servermessages.h"
+#include "HWApplication.h"
 
 char delimeter='\n';
 
@@ -241,6 +243,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     {
         mynick = lst[1];
         m_playersModel->setNickname(mynick);
+        m_nick_registered = false;
         return ;
     }
 
@@ -250,7 +253,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "ERROR")
     {
         if (lst.size() == 2)
-            emit Error(lst[1]);
+            emit Error(HWApplication::translate("server", lst[1].toAscii().constData()));
         else
             emit Error("Unknown error");
         return;
@@ -259,7 +262,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     if (lst[0] == "WARNING")
     {
         if (lst.size() == 2)
-            emit Warning(lst[1]);
+            emit Warning(HWApplication::translate("server", lst[1].toAscii().constData()));
         else
             emit Warning("Unknown warning");
         return;
@@ -304,6 +307,10 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QStringList tmp = lst;
         tmp.removeFirst();
         m_roomsListModel->setRoomsList(tmp);
+        if (m_nick_registered == false)
+        {
+            emit NickNotRegistered(mynick);
+        }
         return;
     }
 
@@ -364,6 +371,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if (lst[0] == "BANLIST")
+    {
+        QStringList tmp = lst;
+        tmp.removeFirst();
+        emit bansList(tmp);
+        return;
+    }
+
     if (lst[0] == "CLIENT_FLAGS")
     {
         if(lst.size() < 3 || lst[1].size() < 2)
@@ -380,11 +395,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             flags.remove(0, 1);
             char c = flags[0].toAscii();
+            bool inRoom = (netClientState == InRoom || netClientState == InGame);
 
             switch(c)
             {
                 // flag indicating if a player is ready to start a game
                 case 'r':
+                    if(inRoom)
                         foreach (const QString & nick, nicks)
                         {
                             if (nick == mynick)
@@ -401,14 +418,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
-
+                // flag indicating if a player has engine running
                 case 'g':
+                    if(inRoom)
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::InGame, setFlag);
                         break;
 
                 // flag indicating if a player is the host/master of the room
                 case 'h':
+                    if(inRoom)
                         foreach (const QString & nick, nicks)
                         {
                             if (nick == mynick)
@@ -493,9 +512,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QString roomName = tmp.takeFirst();
         m_roomsListModel->updateRoom(roomName, tmp);
 
-        // keep track of room name so correct name is displayed when you become room admin
+        // keep track of room name so correct name is displayed
         if(myroom == roomName)
+        {
             myroom = tmp[1];
+            emit roomNameUpdated(myroom);
+        }
 
         return;
     }
@@ -526,7 +548,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ASKPASSWORD")
     {
-        emit AskForPassword(mynick);
+        emit NickRegistered(mynick);
+        m_nick_registered = true;
         return;
     }
 
@@ -561,10 +584,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         if (lst[1] == "Authentication failed")
         {
             emit AuthFailed();
+            m_game_connected = false;
+            Disconnect();
+            //omitted 'emit disconnected()', we don't want the error message
+            return;
         }
         m_game_connected = false;
         Disconnect();
-        emit disconnected(lst[1]);
+        emit disconnected(HWApplication::translate("server", lst[1].toAscii().constData()));
         return;
     }
 
@@ -572,6 +599,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
     {
         // obsolete, see +a client flag
         return;
+    }
+
+    if(lst[0] == "JOINING")
+    {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Bad JOINING message");
+            return;
+        }
+
+        myroom = lst[1];
+        emit roomNameUpdated(myroom);
     }
 
     if(netClientState == InLobby && lst[0] == "JOINED")
@@ -614,6 +653,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 QByteArray em = QByteArray::fromBase64(lst[i].toAscii());
                 emit FromNet(em);
             }
+            return;
+        }
+
+        if (lst[0] == "ROUND_FINISHED")
+        {
+            emit FromNet(QByteArray("\x01o"));
             return;
         }
 
@@ -859,6 +904,26 @@ void HWNewNet::banPlayer(const QString & nick)
     RawSendNet(QString("BAN%1%2").arg(delimeter).arg(nick));
 }
 
+void HWNewNet::banIP(const QString & ip, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANIP%1%2%1%3%1%4").arg(delimeter).arg(ip).arg(reason).arg(seconds));
+}
+
+void HWNewNet::banNick(const QString & nick, const QString & reason, int seconds)
+{
+    RawSendNet(QString("BANNICK%1%2%1%3%1%4").arg(delimeter).arg(nick).arg(reason).arg(seconds));
+}
+
+void HWNewNet::getBanList()
+{
+    RawSendNet(QByteArray("BANLIST"));
+}
+
+void HWNewNet::removeBan(const QString & b)
+{
+    RawSendNet(QString("UNBAN%1%2").arg(delimeter).arg(b));
+}
+
 void HWNewNet::kickPlayer(const QString & nick)
 {
     RawSendNet(QString("KICK%1%2").arg(delimeter).arg(nick));
@@ -876,6 +941,20 @@ void HWNewNet::followPlayer(const QString & nick)
         RawSendNet(QString("FOLLOW%1%2").arg(delimeter).arg(nick));
         isChief = false;
     }
+}
+
+void HWNewNet::consoleCommand(const QString & cmd)
+{
+    RawSendNet(QString("CMD%1%2").arg(delimeter).arg(cmd));
+}
+
+bool HWNewNet::allPlayersReady()
+{
+    int ready = 0;
+    for (int i = 0; i < m_roomPlayersModel->rowCount(); i++)
+        if (m_roomPlayersModel->index(i, 0).data(PlayersListModel::Ready).toBool()) ready++;
+
+    return (ready == m_roomPlayersModel->rowCount());
 }
 
 void HWNewNet::startGame()

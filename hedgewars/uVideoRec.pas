@@ -30,11 +30,6 @@ end.
 {$IFNDEF WIN32}
     {$LINKLIB ../bin/libavwrapper.a}
 {$ENDIF}
-{$IFDEF DARWIN}
-    {$LINKLIB bz2}
-    {$LINKFRAMEWORK CoreVideo}
-    {$LINKFRAMEWORK VideoDecodeAcceleration}
-{$ENDIF}
 
 interface
 
@@ -201,7 +196,7 @@ begin
 end;
 
 function LoadNextCameraPosition(out newRealTicks, newGameTicks: LongInt): Boolean;
-var frame: TFrame;
+var frame: TFrame = (realTicks: 0; gameTicks: 0; CamX: 0; CamY: 0; zoom: 0);
 begin
     // we need to skip or duplicate frames to match target framerate
     while Int64(curTime)*cVideoFramerateNum <= Int64(numFrames)*cVideoFramerateDen*1000 do
@@ -249,9 +244,12 @@ procedure CopyFile(src, dest: shortstring);
 var inF, outF: file;
     buffer: array[0..1023] of byte;
     result: LongInt;
+    i: integer;
 begin
 {$IOCHECKS OFF}
-    result:= 0; // avoid compiler hint
+    result:= 0; // avoid compiler hint and warning
+    for i:= 0 to 1023 do
+        buffer[i]:= 0;
 
     Assign(inF, src);
     Reset(inF, 1);

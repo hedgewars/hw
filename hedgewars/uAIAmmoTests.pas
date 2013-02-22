@@ -40,6 +40,7 @@ function TestGrenade(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackPar
 function TestMolotov(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestClusterBomb(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestWatermelon(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDrillRocket(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestShotgun(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestDesertEagle(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
@@ -91,7 +92,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: @TestWatermelon;  flags: 0), // amWatermelon
             (proc: nil;              flags: 0), // amHellishBomb
             (proc: nil;              flags: 0), // amNapalm
-            (proc: nil;              flags: 0), // amDrill
+            (proc: @TestDrillRocket; flags: 0), // amDrill
             (proc: nil;              flags: 0), // amBallgun
             (proc: nil;              flags: 0), // amRCPlane
             (proc: nil;              flags: 0), // amLowGravity
@@ -115,7 +116,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amDrillStrike
             (proc: nil;              flags: 0), // amSnowball
             (proc: nil;              flags: 0), // amTardis
-            (proc: nil;              flags: 0), // amStructure
+            //(proc: nil;              flags: 0), // amStructure
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0)  // amKnife
@@ -186,6 +187,65 @@ repeat
 until rTime > 4250;
 TestBazooka:= valueResult
 end;
+
+
+function TestDrillRocket(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
+var Vx, Vy, r, mX, mY: real;
+    rTime: LongInt;
+    EX, EY: LongInt;
+    valueResult: LongInt;
+    x, y, dX, dY: real;
+    t: LongInt;
+    value: LongInt;
+begin
+    mX:= hwFloat2Float(Me^.X);
+    mY:= hwFloat2Float(Me^.Y);
+    ap.Time:= 0;
+    rTime:= 350;
+    ap.ExplR:= 0;
+    valueResult:= BadTurn;
+    repeat
+        rTime:= rTime + 300 + Level * 50 + random(300);
+        Vx:= - windSpeed * rTime * 0.5 + (Targ.X + AIrndSign(2) - mX) / rTime;
+        Vy:= cGravityf * rTime * 0.5 - (Targ.Y - 35 - mY) / rTime;
+        r:= sqr(Vx) + sqr(Vy);
+        if not (r > 1) then
+            begin
+            x:= mX;
+            y:= mY;
+            dX:= Vx;
+            dY:= -Vy;
+            t:= rTime;
+            repeat
+                x:= x + dX;
+                y:= y + dY;
+                dX:= dX + windSpeed;
+                dY:= dY + cGravityf;
+                dec(t)
+            until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+                   ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (y > cWaterLine);
+            
+            EX:= trunc(x);
+            EY:= trunc(y);
+            if Level = 1 then
+                value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
+            else value:= RateExplosion(Me, EX, EY, 101);
+            if value = 0 then
+                value:= 1024 - Metric(Targ.X, Targ.Y, EX, EY) div 64;
+            if valueResult <= value then
+                begin
+                ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
+                ap.Power:= trunc(sqrt(r) * cMaxPower) - random((Level - 1) * 17 + 1);
+                ap.ExplR:= 100;
+                ap.ExplX:= EX;
+                ap.ExplY:= EY;
+                valueResult:= value
+                end;
+            end
+    until rTime > 4250;
+    TestDrillRocket:= valueResult
+end;
+
 
 function TestSnowball(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r: real;
@@ -1080,7 +1140,7 @@ procedure checkCakeWalk(Me, Gear: PGear; var ap: TAttackParams);
 var i: Longword;
     v: LongInt;
 begin
-while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LAND_HEIGHT) do
+while (not TestColl(hwRound(Gear^.X), hwRound(Gear^.Y), 6)) and (Gear^.Y.Round < LongWord(LAND_HEIGHT)) do
     Gear^.Y:= Gear^.Y + _1;
 
 for i:= 0 to 2040 do

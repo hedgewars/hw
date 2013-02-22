@@ -55,6 +55,12 @@ procedure Tint                  (c: Longword); inline;
 implementation
 uses uVariables;
 
+{$IFDEF USE_TOUCH_INTERFACE}
+const
+    FADE_ANIM_TIME = 500;
+    MOVE_ANIM_TIME = 500;
+{$ENDIF}
+
 var LastTint: LongWord = 0;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);

@@ -1,10 +1,22 @@
 unit uPhysFSLayer;
 
-{$LINKLIB ../bin/libphysfs.a}
-{$LINKLIB ../bin/libphysfsrwops.a}
-
 interface
-uses SDLh;
+uses SDLh, LuaPas;
+
+{$IFDEF ANDROID}
+    {$linklib physfs}
+{$ELSE}
+    {$IFDEF DARWIN}
+        {$LINKFRAMEWORK IOKit}
+    {$ENDIF}
+{$ENDIF}
+
+const
+{$IFDEF WIN32}
+    PhysfsLibName = 'libphysfs';
+{$ELSE}
+    PhysfsLibName = 'physfs';
+{$ENDIF}
 
 procedure initModule;
 procedure freeModule;
@@ -18,27 +30,31 @@ function pfsOpenRead(fname: shortstring): PFSFile;
 function pfsClose(f: PFSFile): boolean;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
+procedure pfsReadLnA(f: PFSFile; var s: ansistring);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
+function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhysfsLibName;
+procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
+
 implementation
-uses uUtils, uVariables;
+uses uUtils, uVariables, sysutils;
 
-function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external;
-function PHYSFS_deinit() : LongInt; cdecl; external;
-function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external;
-function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external;
+function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
+function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
+function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhysfsLibName;
+function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
 
-function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external;
-function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external;
-function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external;
-function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external;
-function PHYSFS_close(f: PFSFile): LongBool; cdecl; external;
-function PHYSFS_exists(fname: PChar): LongBool; cdecl; external;
+function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external PhysfsLibName;
+function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
+function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external PhysfsLibName;
+function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 
-procedure hedgewarsMountPackages(); cdecl; external;
+procedure hedgewarsMountPackages(); cdecl; external PhysfsLibName;
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 begin
@@ -84,6 +100,28 @@ while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
         end
 end;
 
+procedure pfsReadLnA(f: PFSFile; var s: ansistring);
+var c: char;
+    b: shortstring;
+begin
+s:= '';
+b[0]:= #0;
+
+while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
+    if (c <> #13) then
+        begin
+        inc(b[0]);
+        b[byte(b[0])]:= c;
+        if b[0] = #255 then
+            begin
+            s:= s + b;
+            b[0]:= #0
+            end
+        end;
+        
+s:= s + b
+end;
+
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 var r: Int64;
 begin
@@ -97,8 +135,16 @@ end;
 
 procedure initModule;
 var i: LongInt;
+    cPhysfsId: shortstring;
 begin
-    i:= PHYSFS_init(Str2PChar(ParamStr(0)));
+{$IFDEF HWLIBRARY}
+    //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
+    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF} ' hedgewars';
+{$ELSE}
+    cPhysfsId:= ParamStr(0);
+{$ENDIF}
+
+    i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
     i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, true);

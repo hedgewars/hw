@@ -55,7 +55,7 @@ TeamShowWidget::TeamShowWidget(const HWTeam & team, bool isPlaying, FrameTeams *
 
     butt = new QPushButton(difficultyIcon, team.name().replace("&","&&"), this);
     butt->setFlat(true);
-    butt->setToolTip(team.owner());
+    butt->setWhatsThis(tr("%1's team").arg(team.owner()));
     mainLayout.addWidget(butt);
     butt->setStyleSheet("QPushButton{"
                         "icon-size: 48px;"

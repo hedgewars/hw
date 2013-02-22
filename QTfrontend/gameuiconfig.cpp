@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
+#include <utility>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -34,6 +35,7 @@
 #include "fpsedit.h"
 #include "HWApplication.h"
 #include "DataManager.h"
+#include "SDL.h"
 
 
 const QNetworkProxy::ProxyType proxyTypesMap[] = {
@@ -44,24 +46,35 @@ const QNetworkProxy::ProxyType proxyTypesMap[] = {
 
 
 GameUIConfig::GameUIConfig(HWForm * FormWidgets, const QString & fileName)
-    : QSettings(fileName, QSettings::IniFormat)
+    : QSettings(fileName, QSettings::IniFormat, FormWidgets)
 {
     Form = FormWidgets;
 
-    connect(Form->ui.pageOptions->CBEnableFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
+    setIniCodec("UTF-8");
+
+    connect(Form->ui.pageOptions->CBFrontendMusic, SIGNAL(toggled(bool)), Form, SLOT(Music(bool)));
+
+    for(int i = 0; i < BINDS_NUMBER; i++)
+    {
+        m_binds.append(BindAction());
+        m_binds[i].action = cbinds[i].action;
+        m_binds[i].strbind = cbinds[i].strbind;
+    }
 
     //Form->resize(value("frontend/width", 640).toUInt(), value("frontend/height", 450).toUInt());
     resizeToConfigValues();
 
     reloadValues();
+#ifdef VIDEOREC
     reloadVideosValues();
+#endif
 }
 
 void GameUIConfig::reloadValues(void)
 {
     Form->ui.pageOptions->WeaponTooltip->setChecked(value("misc/weaponTooltips", true).toBool());
 
-    int t = Form->ui.pageOptions->CBResolution->findText(value("video/resolution").toString());
+    int t = Form->ui.pageOptions->CBResolution->findText(value("video/fullscreenResolution").toString());
     if (t < 0)
     {
         if (Form->ui.pageOptions->CBResolution->count() > 1)
@@ -70,6 +83,20 @@ void GameUIConfig::reloadValues(void)
             Form->ui.pageOptions->CBResolution->setCurrentIndex(0);
     }
     else Form->ui.pageOptions->CBResolution->setCurrentIndex(t);
+
+    // Default the windowed resolution to 5/6 of the screen size
+    int screenWidth = SDL_GetVideoInfo()->current_w * 5 / 6;
+    int screenHeight = SDL_GetVideoInfo()->current_h * 5 / 6;
+    QString widthStr; widthStr.setNum(screenWidth);
+    QString heightStr; heightStr.setNum(screenHeight);
+    QString wWidth = value("video/windowedWidth", widthStr).toString();
+    QString wHeight = value("video/windowedHeight", heightStr).toString();
+    // If left blank reset the resolution to the default
+    wWidth = (wWidth == "" ? widthStr : wWidth);
+    wHeight = (wHeight == "" ? heightStr : wHeight);
+    Form->ui.pageOptions->windowWidthEdit->setText(wWidth);
+    Form->ui.pageOptions->windowHeightEdit->setText(wHeight);
+
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());
     bool ffscr=value("frontend/fullscreen", false).toBool();
@@ -77,12 +104,12 @@ void GameUIConfig::reloadValues(void)
 
     Form->ui.pageOptions->SLQuality->setValue(value("video/quality", 5).toUInt());
     Form->ui.pageOptions->CBStereoMode->setCurrentIndex(value("video/stereo", 0).toUInt());
-    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/effects", true).toBool());
-    Form->ui.pageOptions->CBEnableSound->setChecked(value("audio/sound", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendSound->setChecked(value("frontend/sound", true).toBool());
-    Form->ui.pageOptions->CBEnableMusic->setChecked(value("audio/music", true).toBool());
-    Form->ui.pageOptions->CBEnableFrontendMusic->setChecked(value("frontend/music", true).toBool());
-    Form->ui.pageOptions->volumeBox->setValue(value("audio/volume", 100).toUInt());
+    Form->ui.pageOptions->CBFrontendEffects->setChecked(value("frontend/effects", true).toBool());
+    Form->ui.pageOptions->CBSound->setChecked(value("audio/sound", true).toBool());
+    Form->ui.pageOptions->CBFrontendSound->setChecked(value("frontend/sound", true).toBool());
+    Form->ui.pageOptions->CBMusic->setChecked(value("audio/music", true).toBool());
+    Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
+    Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
     QString netNick = value("net/nick", "").toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
@@ -92,11 +119,13 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->editNetPassword->installEventFilter(this);
 
     int passLength = value("net/passwordlength", 0).toInt();
-    setNetPasswordLength(passLength);
-    if (savePwd == false) {
-        Form->ui.pageOptions->editNetPassword->setEnabled(savePwd);
+    if (!savePwd) {
+        Form->ui.pageOptions->editNetPassword->setEnabled(false);
         Form->ui.pageOptions->editNetPassword->setText("");
-        setNetPasswordLength(0);        
+        setNetPasswordLength(0);
+    } else
+    {
+        setNetPasswordLength(passLength);
     }
 
     delete netHost;
@@ -124,39 +153,51 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->leProxyLogin->setText(value("proxy/login", "").toString());
     Form->ui.pageOptions->leProxyPassword->setText(value("proxy/password", "").toString());
 
-    depth = HWApplication::desktop()->depth();
-    if (depth < 16) depth = 16;
-    else if (depth > 16) depth = 32;
-
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>()).value<QColor>()));
+            model->item(i)->setData(value(QString("colors/color%1").arg(i), model->item(i)->data()));
+    }
+
+    { // load binds
+        for(int i = 0; i < BINDS_NUMBER; i++)
+        {
+            m_binds[i].strbind = value(QString("Binds/%1").arg(m_binds[i].action), cbinds[i].strbind).toString();
+            if (m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default") m_binds[i].strbind = cbinds[i].strbind;
+        }
     }
 }
 
 void GameUIConfig::reloadVideosValues(void)
 {
-    Form->ui.pageVideos->framerateBox->setValue(value("videorec/fps",25).toUInt());
-    Form->ui.pageVideos->bitrateBox->setValue(value("videorec/bitrate",400).toUInt());
-    bool useGameRes = value("videorec/usegameres",true).toBool();
+    // one pass with default values
+    Form->ui.pageOptions->setDefaultOptions();
+
+    // then load user configuration
+    Form->ui.pageOptions->framerateBox->setCurrentIndex(
+            Form->ui.pageOptions->framerateBox->findData(
+                        value("videorec/framerate", rec_Framerate()).toString() + " fps",
+                    Qt::MatchExactly) );
+    Form->ui.pageOptions->bitrateBox->setValue(value("videorec/bitrate", rec_Bitrate()).toUInt());
+    bool useGameRes = value("videorec/usegameres",Form->ui.pageOptions->checkUseGameRes->isChecked()).toBool();
     if (useGameRes)
     {
         QRect res = vid_Resolution();
-        Form->ui.pageVideos->widthEdit->setText(QString::number(res.width()));
-        Form->ui.pageVideos->heightEdit->setText(QString::number(res.height()));
+        Form->ui.pageOptions->widthEdit->setText(QString::number(res.width()));
+        Form->ui.pageOptions->heightEdit->setText(QString::number(res.height()));
     }
     else
     {
-        Form->ui.pageVideos->widthEdit->setText(value("videorec/width","800").toString());
-        Form->ui.pageVideos->heightEdit->setText(value("videorec/height","600").toString());
+        Form->ui.pageOptions->widthEdit->setText(value("videorec/width","800").toString());
+        Form->ui.pageOptions->heightEdit->setText(value("videorec/height","600").toString());
     }
-    Form->ui.pageVideos->checkUseGameRes->setChecked(useGameRes);
-    Form->ui.pageVideos->checkRecordAudio->setChecked(value("videorec/audio",true).toBool());
-    if (!Form->ui.pageVideos->tryCodecs(value("videorec/format","no").toString(),
+    Form->ui.pageOptions->checkUseGameRes->setChecked(useGameRes);
+    Form->ui.pageOptions->checkRecordAudio->setChecked(
+            value("videorec/audio",Form->ui.pageOptions->checkRecordAudio->isChecked()).toBool() );
+    if (!Form->ui.pageOptions->tryCodecs(value("videorec/format","no").toString(),
                                         value("videorec/videocodec","no").toString(),
                                         value("videorec/audiocodec","no").toString()))
-        Form->ui.pageVideos->setDefaultCodecs();
+        Form->ui.pageOptions->setDefaultCodecs();
 }
 
 QStringList GameUIConfig::GetTeamsList()
@@ -175,12 +216,23 @@ QStringList GameUIConfig::GetTeamsList()
 
 void GameUIConfig::resizeToConfigValues()
 {
-    Form->resize(value("frontend/width", 800).toUInt(), value("frontend/height", 600).toUInt());
+    // fill 2/3 of the screen desktop
+    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    Form->resize(value("frontend/width", qMin(qMax(deskSize.width()*2/3,800),deskSize.width())).toUInt(),
+                 value("frontend/height", qMin(qMax(deskSize.height()*2/3,600),deskSize.height())).toUInt());
+
+    // move the window to the center of the screen
+    QPoint center = QApplication::desktop()->availableGeometry(-1).center();
+    center.setX(center.x() - (Form->width()/2));
+    center.setY(center.y() - (Form->height()/2));
+    Form->move(center);
 }
 
 void GameUIConfig::SaveOptions()
 {
-    setValue("video/resolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/fullscreenResolution", Form->ui.pageOptions->CBResolution->currentText());
+    setValue("video/windowedWidth", Form->ui.pageOptions->windowWidthEdit->text());
+    setValue("video/windowedHeight", Form->ui.pageOptions->windowHeightEdit->text());
     setValue("video/fullscreen", vid_Fullscreen());
 
     setValue("video/quality", Form->ui.pageOptions->SLQuality->value());
@@ -207,14 +259,16 @@ void GameUIConfig::SaveOptions()
     setValue("frontend/sound", isFrontendSoundEnabled());
     setValue("audio/music", isMusicEnabled());
     setValue("frontend/music", isFrontendMusicEnabled());
-    setValue("audio/volume", Form->ui.pageOptions->volumeBox->value());
+    setValue("audio/volume", Form->ui.pageOptions->SLVolume->value());
 
     setValue("net/nick", netNick());
-    if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked())
-    {
-        setValue("net/passwordhash", netPasswordHash());
-        setValue("net/passwordlength", netPasswordLength());
+    if (netPasswordIsValid() && Form->ui.pageOptions->CBSavePassword->isChecked()) {
+        setPasswordHash(netPasswordHash());
     }
+    else if(!Form->ui.pageOptions->CBSavePassword->isChecked()) {
+        clearPasswordHash();
+    }
+
     setValue("net/savepassword", Form->ui.pageOptions->CBSavePassword->isChecked());
     setValue("net/ip", *netHost);
     setValue("net/port", netPort);
@@ -268,7 +322,7 @@ void GameUIConfig::SaveOptions()
             setValue(QString("colors/color%1").arg(i), model->item(i)->data());
     }
 
-    Form->gameSettings->sync();
+    sync();
 }
 
 void GameUIConfig::SaveVideosOptions()
@@ -277,14 +331,20 @@ void GameUIConfig::SaveVideosOptions()
     setValue("videorec/format", AVFormat());
     setValue("videorec/videocodec", videoCodec());
     setValue("videorec/audiocodec", audioCodec());
-    setValue("videorec/fps", rec_Framerate());
+    setValue("videorec/framerate", rec_Framerate());
     setValue("videorec/bitrate", rec_Bitrate());
     setValue("videorec/width", res.width());
     setValue("videorec/height", res.height());
-    setValue("videorec/usegameres", Form->ui.pageVideos->checkUseGameRes->isChecked());
+    setValue("videorec/usegameres", Form->ui.pageOptions->checkUseGameRes->isChecked());
     setValue("videorec/audio", recordAudio());
 
-    Form->gameSettings->sync();
+    sync();
+}
+
+void GameUIConfig::setValue(const QString &key, const QVariant &value)
+{
+    //qDebug() << "[settings]" << key << value;
+    QSettings::setValue(key, value);
 }
 
 QString GameUIConfig::language()
@@ -292,16 +352,28 @@ QString GameUIConfig::language()
     return Form->ui.pageOptions->CBLanguage->itemData(Form->ui.pageOptions->CBLanguage->currentIndex()).toString();
 }
 
-QRect GameUIConfig::vid_Resolution()
-{
-    QRect result(0, 0, 640, 480);
+std::pair<QRect, QRect> GameUIConfig::vid_ResolutionPair() {
+    // returns a pair of both the fullscreen and the windowed resolution
+    QRect full(0, 0, 640, 480);
+    QRect windowed(0, 0, 640, 480);
     QStringList wh = Form->ui.pageOptions->CBResolution->currentText().split('x');
     if (wh.size() == 2)
     {
-        result.setWidth(wh[0].toInt());
-        result.setHeight(wh[1].toInt());
+        full.setWidth(wh[0].toInt());
+        full.setHeight(wh[1].toInt());
     }
-    return result;
+    windowed.setWidth(Form->ui.pageOptions->windowWidthEdit->text().toInt());
+    windowed.setHeight(Form->ui.pageOptions->windowHeightEdit->text().toInt());
+    return std::make_pair(full, windowed);
+}
+
+QRect GameUIConfig::vid_Resolution()
+{
+    std::pair<QRect, QRect> result = vid_ResolutionPair();
+    if(Form->ui.pageOptions->CBFullscreen->isChecked())
+        return result.first;
+    else
+        return result.second;
 }
 
 bool GameUIConfig::vid_Fullscreen()
@@ -370,20 +442,20 @@ bool GameUIConfig::isFrontendFullscreen() const
 
 bool GameUIConfig::isSoundEnabled()
 {
-    return Form->ui.pageOptions->CBEnableSound->isChecked();
+    return Form->ui.pageOptions->CBSound->isChecked();
 }
 bool GameUIConfig::isFrontendSoundEnabled()
 {
-    return Form->ui.pageOptions->CBEnableFrontendSound->isChecked();
+    return Form->ui.pageOptions->CBFrontendSound->isChecked();
 }
 
 bool GameUIConfig::isMusicEnabled()
 {
-    return Form->ui.pageOptions->CBEnableMusic->isChecked();
+    return Form->ui.pageOptions->CBMusic->isChecked();
 }
 bool GameUIConfig::isFrontendMusicEnabled()
 {
-    return Form->ui.pageOptions->CBEnableFrontendMusic->isChecked();
+    return Form->ui.pageOptions->CBFrontendMusic->isChecked();
 }
 
 bool GameUIConfig::isShowFPSEnabled()
@@ -418,11 +490,6 @@ quint8 GameUIConfig::timerInterval()
     return 35 - Form->ui.pageOptions->fpsedit->value();
 }
 
-quint8 GameUIConfig::bitDepth()
-{
-    return depth;
-}
-
 QString GameUIConfig::netNick()
 {
     return Form->ui.pageOptions->editNetNick->text();
@@ -445,7 +512,41 @@ int GameUIConfig::netPasswordLength()
 
 bool GameUIConfig::netPasswordIsValid()
 {
-    return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '\0'));
+    return (netPasswordLength() == 0 || Form->ui.pageOptions->editNetPassword->text() != QString(netPasswordLength(), '*'));
+}
+
+void GameUIConfig::clearPasswordHash()
+{
+    setValue("net/passwordhash", QString());
+    setValue("net/passwordlength", 0);
+    setValue("net/savepassword", false); //changes the savepassword value to false in order to not let the user save an empty password in PAGE_SETUP
+    reloadValues(); //reloads the values of PAGE_SETUP
+}
+
+void GameUIConfig::setPasswordHash(const QString & passwordhash)
+{
+    setValue("net/passwordhash", passwordhash);
+    setValue("net/passwordlength", passwordhash.size()/4);
+    setNetPasswordLength(passwordhash.size()/4);  //the hash.size() is divided by 4 let PAGE_SETUP use a reasonable number of stars to display the PW
+}
+
+QString GameUIConfig::passwordHash()
+{
+    return value("net/passwordhash").toString();
+}
+
+void GameUIConfig::clearTempHash()
+{
+    setTempHash(QString());
+}
+
+void GameUIConfig::setTempHash(const QString & temphash)
+{
+    this->temphash = temphash;
+}
+
+QString GameUIConfig::tempHash() {
+    return this->temphash;
 }
 
 // When hedgewars launches, the password field is set with null characters. If the user tries to edit the field and there are such characters, then clear the field
@@ -470,7 +571,7 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 {
     if (passwordLength > 0)
     {
-        Form->ui.pageOptions->editNetPassword->setText(QString(passwordLength, '\0'));
+        Form->ui.pageOptions->editNetPassword->setText(QString(passwordLength, '*'));
     }
     else
     {
@@ -480,45 +581,61 @@ void GameUIConfig::setNetPasswordLength(int passwordLength)
 
 quint8 GameUIConfig::volume()
 {
-    return Form->ui.pageOptions->volumeBox->value() * 128 / 100;
+    return Form->ui.pageOptions->SLVolume->value() * 128 / 100;
 }
 
 QString GameUIConfig::AVFormat()
 {
-    return Form->ui.pageVideos->format();
+    return Form->ui.pageOptions->format();
 }
 
 QString GameUIConfig::videoCodec()
 {
-    return Form->ui.pageVideos->videoCodec();
+    return Form->ui.pageOptions->videoCodec();
 }
 
 QString GameUIConfig::audioCodec()
 {
-    return Form->ui.pageVideos->audioCodec();
+    return Form->ui.pageOptions->audioCodec();
 }
 
 QRect GameUIConfig::rec_Resolution()
 {
-    if (Form->ui.pageVideos->checkUseGameRes->isChecked())
+    if (Form->ui.pageOptions->checkUseGameRes->isChecked())
         return vid_Resolution();
     QRect res(0,0,0,0);
-    res.setWidth(Form->ui.pageVideos->widthEdit->text().toUInt());
-    res.setHeight(Form->ui.pageVideos->heightEdit->text().toUInt());
+    res.setWidth(Form->ui.pageOptions->widthEdit->text().toUInt());
+    res.setHeight(Form->ui.pageOptions->heightEdit->text().toUInt());
     return res;
 }
 
 int GameUIConfig::rec_Framerate()
 {
-    return Form->ui.pageVideos->framerateBox->value();
+    // remove the "fps" label
+    QString fpsText = Form->ui.pageOptions->framerateBox->currentText();
+    QStringList fpsList = fpsText.split(" ");
+    return fpsList.first().toInt();
 }
 
 int GameUIConfig::rec_Bitrate()
 {
-    return Form->ui.pageVideos->bitrateBox->value();
+    return Form->ui.pageOptions->bitrateBox->value();
 }
 
 bool GameUIConfig::recordAudio()
 {
-    return Form->ui.pageVideos->checkRecordAudio->isChecked();
+    return Form->ui.pageOptions->checkRecordAudio->isChecked();
+}
+
+// Gets a bind for a bindID
+QString GameUIConfig::bind(int bindID)
+{
+    return m_binds[bindID].strbind;
+}
+
+// Sets a bind for a bindID and saves it
+void GameUIConfig::setBind(int bindID, QString & strbind)
+{
+    m_binds[bindID].strbind = strbind;
+    setValue(QString("Binds/%1").arg(m_binds[bindID].action), strbind);
 }

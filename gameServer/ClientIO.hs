@@ -30,25 +30,26 @@ takePacks
             return (B.splitWith (== '\n') packet : packets)
 
 listenLoop :: Socket -> Chan CoreMessage -> ClientIndex -> IO ()
-listenLoop sock chan ci = recieveWithBufferLoop B.empty
+listenLoop sock chan ci = receiveWithBufferLoop B.empty
     where
-        recieveWithBufferLoop recvBuf = do
+        receiveWithBufferLoop recvBuf = do
             recvBS <- recv sock 4096
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket
-                recieveWithBufferLoop newrecvBuf
+                receiveWithBufferLoop $ B.copy newrecvBuf
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
 
 clientRecvLoop :: Socket -> Chan CoreMessage -> Chan [B.ByteString] -> ClientIndex -> (forall a. IO a -> IO a) -> IO ()
 clientRecvLoop s chan clChan ci restore =
     (myThreadId >>=
-    \t -> (restore $ forkIO (clientSendLoop s t clChan ci) >>
+      (\t -> (restore $ forkIO (clientSendLoop s t clChan ci) >>
         listenLoop s chan ci >> return "Connection closed")
         `Exception.catch` (\(e :: ShutdownThreadException) -> return . B.pack . show $ e)
         `Exception.catch` (\(e :: Exception.IOException) -> return . B.pack . show $ e)
         `Exception.catch` (\(e :: Exception.SomeException) -> return . B.pack . show $ e)
+      )
         >>= clientOff) `Exception.finally` remove
     where
         clientOff msg = writeChan chan $ ClientMessage (ci, ["QUIT", msg])

@@ -21,6 +21,8 @@
 
 #include "AbstractPage.h"
 
+class QTableWidget;
+
 class PageAdmin : public AbstractPage
 {
         Q_OBJECT
@@ -32,6 +34,7 @@ class PageAdmin : public AbstractPage
         void serverMessageNew(const QString & str);
         void serverMessageOld(const QString & str);
         void protocol(int proto);
+        void setBansList(const QStringList & bans);
 
     signals:
         void setServerMessageNew(const QString & str);
@@ -39,6 +42,10 @@ class PageAdmin : public AbstractPage
         void setProtocol(int proto);
         void askServerVars();
         void clearAccountsCache();
+        void bansListRequest();
+        void removeBan(const QString &);
+        void banIP(const QString & ip, const QString & reason, int seconds);
+        void banNick(const QString & nick, const QString & reason, int seconds);
 
     protected:
         QLayout * bodyLayoutDefinition();
@@ -52,9 +59,13 @@ class PageAdmin : public AbstractPage
         QSpinBox * sbProtocol;
         QTextBrowser * tb;
         QPushButton * pbClearAccountsCache;
+        QTableWidget * twBans;
 
     private slots:
         void smChanged();
+        void onAddClicked();
+        void onRemoveClicked();
+        void onRefreshClicked();
 };
 
 #endif

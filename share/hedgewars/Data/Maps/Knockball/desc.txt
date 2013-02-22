@@ -1,0 +1,1 @@
+en_US=Knock your opponents off the platforms using only a bat!

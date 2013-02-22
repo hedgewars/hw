@@ -70,7 +70,7 @@ LibavInteraction::LibavInteraction() : QObject()
 
     // get list of all codecs
     AVCodec* pCodec = NULL;
-    while (pCodec = av_codec_next(pCodec))
+    while ((pCodec = av_codec_next(pCodec)))
     {
 #if LIBAVCODEC_VERSION_MAJOR >= 54
         if (!av_codec_is_encoder(pCodec))
@@ -162,7 +162,7 @@ LibavInteraction::LibavInteraction() : QObject()
 
     // get list of all formats
     AVOutputFormat* pFormat = NULL;
-    while (pFormat = av_oformat_next(pFormat))
+    while ((pFormat = av_oformat_next(pFormat)))
     {
         if (!pFormat->extensions)
             continue;
@@ -270,7 +270,7 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
     QByteArray utf8path = filepath.toUtf8();
     if (avformat_open_input(&pContext, utf8path.data(), NULL, NULL) < 0)
         return "";
-#if LIBAVFORMAT_VERSION_MAJOR < 54
+#if LIBAVFORMAT_VERSION_MAJOR < 53
     if (av_find_stream_info(pContext) < 0)
 #else
     if (avformat_find_stream_info(pContext, NULL) < 0)
@@ -302,13 +302,13 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         else
             continue;
         AVCodec* pDecoder = avcodec_find_decoder(pCodec->codec_id);
-        desc += pDecoder? pDecoder->name : "unknown";
+        desc += pDecoder? pDecoder->name : tr("unknown");
         desc += "\n";
     }
     AVDictionaryEntry* pComment = av_dict_get(pContext->metadata, "comment", NULL, 0);
     if (pComment)
         desc += QString("\n") + pComment->value;
-#if LIBAVFORMAT_VERSION_MAJOR < 54
+#if LIBAVFORMAT_VERSION_MAJOR < 53
     av_close_input_file(pContext);
 #else
     avformat_close_input(&pContext);

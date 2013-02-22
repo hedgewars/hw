@@ -84,7 +84,7 @@ flib_acceptor *flib_acceptor_create(uint16_t port) {
 			srand(time(NULL));
 			for(int i=0; !result->sock && i<1000; i++) {
 				// IANA suggests using ports in the range 49152-65535 for things like this
-				result->port = 49152+(rand()%(65535-49152));
+				result->port = 49152+(rand()%(65536-49152));
 				result->sock = listen(result->port);
 			}
 		}

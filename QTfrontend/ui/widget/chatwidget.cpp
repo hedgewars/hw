@@ -31,6 +31,7 @@
 #include <QModelIndexList>
 #include <QSortFilterProxyModel>
 #include <QMenu>
+#include <QScrollBar>
 
 #include "DataManager.h"
 #include "hwconsts.h"
@@ -156,28 +157,22 @@ void HWChatWidget::setStyleSheet(const QString & styleSheet)
 void HWChatWidget::displayError(const QString & message)
 {
     addLine("msg_Error", " !!! " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
 void HWChatWidget::displayNotice(const QString & message)
 {
     addLine("msg_Notice", " *** " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
 void HWChatWidget::displayWarning(const QString & message)
 {
     addLine("msg_Warning", " *!* " + message);
-    // scroll to the end
-    chatText->moveCursor(QTextCursor::End);
 }
 
 
-HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify) :
+HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     QWidget(parent),
     mainLayout(this)
 {
@@ -187,43 +182,54 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     m_isAdmin = false;
     m_autoKickEnabled = false;
 
-    if(gameSettings->value("frontend/sound", true).toBool())
+    QStringList vpList =
+         QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
+
+    foreach (const QString & vp, vpList)
     {
-        QStringList vpList =
-             QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
-
-        foreach (QString vp, vpList)
-        {
-            m_helloSounds.append(QString("physfs://Sounds/voices/%1/Hello.ogg").arg(vp));
-        }
-
-        m_hilightSound = "physfs://Sounds/beep.ogg";
-
+        m_helloSounds.append(QString("/Sounds/voices/%1/Hello.ogg").arg(vp));
     }
 
-    mainLayout.setSpacing(1);
-    mainLayout.setMargin(1);
-    mainLayout.setSizeConstraint(QLayout::SetMinimumSize);
-    mainLayout.setColumnStretch(0, 76);
-    mainLayout.setColumnStretch(1, 24);
+    m_hilightSound = "/Sounds/beep.ogg";
 
-    chatEditLine = new SmartLineEdit(this);
-    chatEditLine->setMaxLength(300);
-    connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+    mainLayout.setMargin(0);
 
-    mainLayout.addWidget(chatEditLine, 2, 0);
+    QWidget * leftSideContainer = new QWidget();
+    leftSideContainer->setObjectName("leftSideContainer");
+    leftSideContainer->setStyleSheet("#leftSideContainer { border-width: 0px; background-color: #ffcc00; border-radius: 10px;} QTextBrowser, SmartLineEdit { background-color: rgb(13, 5, 68); }");
+    QVBoxLayout * leftSide = new QVBoxLayout(leftSideContainer);
+    leftSide->setSpacing(3);
+    leftSide->setMargin(3);
+    mainLayout.addWidget(leftSideContainer, 76);
+
+    // Chat view
 
     chatText = new QTextBrowser(this);
-
     chatText->document()->setDefaultStyleSheet(styleSheet());
-
     chatText->setMinimumHeight(20);
     chatText->setMinimumWidth(10);
     chatText->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     chatText->setOpenLinks(false);
+    chatText->setStyleSheet("QTextBrowser { background-color: rgb(23, 11, 54); border-width: 0px; }");
     connect(chatText, SIGNAL(anchorClicked(const QUrl&)),
             this, SLOT(linkClicked(const QUrl&)));
-    mainLayout.addWidget(chatText, 0, 0, 2, 1);
+    leftSide->addWidget(chatText, 1);
+
+    // Input box
+
+    // Normal:  rgb(23, 11, 54)
+    // Hover:   rgb(13, 5, 68)
+
+    chatEditLine = new SmartLineEdit();
+    chatEditLine->setMaxLength(300);
+    chatEditLine->setStyleSheet("SmartLineEdit { background-color: rgb(23, 11, 54); padding: 2px 8px; border-width: 0px; border-radius: 7px; } SmartLineEdit:hover, SmartLineEdit:focus { background-color: rgb(13, 5, 68); }");
+    chatEditLine->setFixedHeight(24);
+    chatEditLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(chatEditLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
+
+    leftSide->addWidget(chatEditLine, 0);
+
+    // Nickname list
 
     chatNicks = new QListView(this);
     chatNicks->setIconSize(QSize(24, 16));
@@ -239,7 +245,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
 
     connect(chatNicks, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(nicksContextMenuRequested(QPoint)));
 
-    mainLayout.addWidget(chatNicks, 0, 1, 3, 1);
+    mainLayout.addSpacing(0);
+    mainLayout.addWidget(chatNicks, 24);
 
     // the userData is used to flag things that are even available when user
     // is offline
@@ -281,6 +288,10 @@ HWChatWidget::HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notif
     clear();
 }
 
+void HWChatWidget::setSettings(QSettings * settings)
+{
+    gameSettings = settings;
+}
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
@@ -435,6 +446,8 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     if (s_displayNone->contains(cssClass))
         return; // the css forbids us to display this line
 
+    beforeContentAdd();
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
@@ -457,11 +470,13 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
 
     chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
-    chatText->moveCursor(QTextCursor::End);
+    afterContentAdd();
 }
 
 void HWChatWidget::onServerMessage(const QString& str)
 {
+    beforeContentAdd();
+
     if (chatStrings.size() > 250)
         chatStrings.removeFirst();
 
@@ -469,7 +484,7 @@ void HWChatWidget::onServerMessage(const QString& str)
 
     chatText->setHtml("<html><body>"+chatStrings.join("<br>")+"</body></html>");
 
-    chatText->moveCursor(QTextCursor::End);
+    afterContentAdd();
 }
 
 
@@ -497,7 +512,7 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
-    if(notifyNick && notify && gameSettings->value("frontend/sound", true).toBool())
+    if (notifyNick && notify && (m_helloSounds.size() > 0))
     {
         SDLInteraction::instance().playSoundFile(
                             m_helloSounds.at(rand() % m_helloSounds.size()));
@@ -798,11 +813,7 @@ bool HWChatWidget::parseCommand(const QString & line)
         else if (tline == "/saveStyleSheet")
             saveStyleSheet();
         else
-        {
-            static QRegExp post("\\s.*$");
-            tline.remove(post);
-            displayWarning(tr("%1 is not a valid command!").arg(tline));
-        }
+            emit consoleCommand(tline.mid(1));
 
         return true;
     }
@@ -888,4 +899,22 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
         m_nicksMenu->addAction(action);
 
     m_nicksMenu->popup(chatNicks->mapToGlobal(pos));
+}
+
+void HWChatWidget::beforeContentAdd()
+{
+    m_scrollBarPos = chatText->verticalScrollBar()->value();
+    m_scrollToBottom = m_scrollBarPos == chatText->verticalScrollBar()->maximum();
+}
+
+void HWChatWidget::afterContentAdd()
+{
+    if(m_scrollToBottom)
+    {
+        chatText->verticalScrollBar()->setValue(chatText->verticalScrollBar()->maximum());
+        chatText->moveCursor(QTextCursor::End);
+    } else
+    {
+        chatText->verticalScrollBar()->setValue(m_scrollBarPos);
+    }
 }

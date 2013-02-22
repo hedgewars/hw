@@ -60,7 +60,6 @@ uses
     , uCaptions
     , uCursor
     , uCommands
-    , uMobile
 {$IFDEF USE_VIDEO_RECORDING}    
     , uVideoRec
 {$ENDIF}    
@@ -75,8 +74,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    SoundTimerTicks: Longword;
-    prevPoint: TPoint;
+    prevPoint, prevTargetPoint: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -84,6 +82,9 @@ var cWaveWidth, cWaveHeight: LongInt;
     isFirstFrame: boolean;
     AMAnimType: LongInt;
     recTexture: PTexture;
+    AmmoMenuTex     : PTexture;
+    HorizontOffset: LongInt;
+    cOffsetY: LongInt;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -92,6 +93,27 @@ const cStereo_Sky           = 0.0500;
       cStereo_Land          = 0.0075;
       cStereo_Water_near    = 0.0025;
       cStereo_Outside       = -0.0400;
+
+      AMAnimDuration = 200;
+      AMHidden    = 0;//AMState values
+      AMShowingUp = 1;
+      AMShowing   = 2;
+      AMHiding    = 3;
+
+      AMTypeMaskX     = $00000001;
+      AMTypeMaskY     = $00000002;
+      AMTypeMaskAlpha = $00000004;
+      //AMTypeMaskSlide = $00000008;
+
+{$IFDEF MOBILE}
+      AMSlotSize = 48;
+{$ELSE}
+      AMSlotSize = 32;
+{$ENDIF}
+      AMSlotPadding = (AMSlotSize - 32) shr 1;
+
+      cSendCursorPosTime = 50;
+      cCursorEdgesDist   = 100;
 
 // helper functions to create the goal/game mode string
 function AddGoal(s: ansistring; gf: longword; si: TGoalStrId; i: LongInt): ansistring;
@@ -199,6 +221,8 @@ InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
+prevTargetPoint.X:= 0;
+prevTargetPoint.Y:= 0;
 WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
@@ -220,7 +244,7 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 
 //positioning of the buttons
-buttonScale:= uMobile.getScreenDPI/cDefaultZoomLevel;
+buttonScale:= mobileRecord.getScreenDPI()/cDefaultZoomLevel;
 
 
 with JumpWidget do
@@ -618,6 +642,7 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
+            prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
@@ -961,16 +986,7 @@ begin
         glClear(GL_COLOR_BUFFER_BIT);
         DrawWorldStereo(Lag, rmDefault)
         end
-{$IFNDEF S3D_DISABLED}
-    else if (cStereoMode = smAFR) then
-        begin
-        AFRToggle:= not AFRToggle;
-        glClear(GL_COLOR_BUFFER_BIT);
-        if AFRToggle then
-            DrawWorldStereo(Lag, rmLeftEye)
-        else
-            DrawWorldStereo(Lag, rmRightEye)
-        end
+{$IFDEF USE_S3D_RENDERING}
     else if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
         begin
         // create left fb
@@ -1074,7 +1090,7 @@ end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
-{$IFDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; d:= d; // avoid hint
     exit;
 {$ELSE}
@@ -1092,7 +1108,7 @@ end;
  
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFDEF S3D_DISABLED}
+{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; // avoid hint
     exit;
 {$ELSE}
@@ -1497,22 +1513,8 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         if fpsTexture <> nil then
             DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
         end;
-
-    // lag warning (?)
-    inc(SoundTimerTicks, Lag);
 end;
 
-if SoundTimerTicks >= 50 then
-begin
-    SoundTimerTicks:= 0;
-    if cVolumeDelta <> 0 then
-    begin
-        str(ChangeVolume(cVolumeDelta), s);
-        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
-    end;
-    if isAudioMuted then
-        AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
-end;
 
 if GameState = gsConfirm then
     DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
@@ -1615,6 +1617,7 @@ if isCursorVisible then
     begin
     if not bShowAmmoMenu then
         begin
+        if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
         with CurrentHedgehog^ do
             if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
                 begin
@@ -1623,9 +1626,9 @@ if isCursorVisible then
             i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
-                    DrawSprite(PosSprite, CursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - CursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
+                    DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
                 end;
-        DrawSprite(sprArrow, CursorPoint.X, cScreenHeight - CursorPoint.Y, (RealTicks shr 6) mod 8)
+        DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
         end
     end;
 isFirstFrame:= false
@@ -1637,7 +1640,7 @@ procedure MoveCamera;
 var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
 begin
 {$IFNDEF MOBILE}
-if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu))) and cHasFocus and (GameState <> gsConfirm) then
+if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and autoCameraOn)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
@@ -1708,7 +1711,8 @@ else
     EdgesDist:= cGearScrEdgesDist;
 
 // this generates the border around the screen that moves the camera when cursor is near it
-if isCursorVisible or ((FollowGear <> nil) and autoCameraOn) then
+if (CurrentTeam^.ExtDriven and isCursorVisible and autoCameraOn) or
+   (not CurrentTeam^.ExtDriven and isCursorVisible) or ((FollowGear <> nil) and autoCameraOn) then
     begin
     if CursorPoint.X < - cScreenWidth div 2 + EdgesDist then
         begin

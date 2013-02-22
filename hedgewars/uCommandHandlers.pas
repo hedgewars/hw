@@ -30,6 +30,8 @@ uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh,
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
+    cTagsMasks : array[0..15] of byte = (7, 0, 0, 0, 15, 6, 4, 5, 0, 0, 0, 0, 0, 14, 12, 13);
+    cTagsMasksNoHealth: array[0..15] of byte = (3, 2, 11, 1, 0, 0, 0, 0, 0, 10, 0, 9, 0, 0, 0, 0);
 
 procedure chGenCmd(var s: shortstring);
 begin
@@ -87,11 +89,11 @@ begin
 end;
 
 procedure chCheckProto(var s: shortstring);
-var i, c: LongInt;
+var i: LongInt;
 begin
     if isDeveloperMode then
         begin
-        val(s, i, c);
+        i:= StrToInt(s);
         TryDo(i <= cNetProtoVersion, 'Protocol version mismatch: engine is too old (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         TryDo(i >= cNetProtoVersion, 'Protocol version mismatch: engine is too new (got '+intToStr(i)+', expecting '+intToStr(cNetProtoVersion)+')', true);
         end

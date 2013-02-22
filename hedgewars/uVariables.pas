@@ -21,20 +21,21 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uMobile, uUtils;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils;
 
 var
 /////// init flags ///////
     cMinScreenWidth    : LongInt;
     cMinScreenHeight   : LongInt;
+    cFullscreenWidth   : LongInt;
+    cFullscreenHeight  : LongInt;
+    cWindowedWidth     : LongInt;
+    cWindowedHeight    : LongInt;
     cScreenWidth       : LongInt;
     cScreenHeight      : LongInt;
-    cOrigScreenWidth   : LongInt;
-    cOrigScreenHeight  : LongInt;
     cNewScreenWidth    : LongInt;
     cNewScreenHeight   : LongInt;
     cScreenResizeDelay : LongWord;
-    cBits              : LongInt;
     ipcPort            : Word;
     cFullScreen        : boolean;
     cLocaleFName       : shortstring;
@@ -157,7 +158,6 @@ var
     cVampiric       : boolean;
     cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
-    AmmoMenuTex     : PTexture;
     AmmoMenuInvalidated: boolean;
     AmmoRect		: TSDL_Rect;
     HHTexture       : PTexture;
@@ -177,8 +177,9 @@ var
     SDWaterColorArray : array[0..3] of HwColor4f;
     SDTint          : LongInt;
 
-    CursorPoint     : TPoint;
-    TargetPoint     : TPoint;
+    TargetCursorPoint     : TPoint;
+    CursorPoint           : TPoint;
+    TargetPoint           : TPoint;
 
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
@@ -196,16 +197,9 @@ var
 
     LuaTemplateNumber : LongWord;
 
-    VoiceList : array[0..7] of TVoice =  (
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil),
-                    ( snd: sndNone; voicepack: nil));
     LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+
+    mobileRecord: TMobileRecord;
 
 /////////////////////////////////////
 //Buttons
@@ -690,126 +684,6 @@ const
             (Sprite:   sprJuggle; FramesCount: 49; Interval:  38; cmd: '/juggle'; Voice: sndNone; VoiceDelay: 0)
             );
 
-    Soundz: array[TSound] of record
-            FileName: string[31];
-            Path    : TPathType;
-            end = (
-            (FileName:                         ''; Path: ptNone  ),// sndNone
-            (FileName:        'grenadeimpact.ogg'; Path: ptSounds),// sndGrenadeImpact
-            (FileName:            'explosion.ogg'; Path: ptSounds),// sndExplosion
-            (FileName:         'throwpowerup.ogg'; Path: ptSounds),// sndThrowPowerUp
-            (FileName:         'throwrelease.ogg'; Path: ptSounds),// sndThrowRelease
-            (FileName:               'splash.ogg'; Path: ptSounds),// sndSplash
-            (FileName:        'shotgunreload.ogg'; Path: ptSounds),// sndShotgunReload
-            (FileName:          'shotgunfire.ogg'; Path: ptSounds),// sndShotgunFire
-            (FileName:          'graveimpact.ogg'; Path: ptSounds),// sndGraveImpact
-            (FileName:           'mineimpact.ogg'; Path: ptSounds),// sndMineImpact
-            (FileName:             'minetick.ogg'; Path: ptSounds),// sndMineTicks
-            (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndMudballImpact
-            (FileName:           'pickhammer.ogg'; Path: ptSounds),// sndPickhammer
-            (FileName:                  'gun.ogg'; Path: ptSounds),// sndGun
-            (FileName:                  'bee.ogg'; Path: ptSounds),// sndBee
-            (FileName:                'Jump1.ogg'; Path: ptVoices),// sndJump1
-            (FileName:                'Jump2.ogg'; Path: ptVoices),// sndJump2
-            (FileName:                'Jump3.ogg'; Path: ptVoices),// sndJump3
-            (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
-            (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
-            (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
-            (FileName:          'JustYouWait.ogg'; Path: ptVoices),// sndJustYouWait
-            (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
-            (FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
-            (FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
-            (FileName:           'Firstblood.ogg'; Path: ptVoices),// sndFirstBlood
-            (FileName:               'Boring.ogg'; Path: ptVoices),// sndBoring
-            (FileName:               'Byebye.ogg'; Path: ptVoices),// sndByeBye
-            (FileName:             'Sameteam.ogg'; Path: ptVoices),// sndSameTeam
-            (FileName:               'Nutter.ogg'; Path: ptVoices),// sndNutter
-            (FileName:       'Reinforcements.ogg'; Path: ptVoices),// sndReinforce
-            (FileName:              'Traitor.ogg'; Path: ptVoices),// sndTraitor
-            (FileName:      'Youllregretthat.ogg'; Path: ptVoices),// sndRegret
-            (FileName:            'Enemydown.ogg'; Path: ptVoices),// sndEnemyDown
-            (FileName:               'Coward.ogg'; Path: ptVoices),// sndCoward
-            (FileName:                'Hurry.ogg'; Path: ptVoices),// sndHurry
-            (FileName:              'Watchit.ogg'; Path: ptVoices),// sndWatchIt
-            (FileName:             'Kamikaze.ogg'; Path: ptVoices),// sndKamikaze
-            (FileName:                'cake2.ogg'; Path: ptSounds),// sndCake
-            (FileName:                  'Ow1.ogg'; Path: ptVoices),// sndOw1
-            (FileName:                  'Ow2.ogg'; Path: ptVoices),// sndOw2
-            (FileName:                  'Ow3.ogg'; Path: ptVoices),// sndOw3
-            (FileName:                  'Ow4.ogg'; Path: ptVoices),// sndOw4
-            (FileName:           'Firepunch1.ogg'; Path: ptVoices),// sndFirepunch1
-            (FileName:           'Firepunch2.ogg'; Path: ptVoices),// sndFirepunch2
-            (FileName:           'Firepunch3.ogg'; Path: ptVoices),// sndFirepunch3
-            (FileName:           'Firepunch4.ogg'; Path: ptVoices),// sndFirepunch4
-            (FileName:           'Firepunch5.ogg'; Path: ptVoices),// sndFirepunch5
-            (FileName:           'Firepunch6.ogg'; Path: ptVoices),// sndFirepunch6
-            (FileName:                'Melon.ogg'; Path: ptVoices),// sndMelon
-            (FileName:              'Hellish.ogg'; Path: ptSounds),// sndHellish
-            (FileName:               'Yoohoo.ogg'; Path: ptSounds),// sndYoohoo
-            (FileName:              'rcplane.ogg'; Path: ptSounds),// sndRCPlane
-            (FileName:            'whipcrack.ogg'; Path: ptSounds),// sndWhipCrack
-            (FileName:'ride_of_the_valkyries.ogg'; Path: ptSounds),// sndRideOfTheValkyries
-            (FileName:               'denied.ogg'; Path: ptSounds),// sndDenied
-            (FileName:               'placed.ogg'; Path: ptSounds),// sndPlaced
-            (FileName:          'baseballbat.ogg'; Path: ptSounds),// sndBaseballBat
-            (FileName:                'steam.ogg'; Path: ptSounds),// sndVaporize
-            (FileName:                 'warp.ogg'; Path: ptSounds),// sndWarp
-            (FileName:          'suddendeath.ogg'; Path: ptSounds),// sndSuddenDeath
-            (FileName:               'mortar.ogg'; Path: ptSounds),// sndMortar
-            (FileName:         'shutterclick.ogg'; Path: ptSounds),// sndShutter
-            (FileName:              'homerun.ogg'; Path: ptSounds),// sndHomerun
-            (FileName:              'molotov.ogg'; Path: ptSounds),// sndMolotov
-            (FileName:            'Takecover.ogg'; Path: ptVoices),// sndCover
-            (FileName:                'Uh-oh.ogg'; Path: ptVoices),// sndUhOh
-            (FileName:                 'Oops.ogg'; Path: ptVoices),// sndOops
-            (FileName:                 'Nooo.ogg'; Path: ptVoices),// sndNooo
-            (FileName:                'Hello.ogg'; Path: ptVoices),// sndHello
-            (FileName:             'ropeshot.ogg'; Path: ptSounds),// sndRopeShot
-            (FileName:           'ropeattach.ogg'; Path: ptSounds),// sndRopeAttach
-            (FileName:          'roperelease.ogg'; Path: ptSounds),// sndRopeRelease
-            (FileName:            'switchhog.ogg'; Path: ptSounds),// sndSwitchHog
-            (FileName:              'Victory.ogg'; Path: ptVoices),// sndVictory
-            (FileName:             'Flawless.ogg'; Path: ptVoices),// sndFlawless
-            (FileName:         'sniperreload.ogg'; Path: ptSounds),// sndSniperReload
-            (FileName:                'steps.ogg'; Path: ptSounds),// sndSteps
-            (FileName:           'lowgravity.ogg'; Path: ptSounds),// sndLowGravity
-            (FileName:           'hell_growl.ogg'; Path: ptSounds),// sndHellishImpact1
-            (FileName:            'hell_ooff.ogg'; Path: ptSounds),// sndHellishImpact2
-            (FileName:              'hell_ow.ogg'; Path: ptSounds),// sndHellishImpact3
-            (FileName:             'hell_ugh.ogg'; Path: ptSounds),// sndHellishImpact4
-            (FileName:          'melonimpact.ogg'; Path: ptSounds),// sndMelonImpact
-            (FileName:             'Droplet1.ogg'; Path: ptSounds),// sndDroplet1
-            (FileName:             'Droplet2.ogg'; Path: ptSounds),// sndDroplet2
-            (FileName:             'Droplet3.ogg'; Path: ptSounds),// sndDroplet3
-            (FileName:                  'egg.ogg'; Path: ptSounds),// sndEggBreak
-            (FileName:             'drillgun.ogg'; Path: ptSounds),// sndDrillRocket
-            (FileName:          'PoisonCough.ogg'; Path: ptVoices),// sndPoisonCough
-            (FileName:           'PoisonMoan.ogg'; Path: ptVoices),// sndPoisonMoan
-            (FileName:             'BirdyLay.ogg'; Path: ptSounds),// sndBirdyLay
-            (FileName:              'Whistle.ogg'; Path: ptSounds),// sndWhistle
-            (FileName:             'beewater.ogg'; Path: ptSounds),// sndBeeWater
-            (FileName:                   '1C.ogg'; Path: ptSounds),// sndPiano0
-            (FileName:                   '2D.ogg'; Path: ptSounds),// sndPiano1
-            (FileName:                   '3E.ogg'; Path: ptSounds),// sndPiano2
-            (FileName:                   '4F.ogg'; Path: ptSounds),// sndPiano3
-            (FileName:                   '5G.ogg'; Path: ptSounds),// sndPiano4
-            (FileName:                   '6A.ogg'; Path: ptSounds),// sndPiano5
-            (FileName:                   '7B.ogg'; Path: ptSounds),// sndPiano6
-            (FileName:                   '8C.ogg'; Path: ptSounds),// sndPiano7
-            (FileName:                   '9D.ogg'; Path: ptSounds),// sndPiano8
-            (FileName:                 'skip.ogg'; Path: ptSounds),// sndSkip
-            (FileName:              'sinegun.ogg'; Path: ptSounds),// sndSineGun
-            (FileName:                'Ooff1.ogg'; Path: ptVoices),// sndOoff1
-            (FileName:                'Ooff2.ogg'; Path: ptVoices),// sndOoff2
-            (FileName:                'Ooff3.ogg'; Path: ptVoices),// sndOoff3
-            (FileName:               'hammer.ogg'; Path: ptSounds),// sndWhack
-            (FileName:           'Comeonthen.ogg'; Path: ptVoices),// sndComeonthen
-            (FileName:            'parachute.ogg'; Path: ptSounds),// sndParachute
-            (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
-            (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
-            (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
-            (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
-            );
 var
     Ammoz: array [TAmmoType] of record
             NameId: TAmmoStrId;
@@ -2257,6 +2131,7 @@ var
             ejectY: 0),
 
 // Structure      
+{
             (NameId: sidStructure;
             NameTex: nil;
             Probability: 0;
@@ -2282,6 +2157,7 @@ var
             PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0),
+}
             
 // Land Gun
             (NameId: sidLandGun;
@@ -2359,76 +2235,6 @@ var
             ejectY: 0)
         );
 
-const
-    GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
-(*          gtFlame *)   amNothing
-(*       gtHedgehog *) , amNothing
-(*           gtMine *) , amMine
-(*           gtCase *) , amNothing
-(*     gtExplosives *) , amNothing
-(*        gtGrenade *) , amGrenade
-(*          gtShell *) , amBazooka
-(*          gtGrave *) , amNothing
-(*            gtBee *) , amBee
-(*    gtShotgunShot *) , amShotgun
-(*     gtPickHammer *) , amPickHammer
-(*           gtRope *) , amRope
-(*     gtDEagleShot *) , amDEagle
-(*       gtDynamite *) , amDynamite
-(*    gtClusterBomb *) , amClusterBomb
-(*        gtCluster *) , amClusterBomb
-(*         gtShover *) , amBaseballBat  // Shover is only used for baseball bat right now
-(*      gtFirePunch *) , amFirePunch
-(*    gtATStartGame *) , amNothing
-(*   gtATFinishGame *) , amNothing
-(*      gtParachute *) , amParachute
-(*      gtAirAttack *) , amAirAttack
-(*        gtAirBomb *) , amAirAttack
-(*      gtBlowTorch *) , amBlowTorch
-(*         gtGirder *) , amGirder
-(*       gtTeleport *) , amTeleport
-(*       gtSwitcher *) , amSwitch
-(*         gtTarget *) , amNothing
-(*         gtMortar *) , amMortar
-(*           gtWhip *) , amWhip
-(*       gtKamikaze *) , amKamikaze
-(*           gtCake *) , amCake
-(*      gtSeduction *) , amSeduction
-(*     gtWatermelon *) , amWatermelon
-(*     gtMelonPiece *) , amWatermelon
-(*    gtHellishBomb *) , amHellishBomb
-(*        gtWaterUp *) , amNothing
-(*          gtDrill *) , amDrill
-(*        gtBallGun *) , amBallgun
-(*           gtBall *) , amBallgun
-(*        gtRCPlane *) , amRCPlane
-(*gtSniperRifleShot *) , amSniperRifle
-(*        gtJetpack *) , amJetpack
-(*        gtMolotov *) , amMolotov
-(*          gtBirdy *) , amBirdy
-(*            gtEgg *) , amBirdy
-(*         gtPortal *) , amPortalGun
-(*          gtPiano *) , amPiano
-(*        gtGasBomb *) , amGasBomb
-(*    gtSineGunShot *) , amSineGun
-(*   gtFlamethrower *) , amFlamethrower
-(*          gtSMine *) , amSMine
-(*    gtPoisonCloud *) , amNothing
-(*         gtHammer *) , amHammer
-(*      gtHammerHit *) , amHammer
-(*    gtResurrector *) , amResurrector
-(*    gtPoisonCloud *) , amNothing
-(*       gtSnowball *) , amSnowball
-(*          gtFlake *) , amNothing
-(*      gtStructure *) , amStructure  // TODO - This will undoubtedly change once there is more than one structure
-(*        gtLandGun *) , amLandGun
-(*         gtTardis *) , amTardis
-(*         gtIceGun *) , amIceGun
-(*        gtAddAmmo *) , amNothing
-(*  gtGenericFaller *) , amNothing
-(*          gtKnife *) , amKnife
-    );
-
 var
     Land: TCollisionArray;
     LandPixels: TLandArray;
@@ -2462,7 +2268,6 @@ var
     LocalTeam: LongInt;  // last non-bot, non-extdriven clan first team
     LocalAmmo: LongInt;  // last non-bot, non-extdriven clan's first team's ammo index, updated to next upcoming hog for per-hog-ammo
     CurMinAngle, CurMaxAngle: Longword;
-    NextClan: boolean;
 
     FollowGear: PGear;
     WindBarWidth: LongInt;
@@ -2473,13 +2278,9 @@ var
     WaterColor, DeepWaterColor: TSDL_Color;
     SkyColor, RQSkyColor, SDSkyColor: TSDL_Color;
     SkyOffset: LongInt;
-    HorizontOffset: LongInt;
 {$IFDEF COUNTTICKS}
     cntTicks: LongWord;
 {$ENDIF}
-    cOffsetY: LongInt;
-    AFRToggle: Boolean;
-    bAFRRight: Boolean;
 
 
     PauseTexture,
@@ -2488,9 +2289,6 @@ var
     cScaleFactor: GLfloat;
     SupportNPOTT: Boolean;
     Step: LongInt;
-    squaresize : LongInt;
-    numsquares : LongInt;
-    ProgrTex: PTexture;
     MissionIcons: PSDL_Surface;
     ropeIconTex: PTexture;
 
@@ -2502,23 +2300,11 @@ var
     defaultFrame, depthv: GLuint;
     texv: GLuint;
 
-    VisualGearLayers: array[0..6] of PVisualGear;
     lastVisualGearByUID: PVisualGear;
     vobFrameTicks, vobFramesCount, vobCount: Longword;
     vobVelocity, vobFallSpeed: LongInt;
     vobSDFrameTicks, vobSDFramesCount, vobSDCount: Longword;
     vobSDVelocity, vobSDFallSpeed: LongInt;
-
-    ControllerNumControllers: Integer;
-    ControllerEnabled: Integer;
-    ControllerNumAxes: array[0..5] of Integer;
-    //ControllerNumBalls: array[0..5] of Integer;
-    ControllerNumHats: array[0..5] of Integer;
-    ControllerNumButtons: array[0..5] of Integer;
-    ControllerAxes: array[0..5] of array[0..19] of Integer;
-    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
-    ControllerHats: array[0..5] of array[0..19] of Byte;
-    ControllerButtons: array[0..5] of array[0..19] of Byte;
 
     DefaultBinds : TBinds;
 
@@ -2541,9 +2327,13 @@ procedure preInitModule;
 begin
     // initialisation flags - they are going to be overwritten by program args
 
-    cScreenWidth    := 1024;
-    cScreenHeight   := 768;
-    cBits           := 32;
+    cFullscreenWidth  := 0;
+    cFullscreenHeight := 0;
+    cWindowedWidth    := 1024;
+    cWindowedHeight   := 768;
+    cScreenWidth      := cWindowedWidth;
+    cScreenHeight     := cWindowedHeight;
+
     cShowFPS        := false;
     cAltDamage      := true;
     cTimerInterval  := 8;
@@ -2559,6 +2349,7 @@ begin
     GrayScale       := false;
     PathPrefix      := './';
     GameType        := gmtLocal;
+    cOnlyStats      := False;
 
 {$IFDEF USE_VIDEO_RECORDING}
     RecPrefix          := '';
@@ -2579,7 +2370,6 @@ begin
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
-    cOnlyStats          := False;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
@@ -2724,19 +2514,37 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
-    cMinScreenWidth:= min(cScreenWidth, 640);
-    cMinScreenHeight:= min(cScreenHeight, 480);
-    cOrigScreenWidth:= cScreenWidth;
-    cOrigScreenHeight:= cScreenHeight;
+    cMinScreenWidth  := min(cScreenWidth, 640);
+    cMinScreenHeight := min(cScreenHeight, 480);
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;
     cScreenResizeDelay := 0;
 
+    // make sure fullscreen resolution is always initialised somehow
+    if cFullscreenWidth = 0 then
+        cFullscreenWidth:= min(cWindowedWidth, 640);
+    if cFullscreenHeight = 0 then
+        cFullscreenHeight:= min(cWindowedHeight, 480);
+
+
     LuaGoals:= '';
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
+
+    mobileRecord.getScreenDPI:= @getScreenDPI; //TODO: define external function.
+    {$IFDEF IPHONEOS}
+    mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
+    mobileRecord.GameLoading:= @startLoadingIndicator;
+    mobileRecord.GameLoaded:= @stopLoadingIndicator;
+    mobileRecord.SaveLoadingEnded:= @saveFinishedSynching;
+    {$ELSE}
+    mobileRecord.PerformRumble:= nil;
+    mobileRecord.GameLoading:= nil;
+    mobileRecord.GameLoaded:= nil;
+    mobileRecord.SaveLoadingEnded:= nil;
+    {$ENDIF}
 end;
 
 procedure freeModule;

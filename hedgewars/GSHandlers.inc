@@ -298,7 +298,7 @@ end;
 procedure doStepBomb(Gear: PGear);
 var 
     i, x, y: LongInt;
-    dX, dY: hwFloat;
+    dX, dY, gdX: hwFloat;
     vg: PVisualGear;
 begin
     AllInactive := false;
@@ -338,10 +338,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 20, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 4 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _3) * _0_08;
                     FollowGear := AddGear(x, y, gtCluster, 0, dX, dY, 25)
                     end
@@ -350,10 +351,11 @@ begin
                 begin
                 x := hwRound(Gear^.X);
                 y := hwRound(Gear^.Y);
+                gdX:= Gear^.dX;
                 doMakeExplosion(x, y, 75, Gear^.Hedgehog, EXPLAutoSound);
                 for i:= 0 to 5 do
                     begin
-                    dX := rndSign(GetRandomf * _0_1) + Gear^.dX / 5;
+                    dX := rndSign(GetRandomf * _0_1) + gdX / 5;
                     dY := (GetRandomf - _1_5) * _0_3;
                     FollowGear:= AddGear(x, y, gtMelonPiece, 0, dX, dY, 75);
                     FollowGear^.DirAngle := i * 60
@@ -1691,7 +1693,7 @@ begin
         end
     else
         begin 
-        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $3FF = 0) then // stir it up every second or so
+        if (Gear^.Pos <> posCaseHealth) and (GameTicks and $1FFF = 0) then // stir 'em up periodically
             begin
             gi := GearsList;
             while gi <> nil do
@@ -2223,7 +2225,9 @@ begin
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
-        performRumble();
+        with mobileRecord do
+            if (performRumble <> nil) and (not fastUntilLag) then
+                performRumble(kSystemSoundID_Vibrate);
         exit
         end;
     if (GameTicks and $3F) = 0 then
@@ -2412,7 +2416,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMortar(Gear: PGear);
 var 
-    dX, dY: hwFloat;
+    dX, dY, gdX, gdY: hwFloat;
     i: LongInt;
     dxn, dyn: boolean;
 begin
@@ -2423,14 +2427,16 @@ begin
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
+        gdX := Gear^.dX;
+        gdY := Gear^.dY;
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
 
-        Gear^.dX.isNegative := not dxn;
-        Gear^.dY.isNegative := not dyn;
+        gdX.isNegative := not dxn;
+        gdY.isNegative := not dyn;
         for i:= 0 to 4 do
             begin
-            dX := Gear^.dX + (GetRandomf - _0_5) * _0_03;
-            dY := Gear^.dY + (GetRandomf - _0_5) * _0_03;
+            dX := gdX + (GetRandomf - _0_5) * _0_03;
+            dY := gdY + (GetRandomf - _0_5) * _0_03;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
             end;
 
@@ -2456,6 +2462,12 @@ begin
         Gear^.AdvBounce:= 1;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit
+        end;
+
     HHGear^.State := HHGear^.State or gstNoDamage;
     DeleteCI(HHGear);
 
@@ -4302,7 +4314,9 @@ begin
     Gear^.dY.isNegative := not Gear^.dY.isNegative;
 
     Gear^.doStep := @doStepSineGunShotWork;
-    performRumble();
+    with mobileRecord do
+        if (performRumble <> nil) and (not fastUntilLag) then
+            performRumble(kSystemSoundID_Vibrate);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5143,6 +5157,7 @@ else
         begin
         with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
         AddRandomness(CheckSum);
+        if gi^.Kind = gtGenericFaller then gi^.State:= gi^.State and not gstTmpFlag;
         gi := gi^.NextGear
         end;
     AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));
@@ -5160,8 +5175,17 @@ if Gear^.Timer < $FFFFFFFF then
         DeleteGear(Gear);
         exit
         end;
-    
-doStepFallingGear(Gear);
+if (Gear^.State and gstTmpFlag <> 0) or (GameTicks and $7 = 0) then
+    begin
+    doStepFallingGear(Gear);
+    if (Gear^.State and gstInvisible <> 0) and (GameTicks and $FF = 0) and (hwRound(Gear^.X) < LongInt(leftX)) or (hwRound(Gear^.X) > LongInt(rightX)) or (hwRound(Gear^.Y) < LongInt(topY)) then
+        begin
+        Gear^.X:= int2hwFloat(GetRandom(rightX-leftX)+leftX);
+        Gear^.Y:= int2hwFloat(GetRandom(LAND_HEIGHT-topY)+topY);
+        Gear^.dX:= _90-(GetRandomf*_360);
+        Gear^.dY:= _90-(GetRandomf*_360)
+        end;
+    end
 end;
 
 procedure doStepCreeper(Gear: PGear);
@@ -5247,12 +5271,12 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepKnife(Gear: PGear);
-var ox, oy: LongInt;
-    la: hwFloat;
-    a: real;
+//var ox, oy: LongInt;
+//    la: hwFloat;
+var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
-    if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
+    if (Gear^.Radius = 4) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 7;
     if Gear^.Damage > 100 then Gear^.CollisionMask:= 0
     else if Gear^.Damage > 30 then
         if GetRandom(max(4,18-Gear^.Damage div 10)) < 3 then Gear^.CollisionMask:= 0;
@@ -5261,6 +5285,7 @@ begin
     if (Gear^.State and gstMoving <> 0) and (Gear^.State and gstCollision = 0) then
         begin
         DeleteCI(Gear);
+        Gear^.Radius:= 7;
         // used for damage and impact calc. needs balancing I think
         Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
         doStepFallingGear(Gear);
@@ -5271,14 +5296,14 @@ begin
         end
     else if (Gear^.CollisionIndex = -1) and (Gear^.Timer = 0) then
         begin
-        ox:= 0; oy:= 0;
+        (*ox:= 0; oy:= 0;
         if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
         if TestCollisionXwithGear(Gear, 1)       then ox:=  1;
         if TestCollisionXwithGear(Gear, -1)      then ox:= -1;
         if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
         if Gear^.Health > 0 then
             PlaySound(sndRopeAttach);
-(*
+
         la:= _10000;
         if (ox <> 0) or (oy <> 0) then
             la:= CalcSlopeNearGear(Gear, ox, oy);
@@ -5296,9 +5321,8 @@ begin
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving) or gstCollision;
-        Gear^.Radius:= 20;
-        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Radius:= 16;
+        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Health:= 0;
         Gear^.Timer:= 500;
         AddGearCI(Gear)

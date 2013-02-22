@@ -11,18 +11,41 @@ set(QT_USE_QTOPENGL FALSE)
 set(QT_USE_QTMAIN TRUE)
 
 find_package(Qt4 REQUIRED)
-if (NOT CROSSAPPLE)
-    include(${QT_USE_FILE})
-endif()
+include(${QT_USE_FILE})
 
-# Configure for SDL
-find_package(SDL REQUIRED)
-find_package(SDL_mixer REQUIRED)
+find_package(SDL REQUIRED)       #video in SDLInteraction
+find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+find_package(SDL_net REQUIRED)   #network frontlib
 if(NOT NOVIDEOREC)
     find_package(FFMPEG)
+    if(${FFMPEG_FOUND})
+        add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
+    endif()
 endif()
 
-include_directories(.)
+# server messages localization
+file(GLOB ServerSources ${CMAKE_SOURCE_DIR}/gameServer/*.hs)
+foreach(hsfile ${ServerSources})
+    file(READ ${hsfile} hs)
+    string(REGEX MATCHALL "loc *\"[^\n\"]+\"" locs ${hs})
+    foreach(str ${locs})
+        string(REGEX REPLACE "loc *\"([^\n\"]+)\"" "QT_TRANSLATE_NOOP(\"server\", \"\\1\")" s ${str})
+        list(APPEND serverlocs ${s})
+    endforeach(str)
+endforeach(hsfile)
+
+list(REMOVE_DUPLICATES serverlocs)
+list(GET serverlocs 0 firstline)
+list(REMOVE_AT serverlocs 0)
+set(locsout "const char * serverMessages[] = {\n")
+foreach(l ${serverlocs})
+    list(APPEND locsout ${l} ",\n")
+endforeach(l)
+list(APPEND locsout ${firstline} "\n}\\;\n")
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h ${locsout})
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/model)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/net)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui)
@@ -30,6 +53,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/dialog)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
@@ -40,24 +64,19 @@ if(UNIX)
     include_directories("/usr/local/include")
 endif(UNIX)
 
-
-if(WIN32 AND NOT UNIX)
-    set(HEDGEWARS_BINDIR ".")
-    set(HEDGEWARS_DATADIR "../share/")
-    add_definitions(-DUSE_XFIRE)
+#directory for resources, relative to bindir (on linux an absolute path is always used)
+string(SUBSTRING "${SHAREPATH}" 0 1 sharepath_start)
+if(APPLE OR WIN32 OR ${sharepath_start} MATCHES "/")
+    set(HEDGEWARS_DATADIR ${SHAREPATH})
 else()
-    set(HEDGEWARS_BINDIR ${CMAKE_INSTALL_PREFIX})
-    if(DEFINED DATA_INSTALL_DIR)
-        set(HEDGEWARS_DATADIR ${DATA_INSTALL_DIR})
-    else()
-        set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/share/)
-    endif()
-    #only the cocoa version of qt supports building 64 bit apps
-    if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
-        message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
-    endif()
+    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH})
 endif()
 
+#only the cocoa version of qt supports building 64 bit apps
+if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
+    message(FATAL_ERROR "Building the 64 bit version of Hedgewars *requires* the Cocoa variant of QT on Mac OS X")
+endif()
+#endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/hwconsts.cpp.in ${CMAKE_CURRENT_BINARY_DIR}/hwconsts.cpp)
 
@@ -66,11 +85,7 @@ file(GLOB ModelCpp model/*.cpp)
 file(GLOB_RECURSE UIcpp ui/*.cpp)
 file(GLOB UtilCpp util/*.cpp)
 
-if(${FFMPEG_FOUND})
-    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-endif()
-
-set(hwfr_src
+list(APPEND hwfr_src
     ${ModelCpp}
     ${NetCpp}
     ${UIcpp}
@@ -91,18 +106,18 @@ set(hwfr_src
 
 #xfire integration
 if(WIN32)
-    set(hwfr_src ${hwfr_src} xfire.cpp ../misc/xfire/xfiregameclient.cpp)
+    list(APPEND hwfr_src util/platform/xfire.cpp util/platform/xfiregameclient.cpp)
 endif(WIN32)
 
 if(MINGW)
     # resource compilation for mingw
     add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o
-    COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
-    -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
-    -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
-    set(hwfr_src ${hwfr_src} ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+                       COMMAND windres -I ${CMAKE_CURRENT_SOURCE_DIR}
+                               -i ${CMAKE_CURRENT_SOURCE_DIR}/hedgewars.rc
+                               -o ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
+    list(APPEND hwfr_src ${CMAKE_CURRENT_BINARY_DIR}/hedgewars_rc.o)
 else(MINGW)
-    set(hwfr_src ${hwfr_src} hedgewars.rc)
+    list(APPEND hwfr_src hedgewars.rc)
 endif(MINGW)
 
 file(GLOB ModelHdr model/*.h)
@@ -134,55 +149,73 @@ set(hwfr_hdrs
     hwconsts.h
     sdlkeys.h
     campaign.h
+    ${CMAKE_CURRENT_BINARY_DIR}/servermessages.h
     )
 
 set(hwfr_rez hedgewars.qrc)
+
+if(${BUILD_ENGINE_LIBRARY})
+    add_definitions(-DHWLIBRARY=1)
+    set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    list(APPEND HW_LINK_LIBS ${hwlibname})
+endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 
 qt4_wrap_cpp(hwfr_moc_srcs ${hwfr_moc_hdrs})
 
 
-if(APPLE OR CROSSAPPLE)
-    set(hwfr_src ${hwfr_src} InstallController.cpp CocoaInitializer.mm M3Panel.mm M3InstallController.m NSWorkspace_RBAdditions.m)
-    set(HW_LINK_LIBS IOKit ${HW_LINK_LIBS})
-
+if(APPLE)
+    find_library(iokit_framework NAMES IOKit)
+    list(APPEND HW_LINK_LIBS ${iokit_framework})
+    list(APPEND hwfr_src util/platform/CocoaInitializer.mm
+                         util/platform/InstallController.cpp
+                         util/platform/M3Panel.mm
+                         util/platform/M3InstallController.m
+                         util/platform/NSWorkspace_RBAdditions.m
+                         )
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle)
         if(SPARKLE_FOUND)
             add_definitions(-DSPARKLE_ENABLED)
-            set(hwfr_src ${hwfr_src} AutoUpdater.cpp SparkleAutoUpdater.mm)
-            set(HW_LINK_LIBS ${SPARKLE_LIBRARY} ${HW_LINK_LIBS})
+            list(APPEND hwfr_src util/platform/AutoUpdater.cpp
+                                 util/platform/SparkleAutoUpdater.mm)
+            list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
         endif()
     endif()
 endif()
 
+#when debugging, always prompt a console to see fronted messages
+#TODO: check it doesn't interfere on UNIX
+if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+    set(console_access "WIN32")
+endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
 
-add_executable(hedgewars WIN32
+add_executable(hedgewars ${console_access}
     ${hwfr_src}
     ${hwfr_moc_srcs}
     ${hwfr_hdrs}
     ${hwfr_rez_src}
     )
 
+if((UNIX AND NOT APPLE) AND ${BUILD_ENGINE_LIBRARY})
+    set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}")
+endif()
 
-set(HW_LINK_LIBS
+list(APPEND HW_LINK_LIBS
     physfs
-    physfsrwops
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     ${FFMPEG_LIBRARIES}
-    ${HW_LINK_LIBS}
     )
 
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
-        set(HW_LINK_LIBS ${HW_LINK_LIBS} SDL)
+        list(APPEND HW_LINK_LIBS SDL)
     endif()
 
-    set(HW_LINK_LIBS
-        ${HW_LINK_LIBS}
+    list(APPEND HW_LINK_LIBS
         ole32
         oleaut32
         winspool
@@ -190,13 +223,8 @@ if(WIN32 AND NOT UNIX)
         )
 endif()
 
-
-if (CROSSAPPLE)
-
-else()
-    target_link_libraries(hedgewars ${HW_LINK_LIBS})
-endif()
+target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hedgewars${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
 

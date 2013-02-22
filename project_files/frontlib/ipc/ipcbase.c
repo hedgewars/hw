@@ -186,7 +186,7 @@ int flib_ipcbase_send_raw(flib_ipcbase *ipc, const void *data, size_t len) {
 		logSentMsg(data, len);
 		return 0;
 	} else {
-		flib_log_w("Failed or incomplete ICP write: engine connection lost.");
+		flib_log_w("Failed or incomplete IPC write: engine connection lost.");
 		flib_socket_close(ipc->sock);
 		ipc->sock = NULL;
 		return -1;

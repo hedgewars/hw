@@ -14,6 +14,7 @@ glob:hedgewars.pro.user
 glob:config.inc
 glob:cmake_install.cmake
 glob:QTfrontend/hwconsts.cpp
+glob:QTfrontend/servermessages.h
 glob:CPackConfig.cmake
 glob:CPackSourceConfig.cmake
 glob:tools/cmake_uninstall.cmake
@@ -30,6 +31,7 @@ glob:misc/libtremor/Xcode/build/
 glob:misc/liblua/Xcode/build/
 glob:misc/libfreetype/Xcode/build/
 glob:misc/libfreetype/Xcode-iOS/build/
+glob:misc/physfs/Xcode/build/
 glob:moc_*.cxx_parameters
 relre:^release\/
 glob:*.log
@@ -55,4 +57,5 @@ glob:hedgewars-build-desktop-Qt_4_7_4_for_Desktop_-_MinGW_4_4__Qt_SDK__Debug
 glob:hedgewars-build-desktop-Qt_4_7_4_for_Desktop_-_MinGW_4_4__Qt_SDK__Release
 glob:*.depends
 glob:tools/build_windows_koda.bat
+glob:share/hedgewars/Data/misc/hwengine.desktop
 

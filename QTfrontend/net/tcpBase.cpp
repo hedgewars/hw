@@ -23,19 +23,63 @@
 #include <QList>
 #include <QApplication>
 #include <QImage>
+#include <QThread>
 
 #include "hwconsts.h"
+
+#ifdef HWLIBRARY
+extern "C" void Game(char**arguments);
+extern "C" void GenLandPreview(int port);
+
+
+EngineInstance::EngineInstance(QObject *parent)
+    : QObject(parent)
+{
+    port = 0;
+}
+
+EngineInstance::~EngineInstance()
+{
+}
+
+void EngineInstance::start()
+{
+#if 0
+    char *args[11];
+    args[0] = "65000";  //ipcPort
+    args[1] = "1024";   //cScreenWidth
+    args[2] = "768";    //cScreenHeight
+    args[3] = "0";      //cReducedQuality
+    args[4] = "en.txt"; //cLocaleFName
+    args[5] = "koda";   //UserNick
+    args[6] = "1";      //SetSound
+    args[7] = "1";      //SetMusic
+    args[8] = "0";      //cAltDamage
+    args[9]= datadir->absolutePath().toAscii().data(); //cPathPrefix
+    args[10]= NULL;     //recordFileName
+    Game(args);
+#endif
+    GenLandPreview(port);
+}
+
+#endif
 
 QList<TCPBase*> srvsList;
 QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
+    // make sure this object is not in the server list anymore
+    srvsList.removeOne(this);
+
     if (IPCSocket)
         IPCSocket->deleteLater();
+
 }
 
-TCPBase::TCPBase(bool demoMode) :
+TCPBase::TCPBase(bool demoMode, QObject *parent) :
+    QObject(parent),
+    m_hasStarted(false),
     m_isDemoMode(demoMode),
     IPCSocket(0)
 {
@@ -55,6 +99,7 @@ TCPBase::TCPBase(bool demoMode) :
             exit(0); // FIXME - should be graceful exit here (lower Critical -> Warning above when implemented)
         }
     }
+
     ipc_port=IPCServer->serverPort();
 }
 
@@ -71,9 +116,6 @@ void TCPBase::NewConnection()
     connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
     connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     SendToClientFirst();
-
-    if(srvsList.size()==1) srvsList.pop_front();
-    emit isReadyNow();
 }
 
 void TCPBase::RealStart()
@@ -81,15 +123,31 @@ void TCPBase::RealStart()
     connect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
     IPCSocket = 0;
 
+#ifdef HWLIBRARY
+    QThread *thread = new QThread;
+    EngineInstance *instance = new EngineInstance;
+    instance->port = IPCServer->serverPort();
+
+    instance->moveToThread(thread);
+
+    connect(thread, SIGNAL(started()), instance, SLOT(start(void)));
+    connect(instance, SIGNAL(finished()), thread, SLOT(quit()));
+    connect(instance, SIGNAL(finished()), instance, SLOT(deleteLater()));
+    connect(instance, SIGNAL(finished()), thread, SLOT(deleteLater()));
+    thread->start();
+#else
     QProcess * process;
-    process = new QProcess;
+    process = new QProcess();
     connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
     QStringList arguments=getArguments();
 
     // redirect everything written on stdout/stderr
     if(isDevBuild)
         process->setProcessChannelMode(QProcess::ForwardedChannels);
+
     process->start(bindir->absolutePath() + "/hwengine", arguments);
+#endif
+    m_hasStarted = true;
 }
 
 void TCPBase::ClientDisconnect()
@@ -97,12 +155,8 @@ void TCPBase::ClientDisconnect()
     disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
- /*   if(srvsList.size()==1) srvsList.pop_front();
-    emit isReadyNow();*/
+    emit isReadyNow();
     IPCSocket->deleteLater();
-
-    // make sure this object is not in the server list anymore
-    srvsList.removeOne(this);
 
     deleteLater();
 }
@@ -130,25 +184,34 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 
 void TCPBase::tcpServerReady()
 {
-    disconnect(srvsList.takeFirst(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+    disconnect(srvsList.first(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
 
     RealStart();
 }
 
-void TCPBase::Start()
+void TCPBase::Start(bool couldCancelPreviousRequest)
 {
     if(srvsList.isEmpty())
     {
         srvsList.push_back(this);
+        RealStart();
     }
     else
     {
-        connect(srvsList.back(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
-        srvsList.push_back(this);
-        return;
+        TCPBase * last = srvsList.last();
+        if(couldCancelPreviousRequest
+            && last->couldBeRemoved()
+            && (last->parent() == parent()))
+        {
+            srvsList.removeLast();
+            last->deleteLater();
+            Start(couldCancelPreviousRequest);
+        } else
+        {
+            connect(srvsList.last(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+            srvsList.push_back(this);
+        }
     }
-
-    RealStart();
 }
 
 void TCPBase::onClientRead()
@@ -190,4 +253,9 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
             if(m_isDemoMode) demo.append(buf);
         }
     }
+}
+
+bool TCPBase::couldBeRemoved()
+{
+    return false;
 }

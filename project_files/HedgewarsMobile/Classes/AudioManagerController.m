@@ -79,7 +79,7 @@ static AudioManagerController *mainInstance;
         self.backgroundMusic.delegate = nil;
         self.backgroundMusic.numberOfLoops = -1;
     }
-    
+
     self.backgroundMusic.volume = DEFAULT_VOLUME;
     [self.backgroundMusic play];
 }
@@ -98,7 +98,7 @@ static AudioManagerController *mainInstance;
 
     if (self.audioFaderQueue == nil)
         self.audioFaderQueue = [[NSOperationQueue alloc] init];
-    
+
     MXAudioPlayerFadeOperation *fadeOut = [[MXAudioPlayerFadeOperation alloc] initFadeWithAudioPlayer:self.backgroundMusic
                                                                                              toVolume:0.0
                                                                                          overDuration:FADEOUT_DURATION];
@@ -144,30 +144,30 @@ static AudioManagerController *mainInstance;
 -(void) playClickSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
-    
+
     if (self.clickSound == -1)
         self.clickSound = [self loadSound:@"clickSound"];
-    
+
     AudioServicesPlaySystemSound(self.clickSound);
 }
 
 -(void) playBackSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
-    
+
     if (self.backSound == -1)
         self.backSound = [self loadSound:@"backSound"];
-    
+
     AudioServicesPlaySystemSound(self.backSound);
 }
 
 -(void) playSelectSound {
     if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"sound"] boolValue] == NO)
         return;
-    
+
     if (self.selSound == -1)
         self.selSound = [self loadSound:@"selSound"];
-    
+
     AudioServicesPlaySystemSound(self.selSound);
 }
 

@@ -39,6 +39,7 @@ procedure InitKbdKeyTable;
 
 procedure SetBinds(var binds: TBinds);
 procedure SetDefaultBinds;
+procedure chDefaultBind(var id: shortstring);
 
 procedure ControllerInit;
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
@@ -60,6 +61,17 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     quitKeyCode, closeKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
+    ControllerNumControllers: Integer;
+    ControllerEnabled: Integer;
+    ControllerNumAxes: array[0..5] of Integer;
+    //ControllerNumBalls: array[0..5] of Integer;
+    ControllerNumHats: array[0..5] of Integer;
+    ControllerNumButtons: array[0..5] of Integer;
+    //ControllerAxes: array[0..5] of array[0..19] of Integer;
+    //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
+    //ControllerHats: array[0..5] of array[0..19] of Byte;
+    //ControllerButtons: array[0..5] of array[0..19] of Byte;
+    usingDBinds: boolean;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
 begin
@@ -319,9 +331,9 @@ begin
     binds:= binds; // avoid hint
     CurrentBinds:= DefaultBinds;
 {$ELSE}
-for t:= 0 to cKbdMaxIndex do
-    if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
-        ProcessKey(t, False);
+    for t:= 0 to cKbdMaxIndex do
+        if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
+            ProcessKey(t, False);
 
     CurrentBinds:= binds;
 {$ENDIF}
@@ -343,7 +355,7 @@ end;
 var Controller: array [0..5] of PSDL_Joystick;
 
 procedure ControllerInit;
-var i, j: Integer;
+var j: Integer;
 begin
 ControllerEnabled:= 0;
 {$IFDEF IPHONE}
@@ -388,18 +400,18 @@ if ControllerNumControllers > 0 then
             if ControllerNumButtons[j] > 20 then
                 ControllerNumButtons[j]:= 20;
 
-            // reset all buttons/axes
+            (*// reset all buttons/axes
             for i:= 0 to pred(ControllerNumAxes[j]) do
                 ControllerAxes[j][i]:= 0;
-            (*for i:= 0 to pred(ControllerNumBalls[j]) do
+            for i:= 0 to pred(ControllerNumBalls[j]) do
                 begin
                 ControllerBalls[j][i][0]:= 0;
                 ControllerBalls[j][i][1]:= 0;
-                end;*)
+                end;
             for i:= 0 to pred(ControllerNumHats[j]) do
                 ControllerHats[j][i]:= SDL_HAT_CENTERED;
             for i:= 0 to pred(ControllerNumButtons[j]) do
-                ControllerButtons[j][i]:= 0;
+                ControllerButtons[j][i]:= 0;*)
             end;
         end;
     // enable event generation/controller updating
@@ -440,8 +452,45 @@ begin
     ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;
 
+// Bind that isn't a team bind, but overrides defaultbinds.
+// When first called, DefaultBinds is cleared, because we assume we are getting a full list of dbinds.
+procedure chDefaultBind(var id: shortstring);
+var KeyName, Modifier, tmp: shortstring;
+    b: LongInt;
+begin
+KeyName:= '';
+Modifier:= '';
+
+if (not usingDBinds) then
+    begin
+    usingDBinds:= true;
+    FillByte(DefaultBinds, SizeOf(DefaultBinds), 0);
+    end;
+
+if (Pos('mod:', id) <> 0) then
+    begin
+    tmp:= '';
+    SplitBySpace(id, tmp);
+    Modifier:= id;
+    id:= tmp;
+    end;
+
+SplitBySpace(id, KeyName);
+if KeyName[1]='"' then
+    Delete(KeyName, 1, 1);
+if KeyName[byte(KeyName[0])]='"' then
+    Delete(KeyName, byte(KeyName[0]), 1);
+b:= KeyNameToCode(id, Modifier);
+if b = 0 then
+    OutError(errmsgUnknownVariable + ' "' + id + '"', false)
+else
+    DefaultBinds[b]:= KeyName;
+end;
+
 procedure initModule;
 begin
+    usingDBinds:= false;
+    RegisterVariable('dbind', @chDefaultBind, true );
 end;
 
 procedure freeModule;

@@ -54,7 +54,7 @@ class HWChatWidget : public QWidget
         Q_OBJECT
 
     public:
-        HWChatWidget(QWidget* parent, QSettings * gameSettings, bool notify);
+        HWChatWidget(QWidget* parent, bool notify);
         void setIgnoreListKick(bool enabled); ///< automatically kick people on ignore list (if possible)
         void setShowFollow(bool enabled);
         static const QString & styleSheet();
@@ -63,6 +63,7 @@ class HWChatWidget : public QWidget
         void displayWarning(const QString & message);
         void setUser(const QString & nickname);
         void setUsersModel(QAbstractItemModel * model);
+        void setSettings(QSettings * settings);
 
     protected:
         virtual void dragEnterEvent(QDragEnterEvent * event);
@@ -82,6 +83,8 @@ class HWChatWidget : public QWidget
         void discardStyleSheet();
         void saveStyleSheet();
         QString linkedNick(const QString & nickname);
+        void beforeContentAdd();
+        void afterContentAdd();
 
     public slots:
         void onChatString(const QString& str);
@@ -99,10 +102,11 @@ class HWChatWidget : public QWidget
         void info(const QString & str);
         void follow(const QString &);
         void nickCountUpdate(int cnt);
+        void consoleCommand(const QString & command);
 
     private:
         bool m_isAdmin;
-        QGridLayout mainLayout;
+        QHBoxLayout mainLayout;
         QTextBrowser* chatText;
         QStringList chatStrings;
         QListView* chatNicks;
@@ -122,6 +126,8 @@ class HWChatWidget : public QWidget
         QList<QRegExp> m_highlights; ///< regular expressions used for highlighting
         bool notify;
         bool m_autoKickEnabled;
+        bool m_scrollToBottom;
+        int m_scrollBarPos;
 
     private slots:
         void returnPressed();

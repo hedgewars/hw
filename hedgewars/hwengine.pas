@@ -32,18 +32,19 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer
+     , uPhysFSLayer, uCursor
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
 
+var isInternal: Boolean;
 
 {$IFDEF HWLIBRARY}
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(gameArgs: PPChar); cdecl; export;
+procedure Game(argc: LongInt; argv: PPChar); cdecl; export;
 procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
@@ -52,6 +53,8 @@ procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
+
+{$INCLUDE "ArgParsers.inc"}
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
@@ -91,15 +94,15 @@ begin
             end;
         gsConfirm, gsGame:
             begin
-            DrawWorld(Lag);
+            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsChat:
             begin
-            DrawWorld(Lag);
+            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
-            ProcessVisualGears(Lag);
+            if not cOnlyStats then ProcessVisualGears(Lag);
             end;
         gsExit:
             begin
@@ -109,7 +112,7 @@ begin
             exit(false);
             end;
 
-    SwapBuffers;
+    if not cOnlyStats then SwapBuffers;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if flagPrerecording then
@@ -217,7 +220,13 @@ begin
                         ProcessKey(event.key);
                     
                 SDL_MOUSEBUTTONDOWN:
-                    ProcessMouse(event.button, true);
+                    if GameState = gsConfirm then
+                    begin
+                        resetPosition();
+                        ParseCommand('quit', true);
+                    end
+                    else
+                        ProcessMouse(event.button, true);
                     
                 SDL_MOUSEBUTTONUP:
                     ProcessMouse(event.button, false); 
@@ -255,18 +264,24 @@ begin
             end; //end case event.type_ of
         end; //end while SDL_PollEvent(@event) <> 0 do
 
+        if (CursorMovementX <> 0) or (CursorMovementY <> 0) then
+            handlePositionUpdate(CursorMovementX * cameraKeyboardSpeed, CursorMovementY * cameraKeyboardSpeed);
+
         if (cScreenResizeDelay <> 0) and (cScreenResizeDelay < RealTicks) and
            ((cNewScreenWidth <> cScreenWidth) or (cNewScreenHeight <> cScreenHeight)) then
         begin
             cScreenResizeDelay:= 0;
-            cScreenWidth:= cNewScreenWidth;
-            cScreenHeight:= cNewScreenHeight;
+            cWindowedWidth:= cNewScreenWidth;
+            cWindowedHeight:= cNewScreenHeight;
+            cScreenWidth:= cWindowedWidth;
+            cScreenHeight:= cWindowedHeight;
 
             ParseCommand('fullscr '+intToStr(LongInt(cFullScreen)), true);
             WriteLnToConsole('window resize: ' + IntToStr(cScreenWidth) + ' x ' + IntToStr(cScreenHeight));
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
         CurrTime:= SDL_GetTicks();
@@ -314,29 +329,16 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game{$IFDEF HWLIBRARY}(gameArgs: PPChar); cdecl; export{$ENDIF};
-var p: TPathType;
-    s: shortstring;
+procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
+//var p: TPathType;
+var s: shortstring;
     i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
     preInitEverything();
-    cShowFPS:= {$IFDEF DEBUGFILE}true{$ELSE}false{$ENDIF};
-    ipcPort:= StrToInt(gameArgs[0]);
-    cScreenWidth:= StrToInt(gameArgs[1]);
-    cScreenHeight:= StrToInt(gameArgs[2]);
-    cReducedQuality:= StrToInt(gameArgs[3]);
-    cLocaleFName:= gameArgs[4];
-    UserNick:= gameArgs[5];
-    SetSound(gameArgs[6] = '1');
-    SetMusic(gameArgs[7] = '1');
-    cAltDamage:= gameArgs[8] = '1';
-    PathPrefix:= gameArgs[9];
-    UserPathPrefix:= '../Documents';
-    recordFileName:= gameArgs[10];
+    parseCommandLine(argc, argv);
 {$ENDIF}
     initEverything(true);
-
     WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
@@ -345,7 +347,7 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
+    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
 
     SDL_EnableUNICODE(1);
@@ -437,7 +439,6 @@ procedure initEverything (complete:boolean);
 begin
     uUtils.initModule(complete);    // opens the debug file, must be the first
     uVariables.initModule;          // inits all global variables
-    uConsole.initModule;            // opens stdout
     uCommands.initModule;           // helps below
     uCommandHandlers.initModule;    // registers all messages from frontend
 
@@ -508,7 +509,6 @@ begin
 
     uCommandHandlers.freeModule;
     uCommands.freeModule;
-    uConsole.freeModule;            // closes stdout
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
 end;
@@ -536,60 +536,6 @@ begin
 end;
 
 {$IFNDEF HWLIBRARY}
-///////////////////////////////////////////////////////////////////////////////
-procedure DisplayUsage;
-var i: LongInt;
-begin
-    WriteLn(stdout, 'Wrong argument format: correct configurations is');
-    WriteLn(stdout, '');
-    WriteLn(stdout, '  hwengine <path to user hedgewars folder> <path to global data folder> <path to replay file> [options]');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'where [options] must be specified either as:');
-    WriteLn(stdout, ' --set-video [screen width] [screen height] [color dept]');
-    WriteLn(stdout, ' --set-audio [volume] [enable music] [enable sounds]');
-    WriteLn(stdout, ' --set-other [language file] [full screen] [show FPS]');
-    WriteLn(stdout, ' --set-multimedia [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen]');
-    WriteLn(stdout, ' --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]');
-    WriteLn(stdout, ' --stats-only');
-    WriteLn(stdout, '');
-    WriteLn(stdout, 'Read documentation online at http://code.google.com/p/hedgewars/wiki/CommandLineOptions for more information');
-    WriteLn(stdout, '');
-    Write(stdout, 'PARSED COMMAND: ');
-    
-    for i:=0 to ParamCount do
-        Write(stdout, ParamStr(i) + ' ');
-        
-    WriteLn(stdout, '');
-end;
-
-///////////////////////////////////////////////////////////////////////////////
-{$INCLUDE "ArgParsers.inc"}
-
-procedure GetParams;
-begin
-    if (ParamCount < 3) then
-        GameType:= gmtSyntax
-    else
-        if (ParamCount = 3) and (ParamStr(3) = 'landpreview') then
-            begin
-            ipcPort:= StrToInt(ParamStr(2));
-            GameType:= gmtLandPreview;
-            end
-        else
-            begin
-            if (ParamCount = 3) and (ParamStr(3) = '--stats-only') then
-                playReplayFileWithParameters()
-            else
-                if ParamCount = cDefaultParamNum then
-                    internalStartGameWithParameters()
-{$IFDEF USE_VIDEO_RECORDING}
-                else if ParamCount = cVideorecParamNum then
-                    internalStartVideoRecordingWithParameters()
-{$ENDIF}
-                else
-                    playReplayFileWithParameters();
-            end
-end;
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
@@ -600,9 +546,8 @@ begin
 
     if GameType = gmtLandPreview then
         GenLandPreview()
-    else if GameType = gmtSyntax then
-        DisplayUsage()
-    else Game();
+    else if GameType <> gmtSyntax then
+        Game();
 
     // return 1 when engine is not called correctly
     halt(LongInt(GameType = gmtSyntax));

@@ -150,7 +150,7 @@
 
         cell.textLabel.text = [[[self.listOfAllTeams objectAtIndex:[indexPath row]] objectForKey:@"team"] stringByDeletingPathExtension];
         cell.textLabel.backgroundColor = [UIColor clearColor];
-        
+
         NSString *teamPath = [NSString stringWithFormat:@"%@/%@.plist",TEAMS_DIRECTORY(),cell.textLabel.text];
         NSDictionary *firstHog = [[[NSDictionary dictionaryWithContentsOfFile:teamPath] objectForKey:@"hedgehogs"] objectAtIndex:0];
         if ([[firstHog objectForKey:@"level"] intValue] != 0) {
@@ -159,7 +159,7 @@
             [imgString release];
             UIImageView *spriteView = [[UIImageView alloc] initWithImage:sprite];
             [sprite release];
-            
+
             cell.accessoryView = spriteView;
             [spriteView release];
         } else

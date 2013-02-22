@@ -54,8 +54,8 @@
 00:51=Hrouda bláta
 00:52=Není vybrána žádná zbraň
 00:53=TimeBox
-00:54=Struktura
-00:55=Pozemek s rozprašovačem
+; 00:54=Struktura
+00:54=Pozemek s rozprašovačem
 
 01:00=Do boje!
 01:01=Kolo nerozhodně
@@ -506,7 +506,7 @@
 04:51=Získat ve volném záběru vrhá kouli bláta.|Žihadla bit, a srazí prasata zpět.
 04:52=NEPOUŽITO
 04:53=Vydejte se na dobrodružství v čase a prostoru,|přičemž vaši kamarádi bojovat dál sám.|Být připraven vrátit kdykoliv,|nebo náhlé smrti nebo pokud jsou všichni poraženi.|Prohlášení. Nefunguje v náhlé smrti,|Pokud jste sami, nebo jste-li král.
-04:54=NEÚPLNÝ                  
+04:54=NEÚPLNÝ
 04:55=Sprej proud lepkavými vločkami.|Stavět mosty, pohřbít nepřátele, utěsnění tunely.|Buďte opatrní, nechcete dostat každý z vás!
 
 ; Game goal strings

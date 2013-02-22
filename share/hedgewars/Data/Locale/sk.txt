@@ -54,8 +54,10 @@
 00:51=Blatová guľa
 00:52=Žiadna zbraň nie je vybraná
 00:53=TARDIS
-00:54=Budova
-00:55=Postrek zeme
+; 00:54=Budova
+00:54=Postrek zeme
+00:55=Zmrazovač
+00:56=Sekáčik
 
 01:00=Do boja!
 01:01=Remíza
@@ -78,6 +80,7 @@
 01:18=Vysoký
 01:19=Extrémny
 01:20=%1 odskok
+01:21=Vypnutý zvuk
 
 ; Správy o udalostiach
 ; Ježko (%1) zomrel

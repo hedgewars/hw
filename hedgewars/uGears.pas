@@ -56,8 +56,8 @@ procedure doStepDrowningGear(Gear: PGear);
 
 
 implementation
-uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics,
-    uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uMobile, uVariables,
+uses uStore, uSound, uTeams, uRandom, uCollisions, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{$ENDIF}
+    uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlers, uGearsHandlersRope;
 
@@ -78,6 +78,7 @@ var delay: LongWord;
     stSpawn, stNTurn);
     upd: Longword;
     snowLeft,snowRight: LongInt;
+    NewTurnTick: LongWord;
     //SDMusic: shortstring;
 
 // For better maintainability the step handlers of gears are stored in
@@ -189,6 +190,16 @@ var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
 begin
+ScriptCall('onGameTick');
+if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
+if GameTicks = NewTurnTick then
+    begin
+    ScriptCall('onNewTurn');
+{$IFDEF SDL13}
+    uTouch.NewTurnBeginning();
+{$ENDIF}
+    end;
+
 PrvInactive:= AllInactive;
 AllInactive:= true;
 
@@ -383,7 +394,8 @@ case step of
                 SwitchHedgehog;
 
                 AfterSwitchHedgehog;
-                bBetweenTurns:= false
+                bBetweenTurns:= false;
+                NewTurnTick:= GameTicks + 1
                 end;
             step:= Low(step)
             end;
@@ -430,8 +442,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
-        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-            and (not isInMultiShoot) then
+        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) then
                 begin
                 if (TurnTimeLeft = 5000)
                 and (cHedgehogTurnTime >= 10000)
@@ -470,8 +481,6 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 AddRandomness(CheckSum);
-ScriptCall('onGameTick');
-if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 
 inc(GameTicks)
 end;
@@ -643,7 +652,7 @@ if (GameFlags and gfLaserSight) <> 0 then
 
 if (GameFlags and gfArtillery) <> 0 then
     cArtillery:= true;
-for i:= GetRandom(10)+30 downto 0 do
+for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
     begin
     rx:= GetRandom(rightX-leftX)+leftX;
     ry:= GetRandom(LAND_HEIGHT-topY)+topY;
@@ -677,8 +686,8 @@ while t <> nil do
             gtKnife,
             gtCase,
             gtTarget,
-            gtExplosives,
-            gtStructure: begin
+            gtExplosives: begin//,
+//            gtStructure: begin
 //addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
                     dmg:= 0;
                     r:= Gear^.Radius + t^.Radius;
@@ -777,8 +786,8 @@ while i > 0 do
             gtKnife,
             gtTarget,
             gtCase,
-            gtExplosives,
-            gtStructure:
+            gtExplosives: //,
+            //gtStructure:
             begin
             if (Ammo^.Kind = gtDrill) then
                 begin
@@ -906,10 +915,6 @@ if (GameFlags and gfDivideTeams) <> 0 then
                     inc(Count)
                     end;
         end;
-    // unC0Rr, while it is true user can watch value on map screen, IMO this (and check above) should be enforced in UI
-    // - is there a good place to put values for the different widgets to check?  Right now they are kind of disconnected.
-    //it would be nice if divide teams, forts mode and hh per map could all be checked by the team widget, or maybe disable start button
-    TryDo(Count <= MaxHedgehogs, 'Too many hedgehogs for this map! (max # is ' + inttostr(MaxHedgehogs) + ')', true);
     while (Count > 0) do
         begin
         i:= GetRandom(Count);
@@ -1367,7 +1372,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepNapalmBomb,
             @doStepSnowball,
             @doStepSnowflake,
-            @doStepStructure,
+            //@doStepStructure,
             @doStepLandGun,
             @doStepTardis,
             @doStepIceGun,
@@ -1400,6 +1405,7 @@ begin
     upd:= 0;
 
     //SDMusic:= 'hell.ogg';
+    NewTurnTick:= $FFFFFFFF;
 end;
 
 procedure freeModule;

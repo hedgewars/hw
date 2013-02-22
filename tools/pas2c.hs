@@ -502,7 +502,7 @@ tvar2C _ _ _ _ (VarDeclaration True _ (ids, t) Nothing) = do
     liftM (map(\i -> t' i)) $ mapM (id2CTyped2 (Just $ t' empty) (VarParamType t)) ids
 
 tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mInitExpr) = do
-    t' <- liftM (((if isConst then text "static const" else if externVar 
+    t' <- liftM (((if isConst then text "static const" else if externVar
                                                                 then text "extern"
                                                                 else empty)
                    <+>) . ) $ type2C t
@@ -522,18 +522,18 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
             ie' <- return $ case (r, mInitExpr, ignoreInit) of
                 (RangeInfinite, Nothing, False) -> text "= NULL" -- force dynamic array to be initialized as NULL if not initialized at all
                 (_, _, _) -> ie
-            result <- liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie')) $ mapM (id2CTyped t) ids           
+            result <- liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie')) $ mapM (id2CTyped t) ids
             case (r, ignoreInit) of
-                (RangeInfinite, False) -> 
+                (RangeInfinite, False) ->
                     -- if the array is dynamic, add dimension info to it
                     return $ [dimDecl] ++ result
-                    where 
+                    where
                         arrayDimStr = show $ arrayDimension t
                         arrayDimInitExp = text ("={" ++ ".dim = " ++ arrayDimStr ++ ", .a = {0, 0, 0, 0}}")
                         dimDecl = varDeclDecision isConst includeType (text "fpcrtl_dimension_t" <+>  i' <> text "_dimension_info") arrayDimInitExp
-                    
+
                 (_, _) -> return result
-            
+
          _ -> liftM (map(\i -> varDeclDecision isConst includeType (t' i) ie)) $ mapM (id2CTyped2 (Just $ t' empty) t) ids
     where
     initExpr Nothing = return $ empty
@@ -815,7 +815,7 @@ phrase2C (ForCycle i' e1' e2' p up) = do
         i <+> text "=" <+> e1 <> semi
         $$
         iType <+> iEnd <+> text "=" <+> e2 <> semi
-        $$ 
+        $$
         text "if" <+> (parens $ i <+> text "<=" <+> iEnd) <+> text "do" <+> ph <+>
         text "while" <> parens (i <+> text "!=" <+> iEnd <+> text add) <> semi
     where

@@ -21,6 +21,7 @@
 package org.hedgewars.hedgeroid.frontlib;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -350,10 +351,14 @@ public interface Frontlib extends Library {
 	static class HogStruct extends Structure {
 		public static class ByVal extends HogStruct implements Structure.ByValue {}
 		public static class ByRef extends HogStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"name", "hat", "rounds", "kills", "deaths", "suicides", "difficulty", "initialHealth", "weaponset"};
 
-		public HogStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public HogStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public HogStruct() { super(); }
+		public HogStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("name", "hat", "rounds", "kills", "deaths", "suicides", "difficulty", "initialHealth", "weaponset");
+		}
 		
 		public void fillFrom(Hog hog) {
 			difficulty = hog.level;
@@ -382,10 +387,14 @@ public interface Frontlib extends Library {
 	static class TeamStruct extends Structure {
 		public static class ByVal extends TeamStruct implements Structure.ByValue {}
 		public static class ByRef extends TeamStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"hogs", "name", "grave", "fort", "voicepack", "flag", "bindings", "bindingCount", "rounds", "wins", "campaignProgress", "colorIndex", "hogsInGame", "remoteDriven", "ownerName"};
 
-		public TeamStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public TeamStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public TeamStruct() { super(); }
+		public TeamStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("hogs", "name", "grave", "fort", "voicepack", "flag", "bindings", "bindingCount", "rounds", "wins", "campaignProgress", "colorIndex", "hogsInGame", "remoteDriven", "ownerName");
+		}
 		
 		public void fillFrom(Team team, TeamIngameAttributes attrs) {
 			if(team != null) {
@@ -458,10 +467,14 @@ public interface Frontlib extends Library {
 	static class WeaponsetStruct extends Structure {
 		public static class ByVal extends WeaponsetStruct implements Structure.ByValue {}
 		public static class ByRef extends WeaponsetStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"loadout", "crateprob", "crateammo", "delay", "name"};
 		
-		public WeaponsetStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public WeaponsetStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public WeaponsetStruct() { super(); }
+		public WeaponsetStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("loadout", "crateprob", "crateammo", "delay", "name");
+		}
 		
 		public void fillFrom(Weaponset weaponset) {
 			fillWeaponInfo(loadout, weaponset.loadout);
@@ -501,10 +514,13 @@ public interface Frontlib extends Library {
 	 * Represents a flib_weaponset*, for use as part of a flib_weaponset**
 	 */
 	static class WeaponsetPointerByReference extends Structure implements Structure.ByReference {
-		private static String[] FIELD_ORDER = new String[] {"weaponset"};
+		public WeaponsetPointerByReference() { super(); }
+		public WeaponsetPointerByReference(Pointer ptr) { super(ptr); }
 		
-		public WeaponsetPointerByReference() { super(); setFieldOrder(FIELD_ORDER); }
-		public WeaponsetPointerByReference(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("weaponset");
+		}
 		
 		public WeaponsetStruct.ByRef weaponset;
 	}
@@ -512,10 +528,14 @@ public interface Frontlib extends Library {
 	static class WeaponsetListStruct extends Structure {
 		public static class ByVal extends WeaponsetListStruct implements Structure.ByValue {}
 		public static class ByRef extends WeaponsetListStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"weaponsetCount", "weaponsets"};
 		
-		public WeaponsetListStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public WeaponsetListStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public WeaponsetListStruct() { super(); }
+		public WeaponsetListStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("weaponsetCount", "weaponsets");
+		}
 		
 		public void fillFrom(List<Weaponset> list) {
 			weaponsetCount = list.size();
@@ -560,11 +580,15 @@ public interface Frontlib extends Library {
 	static class RoomStruct extends Structure {
 		public static class ByVal extends RoomStruct implements Structure.ByValue {}
 		public static class ByRef extends RoomStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"inProgress", "name", "playerCount", "teamCount", "owner", "map", "scheme", "weapons"};
 		
-		public RoomStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public RoomStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public RoomStruct() { super(); }
+		public RoomStruct(Pointer ptr) { super(ptr); }
 
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("inProgress", "name", "playerCount", "teamCount", "owner", "map", "scheme", "weapons");
+		}
+		
 		public Room toRoomlistRoom() {
 			return new Room(name, map, scheme, weapons, owner, playerCount, teamCount, inProgress);
 		}
@@ -582,10 +606,14 @@ public interface Frontlib extends Library {
 	static class MapRecipeStruct extends Structure {
 		public static class ByVal extends MapRecipeStruct implements Structure.ByValue {}
 		public static class ByRef extends MapRecipeStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"mapgen", "name", "seed", "theme", "drawData", "drawDataSize", "templateFilter", "mazeSize"};
 		
-		public MapRecipeStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public MapRecipeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public MapRecipeStruct() { super(); }
+		public MapRecipeStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("mapgen", "name", "seed", "theme", "drawData", "drawDataSize", "templateFilter", "mazeSize");
+		}
 		
 		public void fillFrom(MapRecipe map) {
 			mapgen = map.mapgen;
@@ -593,24 +621,14 @@ public interface Frontlib extends Library {
 			seed = map.seed;
 			theme = map.theme;
 			byte[] buf = map.getDrawData();
-			if(buf==null || buf.length==0) {
-				drawData = null;
-			} else {
-				drawData = ByteArrayPtr.createJavaOwned(buf).getPointer();
-			}
+			drawData = ByteArrayPtr.createJavaOwned(buf);
 			drawDataSize = NativeSizeT.valueOf(buf==null ? 0 : buf.length);
 			templateFilter = map.templateFilter;
 			mazeSize = map.mazeSize;
 		}
 		
 		public MapRecipe toMapRecipe() {
-			byte[] buf;
-			int size = drawDataSize.intValue();
-			if(size>0) {
-				buf = drawData.getByteArray(0, size);
-			} else {
-				buf = null;
-			}
+			byte[] buf = ByteArrayPtr.deref(drawData, drawDataSize.intValue());
 			return new MapRecipe(mapgen, templateFilter, mazeSize, name, seed, theme, buf);
 		}
 		
@@ -618,7 +636,7 @@ public interface Frontlib extends Library {
 		public String name;
 		public String seed;
 		public String theme;
-		public Pointer drawData;			// We can't use ByteArrayPtr in a struct because JNA will overwrite the value with NULL - probably a bug.
+		public ByteArrayPtr drawData;
 		public NativeSizeT drawDataSize;
 		public int templateFilter;
 		public int mazeSize;
@@ -627,10 +645,14 @@ public interface Frontlib extends Library {
 	static class MetaschemeSettingStruct extends Structure {
 		public static class ByVal extends MetaschemeSettingStruct implements Structure.ByValue {}
 		public static class ByRef extends MetaschemeSettingStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"name", "engineCommand", "maxMeansInfinity", "times1000", "min", "max", "def"};
 		
-		public MetaschemeSettingStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public MetaschemeSettingStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public MetaschemeSettingStruct() { super(); }
+		public MetaschemeSettingStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("name", "engineCommand", "maxMeansInfinity", "times1000", "min", "max", "def");
+		}
 		
 		public void fillFrom(Setting setting) {
 			name = setting.name;
@@ -658,10 +680,14 @@ public interface Frontlib extends Library {
 	static class MetaschemeModStruct extends Structure {
 		public static class ByVal extends MetaschemeModStruct implements Structure.ByValue {}
 		public static class ByRef extends MetaschemeModStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"name", "bitmaskIndex"};
 		
-		public MetaschemeModStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public MetaschemeModStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public MetaschemeModStruct() { super(); }
+		public MetaschemeModStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("name", "bitmaskIndex");
+		}
 		
 		public void fillFrom(Mod mod) {
 			name = mod.name;
@@ -681,10 +707,13 @@ public interface Frontlib extends Library {
 		public static class ByVal extends MetaschemeStruct implements Structure.ByValue {}
 		public static class ByRef extends MetaschemeStruct implements Structure.ByReference {}
 
-		private static String[] FIELD_ORDER = new String[] {"settingCount", "modCount", "settings", "mods"};
+		public MetaschemeStruct() { super(); }
+		public MetaschemeStruct(Pointer ptr) { super(ptr); }
 		
-		public MetaschemeStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public MetaschemeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("settingCount", "modCount", "settings", "mods");
+		}
 		
 		/**
 		 * Only use on native-owned structs!
@@ -720,10 +749,14 @@ public interface Frontlib extends Library {
 	static class SchemeStruct extends Structure {
 		public static class ByVal extends SchemeStruct implements Structure.ByValue {}
 		public static class ByRef extends SchemeStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"name", "settings", "mod"};
 		
-		public SchemeStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public SchemeStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public SchemeStruct() { super(); }
+		public SchemeStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("name", "settings", "mods");
+		}
 		
 		public void fillFrom(Scheme scheme) {
 			MetaScheme meta = MetaScheme.INSTANCE;
@@ -762,10 +795,13 @@ public interface Frontlib extends Library {
 	 * Represents a flib_scheme*, for use as part of a flib_scheme**
 	 */
 	static class SchemePointerByReference extends Structure implements Structure.ByReference {
-		private static String[] FIELD_ORDER = new String[] {"scheme"};
+		public SchemePointerByReference() { super(); }
+		public SchemePointerByReference(Pointer ptr) { super(ptr); }
 		
-		public SchemePointerByReference() { super(); setFieldOrder(FIELD_ORDER); }
-		public SchemePointerByReference(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("scheme");
+		}
 		
 		public SchemeStruct.ByRef scheme;
 	}
@@ -773,10 +809,14 @@ public interface Frontlib extends Library {
 	static class SchemelistStruct extends Structure {
 		public static class ByVal extends SchemelistStruct implements Structure.ByValue {}
 		public static class ByRef extends SchemelistStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"schemeCount", "schemes"};
 		
-		public SchemelistStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public SchemelistStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public SchemelistStruct() { super(); }
+		public SchemelistStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("schemeCount", "schemes");
+		}
 		
 		public void fillFrom(List<Scheme> schemeList) {
 			schemeCount = schemeList.size();
@@ -823,10 +863,13 @@ public interface Frontlib extends Library {
 	 * Represents a flib_team*, for use as part of a flib_team**
 	 */
 	static class TeamPointerByReference extends Structure implements Structure.ByReference {
-		private static String[] FIELD_ORDER = new String[] {"team"};
+		public TeamPointerByReference() { super(); }
+		public TeamPointerByReference(Pointer ptr) { super(ptr); }
 		
-		public TeamPointerByReference() { super(); setFieldOrder(FIELD_ORDER); }
-		public TeamPointerByReference(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("team");
+		}
 		
 		public TeamStruct.ByRef team;
 	}
@@ -835,10 +878,13 @@ public interface Frontlib extends Library {
 		public static class ByVal extends TeamlistStruct implements Structure.ByValue {}
 		public static class ByRef extends TeamlistStruct implements Structure.ByReference {}
 
-		private static String[] FIELD_ORDER = new String[] {"teamCount", "teams"};
+		public TeamlistStruct() { super(); }
+		public TeamlistStruct(Pointer ptr) { super(ptr); }
 		
-		public TeamlistStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public TeamlistStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("teamCount", "teams");
+		}
 		
 		public void fillFrom(List<TeamInGame> teamList, WeaponsetStruct.ByRef weaponset, int initialHealth) {
 			teamCount = teamList.size();
@@ -878,10 +924,14 @@ public interface Frontlib extends Library {
 	static class GameSetupStruct extends Structure {
 		public static class ByVal extends GameSetupStruct implements Structure.ByValue {}
 		public static class ByRef extends GameSetupStruct implements Structure.ByReference {}
-		private static String[] FIELD_ORDER = new String[] {"script", "gamescheme", "map", "teamlist"};
 		
-		public GameSetupStruct() { super(); setFieldOrder(FIELD_ORDER); }
-		public GameSetupStruct(Pointer ptr) { super(ptr); setFieldOrder(FIELD_ORDER); }
+		public GameSetupStruct() { super(); }
+		public GameSetupStruct(Pointer ptr) { super(ptr); }
+		
+		@Override
+		protected List<String> getFieldOrder() {
+			return Arrays.asList("script", "gamescheme", "map", "teamlist");
+		}
 		
 		public void fillFrom(GameConfig conf) {
 			script = conf.style;

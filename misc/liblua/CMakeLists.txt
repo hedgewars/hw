@@ -9,7 +9,7 @@ if(WIN32)
     set(LUA_LIBRARY lua.dll)
 
     set_target_properties(lua PROPERTIES PREFIX "")
-    install(TARGETS lua RUNTIME DESTINATION ${target_dir})
+    install(TARGETS lua RUNTIME DESTINATION ${target_library_install_dir})
 else(WIN32)
     add_definitions(-DLUA_USE_LINUX)
     add_library(lua STATIC ${lua_src})
