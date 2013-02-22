@@ -36,7 +36,8 @@ interface
 
 {$IFDEF UNIX}
     {$IFNDEF DARWIN}
-        {$linklib c}
+        {necessary for statically linking physfs (divdi3 undefined)}
+        {$linklib stdc++}
     {$ENDIF}
     {$IFDEF HAIKU}
         {$linklib root}
