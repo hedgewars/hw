@@ -34,11 +34,6 @@ include(CheckIncludeFile)
 include(CheckLibraryExists)
 include(CheckCSourceCompiles)
 
-## SDL is needed by extra
-find_package(SDL REQUIRED)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src) ##
-include_directories(${SDL_INCLUDE_DIR}) ##
-include_directories(${LUA_INCLUDE_DIR}) ##
 
 if(MACOSX)
     # Fallback to older OS X on PowerPC to support wider range of systems...
@@ -94,62 +89,39 @@ if(MSVC)
 endif(MSVC)
 
 
-# Basic chunks of source code ...
-set(LZMA_SRCS
-    src/lzma/C/7zCrc.c
-    src/lzma/C/Archive/7z/7zBuffer.c
-    src/lzma/C/Archive/7z/7zDecode.c
-    src/lzma/C/Archive/7z/7zExtract.c
-    src/lzma/C/Archive/7z/7zHeader.c
-    src/lzma/C/Archive/7z/7zIn.c
-    src/lzma/C/Archive/7z/7zItem.c
-    src/lzma/C/Archive/7z/7zMethodID.c
-    src/lzma/C/Compress/Branch/BranchX86.c
-    src/lzma/C/Compress/Branch/BranchX86_2.c
-    src/lzma/C/Compress/Lzma/LzmaDecode.c
-)
-
 if(BEOS)
     # We add this explicitly, since we don't want CMake to think this
     #  is a C++ project unless we're on BeOS.
     set(PHYSFS_BEOS_SRCS src/platform_beos.cpp)
     find_library(BE_LIBRARY be)
     find_library(ROOT_LIBRARY root)
-    set(optionAL_LIBRARY_LIBS ${optionAL_LIBRARY_LIBS} ${BE_LIBRARY} ${ROOT_LIBRARY})
+    set(optional_library_libs ${optional_library_libs} ${BE_LIBRARY} ${ROOT_LIBRARY})
 endif(BEOS)
 
-## extra functions needed by Hedgewars
-## TODO: maybe it's better to have them in a separate library?
-set(PHYSFS_HEDGE_SRCS
-    extras/physfsrwops.c
-    extras/physfslualoader.c
-    extras/hwpacksmounter.c
-)
 
 # Almost everything is "compiled" here, but things that don't apply to the
 #  build are #ifdef'd out. This is to make it easy to embed PhysicsFS into
 #  another project or bring up a new build system: just compile all the source
 #  code and #define the things you want.
 set(PHYSFS_SRCS
-    src/physfs.c
-    src/physfs_byteorder.c
-    src/physfs_unicode.c
-    src/platform_posix.c
-    src/platform_unix.c
-    src/platform_macosx.c
-    src/platform_windows.c
-    src/archiver_dir.c
-    src/archiver_unpacked.c
-    src/archiver_grp.c
-    src/archiver_hog.c
-    src/archiver_lzma.c
-    src/archiver_mvl.c
-    src/archiver_qpak.c
-    src/archiver_wad.c
-    src/archiver_zip.c
-    src/archiver_iso9660.c
+    physfs.c
+    physfs_byteorder.c
+    physfs_unicode.c
+    platform_posix.c
+    platform_unix.c
+    platform_macosx.c
+    platform_windows.c
+    archiver_dir.c
+    archiver_unpacked.c
+    archiver_grp.c
+    archiver_hog.c
+    archiver_lzma.c
+    archiver_mvl.c
+    archiver_qpak.c
+    archiver_wad.c
+    archiver_zip.c
+    archiver_iso9660.c
     ${PHYSFS_BEOS_SRCS}
-    ${PHYSFS_HEDGE_SRCS} ##
 )
 
 
@@ -232,13 +204,6 @@ if(PHYSFS_ARCHIVE_ZIP)
     set(PHYSFS_FEATURES "ZIP")
 endif(PHYSFS_ARCHIVE_ZIP)
 
-option(PHYSFS_ARCHIVE_7Z "Enable 7zip support" FALSE)
-if(PHYSFS_ARCHIVE_7Z)
-    add_definitions(-DPHYSFS_SUPPORTS_7Z=1)
-    list(APPEND PHYSFS_SRCS ${LZMA_SRCS})
-    set(PHYSFS_FEATURES "${PHYSFS_FEATURES} 7zip")
-endif(PHYSFS_ARCHIVE_7Z)
-
 option(PHYSFS_ARCHIVE_GRP "Enable Build Engine GRP support" TRUE)
 if(PHYSFS_ARCHIVE_GRP)
     add_definitions(-DPHYSFS_SUPPORTS_GRP=1)
@@ -275,6 +240,7 @@ if(PHYSFS_ARCHIVE_ISO9660)
     set(PHYSFS_FEATURES "${PHYSFS_FEATURES} CD-ROM")
 endif(PHYSFS_ARCHIVE_ISO9660)
 
+
 ##as needed by Hedgewars configuration
 if(WINDOWS)
     option(PHYSFS_BUILD_STATIC "Build static library" FALSE)
@@ -288,14 +254,18 @@ endif(WINDOWS)
 if(PHYSFS_BUILD_STATIC)
     add_library(physfs STATIC ${PHYSFS_SRCS})
     set_target_properties(physfs PROPERTIES OUTPUT_NAME "physfs")
+    set(lib_prefix ${CMAKE_STATIC_LIBRARY_PREFIX}) ##
+    set(lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX}) ##
 endif(PHYSFS_BUILD_STATIC)
 
 if(PHYSFS_BUILD_SHARED)
     add_library(physfs SHARED ${PHYSFS_SRCS})
     set_target_properties(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
     set_target_properties(physfs PROPERTIES SOVERSION ${PHYSFS_SOVERSION})
-    target_link_libraries(physfs ${optionAL_LIBRARY_LIBS} ${OTHER_LDFLAGS})
+    target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
     install(TARGETS physfs RUNTIME DESTINATION ${target_library_install_dir}) ##
+    set(lib_prefix ${CMAKE_SHARED_LIBRARY_PREFIX}) ##
+    set(lib_suffix ${CMAKE_SHARED_LIBRARY_SUFFIX}) ##
 endif(PHYSFS_BUILD_SHARED)
 
 if(NOT PHYSFS_BUILD_SHARED AND NOT PHYSFS_BUILD_STATIC)
@@ -307,9 +277,16 @@ if(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
     set_target_properties(physfs PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 endif(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
 
+## added standard variables emulating the FindPhysFS.cmake ones (FORCE or cmake won't pick 'em)
+set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "" FORCE)
+set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}physfs${lib_suffix} CACHE STRING "" FORCE)
+
+## this is to avoid find_package() find the just built library and shadowing it at next cmake run
+set(PHYSFS_BUNDLE TRUE CACHE STRING "" FORCE)
+
 
 ## removed install, language bindings and test program
 ## simplified configuration output
 
-message(STATUS "PhysicsFS will build with ${PHYSFS_FEATURES} support")
+message(STATUS "PhysFS will be built with ${PHYSFS_FEATURES} support")
 
