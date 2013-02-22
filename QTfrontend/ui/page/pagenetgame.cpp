@@ -170,8 +170,11 @@ PageNetGame::PageNetGame(QWidget* parent) : AbstractPage(parent)
     restrictJoins->setCheckable(true);
     restrictTeamAdds = new QAction(QAction::tr("Restrict Team Additions"), menu);
     restrictTeamAdds->setCheckable(true);
+    restrictUnregistered = new QAction(QAction::tr("Restrict Unregistered Players Join"), menu);
+    restrictUnregistered->setCheckable(true);
     menu->addAction(restrictJoins);
     menu->addAction(restrictTeamAdds);
+    menu->addAction(restrictUnregistered);
 
     BtnMaster->setMenu(menu);
 

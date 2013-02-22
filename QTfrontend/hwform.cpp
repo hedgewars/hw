@@ -1730,6 +1730,7 @@ void HWForm::NetGameMaster()
     ui.pageNetGame->setMasterMode(true);
     ui.pageNetGame->restrictJoins->setChecked(false);
     ui.pageNetGame->restrictTeamAdds->setChecked(false);
+    ui.pageNetGame->restrictUnregistered->setChecked(false);
     ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
     ui.pageNetGame->pGameCFG->setMaster(true);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
@@ -1742,6 +1743,7 @@ void HWForm::NetGameMaster()
         ui.pageNetGame->leRoomName->disconnect(hwnet);
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
+        ui.pageNetGame->restrictUnregistered->disconnect(hwnet);
         ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString&)));
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
@@ -1750,6 +1752,7 @@ void HWForm::NetGameMaster()
         connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
         connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
         connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
+        connect(ui.pageNetGame->restrictUnregistered, SIGNAL(triggered()), hwnet, SLOT(toggleRegisteredOnly()));
         connect(ui.pageNetGame->pGameCFG->GameSchemes->model(),
                 SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
                 ui.pageNetGame->pGameCFG,

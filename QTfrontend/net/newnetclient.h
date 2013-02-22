@@ -163,6 +163,7 @@ class HWNewNet : public QObject
         void startGame();
         void toggleRestrictJoins();
         void toggleRestrictTeamAdds();
+        void toggleRegisteredOnly();
         void partRoom();
         void clearAccountsCache();
         void getBanList();
