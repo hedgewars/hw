@@ -49,6 +49,7 @@ class PageNetGame : public AbstractPage
 
         QAction * restrictJoins;
         QAction * restrictTeamAdds;
+        QAction * restrictUnregistered;
 
         HWChatWidget* chatWidget;
 

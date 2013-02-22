@@ -982,6 +982,11 @@ void HWNewNet::toggleRestrictTeamAdds()
     RawSendNet(QString("TOGGLE_RESTRICT_TEAMS"));
 }
 
+void HWNewNet::toggleRegisteredOnly()
+{
+    RawSendNet(QString("TOGGLE_REGISTERED_ONLY"));
+}
+
 void HWNewNet::clearAccountsCache()
 {
     RawSendNet(QString("CLEAR_ACCOUNTS_CACHE"));
