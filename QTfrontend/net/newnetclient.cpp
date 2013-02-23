@@ -490,9 +490,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 emit connected();
             }
 
+            m_playersModel->addPlayer(lst[i]);
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
-            m_playersModel->addPlayer(lst[i]);
         }
         return;
     }
@@ -636,9 +636,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                     emit configAsked();
             }
 
+            m_playersModel->playerJoinedRoom(lst[i]);
             emit nickAdded(lst[i], isChief && (lst[i] != mynick));
             emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-            m_playersModel->playerJoinedRoom(lst[i]);
         }
         return;
     }
