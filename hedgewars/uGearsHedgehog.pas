@@ -1001,20 +1001,13 @@ var t: PGear;
     Hedgehog: PHedgehog;
 begin
 Hedgehog:= HHGear^.Hedgehog;
-// Some weapons, deagle in particular, wouldn't play so nice in infinite attack mode if hogs were still moving.  Most likely scenario
-// is trying to shoot them twice while rolling.  This is mostly about not wasting ammo, but shouldn't apply to gears not using AmmoShove (portal
-// Should we rethink AmmoShove? Presumably we'd need a way of knowing if current gear had already attacked a gear
-if isInMultiShoot and not AllInactive and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) then HHGear^.Message:= HHGear^.Message and not gmAttack;
-(*
-if isInMultiShoot then
-    HHGear^.Message:= 0;
-*)
-
-(*if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then 
-    AllInactive:= true
-else if not isInMultiShoot then
-   AllInactive:= false;*)
- AllInactive:= false;
+//if isInMultiShoot and not AllInactive and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) then HHGear^.Message:= HHGear^.Message and not gmAttack;
+if isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) then
+    begin
+    AllInactive:= true;
+    HHGear^.Message:= 0
+    end
+else AllInactive:= false;
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
@@ -1131,7 +1124,7 @@ if (HHGear^.State and gstMoving) <> 0 then
     exit
     end;
 
-    if Hedgehog^.Gear <> nil then
+    if not(isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) and (Hedgehog^.Gear <> nil) then
         begin
         if GHStepTicks > 0 then
             dec(GHStepTicks);
