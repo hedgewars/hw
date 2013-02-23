@@ -538,7 +538,7 @@ begin
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
                 gtIceGun:
-                    begin DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                    begin DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                     if CurAmmoGear^.Tex <> nil then
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
@@ -669,7 +669,7 @@ begin
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
-                amIceGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;
 
