@@ -2876,6 +2876,7 @@ procedure doStepDrillDrilling(Gear: PGear);
 var 
     t: PGearArray;
     ox, oy: hwFloat;
+    tempColl: Word; 
 begin
     AllInactive := false;
 
@@ -2894,11 +2895,12 @@ begin
             exit
         end
     end;
-
-    if GameTicks > Gear^.FlightTime then
+    tempColl:= Gear^.CollisionMask;
+    Gear^.CollisionMask:= $007F;
+    if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) or (GameTicks > Gear^.FlightTime) then
         t := CheckGearsCollision(Gear)
-        
     else t := nil;
+    Gear^.CollisionMask:= tempColl;
     //fixes drill not exploding when touching HH bug
     
     if (Gear^.Timer = 0) or ((t <> nil) and (t^.Count <> 0))
