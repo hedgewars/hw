@@ -350,6 +350,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
         }
     }
 
+    ui.Pages->setCurrentIndex(ID_PAGE_INFO);
     PagesStack.push(ID_PAGE_MAIN);
     ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
