@@ -32,6 +32,7 @@ public class PascalExports {
 		System.loadLibrary("SDL_ttf");
 		System.loadLibrary("lua5.1");
 		System.loadLibrary("physfs");
+		System.loadLibrary("physlayer");
 		System.loadLibrary("hwengine");
 	}
 	
