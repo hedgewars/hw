@@ -86,7 +86,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar
+            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture
             );
 
     // Gears that interact with other Gears and/or Land
@@ -259,6 +259,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             SoundChannel: LongInt;
             PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
             AIHints: LongWord; // hints for ai. haha ^^^^^^ temporary, sure
+            IceTime: Longint; //time of ice beam with object some interaction  temporary
+            IceState: Longint; //state of ice gun temporary
             LastDamage: PHedgehog;
             end;
     TPGearArray = array of PGear;
