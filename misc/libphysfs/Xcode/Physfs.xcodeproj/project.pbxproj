@@ -7,70 +7,58 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		610FB79016613776002FB2A7 /* archiver_dir.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77916613776002FB2A7 /* archiver_dir.c */; };
-		610FB79116613776002FB2A7 /* archiver_grp.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77A16613776002FB2A7 /* archiver_grp.c */; };
-		610FB79216613776002FB2A7 /* archiver_hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77B16613776002FB2A7 /* archiver_hog.c */; };
-		610FB79316613776002FB2A7 /* archiver_iso9660.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77C16613776002FB2A7 /* archiver_iso9660.c */; };
-		610FB79416613776002FB2A7 /* archiver_lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77D16613776002FB2A7 /* archiver_lzma.c */; };
-		610FB79516613776002FB2A7 /* archiver_mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77E16613776002FB2A7 /* archiver_mvl.c */; };
-		610FB79616613776002FB2A7 /* archiver_qpak.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB77F16613776002FB2A7 /* archiver_qpak.c */; };
-		610FB79716613776002FB2A7 /* archiver_unpacked.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78016613776002FB2A7 /* archiver_unpacked.c */; };
-		610FB79816613776002FB2A7 /* archiver_wad.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78116613776002FB2A7 /* archiver_wad.c */; };
-		610FB79916613776002FB2A7 /* archiver_zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78216613776002FB2A7 /* archiver_zip.c */; };
-		610FB79A16613776002FB2A7 /* physfs_byteorder.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78316613776002FB2A7 /* physfs_byteorder.c */; };
-		610FB79B16613776002FB2A7 /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB78416613776002FB2A7 /* physfs_casefolding.h */; };
-		610FB79C16613776002FB2A7 /* physfs_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB78516613776002FB2A7 /* physfs_internal.h */; };
-		610FB79D16613776002FB2A7 /* physfs_miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB78616613776002FB2A7 /* physfs_miniz.h */; };
-		610FB79E16613776002FB2A7 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB78716613776002FB2A7 /* physfs_platforms.h */; };
-		610FB79F16613776002FB2A7 /* physfs_unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78816613776002FB2A7 /* physfs_unicode.c */; };
-		610FB7A016613776002FB2A7 /* physfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78916613776002FB2A7 /* physfs.c */; };
-		610FB7A116613776002FB2A7 /* physfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB78A16613776002FB2A7 /* physfs.h */; };
-		610FB7A216613776002FB2A7 /* platform_beos.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78B16613776002FB2A7 /* platform_beos.cpp */; };
-		610FB7A316613776002FB2A7 /* platform_macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78C16613776002FB2A7 /* platform_macosx.c */; };
-		610FB7A416613776002FB2A7 /* platform_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78D16613776002FB2A7 /* platform_posix.c */; };
-		610FB7A516613776002FB2A7 /* platform_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78E16613776002FB2A7 /* platform_unix.c */; };
-		610FB7A616613776002FB2A7 /* platform_windows.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB78F16613776002FB2A7 /* platform_windows.c */; };
-		610FB7AE16613813002FB2A7 /* hwpacksmounter.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB7A916613813002FB2A7 /* hwpacksmounter.c */; };
-		610FB7AF16613813002FB2A7 /* hwpacksmounter.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB7AA16613813002FB2A7 /* hwpacksmounter.h */; };
-		610FB7B016613813002FB2A7 /* physfslualoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB7AB16613813002FB2A7 /* physfslualoader.c */; };
-		610FB7B116613813002FB2A7 /* physfsrwops.c in Sources */ = {isa = PBXBuildFile; fileRef = 610FB7AC16613813002FB2A7 /* physfsrwops.c */; };
-		610FB7B216613813002FB2A7 /* physfsrwops.h in Headers */ = {isa = PBXBuildFile; fileRef = 610FB7AD16613813002FB2A7 /* physfsrwops.h */; };
+		617D78F916D932900091D4D6 /* archiver_dir.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78E816D932900091D4D6 /* archiver_dir.c */; };
+		617D78FA16D932900091D4D6 /* archiver_grp.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78E916D932900091D4D6 /* archiver_grp.c */; };
+		617D78FB16D932900091D4D6 /* archiver_hog.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78EA16D932900091D4D6 /* archiver_hog.c */; };
+		617D78FC16D932900091D4D6 /* archiver_iso9660.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78EB16D932900091D4D6 /* archiver_iso9660.c */; };
+		617D78FD16D932900091D4D6 /* archiver_lzma.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78EC16D932900091D4D6 /* archiver_lzma.c */; };
+		617D78FE16D932900091D4D6 /* archiver_mvl.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78ED16D932900091D4D6 /* archiver_mvl.c */; };
+		617D78FF16D932900091D4D6 /* archiver_qpak.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78EE16D932900091D4D6 /* archiver_qpak.c */; };
+		617D790016D932900091D4D6 /* archiver_unpacked.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78EF16D932900091D4D6 /* archiver_unpacked.c */; };
+		617D790116D932900091D4D6 /* archiver_wad.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F016D932900091D4D6 /* archiver_wad.c */; };
+		617D790216D932900091D4D6 /* archiver_zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F116D932900091D4D6 /* archiver_zip.c */; };
+		617D790316D932900091D4D6 /* physfs_byteorder.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F216D932900091D4D6 /* physfs_byteorder.c */; };
+		617D790416D932900091D4D6 /* physfs_unicode.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F316D932900091D4D6 /* physfs_unicode.c */; };
+		617D790516D932900091D4D6 /* physfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F416D932900091D4D6 /* physfs.c */; };
+		617D790616D932900091D4D6 /* platform_macosx.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F516D932900091D4D6 /* platform_macosx.c */; };
+		617D790716D932900091D4D6 /* platform_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F616D932900091D4D6 /* platform_posix.c */; };
+		617D790816D932900091D4D6 /* platform_unix.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F716D932900091D4D6 /* platform_unix.c */; };
+		617D790916D932900091D4D6 /* platform_windows.c in Sources */ = {isa = PBXBuildFile; fileRef = 617D78F816D932900091D4D6 /* platform_windows.c */; };
+		617D790F16D932BC0091D4D6 /* physfs_casefolding.h in Headers */ = {isa = PBXBuildFile; fileRef = 617D790A16D932BC0091D4D6 /* physfs_casefolding.h */; };
+		617D791016D932BC0091D4D6 /* physfs_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 617D790B16D932BC0091D4D6 /* physfs_internal.h */; };
+		617D791116D932BC0091D4D6 /* physfs_miniz.h in Headers */ = {isa = PBXBuildFile; fileRef = 617D790C16D932BC0091D4D6 /* physfs_miniz.h */; };
+		617D791216D932BC0091D4D6 /* physfs_platforms.h in Headers */ = {isa = PBXBuildFile; fileRef = 617D790D16D932BC0091D4D6 /* physfs_platforms.h */; };
+		617D791316D932BC0091D4D6 /* physfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 617D790E16D932BC0091D4D6 /* physfs.h */; };
 		AA747D9F0F9514B9006C5449 /* Physfs_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = AA747D9E0F9514B9006C5449 /* Physfs_Prefix.pch */; };
 		AACBBE4A0F95108600F1A2B1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACBBE490F95108600F1A2B1 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		610FB77916613776002FB2A7 /* archiver_dir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_dir.c; path = ../src/archiver_dir.c; sourceTree = SOURCE_ROOT; };
-		610FB77A16613776002FB2A7 /* archiver_grp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_grp.c; path = ../src/archiver_grp.c; sourceTree = SOURCE_ROOT; };
-		610FB77B16613776002FB2A7 /* archiver_hog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_hog.c; path = ../src/archiver_hog.c; sourceTree = SOURCE_ROOT; };
-		610FB77C16613776002FB2A7 /* archiver_iso9660.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_iso9660.c; path = ../src/archiver_iso9660.c; sourceTree = SOURCE_ROOT; };
-		610FB77D16613776002FB2A7 /* archiver_lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_lzma.c; path = ../src/archiver_lzma.c; sourceTree = SOURCE_ROOT; };
-		610FB77E16613776002FB2A7 /* archiver_mvl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_mvl.c; path = ../src/archiver_mvl.c; sourceTree = SOURCE_ROOT; };
-		610FB77F16613776002FB2A7 /* archiver_qpak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_qpak.c; path = ../src/archiver_qpak.c; sourceTree = SOURCE_ROOT; };
-		610FB78016613776002FB2A7 /* archiver_unpacked.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_unpacked.c; path = ../src/archiver_unpacked.c; sourceTree = SOURCE_ROOT; };
-		610FB78116613776002FB2A7 /* archiver_wad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_wad.c; path = ../src/archiver_wad.c; sourceTree = SOURCE_ROOT; };
-		610FB78216613776002FB2A7 /* archiver_zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_zip.c; path = ../src/archiver_zip.c; sourceTree = SOURCE_ROOT; };
-		610FB78316613776002FB2A7 /* physfs_byteorder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_byteorder.c; path = ../src/physfs_byteorder.c; sourceTree = SOURCE_ROOT; };
-		610FB78416613776002FB2A7 /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = ../src/physfs_casefolding.h; sourceTree = SOURCE_ROOT; };
-		610FB78516613776002FB2A7 /* physfs_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_internal.h; path = ../src/physfs_internal.h; sourceTree = SOURCE_ROOT; };
-		610FB78616613776002FB2A7 /* physfs_miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_miniz.h; path = ../src/physfs_miniz.h; sourceTree = SOURCE_ROOT; };
-		610FB78716613776002FB2A7 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = ../src/physfs_platforms.h; sourceTree = SOURCE_ROOT; };
-		610FB78816613776002FB2A7 /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = ../src/physfs_unicode.c; sourceTree = SOURCE_ROOT; };
-		610FB78916613776002FB2A7 /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = ../src/physfs.c; sourceTree = SOURCE_ROOT; };
-		610FB78A16613776002FB2A7 /* physfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs.h; path = ../src/physfs.h; sourceTree = SOURCE_ROOT; };
-		610FB78B16613776002FB2A7 /* platform_beos.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = platform_beos.cpp; path = ../src/platform_beos.cpp; sourceTree = SOURCE_ROOT; };
-		610FB78C16613776002FB2A7 /* platform_macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_macosx.c; path = ../src/platform_macosx.c; sourceTree = SOURCE_ROOT; };
-		610FB78D16613776002FB2A7 /* platform_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_posix.c; path = ../src/platform_posix.c; sourceTree = SOURCE_ROOT; };
-		610FB78E16613776002FB2A7 /* platform_unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_unix.c; path = ../src/platform_unix.c; sourceTree = SOURCE_ROOT; };
-		610FB78F16613776002FB2A7 /* platform_windows.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_windows.c; path = ../src/platform_windows.c; sourceTree = SOURCE_ROOT; };
-		610FB7A916613813002FB2A7 /* hwpacksmounter.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hwpacksmounter.c; path = ../extras/hwpacksmounter.c; sourceTree = SOURCE_ROOT; };
-		610FB7AA16613813002FB2A7 /* hwpacksmounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hwpacksmounter.h; path = ../extras/hwpacksmounter.h; sourceTree = SOURCE_ROOT; };
-		610FB7AB16613813002FB2A7 /* physfslualoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfslualoader.c; path = ../extras/physfslualoader.c; sourceTree = SOURCE_ROOT; };
-		610FB7AC16613813002FB2A7 /* physfsrwops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfsrwops.c; path = ../extras/physfsrwops.c; sourceTree = SOURCE_ROOT; };
-		610FB7AD16613813002FB2A7 /* physfsrwops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfsrwops.h; path = ../extras/physfsrwops.h; sourceTree = SOURCE_ROOT; };
+		617D78E716D932600091D4D6 /* libPhysfs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPhysfs.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		617D78E816D932900091D4D6 /* archiver_dir.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_dir.c; path = ../archiver_dir.c; sourceTree = SOURCE_ROOT; };
+		617D78E916D932900091D4D6 /* archiver_grp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_grp.c; path = ../archiver_grp.c; sourceTree = SOURCE_ROOT; };
+		617D78EA16D932900091D4D6 /* archiver_hog.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_hog.c; path = ../archiver_hog.c; sourceTree = SOURCE_ROOT; };
+		617D78EB16D932900091D4D6 /* archiver_iso9660.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_iso9660.c; path = ../archiver_iso9660.c; sourceTree = SOURCE_ROOT; };
+		617D78EC16D932900091D4D6 /* archiver_lzma.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_lzma.c; path = ../archiver_lzma.c; sourceTree = SOURCE_ROOT; };
+		617D78ED16D932900091D4D6 /* archiver_mvl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_mvl.c; path = ../archiver_mvl.c; sourceTree = SOURCE_ROOT; };
+		617D78EE16D932900091D4D6 /* archiver_qpak.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_qpak.c; path = ../archiver_qpak.c; sourceTree = SOURCE_ROOT; };
+		617D78EF16D932900091D4D6 /* archiver_unpacked.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_unpacked.c; path = ../archiver_unpacked.c; sourceTree = SOURCE_ROOT; };
+		617D78F016D932900091D4D6 /* archiver_wad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_wad.c; path = ../archiver_wad.c; sourceTree = SOURCE_ROOT; };
+		617D78F116D932900091D4D6 /* archiver_zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = archiver_zip.c; path = ../archiver_zip.c; sourceTree = SOURCE_ROOT; };
+		617D78F216D932900091D4D6 /* physfs_byteorder.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_byteorder.c; path = ../physfs_byteorder.c; sourceTree = SOURCE_ROOT; };
+		617D78F316D932900091D4D6 /* physfs_unicode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs_unicode.c; path = ../physfs_unicode.c; sourceTree = SOURCE_ROOT; };
+		617D78F416D932900091D4D6 /* physfs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = physfs.c; path = ../physfs.c; sourceTree = SOURCE_ROOT; };
+		617D78F516D932900091D4D6 /* platform_macosx.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_macosx.c; path = ../platform_macosx.c; sourceTree = SOURCE_ROOT; };
+		617D78F616D932900091D4D6 /* platform_posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_posix.c; path = ../platform_posix.c; sourceTree = SOURCE_ROOT; };
+		617D78F716D932900091D4D6 /* platform_unix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_unix.c; path = ../platform_unix.c; sourceTree = SOURCE_ROOT; };
+		617D78F816D932900091D4D6 /* platform_windows.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = platform_windows.c; path = ../platform_windows.c; sourceTree = SOURCE_ROOT; };
+		617D790A16D932BC0091D4D6 /* physfs_casefolding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_casefolding.h; path = ../physfs_casefolding.h; sourceTree = SOURCE_ROOT; };
+		617D790B16D932BC0091D4D6 /* physfs_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_internal.h; path = ../physfs_internal.h; sourceTree = SOURCE_ROOT; };
+		617D790C16D932BC0091D4D6 /* physfs_miniz.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_miniz.h; path = ../physfs_miniz.h; sourceTree = SOURCE_ROOT; };
+		617D790D16D932BC0091D4D6 /* physfs_platforms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs_platforms.h; path = ../physfs_platforms.h; sourceTree = SOURCE_ROOT; };
+		617D790E16D932BC0091D4D6 /* physfs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = physfs.h; path = ../physfs.h; sourceTree = SOURCE_ROOT; };
 		AA747D9E0F9514B9006C5449 /* Physfs_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physfs_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		AACBBE490F95108600F1A2B1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		D2AAC07E0554694100DB518D /* libPhysfs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPhysfs.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,7 +76,7 @@
 		034768DFFF38A50411DB9C8B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D2AAC07E0554694100DB518D /* libPhysfs.a */,
+				617D78E716D932600091D4D6 /* libPhysfs.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,7 +85,6 @@
 			isa = PBXGroup;
 			children = (
 				08FB77AEFE84172EC02AAC07 /* Sources */,
-				610FB77116613730002FB2A7 /* Extras */,
 				32C88DFF0371C24200C91783 /* Other Sources */,
 				0867D69AFE84028FC02AAC07 /* Frameworks */,
 				034768DFFF38A50411DB9C8B /* Products */,
@@ -116,29 +103,28 @@
 		08FB77AEFE84172EC02AAC07 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				610FB77916613776002FB2A7 /* archiver_dir.c */,
-				610FB77A16613776002FB2A7 /* archiver_grp.c */,
-				610FB77B16613776002FB2A7 /* archiver_hog.c */,
-				610FB77C16613776002FB2A7 /* archiver_iso9660.c */,
-				610FB77D16613776002FB2A7 /* archiver_lzma.c */,
-				610FB77E16613776002FB2A7 /* archiver_mvl.c */,
-				610FB77F16613776002FB2A7 /* archiver_qpak.c */,
-				610FB78016613776002FB2A7 /* archiver_unpacked.c */,
-				610FB78116613776002FB2A7 /* archiver_wad.c */,
-				610FB78216613776002FB2A7 /* archiver_zip.c */,
-				610FB78316613776002FB2A7 /* physfs_byteorder.c */,
-				610FB78416613776002FB2A7 /* physfs_casefolding.h */,
-				610FB78516613776002FB2A7 /* physfs_internal.h */,
-				610FB78616613776002FB2A7 /* physfs_miniz.h */,
-				610FB78716613776002FB2A7 /* physfs_platforms.h */,
-				610FB78816613776002FB2A7 /* physfs_unicode.c */,
-				610FB78916613776002FB2A7 /* physfs.c */,
-				610FB78A16613776002FB2A7 /* physfs.h */,
-				610FB78B16613776002FB2A7 /* platform_beos.cpp */,
-				610FB78C16613776002FB2A7 /* platform_macosx.c */,
-				610FB78D16613776002FB2A7 /* platform_posix.c */,
-				610FB78E16613776002FB2A7 /* platform_unix.c */,
-				610FB78F16613776002FB2A7 /* platform_windows.c */,
+				617D790A16D932BC0091D4D6 /* physfs_casefolding.h */,
+				617D790B16D932BC0091D4D6 /* physfs_internal.h */,
+				617D790C16D932BC0091D4D6 /* physfs_miniz.h */,
+				617D790D16D932BC0091D4D6 /* physfs_platforms.h */,
+				617D790E16D932BC0091D4D6 /* physfs.h */,
+				617D78E816D932900091D4D6 /* archiver_dir.c */,
+				617D78E916D932900091D4D6 /* archiver_grp.c */,
+				617D78EA16D932900091D4D6 /* archiver_hog.c */,
+				617D78EB16D932900091D4D6 /* archiver_iso9660.c */,
+				617D78EC16D932900091D4D6 /* archiver_lzma.c */,
+				617D78ED16D932900091D4D6 /* archiver_mvl.c */,
+				617D78EE16D932900091D4D6 /* archiver_qpak.c */,
+				617D78EF16D932900091D4D6 /* archiver_unpacked.c */,
+				617D78F016D932900091D4D6 /* archiver_wad.c */,
+				617D78F116D932900091D4D6 /* archiver_zip.c */,
+				617D78F216D932900091D4D6 /* physfs_byteorder.c */,
+				617D78F316D932900091D4D6 /* physfs_unicode.c */,
+				617D78F416D932900091D4D6 /* physfs.c */,
+				617D78F516D932900091D4D6 /* platform_macosx.c */,
+				617D78F616D932900091D4D6 /* platform_posix.c */,
+				617D78F716D932900091D4D6 /* platform_unix.c */,
+				617D78F816D932900091D4D6 /* platform_windows.c */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -151,18 +137,6 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		610FB77116613730002FB2A7 /* Extras */ = {
-			isa = PBXGroup;
-			children = (
-				610FB7A916613813002FB2A7 /* hwpacksmounter.c */,
-				610FB7AA16613813002FB2A7 /* hwpacksmounter.h */,
-				610FB7AB16613813002FB2A7 /* physfslualoader.c */,
-				610FB7AC16613813002FB2A7 /* physfsrwops.c */,
-				610FB7AD16613813002FB2A7 /* physfsrwops.h */,
-			);
-			name = Extras;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -171,13 +145,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA747D9F0F9514B9006C5449 /* Physfs_Prefix.pch in Headers */,
-				610FB79B16613776002FB2A7 /* physfs_casefolding.h in Headers */,
-				610FB79C16613776002FB2A7 /* physfs_internal.h in Headers */,
-				610FB79D16613776002FB2A7 /* physfs_miniz.h in Headers */,
-				610FB79E16613776002FB2A7 /* physfs_platforms.h in Headers */,
-				610FB7A116613776002FB2A7 /* physfs.h in Headers */,
-				610FB7AF16613813002FB2A7 /* hwpacksmounter.h in Headers */,
-				610FB7B216613813002FB2A7 /* physfsrwops.h in Headers */,
+				617D790F16D932BC0091D4D6 /* physfs_casefolding.h in Headers */,
+				617D791016D932BC0091D4D6 /* physfs_internal.h in Headers */,
+				617D791116D932BC0091D4D6 /* physfs_miniz.h in Headers */,
+				617D791216D932BC0091D4D6 /* physfs_platforms.h in Headers */,
+				617D791316D932BC0091D4D6 /* physfs.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,7 +170,7 @@
 			);
 			name = Physfs;
 			productName = Physfs;
-			productReference = D2AAC07E0554694100DB518D /* libPhysfs.a */;
+			productReference = 617D78E716D932600091D4D6 /* libPhysfs.a */;
 			productType = "com.apple.product-type.library.static";
 		};
 /* End PBXNativeTarget section */
@@ -231,27 +203,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				610FB79016613776002FB2A7 /* archiver_dir.c in Sources */,
-				610FB79116613776002FB2A7 /* archiver_grp.c in Sources */,
-				610FB79216613776002FB2A7 /* archiver_hog.c in Sources */,
-				610FB79316613776002FB2A7 /* archiver_iso9660.c in Sources */,
-				610FB79416613776002FB2A7 /* archiver_lzma.c in Sources */,
-				610FB79516613776002FB2A7 /* archiver_mvl.c in Sources */,
-				610FB79616613776002FB2A7 /* archiver_qpak.c in Sources */,
-				610FB79716613776002FB2A7 /* archiver_unpacked.c in Sources */,
-				610FB79816613776002FB2A7 /* archiver_wad.c in Sources */,
-				610FB79916613776002FB2A7 /* archiver_zip.c in Sources */,
-				610FB79A16613776002FB2A7 /* physfs_byteorder.c in Sources */,
-				610FB79F16613776002FB2A7 /* physfs_unicode.c in Sources */,
-				610FB7A016613776002FB2A7 /* physfs.c in Sources */,
-				610FB7A216613776002FB2A7 /* platform_beos.cpp in Sources */,
-				610FB7A316613776002FB2A7 /* platform_macosx.c in Sources */,
-				610FB7A416613776002FB2A7 /* platform_posix.c in Sources */,
-				610FB7A516613776002FB2A7 /* platform_unix.c in Sources */,
-				610FB7A616613776002FB2A7 /* platform_windows.c in Sources */,
-				610FB7AE16613813002FB2A7 /* hwpacksmounter.c in Sources */,
-				610FB7B016613813002FB2A7 /* physfslualoader.c in Sources */,
-				610FB7B116613813002FB2A7 /* physfsrwops.c in Sources */,
+				617D78F916D932900091D4D6 /* archiver_dir.c in Sources */,
+				617D78FA16D932900091D4D6 /* archiver_grp.c in Sources */,
+				617D78FB16D932900091D4D6 /* archiver_hog.c in Sources */,
+				617D78FC16D932900091D4D6 /* archiver_iso9660.c in Sources */,
+				617D78FD16D932900091D4D6 /* archiver_lzma.c in Sources */,
+				617D78FE16D932900091D4D6 /* archiver_mvl.c in Sources */,
+				617D78FF16D932900091D4D6 /* archiver_qpak.c in Sources */,
+				617D790016D932900091D4D6 /* archiver_unpacked.c in Sources */,
+				617D790116D932900091D4D6 /* archiver_wad.c in Sources */,
+				617D790216D932900091D4D6 /* archiver_zip.c in Sources */,
+				617D790316D932900091D4D6 /* physfs_byteorder.c in Sources */,
+				617D790416D932900091D4D6 /* physfs_unicode.c in Sources */,
+				617D790516D932900091D4D6 /* physfs.c in Sources */,
+				617D790616D932900091D4D6 /* platform_macosx.c in Sources */,
+				617D790716D932900091D4D6 /* platform_posix.c in Sources */,
+				617D790816D932900091D4D6 /* platform_unix.c in Sources */,
+				617D790916D932900091D4D6 /* platform_windows.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +265,8 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
@@ -315,6 +285,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
