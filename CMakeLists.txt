@@ -19,10 +19,14 @@ option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
+#set this to ON when 2.1.0 becomes more widespread (and only for linux)
+option(SYSTEM_PHYSFS "Use system physfs [default:off]" OFF)
+
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+
 set(FPFLAGS "" CACHE STRING "Additional Freepascal flags")
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
@@ -268,37 +272,39 @@ endif()
 
 
 #physfs discovery
-set(PHYSFS_FOUND false)
-if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
-    find_package(PhysFS)
-endif()
-
-#if they bundled one is discovered
-set(physfs_output_name "hw_physfs")
-get_filename_component(physfs_detected_name ${PHYSFS_LIBRARY} NAME_WE)
-#or if the found one is too old
-find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
-if(physfs_h)
-    file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
-    file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
-    file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
-    string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
-    string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
-    string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
-    set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
-    if(physfs_detected_ver VERSION_LESS "2.1.0")
-        message(STATUS "PhysFS version is too old (dected ${physfs_detected_ver}, required 2.1.0)")
-        set(physfs_too_old true)
+if (${SYSTEM_PHYSFS})
+    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+        find_package(PhysFS)
     endif()
-endif()
 
-if(NOT ${PHYSFS_FOUND} OR physfs_too_old OR
-   (${physfs_detected_name} MATCHES ${physfs_output_name}))
+    find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
+    if(physfs_h)
+        file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
+        file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
+        file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
+        string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
+        string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
+        string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
+        set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
+
+        if (physfs_detected_ver VERSION_LESS "2.1.0")
+            message(FATAL_ERROR "PhysFS version is too old (dected ${physfs_detected_ver}, required 2.1.0)")
+            set(physfs_too_old true)
+        endif()
+    endif()
+
+    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+        message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
+    endif()
+else()
     message(STATUS "PhysFS will be provided by the bundled sources")
+    set(physfs_output_name "hw_physfs")
     add_subdirectory(misc/libphysfs)
     #-XLA is a 'beta' fpc flag that will rename libraries before passing them to the linker
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}")
 endif()
+
+#
 add_subdirectory(misc/libphyslayer)
 
 #main engine
