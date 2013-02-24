@@ -22,9 +22,8 @@ For compressed screenshots:
 
 Lua will be automatically built if not found.
 
-PhysFS will be automatically built if not found.
- * you can override this by manually passing
-   PHYSFS_LIBRARY and PHYSFS_INCLUDE_DIR to cmake
+PhysFS will internally built unless -DPHYSFS_SYSTEM=on is passed to cmake
+(also allows to set PHYSFS_LIBRARY and PHYSFS_INCLUDE_DIR if needed).
 
 1. Configure:
 $ cmake .
