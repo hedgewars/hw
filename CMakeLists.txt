@@ -267,14 +267,36 @@ else()
 endif()
 
 
-#physfs library and its layer
-if(NOT DEFINED PHYSFS_BUNDLE)
+#physfs discovery
+set(PHYSFS_FOUND false)
+if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
     find_package(PhysFS)
 endif()
-if(NOT PHYSFS_FOUND)
+
+#if they bundled one is discovered
+set(physfs_output_name "hw_physfs")
+get_filename_component(physfs_detected_name ${PHYSFS_LIBRARY} NAME_WE)
+#or if the found one is too old
+find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
+if(physfs_h)
+    file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
+    file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
+    file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
+    string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
+    string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
+    string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
+    set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
+    if(physfs_detected_ver VERSION_LESS "2.1.0")
+        message(STATUS "PhysFS version is too old (dected ${physfs_detected_ver}, required 2.1.0)")
+        set(physfs_too_old true)
+    endif()
+endif()
+
+if(NOT ${PHYSFS_FOUND} OR physfs_too_old OR
+   (${physfs_detected_name} MATCHES ${physfs_output_name}))
     message(STATUS "PhysFS will be provided by the bundled sources")
-    set(physfs_output_name "hw_physfs")
     add_subdirectory(misc/libphysfs)
+    #-XLA is a 'beta' fpc flag that will rename libraries before passing them to the linker
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}")
 endif()
 add_subdirectory(misc/libphyslayer)
