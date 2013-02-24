@@ -211,6 +211,8 @@ var i, t: LongInt;
     defaultPos, HatVisible: boolean;
     HH: PHedgehog;
     CurWeapon: PAmmo;
+    iceOffset:Longint;
+    r:TSDL_Rect;
 begin
     HH:= Gear^.Hedgehog;
     if HH^.Unplaced then
@@ -246,6 +248,7 @@ begin
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
         Tint($FF, $FF, $FF, $FF)
         end;
+
 
     if ((Gear^.State and gstWinner) <> 0) and
     ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
@@ -917,6 +920,22 @@ begin
         Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
         DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
         end;
+
+    if HH^.Effects[heFrozen] <> 0 then
+        begin
+       /// Tint($00, $FF, $40, $40);
+        iceOffset := trunc(HH^.Effects[heFrozen] / 256 * 64);
+        Tint($FF, $FF, $FF, $FF);        
+        r.x := 0;
+        r.y := 64 - iceOffset;
+        r.w := 64;
+        r.h := iceOffset;
+        DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
+
+        Tint($FF, $FF, $FF, $FF);
+        end;
+
+
     if cVampiric and
     (CurrentHedgehog^.Gear <> nil) and
     (CurrentHedgehog^.Gear = Gear) then

@@ -5061,6 +5061,8 @@ end;
 
 
 procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
+    var
+    iter:PGear;    
 begin
   with Gear^ do
   begin
@@ -5071,15 +5073,15 @@ begin
     LastDamage:= nil;
     X:= Hedgehog^.Gear^.X;
     Y:= Hedgehog^.Gear^.Y;
-    (* unfreeze all semifrozen hogs - make this generic hog cleanup
+    //unfreeze all semifrozen hogs - make this generic hog cleanup
     iter := GearsList;
     while iter <> nil do
         begin
         if (iter^.Kind = gtHedgehog) and 
-        (iter^.Hedgehog^.Effects[heFrozen] < 0) then 
+        (iter^.Hedgehog^.Effects[heFrozen] and $FF = 0) then 
         iter^.Hedgehog^.Effects[heFrozen]:= 0;
         iter:= iter^.NextGear
-        end *)
+        end 
   end;
 end;
 
@@ -5233,13 +5235,15 @@ begin
                 end;
 
 // freeze nearby hogs
-                hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+                hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius);
                 if hogs.size > 0 then
                     for i:= 0 to hogs.size - 1 do
                     begin
                         if hogs.ar^[i] <> HHGear then
                         begin
-                        //if Gear^.Hedgehog^.Effects[heFrozen]:= 0;
+                            if GameTicks mod 10 = 0 then 
+                            if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
+                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1;
                         end;                        
                     end;
                 inc(Pos)
@@ -5253,14 +5257,14 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
             end;
-            if (gX > max(LAND_WIDTH,4096)*2) or
+            {if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
                     (gY > max(LAND_HEIGHT,4096)+512) then
             begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-            end
+            end}
         end
     end;
 end;
