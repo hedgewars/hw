@@ -282,9 +282,6 @@ endif(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
 set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "" FORCE)
 set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}${physfs_output_name}${lib_suffix} CACHE STRING "" FORCE)
 
-## this is to avoid find_package() find the just built library and shadowing it at next cmake run
-set(PHYSFS_BUNDLE TRUE CACHE STRING "" FORCE)
-
 
 ## removed install, language bindings and test program
 ## simplified configuration output
