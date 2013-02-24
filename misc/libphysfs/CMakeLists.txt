@@ -253,7 +253,7 @@ endif(WINDOWS)
 
 if(PHYSFS_BUILD_STATIC)
     add_library(physfs STATIC ${PHYSFS_SRCS})
-    set_target_properties(physfs PROPERTIES OUTPUT_NAME "physfs")
+    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
     set(lib_prefix ${CMAKE_STATIC_LIBRARY_PREFIX}) ##
     set(lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX}) ##
 endif(PHYSFS_BUILD_STATIC)
@@ -262,6 +262,7 @@ if(PHYSFS_BUILD_SHARED)
     add_library(physfs SHARED ${PHYSFS_SRCS})
     set_target_properties(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
     set_target_properties(physfs PROPERTIES SOVERSION ${PHYSFS_SOVERSION})
+    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
     target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
     install(TARGETS physfs RUNTIME DESTINATION ${target_library_install_dir}) ##
     set(lib_prefix ${CMAKE_SHARED_LIBRARY_PREFIX}) ##
@@ -279,7 +280,7 @@ endif(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
 
 ## added standard variables emulating the FindPhysFS.cmake ones (FORCE or cmake won't pick 'em)
 set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "" FORCE)
-set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}physfs${lib_suffix} CACHE STRING "" FORCE)
+set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}${physfs_output_name}${lib_suffix} CACHE STRING "" FORCE)
 
 ## this is to avoid find_package() find the just built library and shadowing it at next cmake run
 set(PHYSFS_BUNDLE TRUE CACHE STRING "" FORCE)
