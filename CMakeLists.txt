@@ -306,8 +306,10 @@ else()
     message(STATUS "PhysFS will be provided by the bundled sources")
     set(physfs_output_name "hw_physfs")
     add_subdirectory(misc/libphysfs)
-    #-XLA is a 'beta' fpc flag that will rename libraries before passing them to the linker
-    list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}")
+    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
+    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
+    #(should be harmless on other platforms)
+    list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
 #
