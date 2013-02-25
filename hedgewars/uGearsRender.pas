@@ -954,7 +954,7 @@ begin
         r.w := 64;
         r.h := iceOffset;
         //DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
-        DrawTextureFromRectDir(sx-18, sy+48-iceoffset, r.w, r.h, @r, HHTexture, sign);
+        DrawTextureFromRectDir(sx-16+sign*2, sy+48-iceoffset, r.w, r.h, @r, HHTexture, sign);
 
         Tint($FF, $FF, $FF, $FF);
         end;

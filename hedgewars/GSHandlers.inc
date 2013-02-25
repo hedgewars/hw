@@ -2382,7 +2382,9 @@ begin
 
         repeat
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and 
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and 
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
 
         SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true; 
@@ -5074,6 +5076,7 @@ begin
     X:= Hedgehog^.Gear^.X;
     Y:= Hedgehog^.Gear^.Y;
     //unfreeze all semifrozen hogs - make this generic hog cleanup
+(*
     iter := GearsList;
     while iter <> nil do
         begin
@@ -5082,6 +5085,7 @@ begin
         iter^.Hedgehog^.Effects[heFrozen]:= 0;
         iter:= iter^.NextGear
         end 
+*)
   end;
 end;
 
@@ -5243,11 +5247,14 @@ begin
                     begin
                         if hogs.ar^[i] <> HHGear then
                         begin
-                            if GameTicks mod 10 = 0 then 
+                            if GameTicks mod 5 = 0 then 
                             if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
                                 hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
                             else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                begin
                                 hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000;
+                                hogs.ar^[i]^.Active:= true
+                                end;
                         end;                        
                     end;
                 inc(Pos)

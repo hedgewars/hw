@@ -695,7 +695,6 @@ procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
 begin
-if Gear^.Hedgehog^.Effects[heFrozen] > 0 then exit;
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     begin
@@ -1204,7 +1203,7 @@ else
     if Gear^.Timer = 0 then
         begin
         Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
-        Gear^.Active:= false;
+        if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
         AddGearCI(Gear);
         exit
         end
@@ -1228,7 +1227,13 @@ if (Gear^.Message and gmDestroy) <> 0 then
     DeleteGear(Gear);
     exit
     end;
-
+if Gear^.Hedgehog^.Effects[heFrozen] > 0 then 
+    begin
+    if Gear^.Hedgehog^.Effects[heFrozen] > 256 then
+        dec(Gear^.Hedgehog^.Effects[heFrozen])
+    else if GameTicks mod 10 = 0 then
+        dec(Gear^.Hedgehog^.Effects[heFrozen])
+    end;
 if (Gear^.State and gstHHDriven) = 0 then
     doStepHedgehogFree(Gear)
 else
