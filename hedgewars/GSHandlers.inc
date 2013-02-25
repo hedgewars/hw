@@ -5148,6 +5148,7 @@ begin
     w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
     //LandPixels[y, x]:= w;
     LandPixels[y, x]:= addBgColor(w, c);
+    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
 
     Land[y, x] := land[y, x] or lfIce;
 end;
