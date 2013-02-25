@@ -779,7 +779,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) then
         MakeHedgehogsStep(Gear);
 
-    SetAllHHToActive;
+    SetAllHHToActive(false);
     AddGearCI(Gear)
     end
 end;
@@ -1257,7 +1257,7 @@ if (Gear^.Message and gmDestroy) <> 0 then
     DeleteGear(Gear);
     exit
     end;
-if (GameTicks mod (100*LongWord(hwRound(cMaxWindSpeed*2/cGravity))) = 0) then CheckIce(Gear);
+if GameTicks mod 100 = 0 then CheckIce(Gear);
 if Gear^.Hedgehog^.Effects[heFrozen] > 0 then 
     begin
     if Gear^.Hedgehog^.Effects[heFrozen] > 256 then
