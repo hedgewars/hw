@@ -667,7 +667,7 @@ var
             (FileName:  'icetexture'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true), // sprIceTexture
             (FileName:  'amIceGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprIceGun
+            Width: 32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprIceGun
             (FileName:  'amFrozenHog'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprFrozenHog
             );

@@ -695,6 +695,7 @@ procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
 begin
+if Gear^.Hedgehog^.Effects[heFrozen] > 0 then exit;
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     begin

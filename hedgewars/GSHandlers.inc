@@ -2382,7 +2382,7 @@ begin
 
         repeat
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
 
         SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true; 
@@ -5130,7 +5130,8 @@ begin
     pictureX := x mod iceSurface^.w;
     pictureY := y mod iceSurface^.h;
     icePixels := iceSurface^.pixels;
-    LandPixels[y, x] := icePixels^[pictureX + pictureY * iceSurface^.w];
+    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[pictureX + pictureY * iceSurface^.w]);
+
     Land[y, x] := land[y, x] or lfIce;
 end;
 
@@ -5155,6 +5156,7 @@ begin
                 if isLanscapeEdge(weight) then 
                 begin
                     LandPixels[j, i] := $FFB2AF8A;                    
+                    if Land[j, i] > 255 then Land[j, i] := Land[j, i] or lfIce;
                 end;                
             end;
         end;
@@ -5176,7 +5178,7 @@ var
     hogs: PGearArrayS;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
@@ -5235,7 +5237,7 @@ begin
                 end;
 
 // freeze nearby hogs
-                hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius);
+                hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
                 if hogs.size > 0 then
                     for i:= 0 to hogs.size - 1 do
                     begin
@@ -5243,7 +5245,9 @@ begin
                         begin
                             if GameTicks mod 10 = 0 then 
                             if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
-                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1;
+                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
+                            else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000;
                         end;                        
                     end;
                 inc(Pos)

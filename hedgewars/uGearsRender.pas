@@ -241,6 +241,29 @@ begin
     defaultPos:= true;
     HatVisible:= false;
 
+    if HH^.Effects[heFrozen] > 0 then
+        if HH^.Effects[heFrozen] < 256 then
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    0,
+                    0,
+                    0);
+            defaultPos:= false;
+            HatVisible:= true
+            end
+        else 
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    2,
+                    4,
+                    0);
+            defaultPos:= false;
+            HatVisible:= false;
+            exit
+            end;
+
 
     if HH^.Effects[hePoisoned] <> 0 then
         begin
@@ -921,16 +944,17 @@ begin
         DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
         end;
 
-    if HH^.Effects[heFrozen] <> 0 then
+    if HH^.Effects[heFrozen] = HH^.Effects[heFrozen] and $FF then
         begin
-       /// Tint($00, $FF, $40, $40);
-        iceOffset := trunc(HH^.Effects[heFrozen] / 256 * 64);
+       /// Tint($00, $FF, $40, $40);  (HH^.Effects[heFrozen] and $FF)
+        iceOffset:= trunc(HH^.Effects[heFrozen] / 256 * 64);
         Tint($FF, $FF, $FF, $FF);        
-        r.x := 0;
-        r.y := 64 - iceOffset;
+        r.x := 128;
+        r.y := 128 - iceOffset;
         r.w := 64;
         r.h := iceOffset;
-        DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
+        //DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
+        DrawTextureFromRectDir(sx-18, sy+48-iceoffset, r.w, r.h, @r, HHTexture, sign);
 
         Tint($FF, $FF, $FF, $FF);
         end;
