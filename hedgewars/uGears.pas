@@ -46,7 +46,8 @@ procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure SetAllToActive;
-procedure SetAllHHToActive;
+procedure SetAllHHToActive; inline;
+procedure SetAllHHToActive(Ice: boolean);
 procedure DrawGears;
 procedure FreeGearsList;
 procedure AddMiscGears;
@@ -561,7 +562,12 @@ while t <> nil do
     end
 end;
 
-procedure SetAllHHToActive;
+procedure SetAllHHToActive; inline;
+begin
+SetAllHHToActive(true)
+end;
+
+procedure SetAllHHToActive(Ice: boolean);
 var t: PGear;
 begin
 AllInactive:= false;
@@ -570,13 +576,12 @@ while t <> nil do
     begin
     if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then
         begin
-        if t^.Kind = gtHedgehog then CheckIce(t);
+        if (t^.Kind = gtHedgehog) and Ice then CheckIce(t);
         t^.Active:= true
         end;
     t:= t^.NextGear
     end
 end;
-
 
 procedure DrawGears;
 var Gear: PGear;
