@@ -182,6 +182,7 @@ begin
 i:= _1;
 if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then
     i:= _1_5;
+if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Effects[heFrozen] > 0) then i:=i*_0_2;
 if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King) then
     ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
