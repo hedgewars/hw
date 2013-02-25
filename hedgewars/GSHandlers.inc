@@ -5244,19 +5244,15 @@ begin
                 hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
                 if hogs.size > 0 then
                     for i:= 0 to hogs.size - 1 do
-                    begin
                         if hogs.ar^[i] <> HHGear then
-                        begin
                             if GameTicks mod 5 = 0 then 
-                            if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
-                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
-                            else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
                                 begin
-                                hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000;
-                                hogs.ar^[i]^.Active:= true
+                                hogs.ar^[i]^.Active:= true;
+                                if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
+                                else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000
                                 end;
-                        end;                        
-                    end;
                 inc(Pos)
             end
             else if (t > 400) and ((gY > cWaterLine) or
