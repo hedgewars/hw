@@ -5090,19 +5090,19 @@ begin
 end;
 
 
-function isLanscapeEdge(weight:Longint):boolean;
+function isLandscapeEdge(weight:Longint):boolean;
 begin
     result := (weight < 8) and (weight >= 2);
 end;
 
-function isLanscape(weight:Longint):boolean;
+function isLandscape(weight:Longint):boolean;
 begin
     result := weight < 2;
 end;
 
 function isEmptySpace(weight:Longint):boolean;
 begin
-    result := not isLanscape(weight) and not isLanscapeEdge(weight);
+    result := not isLandscape(weight) and not isLandscapeEdge(weight);
 end;
 
 
@@ -5142,7 +5142,8 @@ begin
     w:= LandPixels[y, x];
     w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
           (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
-          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE)) * 4;
+          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
+    if w < 128 then w:= w+128;
     if w > 255 then w:= 255;
     w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
     //LandPixels[y, x]:= w;
@@ -5160,23 +5161,25 @@ var
 begin    
 
     for i := max(x - iceHalfSize, 0) to min(x + iceHalfSize, LAND_WIDTH-1) do
-    begin
-        for j := max(y - iceHalfSize, 0) to min(y + iceHalfSize, LAND_HEIGHT-1) do 
         begin
+        for j := max(y - iceHalfSize, 0) to min(y + iceHalfSize, LAND_HEIGHT-1) do 
+            begin
             weight := getPixelWeight(i, j);
-            if isLanscape(weight) then
+            if isLandscape(weight) then
                 begin
                 if Land[j,i] and lfIce = 0 then drawIcePixel(i, j);
-                end else
-            begin
-                if isLanscapeEdge(weight) then 
+                end 
+            else
                 begin
+                if isLandscapeEdge(weight) then 
+                    begin
                     LandPixels[j, i] := $FFB2AF8A;                    
                     if Land[j, i] > 255 then Land[j, i] := Land[j, i] or lfIce;
-                end;                
+                    end;                
+                end;
             end;
         end;
-    end;
+    SetAllHHToActive; 
     UpdateLandTexture(x - iceHalfSize, iceSize, y - iceHalfSize, iceSize, true);
 end;
 

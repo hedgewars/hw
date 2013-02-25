@@ -569,7 +569,10 @@ t:= GearsList;
 while t <> nil do
     begin
     if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then
-        t^.Active:= true;
+        begin
+        if t^.Kind = gtHedgehog then CheckIce(t);
+        t^.Active:= true
+        end;
     t:= t^.NextGear
     end
 end;
