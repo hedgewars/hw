@@ -5129,12 +5129,23 @@ var
     iceSurface: PSDL_Surface;
     icePixels: PLongwordArray;
     pictureX, pictureY: LongInt;
+    w, c: LongWord;
 begin
+    c:= $aedbe2ff;
+    // FIXME should be a global value, not set every single pixel.  Just for test purposes
+    c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     iceSurface:= SpritesData[sprIceTexture].Surface;
     pictureX := x mod iceSurface^.w;
     pictureY := y mod iceSurface^.h;
     icePixels := iceSurface^.pixels;
-    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[pictureX + pictureY * iceSurface^.w]);
+    w:= LandPixels[y, x];
+    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
+          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
+          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE)) * 2;
+    if w > 255 then w:= 255;
+    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
+    //LandPixels[y, x]:= w;
+    LandPixels[y, x]:= addBgColor(w, c);
 
     Land[y, x] := land[y, x] or lfIce;
 end;
@@ -5153,9 +5164,9 @@ begin
         begin
             weight := getPixelWeight(i, j);
             if isLanscape(weight) then
-            begin
-                drawIcePixel(i, j);
-            end else
+                begin
+                if Land[j,i] and lfIce = 0 then drawIcePixel(i, j);
+                end else
             begin
                 if isLanscapeEdge(weight) then 
                 begin
