@@ -214,7 +214,7 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}              # user flags
+list(APPEND pascal_flags ${fpflags_parsed}      # user flags
                  "-vm4079,4080,4081"            # fpc output format
                  "-B"                           # compile all units
                  "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
@@ -228,11 +228,17 @@ list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-" "-g" "-gl" "-gv")
+    list(APPEND pascal_flags "-O-"              # disable all optimisations
+                             "-g"               # enable debug symbols
+                             "-gl"              # add line info to bt
+                             "-gv"              # allow valgrind
+                             )
     list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 else()
-#    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
-    list(APPEND pascal_flags "-Os" "-Xs" "-Si")
+    list(APPEND pascal_flags "-Os"              # optimise for size
+                             "-Xs"              # strip binary
+                             "-Si"              # turn on inlining
+                             )
     list(APPEND haskell_flags "-w" "-fno-warn-unused-do-bind")
 endif()
 
