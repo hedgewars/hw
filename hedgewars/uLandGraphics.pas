@@ -301,13 +301,11 @@ if weight < 2 then
     //LandPixels[y, x]:= w;
     LandPixels[y, x]:= addBgColor(w, c);
     LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-    Land[y, x] := land[y, x] or lfIce;            
     end
 //pixel is on edge of lanscape
 else if (weight < 8) then
     begin
         LandPixels[y, x] := $FFB2AF8A;                    
-        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
     end;
 end;
 
@@ -334,10 +332,13 @@ for q := 0 to 3 do
         if (t and LAND_HEIGHT_MASK) = 0 then
             for i:= Max(x - getIncrementInquarter2(dx, dy, q), 0) to Min(x + getIncrementInquarter2(dx, dy, q), LAND_WIDTH - 1) do
                 if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+                begin
                     if (cReducedQuality and rqBlurryLand) = 0 then
                        drawIcePixel(t, i)
                     else
                        drawIcePixel(t div 2, i div 2) ;        
+                    if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
+                end;
     end;
 end;
 
