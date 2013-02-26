@@ -350,7 +350,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
             else
                 LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
-            Land[t, i]:= Land[t, i] or lfDamaged;
+            Land[t, i]:= (Land[t, i] or lfDamaged) and not lfIce;
             //Despeckle(i, t);
             LandDirty[t div 32, i div 32]:= 1;
             end;
@@ -364,7 +364,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
                 LandPixels[t, i]:= ExplosionBorderColor
             else
                 LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
-            Land[t, i]:= Land[t, i] or lfDamaged;
+            Land[t, i]:= (Land[t, i] or lfDamaged) and not lfIce;
             //Despeckle(i, t);
             LandDirty[t div 32, i div 32]:= 1;
             end;
@@ -379,7 +379,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
             else
                LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
-            Land[t, i]:= Land[t, i] or lfDamaged;
+            Land[t, i]:= (Land[t, i] or lfDamaged) and not lfIce;
             //Despeckle(i, t);
             LandDirty[t div 32, i div 32]:= 1;
             end;
@@ -394,7 +394,7 @@ if (t and LAND_HEIGHT_MASK) = 0 then
             else
                 LandPixels[t div 2, i div 2]:= ExplosionBorderColor;
 
-            Land[t, i]:= Land[t, i] or lfDamaged;
+            Land[t, i]:= (Land[t, i] or lfDamaged) and not lfIce;
             //Despeckle(i, y - dy);
             LandDirty[t div 32, i div 32]:= 1;
             end;
@@ -525,7 +525,7 @@ for i:= 0 to Pred(Count) do
                 else
                     LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor;
 
-                Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+                Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
                 LandDirty[ty div 32, tx div 32]:= 1;
                 end;
     inc(y, dY)
@@ -567,6 +567,7 @@ for i:= 0 to 7 do
     and ((tx and LAND_WIDTH_MASK) = 0)
     and (((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
+        Land[ty, tx]:= Land[ty, tx] and not lfIce;
         if despeckle then
             begin
             Land[ty, tx]:= Land[ty, tx] or lfDamaged;
@@ -595,7 +596,7 @@ for i:= -HalfWidth to HalfWidth do
         if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
         or ((Land[ty, tx] and lfObject) <> 0)) then
             begin
-            Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+            Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
             if despeckle then
                 LandDirty[ty div 32, tx div 32]:= 1;
             if (cReducedQuality and rqBlurryLand) = 0 then
@@ -638,7 +639,7 @@ for i:= -HalfWidth to HalfWidth do
     if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
     or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+        Land[ty, tx]:=( Land[ty, tx] or lfDamaged) and not lfIce;
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
@@ -664,7 +665,7 @@ for i:= 0 to 7 do
     if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
     or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= Land[ty, tx] or lfDamaged;
+        Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
