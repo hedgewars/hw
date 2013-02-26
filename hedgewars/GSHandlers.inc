@@ -1783,7 +1783,7 @@ begin
         Gear^.Y := Gear^.Y + Gear^.dY;
 
         if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
-            SetAllHHToActive;
+            SetAllHHToActive(false);
 
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
