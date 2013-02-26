@@ -5125,59 +5125,13 @@ begin
         end;
 end;
 
-
-procedure drawIcePixel(x, y:Longint);
-var 
-    iceSurface: PSDL_Surface;
-    icePixels: PLongwordArray;
-    pictureX, pictureY: LongInt;
-    w, c: LongWord;
-begin
-// So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
-    c:= $7dc1ccff;
-    // FIXME should be a global value, not set every single pixel.  Just for test purposes
-    c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
-    iceSurface:= SpritesData[sprIceTexture].Surface;
-    pictureX := x mod iceSurface^.w;
-    pictureY := y mod iceSurface^.h;
-    icePixels := iceSurface^.pixels;
-    w:= LandPixels[y, x];
-    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
-          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
-          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
-    if w < 128 then w:= w+128;
-    if w > 255 then w:= 255;
-    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
-    //LandPixels[y, x]:= w;
-    LandPixels[y, x]:= addBgColor(w, c);
-    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-
-    Land[y, x] := land[y, x] or lfIce;
-end;
-
-procedure DrawIce(x, y: Longint); 
-    const iceRadius :Longint = 32;
-var
-    i, j: Longint;
-    weight: Longint;
-    landRect : TSDL_RECT;
-begin
-    FillRoundInLandWithIce(x, y, iceRadius);
-    SetAllHHToActive; 
-    landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
-    landRect.y := min(max(y - iceRadius, 0), LAND_HEIGHT - 1);
-    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
-    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
-    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
-end;
-
-
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
 const iceWaitNextTarget:Longint = 2;
 const iceCollideWithHog:Longint = 4;
 const groundFreezingTime:Longint = 1000;
+const iceRadius:Longint = 32;
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
@@ -5239,7 +5193,8 @@ begin
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
                 begin 
-                    DrawIce(Target.X, Target.Y);                                        
+                    FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);                                        
+                    SetAllHHToActive; 
                     IceState := iceWaitNextTarget;
                 end;
 

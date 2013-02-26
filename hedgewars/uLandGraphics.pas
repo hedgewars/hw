@@ -247,20 +247,8 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 end;
 
 
-function isLandscapeEdge(weight:Longint):boolean;
-begin
-    result := (weight < 8) and (weight >= 2);
-end;
 
-function isLandscape(weight:Longint):boolean;
-begin
-    result := weight < 2;
-end;
 
-function isEmptySpace(weight:Longint):boolean;
-begin
-    result := not isLandscape(weight) and not isLandscapeEdge(weight);
-end;
 
 function getPixelWeight(x, y:Longint): Longint;
 var
@@ -289,37 +277,38 @@ var
     w, c: LongWord;
     weight: Longint;
 begin
-    weight := getPixelWeight(x, y);
-    if (land[y, x] and lfIce) <> 0 then
-        exit;
-    if isLandscape(weight) then
-        begin
-        // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
-        c:= $7dc1ccff;
-        // FIXME should be a global value, not set every single pixel.  Just for test purposes
-        c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
-        iceSurface:= SpritesData[sprIceTexture].Surface;
-        pictureX := x mod iceSurface^.w;
-        pictureY := y mod iceSurface^.h;
-        icePixels := iceSurface^.pixels;
-        w:= LandPixels[y, x];
-        w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
-              (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
-              (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
-        if w < 128 then w:= w+128;
-        if w > 255 then w:= 255;
-        w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
-        //LandPixels[y, x]:= w;
-        LandPixels[y, x]:= addBgColor(w, c);
-        LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-        Land[y, x] := land[y, x] or lfIce;            
-        end
-    else if (isLandscapeEdge(weight)) then
-        begin
-            LandPixels[y, x] := $FFB2AF8A;                    
-            if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
-        end;
-
+weight := getPixelWeight(x, y);
+if (land[y, x] and lfIce) <> 0 then
+    exit;
+//pixel in landscape
+if weight < 2 then
+    begin
+    // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
+    c:= $7dc1ccff;
+    // FIXME should be a global value, not set every single pixel.  Just for test purposes
+    c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
+    iceSurface:= SpritesData[sprIceTexture].Surface;
+    pictureX := x mod iceSurface^.w;
+    pictureY := y mod iceSurface^.h;
+    icePixels := iceSurface^.pixels;
+    w:= LandPixels[y, x];
+    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
+          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
+          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
+    if w < 128 then w:= w+128;
+    if w > 255 then w:= 255;
+    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
+    //LandPixels[y, x]:= w;
+    LandPixels[y, x]:= addBgColor(w, c);
+    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
+    Land[y, x] := land[y, x] or lfIce;            
+    end
+//pixel is on edge of lanscape
+else if (weight < 8) then
+    begin
+        LandPixels[y, x] := $FFB2AF8A;                    
+        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
+    end;
 end;
 
 function getIncrementInquarter(dx, dy, quarter: Longint): Longint;
@@ -354,24 +343,31 @@ end;
 
 procedure FillRoundInLandWithIce(X, Y, Radius: LongInt);
 var dx, dy, d: LongInt;
+    landRect : TSDL_RECT;
 begin
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
-    while (dx < dy) do
+while (dx < dy) do
+    begin
+    FillLandCircleLinesIce(x, y, dx, dy);
+    if (d < 0) then
+        d:= d + 4 * dx + 6
+    else
         begin
-        FillLandCircleLinesIce(x, y, dx, dy);
-        if (d < 0) then
-            d:= d + 4 * dx + 6
-        else
-            begin
-            d:= d + 4 * (dx - dy) + 10;
-            dec(dy)
-            end;
-        inc(dx)
+        d:= d + 4 * (dx - dy) + 10;
+        dec(dy)
         end;
-    if (dx = dy) then
-        FillLandCircleLinesIce(x, y, dx, dy);
+    inc(dx)
+    end;
+if (dx = dy) then
+    FillLandCircleLinesIce(x, y, dx, dy);
+
+landRect.x := min(max(x - Radius, 0), LAND_WIDTH - 1);
+landRect.y := min(max(y - Radius, 0), LAND_HEIGHT - 1);
+landRect.w := min(2*Radius, LAND_WIDTH - landRect.x - 1);
+landRect.h := min(2*Radius, LAND_HEIGHT - landRect.y - 1);
+UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 end;
 
 
