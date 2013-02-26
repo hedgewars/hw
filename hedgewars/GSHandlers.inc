@@ -5111,16 +5111,18 @@ var
     i, j:Longint;
 begin    
     result := 0;
-    for i := max(x - 1, 0) to min(x + 1, LAND_WIDTH-1) do
-    begin
-        for j := max(y - 1, 0) to min(y + 1, LAND_HEIGHT-1) do 
+    for i := x - 1 to x + 1 do
+        for j := y - 1 to y + 1 do 
         begin
-            if ((Land[j, i] and $FF00) = 0) then
-            begin
-                result := result + 1;
-            end;
+        if (i < 0) or 
+           (i > LAND_WIDTH - 1) or 
+           (j < 0) or 
+           (j > LAND_HEIGHT -1) or 
+           ((Land[j, i] and $FF00) = 0) then
+           begin
+           result := result + 1;
+           end;
         end;
-    end;
 end;
 
 
