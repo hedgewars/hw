@@ -290,6 +290,8 @@ var
     weight: Longint;
 begin
     weight := getPixelWeight(x, y);
+    if (land[y, x] and lfIce) <> 0 then
+        exit;
     if isLandscape(weight) then
         begin
         // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
