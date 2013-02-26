@@ -5133,10 +5133,8 @@ var
     pictureX, pictureY: LongInt;
     w, c: LongWord;
 begin
+    if Land[y, x] and lfIce <> 0 then exit;
 // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
-    c:= $7dc1ccff;
-    // FIXME should be a global value, not set every single pixel.  Just for test purposes
-    c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     iceSurface:= SpritesData[sprIceTexture].Surface;
     pictureX := x mod iceSurface^.w;
     pictureY := y mod iceSurface^.h;
@@ -5149,10 +5147,10 @@ begin
     if w > 255 then w:= 255;
     w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
     //LandPixels[y, x]:= w;
-    LandPixels[y, x]:= addBgColor(w, c);
+    LandPixels[y, x]:= addBgColor(w, IceColor);
     LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
 
-    Land[y, x] := land[y, x] or lfIce;
+    Land[y, x] := Land[y, x] or lfIce;
 end;
 
 procedure DrawIce(x, y: Longint); 
