@@ -265,15 +265,15 @@ end;
 function getPixelWeight(x, y:Longint): Longint;
 var
     i, j:Longint;
-begin    
+begin
     result := 0;
     for i := x - 1 to x + 1 do
-        for j := y - 1 to y + 1 do 
+        for j := y - 1 to y + 1 do
         begin
-        if (i < 0) or 
-           (i > LAND_WIDTH - 1) or 
-           (j < 0) or 
-           (j > LAND_HEIGHT -1) or 
+        if (i < 0) or
+           (i > LAND_WIDTH - 1) or
+           (j < 0) or
+           (j > LAND_HEIGHT -1) or
            ((Land[j, i] and $FF00) = 0) then
            begin
            result := result + 1;
@@ -282,7 +282,7 @@ begin
 end;
 
 procedure drawIcePixel(y, x:Longint);
-var 
+var
     iceSurface: PSDL_Surface;
     icePixels: PLongwordArray;
     pictureX, pictureY: LongInt;
@@ -293,9 +293,6 @@ begin
     if isLandscape(weight) then
         begin
         // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
-        c:= $7dc1ccff;
-        // FIXME should be a global value, not set every single pixel.  Just for test purposes
-        c:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
         iceSurface:= SpritesData[sprIceTexture].Surface;
         pictureX := x mod iceSurface^.w;
         pictureY := y mod iceSurface^.h;
@@ -308,14 +305,14 @@ begin
         if w > 255 then w:= 255;
         w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
         //LandPixels[y, x]:= w;
-        LandPixels[y, x]:= addBgColor(w, c);
+        LandPixels[y, x]:= addBgColor(w, IceColor);
         LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-        Land[y, x] := land[y, x] or lfIce;            
+        Land[y, x] := land[y, x] or lfIce;
         end
     else if (isLandscapeEdge(weight)) then
         begin
-            LandPixels[y, x] := $FFB2AF8A;                    
-            if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
+        LandPixels[y, x] := $FFB2AF8A;
+        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
         end;
 
 end;
@@ -323,14 +320,14 @@ end;
 function getIncrementInquarter(dx, dy, quarter: Longint): Longint;
 const directionX : array [0..3] of Longint = (0, 0, 1, -1);
 const directionY : array [0..3] of Longint = (1, -1, 0, 0);
-begin    
+begin
     getIncrementInquarter := directionX[quarter] * dx + directionY[quarter] * dy;
 end;
 
 function getIncrementInquarter2(dx, dy, quarter: Longint): Longint;
 const directionY : array [0..3] of Longint = (0, 0, 1, 1);
 const directionX : array [0..3] of Longint = (1, 1, 0, 0);
-begin    
+begin
     getIncrementInquarter2 := directionX[quarter] * dx + directionY[quarter] * dy;
 end;
 
@@ -342,11 +339,11 @@ for q := 0 to 3 do
         t:= y + getIncrementInquarter(dx, dy, q);
         if (t and LAND_HEIGHT_MASK) = 0 then
             for i:= Max(x - getIncrementInquarter2(dx, dy, q), 0) to Min(x + getIncrementInquarter2(dx, dy, q), LAND_WIDTH - 1) do
-                if ((Land[t, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+                if (Land[t, i] and (lfIndestructible or lfIce) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
                     if (cReducedQuality and rqBlurryLand) = 0 then
                        drawIcePixel(t, i)
                     else
-                       drawIcePixel(t div 2, i div 2) ;        
+                       drawIcePixel(t div 2, i div 2) ;
     end;
 end;
 
