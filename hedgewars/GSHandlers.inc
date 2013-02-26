@@ -5155,38 +5155,19 @@ begin
     Land[y, x] := land[y, x] or lfIce;
 end;
 
-procedure DrawIce(Gear: PGear; x, y: Longint); 
-    const iceSize :Longint = 255;
-    const iceHalfSize :Longint = 127;
+procedure DrawIce(x, y: Longint); 
+    const iceRadius :Longint = 32;
 var
     i, j: Longint;
     weight: Longint;
     landRect : TSDL_RECT;
 begin
-    for i := max(x - iceHalfSize, 0) to min(x + iceHalfSize, LAND_WIDTH-1) do
-        begin
-        for j := max(y - iceHalfSize, 0) to min(y + iceHalfSize, LAND_HEIGHT-1) do 
-            begin
-            weight := getPixelWeight(i, j);
-            if isLandscape(weight) then
-                begin
-                if Land[j,i] and lfIce = 0 then drawIcePixel(i, j);
-                end 
-            else
-                begin
-                if isLandscapeEdge(weight) then 
-                    begin
-                    LandPixels[j, i] := $FFB2AF8A;                    
-                    if Land[j, i] > 255 then Land[j, i] := Land[j, i] or lfIce;
-                    end;                
-                end;
-            end;
-        end;
+    FillRoundInLandWithIce(x, y, iceRadius);
     SetAllHHToActive; 
-    landRect.x := min(max(x - iceHalfSize, 0), LAND_WIDTH - 1);
-    landRect.y := min(max(y - iceHalfSize, 0), LAND_HEIGHT - 1);
-    landRect.w := min(iceSize, LAND_WIDTH - landRect.x - 1);
-    landRect.h := min(iceSize, LAND_HEIGHT - landRect.y - 1);
+    landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
+    landRect.y := min(max(y - iceRadius, 0), LAND_HEIGHT - 1);
+    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
+    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
     UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 end;
 
@@ -5257,8 +5238,8 @@ begin
                 end;
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
-                begin                    
-                    DrawIce(Gear, Target.X, Target.Y);                    
+                begin 
+                    DrawIce(Target.X, Target.Y);                                        
                     IceState := iceWaitNextTarget;
                 end;
 
