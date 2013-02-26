@@ -5159,8 +5159,8 @@ procedure DrawIce(Gear: PGear; x, y: Longint);
 var
     i, j: Longint;
     weight: Longint;
-begin    
-
+    landRect : TSDL_RECT;
+begin
     for i := max(x - iceHalfSize, 0) to min(x + iceHalfSize, LAND_WIDTH-1) do
         begin
         for j := max(y - iceHalfSize, 0) to min(y + iceHalfSize, LAND_HEIGHT-1) do 
@@ -5181,7 +5181,11 @@ begin
             end;
         end;
     SetAllHHToActive; 
-    UpdateLandTexture(x - iceHalfSize, iceSize, y - iceHalfSize, iceSize, true);
+    landRect.x := min(max(x - iceHalfSize, 0), LAND_WIDTH - 1);
+    landRect.y := min(max(y - iceHalfSize, 0), LAND_HEIGHT - 1);
+    landRect.w := min(iceSize, LAND_WIDTH - landRect.x - 1);
+    landRect.h := min(iceSize, LAND_HEIGHT - landRect.y - 1);
+    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 end;
 
 
