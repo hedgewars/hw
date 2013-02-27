@@ -214,14 +214,15 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}      # user flags
-                 "-vm4079,4080,4081"            # fpc output format
-                 "-B"                           # compile all units
-                 "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
-                 "-Fl${PROJECT_BINARY_DIR}/bin" # fpc linking directory
-                 "-Cs2000000"                   # stack size
-                 "-vewnq"                       # fpc output verbosity
-                 "-dDEBUGFILE"                  # macro for engine output
+list(APPEND pascal_flags ${fpflags_parsed}        # user flags
+                 "-vm4079,4080,4081"              # fpc output format
+                 "-B"                             # compile all units
+                 "-FE${PROJECT_BINARY_DIR}/bin"   # fpc output directory
+                 "-Fl${PROJECT_BINARY_DIR}/bin"   # fpc linking directory (win/unix)
+                 "-k-L${PROJECT_BINARY_DIR}/bin"  # ld linking directory (unix/osx)
+                 "-Cs2000000"                     # stack size
+                 "-vewnq"                         # fpc output verbosity
+                 "-dDEBUGFILE"                    # macro for engine output
                  )
 list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 
