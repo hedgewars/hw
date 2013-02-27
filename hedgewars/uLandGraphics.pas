@@ -37,6 +37,7 @@ procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt;
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
 procedure FillRoundInLandWithIce(X, Y, Radius: LongInt);
+procedure DrawSemiRound(x, y, height, radius:Longint); 
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
@@ -247,21 +248,6 @@ if (t and LAND_HEIGHT_MASK) = 0 then
 end;
 
 
-function isLandscapeEdge(weight:Longint):boolean;
-begin
-    result := (weight < 8) and (weight >= 2);
-end;
-
-function isLandscape(weight:Longint):boolean;
-begin
-    result := weight < 2;
-end;
-
-function isEmptySpace(weight:Longint):boolean;
-begin
-    result := not isLandscape(weight) and not isLandscapeEdge(weight);
-end;
-
 function getPixelWeight(x, y:Longint): Longint;
 var
     i, j:Longint;
@@ -290,7 +276,7 @@ var
     weight: Longint;
 begin
     weight := getPixelWeight(x, y);
-    if isLandscape(weight) then
+    if weight < 2 then
         begin
         // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
         iceSurface:= SpritesData[sprIceTexture].Surface;
@@ -307,12 +293,10 @@ begin
         //LandPixels[y, x]:= w;
         LandPixels[y, x]:= addBgColor(w, IceColor);
         LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-        Land[y, x] := land[y, x] or lfIce;
         end
-    else if (isLandscapeEdge(weight)) then
+    else if weight < 8 then
         begin
         LandPixels[y, x] := $FFB2AF8A;
-        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
         end;
 
 end;
@@ -331,24 +315,31 @@ begin
     getIncrementInquarter2 := directionX[quarter] * dx + directionY[quarter] * dy;
 end;
 
+
 procedure FillLandCircleLinesIce(x, y, dx, dy: LongInt);
 var q, i, t: LongInt;
 begin
 for q := 0 to 3 do
     begin
-        t:= y + getIncrementInquarter(dx, dy, q);
-        if (t and LAND_HEIGHT_MASK) = 0 then
-            for i:= Max(x - getIncrementInquarter2(dx, dy, q), 0) to Min(x + getIncrementInquarter2(dx, dy, q), LAND_WIDTH - 1) do
-                if (Land[t, i] and (lfIndestructible or lfIce) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+    t:= min(y + getIncrementInquarter(dx, dy, q), LAND_HEIGHT - 1);
+    if (t and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - getIncrementInquarter2(dx, dy, q), 0) to Min(x + getIncrementInquarter2(dx, dy, q), LAND_WIDTH - 1) do
+            begin
+            if (Land[t, i] and (lfIndestructible or lfIce) = 0) and (not disableLandBack or (Land[t, i] > 255))  then
+                begin
                     if (cReducedQuality and rqBlurryLand) = 0 then
                        drawIcePixel(t, i)
                     else
                        drawIcePixel(t div 2, i div 2) ;
+                    if Land[t, i] > 255 then Land[t, i] := Land[t, i] or lfIce;                                    
+                end;
+            end;
     end;
 end;
 
 procedure FillRoundInLandWithIce(X, Y, Radius: LongInt);
 var dx, dy, d: LongInt;
+    landRect: TSDL_Rect;
 begin
 dx:= 0;
 dy:= Radius;
@@ -367,7 +358,65 @@ d:= 3 - 2 * Radius;
         end;
     if (dx = dy) then
         FillLandCircleLinesIce(x, y, dx, dy);
+    landRect.x := min(max(x - Radius, 0), LAND_WIDTH - 1);
+    landRect.y := min(max(y - Radius, 0), LAND_HEIGHT - 1);
+    landRect.w := min(2*Radius, LAND_WIDTH - landRect.x - 1);
+    landRect.h := min(2*Radius, LAND_HEIGHT - landRect.y - 1);
+    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);        
 end;
+
+
+procedure FillLandCircleLinesColor(x, y, dx, dy, border: LongInt);
+var q, i, t: LongInt;
+begin
+for q := 0 to 3 do
+    begin
+        t:= y + getIncrementInquarter(dx, dy, q);
+        if (t and LAND_HEIGHT_MASK) = 0 then
+            for i:= Max(x - getIncrementInquarter2(dx, dy, q), 0) to Min(x + getIncrementInquarter2(dx, dy, q), LAND_WIDTH - 1) do
+            begin
+                if (Land[t, i] and (lfIndestructible or lfIce) = 0) and (not disableLandBack or (Land[t, i] > 255))  and (t > border) then
+                    begin
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                       LandPixels[t, i] := $FFFFFFFF
+                    else
+                       LandPixels[t div 2, i div 2] := $FFFFFFFF;
+                    Land[t, i] := lfBasic;                        
+                    end;
+            end;
+    end;
+end;
+
+
+procedure DrawSemiRound(x, y, height, radius:Longint);    
+var dx, dy, d: LongInt;
+    landRect: TSDL_Rect;
+begin
+dx:= 0;
+dy:= Radius;
+d:= 3 - 2 * Radius;
+    while (dx < dy) do
+        begin        
+            FillLandCircleLinesColor(x, y, dx, dy, y);
+        if (d < 0) then
+            d:= d + 4 * dx + 6
+        else
+            begin
+            d:= d + 4 * (dx - dy) + 10;
+            dec(dy)
+            end;
+        inc(dx)
+        end;
+    if (dx = dy) then
+           FillLandCircleLinesColor(x, y, dx, dy, y);
+    landRect.x := min(max(x - Radius, 0), LAND_WIDTH - 1);
+    landRect.y := min(max(y - Radius, 0), LAND_HEIGHT - 1);
+    landRect.w := min(2*Radius, LAND_WIDTH - landRect.x - 1);
+    landRect.h := min(2*Radius, LAND_HEIGHT - landRect.y - 1);
+    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);                
+end;
+
+
 
 
 function FillLandCircleLinesBG(x, y, dx, dy: LongInt): Longword;

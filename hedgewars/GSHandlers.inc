@@ -5127,57 +5127,15 @@ begin
         end;
 end;
 
-
-procedure drawIcePixel(x, y:Longint);
-var 
-    iceSurface: PSDL_Surface;
-    icePixels: PLongwordArray;
-    pictureX, pictureY: LongInt;
-    w, c: LongWord;
-begin
-    if Land[y, x] and lfIce <> 0 then exit;
-// So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
-    iceSurface:= SpritesData[sprIceTexture].Surface;
-    pictureX := x mod iceSurface^.w;
-    pictureY := y mod iceSurface^.h;
-    icePixels := iceSurface^.pixels;
-    w:= LandPixels[y, x];
-    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
-          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
-          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
-    if w < 128 then w:= w+128;
-    if w > 255 then w:= 255;
-    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
-    //LandPixels[y, x]:= w;
-    LandPixels[y, x]:= addBgColor(w, IceColor);
-    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
-
-    Land[y, x] := Land[y, x] or lfIce;
-end;
-
-procedure DrawIce(x, y: Longint); 
-    const iceRadius :Longint = 32;
-var
-    i, j: Longint;
-    weight: Longint;
-    landRect : TSDL_RECT;
-begin
-    FillRoundInLandWithIce(x, y, iceRadius);
-    SetAllHHToActive; 
-    landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
-    landRect.y := min(max(y - iceRadius, 0), LAND_HEIGHT - 1);
-    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
-    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
-    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
-end;
-
-
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
 const iceWaitNextTarget:Longint = 2;
 const iceCollideWithHog:Longint = 4;
+const iceCollideWithWater:Longint = 5;
 const groundFreezingTime:Longint = 1000;
+const waterFreezingTime:Longint = 500;
+const iceRadius:Longint = 32;
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
@@ -5229,6 +5187,9 @@ begin
                         IceState := iceCollideWithGround;
                         IceTime := GameTicks;                    
                     end;
+                end else if (target.y >= cWaterLine) then
+                begin
+                    IceState := iceCollideWithWater;
                 end;
 
                 if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
@@ -5239,9 +5200,19 @@ begin
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
                 begin 
-                    DrawIce(Target.X, Target.Y);                                        
+                    FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
+                    SetAllHHToActive; 
                     IceState := iceWaitNextTarget;
                 end;
+
+                if (IceState = iceCollideWithWater) and ((GameTicks - IceTime) > waterFreezingTime) then
+                begin 
+                    DrawSemiRound(Target.X, cWaterLine - 32, 16, iceRadius-5);
+                    FillRoundInLandWithIce(Target.X,  cWaterLine - 32, iceRadius);
+                    SetAllHHToActive; 
+                    IceState := iceWaitNextTarget;
+                end;
+
 
 // freeze nearby hogs
                 hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
@@ -5267,14 +5238,14 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
             end;
-            {if (gX > max(LAND_WIDTH,4096)*2) or
+            if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
                     (gY > max(LAND_HEIGHT,4096)+512) then
             begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-            end}
+            end
         end
     end;
 end;
