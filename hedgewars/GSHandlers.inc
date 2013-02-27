@@ -1783,7 +1783,7 @@ begin
         Gear^.Y := Gear^.Y + Gear^.dY;
 
         if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
-            SetAllHHToActive;
+            SetAllHHToActive(false);
 
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
@@ -2382,7 +2382,9 @@ begin
 
         repeat
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and 
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and 
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
 
         SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true; 
@@ -5044,7 +5046,138 @@ All these effects assume the ray's angle is not changed and that the target type
 A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
 A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
+
+
+procedure updateFuel(Gear: PGear);
+var 
+  t:LongInt;
+begin
+    t:= Gear^.Health div 10;
+    if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    begin
+    Gear^.Damage:= t;
+    FreeTexture(Gear^.Tex);
+    Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
+              '%', cWhiteColor, fntSmall)
+    end;
+    if GameTicks mod 10 = 0 then dec(Gear^.Health);
+end;
+
+
+procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
+    var
+    iter:PGear;    
+begin
+  with Gear^ do
+  begin
+    dX:= newX;
+    dY:= newY;
+    Pos:= 0;
+    Target.X:= NoPointX;
+    LastDamage:= nil;
+    X:= Hedgehog^.Gear^.X;
+    Y:= Hedgehog^.Gear^.Y;
+    //unfreeze all semifrozen hogs - make this generic hog cleanup
+(*
+    iter := GearsList;
+    while iter <> nil do
+        begin
+        if (iter^.Kind = gtHedgehog) and 
+        (iter^.Hedgehog^.Effects[heFrozen] and $FF = 0) then 
+        iter^.Hedgehog^.Effects[heFrozen]:= 0;
+        iter:= iter^.NextGear
+        end 
+*)
+  end;
+end;
+
+
+function isLandscapeEdge(weight:Longint):boolean;
+begin
+    result := (weight < 8) and (weight >= 2);
+end;
+
+function isLandscape(weight:Longint):boolean;
+begin
+    result := weight < 2;
+end;
+
+function isEmptySpace(weight:Longint):boolean;
+begin
+    result := not isLandscape(weight) and not isLandscapeEdge(weight);
+end;
+
+
+function getPixelWeight(x, y:Longint): Longint;
+var
+    i, j:Longint;
+begin    
+    result := 0;
+    for i := x - 1 to x + 1 do
+        for j := y - 1 to y + 1 do 
+        begin
+        if (i < 0) or 
+           (i > LAND_WIDTH - 1) or 
+           (j < 0) or 
+           (j > LAND_HEIGHT -1) or 
+           ((Land[j, i] and $FF00) = 0) then
+           begin
+           result := result + 1;
+           end;
+        end;
+end;
+
+
+procedure drawIcePixel(x, y:Longint);
+var 
+    iceSurface: PSDL_Surface;
+    icePixels: PLongwordArray;
+    pictureX, pictureY: LongInt;
+    w, c: LongWord;
+begin
+    if Land[y, x] and lfIce <> 0 then exit;
+// So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
+    iceSurface:= SpritesData[sprIceTexture].Surface;
+    pictureX := x mod iceSurface^.w;
+    pictureY := y mod iceSurface^.h;
+    icePixels := iceSurface^.pixels;
+    w:= LandPixels[y, x];
+    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
+          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
+          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
+    if w < 128 then w:= w+128;
+    if w > 255 then w:= 255;
+    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
+    //LandPixels[y, x]:= w;
+    LandPixels[y, x]:= addBgColor(w, IceColor);
+    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
+
+    Land[y, x] := Land[y, x] or lfIce;
+end;
+
+procedure DrawIce(x, y: Longint); 
+    const iceRadius :Longint = 32;
+var
+    i, j: Longint;
+    weight: Longint;
+    landRect : TSDL_RECT;
+begin
+    FillRoundInLandWithIce(x, y, iceRadius);
+    SetAllHHToActive; 
+    landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
+    landRect.y := min(max(y - iceRadius, 0), LAND_HEIGHT - 1);
+    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
+    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
+    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
+end;
+
+
 procedure doStepIceGun(Gear: PGear);
+const iceWaitCollision:Longint = 0;
+const iceCollideWithGround:Longint = 1;
+const iceWaitNextTarget:Longint = 2;
+const iceCollideWithHog:Longint = 4;
+const groundFreezingTime:Longint = 1000;
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
@@ -5052,7 +5185,7 @@ var
     hogs: PGearArrayS;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
@@ -5060,16 +5193,9 @@ begin
         end
     else
         begin
-        t:= Gear^.Health div 10;
-        if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
-            begin
-            Gear^.Damage:= t;
-            FreeTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
-                         '%', cWhiteColor, fntSmall)
-            end
+        updateFuel(Gear);
         end;
-    if GameTicks mod 10 = 0 then dec(Gear^.Health);
+
     with Gear^ do
         begin
         HedgehogChAngle(HHGear);
@@ -5079,65 +5205,76 @@ begin
            ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and 
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
             begin
-            dX:= ndX;
-            dY:= ndY;
-            Pos:= 0;
-            Target.X:= NoPointX;
-            LastDamage:= nil;
-            X:= HHGear^.X;
-            Y:= HHGear^.Y;
-(* unfreeze all semifrozen hogs - make this generic hog cleanup
-            iter := GearsList;
-            while iter <> nil do
-                begin
-                if (iter^.Kind = gtHedgehog) and 
-                   (iter^.Hedgehog^.Effects[heFrozen] < 0) then 
-                    iter^.Hedgehog^.Effects[heFrozen]:= 0;
-                iter:= iter^.NextGear
-                end *)
+                updateTarget(Gear, ndX, ndY);
+                IceState := iceWaitCollision;
             end
         else
             begin
             X:= X + dX;
             Y:= Y + dY;
             gX:= hwRound(X);
-            gY:= hwRound(Y);
-            if Target.X = NoPointX then t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
+            gY:= hwRound(Y);    
+            if Target.X = NoPointX then 
+            begin
+                t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
+            end;
+
             if Target.X <> NoPointX then
-                begin
-                if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
+            begin
+                CheckCollisionWithLand(Gear);
+                if (State and gstCollision) <> 0 then
+                begin        
+                    if IceState = iceWaitCollision then
                     begin
+                        IceState := iceCollideWithGround;
+                        IceTime := GameTicks;                    
+                    end;
+                end;
+
+                if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
+                begin
                     X:= HHGear^.X;
                     Y:= HHGear^.Y
-                    end;
+                end;
+
+                if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
+                begin 
+                    DrawIce(Target.X, Target.Y);                                        
+                    IceState := iceWaitNextTarget;
+                end;
+
 // freeze nearby hogs
-                if GameTicks mod 10 = 0 then dec(Gear^.Health);
-                hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+                hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
                 if hogs.size > 0 then
                     for i:= 0 to hogs.size - 1 do
                         if hogs.ar^[i] <> HHGear then
-                            begin
-                            //if Gear^.Hedgehog^.Effects[heFrozen]:= 0;
-                            end;
+                            if GameTicks mod 5 = 0 then 
+                                begin
+                                hogs.ar^[i]^.Active:= true;
+                                if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
+                                else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000
+                                end;
                 inc(Pos)
-                end
+            end
             else if (t > 400) and ((gY > cWaterLine) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and (Land[gY, gX] <> 0))) then
-                begin
+            begin
                 Target.X:= gX;
                 Target.Y:= gY;
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-                end;
-            if (gX > max(LAND_WIDTH,4096)*2) or
+            end;
+            {if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
                     (gY > max(LAND_HEIGHT,4096)+512) then
-                begin
+            begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-                end
+            end}
         end
     end;
 end;

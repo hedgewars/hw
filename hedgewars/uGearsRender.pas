@@ -211,6 +211,8 @@ var i, t: LongInt;
     defaultPos, HatVisible: boolean;
     HH: PHedgehog;
     CurWeapon: PAmmo;
+    iceOffset:Longint;
+    r:TSDL_Rect;
 begin
     HH:= Gear^.Hedgehog;
     if HH^.Unplaced then
@@ -239,6 +241,29 @@ begin
     defaultPos:= true;
     HatVisible:= false;
 
+    if HH^.Effects[heFrozen] > 0 then
+        if HH^.Effects[heFrozen] < 256 then
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    0,
+                    0,
+                    0);
+            defaultPos:= false;
+            HatVisible:= true
+            end
+        else 
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    2,
+                    4,
+                    0);
+            defaultPos:= false;
+            HatVisible:= false;
+            exit
+            end;
+
 
     if HH^.Effects[hePoisoned] <> 0 then
         begin
@@ -246,6 +271,7 @@ begin
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
         Tint($FF, $FF, $FF, $FF)
         end;
+
 
     if ((Gear^.State and gstWinner) <> 0) and
     ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
@@ -538,7 +564,7 @@ begin
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
                 gtIceGun:
-                    begin DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                    begin DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                     if CurAmmoGear^.Tex <> nil then
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
@@ -669,7 +695,7 @@ begin
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
-                amIceGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;
 
@@ -917,6 +943,23 @@ begin
         Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
         DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
         end;
+
+    if HH^.Effects[heFrozen] = HH^.Effects[heFrozen] and $FF then
+        begin
+       /// Tint($00, $FF, $40, $40);  (HH^.Effects[heFrozen] and $FF)
+        iceOffset:= trunc(HH^.Effects[heFrozen] / 256 * 64);
+        Tint($FF, $FF, $FF, $FF);        
+        r.x := 128;
+        r.y := 128 - iceOffset;
+        r.w := 64;
+        r.h := iceOffset;
+        //DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
+        DrawTextureFromRectDir(sx-16+sign*2, sy+48-iceoffset, r.w, r.h, @r, HHTexture, sign);
+
+        Tint($FF, $FF, $FF, $FF);
+        end;
+
+
     if cVampiric and
     (CurrentHedgehog^.Gear <> nil) and
     (CurrentHedgehog^.Gear = Gear) then

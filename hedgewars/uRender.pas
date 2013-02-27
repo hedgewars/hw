@@ -26,15 +26,16 @@ uses SDLh, uTypes, GLunit, uConsts;
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
-procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
+procedure DrawSpriteFromRect    (Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
 procedure DrawSpriteClipped     (Sprite: TSprite; X, Y, TopY, RightX, BottomY, LeftX: LongInt);
 procedure DrawSpriteRotated     (Sprite: TSprite; X, Y, Dir: LongInt; Angle: real);
 procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
-procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
 procedure DrawTextureCentered   (X, Top: LongInt; Source: PTexture);
 procedure DrawTextureF          (Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
 procedure DrawTextureRotated    (Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
@@ -63,19 +64,23 @@ const
 
 var LastTint: LongWord = 0;
 
-procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt);
+procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
 begin
 r.y:= r.y + Height * Position;
 r.h:= Height;
 DrawTextureFromRect(X, Y, @r, SpritesData[Sprite].Texture)
 end;
 
-procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRect(X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
 begin
-DrawTextureFromRect(X, Y, r^.w, r^.h, r, SourceTexture)
+DrawTextureFromRectDir(X, Y, r^.w, r^.h, r, SourceTexture, 1)
+end;
+procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
+begin
+DrawTextureFromRectDir(X, Y, W, H, r, SourceTexture, 1)
 end;
 
-procedure DrawTextureFromRect(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
+procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
 var rr: TSDL_Rect;
     _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
@@ -101,14 +106,28 @@ _b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
 
 glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
 
-VertexBuffer[0].X:= X;
-VertexBuffer[0].Y:= Y;
-VertexBuffer[1].X:= rr.w + X;
-VertexBuffer[1].Y:= Y;
-VertexBuffer[2].X:= rr.w + X;
-VertexBuffer[2].Y:= rr.h + Y;
-VertexBuffer[3].X:= X;
-VertexBuffer[3].Y:= rr.h + Y;
+if Dir < 0 then
+    begin
+    VertexBuffer[0].X:= X + rr.w/2;
+    VertexBuffer[0].Y:= Y;
+    VertexBuffer[1].X:= X - rr.w/2;
+    VertexBuffer[1].Y:= Y;
+    VertexBuffer[2].X:= X - rr.w/2;
+    VertexBuffer[2].Y:= rr.h + Y;
+    VertexBuffer[3].X:= X + rr.w/2;
+    VertexBuffer[3].Y:= rr.h + Y;
+    end
+else
+    begin
+    VertexBuffer[0].X:= X;
+    VertexBuffer[0].Y:= Y;
+    VertexBuffer[1].X:= rr.w + X;
+    VertexBuffer[1].Y:= Y;
+    VertexBuffer[2].X:= rr.w + X;
+    VertexBuffer[2].Y:= rr.h + Y;
+    VertexBuffer[3].X:= X;
+    VertexBuffer[3].Y:= rr.h + Y;
+    end;
 
 TextureBuffer[0].X:= _l;
 TextureBuffer[0].Y:= _t;
