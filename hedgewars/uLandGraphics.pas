@@ -311,8 +311,8 @@ begin
         end
     else if (isLandscapeEdge(weight)) then
         begin
-        LandPixels[y, x] := $FFB2AF8A;
-        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce;
+        LandPixels[y, x] := IceEdgeColor;
+        if Land[y, x] > 255 then Land[y, x] := Land[y, x] or lfIce and not lfDamaged;
         end;
 
 end;

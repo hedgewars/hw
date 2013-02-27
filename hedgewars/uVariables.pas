@@ -116,6 +116,7 @@ var
     // originally typed consts
     ExplosionBorderColor: LongWord;
     IceColor            : LongWord;
+    IceEdgeColor        : LongWord;
     WaterOpacity: byte;
     SDWaterOpacity: byte;
     GrayScale: Boolean;
@@ -2411,6 +2412,8 @@ begin
     SDTint:= $80;
     ExplosionBorderColor:= $FF808080;
     IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
+    IceEdgeColor:= ($8A shl RShift) or ($AF shl GShift) or ($B2 shl BShift) or ($FF shl AShift);
+
     WaterOpacity:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06
