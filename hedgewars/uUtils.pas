@@ -361,14 +361,14 @@ while i < l do
     if (#$1100  <= u) and  (
                            (u <= #$11FF )  or // Hangul Jamo
        ((#$2E80  <= u) and (u <= #$2FDF))  or // CJK Radicals Supplement / Kangxi Radicals
-       ((#$2FF0  <= u) and (u <= #$303F))  or // Ideographic Description Characters / CJK Radicals Supplement
-       ((#$3130  <= u) and (u <= #$318F))  or // Hangul Compatibility Jamo
+       ((#$2FF0  <= u) and (u <= #$31FF))  or // Ideographic Description Characters / CJK Radicals Supplement / Hiragana / Hangul Compatibility Jamo / Katakana
        ((#$31C0  <= u) and (u <= #$31EF))  or // CJK Strokes
-       ((#$3200  <= u) and (u <= #$4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A
+       ((#$3200  <= u) and (u <= #$4DBF))  or // Enclosed CJK Letters and Months / CJK Compatibility / CJK Unified Ideographs Extension A / Circled Katakana
        ((#$4E00  <= u) and (u <= #$9FFF))  or // CJK Unified Ideographs
        ((#$AC00  <= u) and (u <= #$D7AF))  or // Hangul Syllables
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
-       ((#$FE30  <= u) and (u <= #$FE4F)))    // CJK Compatibility Forms
+       ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
+       ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
        then 
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
