@@ -19,10 +19,14 @@ option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
 
+#set this to ON when 2.1.0 becomes more widespread (and only for linux)
+option(SYSTEM_PHYSFS "Use system physfs [default:off]" OFF)
+
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+
 set(FPFLAGS "" CACHE STRING "Additional Freepascal flags")
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
@@ -210,7 +214,7 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}              # user flags
+list(APPEND pascal_flags ${fpflags_parsed}      # user flags
                  "-vm4079,4080,4081"            # fpc output format
                  "-B"                           # compile all units
                  "-FE${PROJECT_BINARY_DIR}/bin" # fpc output directory
@@ -224,11 +228,17 @@ list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-" "-g" "-gl" "-gv")
+    list(APPEND pascal_flags "-O-"              # disable all optimisations
+                             "-g"               # enable debug symbols
+                             "-gl"              # add line info to bt
+                             "-gv"              # allow valgrind
+                             )
     list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 else()
-#    set(pascal_flags "-O3" "-OpPENTIUM4" "-CfSSE3" "-Xs" "-Si" ${pascal_flags})
-    list(APPEND pascal_flags "-Os" "-Xs" "-Si")
+    list(APPEND pascal_flags "-Os"              # optimise for size
+                             "-Xs"              # strip binary
+                             "-Si"              # turn on inlining
+                             )
     list(APPEND haskell_flags "-w" "-fno-warn-unused-do-bind")
 endif()
 
@@ -267,12 +277,43 @@ else()
 endif()
 
 
-#physfs library (static on unix, dll on win32)
-add_subdirectory(misc/physfs)
-if(NOT WIN32)
-    list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libphysfs.a")
+#physfs discovery
+if (${SYSTEM_PHYSFS})
+    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+        find_package(PhysFS)
+    endif()
+
+    find_file(physfs_h physfs.h ${PHYSFS_INCLUDE_DIR})
+    if(physfs_h)
+        file(STRINGS ${physfs_h} physfs_majorversion REGEX "PHYSFS_VER_MAJOR[\t' ']+[0-9]+")
+        file(STRINGS ${physfs_h} physfs_minorversion REGEX "PHYSFS_VER_MINOR[\t' ']+[0-9]+")
+        file(STRINGS ${physfs_h} physfs_patchversion REGEX "PHYSFS_VER_PATCH[\t' ']+[0-9]+")
+        string(REGEX MATCH "([0-9]+)" physfs_majorversion "${physfs_majorversion}")
+        string(REGEX MATCH "([0-9]+)" physfs_minorversion "${physfs_minorversion}")
+        string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
+        set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
+
+        if (physfs_detected_ver VERSION_LESS "2.1.0")
+            message(FATAL_ERROR "PhysFS version is too old (dected ${physfs_detected_ver}, required 2.1.0)")
+            set(physfs_too_old true)
+        endif()
+    endif()
+
+    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+        message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
+    endif()
+else()
+    message(STATUS "PhysFS will be provided by the bundled sources")
+    set(physfs_output_name "hw_physfs")
+    add_subdirectory(misc/libphysfs)
+    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
+    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
+    #(should be harmless on other platforms)
+    list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
+#
+add_subdirectory(misc/libphyslayer)
 
 #main engine
 add_subdirectory(hedgewars)

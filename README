@@ -12,3 +12,6 @@ depending on your system, consult our wiki at:
 - http://code.google.com/p/hedgewars/wiki/BuildingOnWindows
 - http://code.google.com/p/hedgewars/wiki/BuildingOnMac
 
+Dependencies:
+you can find an outline of the necessary dependencies in the INSTALL file.
+

@@ -57,8 +57,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${FFMPEG_INCLUDE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
-include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
+include_directories(${PHYSFS_INCLUDE_DIR})
+include_directories(${PHYSLAYER_INCLUDE_DIR})
+
+
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
@@ -203,7 +205,8 @@ if((UNIX AND NOT APPLE) AND ${BUILD_ENGINE_LIBRARY})
 endif()
 
 list(APPEND HW_LINK_LIBS
-    physfs
+    ${PHYSFS_LIBRARY}
+    ${PHYSLAYER_LIBRARY}
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
