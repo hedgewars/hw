@@ -3,19 +3,15 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
-{$IFDEF ANDROID}
-    {$linklib physfs}
-{$ELSE}
-    {$IFDEF DARWIN}
-        {$LINKFRAMEWORK IOKit}
-    {$ENDIF}
-{$ENDIF}
+const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhw_physfs'{$ELSE}'libphysfs'{$ENDIF};
+const PhyslayerLibName = 'libphyslayer';
 
-const
-{$IFDEF WIN32}
-    PhysfsLibName = 'libphysfs';
-{$ELSE}
-    PhysfsLibName = 'physfs';
+{$IFNDEF WIN32}
+    {$linklib physfs}
+    {$linklib physlayer}
+    {$IFDEF DARWIN}
+        {$linkframework IOKit}
+    {$ENDIF}
 {$ENDIF}
 
 procedure initModule;
@@ -36,16 +32,16 @@ function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
-function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhysfsLibName;
-procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhysfsLibName;
+function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
+procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 
 implementation
 uses uUtils, uVariables, sysutils;
 
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
-function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhysfsLibName;
-function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhysfsLibName;
+function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhyslayerLibName;
+function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
@@ -54,7 +50,7 @@ function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 
-procedure hedgewarsMountPackages(); cdecl; external PhysfsLibName;
+procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 begin

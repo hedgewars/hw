@@ -8,7 +8,7 @@ To compile and install you need:
  - SDL_image >= 1.2
  - SDL_ttf >= 2.0
  - Lua >= 5.1.0
- - Physfs >= 2.1
+ - Physfs >= 2.1.0
 For server:
  - Glasgow Haskell Compiler >= 6.10
  - bytestring-show package
@@ -22,6 +22,8 @@ For compressed screenshots:
 
 Lua will be automatically built if not found.
 
+PhysFS will internally built unless -DPHYSFS_SYSTEM=on is passed to cmake
+(also allows to set PHYSFS_LIBRARY and PHYSFS_INCLUDE_DIR if needed).
 
 1. Configure:
 $ cmake .

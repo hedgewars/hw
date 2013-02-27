@@ -35,7 +35,6 @@
 		610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43411E290650040BA66 /* Icon-Small@2x.png */; };
 		610D5FB31270E26C0033333A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 61F7A43611E290650040BA66 /* Icon@2x.png */; };
 		610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */ = {isa = PBXBuildFile; fileRef = 610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */; };
-		610FB81A166139DF002FB2A7 /* libPhysfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 610FB7F8166139A4002FB2A7 /* libPhysfs.a */; };
 		61156521147F48B6006729A9 /* About.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156520147F48B6006729A9 /* About.strings */; };
 		61156523147F48B7006729A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156522147F48B7006729A9 /* Localizable.strings */; };
 		61156525147F48B8006729A9 /* Scheme.strings in Resources */ = {isa = PBXBuildFile; fileRef = 61156524147F48B8006729A9 /* Scheme.strings */; };
@@ -171,6 +170,8 @@
 		6179883C114AA34C00BA94A9 /* uVisualGears.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880E114AA34C00BA94A9 /* uVisualGears.pas */; };
 		6179883D114AA34C00BA94A9 /* uWorld.pas in Sources */ = {isa = PBXBuildFile; fileRef = 6179880F114AA34C00BA94A9 /* uWorld.pas */; };
 		61798935114AB25F00BA94A9 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 61798934114AB25F00BA94A9 /* AudioToolbox.framework */; };
+		617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617D78E016D932310091D4D6 /* libPhysfs.a */; };
+		617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 617D794816D933B00091D4D6 /* libPhyslayer.a */; };
 		61808A5D128C930A005D0E2F /* backSound.caf in Resources */ = {isa = PBXBuildFile; fileRef = 611EE9D7122AA10A00DF6938 /* backSound.caf */; };
 		61889985129995B500D55FD6 /* title~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 61889984129995B500D55FD6 /* title~ipad.png */; };
 		61915D5B143A4E2C00299991 /* MissionTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61915D59143A4E2C00299991 /* MissionTrainingViewController.m */; };
@@ -312,26 +313,40 @@
 			remoteGlobalIDString = BE1FA72F07AF4C45004B6283;
 			remoteInfo = libSDL_image;
 		};
-		610FB7F7166139A4002FB2A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = Physfs;
-		};
-		610FB81B166139EC002FB2A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = Physfs;
-		};
 		6162456614E6159C00CC97FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = libFreetype;
+		};
+		617D78DF16D932310091D4D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617D78D816D932310091D4D6 /* Physfs.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = Physfs;
+		};
+		617D791C16D932EC0091D4D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617D78D816D932310091D4D6 /* Physfs.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = Physfs;
+		};
+		617D794716D933B00091D4D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617D794316D933B00091D4D6 /* Physlayer.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteInfo = Physlayer;
+		};
+		617D794916D933BC0091D4D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 617D794316D933B00091D4D6 /* Physlayer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteInfo = Physlayer;
 		};
 		6195981C1364BCD200B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -418,7 +433,6 @@
 		610C8E3514E018D200CF5C4C /* MNEValueTrackingSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MNEValueTrackingSlider.h; path = Classes/MNEValueTrackingSlider.h; sourceTree = "<group>"; };
 		610C8E3614E018D200CF5C4C /* MNEValueTrackingSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MNEValueTrackingSlider.m; path = Classes/MNEValueTrackingSlider.m; sourceTree = "<group>"; };
 		610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uPhysFSLayer.pas; path = ../../hedgewars/uPhysFSLayer.pas; sourceTree = SOURCE_ROOT; };
-		610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Physfs.xcodeproj; path = ../../misc/physfs/Xcode/Physfs.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6115651A147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/About.strings; sourceTree = "<group>"; };
 		6115651B147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6115651C147F48AE006729A9 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = Locale/English.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -613,6 +627,8 @@
 		617BC22D1490210E00E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/About.strings; sourceTree = "<group>"; };
 		617BC2391490211500E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/Localizable.strings; sourceTree = "<group>"; };
 		617BC23A1490211F00E1C294 /* Italian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Italian; path = Locale/Italian.lproj/Scheme.strings; sourceTree = "<group>"; };
+		617D78D816D932310091D4D6 /* Physfs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Physfs.xcodeproj; path = ../../misc/libphysfs/Xcode/Physfs.xcodeproj; sourceTree = SOURCE_ROOT; };
+		617D794316D933B00091D4D6 /* Physlayer.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Physlayer.xcodeproj; path = ../../misc/libphyslayer/Xcode/Physlayer.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6183D83C11E2BCE200A88903 /* Default-ipad-Landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-ipad-Landscape.png"; path = "Resources/Icons/Default-ipad-Landscape.png"; sourceTree = "<group>"; };
 		6183D83D11E2BCE200A88903 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/Icons/Default.png; sourceTree = "<group>"; };
 		618899811299516000D55FD6 /* title@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "title@2x~iphone.png"; path = "Resources/Frontend/title@2x~iphone.png"; sourceTree = "<group>"; };
@@ -717,11 +733,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
+				617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				616245D114E6160200CC97FB /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
 				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
-				610FB81A166139DF002FB2A7 /* libPhysfs.a in Frameworks */,
 				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
 				61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */,
 				61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */,
@@ -830,7 +847,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */,
+				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
+				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
 				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
@@ -852,14 +870,6 @@
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		610FB7F4166139A4002FB2A7 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				610FB7F8166139A4002FB2A7 /* libPhysfs.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		61156510147F481B006729A9 /* Locale */ = {
@@ -1037,6 +1047,22 @@
 			children = (
 			);
 			name = Overlay;
+			sourceTree = "<group>";
+		};
+		617D78D916D932310091D4D6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				617D78E016D932310091D4D6 /* libPhysfs.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		617D794416D933B00091D4D6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				617D794816D933B00091D4D6 /* libPhyslayer.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		619598191364BCD200B429B6 /* Products */ = {
@@ -1303,7 +1329,8 @@
 				610FB7EC16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7EE16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7F016613980002FB2A7 /* PBXTargetDependency */,
-				610FB81C166139EC002FB2A7 /* PBXTargetDependency */,
+				617D791D16D932EC0091D4D6 /* PBXTargetDependency */,
+				617D794A16D933BC0091D4D6 /* PBXTargetDependency */,
 			);
 			name = Hedgewars;
 			productName = HedgewarsMobile;
@@ -1364,8 +1391,12 @@
 					ProjectRef = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
 				},
 				{
-					ProductGroup = 610FB7F4166139A4002FB2A7 /* Products */;
-					ProjectRef = 610FB7F3166139A4002FB2A7 /* Physfs.xcodeproj */;
+					ProductGroup = 617D78D916D932310091D4D6 /* Products */;
+					ProjectRef = 617D78D816D932310091D4D6 /* Physfs.xcodeproj */;
+				},
+				{
+					ProductGroup = 617D794416D933B00091D4D6 /* Products */;
+					ProjectRef = 617D794316D933B00091D4D6 /* Physlayer.xcodeproj */;
 				},
 				{
 					ProductGroup = 61A19AE414D2010A004B1E6D /* Products */;
@@ -1402,18 +1433,25 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		610FB7F8166139A4002FB2A7 /* libPhysfs.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libPhysfs.a;
-			remoteRef = 610FB7F7166139A4002FB2A7 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		6162456714E6159C00CC97FB /* libFreetype.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libFreetype.a;
 			remoteRef = 6162456614E6159C00CC97FB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		617D78E016D932310091D4D6 /* libPhysfs.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPhysfs.a;
+			remoteRef = 617D78DF16D932310091D4D6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		617D794816D933B00091D4D6 /* libPhyslayer.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libPhyslayer.a;
+			remoteRef = 617D794716D933B00091D4D6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		6195981D1364BCD200B429B6 /* libTremor.a */ = {
@@ -1795,10 +1833,15 @@
 			name = libSDL_image;
 			targetProxy = 610FB7EF16613980002FB2A7 /* PBXContainerItemProxy */;
 		};
-		610FB81C166139EC002FB2A7 /* PBXTargetDependency */ = {
+		617D791D16D932EC0091D4D6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = Physfs;
-			targetProxy = 610FB81B166139EC002FB2A7 /* PBXContainerItemProxy */;
+			targetProxy = 617D791C16D932EC0091D4D6 /* PBXContainerItemProxy */;
+		};
+		617D794A16D933BC0091D4D6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Physlayer;
+			targetProxy = 617D794916D933BC0091D4D6 /* PBXContainerItemProxy */;
 		};
 		9283015A0F10E41300CC5A3C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
