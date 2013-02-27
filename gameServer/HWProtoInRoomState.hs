@@ -77,11 +77,11 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
+                AnswerClients othChans $ teamToNet $ newTeam,
+                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
                 ModifyClient $ \c -> c{actionsPending = actionsPending cl
-                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]
-                        , AnswerClients othChans $ teamToNet $ newTeam
-                        , AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
-                    ]},
+                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]]
+                    },
                 AnswerClients [sendChan cl] ["PING"]
                 ]
         where
@@ -229,7 +229,7 @@ handleCmd_inRoom ["EM", msg] = do
         (legalMsgs, nonEmptyMsgs) = checkNetCmd msg
 
 
-handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
+handleCmd_inRoom ["ROUNDFINISHED", _] = do
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
@@ -245,7 +245,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
         else
         return [] -- don't accept this message twice
     where
-        isCorrect = correctly == "1"
+--        isCorrect = correctly == "1"
 
 -- compatibility with clients with protocol < 38
 handleCmd_inRoom ["ROUNDFINISHED"] =
