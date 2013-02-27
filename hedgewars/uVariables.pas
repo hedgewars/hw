@@ -115,6 +115,7 @@ var
 
     // originally typed consts
     ExplosionBorderColor: LongWord;
+    IceColor            : LongWord;
     WaterOpacity: byte;
     SDWaterOpacity: byte;
     GrayScale: Boolean;
@@ -654,16 +655,18 @@ var
             Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSlider
             (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 22; Height: 15; imageWidth: 22; imageHeight: 15; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBotlevels
-         (*   (FileName:  'amKnife'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  64; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprHandKnife*)
             (FileName:  'amCleaver'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: false),// sprHandKnife
-            (*(FileName:  'knife'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 29; Height: 14; imageWidth: 64; imageHeight: 64; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprKnife*)
             (FileName:  'cleaver'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 64; Height: 64; imageWidth: 64; imageHeight: 128; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprKnife
             (FileName:  'star'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 12; Height: 12; imageWidth: 12; imageHeight: 12; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprStar
+            Width: 12; Height: 12; imageWidth: 12; imageHeight: 12; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprStar
+            (FileName:  'icetexture'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 128; Height: 128; imageWidth: 128; imageHeight: 128; saveSurf: true; priority: tpLow; getDimensions: false; getImageDimensions: true), // sprIceTexture
+            (FileName:  'amIceGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprIceGun
+            (FileName:  'amFrozenHog'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprFrozenHog
             );
 
 const
@@ -2407,6 +2410,7 @@ begin
     SDWaterOpacity:= $80;
     SDTint:= $80;
     ExplosionBorderColor:= $FF808080;
+    IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     WaterOpacity:= $80;
 
     cDrownSpeed.QWordValue  := 257698038;       // 0.06

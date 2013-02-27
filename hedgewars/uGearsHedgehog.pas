@@ -29,6 +29,7 @@ procedure doStepHedgehogMoving(Gear: PGear);
 procedure HedgehogChAngle(HHGear: PGear); 
 procedure PickUp(HH, Gear: PGear);
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
+procedure CheckIce(Gear: PGear); inline;
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions, 
@@ -377,7 +378,10 @@ with Gear^,
                                  end;
                     //amStructure: newGear:= AddGear(hwRound(lx) + hwSign(dX) * 7, hwRound(ly), gtStructure, gstWait, SignAs(_0_02, dX), _0, 3000);
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
-                       amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
+                       amIceGun: begin
+                       newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
+                       newGear^.radius := 8;
+                       end;
             end;
             if altUse and (newGear <> nil) then
                begin
@@ -778,7 +782,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
     if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) then
         MakeHedgehogsStep(Gear);
 
-    SetAllHHToActive;
+    SetAllHHToActive(false);
     AddGearCI(Gear)
     end
 end;
@@ -1196,7 +1200,7 @@ else
     if Gear^.Timer = 0 then
         begin
         Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
-        Gear^.Active:= false;
+        if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
         AddGearCI(Gear);
         exit
         end
@@ -1206,40 +1210,24 @@ else
 AllInactive:= false
 end;
 
-////////////////////////////////////////////////////////////////////////////////
-procedure doStepHedgehog(Gear: PGear);
+procedure CheckIce(Gear: PGear); inline;
 (*
 var x,y,tx,ty: LongInt;
     tdX, tdY, slope: hwFloat; 
     land: Word; *)
 var slope: hwFloat; 
 begin
-CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
-if (Gear^.Message and gmDestroy) <> 0 then
-    begin
-    DeleteGear(Gear);
-    exit
-    end;
-
-if (Gear^.State and gstHHDriven) = 0 then
-    doStepHedgehogFree(Gear)
-else
-    begin
-    with Gear^.Hedgehog^ do
-        if Team^.hasGone then
-            TeamGoneEffect(Team^)
-        else
-            doStepHedgehogDriven(Gear)
-    end;
-if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0)
-and (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0)
-and (not Gear^.dY.isNegative) and (GameTicks mod (100*LongWOrd(hwRound(cMaxWindSpeed*2/cGravity))) = 0)
-and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
-    begin
-    slope:= CalcSlopeBelowGear(Gear);
-    Gear^.dX:=Gear^.dX+slope*_0_07;
-    if slope.QWordValue <> 0 then
-        Gear^.State:= Gear^.State or gstMoving;
+    if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0)
+    and (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0)
+    and (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
+        begin
+        slope:= CalcSlopeBelowGear(Gear);
+        if slope.QWordValue > 730144440 then // ignore mild slopes
+            begin
+            Gear^.dX:=Gear^.dX+slope*cGravity*_256;
+            Gear^.State:= Gear^.State or gstMoving
+            end
+        end;
 (*
     x:= hwRound(Gear^.X);
     y:= hwRound(Gear^.Y);
@@ -1254,7 +1242,35 @@ and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
     AddVisualGear(x + hwRound(_40 * slope), y - hwRound(_40 * slope), vgtSmokeTrace);
     AddVisualGear(x - hwRound(_50 * slope), y + hwRound(_50 * slope), vgtSmokeTrace);
     AddVisualGear(x + hwRound(_50 * slope), y - hwRound(_50 * slope), vgtSmokeTrace); *)
-    end
+end;
+
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepHedgehog(Gear: PGear);
+begin
+CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
+if (Gear^.Message and gmDestroy) <> 0 then
+    begin
+    DeleteGear(Gear);
+    exit
+    end;
+if GameTicks mod 100 = 0 then CheckIce(Gear);
+if Gear^.Hedgehog^.Effects[heFrozen] > 0 then 
+    begin
+    if Gear^.Hedgehog^.Effects[heFrozen] > 256 then
+        dec(Gear^.Hedgehog^.Effects[heFrozen])
+    else if GameTicks mod 10 = 0 then
+        dec(Gear^.Hedgehog^.Effects[heFrozen])
+    end;
+if (Gear^.State and gstHHDriven) = 0 then
+    doStepHedgehogFree(Gear)
+else
+    begin
+    with Gear^.Hedgehog^ do
+        if Team^.hasGone then
+            TeamGoneEffect(Team^)
+        else
+            doStepHedgehogDriven(Gear)
+    end;
 end;
 
 end.
