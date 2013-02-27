@@ -273,6 +273,7 @@ void FeedbackDialog::GenerateSpecs()
     delete process;
 #endif
 
+#ifdef __i386__ || __x86_64__
     // cpu info
     quint32 registers[4];
     quint32 i;
@@ -301,6 +302,9 @@ void FeedbackDialog::GenerateSpecs()
     processor_name += std::string((const char *)&registers[1], 4);
     processor_name += std::string((const char *)&registers[2], 4);
     processor_name += std::string((const char *)&registers[3], 3);
+#else
+    processor_name += "Unknown";
+#endif
 
     // compiler
 #ifdef __GNUC__
