@@ -5092,41 +5092,6 @@ begin
 end;
 
 
-function isLandscapeEdge(weight:Longint):boolean;
-begin
-    result := (weight < 8) and (weight >= 2);
-end;
-
-function isLandscape(weight:Longint):boolean;
-begin
-    result := weight < 2;
-end;
-
-function isEmptySpace(weight:Longint):boolean;
-begin
-    result := not isLandscape(weight) and not isLandscapeEdge(weight);
-end;
-
-
-function getPixelWeight(x, y:Longint): Longint;
-var
-    i, j:Longint;
-begin    
-    result := 0;
-    for i := x - 1 to x + 1 do
-        for j := y - 1 to y + 1 do 
-        begin
-        if (i < 0) or 
-           (i > LAND_WIDTH - 1) or 
-           (j < 0) or 
-           (j > LAND_HEIGHT -1) or 
-           ((Land[j, i] and $FF00) = 0) then
-           begin
-           result := result + 1;
-           end;
-        end;
-end;
-
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
