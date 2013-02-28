@@ -42,7 +42,7 @@ function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
 procedure DumpLandToLog(x, y, r: LongInt);
-
+procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
 
 implementation
@@ -263,8 +263,13 @@ begin
         if (i < 0) or
            (i > LAND_WIDTH - 1) or
            (j < 0) or
-           (j > LAND_HEIGHT -1) or
-           ((Land[j, i] and $FF00) = 0) then
+           (j > LAND_HEIGHT -1) then
+               begin               
+                result := 0;
+                exit;
+               end;
+
+        if ((Land[j, i] and $FF00) = 0) and ((Land[j, i] and lfIce) = 0) then
            begin
            result := result + 1;
            end;
@@ -336,9 +341,9 @@ for q := 0 to 3 do
                 else if Land[t, i] > 255 then
                     begin
                     drawIcePixel(py, px)
-                    end
-                end;
+                    end;
                 if Land[t, i] > 255 then Land[t, i] := Land[t, i] or lfIce and not lfDamaged;
+                end;
     end
 end;
 
@@ -369,6 +374,31 @@ landRect.w := min(2*Radius, LAND_WIDTH - landRect.x - 1);
 landRect.h := min(2*Radius, LAND_HEIGHT - landRect.y - 1);
 UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);        
 end;
+
+
+procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
+var
+    i, j: integer;
+    landRect: TSDL_Rect;
+begin
+for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0), LAND_WIDTH - 1) do
+    begin
+    for j := min(max(y, 0), LAND_HEIGHT - 1) to min(max(y + iceHeight, 0), LAND_HEIGHT - 1) do
+        begin
+        if land[j, i] = 0 then
+            begin
+                land[j, i] := lfIce;                
+                drawIcePixel(j, i);
+            end;
+        end;        
+    end;
+landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
+landRect.y := min(max(y, 0), LAND_HEIGHT - 1);
+landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
+landRect.h := min(iceHeight, LAND_HEIGHT - landRect.y - 1);
+UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);        
+end;
+
 
 
 function FillLandCircleLinesBG(x, y, dx, dy: LongInt): Longword;
