@@ -361,7 +361,7 @@ void HWForm::updateXfire(void)
 {
     if(hwnet && (hwnet->clientState() != HWNewNet::Disconnected))
     {
-        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare("netserver.hedgewars.org:46631") ? "Official server" : hwnet->getHost().toAscii());
+        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare(QString("netserver.hedgewars.org:%1").arg(NETGAME_DEFAULT_PORT)) ? "Official server" : hwnet->getHost().toAscii());
         switch(hwnet->clientState())
         {
             case HWNewNet::Connecting: // Connecting
@@ -1008,7 +1008,7 @@ void HWForm::NetConnectServer(const QString & host, quint16 port)
 
 void HWForm::NetConnectOfficialServer()
 {
-    NetConnectServer("netserver.hedgewars.org", 46631);
+    NetConnectServer("netserver.hedgewars.org", NETGAME_DEFAULT_PORT);
 }
 
 void HWForm::NetPassword(const QString & nick)

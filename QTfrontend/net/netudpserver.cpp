@@ -20,13 +20,14 @@
 #include <QUdpSocket>
 
 #include "netudpserver.h"
+#include "hwconsts.h"
 
 HWNetUdpServer::HWNetUdpServer(QObject *parent, const QString & descr, quint16 port) :
     HWNetRegisterServer(parent, descr, port),
     m_descr(descr)
 {
     pUdpSocket = new QUdpSocket(this);
-    pUdpSocket->bind(46631);
+    pUdpSocket->bind(NETGAME_DEFAULT_PORT);
     connect(pUdpSocket, SIGNAL(readyRead()), this, SLOT(onClientRead()));
 }
 

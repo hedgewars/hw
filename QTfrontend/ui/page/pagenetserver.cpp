@@ -26,6 +26,7 @@
 #include <QSpinBox>
 
 #include "pagenetserver.h"
+#include "hwconsts.h"
 
 QLayout * PageNetServer::bodyLayoutDefinition()
 {
@@ -95,5 +96,5 @@ PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
 
 void PageNetServer::setDefaultPort()
 {
-    sbPort->setValue(46631);
+    sbPort->setValue(NETGAME_DEFAULT_PORT);
 }

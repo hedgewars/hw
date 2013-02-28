@@ -23,6 +23,7 @@
 #include <QLabel>
 
 #include "input_ip.h"
+#include "hwconsts.h"
 
 HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
 {
@@ -66,5 +67,5 @@ HWHostPortDialog::HWHostPortDialog(QWidget* parent) : QDialog(parent)
 
 void HWHostPortDialog::setDefaultPort()
 {
-    sbPort->setValue(46631);
+    sbPort->setValue(NETGAME_DEFAULT_PORT);
 }

@@ -20,6 +20,7 @@
 #include <QUdpSocket>
 
 #include "netudpwidget.h"
+#include "hwconsts.h"
 
 HWNetUdpModel::HWNetUdpModel(QObject* parent) :
     HWNetServersModel(parent)
@@ -36,7 +37,7 @@ void HWNetUdpModel::updateList()
 
     reset();
 
-    pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, 46631);
+    pUdpSocket->writeDatagram("hedgewars client", QHostAddress::Broadcast, NETGAME_DEFAULT_PORT);
 }
 
 void HWNetUdpModel::onClientRead()
@@ -54,7 +55,7 @@ void HWNetUdpModel::onClientRead()
         if(packet.startsWith("hedgewars server"))
         {
             QStringList sl;
-            sl << packet.remove(0, 17) << clientAddr.toString() << "46631";
+            sl << packet.remove(0, 17) << clientAddr.toString() << QString::number(NETGAME_DEFAULT_PORT);
             games.append(sl);
         }
     }
