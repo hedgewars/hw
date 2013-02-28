@@ -54,7 +54,10 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
     HWForm->setObjectName(QString::fromUtf8("HWForm"));
     HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
     HWForm->setMinimumSize(QSize(720, 450));
-    HWForm->setWindowTitle(QMainWindow::tr("Hedgewars %1").arg(*cVersionString));
+    QString suffix = isDevBuild ?
+        QMainWindow::tr("-r%1 (%2)").arg(*cRevisionString, *cHashString) : QString("");
+    QString title = QMainWindow::tr("Hedgewars %1").arg(*cVersionString) + suffix;
+    HWForm->setWindowTitle(title);
     centralWidget = new QWidget(HWForm);
     centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
 

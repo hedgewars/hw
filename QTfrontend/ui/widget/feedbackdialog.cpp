@@ -447,7 +447,8 @@ void FeedbackDialog::SendFeedback()
     QString email = this->email->text();
     QString captchaCode = this->captcha_code->text();
     QString captchaID = QString::number(this->captchaID);
-    QString version = "HedgewarsFoundation-Hedgewars-" + (cVersionString?(*cVersionString):QString(""));
+    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" + 
+                       *cRevisionString + "|" + *cHashString;
 
     if (summary.isEmpty() || description.isEmpty())
     {
