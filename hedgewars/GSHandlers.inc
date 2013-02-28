@@ -5091,22 +5091,6 @@ begin
   end;
 end;
 
-procedure DrawIce(x, y: Longint); 
-    const iceRadius :Longint = 32;
-var
-    i, j: Longint;
-    weight: Longint;
-    landRect : TSDL_RECT;
-begin
-    FillRoundInLandWithIce(x, y, iceRadius);
-    SetAllHHToActive; 
-    landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
-    landRect.y := min(max(y - iceRadius, 0), LAND_HEIGHT - 1);
-    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
-    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
-    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
-end;
-
 
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
@@ -5114,6 +5098,7 @@ const iceCollideWithGround:Longint = 1;
 const iceWaitNextTarget:Longint = 2;
 const iceCollideWithHog:Longint = 4;
 const groundFreezingTime:Longint = 1000;
+const iceRadius = 32;
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
@@ -5175,7 +5160,8 @@ begin
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
                 begin 
-                    DrawIce(Target.X, Target.Y);                                        
+                    FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
+                    SetAllHHToActive;                                     
                     IceState := iceWaitNextTarget;
                 end;
 

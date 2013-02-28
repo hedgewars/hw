@@ -328,7 +328,6 @@ for q := 0 to 3 do
                     end;
                 if isLandscapeEdge(getPixelWeight(i, t)) then
                     begin
-                    if Land[t, i] > 255 then Land[t, i] := Land[t, i] or lfIce and not lfDamaged;
                     if (LandPixels[py, px] and AMask < 255) and (LandPixels[py, px] and AMask > 0) then
                         LandPixels[py, px] := (IceEdgeColor and not AMask) or (LandPixels[py, px] and AMask)
                     else if (LandPixels[py, px] and AMask < 255) or (Land[t, i] > 255) then
@@ -336,33 +335,39 @@ for q := 0 to 3 do
                     end
                 else if Land[t, i] > 255 then
                     begin
-                    Land[t, i] := Land[t, i] or lfIce and not lfDamaged;
                     drawIcePixel(py, px)
                     end
-                end
+                end;
+                if Land[t, i] > 255 then Land[t, i] := Land[t, i] or lfIce and not lfDamaged;
     end
 end;
 
 procedure FillRoundInLandWithIce(X, Y, Radius: LongInt);
 var dx, dy, d: LongInt;
+    landRect: TSDL_Rect;
 begin
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
-    while (dx < dy) do
+while (dx < dy) do
+    begin
+    FillLandCircleLinesIce(x, y, dx, dy);
+    if (d < 0) then
+        d:= d + 4 * dx + 6
+    else
         begin
-        FillLandCircleLinesIce(x, y, dx, dy);
-        if (d < 0) then
-            d:= d + 4 * dx + 6
-        else
-            begin
-            d:= d + 4 * (dx - dy) + 10;
-            dec(dy)
-            end;
-        inc(dx)
+        d:= d + 4 * (dx - dy) + 10;
+        dec(dy)
         end;
-    if (dx = dy) then
-        FillLandCircleLinesIce(x, y, dx, dy);
+    inc(dx)
+    end;
+if (dx = dy) then
+    FillLandCircleLinesIce(x, y, dx, dy);
+landRect.x := min(max(x - Radius, 0), LAND_WIDTH - 1);
+landRect.y := min(max(y - Radius, 0), LAND_HEIGHT - 1);
+landRect.w := min(2*Radius, LAND_WIDTH - landRect.x - 1);
+landRect.h := min(2*Radius, LAND_HEIGHT - landRect.y - 1);
+UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);        
 end;
 
 
