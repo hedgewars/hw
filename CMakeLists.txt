@@ -19,10 +19,7 @@ endforeach()
 set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
 
 
-#usually this is set at release time
-option(NOREVISION "Build Hedgewars without revision information [default: off]" OFF)
-
-#set other default values
+#possible cmake configuration
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
 option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
@@ -41,33 +38,31 @@ if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
 endif()
 
-#detect Mercurial revision (if present)
-if(NOT NOREVISION)
-    set(default_build_type "DEBUG")
-    set(HW_DEV true) #becomes isDevBuild
-    find_program(HGCOMMAND hg)
-    if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
-        execute_process(COMMAND ${HGCOMMAND} identify -in
-                        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                        OUTPUT_VARIABLE internal_version
-                        ERROR_QUIET
-                    )
-        #check local repo status
-        string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
 
-        string(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
-        string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" hash_number ${internal_version})
+#detect Mercurial revision and init rev/hash information
+find_program(HGCOMMAND hg)
+if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
+    execute_process(COMMAND ${HGCOMMAND} identify -in
+                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                    OUTPUT_VARIABLE internal_version
+                    ERROR_QUIET
+                )
+    #check local repo status
+    string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
+    string(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" revision_number ${internal_version})
+    string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" hash_number ${internal_version})
 
-        message(STATUS "Building revision ${revision_number} from hash ${hash_number}")
-        if(HGCHANGED)
-            MESSAGE(${WARNING} "You have uncommitted changes in your repository!")
-        endif()
+    if(HGCHANGED)
+        message(${WARNING} "You have uncommitted changes in your repository!")
     endif()
-else(NOT NOREVISION)
+    #let's assume that if you have hg you might be interested in debugging
+    set(default_build_type "DEBUG")
+else()
     set(default_build_type "RELEASE")
-    set(HWDEV false)
-    message(STATUS "Building distributable version")
-endif(NOT NOREVISION)
+    # TODO think of a better fallback when hg not found
+    set(revision_number "0000")
+    set(hash_number "unknown")
+endif()
 
 
 #versioning
@@ -77,10 +72,14 @@ set(CPACK_PACKAGE_VERSION_PATCH 19)
 set(HEDGEWARS_PROTO_VER 44)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
+message(STATUS "Building ${HEDGEWARS_VERSION}-r${revision_number} (${hash_number})")
 
+
+#where to build libs and bins
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
+#resource paths
 if(UNIX AND NOT APPLE)
     set(target_binary_install_dir "bin")
     set(target_library_install_dir "lib")
@@ -186,12 +185,13 @@ endif(APPLE)
 if (CMAKE_BUILD_TYPE)
     string (TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if ( NOT( (CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "DEBUG") ) )
-        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
+        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
         message (STATUS "Unknown build type, using default (${default_build_type})")
     endif ()
 else (CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Choose the build type, options are: Debug Release." FORCE)
+    set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
 endif (CMAKE_BUILD_TYPE)
+
 
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
 if(NOT ${MINIMAL_FLAGS})
@@ -208,6 +208,7 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
 endif()
+
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
@@ -231,9 +232,12 @@ list(APPEND pascal_flags ${fpflags_parsed}        # user flags
                  )
 list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 
+
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
+    set(HW_DEV true) #becomes isDevBuild
+
     list(APPEND pascal_flags "-O-"              # disable all optimisations
                              "-g"               # enable debug symbols
                              "-gl"              # add line info to bt
@@ -241,12 +245,15 @@ if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
                              )
     list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 else()
+    set(HW_DEV false)
+
     list(APPEND pascal_flags "-Os"              # optimise for size
                              "-Xs"              # strip binary
                              "-Si"              # turn on inlining
                              )
     list(APPEND haskell_flags "-w" "-fno-warn-unused-do-bind")
 endif()
+
 
 
 #server discovery
@@ -337,6 +344,7 @@ if(NOT ANDROID)
     add_subdirectory(share)
     add_subdirectory(tools)
 endif()
+
 
 
 # CPack variables
