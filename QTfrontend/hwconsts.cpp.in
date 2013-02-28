@@ -59,6 +59,9 @@ QList< QPair<QString, QString> > cDefaultAmmos =
         << qMakePair(QString("Thinking with Portals"), QString(
             AMMOLINE_PORTALS_QT AMMOLINE_PORTALS_PROB
             AMMOLINE_PORTALS_DELAY AMMOLINE_PORTALS_CRATE ))
+        << qMakePair(QString("One of Everything"), QString(
+            AMMOLINE_ONEEVERY_QT AMMOLINE_ONEEVERY_PROB
+            AMMOLINE_ONEEVERY_DELAY AMMOLINE_ONEEVERY_CRATE ))
         ;
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
