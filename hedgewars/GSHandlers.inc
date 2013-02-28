@@ -616,6 +616,7 @@ We aren't using frametick right now, so just a waste of cycles.
         else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
             lf:= Land[yy, xx] and (lfObject or lfBasic or lfIndestructible);
+            if lf = 0 then lf:= lfObject;
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
@@ -5097,8 +5098,11 @@ const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
 const iceWaitNextTarget:Longint = 2;
 const iceCollideWithHog:Longint = 4;
+const iceCollideWithWater:Longint = 5;
+const waterFreezingTime:Longint = 500;
 const groundFreezingTime:Longint = 1000;
 const iceRadius = 32;
+const iceHeight = 40;
 var
     HHGear: PGear;
     ndX, ndY: hwFloat;
@@ -5145,25 +5149,40 @@ begin
                 CheckCollisionWithLand(Gear);
                 if (State and gstCollision) <> 0 then
                 begin        
-                    if IceState = iceWaitCollision then
+                if IceState = iceWaitCollision then
                     begin
-                        IceState := iceCollideWithGround;
-                        IceTime := GameTicks;                    
+                    IceState := iceCollideWithGround;
+                    IceTime := GameTicks;                    
+                    end                    
+                end
+                else if (target.y >= cWaterLine) then
+                    begin
+                    if IceState = iceWaitCollision then
+                        begin
+                        IceState := iceCollideWithWater;
+                        IceTime := GameTicks;  
+                        end;
                     end;
-                end;
 
                 if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
-                begin
+                    begin
                     X:= HHGear^.X;
                     Y:= HHGear^.Y
-                end;
+                    end;
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
-                begin 
+                    begin 
                     FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;                                     
                     IceState := iceWaitNextTarget;
-                end;
+                    end;
+
+                if (IceState = iceCollideWithWater) and ((GameTicks - IceTime) > groundFreezingTime) then
+                    begin                    
+                    DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
+                    SetAllHHToActive; 
+                    IceState := iceWaitNextTarget;
+                    end;
 
 // freeze nearby hogs
                 hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
