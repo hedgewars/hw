@@ -1401,6 +1401,14 @@ begin
     BTPrevAngle := High(LongInt);
     BTSteps := 0;
     HHGear := Gear^.Hedgehog^.Gear;
+    HedgehogChAngle(HHGear);
+    Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, Gear^.dX);
+    Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
+    DrawTunnel(HHGear^.X,
+        HHGear^.Y + Gear^.dY * cHHRadius - _1 -
+        ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
+        Gear^.dX, Gear^.dY,
+        cHHStepTicks, cHHRadius * 2 + 7);
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepBlowTorchWork
