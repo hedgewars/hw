@@ -1198,8 +1198,8 @@ var
                 Bounciness: 1000);
             Slot: 6;
             TimeAfterTurn: 3000;
-            minAngle: 768;
-            maxAngle: 1280;
+            minAngle: 804;
+            maxAngle: 1327;
             isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
