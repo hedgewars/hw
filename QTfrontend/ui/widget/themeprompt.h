@@ -34,6 +34,10 @@ class ThemeListView : public QListView
 
     public:
         ThemeListView(QWidget* parent = 0) : QListView(parent){}
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
 };
 
 class ThemePrompt : public QDialog
