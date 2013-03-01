@@ -339,7 +339,8 @@ begin
     parseCommandLine(argc, argv);
 {$ENDIF}
     initEverything(true);
-    WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
+    WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
+                     ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
     
