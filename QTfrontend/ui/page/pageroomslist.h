@@ -34,6 +34,8 @@ class RoomTableView : public QTableView
 
     public:
         RoomTableView(QWidget* parent = 0) : QTableView(parent){}
+        void moveUp();
+        void moveDown();
 };
 
 class PageRoomsList : public AbstractPage
