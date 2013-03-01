@@ -462,6 +462,8 @@ void HWMapContainer::setTheme(const QString & theme)
 
 void HWMapContainer::setRandomMap()
 {
+    if (!m_master) return;
+    
     setRandomSeed();
     switch(m_mapInfo.type)
     {
@@ -491,7 +493,7 @@ void HWMapContainer::setRandomTheme()
     if(!m_themeModel->rowCount()) return;
     quint32 themeNum = rand() % m_themeModel->rowCount();
     updateTheme(m_themeModel->index(themeNum));
-    qDebug() << "RANDOM THEME:" << themeNum;
+    emit themeChanged(m_theme);
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)
