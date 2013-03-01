@@ -62,8 +62,13 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     QPushButton * btnOkay = new QPushButton(tr("Create room"));
     connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
     connect(btnOkay, SIGNAL(clicked()), this, SLOT(accept()));
-    buttonLayout->addWidget(btnCancel);
-    buttonLayout->addWidget(btnOkay);
+#ifdef Q_WS_MAC
+        buttonLayout->addWidget(btnCancel);
+        buttonLayout->addWidget(btnOkay);
+#else
+        buttonLayout->addWidget(btnOkay);
+        buttonLayout->addWidget(btnCancel);
+#endif
     btnOkay->setDefault(true);
 
     setStyleSheet("QPushButton { padding: 5px; }");
