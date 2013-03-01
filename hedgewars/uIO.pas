@@ -221,7 +221,7 @@ end;
 
 function isSyncedCommand(c: char): boolean;
 begin
-    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 's', 'b', 'F', 'N', 'p', 'P', 'w', 't', 'h', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
 end;
 
 procedure flushBuffer();
