@@ -264,15 +264,13 @@ begin
            (i > LAND_WIDTH - 1) or
            (j < 0) or
            (j > LAND_HEIGHT -1) then
-               begin               
-                result := 0;
-                exit;
-               end;
-
-        if ((Land[j, i] and $FF00) = 0) and ((Land[j, i] and lfIce) = 0) then
-           begin
-           result := result + 1;
+           begin               
+           result := 0;
+           exit;
            end;
+
+        if Land[j, i] and $FF00 and not lfIce = 0 then
+           result := result + 1;
         end;
 end;
 
@@ -288,15 +286,25 @@ begin
     iceSurface:= SpritesData[sprIceTexture].Surface;
     icePixels := iceSurface^.pixels;
     w:= LandPixels[y, x];
-    w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
-          (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
-          (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
-    if w < 128 then w:= w+128;
-    if w > 255 then w:= 255;
-    w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
-    //LandPixels[y, x]:= w;
-    LandPixels[y, x]:= addBgColor(w, IceColor);
-    LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
+    if w > 0 then
+        begin
+        w:= round(((w shr RShift and $FF) * RGB_LUMINANCE_RED +
+              (w shr BShift and $FF) * RGB_LUMINANCE_GREEN +
+              (w shr GShift and $FF) * RGB_LUMINANCE_BLUE));
+        if w < 128 then w:= w+128;
+        if w > 255 then w:= 255;
+        w:= (w shl RShift) or (w shl BShift) or (w shl GShift) or (LandPixels[y,x] and AMask);
+        LandPixels[y, x]:= addBgColor(w, IceColor);
+        LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)])
+        end
+    else 
+        begin
+        LandPixels[y, x]:= IceColor and not AMask or $E8 shl AShift;
+        LandPixels[y, x]:= addBgColor(LandPixels[y, x], icePixels^[iceSurface^.w * (y mod iceSurface^.h) + (x mod iceSurface^.w)]);
+        // silly workaround to avoid having to make background erasure a tadb it smarter about sea ice
+        if LandPixels[y, x] and AMask shr AShift = 255 then 
+            LandPixels[y, x]:= LandPixels[y, x] and not AMask or 254 shl AShift;
+        end;
 end;
 
 function getIncrementInquarter(dx, dy, quarter: Longint): Longint; inline;
@@ -385,10 +393,10 @@ for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0)
     begin
     for j := min(max(y, 0), LAND_HEIGHT - 1) to min(max(y + iceHeight, 0), LAND_HEIGHT - 1) do
         begin
-        if land[j, i] = 0 then
+        if Land[j, i] = 0 then
             begin
-                land[j, i] := lfIce;                
-                drawIcePixel(j, i);
+            Land[j, i] := lfIce;                
+            drawIcePixel(j, i);
             end;
         end;        
     end;
