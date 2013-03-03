@@ -5182,14 +5182,14 @@ begin
                     begin 
                     FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;                                     
-                    IceState := iceWaitNextTarget;
+                    IceState := iceWaitCollision;
                     end;
 
                 if (IceState = iceCollideWithWater) and ((GameTicks - IceTime) > groundFreezingTime) then
                     begin                    
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
                     SetAllHHToActive; 
-                    IceState := iceWaitNextTarget;
+                    IceState := iceWaitCollision;
                     end;
 
 // freeze nearby hogs
