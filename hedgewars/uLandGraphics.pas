@@ -265,7 +265,7 @@ begin
            (j < 0) or
            (j > LAND_HEIGHT -1) then
            begin               
-           result := 0;
+           result := 9;
            exit;
            end;
 
