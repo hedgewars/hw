@@ -349,7 +349,7 @@ begin
 end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-var VertexBuffer: array [0..3] of TVertex2f;
+var VertexBuffer: array [0..1] of TVertex2f;
 begin
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LINE_SMOOTH);
