@@ -65,7 +65,12 @@ with HHGear^.Hedgehog^ do
         begin
         if (CurAmmoType = amSniperRifle) and ((GameFlags and gfArtillery) = 0) then
             cArtillery := false;
-        OnUsedAmmo(HHGear^.Hedgehog^)
+        if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_NoRoundEnd) = 0 then
+            begin
+            MultiShootAttacks:= Ammoz[CurAmmoType].Ammo.NumPerTurn;
+            AfterAttack
+            end
+        else OnUsedAmmo(HHGear^.Hedgehog^)
         end;
 
     MultiShootAttacks:= 0;
