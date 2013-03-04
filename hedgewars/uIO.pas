@@ -226,9 +226,12 @@ end;
 
 procedure flushBuffer();
 begin
-    SDLNet_TCP_Send(IPCSock, @sendBuffer.buf, sendBuffer.count);
-    flushDelayTicks:= 0;
-    sendBuffer.count:= 0
+    if IPCSock <> nil then
+        begin
+        SDLNet_TCP_Send(IPCSock, @sendBuffer.buf, sendBuffer.count);
+        flushDelayTicks:= 0;
+        sendBuffer.count:= 0
+        end
 end;
 
 procedure SendIPC(s: shortstring);
