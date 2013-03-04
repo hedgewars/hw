@@ -3635,7 +3635,7 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind in [gtPortal, gtRope, gtAirAttack])
+        if (iterator^.Kind in [gtPortal, gtRope, gtAirAttack, gtIceGun])
         or (iterator^.PortalCounter > 32) then
             continue;
 
@@ -4584,8 +4584,8 @@ begin
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
            , lfIndestructible) then
             begin
-            Gear^.X := Gear^.X + Gear^.dX;
-            Gear^.Y := Gear^.Y + _1_9;
+            //Gear^.X := Gear^.X + Gear^.dX;
+            Gear^.Y := Gear^.Y + _1_9
             end;
         end;
     if TestCollisionYwithGear(Gear, 1) <> 0 then
@@ -4596,14 +4596,15 @@ begin
         end
     else
         begin
-        Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        //Gear^.dY := Gear^.dY + cGravity;
+        //Gear^.Y := Gear^.Y + Gear^.dY;
         if hwRound(Gear^.Y) > cWaterLine then
             Gear^.Timer := 1
         end;
 
-    Gear^.X := Gear^.X + HitGear^.dX;
+    //Gear^.X := Gear^.X + HitGear^.dX;
     HitGear^.X := Gear^.X;
+    HitGear^.Y := Gear^.Y;
     SetLittle(HitGear^.dY);
     HitGear^.Active:= true;
 end;
