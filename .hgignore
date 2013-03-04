@@ -61,3 +61,5 @@ glob:tools/build_windows_koda.bat
 glob:share/hedgewars/Data/misc/hwengine.desktop
 glob:*.exe
 glob:_CPack_Packages/
+glob:version_info.txt
+glob:*.tar.*
