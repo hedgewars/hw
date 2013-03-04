@@ -1919,7 +1919,7 @@ void HWForm::AssociateFiles()
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
-    if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 \\2 "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
+    if (success) success = system(("sed -i 's|^\\(Exec=.*\\) \\(%f\\)|\\1 \\2 "+arguments+"|' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
     if (success)
     {
