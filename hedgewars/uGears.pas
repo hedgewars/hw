@@ -838,7 +838,7 @@ while i > 0 do
                 ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
                 end;
 
-            if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
+            if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
                 begin
                 Gear^.dX:= Ammo^.dX * Power * _0_005;
                 Gear^.dY:= Ammo^.dY * Power * _0_005

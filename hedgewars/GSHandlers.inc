@@ -92,7 +92,7 @@ begin
                     
                 else
                     begin
-                    if (gi^.State and gstMoving) = 0 then
+                    if ((gi^.State and gstMoving) = 0) and (gi^.Hedgehog^.Effects[heFrozen] = 0) then
                         begin
                         gi^.dX.isNegative:= X<gi^.X;
                         gi^.State := gi^.State or gstLoser;
@@ -4956,7 +4956,7 @@ if (Gear^.Pos = 3) and (Gear^.Power = 0) then
         end;
     Gear^.Pos:= 4;
     // This condition might need tweaking
-    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount*2)+cHedgehogTurnTime*2
+    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime
     end;
 
 if (Gear^.Pos = 4) then
@@ -4992,7 +4992,7 @@ if (Gear^.Pos = 4) then
             Gear^.Power:= 0;
             end
         end
-    else dec(Gear^.Timer);
+    else if (CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan) then dec(Gear^.Timer)
     end;
 
 end;
@@ -5124,10 +5124,7 @@ begin
         AfterAttack;
         exit
         end
-    else
-        begin
-        updateFuel(Gear);
-        end;
+    else if Gear^.Message and (gmUp or gmDown) = 0 then updateFuel(Gear);
 
     with Gear^ do
         begin
@@ -5203,7 +5200,7 @@ begin
                                 if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
                                     hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
                                 else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
-                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 100000
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= cHedgehogTurnTime + cReadyDelay
                                 end;
                 inc(Pos)
             end
