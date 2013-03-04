@@ -4,13 +4,8 @@ set(SHAREPATH ${HEDGEWARS_DATADIR})
 add_subdirectory(hedgewars/Data)
 
 if(APPLE)
-    #needed for CFBundleVersion and CFBundleShortVersionString
-        #should reuse the variables set in main CMakeLists.txt
-    if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
-        set(HEDGEWARS_REVISION ${revision_number})
-    else()
-        set(HEDGEWARS_REVISION ${HEDGEWARS_VERSION})
-    endif()
+    #CFBundleVersion is HEDGEWARS_REVISION
+    #CFBundleShortVersionString is HEDGEWARS_VERSION
 
     #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
     if(NOT NOVIDEOREC)
