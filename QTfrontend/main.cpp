@@ -346,6 +346,8 @@ int main(int argc, char *argv[])
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         style.append(file.readAll());
 
+    qWarning("Starting Hedgewars %s-r%d (%s)", qPrintable(*cVersionString), cRevisionString->toInt(), qPrintable(*cHashString));
+
     app.form = new HWForm(NULL, style);
     app.form->show();
     if(splash)
