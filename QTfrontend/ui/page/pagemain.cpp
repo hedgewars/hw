@@ -127,17 +127,15 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
+    if(frontendEffects)
+        setAttribute(Qt::WA_NoSystemBackground, true);
     mainNote->setOpenExternalLinks(true);
 
-    if(!isDevBuild)
-    {
-        setDefautDescription(QLabel::tr("Tip: ") + randomTip());
-    }
-    else
-    {
-        setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
-    }
+#ifdef DEBUG
+    setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
+#else
+    setDefautDescription(QLabel::tr("Tip: ") + randomTip());
+#endif
 
 }
 

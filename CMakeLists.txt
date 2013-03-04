@@ -236,8 +236,6 @@ list(APPEND haskell_flags "-O2" ${ghflags_parsed})
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    set(HW_DEV true) #becomes isDevBuild
-
     list(APPEND pascal_flags "-O-"              # disable all optimisations
                              "-g"               # enable debug symbols
                              "-gl"              # add line info to bt
@@ -245,8 +243,6 @@ if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
                              )
     list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
 else()
-    set(HW_DEV false)
-
     list(APPEND pascal_flags "-Os"              # optimise for size
                              "-Xs"              # strip binary
                              "-Si"              # turn on inlining

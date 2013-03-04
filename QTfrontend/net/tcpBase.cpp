@@ -141,9 +141,10 @@ void TCPBase::RealStart()
     connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
     QStringList arguments=getArguments();
 
+#ifdef DEBUG
     // redirect everything written on stdout/stderr
-    if(isDevBuild)
-        process->setProcessChannelMode(QProcess::ForwardedChannels);
+    process->setProcessChannelMode(QProcess::ForwardedChannels);
+#endif
 
     process->start(bindir->absolutePath() + "/hwengine", arguments);
 #endif

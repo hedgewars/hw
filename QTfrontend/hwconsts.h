@@ -51,7 +51,6 @@ extern QString * netHost;
 extern quint16 netPort;
 
 extern bool haveServer;
-extern bool isDevBuild;
 
 //Current season, SEASON_NONE by default
 extern int season;
