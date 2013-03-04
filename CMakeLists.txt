@@ -57,6 +57,8 @@ if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
     endif()
     #let's assume that if you have hg you might be interested in debugging
     set(default_build_type "DEBUG")
+    #write down hash and rev for easy picking should hg be missing
+    file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${revision_number}\nhash ${hash_number}\n")
 else()
     set(default_build_type "RELEASE")
     # TODO think of a better fallback when hg not found
