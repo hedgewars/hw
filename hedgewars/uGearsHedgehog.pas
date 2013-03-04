@@ -1224,6 +1224,7 @@ var slope: hwFloat;
 begin
     if (Gear^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0)
     and (Gear^.State and (gstHHJumping or gstHHHJump or gstAttacking) = 0)
+    and ((Gear^.Hedgehog = nil) or ((Gear^.Hedgehog^.Effects[heFrozen] = 0) or (Gear^.Hedgehog^.Effects[heFrozen] > 255)))
     and (not Gear^.dY.isNegative) and (TurnTimeLeft > 0) and (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
         begin
         slope:= CalcSlopeBelowGear(Gear);
