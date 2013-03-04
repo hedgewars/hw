@@ -50,7 +50,6 @@ extern unsigned int colors[];
 extern QString * netHost;
 extern quint16 netPort;
 
-extern bool haveServer;
 
 //Current season, SEASON_NONE by default
 extern int season;

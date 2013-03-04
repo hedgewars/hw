@@ -261,7 +261,6 @@ if(NOT NOSERVER)
     endif()
 
     if(ghc_executable)
-        set(HAVE_NETSERVER true)
         add_subdirectory(gameServer)
         message(STATUS "Found GHC: ${ghc_executable}")
     else()

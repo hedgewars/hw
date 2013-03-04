@@ -73,7 +73,5 @@ unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
 QString * netHost = new QString();
 quint16 netPort = NETGAME_DEFAULT_PORT;
 
-bool haveServer = ${HAVE_NETSERVER};
-
 int season = SEASON_NONE;
 int years_since_foundation = 0;
