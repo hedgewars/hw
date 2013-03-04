@@ -1,4 +1,7 @@
-add_subdirectory(hedgewars)
+
+set(SHAREPATH ${HEDGEWARS_DATADIR})
+
+add_subdirectory(hedgewars/Data)
 
 if(APPLE)
     #needed for CFBundleVersion and CFBundleShortVersionString
