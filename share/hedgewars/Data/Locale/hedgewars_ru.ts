@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru">
 <context>
+    <name>About</name>
+    <message>
+        <source>Unknown Compiler</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AbstractPage</name>
     <message>
         <source>Go back</source>
@@ -119,34 +126,62 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Настройки игры</translation>
+        <translation type="obsolete">Настройки игры</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Карта</translation>
+    </message>
+    <message>
+        <source>Game options</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWApplication</name>
-    <message>
+    <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 day</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -531,19 +566,15 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HatPrompt</name>
     <message>
-        <source>Select a hat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Filter: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished">Отмена</translation>
     </message>
     <message>
         <source>Use selected hat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search for a hat:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -887,7 +918,7 @@ Please wait a few seconds and try again.</source>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation>Управление</translation>
+        <translation type="obsolete">Управление</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
@@ -896,6 +927,14 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Start</source>
         <translation type="unfinished">Старт</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Обновить</translation>
+    </message>
+    <message>
+        <source>Room controls</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1084,11 +1123,11 @@ Please wait a few seconds and try again.</source>
     <name>PageRoomsList</name>
     <message>
         <source>Create</source>
-        <translation>Создать</translation>
+        <translation type="obsolete">Создать</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation>Присоединиться</translation>
+        <translation type="obsolete">Присоединиться</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -1096,7 +1135,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation>Название комнаты:</translation>
+        <translation type="obsolete">Название комнаты:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1108,11 +1147,11 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Search:</source>
-        <translation>Поиск:</translation>
+        <translation type="obsolete">Поиск:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation type="obsolete">Очистить</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1121,6 +1160,30 @@ Please wait a few seconds and try again.</source>
             <numerusform>на сервере %1 игрока</numerusform>
             <numerusform>на сервере %1 игроков</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Search for a room:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open server administration page</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1396,7 +1459,19 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Обновить</translation>
+        <translation type="obsolete">Обновить</translation>
+    </message>
+    <message>
+        <source>Restrict Unregistered Players Join</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show games in lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show games in-progress</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1498,11 +1573,11 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>In lobby</source>
-        <translation>Подготовка</translation>
+        <translation type="obsolete">Подготовка</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation>В игре</translation>
+        <translation type="obsolete">В игре</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1644,7 +1719,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Version</source>
-        <translation>Версия</translation>
+        <translation type="obsolete">Версия</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
@@ -1846,6 +1921,10 @@ Do you really want to quit?</source>
         <source>Type the security code:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1867,6 +1946,10 @@ Do you really want to quit?</source>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
+    </message>
+    <message>
+        <source>-r%1 (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2110,6 +2193,15 @@ Do you still want to join the room?</source>
         <source>Hedgewars</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Not all players are ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to start this game?
+Not all players are ready.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QPushButton</name>
@@ -2211,6 +2303,21 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RoomNamePrompt</name>
+    <message>
+        <source>Enter a name for your room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Отмена</translation>
+    </message>
+    <message>
+        <source>Create room</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2317,12 +2424,16 @@ Do you still want to join the room?</source>
 <context>
     <name>ThemePrompt</name>
     <message>
-        <source>Select a theme for this map</source>
+        <source>Cancel</source>
+        <translation type="unfinished">Отмена</translation>
+    </message>
+    <message>
+        <source>Search for a theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <source>Use selected theme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2902,6 +3013,121 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>DPad</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>server</name>
+    <message>
+        <source>Not room master</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>round in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>REMOVE_TEAM: no such team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not team owner!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room with such name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Registered users only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned in this room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
