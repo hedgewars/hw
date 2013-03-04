@@ -25,8 +25,8 @@
 QString * cDataDir = new QString("${HEDGEWARS_DATADIR}");
 QString * cProtoVer = new QString("${HEDGEWARS_PROTO_VER}");
 QString * cVersionString = new QString("${HEDGEWARS_VERSION}");
-QString * cRevisionString = new QString("${revision_number}");
-QString * cHashString = new QString("${hash_number}");
+QString * cRevisionString = new QString("${HEDGEWARS_REVISION}");
+QString * cHashString = new QString("${HEDGEWARS_HASH}");
 
 
 QDir * bindir = new QDir();
