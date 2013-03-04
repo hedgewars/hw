@@ -21,8 +21,9 @@
 #include "hwconsts.h"
 #include "weapons.h"
 
-QString * cProtoVer = new QString("${HEDGEWARS_PROTO_VER}");
+// cDataDir gets 'Data' appended later (in main.cpp)
 QString * cDataDir = new QString("${HEDGEWARS_DATADIR}");
+QString * cProtoVer = new QString("${HEDGEWARS_PROTO_VER}");
 QString * cVersionString = new QString("${HEDGEWARS_VERSION}");
 QString * cRevisionString = new QString("${revision_number}");
 QString * cHashString = new QString("${hash_number}");
