@@ -26,4 +26,4 @@ const cNetProtoVersion = ${HEDGEWARS_PROTO_VER};
       cRevisionString = '${revision_number}';
       cHashString = '${hash_number}';
       cLuaLibrary = '${LUA_LIBRARY}';
-      cDefaultPathPrefix = '${CMAKE_INSTALL_PREFIX}/${SHAREPATH}/Data';
+      cDefaultPathPrefix = '${HEDGEWARS_FULL_DATADIR}/Data';
