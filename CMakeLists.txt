@@ -61,9 +61,19 @@ if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
     file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${revision_number}\nhash ${hash_number}\n")
 else()
     set(default_build_type "RELEASE")
-    # TODO think of a better fallback when hg not found
-    set(revision_number "0000")
-    set(hash_number "unknown")
+    # when compiling outside rev control, fetch revision and hash information from version_info.txt
+    find_file(version_info version_info.txt PATH ${CMAKE_SOURCE_DIR}/share)
+    if(version_info)
+        file(STRINGS ${version_info} internal_version REGEX "rev")
+        string(REGEX REPLACE "rev ([0-9]*)" "\\1" revision_number ${internal_version})
+        file(STRINGS ${version_info} internal_version REGEX "hash")
+        string(REGEX REPLACE "hash: ([a-zA-Z0-9]*)" "\\1" hash_number ${internal_version})
+    else()
+        message(${WARNING} "${CMAKE_SOURCE_DIR}/share/version_info.txt not found, revision information "
+                           "will be incorrect!!! Contact your source provider to fix this!")
+        set(revision_number "0000")
+        set(hash_number "unknown")
+    endif()
 endif()
 
 
