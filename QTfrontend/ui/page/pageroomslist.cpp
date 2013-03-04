@@ -75,7 +75,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     corner->setFixedSize(10, 10);
 
     const QIcon& lp = QIcon(":/res/new.png");
-    QSize sz = lp.actualSize(QSize(65535, 65535));
+    //QSize sz = lp.actualSize(QSize(65535, 65535));
     BtnCreate = new QPushButton();
     BtnCreate->setText(tr("Create room"));
     BtnCreate->setIcon(lp);
