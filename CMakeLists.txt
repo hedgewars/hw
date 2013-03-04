@@ -16,7 +16,7 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017)
 endforeach()
 
 #use available modules, fallback to ours if not present (CMP0017 helps)
-set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules")
+set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake_modules")
 
 
 #possible cmake configuration
@@ -366,59 +366,66 @@ else(WIN32 AND NOT UNIX)
 endif(WIN32 AND NOT UNIX)
 
 set(CPACK_SOURCE_IGNORE_FILES
+    #temporary files
     "~"
+    ".swp"
+    #version control
     "\\\\.hg"
-    "\\\\.svn"
+    #output binary/library
     "\\\\.exe$"
     "\\\\.a$"
+    "\\\\.so$"
+    "\\\\.dylib$"
     "\\\\.dll$"
-    "\\\\.xcf$"
+    "\\\\.ppu$"
+    "\\\\.o$"
     "\\\\.cxx$"
+    #graphics
+    "\\\\.xcf$"
+    "\\\\.svg$"
+    "\\\\.svgz$"
+    "\\\\.psd$"
+    "\\\\.sifz$"
+    #misc
+    "\\\\.core$"
+    "\\\\.sh$"
+    "\\\\.orig$"
+    "\\\\.layout$"
     "\\\\.db$"
     "\\\\.dof$"
-    "\\\\.layout$"
+    #archives
     "\\\\.zip$"
     "\\\\.gz$"
     "\\\\.bz2$"
     "\\\\.tmp$"
-    "\\\\.core$"
-    "\\\\.sh$"
-    "\\\\.sifz$"
-    "\\\\.svg$"
-    "\\\\.svgz$"
-    "\\\\.ppu$"
-    "\\\\.psd$"
-    "\\\\.o$"
+    #cmake-configured files
+    "hwconsts\\\\.cpp$"
+    "config\\\\.inc$"
+    "hwengine\\\\.desktop$"
+    "Info\\\\.plist$"
+    #other cmake generated files
     "Makefile"
     "Doxyfile"
     "CMakeFiles"
-    "debug"
-    "release$"
-    "Debug$"
-    "Release$"
-    "proto\\\\.inc$"
-    "hwconsts\\\\.cpp$"
-    "playlist\\\\.inc$"
+    "[dD]ebug$"
+    "[rR]elease$"
     "CPack"
     "cmake_install\\\\.cmake$"
-    "config\\\\.inc$"
-    "hwengine\\\\.desktop$"
     "CMakeCache\\\\.txt$"
-#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
-#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile/"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/[a-z]"
+#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
+#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/promotional_art"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/checkstack*"
     "^${CMAKE_CURRENT_SOURCE_DIR}/doc"
     "^${CMAKE_CURRENT_SOURCE_DIR}/templates"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/Graphics"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/realtest"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tmp"
     "^${CMAKE_CURRENT_SOURCE_DIR}/utils"
     "^${CMAKE_CURRENT_SOURCE_DIR}/share/hedgewars/Data/Maps/test"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/share/hedgewars/Data/Themes/ethereal"
     "^${CMAKE_CURRENT_SOURCE_DIR}/install_manifest.txt"
     "^${CMAKE_CURRENT_SOURCE_DIR}/CMakeCache.txt"
     "^${CMAKE_CURRENT_SOURCE_DIR}/hedgewars\\\\."
