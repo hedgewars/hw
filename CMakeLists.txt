@@ -67,7 +67,7 @@ else()
         file(STRINGS ${version_info} internal_version REGEX "rev")
         string(REGEX REPLACE "rev ([0-9]*)" "\\1" revision_number ${internal_version})
         file(STRINGS ${version_info} internal_version REGEX "hash")
-        string(REGEX REPLACE "hash: ([a-zA-Z0-9]*)" "\\1" hash_number ${internal_version})
+        string(REGEX REPLACE "hash ([a-zA-Z0-9]*)" "\\1" hash_number ${internal_version})
     else()
         message(${WARNING} "${CMAKE_SOURCE_DIR}/share/version_info.txt not found, revision information "
                            "will be incorrect!!! Contact your source provider to fix this!")
@@ -242,24 +242,30 @@ list(APPEND pascal_flags ${fpflags_parsed}        # user flags
                  "-vewnq"                         # fpc output verbosity
                  "-dDEBUGFILE"                    # macro for engine output
                  )
-list(APPEND haskell_flags "-O2" ${ghflags_parsed})
+list(APPEND haskell_flags ${ghflags_parsed}       # user flags
+                 "-O2"                            # optimise for faster code
+                 )
 
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-"              # disable all optimisations
-                             "-g"               # enable debug symbols
-                             "-gl"              # add line info to bt
-                             "-gv"              # allow valgrind
+    list(APPEND pascal_flags "-O-"                # disable all optimisations
+                             "-g"                 # enable debug symbols
+                             "-gl"                # add line info to bt
+                             "-gv"                # allow valgrind
                              )
-    list(APPEND haskell_flags "-Wall" "-debug" "-dcore-lint" "-fno-warn-unused-do-bind")
+    list(APPEND haskell_flags "-Wall"             # all warnings
+                              "-debug"            # debug mode
+                              "-dcore-lint"       # internal sanity check
+                              )
 else()
-    list(APPEND pascal_flags "-Os"              # optimise for size
-                             "-Xs"              # strip binary
-                             "-Si"              # turn on inlining
+    list(APPEND pascal_flags "-Os"                # optimise for size
+                             "-Xs"                # strip binary
+                             "-Si"                # turn on inlining
                              )
-    list(APPEND haskell_flags "-w" "-fno-warn-unused-do-bind")
+    list(APPEND haskell_flags "-w"                # no warnings
+                              )
 endif()
 
 
