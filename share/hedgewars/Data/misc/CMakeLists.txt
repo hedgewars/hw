@@ -4,6 +4,6 @@ if(UNIX AND NOT APPLE)
 
     file(GLOB miscfiles *.xml *.desktop)
 
-    install(FILES ${miscfiles} DESTINATION ${SHAREPATH}/Data/misc)
+    install(FILES ${miscfiles} DESTINATION ${HEDGEWARS_FULL_DATADIR}/Data/misc)
 endif()
 
