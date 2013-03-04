@@ -305,14 +305,14 @@ handleCmd_inRoom ["KICK", kickNick] = do
     let kickId = fromJust maybeClientId
     let kickCl = rnc `client` kickId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
-    let notOnly2Clans = (length . group . sort . map teamcolor . teams $ rm) > 2
+    let notOnly2Players = (length . group . sort . map teamowner . teams $ rm) > 2
     return
         [KickRoomClient kickId |
             master
             && isJust maybeClientId
             && (kickId /= thisClientId)
             && sameRoom
-            && ((isNothing $ gameInfo rm) || notOnly2Clans || teamsInGame kickCl == 0)
+            && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
         ]
 
 
