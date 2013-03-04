@@ -68,7 +68,7 @@ About::About(QWidget * parent) :
 //            "a:hover { color: yellow; }"
         "</style>"
         "<div align=\"center\"><h1>Hedgewars " + *cVersionString + "</h1>"
-        "<h3>" + QLabel::tr("Revision") + " " + *cRevisionString + "|" + *cHashString + "</h3>"
+        "<h3>" + QLabel::tr("Revision") + " " + *cRevisionString + " (" + *cHashString + ")</h3>"
         "<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p>" +
         QLabel::tr("This program is distributed under the GNU General Public License v2") +
         "</div>"
