@@ -1260,6 +1260,7 @@ if (Gear^.Message and gmDestroy) <> 0 then
     exit
     end;
 if GameTicks mod 100 = 0 then CheckIce(Gear);
+(*
 if Gear^.Hedgehog^.Effects[heFrozen] > 0 then 
     begin
     if (Gear^.Hedgehog^.Effects[heFrozen] > 256) and (CurrentHedgehog^.Team^.Clan <> Gear^.Hedgehog^.Team^.Clan) then
@@ -1267,6 +1268,9 @@ if Gear^.Hedgehog^.Effects[heFrozen] > 0 then
     else if GameTicks mod 10 = 0 then
         dec(Gear^.Hedgehog^.Effects[heFrozen])
     end;
+*)
+if (GameTicks mod 10 = 0) and (Gear^.Hedgehog^.Effects[heFrozen] > 0) and (Gear^.Hedgehog^.Effects[heFrozen] < 256) then 
+    dec(Gear^.Hedgehog^.Effects[heFrozen]);
 if (Gear^.State and gstHHDriven) = 0 then
     doStepHedgehogFree(Gear)
 else
