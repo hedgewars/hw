@@ -29,8 +29,10 @@ option(SYSTEM_PHYSFS "Use system physfs [default:off]" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
 option(ANDROID "Enable Android build [default: off]" OFF)
-option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
+if(APPLE)
+    option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
+endif()
 
 set(FPFLAGS "" CACHE STRING "Additional Freepascal flags")
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")

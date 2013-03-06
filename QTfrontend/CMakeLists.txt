@@ -175,6 +175,8 @@ if(APPLE)
             list(APPEND hwfr_src util/platform/AutoUpdater.cpp
                                  util/platform/SparkleAutoUpdater.mm)
             list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
+        else()
+            message(FATAL_ERROR "Missing Sparkle! Rerun cmake with -DNOAUTOUPDATE=on to disable autoupdating")
         endif()
     endif()
 endif()
