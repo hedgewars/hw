@@ -4,7 +4,7 @@
 #  SPARKLE_FOUND - system has Sparkle
 #  SPARKLE_INCLUDE_DIR - the Sparkle include directory
 #  SPARKLE_LIBRARY - The library needed to use Sparkle
-# Copyright (c) 2009, Vittorio Giovara, <vittorio.giovara@gmail.com>
+# Copyright (c) 2009, Vittorio Giovara <vittorio.giovara@gmail.com>
 #
 # Distributed under the OSI-approved BSD License (the "License");
 # see accompanying file Copyright.txt for details.
