@@ -284,28 +284,6 @@ else()
 endif()
 
 
-
-#server discovery
-if(NOT NOSERVER)
-    if(GHC)
-        set(ghc_executable ${GHC})
-    else()
-        find_program(ghc_executable ghc)
-    endif()
-
-    if(ghc_executable)
-        add_subdirectory(gameServer)
-        message(STATUS "Found GHC: ${ghc_executable}")
-    else()
-        message(${WARNING} "Could NOT find GHC, server will not be built")
-        set(HAVE_NETSERVER false)
-    endif()
-else()
-    message(STATUS "Server will not be built per user request")
-    set(HAVE_NETSERVER false)
-endif()
-
-
 #lua discovery
 find_package(Lua)
 if(LUA_FOUND)
@@ -362,8 +340,13 @@ else()
     set(FFMPEG_FOUND false)
 endif()
 
-#
+#physfs helper library
 add_subdirectory(misc/libphyslayer)
+
+#server
+if(NOT NOSERVER)
+    add_subdirectory(gameServer)
+endif()
 
 #main engine
 add_subdirectory(hedgewars)
