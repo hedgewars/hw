@@ -22,7 +22,7 @@ local score_goal = 31
 -- This variable controls how many milliseconds/ticks we'd
 -- like to wait before we end the round once all targets
 -- have been destroyed.
-local end_timer = 5000 -- 5000 ms = 5 s
+local end_timer = 1000 -- 1000 ms = 1 s
 -- This variable is set to true if the game is lost (i.e.
 -- time runs out).
 local game_lost = false
@@ -145,10 +145,10 @@ function onGameTick20()
 			EndGame()
 		else
 			-- ... or just lower the timer by 1.
-			end_timer = end_timer - 20
 			-- Reset the time left to stop the timer
 			TurnTimeLeft = time_goal
 		end
+        end_timer = end_timer - 20
 	end
 end
 
