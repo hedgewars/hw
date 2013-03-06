@@ -414,7 +414,7 @@ if (PGear(Me)^.State and gstAttacked) = 0 then
             // find another hog in team
             repeat
                 itHedgehog:= Succ(itHedgehog) mod CurrentTeam^.HedgehogsNumber;
-            until (itHedgehog = currHedgehogIndex) or (CurrentTeam^.Hedgehogs[itHedgehog].Gear <> nil);
+            until (itHedgehog = currHedgehogIndex) or ((CurrentTeam^.Hedgehogs[itHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[itHedgehog].Effects[heFrozen]=0));
 
 
             inc(switchesNum);
