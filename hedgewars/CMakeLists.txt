@@ -192,7 +192,6 @@ endif()
 
 
 if(NOT NOVIDEOREC)
-    set(FFMPEG_FIND_QUIETLY true)
     find_package(FFMPEG)
     if(${FFMPEG_FOUND})
         # TODO: this check is only for SDL < 2
