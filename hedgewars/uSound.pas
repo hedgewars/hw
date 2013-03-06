@@ -263,14 +263,14 @@ i:= 0;
         begin
         locName:= name+'_'+cLocale;
         path:= cPathz[ptVoices] + '/' + locName;
-        if DirectoryExists(path) then
+        if pfsExists(path) then
             name:= locName
         else
             if Length(cLocale) > 3 then
                 begin
                 locName:= name+'_'+Copy(cLocale,1,2);
                 path:= cPathz[ptVoices] + '/' + locName;
-                if DirectoryExists(path) then
+                if pfsExists(path) then
                     name:= locName
                 end
         end;
