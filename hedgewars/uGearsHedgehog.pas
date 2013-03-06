@@ -1010,13 +1010,10 @@ var t: PGear;
     Hedgehog: PHedgehog;
 begin
 Hedgehog:= HHGear^.Hedgehog;
-//if isInMultiShoot and not AllInactive and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) then HHGear^.Message:= HHGear^.Message and not gmAttack;
-if isInMultiShoot and (Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]) then
-    begin
-    AllInactive:= true;
-    HHGear^.Message:= 0
-    end
-else AllInactive:= false;
+if not isInMultiShoot then
+    AllInactive:= false
+else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
+    HHGear^.Message:= 0;
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
