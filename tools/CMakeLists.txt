@@ -15,8 +15,7 @@ if (APPLE)
     find_package(SDL_mixer REQUIRED)
     find_package(OGGVORBIS REQUIRED)
     if(NOT NOAUTOUPDATE)
-        #needed for SPARKLE_FOUND variable
-        find_package(Sparkle QUIET)
+        find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
         if(${SPARKLE_FOUND})
             set(SPARKLE_FOUND 1)
