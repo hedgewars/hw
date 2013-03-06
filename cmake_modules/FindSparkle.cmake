@@ -1,39 +1,23 @@
-### Hedgewars
-
-# - Try to find the Sparkle framework
-# Once done this will define
+# Find Sparkle.framework
 #
+# Once done this will define
 #  SPARKLE_FOUND - system has Sparkle
 #  SPARKLE_INCLUDE_DIR - the Sparkle include directory
 #  SPARKLE_LIBRARY - The library needed to use Sparkle
 # Copyright (c) 2009, Vittorio Giovara, <vittorio.giovara@gmail.com>
 #
-# Redistribution and use is allowed according to the terms of a Creative Commons license.
-# For details see http://creativecommons.org/licenses/by-sa/3.0/
-# original version of this module was derived from Richard Laerkaeng, <richard@goteborg.utfors.se>
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
 
+include(FindPackageHandleStandardArgs)
 
-include (CheckLibraryExists)
 find_path(SPARKLE_INCLUDE_DIR Sparkle.h)
 find_library(SPARKLE_LIBRARY NAMES Sparkle)
 
-if (SPARKLE_INCLUDE_DIR AND SPARKLE_LIBRARY)
-   set(SPARKLE_FOUND TRUE)
-else ()
-   set(SPARKLE_FOUND FALSE)
-endif ()
-
-if (SPARKLE_FOUND)
-   if (NOT SPARKLE_FIND_QUIETLY)
-      message(STATUS "Found Sparkle: ${SPARKLE_LIBRARY}")
-   endif ()
-else ()
-   if (SPARKLE_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find Sparkle framework")
-   else ()
-      if (NOT SPARKLE_FIND_QUIETLY)
-         message(STATUS "Could NOT find Sparkle framework, autoupdate feature will be disabled")
-      endif()
-   endif ()
-endif ()
+find_package_handle_standard_args(Sparkle DEFAULT_MSG SPARKLE_INCLUDE_DIR SPARKLE_LIBRARY)
+mark_as_advanced(SPARKLE_INCLUDE_DIR SPARKLE_LIBRARY)
 
