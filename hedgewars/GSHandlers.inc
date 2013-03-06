@@ -5201,7 +5201,7 @@ begin
                                 if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
                                     hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
                                 else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
-                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 150000;//cHedgehogTurnTime + cReadyDelay
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 200000;//cHedgehogTurnTime + cReadyDelay
                                 end;
                 inc(Pos)
             end
