@@ -4,7 +4,7 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="92"/>
+        <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="93"/>
         <source>Unknown Compiler</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1042,6 +1042,11 @@ Please wait a few seconds and try again.</source>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagemain.cpp" line="77"/>
         <source>Read about who is behind the Hedgewars Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagemain.cpp" line="80"/>
+        <source>Feedback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2276,7 +2281,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/widget/about.cpp" line="73"/>
-        <source>This program is distributed under the GNU General Public License v2</source>
+        <source>This program is distributed under the %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

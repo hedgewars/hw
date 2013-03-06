@@ -885,6 +885,10 @@ Please wait a few seconds and try again.</source>
         <source>Play a game on an official server</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1767,10 +1771,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
 Do you really want to quit?</source>
@@ -1862,6 +1862,10 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
