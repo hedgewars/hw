@@ -4,16 +4,16 @@
 #  OGGVORBIS_FOUND       - system has both Ogg and Vorbis
 #  OGGVORBIS_VERSION     - set either to 1 or 2
 #  OGGVORBIS_INCLUDE_DIR - the OggVorbis include directory
-#  OGGVORBIS_LIBRARIES   - The libraries needed to use OggVorbis
+#  OGGVORBIS_LIBRARIES   - the libraries needed to use OggVorbis
 #
-#  OGG_LIBRARY           - The Ogg library
-#  OGG_INCLUDE_DIR       - The Ogg include directory
-#  VORBIS_LIBRARY        - The Vorbis library
-#  VORBIS_INCLUDE_DIR    - The Vorbis include directory
-#  VORBISFILE_LIBRARY    - The VorbisFile library
+#  OGG_LIBRARY           - the Ogg library
+#  OGG_INCLUDE_DIR       - the Ogg include directory
+#  VORBIS_LIBRARY        - the Vorbis library
+#  VORBIS_INCLUDE_DIR    - the Vorbis include directory
+#  VORBISFILE_LIBRARY    - the VorbisFile library
 #
-# Copyright (c) 2006, Richard Laerkaeng, <richard@goteborg.utfors.se>
-# Copyright (c) 2013, Vittorio Giovara, <vittorio.giovara@gmail.com>
+# Copyright (c) 2006, Richard Laerkaeng <richard@goteborg.utfors.se>
+# Copyright (c) 2013, Vittorio Giovara <vittorio.giovara@gmail.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
