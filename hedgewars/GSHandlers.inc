@@ -1153,15 +1153,15 @@ begin
 dec(Gear^.Timer);
 case Gear^.Kind of
     gtATStartGame: 
-    begin
+        begin
         AllInactive := false;
         if Gear^.Timer = 0 then
             begin
             AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
             end
-    end;
+        end;
     gtATFinishGame: 
-    begin
+        begin
         AllInactive := false;
         if Gear^.Timer = 1000 then
             begin
@@ -1175,8 +1175,8 @@ case Gear^.Kind of
             SendIPC(_S'q');
             GameState := gsExit
             end
+        end;
     end;
-end;
 if Gear^.Timer = 0 then
     DeleteGear(Gear)
 end;
