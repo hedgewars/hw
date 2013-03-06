@@ -77,7 +77,7 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-    BtnFeedback = addButton("Feedback", pageLayout, 4, 0, 1, 4, false);
+    BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
     BtnFeedback->setStyleSheet("padding: 5px 10px");
     BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
     pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);

@@ -902,6 +902,10 @@ Please wait a few seconds and try again.</source>
         <source>Play a game on an official server</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -1827,7 +1831,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation>Ten program jest rozprowadzany na zasadach GNU GPL v2</translation>
+        <translation type="obsolete">Ten program jest rozprowadzany na zasadach GNU GPL v2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -1923,6 +1927,10 @@ Czy na pewno chcesz wyjść?</translation>
     </message>
     <message>
         <source>Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
