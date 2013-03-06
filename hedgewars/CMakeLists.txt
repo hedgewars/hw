@@ -4,7 +4,19 @@ find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include(${CMAKE_SOURCE_DIR}/cmake_modules/FindSDL_Extras.cmake)
+
+include (CheckLibraryExists)
+#Mix_Init/Mix_Quit from SDL_mixer 1.2.9
+check_library_exists(${SDL_MIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT) 
+if(HAVE_MIXINIT)
+    list(APPEND pascal_flags "-dSDL_MIXER_NEWER")
+endif()
+#IMG_Init/IMG_Quit from SDL_image 1.2.7
+check_library_exists(${SDL_IMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
+if(HAVE_IMGINIT)
+    list(APPEND pascal_flags "-dSDL_IMAGE_NEWER")
+endif()
+
 
 configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
