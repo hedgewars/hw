@@ -5,12 +5,12 @@ find_package(SDL_ttf)
 find_package(SDL_mixer)
 
 include (CheckLibraryExists)
-#Mix_Init/Mix_Quit from SDL_mixer 1.2.9
+#Mix_Init/Mix_Quit from SDL_mixer 1.2.10
 check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
 if(HAVE_MIXINIT)
     list(APPEND pascal_flags "-dSDL_MIXER_NEWER")
 endif()
-#IMG_Init/IMG_Quit from SDL_image 1.2.7
+#IMG_Init/IMG_Quit from SDL_image 1.2.8
 check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
 if(HAVE_IMGINIT)
     list(APPEND pascal_flags "-dSDL_IMAGE_NEWER")
