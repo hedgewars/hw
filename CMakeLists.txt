@@ -230,6 +230,17 @@ else()
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
 endif()
 
+#TODO: find out why we need this...
+include(CheckCSourceCompiles)
+set(CMAKE_REQUIRED_FLAG "-Wl,-z -Wl,noexecstack")
+check_c_source_compiles("int main(void) { return 0; }" HAVE_NOEXECSTACK)
+if(HAVE_NOEXECSTACK)
+    list(APPEND pascal_flags "-k-z" "-knoexecstack")
+    if(NOT ${MINIMAL_FLAGS})
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAG}")
+    endif()
+endif()
+unset(CMAKE_REQUIRED_FLAG)
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
