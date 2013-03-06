@@ -33,6 +33,14 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
+    if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
+        begin
+        DeleteGear(Gear);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        HHGear^.Message:= HHGear^.Message or gmLJump;
+        exit
+        end;
+
     if ((HHGear^.State and gstHHDriven) = 0)
     or (CheckGearDrowning(HHGear))
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
