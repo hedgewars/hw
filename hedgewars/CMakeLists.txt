@@ -189,30 +189,22 @@ if(FREEPASCAL_VERSION VERSION_LESS "2.6")
 endif()
 
 
-if(NOT NOVIDEOREC)
-    find_package(FFMPEG)
-    if(${FFMPEG_FOUND})
-        # TODO: this check is only for SDL < 2
-        # fpc will take care of linking but we need to have this library installed
-        find_package(GLUT REQUIRED)
+if(${FFMPEG_FOUND})
+    # TODO: this check is only for SDL < 2
+    # fpc will take care of linking but we need to have this library installed
+    find_package(GLUT REQUIRED)
 
-        #TODO: convert avwrapper to .pas unit so we can skip this step
-        include_directories(${FFMPEG_INCLUDE_DIR})
-        list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
-        IF (WIN32)
-            # there are some problems with linking our avwrapper as static lib, so link it as shared
-            add_library(avwrapper SHARED avwrapper.c)
-            target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
-            install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
-        ELSE()
-            add_library(avwrapper STATIC avwrapper.c)
-            list(APPEND pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}")
-        ENDIF()
+    #TODO: convert avwrapper to .pas unit so we can skip this step
+    include_directories(${FFMPEG_INCLUDE_DIR})
+    list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
+    if(WIN32)
+        # there are some problems with linking our avwrapper as static lib, so link it as shared
+        add_library(avwrapper SHARED avwrapper.c)
+        target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
+        install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
     else()
-        message(${WARNING} "Could NOT find FFMPEG/LibAV, video recording will be disabled")
+        add_library(avwrapper STATIC avwrapper.c)
     endif()
-else()
-    message(STATUS "Video recording disabled by user")
 endif()
 
 
@@ -273,7 +265,7 @@ if(${FFMPEG_FOUND})
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
+if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
     add_dependencies(hwengine ENGINECLEAN)
 endif()
 

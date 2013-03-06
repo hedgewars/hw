@@ -15,12 +15,11 @@ include(${QT_USE_FILE})
 
 find_package(SDL REQUIRED)       #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
-find_package(SDL_net REQUIRED)   #network frontlib
-if(NOT NOVIDEOREC)
-    find_package(FFMPEG)
-    if(${FFMPEG_FOUND})
-        add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-    endif()
+
+if(${FFMPEG_FOUND})
+    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
+    include_directories(${FFMPEG_INCLUDE_DIR})
+    list(APPEND HW_LINK_LIBS ${FFMPEG_LIBRARIES})
 endif()
 
 # server messages localization
@@ -56,7 +55,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
-include_directories(${FFMPEG_INCLUDE_DIR})
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
 
@@ -204,7 +202,6 @@ list(APPEND HW_LINK_LIBS
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
-    ${FFMPEG_LIBRARIES}
     )
 
 if(WIN32 AND NOT UNIX)

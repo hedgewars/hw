@@ -22,7 +22,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake_modules
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
 option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
-option(NOVIDEOREC "Disable video recording [default: auto]" OFF)
+option(NOVIDEOREC "Disable video recording [default: off]" OFF)
 
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
 option(SYSTEM_PHYSFS "Use system physfs [default:off]" OFF)
@@ -194,11 +194,6 @@ if(APPLE)
     list(APPEND pascal_flags "-Ff~/Library/Frameworks")
     #set deployment target
     list(APPEND pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}")
-
-    #silly libav that always brings in VideoDecoderAcceleration, avaible only from 10.6.3
-    if(NOT NOVIDEOREC AND ${minimum_macosx_version} VERSION_LESS "10.6")
-        set(${WARNING} "Video recording support before OS X 10.6 is experimental")
-    endif()
 endif(APPLE)
 
 
@@ -356,6 +351,15 @@ else()
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
     #(should be harmless on other platforms)
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
+endif()
+
+if(NOT ${NOVIDEOREC})
+    find_package(FFMPEG)
+    if(NOT ${FFMPEG_FOUND})
+        message(FATAL_ERROR "Missing FFMPEG/Libav! Rerun cmake with -DNOVIDEOREC=on to disable video recording")
+    endif()
+else()
+    set(FFMPEG_FOUND false)
 endif()
 
 #
