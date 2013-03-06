@@ -1517,7 +1517,7 @@ end;
 
 
 if GameState = gsConfirm then
-    DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1)-40, ConfirmTexture);
 
 if ScreenFade <> sfNone then
     begin
