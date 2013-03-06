@@ -13,7 +13,7 @@ if (APPLE)
     find_package(SDL_net REQUIRED)
     find_package(SDL_ttf REQUIRED)
     find_package(SDL_mixer REQUIRED)
-    find_package(OGGVORBIS REQUIRED)
+    find_package(OggVorbis REQUIRED)
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
