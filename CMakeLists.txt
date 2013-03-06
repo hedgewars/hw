@@ -15,9 +15,6 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017)
     endif()
 endforeach()
 
-#use available modules, fallback to ours if not present (CMP0017 helps)
-set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" "${CMAKE_SOURCE_DIR}/cmake_modules")
-
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build [default: auto]" OFF)
