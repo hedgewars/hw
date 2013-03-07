@@ -950,13 +950,16 @@ begin
         if HH^.Effects[heFrozen] < 150000 then
             Tint($FF, $FF, $FF, min(255,127+HH^.Effects[heFrozen] div 800));
 
-        iceOffset:= trunc(min(256,HH^.Effects[heFrozen]) / 256 * 64);
+        iceOffset:= min(32, HH^.Effects[heFrozen] div 8);
         r.x := 128;
-        r.y := 128 - iceOffset;
-        r.w := 64;
-        r.h := iceOffset;
-        //DrawTextureFromRect(sx-32, sy-iceoffset+32, @r, SpritesData[sprFrozenHog].texture);
-        DrawTextureFromRectDir(sx-16+sign*2, sy+48-iceoffset, r.w, r.h, @r, HHTexture, sign);
+        r.y := 96 - iceOffset;
+        r.w := 32;
+        r.h := iceOffset;        
+        if sign = -1 then
+        DrawTextureFromRectDir(sx + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign)
+        else 
+        DrawTextureFromRectDir(sx-16 + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign);
+
 
         if HH^.Effects[heFrozen] < 150000 then
             Tint($FF, $FF, $FF, $FF);
