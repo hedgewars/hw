@@ -333,12 +333,7 @@ else()
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
-if(NOT NOVIDEOREC)
-    find_package_or_disable(FFMPEG NOVIDEOREC)
-else()
-    message(STATUS "Video recording disabled")
-    set(FFMPEG_FOUND false)
-endif()
+find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")
 
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
