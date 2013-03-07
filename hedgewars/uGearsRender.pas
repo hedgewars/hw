@@ -759,7 +759,7 @@ begin
 
     end else // not gstHHDriven
         begin
-        if (Gear^.Damage > 0)
+        if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
             begin
             DrawHedgehog(sx, sy,
@@ -948,7 +948,7 @@ begin
     if HH^.Effects[heFrozen] < 150000 then
         begin
         if HH^.Effects[heFrozen] < 150000 then
-            Tint($FF, $FF, $FF, min(255,127+HH^.Effects[heFrozen] div 1200));
+            Tint($FF, $FF, $FF, min(255,127+HH^.Effects[heFrozen] div 800));
 
         iceOffset:= trunc(min(256,HH^.Effects[heFrozen]) / 256 * 64);
         r.x := 128;
