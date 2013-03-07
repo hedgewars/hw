@@ -165,11 +165,9 @@ if(APPLE)
     list(APPEND pascal_flags "-FD${compiler_dir}")
 endif(APPLE)
 
-if(NOT NOPNG)
-    find_package_or_disable(PNG NOPNG)
+find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+if(PNG_FOUND)
     list(APPEND pascal_flags "-dPNG_SCREENSHOTS")
-else()
-    message(STATUS "PNG screenshots disabled, using BMP format")
 endif()
 
 
