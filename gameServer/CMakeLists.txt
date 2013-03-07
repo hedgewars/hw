@@ -1,8 +1,7 @@
 
-find_package(GHC REQUIRED)
-if(NOT ${GHC_FOUND})
-    message(FATAL_ERROR "Missing Glasgow Haskell Compiler! Rerun cmake with -DNOSERVER=on to disable hosting LAN games")
-endif()
+include(${CMAKE_MODULE_PATH}/utils.cmake)
+
+find_package_or_disable(GHC NOSERVER)
 
 set(hwserver_sources
     OfficialServer/DBInteraction.hs

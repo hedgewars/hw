@@ -19,8 +19,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
 
 #possible cmake configuration
-option(NOSERVER "Disable gameServer build [default: auto]" OFF)
-option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
+option(NOSERVER "Disable gameServer build [default: off]" OFF)
+option(NOPNG "Disable screenshoot compression [default: off]" OFF)
 option(NOVIDEOREC "Disable video recording [default: off]" OFF)
 
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
@@ -282,6 +282,7 @@ else()
                               )
 endif()
 
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #lua discovery
 find_package(Lua)
@@ -331,11 +332,9 @@ else()
 endif()
 
 if(NOT NOVIDEOREC)
-    find_package(FFMPEG)
-    if(NOT ${FFMPEG_FOUND})
-        message(FATAL_ERROR "Missing FFMPEG/Libav! Rerun cmake with -DNOVIDEOREC=on to disable video recording")
-    endif()
+    find_package_or_disable(FFMPEG NOVIDEOREC)
 else()
+    message(STATUS "Video recording disabled")
     set(FFMPEG_FOUND false)
 endif()
 

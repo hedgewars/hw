@@ -120,7 +120,10 @@ else(${BUILD_ENGINE_LIBRARY})
 endif(${BUILD_ENGINE_LIBRARY})
 
 
-find_package(FreePascal REQUIRED)
+include(${CMAKE_MODULE_PATH}/utils.cmake)
+
+find_package_or_fail(FreePascal)
+
 #when cmake-2.6 support is dropped, this ought to be inside FindFreePascal.cmake
 if (FREEPASCAL_VERSION VERSION_LESS required_fpc_version)
     message(FATAL_ERROR "Freepascal ${FREEPASCAL_VERSION} is too old, minimum version required is ${required_fpc_version}")
@@ -163,17 +166,10 @@ if(APPLE)
 endif(APPLE)
 
 if(NOT NOPNG)
-    find_package(PNG)
-    if(${PNG_FOUND})
-        list(APPEND pascal_flags "-dPNG_SCREENSHOTS")
-        if(APPLE)  # fpc png unit doesn't pull the library (see bug 21833)
-            list(APPEND pascal_flags "-k${PNG_LIBRARY}")
-        endif()
-    else()
-        message(${WARNING} "Screenshots will be in BMP format because libpng was not found")
-    endif()
+    find_package_or_disable(PNG NOPNG)
+    list(APPEND pascal_flags "-dPNG_SCREENSHOTS")
 else()
-    message(STATUS "Screenshots will be in BMP format per user request")
+    message(STATUS "PNG screenshots disabled, using BMP format")
 endif()
 
 
