@@ -330,7 +330,7 @@ else()
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
-if(NOT ${NOVIDEOREC})
+if(NOT NOVIDEOREC)
     find_package(FFMPEG)
     if(NOT ${FFMPEG_FOUND})
         message(FATAL_ERROR "Missing FFMPEG/Libav! Rerun cmake with -DNOVIDEOREC=on to disable video recording")
