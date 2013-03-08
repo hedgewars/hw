@@ -61,12 +61,12 @@ QLayout * PageMain::bodyLayoutDefinition()
     netLayout->setSpacing(20);
     netLayout->setAlignment(Qt::AlignHCenter);
 
-    BtnNetLocal = addButton("Play local network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetLocal = addButton(tr("Play local network game"), (QBoxLayout*)netLayout, 0, false);
     BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
     BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetLocal->setVisible(false);
 
-    BtnNetOfficial = addButton("Play official network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetOfficial = addButton(tr("Play official network game"), (QBoxLayout*)netLayout, 0, false);
     BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
     BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetOfficial->setVisible(false);
