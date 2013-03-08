@@ -906,6 +906,14 @@ Please wait a few seconds and try again.</source>
         <source>Feedback</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Play local network game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play official network game</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>

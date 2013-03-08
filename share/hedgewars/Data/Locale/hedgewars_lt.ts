@@ -1054,8 +1054,18 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../../../QTfrontend/ui/page/pagemain.cpp" line="64"/>
+        <source>Play local network game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../../../QTfrontend/ui/page/pagemain.cpp" line="65"/>
         <source>Play a game across a local area network</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagemain.cpp" line="69"/>
+        <source>Play official network game</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2405,34 +2415,34 @@ Not all players are ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="338"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="340"/>
         <source>Hedgewars - Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="348"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="350"/>
         <source>System Information Preview</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="363"/>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="374"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="365"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="376"/>
         <source>Failed to generate captcha</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="391"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="393"/>
         <source>Failed to download captcha</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="455"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="457"/>
         <source>Please fill out all fields. Email is optional.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/hwform.cpp" line="1928"/>
-        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="425"/>
+        <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="427"/>
         <source>Hedgewars - Success</source>
         <translation type="unfinished"></translation>
     </message>
