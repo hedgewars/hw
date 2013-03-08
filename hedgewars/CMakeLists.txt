@@ -17,15 +17,15 @@ if(HAVE_IMGINIT)
 endif()
 
 
-configure_file(${hedgewars_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
 if(${BUILD_ENGINE_LIBRARY})
     set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwLibrary.pas)
+    set(hwengine_project hwLibrary.pas)
 else()
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-    set(hwengine_project ${hedgewars_SOURCE_DIR}/hedgewars/hwengine.pas)
+    set(hwengine_project hwengine.pas)
 endif()
 
 if (APPLE)
@@ -180,7 +180,7 @@ if(FREEPASCAL_VERSION VERSION_LESS "2.6")
     else()
         set(SAFE_BUILD_TOOL ${CMAKE_BUILD_TOOL})
     endif()
-    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${hedgewars_SOURCE_DIR}/hedgewars")
+    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
 
@@ -210,8 +210,8 @@ if(NOT APPLE)
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
         COMMAND "${FREEPASCAL_EXECUTABLE}"
         ARGS ${fpc_flags} -o${engine_output_name}
-        MAIN_DEPENDENCY ${hwengine_project}
         DEPENDS ${engine_sources}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 else()
     #these are the dependencies for building a universal binary on Mac OS X
@@ -220,8 +220,8 @@ else()
         add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
             COMMAND "${FREEPASCAL_EXECUTABLE}"
             ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
-            MAIN_DEPENDENCY ${hwengine_project}
             DEPENDS ${engine_sources}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
         add_custom_command(TARGET hwengine.${build_arch} POST_BUILD
