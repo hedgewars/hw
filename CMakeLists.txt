@@ -19,17 +19,19 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 
 
 #possible cmake configuration
-option(NOSERVER "Disable gameServer build [default: auto]" OFF)
-option(NOPNG "Disable screenshoot compression [default: auto]" OFF)
-option(NOVIDEOREC "Disable video recording [default: off]" OFF)
+option(NOSERVER "Disable gameServer build (off)]" OFF)
+option(NOPNG "Disable screenshoot compression (off)" OFF)
+option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
-option(SYSTEM_PHYSFS "Use system physfs [default:off]" OFF)
+option(SYSTEM_PHYSFS "Use system physfs (off)" OFF)
 
-option(BUILD_ENGINE_LIBRARY "Enable hwengine library [default: off]" OFF)
-option(ANDROID "Enable Android build [default: off]" OFF)
-option(MINIMAL_FLAGS "Respect system flags as much as possible [default: off]" OFF)
-if(APPLE)
+option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
+option(ANDROID "Enable Android build (off)" OFF)
+
+if(UNIX AND NOT APPLE)
+    option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
+else()
     option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
 endif()
 
@@ -282,6 +284,7 @@ else()
                               )
 endif()
 
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #lua discovery
 find_package(Lua)
@@ -330,14 +333,7 @@ else()
     list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
-if(NOT ${NOVIDEOREC})
-    find_package(FFMPEG)
-    if(NOT ${FFMPEG_FOUND})
-        message(FATAL_ERROR "Missing FFMPEG/Libav! Rerun cmake with -DNOVIDEOREC=on to disable video recording")
-    endif()
-else()
-    set(FFMPEG_FOUND false)
-endif()
+find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")
 
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
