@@ -1,13 +1,20 @@
 
+# revision information in cpack-generated names
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    set(full_suffix "${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION}")
+else()
+    set(full_suffix "${HEDGEWARS_VERSION}")
+endif()
+
 # CPack variables
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Hedgewars, a free turn-based strategy")
 set(CPACK_PACKAGE_VENDOR "Hedgewars Project")
-set(CPACK_PACKAGE_FILE_NAME "hedgewars-${HEDGEWARS_VERSION}")
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "hedgewars-src-${HEDGEWARS_VERSION}")
+set(CPACK_PACKAGE_FILE_NAME "hedgewars-${full_suffix}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "hedgewars-src-${full_suffix}")
 set(CPACK_SOURCE_GENERATOR "TBZ2")
 set(CPACK_PACKAGE_EXECUTABLES "hedgewars" "hedgewars")
-set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/COPYING")
-set(CPACK_PACKAGE_INSTALL_DIRECTORY "Hedgewars ${HEDGEWARS_VERSION}")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/COPYING")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Hedgewars ${full_suffix}")
 
 if(WIN32 AND NOT UNIX)
     set(CPACK_NSIS_DISPLAY_NAME "Hedgewars")
