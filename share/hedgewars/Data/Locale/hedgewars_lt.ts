@@ -500,7 +500,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/widget/mapContainer.cpp" line="219"/>
-        <source>Largetunnels</source>
+        <source>Large tunnels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

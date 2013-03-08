@@ -423,10 +423,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Largetunnels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Small islands</source>
         <translation type="unfinished"></translation>
     </message>
@@ -468,6 +464,10 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>All files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Large tunnels</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
