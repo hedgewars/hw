@@ -166,16 +166,13 @@ if(APPLE)
                          util/platform/M3InstallController.m
                          util/platform/NSWorkspace_RBAdditions.m
                          )
-    if(NOT NOAUTOUPDATE)
-        find_package(Sparkle)
-        if(SPARKLE_FOUND)
-            add_definitions(-DSPARKLE_ENABLED)
-            list(APPEND hwfr_src util/platform/AutoUpdater.cpp
-                                 util/platform/SparkleAutoUpdater.mm)
-            list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
-        else()
-            message(FATAL_ERROR "Missing Sparkle! Rerun cmake with -DNOAUTOUPDATE=on to disable autoupdating")
-        endif()
+    include(${CMAKE_MODULE_PATH}/utils.cmake)
+    find_package_or_disable_msg(Sparkle NOAUTOUPDATE "Autoupdater will not be built.")
+    if(SPARKLE_FOUND)
+        add_definitions(-DSPARKLE_ENABLED)
+        list(APPEND hwfr_src util/platform/AutoUpdater.cpp
+                             util/platform/SparkleAutoUpdater.mm)
+        list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
     endif()
 endif()
 

@@ -324,7 +324,9 @@ void FeedbackDialog::GenerateSpecs()
         + total_ram
         + screen_size
         + number_of_screens
+#ifndef QT_NO_STL
         + QString::fromStdString(processor_name + "\n")
+#endif
         + number_of_cores
         + compiler_version
         + compiler_bits
