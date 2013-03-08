@@ -216,7 +216,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mazeStyles = new QListWidget();
     new QListWidgetItem(tr("Small tunnels"), mazeStyles);
     new QListWidgetItem(tr("Medium tunnels"), mazeStyles);
-    new QListWidgetItem(tr("Largetunnels"), mazeStyles);
+    new QListWidgetItem(tr("Large tunnels"), mazeStyles);
     new QListWidgetItem(tr("Small islands"), mazeStyles);
     new QListWidgetItem(tr("Medium islands"), mazeStyles);
     new QListWidgetItem(tr("Large islands"), mazeStyles);
