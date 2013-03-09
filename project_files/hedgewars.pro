@@ -10,8 +10,8 @@ INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../QTfrontend/util/platform
-INCLUDEPATH += ../misc/physfs/src
-INCLUDEPATH += ../misc/physfs/extras
+INCLUDEPATH += ../misc/libphysfs
+INCLUDEPATH += ../misc/libphyslayer
 
 DESTDIR = ../bin
 
