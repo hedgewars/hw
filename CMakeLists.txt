@@ -248,41 +248,41 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}        # user flags
-                 "-vm4079,4080,4081"              # fpc output format
-                 "-B"                             # compile all units
-                 "-FE${PROJECT_BINARY_DIR}/bin"   # fpc output directory
+list(APPEND pascal_flags ${fpflags_parsed}            # user flags
+                 "-B"                                 # compile all units
+                 "-vm4079,4080,4081"                  # fpc verbosity output format
+                 "-FE${PROJECT_BINARY_DIR}/bin"       # fpc binaries output directory
                  "-FU${PROJECT_BINARY_DIR}/hedgewars" # fpc units output directory
-                 "-Fl${PROJECT_BINARY_DIR}/bin"   # fpc linking directory (win/unix)
-                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (out of source builds)
-                 "-k-L${PROJECT_BINARY_DIR}/bin"  # ld linking directory (unix/osx)
-                 "-Cs2000000"                     # stack size
-                 "-vewnq"                         # fpc output verbosity
-                 "-dDEBUGFILE"                    # macro for engine output
+                 "-Fl${PROJECT_BINARY_DIR}/bin"       # fpc linking directory (win/unix)
+                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (for out of source builds)
+                 "-k-L${PROJECT_BINARY_DIR}/bin"      # ld linking directory (unix/osx)
+                 "-Cs2000000"                         # stack size
+                 "-vewnq"                             # fpc output verbosity
+                 "-dDEBUGFILE"                        # macro for engine output
                  )
-list(APPEND haskell_flags ${ghflags_parsed}       # user flags
-                 "-O2"                            # optimise for faster code
+list(APPEND haskell_flags ${ghflags_parsed} # user flags
+                 "-O2"                      # optimise for faster code
                  )
 
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-"                # disable all optimisations
-                             "-g"                 # enable debug symbols
-                             "-gl"                # add line info to bt
-                             "-gv"                # allow valgrind
+    list(APPEND pascal_flags "-O-" # disable all optimisations
+                             "-g"  # enable debug symbols
+                             "-gl" # add line info to bt
+                             "-gv" # allow valgrind
                              )
-    list(APPEND haskell_flags "-Wall"             # all warnings
-                              "-debug"            # debug mode
-                              "-dcore-lint"       # internal sanity check
+    list(APPEND haskell_flags "-Wall"       # all warnings
+                              "-debug"      # debug mode
+                              "-dcore-lint" # internal sanity check
                               )
 else()
-    list(APPEND pascal_flags "-Os"                # optimise for size
-                             "-Xs"                # strip binary
-                             "-Si"                # turn on inlining
+    list(APPEND pascal_flags "-Os" # optimise for size
+                             "-Xs" # strip binary
+                             "-Si" # turn on inlining
                              )
-    list(APPEND haskell_flags "-w"                # no warnings
+    list(APPEND haskell_flags "-w" # no warnings
                               )
 endif()
 
