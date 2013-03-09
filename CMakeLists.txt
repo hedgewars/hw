@@ -253,6 +253,7 @@ list(APPEND pascal_flags ${fpflags_parsed}        # user flags
                  "-B"                             # compile all units
                  "-FE${PROJECT_BINARY_DIR}/bin"   # fpc output directory
                  "-Fl${PROJECT_BINARY_DIR}/bin"   # fpc linking directory (win/unix)
+                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (out of source builds)
                  "-k-L${PROJECT_BINARY_DIR}/bin"  # ld linking directory (unix/osx)
                  "-Cs2000000"                     # stack size
                  "-vewnq"                         # fpc output verbosity
