@@ -7,9 +7,9 @@ execute_process(COMMAND ${macdeployqt_executable} ${CMAKE_BINARY_DIR}/Hedgewars.
 
 if(NOT ${NOVIDEOREC})
     # but macdeployqt will not work for 'hwengine'; luckily the dylibs were already updated before
-    execute_process(COMMAND install_name_tool -change ${FFMPEG_LIBAVCODEC} @executable_path/../Frameworks/libavcodec.dylib ${engine_full_path})
-    execute_process(COMMAND install_name_tool -change ${FFMPEG_LIBAVFORMAT} @executable_path/../Frameworks/libavformat.dylib ${engine_full_path})
-    execute_process(COMMAND install_name_tool -change ${FFMPEG_LIBAVUTIL} @executable_path/../Frameworks/libavutil.dylib ${engine_full_path})
+    execute_process(COMMAND install_name_tool -change ${LIBAVCODEC_LIBRARY} @executable_path/../Frameworks/libavcodec.dylib ${engine_full_path})
+    execute_process(COMMAND install_name_tool -change ${LIBAVFORMAT_LIBRARY} @executable_path/../Frameworks/libavformat.dylib ${engine_full_path})
+    execute_process(COMMAND install_name_tool -change ${LIBAVUTIL_LIBRARY} @executable_path/../Frameworks/libavutil.dylib ${engine_full_path})
 endif()
 
 if(NOT ${NOPNG})
