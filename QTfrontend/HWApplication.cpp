@@ -50,23 +50,28 @@ HWApplication::HWApplication(int &argc,  char **argv):
 bool HWApplication::event(QEvent *event)
 {
     QFileOpenEvent *openEvent;
-    QString scheme, path;
+    QString scheme, path, address;
 
     if (event->type() == QEvent::FileOpen) {
         openEvent = (QFileOpenEvent *)event;
         scheme = openEvent->url().scheme();
         path = openEvent->url().path();
+        address = openEvent->url().host();
 
         QFile file(path);
         if (scheme == "file" && file.exists()) {
             form->PlayDemoQuick(openEvent->file());
+            return true;
+        } else if (scheme == "hwplay") {
+            int port = openEvent->url().port(NETGAME_DEFAULT_PORT);
+            form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {
             const QString errmsg = tr("Not yet implemented").arg(path);
             MessageDialog::ShowErrorMessage(errmsg, form);
             return false;
         }
-     }
+    }
 
     return QApplication::event(event);
 }

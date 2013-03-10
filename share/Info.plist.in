@@ -156,7 +156,6 @@
             <string>Viewer</string>
         </dict>
     </array>
-    <!--
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
@@ -164,12 +163,14 @@
             <string>Hedgewars URIs</string>
             <key>CFBundleURLSchemes</key>
             <array>
+            <!--
                 <string>hwd</string>
                 <string>hws</string>
                 <string>hwdlc</string>
+            -->
+                <string>hwplay</string>
             </array>
         </dict>
     </array>
-    -->
 </dict>
 </plist>

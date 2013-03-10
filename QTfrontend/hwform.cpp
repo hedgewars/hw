@@ -1000,8 +1000,14 @@ void HWForm::PlayDemoQuick(const QString & demofilename)
     game->PlayDemo(demofilename, false);
 }
 
+void HWForm::NetConnectQuick(const QString & host, quint16 port)
+{
+    NetConnectServer(host, port);
+}
+
 void HWForm::NetConnectServer(const QString & host, quint16 port)
 {
+    qDebug("connecting to %s:%d", qPrintable(host), port);
     _NetConnect(host, port, ui.pageOptions->editNetNick->text().trimmed());
 }
 
