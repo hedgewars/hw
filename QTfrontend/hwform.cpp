@@ -994,9 +994,8 @@ void HWForm::PlayDemo()
 
 void HWForm::PlayDemoQuick(const QString & demofilename)
 {
-    if (game && game->gameState == gsStarted) return;
-    GoBack(); //needed to cleanly disconnect from netgame
     GoToPage(ID_PAGE_MAIN);
+    //GoBack() <- don't or you'll close the socket
     CreateGame(0, 0, 0);
     game->PlayDemo(demofilename, false);
 }
