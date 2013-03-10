@@ -21,6 +21,7 @@
 
 #include "hwform.h"
 #include "MessageDialog.h"
+#include "signal.h"
 
 
 #if !defined(Q_WS_WIN)
