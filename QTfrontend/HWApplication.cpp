@@ -21,8 +21,10 @@
 
 #include "hwform.h"
 #include "MessageDialog.h"
-#include "signal.h"
 
+#if !defined(Q_WS_WIN)
+#include "signal.h"
+#endif
 
 #if !defined(Q_WS_WIN)
 void terminateFrontend(int signal)
