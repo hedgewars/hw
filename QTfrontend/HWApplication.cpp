@@ -21,10 +21,20 @@
 
 #include "hwform.h"
 
+#if !defined(Q_WS_WIN)
+void terminateFrontend(int signal)
+{
+    Q_UNUSED(signal);
+    QCoreApplication::exit(0);
+}
+#endif
+
 HWApplication::HWApplication(int &argc,  char **argv):
     QApplication(argc, argv)
 {
-
+#if !defined(Q_WS_WIN)
+    signal(SIGINT, &terminateFrontend);
+#endif
 }
 
 bool HWApplication::event(QEvent *event)
