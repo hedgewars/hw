@@ -20,6 +20,8 @@
 #include <QFileOpenEvent>
 
 #include "hwform.h"
+#include "MessageDialog.h"
+
 
 #if !defined(Q_WS_WIN)
 void terminateFrontend(int signal)
@@ -35,23 +37,35 @@ HWApplication::HWApplication(int &argc,  char **argv):
 #if !defined(Q_WS_WIN)
     signal(SIGINT, &terminateFrontend);
 #endif
+#if 0
+    qDebug("%s called with", argv[0]);
+    for (int i = 1; i < argc; i++)
+        qDebug("%d: %s", i, argv[i]);
+#endif
 }
 
 bool HWApplication::event(QEvent *event)
 {
     QFileOpenEvent *openEvent;
+    QString scheme, path;
 
-    switch (event->type())
-    {
-        case QEvent::FileOpen:
-            openEvent = (QFileOpenEvent *)event;
-            if (form) form->PlayDemoQuick(openEvent->file());
+    if (event->type() == QEvent::FileOpen) {
+        openEvent = (QFileOpenEvent *)event;
+        scheme = openEvent->url().scheme();
+        path = openEvent->url().path();
+
+        QFile file(path);
+        if (scheme == "file" && file.exists()) {
+            form->PlayDemoQuick(openEvent->file());
             return true;
-            break;
-        default:
-            return QApplication::event(event);
-            break;
-    }
+        } else {
+            const QString errmsg = tr("Not yet implemented").arg(path);
+            MessageDialog::ShowErrorMessage(errmsg, form);
+            return false;
+        }
+     }
+
+    return QApplication::event(event);
 }
 
 
