@@ -42,9 +42,6 @@
 #elif defined __APPLE__
 #include "CocoaInitializer.h"
 #endif
-#ifndef _WIN32
-#include <signal.h>
-#endif
 
 // Program resources
 #ifdef __APPLE__
