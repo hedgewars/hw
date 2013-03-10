@@ -94,14 +94,7 @@ void checkSeason()
     else
         season = SEASON_NONE;
 }
-#ifndef _WIN32
-void terminateFrontend(int signal)
-{
-    Q_UNUSED(signal);
 
-    QCoreApplication::exit(0);
-}
-#endif
 
 bool checkForDir(const QString & dir)
 {
@@ -145,10 +138,6 @@ int main(int argc, char *argv[])
 
 #ifdef __APPLE__
     cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
-#endif
-
-#ifndef _WIN32
-    signal(SIGINT, &terminateFrontend);
 #endif
 
     HWApplication app(argc, argv);
