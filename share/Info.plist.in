@@ -25,7 +25,7 @@
     <key>NSHumanReadableCopyright</key>
     <string>Copyright © 2004-2012, Hedgewars Project</string>
     <key>NSAppleScriptEnabled</key>
-    <false/>
+    <true/>
     <key>LSRequiresNativeExecution</key>
     <true/>
     <key>LSMinimumSystemVersionByArchitecture</key>
@@ -156,5 +156,20 @@
             <string>Viewer</string>
         </dict>
     </array>
+    <!--
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>Hedgewars URIs</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>hwd</string>
+                <string>hws</string>
+                <string>hwdlc</string>
+            </array>
+        </dict>
+    </array>
+    -->
 </dict>
 </plist>
