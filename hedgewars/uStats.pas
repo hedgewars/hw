@@ -40,6 +40,7 @@ uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc, uConsol
 
 var DamageClan  : Longword = 0;
     DamageTotal : Longword = 0;
+    DamageTurn  : Longword = 0;
     KillsClan   : LongWord = 0;
     Kills       : LongWord = 0;
     KillsTotal  : LongWord = 0;
@@ -82,7 +83,8 @@ if killed then
         inc(KillsClan);
     end;
 
-inc(DamageTotal, Damage)
+inc(DamageTotal, Damage);
+inc(DamageTurn, Damage)
 end;
 
 procedure Skipped;
@@ -112,7 +114,7 @@ if FinishedTurnsTotal <> 0 then
         end
 
     else if DamageClan <> 0 then
-        if DamageTotal > DamageClan then
+        if DamageTurn > DamageClan then
             if random(2) = 0 then
                 AddVoice(sndNutter, CurrentTeam^.voicepack)
             else
@@ -170,6 +172,7 @@ for t:= 0 to Pred(ClansCount) do
 Kills:= 0;
 KillsClan:= 0;
 DamageClan:= 0;
+DamageTurn:= 0;
 AmmoUsedCount:= 0;
 AmmoDamagingUsed:= false;
 isTurnSkipped:= false
