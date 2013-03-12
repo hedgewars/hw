@@ -45,6 +45,25 @@ HWApplication::HWApplication(int &argc,  char **argv):
     for (int i = 1; i < argc; i++)
         qDebug("%d: %s", i, argv[i]);
 #endif
+    // on Windows, sending an event right away leads to a segfault
+    // so we use urlString to save the data and send the event just before the app.exec()
+    urlString = NULL;
+    if (argc > 1) {
+        urlString = new QString(argv[1]);
+        if (urlString->contains("//", Qt::CaseInsensitive) == false) {
+            delete urlString;
+            urlString = NULL;
+        }
+    }
+}
+
+void HWApplication::fakeEvent()
+{
+    QUrl parsedUrl(*urlString);
+    delete urlString;
+    urlString = NULL;
+    QFileOpenEvent *openEvent = new QFileOpenEvent(parsedUrl);
+    QCoreApplication::sendEvent(QCoreApplication::instance(), openEvent);
 }
 
 bool HWApplication::event(QEvent *event)
@@ -60,14 +79,14 @@ bool HWApplication::event(QEvent *event)
 
         QFile file(path);
         if (scheme == "file" && file.exists()) {
-            form->PlayDemoQuick(openEvent->file());
+            form->PlayDemoQuick(path);
             return true;
         } else if (scheme == "hwplay") {
             int port = openEvent->url().port(NETGAME_DEFAULT_PORT);
             form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {
-            const QString errmsg = tr("Not yet implemented").arg(path);
+            const QString errmsg = tr("Scheme '%1' not supported").arg(scheme);
             MessageDialog::ShowErrorMessage(errmsg, form);
             return false;
         }

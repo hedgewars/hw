@@ -1916,6 +1916,8 @@ void HWForm::AssociateFiles()
     QString arguments = getDemoArguments();
 #ifdef _WIN32
     QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
+
+    // file extension(s)
     registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
     registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
     registry_hkcr.setValue("Hedgewars.Demo/Default", tr("Hedgewars Demo File", "File Types"));
@@ -1924,6 +1926,12 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" " + arguments + " %1");
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" " + arguments + " %1");
+
+    // custom url scheme(s)
+    registry_hkcr.setValue("hwplay/Default", "\"URL:Hedgewars ServerAccess Protocol\"");
+    registry_hkcr.setValue("hwplay/URL Protocol", "");
+    registry_hkcr.setValue("hwplay/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\",0");
+    registry_hkcr.setValue("hwplay/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\"  %1");
 #elif defined __APPLE__
     // only useful when other apps have taken precedence over our file extensions and you want to reset it
     system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hwd</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");
