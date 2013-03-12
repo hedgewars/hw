@@ -143,9 +143,9 @@ begin
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
-    i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, true);
+    i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, false);
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
-    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, true);
+    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, false);
     AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
 
     hedgewarsMountPackages;

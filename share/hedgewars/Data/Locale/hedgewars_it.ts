@@ -427,10 +427,6 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
         <translation>Modifica disegno mappa</translation>
     </message>
     <message>
-        <source>Largetunnels</source>
-        <translation>Gallerie grandi</translation>
-    </message>
-    <message>
         <source>Small islands</source>
         <translation>Isole piccole</translation>
     </message>
@@ -473,6 +469,10 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     <message>
         <source>All files</source>
         <translation>Tutti i file</translation>
+    </message>
+    <message>
+        <source>Large tunnels</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

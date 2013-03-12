@@ -41,6 +41,8 @@ class HWApplication : public QApplication
         ~HWApplication() {};
 
         HWForm *form;
+        QString *urlString;
+        void fakeEvent();
     protected:
         bool event(QEvent *);
 };

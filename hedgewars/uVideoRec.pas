@@ -31,6 +31,7 @@ end.
     {$linklib avcodec}
     {$linklib avformat}
     {$linklib avutil}
+    {$linklib avwrapper}
 {$ENDIF}
 
 interface

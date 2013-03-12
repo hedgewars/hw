@@ -23,11 +23,6 @@ interface
 
 uses png;
 
-{$IFDEF FPC}
-    {$PACKRECORDS C}
-{$ELSE}
-    {$DEFINE cdecl attribute(cdecl)}
-{$ENDIF}
 
 {$IFDEF DARWIN}
     {$linklib png}
