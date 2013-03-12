@@ -24,7 +24,7 @@ PHYSFS_DECL void hedgewarsMountPackages()
                     strcat(fullPath, "/");
                     strcat(fullPath, fileName);
 
-                    PHYSFS_mount(fullPath, NULL, 1);
+                    PHYSFS_mount(fullPath, NULL, 0);
 
                     free(fullPath);
                 }

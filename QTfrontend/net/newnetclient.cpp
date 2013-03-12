@@ -311,7 +311,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QStringList tmp = lst;
         tmp.removeFirst();
         m_roomsListModel->setRoomsList(tmp);
-        if (m_nick_registered == false)
+        if (m_private_game == false && m_nick_registered == false)
         {
             emit NickNotRegistered(mynick);
         }
