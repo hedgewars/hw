@@ -257,7 +257,7 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
     frameDontPlaying = new FrameTeams();
 
     // Add notice about number of required teams.
-    numTeamNotice = new QLabel("Two teams are required to play!");
+    numTeamNotice = new QLabel(tr("At least two teams are required to play!"));
     mainLayout.addWidget(numTeamNotice);
 
     QPalette p;
