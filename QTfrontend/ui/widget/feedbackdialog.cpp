@@ -238,7 +238,7 @@ void FeedbackDialog::GenerateSpecs()
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    total_ram += QString::number(status.ullTotalPhys);
+    total_ram += QString::number(status.ullTotalPhys) + "\n";
 
     switch(QSysInfo::WinVersion())
     {
