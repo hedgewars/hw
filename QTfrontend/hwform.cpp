@@ -1002,6 +1002,7 @@ void HWForm::PlayDemoQuick(const QString & demofilename)
 
 void HWForm::NetConnectQuick(const QString & host, quint16 port)
 {
+    GoToPage(ID_PAGE_MAIN);
     NetConnectServer(host, port);
 }
 
@@ -1103,10 +1104,14 @@ void HWForm::NetNickTaken(const QString & nick)
     if (!ok || newNick.isEmpty())
     {
         //ForcedDisconnect(tr("No nickname supplied."));
-    bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
-    GoBack();
+        bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
+        GoBack();
         if (retry) {
-            NetConnectOfficialServer();
+            if (hwnet->m_private_game) {
+                QStringList list = hwnet->getHost().split(":");
+                NetConnectServer(list.at(0), list.at(1).toShort());
+            } else
+                NetConnectOfficialServer();
         }
         return;
     }
@@ -1189,11 +1194,11 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 {
     Q_UNUSED(nick);
 
-    if(hwnet)
-    {
+    if (hwnet) {
+        // destroy old connection
         hwnet->Disconnect();
         delete hwnet;
-        hwnet=0;
+        hwnet = NULL;
     }
 
     hwnet = new HWNewNet();
@@ -1337,8 +1342,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
 
-//nick and pass stuff
+    //nick and pass stuff
+    QString nickname = config->value("net/nick", "").toString();
 
+    hwnet->m_private_game = !(hostName == "netserver.hedgewars.org" && port == NETGAME_DEFAULT_PORT);
+    if (hwnet->m_private_game == false)
+        if (AskForNickAndPwd() != 0)
+            return;
+
+    ui.pageRoomsList->setUser(nickname);
+    ui.pageNetGame->setUser(nickname);
+
+    hwnet->Connect(hostName, port, nickname);
+}
+
+int HWForm::AskForNickAndPwd(void)
+{
     //remove temppasswordhash just in case
     config->clearTempHash();
 
@@ -1369,7 +1388,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             if (pwDialog->exec() != QDialog::Accepted) {
                 delete pwDialog;
                 GoBack();
-                return;
+                return -1;
             }
 
             //set nick and pass from the dialog
@@ -1382,9 +1401,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
                 GoBack();
                 delete pwDialog;
                 if (retry) {
-                    NetConnectOfficialServer();
-                }
-                return;
+                    if (hwnet->m_private_game) {
+                        QStringList list = hwnet->getHost().split(":");
+                        NetConnectServer(list.at(0), list.at(1).toShort());
+                    } else
+                        NetConnectOfficialServer();
+                    }
+                return -1;
             }
 
             if (!password.isEmpty()) {
@@ -1421,14 +1444,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             nickname = config->value("net/nick", "").toString();
         }
     }
-
-    ui.pageRoomsList->setUser(nickname);
-    ui.pageNetGame->setUser(nickname);
-
-    hwnet->Connect(hostName, port, nickname);
+    return 0;
 }
-
-
 
 void HWForm::NetConnect()
 {
@@ -1497,7 +1514,11 @@ void HWForm::ForcedDisconnect(const QString & reason)
     if (reason == "Reconnected too fast") { //TODO: this is a hack, which should be remade
         bool retry = RetryDialog(tr("Hedgewars - Connection error"), tr("You reconnected too fast.\nPlease wait a few seconds and try again."));
         if (retry) {
-            NetConnectOfficialServer();
+            if (hwnet->m_private_game) {
+                QStringList list = hwnet->getHost().split(":");
+                NetConnectServer(list.at(0), list.at(1).toShort());
+            } else
+                NetConnectOfficialServer();
         }
         else {
             while (ui.Pages->currentIndex() != ID_PAGE_NET
@@ -1510,8 +1531,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
     }
     if (pnetserver)
         return; // we have server - let it care of all things
-    if (hwnet)
-    {
+    if (hwnet) {
         QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
         MessageDialog::ShowErrorMessage(errorStr, this);
     }

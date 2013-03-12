@@ -61,6 +61,7 @@ class HWNewNet : public QObject
         QAbstractItemModel * lobbyPlayersModel();
         QAbstractItemModel * roomPlayersModel();
         bool allPlayersReady();
+        bool m_private_game;
 
     private:
         bool isChief;
