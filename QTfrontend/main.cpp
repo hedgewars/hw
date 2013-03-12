@@ -338,5 +338,7 @@ int main(int argc, char *argv[])
     app.form->show();
     if(splash)
         splash->close();
+    if (app.urlString)
+        app.fakeEvent();
     return app.exec();
 }
