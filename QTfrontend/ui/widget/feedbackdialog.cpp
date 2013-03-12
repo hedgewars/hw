@@ -30,6 +30,7 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QCheckBox>
+#include <QByteArray>
 
 #include <string>
 
@@ -194,7 +195,7 @@ void FeedbackDialog::GenerateSpecs()
     QString screen_size = "Size of the screen(s): " +
         QString::number(screen->width()) + "x" + QString::number(screen->height()) + "\n";
     QString number_of_screens = "Number of screens: " + QString::number(screen->screenCount()) + "\n";
-    std::string processor_name = "Processor: ";
+    QString processor_name = "Processor: ";
 
     // platform specific code
 #ifdef Q_WS_MACX
@@ -245,6 +246,7 @@ void FeedbackDialog::GenerateSpecs()
         case QSysInfo::WV_XP: os_version += "Windows XP\n"; break;
         case QSysInfo::WV_VISTA: os_version += "Windows Vista\n"; break;
         case QSysInfo::WV_WINDOWS7: os_version += "Windows 7\n"; break;
+        //case QSysInfo::WV_WINDOWS8: os_version += "Windows 8\n"; break; //QT 5+
         default: os_version += "Windows (Unknown version)\n"; break;
     }
     kernel_line += "Windows kernel\n";
@@ -282,26 +284,27 @@ void FeedbackDialog::GenerateSpecs()
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
     i = 0x80000003;
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
     i = 0x80000004;
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 3);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
+    processor_name += "\n";
 #else
     processor_name += "Unknown";
 #endif
@@ -324,9 +327,7 @@ void FeedbackDialog::GenerateSpecs()
         + total_ram
         + screen_size
         + number_of_screens
-#ifndef QT_NO_STL
-        + QString::fromStdString(processor_name + "\n")
-#endif
+        + processor_name
         + number_of_cores
         + compiler_version
         + compiler_bits
