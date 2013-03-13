@@ -134,9 +134,9 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
     mainNote->setOpenExternalLinks(true);
 
 #ifdef DEBUG
-    setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
+    setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
 #else
-    setDefautDescription(QLabel::tr("Tip: ") + randomTip());
+    setDefaultDescription(QLabel::tr("Tip: ") + randomTip());
 #endif
 
 }
