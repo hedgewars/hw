@@ -1020,7 +1020,7 @@ begin
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
             inc(Gear^.Damage);
         // let's interrupt before a collision to give portals a chance to catch the bullet
-        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (Land[y, x] > 255) then
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and not(CheckLandValue(x, y, $FF00)) then
             begin
             Gear^.Tag := 1;
             Gear^.Damage := 0;
