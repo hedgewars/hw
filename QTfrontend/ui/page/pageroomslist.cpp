@@ -582,7 +582,7 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
 
 void PageRoomsList::updateNickCounter(int cnt)
 {
-    setDefautDescription(tr("%1 players online", 0, cnt).arg(cnt));
+    setDefaultDescription(tr("%1 players online", 0, cnt).arg(cnt));
 }
 
 void PageRoomsList::setUser(const QString & nickname)

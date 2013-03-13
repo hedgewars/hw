@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QListView>
 
 #include "mouseoverfilter.h"
 #include "ui/page/AbstractPage.h"
@@ -21,7 +22,7 @@ MouseOverFilter::MouseOverFilter(QObject *parent) :
 
 bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
 {
-    if (event->type() == QEvent::Enter)
+    if (event->type() == QEvent::FocusIn)
     {
         QWidget * widget = dynamic_cast<QWidget*>(dist);
 
@@ -39,7 +40,8 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         QComboBox * droplist = dynamic_cast<QComboBox*>(dist);
         QSlider * slider = dynamic_cast<QSlider*>(dist);
         QTabWidget * tab = dynamic_cast<QTabWidget*>(dist);
-        if (button || textfield || checkbox || droplist || slider || tab)
+        QListView * listview = dynamic_cast<QListView*>(dist);
+        if (button || textfield || checkbox || droplist || slider || tab || listview)
         {
             SDLInteraction::instance().playSoundFile("/Sounds/steps.ogg");
         }
@@ -50,9 +52,9 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
     {
         abstractpage = qobject_cast<AbstractPage*>(ui->Pages->currentWidget());
 
-        if (abstractpage->getDefautDescription() != NULL)
+        if (abstractpage->getDefaultDescription() != NULL)
         {
-            abstractpage->setButtonDescription( * abstractpage->getDefautDescription());
+            abstractpage->setButtonDescription( * abstractpage->getDefaultDescription());
         }
         else
             abstractpage->setButtonDescription("");

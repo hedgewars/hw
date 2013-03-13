@@ -158,13 +158,13 @@ void AbstractPage::setButtonDescription(QString desc)
     descLabel->setText(desc);
 }
 
-void AbstractPage::setDefautDescription(QString text)
+void AbstractPage::setDefaultDescription(QString text)
 {
     *defautDesc = text;
     descLabel->setText(text);
 }
 
-QString * AbstractPage::getDefautDescription()
+QString * AbstractPage::getDefaultDescription()
 {
     return defautDesc;
 }

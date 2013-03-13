@@ -70,12 +70,12 @@ class AbstractPage : public QWidget
         *
         * @param text the defaut desc
         */
-        void setDefautDescription(QString text);
+        void setDefaultDescription(QString text);
 
         /**
         * @brief Get the desc defaut text
         */
-        QString * getDefautDescription();
+        QString * getDefaultDescription();
 
     signals:
 
