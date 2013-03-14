@@ -4732,6 +4732,7 @@ end;
 procedure doStepResurrector(Gear: PGear);
 var
     graves: PGearArrayS;
+    hh: PHedgehog;
     i: LongInt;
 begin
     AllInactive := false;
@@ -4739,12 +4740,24 @@ begin
 
     if graves.size > 0 then
         begin
+        hh := Gear^.Hedgehog;
         for i:= 0 to graves.size - 1 do
             begin
             PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := nil;
             graves.ar^[i]^.Health := 0;
             end;
         Gear^.doStep := @doStepResurrectorWork;
+        if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then
+            begin
+            if LongInt(graves.size) <= Gear^.Tag then Gear^.Tag:= 0;
+            dec(hh^.Gear^.Health);
+            if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
+                hh^.Gear^.Damage:= 1;
+            RenderHealth(hh^);
+            RecountTeamHealth(hh^.Team);
+            inc(graves.ar^[Gear^.Tag]^.Health);
+            inc(Gear^.Tag)
+            end 
         end 
     else 
         begin
