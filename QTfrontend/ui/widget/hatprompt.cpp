@@ -35,6 +35,26 @@
 #include "HatModel.h"
 #include "hatprompt.h"
 
+void HatListView::moveUp()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+}
+
+void HatListView::moveDown()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+}
+
+void HatListView::moveLeft()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+}
+
+void HatListView::moveRight()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+}
+
 HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 {
     setModal(true);
@@ -128,22 +148,22 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
 void HatPrompt::moveUp()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+    list->moveUp();
 }
 
 void HatPrompt::moveDown()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+    list->moveDown();
 }
 
 void HatPrompt::moveLeft()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+    list->moveLeft();
 }
 
 void HatPrompt::moveRight()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+    list->moveRight();
 }
 
 void HatPrompt::onAccepted()
