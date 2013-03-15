@@ -35,6 +35,27 @@
 #include "ThemeModel.h"
 #include "themeprompt.h"
 
+
+void ThemeListView::moveUp()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+}
+
+void ThemeListView::moveDown()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+}
+
+void ThemeListView::moveLeft()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+}
+
+void ThemeListView::moveRight()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+}
+
 ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 {
     setModal(true);
@@ -128,22 +149,22 @@ ThemePrompt::ThemePrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
 void ThemePrompt::moveUp()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+    list->moveUp();
 }
 
 void ThemePrompt::moveDown()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+    list->moveDown();
 }
 
 void ThemePrompt::moveLeft()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+    list->moveLeft();
 }
 
 void ThemePrompt::moveRight()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+    list->moveRight();
 }
 
 void ThemePrompt::onAccepted()

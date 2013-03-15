@@ -40,6 +40,16 @@
 #include "lineeditcursor.h"
 #include "pageroomslist.h"
 
+void RoomTableView::moveDown()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+}
+
+void RoomTableView::moveUp()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+}
+
 QLayout * PageRoomsList::bodyLayoutDefinition()
 {
     QVBoxLayout * pageLayout = new QVBoxLayout();
@@ -231,12 +241,12 @@ void PageRoomsList::connectSignals()
 
 void PageRoomsList::moveSelectionUp()
 {
-    roomsList->setCurrentIndex(roomsList->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+    roomsList->moveUp();
 }
 
 void PageRoomsList::moveSelectionDown()
 {
-    roomsList->setCurrentIndex(roomsList->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+    roomsList->moveDown();
 }
 
 void PageRoomsList::roomSelectionChanged(const QModelIndex & current, const QModelIndex & previous)
