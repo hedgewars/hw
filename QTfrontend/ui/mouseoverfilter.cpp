@@ -22,7 +22,7 @@ MouseOverFilter::MouseOverFilter(QObject *parent) :
 
 bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
 {
-    if (event->type() == QEvent::FocusIn)
+    if (event->type() == QEvent::Enter)
     {
         QWidget * widget = dynamic_cast<QWidget*>(dist);
 
@@ -32,6 +32,11 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
             abstractpage->setButtonDescription(widget->whatsThis());
         else if (widget->toolTip() != NULL)
             abstractpage->setButtonDescription(widget->toolTip());
+    }
+    else if (event->type() == QEvent::FocusIn)
+    {
+        QWidget * widget = dynamic_cast<QWidget*>(dist);
+        abstractpage = qobject_cast<AbstractPage*>(ui->Pages->currentWidget());
 
         // play a sound when mouse hovers certain ui elements
         QPushButton * button = dynamic_cast<QPushButton*>(dist);
