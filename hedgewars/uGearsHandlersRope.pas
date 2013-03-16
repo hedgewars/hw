@@ -110,7 +110,7 @@ var
     lx, ly, cd: LongInt;
     haveCollision,
     haveDivided: boolean;
-
+    wrongSide: boolean;
 begin
     if GameTicks mod 4 <> 0 then exit;
 
@@ -216,6 +216,9 @@ begin
                 if RopePoints.Count = 0 then
                     RopePoints.HookAngle := DxDy2Angle(Gear^.dY, Gear^.dX);
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
+                sx:= Gear^.dX.isNegative;
+                sy:= Gear^.dY.isNegative;
+                sb:= Gear^.dX.QWordValue < Gear^.dY.QWordValue;
                 dLen := len
                 end;
 
@@ -248,21 +251,45 @@ begin
             ty := RopePoints.ar[Pred(RopePoints.Count)].Y;
             mdX := tx - Gear^.X;
             mdY := ty - Gear^.Y;
-            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * (ty - HHGear^.Y) > (tx - HHGear^.X) * mdY) then
+            ropeDx:= tx - HHGear^.X;
+            ropeDy:= ty - HHGear^.Y;
+            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * ropeDy > ropeDx * mdY) then
                 begin
                 dec(RopePoints.Count);
-                Gear^.X := RopePoints.ar[RopePoints.Count].X;
-                Gear^.Y := RopePoints.ar[RopePoints.Count].Y;
-                Gear^.Elasticity := Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
-                Gear^.Friction := Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen;
+                Gear^.X := tx;
+                Gear^.Y := ty;
 
-                // restore hog position
-                len := _1 / Distance(mdX, mdY);
-                mdX := mdX * len;
-                mdY := mdY * len;
+                // oops, opposite quadrant, don't restore hog position in such case, just remove the point
+                wrongSide:= (ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
+                    and (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy);
 
-                HHGear^.X := Gear^.X - mdX * Gear^.Elasticity;
-                HHGear^.Y := Gear^.Y - mdY * Gear^.Elasticity;
+                // previous check could be inaccurate in vertical/horizontal rope positions,
+                // so perform this check also, even though odds are 1 to 415927 to hit this
+                if (not wrongSide)
+                    and ((ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
+                      <> (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy)) then
+                    if RopePoints.ar[RopePoints.Count].sb then
+                        wrongSide:= ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy
+                        else
+                        wrongSide:= ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx;
+
+                if wrongSide then
+                    begin
+                    Gear^.Elasticity := Gear^.Elasticity - RopePoints.ar[RopePoints.Count].dLen;
+                    Gear^.Friction := Gear^.Friction - RopePoints.ar[RopePoints.Count].dLen;
+                    end else
+                    begin
+                    Gear^.Elasticity := Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
+                    Gear^.Friction := Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen;
+
+                    // restore hog position
+                    len := _1 / Distance(mdX, mdY);
+                    mdX := mdX * len;
+                    mdY := mdY * len;
+
+                    HHGear^.X := Gear^.X - mdX * Gear^.Elasticity;
+                    HHGear^.Y := Gear^.Y - mdY * Gear^.Elasticity;
+                    end;
                 end
             end;
 
