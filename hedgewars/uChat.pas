@@ -325,6 +325,8 @@ begin
             GameState:= gsGame;
             ResetKbd;
             end;
+        {arrow keys}
+        63232, 63233, 63234, 63235: begin end;
         else
             if (Key < $80) then
                 btw:= 1
