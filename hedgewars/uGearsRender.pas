@@ -32,6 +32,7 @@ var RopePoints: record
                                 X, Y: hwFloat;
                                 dLen: hwFloat;
                                 b: boolean;
+                                sx, sy, sb: boolean;
                                 end;
                 rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
                 end;
