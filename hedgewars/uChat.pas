@@ -296,7 +296,7 @@ const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw: integer;
     utf8: shortstring;
 begin
-if Key <> 0 then
+    if Key <> 0 then
     case Key of
         {Backspace}
         8, 127: if Length(InputStr.s) > 0 then
@@ -325,32 +325,32 @@ if Key <> 0 then
             GameState:= gsGame;
             ResetKbd;
             end;
-    else
-        if (Key < $80) then
-            btw:= 1
-        else if (Key < $800) then
-            btw:= 2
-        else if (Key < $10000) then
-            btw:= 3
         else
-            btw:= 4;
+            if (Key < $80) then
+                btw:= 1
+            else if (Key < $800) then
+                btw:= 2
+            else if (Key < $10000) then
+                btw:= 3
+            else
+                btw:= 4;
 
-    utf8:= '';
+            utf8:= '';
 
-    for i:= btw downto 2 do
-        begin
-        utf8:= char((Key or $80) and $BF) + utf8;
-        Key:= Key shr 6
-        end;
+            for i:= btw downto 2 do
+                begin
+                utf8:= char((Key or $80) and $BF) + utf8;
+                Key:= Key shr 6
+                end;
 
-    utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
+            utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-    if byte(InputStr.s[0]) + btw > 240 then
-        exit;
+            if byte(InputStr.s[0]) + btw > 240 then
+                exit;
 
-    InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-    SetLine(InputStr, InputStr.s + utf8, true)
-    end
+            InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
+            SetLine(InputStr, InputStr.s + utf8, true)
+        end
 end;
 
 procedure chChatMessage(var s: shortstring);
