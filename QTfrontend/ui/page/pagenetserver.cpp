@@ -24,9 +24,13 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QSpinBox>
+#include <QTcpSocket>
+#include <QHostAddress>
+#include <QClipboard>
 
 #include "pagenetserver.h"
 #include "hwconsts.h"
+#include "HWApplication.h"
 
 QLayout * PageNetServer::bodyLayoutDefinition()
 {
@@ -70,6 +74,11 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     BtnDefault->setWhatsThis(QPushButton::tr("Set the default server port for Hedgewars"));
     gbLayout->addWidget(BtnDefault, 1, 2);
 
+    BtnShare = new QPushButton(gb);
+    BtnShare->setText(QPushButton::tr("Invite your friends to your server in just 1 click!"));
+    BtnShare->setWhatsThis(QPushButton::tr("Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you."));
+    gbLayout->addWidget(BtnShare, 2, 1);
+
     return pageLayout;
 }
 
@@ -90,6 +99,7 @@ QLayout * PageNetServer::footerLayoutDefinition()
 void PageNetServer::connectSignals()
 {
     connect(BtnDefault, SIGNAL(clicked()), this, SLOT(setDefaultPort()));
+    connect(BtnShare, SIGNAL(clicked()), this, SLOT(copyUrl()));
 }
 
 PageNetServer::PageNetServer(QWidget* parent) : AbstractPage(parent)
@@ -101,3 +111,27 @@ void PageNetServer::setDefaultPort()
 {
     sbPort->setValue(NETGAME_DEFAULT_PORT);
 }
+
+// This function assumes that the user wants to share his server while connected to
+// the Internet and that he/she is using direct access (eg no NATs). To determine the
+// IP we briefly connect to Hedgewars website and fallback to user intervention 
+// after 4 seconds of timeout.
+void PageNetServer::copyUrl()
+{
+    QString address = "hwplay://";
+
+    QTcpSocket socket;
+    socket.connectToHost("www.hedgewars.org", 80);
+    if (socket.waitForConnected(4000))
+        address += socket.localAddress().toString();
+    else
+        address += "<" + tr("Insert your address here") + ">";
+
+    if (sbPort->value() != NETGAME_DEFAULT_PORT)
+        address += ":" + QString::number(sbPort->value());
+
+    QClipboard *clipboard = HWApplication::clipboard();
+    clipboard->setText(address);
+    qDebug() << address << "copied to clipboard";
+}
+
