@@ -25,7 +25,7 @@ interface
 procedure initModule;
 procedure freeModule;
 procedure ReloadLines;
-
+procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key: Longword);
@@ -292,6 +292,15 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
         ParseCommand('/say ' + s, true);
 end;
 
+procedure CleanupInput;
+begin
+    FreezeEnterKey;
+    history:= 0;
+    SDL_EnableKeyRepeat(0,0);
+    GameState:= gsGame;
+    ResetKbd;
+end;
+
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
@@ -302,20 +311,12 @@ begin
         {Backspace}
         8, 127: if Length(InputStr.s) > 0 then
                 begin
-                history:= 0;
                 InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
                 SetLine(InputStr, InputStr.s, true)
                 end;
         {Esc}
         27: if Length(InputStr.s) > 0 then SetLine(InputStr, '', true)
-            else
-                begin
-                FreezeEnterKey;
-                history:= 0;
-                SDL_EnableKeyRepeat(0,0);
-                GameState:= gsGame;
-                ResetKbd;
-                end;
+            else CleanupInput;
         {Return}
         3, 13, 271: begin
             if Length(InputStr.s) > 0 then
@@ -323,11 +324,7 @@ begin
                 AcceptChatString(InputStr.s);
                 SetLine(InputStr, '', false)
                 end;
-            FreezeEnterKey;
-            history:= 0;
-            SDL_EnableKeyRepeat(0,0);
-            GameState:= gsGame;
-            ResetKbd;
+            CleanupInput;
             end;
         {arrow keys (up, down)}
         63232, 63233: begin
