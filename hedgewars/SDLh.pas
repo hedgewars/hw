@@ -316,6 +316,8 @@ const
     SDLK_BACKSPACE = 8;
     SDLK_RETURN    = 13;
     SDLK_ESCAPE    = 27;
+    SDLK_q         = 113;
+    SDLK_w         = 119;
     SDLK_DELETE    = 127;
     SDLK_UP        = 273;
     SDLK_DOWN      = 274;
