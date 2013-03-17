@@ -28,7 +28,7 @@ procedure ReloadLines;
 procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
-procedure KeyPressChat(Key: Longword);
+procedure KeyPressChat(Key, Sym: Longword);
 
 implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
@@ -303,72 +303,78 @@ begin
     ResetKbd;
 end;
 
-procedure KeyPressChat(Key: Longword);
+procedure KeyPressChat(Key, Sym: Longword);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
+    action: boolean;
 begin
-    if Key <> 0 then
-    case Key of
-        {Backspace}
-        8, 127: if Length(InputStr.s) > 0 then
+    action:= false;
+    if Sym <> 0 then
+        case Sym of
+            SDLK_BACKSPACE:
                 begin
-                InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-                SetLine(InputStr, InputStr.s, true)
+                action:= true;
+                if Length(InputStr.s) > 0 then
+                    begin
+                    InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
+                    SetLine(InputStr, InputStr.s, true)
+                    end
                 end;
-        {Esc}
-        27: if Length(InputStr.s) > 0 then SetLine(InputStr, '', true)
-            else CleanupInput;
-        {Return}
-        3, 13, 271: begin
-            if Length(InputStr.s) > 0 then
+            SDLK_ESCAPE: 
                 begin
-                AcceptChatString(InputStr.s);
-                SetLine(InputStr, '', false)
+                action:= true;
+                if Length(InputStr.s) > 0 then 
+                    SetLine(InputStr, '', true)
+                else CleanupInput
                 end;
-            CleanupInput;
-            end;
-        {arrow keys (up, down)}
-        111, 116,     //linux
-        63232, 63233: //osx
-            begin
-
-            if ((Key = 63232) or (Key = 111)) and (history < localLastStr) then inc(history);
-            if ((Key = 63233) or (Key = 116)) and (history > 0) then dec(history);
-
-            index:= localLastStr - history + 1;
-            if (index > localLastStr) then
-                SetLine(InputStr, '', true)
-            else
-                SetLine(InputStr, LocalStrs[index], true);
-            end;
-        {arrow keys (left, right)}
-        63234, 63235: begin end;
+            SDLK_RETURN:
+                begin
+                action:= true;
+                if Length(InputStr.s) > 0 then
+                    begin
+                    AcceptChatString(InputStr.s);
+                    SetLine(InputStr, '', false)
+                    end;
+                CleanupInput
+                end;
+            SDLK_UP, SDLK_DOWN:
+                begin
+                action:= true;
+                if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
+                if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
+                index:= localLastStr - history + 1;
+                if (index > localLastStr) then
+                     SetLine(InputStr, '', true)
+                else SetLine(InputStr, LocalStrs[index], true)
+                end
+        end;
+    if not action and (Key <> 0) then
+        begin
+        if (Key < $80) then
+            btw:= 1
+        else if (Key < $800) then
+            btw:= 2
+        else if (Key < $10000) then
+            btw:= 3
         else
-            if (Key < $80) then
-                btw:= 1
-            else if (Key < $800) then
-                btw:= 2
-            else if (Key < $10000) then
-                btw:= 3
-            else
-                btw:= 4;
+            btw:= 4;
 
-            utf8:= '';
+        utf8:= '';
 
-            for i:= btw downto 2 do
-                begin
-                utf8:= char((Key or $80) and $BF) + utf8;
-                Key:= Key shr 6
-                end;
+        for i:= btw downto 2 do
+            begin
+            utf8:= char((Key or $80) and $BF) + utf8;
+            Key:= Key shr 6
+            end;
 
-            utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
+        utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-            if byte(InputStr.s[0]) + btw > 240 then
-                exit;
+        if byte(InputStr.s[0]) + btw > 240 then
+            exit;
 
-            InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-            SetLine(InputStr, InputStr.s + utf8, true)
+        InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
+        SetLine(InputStr, InputStr.s + utf8, true)
         end
 end;
 
