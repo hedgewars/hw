@@ -108,54 +108,54 @@ if not doSet then
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dy, i]:= Land[y + dy, i] and $FF7F
-            else if Land[y + dy, i] and $007F > 0 then
-                Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) - 1);
+                Land[y + dy, i]:= Land[y + dy, i] and lfCurrentMask
+            else if Land[y + dy, i] and lfObjMask > 0 then
+                Land[y + dy, i]:= (Land[y + dy, i] and lfNotObjMask) or ((Land[y + dy, i] and lfObjMask) - 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dy, i]:= Land[y - dy, i] and $FF7F
-            else if Land[y - dy, i] and $007F > 0 then
-                Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) - 1);
+                Land[y - dy, i]:= Land[y - dy, i] and lfCurrentMask
+            else if Land[y - dy, i] and lfObjMask > 0 then
+                Land[y - dy, i]:= (Land[y - dy, i] and lfNotObjMask) or ((Land[y - dy, i] and lfObjMask) - 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dx, i]:= Land[y + dx, i] and $FF7F
-            else if Land[y + dx, i] and $007F > 0 then
-                Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) - 1);
+                Land[y + dx, i]:= Land[y + dx, i] and lfCurrentMask
+            else if Land[y + dx, i] and lfObjMask > 0 then
+                Land[y + dx, i]:= (Land[y + dx, i] and lfNotObjMask) or ((Land[y + dx, i] and lfObjMask) - 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dx, i]:= Land[y - dx, i] and $FF7F
-            else if Land[y - dx, i] and $007F > 0 then
-                Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) - 1)
+                Land[y - dx, i]:= Land[y - dx, i] and lfCurrentMask
+            else if Land[y - dx, i] and lfObjMask > 0 then
+                Land[y - dx, i]:= (Land[y - dx, i] and lfNotObjMask) or ((Land[y - dx, i] and lfObjMask) - 1)
     end
 else
     begin
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dy, i]:= Land[y + dy, i] or $80
-            else if Land[y + dy, i] and $007F < 127 then
-                Land[y + dy, i]:= (Land[y + dy, i] and $FF80) or ((Land[y + dy, i] and $7F) + 1);
+                Land[y + dy, i]:= Land[y + dy, i] or lfCurrentHog
+            else if Land[y + dy, i] and lfObjMask < lfObjMask then
+                Land[y + dy, i]:= (Land[y + dy, i] and lfNotObjMask) or ((Land[y + dy, i] and lfObjMask) + 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dy, i]:= Land[y - dy, i] or $80
-            else if Land[y - dy, i] and $007F < 127 then
-                Land[y - dy, i]:= (Land[y - dy, i] and $FF80) or ((Land[y - dy, i] and $7F) + 1);
+                Land[y - dy, i]:= Land[y - dy, i] or lfCurrentHog
+            else if Land[y - dy, i] and lfObjMask < lfObjMask then
+                Land[y - dy, i]:= (Land[y - dy, i] and lfNotObjMask) or ((Land[y - dy, i] and lfObjMask) + 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dx, i]:= Land[y + dx, i] or $80
-            else if Land[y + dx, i] and $007F < 127 then
-                Land[y + dx, i]:= (Land[y + dx, i] and $FF80) or ((Land[y + dx, i] and $7F) + 1);
+                Land[y + dx, i]:= Land[y + dx, i] or lfCurrentHog
+            else if Land[y + dx, i] and lfObjMask < lfObjMask then
+                Land[y + dx, i]:= (Land[y + dx, i] and lfNotObjMask) or ((Land[y + dx, i] and lfObjMask) + 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dx, i]:= Land[y - dx, i] or $80
-            else if Land[y - dx, i] and $007F < 127 then
-                Land[y - dx, i]:= (Land[y - dx, i] and $FF80) or ((Land[y - dx, i] and $7F) + 1)
+                Land[y - dx, i]:= Land[y - dx, i] or lfCurrentHog
+            else if Land[y - dx, i] and lfObjMask < lfObjMask then
+                Land[y - dx, i]:= (Land[y - dx, i] and lfNotObjMask) or ((Land[y - dx, i] and lfObjMask) + 1)
     end
 end;
 

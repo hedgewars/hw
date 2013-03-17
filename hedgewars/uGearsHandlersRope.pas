@@ -450,7 +450,7 @@ begin
         end;
 
     if Gear^.Elasticity < _20 then Gear^.CollisionMask:= $FF00
-    else Gear^.CollisionMask:= $FF7F;
+    else Gear^.CollisionMask:= lfCurrentMask;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then
