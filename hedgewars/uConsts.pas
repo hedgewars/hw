@@ -98,6 +98,11 @@ const
     lfIce            = $0800;  // blue
     lfBouncy         = $0400;  // green
 
+    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this doesn't impact play
+    lfCurrentMask    = $FF7F;  // inverse of above. frequently used.
+    lfObjMask        = $007F;  // lower 7 bits used for hogs
+    lfNotObjMask     = $FF80;  // inverse of above.
+
     cMaxPower     = 1500;
     cMaxAngle     = 2048;
     cPowerDivisor = 1500;

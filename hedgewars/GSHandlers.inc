@@ -2753,7 +2753,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
-    Gear^.CollisionMask:= $FF7F;
+    Gear^.CollisionMask:= lfCurrentMask;
 
     FollowGear := Gear;
 
@@ -3025,7 +3025,7 @@ begin
         ry := rndSign(getRandomf * _0_1);
 
         ball:= AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        ball^.CollisionMask:= $FF7F;
+        ball^.CollisionMask:= lfCurrentMask;
 
         PlaySound(sndGun);
         end;
@@ -4376,14 +4376,14 @@ begin
             flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-            flame^.CollisionMask:= $FF7F;
+            flame^.CollisionMask:= lfCurrentMask;
             
             if (Gear^.Health mod 30) = 0 then
                 begin
                 flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-                flame^.CollisionMask:= $FF7F;
+                flame^.CollisionMask:= lfCurrentMask;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
@@ -4460,7 +4460,7 @@ begin
         land:= AddGear(gx, gy, gtFlake, gstTmpFlag, 
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx, 
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-        land^.CollisionMask:= $FF7F;
+        land^.CollisionMask:= lfCurrentMask;
             
         Gear^.Timer:= Gear^.Tag
         end;
