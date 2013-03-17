@@ -329,10 +329,12 @@ begin
             CleanupInput;
             end;
         {arrow keys (up, down)}
-        63232, 63233: begin
+        111, 116,     //linux
+        63232, 63233: //osx
+            begin
 
-            if (Key = 63232) and (history < localLastStr) then inc(history);
-            if (Key = 63233) and (history > 0) then dec(history);
+            if ((Key = 63232) or (Key = 111)) and (history < localLastStr) then inc(history);
+            if ((Key = 63233) or (Key = 116)) and (history > 0) then dec(history);
 
             index:= localLastStr - history + 1;
             if (index > localLastStr) then
