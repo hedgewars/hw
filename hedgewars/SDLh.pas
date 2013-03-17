@@ -312,6 +312,13 @@ const
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
 
+    {* SDL_keysym *}
+    SDLK_BACKSPACE = 8;
+    SDLK_RETURN    = 13;
+    SDLK_ESCAPE    = 27;
+    SDLK_UP        = 273;
+    SDLK_DOWN      = 274;
+
 
 /////////////////////////////////////////////////////////////////
 ///////////////////////  TYPE DEFINITIONS ///////////////////////
