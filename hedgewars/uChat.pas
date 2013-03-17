@@ -195,7 +195,7 @@ and (Strs[i].Tex <> nil) do
         i:= MaxStrIndex
     else
         dec(i);
-        
+
     inc(cnt);
     inc(t)
     end;
@@ -219,13 +219,13 @@ t:= LocalTeam;
 x:= 0;
 if (s[1] = '"') and (s[Length(s)] = '"')
     then x:= 1
-    
+
 else if (s[1] = '''') and (s[Length(s)] = '''') then
     x:= 2
-    
+
 else if (s[1] = '-') and (s[Length(s)] = '-') then
     x:= 3;
-    
+
 if not CurrentTeam^.ExtDriven and (x <> 0) then
     for c:= 0 to Pred(TeamsCount) do
         if (TeamsArray[c] = CurrentTeam) then
@@ -283,7 +283,7 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
             exit
             end;
 
-	for j:= Low(TChatCmd) to High(TChatCmd) do
+    for j:= Low(TChatCmd) to High(TChatCmd) do
         if (s = ChatCommandz[j].ChatCmd) then
             begin
             ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
@@ -309,27 +309,24 @@ var i, btw, index: integer;
     utf8: shortstring;
     action: boolean;
 begin
-    action:= false;
+    action:= true;
     case Sym of
         SDLK_BACKSPACE:
             begin
-            action:= true;
             if Length(InputStr.s) > 0 then
                 begin
                 InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
                 SetLine(InputStr, InputStr.s, true)
                 end
             end;
-        SDLK_ESCAPE: 
+        SDLK_ESCAPE:
             begin
-            action:= true;
-            if Length(InputStr.s) > 0 then 
+            if Length(InputStr.s) > 0 then
                 SetLine(InputStr, '', true)
             else CleanupInput
             end;
         SDLK_RETURN:
             begin
-            action:= true;
             if Length(InputStr.s) > 0 then
                 begin
                 AcceptChatString(InputStr.s);
@@ -339,14 +336,21 @@ begin
             end;
         SDLK_UP, SDLK_DOWN:
             begin
-            action:= true;
             if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
             if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
             index:= localLastStr - history + 1;
             if (index > localLastStr) then
                  SetLine(InputStr, '', true)
             else SetLine(InputStr, LocalStrs[index], true)
-            end
+            end;
+        SDLK_RIGHT, SDLK_LEFT, SDLK_DELETE,
+        SDLK_HOME, SDLK_END,
+        SDLK_PAGEUP, SDLK_PAGEDOWN:
+            begin
+            // ignore me!!!
+            end;
+        else
+            action:= false;
         end;
     if not action and (Key <> 0) then
         begin
