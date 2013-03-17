@@ -45,8 +45,10 @@ type TChatLine = record
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
+    LocalStrs: array[0 .. MaxStrIndex] of shortstring;
     missedCount: LongWord;
     lastStr: LongWord;
+    localLastStr: LongWord;
     history: LongWord;
     visibleCount: LongWord;
     InputStr: TChatLine;
@@ -304,7 +306,7 @@ end;
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
-    utf8, chatLine: shortstring;
+    utf8: shortstring;
 begin
     if Key <> 0 then
     case Key of
@@ -329,18 +331,14 @@ begin
         {arrow keys (up, down)}
         63232, 63233: begin
 
-            if (Key = 63232) and (history < lastStr) then inc(history);
+            if (Key = 63232) and (history < localLastStr) then inc(history);
             if (Key = 63233) and (history > 0) then dec(history);
 
-            index:= lastStr - history + 1;
-            if (index > lastStr) then
+            index:= localLastStr - history + 1;
+            if (index > localLastStr) then
                 SetLine(InputStr, '', true)
             else
-                begin
-                btw:= Pos(': ', Strs[index].s) + 2; // remove the nick
-                chatLine:= copy(Strs[index].s, btw, Length(Strs[index].s));
-                SetLine(InputStr, chatLine, true);
-                end;
+                SetLine(InputStr, LocalStrs[index], true);
             end;
         {arrow keys (left, right)}
         63234, 63235: begin end;
@@ -384,7 +382,11 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
+        begin
+        localLastStr:= (localLastStr + 1) mod MaxStrIndex;
+        LocalStrs[localLastStr]:= s;
         s:= #1 + UserNick + ': ' + s;
+        end;
 
     AddChatString(s)
 end;
@@ -425,6 +427,7 @@ begin
     RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
+    localLastStr:= 0;
     history:= 0;
     visibleCount:= 0;
     showAll:= false;
