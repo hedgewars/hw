@@ -65,7 +65,9 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     gbLayout->addWidget(sbPort, 1, 1);
 
     BtnDefault = new QPushButton(gb);
-    BtnDefault->setText(QPushButton::tr("default"));
+    BtnDefault->setMinimumWidth(50);
+    BtnDefault->setText(QPushButton::tr("Reset"));
+    BtnDefault->setWhatsThis(QPushButton::tr("Set the default server port for Hedgewars"));
     gbLayout->addWidget(BtnDefault, 1, 2);
 
     return pageLayout;
@@ -76,6 +78,7 @@ QLayout * PageNetServer::footerLayoutDefinition()
     QHBoxLayout * bottomLayout = new QHBoxLayout();
 
     BtnStart = formattedButton(QPushButton::tr("Start"));
+    BtnStart->setWhatsThis(QPushButton::tr("Start private server"));
     BtnStart->setMinimumWidth(180);
 
     bottomLayout->addStretch();
