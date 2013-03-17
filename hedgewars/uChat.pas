@@ -412,15 +412,7 @@ begin
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
-        begin
-        // "/team "
-        KeyPressChat(47);
-        KeyPressChat(116);
-        KeyPressChat(101);
-        KeyPressChat(97);
-        KeyPressChat(109);
-        KeyPressChat(32)
-        end
+        SetLine(InputStr, '/team ', true)
 end;
 
 procedure initModule;
