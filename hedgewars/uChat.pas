@@ -47,6 +47,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
     missedCount: LongWord;
     lastStr: LongWord;
+    history: LongWord;
     visibleCount: LongWord;
     InputStr: TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
@@ -293,14 +294,15 @@ end;
 
 procedure KeyPressChat(Key: Longword);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
-var i, btw: integer;
-    utf8: shortstring;
+var i, btw, index: integer;
+    utf8, chatLine: shortstring;
 begin
     if Key <> 0 then
     case Key of
         {Backspace}
         8, 127: if Length(InputStr.s) > 0 then
                 begin
+                history:= 0;
                 InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
                 SetLine(InputStr, InputStr.s, true)
                 end;
@@ -309,6 +311,7 @@ begin
             else
                 begin
                 FreezeEnterKey;
+                history:= 0;
                 SDL_EnableKeyRepeat(0,0);
                 GameState:= gsGame;
                 ResetKbd;
@@ -321,12 +324,29 @@ begin
                 SetLine(InputStr, '', false)
                 end;
             FreezeEnterKey;
+            history:= 0;
             SDL_EnableKeyRepeat(0,0);
             GameState:= gsGame;
             ResetKbd;
             end;
-        {arrow keys}
-        63232, 63233, 63234, 63235: begin end;
+        {arrow keys (up, down)}
+        63232, 63233: begin
+
+            if (Key = 63232) and (history < lastStr) then inc(history);
+            if (Key = 63233) and (history > 0) then dec(history);
+
+            index:= lastStr - history + 1;
+            if (index > lastStr) then
+                SetLine(InputStr, '', true)
+            else
+                begin
+                btw:= Pos(': ', Strs[index].s) + 2; // remove the nick
+                chatLine:= copy(Strs[index].s, btw, Length(Strs[index].s));
+                SetLine(InputStr, chatLine, true);
+                end;
+            end;
+        {arrow keys (left, right)}
+        63234, 63235: begin end;
         else
             if (Key < $80) then
                 btw:= 1
@@ -416,6 +436,7 @@ begin
     RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
+    history:= 0;
     visibleCount:= 0;
     showAll:= false;
     ChatReady:= false;
