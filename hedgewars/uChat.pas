@@ -310,44 +310,43 @@ var i, btw, index: integer;
     action: boolean;
 begin
     action:= false;
-    if Sym <> 0 then
-        case Sym of
-            SDLK_BACKSPACE:
+    case Sym of
+        SDLK_BACKSPACE:
+            begin
+            action:= true;
+            if Length(InputStr.s) > 0 then
                 begin
-                action:= true;
-                if Length(InputStr.s) > 0 then
-                    begin
-                    InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-                    SetLine(InputStr, InputStr.s, true)
-                    end
-                end;
-            SDLK_ESCAPE: 
-                begin
-                action:= true;
-                if Length(InputStr.s) > 0 then 
-                    SetLine(InputStr, '', true)
-                else CleanupInput
-                end;
-            SDLK_RETURN:
-                begin
-                action:= true;
-                if Length(InputStr.s) > 0 then
-                    begin
-                    AcceptChatString(InputStr.s);
-                    SetLine(InputStr, '', false)
-                    end;
-                CleanupInput
-                end;
-            SDLK_UP, SDLK_DOWN:
-                begin
-                action:= true;
-                if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
-                if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
-                index:= localLastStr - history + 1;
-                if (index > localLastStr) then
-                     SetLine(InputStr, '', true)
-                else SetLine(InputStr, LocalStrs[index], true)
+                InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
+                SetLine(InputStr, InputStr.s, true)
                 end
+            end;
+        SDLK_ESCAPE: 
+            begin
+            action:= true;
+            if Length(InputStr.s) > 0 then 
+                SetLine(InputStr, '', true)
+            else CleanupInput
+            end;
+        SDLK_RETURN:
+            begin
+            action:= true;
+            if Length(InputStr.s) > 0 then
+                begin
+                AcceptChatString(InputStr.s);
+                SetLine(InputStr, '', false)
+                end;
+            CleanupInput
+            end;
+        SDLK_UP, SDLK_DOWN:
+            begin
+            action:= true;
+            if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
+            if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
+            index:= localLastStr - history + 1;
+            if (index > localLastStr) then
+                 SetLine(InputStr, '', true)
+            else SetLine(InputStr, LocalStrs[index], true)
+            end
         end;
     if not action and (Key <> 0) then
         begin
