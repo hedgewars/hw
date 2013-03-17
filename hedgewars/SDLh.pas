@@ -316,8 +316,15 @@ const
     SDLK_BACKSPACE = 8;
     SDLK_RETURN    = 13;
     SDLK_ESCAPE    = 27;
+    SDLK_DELETE    = 127;
     SDLK_UP        = 273;
     SDLK_DOWN      = 274;
+    SDLK_RIGHT     = 275;
+    SDLK_LEFT      = 276;
+    SDLK_HOME      = 278;
+    SDLK_END       = 279;
+    SDLK_PAGEUP    = 280;
+    SDLK_PAGEDOWN  = 281;
 
 
 /////////////////////////////////////////////////////////////////
