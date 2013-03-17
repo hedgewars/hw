@@ -60,7 +60,7 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     gbLayout->addWidget(labelPort, 1, 0);
 
     sbPort = new QSpinBox(gb);
-    sbPort->setMinimum(0);
+    sbPort->setMinimum(1024);
     sbPort->setMaximum(65535);
     gbLayout->addWidget(sbPort, 1, 1);
 
