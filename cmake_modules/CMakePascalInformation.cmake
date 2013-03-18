@@ -8,7 +8,7 @@ SET(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
 INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
 # This should be included before the _INIT variables are
-# used to initialize the cache.  Since the rule variables 
+# used to initialize the cache.  Since the rule variables
 # have if blocks on them, users can still define them here.
 # But, it should still be after the platform file so changes can
 # be made to those values.
@@ -46,7 +46,7 @@ ENDIF(NOT CMAKE_MODULE_EXISTS)
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_LINK_Ada_FLAGS)
 
 #IF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG)
-#  SET(CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG}) 
+#  SET(CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG)
 
 #IF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG_SEP)
@@ -63,7 +63,7 @@ ENDIF(NOT CMAKE_MODULE_EXISTS)
 #ENDIF(NOT CMAKE_SHARED_MODULE_Ada_FLAGS)
 
 #IF(NOT CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG)
-#  SET(CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG ${CMAKE_SHARED_MODULE_RUNTIME_C_FLAG}) 
+#  SET(CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG ${CMAKE_SHARED_MODULE_RUNTIME_C_FLAG})
 #ENDIF(NOT CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG)
 
 #IF(NOT CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG_SEP)
@@ -86,7 +86,7 @@ ENDIF(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 SET(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
 SET (CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING
-     "Flags for Ada compiler.")
+     "Flags for Pascal compiler.")
 
 INCLUDE(CMakeCommonLanguageInclude)
 
@@ -108,13 +108,13 @@ INCLUDE(CMakeCommonLanguageInclude)
 # <LINK_FLAGS>
 
 # Ada compiler information
-# <CMAKE_Ada_COMPILER>  
+# <CMAKE_Ada_COMPILER>
 # <CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS>
 # <CMAKE_SHARED_MODULE_CREATE_Ada_FLAGS>
 # <CMAKE_Ada_LINK_FLAGS>
 
 # Static library tools
-# <CMAKE_AR> 
+# <CMAKE_AR>
 # <CMAKE_RANLIB>
 
 
@@ -156,7 +156,7 @@ ENDIF(NOT CMAKE_Pascal_COMPILE_OBJECT)
 # routine qualifies since it is normally small.  Thus, the normal usage is
 # add_executable(foo foo.adb), but  add_executable(foo path/minimal.adb) would
 # work as well so long as both path/minimal.adb existed and foo.adb existed.
-# Also, note there is no way to specify 
+# Also, note there is no way to specify
 # ${CMAKE_CURRENT_SOURCE_DIR}/<TARGET>.adb as the code for gnatmake to compile
 # because in this context ${CMAKE_CURRENT_SOURCE_DIR} is set to the top
 # of the source tree and not the expected sub-directory of the source tree.
@@ -168,13 +168,14 @@ ENDIF(NOT CMAKE_Pascal_COMPILE_OBJECT)
 # In sum, you have to be careful of your target name, the nominal source file
 # name has to be compilable, but otherwise it is ignored, and you must specify
 # the required -aI and other GNAT_EXECUTABLE_BUILDER = gnatmake options
-# using LINK_FLAGS specified with set_target_properties.  
+# using LINK_FLAGS specified with set_target_properties.
 # However, so long as you pay attention to these
 # constraints, add_executable should work for the Ada language.
 
 IF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
 #GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
-    set(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_BINARY_DIR}/ppas.sh")
+    message("look here ${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.sh")
 #  SET(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_Pascal_COMPILER} <CMAKE_Ada_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE>.adb -cargs <FLAGS> -largs <LINK_LIBRARIES>")
 ENDIF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
 

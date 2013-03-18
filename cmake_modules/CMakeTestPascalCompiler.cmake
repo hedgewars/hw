@@ -36,19 +36,19 @@ ENDIF(NOT CMAKE_Pascal_COMPILER_WORKS)
 
 IF(NOT CMAKE_Pascal_COMPILER_WORKS)
   MESSAGE(STATUS "Check for working Pascal compiler: ${CMAKE_Pascal_COMPILER} -- broken")
-  FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log
+  FILE(APPEND ${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakeError.log
     "Determining if the Pascal compiler works failed with "
     "the following output:\n${OUTPUT}\n\n")
   MESSAGE(FATAL_ERROR "The Pascal builder \"${CMAKE_Pascal_COMPILER}\" "
-    "is not able to compile, and link a simple test program.\nIt fails "
+    "is not able to compile and link a simple test program.\nIt fails "
     "with the following output:\n ${OUTPUT}\n\n"
     "CMake will not be able to correctly generate this project.")
 ELSE(NOT CMAKE_Pascal_COMPILER_WORKS)
   IF(PASCAL_TEST_WAS_RUN)
     MESSAGE(STATUS "Check for working Pascal compiler: ${CMAKE_Pascal_COMPILER} -- works")
-    FILE(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
+    FILE(APPEND ${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
       "Determining if the Pascal compiler works passed with "
-      "the following output:\n${OUTPUT}\n\n") 
+      "the following output:\n${OUTPUT}\n\n")
   ENDIF(PASCAL_TEST_WAS_RUN)
   SET(CMAKE_Pascal_COMPILER_WORKS 1 CACHE INTERNAL "")
 ENDIF(NOT CMAKE_Pascal_COMPILER_WORKS)
