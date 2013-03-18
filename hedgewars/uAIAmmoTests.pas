@@ -1171,7 +1171,7 @@ begin
 
     //FillChar(cake, sizeof(cake), 0);
     cake.Radius:= 7;
-    cake.CollisionMask:= lfCurrentMask;
+    cake.CollisionMask:= lfNotCurrentMask;
     cake.Hedgehog:= Me^.Hedgehog;
 
     // check left direction

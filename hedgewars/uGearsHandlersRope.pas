@@ -202,7 +202,7 @@ begin
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] > lfAllObjMask) then
             begin
             tx := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
@@ -425,7 +425,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] and $FF00) <> 0) then
+            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and (Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] > lfAllObjMask) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
@@ -449,8 +449,8 @@ begin
             end;
         end;
 
-    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= $FF00
-    else Gear^.CollisionMask:= lfCurrentMask;
+    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= lfLandMask
+    else Gear^.CollisionMask:= lfNotCurrentMask;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then

@@ -108,25 +108,25 @@ if not doSet then
     if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dy, i]:= Land[y + dy, i] and lfCurrentMask
+                Land[y + dy, i]:= Land[y + dy, i] and lfNotCurrentMask
             else if Land[y + dy, i] and lfObjMask > 0 then
                 Land[y + dy, i]:= (Land[y + dy, i] and lfNotObjMask) or ((Land[y + dy, i] and lfObjMask) - 1);
     if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dy, i]:= Land[y - dy, i] and lfCurrentMask
+                Land[y - dy, i]:= Land[y - dy, i] and lfNotCurrentMask
             else if Land[y - dy, i] and lfObjMask > 0 then
                 Land[y - dy, i]:= (Land[y - dy, i] and lfNotObjMask) or ((Land[y - dy, i] and lfObjMask) - 1);
     if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y + dx, i]:= Land[y + dx, i] and lfCurrentMask
+                Land[y + dx, i]:= Land[y + dx, i] and lfNotCurrentMask
             else if Land[y + dx, i] and lfObjMask > 0 then
                 Land[y + dx, i]:= (Land[y + dx, i] and lfNotObjMask) or ((Land[y + dx, i] and lfObjMask) - 1);
     if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
         for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
             if isCurrent then
-                Land[y - dx, i]:= Land[y - dx, i] and lfCurrentMask
+                Land[y - dx, i]:= Land[y - dx, i] and lfNotCurrentMask
             else if Land[y - dx, i] and lfObjMask > 0 then
                 Land[y - dx, i]:= (Land[y - dx, i] and lfNotObjMask) or ((Land[y - dx, i] and lfObjMask) - 1)
     end
@@ -269,7 +269,7 @@ begin
            exit;
            end;
 
-        if Land[j, i] and $FF00 and not lfIce = 0 then
+        if Land[j, i] and lfLandMask and not lfIce = 0 then
            result := result + 1;
         end;
 end;
@@ -957,7 +957,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= ((Land[Y, X] and $FF00) = 0) and (LandPixels[yy, xx] <> 0);
+    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and (LandPixels[yy, xx] <> 0);
     if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
