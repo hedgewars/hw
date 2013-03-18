@@ -17,16 +17,17 @@ if(HAVE_IMGINIT)
 endif()
 
 
+enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
-if(${BUILD_ENGINE_LIBRARY})
-    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(hwengine_project hwLibrary.pas)
-else()
-    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-    set(hwengine_project hwengine.pas)
-endif()
+#if(${BUILD_ENGINE_LIBRARY})
+#    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+#    set(hwengine_project hwLibrary.pas)
+#else()
+#    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+#    set(hwengine_project hwengine.pas)
+#endif()
 
 if (APPLE)
     set(required_fpc_version 2.6)
@@ -203,43 +204,12 @@ if(${FFMPEG_FOUND})
 endif()
 
 
+set(CMAKE_Pascal_FLAGS "-B -FE${PROJECT_BINARY_DIR}/bin -FU${PROJECT_BINARY_DIR}/hedgewars -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -Px86_64   -Fi${PROJECT_BINARY_DIR}/hedgewars -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE -k-llua -k${SDLMAIN_LIB}")
+add_executable(hwengine hwengine.pas)
+
 set(fpc_flags ${pascal_flags} ${hwengine_project})
 
-if(NOT APPLE)
-    #here is the command for standard executables or for shared library
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
-        COMMAND "${FREEPASCAL_EXECUTABLE}"
-        ARGS ${fpc_flags} -o${engine_output_name}
-        DEPENDS ${engine_sources}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        )
-else()
-    #these are the dependencies for building a universal binary on Mac OS X
-    foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
-        list(APPEND lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
-        add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
-            COMMAND "${FREEPASCAL_EXECUTABLE}"
-            ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
-            DEPENDS ${engine_sources}
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-            )
-        add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
-        add_custom_command(TARGET hwengine.${build_arch} POST_BUILD
-            COMMAND "install_name_tool"
-            ARGS -id @executable_path/../Frameworks/${engine_output_name}
-                ${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}
-            )
-    endforeach()
-
-    add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
-        COMMAND "lipo"
-        ARGS ${lipo_args_list} -create -output ${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}
-        DEPENDS ${lipo_args_list}
-        )
-endif()
-
-
-add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
+#add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
 
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
@@ -264,4 +234,4 @@ if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
     add_dependencies(hwengine ENGINECLEAN)
 endif()
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine" DESTINATION ${destination_dir})

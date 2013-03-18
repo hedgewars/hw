@@ -1,7 +1,7 @@
 # Determine the compiler to use for Pascal programs
 # NOTE, a generator may set CMAKE_Pascal_COMPILER before
 # loading this file to force a compiler.
-# use environment variable Pascal first if defined by user, next use 
+# use environment variable Pascal first if defined by user, next use
 # the cmake variable CMAKE_GENERATOR_PASCAL which can be defined by a generator
 # as a default compiler
 
@@ -15,12 +15,12 @@ IF(NOT CMAKE_Pascal_COMPILER)
     ENDIF(CMAKE_Pascal_FLAGS_ENV_INIT)
     IF(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
     ELSE(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
-      MESSAGE(FATAL_ERROR "Could not find compiler set in environment variable FPC:\n$ENV{FPC}.") 
+      MESSAGE(FATAL_ERROR "Could not find compiler set in environment variable FPC:\n$ENV{FPC}.")
     ENDIF(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
   ENDIF($ENV{FPC} MATCHES ".+")
 
   # next try prefer the compiler specified by the generator
-  IF(CMAKE_GENERATOR_PASCAL) 
+  IF(CMAKE_GENERATOR_PASCAL)
     IF(NOT CMAKE_Pascal_COMPILER_INIT)
       SET(CMAKE_Pascal_COMPILER_INIT ${CMAKE_GENERATOR_PASCAL})
     ENDIF(NOT CMAKE_Pascal_COMPILER_INIT)
@@ -30,7 +30,7 @@ IF(NOT CMAKE_Pascal_COMPILER)
   IF(CMAKE_Pascal_COMPILER_INIT)
     SET(CMAKE_Pascal_COMPILER_LIST ${CMAKE_Pascal_COMPILER_INIT})
   ELSE(CMAKE_Pascal_COMPILER_INIT)
-    SET(CMAKE_Pascal_COMPILER_LIST fpc ppc386 ppcx64 ppcppc ppcarm)  
+    SET(CMAKE_Pascal_COMPILER_LIST fpc)
   ENDIF(CMAKE_Pascal_COMPILER_INIT)
 
   # Find the compiler.
@@ -53,8 +53,8 @@ ENDIF(NOT CMAKE_RANLIB)
 MARK_AS_ADVANCED(CMAKE_RANLIB)
 
 # configure variables set in this file for fast reload later on
-#CONFIGURE_FILE(${CMAKE_ROOT}/Modules/CMakePascalCompiler.cmake.in 
-CONFIGURE_FILE(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in 
+#CONFIGURE_FILE(${CMAKE_ROOT}/Modules/CMakePascalCompiler.cmake.in
+CONFIGURE_FILE(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
                "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/${CMAKE_VERSION}/CMakePascalCompiler.cmake"
                IMMEDIATE)
 MARK_AS_ADVANCED(CMAKE_AR)
