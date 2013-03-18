@@ -204,7 +204,7 @@ if(${FFMPEG_FOUND})
 endif()
 
 
-set(CMAKE_Pascal_FLAGS "-B -FE${PROJECT_BINARY_DIR}/bin -FU${PROJECT_BINARY_DIR}/hedgewars -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin    -Fi${PROJECT_BINARY_DIR}/hedgewars -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
+set(CMAKE_Pascal_FLAGS "-B  -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
 add_executable(hwengine hwengine.pas)
 
 if(APPLE)
