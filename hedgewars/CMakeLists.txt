@@ -36,69 +36,71 @@ else()
 endif()
 
 set(engine_sources
-    ${hwengine_project}
+    SDLh.pas
+    uSinTable.pas
+    uFloat.pas
+    uConsts.pas
     LuaPas.pas
     PNGh.pas
-    SDLh.pas
-    uAI.pas
-    uAIActions.pas
-    uAILandMarks.pas
-    uAIAmmoTests.pas
-    uAIMisc.pas
-    uAmmos.pas
-    uCaptions.pas
-    uChat.pas
-    uCollisions.pas
-    uCommands.pas
-    uCommandHandlers.pas
-    uConsole.pas
-    uConsts.pas
-    uCursor.pas
-    uDebug.pas
-    uFloat.pas
-    uGame.pas
-    uGears.pas
-    uGearsHandlers.pas
-    uGearsHandlersRope.pas
-    uGearsHedgehog.pas
-    uGearsList.pas
-    uGearsRender.pas
-    uGearsUtils.pas
-    uIO.pas
-    uInputHandler.pas
-    uLand.pas
-    uLandGenMaze.pas
-    uLandGraphics.pas
-    uLandObjects.pas
-    uLandOutline.pas
-    uLandPainted.pas
-    uLandTemplates.pas
-    uLandTexture.pas
-    uLocale.pas
-    uMisc.pas
-    uPhysFSLayer.pas
-    uRandom.pas
-    uRender.pas
-    uRenderUtils.pas
-    uScript.pas
-    uSinTable.pas
-    uSound.pas
-    uStats.pas
-    uStore.pas
-    uTeams.pas
-    uTextures.pas
-    uTouch.pas
     uTypes.pas
     uUtils.pas
     uVariables.pas
+    uMisc.pas
+    uConsole.pas
+    uDebug.pas
+    uCommands.pas
+    uInputHandler.pas
+    uTextures.pas
+    uRenderUtils.pas
+    uRender.pas
+    uCaptions.pas
+    uLandTexture.pas
+    uIO.pas
+    uChat.pas
+    uPhysFSLayer.pas
+    uStore.pas
+    uSound.pas
+    uRandom.pas
+    uLocale.pas
+    uStats.pas
+    uCursor.pas
     uVideoRec.pas
-    uVisualGears.pas
+    uAILandMarks.pas
+    adler32.pas
+    uLandTemplates.pas
+    uLandGraphics.pas
+    uLandPainted.pas
+    uLandOutline.pas
+    uLandGenMaze.pas
+    uLandObjects.pas
+    uLand.pas
+    uAmmos.pas
+
+
+    uGearsList.pas
+    uCollisions.pas
+    uAIMisc.pas
+    uAIActions.pas
+    uAIAmmoTests.pas
+    uAI.pas
+    uTeams.pas
+    uGears.pas
+    uGame.pas
+    uCommandHandlers.pas
+    uGearsHandlers.pas
+    uGearsHandlersRope.pas
+    uGearsHedgehog.pas
+    uGearsRender.pas
+    uGearsUtils.pas
+    uScript.pas
     uWorld.pas
+    uVisualGears.pas
+    hwengine.pas
+
     GSHandlers.inc
     VGSHandlers.inc
     ArgParsers.inc
     options.inc
-    adler32.pas
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
@@ -204,8 +206,8 @@ if(${FFMPEG_FOUND})
 endif()
 
 
-set(CMAKE_Pascal_FLAGS "-B  -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
-add_executable(hwengine hwengine.pas)
+set(CMAKE_Pascal_FLAGS " -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
+add_executable(hwengine ${engine_sources})
 
 if(APPLE)
     set(CMAKE_Pascal_FLAGS "-Px86_64  -k-llua -k${SDLMAIN_LIB} ${CMAKE_Pascal_FLAGS}")
@@ -235,8 +237,8 @@ if(${FFMPEG_FOUND})
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
-    add_dependencies(hwengine ENGINECLEAN)
-endif()
+#if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
+#    add_dependencies(hwengine ENGINECLEAN)
+#endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine" DESTINATION ${destination_dir})
