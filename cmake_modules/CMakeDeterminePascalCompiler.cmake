@@ -55,7 +55,7 @@ MARK_AS_ADVANCED(CMAKE_RANLIB)
 # configure variables set in this file for fast reload later on
 #CONFIGURE_FILE(${CMAKE_ROOT}/Modules/CMakePascalCompiler.cmake.in
 CONFIGURE_FILE(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
-               "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/${CMAKE_VERSION}/CMakePascalCompiler.cmake"
+               "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakePascalCompiler.cmake"
                IMMEDIATE)
 MARK_AS_ADVANCED(CMAKE_AR)
 
