@@ -6,10 +6,9 @@
 
 IF(NOT CMAKE_Pascal_COMPILER_WORKS)
   MESSAGE(STATUS "Check for working Pascal compiler: ${CMAKE_Pascal_COMPILER}")
-  FILE(WRITE ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmp/testpascalcompiler.pas
+  FILE(WRITE ${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakeTmp/testpascalcompiler.pas
   "program testPascalCompiler;
    begin
-
    end.
   ")
 

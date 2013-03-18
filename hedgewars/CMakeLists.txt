@@ -204,9 +204,14 @@ if(${FFMPEG_FOUND})
 endif()
 
 
-set(CMAKE_Pascal_FLAGS "-B -FE${PROJECT_BINARY_DIR}/bin -FU${PROJECT_BINARY_DIR}/hedgewars -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -Px86_64   -Fi${PROJECT_BINARY_DIR}/hedgewars -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE -k-llua -k${SDLMAIN_LIB}")
+set(CMAKE_Pascal_FLAGS "-B -FE${PROJECT_BINARY_DIR}/bin -FU${PROJECT_BINARY_DIR}/hedgewars -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin    -Fi${PROJECT_BINARY_DIR}/hedgewars -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
 add_executable(hwengine hwengine.pas)
 
+if(APPLE)
+    set(CMAKE_Pascal_FLAGS "-Px86_64  -k-llua -k${SDLMAIN_LIB} ${CMAKE_Pascal_FLAGS}")
+else()
+    set(CMAKE_Pascal_FLAGS "-Pi386 ${CMAKE_Pascal_FLAGS}")
+endif()
 set(fpc_flags ${pascal_flags} ${hwengine_project})
 
 #add_custom_target(hwengine ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}")
