@@ -680,7 +680,7 @@ if draw then
                             begin
                             rx:= rx div 2;ry:= ry div 2;
                             end;
-                        if Land[yy + py, xx + px] and $FF00 = 0 then
+                        if Land[yy + py, xx + px] <= lfAllObjMask then
                             if gun then
                                 begin
                                 LandDirty[yy div 32, xx div 32]:= 1;
@@ -1020,7 +1020,7 @@ begin
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
             inc(Gear^.Damage);
         // let's interrupt before a collision to give portals a chance to catch the bullet
-        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and not(CheckLandValue(x, y, $FF00)) then
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and not(CheckLandValue(x, y, lfLandMask)) then
             begin
             Gear^.Tag := 1;
             Gear^.Damage := 0;
@@ -1242,7 +1242,7 @@ begin
         end
     else
         begin
-        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), $FF00) then
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfLandMask) then
             begin
             Gear^.dY := Gear^.dY + cGravity;
             Gear^.Y := Gear^.Y + Gear^.dY
@@ -1252,7 +1252,7 @@ begin
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, $FF00) then
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfLandMask) then
         begin
         HHGear^.X := Gear^.X;
         HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
@@ -2753,7 +2753,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
-    Gear^.CollisionMask:= lfCurrentMask;
+    Gear^.CollisionMask:= lfNotCurrentMask;
 
     FollowGear := Gear;
 
@@ -3025,7 +3025,7 @@ begin
         ry := rndSign(getRandomf * _0_1);
 
         ball:= AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        ball^.CollisionMask:= lfCurrentMask;
+        ball^.CollisionMask:= lfNotCurrentMask;
 
         PlaySound(sndGun);
         end;
@@ -3595,7 +3595,7 @@ begin
     doPortalColorSwitch();
 
     // destroy portal if ground it was attached too is gone
-    if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
+    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
     or (hwRound(Gear^.Y) > cWaterLine) then
@@ -4376,14 +4376,14 @@ begin
             flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-            flame^.CollisionMask:= lfCurrentMask;
+            flame^.CollisionMask:= lfNotCurrentMask;
             
             if (Gear^.Health mod 30) = 0 then
                 begin
                 flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-                flame^.CollisionMask:= lfCurrentMask;
+                flame^.CollisionMask:= lfNotCurrentMask;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
@@ -4460,7 +4460,7 @@ begin
         land:= AddGear(gx, gy, gtFlake, gstTmpFlag, 
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx, 
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-        land^.CollisionMask:= lfCurrentMask;
+        land^.CollisionMask:= lfNotCurrentMask;
             
         Gear^.Timer:= Gear^.Tag
         end;
@@ -5064,7 +5064,7 @@ spewing ice cubes.  The cubes will be visual gears only.  The scatter from them 
 For now we assume a "ray" like a deagle projected out from the gun.
 All these effects assume the ray's angle is not changed and that the target type was unchanged over a number of ticks.  This is a simplifying assumption for "gun was applying freezing effect to the same target".  
   * When fired at water a layer of ice textured land is added above the water.
-  * When fired at non-ice land (land and $FF00 and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
+  * When fired at non-ice land (land and lfLandMask and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
   * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.  As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.  If the effect is interrupted before reaching the top, the freezing state is cleared.
 A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
 A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
@@ -5460,7 +5460,7 @@ begin
     if Gear^.State and gstDrowning <> 0 then exit;
     with Gear^ do
         begin
-        if CheckLandValue(gx, gy, $FF00) then
+        if CheckLandValue(gx, gy, lfLandMask) then
             begin
             t:= Angle + hwRound((hwAbs(dX)+hwAbs(dY)) * _10); 
 
