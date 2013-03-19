@@ -175,6 +175,11 @@ if(PNG_FOUND)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIB_DIR})
 endif()
 
+if(NOT LUA_FOUND)
+    #linking with liblua.a requires system readline
+    add_flag_append(CMAKE_Pascal_FLAGS "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a -k-lreadline")
+endif()
+
 if(NOT PHYSFS_FOUND)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
