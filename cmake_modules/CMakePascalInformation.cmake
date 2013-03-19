@@ -21,15 +21,6 @@ IF(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
    INCLUDE(${CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal})
 ENDIF(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
 
-
-# for most systems a module is the same as a shared library
-# so unless the variable CMAKE_MODULE_EXISTS is set just
-# copy the values from the LIBRARY variables
-IF(NOT CMAKE_MODULE_EXISTS)
-  SET(CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_Pascal_FLAGS})
-  SET(CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS})
-ENDIF(NOT CMAKE_MODULE_EXISTS)
-
 # Create a set of shared library variable specific to Pascal
 # For 90% of the systems, these are the same flags as the C versions
 # so if these are not set just copy the flags from the c version
@@ -101,8 +92,7 @@ ENDIF(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 SET(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
-SET (CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING
-     "Flags for Pascal compiler.")
+SET (CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING "Flags for Pascal compiler.")
 
 INCLUDE(CMakeCommonLanguageInclude)
 
@@ -158,10 +148,13 @@ ENDIF(NOT CMAKE_Ada_CREATE_STATIC_LIBRARY)
 
 # compile a Pascal file into an object file
 IF(NOT CMAKE_Pascal_COMPILE_OBJECT)
-    #when you have multiple ld installation make sure you get the one bundled with the system C compiler
   if(UNIX)
-    get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
-    set(CMAKE_Pascal_UNIX_FLAGS "-FD${CMAKE_C_COMPILER_DIR}")
+    #when you have multiple ld installation make sure you get the one bundled with the system C compiler
+    INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-GNU-C.cmake OPTIONAL)
+    if(CMAKE_C_COMPILER)
+      get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
+      set(CMAKE_Pascal_UNIX_FLAGS "-FD${CMAKE_C_COMPILER_DIR}")
+    endif(CMAKE_C_COMPILER)
     if(APPLE)
       #add user framework directory
       set(CMAKE_Pascal_UNIX_FLAGS "-Ff~/Library/Frameworks ${CMAKE_Pascal_UNIX_FLAGS}")
