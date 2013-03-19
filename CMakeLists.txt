@@ -16,7 +16,7 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017)
 endforeach()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
-
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)]" OFF)
@@ -161,7 +161,7 @@ if(APPLE)
         set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
         set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
         set(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        list(APPEND pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}")
     endif()
 
     #CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
@@ -190,10 +190,8 @@ if(APPLE)
         endif()
     endif()
 
-    #add user framework directory, other paths can be passed via FPFLAGS
-    list(APPEND pascal_flags "-Ff~/Library/Frameworks")
     #set deployment target
-    list(APPEND pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}")
+    add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version} ")
 endif(APPLE)
 
 
@@ -230,7 +228,7 @@ include(CheckCCompilerFlag)
 set(CMAKE_REQUIRED_FLAGS "-Wl,-z -Wl,noexecstack")
 check_c_compiler_flag("" HAVE_NOEXECSTACK) #empty because we are testing a linker flag
 if(HAVE_NOEXECSTACK)
-    list(APPEND pascal_flags "-k-z" "-knoexecstack")
+    add_flag_append(CMAKE_Pascal_FLAGS "-k-z -knoexecstack")
     if(NOT ${MINIMAL_FLAGS})
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
     endif()
@@ -247,40 +245,24 @@ if(FPFLAGS OR GHFLAGS)
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}            # user flags
-                 "-B"                                 # compile all units
-                 "-vm4079,4080,4081"                  # fpc verbosity output format
-                 "-FE${PROJECT_BINARY_DIR}/bin"       # fpc binaries output directory
-                 "-FU${PROJECT_BINARY_DIR}/hedgewars" # fpc units output directory
-                 "-Fl${PROJECT_BINARY_DIR}/bin"       # fpc linking directory (win/unix)
-                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (for out of source builds)
-                 "-k-L${PROJECT_BINARY_DIR}/bin"      # ld linking directory (unix/osx)
-                 "-Cs2000000"                         # stack size
-                 "-vewnq"                             # fpc output verbosity
-                 "-dDEBUGFILE"                        # macro for engine output
-                 )
+
 list(APPEND haskell_flags ${ghflags_parsed} # user flags
                  "-O2"                      # optimise for faster code
                  )
 
+add_flag_append(CMAKE_Pascal_FLAGS "-vm4079,4080,4081 -Cs2000000 -vewnq")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -g -gl -gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs -Si")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-" # disable all optimisations
-                             "-g"  # enable debug symbols
-                             "-gl" # add line info to bt
-                             "-gv" # allow valgrind
-                             )
+
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
                               )
 else()
-    list(APPEND pascal_flags "-Os" # optimise for size
-                             "-Xs" # strip binary
-                             "-Si" # turn on inlining
-                             )
     list(APPEND haskell_flags "-w" # no warnings
                               )
 endif()
@@ -295,7 +277,7 @@ else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
     #linking with liblua.a requires system readline
-    list(APPEND pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline")
+    add_flag_append(CMAKE_Pascal_FLAGS "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a -k-lreadline")
 endif()
 
 
@@ -328,10 +310,6 @@ else()
     message(STATUS "PhysFS will be provided by the bundled sources")
     set(physfs_output_name "hw_physfs")
     add_subdirectory(misc/libphysfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    set(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name} -dPHYSFS_INTERNAL ${CMAKE_Pascal_FLAGS}")
 endif()
 
 find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")

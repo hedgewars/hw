@@ -58,7 +58,8 @@ interface
 {$ENDIF}
 
 {$IFDEF DARWIN}
-    {$IFNDEF IPHONEOS}
+    {$IFNDEF HWLIBRARY}
+        {$linklib SDLmain}
         {$PASCALMAINNAME SDL_main}
         {$linkframework Cocoa}
         {$linkframework SDL}
