@@ -124,6 +124,9 @@ find_package_or_fail(FreePascal)
 #when cmake-2.6 support is dropped, this ought to be inside FindFreePascal.cmake
 if (FREEPASCAL_VERSION VERSION_LESS required_fpc_version)
     message(FATAL_ERROR "Freepascal ${FREEPASCAL_VERSION} is too old, minimum version required is ${required_fpc_version}")
+elseif(FREEPASCAL_VERSION VERSION_GREATER 2.4)
+    #enable INLINE only with a recent version of fpc
+    add_flag_append(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
 
 
@@ -220,9 +223,5 @@ endif()
 if(APPLE)
     target_link_libraries(hwengine SDLmain)
 endif()
-#this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-#if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
-#    add_dependencies(hwengine ENGINECLEAN)
-#endif()
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})

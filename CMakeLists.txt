@@ -254,7 +254,7 @@ list(APPEND haskell_flags ${ghflags_parsed} # user flags
 
 add_flag_append(CMAKE_Pascal_FLAGS "-vm4079,4080,4081 -Cs2000000 -vewnq")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -g -gl -gv")
-add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs -Si")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
