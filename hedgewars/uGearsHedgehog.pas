@@ -897,35 +897,40 @@ if (Gear^.State and gstMoving) <> 0 then
     if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
         if not isFalling then
             if hwAbs(Gear^.dX) > _0_01 then
-                if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) then
+                if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) or
+                (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
                     begin
                     Gear^.X:= Gear^.X + Gear^.dX;
                     Gear^.dX:= Gear^.dX * _0_96;
                     Gear^.Y:= Gear^.Y - _1
                     end
                 else
-                    if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) then
+                    if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) or
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
                         begin
                         Gear^.X:= Gear^.X + Gear^.dX;
                         Gear^.dX:= Gear^.dX * _0_93;
                         Gear^.Y:= Gear^.Y - _2
                         end 
                     else
-                        if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) then
+                    if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) or
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
                         begin
                         Gear^.X:= Gear^.X + Gear^.dX;
                         Gear^.dX:= Gear^.dX * _0_9 ;
                         Gear^.Y:= Gear^.Y - _3
                         end
                     else
-                        if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) then
+                        if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) or
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
                             begin
                             Gear^.X:= Gear^.X + Gear^.dX;
                             Gear^.dX:= Gear^.dX * _0_87;
                             Gear^.Y:= Gear^.Y - _4
                             end
                     else
-                        if not TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) then
+                        if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) or
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
                             begin
                             Gear^.X:= Gear^.X + Gear^.dX;
                             Gear^.dX:= Gear^.dX * _0_84;
