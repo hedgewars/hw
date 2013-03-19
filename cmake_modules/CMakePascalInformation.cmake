@@ -40,6 +40,7 @@ ENDIF(NOT CMAKE_MODULE_EXISTS)
 
 IF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
   #another similarity, fpc: -fPIC  Same as -Cg
+  #(maybe required only for x86_64)
   SET(CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
 ENDIF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
 
@@ -157,13 +158,21 @@ ENDIF(NOT CMAKE_Ada_CREATE_STATIC_LIBRARY)
 
 # compile a Pascal file into an object file
 IF(NOT CMAKE_Pascal_COMPILE_OBJECT)
-  SET(CMAKE_Pascal_COMPILE_OBJECT
-      "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> -Fi${CMAKE_CURRENT_BINARY_DIR} <FLAGS> <SOURCE>")
+    #when you have multiple ld installation make sure you get the one bundled with the system C compiler
+  get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
+  if(APPLE)
+    #add user framework directory
+    set(CMAKE_Pascal_OSX_FLAGS "-Ff~/Library/Frameworks")
+    if(CMAKE_OSX_SYSROOT)
+        set(CMAKE_Pascal_OSX_FLAGS "-XD${CMAKE_OSX_SYSROOT} ${CMAKE_Pascal_OSX_FLAGS}")
+    endif(CMAKE_OSX_SYSROOT)
+  endif(APPLE)
+    SET(CMAKE_Pascal_COMPILE_OBJECT
+      "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> -Fi${CMAKE_CURRENT_BINARY_DIR} -FD${CMAKE_C_COMPILER_DIR} ${CMAKE_Pascal_OSX_FLAGS} <FLAGS> <SOURCE>")
 ENDIF(NOT CMAKE_Pascal_COMPILE_OBJECT)
 
-
+# link Pascal objects in a single executable
 IF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
-#GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
     set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.sh")
 #  SET(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_Pascal_COMPILER} <CMAKE_Pascal_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE>.adb -cargs <FLAGS> -largs <LINK_LIBRARIES>")
 ENDIF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
