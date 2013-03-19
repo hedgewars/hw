@@ -35,10 +35,6 @@ interface
 {$ENDIF}
 
 {$IFDEF UNIX}
-    {$IFNDEF DARWIN}
-        {necessary for statically linking physfs (divdi3 undefined)}
-        {$linklib stdc++}
-    {$ENDIF}
     {$IFDEF HAIKU}
         {$linklib root}
     {$ELSE}
@@ -81,19 +77,11 @@ const
     SDL_ImageLibName = 'SDL_image.dll';
     SDL_NetLibName = 'SDL_net.dll';
 {$ELSE}
-    {$IFDEF DARWIN}
-    SDLLibName = 'SDL';
-    SDL_TTFLibName = 'SDL_ttf';
-    SDL_MixerLibName = 'SDL_mixer';
-    SDL_ImageLibName = 'SDL_image';
-    SDL_NetLibName = 'SDL_net';
-    {$ELSE}
-    SDLLibName = 'libSDL.so';
-    SDL_TTFLibName = 'libSDL_ttf.so';
-    SDL_MixerLibName = 'libSDL_mixer.so';
-    SDL_ImageLibName = 'libSDL_image.so';
-    SDL_NetLibName = 'libSDL_net.so';
-    {$ENDIF}
+    SDLLibName = 'libSDL';
+    SDL_TTFLibName = 'libSDL_ttf';
+    SDL_MixerLibName = 'libSDL_mixer';
+    SDL_ImageLibName = 'libSDL_image';
+    SDL_NetLibName = 'libSDL_net';
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////
