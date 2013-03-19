@@ -168,13 +168,6 @@ if(APPLE)
     list(APPEND pascal_flags "-FD${compiler_dir}")
 endif(APPLE)
 
-find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
-if(PNG_FOUND)
-    list(REMOVE_AT PNG_INCLUDE_DIR 1) #removing the zlib include path
-    list(APPEND pascal_flags "-dPNG_SCREENSHOTS -Fl${PNG_INCLUDE_DIR}")
-endif()
-
-
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if(FREEPASCAL_VERSION VERSION_LESS "2.6")
     #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
@@ -205,8 +198,14 @@ if(${FFMPEG_FOUND})
     endif()
 endif()
 
+find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+if(PNG_FOUND)
+    get_filename_component(PNG_LIB_DIR ${PNG_LIBRARY} PATH)
+    add_definitions(-dPNG_SCREENSHOTS -Fl${PNG_LIB_DIR})
+endif()
 
-set(CMAKE_Pascal_FLAGS " -vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -k-L${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE")
+
+set(CMAKE_Pascal_FLAGS "-vm4079,4080,4081 -Fl${PROJECT_BINARY_DIR}/bin -Cs2000000 -vewnq -dDEBUGFILE ${CMAKE_Pascal_FLAGS}")
 add_executable(hwengine ${engine_sources})
 
 if(APPLE)

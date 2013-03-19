@@ -34,16 +34,18 @@ ENDIF(NOT CMAKE_MODULE_EXISTS)
 # For 90% of the systems, these are the same flags as the C versions
 # so if these are not set just copy the flags from the c version
 #IF(NOT CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS)
+#-dynamiclib -Wl,-headerpad_max_install_names for C
 #  SET(CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS)
 
-#IF(NOT CMAKE_SHARED_LIBRARY_Ada_FLAGS)
-#  SET(CMAKE_SHARED_LIBRARY_Ada_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
-#ENDIF(NOT CMAKE_SHARED_LIBRARY_Ada_FLAGS)
+IF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
+  #another similarity, fpc: -fPIC  Same as -Cg
+  SET(CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
+ENDIF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
 
-#IF(NOT CMAKE_SHARED_LIBRARY_LINK_Ada_FLAGS)
-#  SET(CMAKE_SHARED_LIBRARY_LINK_Ada_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
-#ENDIF(NOT CMAKE_SHARED_LIBRARY_LINK_Ada_FLAGS)
+IF(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
+  SET(CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
+ENDIF(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
 
 #IF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG)
 #  SET(CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
@@ -52,6 +54,18 @@ ENDIF(NOT CMAKE_MODULE_EXISTS)
 #IF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG_SEP)
 #  SET(CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG_SEP ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP})
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG_SEP)
+
+if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
+  set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
+endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
+
+# for most systems a module is the same as a shared library
+# so unless the variable CMAKE_MODULE_EXISTS is set just
+# copy the values from the LIBRARY variables
+if(NOT CMAKE_MODULE_EXISTS)
+  set(CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_Pascal_FLAGS})
+  set(CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS})
+endif()
 
 # repeat for modules
 #IF(NOT CMAKE_SHARED_MODULE_CREATE_Ada_FLAGS)
@@ -145,43 +159,13 @@ ENDIF(NOT CMAKE_Ada_CREATE_STATIC_LIBRARY)
 IF(NOT CMAKE_Pascal_COMPILE_OBJECT)
   SET(CMAKE_Pascal_COMPILE_OBJECT
       "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> -Fi${CMAKE_CURRENT_BINARY_DIR} <FLAGS> <SOURCE>")
-#"<CMAKE_Pascal_COMPILER> <FLAGS> <SOURCE> -o<OBJECT> -Cn
 ENDIF(NOT CMAKE_Pascal_COMPILE_OBJECT)
 
-# Constraints:  GNAT_EXECUTABLE_BUILDER = gnatmake
-# is required to do the compile+bind+link of
-# Ada executables, and it requires a source file name which is constructed from
-# <TARGET>.adb.  The source file arguments of add_executable are
-# all compiled by the above rule (which must remain that form since it
-# is also used to compile objects for Ada libraries), but the results are
-# ignored since they are put in a different directory while gnatmake assumes
-# objects are located in the _current_ directory.  Thus, put in a minimal
-# source file (with correct .adb suffix to identify the Ada language)
-# to reduce this useless compilation to a minimum.  Usually, the main Ada
-# routine qualifies since it is normally small.  Thus, the normal usage is
-# add_executable(foo foo.adb), but  add_executable(foo path/minimal.adb) would
-# work as well so long as both path/minimal.adb existed and foo.adb existed.
-# Also, note there is no way to specify
-# ${CMAKE_CURRENT_SOURCE_DIR}/<TARGET>.adb as the code for gnatmake to compile
-# because in this context ${CMAKE_CURRENT_SOURCE_DIR} is set to the top
-# of the source tree and not the expected sub-directory of the source tree.
-# Thus, LINK_FLAGS -aI${CMAKE_CURRENT_SOURCE_DIR} must be set using
-# set_target_properties in order to specify the directory where <TARGET>.adb
-# exists. Note, LINK_FLAGS can also be used to set other gnatmake flags
-# such as -aL.
-
-# In sum, you have to be careful of your target name, the nominal source file
-# name has to be compilable, but otherwise it is ignored, and you must specify
-# the required -aI and other GNAT_EXECUTABLE_BUILDER = gnatmake options
-# using LINK_FLAGS specified with set_target_properties.
-# However, so long as you pay attention to these
-# constraints, add_executable should work for the Ada language.
 
 IF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
 #GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
-    message("look here ${CMAKE_CURRENT_BINARY_DIR} ${EXECUTABLE_OUTPUT_PATH}")
     set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.sh")
-#  SET(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_Pascal_COMPILER} <CMAKE_Ada_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE>.adb -cargs <FLAGS> -largs <LINK_LIBRARIES>")
+#  SET(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_Pascal_COMPILER} <CMAKE_Pascal_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE>.adb -cargs <FLAGS> -largs <LINK_LIBRARIES>")
 ENDIF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
 
 IF(CMAKE_Ada_STANDARD_LIBRARIES_INIT)
