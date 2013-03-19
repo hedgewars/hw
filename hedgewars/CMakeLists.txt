@@ -21,13 +21,12 @@ enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
-#if(${BUILD_ENGINE_LIBRARY})
-#    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-#    set(hwengine_project hwLibrary.pas)
-#else()
-#    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-#    set(hwengine_project hwengine.pas)
-#endif()
+if(${BUILD_ENGINE_LIBRARY})
+    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    set(hwengine_project hwLibrary.pas)
+else()
+    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+endif()
 
 if (APPLE)
     set(required_fpc_version 2.6)
@@ -176,8 +175,11 @@ if(PNG_FOUND)
 endif()
 
 if(NOT LUA_FOUND)
+    add_flag_append(CMAKE_Pascal_FLAGS -k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a)
     #linking with liblua.a requires system readline
-    add_flag_append(CMAKE_Pascal_FLAGS "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a -k-lreadline")
+    if(UNIX)
+        add_flag_append(CMAKE_Pascal_FLAGS -k-lreadline)
+    endif(UNIX)
 endif()
 
 if(NOT PHYSFS_FOUND)
@@ -223,4 +225,4 @@ endif()
 #    add_dependencies(hwengine ENGINECLEAN)
 #endif()
 
-install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine" DESTINATION ${destination_dir})
+install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})
