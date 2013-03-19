@@ -17,7 +17,7 @@ endforeach()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
-message("prefix ${CMAKE_PREFIX_PATH}")
+
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)]" OFF)
 option(NOPNG "Disable screenshoot compression (off)" OFF)
