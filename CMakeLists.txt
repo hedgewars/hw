@@ -257,7 +257,6 @@ add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs -Si")
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
@@ -267,8 +266,6 @@ else()
                               )
 endif()
 
-include(${CMAKE_MODULE_PATH}/utils.cmake)
-
 #lua discovery
 find_package(Lua)
 if(LUA_FOUND)
@@ -276,8 +273,6 @@ if(LUA_FOUND)
 else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
-    #linking with liblua.a requires system readline
-    add_flag_append(CMAKE_Pascal_FLAGS "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a -k-lreadline")
 endif()
 
 
