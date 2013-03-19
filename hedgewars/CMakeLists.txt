@@ -68,14 +68,16 @@ set(engine_sources
     uLand.pas
     uAmmos.pas
 
+    uAIMisc.pas
+    uAIActions.pas
+    uAI.pas
+    uWorld.pas
+    uVisualGears.pas
+    uTeams.pas
 
     uGearsList.pas
     uCollisions.pas
-    uAIMisc.pas
-    uAIActions.pas
     uAIAmmoTests.pas
-    uAI.pas
-    uTeams.pas
     uGears.pas
     uGame.pas
     uCommandHandlers.pas
@@ -85,8 +87,6 @@ set(engine_sources
     uGearsRender.pas
     uGearsUtils.pas
     uScript.pas
-    uWorld.pas
-    uVisualGears.pas
     hwengine.pas
 
     GSHandlers.inc
