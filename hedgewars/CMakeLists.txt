@@ -199,22 +199,25 @@ add_executable(hwengine ${engine_sources})
 
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
-    add_dependencies(hwengine lua)
+    target_link_libraries(hwengine lua)
 endif()
 
 # same for physfs
 if(NOT PHYSFS_FOUND)
-    add_dependencies(hwengine physfs)
+    target_link_libraries(hwengine physfs)
 endif()
 
-add_dependencies(hwengine physlayer)
+target_link_libraries(hwengine physlayer)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
 if(${FFMPEG_FOUND})
-    add_dependencies(hwengine avwrapper)
+    target_link_libraries(hwengine avwrapper)
 endif()
 
+if(APPLE)
+    target_link_libraries(hwengine SDLmain)
+endif()
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 #if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
 #    add_dependencies(hwengine ENGINECLEAN)
