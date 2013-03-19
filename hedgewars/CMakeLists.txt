@@ -7,15 +7,8 @@ find_package(SDL_mixer)
 include (CheckLibraryExists)
 #Mix_Init/Mix_Quit from SDL_mixer 1.2.10
 check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
-if(HAVE_MIXINIT)
-    add_definitions(-dSDL_MIXER_NEWER)
-endif()
 #IMG_Init/IMG_Quit from SDL_image 1.2.8
 check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
-if(HAVE_IMGINIT)
-    add_definitions(-dSDL_IMAGE_NEWER)
-endif()
-
 
 enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
@@ -103,19 +96,6 @@ set(engine_sources
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
-if(${BUILD_ENGINE_LIBRARY})
-    message(${WARNING} "Engine will be built as library (experimental)")
-    add_definitions(-dHWLIBRARY)
-
-    # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-no_order_inits")
-    endif()
-    set(destination_dir ${target_library_install_dir})
-else(${BUILD_ENGINE_LIBRARY})
-    set(destination_dir ${target_binary_install_dir})
-endif(${BUILD_ENGINE_LIBRARY})
-
 
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
@@ -147,8 +127,7 @@ if(APPLE)
     endif()
 endif(APPLE)
 
-
-if(${FFMPEG_FOUND})
+if(FFMPEG_FOUND)
     add_subdirectory(avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
@@ -182,6 +161,29 @@ if(APPLE)
 else()
     add_flag_append(CMAKE_Pascal_FLAGS -Pi386)
 endif()
+
+
+if(BUILD_ENGINE_LIBRARY)
+    message(${WARNING} "Engine will be built as library (experimental)")
+    add_definitions(-dHWLIBRARY)
+
+    # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
+    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-no_order_inits")
+    endif()
+    set(destination_dir ${target_library_install_dir})
+else(BUILD_ENGINE_LIBRARY)
+    set(destination_dir ${target_binary_install_dir})
+endif(BUILD_ENGINE_LIBRARY)
+
+
+if(HAVE_MIXINIT)
+    add_definitions(-dSDL_MIXER_NEWER)
+endif(HAVE_MIXINIT)
+
+if(HAVE_IMGINIT)
+    add_definitions(-dSDL_IMAGE_NEWER)
+endif(HAVE_IMGINIT)
 
 add_definitions(-dDEBUGFILE)
 add_executable(hwengine ${engine_sources})
