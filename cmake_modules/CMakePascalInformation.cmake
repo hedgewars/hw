@@ -2,10 +2,10 @@
 # It also loads the available platform file for the system-compiler
 # if it exists.
 
-GET_FILENAME_COMPONENT(CMAKE_BASE_NAME ${CMAKE_Pascal_COMPILER} NAME_WE)
-SET(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
-  ${CMAKE_ROOT}/Modules/Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME}.cmake)
-INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
+get_filename_component(CMAKE_BASE_NAME ${CMAKE_Pascal_COMPILER} NAME_WE)
+set(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
+    ${CMAKE_ROOT}/Modules/Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME}.cmake)
+include(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
 # This should be included before the _INIT variables are
 # used to initialize the cache.  Since the rule variables
@@ -13,13 +13,13 @@ INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 # But, it should still be after the platform file so changes can
 # be made to those values.
 
-IF(CMAKE_USER_MAKE_RULES_OVERRIDE)
-   INCLUDE(${CMAKE_USER_MAKE_RULES_OVERRIDE})
-ENDIF(CMAKE_USER_MAKE_RULES_OVERRIDE)
+if(CMAKE_USER_MAKE_RULES_OVERRIDE)
+   include(${CMAKE_USER_MAKE_RULES_OVERRIDE})
+endif(CMAKE_USER_MAKE_RULES_OVERRIDE)
 
-IF(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
-   INCLUDE(${CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal})
-ENDIF(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
+if(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
+   include(${CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal})
+endif(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
 
 # Create a set of shared library variable specific to Pascal
 # For 90% of the systems, these are the same flags as the C versions
@@ -29,15 +29,15 @@ ENDIF(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
 #  SET(CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_CREATE_Ada_FLAGS)
 
-IF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
-  #another similarity, fpc: -fPIC  Same as -Cg
-  #(maybe required only for x86_64)
-  SET(CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
-ENDIF(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
+if(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
+    #another similarity, fpc: -fPIC  Same as -Cg
+    #(maybe required only for x86_64)
+    set(CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
+endif(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
 
-IF(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
-  SET(CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
-ENDIF(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
+if(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
+    set(CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
+endif(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
 
 #IF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG)
 #  SET(CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
@@ -48,16 +48,16 @@ ENDIF(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
 #ENDIF(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Ada_FLAG_SEP)
 
 if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
-  set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
+    set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
 endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 
 # for most systems a module is the same as a shared library
 # so unless the variable CMAKE_MODULE_EXISTS is set just
 # copy the values from the LIBRARY variables
 if(NOT CMAKE_MODULE_EXISTS)
-  set(CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_Pascal_FLAGS})
-  set(CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS})
-endif()
+    set(CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_Pascal_FLAGS})
+    set(CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS})
+endif(NOT CMAKE_MODULE_EXISTS)
 
 # repeat for modules
 #IF(NOT CMAKE_SHARED_MODULE_CREATE_Ada_FLAGS)
@@ -76,23 +76,23 @@ endif()
 #  SET(CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG_SEP ${CMAKE_SHARED_MODULE_RUNTIME_C_FLAG_SEP})
 #ENDIF(NOT CMAKE_SHARED_MODULE_RUNTIME_Ada_FLAG_SEP)
 
-IF(NOT CMAKE_INCLUDE_FLAG_Pascal)
-  #amazing, fpc: -I<x>  Add <x> to include path
-  SET(CMAKE_INCLUDE_FLAG_Pascal ${CMAKE_INCLUDE_FLAG_C})
-ENDIF(NOT CMAKE_INCLUDE_FLAG_Pascal)
+if(NOT CMAKE_INCLUDE_FLAG_Pascal)
+    #amazing, fpc: -I<x>  Add <x> to include path
+    set(CMAKE_INCLUDE_FLAG_Pascal ${CMAKE_INCLUDE_FLAG_C})
+endif(NOT CMAKE_INCLUDE_FLAG_Pascal)
 
-IF(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
-  SET(CMAKE_INCLUDE_FLAG_SEP_Pascal ${CMAKE_INCLUDE_FLAG_SEP_C})
-ENDIF(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
+if(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
+    set(CMAKE_INCLUDE_FLAG_SEP_Pascal ${CMAKE_INCLUDE_FLAG_SEP_C})
+endif(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
 
 # Copy C version of this flag which is normally determined in platform file.
-IF(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
-  SET(CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
-ENDIF(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
+if(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
+  set(CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
+endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
-SET(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
+set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
-SET (CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING "Flags for Pascal compiler.")
+set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING "Flags for Pascal compiler.")
 
 INCLUDE(CMakeCommonLanguageInclude)
 
@@ -123,9 +123,9 @@ INCLUDE(CMakeCommonLanguageInclude)
 # <CMAKE_AR>
 # <CMAKE_RANLIB>
 
-if (NOT EXECUTABLE_OUTPUT_PATH)
+if(NOT EXECUTABLE_OUTPUT_PATH)
     set (EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
-endif (NOT EXECUTABLE_OUTPUT_PATH)
+endif(NOT EXECUTABLE_OUTPUT_PATH)
 
 # create an Ada shared library
 IF(NOT CMAKE_Ada_CREATE_SHARED_LIBRARY)
@@ -147,59 +147,56 @@ IF(NOT CMAKE_Ada_CREATE_STATIC_LIBRARY)
 ENDIF(NOT CMAKE_Ada_CREATE_STATIC_LIBRARY)
 
 # compile a Pascal file into an object file
-IF(NOT CMAKE_Pascal_COMPILE_OBJECT)
-  if(UNIX)
-    #when you have multiple ld installation make sure you get the one bundled with the system C compiler
-    INCLUDE(Platform/${CMAKE_SYSTEM_NAME}-GNU-C.cmake OPTIONAL)
-    if(CMAKE_C_COMPILER)
-      get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
-      set(CMAKE_Pascal_UNIX_FLAGS "-FD${CMAKE_C_COMPILER_DIR}")
-    endif(CMAKE_C_COMPILER)
-    if(APPLE)
-      #add user framework directory
-      set(CMAKE_Pascal_UNIX_FLAGS "-Ff~/Library/Frameworks ${CMAKE_Pascal_UNIX_FLAGS}")
-      if(CMAKE_OSX_SYSROOT)
-        set(CMAKE_Pascal_UNIX_FLAGS "-XD${CMAKE_OSX_SYSROOT} ${CMAKE_Pascal_UNIX_FLAGS}")
-      endif(CMAKE_OSX_SYSROOT)
-    endif(APPLE)
-  endif(UNIX)
-    SET(CMAKE_Pascal_COMPILE_OBJECT
-      "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> -Fi${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_Pascal_UNIX_FLAGS} <FLAGS> <SOURCE>")
-ENDIF(NOT CMAKE_Pascal_COMPILE_OBJECT)
+if(NOT CMAKE_Pascal_COMPILE_OBJECT)
+    if(UNIX)
+        #when you have multiple ld installation make sure you get the one bundled with the system C compiler
+        include(Platform/${CMAKE_SYSTEM_NAME}-GNU-C.cmake OPTIONAL)
+        if(CMAKE_C_COMPILER)
+            get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
+            set(CMAKE_Pascal_UNIX_FLAGS "-FD${CMAKE_C_COMPILER_DIR}")
+        endif(CMAKE_C_COMPILER)
+        if(APPLE)
+            #add user framework directory
+            set(CMAKE_Pascal_UNIX_FLAGS "-Ff~/Library/Frameworks ${CMAKE_Pascal_UNIX_FLAGS}")
+            #when sysroot is set, make sure that fpc picks it
+            if(CMAKE_OSX_SYSROOT)
+                set(CMAKE_Pascal_UNIX_FLAGS "-XD${CMAKE_OSX_SYSROOT} ${CMAKE_Pascal_UNIX_FLAGS}")
+            endif(CMAKE_OSX_SYSROOT)
+        endif(APPLE)
+    endif(UNIX)
+
+    set(CMAKE_Pascal_COMPILE_OBJECT
+        "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> -Fi${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_Pascal_UNIX_FLAGS} <FLAGS> <SOURCE>")
+endif(NOT CMAKE_Pascal_COMPILE_OBJECT)
 
 # link Pascal objects in a single executable
-IF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
-  if(WIN32)
-    set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.bat")
-  else(WIN32)
-    set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.sh")
-  endif(WIN32)
-#  SET(CMAKE_Pascal_LINK_EXECUTABLE "${CMAKE_Pascal_COMPILER} <CMAKE_Pascal_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE>.adb -cargs <FLAGS> -largs <LINK_LIBRARIES>")
-ENDIF(NOT CMAKE_Pascal_LINK_EXECUTABLE)
+if(NOT CMAKE_Pascal_LINK_EXECUTABLE)
+    if(WIN32)
+        set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.bat")
+    else(WIN32)
+        set(CMAKE_Pascal_LINK_EXECUTABLE "${EXECUTABLE_OUTPUT_PATH}/ppas.sh")
+    endif(WIN32)
+# other expandable variables here are<CMAKE_Pascal_LINK_FLAGS> <LINK_FLAGS> <TARGET_BASE> <FLAGS> <LINK_LIBRARIES>
+endif(NOT CMAKE_Pascal_LINK_EXECUTABLE)
 
-IF(CMAKE_Ada_STANDARD_LIBRARIES_INIT)
-  SET(CMAKE_Ada_STANDARD_LIBRARIES "${CMAKE_Ada_STANDARD_LIBRARIES_INIT}"
-    CACHE STRING "Libraries linked by default with all Ada applications.")
-  MARK_AS_ADVANCED(CMAKE_Ada_STANDARD_LIBRARIES)
-ENDIF(CMAKE_Ada_STANDARD_LIBRARIES_INIT)
+if(CMAKE_Pascal_STANDARD_LIBRARIES_INIT)
+    set(CMAKE_Pascal_STANDARD_LIBRARIES "${CMAKE_Pascal_STANDARD_LIBRARIES_INIT}"
+    CACHE STRING "Libraries linked by default (usually handled internally).")
+    MARK_AS_ADVANCED(CMAKE_Pascal_STANDARD_LIBRARIES)
+endif(CMAKE_Pascal_STANDARD_LIBRARIES_INIT)
 
-IF(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
-  SET (CMAKE_Ada_FLAGS_DEBUG "${CMAKE_Ada_FLAGS_DEBUG_INIT}" CACHE STRING
+if(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
+  SET (CMAKE_Pascal_FLAGS_DEBUG "${CMAKE_Ada_FLAGS_DEBUG_INIT}" CACHE STRING
      "Flags used by the compiler during debug builds.")
-  SET (CMAKE_Ada_FLAGS_MINSIZEREL "${CMAKE_Ada_FLAGS_MINSIZEREL_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_MINSIZEREL "${CMAKE_Ada_FLAGS_MINSIZEREL_INIT}" CACHE STRING
      "Flags used by the compiler during release minsize builds.")
-  SET (CMAKE_Ada_FLAGS_RELEASE "${CMAKE_Ada_FLAGS_RELEASE_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_RELEASE "${CMAKE_Ada_FLAGS_RELEASE_INIT}" CACHE STRING
      "Flags used by the compiler during release builds (/MD /Ob1 /Oi /Ot /Oy /Gs will produce slightly less optimized but smaller files).")
-  SET (CMAKE_Ada_FLAGS_RELWITHDEBINFO "${CMAKE_Ada_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_RELWITHDEBINFO "${CMAKE_Ada_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING
      "Flags used by the compiler during Release with Debug Info builds.")
-ENDIF(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
+endif(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
 
-MARK_AS_ADVANCED(
-CMAKE_Pascal_FLAGS
-CMAKE_Pascal_FLAGS_DEBUG
-CMAKE_Pascal_FLAGS_MINSIZEREL
-CMAKE_Pascal_FLAGS_RELEASE
-CMAKE_Pascal_FLAGS_RELWITHDEBINFO
-)
-SET(CMAKE_Pascal_INFORMATION_LOADED 1)
+mark_as_advanced(CMAKE_Pascal_FLAGS CMAKE_Pascal_FLAGS_DEBUG CMAKE_Pascal_FLAGS_MINSIZEREL
+                 CMAKE_Pascal_FLAGS_RELEASE CMAKE_Pascal_FLAGS_RELWITHDEBINFO)
+set(CMAKE_Pascal_INFORMATION_LOADED 1)
 
