@@ -140,12 +140,10 @@ if(APPLE)
         set(powerpc_build "powerpc")
     endif()
 
+
     #on OSX we need to provide the SDL_main() function when building as executable
     if(NOT ${BUILD_ENGINE_LIBRARY})
-        #let's look for the installed sdlmain file; if it is not found, let's build our own
-        find_package(SDL REQUIRED)
-        include_directories(${SDL_INCLUDE_DIR})
-        add_library (SDLmain STATIC SDLMain.m)
+        add_subdirectory(sdlmain)
         add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     endif()
 endif(APPLE)
