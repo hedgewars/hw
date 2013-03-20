@@ -7,8 +7,15 @@ set(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
     ${CMAKE_ROOT}/Modules/Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME}.cmake)
 include(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
+# This section should actually be in Platform/${CMAKE_SYSTME_NAME}-fpc.cmake
+set(CMAKE_Pascal_FLAGS_INIT "-l- -v0ewn")
+set(CMAKE_Pascal_FLAGS_DEBUG_INIT "-g -gl -gp -gh")
+set(CMAKE_Pascal_FLAGS_MINSIZEREL_INIT "-Os -dNDEBUG")
+set(CMAKE_Pascal_FLAGS_RELEASE_INIT "-O3 -dNDEBUG")
+set(CMAKE_Pascal_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -gl -gp")
+
 # This should be included before the _INIT variables are
-# used to initialize the cache.  Since the rule variables
+# used to initialize the cache. Since the rule variables
 # have if blocks on them, users can still define them here.
 # But, it should still be after the platform file so changes can
 # be made to those values.
@@ -186,13 +193,13 @@ if(CMAKE_Pascal_STANDARD_LIBRARIES_INIT)
 endif(CMAKE_Pascal_STANDARD_LIBRARIES_INIT)
 
 if(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
-  SET (CMAKE_Pascal_FLAGS_DEBUG "${CMAKE_Ada_FLAGS_DEBUG_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_DEBUG "${CMAKE_Pascal_FLAGS_DEBUG_INIT}" CACHE STRING
      "Flags used by the compiler during debug builds.")
-  SET (CMAKE_Pascal_FLAGS_MINSIZEREL "${CMAKE_Ada_FLAGS_MINSIZEREL_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_MINSIZEREL "${CMAKE_Pascal_FLAGS_MINSIZEREL_INIT}" CACHE STRING
      "Flags used by the compiler during release minsize builds.")
-  SET (CMAKE_Pascal_FLAGS_RELEASE "${CMAKE_Ada_FLAGS_RELEASE_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_RELEASE "${CMAKE_Pascal_FLAGS_RELEASE_INIT}" CACHE STRING
      "Flags used by the compiler during release builds (/MD /Ob1 /Oi /Ot /Oy /Gs will produce slightly less optimized but smaller files).")
-  SET (CMAKE_Pascal_FLAGS_RELWITHDEBINFO "${CMAKE_Ada_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING
+  SET (CMAKE_Pascal_FLAGS_RELWITHDEBINFO "${CMAKE_Pascal_FLAGS_RELWITHDEBINFO_INIT}" CACHE STRING
      "Flags used by the compiler during Release with Debug Info builds.")
 endif(NOT CMAKE_NOT_USING_CONFIG_FLAGS)
 

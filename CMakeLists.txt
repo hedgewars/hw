@@ -211,7 +211,7 @@ endif (CMAKE_BUILD_TYPE)
 if(NOT ${MINIMAL_CFLAGS})
     add_flag_append(CMAKE_C_FLAGS "-pipe")
     add_flag_append(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer")
-    add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG")
+    add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -DDEBUG")
     add_flag_append(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
     add_flag_append(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
     add_flag_append(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
@@ -252,8 +252,9 @@ list(APPEND haskell_flags ${ghflags_parsed} # user flags
                  "-O2"                      # optimise for faster code
                  )
 
-add_flag_append(CMAKE_Pascal_FLAGS "-vm4079,4080,4081 -Cs2000000 -vewnq")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -g -gl -gv")
+#-vm4079,4080,4081
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #get BUILD_TYPE and enable/disable optimisation

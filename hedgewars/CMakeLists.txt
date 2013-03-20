@@ -106,7 +106,7 @@ if (FREEPASCAL_VERSION VERSION_LESS required_fpc_version)
     message(FATAL_ERROR "Freepascal ${FREEPASCAL_VERSION} is too old, minimum version required is ${required_fpc_version}")
 elseif(FREEPASCAL_VERSION VERSION_GREATER 2.4)
     #enable INLINE only with a recent version of fpc
-    add_flag_append(CMAKE_Pascal_FLAGS_RELEASE -Si)
+    add_flag_prepend(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
 
 

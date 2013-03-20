@@ -51,7 +51,7 @@ endif(MACOSX)
 # Add some gcc-specific command lines.
 if(CMAKE_COMPILER_IS_GNUCC)
     # Always build with debug symbols...you can strip it later.
-    add_definitions(-g -pipe -Werror -fsigned-char)
+    add_definitions(-g -pipe -fsigned-char)
 
     # Stupid BeOS generates warnings in the system headers.
     if(NOT BEOS)
