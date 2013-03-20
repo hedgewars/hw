@@ -336,7 +336,7 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
+        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, " (team): ", msg, "\x20\x20"]
 
 
 handleCmd_inRoom ["BAN", banNick] = do
