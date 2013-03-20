@@ -45,15 +45,18 @@ QByteArray & HWProto::addStringListToBuffer(QByteArray & buf, const QStringList 
     return buf;
 }
 
-QString HWProto::formatChatMsgForFrontend(const QString & msg)
-{
-    return formatChatMsg("|nick|", msg);
-}
-
 QString HWProto::formatChatMsg(const QString & nick, const QString & msg)
 {
     if(msg.left(4) == "/me ")
         return QString("\x02* %1 %2").arg(nick).arg(msg.mid(4));
     else
         return QString("\x01%1: %2").arg(nick).arg(msg);
+}
+
+QString HWProto::chatStringToAction(const QString & string)
+{
+    if(string.left(4) == "/me ")
+        return string.mid(4);
+    else
+        return NULL;
 }
