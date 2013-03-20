@@ -61,15 +61,20 @@ a { color: #c8c8ff; }
 .msg_FriendChat .nick { color: #30ff30; }
 .msg_UserJoin { color: #c0c0c0; }
 .msg_UserJoin .nick { color: #d0d0d0; }
+.msg_UserLeave { color: #b8b8b8; }
+.msg_UserLeave .nick { color: #c8c8c8; }
 .msg_FriendJoin { font-weight: bold; color: #c0f0c0; }
 .msg_FriendJoin .nick { color: #d8f0d8; }
+.msg_FriendLeave { font-weight: bold; color: #ffe090; }
+.msg_FriendLeave .nick { color: #f8e878; }
 .msg_UserAction { color: #ff80ff; }
 .msg_UserAction .nick { color: #ffa0ff;}
 .msg_FriendAction { color: #ff00ff; }
 .msg_FriendAction .nick { color: #ff30ff; }
 
-/* uncomment next line to disable join and leave messages of non-friends */
+/* uncomment next lines to disable join and leave messages of non-friends */
 /* .msg_UserJoin { display:none; } */
+/* .msg_UserLeave { display:none; } */
 
 /* timestamps */
 .timestamp {

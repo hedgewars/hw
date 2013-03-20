@@ -35,6 +35,12 @@ class HWProto : public QObject
         static QByteArray & addStringListToBuffer(QByteArray & buf, const QStringList & strList);
         static QString formatChatMsg(const QString & nick, const QString & msg);
         static QString formatChatMsgForFrontend(const QString & msg);
+        /**
+         * @brief Determines if a chat string represents a chat action and returns the action.
+         * @param string chat string
+         * @return the action-message or NULL if message is no action
+         */
+        static QString chatStringToAction(const QString & string);
 };
 
 #endif // _PROTO_H
