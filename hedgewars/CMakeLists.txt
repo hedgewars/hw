@@ -13,14 +13,6 @@ check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
 enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
-#SOURCE AND PROGRAMS SECTION
-if(${BUILD_ENGINE_LIBRARY})
-    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(hwengine_project hwLibrary.pas)
-else()
-    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-endif()
-
 if (APPLE)
     set(required_fpc_version 2.6)
 else()
@@ -121,7 +113,7 @@ if(APPLE)
     endif()
 
     #on OSX we need to provide the SDL_main() function when building as executable
-    if(NOT ${BUILD_ENGINE_LIBRARY})
+    if(NOT BUILD_ENGINE_LIBRARY)
         add_subdirectory(sdlmain)
         add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     endif()
@@ -164,16 +156,7 @@ endif()
 
 
 if(BUILD_ENGINE_LIBRARY)
-    message(${WARNING} "Engine will be built as library (experimental)")
-    add_definitions(-dHWLIBRARY)
-
-    # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-no_order_inits")
-    endif()
-    set(destination_dir ${target_library_install_dir})
 else(BUILD_ENGINE_LIBRARY)
-    set(destination_dir ${target_binary_install_dir})
 endif(BUILD_ENGINE_LIBRARY)
 
 
@@ -186,7 +169,29 @@ if(HAVE_IMGINIT)
 endif(HAVE_IMGINIT)
 
 add_definitions(-dDEBUGFILE)
-add_executable(hwengine ${engine_sources})
+
+#SOURCE AND PROGRAMS SECTION
+if(BUILD_ENGINE_LIBRARY)
+    message(${WARNING} "Engine will be built as library (experimental)")
+    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
+        # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-no_order_inits")
+    endif()
+
+    #workaround for missing <TARGET> support during object generation
+    set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    set(destination_dir ${target_library_install_dir})
+    add_flags_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
+
+    add_definitions(-dHWLIBRARY)
+    add_library(hwengine SHARED ${engine_sources} hwLibrary.pas)
+else()
+    # no need to change name here because target has same name
+    set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
+    set(destination_dir ${target_binary_install_dir})
+    add_executable(hwengine ${engine_sources})
+endif()
+
 
 #when system Lua is not found we need to compile it before engine
 if(NOT LUA_FOUND)
@@ -206,7 +211,7 @@ if(${FFMPEG_FOUND})
     target_link_libraries(hwengine avwrapper)
 endif()
 
-if(APPLE)
+if(APPLE AND NOT BUILD_ENGINE_LIBRARY)
     target_link_libraries(hwengine SDLmain)
 endif()
 
