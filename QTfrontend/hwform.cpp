@@ -1259,7 +1259,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(roomMaster(bool)),
             ui.pageNetGame->chatWidget, SLOT(adminAccess(bool)), Qt::QueuedConnection);
     connect(ui.pageNetGame->chatWidget, SIGNAL(chatLine(const QString&)),
-            hwnet, SLOT(chatLineToNet(const QString&)));
+            hwnet, SLOT(chatLineToNetWithEcho(const QString&)));
     connect(ui.pageNetGame->BtnGo, SIGNAL(clicked()), hwnet, SLOT(ToggleReady()));
     connect(hwnet, SIGNAL(setMyReadyStatus(bool)),
             ui.pageNetGame, SLOT(setReadyStatus(bool)), Qt::QueuedConnection);
