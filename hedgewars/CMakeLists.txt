@@ -150,8 +150,6 @@ endif()
 
 if(APPLE)
     add_flag_append(CMAKE_Pascal_FLAGS -Px86_64)
-else()
-    add_flag_append(CMAKE_Pascal_FLAGS -Pi386)
 endif()
 
 
