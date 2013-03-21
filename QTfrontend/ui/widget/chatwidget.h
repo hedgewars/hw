@@ -114,6 +114,11 @@ class HWChatWidget : public QWidget
         void nickRemoved(const QString& nick, const QString& message);
         void clear();
         void adminAccess(bool);
+        void onPlayerInfo(
+            const QString & nick,
+            const QString & ip,
+            const QString & version,
+            const QString & roomInfo);
 
     signals:
         void chatLine(const QString& str);
