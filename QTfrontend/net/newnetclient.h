@@ -143,6 +143,7 @@ class HWNewNet : public QObject
     public slots:
         void ToggleReady();
         void chatLineToNet(const QString& str);
+        void chatLineToNetWithEcho(const QString&);
         void chatLineToLobby(const QString& str);
         void SendTeamMessage(const QString& str);
         void SendNet(const QByteArray & buf);

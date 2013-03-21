@@ -850,6 +850,15 @@ void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
         );
 }
 
+void HWNewNet::chatLineToNetWithEcho(const QString& str)
+{
+    if(str != "")
+    {
+        emit chatStringFromNet(HWProto::formatChatMsg(mynick, str));
+        chatLineToNet(str);
+    }
+}
+
 void HWNewNet::chatLineToNet(const QString& str)
 {
     if(str != "")
