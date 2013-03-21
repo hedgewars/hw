@@ -580,6 +580,19 @@ void HWChatWidget::clear()
     }
 }
 
+void HWChatWidget::onPlayerInfo(
+            const QString & nick,
+            const QString & ip,
+            const QString & version,
+            const QString & roomInfo)
+{
+    addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
+        .arg(linkedNick(nick))
+        .arg(ip)
+        .arg(version)
+        .arg(roomInfo));
+}
+
 void HWChatWidget::onKick()
 {
     QModelIndexList mil = chatNicks->selectionModel()->selectedRows();

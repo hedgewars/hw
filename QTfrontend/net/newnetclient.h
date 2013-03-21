@@ -119,7 +119,7 @@ class HWNewNet : public QObject
         void hhnumChanged(const HWTeam&);
         void teamColorChanged(const HWTeam&);
         void playerInfo(
-            const QString & name,
+            const QString & nick,
             const QString & ip,
             const QString & version,
             const QString & roomInfo);

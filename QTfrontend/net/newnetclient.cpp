@@ -369,7 +369,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             QStringList tmp = lst;
             tmp.removeFirst();
-            emit chatStringFromNet(tmp.join("\n").prepend('\x01'));
+            emit chatStringFromNet(tmp.join(" ").prepend('\x01'));
         }
         return;
     }
