@@ -295,9 +295,9 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if (link.scheme() == "http")
+    if ((link.scheme() == "http") or (link.scheme() == "https"))
         QDesktopServices::openUrl(link);
-    if (link.scheme() == "hwnick")
+    else if (link.scheme() == "hwnick")
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
@@ -368,7 +368,7 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http://)?(www\\.)?((hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
 
 bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {
@@ -389,7 +389,7 @@ QString HWChatWidget::messageToHTML(const QString & message)
 {
     QString formattedStr = Qt::escape(message);
     // link some urls
-    formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http://\\3\">\\3</a>");
+    formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
     return formattedStr;
 }
 
