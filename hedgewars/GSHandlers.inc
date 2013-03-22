@@ -5088,8 +5088,8 @@ end;
 
 
 procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
-    var
-    iter:PGear;    
+//    var
+//    iter:PGear;
 begin
   with Gear^ do
   begin
@@ -5118,10 +5118,10 @@ end;
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
-const iceWaitNextTarget:Longint = 2;
-const iceCollideWithHog:Longint = 4;
+//const iceWaitNextTarget:Longint = 2;
+//const iceCollideWithHog:Longint = 4;
 const iceCollideWithWater:Longint = 5;
-const waterFreezingTime:Longint = 500;
+//const waterFreezingTime:Longint = 500;
 const groundFreezingTime:Longint = 1000;
 const iceRadius = 32;
 const iceHeight = 40;
