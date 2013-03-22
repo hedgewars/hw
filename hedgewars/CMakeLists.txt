@@ -179,7 +179,7 @@ if(BUILD_ENGINE_LIBRARY)
     #workaround for missing <TARGET> support during object generation
     set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     set(destination_dir ${target_library_install_dir})
-    add_flags_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
+    add_flag_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
 
     add_definitions(-dHWLIBRARY)
     add_library(hwengine SHARED ${engine_sources} hwLibrary.pas)
