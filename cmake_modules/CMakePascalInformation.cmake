@@ -129,8 +129,7 @@ INCLUDE(CMakeCommonLanguageInclude)
 # <CMAKE_Pascal_LINK_FLAGS>
 
 # Static library tools
-# <CMAKE_AR>
-# <CMAKE_RANLIB>
+#  NONE!
 
 if(NOT EXECUTABLE_OUTPUT_PATH)
     set (EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
