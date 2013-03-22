@@ -74,7 +74,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    prevPoint, prevTargetPoint: TPoint;
+    prevPoint{, prevTargetPoint}: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -221,8 +221,8 @@ InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
-prevTargetPoint.X:= 0;
-prevTargetPoint.Y:= 0;
+//prevTargetPoint.X:= 0;
+//prevTargetPoint.Y:= 0;
 WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
@@ -642,7 +642,7 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
-            prevTargetPoint:= TargetCursorPoint;
+            //prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
