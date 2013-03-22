@@ -1928,7 +1928,7 @@ void HWForm::AssociateFiles()
     registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" " + arguments + " %1");
 
     // custom url scheme(s)
-    registry_hkcr.setValue("hwplay/Default", "\"URL:Hedgewars ServerAccess Protocol\"");
+    registry_hkcr.setValue("hwplay/Default", "\"URL:Hedgewars ServerAccess Scheme\"");
     registry_hkcr.setValue("hwplay/URL Protocol", "");
     registry_hkcr.setValue("hwplay/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\",0");
     registry_hkcr.setValue("hwplay/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\"  %1");
@@ -1947,8 +1947,10 @@ void HWForm::AssociateFiles()
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/applications");
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars-mimeinfo.xml "+QDir::home().absolutePath()+"/.local/share/mime/packages").toLocal8Bit().constData())==0;
+    if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hwengine.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
     if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
+    if (success) success = system("xdg-mime default hedgewars.desktop x-scheme-handler/hwplay")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
