@@ -177,6 +177,10 @@
             <numerusform>%1 giorni</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Scheme &apos;%1&apos; not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWAskQuitDialog</name>
@@ -944,6 +948,17 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     <message>
         <source>Room controls</source>
         <translation>Controlli stanza</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetServer</name>
+    <message>
+        <source>Click here for details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert your address here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2321,6 +2336,26 @@ Non tutti i giocatori sono pronti.</translation>
         <source>Upload this video to your Youtube account</source>
         <translation>Cariva questo video nel tuo account Youtube</translation>
     </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the default server port for Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invite your friends to your server in just 1 click!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomNamePrompt</name>
@@ -2428,6 +2463,13 @@ Non tutti i giocatori sono pronti.</translation>
     <message>
         <source>copy of</source>
         <translation>copia di</translation>
+    </message>
+</context>
+<context>
+    <name>TeamSelWidget</name>
+    <message>
+        <source>At least two teams are required to play!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3036,115 +3078,111 @@ Non tutti i giocatori sono pronti.</translation>
     <name>server</name>
     <message>
         <source>Not room master</source>
-        <translation>Non proprietario della stanza</translation>
+        <translation type="obsolete">Non proprietario della stanza</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation>Informazioni ricci corrotte</translation>
+        <translation type="obsolete">Informazioni ricci corrotte</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation>troppe squadre</translation>
+        <translation type="obsolete">troppe squadre</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation>troppi ricci</translation>
+        <translation type="obsolete">troppi ricci</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation>C&apos;è già una quadra collo stesso nome in lista</translation>
+        <translation type="obsolete">C&apos;è già una quadra collo stesso nome in lista</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation>turno in corso</translation>
+        <translation type="obsolete">turno in corso</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation>proibito</translation>
+        <translation type="obsolete">proibito</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation>CANCELLA_SQUADRA: squadra non presente</translation>
+        <translation type="obsolete">CANCELLA_SQUADRA: squadra non presente</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation>Non proprietario della squadra!</translation>
+        <translation type="obsolete">Non proprietario della squadra!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation>Meno di due clan!</translation>
+        <translation type="obsolete">Meno di due clan!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation>Esiste già una stanza con questo nome</translation>
+        <translation type="obsolete">Esiste già una stanza con questo nome</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation>Nome già scelto</translation>
+        <translation type="obsolete">Nome già scelto</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation>Nome non valido</translation>
+        <translation type="obsolete">Nome non valido</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation>Protocollo già conosciuto</translation>
+        <translation type="obsolete">Protocollo già conosciuto</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation>Numero non valido</translation>
+        <translation type="obsolete">Numero non valido</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Nome già in uso</translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Nome già in uso</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation>Autenticazione fallita</translation>
+        <translation type="obsolete">Autenticazione fallita</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>60 secondi di raffreddamento prima dell'espulsione</translation>
+        <translation type="obsolete">60 secondi di raffreddamento prima dell&apos;espulsione</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>espulso</translation>
+        <translation type="obsolete">espulso</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Scadenza ping</translation>
+        <translation type="obsolete">Scadenza ping</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation>ciao</translation>
+        <translation type="obsolete">ciao</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation>Nome stanza non valido</translation>
+        <translation type="obsolete">Nome stanza non valido</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation>Stanza non esistente</translation>
+        <translation type="obsolete">Stanza non esistente</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation>Ingresso riservato</translation>
+        <translation type="obsolete">Ingresso riservato</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation>Solo utenti registrati</translation>
+        <translation type="obsolete">Solo utenti registrati</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation>Sei stato espulso dalla stanza</translation>
+        <translation type="obsolete">Sei stato espulso dalla stanza</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation>Configurazione vuota</translation>
+        <translation type="obsolete">Configurazione vuota</translation>
     </message>
 </context>
 </TS>
