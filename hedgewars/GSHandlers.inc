@@ -5127,6 +5127,7 @@ const iceRadius = 32;
 const iceHeight = 40;
 var
     HHGear: PGear;
+    landRect: TSDL_Rect;
     ndX, ndY: hwFloat;
     i, t, gX, gY: LongInt;
     hogs: PGearArrayS;
@@ -5191,8 +5192,15 @@ begin
 
                 if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
                     begin 
-                    FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
-                    SetAllHHToActive;                                     
+                    FillRoundInLand(target.x, target.y, iceRadius, icePixel);
+                    landRect.x := min(max(target.x - iceRadius, 0), LAND_WIDTH - 1);
+                    landRect.y := min(max(target.y - iceRadius, 0), LAND_HEIGHT - 1);
+                    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
+                    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
+                    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
+                            
+                    // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
+                    SetAllHHToActive;
                     IceState := iceWaitCollision;
                     end;
 
