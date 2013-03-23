@@ -32,8 +32,9 @@ class PageNetServer : public AbstractPage
         QPushButton *BtnDefault;
         QPushButton *BtnShare;
         QLabel *labelSD;
-        QLineEdit *leServerDescr;
         QLabel *labelPort;
+        QLabel *labelURL;
+        QLineEdit *leServerDescr;
         QSpinBox *sbPort;
 
     protected:
