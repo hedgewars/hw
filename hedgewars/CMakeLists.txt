@@ -153,15 +153,6 @@ if(NOT PHYSFS_FOUND)
     add_definitions(-dPHYSFS_INTERNAL)
 endif()
 
-if(APPLE)
-    add_flag_append(CMAKE_Pascal_FLAGS -Px86_64)
-endif()
-
-
-if(BUILD_ENGINE_LIBRARY)
-else(BUILD_ENGINE_LIBRARY)
-endif(BUILD_ENGINE_LIBRARY)
-
 
 if(HAVE_MIXINIT)
     add_definitions(-dSDL_MIXER_NEWER)
@@ -178,7 +169,7 @@ if(BUILD_ENGINE_LIBRARY)
     message(${WARNING} "Engine will be built as library (experimental)")
     if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
         # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-no_order_inits")
+        add_flag_prepend(CMAKE_Pascal_FLAGS "-k-no_order_inits")
     endif()
 
     #workaround for missing <TARGET> support during object generation
