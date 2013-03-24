@@ -120,12 +120,14 @@ if(APPLE)
     #on OSX we need to provide the SDL_main() function when building as executable
     if(NOT BUILD_ENGINE_LIBRARY)
         add_subdirectory(sdlmain)
+        list(APPEND HW_LINK_LIBS SDLmain)
         add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     endif()
 endif(APPLE)
 
 if(FFMPEG_FOUND)
     add_subdirectory(avwrapper)
+    list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
 endif()
@@ -138,6 +140,7 @@ if(PNG_FOUND)
 endif()
 
 if(NOT LUA_FOUND)
+    list(APPEND HW_LINK_LIBS lua)
     add_flag_append(CMAKE_Pascal_FLAGS -k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a)
     #linking with liblua.a requires system readline
     if(UNIX)
@@ -146,13 +149,14 @@ if(NOT LUA_FOUND)
 endif()
 
 if(NOT PHYSFS_FOUND)
+    add_definitions(-dPHYSFS_INTERNAL)
+    list(APPEND HW_LINK_LIBS physfs)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
     #(should be harmless on other platforms)
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
-    add_definitions(-dPHYSFS_INTERNAL)
 endif()
-
+list(APPEND HW_LINK_LIBS physlayer)
 
 if(HAVE_MIXINIT)
     add_definitions(-dSDL_MIXER_NEWER)
@@ -186,27 +190,6 @@ else()
     add_executable(hwengine ${engine_sources})
 endif()
 
-
-#when system Lua is not found we need to compile it before engine
-if(NOT LUA_FOUND)
-    target_link_libraries(hwengine lua)
-endif()
-
-# same for physfs
-if(NOT PHYSFS_FOUND)
-    target_link_libraries(hwengine physfs)
-endif()
-
-target_link_libraries(hwengine physlayer)
-
-#when ffmpeg/libav is found we need to compile it before engine
-#TODO: convert avwrapper to .pas unit so we can skip this step
-if(${FFMPEG_FOUND})
-    target_link_libraries(hwengine avwrapper)
-endif()
-
-if(APPLE AND NOT BUILD_ENGINE_LIBRARY)
-    target_link_libraries(hwengine SDLmain)
-endif()
+target_link_libraries(hwengine ${HW_LINK_LIBS})
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})
