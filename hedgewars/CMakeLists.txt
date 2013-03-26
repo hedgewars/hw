@@ -14,11 +14,6 @@ enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-if (APPLE)
-    set(required_fpc_version 2.6)
-else()
-    set(required_fpc_version 2.2)
-endif()
 
 set(engine_sources
     SDLh.pas
@@ -92,12 +87,10 @@ set(engine_sources
 
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
-find_package_or_fail(FreePascal)
-
-#when cmake-2.6 support is dropped, this ought to be inside FindFreePascal.cmake
-if (FREEPASCAL_VERSION VERSION_LESS required_fpc_version)
-    message(FATAL_ERROR "Freepascal ${FREEPASCAL_VERSION} is too old, minimum version required is ${required_fpc_version}")
-elseif(FREEPASCAL_VERSION VERSION_GREATER 2.4)
+if (${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.2 OR # older versions are just ancient
+    (${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.6 AND APPLE)) # because of 64bit and opengl bindings
+    message(FATAL_ERROR "Your FreePascal installation is too old (fpc ${CMAKE_Pascal_COMPILER_VERSION})!")
+elseif(CMAKE_Pascal_COMPILER_VERSION VERSION_GREATER 2.4)
     #enable INLINE only with a recent version of fpc
     add_flag_prepend(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
