@@ -12,6 +12,7 @@ check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
 
 enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 if (APPLE)
     set(required_fpc_version 2.6)
