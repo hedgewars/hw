@@ -9,8 +9,17 @@ const PhyslayerLibName = 'libphyslayer';
 {$IFNDEF WIN32}
     {$linklib physfs}
     {$linklib physlayer}
-    {$IFDEF DARWIN}
-        {$linkframework IOKit}
+
+    {statically linking physfs brings IOKit dependency on OSX and
+     stdc++ under linux 32 bit because divdi3 is not defined}
+    {$IFDEF PHYSFS_INTERNAL}
+        {$IFDEF DARWIN}
+            {$linkframework IOKit}
+        {$ELSE}
+            {$IFDEF CPU32}
+                {$linklib stdc++}
+            {$ENDIF}
+        {$ENDIF}
     {$ENDIF}
 {$ENDIF}
 
