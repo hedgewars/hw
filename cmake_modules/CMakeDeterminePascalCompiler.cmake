@@ -41,6 +41,14 @@ IF(NOT CMAKE_Pascal_COMPILER)
 ENDIF(NOT CMAKE_Pascal_COMPILER)
 MARK_AS_ADVANCED(CMAKE_Pascal_COMPILER)
 
+if(NOT CMAKE_Pascal_COMPILER_VERSION)
+  execute_process(COMMAND ${CMAKE_Pascal_COMPILER} -iV
+                  OUTPUT_VARIABLE CMAKE_Pascal_COMPILER_VERSION
+                  OUTPUT_STRIP_TRAILING_WHITESPACE
+                  ) # we assume no error for something so simple
+endif(NOT CMAKE_Pascal_COMPILER_VERSION)
+mark_as_advanced(CMAKE_Pascal_COMPILER_VERSION)
+
 GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
 
 # configure variables set in this file for fast reload later on
