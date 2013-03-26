@@ -548,7 +548,10 @@ gtFlamethrower: begin
                 gear^.Pos:= 1;
                 end;
 }
-      gtIceGun: gear^.Health:= 1000;
+      gtIceGun: begin
+                gear^.Health:= 1000;
+                gear^.Radius:= 8;
+                end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 1;
