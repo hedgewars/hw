@@ -278,9 +278,9 @@ procedure drawIcePixel(y, x:Longint);
 var
     iceSurface: PSDL_Surface;
     icePixels: PLongwordArray;
-    pictureX, pictureY: LongInt;
-    w, c: LongWord;
-    weight: Longint;
+    //pictureX, pictureY: LongInt;
+    w: LongWord;
+    //weight: Longint;
 begin
     // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
     iceSurface:= SpritesData[sprIceTexture].Surface;

@@ -5088,8 +5088,7 @@ end;
 
 
 procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
-    var
-    iter:PGear;    
+    //var iter:PGear;    
 begin
   with Gear^ do
   begin
@@ -5118,10 +5117,10 @@ end;
 procedure doStepIceGun(Gear: PGear);
 const iceWaitCollision:Longint = 0;
 const iceCollideWithGround:Longint = 1;
-const iceWaitNextTarget:Longint = 2;
-const iceCollideWithHog:Longint = 4;
+//const iceWaitNextTarget:Longint = 2;
+//const iceCollideWithHog:Longint = 4;
 const iceCollideWithWater:Longint = 5;
-const waterFreezingTime:Longint = 500;
+//const waterFreezingTime:Longint = 500;
 const groundFreezingTime:Longint = 1000;
 const iceRadius = 32;
 const iceHeight = 40;
@@ -5132,7 +5131,7 @@ var
     hogs: PGearArrayS;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+    if (Gear^.Message and gmAttack <> 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
@@ -5150,7 +5149,7 @@ begin
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
             begin
                 updateTarget(Gear, ndX, ndY);
-                IceState := iceWaitCollision;
+                Health := iceWaitCollision;
             end
         else
             begin
@@ -5168,18 +5167,18 @@ begin
                 CheckCollisionWithLand(Gear);
                 if (State and gstCollision) <> 0 then
                 begin        
-                if IceState = iceWaitCollision then
+                if Health = iceWaitCollision then
                     begin
-                    IceState := iceCollideWithGround;
-                    IceTime := GameTicks;                    
+                    Health := iceCollideWithGround;
+                    Power := GameTicks;                    
                     end                    
                 end
                 else if (target.y >= cWaterLine) then
                     begin
-                    if IceState = iceWaitCollision then
+                    if Health = iceWaitCollision then
                         begin
-                        IceState := iceCollideWithWater;
-                        IceTime := GameTicks;  
+                        Health := iceCollideWithWater;
+                        Power := GameTicks;  
                         end;
                     end;
 
@@ -5189,18 +5188,18 @@ begin
                     Y:= HHGear^.Y
                     end;
 
-                if (IceState = iceCollideWithGround) and ((GameTicks - IceTime) > groundFreezingTime) then
+                if (Health = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
                     begin 
                     FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;                                     
-                    IceState := iceWaitCollision;
+                    Health := iceWaitCollision;
                     end;
 
-                if (IceState = iceCollideWithWater) and ((GameTicks - IceTime) > groundFreezingTime) then
+                if (Health = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
                     begin                    
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
                     SetAllHHToActive; 
-                    IceState := iceWaitCollision;
+                    Health := iceWaitCollision;
                     end;
 
 // freeze nearby hogs

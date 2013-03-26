@@ -220,48 +220,56 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     PClan     = ^TClan;
 
     TGearStepProcedure = procedure (Gear: PGear);
+// So, you're here looking for variables you can (ab)use to store some gear state?
+// Not all members of this structure are created equal. Comments below are my take on what can be used for what in the gear structure.
     TGear = record
-            NextGear, PrevGear: PGear;
-            Active: Boolean;
-            AdvBounce: Longword;
-            Invulnerable: Boolean;
-            RenderTimer: Boolean;
-            AmmoType : TAmmoType;
-            State : Longword;
-            X : hwFloat;
+// Don't ever override these.
+            NextGear, PrevGear: PGear;  // Linked list
+            Z: Longword;                // Z index. For rendering. Sets order in list
+            Active: Boolean;            // Is gear Active (running step code)
+            Kind: TGearType;
+            doStep: TGearStepProcedure; // Code the gear is running
+            AmmoType : TAmmoType;       // Ammo type associated with this kind of gear
+            RenderTimer: Boolean;       // Will visually display Timer if true
+            Target : TPoint;            // Gear target. Will render in uGearsRender unless a special case is added
+            AIHints: LongWord;          // hints for ai.
+            LastDamage: PHedgehog;      // Used to track damage source for stats
+            CollisionIndex: LongInt;    // Position in collision array
+            Message: LongWord;          // Game messages are stored here. See gm bitmasks in uConsts
+            uid: Longword;              // Lua use this to reference gears
+// Strongly recommended not to override these.  Will mess up generic operations like portaling
+            X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
             Y : hwFloat;
             dX: hwFloat;
             dY: hwFloat;
-            Target : TPoint;
-            Kind: TGearType;
-            Pos: Longword;
-            doStep: TGearStepProcedure;
-            Radius: LongInt;
-            Angle, Power : Longword;
-            DirAngle: real;
-            Timer : LongWord;
+            State : Longword;        // See gst bitmask values in uConsts
+            PortalCounter: LongWord; // Necessary to interrupt portal loops.  Not possible to avoid infinite loops without it.
+// Don't use these if you're using generic movement like doStepFallingGear and explosion shoves. Generally recommended not to use.
+            Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
+            CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
+            AdvBounce: Longword; // Triggers 45° bounces. Is a counter to avoid edge cases
             Elasticity: hwFloat;
             Friction  : hwFloat;
-            Density   : hwFloat;
-            Message, MsgParam : Longword;
-            Hedgehog: PHedgehog;
-            Health, Damage, Karma: LongInt;
-            CollisionIndex: LongInt;
-            Tag: LongInt;
-            Tex: PTexture;
-            Z: Longword;
-            CollisionMask: Word;
-            LinkedGear: PGear;
-            FlightTime: Longword;
-            uid: Longword;
+            Density   : hwFloat; // Density is kind of a mix of size and density. Impacts distance thrown, wind.
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
-            nImpactSounds: Word; // count of ImpactSounds
-            SoundChannel: LongInt;
-            PortalCounter: LongWord;  // Hopefully temporary, but avoids infinite portal loops in a guaranteed fashion.
-            AIHints: LongWord; // hints for ai. haha ^^^^^^ temporary, sure
-            IceTime: Longint; //time of ice beam with object some interaction  temporary
-            IceState: Longint; //state of ice gun temporary
-            LastDamage: PHedgehog;
+            nImpactSounds: Word; // count of ImpactSounds.
+// Don't use these if you want to take damage normally, otherwise health/damage are commonly used for other purposes
+            Invulnerable: Boolean;
+            Health, Damage, Karma: LongInt;
+// DirAngle is a "real" - if you don't need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
+            DirAngle: real;
+// These are frequently overridden to serve some other purpose
+            Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
+            Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
+            Timer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
+            Tag: LongInt;            // Quite generic. Variety of uses.
+            FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
+            MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden
+// These are not used generically, but should probably be used for purpose intended. Definitely shouldn't override pointer type
+            Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
+            LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
+            Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
+            SoundChannel: LongInt;  // Used to track a sound the gear started
             end;
     TPGearArray = array of PGear;
     PGearArrayS = record
