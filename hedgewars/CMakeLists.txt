@@ -103,12 +103,22 @@ if(APPLE)
         string(REGEX MATCH "[pP][pP][cC]+" powerpc_build "${CMAKE_OSX_ARCHITECTURES}")
         string(REGEX MATCH "[iI]386+" i386_build "${CMAKE_OSX_ARCHITECTURES}")
         string(REGEX MATCH "[xX]86_64+" x86_64_build "${CMAKE_OSX_ARCHITECTURES}")
-        if(powerpc_build)
-            set(powerpc_build "powerpc")
+        if(x86_64_build)
+            add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
+        elseif(i386_build)
+            add_flag_prepend(CMAKE_Pascal_FLAGS -Pi386)
+        elseif(powerpc_build)
+            add_flag_prepend(CMAKE_Pascal_FLAGS -Ppowerpc)
+        else()
+            message(FATAL_ERROR "Unknown architecture present in CMAKE_OSX_ARCHITECTURES (${CMAKE_OSX_ARCHITECTURES})")
+        endif()
+        list(LENGTH CMAKE_OSX_ARCHITECTURES num_of_archs)
+        if(num_of_archs GREATER 1)
+            message(${WARNING} "Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one")
         endif()
     elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
         #if that variable is not set check if we are on x86_64 and if so force it, else use default
-        add_flag_append(CMAKE_Pascal_FLAGS -Px86_64)
+        add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
     endif()
 
     #on OSX we need to provide the SDL_main() function when building as executable
@@ -184,6 +194,7 @@ else()
     add_executable(hwengine ${engine_sources})
 endif()
 
+#even though not actually used, this will trigger relink if any lib changes
 target_link_libraries(hwengine ${HW_LINK_LIBS})
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}" DESTINATION ${destination_dir})
