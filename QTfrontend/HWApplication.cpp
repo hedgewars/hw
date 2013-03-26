@@ -83,6 +83,8 @@ bool HWApplication::event(QEvent *event)
             return true;
         } else if (scheme == "hwplay") {
             int port = openEvent->url().port(NETGAME_DEFAULT_PORT);
+            if (address == "")
+                address = "netserver.hedgewars.org";
             form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {
