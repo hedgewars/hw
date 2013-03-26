@@ -197,6 +197,8 @@ var Vx, Vy, r, mX, mY: real;
     x, y, dX, dY: real;
     t: LongInt;
     value: LongInt;
+    t2: real;
+    timer: Longint;
 begin
     mX:= hwFloat2Float(Me^.X);
     mY:= hwFloat2Float(Me^.Y);
@@ -224,7 +226,25 @@ begin
                 dec(t)
             until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
                    ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (y > cWaterLine);
-            
+
+            if TestCollWithLand(trunc(x), trunc(y), 5) then
+                begin
+                timer := 500;
+                t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
+                dX := dX * t2;
+                dY := dY * t2;
+                repeat
+                    x:= x + dX;
+                    y:= y + dY;
+                    dec(timer);
+                until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5)
+                    or (x < 0)
+                    or (y < 0)
+                    or (trunc(x) > LAND_WIDTH)
+                    or (trunc(y) > LAND_HEIGHT)
+                    or not TestCollWithLand(trunc(x), trunc(y), 5)
+                    or (timer = 0)
+                end;
             EX:= trunc(x);
             EY:= trunc(y);
             if Level = 1 then

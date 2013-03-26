@@ -2886,18 +2886,16 @@ forward;
 procedure doStepDrillDrilling(Gear: PGear);
 var 
     t: PGearArray;
-    ox, oy: hwFloat;
     tempColl: Word; 
 begin
     AllInactive := false;
 
+
     if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
     begin
-        ox := Gear^.X;
-        oy := Gear^.Y;
+        DrawTunnel(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 2, 6);
         Gear^.X := Gear^.X + Gear^.dX;
         Gear^.Y := Gear^.Y + Gear^.dY;
-        DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
         if (Gear^.Timer mod 30) = 0 then
             AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
         if (CheckGearDrowning(Gear)) then
