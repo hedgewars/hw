@@ -113,6 +113,7 @@ About::About(QWidget * parent) :
         .arg(PHYSFS_VER_PATCH));
 
     QLabel * lblLibInfo = new QLabel();
+    lblLibInfo->setOpenExternalLinks(true);
     lblLibInfo->setText(libinfo);
     lblLibInfo->setWordWrap(true);
     lblLibInfo->setMaximumWidth(280);
