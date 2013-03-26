@@ -5,61 +5,61 @@
 # the cmake variable CMAKE_GENERATOR_PASCAL which can be defined by a generator
 # as a default compiler
 
-IF(NOT CMAKE_Pascal_COMPILER)
+if(NOT CMAKE_Pascal_COMPILER)
+    # prefer the environment variable FPC
+    if($ENV{FPC} MATCHES ".+")
+        get_filename_component(CMAKE_Pascal_COMPILER_INIT $ENV{FPC} PROGRAM PROGRAM_ARGS CMAKE_Pascal_FLAGS_ENV_INIT)
+        if(CMAKE_Pascal_FLAGS_ENV_INIT)
+            set(CMAKE_Pascal_COMPILER_ARG1 "${CMAKE_Pascal_FLAGS_ENV_INIT}" CACHE STRING "First argument to Pascal compiler")
+        endif(CMAKE_Pascal_FLAGS_ENV_INIT)
+        if(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
+        else(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
+            message(FATAL_ERROR "Could not find compiler set in environment variable FPC:\n$ENV{FPC}.")
+        endif(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
+    endif($ENV{FPC} MATCHES ".+")
 
-  # prefer the environment variable FPC
-  IF($ENV{FPC} MATCHES ".+")
-    GET_FILENAME_COMPONENT(CMAKE_Pascal_COMPILER_INIT $ENV{FPC} PROGRAM PROGRAM_ARGS CMAKE_Pascal_FLAGS_ENV_INIT)
-    IF(CMAKE_Pascal_FLAGS_ENV_INIT)
-      SET(CMAKE_Pascal_COMPILER_ARG1 "${CMAKE_Pascal_FLAGS_ENV_INIT}" CACHE STRING "First argument to Pascal compiler")
-    ENDIF(CMAKE_Pascal_FLAGS_ENV_INIT)
-    IF(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
-    ELSE(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
-      MESSAGE(FATAL_ERROR "Could not find compiler set in environment variable FPC:\n$ENV{FPC}.")
-    ENDIF(EXISTS ${CMAKE_Pascal_COMPILER_INIT})
-  ENDIF($ENV{FPC} MATCHES ".+")
+    # next try prefer the compiler specified by the generator
+    if(CMAKE_GENERATOR_PASCAL)
+        if(NOT CMAKE_Pascal_COMPILER_INIT)
+            set(CMAKE_Pascal_COMPILER_INIT ${CMAKE_GENERATOR_PASCAL})
+        endif(NOT CMAKE_Pascal_COMPILER_INIT)
+    endif(CMAKE_GENERATOR_PASCAL)
 
-  # next try prefer the compiler specified by the generator
-  IF(CMAKE_GENERATOR_PASCAL)
-    IF(NOT CMAKE_Pascal_COMPILER_INIT)
-      SET(CMAKE_Pascal_COMPILER_INIT ${CMAKE_GENERATOR_PASCAL})
-    ENDIF(NOT CMAKE_Pascal_COMPILER_INIT)
-  ENDIF(CMAKE_GENERATOR_PASCAL)
+    # finally list compilers to try
+    if(CMAKE_Pascal_COMPILER_INIT)
+        set(CMAKE_Pascal_COMPILER_LIST ${CMAKE_Pascal_COMPILER_INIT})
+    else(CMAKE_Pascal_COMPILER_INIT)
+        set(CMAKE_Pascal_COMPILER_LIST fpc)
+    endif(CMAKE_Pascal_COMPILER_INIT)
 
-  # finally list compilers to try
-  IF(CMAKE_Pascal_COMPILER_INIT)
-    SET(CMAKE_Pascal_COMPILER_LIST ${CMAKE_Pascal_COMPILER_INIT})
-  ELSE(CMAKE_Pascal_COMPILER_INIT)
-    SET(CMAKE_Pascal_COMPILER_LIST fpc)
-  ENDIF(CMAKE_Pascal_COMPILER_INIT)
-
-  # Find the compiler.
-  FIND_PROGRAM(CMAKE_Pascal_COMPILER NAMES ${CMAKE_Pascal_COMPILER_LIST} DOC "Pascal compiler")
-  IF(CMAKE_Pascal_COMPILER_INIT AND NOT CMAKE_Pascal_COMPILER)
-    SET(CMAKE_Pascal_COMPILER "${CMAKE_Pascal_COMPILER_INIT}" CACHE FILEPATH "Pascal compiler" FORCE)
-  ENDIF(CMAKE_Pascal_COMPILER_INIT AND NOT CMAKE_Pascal_COMPILER)
-ENDIF(NOT CMAKE_Pascal_COMPILER)
-MARK_AS_ADVANCED(CMAKE_Pascal_COMPILER)
+    # Find the compiler.
+    find_program(CMAKE_Pascal_COMPILER NAMES ${CMAKE_Pascal_COMPILER_LIST} DOC "Pascal compiler")
+    if(CMAKE_Pascal_COMPILER_INIT AND NOT CMAKE_Pascal_COMPILER)
+        set(CMAKE_Pascal_COMPILER "${CMAKE_Pascal_COMPILER_INIT}" CACHE FILEPATH "Pascal compiler" FORCE)
+    endif(CMAKE_Pascal_COMPILER_INIT AND NOT CMAKE_Pascal_COMPILER)
+endif(NOT CMAKE_Pascal_COMPILER)
+mark_as_advanced(CMAKE_Pascal_COMPILER)
 
 if(NOT CMAKE_Pascal_COMPILER_VERSION)
-  execute_process(COMMAND ${CMAKE_Pascal_COMPILER} -iV
-                  OUTPUT_VARIABLE CMAKE_Pascal_COMPILER_VERSION
-                  OUTPUT_STRIP_TRAILING_WHITESPACE
-                  ) # we assume no error for something so simple
+    execute_process(COMMAND ${CMAKE_Pascal_COMPILER} -iV
+                    OUTPUT_VARIABLE CMAKE_Pascal_COMPILER_VERSION
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    ) # we assume no error for something so simple
 endif(NOT CMAKE_Pascal_COMPILER_VERSION)
 mark_as_advanced(CMAKE_Pascal_COMPILER_VERSION)
 
-GET_FILENAME_COMPONENT(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
+get_filename_component(COMPILER_LOCATION "${CMAKE_Pascal_COMPILER}" PATH)
 
 # configure variables set in this file for fast reload later on
 if(${CMAKE_VERSION} VERSION_LESS 2.8.10)
-  CONFIGURE_FILE(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
-                 "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakePascalCompiler.cmake"
-                 IMMEDIATE )
+    configure_file(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
+                   "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakePascalCompiler.cmake"
+                   IMMEDIATE )
 else(${CMAKE_VERSION} VERSION_LESS 2.8.10)
-  CONFIGURE_FILE(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
-                "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/${CMAKE_VERSION}/CMakePascalCompiler.cmake"
-                 IMMEDIATE )
+    configure_file(${CMAKE_MODULE_PATH}/CMakePascalCompiler.cmake.in
+                  "${CMAKE_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/${CMAKE_VERSION}/CMakePascalCompiler.cmake"
+                   IMMEDIATE )
 endif(${CMAKE_VERSION} VERSION_LESS 2.8.10)
 
-SET(CMAKE_Pascal_COMPILER_ENV_VAR "FPC")
+set(CMAKE_Pascal_COMPILER_ENV_VAR "FPC")
+
