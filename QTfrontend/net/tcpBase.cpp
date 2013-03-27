@@ -19,13 +19,12 @@
 
 #include "tcpBase.h"
 
-#include <QMessageBox>
 #include <QList>
-#include <QApplication>
 #include <QImage>
 #include <QThread>
 
 #include "hwconsts.h"
+#include "MessageDialog.h"
 
 #ifdef HWLIBRARY
 extern "C" void Game(char**arguments);
@@ -89,13 +88,7 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
         IPCServer->setMaxPendingConnections(1);
         if (!IPCServer->listen(QHostAddress::LocalHost))
         {
-            QMessageBox deniedMsg(QApplication::activeWindow());
-            deniedMsg.setIcon(QMessageBox::Critical);
-            deniedMsg.setWindowTitle(QMessageBox::tr("TCP - Error"));
-            deniedMsg.setText(QMessageBox::tr("Unable to start the server: %1.").arg(IPCServer->errorString()));
-            deniedMsg.setWindowModality(Qt::WindowModal);
-            deniedMsg.exec();
-
+            MessageDialog::ShowFatalMessage(tr("Unable to start server at %1.").arg(IPCServer->errorString()));
             exit(0); // FIXME - should be graceful exit here (lower Critical -> Warning above when implemented)
         }
     }
@@ -172,14 +165,7 @@ void TCPBase::ClientRead()
 
 void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
-    QMessageBox deniedMsg(QApplication::activeWindow());
-    deniedMsg.setIcon(QMessageBox::Critical);
-    deniedMsg.setWindowTitle(QMessageBox::tr("TCP - Error"));
-    deniedMsg.setText(QMessageBox::tr("Unable to run engine at ") + bindir->absolutePath() + "/hwengine\n" +
-                      QMessageBox::tr("Error code: %1").arg(error));
-    deniedMsg.setWindowModality(Qt::WindowModal);
-    deniedMsg.exec();
-
+    MessageDialog::ShowFatalMessage(tr("Unable to run engine at %1\nError code: %2").arg(bindir->absolutePath() + "/hwengine").arg(error));
     ClientDisconnect();
 }
 

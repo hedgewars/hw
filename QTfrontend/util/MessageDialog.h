@@ -19,7 +19,6 @@
 #ifndef MESSAGEDIALOG_H
 #define MESSAGEDIALOG_H
 
-#include <QString>
 #include <QMessageBox>
 
 class QWidget;
@@ -27,9 +26,10 @@ class QWidget;
 class MessageDialog
 {
     public:
+        static int ShowFatalMessage(const QString & msg, QWidget * parent = 0);
         static int ShowErrorMessage(const QString & msg, QWidget * parent = 0);
         static int ShowInfoMessage(const QString & msg, QWidget * parent = 0);
-        static int ShowMessage(const QString & msg, const QString & title = QString(), QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
+        static int ShowMessage(const QString & msg, const QString & title = 0, QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
 };
 
 #endif
