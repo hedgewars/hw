@@ -21,25 +21,35 @@
 
 int MessageDialog::ShowFatalMessage(const QString & msg, QWidget * parent)
 {
-    return ShowMessage(msg, QMessageBox::tr("Hedgewars - Fatal Error"), QMessageBox::Critical, parent);
+    return ShowMessage(QMessageBox::tr("Hedgewars - Error"),
+                       msg,
+                       QMessageBox::Critical,
+                       parent);
 }
 
 int MessageDialog::ShowErrorMessage(const QString & msg, QWidget * parent)
 {
-    return ShowMessage(msg, QMessageBox::tr("Hedgewars - Warning"), QMessageBox::Warning, parent);
+    return ShowMessage(QMessageBox::tr("Hedgewars - Warning"),
+                       msg,
+                       QMessageBox::Warning,
+                       parent);
 }
 
 int MessageDialog::ShowInfoMessage(const QString & msg, QWidget * parent)
 {
-    return ShowMessage(msg, QMessageBox::tr("Hedgewars - Information"), QMessageBox::Information, parent);
+    return ShowMessage(QMessageBox::tr("Hedgewars - Information"),
+                       msg,
+                       QMessageBox::Information,
+                       parent);
 }
 
-int MessageDialog::ShowMessage(const QString & msg, const QString & title, QMessageBox::Icon icon, QWidget * parent)
+int MessageDialog::ShowMessage(const QString & title, const QString & msg, QMessageBox::Icon icon, QWidget * parent)
 {
     QMessageBox msgMsg(parent ? parent : HWApplication::activeWindow());
-    msgMsg.setIcon(icon);
     msgMsg.setWindowTitle(title != NULL ? title : "Hedgewars");
     msgMsg.setText(msg);
+    msgMsg.setIcon(icon);
     msgMsg.setWindowModality(Qt::WindowModal);
+
     return msgMsg.exec();
 }
