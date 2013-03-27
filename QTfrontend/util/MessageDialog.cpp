@@ -17,6 +17,12 @@
  */
 
 #include "MessageDialog.h"
+#include "HWApplication.h"
+
+int MessageDialog::ShowFatalMessage(const QString & msg, QWidget * parent)
+{
+    return ShowMessage(msg, QMessageBox::tr("Hedgewars - Fatal Error"), QMessageBox::Critical, parent);
+}
 
 int MessageDialog::ShowErrorMessage(const QString & msg, QWidget * parent)
 {
@@ -30,9 +36,9 @@ int MessageDialog::ShowInfoMessage(const QString & msg, QWidget * parent)
 
 int MessageDialog::ShowMessage(const QString & msg, const QString & title, QMessageBox::Icon icon, QWidget * parent)
 {
-    QMessageBox msgMsg(parent);
+    QMessageBox msgMsg(parent ? parent : HWApplication::activeWindow());
     msgMsg.setIcon(icon);
-    msgMsg.setWindowTitle(title.isEmpty() ? QMessageBox::tr("Hedgewars") : title);
+    msgMsg.setWindowTitle(title != NULL ? title : "Hedgewars");
     msgMsg.setText(msg);
     msgMsg.setWindowModality(Qt::WindowModal);
     return msgMsg.exec();

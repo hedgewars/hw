@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QMessageBox>
 #include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
@@ -36,6 +35,7 @@
 
 #include "DataManager.h"
 #include "FileEngine.h"
+#include "MessageDialog.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
@@ -99,12 +99,7 @@ bool checkForDir(const QString & dir)
     if (!tmpdir.exists())
         if (!tmpdir.mkpath(dir))
         {
-            QMessageBox directoryMsg(QApplication::activeWindow());
-            directoryMsg.setIcon(QMessageBox::Warning);
-            directoryMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
-            directoryMsg.setText(QMessageBox::tr("Cannot create directory %1").arg(dir));
-            directoryMsg.setWindowModality(Qt::WindowModal);
-            directoryMsg.exec();
+            MessageDialog::ShowErrorMessage(HWApplication::tr("Cannot create directory %1").arg(dir));
             return false;
         }
     return true;
@@ -144,7 +139,7 @@ int main(int argc, char *argv[])
     QPixmap pixmap(":res/splash.png");
     splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     splash->setAttribute(Qt::WA_TranslucentBackground);
-    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
     QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
                                   (deskSize.height() - pixmap.height())/2 );
     splash->move(splashCenter);
@@ -253,16 +248,9 @@ int main(int argc, char *argv[])
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("Data"))
+    if (!datadir->cd("Data"))
     {
-        QMessageBox missingMsg(QApplication::activeWindow());
-        missingMsg.setIcon(QMessageBox::Critical);
-        missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
-        missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
-                                           "Please check your installation!").
-                                            arg(datadir->absolutePath()+"/Data"));
-        missingMsg.setWindowModality(Qt::WindowModal);
-        missingMsg.exec();
+        MessageDialog::ShowFatalMessage(HWApplication::tr("Failed to open data directory:\n%1\n\nPlease check your installation!").arg(datadir->absolutePath()+"/Data"));
         return 1;
     }
 

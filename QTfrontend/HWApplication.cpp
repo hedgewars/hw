@@ -18,6 +18,7 @@
 
 #include "HWApplication.h"
 #include <QFileOpenEvent>
+#include <QEvent>
 
 #include "hwform.h"
 #include "MessageDialog.h"
