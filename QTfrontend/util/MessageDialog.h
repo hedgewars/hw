@@ -29,7 +29,7 @@ class MessageDialog
         static int ShowFatalMessage(const QString & msg, QWidget * parent = 0);
         static int ShowErrorMessage(const QString & msg, QWidget * parent = 0);
         static int ShowInfoMessage(const QString & msg, QWidget * parent = 0);
-        static int ShowMessage(const QString & title = 0, const QString & msg, QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
+        static int ShowMessage(const QString & title, const QString & msg, QMessageBox::Icon icon = QMessageBox::NoIcon, QWidget * parent = 0);
 };
 
 #endif
