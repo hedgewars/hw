@@ -266,7 +266,7 @@ begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and (Land[y, x] <= lfAllObjMask) then
+        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and (Land[y, x] <= lfAllObjMask) and ((Land[y, x] and lfObjMask) < 2) then
             exit(false);
     end;
     TestCollExcludingMe:= TestColl(x, y, r)
