@@ -793,7 +793,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 var da: LongWord;
 begin
 with HHGear^.Hedgehog^ do
-    if ((CurAmmoType = amRope) and ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving))
+    if ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope) and ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving))
     or ((CurAmmoType = amPortalGun) and ((HHGear^.State and gstMoving) <> 0)) then
         da:= 2
     else da:= 1;
