@@ -5130,7 +5130,7 @@ var
     hogs: PGearArrayS;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Message and gmAttack <> 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
