@@ -74,16 +74,22 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     QHBoxLayout * systemLayout = new QHBoxLayout();
 
     info = new QLabel();
-    info->setText(
+    info->setText(QString(
         "<style type=\"text/css\">"
         "a { color: #fc0; }"
         "b { color: #0df; }"
         "</style>"
-        "<div align=\"center\"><h1>Please give us feedback!</h1>"
-        "<h3>We are always happy about suggestions, ideas, or bug reports.<h3>"
-        "<h4>Your email address is optional, but we may want to contact you.<h4>"
-        "</div>"
+        "<div align=\"center\"><h1>%1</h1>"
+        "<h3>%2<h3>"
+        "<h4>%3 <a href=\"http://code.google.com/p/hedgewars/wiki/KnownBugs\">known bugs</a><h4>"
+        "<h4>%4<h4>"
+        "</div>")
+        .arg(tr("Please give us feedback!"))
+        .arg(tr("We are always happy about suggestions, ideas, or bug reports."))
+        .arg(tr("If you found a bug, you can see if it's already known here (english): "))
+        .arg(tr("Your email address is optional, but we may want to contact you."))
     );
+    info->setOpenExternalLinks(true);
     pageLayout->addWidget(info);
 
     QVBoxLayout * summaryEmailLayout = new QVBoxLayout();
