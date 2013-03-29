@@ -5147,8 +5147,8 @@ begin
            ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
             begin
-                updateTarget(Gear, ndX, ndY);
-                Health := iceWaitCollision;
+            updateTarget(Gear, ndX, ndY);
+            Timer := iceWaitCollision;
             end
         else
             begin
@@ -5156,27 +5156,24 @@ begin
             Y:= Y + dY;
             gX:= hwRound(X);
             gY:= hwRound(Y);
-            if Target.X = NoPointX then
-            begin
-                t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
-            end;
+            if Target.X = NoPointX then t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
 
             if Target.X <> NoPointX then
-            begin
+                begin
                 CheckCollisionWithLand(Gear);
                 if (State and gstCollision) <> 0 then
-                begin
-                if Health = iceWaitCollision then
                     begin
-                    Health := iceCollideWithGround;
-                    Power := GameTicks;
+                    if Timer = iceWaitCollision then
+                        begin
+                        Timer := iceCollideWithGround;
+                        Power := GameTicks;
+                        end
                     end
-                end
                 else if (target.y >= cWaterLine) then
                     begin
-                    if Health = iceWaitCollision then
+                    if Timer = iceWaitCollision then
                         begin
-                        Health := iceCollideWithWater;
+                        Timer := iceCollideWithWater;
                         Power := GameTicks;
                         end;
                     end;
@@ -5187,7 +5184,7 @@ begin
                     Y:= HHGear^.Y
                     end;
 
-                if (Health = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
+                if (Timer = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
                     FillRoundInLand(target.x, target.y, iceRadius, icePixel);
                     landRect.x := min(max(target.x - iceRadius, 0), LAND_WIDTH - 1);
@@ -5198,14 +5195,14 @@ begin
 
                     // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;
-                    Health := iceWaitCollision;
+                    Timer := iceWaitCollision;
                     end;
 
-                if (Health = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
+                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
                     SetAllHHToActive;
-                    Health := iceWaitCollision;
+                    Timer := iceWaitCollision;
                     end;
 
 // freeze nearby hogs
@@ -5222,16 +5219,16 @@ begin
                                     hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 200000;//cHedgehogTurnTime + cReadyDelay
                                 end;
                 inc(Pos)
-            end
+                end
             else if (t > 400) and ((gY > cWaterLine) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and (Land[gY, gX] <> 0))) then
-            begin
+                begin
                 Target.X:= gX;
                 Target.Y:= gY;
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-            end;
+                end;
             {if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
