@@ -200,6 +200,8 @@ var Vx, Vy, r, mX, mY: real;
     t2: real;
     timer: Longint;
 begin
+    if (Level > 3) then exit(BadTurn);
+
     mX:= hwFloat2Float(Me^.X);
     mY:= hwFloat2Float(Me^.Y);
     ap.Time:= 0;
@@ -250,8 +252,6 @@ begin
             if Level = 1 then
                 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
             else value:= RateExplosion(Me, EX, EY, 101);
-            if value = 0 then
-                value:= 1024 - Metric(Targ.X, Targ.Y, EX, EY) div 64;
             if valueResult <= value then
                 begin
                 ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random((Level - 1) * 9));
@@ -259,7 +259,7 @@ begin
                 ap.ExplR:= 100;
                 ap.ExplX:= EX;
                 ap.ExplY:= EY;
-                valueResult:= value
+                valueResult:= value-5 // trying to make it slightly less attractive than a bazooka, to prevent waste.  AI could use awareness of weapon count
                 end;
             end
     until rTime > 4250;

@@ -2889,21 +2889,23 @@ var
     tempColl: Word;
 begin
     AllInactive := false;
+    if (Gear^.Timer > 0) and (Gear^.Timer mod 10 <> 0) then
+        begin
+        dec(Gear^.Timer);
+        exit;
+        end;
 
-
-    if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
-    begin
-        DrawTunnel(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 2, 6);
-        Gear^.X := Gear^.X + Gear^.dX;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        if (Gear^.Timer mod 30) = 0 then
-            AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
-        if (CheckGearDrowning(Gear)) then
-            begin
-            StopSoundChan(Gear^.SoundChannel);
-            exit
-        end
+    DrawTunnel(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 2, 6);
+    Gear^.X := Gear^.X + Gear^.dX;
+    Gear^.Y := Gear^.Y + Gear^.dY;
+    if (Gear^.Timer mod 30) = 0 then
+        AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
+    if (CheckGearDrowning(Gear)) then
+        begin
+        StopSoundChan(Gear^.SoundChannel);
+        exit
     end;
+
     tempColl:= Gear^.CollisionMask;
     Gear^.CollisionMask:= $007F;
     if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) or (GameTicks > Gear^.FlightTime) then
