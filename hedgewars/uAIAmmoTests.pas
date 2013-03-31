@@ -229,7 +229,7 @@ begin
             until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
                    ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (y > cWaterLine);
 
-            if TestCollWithLand(trunc(x), trunc(y), 5) then
+            if TestCollWithLand(trunc(x), trunc(y), 5) and (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) > 21) then
                 begin
                 timer := 500;
                 t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
@@ -239,7 +239,7 @@ begin
                     x:= x + dX;
                     y:= y + dY;
                     dec(timer);
-                until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5)
+                until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 22)
                     or (x < 0)
                     or (y < 0)
                     or (trunc(x) > LAND_WIDTH)
@@ -259,7 +259,7 @@ begin
                 ap.ExplR:= 100;
                 ap.ExplX:= EX;
                 ap.ExplY:= EY;
-                valueResult:= value-5 // trying to make it slightly less attractive than a bazooka, to prevent waste.  AI could use awareness of weapon count
+                valueResult:= value-2500 // trying to make it slightly less attractive than a bazooka, to prevent waste.  AI could use awareness of weapon count
                 end;
             end
     until rTime > 4250;
