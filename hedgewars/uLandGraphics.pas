@@ -382,10 +382,10 @@ begin
         FillRoundInLand(x, y, Radius - 15, nullPixel);
     FillRoundInLand(X, Y, Radius, 0);
     FillRoundInLand(x, y, Radius + 4, ebcPixel);
-    tx:= Max(X - Radius - 1, 0);
-    dx:= Min(X + Radius + 1, LAND_WIDTH) - tx;
-    ty:= Max(Y - Radius - 1, 0);
-    dy:= Min(Y + Radius + 1, LAND_HEIGHT) - ty;
+    tx:= Max(X - Radius - 5, 0);
+    dx:= Min(X + Radius + 5, LAND_WIDTH) - tx;
+    ty:= Max(Y - Radius - 5, 0);
+    dy:= Min(Y + Radius + 5, LAND_HEIGHT) - ty;
     UpdateLandTexture(tx, dx, ty, dy, false);
 end;
 
