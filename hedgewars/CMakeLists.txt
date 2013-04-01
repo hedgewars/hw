@@ -168,7 +168,7 @@ endif(APPLE)
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
 if(PNG_FOUND)
     list(REMOVE_AT PNG_INCLUDE_DIR 1) #removing the zlib include path
-    list(APPEND pascal_flags "-dPNG_SCREENSHOTS -Fl${PNG_INCLUDE_DIR}")
+    list(APPEND pascal_flags "-dPNG_SCREENSHOTS" "-Fl${PNG_INCLUDE_DIR}")
 endif()
 
 
