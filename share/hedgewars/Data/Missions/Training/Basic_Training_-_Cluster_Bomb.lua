@@ -2,7 +2,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 local player = nil
 local scored = 0
-local end_timer = 5000
+local end_timer = 1000
 local game_lost = false
 local time_goal = 0
 
@@ -76,9 +76,9 @@ function onGameTick20()
 		if end_timer == 0 then
 			EndGame()
 		else
-			end_timer = end_timer - 20
 			TurnTimeLeft = time_goal
 		end
+        end_timer = end_timer - 20
 	end
 
 end

@@ -32,61 +32,8 @@ import Consts
 import ConfigFile
 import EngineInteraction
 
-data Action =
-    AnswerClients ![ClientChan] ![B.ByteString]
-    | SendServerMessage
-    | SendServerVars
-    | MoveToRoom RoomIndex
-    | MoveToLobby B.ByteString
-    | RemoveTeam B.ByteString
-    | SendTeamRemovalMessage B.ByteString
-    | RemoveRoom
-    | FinishGame
-    | UnreadyRoomClients
-    | JoinLobby
-    | ProtocolError B.ByteString
-    | Warning B.ByteString
-    | NoticeMessage Notice
-    | ByeClient B.ByteString
-    | KickClient ClientIndex
-    | KickRoomClient ClientIndex
-    | BanClient NominalDiffTime B.ByteString ClientIndex
-    | BanIP B.ByteString NominalDiffTime B.ByteString
-    | BanNick B.ByteString NominalDiffTime B.ByteString
-    | BanList
-    | Unban B.ByteString
-    | ChangeMaster (Maybe ClientIndex)
-    | RemoveClientTeams
-    | ModifyClient (ClientInfo -> ClientInfo)
-    | ModifyClient2 ClientIndex (ClientInfo -> ClientInfo)
-    | ModifyRoomClients (ClientInfo -> ClientInfo)
-    | ModifyRoom (RoomInfo -> RoomInfo)
-    | ModifyServerInfo (ServerInfo -> ServerInfo)
-    | AddRoom B.ByteString B.ByteString
-    | SendUpdateOnThisRoom
-    | CheckRegistered
-    | ClearAccountsCache
-    | ProcessAccountInfo AccountInfo
-    | AddClient ClientInfo
-    | DeleteClient ClientIndex
-    | PingAll
-    | StatsAction
-    | RestartServer
-    | AddNick2Bans B.ByteString B.ByteString UTCTime
-    | AddIP2Bans B.ByteString B.ByteString UTCTime
-    | CheckBanned Bool
-    | SaveReplay
-    | Stats
-
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
-
-instance NFData Action where
-    rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
-    rnf a = a `seq` ()
-
---instance NFData B.ByteString
-instance NFData (Chan a)
 
 
 othersChans :: StateT ServerState IO [ClientChan]
@@ -214,7 +161,7 @@ processAction (MoveToRoom ri) = do
     rnc <- gets roomsClients
 
     io $ do
-        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False, isInGame = False}) ci
+        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False, isInGame = False, clientClan = Nothing}) ci
         modifyRoom rnc (\r -> r{playersIn = playersIn r + 1}) ri
         moveClientToRoom rnc ri ci
 
@@ -430,7 +377,7 @@ processAction CheckRegistered = do
     uid <- client's clUID
     -- allow multiple checker logins
     haveSameNick <- liftM (not . null . tail . filter (\c -> (not $ isChecker c) && caseInsensitiveCompare (nick c) n)) allClientsS
-    if haveSameNick && (not checker) then
+    if (not checker) && haveSameNick then
         if p < 38 then
             processAction $ ByeClient $ loc "Nickname is already in use"
             else
@@ -455,8 +402,12 @@ processAction (ProcessAccountInfo info) = do
             when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
         Guest -> do
             b <- isBanned
+            c <- client's isChecker
             when (not b) $
-                processAction JoinLobby
+                if c then
+                    checkerLogin "" False
+                    else
+                    processAction JoinLobby
         Admin -> do
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
@@ -588,6 +539,7 @@ processAction (AddIP2Bans ip reason expiring) = do
     when (not $ ci `Set.member` rc)
         $ processAction $ ModifyServerInfo (\s -> s{bans = BanByIP ip reason expiring : bans s})
 
+
 processAction (CheckBanned byIP) = do
     clTime <- client's connectTime
     clNick <- client's nick
@@ -606,6 +558,7 @@ processAction (CheckBanned byIP) = do
         checkBan _ _ _ _ = False
         getBanReason (BanByIP _ msg _) = msg
         getBanReason (BanByNick _ msg _) = msg
+
 
 processAction PingAll = do
     rnc <- gets roomsClients
@@ -648,12 +601,19 @@ processAction RestartServer = do
 
 processAction Stats = do
     cls <- allClientsS
-    let stats = versions cls
-    processAction $ Warning stats
-    where
-        versions = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
-            . concatMap (\(p, n :: Int) -> ["<tr><td>", protoNumber2ver p, "</td><td>", showB n, "</td></tr>"])
-            . Map.toList . Map.fromListWith (+) . map (\c -> (clientProto c, 1))
+    rms <- allRoomsS
+    let clientsMap = Map.fromListWith (+) . map (\c -> (clientProto c, 1 :: Int)) $ cls
+    let roomsMap = Map.fromListWith (+) . map (\c -> (roomProto c, 1 :: Int)) . filter ((/=) 0 . roomProto) $ rms
+    let keys = Map.keysSet clientsMap `Set.union` Map.keysSet roomsMap
+    let versionsStats = B.concat . ((:) "<table border=1>") . (flip (++) ["</table>"])
+            . concatMap (\p -> [
+                    "<tr><td>", protoNumber2ver p
+                    , "</td><td>", showB $ Map.findWithDefault 0 p clientsMap
+                    , "</td><td>", showB $ Map.findWithDefault 0 p roomsMap
+                    , "</td></tr>"])
+            . Set.toList $ keys
+    processAction $ Warning versionsStats
+
 
 #if defined(OFFICIAL_SERVER)
 processAction SaveReplay = do
@@ -663,6 +623,29 @@ processAction SaveReplay = do
     io $ do
         r <- room'sM rnc id ri
         saveReplay r
+
+
+processAction CheckRecord = do
+    p <- client's clientProto
+    c <- client's sendChan
+    (cinfo, l) <- io $ loadReplay (fromIntegral p)
+    when (not . null $ l) $
+        mapM_ processAction [
+            AnswerClients [c] ("REPLAY" : l)
+            , ModifyClient $ \c -> c{checkInfo = cinfo}
+            ]
+
+processAction (CheckFailed msg) = do
+    Just (CheckInfo fileName _) <- client's checkInfo
+    io $ moveFailedRecord fileName
+
+processAction (CheckSuccess info) = do
+    Just (CheckInfo fileName _) <- client's checkInfo
+    io $ moveCheckedRecord fileName
+
 #else
 processAction SaveReplay = return ()
+processAction CheckRecord = return ()
+processAction (CheckFailed _) = return ()
+processAction (CheckSuccess _) = return ()
 #endif

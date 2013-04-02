@@ -1,6 +1,6 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.3c
+-- version 0.4
 -- by mikade
 --------------------------------
 
@@ -51,6 +51,37 @@
 -- added napalm (whoops) to list of possible weapons you can get
 -- hogs no longer recieve airstrike-related weps on border maps
 
+-----------
+--0.4
+-----------
+-- fix same name/blank weapon transfer bug (issue 541)
+-- show next hog ammo set in full (issue 312)
+-- allow mid-kill multi-shot weapon transfers (issue 503)
+-- allow users to configure hog health
+-- remove 'switched to' message
+-- remove some extraeneous code
+-- add more whitespace
+-- break everything
+
+-------------------------
+-- ideas for the future
+-------------------------
+-- add ice gun, structure
+-- allow switcher, resurrector
+-- add abuse
+-- nerf teleport
+-- allow more customization
+-- poison hogs using the default team? :/
+-- balance weapon distribution across entire team / all teams
+-- add other inequalities/bonuses like... ???
+-- some hogs start off with an extra 25 health?
+-- some hogs start off poisoned?
+-- some hogs start off with a rope and 2 drills but die after their turn?
+
+-------------------------------
+-- derp, script follows
+-------------------------------
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
@@ -77,10 +108,33 @@ local utilArray = 	{
 
 local wepArray = 	{}
 
-local currName
-local lastName
+local currHog
+local lastHog
 local started = false
 local switchStage = 0
+
+local lastWep = amNothing
+local shotsFired = 0
+
+function CheckForWeaponSwap()
+	if GetCurAmmoType() ~= lastWep then
+		shotsFired = 0
+	end
+	lastWep = GetCurAmmoType()
+end
+
+function onSlot()
+	CheckForWeaponSwap()
+end
+
+function onSetWeapon()
+	CheckForWeaponSwap()
+end
+
+function onHogAttack()
+	CheckForWeaponSwap()
+	shotsFired = shotsFired + 1
+end
 
 function StartingSetUp(gear)
 
@@ -88,7 +142,8 @@ function StartingSetUp(gear)
 		setGearValue(gear,wepArray[i],0)
 	end
 
-	setGearValue(gear,amKamikaze,1)
+	setGearValue(gear,amKamikaze,100)
+	setGearValue(gear,amSkip,100)
 
 	i = 1 + GetRandom(#atkArray)
 	setGearValue(gear,atkArray[i],1)
@@ -96,13 +151,11 @@ function StartingSetUp(gear)
 	i = 1 + GetRandom(#utilArray)
 	setGearValue(gear,utilArray[i],1)
 
-	SetHealth(gear, 100)
-
 end
 
 --[[function SaveWeapons(gear)
+-- er, this has no 0 check so presumably if you use a weapon then when it saves  you wont have it
 
-	-
 	for i = 1, (#wepArray) do
 		setGearValue(gear, wepArray[i], GetAmmoCount(gear, wepArray[i]) )
 		 --AddAmmo(gear, wepArray[i], getGearValue(gear,wepArray[i]) )
@@ -116,10 +169,9 @@ function ConvertValues(gear)
 		AddAmmo(gear, wepArray[i], getGearValue(gear,wepArray[i]) )
 	end
 
-
 end
 
-
+-- this is called when a hog dies
 function TransferWeps(gear)
 
 	if CurrentHedgehog ~= nil then
@@ -127,8 +179,17 @@ function TransferWeps(gear)
 		for i = 1, #wepArray do
 			val = getGearValue(gear,wepArray[i])
 			if val ~= 0 then
+
 				setGearValue(CurrentHedgehog, wepArray[i], val)
-				AddAmmo(CurrentHedgehog, wepArray[i], val)
+
+				-- if you are using multi-shot weapon, gimme one more
+				if (GetCurAmmoType()  == wepArray[i]) and (shotsFired ~= 0) then
+					AddAmmo(CurrentHedgehog, wepArray[i], val+1)
+				-- assign ammo as per normal
+				else
+					AddAmmo(CurrentHedgehog, wepArray[i], val)
+				end
+
 			end
 		end
 
@@ -137,12 +198,11 @@ function TransferWeps(gear)
 end
 
 function onGameInit()
-	GameFlags = gfInfAttack + gfRandomOrder
+	GameFlags = bor(GameFlags,gfInfAttack + gfRandomOrder + gfPerHogAmmo)
 	HealthCaseProb = 100
 end
 
 function onGameStart()
-
 
 	ShowMission	(
 				loc("HIGHLANDER"),
@@ -156,10 +216,10 @@ function onGameStart()
 				)
 
 	if MapHasBorder() == false then
-        for i, w in pairs(airWeapons) do
+       	for i, w in pairs(airWeapons) do
             table.insert(atkArray, w)
         end
-    end
+	end
 
 	for i, w in pairs(atkArray) do
         table.insert(wepArray, w)
@@ -169,32 +229,51 @@ function onGameStart()
         table.insert(wepArray, w)
 	end
 
+	table.insert(wepArray, amSkip)
+	table.insert(wepArray, amKamikaze)
+
 	runOnGears(StartingSetUp)
 	runOnGears(ConvertValues)
 
 
 end
 
---function onNewTurn()
---
---end
-
-
-function onGameTick20()
+function CheckForHogSwitch()
 
 	if (CurrentHedgehog ~= nil) then
 
-		currName = GetHogName(CurrentHedgehog)
+		currHog = CurrentHedgehog
 
-		if (currName ~= lastName) then
-			AddCaption(loc("Switched to ") .. currName .. "!")
+		if currHog ~= lastHog then
+
+			-- re-assign ammo to this guy, so that his entire ammo set will
+			-- be visible during another player's turn
+			if lastHog ~= nil then
+				ConvertValues(lastHog)
+			end
+
+			-- give the new hog what he is supposed to have, too
 			ConvertValues(CurrentHedgehog)
+
 		end
 
-		lastName = currName
+		lastHog = currHog
+
 	end
 
 end
+
+function onNewTurn()
+	CheckForHogSwitch()
+end
+
+--function onGameTick20()
+--CheckForHogSwitch()
+-- if we use gfPerHogAmmo is this even needed? Err, well, weapons reset, so... yes?
+-- orrrr, should we rather call the re-assignment of weapons onNewTurn()? probably not because
+-- then you cant switch hogs... unless we add a thing in onSwitch or whatever
+-- ye, that is probably better actually, but I'll add that when/if I add switch
+--end
 
 --[[function onHogHide(gear)
 	-- waiting for Henek
@@ -226,8 +305,6 @@ function onGearDelete(gear)
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amSkip, 9, 0, 0, 0)
-	SetAmmo(amKamikaze, 9, 0, 0, 0)
-	--SetAmmo(amSwitch, 9, 0, 0, 0) -------1
+	-- no, you can't set your own ammo scheme
 end
 

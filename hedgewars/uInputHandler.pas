@@ -58,7 +58,6 @@ const
     RCTRL  = $4000;
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
-    quitKeyCode, closeKeyCode: Byte;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
     CurrentBinds: TBinds;
     ControllerNumControllers: Integer;
@@ -138,7 +137,7 @@ Trusted:= (CurrentTeam <> nil)
           and (CurrentHedgehog^.BotLevel = 0);
 
 // ctrl/cmd + q to close engine and frontend
-if(KeyDown and (code = quitKeyCode)) then
+if(KeyDown and (code = SDLK_q)) then
     begin
 {$IFDEF DARWIN}
     if tkbd[KeyNameToCode('left_meta')] or tkbd[KeyNameToCode('right_meta')] then
@@ -149,7 +148,7 @@ if(KeyDown and (code = quitKeyCode)) then
     end;
 
 // ctrl/cmd + w to close engine
-if(KeyDown and (code = closeKeyCode)) then
+if(KeyDown and (code = SDLK_w)) then
     begin
 {$IFDEF DARWIN}
     // on OS X it this is expected behaviour
@@ -159,7 +158,7 @@ if(KeyDown and (code = closeKeyCode)) then
     if tkbd[KeyNameToCode('left_ctrl')] or tkbd[KeyNameToCode('right_ctrl')] then
         if ((CurrentBinds[KeyNameToCode('left_ctrl')] = '') or
             (CurrentBinds[KeyNameToCode('right_ctrl')] = '')) and
-            (CurrentBinds[closeKeyCode] = '') then
+            (CurrentBinds[SDLK_w] = '') then
 {$ENDIF}
         ParseCommand('forcequit', true);
     end;
@@ -242,8 +241,6 @@ for i:= 6 to cKeyMaxIndex do
         end;
     end;
 
-quitKeyCode:= KeyNameToCode(_S'q');
-closeKeyCode:= KeyNameToCode(_S'w');
 
 // get the size of keyboard array
 SDL_GetKeyState(@k);

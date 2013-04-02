@@ -102,6 +102,7 @@ class HWGame : public TCPBase
         GameCFGWidget * gamecfg;
         TeamSelWidget* m_pTeamSelWidget;
         GameType gameType;
+        QByteArray m_netSendBuffer;
 
         void addKeyBindings(QByteArray * buf);
         void commonConfig();
@@ -114,6 +115,7 @@ class HWGame : public TCPBase
         void SetGameState(GameState state);
         void sendCampaignVar(const QByteArray & varToSend);
         void writeCampaignVar(const QByteArray &varVal);
+        void flushNetBuffer();
 };
 
 #endif

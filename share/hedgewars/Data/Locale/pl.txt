@@ -54,10 +54,10 @@
 00:51=Kula błotna
 00:52=Nie wybrano broni
 00:53=TARDIS
-00:54=Budynek
-00:55=Miotacz błota
-00:56=Zamrażarka
-00:57=Tasak
+; 00:54=Budynek
+00:54=Miotacz błota
+00:55=Zamrażarka
+00:56=Tasak
 
 01:00=Walczmy!
 01:01=Remis

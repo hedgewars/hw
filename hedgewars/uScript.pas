@@ -1280,10 +1280,8 @@ end;
 
 function lc_endgame(L : Plua_State) : LongInt; Cdecl;
 begin
-   {$IFNDEF PAS2C}
     L:= L; // avoid compiler hint
-   {$ENDIF}
-    GameState:= gsExit;
+    AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000);
     lc_endgame:= 0
 end;
 
@@ -2048,7 +2046,6 @@ procedure SetGlobals;
 begin
 ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
-ScriptSetInteger('RealTime', RealTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if GameTicks = 0 then

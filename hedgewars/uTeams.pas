@@ -110,7 +110,7 @@ GameOver:= true
 end;
 
 procedure SwitchHedgehog;
-var c: LongWord;
+var c, i, j: LongWord;
     PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
@@ -173,7 +173,15 @@ repeat
     if c = ClansCount then
         begin
         if not PlacingHogs then
+            begin
             inc(TotalRounds);
+            for i:= 0 to Pred(TeamsCount) do
+                with TeamsArray[i]^ do
+                    for j:= 0 to Pred(HedgehogsNumber) do
+                        with Hedgehogs[j] do
+                            if Effects[heFrozen] > 255 then
+                                Effects[heFrozen]:= max(255,Effects[heFrozen]-50000)
+            end;
         c:= 0
         end;
 
@@ -188,11 +196,11 @@ repeat
                 PrevHH:= CurrHedgehog mod HedgehogsNumber; // prevent infinite loop when CurrHedgehog = 7, but HedgehogsNumber < 8 (team is destroyed before its first turn)
                 repeat
                     CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
-                until (Hedgehogs[CurrHedgehog].Gear <> nil) or (CurrHedgehog = PrevHH)
+                until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] = 0)) or (CurrHedgehog = PrevHH)
                 end
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0));
         end
-until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil);
+until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] = 0);
 
 SwitchCurrentHedgehog(@(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]));
 {$IFDEF USE_TOUCH_INTERFACE}

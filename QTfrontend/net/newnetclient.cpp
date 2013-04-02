@@ -63,6 +63,8 @@ HWNewNet::HWNewNet() :
     connect(&NetSocket, SIGNAL(disconnected()), this, SLOT(OnDisconnect()));
     connect(&NetSocket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(displayError(QAbstractSocket::SocketError)));
+
+    connect(this, SIGNAL(messageProcessed()), this, SLOT(ClientRead()), Qt::QueuedConnection);
 }
 
 HWNewNet::~HWNewNet()
@@ -186,6 +188,8 @@ void HWNewNet::ClientRead()
         {
             ParseCmd(cmdbuf);
             cmdbuf.clear();
+            emit messageProcessed();
+            return ;
         }
         else
             cmdbuf << s;
@@ -307,7 +311,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QStringList tmp = lst;
         tmp.removeFirst();
         m_roomsListModel->setRoomsList(tmp);
-        if (m_nick_registered == false)
+        if (m_private_game == false && m_nick_registered == false)
         {
             emit NickNotRegistered(mynick);
         }
@@ -486,9 +490,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 emit connected();
             }
 
+            m_playersModel->addPlayer(lst[i]);
             emit nickAddedLobby(lst[i], false);
             emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
-            m_playersModel->addPlayer(lst[i]);
         }
         return;
     }
@@ -512,9 +516,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         QString roomName = tmp.takeFirst();
         m_roomsListModel->updateRoom(roomName, tmp);
 
-        // keep track of room name so correct name is displayed when you become room admin
+        // keep track of room name so correct name is displayed
         if(myroom == roomName)
+        {
             myroom = tmp[1];
+            emit roomNameUpdated(myroom);
+        }
 
         return;
     }
@@ -598,6 +605,18 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
+    if(lst[0] == "JOINING")
+    {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Bad JOINING message");
+            return;
+        }
+
+        myroom = lst[1];
+        emit roomNameUpdated(myroom);
+    }
+
     if(netClientState == InLobby && lst[0] == "JOINED")
     {
         if(lst.size() < 2 || lst[1] != mynick)
@@ -617,9 +636,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                     emit configAsked();
             }
 
+            m_playersModel->playerJoinedRoom(lst[i]);
             emit nickAdded(lst[i], isChief && (lst[i] != mynick));
             emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-            m_playersModel->playerJoinedRoom(lst[i]);
         }
         return;
     }
@@ -961,6 +980,11 @@ void HWNewNet::toggleRestrictJoins()
 void HWNewNet::toggleRestrictTeamAdds()
 {
     RawSendNet(QString("TOGGLE_RESTRICT_TEAMS"));
+}
+
+void HWNewNet::toggleRegisteredOnly()
+{
+    RawSendNet(QString("TOGGLE_REGISTERED_ONLY"));
 }
 
 void HWNewNet::clearAccountsCache()

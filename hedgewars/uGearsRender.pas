@@ -37,7 +37,17 @@ type
          end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
 
-var RopePoints: TRopePoints;
+var RopePoints: record
+                Count: Longword;
+                HookAngle: GLfloat;
+                ar: array[0..MAXROPEPOINTS] of record
+                                X, Y: hwFloat;
+                                dLen: hwFloat;
+                                b: boolean;
+                                sx, sy, sb: boolean;
+                                end;
+                rounded: array[0..MAXROPEPOINTS + 2] of TVertex2f;
+                end;
 
 implementation
 uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
@@ -215,6 +225,8 @@ var i, t: LongInt;
     defaultPos, HatVisible: boolean;
     HH: PHedgehog;
     CurWeapon: PAmmo;
+    iceOffset:Longint;
+    r:TSDL_Rect;
 begin
     HH:= Gear^.Hedgehog;
     if HH^.Unplaced then
@@ -243,6 +255,30 @@ begin
     defaultPos:= true;
     HatVisible:= false;
 
+    if HH^.Effects[heFrozen] > 0 then
+        if HH^.Effects[heFrozen] < 150000 then
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    0,
+                    0,
+                    0);
+            defaultPos:= false;
+            if HH^.Effects[heFrozen] < 256 then
+                 HatVisible:= true
+            else HatVisible:= false
+            end
+        else
+            begin
+            DrawHedgehog(sx, sy,
+                    sign,
+                    2,
+                    4,
+                    0);
+            defaultPos:= false;
+            HatVisible:= false
+            end;
+
 
     if HH^.Effects[hePoisoned] <> 0 then
         begin
@@ -250,6 +286,7 @@ begin
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
         Tint($FF, $FF, $FF, $FF)
         end;
+
 
     if ((Gear^.State and gstWinner) <> 0) and
     ((CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtPickHammer)) then
@@ -542,7 +579,7 @@ begin
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
                 gtIceGun:
-                    begin DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                    begin DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                     if CurAmmoGear^.Tex <> nil then
                         DrawTextureCentered(sx, sy - 40, CurAmmoGear^.Tex)
                     end;
@@ -673,7 +710,7 @@ begin
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amLandGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
-                amIceGun: DrawSpriteRotated(sprHandBallgun, hx, hy, sign, aangle);
+                amIceGun: DrawSpriteRotated(sprIceGun, hx, hy, sign, aangle);
                 amResurrector: DrawCircle(ox, oy, 98, 4, $F5, $DB, $35, $AA); // I'd rather not like to hardcode 100 here
             end;
 
@@ -736,7 +773,7 @@ begin
 
     end else // not gstHHDriven
         begin
-        if (Gear^.Damage > 0)
+        if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
             begin
             DrawHedgehog(sx, sy,
@@ -921,6 +958,28 @@ begin
         Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
         DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
         end;
+
+    if HH^.Effects[heFrozen] < 150000 then
+        begin
+        if HH^.Effects[heFrozen] < 150000 then
+            Tint($FF, $FF, $FF, min(255,127+HH^.Effects[heFrozen] div 800));
+
+        iceOffset:= min(32, HH^.Effects[heFrozen] div 8);
+        r.x := 128;
+        r.y := 96 - iceOffset;
+        r.w := 32;
+        r.h := iceOffset;
+        if sign = -1 then
+        DrawTextureFromRectDir(sx + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign)
+        else
+        DrawTextureFromRectDir(sx-16 + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign);
+
+
+        if HH^.Effects[heFrozen] < 150000 then
+            Tint($FF, $FF, $FF, $FF);
+        end;
+
+
     if cVampiric and
     (CurrentHedgehog^.Gear <> nil) and
     (CurrentHedgehog^.Gear = Gear) then
@@ -1232,8 +1291,13 @@ begin
                                 begin
                                 i:= random(100)+100;
                                 if Gear^.Target.X <> NoPointX then
-                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(HHGear^.X), hwRound(HHGear^.Y), 4.0, i, i, $FF, $40)
-                                else DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
+                                    begin
+                                    DrawLine(Gear^.Target.X, Gear^.Target.Y, hwRound(HHGear^.X), hwRound(HHGear^.Y), 4.0, i, i, $FF, $40);
+                                    end
+                                else
+                                    begin
+                                    DrawLine(hwRound(HHGear^.X), hwRound(HHGear^.Y), hwRound(Gear^.X), hwRound(Gear^.Y), 4.0, i, i, $FF, $40);
+                                    end;
                                 end
                           end
                       end;

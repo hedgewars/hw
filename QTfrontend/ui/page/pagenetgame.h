@@ -26,6 +26,7 @@
 class HWChatWidget;
 class TeamSelWidget;
 class GameCFGWidget;
+class QSettings;
 
 class PageNetGame : public AbstractPage
 {
@@ -34,11 +35,7 @@ class PageNetGame : public AbstractPage
     public:
         PageNetGame(QWidget* parent);
 
-        /**
-         * Sets the room name to display.
-         * @param roomName room name to be displayed.
-         */
-        void setRoomName(const QString & roomName);
+        void setSettings(QSettings * settings);
 
         void displayError(const QString & message);
         void displayNotice(const QString & message);
@@ -52,6 +49,7 @@ class PageNetGame : public AbstractPage
 
         QAction * restrictJoins;
         QAction * restrictTeamAdds;
+        QAction * restrictUnregistered;
 
         HWChatWidget* chatWidget;
 
@@ -59,6 +57,7 @@ class PageNetGame : public AbstractPage
         GameCFGWidget* pGameCFG;
 
     public slots:
+        void setRoomName(const QString & roomName);
         void setReadyStatus(bool isReady);
         void setUser(const QString & nickname);
         void onUpdateClick();
@@ -80,6 +79,7 @@ class PageNetGame : public AbstractPage
         QLayout * footerLayoutLeftDefinition();
         void connectSignals();
 
+        QSettings * m_gameSettings;
         QPushButton * btnSetup;
         QLabel * lblRoomNameReadOnly;
 };

@@ -33,6 +33,14 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
+    if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
+        begin
+        DeleteGear(Gear);
+        ApplyAmmoChanges(HHGear^.Hedgehog^);
+        HHGear^.Message:= HHGear^.Message or gmLJump;
+        exit
+        end;
+
     if ((HHGear^.State and gstHHDriven) = 0)
     or (CheckGearDrowning(HHGear))
     or (TestCollisionYwithGear(HHGear, 1) <> 0) then
@@ -102,7 +110,7 @@ var
     lx, ly, cd: LongInt;
     haveCollision,
     haveDivided: boolean;
-
+    wrongSide: boolean;
 begin
     if GameTicks mod 4 <> 0 then exit;
 
@@ -165,12 +173,12 @@ begin
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, hwSign(ropeDy)) <> 0)) then
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or (TestCollisionYwithGear(HHGear, -hwSign(ropeDy)) <> 0)) then
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, -hwSign(ropeDy)))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -194,7 +202,7 @@ begin
         begin
         lx := hwRound(nx);
         ly := hwRound(ny);
-        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and ((Land[ly, lx] and $FF00) <> 0) then
+        if ((ly and LAND_HEIGHT_MASK) = 0) and ((lx and LAND_WIDTH_MASK) = 0) and (Land[ly, lx] > lfAllObjMask) then
             begin
             tx := _1 / Distance(ropeDx, ropeDy);
             // old rope pos
@@ -208,6 +216,9 @@ begin
                 if RopePoints.Count = 0 then
                     RopePoints.HookAngle := DxDy2Angle(Gear^.dY, Gear^.dX);
                 b := (nx * HHGear^.dY) > (ny * HHGear^.dX);
+                sx:= Gear^.dX.isNegative;
+                sy:= Gear^.dY.isNegative;
+                sb:= Gear^.dX.QWordValue < Gear^.dY.QWordValue;
                 dLen := len
                 end;
 
@@ -240,21 +251,45 @@ begin
             ty := RopePoints.ar[Pred(RopePoints.Count)].Y;
             mdX := tx - Gear^.X;
             mdY := ty - Gear^.Y;
-            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * (ty - HHGear^.Y) > (tx - HHGear^.X) * mdY) then
+            ropeDx:= tx - HHGear^.X;
+            ropeDy:= ty - HHGear^.Y;
+            if RopePoints.ar[Pred(RopePoints.Count)].b xor (mdX * ropeDy > ropeDx * mdY) then
                 begin
                 dec(RopePoints.Count);
-                Gear^.X := RopePoints.ar[RopePoints.Count].X;
-                Gear^.Y := RopePoints.ar[RopePoints.Count].Y;
-                Gear^.Elasticity := Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
-                Gear^.Friction := Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen;
+                Gear^.X := tx;
+                Gear^.Y := ty;
 
-                // restore hog position
-                len := _1 / Distance(mdX, mdY);
-                mdX := mdX * len;
-                mdY := mdY * len;
+                // oops, opposite quadrant, don't restore hog position in such case, just remove the point
+                wrongSide:= (ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
+                    and (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy);
 
-                HHGear^.X := Gear^.X - mdX * Gear^.Elasticity;
-                HHGear^.Y := Gear^.Y - mdY * Gear^.Elasticity;
+                // previous check could be inaccurate in vertical/horizontal rope positions,
+                // so perform this check also, even though odds are 1 to 415927 to hit this
+                if (not wrongSide)
+                    and ((ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx)
+                      <> (ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy)) then
+                    if RopePoints.ar[RopePoints.Count].sb then
+                        wrongSide:= ropeDy.isNegative = RopePoints.ar[RopePoints.Count].sy
+                        else
+                        wrongSide:= ropeDx.isNegative = RopePoints.ar[RopePoints.Count].sx;
+
+                if wrongSide then
+                    begin
+                    Gear^.Elasticity := Gear^.Elasticity - RopePoints.ar[RopePoints.Count].dLen;
+                    Gear^.Friction := Gear^.Friction - RopePoints.ar[RopePoints.Count].dLen;
+                    end else
+                    begin
+                    Gear^.Elasticity := Gear^.Elasticity + RopePoints.ar[RopePoints.Count].dLen;
+                    Gear^.Friction := Gear^.Friction + RopePoints.ar[RopePoints.Count].dLen;
+
+                    // restore hog position
+                    len := _1 / Distance(mdX, mdY);
+                    mdX := mdX * len;
+                    mdY := mdY * len;
+
+                    HHGear^.X := Gear^.X - mdX * Gear^.Elasticity;
+                    HHGear^.Y := Gear^.Y - mdY * Gear^.Elasticity;
+                    end;
                 end
             end;
 
@@ -264,7 +299,7 @@ begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
         end;
-    if TestCollisionYwithGear(HHGear, hwSign(HHGear^.dY)) <> 0 then
+    if TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(HHGear^.dY)) then
         begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true
@@ -390,7 +425,7 @@ begin
         ty := _0;
         while tt > _20 do
             begin
-            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and ((Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] and $FF00) <> 0) then
+            if ((hwRound(Gear^.Y+ty) and LAND_HEIGHT_MASK) = 0) and ((hwRound(Gear^.X+tx) and LAND_WIDTH_MASK) = 0) and (Land[hwRound(Gear^.Y+ty), hwRound(Gear^.X+tx)] > lfAllObjMask) then
                 begin
                 Gear^.X := Gear^.X + tx;
                 Gear^.Y := Gear^.Y + ty;
@@ -414,8 +449,8 @@ begin
             end;
         end;
 
-    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= $FF00
-    else Gear^.CollisionMask:= $FF7F;
+    if Gear^.Elasticity < _20 then Gear^.CollisionMask:= lfLandMask
+    else Gear^.CollisionMask:= lfNotCurrentMask;
     CheckCollision(Gear);
 
     if (Gear^.State and gstCollision) <> 0 then

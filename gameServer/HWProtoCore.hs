@@ -11,6 +11,7 @@ import Actions
 import HWProtoNEState
 import HWProtoLobbyState
 import HWProtoInRoomState
+import HWProtoChecker
 import HandlerUtils
 import RoomsAndClients
 import Utils
@@ -29,12 +30,12 @@ handleCmd ("QUIT" : xs) = return [ByeClient msg]
 handleCmd ["PONG"] = do
     cl <- thisClient
     if pingsQueue cl == 0 then
-        return [ProtocolError "Protocol violation"]
+        return $ actionsPending cl ++ [ModifyClient (\c -> c{actionsPending = []})]
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
-handleCmd ("CMD" : params) =
-    let c = concatMap B.words params in
+handleCmd ("CMD" : parameters) =
+    let c = concatMap B.words parameters in
         if not $ null c then
             h $ (upperCase . head $ c) : tail c
             else
@@ -42,12 +43,22 @@ handleCmd ("CMD" : params) =
     where
         h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
         h ["STATS"] = handleCmd ["STATS"]
+        h ["PART", msg] = handleCmd ["PART", msg]
+        h ["QUIT", msg] = handleCmd ["QUIT", msg]
+        h ["GLOBAL", msg] = do
+            rnc <- liftM snd ask
+            let chans = map (sendChan . client rnc) $ allClients rnc
+            return [AnswerClients chans ["CHAT", "[global notice]", msg]]
         h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
 
 handleCmd cmd = do
     (ci, irnc) <- ask
-    if logonPassed (irnc `client` ci) then
-        handleCmd_loggedin cmd
+    let cl = irnc `client` ci
+    if logonPassed cl then
+        if isChecker cl then
+            handleCmd_checker cmd
+            else
+            handleCmd_loggedin cmd
         else
         handleCmd_NotEntered cmd
 

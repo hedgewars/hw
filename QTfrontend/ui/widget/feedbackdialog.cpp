@@ -30,6 +30,7 @@
 #include <QProcess>
 #include <QMessageBox>
 #include <QCheckBox>
+#include <QByteArray>
 
 #include <string>
 
@@ -73,16 +74,22 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
     QHBoxLayout * systemLayout = new QHBoxLayout();
 
     info = new QLabel();
-    info->setText(
+    info->setText(QString(
         "<style type=\"text/css\">"
         "a { color: #fc0; }"
         "b { color: #0df; }"
         "</style>"
-        "<div align=\"center\"><h1>Please give us feedback!</h1>"
-        "<h3>We are always happy about suggestions, ideas, or bug reports.<h3>"
-        "<h4>Your email address is optional, but we may want to contact you.<h4>"
-        "</div>"
+        "<div align=\"center\"><h1>%1</h1>"
+        "<h3>%2<h3>"
+        "<h4>%3 <a href=\"http://code.google.com/p/hedgewars/wiki/KnownBugs\">known bugs</a><h4>"
+        "<h4>%4<h4>"
+        "</div>")
+        .arg(tr("Please give us feedback!"))
+        .arg(tr("We are always happy about suggestions, ideas, or bug reports."))
+        .arg(tr("If you found a bug, you can see if it's already known here (english): "))
+        .arg(tr("Your email address is optional, but we may want to contact you."))
     );
+    info->setOpenExternalLinks(true);
     pageLayout->addWidget(info);
 
     QVBoxLayout * summaryEmailLayout = new QVBoxLayout();
@@ -194,7 +201,7 @@ void FeedbackDialog::GenerateSpecs()
     QString screen_size = "Size of the screen(s): " +
         QString::number(screen->width()) + "x" + QString::number(screen->height()) + "\n";
     QString number_of_screens = "Number of screens: " + QString::number(screen->screenCount()) + "\n";
-    std::string processor_name = "Processor: ";
+    QString processor_name = "Processor: ";
 
     // platform specific code
 #ifdef Q_WS_MACX
@@ -237,7 +244,7 @@ void FeedbackDialog::GenerateSpecs()
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    total_ram += QString::number(status.ullTotalPhys);
+    total_ram += QString::number(status.ullTotalPhys) + "\n";
 
     switch(QSysInfo::WinVersion())
     {
@@ -245,6 +252,7 @@ void FeedbackDialog::GenerateSpecs()
         case QSysInfo::WV_XP: os_version += "Windows XP\n"; break;
         case QSysInfo::WV_VISTA: os_version += "Windows Vista\n"; break;
         case QSysInfo::WV_WINDOWS7: os_version += "Windows 7\n"; break;
+        //case QSysInfo::WV_WINDOWS8: os_version += "Windows 8\n"; break; //QT 5+
         default: os_version += "Windows (Unknown version)\n"; break;
     }
     kernel_line += "Windows kernel\n";
@@ -273,6 +281,7 @@ void FeedbackDialog::GenerateSpecs()
     delete process;
 #endif
 
+#if defined(__i386__) || defined(__x86_64__)
     // cpu info
     quint32 registers[4];
     quint32 i;
@@ -281,26 +290,30 @@ void FeedbackDialog::GenerateSpecs()
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
     i = 0x80000003;
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
     i = 0x80000004;
     asm volatile
       ("cpuid" : "=a" (registers[0]), "=b" (registers[1]), "=c" (registers[2]), "=d" (registers[3])
        : "a" (i), "c" (0));
-    processor_name += std::string((const char *)&registers[0], 4);
-    processor_name += std::string((const char *)&registers[1], 4);
-    processor_name += std::string((const char *)&registers[2], 4);
-    processor_name += std::string((const char *)&registers[3], 3);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[0]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[1]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[2]), 4);
+    processor_name += QByteArray(reinterpret_cast<char*>(&registers[3]), 4);
+    processor_name += "\n";
+#else
+    processor_name += "Unknown";
+#endif
 
     // compiler
 #ifdef __GNUC__
@@ -320,7 +333,7 @@ void FeedbackDialog::GenerateSpecs()
         + total_ram
         + screen_size
         + number_of_screens
-        + QString::fromStdString(processor_name + "\n")
+        + processor_name
         + number_of_cores
         + compiler_version
         + compiler_bits
@@ -443,7 +456,8 @@ void FeedbackDialog::SendFeedback()
     QString email = this->email->text();
     QString captchaCode = this->captcha_code->text();
     QString captchaID = QString::number(this->captchaID);
-    QString version = "HedgewarsFoundation-Hedgewars-" + (cVersionString?(*cVersionString):QString(""));
+    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" + 
+                       *cRevisionString + "|" + *cHashString;
 
     if (summary.isEmpty() || description.isEmpty())
     {

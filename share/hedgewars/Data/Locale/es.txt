@@ -55,8 +55,8 @@
 00:51=Bola de barro
 00:52=No hay arma seleccionada
 00:53=Cabina del tiempo
-00:54=Estructura
-00:55=Pistola de barro
+; 00:54=Estructura
+00:54=Pistola de barro
 
 01:00=¡Luchad!
 01:01=Empate

@@ -107,13 +107,14 @@ class HWMapContainer : public QWidget
         void missionMapChanged(const QModelIndex & map, const QModelIndex & old = QModelIndex());
         void loadDrawing();
         void showSeedPrompt();
+        void previewClicked();
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );
 
     private:
         QVBoxLayout mainLayout;
-        QLabel* mapPreview;
+        QPushButton* mapPreview;
         QComboBox* chooseMap;
         MapModel * m_staticMapModel;
         MapModel * m_missionMapModel;
@@ -162,6 +163,7 @@ class HWMapContainer : public QWidget
         void updateThemeButtonSize();
 
         MapModel::MapInfo m_mapInfo;
+        int m_themeID;
         QString m_theme;
         QString m_curMap;
 

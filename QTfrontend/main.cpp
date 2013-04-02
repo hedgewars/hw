@@ -20,7 +20,6 @@
 
 #include <QTranslator>
 #include <QLocale>
-#include <QMessageBox>
 #include <QPlastiqueStyle>
 #include <QRegExp>
 #include <QMap>
@@ -36,14 +35,12 @@
 
 #include "DataManager.h"
 #include "FileEngine.h"
+#include "MessageDialog.h"
 
 #ifdef _WIN32
 #include <Shlobj.h>
 #elif defined __APPLE__
 #include "CocoaInitializer.h"
-#endif
-#ifndef _WIN32
-#include <signal.h>
 #endif
 
 // Program resources
@@ -94,14 +91,7 @@ void checkSeason()
     else
         season = SEASON_NONE;
 }
-#ifndef _WIN32
-void terminateFrontend(int signal)
-{
-    Q_UNUSED(signal);
 
-    QCoreApplication::exit(0);
-}
-#endif
 
 bool checkForDir(const QString & dir)
 {
@@ -109,24 +99,10 @@ bool checkForDir(const QString & dir)
     if (!tmpdir.exists())
         if (!tmpdir.mkpath(dir))
         {
-            QMessageBox directoryMsg(QApplication::activeWindow());
-            directoryMsg.setIcon(QMessageBox::Warning);
-            directoryMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
-            directoryMsg.setText(QMessageBox::tr("Cannot create directory %1").arg(dir));
-            directoryMsg.setWindowModality(Qt::WindowModal);
-            directoryMsg.exec();
+            MessageDialog::ShowErrorMessage(HWApplication::tr("Cannot create directory %1").arg(dir));
             return false;
         }
     return true;
-}
-
-bool checkForFile(const QString & file)
-{
-    QFile tmpfile(file);
-    if (!tmpfile.exists())
-        return tmpfile.open(QFile::WriteOnly);
-    else
-        return true;
 }
 
 // Guaranteed to be the last thing ran in the application's life time.
@@ -156,10 +132,6 @@ int main(int argc, char *argv[])
     cocoaInit = new CocoaInitializer(); // Creates the autoreleasepool preventing cocoa object leaks on OS X.
 #endif
 
-#ifndef _WIN32
-    signal(SIGINT, &terminateFrontend);
-#endif
-
     HWApplication app(argc, argv);
 
     QLabel *splash = NULL;
@@ -167,7 +139,7 @@ int main(int argc, char *argv[])
     QPixmap pixmap(":res/splash.png");
     splash = new QLabel(0, Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
     splash->setAttribute(Qt::WA_TranslucentBackground);
-    const QRect deskSize = QApplication::desktop()->screenGeometry(-1);
+    const QRect deskSize = HWApplication::desktop()->screenGeometry(-1);
     QPoint splashCenter = QPoint( (deskSize.width() - pixmap.width())/2,
                                   (deskSize.height() - pixmap.height())/2 );
     splash->move(splashCenter);
@@ -276,16 +248,9 @@ int main(int argc, char *argv[])
 
     datadir->cd(bindir->absolutePath());
     datadir->cd(*cDataDir);
-    if(!datadir->cd("Data"))
+    if (!datadir->cd("Data"))
     {
-        QMessageBox missingMsg(QApplication::activeWindow());
-        missingMsg.setIcon(QMessageBox::Critical);
-        missingMsg.setWindowTitle(QMessageBox::tr("Main - Error"));
-        missingMsg.setText(QMessageBox::tr("Failed to open data directory:\n%1\n\n"
-                                           "Please check your installation!").
-                                            arg(datadir->absolutePath()+"/Data"));
-        missingMsg.setWindowModality(Qt::WindowModal);
-        missingMsg.exec();
+        MessageDialog::ShowFatalMessage(HWApplication::tr("Failed to open data directory:\n%1\n\nPlease check your installation!").arg(datadir->absolutePath()+"/Data"));
         return 1;
     }
 
@@ -296,7 +261,7 @@ int main(int argc, char *argv[])
     engine->setWriteDir(cfgdir->absolutePath());
     engine->mountPacks();
 
-    checkForFile("physfs://hedgewars.ini");
+    DataManager::ensureFileExists("physfs://hedgewars.ini");
 
     QTranslator Translator;
     {
@@ -355,9 +320,13 @@ int main(int argc, char *argv[])
     if (file.open(QIODevice::ReadOnly | QIODevice::Text))
         style.append(file.readAll());
 
+    qWarning("Starting Hedgewars %s-r%d (%s)", qPrintable(*cVersionString), cRevisionString->toInt(), qPrintable(*cHashString));
+
     app.form = new HWForm(NULL, style);
     app.form->show();
     if(splash)
         splash->close();
+    if (app.urlString)
+        app.fakeEvent();
     return app.exec();
 }

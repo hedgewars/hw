@@ -36,7 +36,10 @@ interface
 
 {$IFDEF UNIX}
     {$IFNDEF DARWIN}
-        {$linklib c}
+        {necessary for statically linking physfs (divdi3 undefined on 32 bit)}
+        {$IFDEF CPU32}
+            {$linklib stdc++}
+        {$ENDIF}
     {$ENDIF}
     {$IFDEF HAIKU}
         {$linklib root}
@@ -314,6 +317,22 @@ const
     IMG_INIT_JPG = $00000001;
     IMG_INIT_PNG = $00000002;
     IMG_INIT_TIF = $00000004;
+
+    {* SDL_keysym *}
+    SDLK_BACKSPACE = 8;
+    SDLK_RETURN    = 13;
+    SDLK_ESCAPE    = 27;
+    SDLK_q         = 113;
+    SDLK_w         = 119;
+    SDLK_DELETE    = 127;
+    SDLK_UP        = 273;
+    SDLK_DOWN      = 274;
+    SDLK_RIGHT     = 275;
+    SDLK_LEFT      = 276;
+    SDLK_HOME      = 278;
+    SDLK_END       = 279;
+    SDLK_PAGEUP    = 280;
+    SDLK_PAGEDOWN  = 281;
 
 
 /////////////////////////////////////////////////////////////////

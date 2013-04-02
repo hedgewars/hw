@@ -88,12 +88,14 @@ isExternalSource:= ExternalSource or ((CurrentTeam <> nil) and CurrentTeam^.ExtD
 //WriteLnToConsole(CmdStr);
 if CmdStr[0]=#0 then
     exit;
+
+AddFileLog('[Cmd] ' + sanitizeForLog(CmdStr));
+
 c:= CmdStr[1];
 if (c = '/') or (c = '$') then
     Delete(CmdStr, 1, 1);
 s:= '';
 SplitBySpace(CmdStr, s);
-AddFileLog('[Cmd] ' + CmdStr + ' (' + inttostr(length(s)) + ')');
 
 t:= Variables;
 while t <> nil do

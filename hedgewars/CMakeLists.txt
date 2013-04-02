@@ -4,17 +4,28 @@ find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include(${CMAKE_SOURCE_DIR}/cmake_modules/FindSDL_Extras.cmake)
+include (CheckLibraryExists)
+#Mix_Init/Mix_Quit from SDL_mixer 1.2.10
+check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
+if(HAVE_MIXINIT)
+    list(APPEND pascal_flags "-dSDL_MIXER_NEWER")
+endif()
+#IMG_Init/IMG_Quit from SDL_image 1.2.8
+check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
+if(HAVE_IMGINIT)
+    list(APPEND pascal_flags "-dSDL_IMAGE_NEWER")
+endif()
+
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #SOURCE AND PROGRAMS SECTION
 if(${LIBENGINE})
     set(engine_output_name "${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(hwengine_project ${CMAKE_CURRENT_SOURCE_DIR}/hwLibrary.pas)
+    set(hwengine_project hwLibrary.pas)
 else()
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
-    set(hwengine_project ${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas)
+    set(hwengine_project hwengine.pas)
 endif()
 
 if (APPLE)
@@ -92,7 +103,7 @@ set(engine_sources
     )
 
 if(${LIBENGINE})
-    message(WARNING "Engine will be built as library (experimental)")
+    message(${WARNING} "Engine will be built as library (experimental)")
     list(APPEND pascal_flags "-dHWLIBRARY")
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
@@ -110,16 +121,18 @@ else(${LIBENGINE})
 endif(${LIBENGINE})
 
 
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 #opengl 2
 IF(${GL2})
     set(pascal_flags "-dGL2" ${pascal_flags})
     message(STATUS "Building using OpenGL 2")
 ENDIF(${GL2})
-# Check Freepascal version
-find_package(Freepascal)
 
-if (FPC_VERSION VERSION_LESS required_fpc_version)
-    message(FATAL_ERROR "Freepascal is too old, minimum version required is ${required_fpc_version}")
+find_package_or_fail(FreePascal)
+
+#when cmake-2.6 support is dropped, this ought to be inside FindFreePascal.cmake
+if (FREEPASCAL_VERSION VERSION_LESS required_fpc_version)
+    message(FATAL_ERROR "Freepascal ${FREEPASCAL_VERSION} is too old, minimum version required is ${required_fpc_version}")
 endif()
 
 
@@ -152,82 +165,71 @@ if(APPLE)
 
         list(APPEND pascal_flags "-k${SDLMAIN_LIB}")
     endif()
+
+    #when you have multiple ld installation make sure you get the one bundled with the compiler
+    get_filename_component(compiler_dir ${CMAKE_C_COMPILER} PATH)
+    list(APPEND pascal_flags "-FD${compiler_dir}")
 endif(APPLE)
 
-if(NOT NOPNG)
-    find_package(PNG)
-    if(${PNG_FOUND})
-        list(APPEND pascal_flags "-dPNG_SCREENSHOTS")
-        if(APPLE)  # fpc png unit doesn't pull the library (see bug 21833)
-            list(APPEND pascal_flags "-k${PNG_LIBRARY}")
-        endif()
-    else()
-        message(WARNING "Screenshots will be in BMP format because libpng was not found")
-    endif()
-else()
-    message(STATUS "Screenshots will be in BMP format per user request")
+find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
+if(PNG_FOUND)
+    list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
+    get_filename_component(PNG_LIB_DIR ${PNG_LIBRARIES} PATH)
+    list(APPEND pascal_flags "-dPNG_SCREENSHOTS" "-Fl${PNG_LIB_DIR}")
 endif()
 
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if(FPC_VERSION VERSION_LESS "2.6")
+if(FREEPASCAL_VERSION VERSION_LESS "2.6")
     #under some configurations CMAKE_BUILD_TOOL fails to pass on the jobserver, breaking parallel compilation
     if(UNIX)
         set(SAFE_BUILD_TOOL $(MAKE))
     else()
         set(SAFE_BUILD_TOOL ${CMAKE_BUILD_TOOL})
     endif()
-    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${CMAKE_SOURCE_DIR}/hedgewars")
+    add_custom_target(ENGINECLEAN COMMAND ${SAFE_BUILD_TOOL} "clean" "${PROJECT_BINARY_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
 
-if(NOT NOVIDEOREC)
-    set(FFMPEG_FIND_QUIETLY true)
-    find_package(FFMPEG)
-    if(${FFMPEG_FOUND})
-        # TODO: this check is only for SDL < 2
-        # fpc will take care of linking but we need to have this library installed
-        find_package(GLUT REQUIRED)
+if(${FFMPEG_FOUND})
+    # TODO: this check is only for SDL < 2
+    # fpc will take care of linking but we need to have this library installed
+    find_package(GLUT REQUIRED)
 
-        #TODO: convert avwrapper to .pas unit so we can skip this step
-        include_directories(${FFMPEG_INCLUDE_DIR})
+    #TODO: convert avwrapper to .pas unit so we can skip this step
+    include_directories(${FFMPEG_INCLUDE_DIR})
+    list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
+    if(WIN32)
+        # there are some problems with linking our avwrapper as static lib, so link it as shared
+        add_library(avwrapper SHARED videorec/avwrapper.c)
+        target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
+        install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
         list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
-        IF (WIN32)
-            # there are some problems with linking our avwrapper as static lib, so link it as shared
-            add_library(avwrapper SHARED videorec/avwrapper.c)
-            target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
-            install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
-        ELSE()
-            add_library(avwrapper STATIC videorec/avwrapper.c)
-            list(APPEND pascal_flags "-k${FFMPEG_LIBAVCODEC}" "-k${FFMPEG_LIBAVFORMAT}" "-k${FFMPEG_LIBAVUTIL}")
-        ENDIF()
     else()
-        message(WARNING "Could NOT find FFMPEG/LibAV, video recording will be disabled")
+        add_library(avwrapper STATIC videorec/avwrapper.c)
     endif()
-else()
-    message(STATUS "Video recording disabled by user")
 endif()
 
 
-set(fpc_flags ${NOEXECSTACK_FLAGS} ${pascal_flags} ${hwengine_project})
+set(fpc_flags ${pascal_flags} ${hwengine_project})
 
 if(NOT APPLE)
     #here is the command for standard executables or for shared library
     add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/${engine_output_name}"
-        COMMAND "${FPC_EXECUTABLE}"
+        COMMAND "${FREEPASCAL_EXECUTABLE}"
         ARGS ${fpc_flags} -o${engine_output_name}
-        MAIN_DEPENDENCY ${hwengine_project}
         DEPENDS ${engine_sources}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
 else()
     #these are the dependencies for building a universal binary on Mac OS X
     foreach (build_arch ${powerpc_build} ${i386_build} ${x86_64_build})
         list(APPEND lipo_args_list "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
         add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}"
-            COMMAND "${FPC_EXECUTABLE}"
+            COMMAND "${FREEPASCAL_EXECUTABLE}"
             ARGS ${fpc_flags} -ohwengine.${build_arch} -P${build_arch}
-            MAIN_DEPENDENCY ${hwengine_project}
             DEPENDS ${engine_sources}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
             )
         add_custom_target(hwengine.${build_arch} ALL DEPENDS "${EXECUTABLE_OUTPUT_PATH}/hwengine.${build_arch}")
         add_custom_command(TARGET hwengine.${build_arch} POST_BUILD
@@ -252,8 +254,12 @@ if(NOT LUA_FOUND)
     add_dependencies(hwengine lua)
 endif()
 
-# compile physfs before engine
-add_dependencies(hwengine physfs)
+# same for physfs
+if(NOT PHYSFS_FOUND)
+    add_dependencies(hwengine physfs)
+endif()
+
+add_dependencies(hwengine physlayer)
 
 #when ffmpeg/libav is found we need to compile it before engine
 #TODO: convert avwrapper to .pas unit so we can skip this step
@@ -262,7 +268,7 @@ if(${FFMPEG_FOUND})
 endif()
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
-if((FPC_VERSION VERSION_LESS "2.6") AND (NOVIDEOREC OR NOT ${FFMPEG_FOUND}))
+if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
     add_dependencies(hwengine ENGINECLEAN)
 endif()
 

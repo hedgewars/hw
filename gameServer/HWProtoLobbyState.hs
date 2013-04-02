@@ -92,9 +92,12 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
             ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
-            ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
-            ++ answerTeams cl jRoom
-            ++ watchRound cl jRoom chans
+            ++ [AnswerClients [sendChan cl] ["PING"]
+                , ModifyClient $ \c -> c{actionsPending = actionsPending cl
+                    ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
+                    ++ answerTeams cl jRoom
+                    ++ watchRound cl jRoom chans}
+                ]
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
@@ -135,13 +138,14 @@ handleCmd_lobby ["JOIN_ROOM", roomName] =
 
 handleCmd_lobby ["FOLLOW", asknick] = do
     (_, rnc) <- ask
+    clChan <- liftM sendChan thisClient
     ci <- clientByNick asknick
     let ri = clientRoom rnc $ fromJust ci
-    let clRoom = room rnc ri
+    let roomName = name $ room rnc ri
     if isNothing ci || ri == lobbyId then
         return []
         else
-        handleCmd_lobby ["JOIN_ROOM", name clRoom]
+        liftM ((:) (AnswerClients [clChan] ["JOINING", roomName])) $ handleCmd_lobby ["JOIN_ROOM", roomName]
 
     ---------------------------
     -- Administrator's stuff --

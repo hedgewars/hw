@@ -61,6 +61,7 @@ class HWNewNet : public QObject
         QAbstractItemModel * lobbyPlayersModel();
         QAbstractItemModel * roomPlayersModel();
         bool allPlayersReady();
+        bool m_private_game;
 
     private:
         bool isChief;
@@ -105,6 +106,7 @@ class HWNewNet : public QObject
         void FromNet(const QByteArray & buf);
         void adminAccess(bool);
         void roomMaster(bool);
+        void roomNameUpdated(const QString & name);
 
         void netSchemeConfig(QStringList &);
         void paramChanged(const QString & param, const QStringList & value);
@@ -129,6 +131,8 @@ class HWNewNet : public QObject
         void bansList(const QStringList &);
 
         void setMyReadyStatus(bool isReady);
+
+        void messageProcessed();
 
     public slots:
         void ToggleReady();
@@ -160,6 +164,7 @@ class HWNewNet : public QObject
         void startGame();
         void toggleRestrictJoins();
         void toggleRestrictTeamAdds();
+        void toggleRegisteredOnly();
         void partRoom();
         void clearAccountsCache();
         void getBanList();

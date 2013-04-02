@@ -21,21 +21,45 @@
 
 #include <QWidget>
 #include <QDialog>
+#include <QListView>
 
-class QLabel;
+class QLineEdit;
+class QModelIndex;
+class QSortFilterProxyModel;
+class LineEditCursor;
+
+class ThemeListView : public QListView
+{
+    friend class ThemePrompt;
+
+    public:
+        ThemeListView(QWidget* parent = 0) : QListView(parent){}
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
+};
 
 class ThemePrompt : public QDialog
 {
         Q_OBJECT
 
     public:
-        ThemePrompt(QWidget* parent);
+        ThemePrompt(int currentIndex = 0, QWidget* parent = 0);
 
     private:
-        QLabel * lblToolTip;
+        LineEditCursor * txtFilter;
+        ThemeListView * list;
+        QSortFilterProxyModel * filterModel;
 
     private slots:
-        void themeClicked();
+        void onAccepted();
+        void themeChosen(const QModelIndex & index);
+        void filterChanged(const QString & text);
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
 };
 
 #endif // THEMEPROMPT_H

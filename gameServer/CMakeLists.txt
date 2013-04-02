@@ -1,4 +1,7 @@
 
+include(${CMAKE_MODULE_PATH}/utils.cmake)
+
+find_package_or_disable(GHC NOSERVER)
 
 set(hwserver_sources
     OfficialServer/DBInteraction.hs
@@ -34,7 +37,7 @@ set(ghc_flags
     ${haskell_flags})
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/hedgewars-server${CMAKE_EXECUTABLE_SUFFIX}"
-        COMMAND "${ghc_executable}"
+        COMMAND "${GHC_EXECUTABLE}"
         ARGS ${ghc_flags}
         MAIN_DEPENDENCY ${hwserv_main}
         DEPENDS ${hwserver_sources}

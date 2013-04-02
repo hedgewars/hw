@@ -61,12 +61,12 @@ QLayout * PageMain::bodyLayoutDefinition()
     netLayout->setSpacing(20);
     netLayout->setAlignment(Qt::AlignHCenter);
 
-    BtnNetLocal = addButton("Play local network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetLocal = addButton(tr("Play local network game"), (QBoxLayout*)netLayout, 0, false);
     BtnNetLocal->setWhatsThis(tr("Play a game across a local area network"));
     BtnNetLocal->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetLocal->setVisible(false);
 
-    BtnNetOfficial = addButton("Play official network game", (QBoxLayout*)netLayout, 0, false);
+    BtnNetOfficial = addButton(tr("Play official network game"), (QBoxLayout*)netLayout, 0, false);
     BtnNetOfficial->setWhatsThis(tr("Play a game on an official server"));
     BtnNetOfficial->setFixedSize(BtnNet->width() - 50, 60);
     BtnNetOfficial->setVisible(false);
@@ -77,13 +77,13 @@ QLayout * PageMain::bodyLayoutDefinition()
     BtnInfo->setWhatsThis(tr("Read about who is behind the Hedgewars Project"));
     pageLayout->setAlignment(BtnInfo, Qt::AlignHCenter);
 
-    BtnFeedback = addButton("Feedback", pageLayout, 4, 0, 1, 4, false);
-    BtnFeedback->setFixedSize(86, 27);
+    BtnFeedback = addButton(tr("Feedback"), pageLayout, 4, 0, 1, 4, false);
+    BtnFeedback->setStyleSheet("padding: 5px 10px");
     BtnFeedback->setWhatsThis(tr("Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars"));
     pageLayout->setAlignment(BtnFeedback, Qt::AlignHCenter);
 
     BtnDataDownload = addButton(tr("Downloadable Content"), pageLayout, 5, 0, 1, 4, false);
-    BtnDataDownload->setFixedSize(176, 27);
+    BtnDataDownload->setStyleSheet("padding: 5px 10px");
     BtnDataDownload->setWhatsThis(tr("Access the user created content downloadable from our website"));
     pageLayout->setAlignment(BtnDataDownload, Qt::AlignHCenter);
 
@@ -120,6 +120,8 @@ QLayout * PageMain::footerLayoutDefinition()
 void PageMain::connectSignals()
 {
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     // TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 
@@ -127,17 +129,15 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
 {
     initPage();
 
-    if(frontendEffects) setAttribute(Qt::WA_NoSystemBackground, true);
+    if(frontendEffects)
+        setAttribute(Qt::WA_NoSystemBackground, true);
     mainNote->setOpenExternalLinks(true);
 
-    if(!isDevBuild)
-    {
-        setDefautDescription(QLabel::tr("Tip: ") + randomTip());
-    }
-    else
-    {
-        setDefautDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
-    }
+#ifdef DEBUG
+    setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
+#else
+    setDefaultDescription(QLabel::tr("Tip: ") + randomTip());
+#endif
 
 }
 

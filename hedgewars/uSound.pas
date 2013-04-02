@@ -105,12 +105,13 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 function  AskForVoicepack(name: shortstring): Pointer;
 
 
+var Volume: LongInt;
+    SoundTimerTicks: Longword;
 implementation
 uses uVariables, uConsole, uCommands, uDebug, uPhysFSLayer;
 
 const chanTPU = 32;
-var Volume: LongInt;
-    cInitVolume: LongInt;
+var cInitVolume: LongInt;
     previousVolume: LongInt; // cached volume value
     lastChan: array [TSound] of LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
@@ -262,14 +263,14 @@ i:= 0;
         begin
         locName:= name+'_'+cLocale;
         path:= cPathz[ptVoices] + '/' + locName;
-        if DirectoryExists(path) then
+        if pfsExists(path) then
             name:= locName
         else
             if Length(cLocale) > 3 then
                 begin
                 locName:= name+'_'+Copy(cLocale,1,2);
                 path:= cPathz[ptVoices] + '/' + locName;
-                if DirectoryExists(path) then
+                if pfsExists(path) then
                     name:= locName
                 end
         end;
@@ -712,6 +713,7 @@ begin
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
     Volume:= 0;
+    SoundTimerTicks:= 0;
     defVoicepack:= AskForVoicepack('Default');
 
     for i:= Low(TSound) to High(TSound) do

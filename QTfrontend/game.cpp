@@ -313,9 +313,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
         default:
         {
             if (gameType == gtNet && !netSuspend)
-            {
-                emit SendNet(msg);
-            }
+                m_netSendBuffer.append(msg);
+
             demo.append(msg);
         }
     }
@@ -343,6 +342,18 @@ void HWGame::onClientRead()
         QByteArray msg = readbuffer.left(msglen + 1);
         readbuffer.remove(0, msglen + 1);
         ParseMessage(msg);
+    }
+    
+    flushNetBuffer();
+}
+
+void HWGame::flushNetBuffer()
+{
+    if(m_netSendBuffer.size())
+    {
+        emit SendNet(m_netSendBuffer);
+        
+        m_netSendBuffer.clear();
     }
 }
 
@@ -478,7 +489,7 @@ void HWGame::abort()
 void HWGame::sendCampaignVar(const QByteArray &varToSend)
 {
     QString varToFind(varToSend);
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     QString varValue = teamfile.value("Campaign " + campaign + "/" + varToFind, "").toString();
     QByteArray command;
@@ -495,7 +506,7 @@ void HWGame::writeCampaignVar(const QByteArray & varVal)
     QString varToWrite = QString::fromUtf8(varVal.left(i));
     QString varValue = QString::fromUtf8(varVal.mid(i + 1));
 
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + campaignTeam + ".hwt", QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     teamfile.setValue("Campaign " + campaign + "/" + varToWrite, varValue);
 }

@@ -176,3 +176,12 @@ void DataManager::resetColors()
         m_colorsModel->item(i)->setData(QColor(colors[i]));
     }
 }
+
+bool DataManager::ensureFileExists(const QString &fileName)
+{
+    QFile tmpfile(fileName);
+    if (!tmpfile.exists())
+        return tmpfile.open(QFile::WriteOnly);
+    else
+        return true;
+}

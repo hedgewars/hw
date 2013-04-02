@@ -62,11 +62,13 @@ class HWForm : public QMainWindow
         Ui_HWForm ui;
         static GameUIConfig * config;
         void updateXfire();
-        void PlayDemoQuick(const QString & demofilename);
         void exit();
         void setButtonDescription(QString desc);
         void backDescription();
         void GoToVideos();
+
+        void NetConnectQuick(const QString & host, quint16 port);
+        void PlayDemoQuick(const QString & demofilename);
 
     private slots:
         void GoToSaves();
@@ -143,6 +145,7 @@ class HWForm : public QMainWindow
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
+        int  AskForNickAndPwd(void);
         void UpdateTeamsLists();
         void CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, QString ammo);
         void closeEvent(QCloseEvent *event);
