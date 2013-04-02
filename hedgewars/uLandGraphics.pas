@@ -94,14 +94,14 @@ end;
 
 function isLandscapeEdge(weight:Longint):boolean; inline;
 begin
-result := (weight < 8) and (weight >= 2);
+isLandscapeEdge := (weight < 8) and (weight >= 2);
 end;
 
 function getPixelWeight(x, y:Longint): Longint;
 var
-    i, j:Longint;
+    i, j, r: Longint;
 begin
-result := 0;
+r := 0;
 for i := x - 1 to x + 1 do
     for j := y - 1 to y + 1 do
     begin
@@ -109,13 +109,13 @@ for i := x - 1 to x + 1 do
        (i > LAND_WIDTH - 1) or
        (j < 0) or
        (j > LAND_HEIGHT -1) then
-       begin
-       result := 9;
-       exit;
-       end;
+       exit(9);
+
     if Land[j, i] and lfLandMask and (not lfIce) = 0 then
-       result := result + 1;
+       inc(r)
     end;
+
+    getPixelWeight:= r
 end;
 
 
