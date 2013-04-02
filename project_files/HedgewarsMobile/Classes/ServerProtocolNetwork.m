@@ -18,7 +18,7 @@
 
 
 #import "ServerProtocolNetwork.h"
-
+#import "hwconsts.h"
 
 #define BUFFER_SIZE 256
 
