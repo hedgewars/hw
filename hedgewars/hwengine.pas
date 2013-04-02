@@ -196,8 +196,10 @@ begin
 {$IFDEF SDL13}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
+                        begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym))//TODO correct for keymodifiers
+                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym, event.key.keysym.sym)//TODO correct for keymodifiers
+                        end
                     else
                         ProcessKey(event.key);
                 SDL_KEYUP:
@@ -241,7 +243,7 @@ begin
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode)
+                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym)
                     else
                         ProcessKey(event.key);
                 SDL_KEYUP:
@@ -384,8 +386,11 @@ begin
     parseCommandLine(argc, argv);
 {$ENDIF}
     initEverything(true);
-    WriteLnToConsole('Hedgewars ' + cVersionString + ' engine (network protocol: ' + inttostr(cNetProtoVersion) + ')');
-
+    WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
+                     ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
+    AddFileLog('Prefix: "' + PathPrefix +'"');
+    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
+    
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 

@@ -187,7 +187,7 @@ if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
-        gear^.CollisionMask:= $FF7F
+        gear^.CollisionMask:= lfNotCurrentMask
     end;
 
 if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
@@ -329,7 +329,7 @@ case Kind of
                 end;
        gtKnife: begin
                 gear^.Density:= _4;
-                gear^.Radius:= 16
+                gear^.Radius:= 7
                 end;
         gtCase: begin
                 gear^.ImpactSound:= sndGraveImpact;
@@ -550,7 +550,10 @@ gtFlamethrower: begin
                 gear^.Pos:= 1;
                 end;
 }
-      gtIceGun: gear^.Health:= 1000;
+      gtIceGun: begin
+                gear^.Health:= 1000;
+                gear^.Radius:= 8;
+                end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 1;

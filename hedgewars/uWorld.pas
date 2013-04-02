@@ -77,8 +77,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     timeTexture: PTexture;
     FPS: Longword;
     CountTicks: Longword;
-    SoundTimerTicks: Longword;
-    prevPoint, prevTargetPoint: TPoint;
+    prevPoint{, prevTargetPoint}: TPoint;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
@@ -225,8 +224,8 @@ InitCameraBorders();
 uCursor.init();
 prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
-prevTargetPoint.X:= 0;
-prevTargetPoint.Y:= 0;
+//prevTargetPoint.X:= 0;
+//prevTargetPoint.Y:= 0;
 WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
@@ -646,7 +645,7 @@ if AMState = AMHiding then // hide ammo menu
             AMShiftX:= AMShiftTargetX;
             AMShiftY:= AMShiftTargetY;
             prevPoint:= CursorPoint;
-            prevTargetPoint:= TargetCursorPoint;
+            //prevTargetPoint:= TargetCursorPoint;
             AMState:= AMHidden;
             end;
     end;
@@ -1582,25 +1581,11 @@ if (RM = rmDefault) or (RM = rmRightEye) then
         if fpsTexture <> nil then
             DrawTexture((cScreenWidth shr 1) - 60 - offsetY, offsetX, fpsTexture);
         end;
-
-    // lag warning (?)
-    inc(SoundTimerTicks, Lag);
 end;
 
-if SoundTimerTicks >= 50 then
-begin
-    SoundTimerTicks:= 0;
-    if cVolumeDelta <> 0 then
-    begin
-        str(ChangeVolume(cVolumeDelta), s);
-        AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume);
-    end;
-    if isAudioMuted then
-        AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
-end;
 
 if GameState = gsConfirm then
-    DrawTextureCentered(0, (cScreenHeight shr 1), ConfirmTexture);
+    DrawTextureCentered(0, (cScreenHeight shr 1)-40, ConfirmTexture);
 
 if ScreenFade <> sfNone then
     begin

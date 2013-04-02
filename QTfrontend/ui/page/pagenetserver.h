@@ -30,6 +30,7 @@ class PageNetServer : public AbstractPage
 
         QPushButton *BtnStart;
         QPushButton *BtnDefault;
+        QPushButton *BtnShare;
         QLabel *labelSD;
         QLineEdit *leServerDescr;
         QLabel *labelPort;
@@ -42,6 +43,7 @@ class PageNetServer : public AbstractPage
 
     private slots:
         void setDefaultPort();
+        void copyUrl();
 };
 
 #endif

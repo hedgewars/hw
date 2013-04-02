@@ -54,10 +54,10 @@
 00:51=Palla di Fango
 00:52=Nessuna Arma Selezionata
 00:53=Macchina Spazio-Temporale
-00:54=Attrezzi da Costruzione
-00:55=Land Spray
-00:56=Congelatore
-00:57=Mannarino
+; 00:54=Attrezzi da Costruzione
+00:54=Terreno Spray
+00:55=Congelatore
+00:56=Mannarino
 
 01:00=Combattiamo!
 01:01=Round in parità

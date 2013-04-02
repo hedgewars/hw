@@ -92,7 +92,7 @@ begin
 
                 else
                     begin
-                    if (gi^.State and gstMoving) = 0 then
+                    if ((gi^.State and gstMoving) = 0) and (gi^.Hedgehog^.Effects[heFrozen] = 0) then
                         begin
                         gi^.dX.isNegative:= X<gi^.X;
                         gi^.State := gi^.State or gstLoser;
@@ -616,6 +616,7 @@ We aren't using frametick right now, so just a waste of cycles.
         else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
             lf:= Land[yy, xx] and (lfObject or lfBasic or lfIndestructible);
+            if lf = 0 then lf:= lfObject;
             // If there's room below keep falling
             if (((yy-1) and LAND_HEIGHT_MASK) = 0) and (Land[yy-1, xx] = 0) then
                 begin
@@ -679,7 +680,7 @@ if draw then
                             begin
                             rx:= rx div 2;ry:= ry div 2;
                             end;
-                        if Land[yy + py, xx + px] and $FF00 = 0 then
+                        if Land[yy + py, xx + px] <= lfAllObjMask then
                             if gun then
                                 begin
                                 LandDirty[yy div 32, xx div 32]:= 1;
@@ -1020,7 +1021,7 @@ begin
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
             inc(Gear^.Damage);
         // let's interrupt before a collision to give portals a chance to catch the bullet
-        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (Land[y, x] > 255) then
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and not(CheckLandValue(x, y, lfLandMask)) then
             begin
             Gear^.Tag := 1;
             Gear^.Damage := 0;
@@ -1153,15 +1154,15 @@ begin
 dec(Gear^.Timer);
 case Gear^.Kind of
     gtATStartGame:
-    begin
+        begin
         AllInactive := false;
         if Gear^.Timer = 0 then
             begin
             AddCaption(trmsg[sidStartFight], cWhiteColor, capgrpGameState);
             end
-    end;
+        end;
     gtATFinishGame:
-    begin
+        begin
         AllInactive := false;
         if Gear^.Timer = 1000 then
             begin
@@ -1175,8 +1176,8 @@ case Gear^.Kind of
             SendIPC(_S'q');
             GameState := gsExit
             end
+        end;
     end;
-end;
 if Gear^.Timer = 0 then
     DeleteGear(Gear)
 end;
@@ -1242,7 +1243,7 @@ begin
         end
     else
         begin
-        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), $FF00) then
+        if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfLandMask) then
             begin
             Gear^.dY := Gear^.dY + cGravity;
             Gear^.Y := Gear^.Y + Gear^.dY
@@ -1252,7 +1253,7 @@ begin
         end;
 
     Gear^.X := Gear^.X + HHGear^.dX;
-    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, $FF00) then
+    if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y)-cHHRadius, lfLandMask) then
         begin
         HHGear^.X := Gear^.X;
         HHGear^.Y := Gear^.Y - int2hwFloat(cHHRadius)
@@ -1401,6 +1402,14 @@ begin
     BTPrevAngle := High(LongInt);
     BTSteps := 0;
     HHGear := Gear^.Hedgehog^.Gear;
+    HedgehogChAngle(HHGear);
+    Gear^.dX := SignAs(AngleSin(HHGear^.Angle) * _0_5, Gear^.dX);
+    Gear^.dY := AngleCos(HHGear^.Angle) * ( - _0_5);
+    DrawTunnel(HHGear^.X,
+        HHGear^.Y + Gear^.dY * cHHRadius - _1 -
+        ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
+        Gear^.dX, Gear^.dY,
+        cHHStepTicks, cHHRadius * 2 + 7);
     HHGear^.Message := 0;
     HHGear^.State := HHGear^.State or gstNotKickable;
     Gear^.doStep := @doStepBlowTorchWork
@@ -1784,7 +1793,7 @@ begin
         Gear^.Y := Gear^.Y + Gear^.dY;
 
         if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
-            SetAllHHToActive;
+            SetAllHHToActive(false);
 
         if (not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
@@ -2385,7 +2394,9 @@ begin
 
         repeat
             CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
-        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0);
+        until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and
+              (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
 
         SwitchCurrentHedgehog(@CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]);
         AmmoMenuInvalidated:= true;
@@ -2418,7 +2429,7 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMortar(Gear: PGear);
-var 
+var
     dX, dY, gdX, gdY: hwFloat;
     i: LongInt;
     dxn, dyn: boolean;
@@ -2745,7 +2756,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
     HHGear^.Message := HHGear^.Message and (not gmAttack);
-    Gear^.CollisionMask:= $FF7F;
+    Gear^.CollisionMask:= lfNotCurrentMask;
 
     FollowGear := Gear;
 
@@ -2879,30 +2890,32 @@ forward;
 procedure doStepDrillDrilling(Gear: PGear);
 var
     t: PGearArray;
-    ox, oy: hwFloat;
+    tempColl: Word;
 begin
     AllInactive := false;
+    if (Gear^.Timer > 0) and (Gear^.Timer mod 10 <> 0) then
+        begin
+        dec(Gear^.Timer);
+        exit;
+        end;
 
-    if (Gear^.Timer > 0) and ((Gear^.Timer mod 10) = 0) then
-    begin
-        ox := Gear^.X;
-        oy := Gear^.Y;
-        Gear^.X := Gear^.X + Gear^.dX;
-        Gear^.Y := Gear^.Y + Gear^.dY;
-        DrawTunnel(oX, oY, Gear^.dX, Gear^.dY, 2, 6);
-        if (Gear^.Timer mod 30) = 0 then
-            AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
-        if (CheckGearDrowning(Gear)) then
-            begin
-            StopSoundChan(Gear^.SoundChannel);
-            exit
-        end
+    DrawTunnel(Gear^.X, Gear^.Y, Gear^.dX, Gear^.dY, 2, 6);
+    Gear^.X := Gear^.X + Gear^.dX;
+    Gear^.Y := Gear^.Y + Gear^.dY;
+    if (Gear^.Timer mod 30) = 0 then
+        AddVisualGear(hwRound(Gear^.X + _20 * Gear^.dX), hwRound(Gear^.Y + _20 * Gear^.dY), vgtDust);
+    if (CheckGearDrowning(Gear)) then
+        begin
+        StopSoundChan(Gear^.SoundChannel);
+        exit
     end;
 
-    if GameTicks > Gear^.FlightTime then
+    tempColl:= Gear^.CollisionMask;
+    Gear^.CollisionMask:= $007F;
+    if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) or (GameTicks > Gear^.FlightTime) then
         t := CheckGearsCollision(Gear)
-
     else t := nil;
+    Gear^.CollisionMask:= tempColl;
     //fixes drill not exploding when touching HH bug
 
     if (Gear^.Timer = 0) or ((t <> nil) and (t^.Count <> 0))
@@ -3016,7 +3029,7 @@ begin
         ry := rndSign(getRandomf * _0_1);
 
         ball:= AddGear(gx, gy, gtBall, 0, SignAs(AngleSin(HHGear^.Angle) * _0_8, HHGear^.dX) + rx, AngleCos(HHGear^.Angle) * ( - _0_8) + ry, 0);
-        ball^.CollisionMask:= $FF7F;
+        ball^.CollisionMask:= lfNotCurrentMask;
 
         PlaySound(sndGun);
         end;
@@ -3588,7 +3601,7 @@ begin
     doPortalColorSwitch();
 
     // destroy portal if ground it was attached too is gone
-    if ((Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and $FF00) = 0)
+    if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
     or (hwRound(Gear^.Y) > cWaterLine) then
@@ -3628,7 +3641,7 @@ begin
             break;
 
         // don't port portals or other gear that wouldn't make sense
-        if (iterator^.Kind in [gtPortal, gtRope, gtAirAttack])
+        if (iterator^.Kind in [gtPortal, gtRope, gtAirAttack, gtIceGun])
         or (iterator^.PortalCounter > 32) then
             continue;
 
@@ -4371,14 +4384,14 @@ begin
             flame:= AddGear(gx, gy, gtFlame, gstTmpFlag,
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-            flame^.CollisionMask:= $FF7F;
+            flame^.CollisionMask:= lfNotCurrentMask;
 
             if (Gear^.Health mod 30) = 0 then
                 begin
                 flame:= AddGear(gx, gy, gtFlame, 0,
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-                flame^.CollisionMask:= $FF7F;
+                flame^.CollisionMask:= lfNotCurrentMask;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
@@ -4455,7 +4468,7 @@ begin
         land:= AddGear(gx, gy, gtFlake, gstTmpFlag,
                 SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                 AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
-        land^.CollisionMask:= $FF7F;
+        land^.CollisionMask:= lfNotCurrentMask;
 
         Gear^.Timer:= Gear^.Tag
         end;
@@ -4579,8 +4592,8 @@ begin
         if CheckLandValue(hwRound(Gear^.X + Gear^.dX + SignAs(_6,Gear^.dX)), hwRound(Gear^.Y + _1_9)
            , lfIndestructible) then
             begin
-            Gear^.X := Gear^.X + Gear^.dX;
-            Gear^.Y := Gear^.Y + _1_9;
+            //Gear^.X := Gear^.X + Gear^.dX;
+            Gear^.Y := Gear^.Y + _1_9
             end;
         end;
     if TestCollisionYwithGear(Gear, 1) <> 0 then
@@ -4591,14 +4604,15 @@ begin
         end
     else
         begin
-        Gear^.dY := Gear^.dY + cGravity;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        //Gear^.dY := Gear^.dY + cGravity;
+        //Gear^.Y := Gear^.Y + Gear^.dY;
         if hwRound(Gear^.Y) > cWaterLine then
             Gear^.Timer := 1
         end;
 
-    Gear^.X := Gear^.X + HitGear^.dX;
+    //Gear^.X := Gear^.X + HitGear^.dX;
     HitGear^.X := Gear^.X;
+    HitGear^.Y := Gear^.Y;
     SetLittle(HitGear^.dY);
     HitGear^.Active:= true;
 end;
@@ -4727,6 +4741,7 @@ end;
 procedure doStepResurrector(Gear: PGear);
 var
     graves: PGearArrayS;
+    hh: PHedgehog;
     i: LongInt;
     len: Integer;
 begin
@@ -4735,12 +4750,24 @@ begin
 
     if graves.size > 0 then
         begin
+        hh := Gear^.Hedgehog;
         for i:= 0 to graves.size - 1 do
             begin
             PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := nil;
             graves.ar^[i]^.Health := 0;
             end;
         Gear^.doStep := @doStepResurrectorWork;
+        if ((Gear^.Message and gmAttack) <> 0) and (hh^.Gear^.Health > 0) and (TurnTimeLeft > 0) then
+            begin
+            if LongInt(graves.size) <= Gear^.Tag then Gear^.Tag:= 0;
+            dec(hh^.Gear^.Health);
+            if (hh^.Gear^.Health = 0) and (hh^.Gear^.Damage = 0) then
+                hh^.Gear^.Damage:= 1;
+            RenderHealth(hh^);
+            RecountTeamHealth(hh^.Team);
+            inc(graves.ar^[Gear^.Tag]^.Health);
+            inc(Gear^.Tag)
+            end
         end
     else
         begin
@@ -4953,7 +4980,7 @@ if (Gear^.Pos = 3) and (Gear^.Power = 0) then
         end;
     Gear^.Pos:= 4;
     // This condition might need tweaking
-    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount*2)+cHedgehogTurnTime*2
+    Gear^.Timer:= GetRandom(cHedgehogTurnTime*TeamsCount)+cHedgehogTurnTime
     end;
 
 if (Gear^.Pos = 4) then
@@ -4989,7 +5016,7 @@ if (Gear^.Pos = 4) then
             Gear^.Power:= 0;
             end
         end
-    else dec(Gear^.Timer);
+    else if (CurrentHedgehog^.Team^.Clan = Gear^.Hedgehog^.Team^.Clan) then dec(Gear^.Timer)
     end;
 
 end;
@@ -5047,39 +5074,83 @@ spewing ice cubes.  The cubes will be visual gears only.  The scatter from them 
 For now we assume a "ray" like a deagle projected out from the gun.
 All these effects assume the ray's angle is not changed and that the target type was unchanged over a number of ticks.  This is a simplifying assumption for "gun was applying freezing effect to the same target".
   * When fired at water a layer of ice textured land is added above the water.
-  * When fired at non-ice land (land and $FF00 and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
+  * When fired at non-ice land (land and lfLandMask and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
   * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.  As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.  If the effect is interrupted before reaching the top, the freezing state is cleared.
 A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
 A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
 
+
+procedure updateFuel(Gear: PGear);
+var
+  t:LongInt;
+begin
+    t:= Gear^.Health div 10;
+    if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
+    begin
+    Gear^.Damage:= t;
+    FreeTexture(Gear^.Tex);
+    Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
+              '%', cWhiteColor, fntSmall)
+    end;
+    if GameTicks mod 10 = 0 then dec(Gear^.Health);
+end;
+
+
+procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
+//    var
+//    iter:PGear;
+begin
+  with Gear^ do
+  begin
+    dX:= newX;
+    dY:= newY;
+    Pos:= 0;
+    Target.X:= NoPointX;
+    LastDamage:= nil;
+    X:= Hedgehog^.Gear^.X;
+    Y:= Hedgehog^.Gear^.Y;
+    //unfreeze all semifrozen hogs - make this generic hog cleanup
+(*
+    iter := GearsList;
+    while iter <> nil do
+        begin
+        if (iter^.Kind = gtHedgehog) and
+        (iter^.Hedgehog^.Effects[heFrozen] and $FF = 0) then
+        iter^.Hedgehog^.Effects[heFrozen]:= 0;
+        iter:= iter^.NextGear
+        end
+*)
+  end;
+end;
+
 procedure doStepIceGun(Gear: PGear);
+const iceWaitCollision:Longint = 0;
+const iceCollideWithGround:Longint = 1;
+//const iceWaitNextTarget:Longint = 2;
+//const iceCollideWithHog:Longint = 4;
+const iceCollideWithWater:Longint = 5;
+//const waterFreezingTime:Longint = 500;
+const groundFreezingTime:Longint = 1000;
+const iceRadius = 32;
+const iceHeight = 40;
 var
     HHGear: PGear;
+    landRect: TSDL_Rect;
     ndX, ndY: hwFloat;
     i, t, gX, gY: LongInt;
     hogs: PGearArrayS;
     len: Integer;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
         exit
         end
-    else
-        begin
-        t:= Gear^.Health div 10;
-        if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
-            begin
-            Gear^.Damage:= t;
-            FreeTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
-                         '%', cWhiteColor, fntSmall)
-            end
-        end;
-    if GameTicks mod 10 = 0 then dec(Gear^.Health);
+    else if Gear^.Message and (gmUp or gmDown) = 0 then updateFuel(Gear);
+
     with Gear^ do
         begin
         HedgehogChAngle(HHGear);
@@ -5089,22 +5160,8 @@ begin
            ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
              (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
             begin
-            dX:= ndX;
-            dY:= ndY;
-            Pos:= 0;
-            Target.X:= NoPointX;
-            LastDamage:= nil;
-            X:= HHGear^.X;
-            Y:= HHGear^.Y;
-(* unfreeze all semifrozen hogs - make this generic hog cleanup
-            iter := GearsList;
-            while iter <> nil do
-                begin
-                if (iter^.Kind = gtHedgehog) and
-                   (iter^.Hedgehog^.Effects[heFrozen] < 0) then
-                    iter^.Hedgehog^.Effects[heFrozen]:= 0;
-                iter:= iter^.NextGear
-                end *)
+            updateTarget(Gear, ndX, ndY);
+            Timer := iceWaitCollision;
             end
         else
             begin
@@ -5113,22 +5170,67 @@ begin
             gX:= hwRound(X);
             gY:= hwRound(Y);
             if Target.X = NoPointX then t:= hwRound(hwSqr(X-HHGear^.X)+hwSqr(Y-HHGear^.Y));
+
             if Target.X <> NoPointX then
                 begin
+                CheckCollisionWithLand(Gear);
+                if (State and gstCollision) <> 0 then
+                    begin
+                    if Timer = iceWaitCollision then
+                        begin
+                        Timer := iceCollideWithGround;
+                        Power := GameTicks;
+                        end
+                    end
+                else if (target.y >= cWaterLine) then
+                    begin
+                    if Timer = iceWaitCollision then
+                        begin
+                        Timer := iceCollideWithWater;
+                        Power := GameTicks;
+                        end;
+                    end;
+
                 if (abs(gX-Target.X) < 2) and (abs(gY-Target.Y) < 2) then
                     begin
                     X:= HHGear^.X;
                     Y:= HHGear^.Y
                     end;
+
+                if (Timer = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
+                    begin
+                    FillRoundInLand(target.x, target.y, iceRadius, icePixel);
+                    landRect.x := min(max(target.x - iceRadius, 0), LAND_WIDTH - 1);
+                    landRect.y := min(max(target.y - iceRadius, 0), LAND_HEIGHT - 1);
+                    landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
+                    landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
+                    UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
+
+                    // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
+                    SetAllHHToActive;
+                    Timer := iceWaitCollision;
+                    end;
+
+                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
+                    begin
+                    DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
+                    SetAllHHToActive;
+                    Timer := iceWaitCollision;
+                    end;
+
 // freeze nearby hogs
-                if GameTicks mod 10 = 0 then dec(Gear^.Health);
-                hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Radius);
+                hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
                 if hogs.size > 0 then
                     for i:= 0 to hogs.size - 1 do
                         if hogs.ar^[i] <> HHGear then
-                            begin
-                            //if Gear^.Hedgehog^.Effects[heFrozen]:= 0;
-                            end;
+                            if GameTicks mod 5 = 0 then
+                                begin
+                                hogs.ar^[i]^.Active:= true;
+                                if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
+                                else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                    hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 200000;//cHedgehogTurnTime + cReadyDelay
+                                end;
                 inc(Pos)
                 end
             else if (t > 400) and ((gY > cWaterLine) or
@@ -5140,14 +5242,14 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end;
-            if (gX > max(LAND_WIDTH,4096)*2) or
+            {if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
                     (gY > max(LAND_HEIGHT,4096)+512) then
-                begin
+            begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
-                end
+            end}
         end
     end;
 end;
@@ -5288,7 +5390,7 @@ procedure doStepKnife(Gear: PGear);
 var   a: real;
 begin
     // Gear is shrunk so it can actually escape the hog without carving into the terrain
-    if (Gear^.Radius = 6) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 16;
+    if (Gear^.Radius = 4) and (Gear^.CollisionMask = $FFFF) then Gear^.Radius:= 7;
     if Gear^.Damage > 100 then Gear^.CollisionMask:= 0
     else if Gear^.Damage > 30 then
         if GetRandom(max(4,18-Gear^.Damage div 10)) < 3 then Gear^.CollisionMask:= 0;
@@ -5297,6 +5399,7 @@ begin
     if (Gear^.State and gstMoving <> 0) and (Gear^.State and gstCollision = 0) then
         begin
         DeleteCI(Gear);
+        Gear^.Radius:= 7;
         // used for damage and impact calc. needs balancing I think
         Gear^.Health:= hwRound(hwSqr((hwAbs(Gear^.dY)+hwAbs(Gear^.dX))*_4));
         doStepFallingGear(Gear);
@@ -5332,9 +5435,8 @@ begin
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving) or gstCollision;
-        Gear^.Radius:= 20;
-        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Radius:= 16;
+        if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Health:= 0;
         Gear^.Timer:= 500;
         AddGearCI(Gear)
@@ -5373,7 +5475,7 @@ begin
     if Gear^.State and gstDrowning <> 0 then exit;
     with Gear^ do
         begin
-        if CheckLandValue(gx, gy, $FF00) then
+        if CheckLandValue(gx, gy, lfLandMask) then
             begin
             t:= Angle + hwRound((hwAbs(dX)+hwAbs(dY)) * _10);
 

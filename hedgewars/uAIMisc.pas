@@ -74,6 +74,7 @@ function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
+function TestCollWithLand(x, y, r: LongInt): boolean; inline;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -269,7 +270,7 @@ begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and ((Land[y, x] and $FF00) = 0) then
+        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and (Land[y, x] <= lfAllObjMask) and ((Land[y, x] and lfObjMask) < 2) then
             exit(false);
     end;
     TestCollExcludingMe:= TestColl(x, y, r)
@@ -278,19 +279,19 @@ end;
 function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF00 <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > lfAllObjMask);
     if b then
         exit(true);
     
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF00 <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > lfAllObjMask);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF00 <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > lfAllObjMask);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF00 <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > lfAllObjMask);
     if b then
         exit(true);
     
@@ -300,19 +301,19 @@ end;
 function TestColl(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and $FF7F <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and lfNotCurrentMask <> 0);
     if b then
         exit(true);
     
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and $FF7F <> 0);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and lfNotCurrentMask <> 0);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and $FF7F <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and lfNotCurrentMask <> 0);
     if b then
         exit(true);
     
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and $FF7F <> 0);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and lfNotCurrentMask <> 0);
     if b then
         exit(true);
     
@@ -322,19 +323,19 @@ end;
 function TestCollWithLand(x, y, r: LongInt): boolean; inline;
 var b: boolean;
 begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > 255);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > lfAllObjMask);
     if b then
         exit(true);
         
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > 255);
+    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > lfAllObjMask);
     if b then
         exit(true);
         
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > 255);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > lfAllObjMask);
     if b then
         exit(true);
         
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > 255);
+    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > lfAllObjMask);
     if b then
         exit(true);
 
@@ -716,7 +717,7 @@ function HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
 var pX, pY, tY: LongInt;
 begin
 HHGo:= false;
-Gear^.CollisionMask:= $FF7F;
+Gear^.CollisionMask:= lfNotCurrentMask;
 AltGear^:= Gear^;
 
 GoInfo.Ticks:= 0;

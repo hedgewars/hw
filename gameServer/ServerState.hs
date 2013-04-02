@@ -5,6 +5,7 @@ module ServerState
     ServerState(..),
     client's,
     allClientsS,
+    allRoomsS,
     roomClientsS,
     sameProtoClientsS,
     io
@@ -39,6 +40,9 @@ client's f = do
 
 allClientsS :: StateT ServerState IO [ClientInfo]
 allClientsS = gets roomsClients >>= liftIO . clientsM
+
+allRoomsS :: StateT ServerState IO [RoomInfo]
+allRoomsS = gets roomsClients >>= liftIO . roomsM
 
 roomClientsS :: RoomIndex -> StateT ServerState IO [ClientInfo]
 roomClientsS ri = do

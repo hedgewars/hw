@@ -77,9 +77,12 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 SendUpdateOnThisRoom,
                 ModifyClient (\c -> c{teamsInGame = teamsInGame c + 1, clientClan = Just teamColor}),
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
-                AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam],
                 AnswerClients othChans $ teamToNet $ newTeam,
-                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor]
+                AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
+                ModifyClient $ \c -> c{actionsPending = actionsPending cl
+                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]]
+                    },
+                AnswerClients [sendChan cl] ["PING"]
                 ]
         where
         canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
@@ -97,7 +100,6 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
         r <- thisRoom
-        clNick <- clientNick
 
         let maybeTeam = findTeam r
         let team = fromJust maybeTeam
@@ -105,18 +107,18 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         return $
             if isNothing $ maybeTeam then
                 [Warning $ loc "REMOVE_TEAM: no such team"]
-            else if clNick /= teamowner team then
+            else if ci /= teamownerId team then
                 [ProtocolError $ loc "Not team owner!"]
             else
                 [RemoveTeam tName,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
-                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci r
+                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci team r
                     })
                 ]
     where
-        anotherTeamClan ci = teamcolor . fromJust . find (\t -> teamownerId t == ci) . teams
+        anotherTeamClan ci team = teamcolor . fromMaybe (error "CHECKPOINT 011") . find (\t -> (teamownerId t == ci) && (t /= team)) . teams
         findTeam = find (\t -> tName == teamname t) . teams
 
 
@@ -124,7 +126,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
     cl <- thisClient
     r <- thisRoom
     clChan <- thisClientChans
-    roomChans <- roomClientsChans
+    others <- roomOthersChans
 
     let maybeTeam = findTeam r
     let team = fromJust maybeTeam
@@ -138,7 +140,7 @@ handleCmd_inRoom ["HH_NUM", teamName, numberStr] = do
             [AnswerClients clChan ["HH_NUM", teamName, showB $ hhnum team]]
         else
             [ModifyRoom $ modifyTeam team{hhnum = hhNumber},
-            AnswerClients roomChans ["HH_NUM", teamName, showB hhNumber]]
+            AnswerClients others ["HH_NUM", teamName, showB hhNumber]]
     where
         hhNumber = readInt_ numberStr
         findTeam = find (\t -> teamName == teamname t) . teams
@@ -182,6 +184,7 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
                     ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
             ]
 
+
 handleCmd_inRoom ["START_GAME"] = do
     (ci, rnc) <- ask
     cl <- thisClient
@@ -217,16 +220,16 @@ handleCmd_inRoom ["EM", msg] = do
     rm <- thisRoom
     chans <- roomOthersChans
 
-    if teamsInGame cl > 0 && (isJust $ gameInfo rm) && isLegal then
-        return $ AnswerClients chans ["EM", msg]
-            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = msg : roundMsgs g}) $ gameInfo r}) | not isKeepAlive]
+    if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
+        return $ AnswerClients chans ["EM", legalMsgs]
+            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = nonEmptyMsgs : roundMsgs g}) $ gameInfo r}) | not $ B.null nonEmptyMsgs]
         else
         return []
     where
-        (isLegal, isKeepAlive) = checkNetCmd msg
+        (legalMsgs, nonEmptyMsgs) = checkNetCmd msg
 
 
-handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
+handleCmd_inRoom ["ROUNDFINISHED", _] = do
     cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
@@ -242,7 +245,7 @@ handleCmd_inRoom ["ROUNDFINISHED", correctly] = do
         else
         return [] -- don't accept this message twice
     where
-        isCorrect = correctly == "1"
+--        isCorrect = correctly == "1"
 
 -- compatibility with clients with protocol < 38
 handleCmd_inRoom ["ROUNDFINISHED"] =
@@ -274,6 +277,7 @@ handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
         else
             [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
 
+
 handleCmd_inRoom ["ROOM_NAME", newName] = do
     cl <- thisClient
     rs <- allRoomInfos
@@ -297,10 +301,19 @@ handleCmd_inRoom ["KICK", kickNick] = do
     (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick kickNick
     master <- liftM isMaster thisClient
+    rm <- thisRoom
     let kickId = fromJust maybeClientId
+    let kickCl = rnc `client` kickId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
+    let notOnly2Players = (length . group . sort . map teamowner . teams $ rm) > 2
     return
-        [KickRoomClient kickId | master && isJust maybeClientId && (kickId /= thisClientId) && sameRoom]
+        [KickRoomClient kickId |
+            master
+            && isJust maybeClientId
+            && (kickId /= thisClientId)
+            && sameRoom
+            && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
+        ]
 
 
 handleCmd_inRoom ["DELEGATE", newAdmin] = do
@@ -323,7 +336,8 @@ handleCmd_inRoom ["TEAMCHAT", msg] = do
     chans <- roomSameClanChans
     return [AnswerClients chans ["EM", engineMsg cl]]
     where
-        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, "(team): ", msg, "\x20\x20"]
+        engineMsg cl = toEngineMsg $ B.concat ["b", nick cl, " (team): ", msg, "\x20\x20"]
+
 
 handleCmd_inRoom ["BAN", banNick] = do
     (thisClientId, rnc) <- ask

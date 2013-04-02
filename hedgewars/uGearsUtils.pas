@@ -137,7 +137,7 @@ while Gear <> nil do
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (not Gear^.Invulnerable) then
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (not Gear^.Invulnerable) and ((Gear^.State and gstHHDeath) = 0) then
                                 Gear^.Hedgehog^.Effects[hePoisoned] := 1;
                             end;
 
@@ -182,7 +182,7 @@ begin
 i:= _1;
 if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then
     i:= _1_5;
-if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King) then
+if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
     ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent * _0_5)
 else
     ModifyDamage:= hwRound(_0_01 * cDamageModifier * dmg * i * cDamagePercent)
@@ -580,16 +580,16 @@ while tryAgain do
                 repeat
                     inc(y, 2);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) = 0));
+                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) = 0)) or 
+                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask) = 0));
 
                 sy:= y;
 
                 repeat
                     inc(y);
                 until (y >= cWaterLine) or
-                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or
-                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FF00) <> 0));
+                        ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or 
+                        (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask) <> 0)); 
 
                 if (y - sy > Gear^.Radius * 2)
                     and (((Gear^.Kind = gtExplosives)

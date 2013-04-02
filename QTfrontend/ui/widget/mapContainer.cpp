@@ -132,14 +132,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     QLabel * lblMapPreviewText = new QLabel(this);
     lblMapPreviewText->setText(tr("Map preview:"));
     leftLayout->addWidget(lblMapPreviewText, 0);
-    leftLayout->addSpacing(2);
 
     /* Map Preview */
 
-    mapPreview = new QLabel(this);
+    mapPreview = new QPushButton(this);
     mapPreview->setObjectName("mapPreview");
     mapPreview->setFixedSize(256, 128);
+    mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
+    connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
 
     /* Bottom-Left layout */
 
@@ -215,7 +216,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mazeStyles = new QListWidget();
     new QListWidgetItem(tr("Small tunnels"), mazeStyles);
     new QListWidgetItem(tr("Medium tunnels"), mazeStyles);
-    new QListWidgetItem(tr("Largetunnels"), mazeStyles);
+    new QListWidgetItem(tr("Large tunnels"), mazeStyles);
     new QListWidgetItem(tr("Small islands"), mazeStyles);
     new QListWidgetItem(tr("Medium islands"), mazeStyles);
     new QListWidgetItem(tr("Large islands"), mazeStyles);
@@ -230,7 +231,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     lblDesc->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     lblDesc->setStyleSheet("font: 10px;");
-    bottomLeftLayout->addWidget(lblDesc, 1);
+    bottomLeftLayout->addWidget(lblDesc, 100);
 
     /* Add stretch above theme button */
 
@@ -249,14 +250,13 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Set defaults */
 
-    setRandomTheme();
     setRandomSeed();
     setMazeSize(0);
     setTemplateFilter(0);
     staticMapChanged(m_staticMapModel->index(0, 0));
     missionMapChanged(m_missionMapModel->index(0, 0));
-    updateTheme(m_themeModel->index(0, 0));
     changeMapType(MapModel::GeneratedMap);
+    setRandomTheme();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -270,7 +270,7 @@ void HWMapContainer::setImage(const QImage newImage)
     px.setMask(bm);
 
     p.fillRect(pxres.rect(), linearGrad);
-    p.drawPixmap(QPoint(0, 0), px);
+    p.drawPixmap(0, 0, px);
 
     addInfoToPreview(pxres);
     pMap = 0;
@@ -300,7 +300,14 @@ void HWMapContainer::addInfoToPreview(QPixmap image)
     p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
     p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
-    mapPreview->setPixmap(finalImage);
+    // Shrink, crop, and center preview image
+    QPixmap centered(QSize(m_previewSize.width() - 6, m_previewSize.height() - 6));
+    QPainter pc(&centered);
+    pc.fillRect(centered.rect(), linearGrad);
+    pc.drawPixmap(-3, -3, finalImage);
+
+    mapPreview->setIcon(QIcon(centered));
+    mapPreview->setIconSize(centered.size());
 }
 
 void HWMapContainer::askForGeneratedPreview()
@@ -331,6 +338,19 @@ void HWMapContainer::askForGeneratedPreview()
     addInfoToPreview(waitImage);
 
     cType->setEnabled(false);
+}
+
+void HWMapContainer::previewClicked()
+{
+    switch (m_mapInfo.type)
+    {
+        case MapModel::HandDrawnMap:
+            emit drawMapRequested();
+            break;
+        default:
+            setRandomMap();
+            break;
+    }
 }
 
 QString HWMapContainer::getCurrentSeed() const
@@ -432,7 +452,7 @@ void HWMapContainer::setMap(const QString & map)
 
 void HWMapContainer::setTheme(const QString & theme)
 {
-    QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), Qt::DisplayRole, theme);
+    QModelIndexList mdl = m_themeModel->match(m_themeModel->index(0), ThemeModel::ActualNameRole, theme);
 
     if(mdl.size())
         updateTheme(mdl.at(0));
@@ -442,6 +462,8 @@ void HWMapContainer::setTheme(const QString & theme)
 
 void HWMapContainer::setRandomMap()
 {
+    if (!m_master) return;
+    
     setRandomSeed();
     switch(m_mapInfo.type)
     {
@@ -471,6 +493,7 @@ void HWMapContainer::setRandomTheme()
     if(!m_themeModel->rowCount()) return;
     quint32 themeNum = rand() % m_themeModel->rowCount();
     updateTheme(m_themeModel->index(themeNum));
+    emit themeChanged(m_theme);
 }
 
 void HWMapContainer::intSetTemplateFilter(int filter)
@@ -594,7 +617,8 @@ void HWMapContainer::updatePreview()
     {
         case MapModel::Invalid:
             failIcon = QPixmap(":/res/btnDisabled.png");
-            mapPreview->setPixmap(failIcon);
+            mapPreview->setIcon(QIcon(failIcon));
+            mapPreview->setIconSize(failIcon.size());
             break;
         case MapModel::GeneratedMap:
             askForGeneratedPreview();
@@ -611,7 +635,7 @@ void HWMapContainer::updatePreview()
 
             if(!success)
             {
-                mapPreview->setPixmap(QPixmap());
+                mapPreview->setIcon(QIcon());
                 return;
             }
 
@@ -730,6 +754,8 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
         }
     }
 
+    repaint();
+
     emit mapgenChanged(mapgen);
 }
 
@@ -752,7 +778,7 @@ void HWMapContainer::updateThemeButtonSize()
 
 void HWMapContainer::showThemePrompt()
 {
-    ThemePrompt prompt(this);
+    ThemePrompt prompt(m_themeID, this);
     int theme = prompt.exec() - 1; // Since 0 means canceled, so all indexes are +1'd
     if (theme < 0) return;
 
@@ -763,8 +789,9 @@ void HWMapContainer::showThemePrompt()
 
 void HWMapContainer::updateTheme(const QModelIndex & current)
 {
-    m_theme = selectedTheme = current.data().toString();
-    QIcon icon = qVariantValue<QIcon>(current.data(Qt::UserRole));
+    m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
+    m_themeID = current.row();
+    QIcon icon = qVariantValue<QIcon>(current.data(Qt::DecorationRole));
     QSize iconSize = icon.actualSize(QSize(65535, 65535));
     btnTheme->setFixedHeight(64);
     btnTheme->setIconSize(iconSize);

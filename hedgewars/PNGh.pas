@@ -23,15 +23,14 @@ interface
 
 uses png;
 
-{$IFDEF FPC}
-    {$PACKRECORDS C}
-{$ELSE}
-    {$DEFINE cdecl attribute(cdecl)}
+
+{$IFDEF DARWIN}
+    {$linklib png}
 {$ENDIF}
 
 const
     // Constants for libpng, they are not defined in png unit.
-    // We actually don't need all of them.
+    // We actually do not need all of them.
 
     // These describe the color_type field in png_info.
     // color type masks

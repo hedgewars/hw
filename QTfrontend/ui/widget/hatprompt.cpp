@@ -35,6 +35,26 @@
 #include "HatModel.h"
 #include "hatprompt.h"
 
+void HatListView::moveUp()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+}
+
+void HatListView::moveDown()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+}
+
+void HatListView::moveLeft()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+}
+
+void HatListView::moveRight()
+{
+    setCurrentIndex(moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+}
+
 HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 {
     setModal(true);
@@ -60,7 +80,7 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     QHBoxLayout * topLayout = new QHBoxLayout();
 
     // Help/prompt message at top
-    QLabel * lblDesc = new QLabel(tr("Select a hat"));
+    QLabel * lblDesc = new QLabel(tr("Search for a hat:"));
     lblDesc->setObjectName("lblDesc");
     lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -72,21 +92,17 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
     filterContainer->setFixedHeight(24);
     filterContainer->setObjectName("filterContainer");
     filterContainer->setStyleSheet("#filterContainer { background: #F6CB1C; border-top-right-radius: 10px; padding: 3px; }");
-    filterContainer->setFixedWidth(250);
+    filterContainer->setFixedWidth(150);
     txtFilter = new LineEditCursor(filterContainer);
-    txtFilter->setFixedWidth(250);
+    txtFilter->setFixedWidth(150);
     txtFilter->setFocus();
     txtFilter->setFixedHeight(22);
+    txtFilter->setStyleSheet("LineEditCursor { border-width: 0px; border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: 4px; padding-bottom: 2px; background-color: rgb(23, 11, 54); } LineEditCursor:hover, LineEditCursor:focus { background-color: rgb(13, 5, 68); }");
     connect(txtFilter, SIGNAL(textChanged(const QString &)), this, SLOT(filterChanged(const QString &)));
     connect(txtFilter, SIGNAL(moveUp()), this, SLOT(moveUp()));
     connect(txtFilter, SIGNAL(moveDown()), this, SLOT(moveDown()));
     connect(txtFilter, SIGNAL(moveLeft()), this, SLOT(moveLeft()));
     connect(txtFilter, SIGNAL(moveRight()), this, SLOT(moveRight()));
-
-    // Filter label
-    QLabel * lblFilter = new QLabel(tr("Filter: "), txtFilter);
-    lblFilter->setStyleSheet(QString("background: none; margin-left: -%1px; margin-top: 4px;").arg(lblFilter->width() / 2 - 3));
-    txtFilter->setStyleSheet(QString("border-width: 0px; background-color: rgb(13, 5, 68); border-radius: 6px; margin-top: 3px; margin-right: 3px; padding-left: %1px; padding-bottom: 2px;").arg(lblFilter->width() / 2));
 
     // Corner widget
     QLabel * corner = new QLabel();
@@ -132,22 +148,22 @@ HatPrompt::HatPrompt(int currentIndex, QWidget* parent) : QDialog(parent)
 
 void HatPrompt::moveUp()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveUp, Qt::NoModifier));
+    list->moveUp();
 }
 
 void HatPrompt::moveDown()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveDown, Qt::NoModifier));
+    list->moveDown();
 }
 
 void HatPrompt::moveLeft()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveLeft, Qt::NoModifier));
+    list->moveLeft();
 }
 
 void HatPrompt::moveRight()
 {
-    list->setCurrentIndex(list->moveCursor(QAbstractItemView::MoveRight, Qt::NoModifier));
+    list->moveRight();
 }
 
 void HatPrompt::onAccepted()

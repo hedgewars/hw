@@ -54,8 +54,8 @@
 00:51=Hrouda bláta
 00:52=Není vybrána žádná zbraň
 00:53=TimeBox
-00:54=Struktura
-00:55=Pozemek s rozprašovačem
+; 00:54=Struktura
+00:54=Pozemek s rozprašovačem
 
 01:00=Do boje!
 01:01=Kolo nerozhodně

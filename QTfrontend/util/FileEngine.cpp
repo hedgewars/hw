@@ -327,12 +327,12 @@ QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 
 void FileEngineHandler::mount(const QString &path)
 {
-    PHYSFS_mount(path.toUtf8().constData(), NULL, 1);
+    PHYSFS_mount(path.toUtf8().constData(), NULL, 0);
 }
 
 void FileEngineHandler::mount(const QString & path, const QString & mountPoint)
 {
-    PHYSFS_mount(path.toUtf8().constData(), mountPoint.toUtf8().constData(), 1);
+    PHYSFS_mount(path.toUtf8().constData(), mountPoint.toUtf8().constData(), 0);
 }
 
 void FileEngineHandler::setWriteDir(const QString &path)

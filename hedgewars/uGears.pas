@@ -46,7 +46,8 @@ procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure SetAllToActive;
-procedure SetAllHHToActive;
+procedure SetAllHHToActive; inline;
+procedure SetAllHHToActive(Ice: boolean);
 procedure DrawGears;
 procedure FreeGearsList;
 procedure AddMiscGears;
@@ -441,8 +442,8 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
-        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
-            and (not isInMultiShoot) then
+        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) and 
+            not(isInMultiShoot and (CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) then
                 begin
                 if (TurnTimeLeft = 5000)
                 and (cHedgehogTurnTime >= 10000)
@@ -561,7 +562,12 @@ while t <> nil do
     end
 end;
 
-procedure SetAllHHToActive;
+procedure SetAllHHToActive; inline;
+begin
+SetAllHHToActive(true)
+end;
+
+procedure SetAllHHToActive(Ice: boolean);
 var t: PGear;
 begin
 AllInactive:= false;
@@ -569,11 +575,13 @@ t:= GearsList;
 while t <> nil do
     begin
     if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then
-        t^.Active:= true;
+        begin
+        if (t^.Kind = gtHedgehog) and Ice then CheckIce(t);
+        t^.Active:= true
+        end;
     t:= t^.NextGear
     end
 end;
-
 
 procedure DrawGears;
 var Gear: PGear;
@@ -766,6 +774,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
+    if (Ammo^.Kind = gtFlame) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
+        Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then
         begin
@@ -779,6 +789,7 @@ while i > 0 do
 
         if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then
             Gear^.FlightTime:= 1;
+
 
         case Gear^.Kind of
             gtHedgehog,
@@ -827,7 +838,7 @@ while i > 0 do
                 ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
                 end;
 
-            if (Gear^.Kind = gtHedgehog) and Gear^.Hedgehog^.King then
+            if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
                 begin
                 Gear^.dX:= Ammo^.dX * Power * _0_005;
                 Gear^.dY:= Ammo^.dY * Power * _0_005

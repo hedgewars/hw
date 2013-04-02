@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="pt_PT">
 <context>
+    <name>About</name>
+    <message>
+        <source>Unknown Compiler</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AbstractPage</name>
     <message>
         <source>Go back</source>
@@ -91,6 +98,22 @@
         <source>Send Feedback</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Please give us feedback!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We are always happy about suggestions, ideas, or bug reports.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but we may want to contact you.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -118,34 +141,75 @@
     </message>
     <message>
         <source>Game Options</source>
-        <translation>Opções de Jogo</translation>
+        <translation type="obsolete">Opções de Jogo</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Map</source>
+        <translation type="unfinished">Mapa</translation>
+    </message>
+    <message>
+        <source>Game options</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWApplication</name>
-    <message>
+    <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>%1 day</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%1 days</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Scheme &apos;%1&apos; not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 days</source>
-        <translation type="unfinished"></translation>
+        <source>Cannot create directory %1</source>
+        <translation type="unfinished">Não foi possível criar o diretório %1</translation>
+    </message>
+    <message>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished">Erro ao abrir o diretório:
+%1
+
+Por favor verifica a tua instalação!</translation>
     </message>
 </context>
 <context>
@@ -388,10 +452,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Largetunnels</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Small islands</source>
         <translation type="unfinished"></translation>
     </message>
@@ -434,6 +494,10 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>All files</source>
         <translation type="unfinished">Todos os ficheiros</translation>
+    </message>
+    <message>
+        <source>Large tunnels</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -508,6 +572,21 @@ Please wait a few seconds and try again.</source>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>To connect to the server, please log in.
+
+If you don&apos;t have an account on www.hedgewars.org,
+just enter your nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWUploadVideoDialog</name>
@@ -530,19 +609,15 @@ Please wait a few seconds and try again.</source>
 <context>
     <name>HatPrompt</name>
     <message>
-        <source>Select a hat</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Filter: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Cancel</source>
         <translation type="unfinished">Cancelar</translation>
     </message>
     <message>
         <source>Use selected hat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search for a hat:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -865,6 +940,18 @@ Please wait a few seconds and try again.</source>
         <source>Play a game on an official server</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Feedback</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play local network game</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Play official network game</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
@@ -881,7 +968,7 @@ Please wait a few seconds and try again.</source>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation>Controlo</translation>
+        <translation type="obsolete">Controlo</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
@@ -890,6 +977,21 @@ Please wait a few seconds and try again.</source>
     <message>
         <source>Start</source>
         <translation type="unfinished">Iniciar</translation>
+    </message>
+    <message>
+        <source>Update</source>
+        <translation type="unfinished">Actualizar</translation>
+    </message>
+    <message>
+        <source>Room controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PageNetServer</name>
+    <message>
+        <source>Insert your address here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1078,11 +1180,11 @@ Please wait a few seconds and try again.</source>
     <name>PageRoomsList</name>
     <message>
         <source>Create</source>
-        <translation>Criar</translation>
+        <translation type="obsolete">Criar</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation>Entrar</translation>
+        <translation type="obsolete">Entrar</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -1090,7 +1192,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Room Name:</source>
-        <translation>Nome da Sala:</translation>
+        <translation type="obsolete">Nome da Sala:</translation>
     </message>
     <message>
         <source>Rules:</source>
@@ -1102,11 +1204,11 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Search:</source>
-        <translation>Pesquisa:</translation>
+        <translation type="obsolete">Pesquisa:</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Limpar</translation>
+        <translation type="obsolete">Limpar</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1114,6 +1216,30 @@ Please wait a few seconds and try again.</source>
             <numerusform>%1 jogador online</numerusform>
             <numerusform>%1 jogadores online</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Search for a room:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Join room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room state</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open server administration page</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1388,7 +1514,19 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Update</source>
-        <translation>Actualizar</translation>
+        <translation type="obsolete">Actualizar</translation>
+    </message>
+    <message>
+        <source>Restrict Unregistered Players Join</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show games in lobby</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show games in-progress</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1490,11 +1628,11 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>In lobby</source>
-        <translation>No lobby</translation>
+        <translation type="obsolete">No lobby</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation>Em progresso</translation>
+        <translation type="obsolete">Em progresso</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1608,7 +1746,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Version</source>
-        <translation>Versão</translation>
+        <translation type="obsolete">Versão</translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -1744,7 +1882,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
-        <translation>Esta aplicação é distribuída sob a GNU General Public License v2</translation>
+        <translation type="obsolete">Esta aplicação é distribuída sob a GNU General Public License v2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -1838,6 +1976,14 @@ Deseja mesmo sair?</translation>
         <source>Type the security code:</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Revision</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This program is distributed under the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1859,6 +2005,10 @@ Deseja mesmo sair?</translation>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
+    </message>
+    <message>
+        <source>-r%1 (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1925,37 +2075,37 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Main - Error</source>
-        <translation>Main - Erro</translation>
+        <translation type="obsolete">Main - Erro</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Não foi possível criar o diretório %1</translation>
+        <translation type="obsolete">Não foi possível criar o diretório %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation>Erro ao abrir o diretório:
+        <translation type="obsolete">Erro ao abrir o diretório:
 %1
 
 Por favor verifica a tua instalação!</translation>
     </message>
     <message>
         <source>TCP - Error</source>
-        <translation>TCP - Erro</translation>
+        <translation type="obsolete">TCP - Erro</translation>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation>Não foi possível iniciar o servidor: %1.</translation>
+        <translation type="obsolete">Não foi possível iniciar o servidor: %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at </source>
-        <translation>Não foi possivel lançar o motor de jogo em </translation>
+        <translation type="obsolete">Não foi possivel lançar o motor de jogo em </translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation>Código de erro: %1</translation>
+        <translation type="obsolete">Código de erro: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2103,7 +2253,12 @@ Desejas entrar na sala de qualquer maneira?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hedgewars</source>
+        <source>Not all players are ready</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to start this game?
+Not all players are ready.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2209,6 +2364,41 @@ Desejas entrar na sala de qualquer maneira?</translation>
         <source>Upload this video to your Youtube account</source>
         <translation>Enviar este vídeo para a tua conta do Youtube</translation>
     </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the default server port for Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invite your friends to your server in just 1 click!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RoomNamePrompt</name>
+    <message>
+        <source>Enter a name for your room.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Create room</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomsListModel</name>
@@ -2304,6 +2494,25 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
 </context>
 <context>
+    <name>TCPBase</name>
+    <message>
+        <source>Unable to start server at %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to run engine at %1
+Error code: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TeamSelWidget</name>
+    <message>
+        <source>At least two teams are required to play!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
@@ -2313,12 +2522,16 @@ Desejas entrar na sala de qualquer maneira?</translation>
 <context>
     <name>ThemePrompt</name>
     <message>
-        <source>Select a theme for this map</source>
+        <source>Cancel</source>
+        <translation type="unfinished">Cancelar</translation>
+    </message>
+    <message>
+        <source>Search for a theme:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Cancelar</translation>
+        <source>Use selected theme</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2899,6 +3112,121 @@ Desejas entrar na sala de qualquer maneira?</translation>
     <message>
         <source>DPad</source>
         <translation>DPad</translation>
+    </message>
+</context>
+<context>
+    <name>server</name>
+    <message>
+        <source>Not room master</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>round in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>REMOVE_TEAM: no such team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not team owner!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room with such name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Registered users only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned in this room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

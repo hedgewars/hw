@@ -1,96 +1,83 @@
-# - Try to find ffmpeg libraries (libavcodec, libavformat and libavutil)
+# Find ffmpeg/libav libraries (libavcodec, libavformat and libavutil)
 # Once done this will define
 #
-#  FFMPEG_FOUND - system has ffmpeg or libav
-#  FFMPEG_INCLUDE_DIR - the ffmpeg include directory
-#  FFMPEG_LIBRARIES - Link these to use ffmpeg
-#  FFMPEG_LIBAVCODEC
-#  FFMPEG_LIBAVFORMAT
-#  FFMPEG_LIBAVUTIL
+#  FFMPEG_FOUND             - system has libavcodec, libavformat, libavutil
+#  FFMPEG_INCLUDE_DIR       - the libav include directories
+#  FFMPEG_LIBRARIES         - the libav libraries
+#
+#  LIBAVCODEC_LIBRARY      - the libavcodec library
+#  LIBAVCODEC_INCLUDE_DIR  - the libavcodec include directory
+#  LIBAVFORMAT_LIBRARY     - the libavformat library
+#  LIBAVUTIL_LIBRARY       - the libavutil library
 #
 #  Copyright (c) 2008 Andreas Schneider <mail@cynapses.org>
 #  Modified for other libraries by Lasse Kärkkäinen <tronic>
 #  Modified for Hedgewars by Stepik777
+#  Copyright (c) 2013 Vittorio Giovara <vittorio.giovara@gmail.com>
 #
 #  Redistribution and use is allowed according to the terms of the New
 #  BSD license.
 #
 
-set(FFMPEG_FOUND FALSE)
+include(FindPackageHandleStandardArgs)
 
-if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
-  # in cache already
-  set(FFMPEG_FOUND TRUE)
-else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
-  # silence output option
-  if (FFMPEG_FIND_QUIETLY)
-    set(VERBOSITY "QUIET")
-  endif ()
-  # use pkg-config to get the directories and then use these values
-  # in the FIND_PATH() and FIND_LIBRARY() calls
-  find_package(PkgConfig)
-  if (PKG_CONFIG_FOUND)
+
+# use pkg-config to get the directories and then use these values
+# in the FIND_PATH() and FIND_LIBRARY() calls
+find_package(PkgConfig)
+if (PKG_CONFIG_FOUND)
     pkg_check_modules(_FFMPEG_AVCODEC libavcodec ${VERBOSITY})
     pkg_check_modules(_FFMPEG_AVFORMAT libavformat ${VERBOSITY})
     pkg_check_modules(_FFMPEG_AVUTIL libavutil ${VERBOSITY})
-  endif (PKG_CONFIG_FOUND)
+endif (PKG_CONFIG_FOUND)
 
-  find_path(FFMPEG_AVCODEC_INCLUDE_DIR
+find_path(LIBAVCODEC_INCLUDE_DIR
     NAMES libavcodec/avcodec.h
-    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS}
+    PATHS ${_AVCODEC_INCLUDE_DIRS}
         /usr/include /usr/local/include #system level
         /opt/local/include #macports
         /sw/include #fink
-    PATH_SUFFIXES ffmpeg libav
-  )
+    PATH_SUFFIXES libav ffmpeg
+)
 
-  find_library(FFMPEG_LIBAVCODEC
+#TODO: add other include paths
+
+find_library(LIBAVCODEC_LIBRARY
     NAMES avcodec
-    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS}
+    PATHS ${_AVCODEC_LIBRARY_DIRS}
         /usr/lib /usr/local/lib #system level
         /opt/local/lib #macports
         /sw/lib #fink
-  )
+)
 
-  find_library(FFMPEG_LIBAVFORMAT
+find_library(LIBAVFORMAT_LIBRARY
     NAMES avformat
-    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS}
+    PATHS ${_AVFORMAT_LIBRARY_DIRS}
         /usr/lib /usr/local/lib #system level
         /opt/local/lib #macports
         /sw/lib #fink
-  )
+)
 
-  find_library(FFMPEG_LIBAVUTIL
+find_library(LIBAVUTIL_LIBRARY
     NAMES avutil
-    PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS}
+    PATHS ${_AVUTIL_LIBRARY_DIRS}
         /usr/lib /usr/local/lib #system level
         /opt/local/lib #macports
         /sw/lib #fink
-  )
+)
 
-  if (FFMPEG_LIBAVCODEC AND FFMPEG_LIBAVFORMAT)
-    set(FFMPEG_FOUND TRUE)
-  endif()
+find_package_handle_standard_args(FFMPEG DEFAULT_MSG LIBAVCODEC_LIBRARY LIBAVCODEC_INCLUDE_DIR
+                                                     LIBAVFORMAT_LIBRARY
+                                                     LIBAVUTIL_LIBRARY
+                                                     )
+set(FFMPEG_INCLUDE_DIR ${LIBAVCODEC_INCLUDE_DIR}
+                       #TODO: add other include paths
+                       )
+set(FFMPEG_LIBRARIES ${LIBAVCODEC_LIBRARY}
+                     ${LIBAVFORMAT_LIBRARY}
+                     ${LIBAVUTIL_LIBRARY}
+                     )
 
-  if (FFMPEG_FOUND)
-    set(FFMPEG_INCLUDE_DIR ${FFMPEG_AVCODEC_INCLUDE_DIR})
+mark_as_advanced(FFMPEG_INCLUDE_DIR FFMPEG_LIBRARIES LIBAVCODEC_LIBRARY LIBAVCODEC_INCLUDE_DIR LIBAVFORMAT_LIBRARY LIBAVUTIL_LIBRARY)
 
-    set(FFMPEG_LIBRARIES
-      ${FFMPEG_LIBAVCODEC}
-      ${FFMPEG_LIBAVFORMAT}
-      ${FFMPEG_LIBAVUTIL}
-    )
-  endif (FFMPEG_FOUND)
-
-  if (FFMPEG_FOUND)
-    if (NOT FFMPEG_FIND_QUIETLY)
-      message(STATUS "Found FFMPEG/LibAV: ${FFMPEG_LIBRARIES}, ${FFMPEG_INCLUDE_DIR}")
-    endif (NOT FFMPEG_FIND_QUIETLY)
-  else (FFMPEG_FOUND)
-    if (FFMPEG_FIND_REQUIRED)
-      message(FATAL_ERROR "Could NOT find libavcodec or libavformat or libavutil")
-    endif (FFMPEG_FIND_REQUIRED)
-  endif (FFMPEG_FOUND)
-
-endif (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIR)
 

@@ -25,10 +25,10 @@ interface
 procedure initModule;
 procedure freeModule;
 procedure ReloadLines;
-
+procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
-procedure KeyPressChat(Key: Longword);
+procedure KeyPressChat(Key, Sym: Longword);
 
 implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
@@ -45,8 +45,11 @@ type TChatLine = record
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
+    LocalStrs: array[0 .. MaxStrIndex] of shortstring;
     missedCount: LongWord;
     lastStr: LongWord;
+    localLastStr: LongWord;
+    history: LongWord;
     visibleCount: LongWord;
     InputStr: TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
@@ -291,41 +294,66 @@ if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
         ParseCommand('/say ' + s, true);
 end;
 
-procedure KeyPressChat(Key: Longword);
-const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
-var i, btw: integer;
-    utf8: shortstring;
+procedure CleanupInput;
 begin
-if Key <> 0 then
-    case Key of
-        {Backspace}
-        8, 127: if Length(InputStr.s) > 0 then
+    FreezeEnterKey;
+    history:= 0;
+    SDL_EnableKeyRepeat(0,0);
+    GameState:= gsGame;
+    ResetKbd;
+end;
+
+procedure KeyPressChat(Key, Sym: Longword);
+const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
+var i, btw, index: integer;
+    utf8: shortstring;
+    action: boolean;
+begin
+    action:= true;
+    case Sym of
+        SDLK_BACKSPACE:
+            begin
+            if Length(InputStr.s) > 0 then
                 begin
                 InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
                 SetLine(InputStr, InputStr.s, true)
-                end;
-        {Esc}
-        27: if Length(InputStr.s) > 0 then SetLine(InputStr, '', true)
-            else
-                begin
-                FreezeEnterKey;
-                SDL_EnableKeyRepeat(0,0);
-                GameState:= gsGame;
-                ResetKbd;
-                end;
-        {Return}
-        3, 13, 271: begin
+                end
+            end;
+        SDLK_ESCAPE:
+            begin
+            if Length(InputStr.s) > 0 then
+                SetLine(InputStr, '', true)
+            else CleanupInput
+            end;
+        SDLK_RETURN:
+            begin
             if Length(InputStr.s) > 0 then
                 begin
                 AcceptChatString(InputStr.s);
                 SetLine(InputStr, '', false)
                 end;
-            FreezeEnterKey;
-            SDL_EnableKeyRepeat(0,0);
-            GameState:= gsGame;
-            ResetKbd;
+            CleanupInput
             end;
-    else
+        SDLK_UP, SDLK_DOWN:
+            begin
+            if (Sym = SDLK_UP) and (history < localLastStr) then inc(history);
+            if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
+            index:= localLastStr - history + 1;
+            if (index > localLastStr) then
+                 SetLine(InputStr, '', true)
+            else SetLine(InputStr, LocalStrs[index], true)
+            end;
+        SDLK_RIGHT, SDLK_LEFT, SDLK_DELETE,
+        SDLK_HOME, SDLK_END,
+        SDLK_PAGEUP, SDLK_PAGEDOWN:
+            begin
+            // ignore me!!!
+            end;
+        else
+            action:= false;
+        end;
+    if not action and (Key <> 0) then
+        begin
         if (Key < $80) then
             btw:= 1
         else if (Key < $800) then
@@ -335,22 +363,22 @@ if Key <> 0 then
         else
             btw:= 4;
 
-    utf8:= '';
+        utf8:= '';
 
-    for i:= btw downto 2 do
-        begin
-        utf8:= char((Key or $80) and $BF) + utf8;
-        Key:= Key shr 6
-        end;
+        for i:= btw downto 2 do
+            begin
+            utf8:= char((Key or $80) and $BF) + utf8;
+            Key:= Key shr 6
+            end;
 
-    utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
+        utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-    if byte(InputStr.s[0]) + btw > 240 then
-        exit;
+        if byte(InputStr.s[0]) + btw > 240 then
+            exit;
 
-    InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-    SetLine(InputStr, InputStr.s + utf8, true)
-    end
+        InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
+        SetLine(InputStr, InputStr.s + utf8, true)
+        end
 end;
 
 procedure chChatMessage(var s: shortstring);
@@ -365,7 +393,11 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
+        begin
+        localLastStr:= (localLastStr + 1) mod MaxStrIndex;
+        LocalStrs[localLastStr]:= s;
         s:= #1 + UserNick + ': ' + s;
+        end;
 
     AddChatString(s)
 end;
@@ -393,17 +425,7 @@ begin
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
-        begin
-        // err, does anyone have any documentation on this sequence?
-        // ^^ isn't it obvious? 27 is esc, 32 is space, inbetween is "/team"
-        KeyPressChat(27);
-        KeyPressChat(47);
-        KeyPressChat(116);
-        KeyPressChat(101);
-        KeyPressChat(97);
-        KeyPressChat(109);
-        KeyPressChat(32)
-        end
+        SetLine(InputStr, '/team ', true)
 end;
 
 procedure initModule;
@@ -416,6 +438,8 @@ begin
     RegisterVariable('chat', @chChat, true );
 
     lastStr:= 0;
+    localLastStr:= 0;
+    history:= 0;
     visibleCount:= 0;
     showAll:= false;
     ChatReady:= false;

@@ -67,10 +67,11 @@ About::About(QWidget * parent) :
         "a { color: #ffcc00; }"
 //            "a:hover { color: yellow; }"
         "</style>"
-        "<div align=\"center\"><h1>Hedgewars</h1>"
-        "<h3>" + QLabel::tr("Version") + " " + *cVersionString + "</h3>"
+        "<div align=\"center\"><h1>Hedgewars " + *cVersionString + "</h1>"
+        "<h3>" + QLabel::tr("Revision") + " " + *cRevisionString + " (" + *cHashString + ")</h3>"
         "<p><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p>" +
-        QLabel::tr("This program is distributed under the GNU General Public License v2") +
+        QLabel::tr("This program is distributed under the %1").arg("<a \
+        href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GNU GPL v2</a>") +
         "</div>"
     );
     lbl1->setWordWrap(true);
@@ -87,9 +88,9 @@ About::About(QWidget * parent) :
     QString libinfo = "<style type=text/css>a:link { color: #FFFF6E; }</style>";
 
 #ifdef __GNUC__
-    libinfo.append(QString("Compiler: <a href=\"http://gcc.gnu.org\">GCC</a> %1<br>").arg(__VERSION__));
+    libinfo.append(QString("<a href=\"http://gcc.gnu.org\">GCC</a> %1<br>").arg(__VERSION__));
 #else
-    libinfo.append(QString("Compiler: Unknown<br>").arg(__VERSION__));
+    libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
@@ -112,10 +113,11 @@ About::About(QWidget * parent) :
         .arg(PHYSFS_VER_PATCH));
 
     QLabel * lblLibInfo = new QLabel();
+    lblLibInfo->setOpenExternalLinks(true);
     lblLibInfo->setText(libinfo);
     lblLibInfo->setWordWrap(true);
     lblLibInfo->setMaximumWidth(280);
-    leftLayout->addWidget(lblLibInfo, 0, Qt::AlignTop | Qt::AlignHCenter);
+    leftLayout->addWidget(lblLibInfo, 0, Qt::AlignHCenter);
     leftLayout->addStretch(1);
 
     setAcceptDrops(true);

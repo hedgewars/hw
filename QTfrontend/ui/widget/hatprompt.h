@@ -34,6 +34,10 @@ class HatListView : public QListView
 
     public:
         HatListView(QWidget* parent = 0) : QListView(parent){}
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
 };
 
 class HatPrompt : public QDialog

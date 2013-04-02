@@ -53,7 +53,7 @@ void AbstractPage::initPage()
     // add back/exit button
     btnBack = formattedButton(":/res/Exit.png", true);
     btnBack->setWhatsThis(tr("Go back"));
-    bottomLeftLayout->addWidget(btnBack, 0);
+    bottomLeftLayout->addWidget(btnBack, 0, Qt::AlignBottom);
 
     // add body layout as defined by the subclass
     pageLayout->addLayout(bodyLayoutDefinition(), 0, 0, 1, 3);
@@ -158,13 +158,13 @@ void AbstractPage::setButtonDescription(QString desc)
     descLabel->setText(desc);
 }
 
-void AbstractPage::setDefautDescription(QString text)
+void AbstractPage::setDefaultDescription(QString text)
 {
     *defautDesc = text;
     descLabel->setText(text);
 }
 
-QString * AbstractPage::getDefautDescription()
+QString * AbstractPage::getDefaultDescription()
 {
     return defautDesc;
 }

@@ -15,12 +15,11 @@ include(${QT_USE_FILE})
 
 find_package(SDL REQUIRED)       #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
-find_package(SDL_net REQUIRED)   #network frontlib
-if(NOT NOVIDEOREC)
-    find_package(FFMPEG)
-    if(${FFMPEG_FOUND})
-        add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-    endif()
+
+if(${FFMPEG_FOUND})
+    add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
+    include_directories(${FFMPEG_INCLUDE_DIR})
+    list(APPEND HW_LINK_LIBS ${FFMPEG_LIBRARIES})
 endif()
 
 # server messages localization
@@ -56,21 +55,14 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
-include_directories(${FFMPEG_INCLUDE_DIR})
-include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/src)
-include_directories(${CMAKE_SOURCE_DIR}/misc/physfs/extras)
+include_directories(${PHYSFS_INCLUDE_DIR})
+include_directories(${PHYSLAYER_INCLUDE_DIR})
+
+
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
     include_directories("/usr/local/include")
 endif(UNIX)
-
-#directory for resources, relative to bindir (on linux an absolute path is always used)
-string(SUBSTRING "${SHAREPATH}" 0 1 sharepath_start)
-if(APPLE OR WIN32 OR ${sharepath_start} MATCHES "/")
-    set(HEDGEWARS_DATADIR ${SHAREPATH})
-else()
-    set(HEDGEWARS_DATADIR ${CMAKE_INSTALL_PREFIX}/${SHAREPATH})
-endif()
 
 #only the cocoa version of qt supports building 64 bit apps
 if(APPLE AND (CMAKE_OSX_ARCHITECTURES MATCHES "x86_64*") AND (NOT QT_MAC_USE_COCOA))
@@ -138,7 +130,6 @@ set(hwfr_moc_hdrs
     team.h
     util/DataManager.h
     util/LibavInteraction.h
-    util/MessageDialog.h
     )
 
 set(hwfr_hdrs
@@ -175,14 +166,13 @@ if(APPLE)
                          util/platform/M3InstallController.m
                          util/platform/NSWorkspace_RBAdditions.m
                          )
-    if(NOT NOAUTOUPDATE)
-        find_package(Sparkle)
-        if(SPARKLE_FOUND)
-            add_definitions(-DSPARKLE_ENABLED)
-            list(APPEND hwfr_src util/platform/AutoUpdater.cpp
-                                 util/platform/SparkleAutoUpdater.mm)
-            list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
-        endif()
+    include(${CMAKE_MODULE_PATH}/utils.cmake)
+    find_package_or_disable_msg(Sparkle NOAUTOUPDATE "Autoupdater will not be built.")
+    if(SPARKLE_FOUND)
+        add_definitions(-DSPARKLE_ENABLED)
+        list(APPEND hwfr_src util/platform/AutoUpdater.cpp
+                             util/platform/SparkleAutoUpdater.mm)
+        list(APPEND HW_LINK_LIBS ${SPARKLE_LIBRARY})
     endif()
 endif()
 
@@ -209,11 +199,11 @@ if((UNIX AND NOT APPLE) AND ${LIBENGINE})
 endif()
 
 list(APPEND HW_LINK_LIBS
-    physfs
+    ${PHYSFS_LIBRARY}
+    ${PHYSLAYER_LIBRARY}
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
-    ${FFMPEG_LIBRARIES}
     )
 
 if(WIN32 AND NOT UNIX)

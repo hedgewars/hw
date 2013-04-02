@@ -155,6 +155,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     playerHash = QString(QCryptographicHash::hash(config->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     ui.pageRoomsList->setSettings(config);
+    ui.pageNetGame->setSettings(config);
     ui.pageNetGame->chatWidget->setSettings(config);
     ui.pageRoomsList->chatWidget->setSettings(config);
     ui.pageOptions->setConfig(config);
@@ -349,6 +350,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
         }
     }
 
+    ui.Pages->setCurrentIndex(ID_PAGE_INFO);
     PagesStack.push(ID_PAGE_MAIN);
     ((AbstractPage*)ui.Pages->widget(ID_PAGE_MAIN))->triggerPageEnter();
     GoBack();
@@ -359,7 +361,7 @@ void HWForm::updateXfire(void)
 {
     if(hwnet && (hwnet->clientState() != HWNewNet::Disconnected))
     {
-        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare("netserver.hedgewars.org:46631") ? "Official server" : hwnet->getHost().toAscii());
+        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare(QString("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)) ? "Official server" : hwnet->getHost().toAscii());
         switch(hwnet->clientState())
         {
             case HWNewNet::Connecting: // Connecting
@@ -992,21 +994,27 @@ void HWForm::PlayDemo()
 
 void HWForm::PlayDemoQuick(const QString & demofilename)
 {
-    if (game && game->gameState == gsStarted) return;
-    GoBack(); //needed to cleanly disconnect from netgame
     GoToPage(ID_PAGE_MAIN);
+    //GoBack() <- don't or you'll close the socket
     CreateGame(0, 0, 0);
     game->PlayDemo(demofilename, false);
 }
 
+void HWForm::NetConnectQuick(const QString & host, quint16 port)
+{
+    GoToPage(ID_PAGE_MAIN);
+    NetConnectServer(host, port);
+}
+
 void HWForm::NetConnectServer(const QString & host, quint16 port)
 {
+    qDebug("connecting to %s:%d", qPrintable(host), port);
     _NetConnect(host, port, ui.pageOptions->editNetNick->text().trimmed());
 }
 
 void HWForm::NetConnectOfficialServer()
 {
-    NetConnectServer("netserver.hedgewars.org", 46631);
+    NetConnectServer(NETGAME_DEFAULT_SERVER, NETGAME_DEFAULT_PORT);
 }
 
 void HWForm::NetPassword(const QString & nick)
@@ -1096,10 +1104,14 @@ void HWForm::NetNickTaken(const QString & nick)
     if (!ok || newNick.isEmpty())
     {
         //ForcedDisconnect(tr("No nickname supplied."));
-    bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
-    GoBack();
+        bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
+        GoBack();
         if (retry) {
-            NetConnectOfficialServer();
+            if (hwnet->m_private_game) {
+                QStringList list = hwnet->getHost().split(":");
+                NetConnectServer(list.at(0), list.at(1).toShort());
+            } else
+                NetConnectOfficialServer();
         }
         return;
     }
@@ -1182,18 +1194,18 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 {
     Q_UNUSED(nick);
 
-    if(hwnet)
-    {
+    if (hwnet) {
+        // destroy old connection
         hwnet->Disconnect();
         delete hwnet;
-        hwnet=0;
+        hwnet = NULL;
     }
 
     hwnet = new HWNewNet();
 
     GoToPage(ID_PAGE_CONNECTING);
 
-    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()));
+    connect(hwnet, SIGNAL(AskForRunGame()), this, SLOT(CreateNetGame()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(connected()), this, SLOT(NetConnected()), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Error(const QString&)), this, SLOT(NetError(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(Warning(const QString&)), this, SLOT(NetWarning(const QString&)), Qt::QueuedConnection);
@@ -1237,6 +1249,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             this, SLOT(NetGameChangeStatus(bool)), Qt::QueuedConnection);
 
 // net page stuff
+    connect(hwnet, SIGNAL(roomNameUpdated(const QString &)),
+            ui.pageNetGame, SLOT(setRoomName(const QString &)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringFromNet(const QString&)),
             ui.pageNetGame->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
 
@@ -1278,7 +1292,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(chatStringLobby(const QString&)),
             ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringLobby(const QString&, const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&, const QString&)));
+            ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&, const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringFromMeLobby(const QString&)),
             ui.pageRoomsList->chatWidget, SLOT(onChatString(const QString&)), Qt::QueuedConnection);
 
@@ -1328,8 +1342,22 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
 
-//nick and pass stuff
+    //nick and pass stuff
+    QString nickname = config->value("net/nick", "").toString();
 
+    hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
+    if (hwnet->m_private_game == false)
+        if (AskForNickAndPwd() != 0)
+            return;
+
+    ui.pageRoomsList->setUser(nickname);
+    ui.pageNetGame->setUser(nickname);
+
+    hwnet->Connect(hostName, port, nickname);
+}
+
+int HWForm::AskForNickAndPwd(void)
+{
     //remove temppasswordhash just in case
     config->clearTempHash();
 
@@ -1360,7 +1388,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             if (pwDialog->exec() != QDialog::Accepted) {
                 delete pwDialog;
                 GoBack();
-                return;
+                return -1;
             }
 
             //set nick and pass from the dialog
@@ -1373,9 +1401,13 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
                 GoBack();
                 delete pwDialog;
                 if (retry) {
-                    NetConnectOfficialServer();
-                }
-                return;
+                    if (hwnet->m_private_game) {
+                        QStringList list = hwnet->getHost().split(":");
+                        NetConnectServer(list.at(0), list.at(1).toShort());
+                    } else
+                        NetConnectOfficialServer();
+                    }
+                return -1;
             }
 
             if (!password.isEmpty()) {
@@ -1412,14 +1444,8 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             nickname = config->value("net/nick", "").toString();
         }
     }
-
-    ui.pageRoomsList->setUser(nickname);
-    ui.pageNetGame->setUser(nickname);
-
-    hwnet->Connect(hostName, port, nickname);
+    return 0;
 }
-
-
 
 void HWForm::NetConnect()
 {
@@ -1488,7 +1514,11 @@ void HWForm::ForcedDisconnect(const QString & reason)
     if (reason == "Reconnected too fast") { //TODO: this is a hack, which should be remade
         bool retry = RetryDialog(tr("Hedgewars - Connection error"), tr("You reconnected too fast.\nPlease wait a few seconds and try again."));
         if (retry) {
-            NetConnectOfficialServer();
+            if (hwnet->m_private_game) {
+                QStringList list = hwnet->getHost().split(":");
+                NetConnectServer(list.at(0), list.at(1).toShort());
+            } else
+                NetConnectOfficialServer();
         }
         else {
             while (ui.Pages->currentIndex() != ID_PAGE_NET
@@ -1501,8 +1531,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
     }
     if (pnetserver)
         return; // we have server - let it care of all things
-    if (hwnet)
-    {
+    if (hwnet) {
         QString errorStr = QMessageBox::tr("Connection to server is lost") + (reason.isEmpty()?"":("\n\n" + HWNewNet::tr("Quit reason: ") + '"' + reason +'"'));
         MessageDialog::ShowErrorMessage(errorStr, this);
     }
@@ -1621,9 +1650,7 @@ void HWForm::GetRecord(RecordType type, const QByteArray & record)
             QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm") :
             "LastRound";
 
-        QStringList versionParts = cVersionString->split('-');
-        if ( (versionParts.size() == 2) && (!versionParts[1].isEmpty()) && (versionParts[1].contains(':')) )
-            recordFileName = recordFileName + "_" + versionParts[1].replace(':','-');
+        recordFileName += "_" + *cRevisionString + "-" + *cHashString;
 
         if (type == rtDemo)
         {
@@ -1727,6 +1754,7 @@ void HWForm::NetGameMaster()
     ui.pageNetGame->setMasterMode(true);
     ui.pageNetGame->restrictJoins->setChecked(false);
     ui.pageNetGame->restrictTeamAdds->setChecked(false);
+    ui.pageNetGame->restrictUnregistered->setChecked(false);
     ui.pageNetGame->pGameCFG->GameSchemes->setModel(ammoSchemeModel);
     ui.pageNetGame->pGameCFG->setMaster(true);
     ui.pageNetGame->pNetTeamsWidget->setInteractivity(true);
@@ -1739,6 +1767,7 @@ void HWForm::NetGameMaster()
         ui.pageNetGame->leRoomName->disconnect(hwnet);
         ui.pageNetGame->restrictJoins->disconnect(hwnet);
         ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
+        ui.pageNetGame->restrictUnregistered->disconnect(hwnet);
         ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString&)));
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
@@ -1747,6 +1776,7 @@ void HWForm::NetGameMaster()
         connect(ui.pageNetGame, SIGNAL(askForUpdateRoomName(const QString &)), hwnet, SLOT(updateRoomName(const QString &)));
         connect(ui.pageNetGame->restrictJoins, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictJoins()));
         connect(ui.pageNetGame->restrictTeamAdds, SIGNAL(triggered()), hwnet, SLOT(toggleRestrictTeamAdds()));
+        connect(ui.pageNetGame->restrictUnregistered, SIGNAL(triggered()), hwnet, SLOT(toggleRegisteredOnly()));
         connect(ui.pageNetGame->pGameCFG->GameSchemes->model(),
                 SIGNAL(dataChanged(const QModelIndex &, const QModelIndex &)),
                 ui.pageNetGame->pGameCFG,
@@ -1855,8 +1885,8 @@ void HWForm::UpdateCampaignPageProgress(int index)
 QString HWForm::getDemoArguments()
 {
 
-    QString prefix = datadir->absolutePath();
-    QString userPrefix = cfgdir->absolutePath();
+    QString prefix = "\"" + datadir->absolutePath() + "\"";
+    QString userPrefix = "\"" + cfgdir->absolutePath() + "\"";
 #ifdef Q_WS_WIN
     prefix = prefix.replace("/","\\");
     userPrefix = userPrefix.replace("/","\\");
@@ -1886,14 +1916,22 @@ void HWForm::AssociateFiles()
     QString arguments = getDemoArguments();
 #ifdef _WIN32
     QSettings registry_hkcr("HKEY_CLASSES_ROOT", QSettings::NativeFormat);
+
+    // file extension(s)
     registry_hkcr.setValue(".hwd/Default", "Hedgewars.Demo");
     registry_hkcr.setValue(".hws/Default", "Hedgewars.Save");
     registry_hkcr.setValue("Hedgewars.Demo/Default", tr("Hedgewars Demo File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Save/Default", tr("Hedgewars Save File", "File Types"));
     registry_hkcr.setValue("Hedgewars.Demo/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwdfile.ico\",0");
     registry_hkcr.setValue("Hedgewars.Save/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwsfile.ico\",0");
-    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"%1\" "+arguments);
-    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" \"%1\" "+arguments);
+    registry_hkcr.setValue("Hedgewars.Demo/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" " + arguments + " %1");
+    registry_hkcr.setValue("Hedgewars.Save/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hwengine.exe\" " + arguments + " %1");
+
+    // custom url scheme(s)
+    registry_hkcr.setValue("hwplay/Default", "\"URL:Hedgewars ServerAccess Scheme\"");
+    registry_hkcr.setValue("hwplay/URL Protocol", "");
+    registry_hkcr.setValue("hwplay/DefaultIcon/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\",0");
+    registry_hkcr.setValue("hwplay/Shell/Open/Command/Default", "\"" + bindir->absolutePath().replace("/", "\\") + "\\hedgewars.exe\"  %1");
 #elif defined __APPLE__
     // only useful when other apps have taken precedence over our file extensions and you want to reset it
     system("defaults write com.apple.LaunchServices LSHandlers -array-add '<dict><key>LSHandlerContentTag</key><string>hwd</string><key>LSHandlerContentTagClass</key><string>public.filename-extension</string><key>LSHandlerRoleAll</key><string>org.hedgewars.desktop</string></dict>'");
@@ -1909,12 +1947,14 @@ void HWForm::AssociateFiles()
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share");
     if (success) success = checkForDir(QDir::home().absolutePath() + "/.local/share/applications");
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars-mimeinfo.xml "+QDir::home().absolutePath()+"/.local/share/mime/packages").toLocal8Bit().constData())==0;
+    if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hedgewars.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
     if (success) success = system(("cp "+datadir->absolutePath()+"/misc/hwengine.desktop "+QDir::home().absolutePath()+"/.local/share/applications").toLocal8Bit().constData())==0;
     if (success) success = system(("update-mime-database "+QDir::home().absolutePath()+"/.local/share/mime").toLocal8Bit().constData())==0;
+    if (success) success = system("xdg-mime default hedgewars.desktop x-scheme-handler/hwplay")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-demo")==0;
     if (success) success = system("xdg-mime default hwengine.desktop application/x-hedgewars-save")==0;
     // hack to add user's settings to hwengine. might be better at this point to read in the file, append it, and write it out to its new home.  This assumes no spaces in the data dir path
-    if (success) success = system(("sed -i 's/^\\(Exec=.*\\) \\([^ ]* %f\\)/\\1 \\2 "+arguments+"/' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
+    if (success) success = system(("sed -i 's|^\\(Exec=.*\\) \\(%f\\)|\\1 \\2 "+arguments+"|' "+QDir::home().absolutePath()+"/.local/share/applications/hwengine.desktop").toLocal8Bit().constData())==0;
 #endif
     if (success)
     {

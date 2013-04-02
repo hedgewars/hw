@@ -10,8 +10,8 @@ INCLUDEPATH += ../QTfrontend/ui/dialog
 INCLUDEPATH += ../QTfrontend/net
 INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../QTfrontend/util/platform
-INCLUDEPATH += ../misc/physfs/src
-INCLUDEPATH += ../misc/physfs/extras
+INCLUDEPATH += ../misc/libphysfs
+INCLUDEPATH += ../misc/libphyslayer
 
 DESTDIR = ../bin
 
@@ -114,9 +114,9 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/util/MessageDialog.h \
     ../QTfrontend/ui/widget/hatprompt.h \
     ../QTfrontend/ui/widget/feedbackdialog.h \
-    ../QTfrontend/ui/widget/flowlayout.h \
     ../QTfrontend/ui/widget/lineeditcursor.h \
-    ../QTfrontend/servermessages.h
+    ../QTfrontend/servermessages.h \
+    ../QTfrontend/ui/widget/roomnameprompt.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -214,8 +214,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/ui/widget/themeprompt.cpp \
     ../QTfrontend/util/MessageDialog.cpp \
     ../QTfrontend/ui/widget/feedbackdialog.cpp \
-    ../QTfrontend/ui/widget/flowlayout.cpp \
-    ../QTfrontend/ui/widget/lineeditcursor.cpp
+    ../QTfrontend/ui/widget/lineeditcursor.cpp \
+    ../QTfrontend/ui/widget/roomnameprompt.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
