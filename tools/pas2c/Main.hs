@@ -4,7 +4,9 @@ import System.Console.GetOpt
 import System.Environment
 import System.Exit
 import System.IO
-import Data.Maybe( fromMaybe )
+import Data.Maybe( fromMaybe, isJust, fromJust )
+import Data.List (find)
+import Control.Monad
 import Pas2C
 
 main = do
@@ -16,34 +18,47 @@ main = do
         exitFailure
     else do
         case getOpt RequireOrder options args of
-          (flags, [],      [])     ->
-            if length args == 8 then do
+          (flags, [],      []) | enoughFlags flags -> do
+                let m = flag flags isName
+                let i = flag flags isInput
+                let o = flag flags isOutput
+                let a = fromMaybe o $ liftM extractString $ find isAlt flags
                 hPutStrLn stdout $ "--------Pas2C Config--------"
-                hPutStrLn stdout $ "Main module: " ++ (args !! 1)
-                hPutStrLn stdout $ "Input path : " ++ (args !! 3)
-                hPutStrLn stdout $ "Output path: " ++ (args !! 5)
-                hPutStrLn stdout $ "Altern path: " ++ (args !! 7)
+                hPutStrLn stdout $ "Main module: " ++ m
+                hPutStrLn stdout $ "Input path : " ++ i
+                hPutStrLn stdout $ "Output path: " ++ o
+                hPutStrLn stdout $ "Altern path: " ++ a
                 hPutStrLn stdout $ "----------------------------"
-                pas2C (args !! 1) ((args !! 3)++"/") ((args !! 5)++"/") ((args !! 7)++"/")
+                pas2C m (i++"/") (o++"/") (a++"/")
                 hPutStrLn stdout $ "----------------------------"
-            else do
-                if length args == 6 then do
-                    hPutStrLn stdout $ "--------Pas2C Config--------"
-                    hPutStrLn stdout $ "Main module: " ++ (args !! 1)
-                    hPutStrLn stdout $ "Input path : " ++ (args !! 3)
-                    hPutStrLn stdout $ "Output path: " ++ (args !! 5)
-                    hPutStrLn stdout $ "Altern path: " ++ "./"
-                    hPutStrLn stdout $ "----------------------------"
-                    pas2C (args !! 1) ((args !! 3)++"/") ((args !! 5)++"/") "./"
-                    hPutStrLn stdout $ "----------------------------"
-                else do
-                    error $ usageInfo header options
+                      | otherwise ->  error $ usageInfo header options
           (_,     nonOpts, [])     -> error $ "unrecognized arguments: " ++ unwords nonOpts
           (_,     _,       msgs)   -> error $ usageInfo header options
-    where header = "Freepascal to C conversion! Please use -n -i -o -a options in this order.\n"
+    where 
+        header = "Freepascal to C conversion! Please specify -n -i -o options.\n"
+        enoughFlags f = and $ map (isJust . flip find f) [isName, isInput, isOutput]
+        flag f = extractString . fromJust . flip find f
 
 
 data Flag = HelpMessage | Name String | Input String | Output String | Alternate String
+
+
+extractString :: Flag -> String
+extractString (Name s) = s
+extractString (Input s) = s
+extractString (Output s) = s
+extractString (Alternate s) = s
+extractString _ = undefined
+
+isName, isInput, isOutput, isAlt :: Flag -> Bool
+isName (Name _) = True
+isName _ = False
+isInput (Input _) = True
+isInput _ = False
+isOutput (Output _) = True
+isOutput _ = False
+isAlt (Alternate _) = True
+isAlt _ = False
 
 options :: [OptDescr Flag]
 options = [
