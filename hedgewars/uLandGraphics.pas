@@ -87,7 +87,7 @@ begin
 if ((Land[landY, landX] and lfBasic) <> 0) or ((Land[landY, landX] and lfObject) <> 0) then
     begin
     LandPixels[pixelY, pixelX]:= ExplosionBorderColor;
-    Land[landY, landX]:= (Land[landY, landX] or lfDamaged) and not lfIce;
+    Land[landY, landX]:= (Land[landY, landX] or lfDamaged) and (not lfIce);
     LandDirty[landY div 32, landX div 32]:= 1;
     end;
 end;
@@ -113,7 +113,7 @@ for i := x - 1 to x + 1 do
        result := 9;
        exit;
        end;
-    if Land[j, i] and lfLandMask and not lfIce = 0 then
+    if Land[j, i] and lfLandMask and (not lfIce) = 0 then
        result := result + 1;
     end;
 end;
@@ -142,11 +142,11 @@ begin
         end
     else
         begin
-        LandPixels[pixelY, pixelX]:= IceColor and not AMask or $E8 shl AShift;
+        LandPixels[pixelY, pixelX]:= IceColor and (not AMask) or $E8 shl AShift;
         LandPixels[pixelY, pixelX]:= addBgColor(LandPixels[pixelY, pixelX], icePixels^[iceSurface^.w * (pixelY mod iceSurface^.h) + (pixelX mod iceSurface^.w)]);
         // silly workaround to avoid having to make background erasure a tadb it smarter about sea ice
         if LandPixels[pixelY, pixelX] and AMask shr AShift = 255 then
-            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and not AMask or 254 shl AShift;
+            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and (not AMask) or 254 shl AShift;
         end;
 end;
 
@@ -157,7 +157,7 @@ if ((Land[landY, landX] and lfIce) <> 0) then exit;
 if isLandscapeEdge(getPixelWeight(landX, landY)) then
     begin
     if (LandPixels[pixelY, pixelX] and AMask < 255) and (LandPixels[pixelY, pixelX] and AMask > 0) then
-        LandPixels[pixelY, pixelX] := (IceEdgeColor and not AMask) or (LandPixels[pixelY, pixelX] and AMask)
+        LandPixels[pixelY, pixelX] := (IceEdgeColor and (not AMask)) or (LandPixels[pixelY, pixelX] and AMask)
     else if (LandPixels[pixelY, pixelX] and AMask < 255) or (Land[landY, landX] > 255) then
         LandPixels[pixelY, pixelX] := IceEdgeColor
     end
@@ -165,7 +165,7 @@ else if Land[landY, landX] > 255 then
     begin
         fillPixelFromIceSprite(pixelX, pixelY);
     end;
-if Land[landY, landX] > 255 then Land[landY, landX] := Land[landY, landX] or lfIce and not lfDamaged;
+if Land[landY, landX] > 255 then Land[landY, landX] := Land[landY, landX] or lfIce and (not lfDamaged);
 end;
 
 
@@ -342,11 +342,11 @@ procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 begin
 if not doSet and isCurrent then
     FillRoundInLand(X, Y, Radius, setNotCurrentMask)
-else if not doSet and not IsCurrent then
+else if not doSet and (not IsCurrent) then
     FillRoundInLand(X, Y, Radius, changePixelSetNotCurrent)
 else if doSet and IsCurrent then
     FillRoundInLand(X, Y, Radius, setCurrentHog)
-else if doSet and not IsCurrent then
+else if doSet and (not IsCurrent) then
     FillRoundInLand(X, Y, Radius, changePixelNotSetNotCurrent);
 end;
 
@@ -430,7 +430,7 @@ for i:= 0 to Pred(Count) do
                 else
                     LandPixels[ty div 2, tx div 2]:= ExplosionBorderColor;
 
-                Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
+                Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and (not lfIce);
                 LandDirty[ty div 32, tx div 32]:= 1;
                 end;
     inc(y, dY)
@@ -455,7 +455,7 @@ for t:= 0 to 7 do
     if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
     or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
+        Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and (not lfIce);
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
@@ -499,7 +499,7 @@ for i:= 0 to 7 do
     and ((tx and LAND_WIDTH_MASK) = 0)
     and (((Land[ty, tx] and lfBasic) <> 0) or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= Land[ty, tx] and not lfIce;
+        Land[ty, tx]:= Land[ty, tx] and (not lfIce);
         if despeckle then
             begin
             Land[ty, tx]:= Land[ty, tx] or lfDamaged;
@@ -563,7 +563,7 @@ for i:= 0 to 7 do
     if ((ty and LAND_HEIGHT_MASK) = 0) and ((tx and LAND_WIDTH_MASK) = 0) and (((Land[ty, tx] and lfBasic) <> 0)
     or ((Land[ty, tx] and lfObject) <> 0)) then
         begin
-        Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and not lfIce;
+        Land[ty, tx]:= (Land[ty, tx] or lfDamaged) and (not lfIce);
         if despeckle then
             LandDirty[ty div 32, tx div 32]:= 1;
         if (cReducedQuality and rqBlurryLand) = 0 then
