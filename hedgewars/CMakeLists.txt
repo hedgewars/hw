@@ -167,8 +167,9 @@ endif(APPLE)
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
 if(PNG_FOUND)
-    list(REMOVE_AT PNG_INCLUDE_DIR 1) #removing the zlib include path
-    list(APPEND pascal_flags "-dPNG_SCREENSHOTS" "-Fl${PNG_INCLUDE_DIR}")
+    list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
+    get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
+    list(APPEND pascal_flags "-dPNG_SCREENSHOTS" "-Fl${PNG_LIBRARY_DIR}")
 endif()
 
 
