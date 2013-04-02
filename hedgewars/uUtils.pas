@@ -481,8 +481,12 @@ begin
     if (c < #32) or (c > #127) then
         r:= '#' + inttostr(byte(c))
         else
-        r:= c;
-            
+        begin
+        // some magic for pas2c
+        r[0]:= #1;
+        r[1]:= c;
+        end;
+
     sanitizeCharForLog:= r
 end;
 
