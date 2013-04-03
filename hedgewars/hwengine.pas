@@ -122,11 +122,7 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
-        {$IFDEF PAS2C}
-        s:= '/Screenshots/hw';
-        {$ELSE}
         s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
-        {$ENDIF}
 
         // flash
         playSound(sndShutter);

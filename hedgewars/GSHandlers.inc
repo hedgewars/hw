@@ -173,23 +173,11 @@ var
     land: word;
 begin
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
-{$IFNDEF WEB}
     if Gear^.dX.Round > 2 then
         Gear^.dX.QWordValue:= 8589934592;
     if Gear^.dY.Round > 2 then
         Gear^.dY.QWordValue:= 8589934592;
-{$ELSE}
-    if Gear^.dX.Round > 2 then
-        begin
-        Gear^.dX.Round:= 2;
-        Gear^.dX.Frac:= 0
-        end;
-    if Gear^.dY.QWordValue > 2 then
-        begin
-        Gear^.dY.Round:= 2;
-        Gear^.dY.Frac:= 0
-        end;
-{$ENDIF}
+
     Gear^.State := Gear^.State and (not gstCollision);
     collV := 0;
     collH := 0;
