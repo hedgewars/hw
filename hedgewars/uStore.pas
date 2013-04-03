@@ -920,6 +920,7 @@ begin
     AddFileLogRaw(PChar(glGetString(GL_EXTENSIONS)));
 {$ELSE}
     AddFileLog('  \----- Extensions: ');
+
     // fetch extentions and store them in string
     tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
     tmpn := WordCount(tmpstr, [' ']);

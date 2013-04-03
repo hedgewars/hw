@@ -30,14 +30,12 @@ procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByChar(var a, b: ansistring; c: char);
 {$ENDIF}
 
-//{$IFNDEF PAS2C}
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
-//{$ENDIF}
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
@@ -143,11 +141,11 @@ if i > 0 then
 end; { SplitByChar }
 {$ENDIF}
 
-//{$IFNDEF PAS2C}
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
 end;
+
 function EnumToStr(const en : TVisualGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TVisualGearType), ord(en))
@@ -172,7 +170,7 @@ function EnumToStr(const en: TCapGroup) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
-//{$ENDIF}
+
 
 function Min(a, b: LongInt): LongInt;
 begin
