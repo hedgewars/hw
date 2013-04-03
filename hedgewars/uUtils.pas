@@ -194,13 +194,17 @@ begin
 str(n, IntToStr)
 end;
 
-function  StrToInt(s: shortstring): LongInt;
+function StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
+{$IFDEF PAS2C}
+val(s, StrToInt);
+{$ELSE}
 val(s, StrToInt, c);
 {$IFDEF DEBUGFILE}
 if c <> 0 then
     writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 {$ENDIF}
 end;
 

@@ -1233,7 +1233,7 @@ begin
             Gear^.X := Gear^.X + Gear^.dX;
             Gear^.Y := Gear^.Y + _1_9;
             end;
-        SetAllHHToActive;
+        SetAllHHToActive(true);
         end;
     if TestCollisionYwithGear(Gear, 1) <> 0 then
         begin
@@ -2338,7 +2338,7 @@ begin
     else
         begin
         DeleteCI(HHGear);
-        SetAllHHToActive;
+        SetAllHHToActive(true);
         Gear^.doStep := @doStepTeleportAnim;
 
   // copy old HH position and direction to Gear (because we need them for drawing the vanishing hog)
@@ -5207,14 +5207,14 @@ begin
                     UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 
                     // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
-                    SetAllHHToActive;
+                    SetAllHHToActive(true);
                     Timer := iceWaitCollision;
                     end;
 
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
-                    SetAllHHToActive;
+                    SetAllHHToActive(true);
                     Timer := iceWaitCollision;
                     end;
 

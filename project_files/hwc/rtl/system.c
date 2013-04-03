@@ -169,23 +169,21 @@ LongInt str_to_int(char *src)
     // decimal
     return atoi(src);
 }
-void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongInt *a,
-        LongInt *c) {
-    *c = 0; // no error
+
+void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongInt *a)
+{
     FIX_STRING(s);
     *a = str_to_int(s.str);
 }
 
-void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, Byte *a,
-        LongInt *c) {
-    *c = 0; // no error
+void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, Byte *a)
+{
     FIX_STRING(s);
     *a = str_to_int(s.str);
 }
 
-void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongWord *a,
-        LongInt *c) {
-    *c = 0; // no error
+void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongWord *a)
+{
     FIX_STRING(s);
     *a = str_to_int(s.str);
 }
