@@ -93,7 +93,7 @@ begin
         end
 end;
 
-function parseNick(nick: String): String;
+function parseNick(nick: shortstring): shortstring;
 begin
     if isInternal then
         parseNick:= DecodeBase64(nick)
@@ -140,18 +140,22 @@ begin
 {$ENDIF}
 end;
 
-function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
+function getLongIntParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
 var tmpInt, c: LongInt;
 begin
     inc(paramIndex);
+{$IFDEF PAS2C}
+    val(str, tmpInt);
+{$ELSE}
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
         WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+{$ENDIF}
     getLongIntParameter:= tmpInt;
 end;
 
-function getStringParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): String;
+function getStringParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): shortstring;
 begin
     inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
@@ -160,14 +164,14 @@ begin
     getStringParameter:= str;
 end;
 
-procedure parseClassicParameter(cmdarray: array of String; size:LongInt; var paramIndex:LongInt); forward;
+procedure parseClassicParameter(cmdarray: array of shortstring; size:LongInt; var paramIndex:LongInt); forward;
 
-function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoarray: array [0..4] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
-      audioarray: array [0..2] of String = ('--volume','--nomusic','--nosound');
-      otherarray: array [0..2] of String = ('--locale','--fullscreen','--showfps');
-      mediaarray: array [0..9] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allarray: array [0..13] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
+function parseParameter(cmd:shortstring; arg:shortstring; var paramIndex:LongInt): Boolean;
+const videoarray: array [0..4] of shortstring = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
+      audioarray: array [0..2] of shortstring = ('--volume','--nomusic','--nosound');
+      otherarray: array [0..2] of shortstring = ('--locale','--fullscreen','--showfps');
+      mediaarray: array [0..9] of shortstring = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allarray: array [0..13] of shortstring = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
       reallyAll: array[0..30] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width', 
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
@@ -233,10 +237,10 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdarray: array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdarray: array of shortstring; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
-    cmd, arg, newSyntax: String;
+    cmd, arg, newSyntax: shortstring;
 begin
     WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');

@@ -62,10 +62,10 @@ if f <> nil then
         if (s[1] < '0') or (s[1] > '9') then
             continue;
         TryDo(Length(s) > 6, 'Load locale: empty string', true);
-        val(s[1]+s[2], a, c);
+        val(s[1]+s[2], a{$IFNDEF PAS2C}, c{$ENDIF});
         TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
         TryDo(s[3] = ':', 'Load locale: ":" expected', true);
-        val(s[4]+s[5], b, c);
+        val(s[4]+s[5], b{$IFNDEF PAS2C}, c{$ENDIF});
         TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
         TryDo(s[6] = '=', 'Load locale: "=" expected', true);
         Delete(s, 1, 6);

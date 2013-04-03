@@ -27,8 +27,6 @@ var Stack: record
                                      end
            end;
 
-const
-    cMaxEdgePoints = 16384;
 
 procedure Push(_xl, _xr, _y, _dir: LongInt);
 begin

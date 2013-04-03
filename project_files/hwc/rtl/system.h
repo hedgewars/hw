@@ -77,10 +77,10 @@ void        fpcrtl_new__vars(void **p, int size);
 
 Integer     fpcrtl_trunc(extended n);
 
-#define     fpcrtl_val(s, a, c)                             fpcrtl_val__vars(s, &(a), &(c))
-void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, LongInt *a, LongInt *c);
-void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, Byte *a, LongInt *c);
-void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, LongWord *a, LongInt *c);
+#define     fpcrtl_val(s, a)                                fpcrtl_val__vars(s, &(a))
+void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, LongInt *a);
+void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, Byte *a);
+void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, LongWord *a);
 
 #define     fpcrtl_randomize()                              srand(time(NULL))
 

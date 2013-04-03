@@ -41,7 +41,7 @@ type TChatLine = record
     Width: LongInt;
     s: shortstring;
     end;
-    TChatCmd = (quit, pause, finish, fullscreen);
+    TChatCmd = (quitCmd, pauseCmd, finishCmd, fullscreenCmd);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
