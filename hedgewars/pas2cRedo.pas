@@ -71,14 +71,15 @@ var
     trunc, round : function : integer;
     abs, sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, delete, str, pos, PosS, trim, LowerCase : function : shortstring;
+    StrPas, FormatDateTime, copy, delete, str, PosS, trim, LowerCase : function : shortstring;
+    pos : function : integer;
     StrToInt : function : integer;
     SetLength, val : procedure;
     _pchar : function : PChar;
     pchar2str : function : string;
     memcpy : procedure;
 
-	     min, max:function:integer;
+     min, max:function:integer;
     assign, rewrite, rewrite_2, reset, reset_2, flush, BlockWrite, BlockRead, close : procedure;
     FileExists, DirectoryExists, eof : function : boolean;
     ExtractFileName : function : string;
