@@ -53,8 +53,14 @@ target_link_libraries(hwengine  fpcrtl
                                 ${SDLNET_LIBRARY}
                                 ${SDLIMAGE_LIBRARY}
                                 ${SDLTTF_LIBRARY}
+                                ${GLEW_LIBRARY}
+                                physfs
+                                physlayer
                                 #TODO: add other libraries
                             )
+if(APPLE)
+    target_link_libraries(hwengine IOKit)
+endif()
 
 #TODO: move this away in its proper findxxx.cmake
 if(APPLE)
