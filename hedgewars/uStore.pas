@@ -575,19 +575,19 @@ begin
     tmpsurf:= IMG_Load_RW(rwopsOpenRead(s), true);
 
     if tmpsurf = nil then
-    begin
+        begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
-    end;
+        end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-    begin
+        begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
-    end;
+        end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
