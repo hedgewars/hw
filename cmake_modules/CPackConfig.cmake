@@ -23,9 +23,9 @@ if(WIN32 AND NOT UNIX)
     set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
     set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")
     set(CPACK_NSIS_MODIFY_PATH OFF)
-    set(CPACK_NSIS_EXECUTABLES_DIRECTORY "${target_binary_install_dir}")
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
     set(CPACK_NSIS_MUI_FINISHPAGE_RUN "hedgewars${CMAKE_EXECUTABLE_SUFFIX}")
-    set(CPACK_GENERATOR "ZIP;NSIS")
+    set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Hedgewars.lnk' '$INSTDIR\\\\hedgewars.exe'")
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "hedgewars")
 endif(WIN32 AND NOT UNIX)
 
@@ -96,4 +96,3 @@ set(CPACK_SOURCE_IGNORE_FILES
 )
 
 include(CPack)
-
