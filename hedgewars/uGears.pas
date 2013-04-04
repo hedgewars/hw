@@ -46,7 +46,6 @@ procedure RestoreHog(HH: PHedgehog);
 procedure ProcessGears;
 procedure EndTurnCleanup;
 procedure SetAllToActive;
-procedure SetAllHHToActive; inline;
 procedure SetAllHHToActive(Ice: boolean);
 procedure DrawGears;
 procedure FreeGearsList;
@@ -560,11 +559,6 @@ while t <> nil do
     t^.Active:= true;
     t:= t^.NextGear
     end
-end;
-
-procedure SetAllHHToActive; inline;
-begin
-SetAllHHToActive(true)
 end;
 
 procedure SetAllHHToActive(Ice: boolean);
