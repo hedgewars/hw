@@ -20,10 +20,9 @@
 #define HWAPP_H
 
 #include <QApplication>
-#include <QString>
-#include <QEvent>
 
 class HWForm;
+class QEvent;
 
 /**
  * @brief Main class of the Qt application.

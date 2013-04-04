@@ -35,7 +35,6 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
     }
     else if (event->type() == QEvent::FocusIn)
     {
-        QWidget * widget = dynamic_cast<QWidget*>(dist);
         abstractpage = qobject_cast<AbstractPage*>(ui->Pages->currentWidget());
 
         // play a sound when mouse hovers certain ui elements
