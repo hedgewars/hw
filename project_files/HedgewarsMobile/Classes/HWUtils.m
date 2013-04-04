@@ -22,7 +22,7 @@
 #import <sys/sysctl.h>
 #import <netinet/in.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
-
+#import "hwconsts.h"
 
 static NSString *cachedModel = nil;
 static NSArray *cachedColors = nil;

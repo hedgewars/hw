@@ -27,14 +27,12 @@ procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
 procedure SplitByChar(var a, b: ansistring; c: char);
 
-{$IFNDEF PAS2C}
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
-{$ENDIF}
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  Max(a, b: LongInt): LongInt; inline;
@@ -68,10 +66,8 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
-{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
-{$ENDIF}
 
 function  isPhone: Boolean; inline;
 function  getScreenDPI: Double; inline; //cdecl; external;
@@ -92,7 +88,7 @@ procedure freeModule;
 
 
 implementation
-uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
+uses typinfo, Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
 var f: textfile;
@@ -135,11 +131,11 @@ if i > 0 then
     end else b:= '';
 end;
 
-{$IFNDEF PAS2C}
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TGearType), ord(en))
 end;
+
 function EnumToStr(const en : TVisualGearType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TVisualGearType), ord(en))
@@ -164,7 +160,7 @@ function EnumToStr(const en: TCapGroup) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TCapGroup), ord(en))
 end;
-{$ENDIF}
+
 
 function Min(a, b: LongInt): LongInt;
 begin
@@ -407,7 +403,6 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
-{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 begin
 system.write(f, s)
@@ -417,7 +412,7 @@ procedure WriteLn(var f: textfile; s: shortstring);
 begin
 system.writeln(f, s)
 end;
-{$ENDIF}
+
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;

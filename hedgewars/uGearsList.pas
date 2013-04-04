@@ -36,7 +36,7 @@ uses uRandom, uUtils, uConsts, uVariables, uAmmos, uTeams, uStats,
     uGearsRender, uGearsUtils, uDebug;
 
 const
-    GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (    
+    GearKindAmmoTypeMap : array [TGearType] of TAmmoType = (
 (*          gtFlame *)   amNothing
 (*       gtHedgehog *) , amNothing
 (*           gtMine *) , amMine
@@ -181,7 +181,7 @@ gear^.Density:= _1;
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
 
-if CurrentHedgehog <> nil then 
+if CurrentHedgehog <> nil then
     begin
     gear^.Hedgehog:= CurrentHedgehog;
     if (CurrentHedgehog^.Gear <> nil) and (hwRound(CurrentHedgehog^.Gear^.X) = X) and (hwRound(CurrentHedgehog^.Gear^.Y) = Y) then
@@ -192,7 +192,7 @@ if (Ammoz[Gear^.AmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
     gear^.Z:= cHHZ+1
 else gear^.Z:= cUsualZ;
 
-    
+
 case Kind of
      gtGrenade,
      gtClusterBomb,
@@ -548,7 +548,10 @@ gtFlamethrower: begin
                 gear^.Pos:= 1;
                 end;
 }
-      gtIceGun: gear^.Health:= 1000;
+      gtIceGun: begin
+                gear^.Health:= 1000;
+                gear^.Radius:= 8;
+                end;
 gtGenericFaller:begin
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 1;
@@ -645,7 +648,7 @@ else if Gear^.Kind = gtHedgehog then
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
         //(Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
         (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan) then
-            with CurrentHedgehog^ do 
+            with CurrentHedgehog^ do
                 begin
                 inc(Team^.stats.AIKills);
                 FreeTexture(Team^.AIKillsTex);

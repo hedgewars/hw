@@ -18,6 +18,7 @@
 
 #include "HWApplication.h"
 #include <QFileOpenEvent>
+#include <QEvent>
 
 #include "hwform.h"
 #include "MessageDialog.h"
@@ -34,7 +35,7 @@ void terminateFrontend(int signal)
 }
 #endif
 
-HWApplication::HWApplication(int &argc,  char **argv):
+HWApplication::HWApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {
 #if !defined(Q_WS_WIN)
@@ -83,6 +84,8 @@ bool HWApplication::event(QEvent *event)
             return true;
         } else if (scheme == "hwplay") {
             int port = openEvent->url().port(NETGAME_DEFAULT_PORT);
+            if (address == "")
+                address = NETGAME_DEFAULT_SERVER;
             form->NetConnectQuick(address, (quint16) port);
             return true;
         } else {

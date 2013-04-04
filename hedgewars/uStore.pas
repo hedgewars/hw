@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses StrUtils, SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -575,19 +575,19 @@ begin
     tmpsurf:= IMG_Load_RW(rwopsOpenRead(s), true);
 
     if tmpsurf = nil then
-    begin
+        begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
-    end;
+        end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-    begin
+        begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
-    end;
+        end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 
@@ -765,7 +765,7 @@ begin
     AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
 {$ENDIF}
     AddFileLog('  \----- Extensions: ');
-{$IFNDEF PAS2C}
+
     // fetch extentions and store them in string
     tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
     tmpn := WordCount(tmpstr, [' ']);
@@ -783,10 +783,6 @@ begin
         tmpint := tmpint + 3;
     end;
     until (tmpint > tmpn);
-{$ELSE}
-    // doesn't seem to print >256 chars
-    AddFileLogRaw(PChar(glGetString(GL_EXTENSIONS)));
-{$ENDIF}
     AddFileLog('');
 
     defaultFrame:= 0;

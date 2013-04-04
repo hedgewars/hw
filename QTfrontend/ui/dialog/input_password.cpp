@@ -29,18 +29,14 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
 {
     setWindowTitle(tr("Login"));
 
-    QString titleLabelText = "To connect to the server, please log in.\n\nIf you don't have an account on www.hedgewars.org,\njust enter your nickname.";
-    QString nickLabelText = "Nickname:";
-    QString passLabelText = "Password:";
-
     QGridLayout * layout = new QGridLayout(this);
 
     QLabel * titleLabel = new QLabel(this);
-    titleLabel->setText(titleLabelText);
+    titleLabel->setText(tr("To connect to the server, please log in.\n\nIf you don't have an account on www.hedgewars.org,\njust enter your nickname."));
     layout->addWidget(titleLabel, 0, 0);
 
     QLabel * nickLabel = new QLabel(this);
-    nickLabel->setText(nickLabelText);
+    nickLabel->setText(tr("Nickname:"));
     layout->addWidget(nickLabel, 1, 0);
 
     leNickname = new QLineEdit(this);
@@ -48,7 +44,7 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
     layout->addWidget(leNickname, 2, 0);
 
     QLabel * passLabel = new QLabel(this);
-    passLabel->setText(passLabelText);
+    passLabel->setText(tr("Password:"));
     layout->addWidget(passLabel, 3, 0);
 
     lePassword = new QLineEdit(this);

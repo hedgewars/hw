@@ -98,6 +98,22 @@
         <source>Send Feedback</source>
         <translation>Enviar Feedback</translation>
     </message>
+    <message>
+        <source>Please give us feedback!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We are always happy about suggestions, ideas, or bug reports.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but we may want to contact you.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -180,6 +196,20 @@
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create directory %1</source>
+        <translation type="unfinished">Não foi possível criar o diretório %1</translation>
+    </message>
+    <message>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished">Erro ao abrir o diretório:
+%1
+
+Por favor verifica a tua instalação!</translation>
     </message>
 </context>
 <context>
@@ -550,6 +580,21 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     <message>
         <source>Login</source>
         <translation>Login</translation>
+    </message>
+    <message>
+        <source>To connect to the server, please log in.
+
+If you don&apos;t have an account on www.hedgewars.org,
+just enter your nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2001,37 +2046,37 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>Main - Error</source>
-        <translation>Main - Erro</translation>
+        <translation type="obsolete">Main - Erro</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Não foi possível criar o diretório %1</translation>
+        <translation type="obsolete">Não foi possível criar o diretório %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation>Erro ao abrir o diretório:
+        <translation type="obsolete">Erro ao abrir o diretório:
 %1
 
 Por favor verifica a tua instalação!</translation>
     </message>
     <message>
         <source>TCP - Error</source>
-        <translation>TCP - Erro</translation>
+        <translation type="obsolete">TCP - Erro</translation>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation>Não foi possível iniciar o servidor: %1.</translation>
+        <translation type="obsolete">Não foi possível iniciar o servidor: %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at </source>
-        <translation>Não foi possível lançar o motor de jogo em </translation>
+        <translation type="obsolete">Não foi possível lançar o motor de jogo em </translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation>Código de erro: %1</translation>
+        <translation type="obsolete">Código de erro: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2180,7 +2225,7 @@ Desejas entrar na sala de qualquer maneira?</translation>
     </message>
     <message>
         <source>Hedgewars</source>
-        <translation>Hedgewars</translation>
+        <translation type="obsolete">Hedgewars</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
@@ -2422,6 +2467,18 @@ Nem todos os jogadores estão prontos.</translation>
     <message>
         <source>copy of</source>
         <translation>copia de</translation>
+    </message>
+</context>
+<context>
+    <name>TCPBase</name>
+    <message>
+        <source>Unable to start server at %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to run engine at %1
+Error code: %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3037,115 +3094,115 @@ Nem todos os jogadores estão prontos.</translation>
     <name>server</name>
     <message>
         <source>Not room master</source>
-        <translation type="obsolete">Não és o anfitrião da sala</translation>
+        <translation type="unfinished">Não és o anfitrião da sala</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="obsolete">Informação dos ouriços corrompida</translation>
+        <translation type="unfinished">Informação dos ouriços corrompida</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation type="obsolete">demasiadas equipas</translation>
+        <translation type="unfinished">demasiadas equipas</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation type="obsolete">demasiados ouriços</translation>
+        <translation type="unfinished">demasiados ouriços</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="obsolete">Já existe uma equipa com o mesmo nome na lista</translation>
+        <translation type="unfinished">Já existe uma equipa com o mesmo nome na lista</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="obsolete">partida em progresso</translation>
+        <translation type="unfinished">partida em progresso</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="obsolete">limitada</translation>
+        <translation type="unfinished">limitada</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation type="obsolete">REMOVE_TEAM: equipa inexistente</translation>
+        <translation type="unfinished">REMOVE_TEAM: equipa inexistente</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation type="obsolete">A equipa não te pertence!</translation>
+        <translation type="unfinished">A equipa não te pertence!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="obsolete">Menos de 2 clãs!</translation>
+        <translation type="unfinished">Menos de 2 clãs!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="obsolete">Já existe uma sala com esse nome</translation>
+        <translation type="unfinished">Já existe uma sala com esse nome</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="obsolete">Utilizador já em uso</translation>
+        <translation type="unfinished">Utilizador já em uso</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation type="obsolete">Nome de utilizador ilegal</translation>
+        <translation type="unfinished">Nome de utilizador ilegal</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="obsolete">Protocolo já conhecido</translation>
+        <translation type="unfinished">Protocolo já conhecido</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation type="obsolete">Número inválido</translation>
+        <translation type="unfinished">Número inválido</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="obsolete">Nome de utilizador já em uso</translation>
+        <translation type="unfinished">Nome de utilizador já em uso</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="obsolete">Não possui permissões para verificar</translation>
+        <translation type="unfinished">Não possui permissões para verificar</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation type="obsolete">A autenticação falhou</translation>
+        <translation type="unfinished">A autenticação falhou</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="obsolete">É necessário aguardar 60 segundos após uma expulsão</translation>
+        <translation type="unfinished">É necessário aguardar 60 segundos após uma expulsão</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="obsolete">expulso</translation>
+        <translation type="unfinished">expulso</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="obsolete">Ping timeout</translation>
+        <translation type="unfinished">Ping timeout</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation type="obsolete">tchau (bye)</translation>
+        <translation type="unfinished">tchau (bye)</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation type="obsolete">Nome da sala ilegal</translation>
+        <translation type="unfinished">Nome da sala ilegal</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation type="obsolete">Sala inexistente</translation>
+        <translation type="unfinished">Sala inexistente</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="obsolete">Entrada restrita</translation>
+        <translation type="unfinished">Entrada restrita</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="obsolete">Apenas utilizadores registados</translation>
+        <translation type="unfinished">Apenas utilizadores registados</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="obsolete">Estás banido desta sala</translation>
+        <translation type="unfinished">Estás banido desta sala</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="obsolete">Campo vazio na configuração</translation>
+        <translation type="unfinished">Campo vazio na configuração</translation>
     </message>
 </context>
 </TS>

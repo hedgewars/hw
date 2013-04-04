@@ -56,7 +56,7 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam tm ts
 
 illegalName :: B.ByteString -> Bool
-illegalName s = B.null s || B.all isSpace s || isSpace (B.head s) || isSpace (B.last s) || B.any isIllegalChar s
+illegalName s = B.null s || B.length s > 40 || B.all isSpace s || isSpace (B.head s) || isSpace (B.last s) || B.any isIllegalChar s
     where
         isIllegalChar c = c `List.elem` "$()*+?[]^{|}"
 
