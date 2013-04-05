@@ -129,6 +129,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
         void showFeedbackDialog();
+        void showFeedbackDialogNetChecked();
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
