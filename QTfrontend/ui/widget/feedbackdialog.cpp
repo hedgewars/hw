@@ -244,7 +244,7 @@ void FeedbackDialog::GenerateSpecs()
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    total_ram += QString::number(status.ullTotalPhys) + "\n";
+    total_ram += QString::number(status.ullTotalPhys/1024/1024) + " MB\n";
 
     switch(QSysInfo::WinVersion())
     {
@@ -266,8 +266,8 @@ void FeedbackDialog::GenerateSpecs()
 #else
          available_pages = 0,
 #endif*/
-         page_size = sysconf(_SC_PAGE_SIZE);
-    total_ram += QString::number(pages * page_size) + "\n";
+    page_size = sysconf(_SC_PAGE_SIZE);
+    total_ram += QString::number(pages*page_size/1024/1024) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif
 
