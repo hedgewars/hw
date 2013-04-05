@@ -2010,8 +2010,22 @@ void HWForm::ShowErrorMessage(const QString & msg)
 
 void HWForm::showFeedbackDialog()
 {
-    FeedbackDialog dialog(this);
-    dialog.exec();
+    QNetworkRequest newRequest(QUrl("http://www.hedgewars.org"));
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkReply *reply = manager->get(newRequest);
+    connect(reply, SIGNAL(finished()), this, SLOT(showFeedbackDialogNetChecked()));
+}
+
+void HWForm::showFeedbackDialogNetChecked()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+
+    if (reply && (reply->error() == QNetworkReply::NoError)) {
+        FeedbackDialog dialog(this);
+        dialog.exec();
+    } else
+        MessageDialog::ShowErrorMessage(tr("This page requires an internet connection."), this);
 }
 
 void HWForm::startGame()
