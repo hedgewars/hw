@@ -249,6 +249,8 @@ begin
                 end;
             EX:= trunc(x);
             EY:= trunc(y);
+            // Try to prevent AI from thinking firing into water will cause a drowning
+            if (EY < cWaterLine-5) and (Timer > 0) and (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) > 21) then exit(BadTurn);
             if Level = 1 then
                 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
             else value:= RateExplosion(Me, EX, EY, 101);
