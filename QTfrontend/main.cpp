@@ -267,12 +267,13 @@ int main(int argc, char *argv[])
     {
         QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
         QString cc = settings.value("misc/locale", QString()).toString();
-        if(cc.isEmpty())
-            cc = QLocale::system().name();
+        if (cc.isEmpty())
+            cc = HWApplication::keyboardInputLocale().name();
+            // QLocale::system().name() returns only "C"...
 
         // load locale file into translator
-        if(!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
-            qWarning("Failed to install translation");
+        if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+            qWarning("Failed to install translation (%s)", qPrintable(cc));
         app.installTranslator(&Translator);
     }
 
