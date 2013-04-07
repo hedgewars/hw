@@ -31,7 +31,7 @@
 00:28=Bohrkopfrakete
 00:29=Ballpistole
 00:30=Napalm-Luftangriff
-00:31=RC-Flugzeug
+00:31=Funkflugzeug
 00:32=Schwerkraft verringern
 00:33=Zusatzschaden
 00:34=Unverwundbarkeit
@@ -101,12 +101,10 @@
 02:00=Für %1 gehen alle Lichter aus!
 02:00=%1 kommt wieder!
 02:00=%1 ist urlaubsreif!
-02:00=%1 trifft seine Ahnen.
 02:00=%1 war nicht hartnäckig genug!
 02:00=%1 war einmal
 02:00=%1 hat wohl versagt
 02:00=Mach’s gut, %1!
-02:00=%1 hinterlässt Frau und Kind
 02:00=%1 hat die letzte Bazooka gefeuert
 02:00=%1 hat die letzte Granate geworfen
 02:00=%1 hat den letzten Kuchen gebacken
@@ -117,11 +115,11 @@
 02:00=%1 nahm einen Schuss zu viel
 02:00=%1 hätte wirklich ein Erste-Hilfe-Kit gebrauchen können
 02:00=%1 ist gegangen, um ein besseres Spiel zu spielen
-02:00=%1 verlässt sein Leben aus Wut
+02:00=%1 will nicht mehr
 02:00=%1 scheitert
 02:00=Schlecht, schlecht, %1 …
 02:00=%1 sollte lieber WarMUX spielen
-02:00=%1 hat versucht die Kugeln mit den Zähnen zu fangen
+02:00=%1 hat versucht, die Kugeln mit den Zähnen zu fangen
 02:00=%1 findet seinen Platz in der Walhall
 02:00=%1 geht den Weg der Dinosaurier
 02:00=%1 bringt die Igelspezies einen Schritt näher zum Aussterben
@@ -325,19 +323,17 @@
 02:08=%1 braucht etwas Motivation
 02:08=%1 ist ein Pazifist
 02:08=%1 hat eine Verschnaufpause
-02:08=%1 hat eine Pause
-02:08=%1 ist dem Schüttelfrost ausgesetz
-02:08=%1 hat kein Vertrauen in seine eigenen Fähigkeiten
+02:08=%1 nimmt sich eine Auszeit
+02:08=%1 hat kein Vertrauen in die eigenen Fähigkeiten
 02:08=%1 beschließt, nichts zu tun
 02:08=%1 lässt den Feind sich selbst vernichten
 02:08=%1 wäre furchtbar auf Partys
 02:08=%1 versteckt sich
 02:08=%1 verpasst die Gelegenheit
 02:08=%1 verschenkt die Chance
-02:08=%1 meint, das Beste, was er tun kann, ist nichts …
+02:08=%1 meint Nichtstun sei der beste Plan …
 02:08=%1 ist ein großes Weichei
-02:08=Gock, gock, gock, %1 ist ein Huhn
-02:08=%1 sieht etwas gelblich aus
+02:08=%1 hat Angst …
 02:08=%1 ist ein Feigling!
 02:08=%1 wartet auf Sudden Death
 02:08=%1 ist nicht so der Kämpfertyp
@@ -350,6 +346,7 @@
 02:08=%1 hat anscheinend Besseres zu tun
 02:08=%1 hat sich fast zu Tode erschrocken
 02:08=%1 ist eingeschlafen
+02:08=%1 ist wohl nur aus Versehen hier
 
 ; Hog (%1) hurts himself only
 02:09=%1 sollte lieber zielen üben!
@@ -502,7 +499,7 @@
 04:28=Kurz nach dem Start wird diese Rakete beginnen,|sich durch soliden Grund zu graben. Sobald sie|wieder austritt oder der Zeitzünder abläuft,|wird sie explodieren.|Angriff: Halten, um mit mehr Kraft zu feuern
 04:29=Das ist nichts für kleine Kinder! Die Ballpistole|feuert Tonnen kleiner farbiger Bälle, die mit|Sprengstoff gefüllt sind.|Angriff: Mit voller Kraft feuern|Hoch/Runter: Im Feuern zielen
 04:30=Rufe ein Flugzeug, um ein Areal gezielt mit|tödlichem Napalm einzudecken. Gut gezielt|lassen sich so große Teile der Karte auslöschen.|Links/Rechts: Angriffsrichtung wählen|Cursor: Zielgebiet wählen und Angriff starten
-04:31=Das RC-Flugzeug kann Kisten einsammeln und weit|entfernte Igel angreifen. Steuere es direkt in|ein Opfer oder wirf erst einige Bomben ab.|Angriff: Flugzeug starten und Bomben abwerfen|Weiter Sprung: "Ritt der Walküren"|Hoch/Runter: Flugzeug lenken
+04:31=Das Funkflugzeug kann Kisten einsammeln und weit|entfernte Igel angreifen. Steuere es direkt in|ein Opfer oder wirf erst einige Bomben ab.|Angriff: Flugzeug starten und Bomben abwerfen|Weiter Sprung: "Ritt der Walküren"|Hoch/Runter: Flugzeug lenken
 04:32=Niedrige Schwerkraft ist effektiver als jede|Diät! Springe höher und weiter oder lass|einfach deine Gegner noch weiter fliegen.|Angriff: Aktivieren
 04:33=Manchmal muss es eben doch ein bisschen|mehr sein …|Angreifen: Aktivieren
 04:34=Can’t touch me!|Angreifen: Aktivieren
