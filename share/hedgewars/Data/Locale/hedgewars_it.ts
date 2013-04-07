@@ -98,6 +98,22 @@
         <source>Send Feedback</source>
         <translation>Invia Commento</translation>
     </message>
+    <message>
+        <source>Please give us feedback!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>We are always happy about suggestions, ideas, or bug reports.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but we may want to contact you.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>FreqSpinBox</name>
@@ -176,6 +192,24 @@
             <numerusform>%1 giorno</numerusform>
             <numerusform>%1 giorni</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Scheme &apos;%1&apos; not supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cannot create directory %1</source>
+        <translation type="unfinished">Impossibile creare la directory %1</translation>
+    </message>
+    <message>
+        <source>Failed to open data directory:
+%1
+
+Please check your installation!</source>
+        <translation type="unfinished">Impossibile creare la directory dati:
+%1
+
+Per favore controlla l&apos;installazione!</translation>
     </message>
 </context>
 <context>
@@ -546,6 +580,21 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     <message>
         <source>Login</source>
         <translation>Login</translation>
+    </message>
+    <message>
+        <source>To connect to the server, please log in.
+
+If you don&apos;t have an account on www.hedgewars.org,
+just enter your nickname.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -944,6 +993,13 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     <message>
         <source>Room controls</source>
         <translation>Controlli stanza</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetServer</name>
+    <message>
+        <source>Insert your address here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2027,37 +2083,37 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Main - Error</source>
-        <translation>Main - Errore</translation>
+        <translation type="obsolete">Main - Errore</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Impossibile creare la directory %1</translation>
+        <translation type="obsolete">Impossibile creare la directory %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation>Impossibile creare la directory dati:
+        <translation type="obsolete">Impossibile creare la directory dati:
 %1
 
 Per favore controlla l&apos;installazione!</translation>
     </message>
     <message>
         <source>TCP - Error</source>
-        <translation>TCP - Errore</translation>
+        <translation type="obsolete">TCP - Errore</translation>
     </message>
     <message>
         <source>Unable to start the server: %1.</source>
-        <translation>Impossibile avviare il server: %1.</translation>
+        <translation type="obsolete">Impossibile avviare il server: %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at </source>
-        <translation>Impossibile avviare il motore a </translation>
+        <translation type="obsolete">Impossibile avviare il motore a </translation>
     </message>
     <message>
         <source>Error code: %1</source>
-        <translation>Codice di errore: %1</translation>
+        <translation type="obsolete">Codice di errore: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2206,7 +2262,7 @@ Voui comunque entrare nella stanza?</translation>
     </message>
     <message>
         <source>Hedgewars</source>
-        <translation>Hedgewars</translation>
+        <translation type="obsolete">Hedgewars</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
@@ -2321,6 +2377,26 @@ Non tutti i giocatori sono pronti.</translation>
         <source>Upload this video to your Youtube account</source>
         <translation>Cariva questo video nel tuo account Youtube</translation>
     </message>
+    <message>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set the default server port for Hedgewars</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Invite your friends to your server in just 1 click!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start private server</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomNamePrompt</name>
@@ -2428,6 +2504,25 @@ Non tutti i giocatori sono pronti.</translation>
     <message>
         <source>copy of</source>
         <translation>copia di</translation>
+    </message>
+</context>
+<context>
+    <name>TCPBase</name>
+    <message>
+        <source>Unable to start server at %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unable to run engine at %1
+Error code: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TeamSelWidget</name>
+    <message>
+        <source>At least two teams are required to play!</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3108,7 +3203,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>60 secondi di raffreddamento prima dell'espulsione</translation>
+        <translation>60 secondi di raffreddamento prima dell&apos;espulsione</translation>
     </message>
     <message>
         <source>kicked</source>

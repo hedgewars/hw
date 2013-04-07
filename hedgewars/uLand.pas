@@ -483,28 +483,11 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
 
         p:= tmpsurf^.pixels;
         for y:= 0 to Pred(tmpsurf^.h) do
-        begin
-            for x:= 0 to Pred(tmpsurf^.w) do
             begin
-                // this an if instead of masking colours to avoid confusing map creators
-                if ((AMask and p^[x]) = 0) then 
-                    Land[cpY + y, cpX + x]:= 0
-                else if p^[x] = $FFFFFFFF then                  // white
-                    Land[cpY + y, cpX + x]:= lfObject
-                else if p^[x] = AMask then                      // black
-                    begin
-                    Land[cpY + y, cpX + x]:= lfBasic;
-                    disableLandBack:= false
-                    end
-                else if p^[x] = (AMask or RMask) then           // red
-                    Land[cpY + y, cpX + x]:= lfIndestructible
-                else if p^[x] = (AMask or BMask) then           // blue
-                    Land[cpY + y, cpX + x]:= lfObject or lfIce
-                else if p^[x] = (AMask or GMask) then           // green
-                    Land[cpY + y, cpX + x]:= lfObject or lfBouncy
-            end;
+            for x:= 0 to Pred(tmpsurf^.w) do
+                SetLand(Land[cpY + y, cpX + x], p^[x]);
             p:= @(p^[tmpsurf^.pitch div 4]);
-        end;
+            end;
 
     if SDL_MustLock(tmpsurf) then
         SDL_UnlockSurface(tmpsurf);

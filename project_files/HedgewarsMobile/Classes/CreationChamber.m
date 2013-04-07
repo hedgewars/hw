@@ -18,7 +18,7 @@
 
 
 #import "CreationChamber.h"
-
+#import "weapons.h"
 
 @implementation CreationChamber
 

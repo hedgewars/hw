@@ -361,7 +361,7 @@ void HWForm::updateXfire(void)
 {
     if(hwnet && (hwnet->clientState() != HWNewNet::Disconnected))
     {
-        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare(QString("netserver.hedgewars.org:%1").arg(NETGAME_DEFAULT_PORT)) ? "Official server" : hwnet->getHost().toAscii());
+        xfire_setvalue(XFIRE_SERVER, !hwnet->getHost().compare(QString("%1:%2").arg(NETGAME_DEFAULT_SERVER).arg(NETGAME_DEFAULT_PORT)) ? "Official server" : hwnet->getHost().toAscii());
         switch(hwnet->clientState())
         {
             case HWNewNet::Connecting: // Connecting
@@ -1014,7 +1014,7 @@ void HWForm::NetConnectServer(const QString & host, quint16 port)
 
 void HWForm::NetConnectOfficialServer()
 {
-    NetConnectServer("netserver.hedgewars.org", NETGAME_DEFAULT_PORT);
+    NetConnectServer(NETGAME_DEFAULT_SERVER, NETGAME_DEFAULT_PORT);
 }
 
 void HWForm::NetPassword(const QString & nick)
@@ -1351,7 +1351,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     //nick and pass stuff
     QString nickname = config->value("net/nick", "").toString();
 
-    hwnet->m_private_game = !(hostName == "netserver.hedgewars.org" && port == NETGAME_DEFAULT_PORT);
+    hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
     if (hwnet->m_private_game == false)
         if (AskForNickAndPwd() != 0)
             return;
@@ -2016,8 +2016,22 @@ void HWForm::ShowErrorMessage(const QString & msg)
 
 void HWForm::showFeedbackDialog()
 {
-    FeedbackDialog dialog(this);
-    dialog.exec();
+    QNetworkRequest newRequest(QUrl("http://www.hedgewars.org"));
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkReply *reply = manager->get(newRequest);
+    connect(reply, SIGNAL(finished()), this, SLOT(showFeedbackDialogNetChecked()));
+}
+
+void HWForm::showFeedbackDialogNetChecked()
+{
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+
+    if (reply && (reply->error() == QNetworkReply::NoError)) {
+        FeedbackDialog dialog(this);
+        dialog.exec();
+    } else
+        MessageDialog::ShowErrorMessage(tr("This page requires an internet connection."), this);
 }
 
 void HWForm::startGame()

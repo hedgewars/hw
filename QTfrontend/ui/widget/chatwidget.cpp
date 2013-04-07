@@ -37,7 +37,7 @@
 #include "hwconsts.h"
 #include "gameuiconfig.h"
 #include "playerslistmodel.h"
-
+#include "HWApplication.h"
 #include "chatwidget.h"
 
 
@@ -449,6 +449,7 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     {
         line = QString("<span class=\"highlight\">%1</span>").arg(line);
         SDLInteraction::instance().playSoundFile(m_hilightSound);
+        HWApplication::alert(this, 800);
     }
 
     chatStrings.append(line);
