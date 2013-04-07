@@ -361,6 +361,7 @@ var BackMe, WalkMe: TGear;
     Actions: TActions;
 begin
 AddFileLog('Thread started');
+dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 StartTicks:= GameTicks;
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
 itHedgehog:= currHedgehogIndex;

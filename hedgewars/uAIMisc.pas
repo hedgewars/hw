@@ -64,7 +64,7 @@ function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
-function TestCollWithLand(x, y, r: LongInt): boolean; inline;
+function  TestCollWithLand(x, y, r: LongInt): boolean; inline;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -90,6 +90,7 @@ var ThinkingHH: PGear;
 
 const KillScore = 200;
 var friendlyfactor: LongInt = 300;
+var dmgMod: real = 1.0;
 
 implementation
 uses uCollisions, uVariables, uUtils, uLandTexture, uGearsUtils;
@@ -412,11 +413,10 @@ end;
 
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
     hadSkips: boolean;
 begin
 fallDmg:= 0;
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
@@ -480,12 +480,11 @@ end;
 
 function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, rate: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
 begin
 fallDmg:= 0;
 dX:= gdX * 0.01 * kick;
 dY:= gdY * 0.01 * kick;
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
@@ -524,10 +523,9 @@ end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
     hadSkips: boolean;
 begin
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 gdX:= gdX * 0.01;
 gdY:= gdX * 0.01;
