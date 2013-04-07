@@ -191,8 +191,8 @@ begin
         {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
         {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--width}                5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}               6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
+        {--height}               6 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
         {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
         {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
         {--nomusic}              9 : SetMusic           ( false );
