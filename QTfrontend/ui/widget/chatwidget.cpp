@@ -295,9 +295,9 @@ void HWChatWidget::setSettings(QSettings * settings)
 
 void HWChatWidget::linkClicked(const QUrl & link)
 {
-    if (link.scheme() == "http")
+    if ((link.scheme() == "http") or (link.scheme() == "https"))
         QDesktopServices::openUrl(link);
-    if (link.scheme() == "hwnick")
+    else if (link.scheme() == "hwnick")
     {
         // decode nick
         QString nick = QString::fromUtf8(QByteArray::fromBase64(link.encodedQuery()));
@@ -368,15 +368,43 @@ QString HWChatWidget::linkedNick(const QString & nickname)
     return QString("<span class=\"nick\">%1</span>").arg(Qt::escape(nickname));
 }
 
+const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http(s)?://)?(www\\.)?((hedgewars\\.org|code\\.google\\.com|googlecode\\.com|hh\\.unit22\\.org)(/[^ ]*)?)");
 
-void HWChatWidget::onChatString(const QString& str)
+bool HWChatWidget::containsHighlight(const QString & sender, const QString & message)
 {
-    onChatString("", str);
+    if ((sender != m_userNick) && (!m_userNick.isEmpty()))
+    {
+        QString lcStr = message.toLower();
+
+        foreach (const QRegExp & hl, m_highlights)
+        {
+            if (lcStr.contains(hl))
+                return true;
+        }
+    }
+    return false;
 }
 
-const QRegExp HWChatWidget::URLREGEXP = QRegExp("(http://)?(www\\.)?(hedgewars\\.org(/[^ ]*)?)");
+QString HWChatWidget::messageToHTML(const QString & message)
+{
+    QString formattedStr = Qt::escape(message);
+    // link some urls
+    formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http\\2://\\4\">\\4</a>");
+    return formattedStr;
+}
 
-void HWChatWidget::onChatString(const QString& nick, const QString& str)
+void HWChatWidget::onChatAction(const QString & nick, const QString & action)
+{
+    printChatString(nick, "* " + linkedNick(nick) + " " + messageToHTML(action), "Action", containsHighlight(nick, action));
+}
+
+void HWChatWidget::onChatMessage(const QString & nick, const QString & message)
+{
+    printChatString(nick, linkedNick(nick) + ": " + messageToHTML(message), "Chat", containsHighlight(nick, message));
+}
+
+void HWChatWidget::printChatString(
+    const QString & nick, const QString & str, const QString & cssClassPart, bool highlight)
 {
     QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
     if(!playersSortFilterModel)
@@ -387,58 +415,15 @@ void HWChatWidget::onChatString(const QString& nick, const QString& str)
     if(!players)
         return;
 
-    if (!nick.isEmpty())
-    {
-        // don't show chat lines that are from ignored nicks
-        if (players->isFlagSet(nick, PlayersListModel::Ignore))
-            return;
-    }
+    // don't show chat lines that are from ignored nicks
+    if (players->isFlagSet(nick, PlayersListModel::Ignore))
+        return;
 
     bool isFriend = (!nick.isEmpty()) && players->isFlagSet(nick, PlayersListModel::Friend);
 
-    QString formattedStr = Qt::escape(str.mid(1));
-    // make hedgewars.org urls actual links
-    formattedStr = formattedStr.replace(URLREGEXP, "<a href=\"http://\\3\">\\3</a>");
+    QString cssClass = (isFriend ? "msg_Friend" : "msg_User") + cssClassPart;
 
-    // link the nick
-    if(!nick.isEmpty())
-        formattedStr.replace("|nick|", linkedNick(nick));
-
-    QString cssClass("msg_UserChat");
-
-    // check first character for color code and set color properly
-    char c = str[0].toAscii();
-    switch (c)
-    {
-        case 3:
-            cssClass = (isFriend ? "msg_FriendJoin" : "msg_UserJoin");
-            break;
-        case 2:
-            cssClass = (isFriend ? "msg_FriendAction" : "msg_UserAction");
-            break;
-        default:
-            if (isFriend)
-                cssClass = "msg_FriendChat";
-    }
-
-    bool isHL = false;
-
-    if ((c != 3) && (!nick.isEmpty()) &&
-            (nick != m_userNick) && (!m_userNick.isEmpty()))
-    {
-        QString lcStr = str.toLower();
-
-        foreach (const QRegExp & hl, m_highlights)
-        {
-            if (lcStr.contains(hl))
-            {
-                isHL = true;
-                break;
-            }
-        }
-    }
-
-    addLine(cssClass, formattedStr, isHL);
+    addLine(cssClass, str, highlight);
 }
 
 void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighlight)
@@ -513,6 +498,9 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
 
+    if (!isIgnored)
+        printChatString(nick, QString("*** ") + tr("%1 has joined").arg(linkedNick(nick)), "Join", false);
+
     if (notifyNick && notify && (m_helloSounds.size() > 0))
     {
         SDLInteraction::instance().playSoundFile(
@@ -522,9 +510,19 @@ void HWChatWidget::nickAdded(const QString & nick, bool notifyNick)
 
 void HWChatWidget::nickRemoved(const QString& nick)
 {
+    nickRemoved(nick, "");
+}
+
+void HWChatWidget::nickRemoved(const QString& nick, const QString & message)
+{
     chatEditLine->removeNickname(nick);
 
     emit nickCountUpdate(chatNicks->model()->rowCount());
+
+    if (message.isEmpty())
+        printChatString(nick, QString("*** ") + tr("%1 has left").arg(linkedNick(nick)), "Leave", false);
+    else
+        printChatString(nick, QString("*** ") + tr("%1 has left (%2)").arg(linkedNick(nick)).arg(messageToHTML(message)), "Leave", false);
 }
 
 void HWChatWidget::clear()
@@ -581,6 +579,19 @@ void HWChatWidget::clear()
         if (file2.isOpen())
             file2.close();
     }
+}
+
+void HWChatWidget::onPlayerInfo(
+            const QString & nick,
+            const QString & ip,
+            const QString & version,
+            const QString & roomInfo)
+{
+    addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
+        .arg(linkedNick(nick))
+        .arg(ip)
+        .arg(version)
+        .arg(roomInfo));
 }
 
 void HWChatWidget::onKick()
