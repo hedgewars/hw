@@ -38,8 +38,7 @@ function  SDL_RectMake(x, y: SmallInt; width, height: Word): TSDL_Rect; inline;
 
 implementation
 uses SysUtils, uVariables, uUtils
-     {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF}
-     {$IFNDEF USE_SDLTHREADS} {$IFDEF UNIX}, cthreads{$ENDIF} {$ENDIF};
+     {$IFDEF PNG_SCREENSHOTS}, PNGh, png {$ENDIF};
 
 type PScreenshot = ^TScreenshot;
      TScreenshot = record
@@ -64,7 +63,7 @@ end;
 
 {$IFDEF PNG_SCREENSHOTS}
 // this funtion will be executed in separate thread
-function SaveScreenshot(screenshot: pointer): PtrInt;
+function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var i: LongInt;
     png_ptr: ^png_struct;
     info_ptr: ^png_info;
@@ -119,7 +118,7 @@ end;
 {$ELSE} // no PNG_SCREENSHOTS
 
 // this funtion will be executed in separate thread
-function SaveScreenshot(screenshot: pointer): PtrInt;
+function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var f: file;
     // Windows Bitmap Header
     head: array[0..53] of Byte = (
@@ -262,11 +261,7 @@ image^.height:= cScreenHeight div k;
 image^.size:= size;
 image^.buffer:= p;
 
-{$IFDEF USE_SDLTHREADS}
-SDL_CreateThread(@SaveScreenshot{$IFDEF SDL13}, nil{$ENDIF}, image);
-{$ELSE}
-BeginThread(@SaveScreenshot, image);
-{$ENDIF}
+SDL_CreateThread(@SaveScreenshot{$IFDEF SDL13}, 'snapshot'{$ENDIF}, image);
 MakeScreenshot:= true; // possibly it is not true but we will not wait for thread to terminate
 end;
 

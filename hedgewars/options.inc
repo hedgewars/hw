@@ -29,10 +29,8 @@
 
 {$DEFINE USE_LUA_SCRIPT}
 
-
 {$IFDEF ANDROID}
     {$DEFINE MOBILE}
-    {$DEFINE USE_SDLTHREADS}
     {$DEFINE USE_CONTEXT_RESTORE}
     {$DEFINE Java_Prefix:= 'Java_org_hedgewars_hedgeroid_EngineProtocol_PascalExports_'}
 {$ENDIF}
@@ -66,13 +64,11 @@
     {$DEFINE SDL13}
 {$ENDIF}
 
-{$IFDEF PAS2C}
-    {$DEFINE NOCONSOLE}
-    {$DEFINE USE_SDLTHREADS}
-{$ENDIF}
 
+//TODO: cruft to be removed
 {$DEFINE _S:=}
 {$DEFINE _P:=}
+
 
 //{$DEFINE TRACEAIACTIONS}
 //{$DEFINE COUNTTICKS}

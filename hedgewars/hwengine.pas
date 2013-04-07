@@ -122,11 +122,7 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
-        {$IFDEF PAS2C}
-        s:= '/Screenshots/hw';
-        {$ELSE}
         s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
-        {$ENDIF}
 
         // flash
         playSound(sndShutter);
@@ -169,7 +165,7 @@ begin
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym, event.key.keysym.sym)//TODO correct for keymodifiers
+                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
                         end
                     else
                         ProcessKey(event.key);

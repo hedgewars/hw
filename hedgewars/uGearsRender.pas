@@ -352,13 +352,7 @@ begin
                     lx:= lx + ax;
                     ly:= ly + ay;
                     tx:= round(lx);
-                    ty:= round(ly);
-                    if (abs(tx-hx) > 1000) or (abs(hy-ty) > 1000) then
-                        begin
-                        DrawLine(hx, hy, tx, ty, 1.0, $FF, $00, $00, $C0);
-                        hx:= tx;
-                        hy:= ty
-                        end
+                    ty:= round(ly)
                     end;
                 // reached edge of land. assume infinite beam. Extend it way out past camera
                 if ((ty and LAND_HEIGHT_MASK) <> 0) or ((tx and LAND_WIDTH_MASK) <> 0) then
@@ -368,7 +362,6 @@ begin
                     end;
 
                 //if (abs(lx-tx)>8) or (abs(ly-ty)>8) then
-                if (tx <> hx) or (ty <> hy) then
                     begin
                     DrawLine(hx, hy, tx, ty, 1.0, $FF, $00, $00, $C0);
                     end;

@@ -27,7 +27,9 @@ procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
+procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
+procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 
 implementation
 uses uStore, uConsts, uConsole, uRandom, uSound, GLunit
@@ -42,7 +44,7 @@ const MaxRects = 512;
 type TRectsArray = array[0..MaxRects] of TSDL_Rect;
      PRectArray = ^TRectsArray;
      TThemeObject = record
-                     Surf: PSDL_Surface;
+                     Surf, Mask: PSDL_Surface;
                      inland: TSDL_Rect;
                      outland: array[0..Pred(MAXOBJECTRECTS)] of TSDL_Rect;
                      rectcnt: Longword;
@@ -67,6 +69,26 @@ var Rects: PRectArray;
     RectCount: Longword;
     ThemeObjects: TThemeObjects;
     SprayObjects: TSprayObjects;
+
+procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
+begin
+    // this an if instead of masking colours to avoid confusing map creators
+    if ((AMask and Pixel) = 0) then
+        LandWord:= 0
+    else if Pixel = $FFFFFFFF then                  // white
+        LandWord:= lfObject
+    else if Pixel = AMask then                      // black
+        begin
+        LandWord:= lfBasic;
+        disableLandBack:= false
+        end
+    else if Pixel = (AMask or RMask) then           // red
+        LandWord:= lfIndestructible
+    else if Pixel = (AMask or BMask) then           // blue
+        LandWord:= lfObject or lfIce
+    else if Pixel = (AMask or GMask) then           // green
+        LandWord:= lfObject or lfBouncy
+end;
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 begin
@@ -112,6 +134,47 @@ for y:= 0 to Pred(Image^.h) do
                 end;
             end;
     p:= @(p^[Image^.pitch shr 2])
+    end;
+
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+WriteLnToConsole(msgOK)
+end;
+
+procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
+var p, mp: PLongwordArray;
+    x, y: Longword;
+    bpp: LongInt;
+begin
+WriteToConsole('Generating collision info... ');
+
+if SDL_MustLock(Image) then
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
+
+bpp:= Image^.format^.BytesPerPixel;
+TryDo(bpp = 4, 'Land object should be 32bit', true);
+
+p:= Image^.pixels;
+mp:= Mask^.pixels;
+for y:= 0 to Pred(Image^.h) do
+    begin
+    for x:= 0 to Pred(Image^.w) do
+        begin
+        if (cReducedQuality and rqBlurryLand) = 0 then
+            begin
+            if (LandPixels[cpY + y, cpX + x] = 0)
+            or (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
+                LandPixels[cpY + y, cpX + x]:= p^[x];
+            end
+        else
+            if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then 
+                LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+
+        if (Land[cpY + y, cpX + x] <= lfAllObjMask) or (Land[cpY + y, cpX + x] and lfObject <> 0)  then
+            SetLand(Land[cpY + y, cpX + x], mp^[x]);
+        end;
+    p:= @(p^[Image^.pitch shr 2]);
+    mp:= @(mp^[Mask^.pitch shr 2])
     end;
 
 if SDL_MustLock(Image) then
@@ -326,7 +389,9 @@ with Obj do
     if bRes then
         begin
         i:= getrandom(cnt);
-        BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
+        if Obj.Mask <> nil then
+             BlitImageUsingMask(ar[i].x, ar[i].y, Obj.Surf, Obj.Mask)
+        else BlitImageAndGenerateCollisionInfo(ar[i].x, ar[i].y, 0, Obj.Surf);
         AddRect(ar[i].x, ar[i].y, Width, Height);
         dec(Maxcnt)
         end
@@ -555,9 +620,10 @@ while not pfsEOF(f) do
         with ThemeObjects.objs[Pred(ThemeObjects.Count)] do
             begin
             i:= Pos(',', s);
-            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps);
+            Surf:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i))), ifTransparent or ifIgnoreCaps or ifCritical);
             Width:= Surf^.w;
             Height:= Surf^.h;
+            Mask:= LoadDataImage(ptCurrTheme, Trim(Copy(s, 1, Pred(i)))+'_mask', ifTransparent or ifIgnoreCaps);
             Delete(s, 1, i);
             i:= Pos(',', s);
             Maxcnt:= StrToInt(Trim(Copy(s, 1, Pred(i))));

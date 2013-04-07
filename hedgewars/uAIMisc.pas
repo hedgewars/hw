@@ -64,6 +64,7 @@ function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
+function  TestCollWithLand(x, y, r: LongInt): boolean; inline;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -89,6 +90,7 @@ var ThinkingHH: PGear;
 
 const KillScore = 200;
 var friendlyfactor: LongInt = 300;
+var dmgMod: real = 1.0;
 
 implementation
 uses uCollisions, uVariables, uUtils, uLandTexture, uGearsUtils;
@@ -255,6 +257,72 @@ for i:= 0 to Pred(bonuses.Count) do
     RatePlace:= rate;
 end;
 
+function CheckBounds(x, y, r: Longint): boolean; inline;
+begin
+    CheckBounds := (((x-r) and LAND_WIDTH_MASK) = 0) and
+        (((x+r) and LAND_WIDTH_MASK) = 0) and
+        (((y-r) and LAND_HEIGHT_MASK) = 0) and
+        (((y+r) and LAND_HEIGHT_MASK) = 0);
+end;
+
+
+function TestCollWithEverything(x, y, r: LongInt): boolean; inline;
+begin
+    if not CheckBounds(x, y, r) then
+        exit(false);
+
+    if (Land[y-r, x-r] <> 0) or    
+       (Land[y+r, x-r] <> 0) or 
+       (Land[y-r, x+r] <> 0) or
+       (Land[y+r, x+r] <> 0) then
+       exit(true);
+
+    TestCollWithEverything := false;
+end;
+
+function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
+begin
+    if not CheckBounds(x, y, r) then
+        exit(false);
+
+    if (Land[y-r, x-r] > lfAllObjMask) or
+       (Land[y+r, x-r] > lfAllObjMask) or 
+       (Land[y-r, x+r] > lfAllObjMask) or
+       (Land[y+r, x+r] > lfAllObjMask) then
+       exit(true);
+
+    TestCollExcludingObjects:= false;
+end;
+
+function TestColl(x, y, r: LongInt): boolean; inline;
+begin
+    if not CheckBounds(x, y, r) then
+        exit(false);
+
+    if (Land[y-r, x-r] and lfNotCurrentMask <> 0) or
+       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or 
+       (Land[y-r, x+r] and lfNotCurrentMask <> 0) or
+       (Land[y+r, x+r] and lfNotCurrentMask <> 0) then
+       exit(true);
+    
+    TestColl:= false;
+end;
+
+function TestCollWithLand(x, y, r: LongInt): boolean; inline;
+begin
+    if not CheckBounds(x, y, r) then
+        exit(false);
+
+    if (Land[y-r, x-r] > lfAllObjMask) or
+       (Land[y+r, x-r] > lfAllObjMask) or 
+       (Land[y-r, x+r] > lfAllObjMask) or
+       (Land[y+r, x+r] > lfAllObjMask) then
+       exit(true);
+    
+    TestCollWithLand:= false;
+end;
+
+
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
 function TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
@@ -265,77 +333,13 @@ begin
         MeX:= hwRound(Me^.X);
         MeY:= hwRound(Me^.Y);
         // We are still inside the hog. Skip radius test
-        if ((((x-MeX)*(x-MeX)) + ((y-MeY)*(y-MeY))) < 256) and (Land[y, x] <= lfAllObjMask) then
+        if ((sqr(x-MeX) + sqr(y-MeY)) < 256) and (Land[y, x] and lfObjMask = 0) then
             exit(false);
     end;
-    TestCollExcludingMe:= TestColl(x, y, r)
+    TestCollExcludingMe:= TestCollWithEverything(x, y, r)
 end;
 
-function TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
-var b: boolean;
-begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > lfAllObjMask);
-    if b then
-        exit(true);
-    
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > lfAllObjMask);
-    if b then
-        exit(true);
-    
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > lfAllObjMask);
-    if b then
-        exit(true);
-    
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > lfAllObjMask);
-    if b then
-        exit(true);
-    
-    TestCollExcludingObjects:= false;
-end;
 
-function TestColl(x, y, r: LongInt): boolean; inline;
-var b: boolean;
-begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] and lfNotCurrentMask <> 0);
-    if b then
-        exit(true);
-    
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] and lfNotCurrentMask <> 0);
-    if b then
-        exit(true);
-    
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] and lfNotCurrentMask <> 0);
-    if b then
-        exit(true);
-    
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] and lfNotCurrentMask <> 0);
-    if b then
-        exit(true);
-    
-    TestColl:= false;
-end;
-
-function TestCollWithLand(x, y, r: LongInt): boolean; inline;
-var b: boolean;
-begin
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x-r] > lfAllObjMask);
-    if b then
-        exit(true);
-        
-    b:= (((x-r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x-r] > lfAllObjMask);
-    if b then
-        exit(true);
-        
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y-r) and LAND_HEIGHT_MASK) = 0) and (Land[y-r, x+r] > lfAllObjMask);
-    if b then
-        exit(true);
-        
-    b:= (((x+r) and LAND_WIDTH_MASK) = 0) and (((y+r) and LAND_HEIGHT_MASK) = 0) and (Land[y+r, x+r] > lfAllObjMask);
-    if b then
-        exit(true);
-
-    TestCollWithLand:= false;
-end;
 
 function TraceFall(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): LongInt;
 var skipLandCheck: boolean;
@@ -409,11 +413,10 @@ end;
 
 function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
     hadSkips: boolean;
 begin
 fallDmg:= 0;
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 // add our virtual position
 with Targets.ar[Targets.Count] do
@@ -477,12 +480,11 @@ end;
 
 function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, rate: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
 begin
 fallDmg:= 0;
 dX:= gdX * 0.01 * kick;
 dY:= gdY * 0.01 * kick;
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
@@ -521,10 +523,9 @@ end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
-    dX, dY, dmgMod: real;
+    dX, dY: real;
     hadSkips: boolean;
 begin
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 rate:= 0;
 gdX:= gdX * 0.01;
 gdY:= gdX * 0.01;
