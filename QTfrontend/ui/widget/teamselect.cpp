@@ -258,12 +258,16 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
     // Add notice about number of required teams.
     numTeamNotice = new QLabel(tr("At least two teams are required to play!"));
+    numTeamNotice->setWordWrap(true);
     mainLayout.addWidget(numTeamNotice);
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
     addScrArea(framePlaying, p.color(QPalette::Window).light(105), 150);
     addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+
+    this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    this->setMinimumWidth(200);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)

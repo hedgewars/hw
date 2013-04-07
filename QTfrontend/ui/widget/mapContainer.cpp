@@ -75,8 +75,11 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Layouts */
 
-    QHBoxLayout * typeLayout = new QHBoxLayout();
-    QHBoxLayout * seedLayout = new QHBoxLayout();
+    QWidget * topWidget = new QWidget();
+    QHBoxLayout * topLayout = new QHBoxLayout(topWidget);
+    topWidget->setContentsMargins(0, 0, 0, 0);
+    topLayout->setContentsMargins(0, 0, 0, 0);
+
     QHBoxLayout * twoColumnLayout = new QHBoxLayout();
     QVBoxLayout * leftLayout = new QVBoxLayout();
     QVBoxLayout * rightLayout = new QVBoxLayout();
@@ -84,15 +87,13 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     twoColumnLayout->addStretch(1);
     twoColumnLayout->addLayout(rightLayout, 0);
     QVBoxLayout * drawnControls = new QVBoxLayout();
-    leftLayout->addLayout(typeLayout, 0);
-    rightLayout->addLayout(seedLayout, 0);
 
     /* Map type combobox */
 
-    typeLayout->setSpacing(10);
-    typeLayout->addWidget(new QLabel(tr("Map type:")), 0);
+    topLayout->setSpacing(10);
+    topLayout->addWidget(new QLabel(tr("Map type:")), 0);
     cType = new QComboBox(this);
-    typeLayout->addWidget(cType, 1);
+    topLayout->addWidget(cType, 1);
     cType->insertItem(0, tr("Image map"), MapModel::StaticMap);
     cType->insertItem(1, tr("Mission map"), MapModel::MissionMap);
     cType->insertItem(2, tr("Hand-drawn"), MapModel::HandDrawnMap);
@@ -103,7 +104,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Randomize button */
 
-    seedLayout->addStretch(1);
+    topLayout->addStretch(1);
     const QIcon& lp = QIcon(":/res/dice.png");
     QSize sz = lp.actualSize(QSize(65535, 65535));
     btnRandomize = new QPushButton();
@@ -117,15 +118,16 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_childWidgets << btnRandomize;
     btnRandomize->setStyleSheet("padding: 5px;");
     btnRandomize->setFixedHeight(cType->height());
-    seedLayout->addWidget(btnRandomize, 1);
+    topLayout->addWidget(btnRandomize, 1);
 
     /* Seed button */
+
     btnSeed = new QPushButton(parentWidget()->parentWidget());
     btnSeed->setText(tr("Seed"));
     btnSeed->setStyleSheet("padding: 5px;");
     btnSeed->setFixedHeight(cType->height());
     connect(btnSeed, SIGNAL(clicked()), this, SLOT(showSeedPrompt()));
-    seedLayout->addWidget(btnSeed, 0);
+    topLayout->addWidget(btnSeed, 0);
 
     /* Map preview label */
 
@@ -137,6 +139,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     mapPreview = new QPushButton(this);
     mapPreview->setObjectName("mapPreview");
+    mapPreview->setFlat(true);
     mapPreview->setFixedSize(256, 128);
     mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
@@ -240,13 +243,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     /* Theme chooser */
 
     btnTheme = new QPushButton();
+    btnTheme->setFlat(true);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
     bottomLeftLayout->addWidget(btnTheme, 0);
 
     /* Add everything to main layout */
 
-    mainLayout.addLayout(twoColumnLayout, 0);
+    mainLayout.addWidget(topWidget, 0);
+    mainLayout.addLayout(twoColumnLayout, 1);
 
     /* Set defaults */
 
