@@ -45,6 +45,7 @@
 #include <QInputDialog>
 #include <QPropertyAnimation>
 #include <QSettings>
+#include <QSortFilterProxyModel>
 
 #if (QT_VERSION >= 0x040600)
 #include <QGraphicsEffect>
@@ -1301,16 +1302,23 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
             ui.pageRoomsList->chatWidget, SLOT(onChatMessage(const QString&, const QString&)), Qt::QueuedConnection);
 
 // nick list stuff
-    connect(hwnet, SIGNAL(nickAdded(const QString&, bool)),
-            ui.pageNetGame->chatWidget, SLOT(nickAdded(const QString&, bool)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(nickRemoved(const QString&)),
-            ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(nickAddedLobby(const QString&, bool)),
-            ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&, bool)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(nickRemovedLobby(const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)), Qt::QueuedConnection);
-    connect(hwnet, SIGNAL(nickRemovedLobby(const QString&, const QString&)),
-            ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&, const QString&)), Qt::QueuedConnection);
+    {
+        QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(hwnet->lobbyPlayersModel());
+        if(playersSortFilterModel)
+        {
+            PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
+            connect(players, SIGNAL(nickAdded(const QString&, bool)),
+                    ui.pageNetGame->chatWidget, SLOT(nickAdded(const QString&, bool)));
+            connect(players, SIGNAL(nickRemoved(const QString&)),
+                    ui.pageNetGame->chatWidget, SLOT(nickRemoved(const QString&)));
+            connect(players, SIGNAL(nickAddedLobby(const QString&, bool)),
+                    ui.pageRoomsList->chatWidget, SLOT(nickAdded(const QString&, bool)));
+            connect(players, SIGNAL(nickRemovedLobby(const QString&)),
+                    ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&)));
+            connect(players, SIGNAL(nickRemovedLobby(const QString&, const QString&)),
+                    ui.pageRoomsList->chatWidget, SLOT(nickRemoved(const QString&, const QString&)));
+        }
+    }
 
 // teams selecting stuff
     connect(ui.pageNetGame->pNetTeamsWidget, SIGNAL(hhogsNumChanged(const HWTeam&)),

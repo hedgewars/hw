@@ -41,12 +41,19 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
 public slots:
-    void addPlayer(const QString & nickname);
-    void removePlayer(const QString & nickname);
-    void playerJoinedRoom(const QString & nickname);
+    void addPlayer(const QString & nickname, bool notify);
+    void removePlayer(const QString & nickname, const QString & msg = QString());
+    void playerJoinedRoom(const QString & nickname, bool notify);
     void playerLeftRoom(const QString & nickname);
     void resetRoomFlags();
     void setNickname(const QString & nickname);
+
+signals:
+    void nickAdded(const QString& nick, bool notifyNick);
+    void nickRemoved(const QString& nick);
+    void nickAddedLobby(const QString& nick, bool notifyNick);
+    void nickRemovedLobby(const QString& nick);
+    void nickRemovedLobby(const QString& nick, const QString& message);
 
 private:
     QHash<quint32, QIcon> & m_icons();

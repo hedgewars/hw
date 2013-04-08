@@ -99,11 +99,6 @@ class HWNewNet : public QObject
         void AuthFailed();
         void EnteredGame();
         void LeftRoom(const QString & reason);
-        void nickAdded(const QString& nick, bool notifyNick);
-        void nickRemoved(const QString& nick);
-        void nickAddedLobby(const QString& nick, bool notifyNick);
-        void nickRemovedLobby(const QString& nick);
-        void nickRemovedLobby(const QString& nick, const QString& message);
         void FromNet(const QByteArray & buf);
         void adminAccess(bool);
         void roomMaster(bool);
