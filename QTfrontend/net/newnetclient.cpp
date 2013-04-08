@@ -505,8 +505,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 emit connected();
             }
 
-            m_playersModel->addPlayer(lst[i]);
-            emit nickAddedLobby(lst[i], false);
+            m_playersModel->addPlayer(lst[i], false);
         }
         return;
     }
@@ -555,11 +554,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         }
 
         if (lst.size() < 3)
-            emit nickRemovedLobby(lst[1]);
+            m_playersModel->removePlayer(lst[1]);
         else
-            emit nickRemovedLobby(lst[1], lst[2]);
-
-        m_playersModel->removePlayer(lst[1]);
+            m_playersModel->removePlayer(lst[1], lst[2]);
 
         return;
     }
@@ -650,8 +647,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                     emit configAsked();
             }
 
-            m_playersModel->playerJoinedRoom(lst[i]);
-            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+            m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+
             emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
         }
         return;
@@ -783,9 +780,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             for(int i = 1; i < lst.size(); ++i)
             {
-                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
                 emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-                m_playersModel->playerJoinedRoom(lst[i]);
+                m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
             }
             return;
         }
@@ -797,7 +793,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 qWarning("Net: Bad LEFT message");
                 return;
             }
-            emit nickRemoved(lst[1]);
+
             if (lst.size() < 3)
                 emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
             else
