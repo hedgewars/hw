@@ -1247,7 +1247,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
 
 // room status stuff
     connect(hwnet, SIGNAL(roomMaster(bool)),
-            this, SLOT(NetGameChangeStatus(bool)), Qt::QueuedConnection);
+            this, SLOT(NetGameChangeStatus(bool)));
 
 // net page stuff
     connect(hwnet, SIGNAL(roomNameUpdated(const QString &)),
@@ -1754,9 +1754,6 @@ void HWForm::Music(bool checked)
 
 void HWForm::NetGameChangeStatus(bool isMaster)
 {
-    ui.pageNetGame->pGameCFG->setMaster(isMaster);
-    ui.pageNetGame->pNetTeamsWidget->setInteractivity(isMaster);
-
     if (isMaster)
         NetGameMaster();
     else
@@ -1808,6 +1805,7 @@ void HWForm::NetGameSlave()
     {
         NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
         connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)), netAmmo, SLOT(setNetSchemeConfig(QStringList &)));
+
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
 
         ui.pageNetGame->setRoomName(hwnet->getRoom());
