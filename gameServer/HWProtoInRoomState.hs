@@ -59,7 +59,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
         let roomTeams = teams rm
-        let hhNum = let p = if not $ null roomTeams then hhnum $ head roomTeams else 4 in newTeamHHNum roomTeams p
+        let hhNum = let p = if not $ null roomTeams then minimum [hhnum $ head roomTeams, canAddNumber roomTeams] else 4 in newTeamHHNum roomTeams p
         let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ roomTeams then
@@ -79,9 +79,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
                 AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
-                ModifyClient $ \c -> c{actionsPending = actionsPending cl
-                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]]
-                    },
+                AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam],
                 AnswerClients [sendChan cl] ["PING"]
                 ]
         where

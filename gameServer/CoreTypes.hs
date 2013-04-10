@@ -108,8 +108,7 @@ data ClientInfo =
         isKickedFromServer :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
-        teamsInGame :: Word,
-        actionsPending :: [Action]
+        teamsInGame :: Word
     }
 
 instance Eq ClientInfo where
