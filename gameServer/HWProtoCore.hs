@@ -30,7 +30,7 @@ handleCmd ("QUIT" : xs) = return [ByeClient msg]
 handleCmd ["PONG"] = do
     cl <- thisClient
     if pingsQueue cl == 0 then
-        return $ actionsPending cl ++ [ModifyClient (\c -> c{actionsPending = []})]
+        return [ProtocolError "Protocol violation"]
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
