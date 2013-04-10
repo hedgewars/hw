@@ -164,7 +164,7 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (t <= 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
         
         EX:= trunc(x);
         EY:= trunc(y);
@@ -227,9 +227,9 @@ begin
                 dY:= dY + cGravityf;
                 dec(t)
             until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
-                   ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (y > cWaterLine);
+                   ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (y > cWaterLine);
 
-            if TestCollWithLand(trunc(x), trunc(y), 5) and (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) > 21) then
+            if TestCollExcludingObjects(trunc(x), trunc(y), 5) and (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) > 21) then
                 begin
                 timer := 500;
                 t2 := 0.5 / sqrt(sqr(dX) + sqr(dY));
@@ -244,7 +244,7 @@ begin
                     or (y < 0)
                     or (trunc(x) > LAND_WIDTH)
                     or (trunc(y) > LAND_HEIGHT)
-                    or not TestCollWithLand(trunc(x), trunc(y), 5)
+                    or not TestCollExcludingObjects(trunc(x), trunc(y), 5)
                     or (timer = 0)
                 end;
             EX:= trunc(x);
@@ -304,7 +304,7 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (t <= 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
         EX:= trunc(x);
         EY:= trunc(y);
 
@@ -356,7 +356,7 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or 
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 6))) or (t = 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
         EX:= trunc(x);
         EY:= trunc(y);
         if t < 50 then
@@ -408,7 +408,7 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
         until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (t = 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
     EX:= trunc(x);
     EY:= trunc(y);
     if t < 50 then 
@@ -468,7 +468,7 @@ repeat
         dY:= dY + cGravityf;
         dec(t)
     until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
-           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 5))) or (t = 0);
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
     EX:= trunc(x);
     EY:= trunc(y);
     if t < 50 then 
@@ -521,7 +521,7 @@ repeat
             dY:= dY + cGravityf;
             dec(t)
        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or 
-               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, trunc(x), trunc(y), 6))) or (t = 0);
+               ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
         
         EX:= trunc(x);
         EY:= trunc(y);
@@ -602,7 +602,7 @@ begin
         EX:= trunc(x);
         EY:= trunc(y);
     until (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 4)) or 
-           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, EX, EY, 4))) or (EY > cWaterLine);
+           ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, EX, EY, 4))) or (EY > cWaterLine);
 
     if (EY < cWaterLine) and (dY >= 0) then
         begin
@@ -656,7 +656,7 @@ repeat
     rx:= trunc(x);
     ry:= trunc(y);
     if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 2)) or 
-        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me, rx, ry, 2)) then
+        ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 2)) then
     begin
         x:= x + vX * 8;
         y:= y + vY * 8;

@@ -64,7 +64,6 @@ function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
-function  TestCollWithLand(x, y, r: LongInt): boolean; inline;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
@@ -308,20 +307,6 @@ begin
     TestColl:= false;
 end;
 
-function TestCollWithLand(x, y, r: LongInt): boolean; inline;
-begin
-    if not CheckBounds(x, y, r) then
-        exit(false);
-
-    if (Land[y-r, x-r] > lfAllObjMask) or
-       (Land[y+r, x-r] > lfAllObjMask) or 
-       (Land[y-r, x+r] > lfAllObjMask) or
-       (Land[y+r, x+r] > lfAllObjMask) then
-       exit(true);
-    
-    TestCollWithLand:= false;
-end;
-
 
 // Wrapper to test various approaches.  If it works reasonably, will just replace.
 // Right now, converting to hwFloat is a tad inefficient since the x/y were hwFloat to begin with...
@@ -357,7 +342,7 @@ begin
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
-        if not skipLandCheck and TestCollWithLand(trunc(x), trunc(y), cHHRadius) then
+        if not skipLandCheck and TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
         begin
             if 0.4 < dY then
             begin
