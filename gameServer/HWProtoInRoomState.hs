@@ -79,8 +79,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
                 AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
-                AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam],
-                AnswerClients [sendChan cl] ["PING"]
+                AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam]
                 ]
         where
         canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
