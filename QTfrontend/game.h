@@ -29,6 +29,18 @@ class GameUIConfig;
 class GameCFGWidget;
 class TeamSelWidget;
 
+enum GameType
+{
+    gtNone     = 0,
+    gtLocal    = 1,
+    gtQLocal   = 2,
+    gtDemo     = 3,
+    gtNet      = 4,
+    gtTraining = 5,
+    gtCampaign = 6,
+    gtSave     = 7,
+};
+
 enum GameState
 {
     gsNotStarted = 0,
@@ -48,6 +60,13 @@ enum RecordType
 };
 
 bool checkForDir(const QString & dir);
+
+// last game info
+extern QList<QVariant> lastGameStartArgs;
+extern GameType lastGameType;
+extern GameCFGWidget * lastGameCfg;
+extern QString lastGameAmmo;
+extern TeamSelWidget * lastGameTeamSel;
 
 class HWGame : public TCPBase
 {
@@ -86,16 +105,6 @@ class HWGame : public TCPBase
         void FromNetChat(const QString & msg);
 
     private:
-        enum GameType
-        {
-            gtLocal    = 1,
-            gtQLocal   = 2,
-            gtDemo     = 3,
-            gtNet      = 4,
-            gtTraining = 5,
-            gtCampaign = 6,
-            gtSave     = 7,
-        };
         char msgbuf[MAXMSGCHARS];
         QString ammostr;
         GameUIConfig * config;

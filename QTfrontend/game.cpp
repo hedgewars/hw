@@ -38,6 +38,13 @@
 #include <QTextStream>
 #include "ThemeModel.h"
 
+// last game info
+QList<QVariant> lastGameStartArgs = QList<QVariant>();
+GameType lastGameType = gtNone;
+GameCFGWidget * lastGameCfg = NULL;
+QString lastGameAmmo = NULL;
+TeamSelWidget * lastGameTeamSel = NULL;
+
 QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
@@ -48,6 +55,10 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     this->config = config;
     this->gamecfg = gamecfg;
     netSuspend = false;
+
+    lastGameCfg = gamecfg;
+    lastGameAmmo = ammo;
+    lastGameTeamSel = pTeamSelWidget;
 }
 
 HWGame::~HWGame()
@@ -228,6 +239,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
                     SendQuickConfig();
                     break;
                 }
+                case gtNone:
                 case gtSave:
                 case gtDemo:
                     break;
@@ -435,6 +447,9 @@ void HWGame::StartNet()
 
 void HWGame::StartLocal()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtLocal;
+
     gameType = gtLocal;
     demo.clear();
     Start(false);
@@ -443,6 +458,9 @@ void HWGame::StartLocal()
 
 void HWGame::StartQuick()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtQLocal;
+
     gameType = gtQLocal;
     demo.clear();
     Start(false);
@@ -451,6 +469,10 @@ void HWGame::StartQuick()
 
 void HWGame::StartTraining(const QString & file)
 {
+    lastGameStartArgs.clear();
+    lastGameStartArgs.append(file);
+    lastGameType = gtTraining;
+
     gameType = gtTraining;
     training = "Missions/Training/" + file + ".lua";
     demo.clear();
@@ -460,6 +482,12 @@ void HWGame::StartTraining(const QString & file)
 
 void HWGame::StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam)
 {
+    lastGameStartArgs.clear();
+    lastGameStartArgs.append(camp);
+    lastGameStartArgs.append(campScript);
+    lastGameStartArgs.append(campTeam);
+    lastGameType = gtCampaign;
+
     gameType = gtCampaign;
     campaign = camp;
     campaignScript = "Missions/Campaign/" + camp + "/" + campScript;

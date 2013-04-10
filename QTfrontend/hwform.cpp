@@ -286,6 +286,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageInfo->BtnSnapshots, SIGNAL(clicked()), this, SLOT(OpenSnapshotFolder()));
 
     connect(ui.pageGameStats, SIGNAL(saveDemoRequested()), this, SLOT(saveDemoWithCustomName()));
+    connect(ui.pageGameStats, SIGNAL(restartGameRequested()), this, SLOT(restartGame()));
 
     connect(ui.pageSinglePlayer->BtnSimpleGamePage, SIGNAL(clicked()), this, SLOT(SimpleGame()));
     connect(ui.pageSinglePlayer->BtnTrainPage, SIGNAL(clicked()), pageSwitchMapper, SLOT(map()));
@@ -671,6 +672,21 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
                  && lastid != ID_PAGE_SELECTWEAPON)
         {
             curTeamSelWidget->resetPlayingTeams(teamsList);
+        }
+    }
+
+    if (id == ID_PAGE_GAMESTATS)
+    {
+        switch(lastGameType) {
+        case gtLocal:
+        case gtQLocal:
+        case gtTraining:
+        case gtCampaign:
+            ui.pageGameStats->restartBtnVisible(true);
+            break;
+        default:
+            ui.pageGameStats->restartBtnVisible(false);
+            break;
         }
     }
 
@@ -2014,6 +2030,31 @@ void HWForm::saveDemoWithCustomName()
     }
 }
 
+void HWForm::restartGame()
+{
+    // get rid off old game stats page
+    if(ui.Pages->currentIndex() == ID_PAGE_GAMESTATS)
+        GoBack();
+
+    CreateGame(lastGameCfg, lastGameTeamSel, lastGameAmmo);
+
+    switch(lastGameType) {
+    case gtTraining:
+        game->StartTraining(lastGameStartArgs.at(0).toString());
+        break;
+    case gtQLocal:
+        game->StartQuick();
+        break;
+    case gtCampaign:
+        game->StartCampaign(lastGameStartArgs.at(0).toString(), lastGameStartArgs.at(1).toString(), lastGameStartArgs.at(2).toString());
+        break;
+    case gtLocal:
+        game->StartLocal();
+        break;
+    default:
+        break;
+    }
+}
 
 void HWForm::ShowErrorMessage(const QString & msg)
 {

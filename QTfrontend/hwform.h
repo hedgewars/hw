@@ -143,6 +143,7 @@ class HWForm : public QMainWindow
         void openRegistrationPage();
 
         void startGame();
+        void restartGame();
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
