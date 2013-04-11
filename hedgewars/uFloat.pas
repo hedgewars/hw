@@ -84,7 +84,8 @@ function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round bu
 function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
 function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
 function hwPow(const t: hwFloat; p: LongWord): hwFloat; inline; // Returns the power of the value
-function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function hwSqrt1(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function hwSqrt(const x: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
@@ -385,14 +386,14 @@ while p > 0 do
     end
 end;
 
-function hwSqrt(const t: hwFloat): hwFloat;
+function hwSqrt1(const t: hwFloat): hwFloat;
 const pwr = 8; // even value, feel free to adjust
       rThreshold = 1 shl (pwr + 32);
       lThreshold = 1 shl (pwr div 2 + 32);
 var l, r: QWord;
     c: hwFloat;
 begin
-hwSqrt.isNegative:= false;
+hwSqrt1.isNegative:= false;
 
 if t.Round = 0 then
     begin
@@ -425,8 +426,35 @@ repeat
         l:= c.QWordValue
 until r - l <= 1;
 
-hwSqrt.QWordValue:= l
+hwSqrt1.QWordValue:= l
 end;
+
+function hwSqrt(const x: hwFloat): hwFloat;
+var r, t, s, q: QWord;
+    i: integer;
+begin
+hwSqrt.isNegative:= false;
+
+t:= $4000000000000000;
+r:= 0;
+q:= x.QWordValue;
+
+for i:= 0 to 31 do
+    begin
+    s:= r + t;
+    r:= r shr 1;
+    if s <= q then
+        begin
+        dec(q, s);
+        inc(r, t);
+        end;
+    t:= t shr 2;
+    end;
+
+hwSqrt.QWordValue:= r shl 16
+end;
+
+
 
 function Distance(const dx, dy: hwFloat): hwFloat;
 begin
