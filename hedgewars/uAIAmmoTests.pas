@@ -184,7 +184,7 @@ repeat
             end;
         end
 //until (value > 204800) or (rTime > 4250); not so useful since adding score to the drowning
-until rTime > 4250;
+until rTime > 5050 - Level * 800;
 TestBazooka:= valueResult
 end;
 
@@ -264,7 +264,7 @@ begin
                 valueResult:= value-2500 // trying to make it slightly less attractive than a bazooka, to prevent waste.  AI could use awareness of weapon count
                 end;
             end
-    until rTime > 4250;
+    until rTime > 5050 - Level * 800;
     TestDrillRocket:= valueResult
 end;
 
@@ -323,7 +323,7 @@ repeat
             valueResult:= value
             end;
      end
-until (rTime > 4250);
+until (rTime > 5050 - Level * 800);
 TestSnowball:= valueResult
 end;
 
@@ -374,7 +374,7 @@ repeat
             valueResult:= Score
             end;
         end
-until (TestTime > 4250);
+until (TestTime > 5050 - Level * 800);
 TestMolotov:= valueResult
 end;
 
@@ -420,8 +420,8 @@ repeat
 
     if (valueResult < Score) and (Score > 0) then
         begin
-        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
-        ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level * 3));
+        ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 20);
         ap.Time:= TestTime;
         ap.ExplR:= 100;
         ap.ExplX:= EX;
@@ -430,7 +430,7 @@ repeat
         end;
     end
 //until (Score > 204800) or (TestTime > 4000);
-until TestTime > 4000;
+until TestTime > 4500 - Level * 512;
 TestGrenade:= valueResult
 end;
 
@@ -478,7 +478,7 @@ repeat
 
      if valueResult < Score then
         begin
-        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
+        ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level * 2));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
         ap.Time:= TestTime div 1000 * 1000;
         ap.ExplR:= 90;
