@@ -100,19 +100,19 @@
     </message>
     <message>
         <source>Please give us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Per favore, inviaci un commento!</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation type="unfinished"></translation>
+        <translation>Siamo sempre felici di ricevere suggerimenti, idee o segnalazioni di bachi.</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="unfinished"></translation>
+        <translation>Se torvi u nbaco, puoi vedere se è già conosciuto qui (in inglese): </translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il tuo indirizzo di posta elettronica è opzionale, ma potremmo volerti contattare.</translation>
     </message>
 </context>
 <context>
@@ -199,14 +199,14 @@
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Impossibile creare la directory %1</translation>
+        <translation>Impossibile creare la directory %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished">Impossibile creare la directory dati:
+        <translation>Impossibile creare la directory dati:
 %1
 
 Per favore controlla l&apos;installazione!</translation>
@@ -586,15 +586,18 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Per collegarsi al server, per favore accedi.
+
+Se non possiedi un account su www.hedgewars.org,
+inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Soprannome:</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Password:</translation>
     </message>
 </context>
 <context>
@@ -954,11 +957,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play local network game</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partita in rete locale</translation>
     </message>
     <message>
         <source>Play official network game</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca una partita sul server ufficiale</translation>
     </message>
 </context>
 <context>
@@ -1003,7 +1006,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Insert your address here</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisci il tuo indirizzo</translation>
     </message>
 </context>
 <context>
@@ -2383,23 +2386,23 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Ripristina</translation>
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la porta di configurazione del server di Hedgewars</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation type="unfinished"></translation>
+        <translation>Invita i tuoi amici sul tuo serve con 1 solo clic!</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca per copiare il tuo URL univoco del serve negli appunti. Invia questo collegamento ai tuoi amici e potranno unirsi a te.</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvia un server privato</translation>
     </message>
 </context>
 <context>
@@ -2514,19 +2517,20 @@ Non tutti i giocatori sono pronti.</translation>
     <name>TCPBase</name>
     <message>
         <source>Unable to start server at %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile avviare il server a %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossibile eseguire il motore a %1
+Codice di errore: %2</translation>
     </message>
 </context>
 <context>
     <name>TeamSelWidget</name>
     <message>
         <source>At least two teams are required to play!</source>
-        <translation type="unfinished"></translation>
+        <translation>Servono almeno due squadre per giocare!</translation>
     </message>
 </context>
 <context>
