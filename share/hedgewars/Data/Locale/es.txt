@@ -171,7 +171,6 @@
 02:01=%1 prefiere jugar a Ecco the dolphin
 02:01=%1 ha ido a visitar Aquaria
 02:01=%1 ha encontrado la ciudad perdida de la Atlántida
-02:01=%1 hace audiciones para el personaje principal de Bioshock 3
 02:01=Necesitas practicar más tu estilo perrito, %1
 02:01=Necesitas practicar más tu brazada, %1
 02:01=Necesitas practicar más tu estilo mariposa, %1

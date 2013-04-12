@@ -175,7 +175,6 @@
 02:01=%1 chce hrát delfína Ecca
 02:01=%1 odešel navštívit akvárium
 02:01=%1 našel ztracené město Atlantidu
-02:01=%1 míří na hlavní roli v Bioshocku 3
 02:01=Na tvém stylu čubička by ještě chtělo zapracovat, %1
 02:01=%1 si neměl vozit vodní lyže
 02:01=%1 nemá rád vodní sporty

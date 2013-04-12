@@ -191,7 +191,6 @@
 02:01=Sonic konnte nicht schwimmen, %1 auch nicht
 02:01=%1 spielt »Flipper der Delphin«
 02:01=%1 ist von uns gegangen, um Aquaria zu besuchen
-02:01=%1 strebt die Hauptrolle in Bioshock 3 an
 02:01=%1 hasst Wassersport
 02:01=%1 wird für immer Blasen machen
 02:01=%1 war ganz, ganz knapp vor einem Floß

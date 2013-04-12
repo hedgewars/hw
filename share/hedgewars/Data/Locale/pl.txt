@@ -193,7 +193,6 @@
 02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
 02:01=%1 odnalazł Atlantydę!
-02:01=%1 chce być główną postacią w Bioshock 3
 02:01=Trzeba było się uczyć pływać...
 02:01=%1 powinien ze sobą zabrać narty wodne
 02:01=%1 nie lubi sportów wodnych

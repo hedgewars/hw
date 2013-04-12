@@ -237,8 +237,6 @@
 02:01=%1 去水族館報到了
 ;02:01=%1 has found the lost city of Atlantis
 02:01=%1 找到了傳說中的亞特蘭蒂斯城
-;02:01=%1 aims for the lead role in Bioshock 3
-02:01=%1 的目的是為了在生化危機3中起帶頭作用
 ;02:01=Your doggy paddle could use a little work, %1
 02:01=狗爬式會有用的, %1
 ;02:01=%1 should have brought a jet ski

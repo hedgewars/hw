@@ -178,7 +178,6 @@
 02:01=%1 foi brincar com os golfinhos
 02:01=%1 foi visitar o Oceanário
 02:01=%1 encontrou a Atlântida perdida
-02:01=%1 inscreve-se no papel principal do Bioshock 3
 02:01=O teu pato insuflável ficou triste %1
 02:01=%1 devia ter comprado uma mota de água
 02:01=%1 não gosta de desportos náuticos
