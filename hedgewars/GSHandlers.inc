@@ -417,14 +417,13 @@ begin
     CalcRotationDirAngle(Gear);
 
     // let's add some smoke depending on speed
-    s:= max(32,152 - hwRound(Distance(Gear^.dX,Gear^.dY)*120))+random(10);
+    s:= max(32,152 - round((abs(hwFloat2FLoat(Gear^.dX))+abs(hwFloat2Float(Gear^.dY)))*120))+random(10);
     if (GameTicks mod s) = 0 then
         begin
         // adjust angle to match the texture
         if Gear^.dX.isNegative then
-            i:= 130
-        else
-            i:= 50;
+             i:= 130
+        else i:= 50;
 
         smoke:= AddVisualGear(hwRound(Gear^.X)-round(cos((Gear^.DirAngle+i) * pi / 180)*20), hwRound(Gear^.Y)-round(sin((Gear^.DirAngle+i) * pi / 180)*20), vgtSmoke);
         if smoke <> nil then
