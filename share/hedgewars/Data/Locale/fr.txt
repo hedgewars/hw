@@ -148,7 +148,6 @@
 02:01=%1 veut jouer à Ecco the Dolphin
 02:01=%1 est parti visiter l'aquarium
 02:01=%1 a trouvé la cité perdue d'Atlantide
-02:01=%1 se propose pour le rôle principal de Bioshock 3
 02:01=Ta pagaie pour chiens aurait pû servir, %1
 02:01=%1 aurait dû acheter un jet ski
 02:01=%1 n'aime pas les sports aquatiques

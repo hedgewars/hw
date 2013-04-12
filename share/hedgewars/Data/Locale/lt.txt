@@ -175,7 +175,6 @@
 02:01=%1 nori žaisti delfinus
 02:01=%1 nuejo i Aquaria
 02:01=%1 rado prarasta atlantijos miesta
-02:01=%1 bando pajimti pagrindini vaidmeni Bioshock 3
 02:01=Tavo šuniuko stylius galėtu panaudoti šiek tiek daugiau praktikos, %1
 02:01=%1 galėjo atsinešti laiva
 02:01=%1 nepatinka vandens sportas

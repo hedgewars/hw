@@ -180,7 +180,6 @@
 02:01=%1 vill leka Ecco the dolphin
 02:01=%1 har gått för att besöka Aquaria
 02:01=%1 har funnit den förlorade staden Atlantis
-02:01=%1 siktar på huvudrollen i Bioshock 3
 02:01=Du borde träna på ditt hundsim, %1
 02:01=%1 skulle ha tagit med sig vattenskidor
 02:01=%1 gillar inte vattensporter

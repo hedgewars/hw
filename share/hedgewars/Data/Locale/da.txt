@@ -175,7 +175,6 @@
 02:01=%1 leger delfin
 02:01=%1 er taget til Lalandia
 02:01=%1 har fundet den forsvundne by Atlantis
-02:01=%1 håber på en hovedrolle i Bioshock 3
 02:01=Du burde arbejde lidt med din hundesvømning, %1
 02:01=%1 burde have medbragt jetski
 02:01=%1 bryder sig ikke om vandsport
