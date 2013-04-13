@@ -407,7 +407,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(true)          // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
-            << QVariant(true)          // low gravity    5
+            << QVariant(false)         // low gravity    5
             << QVariant(false)         // laser sight    6
             << QVariant(false)         // invulnerable   7
             << QVariant(false)         // reset health   8
