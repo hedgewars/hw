@@ -61,6 +61,6 @@
 #define AMMOLINE_ONEEVERY_DELAY "0000000000000205500000040007004000000000220000000600020"
 #define AMMOLINE_ONEEVERY_CRATE "1111110111111111111111111111111111111111111111111111111"
 
-//When adding new weapons also inster one element in cDefaultAmmos list (hwconsts.cpp.in)
+//When adding new weapons also insert one element in cDefaultAmmos list (hwconsts.cpp.in)
 
 
