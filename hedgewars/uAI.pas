@@ -36,15 +36,18 @@ uses uConsts, SDLh, uAIMisc, uAIAmmoTests, uAIActions,
 var BestActions: TActions;
     CanUseAmmo: array [TAmmoType] of boolean;
     StopThinking: boolean;
-    ThinkThread: PSDL_Thread = nil;
     StartTicks: Longword;
+    ThinkThread: PSDL_Thread;
+    ThreadLock: PSDL_Mutex;
 
 procedure FreeActionsList;
 begin
     AddFileLog('FreeActionsList called');
+    SDL_LockMutex(ThreadLock);
     if (ThinkThread <> nil) then
-        SDL_WaitThread(ThinkThread, nil);
-    ThinkThread:=nil;
+        SDL_KillThread(ThinkThread);
+    ThinkThread:= nil;
+    SDL_UnlockMutex(ThreadLock);
 
     with CurrentHedgehog^ do
         if Gear <> nil then
@@ -360,7 +363,7 @@ var BackMe, WalkMe: TGear;
     switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
-AddFileLog('Thread started');
+AddFileLog('Think thread started');
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 StartTicks:= GameTicks;
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
@@ -440,7 +443,9 @@ else
     end;
 
 Me^.State:= Me^.State and (not gstHHThinking);
+SDL_LockMutex(ThreadLock);
 ThinkThread:= nil;
+SDL_UnlockMutex(ThreadLock);
 Think:= 0;
 end;
 
@@ -471,8 +476,10 @@ if Targets.Count = 0 then
     end;
 
 FillBonuses((Me^.State and gstAttacked) <> 0);
-AddFileLog('Enter Think Thread');
+
+SDL_LockMutex(ThreadLock);
 ThinkThread:= SDL_CreateThread(@Think{$IFDEF SDL13}, 'think'{$ENDIF}, Me);
+SDL_UnlockMutex(ThreadLock);
 end;
 
 //var scoreShown: boolean = false;
@@ -519,14 +526,13 @@ procedure initModule;
 begin
     StartTicks:= 0;
     ThinkThread:= nil;
+    ThreadLock:= SDL_CreateMutex();
 end;
 
 procedure freeModule;
 begin
-    if (ThinkThread <> nil) then
-        SDL_KillThread(ThinkThread);
-    ThinkThread:= nil;
     FreeActionsList();
+    SDL_DestroyMutex(ThreadLock);
 end;
 
 end.
