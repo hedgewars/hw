@@ -38,7 +38,9 @@ void TeamSelWidget::addTeam(HWTeam team)
         curPlayingTeams.push_back(team);
         connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
+        blockSignals(true);
         dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
     }
@@ -210,7 +212,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     {
         connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
+        blockSignals(true);
         dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
         emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
