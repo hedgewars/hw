@@ -43,9 +43,12 @@ var BestActions: TActions;
 procedure FreeActionsList;
 begin
     AddFileLog('FreeActionsList called');
-    SDL_LockMutex(ThreadLock);
     if (ThinkThread <> nil) then
-        SDL_KillThread(ThinkThread);
+        begin
+        StopThinking:= true;
+        SDL_WaitThread(ThinkThread, nil);
+        end;
+    SDL_LockMutex(ThreadLock);
     ThinkThread:= nil;
     SDL_UnlockMutex(ThreadLock);
 
