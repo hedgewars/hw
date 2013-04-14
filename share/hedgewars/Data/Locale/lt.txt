@@ -446,7 +446,7 @@
 03:51=Rastas Ant Žemės
 03:52=UNUSED
 03:53=Tipas 40
-03:54=Pastatyk Ka Nors
+;03:54=Pastatyk Ka Nors
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuok savo priešus su paprasta granata.|Ji sprogs kaip jos laikmatis pasieks nuli.|1-5: Nustatyk granatos laikmati|Ataka: Laikyk kad mestum stipriau

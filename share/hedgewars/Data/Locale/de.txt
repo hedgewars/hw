@@ -463,8 +463,8 @@
 03:51=Am Boden gefunden
 03:52=NICHT IN VERWENDUNG
 03:53=Typ 40
-03:54=Baue etwas
-03:55=Werkzeug
+;03:54=Baue etwas
+03:54=Werkzeug
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Greife deine Feinde mit einfachen Granaten an.|Der Zeitzünder steuert den Explosionszeitpunkt.|1-5: Zeitzünder einstellen|Angriff: Halten, um mit mehr Kraft zu werfen
@@ -521,8 +521,8 @@
 04:51=Wirf mit Dreck um dich!|Schmerzt ein wenig und schubst Igel weg.
 04:52=NICHT IN VERWENDUNG
 04:53=Unternimm eine Reise durch Zeit und Raum,|während du deine Kameraden alleine am Schlachtfeld zurücklässt.|Sei darauf vorbereitet jederzeit wieder zurückzukommen,|oder auf Sudden Death wenn sie alle besiegt wurden.|Disclaimer: Nicht funktionstüchtig wenn in Sudden Death,|wenn du alleine bist - oder der König.
-04:54=IN ARBEIT
-04:55=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!
+;04:54=IN ARBEIT
+04:54=Versprühe einen Strahl klebriger Flocken.|Baue Brücken, begrabe Gegner, versiegle Tunnel.|Pass auf, dass du selbst nichts abbekommst!
 
 ; Game goal strings
 05:00=Spielmodifikationen
