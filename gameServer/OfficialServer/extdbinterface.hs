@@ -14,7 +14,7 @@ import CoreTypes
 
 
 dbQueryAccount =
-    "SELECT users.pass, users_roles.rid FROM users LEFT JOIN users_roles ON users.uid = users_roles.uid WHERE users.name = ?"
+    "SELECT users.pass, users_roles.rid FROM users LEFT JOIN users_roles ON (users.uid = users_roles.uid AND users_roles.rid = 3) WHERE users.name = ?"
 
 dbQueryStats =
     "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
