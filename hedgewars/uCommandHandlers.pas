@@ -573,7 +573,7 @@ procedure chSetSeed(var s: shortstring);
 begin
 if isDeveloperMode then
     begin
-    SetRandomSeed(s);
+    SetRandomSeed(s, true);
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end
