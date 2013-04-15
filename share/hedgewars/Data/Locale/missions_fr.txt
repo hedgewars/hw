@@ -13,7 +13,7 @@ Basic_Training_-_Shotgun.desc="On tire d'abord, on pose les questions après !"
 Basic_Training_-_Sniper_Rifle.name=Initiation au Sniper
 Basic_Training_-_Sniper_Rifle.desc="Pan ! En pleine tête !"
 
-Basic_Training_-_Rope.name=Initiation à la Corde Ninja
+Basic_Training_-_Rope.name=Initiation à la Grappin
 Basic_Training_-_Rope.desc="Bouge de là et Balance toi !"
 
 User_Mission_-_Dangerous_Ducklings.name=Mission: Canards dangereux
@@ -40,7 +40,7 @@ User_Mission_-_Newton_and_the_Hammock.desc="Souvenez vous petits hérissons : La
 User_Mission_-_The_Great_Escape.name=Mission: La grande évasion
 User_Mission_-_The_Great_Escape.desc="Tu pense que tu peux me capturer ?!"
 
-User_Mission_-_Rope_Knock_Challenge.name=Challenge: A coup de Corde Ninja
+User_Mission_-_Rope_Knock_Challenge.name=Challenge: A coup de Grappin
 User_Mission_-_Rope_Knock_Challenge.desc="Regarde derrière toi !"
 
 User_Mission_-_RCPlane_Challenge.name=Challenge: Avion télécommandé

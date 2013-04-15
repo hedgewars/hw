@@ -513,5 +513,5 @@
 05:18=Attaques illimitées
 05:19=Les armes sont réinitialisées à la fin du tour
 05:20=Les armes ne sont pas partagées entre les hérissons
-05:21=Relais: Des équipes sous la même couleur partagent le tour|Temps partagé: Dès que l'un à fini son action il passe la main a sont camarade pour qu'il agisse|avant la fin du tour
+05:21=Relais: Des équipes sous la même couleur partagent le tour|Temps partagé: Dès que l'un à fini son action il passe la main à sont camarade pour qu'il agisse|avant la fin du tour
 
