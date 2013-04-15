@@ -30,7 +30,7 @@ unit uRandom;
 interface
 uses uFloat;
 
-procedure SetRandomSeed(Seed: shortstring); // Sets the seed that should be used for generating pseudo-random values.
+procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean); // Sets the seed that should be used for generating pseudo-random values.
 function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
 function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
 procedure AddRandomness(r: LongWord); inline;
@@ -59,18 +59,24 @@ cirbuf[n]:=
 GetNext:= cirbuf[n]
 end;
 
-procedure SetRandomSeed(Seed: shortstring);
-var i: Longword;
+procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean);
+var i, t, l: Longword;
 begin
 n:= 54;
 
 if Length(Seed) > 54 then
     Seed:= copy(Seed, 1, 54); // not 55 to ensure we have odd numbers in cirbuf
 
-for i:= 0 to Pred(Length(Seed)) do
-    cirbuf[i]:= byte(Seed[i + 1]);
+t:= 0;
+l:= Length(Seed);
 
-for i:= Length(Seed) to 54 do
+while (t < l) and ((not dropAdditionalPart) or (Seed[t + 1] <> '|')) do
+    begin
+    cirbuf[t]:= byte(Seed[t + 1]);
+    inc(t)
+    end;
+
+for i:= t to 54 do
     cirbuf[i]:= $A98765 + 68; // odd number
 
 for i:= 0 to 1023 do
