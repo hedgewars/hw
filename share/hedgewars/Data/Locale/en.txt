@@ -510,8 +510,8 @@
 04:52=UNUSED
 04:53=Take a trip through time and space,|while leaving your comrades to fight on alone.|Be prepared to return at any time,|or for Sudden Death or if they are all defeated.|Disclaimer. Does not function in Sudden Death,|if you are alone, or if you are a King.|Attack: Activate
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
-04:55=Bring back the ice-age on your ennemies!|With the Freezer, freeze the hedgehogs, make the floor slippery or save yourself from drowning by freezing the water.|Attack: Shoot
-04:56=A knife but so much more,|you can throw this cleaver on your ennemy, block passages and tunnels and even use it for climbing!|Be careful: might be dangerous.|Attack: Hold to shoot with more power
+04:55=Bring back the ice-age!|Freeze hedgehogs, make the floor slippery or|save yourself from drowning by freezing the water.|Attack: Shoot
+04:56=You can throw two cleavers at your enemy,|block passages and tunnels and even use them for climbing!|Be careful: Playing with knifes is dangerous.|Attack: Hold to shoot with more power
 
 ; Game goal strings
 05:00=Game Modes

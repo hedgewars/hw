@@ -487,8 +487,8 @@
 04:52=UNUSED
 04:53=Faîtes un voyage dans le temps et l'espace en|laissant vos camarades se battre seuls!|Soyez préparé à revenir a n'importequel moment|ou lors d'une mort subite ou encore si tout vos camarades sont morts|Attention ne marche pas pendant la mort subite, si vous êtes le dernier survivant ou le roi.|Attaque : Activer
 04:54=Et voici le nouveau sol en bouteille! Ce spray produit des flocon collants sur lesquels vous pouvez marchez!|Construisez des pont,enterrez vos ennemis, scellez des tunnels.|Attention à ne pas en mettre sur vous!|Attaque : Activez|Haut/Bas : Continuez à viser|Droite/Gauche : Changer la puissance de tir
-04:55=Apportez l'ère glacière sur vos ennemis!|Avec le congélateur gelez les herissons rendez le sol glissant et sauvez vous de la noyade en gelant l'eau!!|Attaque : Tirez
-04:56=Un couteau mais bien plus,|ce hachoir se lance sur les ennemis, bloc les passages et tunnels et peut même servir d'appui pour gravir une montagne!|Mais attention à ne pas vous blesser.|Attaque : maintenez pour la lancer avec plus de force
+04:55=Apportez l'ère glacière sur vos ennemis!|Avec le congélateur gelez les herissons rendez le sol glissant|et sauvez vous de la noyade en gelant l'eau!!|Attaque : Tirez
+04:56=Un couteau mais bien plus,|ce hachoir se lance sur les ennemis, bloc les passages et tunnels et|peut même servir d'appui pour gravir une montagne!|Mais attention à ne pas vous blesser.|Attaque : maintenez pour la lancer avec plus de force (deux fois)
 
 
 ; Game goal strings
