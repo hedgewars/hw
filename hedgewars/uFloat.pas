@@ -318,19 +318,18 @@ begin
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
 t:= z1 - z2 * z.Round;
-if t.QWordValue = 0 then
-    z.Frac:= 0
-else
+z.Frac:= 0;
+
+if t.QWordValue <> 0 then
     begin
-    while ((t.QWordValue and $8000000000000000) = 0) and ((z2.QWordValue and $8000000000000000) = 0) do
+    while ((t.QWordValue and $FF00000000000000) = 0) and ((z2.QWordValue and $FF00000000000000) = 0) do
         begin
-        t.QWordValue:= t.QWordValue shl 1;
-        z2.QWordValue:= z2.QWordValue shl 1
+        t.QWordValue:= t.QWordValue shl 8;
+        z2.QWordValue:= z2.QWordValue shl 8
         end;
+        
     if z2.Round > 0 then
-        z.Frac:= (t.QWordValue) div (z2.Round)
-    else
-        z.Frac:= 0
+        inc(z.QWordValue, t.QWordValue div z2.Round);
     end
 end;
 
