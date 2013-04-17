@@ -306,8 +306,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
             int size = msg.size();
             QString newResolution = QString().append(msg.mid(2)).left(size - 4);
             QStringList wh = newResolution.split('x');
-            config->Form->ui.pageOptions->windowWidthEdit->setText(wh[0]);
-            config->Form->ui.pageOptions->windowHeightEdit->setText(wh[1]);
+            config->Form->ui.pageOptions->windowWidthEdit->setValue(wh[0].toInt());
+            config->Form->ui.pageOptions->windowHeightEdit->setValue(wh[1].toInt());
             break;
         }
         default:
