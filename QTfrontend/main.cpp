@@ -261,11 +261,11 @@ int main(int argc, char *argv[])
     engine->setWriteDir(cfgdir->absolutePath());
     engine->mountPacks();
 
-    DataManager::ensureFileExists("physfs://hedgewars.ini");
-
     QTranslator Translator;
     {
-        QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
+        QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
+        settings.setIniCodec("UTF-8");
+
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
             cc = HWApplication::keyboardInputLocale().name();
