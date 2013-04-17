@@ -278,7 +278,7 @@ else
     if z1.QWordValue = z2.QWordValue then
         b:= false
     else
-        b:= not((z1.QWordValue = z2.QWordValue) or ((z2.QWordValue < z1.QWordValue) <> z1.isNegative))
+        b:= (z2.QWordValue < z1.QWordValue) = z1.isNegative
 end;
 
 operator > (const z1, z2: hwFloat) b : boolean; inline;
