@@ -315,6 +315,7 @@ end;
 operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
 var t: hwFloat;
 begin
+if z2.QWordValue = 0 then inc(z2.QWordValue);
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
 t:= z1 - z2 * z.Round;
