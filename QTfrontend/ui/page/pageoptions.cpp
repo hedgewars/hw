@@ -275,11 +275,13 @@ QLayout * PageOptions::bodyLayoutDefinition()
             winLabelX->setFixedWidth(40);
             winLabelX->setAlignment(Qt::AlignCenter);
 
-            windowWidthEdit = new QLineEdit(groupGame);
-            windowWidthEdit->setValidator(new QIntValidator(this));
+            // TODO: less random max. also:
+            // make some min/max-consts, shared with engine?
+            windowWidthEdit = new QSpinBox(groupGame);
+            windowWidthEdit->setRange(640, 102400);
             windowWidthEdit->setFixedSize(55, CBResolution->height());
-            windowHeightEdit = new QLineEdit(groupGame);
-            windowHeightEdit->setValidator(new QIntValidator(this));
+            windowHeightEdit = new QSpinBox(groupGame);
+            windowHeightEdit->setRange(480, 102400);
             windowHeightEdit->setFixedSize(55, CBResolution->height());
 
             winResLayout->addWidget(windowWidthEdit, 0);
