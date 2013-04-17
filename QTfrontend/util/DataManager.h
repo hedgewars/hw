@@ -117,6 +117,8 @@ class DataManager: public QObject
         QStandardItemModel * colorsModel();
         QStandardItemModel * bindsModel();
 
+        QString settingsFileName();
+
         static bool ensureFileExists(const QString & fileName);
 
     public slots:
@@ -148,6 +150,7 @@ class DataManager: public QObject
         ThemeModel * m_themeModel; ///< theme model instance
         QStandardItemModel * m_colorsModel;
         QStandardItemModel * m_bindsModel;
+        QString m_settingsFileName;
 };
 
 #endif // HEDGEWARS_DATAMANAGER_H

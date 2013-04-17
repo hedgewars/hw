@@ -25,6 +25,7 @@
 #include <QStringList>
 #include <QStandardItemModel>
 #include <QFileInfo>
+#include <QSettings>
 
 #include "hwconsts.h"
 #include "HWApplication.h"
@@ -160,6 +161,36 @@ QStandardItemModel * DataManager::bindsModel()
     }
 
     return m_bindsModel;
+}
+
+QString DataManager::settingsFileName()
+{
+    if(m_settingsFileName.isEmpty())
+    {
+        QFile settingsFile("physfs://settings.ini");
+
+        if(!settingsFile.exists())
+        {
+            QFile oldSettingsFile("physfs://hedgewars.ini");
+
+            settingsFile.open(QFile::WriteOnly);
+            settingsFile.close();
+
+            if(oldSettingsFile.exists())
+            {
+                QSettings sOld(oldSettingsFile.fileName(), QSettings::IniFormat);
+                QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
+                sNew.setIniCodec("UTF-8");
+
+                foreach(const QString & key, sOld.allKeys())
+                    sNew.setValue(key, sOld.value(key));
+            }
+        }
+
+        m_settingsFileName = settingsFile.fileName();
+    }
+
+    return m_settingsFileName;
 }
 
 void DataManager::reload()
