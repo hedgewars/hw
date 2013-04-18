@@ -26,6 +26,7 @@
 #include <QStandardItemModel>
 #include <QFileInfo>
 #include <QSettings>
+#include <QColor>
 
 #include "hwconsts.h"
 #include "HWApplication.h"
@@ -183,7 +184,12 @@ QString DataManager::settingsFileName()
                 sNew.setIniCodec("UTF-8");
 
                 foreach(const QString & key, sOld.allKeys())
-                    sNew.setValue(key, sOld.value(key));
+                {
+                    if(key.startsWith("colors/color"))
+                        sNew.setValue(key, sOld.value(key).value<QColor>().name());
+                    else
+                        sNew.setValue(key, sOld.value(key));
+                }
             }
         }
 

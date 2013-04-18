@@ -25,6 +25,7 @@
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
 #include <utility>
+#include <QVariant>
 
 #include "gameuiconfig.h"
 #include "hwform.h"
@@ -156,7 +157,7 @@ void GameUIConfig::reloadValues(void)
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            model->item(i)->setData(value(QString("colors/color%1").arg(i), model->item(i)->data()));
+            model->item(i)->setData(QColor(value(QString("colors/color%1").arg(i), model->item(i)->data()).toString()));
     }
 
     { // load binds
@@ -319,7 +320,7 @@ void GameUIConfig::SaveOptions()
     { // save colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
-            setValue(QString("colors/color%1").arg(i), model->item(i)->data());
+            setValue(QString("colors/color%1").arg(i), model->item(i)->data().value<QColor>().name());
     }
 
     sync();
