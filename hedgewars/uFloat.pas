@@ -313,24 +313,24 @@ z.QWordValue:= z1.QWordValue * abs(z2)
 end;
 
 operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
-var t: hwFloat;
+var t: QWord;
 begin
 if z2.QWordValue = 0 then inc(z2.QWordValue);
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
-t:= z1 - z2 * z.Round;
+t:= z1.QWordValue - z2.QWordValue * z.Round;
 z.Frac:= 0;
 
-if t.QWordValue <> 0 then
+if t <> 0 then
     begin
-    while ((t.QWordValue and $FF00000000000000) = 0) and ((z2.QWordValue and $FF00000000000000) = 0) do
+    while ((t and $FF00000000000000) = 0) and ((z2.QWordValue and $FF00000000000000) = 0) do
         begin
-        t.QWordValue:= t.QWordValue shl 8;
+        t:= t shl 8;
         z2.QWordValue:= z2.QWordValue shl 8
         end;
         
     if z2.Round > 0 then
-        inc(z.QWordValue, t.QWordValue div z2.Round);
+        inc(z.QWordValue, t div z2.Round);
     end
 end;
 
