@@ -18,6 +18,7 @@
     <comment xml:lang="cs">Ukázka hry Hedgewars</comment>
     <comment xml:lang="sv">Demo för Hedgewars</comment>
     <comment xml:lang="da">Hedgewars-demo</comment>
+    <comment xml:lang="tr">Hedgewars Dösteri</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21572"/>
@@ -39,6 +40,7 @@
     <comment xml:lang="cs">Uložená hra Hedgewars</comment>
     <comment xml:lang="sv">Sparfil för Hedgewars</comment>
     <comment xml:lang="da">Gemt Hedgewars-spil</comment>
+    <comment xml:lang="tr">Hedgewars kayıtlı oyun</comment>
     <magic priority="50">
       <match required="yes" type="byte" offset="0" value="2"/>
       <match required="yes" type="big16" offset="1" value="21587"/>

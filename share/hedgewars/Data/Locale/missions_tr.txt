@@ -1,0 +1,50 @@
+Basic_Training_-_Bazooka.name=Temel Roketatar Eğitimi
+Basic_Training_-_Bazooka.desc="Rüzgarı yararına kullanmak bir anahtar!"
+
+Basic_Training_-_Grenade.name=Temel Bomba Eğitimi
+Basic_Training_-_Grenade.desc="Unutma, pimi çek VE at!"
+
+Basic_Training_-_Cluster_Bomb.name=Temel Parça Tesirli Bomba Eğitimi
+Basic_Training_-_Cluster_Bomb.desc="Birinin sıcak duşa ihtiyacı var!"
+
+Basic_Training_-_Shotgun.name=Temel Tüfek Eğitimi
+Basic_Training_-_Shotgun.desc="Önce atış yap, soruları sonra sor!"
+
+Basic_Training_-_Sniper_Rifle.name=Temel Keskin Nişancı Tüfeği Eğitimi
+Basic_Training_-_Sniper_Rifle.desc="Bum, kafadan!"
+
+Basic_Training_-_Rope.name=Temel Halat Eğitimi
+Basic_Training_-_Rope.desc="Ordan çık ve sallan!"
+
+User_Mission_-_Dangerous_Ducklings.name=Görev: Tehlikeli Ördek Yavruları
+User_Mission_-_Dangerous_Ducklings.desc="Peki acemi! Şimdi Temel Eğitimde öğrendiklerini uygulamanın zamanı!"
+
+User_Mission_-_Diver.name=Görev: Dalıcı
+User_Mission_-_Diver.desc="Bu 'iki yönlü saldırı' göründüğünden daha zor..."
+
+User_Mission_-_Teamwork.name=Görev: Takım Çalışması
+User_Mission_-_Teamwork.desc="Bazen, aşk acıtır."
+
+User_Mission_-_Spooky_Tree.name=Görev: Korkak Ağaç
+User_Mission_-_Spooky_Tree.desc="Burada çok fazla kasa var. Eminim bu kuş aç değildir."
+
+User_Mission_-_Bamboo_Thicket.name=Görev: Bambu Ormanı
+User_Mission_-_Bamboo_Thicket.desc="Ölüm yukardan gelir."
+
+User_Mission_-_That_Sinking_Feeling.name=Görev: Batıyormuş Hissi
+User_Mission_-_That_Sinking_Feeling.desc="Su hızlıca yükseliyor ve zaman kısıtlı. Çoğu denedi ve kaybetti. Hepsini kurtarabilecek misin?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Görev: Newton ve Hamak
+User_Mission_-_Newton_and_the_Hammock.desc="Kirpişleri unutma: Bir vücudun hızı harici bir kuvvetle itilmedikçe sabit kalır!"
+
+User_Mission_-_The_Great_Escape.name=Görev: Büyük Kaçış
+User_Mission_-_The_Great_Escape.desc="Beni hapsedebileceğini mi sanıyorsun!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Mücadele: Halat Vuruşu
+User_Mission_-_Rope_Knock_Challenge.desc="Arkana bak!"
+
+User_Mission_-_RCPlane_Challenge.name=Mücadele: RC Uçağı
+User_Mission_-_RCPlane_Challenge.desc="Çok emin görünüyorsun değil mi, uçan çocuk?"
+
+portal.name= Görev: Portal eğitim görevi
+portal.desc="Hızlı ve uzak yerlere hareket için portalı kullan, öldürmek için kullan, dikkatli kullan!"
