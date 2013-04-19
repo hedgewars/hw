@@ -315,7 +315,6 @@ end;
 operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
 var t: QWord;
 begin
-if z2.QWordValue = 0 then inc(z2.QWordValue);
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
 t:= z1.QWordValue - z2.QWordValue * z.Round;
@@ -328,7 +327,7 @@ if t <> 0 then
         t:= t shl 8;
         z2.QWordValue:= z2.QWordValue shl 8
         end;
-        
+
     if z2.Round > 0 then
         inc(z.QWordValue, t div z2.Round);
     end
@@ -457,8 +456,16 @@ end;
 
 
 function Distance(const dx, dy: hwFloat): hwFloat;
+var r: QWord;
 begin
-Distance:= hwSqrt(hwSqr(dx) + hwSqr(dy))
+r:= dx.QWordValue or dy.QWordValue;
+
+if r < $10000 then
+    begin
+    Distance.QWordValue:= r;
+    Distance.isNegative:= false
+    end else
+    Distance:= hwSqrt(hwSqr(dx) + hwSqr(dy))
 end;
 
 function DistanceI(const dx, dy: LongInt): hwFloat;
