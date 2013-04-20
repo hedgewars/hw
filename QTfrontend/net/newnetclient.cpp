@@ -336,10 +336,24 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Empty CHAT message");
             return;
         }
+
+        QString action = HWProto::chatStringToAction(lst[2]);
+
         if (netClientState == InLobby)
-            emit chatStringLobby(lst[1], HWProto::formatChatMsgForFrontend(lst[2]));
+        {
+            if (action != NULL)
+                emit lobbyChatAction(lst[1], action);
+            else
+                emit lobbyChatMessage(lst[1], lst[2]);
+        }
         else
+        {
             emit chatStringFromNet(HWProto::formatChatMsg(lst[1], lst[2]));
+            if (action != NULL)
+                emit roomChatAction(lst[1], action);
+            else
+                emit roomChatMessage(lst[1], lst[2]);
+        }
         return;
     }
 
@@ -350,12 +364,13 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Malformed INFO message");
             return;
         }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        if (netClientState == InLobby)
-            emit chatStringLobby(tmp.join("\n").prepend('\x01'));
-        else
-            emit chatStringFromNet(tmp.join("\n").prepend('\x01'));
+        emit playerInfo(lst[1], lst[2], lst[3], lst[4]);
+        if (netClientState != InLobby)
+        {
+            QStringList tmp = lst;
+            tmp.removeFirst();
+            emit chatStringFromNet(tmp.join(" ").prepend('\x01'));
+        }
         return;
     }
 
@@ -490,9 +505,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 emit connected();
             }
 
-            m_playersModel->addPlayer(lst[i]);
-            emit nickAddedLobby(lst[i], false);
-            emit chatStringLobby(lst[i], tr("%1 *** %2 has joined").arg('\x03').arg("|nick|"));
+            m_playersModel->addPlayer(lst[i], false);
         }
         return;
     }
@@ -539,13 +552,11 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             qWarning("Net: Bad LOBBY:LEFT message");
             return;
         }
-        emit nickRemovedLobby(lst[1]);
-        if (lst.size() < 3)
-            emit chatStringLobby(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
-        else
-            emit chatStringLobby(lst[1], tr("%1 *** %2 has left (%3)").arg('\x03').arg("|nick|", lst[2]));
 
-        m_playersModel->removePlayer(lst[1]);
+        if (lst.size() < 3)
+            m_playersModel->removePlayer(lst[1]);
+        else
+            m_playersModel->removePlayer(lst[1], lst[2]);
 
         return;
     }
@@ -636,8 +647,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                     emit configAsked();
             }
 
-            m_playersModel->playerJoinedRoom(lst[i]);
-            emit nickAdded(lst[i], isChief && (lst[i] != mynick));
+            m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
+
             emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
         }
         return;
@@ -769,9 +780,8 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
             for(int i = 1; i < lst.size(); ++i)
             {
-                emit nickAdded(lst[i], isChief && (lst[i] != mynick));
                 emit chatStringFromNet(tr("%1 *** %2 has joined the room").arg('\x03').arg(lst[i]));
-                m_playersModel->playerJoinedRoom(lst[i]);
+                m_playersModel->playerJoinedRoom(lst[i], isChief && (lst[i] != mynick));
             }
             return;
         }
@@ -783,7 +793,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 qWarning("Net: Bad LEFT message");
                 return;
             }
-            emit nickRemoved(lst[1]);
+
             if (lst.size() < 3)
                 emit chatStringFromNet(tr("%1 *** %2 has left").arg('\x03').arg(lst[1]));
             else
@@ -836,12 +846,25 @@ void HWNewNet::onParamChanged(const QString & param, const QStringList & value)
         );
 }
 
+void HWNewNet::chatLineToNetWithEcho(const QString& str)
+{
+    if(str != "")
+    {
+        emit chatStringFromNet(HWProto::formatChatMsg(mynick, str));
+        chatLineToNet(str);
+    }
+}
+
 void HWNewNet::chatLineToNet(const QString& str)
 {
     if(str != "")
     {
         RawSendNet(QString("CHAT") + delimeter + str);
-        emit(chatStringFromMe(HWProto::formatChatMsg(mynick, str)));
+        QString action = HWProto::chatStringToAction(str);
+        if (action != NULL)
+            emit(roomChatAction(mynick, action));
+        else
+            emit(roomChatMessage(mynick, str));
     }
 }
 
@@ -850,7 +873,11 @@ void HWNewNet::chatLineToLobby(const QString& str)
     if(str != "")
     {
         RawSendNet(QString("CHAT") + delimeter + str);
-        emit chatStringLobby(mynick, HWProto::formatChatMsgForFrontend(str));
+        QString action = HWProto::chatStringToAction(str);
+        if (action != NULL)
+            emit(lobbyChatAction(mynick, action));
+        else
+            emit(lobbyChatMessage(mynick, str));
     }
 }
 

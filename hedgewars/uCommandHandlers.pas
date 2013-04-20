@@ -36,7 +36,7 @@ var prevGState: TGameState = gsConfirm;
 procedure chGenCmd(var s: shortstring);
 begin
 case s[1] of
-    'R': if ReadyTimeLeft > 1 then 
+    'R': if ReadyTimeLeft > 1 then
         begin
         ReadyTimeLeft:= 1;
         if not isExternalSource then
@@ -480,7 +480,7 @@ bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmSlot and InputMask);
-    MsgParam:= slot; 
+    MsgParam:= slot;
     ScriptCall('onSlot', MsgParam);
     end
 end;
@@ -517,7 +517,7 @@ if not isExternalSource then
 with CurrentHedgehog^.Gear^ do
     begin
     Message:= Message or (gmAnimate and InputMask);
-    MsgParam:= byte(s[1]) ; 
+    MsgParam:= byte(s[1]) ;
     ScriptCall('onTaunt', MsgParam);
     end
 end;
@@ -573,7 +573,7 @@ procedure chSetSeed(var s: shortstring);
 begin
 if isDeveloperMode then
     begin
-    SetRandomSeed(s);
+    SetRandomSeed(s, true);
     cSeed:= s;
     InitStepsFlags:= InitStepsFlags or cifRandomize
     end

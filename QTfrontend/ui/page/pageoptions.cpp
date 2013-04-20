@@ -594,6 +594,11 @@ QLayout * PageOptions::bodyLayoutDefinition()
                 CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
             }
 
+            QLabel *restartNoticeLabel = new QLabel(groupMisc);
+            restartNoticeLabel->setText(QLabel::tr("This setting will be effective at next restart."));
+            groupMisc->layout()->addWidget(restartNoticeLabel, 1, 1);
+
+
             // Divider
 
             groupMisc->addDivider(); // row 1
@@ -602,14 +607,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            groupMisc->layout()->addWidget(CBNameWithDate, 2, 0, 1, 2);
+            groupMisc->layout()->addWidget(CBNameWithDate, 3, 0, 1, 2);
 
             // Associate file extensions
 
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setVisible(!custom_data && !custom_config);
-            groupMisc->layout()->addWidget(BtnAssociateFiles, 3, 0, 1, 2);
+            groupMisc->layout()->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
         }
 
 #ifdef __APPLE__

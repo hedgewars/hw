@@ -170,9 +170,9 @@ const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-h
       mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allArray: Array [1..14] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
       reallyAll: array[0..30] of shortstring = (
-                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width', 
+                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
-                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick', 
+                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
   {misc}        '--stats-only', '--gci', '--help');
@@ -191,8 +191,8 @@ begin
         {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
         {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--width}                5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}               6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
+        {--height}               6 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
         {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
         {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
         {--nomusic}              9 : SetMusic           ( false );
@@ -270,7 +270,7 @@ begin
             end;
         inc(index);
         end;
-    
+
     WriteLn(stdout, 'Attempted to automatically convert to the new syntax:');
     WriteLn(stdout, newSyntax);
     WriteLn(stdout, '');

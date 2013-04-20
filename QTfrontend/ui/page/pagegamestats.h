@@ -44,6 +44,7 @@ class PageGameStats : public AbstractPage
         PageGameStats(QWidget* parent = 0);
 
         QPushButton *btnSave;
+        QPushButton *btnRestart;
         QLabel *labelGameStats;
         QLabel *labelGameWin;
         QLabel *labelGameRank;
@@ -53,9 +54,11 @@ class PageGameStats : public AbstractPage
         void GameStats(char type, const QString & info);
         void clear();
         void renderStats();
+        void restartBtnVisible(bool visible);
 
     signals:
         void saveDemoRequested();
+        void restartGameRequested();
 
     private:
         void AddStatText(const QString & msg);

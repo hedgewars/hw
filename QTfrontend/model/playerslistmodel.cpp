@@ -84,7 +84,7 @@ bool PlayersListModel::removeRows(int row, int count, const QModelIndex &parent)
 }
 
 
-void PlayersListModel::addPlayer(const QString & nickname)
+void PlayersListModel::addPlayer(const QString & nickname, bool notify)
 {
     insertRow(rowCount());
 
@@ -92,11 +92,18 @@ void PlayersListModel::addPlayer(const QString & nickname)
     setData(mi, nickname);
 
     checkFriendIgnore(mi);
+
+    emit nickAddedLobby(nickname, notify);
 }
 
 
-void PlayersListModel::removePlayer(const QString & nickname)
+void PlayersListModel::removePlayer(const QString & nickname, const QString &msg)
 {
+    if(msg.isEmpty())
+        emit nickRemovedLobby(nickname);
+    else
+        emit nickRemovedLobby(nickname, msg);
+
     QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
@@ -104,7 +111,7 @@ void PlayersListModel::removePlayer(const QString & nickname)
 }
 
 
-void PlayersListModel::playerJoinedRoom(const QString & nickname)
+void PlayersListModel::playerJoinedRoom(const QString & nickname, bool notify)
 {
     QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
@@ -114,11 +121,15 @@ void PlayersListModel::playerJoinedRoom(const QString & nickname)
         updateIcon(mil[0]);
         updateSortData(mil[0]);
     }
+
+    emit nickAdded(nickname, notify);
 }
 
 
 void PlayersListModel::playerLeftRoom(const QString & nickname)
 {
+    emit nickRemoved(nickname);
+
     QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())

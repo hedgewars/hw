@@ -31,15 +31,13 @@
 
 QLayout * PageMultiplayer::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout();
+    QHBoxLayout * pageLayout = new QHBoxLayout();
 
     gameCFG = new GameCFGWidget(this);
-    pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
-
-    pageLayout->setRowStretch(2, 1);
+    pageLayout->addWidget(gameCFG, 3, Qt::AlignTop);
 
     teamsSelect = new TeamSelWidget(this);
-    pageLayout->addWidget(teamsSelect, 0, 2, 3, 2);
+    pageLayout->addWidget(teamsSelect, 2, Qt::AlignTop);
 
     return pageLayout;
 }

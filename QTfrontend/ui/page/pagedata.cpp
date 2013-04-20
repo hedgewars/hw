@@ -60,7 +60,10 @@ PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
 
     web->setOpenLinks(false);
 //    fetchList();
-
+    web->setHtml(QString(
+        "<center><h2>Hedgewars Downloadable Content</h2><br><br>"
+        "<i>%1</i></center>")
+        .arg(tr("Loading, please wait.")));
     m_contentDownloaded = false;
 }
 
@@ -106,8 +109,7 @@ void PageDataDownload::pageDownloaded()
 {
     QNetworkReply * reply = qobject_cast<QNetworkReply *>(sender());
 
-    if(reply)
-    {
+    if (reply && (reply->error() == QNetworkReply::NoError)) {
         QString html = QString::fromUtf8(reply->readAll());
         int begin = html.indexOf("<!-- BEGIN -->");
         int end = html.indexOf("<!-- END -->");
@@ -117,7 +119,11 @@ void PageDataDownload::pageDownloaded()
             html.remove(0, begin);
         }
         web->setHtml(html);
-    }
+    } else
+        web->setHtml(QString(
+            "<center><h2>Hedgewars Downloadable Content</h2><br><br>"
+            "<p><i><h4>%1</i></h4></p></center>")
+            .arg(tr("This page requires an internet connection.")));
 }
 
 void PageDataDownload::fileDownloaded()

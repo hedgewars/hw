@@ -599,7 +599,7 @@ void GameCFGWidget::scriptChanged(int index)
             GameSchemes->setEnabled(false);
             GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
-        else
+        else if (m_master)
         {
             GameSchemes->setEnabled(true);
             int num = GameSchemes->findText(scheme);
@@ -614,7 +614,7 @@ void GameCFGWidget::scriptChanged(int index)
             WeaponsName->setEnabled(false);
             WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
-        else
+        else if (m_master)
         {
             WeaponsName->setEnabled(true);
             int num = WeaponsName->findText(weapons);

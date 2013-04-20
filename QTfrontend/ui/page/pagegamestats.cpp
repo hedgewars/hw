@@ -97,10 +97,12 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     return pageLayout;
 }
 
+//TODO button placement, image etc
 QLayout * PageGameStats::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
 
+    btnRestart = addButton(":/res/Start.png", bottomLayout, 0, true);
     btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
     btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
     bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
@@ -112,6 +114,7 @@ void PageGameStats::connectSignals()
 {
     connect(this, SIGNAL(pageEnter()), this, SLOT(renderStats()));
     connect(btnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
+    connect(btnRestart, SIGNAL(clicked()), this, SIGNAL(restartGameRequested()));
 }
 
 PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
@@ -131,6 +134,11 @@ void PageGameStats::clear()
     labelGameRank->setText("");
     playerPosition = 0;
     lastColor = 0;
+}
+
+void PageGameStats::restartBtnVisible(bool visible)
+{
+    btnRestart->setVisible(visible);
 }
 
 void PageGameStats::renderStats()
