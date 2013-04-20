@@ -10,11 +10,14 @@ const PhyslayerLibName = 'libphyslayer';
     {$linklib physfs}
     {$linklib physlayer}
 
-    {statically linking physfs brings IOKit dependency on OSX and
-     stdc++ under linux 32 bit because divdi3 is not defined}
+    {statically linking physfs brings IOKit dependency on OSX}
+    {divdi3 is found in stdc++ on linux x86 and in gcc_s.1 on osx ppc32}
     {$IFDEF PHYSFS_INTERNAL}
         {$IFDEF DARWIN}
             {$linkframework IOKit}
+            {$IFDEF CPU32}
+                {$linklib gcc_s.1}
+            {$ENDIF}
         {$ELSE}
             {$IFDEF CPU32}
                 {$linklib stdc++}
