@@ -79,6 +79,16 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     BtnShare->setWhatsThis(QPushButton::tr("Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you."));
     gbLayout->addWidget(BtnShare, 2, 1);
 
+    labelURL = new QLabel(gb);
+    labelURL->setText(
+              "<style type=\"text/css\"> a { color: #ffcc00; } </style>"
+              "<div align=\"center\">"
+              "<a href=\"https://code.google.com/p/hedgewars/wiki/HWPlaySchemeSyntax\">" +
+              tr("Click here for details") +
+              "</a></div>");
+    labelURL->setOpenExternalLinks(true);
+    gbLayout->addWidget(labelURL, 3, 1);
+
     return pageLayout;
 }
 

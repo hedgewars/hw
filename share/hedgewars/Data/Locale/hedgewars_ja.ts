@@ -34,11 +34,11 @@
     </message>
     <message>
         <source>Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>ニックネーム</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>ＩＰ／ニックネーム</translation>
     </message>
     <message>
         <source>Reason</source>
@@ -50,11 +50,11 @@
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>オッケー</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>you know why</source>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警報メッセージ</translation>
     </message>
     <message>
         <source>Please, specify %1</source>
@@ -70,7 +70,7 @@
     </message>
     <message>
         <source>nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>ニックネーム</translation>
     </message>
     <message>
         <source>permanent</source>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Send Feedback</source>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">地図</translation>
+        <translation>地図</translation>
     </message>
     <message>
         <source>Game options</source>
@@ -155,32 +155,32 @@
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1分</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1時</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1時</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>%1日</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1日</numerusform>
         </translation>
     </message>
     <message>
@@ -283,7 +283,7 @@ Please check your installation!</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>ニックネーム</translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
@@ -296,7 +296,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>%1&apos;s Team</source>
-        <translation type="unfinished"></translation>
+        <translation>%1のチーム</translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
@@ -556,7 +556,7 @@ Please wait a few seconds and try again.</source>
     <name>HWPasswordDialog</name>
     <message>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation>ログイン</translation>
     </message>
     <message>
         <source>To connect to the server, please log in.
@@ -582,7 +582,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Upload</source>
-        <translation type="unfinished"></translation>
+        <translation>アップロード</translation>
     </message>
 </context>
 <context>
@@ -596,7 +596,7 @@ just enter your nickname.</source>
     <name>HatPrompt</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Use selected hat</source>
@@ -684,7 +684,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">一般</translation>
+        <translation>一般</translation>
     </message>
     <message>
         <source>Bans</source>
@@ -692,7 +692,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>ＩＰ／ニックネーム</translation>
     </message>
     <message>
         <source>Expiration</source>
@@ -734,11 +734,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Load</source>
-        <translation type="unfinished">ロード</translation>
+        <translation>ロード</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>セーブ</translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -955,11 +955,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">スタート</translation>
+        <translation>スタート</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">更新</translation>
+        <translation>更新</translation>
     </message>
     <message>
         <source>Room controls</source>
@@ -968,6 +968,10 @@ just enter your nickname.</source>
 </context>
 <context>
     <name>PageNetServer</name>
+    <message>
+        <source>Click here for details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Insert your address here</source>
         <translation type="unfinished"></translation>
@@ -1017,7 +1021,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished">高級</translation>
+        <translation>高級</translation>
     </message>
     <message>
         <source>Reset to default colors</source>
@@ -1069,7 +1073,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"></translation>
+        <translation>ゲーム</translation>
     </message>
     <message>
         <source>Graphics</source>
@@ -1877,7 +1881,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>ニックネーム</translation>
     </message>
     <message>
         <source>Format</source>
@@ -2318,7 +2322,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Create room</source>
@@ -2380,7 +2384,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Set seed</source>
@@ -2448,7 +2452,7 @@ Error code: %2</source>
     <name>ThemePrompt</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">キャンセル</translation>
+        <translation>キャンセル</translation>
     </message>
     <message>
         <source>Search for a theme:</source>
@@ -3042,6 +3046,34 @@ Error code: %2</source>
 <context>
     <name>server</name>
     <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Not room master</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3086,50 +3118,6 @@ Error code: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Illegal room name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3150,7 +3138,23 @@ Error code: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Empty config entry</source>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

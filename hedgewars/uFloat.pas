@@ -265,7 +265,7 @@ else
     end
 end;
 
-function isZero(const z: hwFloat): boolean; inline; 
+function isZero(const z: hwFloat): boolean; inline;
 begin
 isZero := z.QWordValue = 0;
 end;

@@ -159,7 +159,6 @@
 02:01=%1 haluaa näytellä Ecco-delfiiniä
 02:01=%1 lähti käymään Aquariassa
 02:01=%1 löysi Atlantiksen kadonneen kaupungin
-02:01=%1 tähtää Bioshock 3:en päärooliin
 02:01=%1:n olisi pitänyt ottaa vesiskootteri mukaan
 02:01=%1 ei pidä vesiurheilusta
 02:01=%1 puhaltaa ikuisesti kuplia

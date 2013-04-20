@@ -468,7 +468,7 @@ void HWMapContainer::setTheme(const QString & theme)
 void HWMapContainer::setRandomMap()
 {
     if (!m_master) return;
-    
+
     setRandomSeed();
     switch(m_mapInfo.type)
     {

@@ -29,7 +29,7 @@ dbInteractionLoop dbConn = forever $ do
                 execute statement [SqlByteString clNick]
                 passAndRole <- fetchRow statement
                 finish statement
-                let response = 
+                let response =
                         if isJust passAndRole then
                         (
                             clId,

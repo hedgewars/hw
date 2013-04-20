@@ -54,7 +54,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
         roomChans <- roomClientsChans
         cl <- thisClient
         teamColor <-
-            if clientProto cl < 42 then 
+            if clientProto cl < 42 then
                 return color
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom

@@ -157,7 +157,7 @@ begin
     while isTerminated = false do
     begin
         SDL_PumpEvents();
- 
+
         while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
@@ -173,7 +173,7 @@ begin
                 SDL_KEYUP:
                     if GameState <> gsChat then
                         ProcessKey(event.key);
-                    
+
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin
@@ -199,13 +199,13 @@ begin
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
                     end;
-                        
+
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
-                
+
                 SDL_FINGERDOWN:
                     onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-                
+
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 {$ELSE}
@@ -217,7 +217,7 @@ begin
                 SDL_KEYUP:
                     if GameState <> gsChat then
                         ProcessKey(event.key);
-                    
+
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
                     begin
@@ -226,10 +226,10 @@ begin
                     end
                     else
                         ProcessMouse(event.button, true);
-                    
+
                 SDL_MOUSEBUTTONUP:
-                    ProcessMouse(event.button, false); 
-                    
+                    ProcessMouse(event.button, false);
+
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
                     begin
@@ -238,7 +238,7 @@ begin
                         if prevFocusState xor cHasFocus then
                             onFocusStateChanged()
                     end;
-                        
+
                 SDL_VIDEORESIZE:
                 begin
                     // using lower values than cMinScreenWidth or cMinScreenHeight causes widget overlap and off-screen widget parts
@@ -342,7 +342,7 @@ begin
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
-    
+
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
@@ -362,7 +362,7 @@ begin
         InitOffscreenOpenGL()
     else
 {$ENDIF}
-        begin            
+        begin
         // show main window
         if cFullScreen then
             ParseCommand('fullscr 1', true)

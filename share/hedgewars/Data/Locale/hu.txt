@@ -146,7 +146,6 @@
 02:01=%1 Eccot, a delfint játssza
 02:01=%1 meglátogatja Aquaria-t
 02:01=%1 meglelte Atlantiszt
-02:01=%1 a Bioshock 3 főszerepére vágyik
 02:01=A kutyaúszásod még nem tőkéletes, %1
 02:01=%1 hozhatott volna jet ski-t is
 02:01=%1 nem szereti a vízisportokat

@@ -77,8 +77,8 @@ class PageOptions : public AbstractPage
         QComboBox *CBTeamName;
         IconedGroupBox *AGGroupBox;
         QComboBox *CBResolution;
-        QLineEdit *windowWidthEdit;
-        QLineEdit *windowHeightEdit;
+        QSpinBox *windowWidthEdit;
+        QSpinBox *windowHeightEdit;
         QComboBox *CBStereoMode;
         QCheckBox *CBFrontendSound;
         QCheckBox *CBFrontendMusic;

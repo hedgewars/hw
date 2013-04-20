@@ -95,8 +95,8 @@ void GameUIConfig::reloadValues(void)
     // If left blank reset the resolution to the default
     wWidth = (wWidth == "" ? widthStr : wWidth);
     wHeight = (wHeight == "" ? heightStr : wHeight);
-    Form->ui.pageOptions->windowWidthEdit->setText(wWidth);
-    Form->ui.pageOptions->windowHeightEdit->setText(wHeight);
+    Form->ui.pageOptions->windowWidthEdit->setValue(wWidth.toInt());
+    Form->ui.pageOptions->windowHeightEdit->setValue(wHeight.toInt());
 
     Form->ui.pageOptions->CBResolution->setCurrentIndex((t < 0) ? 1 : t);
     Form->ui.pageOptions->CBFullscreen->setChecked(value("video/fullscreen", false).toBool());

@@ -1,10 +1,21 @@
 + features
 * bugfixes
 
+0.9.18 -> 0.9.19:
+ + new icegun weapon
+ + main graphical user interface overhaul
+ + up and down keys navigate in chat history
+ + several commands from chat available
+ + support hwplay:// scheme syntax
+ + supply full revision and hash information in version tag
+ + better set of options for driving engine
+ * rope sliding
+ * forbid kicking on 1v1 matches
+
 0.9.17 -> 0.9.18:
 
  + 'A Classic Fairytale' Campaign
- + Video recorder (requires ffmpeg)
+ + Video recorder (requires ffmpeg/libav)
  + Cleaver weapon
  + AI is now aware of drowning and fall damage
  + AI learned how to use Sniper Rifle and Cake

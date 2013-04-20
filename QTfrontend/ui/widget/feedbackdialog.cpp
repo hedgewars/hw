@@ -44,6 +44,9 @@
 
 #ifdef Q_WS_MAC
 #include <sys/sysctl.h>
+#ifndef _SC_NPROCESSORS_ONLN
+#define _SC_NPROCESSORS_ONLN 58
+#endif
 #endif
 
 #include <stdint.h>
@@ -458,7 +461,7 @@ void FeedbackDialog::SendFeedback()
     QString email = this->email->text();
     QString captchaCode = this->captcha_code->text();
     QString captchaID = QString::number(this->captchaID);
-    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" + 
+    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" +
                        *cRevisionString + "|" + *cHashString;
 
     if (summary.isEmpty() || description.isEmpty())

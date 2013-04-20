@@ -1,0 +1,50 @@
+Basic_Training_-_Bazooka.name=Treino Básico com Bazuca
+Basic_Training_-_Bazooka.desc="Saber utilizar o vento para tua vantagem é a chave!"
+
+Basic_Training_-_Grenade.name=Treino Básico com Granada
+Basic_Training_-_Grenade.desc="Lembra-te, tens de retirar a cavilha E ATIRAR!"
+
+Basic_Training_-_Cluster_Bomb.name=Treino Básico com Bomba de Fragmentos
+Basic_Training_-_Cluster_Bomb.desc="Alguem está a precisar de um duche bem quente!"
+
+Basic_Training_-_Shotgun.name=Treino Básico com Caçadeira
+Basic_Training_-_Shotgun.desc="Dispara primeiro, questiona depois!"
+
+Basic_Training_-_Sniper_Rifle.name=Treino Básico com Sniper
+Basic_Training_-_Sniper_Rifle.desc="Boom, headshot!"
+
+Basic_Training_-_Rope.name=Treino Básico com Corda
+Basic_Training_-_Rope.desc="Get out there and swing!"
+
+User_Mission_-_Dangerous_Ducklings.name=Missão: Dangerous Ducklings
+User_Mission_-_Dangerous_Ducklings.desc="Alright, rookie! Time to put what we learned in Basic Training into practice!"
+
+User_Mission_-_Diver.name=Missão: Diver
+User_Mission_-_Diver.desc="Esta coisa do 'assalto anfíbio' é mais difícil do que parece..."
+
+User_Mission_-_Teamwork.name=Missão: Teamwork
+User_Mission_-_Teamwork.desc="Por vezes, o amor doi."
+
+User_Mission_-_Spooky_Tree.name=Missão: Spooky Tree
+User_Mission_-_Spooky_Tree.desc="Imensas caixas por todo o lado. Só espero que este pássaro não se esteja a sentir com fome."
+
+User_Mission_-_Bamboo_Thicket.name=Missão: Bamboo Thicket
+User_Mission_-_Bamboo_Thicket.desc="Death comes from above."
+
+User_Mission_-_That_Sinking_Feeling.name=Missão: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.desc="A água está a subir rapidamente e o tempo é limitado. Muitos tentaram e falharam. Consegues salvá-los todos?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Missão: Newton and the Hammock
+User_Mission_-_Newton_and_the_Hammock.desc="Remember hoglets: The velocity of a body remains constant unless the body is acted upon by an external force!"
+
+User_Mission_-_The_Great_Escape.name=Missão: The Great Escape
+User_Mission_-_The_Great_Escape.desc="Pensas que me consegues enjaular!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Desafio: Rope Knocking
+User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
+
+User_Mission_-_RCPlane_Challenge.name=Desafio: Avião Telecomandado
+User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
+
+portal.name=Missão: Treino com Portais
+portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
