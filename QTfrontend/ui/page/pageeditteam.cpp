@@ -320,7 +320,7 @@ void PageEditTeam::testSound()
                        );
 
     if (!list.isEmpty())
-        SDLInteraction::instance().playSoundFile("physfs://" + voiceDir + "/" +
+        SDLInteraction::instance().playSoundFile("/" + voiceDir + "/" +
                                     list[rand() % list.size()]);
 }
 

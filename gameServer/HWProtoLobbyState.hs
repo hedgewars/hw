@@ -92,12 +92,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
             ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
-            ++ [AnswerClients [sendChan cl] ["PING"]
-                , ModifyClient $ \c -> c{actionsPending = actionsPending cl
-                    ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
-                    ++ answerTeams cl jRoom
-                    ++ watchRound cl jRoom chans}
-                ]
+            ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
+            ++ answerTeams cl jRoom
+            ++ watchRound cl jRoom chans
 
         where
         readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]

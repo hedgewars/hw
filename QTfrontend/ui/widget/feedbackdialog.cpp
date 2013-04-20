@@ -84,10 +84,10 @@ FeedbackDialog::FeedbackDialog(QWidget * parent) : QDialog(parent)
         "<h4>%3 <a href=\"http://code.google.com/p/hedgewars/wiki/KnownBugs\">known bugs</a><h4>"
         "<h4>%4<h4>"
         "</div>")
-        .arg(tr("Please give us feedback!"))
+        .arg(tr("Send us feedback!"))
         .arg(tr("We are always happy about suggestions, ideas, or bug reports."))
-        .arg(tr("If you found a bug, you can see if it's already known here (english): "))
-        .arg(tr("Your email address is optional, but we may want to contact you."))
+        .arg(tr("If you found a bug, you can see if it's already been reported here: "))
+        .arg(tr("Your email address is optional, but necessary if you want us to get back at you."))
     );
     info->setOpenExternalLinks(true);
     pageLayout->addWidget(info);
@@ -244,12 +244,14 @@ void FeedbackDialog::GenerateSpecs()
     MEMORYSTATUSEX status;
     status.dwLength = sizeof(status);
     GlobalMemoryStatusEx(&status);
-    total_ram += QString::number(status.ullTotalPhys) + "\n";
+    total_ram += QString::number(status.ullTotalPhys/1024/1024) + " MB\n";
 
-    switch(QSysInfo::WinVersion())
+    switch(QSysInfo::windowsVersion())
     {
+        case QSysInfo::WV_NT: os_version += "Windows NT\n"; break;
         case QSysInfo::WV_2000: os_version += "Windows 2000\n"; break;
         case QSysInfo::WV_XP: os_version += "Windows XP\n"; break;
+        case QSysInfo::WV_2003: os_version += "Windows Server 2003\n"; break;
         case QSysInfo::WV_VISTA: os_version += "Windows Vista\n"; break;
         case QSysInfo::WV_WINDOWS7: os_version += "Windows 7\n"; break;
         //case QSysInfo::WV_WINDOWS8: os_version += "Windows 8\n"; break; //QT 5+
@@ -266,8 +268,8 @@ void FeedbackDialog::GenerateSpecs()
 #else
          available_pages = 0,
 #endif*/
-         page_size = sysconf(_SC_PAGE_SIZE);
-    total_ram += QString::number(pages * page_size) + "\n";
+    page_size = sysconf(_SC_PAGE_SIZE);
+    total_ram += QString::number(pages*page_size/1024/1024) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif
 
@@ -456,7 +458,7 @@ void FeedbackDialog::SendFeedback()
     QString email = this->email->text();
     QString captchaCode = this->captcha_code->text();
     QString captchaID = QString::number(this->captchaID);
-    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" + 
+    QString version = "HedgewarsFoundation-Hedgewars-v" + *cVersionString + "_r" +
                        *cRevisionString + "|" + *cHashString;
 
     if (summary.isEmpty() || description.isEmpty())

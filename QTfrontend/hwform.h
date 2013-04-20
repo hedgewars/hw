@@ -129,6 +129,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
         void showFeedbackDialog();
+        void showFeedbackDialogNetChecked();
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
@@ -142,6 +143,7 @@ class HWForm : public QMainWindow
         void openRegistrationPage();
 
         void startGame();
+        void restartGame();
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
