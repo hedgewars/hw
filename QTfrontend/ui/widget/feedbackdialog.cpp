@@ -44,6 +44,9 @@
 
 #ifdef Q_WS_MAC
 #include <sys/sysctl.h>
+#ifndef _SC_NPROCESSORS_ONLN
+#define _SC_NPROCESSORS_ONLN 58
+#endif
 #endif
 
 #include <stdint.h>
