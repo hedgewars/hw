@@ -193,7 +193,6 @@
 02:01=%1 będzie grał w "Uwolnić Orkę"
 02:01=%1 szuka rybek do akwarium!
 02:01=%1 odnalazł Atlantydę!
-02:01=%1 chce być główną postacią w Bioshock 3
 02:01=Trzeba było się uczyć pływać...
 02:01=%1 powinien ze sobą zabrać narty wodne
 02:01=%1 nie lubi sportów wodnych
@@ -540,8 +539,8 @@
 03:51=Znalezione na ziemi
 03:52=UNUSED
 03:53=Typ 40
-03:54=Zbuduj coś przydatnego
-03:55=Narzędzie
+;03:54=Zbuduj coś przydatnego
+03:54=Narzędzie
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -598,8 +597,8 @@
 04:51=Obrzuć kogoś błotem! Broń ta nie zadaje dużych|obrażeń ale może Gogol zepchnąć z krawędzi!|Atak: Przytrzymaj by strzelić z większą siłą
 04:52=UNUSED
 04:53=Wybierz się na podróż w czasie i przestrzeni|zostawiając inne jeże na polu walki.|Bądź przygotowany na powrót w dowolnym momencie.|Gdy rozpocznie się|Nagła Śmierć lub większość jeży zostanie wybita.|Uwaga. Nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam lub jeśli jesteś Królem.
-04:54=INCOMPLETE
-04:55=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
+;04:54=INCOMPLETE
+04:54=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
 
 ; Game goal strings
 05:00=Ustawienia gry

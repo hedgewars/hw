@@ -21,7 +21,7 @@
 unit uAIAmmoTests;
 interface
 uses SDLh, uConsts, uFloat, uTypes;
-const 
+const
     amtest_Rare     = $00000001; // check only several positions
     amtest_NoTarget = $00000002; // each pos, but no targetting
 
@@ -163,9 +163,9 @@ repeat
             dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
-        
+
         EX:= trunc(x);
         EY:= trunc(y);
         if Level = 1 then
@@ -226,7 +226,7 @@ begin
                 dX:= dX + windSpeed;
                 dY:= dY + cGravityf;
                 dec(t)
-            until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+            until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                    ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (y > cWaterLine);
 
             if TestCollExcludingObjects(trunc(x), trunc(y), 5) and (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) > 21) then
@@ -303,7 +303,7 @@ repeat
             dX:= dX + windSpeed;
             dY:= dY + cGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t <= 0);
         EX:= trunc(x);
         EY:= trunc(y);
@@ -355,7 +355,7 @@ repeat
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or 
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
         EX:= trunc(x);
         EY:= trunc(y);
@@ -363,7 +363,7 @@ repeat
             Score:= RateExplosion(Me, EX, EY, 97)  // average of 17 attempts, most good, but some failing spectacularly
         else
             Score:= BadTurn;
-                  
+
         if valueResult < Score then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
@@ -399,7 +399,7 @@ repeat
     if not (r > 1) then
         begin
         x:= meX;
-        y:= meY; 
+        y:= meY;
         dY:= -Vy;
         t:= TestTime;
         repeat
@@ -407,15 +407,15 @@ repeat
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
-        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+        until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
     EX:= trunc(x);
     EY:= trunc(y);
-    if t < 50 then 
+    if t < 50 then
         if Level = 1 then
             Score:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else Score:= RateExplosion(Me, EX, EY, 101)
-    else 
+    else
         Score:= BadTurn;
 
     if (valueResult < Score) and (Score > 0) then
@@ -467,13 +467,13 @@ repeat
         y:= y + dY;
         dY:= dY + cGravityf;
         dec(t)
-    until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or 
+    until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 5)) or
            ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 5))) or (t = 0);
     EX:= trunc(x);
     EY:= trunc(y);
-    if t < 50 then 
+    if t < 50 then
         Score:= RateExplosion(Me, EX, EY, 41)
-    else 
+    else
         Score:= BadTurn;
 
      if valueResult < Score then
@@ -520,16 +520,16 @@ repeat
             y:= y + dY;
             dY:= dY + cGravityf;
             dec(t)
-       until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or 
+       until (((Me = CurrentHedgehog^.Gear) and TestColl(trunc(x), trunc(y), 6)) or
                ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, trunc(x), trunc(y), 6))) or (t = 0);
-        
+
         EX:= trunc(x);
         EY:= trunc(y);
-        if t < 50 then 
+        if t < 50 then
             Score:= RateExplosion(Me, EX, EY, 200) + RateExplosion(Me, EX, EY + 120, 200)
-        else 
+        else
             Score:= BadTurn;
-            
+
         if valueResult < Score then
             begin
             ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
@@ -566,7 +566,7 @@ end;
             else
                 Solve:= 0
     end;
-    
+
 function TestMortar(Me: PGear; Targ: TPoint; Level: LongInt; var ap: TAttackParams): LongInt;
 //const tDelta = 24;
 var Vx, Vy: real;
@@ -601,7 +601,7 @@ begin
         dY:= dY + cGravityf;
         EX:= trunc(x);
         EY:= trunc(y);
-    until (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 4)) or 
+    until (((Me = CurrentHedgehog^.Gear) and TestColl(EX, EY, 4)) or
            ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, EX, EY, 4))) or (EY > cWaterLine);
 
     if (EY < cWaterLine) and (dY >= 0) then
@@ -655,16 +655,16 @@ repeat
     y:= y + vY;
     rx:= trunc(x);
     ry:= trunc(y);
-    if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 2)) or 
+    if ((Me = CurrentHedgehog^.Gear) and TestColl(rx, ry, 2)) or
         ((Me <> CurrentHedgehog^.Gear) and TestCollExcludingMe(Me^.Hedgehog^.Gear, rx, ry, 2)) then
     begin
         x:= x + vX * 8;
         y:= y + vY * 8;
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
-     
-        if valueResult = 0 then 
+
+        if valueResult = 0 then
             valueResult:= 1024 - Metric(Targ.X, Targ.Y, rx, ry) div 64
-        else 
+        else
             dec(valueResult, Level * 4000);
         // 27/20 is reuse bonus
         exit(valueResult * 27 div 20)
@@ -770,7 +770,7 @@ if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4 then
     fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00166 * dmg, vY * 0.00166 * dmg);
     if fallDmg < 0 then
         TestSniperRifle:= BadTurn
-    else 
+    else
         TestSniperRifle:= Max(0, trunc((dmg + fallDmg) * dmgMod) * 1024)
     end
 else
@@ -809,13 +809,13 @@ begin
                 , 32, 30, 115
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
-            if (v2 > v1) 
+            if (v2 > v1)
                 or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
                 begin
                 ap.Angle:= a;
                 valueResult:= v2
                 end
-            else 
+            else
                 begin
                 ap.Angle:= -a;
                 valueResult:= v1
@@ -823,7 +823,7 @@ begin
 
         a:= a - 15 - random(cMaxAngle div 16)
         end;
-   
+
     if valueResult <= 0 then
         valueResult:= BadTurn;
 
@@ -869,18 +869,18 @@ begin
             , 19, 30, 40
             , 0.45, -0.9, trackFall);
 
-    if (v2 > v1) 
+    if (v2 > v1)
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
         begin
         ap.Angle:= 1;
         valueResult:= v2
         end
-    else 
+    else
         begin
         ap.Angle:= -1;
         valueResult:= v1
         end;
-    
+
     if valueResult <= 0 then
         valueResult:= BadTurn;
 
@@ -904,8 +904,8 @@ begin
     y:= hwRound(Me^.Y);
 
     // check left direction
-    {first RateShove checks farthermost of two whip's AmmoShove attacks 
-    to encourage distant attacks (damaged hog is excluded from view of second 
+    {first RateShove checks farthermost of two whip's AmmoShove attacks
+    to encourage distant attacks (damaged hog is excluded from view of second
     RateShove call)}
     v1:= RateShove(x - 13, y
             , 30, 30, 25
@@ -923,18 +923,18 @@ begin
             , 30, 30, 25
             , 1, -0.8, trackFall);
 
-    if (v2 > v1) 
+    if (v2 > v1)
         or {don't encourage turning for no gain}((v2 = v1) and (not Me^.dX.isNegative)) then
         begin
         ap.Angle:= 1;
         valueResult:= v2
         end
-    else 
+    else
         begin
         ap.Angle:= -1;
         valueResult:= v1
         end;
-    
+
     if valueResult <= 0 then
         valueResult:= BadTurn
     else
@@ -953,13 +953,13 @@ begin
     ap.Time:= 0;
     ap.Power:= 1;
 
-    if Level = 1 then 
+    if Level = 1 then
         trackFall:= afTrackFall
     else if Level = 2 then
         trackFall:= 0
     else
         exit(BadTurn);
-        
+
     valueResult:= 0;
     v:= 0;
 
@@ -980,16 +980,16 @@ begin
 
         ap.Angle:= DxDy2AttackAnglef(dx, -dy)
         end;
-    
+
     if dx >= 0 then cx:= 0.45 else cx:= -0.45;
 
     for i:= 0 to 512 div step - 2 do
         begin
-        valueResult:= valueResult + 
+        valueResult:= valueResult +
             RateShove(trunc(x), trunc(y)
                 , 30, 30, 25
                 , cx, -0.9, trackFall or afSetSkip);
-                
+
         x:= x + dx;
         y:= y + dy;
         end;
@@ -1004,7 +1004,7 @@ begin
         for i:= 1 to 512 div step - 2 do
             begin
             y:= y + dy;
-            v:= v + 
+            v:= v +
                 RateShove(tx, trunc(y)
                     , 30, 30, 25
                     , -cx, -0.9, trackFall or afSetSkip);
@@ -1037,7 +1037,7 @@ ap.ExplR:= 0;
 ap.Time:= 0;
 ap.Power:= 1;
 ap.Angle:= 0;
-         
+
 rate:= RateHammer(Me);
 if rate = 0 then
     rate:= BadTurn;
@@ -1128,7 +1128,7 @@ begin
         if Me^.Health <= 100  then
             begin
             maxTop := Targ.Y - cHHRadius * 2;
-            
+
             while not TestColl(Targ.X, maxTop, cHHRadius) and (maxTop > topY + cHHRadius * 2 + 1) do
                 dec(maxTop, cHHRadius*2);
             if not TestColl(Targ.X, maxTop + cHHRadius, cHHRadius) then
@@ -1147,7 +1147,7 @@ begin
             inc(failNum);
         until not TestColl(bonuses.ar[i].X, bonuses.ar[i].Y - cHHRadius - bonuses.ar[i].Radius, cHHRadius)
         or (failNum = bonuses.Count*2);
-        
+
         if failNum < bonuses.Count*2 then
             begin
             ap.AttackPutX := bonuses.ar[i].X;
@@ -1169,7 +1169,7 @@ for i:= 0 to 2040 do
     begin
     cakeStep(Gear);
     v:= RateExplosion(Me, hwRound(Gear^.X), hwRound(Gear^.Y), cakeDmg * 2, afTrackFall);
-    if v > ap.Power then 
+    if v > ap.Power then
         begin
         ap.ExplX:= hwRound(Gear^.X);
         ap.ExplY:= hwRound(Gear^.Y);

@@ -152,7 +152,6 @@
 02:01=%1 wants to play Ecco the dolphin
 02:01=%1 has gone to visit Aquaria
 02:01=%1 has found the lost city of Atlantis
-02:01=%1 aims for the lead role in Bioshock 3
 02:01=Your doggy paddle could use a little work, %1
 02:01=%1 should have brought a jet ski
 02:01=%1 doesn't like watersports

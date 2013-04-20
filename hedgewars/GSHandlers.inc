@@ -3682,7 +3682,11 @@ begin
             // wow! good candidate there, let's see if the distance and direction is okay!
             if hasdxy then
                 begin
-                s := r / Distance(iterator^.dX, iterator^.dY);
+                s := Distance(iterator^.dX, iterator^.dY);
+                // if the resulting distance is 0 skip this gear
+                if s.QWordValue = 0 then
+                    continue;
+                s := r / s;
                 ox:= iterator^.X + s * iterator^.dX;
                 oy:= iterator^.Y + s * iterator^.dY;
                 end

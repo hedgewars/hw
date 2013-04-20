@@ -3,22 +3,22 @@
 00:00=Grenade
 00:01=Grenade à fragmentation
 00:02=Bazooka
-00:03=Abeille Missile
+00:03=Abeille à tête chercheuse
 00:04=Fusil
 00:05=Marteau-piqueur
 00:06=Passer
-00:07=Corde ninja
+00:07=Grappin
 00:08=Mine
-00:09=Révolver
+00:09=Pistolet
 00:10=Dynamite
 00:11=Batte de baseball
 00:12=Shoryuken
 00:13=sec
 00:14=Parachute
-00:15=Attaque aérienne
-00:16=Lancer de mines
+00:15=Frappe aérienne
+00:16=Pluie de mines
 00:17=Chalumeau
-00:18=Poutre
+00:18=Construction
 00:19=Téléportation
 00:20=Changer de hérisson
 00:21=Mortier
@@ -29,39 +29,44 @@
 00:26=Bombe pastèque
 00:27=Grenade infernale
 00:28=Roquette perforante
-00:29=Canon à billes
+00:29=Mitrailleuse à balles
 00:30=Napalm
 00:31=Avion télécommandé
 00:32=Faible gravité
-00:33=Plus de dégâts
+00:33=Dégats supplémentaires
 00:34=Invulnérable
 00:35=Temps supplémentaire
 00:36=Visée laser
 00:37=Vampirisme
-00:38=Fusil de sniper
+00:38=Sniper
 00:39=Soucoupe Volante
 00:40=Cocktail Molotov
 00:41=Piaf
-00:42=Fusil à portails
-00:43=Attaque du Piano
+00:42=Générateur de portails
+00:43=Chute de Piano
 00:44=Vieux Limburger
-00:45=Fusil Sinus (bêta)
+00:45=Fusil Sinusoidale
 00:46=Lance-flammes
 00:47=Mines adhésives
 00:48=Marteau
 00:49=Resurrecteur
 00:50=Attaque perforante
 00:51=Boule de terre
+00:52=Aucune arme sélectionnée
+00:53=Boîte temporelle
+00:54=Aéro-Sol
+00:55=Congélateur
+00:56=Hachoir
 
 01:00=C'est parti !
 01:01=Round ex-aequo
 01:02=%1 gagne !
 01:03=Volume %1%
 01:04=Pause
-01:05=Quitter (Y/Esc) ?
+01:05=Quitter? (Y/Esc) (Clique pour reprendre)
 01:06=Mort subite !
 01:07=%1 Restantes
-01:08=Essence
+01:08=Carburant
 
 ; Event messages
 ; Hog (%1) died
@@ -78,41 +83,42 @@
 02:00=%1 fait l'ultime sacrifice !
 02:00=%1 sera profondément regretté !
 02:00=%1 a un anévrisme !
-02:00=%1 s'en va, laissant sa femme et ses enfants
-02:00=%1 a lancé sa dernière roquette
-02:00=%1 a jeté sa dernière grenade
-02:00=%1 a fait cuire son dernier gâteau
-02:00=%1 s'est balancé sur sa dernière corde
-02:00=%1 a appelé son dernier raid aérien
-02:00=%1 a rechargé son dernier fusil de chasse
-02:00=%1 a envoyé son dernier melon
-02:00=%1 a tiré sa dernière balle
-02:00=%1 aurait vraiment dû utiliser une caisse de vie
-02:00=%1 est parti pour jouer à un meilleur jeu
+02:00=%1 s'en va, laissant sa femme et ses enfants !
+02:00=%1 a lancé sa dernière roquette !
+02:00=%1 a jeté sa dernière grenade !
+02:00=%1 a fait cuire son dernier gâteau !
+02:00=%1 s'est balancé sur sa dernière corde !
+02:00=%1 a appelé son dernier raid aérien !
+02:00=%1 a rechargé son dernier fusil de chasse !
+02:00=%1 a envoyé son dernier melon !
+02:00=%1 a tiré sa dernière balle !
+02:00=%1 aurait vraiment dû utiliser une caisse de vie !
+02:00=%1 est parti pour jouer à un meilleur jeu !
 02:00=%1 est mauvais joueur !
-02:00=%1 a échoué
+02:00=%1 a échoué !
 02:00=Pauvre %1...
-02:00=%1 préfère Warmux
-02:00=%1 a bloqué les balles avec sa tête
-02:00=%1 s'en va à la façon des dinosaures
-02:00=%1 fait avancer les hérissons d'un pas vers l'extinction
-02:00=%1 me fait pleurer une larme
-02:00=%1 a cessé d'être
-02:00=Dites au revoir à %1
-02:00=Plus d'espoir restant pour %1
-02:00=%1 ferme le rideau final
-02:00=%1 souffre d'Échec Spontané et Massif d'Existence
-02:00=%1 est mort
-02:00=%1 est raide mort
-02:00=%1 n'existe plus
-02:00=%1 est périmé
-02:00=Privé de la vie, %1, reste en paix
-02:00=%1 rejoins le chœur invisible
+02:00=%1 préfère Warmux !
+02:00=%1 a bloqué les balles avec sa tête !
+02:00=%1 s'en va à la façon des dinosaures !
+02:00=%1 fait avancer les hérissons d'un pas vers l'extinction !
+02:00=%1 me fait pleurer une larme !
+02:00=%1 a cessé d'être !
+02:00=Dites au revoir à %1 !
+02:00=Plus d'espoir restant pour %1 !
+02:00=%1 ferme le rideau final !
+02:00=%1 souffre d'Échec Spontané et Massif d'Existence !
+02:00=%1 est mort !
+02:00=%1 est raide mort !
+02:00=%1 n'existe plus !
+02:00=%1 est périmé !
+02:00=Privé de la vie, %1, reste en paix !
+02:00=%1 rejoins le chœur invisible !
 02:00=Adieu %1, nous tenions beaucoup a toi !
-02:00=%1 avait une faible tolérance aux coups à balles
-02:00=%1 aurait dû utiliser une vie supplémentaire
-02:00=%1 rejoint ses ancêtres
+02:00=%1 avait une faible tolérance aux coups à balles !
+02:00=%1 aurait dû utiliser une vie supplémentaire !
+02:00=%1 rejoint ses ancêtres !
 02:00=%1 sera muet comme une tombe
+
 ; Hog (%1) drowned
 02:01=%1 joue au sous-marin !
 02:01=%1 imite le Titanic !
@@ -148,7 +154,6 @@
 02:01=%1 veut jouer à Ecco the Dolphin
 02:01=%1 est parti visiter l'aquarium
 02:01=%1 a trouvé la cité perdue d'Atlantide
-02:01=%1 se propose pour le rôle principal de Bioshock 3
 02:01=Ta pagaie pour chiens aurait pû servir, %1
 02:01=%1 aurait dû acheter un jet ski
 02:01=%1 n'aime pas les sports aquatiques
@@ -162,6 +167,7 @@
 02:01=%1 flotte comme une enclume
 02:01=%1 a oublié son masque et ses palmes
 02:01=%1 a vu une sirène !
+
 ; Match starts
 02:02=Aux armes !
 02:02=Prêts à combattre !
@@ -210,10 +216,13 @@
 02:02=Ave Caesar, Morituri te salutant !
 02:02=Combattez jusqu'à la fin !
 02:02=Que la force soit avec vous !
+
 ; Round ends (win; unused atm)
 02:03=...
+
 ; Round ends (draw; unused atm)
 02:04=...
+
 ; New health crate
 02:05=Pharmacie !
 02:05=De l'aide !
@@ -232,6 +241,7 @@
 02:05=Voilà la Croix Rouge !
 02:05=Médecin Sans Frontière à votre service !
 02:05=Hausse de l'espérance de vie en vue
+
 ; New ammo crate
 02:06=Plus d'armes !
 02:06=Du renfort !
@@ -256,6 +266,7 @@
 02:06=L'espoir fait vivre
 02:06=Surement quelquechose d'utile
 02:06=Que la chance soit avec vous !
+
 ; New utility crate
 02:07=Boite à outils !
 02:07=Ça peut être pratique...
@@ -269,6 +280,7 @@
 02:07=Elle s'est peut être blessée en tombant, vous devriez aller la voir
 02:07=Bob le bricoleur sait être généreux
 02:07=Le moment donné par le hasard vaut mieux que le moment choisi
+
 ; Hog (%1) skips his turn
 02:08=%1 est une lopette...
 02:08=%1 est trooooop rasant...
@@ -310,6 +322,7 @@
 02:08=Les gens heureux n'ont pas besoin de se presser selon %1
 02:08=Ne crains pas d'avancer lentement, crains seulement de t'arrêter %1
 02:08=Patience ! Avec le temps, l'herbe devient du lait
+
 ; Hog (%1) hurts himself only
 02:09=%1 devrait apprendre à viser !
 02:09=%1 s'en veut
@@ -345,43 +358,50 @@
 02:09=%1 ne peut pas échapper à son destin
 02:09=%1 a pris son arme dans le mauvais sens
 02:09=%1 est surement daltonien
+
 ; Hog shot an home run (using the bat and another hog)
 02:10=Home Run !
 02:10=C'est un oiseau ! C'est un avion ! ...
 02:10=Hors du parc !
 02:10=Coup gagnant !
 02:10=I believe I can FLY ! I believe I can... *boum*
+
+; Hog (%1) Has to leave (team is gone)
+02:11=%1 a du aller se coucher!
+02:11=%1 est trop occupé pour jouer
+02:11=%1 a du partir
+
 ; Weapon Categories
 03:00=Grenade à retardement
 03:01=Grenade à retardement
 03:02=Arme balistique
 03:03=Arme téléguidée
 03:04=Fusil (plusieurs coups)
-03:05=Engin excavateur
+03:05=Outil de creusage
 03:06=Action
-03:07=Véhicule utilitaire
+03:07=Moyen de transport
 03:08=Bombe de proximité
 03:09=Révolver (à plusieurs coups)
 03:10=BOUM!
 03:11=Bonk!
 03:12=Arts martiaux
 03:13=Non Utilisé
-03:14=Véhicule utilitaire
+03:14=Moyen de transport
 03:15=Attaque aéroportée
 03:16=Attaque aéroportée
-03:17=Engin excavateur
+03:17=Outil de creusage
 03:18=Utilitaire
-03:19=Véhicule utilitaire
+03:19=Moyen de transport
 03:20=Action
 03:21=Engin balistique
 03:22=Appelez-moi Indiana !
 03:23=Arts (vraiment) martiaux !
 03:24=Le gâteau n'est PAS un mensonge !
 03:25=Déguisement
-03:26=Grenade à fragmentation
-03:27=Grenade infernale
-03:28=Missile balistique
-03:29=Missile balistique
+03:26=Grenade juteuse
+03:27=Grenade enflammée
+03:28=Arme balistique
+03:29=Arme balistique
 03:30=Attaque aéroportée
 03:31=Bombe à déclenchement télécommandé
 03:32=Effet temporaire
@@ -394,21 +414,37 @@
 03:39=Moyen de transport
 03:40=Grenade incendiaire
 03:41=Un supporter enragé de Squawks
+; they wont get the original joke the song is in english so Ill use "for science" instead since its said a lot in the game
+03:42=Pour la science ...
+03:43=Joue la douloureuse sonate de Beethoven
+03:44=A consommer de préference avant : 1923
+03:45=La puissance de la science
+03:46=Chaud ! Chaud ! Chaud!
+03:47=Colle ça là où ce sera utile!
+03:48=C'est l'heure de marteler !
+03:49=Ramène les morts en ENFER !!!
+03:50=Un fan de taupes
+03:51=Trouvé par terre
+03:52=UNUSED
+03:53=Type 40
+03:54=Trace ta route
+03:55=Qui a commandé un herisson-glacé?
+03:56=Grand couteau, Multi-fonctions !
 
 ; Weapon Descriptions (use | as line breaks)
-04:00=Attaquez vos ennemis en utilisant une simple grenade.|Elle explosera une fois que le compte à rebours atteindra zéro.|1-5: Lancez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force
-04:01=Attaquez vos ennemis en utilisant une bombe à retardement.|Elle se désintégrera en de multiples petites bombes |quand le compte à rebours atteindra zéro|1-5 : Lancez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force
-04:02=Attaquez vos ennemis en utilisant un missile balistique|subissant l'influence du vent.|Attaque : maintenez pour tirer avec plus de force
-04:03=Lancez une bombe téléguidée qui se verrouillera|sur la cible choisie. Ne tirez pas à pleine puissance|pour une meilleure précision.|Curseur : choix de la cible|Attaque : maintenez pour tirer avec plus de force
+04:00=Attaquez vos ennemis en utilisant une simple grenade.|Elle explosera une fois que le compte à rebours atteindra zéro.|1-5: Réglez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force
+04:01=Attaquez vos ennemis en utilisant une grenade a fragmentation.|Elle se désintégrera en de multiples petits fragements explosifs |quand le compte à rebours atteindra zéro|1-5 : Réglez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force
+04:02=Attaquez vos ennemis en utilisant un bazooka dont la roquette|subira l'influence du vent.|Attaque : maintenez pour tirer avec plus de force
+04:03=Lancez une abeille à tête chercheuse qui se verrouillera|sur la cible choisie. Ne tirez pas à pleine puissance|pour une meilleure précision.|Curseur : choix de la cible|Attaque : maintenez pour tirer avec plus de force
 04:04=Attaquez votre ennemi en utilisant un fusil à deux coups.|Grâce à son pouvoir de dispersion vous n'avez pas besoin de frapper directement sur la cible|pour toucher votre ennemi.|Attaque : tirez (coups multiples)
 04:05=Descendez sous terre ! Utilisez le marteau-piqueur pour creuser un trou|dans le sol et atteindre d'autres zones.|Attaque : commencez/achevez de creuser
 04:06=Vous en avez marre ? Pas moyen d'attaquer ? Vous économisez vos munitions ?|Pas de problèmes ! Passez simplement votre tour, espèce de lâche !|Attaque : Passez votre tour sans combattre
-04:07=Franchissez les grandes distances en utilisant par intervalles la |corde ninja. Utilisez votre élan pour vous lancer contre les autres hérissons,|balancez leurs des grenades ou d'autres armes explosives.|Attaque : Tirer ou lâchez la corde ninja|Saut longue distance : jetez des grenades ou des armes similaires
+04:07=Franchissez les grandes distances en utilisant par intervalles le |Grappin. Utilisez votre élan pour vous lancer contre les autres hérissons,|leur balancer des grenades ou d'autres armes explosives.|Attaque : Tirer ou lâchez la corde ninja|Saut longue distance : jetez des grenades ou des armes similaires
 04:08=Maintenez vos ennemis à distance en laissant une mine|dans les passages étroits ou juste sous leurs pieds. Assurez-vous|que vous pouvez vous sauver avant son déclenchement !|Attaque : lâchez la mine à vos pieds
-04:09=Vous n'êtes pas sûr de ce que vous voulez ? Utilisez l'Aigle| du Désert pour attaquer en utilisant vos quatre coups. Poussez dans l'eau vos ennemis ou transpercez leur défense|Attaque : tirez (coups multiples)
+04:09=Vous n'êtes pas sûr de ce que vous voulez ? Utilisez le| pistolet pour attaquer en utilisant vos quatre coups. Poussez dans l'eau vos ennemis ou transpercez leur défense|Attaque : tirez (coups multiples)
 04:10=La force brute est toujours une possibilité. Lancez cet explosif|classique sur vos ennemis et prenez le temps de vous retirer.|Attaque : Lâchez la dynamite à vos pieds
-04:11=Débarrassez-vous des hérissons ennemis en leur donnant des coups pour les chasser |vers d'autres horizons ou en les jetant à l'eau. Ou bien préférez-vous|envoyer quelques tonneaux ou mines sur vos ennemis ?|Attaque : frappez un bon coup sur tout ce qui bouge.
-04:12=Allez au combat rapproché corps à corps pour utiliser toute la force presque mortelle de ces arts martiaux.|Attaque : lancez un coup de poing fulgurant
+04:11=Débarrassez-vous des hérissons ennemis en leur donnant des coups pour les éjecter |vers d'autres horizons ou en les jetant à l'eau. Ou bien préférez-vous|envoyer quelques tonneaux ou mines sur vos ennemis ?|Attaque : frappez un bon coup sur tout ce qui bouge.
+04:12=Allez au corps-à-corps pour utiliser toute la force presque mortelle de ces arts martiaux.|Attaque : lancez un coup de poing fulgurant
 04:13=non-utilisé
 04:14=Vous avez le vertige ? Prenez donc un parachute.|Il se déploiera lorsque|vous serez tombé trop loin|et épargnera le choc de la chute à votre hérisson.|Attaque: Dépliez le parachute
 04:15=Appelez le 3615 BOMBE pour commander une frappe aérienne dévastatrice sur vos ennemis.|Gauche/Droite : Déterminez la direction de l'attaque|Curseur : Choisissez la zone cible
@@ -416,36 +452,44 @@
 04:17=vous avez besoin d'un abri ? de pousser quelques ennemis dans l'eau ? Utilisez le chalumeau| pour creuser un tunnel dans le sol, vous protéger ou faire de nouvelles victimes.|Attaque : Commencez/cessez de creuser.
 04:18=Vous avez besoin de vous protéger davantage ou de passer un |obstacle infranchissable ? Placez quelques poutrelles|où vous voulez .|Gauche/Droite : Choisissez la poutrelle à placer|Curseur : Placez la poutrelle dans la bonne position
 04:19=La téléportation utilisée au bon moment|peut être bien plus efficace|que la plupart des autres armes|car elle vous permet de sauver des hérissons de situations dangereuses|en quelques secondes.|Curseur : Choisissez la zone cible
-04:20=Vous permet de jouer la partie en cours avec|un hérisson différent.|Attaque : Activez le changement de hérisson
+04:20=Vous permet de changer de herisson|pendant votre tour.|Attaque : Activez le changement de hérisson
 04:21=Tirez un missile balistique qui va|envoyer de multiples bombes au point d'impact.|Attaque : Tirez à pleine puissance
 04:22=Ce n'est pas réservé à Indiana Jones ! Le fouet est une|arme bien utile dans plusieurs situations. Particulièrement|quand vous devez hisser quelqu'un en haut d'une falaise.|Attaque : Frappez tout ce qui bouge devant vous
-04:23=Si vous n'avez rien à perdre, voilà qui peut être |bien pratique. Sacrifiez votre hérisson en le lançant dans une direction| particulière. Il heurtera tout sur son passage avant |d'exploser finalement.|Attaque : Lancer l'attaque mortelle et dévastatrice
-04:24=Joyeux anniversaire ! Lancez ce gâteau, faites-le atterrir|tout près de vos ennemis et offrez-leur une fête explosive.|Le gâteau peut franchir presque tous les environnements mais|il se peut qu'il explose à mi-chemin.|Attaque : Lancez le gâteau ou bien faites-le s'arrêter et exploser
-04:25=Arme de séduction massive ! Utilisez le déguisement pour amener vos ennemis| à sauter vers votre hérisson (et donc vers un piège ou un trou).|Attaque : Utilisez le déguisement et tentez de séduire un autre hérisson
-04:26=Envoyez cette pastèque explosive à la tête de vos ennemis. Une fois le compte-à-rebours achevé, elle se désintégrera en de multiples fragments explosifs|1-5 : Lancer le compte à rebours|Attaque : Maintenez pour tirer avec plus de puissance
-04:27=Faites tomber un déluge de feu sur vos adversaires en utilisant|cet explosif dévastateur.|Ne vous tenez pas trop prêt|de l'impact car les flammes peuvent durer longtemps|Attaque : Maintenez pour tirer avec plus de puissance
-04:28=Peu après le lancement de ce missile, il va se mettre|à creuser le sol le plus résistant et explosera|une fois son détonateur amorcé ou une fois atteint l'air libre.|Attaque : Maintenez pour tirer avec plus de puissance
+04:23=Si vous n'avez rien à perdre, voilà qui peut être |bien pratique. Sacrifiez votre hérisson en le lançant dans une direction| particulière. Il heurtera tout sur son passage avant |d'exploser.|Attaque : Lancer l'attaque mortelle et dévastatrice
+04:24=Joyeux anniversaire ! Lancez ce gâteau, et déposez-le|tout près de vos ennemis et offrez-leur une fête explosive.|Le gâteau peut franchir presque tous les environnements mais|il se peut qu'il explose à mi-chemin ou apès votre cible.|Attaque : Lancez le gâteau ou bien faites-le s'arrêter et exploser
+04:25=Arme de séduction massive ! Utilisez le déguisement pour ammener vos ennemis| à sauter vers votre hérisson (et donc vers un piège ou un trou).|Attaque : Utilisez le déguisement et tentez de séduire un autre hérisson
+04:26=Envoyez cette pastèque explosive à la tête de vos ennemis. Une fois le compte-à-rebours achevé, elle se désintégrera en de multiples tranches explosives|1-5 : Régler le compte à rebours|Attaque : Maintenez pour tirer avec plus de puissance
+04:27=Faites tomber un déluge de feu sur vos adversaires en utilisant|cet explosif diabolique et dévastateur.|Ne vous tenez pas trop prêt|de l'impact car les flammes peuvent durer longtemps|Attaque : Maintenez pour tirer avec plus de puissance
+04:28=Peu après le lancement de cette roquette, elle va se mettre|à creuser le sol le plus résistant et explosera|une fois son compte à rebours ou une fois atteint l'air libre.|Attaque : Maintenez pour tirer avec plus de puissance
 04:29=Ce n'est pas un jouet pour les enfants ! La mitrailleuse envoie|des centaines de petites balles colorées explosives.|Attaque : Tirez à pleine puissance|Haut/Bas : Continuez à tirer
-04:30=Appelez un avion pour larguer une puissante giclée de napalm.|En la menant correctement cette attaque peut éradiquer|des zones entières du paysage, et notamment les hérissons qui auraient la malchance de se trouver là.|Gauche/Droite: Déterminez la direction de l'attaque|Curseur : Choisissez la zone cible
+04:30=Appelez un avion pour larguer une pluie de napalm soumise à la force du vent.|En la menant correctement cette attaque peut éradiquer|des zones entières du paysage, et notamment les hérissons qui auraient la malchance de se trouver là.|Gauche/Droite: Déterminez la direction de l'attaque|Curseur : Choisissez la zone cible
 04:31=L'avion télécommandé est l'arme idéale pour récolter des boites ou|attaquer des hérissons très éloignés. Une fois vos ennemis bombardés, vous pourrez lancer votre avion sur l'ennemi dans une explosion incendiaire.|Attaque : Lancez l'avion ou larguez des bombes|Saut longue distance : laissez les valkyries entrer dans la danse guerrière|Haut/Bas : Pilotez l'avion
-04:32=La fable gravité est plus efficace que n'importe quel régime ! Sautez|plus haut et franchissez de plus grandes distances ou bien faites voltiger vos ennemis |encore plus loin.|Attaque : Activez
+04:32=La faible gravité est plus efficace que n'importe quel régime ! Sautez|plus haut et franchissez de plus grandes distances ou bien faites voltiger vos ennemis |encore plus loin.|Attaque : Activez
 04:33=Parfois vous avez besoin d'un petit coup de pouce supplémentaire|pour gérer les dégâts.|Attaque : Activez
 04:34=Personne ne peut me toucher !|Attaque : Activez
 04:35=Parfois le temps passe trop vite. Grappillez quelques secondes de plus pour terminer votre attaque|Attaque : Activez
-04:36=Eh bien, parfois vous ratez complètement la cible. Demandez plutôt de l'aide|à la technologie de pointe actuelle pour bien viser.|Attaque : Activez
+04:36=Eh bien, parfois vous ratez complètement la cible. Demandez plutôt de l'aide|à la technologie de pointe pour bien viser.|Attaque : Activez
 04:37=Ne craignez pas la lumière du jour. Rafraichissez vous |d'un peu de sang en récupérant des points de vie sur les dégats faits aux ennemis.|Attaque : Activez
-04:38= Le fusil à lunette peut être une des armes les plus dévastatrices|de tout votre arsenal, toutefois il est totalement inefficace|en combat rapproché. Les dommages qu'il cause augmentent suivant|la distance de la cible.|Attaque : Tirez (deux fois)
-04:39=Volez vers d'autres secteurs de la carte en utilisant une soucoupe|volante. Ce moyen de transport, pas facile à dompter, vous|emportera vers presque tous les horizons du champ de bataille|Attaque : Activer|Haut/Gauche/Droite : Prenez de l'altitude et controllez votre direction
+04:38= Le sniper peut être une des armes les plus dévastatrices|de tout votre arsenal, toutefois il est totalement inefficace|en combat rapproché. Les dommages qu'il cause augmentent suivant|la distance de la cible.|Attaque : Tirez (deux fois)
+04:39=Volez vers d'autres secteurs de la carte en utilisant une soucoupe|volante. Ce moyen de transport, pas facile à dompter, vous|emportera vers presque tous les horizons du champ de bataille mais attention au carburant!|Attaque : Activer|Haut/Gauche/Droite : Prenez de l'altitude et controllez votre direction
 04:40=Mettez le feu à un territoire en utilisant cette bouteille remplie|de liquide inflammable.|Attaque : maintenez pour tirer avec plus de force
 04:41=Une arme naturelle qui peut suffire à remplacer la soucoupe volante.|Cet oiseau a du manger un vieux fromage pourri (du Limburger vous dites ?)|car ses oeufs ont comme quelquechose de ... toxique.|Le piaf peut donc transporter votre hérisson et balancer des œufs|sur vos ennemis !|Attaque : Activez et larguez des œufs|Haut/Gauche/Droite: voltigez vers une direction.
-04:42=Ce fusil à portails est capable de transporter instantanément hérissons,|tonneaux ou mines entre deux points du terrain. |Utilisez-le intelligemment et votre campagne sera un ... GRAND SUCCÈS !|Attaque : Crée un portail|Modificateur : Change la couleur du portail
+04:42=Ce générateur de portails est capable de transporter instantanément hérissons,|tonneaux ou mines entre deux points du terrain. |Utilisez-le intelligemment et votre campagne sera un ... GRAND SUCCÈS !|Attaque : Crée un portail|Modificateur : Change la couleur du portail
 04:43=Faites de vos débuts musicaux un succès explosif !| Lâchez un piano depuis les cieux, mais attention ... si quelqu'un doit|jouer dessus, cela pourrait lui coûter la vie !|Curseur : Choix de la cible|F1-F9 : Jouer du piano
-04:44=Ce n'est pas juste un fromage, c'est une arme bactériologique !|Si il ne provoque que de faibles dommages, sa puissance se|trouve dans sa durée. Il empoisonnera tous les malchanceux|touchés par l'odeur et réduira leur vie à l'agonie !|1-5 : Lancez le minuteur de la grenade|Attaque : maintenez pour la lancer avec plus de force
-04:45=Tous ces cours de physique ont finalement payé,|lancez une onde Sinus dévastatrice sur vos ennemis.|Attention au recul ! (cette arme est incomplète)|Attaque : Activez
+04:44=Ce n'est pas juste un fromage, c'est une arme bactériologique !|Si il ne provoque que de faibles dommages, sa puissance se|trouve dans sa durée. Il empoisonnera tous les malchanceux|touchés par l'odeur et réduira leur vie à l'agonie !|1-5 : Réglez le minuteur de l'arme|Attaque : maintenez pour la lancer avec plus de force
+04:45=Tous ces cours de physique ont finalement payé,|lancez une onde Sinusoidale dévastatrice sur vos ennemis.|Attention au recul ! |Attaque : Activez
 04:46=Aspergez vos ennemis de flammes liquides ou creusez vous un passage dans le sol.|Hardi !|Attaque : Activez|Haut/Bas : Continuez à viser|Droite/Gauche : Changer la puissance de tir
 04:47=Doublez le fun avec deux mines, piquantes, furtives et collantes.|Provoquez une réaction en chaine dévastatrice et/ou défendez-vous ! |Attaque : maintenez pour tirer avec plus de force (deux fois)
 04:48=Outre une bonne bosse, un bon coup de ce marteau enlèvera un tiers de la santé |du hérisson ennemi et l'enfoncera dans le sol ou dans l'eau comme un vulgaire asticot !|Attaque : Activez
 04:49=Ressuscite vos amis oubliés six pieds sous terre ! Mais méfiez-vous, ressuscite également vos ennemis. |Attaque : Maintenez attaque pressée pour ressusciter lentement|Haut : Accélérer la résurrection
+04:50=Un ennemi se cache sous terre ?|Faîtes le sortir avec l'attaque perforante! |Un avion vous délivrera des roquettes perforantes qui creuseront vers le bas jusqu'a la fin du compte a rebours|ou du contact a l'air libre où elles exploseront|1-5 : Réglez le minuteur des roquettes|Gauche/Droite: Déterminez la direction de l'attaque|Curseur : Choisissez la zone cible
+04:51=Gagnez un tir gratuit en lançant une boule de terre sur vos ennemis.|Elle poussera les herissons dans l'eau ou dans un trou afin d'utiliser votre deuxième arme pour l'achever|Attaque : Maintenez pour tirer avec plus de puissance
+04:52=UNUSED
+04:53=Faîtes un voyage dans le temps et l'espace en|laissant vos camarades se battre seuls!|Soyez préparé à revenir a n'importequel moment|ou lors d'une mort subite ou encore si tout vos camarades sont morts|Attention ne marche pas pendant la mort subite, si vous êtes le dernier survivant ou le roi.|Attaque : Activer
+04:54=Et voici le nouveau sol en bouteille! Ce spray produit des flocon collants sur lesquels vous pouvez marchez!|Construisez des pont,enterrez vos ennemis, scellez des tunnels.|Attention à ne pas en mettre sur vous!|Attaque : Activez|Haut/Bas : Continuez à viser|Droite/Gauche : Changer la puissance de tir
+04:55=Apportez l'ère glacière sur vos ennemis!|Avec le congélateur gelez les herissons rendez le sol glissant|et sauvez vous de la noyade en gelant l'eau!!|Attaque : Tirez
+04:56=Un couteau mais bien plus,|ce hachoir se lance sur les ennemis, bloc les passages et tunnels et|peut même servir d'appui pour gravir une montagne!|Mais attention à ne pas vous blesser.|Attaque : maintenez pour la lancer avec plus de force (deux fois)
+
 
 ; Game goal strings
 05:00=Modes de jeu
@@ -461,7 +505,13 @@
 05:10=Terrain indestructible : La plupart des armes sont incapables de modifier le terrain
 05:11=Munitions partagées : Toutes les équipes de la même couleur partagent leurs munitions
 05:12=Mines à retardement : Les mines exploseront après %1 seconde(s)
-05:13=Mines à retardement : Les mines explosent immédiatement
+05:13=Mines à retardement : Les mines explosent instentanément
 05:14=Mines à retardement : Les mines exploseront dans un délai compris entre 0 et 3 secondes
 05:15=Modificateur de dégâts : Toutes les armes feront  %1% de dégâts
+05:16=La vie de tout les hérissons est restaurée à la fin du tour
+05:17=Les hérissons IA réapparaissent lorsqu'ils meurent
+05:18=Attaques illimitées
+05:19=Les armes sont réinitialisées à la fin du tour
+05:20=Les armes ne sont pas partagées entre les hérissons
+05:21=Relais: Des équipes sous la même couleur partagent le tour|Temps partagé: Dès que l'un à fini son action il passe la main à sont camarade pour qu'il agisse|avant la fin du tour
 

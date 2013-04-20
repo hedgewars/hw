@@ -982,6 +982,10 @@ just enter your nickname.</source>
 <context>
     <name>PageNetServer</name>
     <message>
+        <source>Click here for details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Insert your address here</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3081,6 +3085,34 @@ Error code: %2</source>
 <context>
     <name>server</name>
     <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Not room master</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3125,50 +3157,6 @@ Error code: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Illegal room name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3189,7 +3177,23 @@ Error code: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Empty config entry</source>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

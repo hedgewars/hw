@@ -178,7 +178,6 @@
 02:01=%1 foi brincar com os golfinhos
 02:01=%1 foi visitar o Oceanário
 02:01=%1 encontrou a Atlântida perdida
-02:01=%1 inscreve-se no papel principal do Bioshock 3
 02:01=O teu pato insuflável ficou triste %1
 02:01=%1 devia ter comprado uma mota de água
 02:01=%1 não gosta de desportos náuticos
@@ -450,8 +449,8 @@
 03:51=Encontrado no chão
 03:52=UNUSED
 03:53=Modelo 40
-03:54=Constroi qualquer coisa
-03:55=Utilitário
+;03:54=Constroi qualquer coisa
+03:54=Utilitário
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Ataca os teus inimigos usando uma simples granada.|Explodirá quando o tempo chegar a zero.|1-5: Define o temporizador da granada|Ataque: Deixa premido para lançar com mais força
@@ -508,8 +507,8 @@
 04:51=Empurra um ouriço sem perder o turno|criando uma bola de lama tu mesmo!
 04:52=UNUSED
 04:53=Parte numa aventura pelo tempo e espaço,|deixando os teus colegas para se defenderem sozinhos.|Está preparado para regressar a qualquer altura,|para Morte Súbita ou se todos forem derrotados.|Atenção: Não funciona em Morte Súbita,|se estiveres sozinho, ou se fores o Rei.
-04:54=INCOMPLETO
-04:55=Aplica estas particulas de terreno em spray onde quiseres.|Constroi pontes, enterra inimigos ou fecha túneis.|Tem apenas cuidado, não o uses em ti proprio!
+;04:54=INCOMPLETO
+04:54=Aplica estas particulas de terreno em spray onde quiseres.|Constroi pontes, enterra inimigos ou fecha túneis.|Tem apenas cuidado, não o uses em ti proprio!
 
 ; Game goal strings
 05:00=Modos de Jogo

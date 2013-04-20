@@ -35,8 +35,8 @@
 
 @implementation M3InstallController
 
-- (id) init {
-        if ((self = [super init])) {
+-(id) init {
+    if ((self = [super init])) {
         NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
         NSString *title = [NSString stringWithFormat:NSLocalizedString(@"%@ is currently running from a disk image", @"AppName is currently running from a disk image"), appName];
         NSString *body = [NSString stringWithFormat:NSLocalizedString(@"Would you like to install %@ in your applications folder before quitting?", @"Would you like to install App Name in your applications folder before quitting?"), appName];
@@ -50,70 +50,91 @@
     return self;
 }
 
-- (void)displayInstaller {
+-(void) displayInstaller {
     NSString *imageFilePath = [[[NSWorkspace sharedWorkspace] propertiesForPath:[[NSBundle mainBundle] bundlePath]] objectForKey:NSWorkspace_RBimagefilepath];
     if (imageFilePath && ![imageFilePath isEqualToString:[NSString stringWithFormat:@"/Users/.%@/%@.sparseimage", NSUserName(), NSUserName()]] && ![[NSUserDefaults standardUserDefaults] boolForKey:@"M3DontAskInstallAgain"]) {
         NSInteger returnValue = [alert runModal];
         if (returnValue == NSAlertDefaultReturn) {
             [self installApp];
         }
-        if ([[alert suppressionButton] state] == NSOnState) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"M3DontAskInstallAgain"];
+        if ([NSAlert instancesRespondToSelector:@selector(suppressionButton)])
+            if ([[alert performSelector:@selector(suppressionButton)] state] == NSOnState)
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"M3DontAskInstallAgain"];
         }
-    }
 }
 
-- (void)installApp {
+-(void) installApp {
     NSString *appsPath = [[NSString stringWithString:@"/Applications"] stringByAppendingPathComponent:[[[NSBundle mainBundle] bundlePath] lastPathComponent]];
     NSString *userAppsPath = [[[NSString stringWithString:@"~/Applications"] stringByAppendingPathComponent:[[[NSBundle mainBundle] bundlePath] lastPathComponent]] stringByExpandingTildeInPath];
     NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"];
+    NSString *currentPath = [[NSBundle mainBundle] bundlePath];
+    NSString *finalPath;
+    NSError *error = nil;
+    BOOL success;
 
-    //Delete the app that is installed
-    if ([[NSFileManager defaultManager] fileExistsAtPath:appsPath]) {
-        if ([NSFileManager instancesRespondToSelector:@selector(removeItemAtPath:error:)])
-            [[NSFileManager defaultManager] removeItemAtPath:appsPath error:nil];
-        else
-            //casting hides the deprecation warning
-            [(id)[NSFileManager defaultManager] removeFileAtPath:appsPath handler:nil];
-    }
-    //Delete the app that is installed
-    BOOL success = NO;
-    if ([NSFileManager instancesRespondToSelector:@selector(copyItemAtPath:toPath:error:)])
-        success = [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] bundlePath]
-                                                          toPath:appsPath
-                                                           error:nil];
+    // Prepare the remove invocation
+    SEL removeSelector;
+    if ([NSFileManager instancesRespondToSelector:@selector(removeItemAtPath:error:)])
+        removeSelector = @selector(removeItemAtPath:error:);
     else
-        success = [(id)[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath]
-                                                        toPath:appsPath
-                                                       handler:nil];
-    if (success) {
-        NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"App Name installed successfully"), appName],
-                        [NSString stringWithFormat:NSLocalizedString(@"%@ was installed in /Applications", @"App Name was installed in /Applications"), appName],
-                        NSLocalizedString(@"Quit", @"Quit"), nil, nil);
-    } else {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:userAppsPath]) {
-            if ([NSFileManager instancesRespondToSelector:@selector(removeItemAtPath:error:)])
-                [[NSFileManager defaultManager] removeItemAtPath:userAppsPath error:nil];
-            else
-                [(id)[NSFileManager defaultManager] removeFileAtPath:userAppsPath handler:nil];
-        }
-        if ([NSFileManager instancesRespondToSelector:@selector(copyItemAtPath:toPath:error:)])
-            success = [[NSFileManager defaultManager] copyItemAtPath:[[NSBundle mainBundle] bundlePath]
-                                                              toPath:userAppsPath
-                                                               error:nil];
-        else
-            success = [(id)[NSFileManager defaultManager] copyPath:[[NSBundle mainBundle] bundlePath]
-                                                            toPath:userAppsPath
-                                                           handler:nil];
-        if (success) {
-            NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"AppName installed successfully"), appName],
-                [NSString stringWithFormat:NSLocalizedString(@"%@ was installed in %@", @"App Name was installed in %@"), appName, [[NSString stringWithString:@"~/Applications"] stringByExpandingTildeInPath]],
-                        NSLocalizedString(@"Quit", @"Quit"), nil, nil);
-        } else {
-            NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"Could not install %@", @"Could not install App Name"), appName],
-                            NSLocalizedString(@"An error occurred when installing", @"An error occurred when installing"), NSLocalizedString(@"Quit", @"Quit"), nil, nil);
-        }
+        removeSelector = @selector(removeFileAtPath:handler:);
+
+    NSMethodSignature *removeSignature = [NSFileManager instanceMethodSignatureForSelector:removeSelector];
+    NSInvocation *removeInvocation = [NSInvocation invocationWithMethodSignature:removeSignature];
+    [removeInvocation setTarget:[NSFileManager defaultManager]];
+    [removeInvocation setSelector:removeSelector];
+
+    // Delete the app if already installed
+    if ([[NSFileManager defaultManager] fileExistsAtPath:appsPath]) {
+        [removeInvocation setArgument:&appsPath atIndex:2];
+        [removeInvocation setArgument:&error atIndex:3];
+        [removeInvocation invoke];
     }
+
+    // Prepare the copy invocation
+    SEL copySelector;
+    if ([NSFileManager instancesRespondToSelector:@selector(copyItemAtPath:toPath:error:)])
+        copySelector = @selector(copyItemAtPath:toPath:error:);
+    else
+        copySelector = @selector(copyPath:toPath:handler:);
+
+    NSMethodSignature *copySignature = [NSFileManager instanceMethodSignatureForSelector:copySelector];
+    NSInvocation *copyInvocation = [NSInvocation invocationWithMethodSignature:copySignature];
+
+    [copyInvocation setTarget:[NSFileManager defaultManager]];
+    [copyInvocation setSelector:copySelector];
+
+    // Copy the app in /Applications
+    [copyInvocation setArgument:&currentPath atIndex:2];
+    [copyInvocation setArgument:&appsPath atIndex:3];
+    [copyInvocation setArgument:&error atIndex:4];
+    [copyInvocation invoke];
+    [copyInvocation getReturnValue:&success];
+    finalPath = @"/Applications";
+
+    // In case something went wrong, let's try again somewhere else
+    if (success == NO) {
+        // Delete the app if already installed
+        if ([[NSFileManager defaultManager] fileExistsAtPath:userAppsPath]) {
+            [removeInvocation setArgument:&userAppsPath atIndex:2];
+            [removeInvocation invoke];
+        }
+
+        // Copy the app in ~/Applications
+        [copyInvocation setArgument:&userAppsPath atIndex:3];
+        [copyInvocation invoke];
+        [copyInvocation getReturnValue:&success];
+        finalPath = [[NSString stringWithString:@"~/Applications"] stringByExpandingTildeInPath];
+    }
+
+    if (success)
+        NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"%@ installed successfully", @"successful installation title"), appName],
+              [NSString stringWithFormat:NSLocalizedString(@"%@ was installed in %@", @"successfull installation text"), appName, finalPath],
+              NSLocalizedString(@"Ok", @"ok message"), nil, nil);
+    else
+        NSRunAlertPanel([NSString stringWithFormat:NSLocalizedString(@"Could not install %@", @"installation failure title"), appName],
+              NSLocalizedString(@"An error occurred when installing", @"installation failure text"),
+              NSLocalizedString(@"Quit", @"exit message"), nil, nil);
 }
 
 @end

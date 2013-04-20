@@ -5,14 +5,14 @@
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
-        <translation>Bilinmeyen Derleyici</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AbstractPage</name>
     <message>
         <source>Go back</source>
-        <translation>Geri Dön</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -23,80 +23,80 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>kopya</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BanDialog</name>
     <message>
         <source>IP</source>
-        <translation>IP</translation>
+        <translation type="unfinished">IP</translation>
     </message>
     <message>
         <source>Nick</source>
-        <translation>Takma Ad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation>IP</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation>Sebep</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Süre</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>you know why</source>
-        <translation>biliyor musunuz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Warning</source>
-        <translation>Uyarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation>Lütfen %1 belirtin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation>takmaad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>permanent</source>
-        <translation>kalıcı</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation>Varsayılanı Kullan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation>Göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation>Geribildirim Gönder</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please give us feedback!</source>
@@ -119,12 +119,12 @@
     <name>FreqSpinBox</name>
     <message>
         <source>Never</source>
-        <translation>Asla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>Every %1 turn</source>
-        <translation>
-            <numerusform>Her %1 turda</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -140,47 +140,47 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation>Oyun planı otomatik bir silah seçecek</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Map</source>
-        <translation>Harita</translation>
+        <translation type="unfinished">Harita</translation>
     </message>
     <message>
         <source>Game options</source>
-        <translation>Oyun seçenekleri</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation>
-            <numerusform>%1 dakika</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation>
-            <numerusform>%1 saat</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation>
-            <numerusform>%1 saat</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation>
-            <numerusform>%1 gün</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation>
-            <numerusform>%1 gün</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -196,63 +196,56 @@
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished">Veri dizini açılamadı:
-%1
-
-Lütfen kurulumunuzu denetleyin!</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWAskQuitDialog</name>
     <message>
         <source>Do you really want to quit?</source>
-        <translation>Gerçekten çıkmak istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWChatWidget</name>
     <message>
         <source>%1 has been removed from your ignore list</source>
-        <translation>%1 yoksayma listenizden kaldırıldı</translation>
-    </message>
-    <message>
-        <source>%1 has been added toINCOMPLETE your ignore list</source>
-        <translation type="obsolete">%1 yoksayma listenize eklendi</translation>
-    </message>
-    <message>
-        <source>%1 has been removed from your friends list</source>
-        <translation>%1 arkadaş listenizden kaldırıldı</translation>
-    </message>
-    <message>
-        <source>%1 has been added to your friends list</source>
-        <translation>%1 arkadaş listenize eklendi</translation>
-    </message>
-    <message>
-        <source>Stylesheet imported from %1</source>
-        <translation>%1 biçembelgesi aktarıldı</translation>
-    </message>
-    <message>
-        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation>Geçerli BiçemBelgesini ileride kullanmak için %1, sıfırlamak için %3 girin!</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t read %1</source>
-        <translation>%1 okunamadı</translation>
-    </message>
-    <message>
-        <source>StyleSheet discarded</source>
-        <translation>BiçemBelgesi silindi</translation>
-    </message>
-    <message>
-        <source>StyleSheet saved to %1</source>
-        <translation>BiçemBelgesi %1 konumuna kaydedildi</translation>
-    </message>
-    <message>
-        <source>Failed to save StyleSheet to %1</source>
-        <translation>BiçemBelgesi %1 konumuna kaydedilemedi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 has been added to your ignore list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been removed from your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has been added to your friends list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stylesheet imported from %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t read %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet discarded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>StyleSheet saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to save StyleSheet to %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -264,50 +257,50 @@ Lütfen kurulumunuzu denetleyin!</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation>VarsayılanTakım</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation>Hedgewars Gösteri Dosyası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation>Hedgewars Kayıt Dosyası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Demo name</source>
-        <translation type="unfinished">Gösteri adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation type="unfinished">Gösteri adı:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game aborted</source>
-        <translation>Oyun sonlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Takma ad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No nickname supplied.</source>
-        <translation>Takma ad girilmedi.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation>Sunucuda başka biri %1 takma adını kullanıyor. Başka bir isim girin:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1&apos;s Team</source>
-        <translation>%1 Oyuncusunun Takımı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation>Hedgewars - Takma ad kayıtlı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -315,53 +308,44 @@ Please pick another nickname:</source>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Bu takma ad kayıtlı ve bir parola belirtmediniz.
-
-Bu takma ad sizin değilse, lütfen kendi takma adınızı www.hedgewars.org adresinden kaydedin.
-
-Parola:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Takma adınız kayıtlı değil.
-Başkasının kullanmaması için lütfen,
-www.hedgewars.org sitesinde kaydedin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>
 
 Your password wasn&apos;t saved either.</source>
-        <translation>
-        
-Parolanız da kaydedilmedi.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation>Hedgewars - Boş takma ad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation>Hedgewars - Hatalı parola</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
-        <translation>Hatalı parola girdiniz.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Try Again</source>
-        <translation>Tekrar Dene</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Connection error</source>
-        <translation>Hedgewars - Bağlantı hatası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
-        <translation>Çok hızlı yeniden bağlandınız.
-Birkaç saniye bekleyin ve yeniden deneyin.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -403,103 +387,103 @@ Birkaç saniye bekleyin ve yeniden deneyin.</translation>
     </message>
     <message>
         <source>Small tunnels</source>
-        <translation>Küçük tüneller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation>Orta tüneller</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Seed</source>
-        <translation>Besleme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Map type:</source>
-        <translation>Harita türü:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation>Resim haritası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mission map</source>
-        <translation>Görev haritası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation>El çizimi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Randomly generated</source>
-        <translation>Rastgele oluşturulmuş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Random maze</source>
-        <translation>Rastgele labirent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Random</source>
-        <translation>Rastgele</translation>
+        <translation type="unfinished">Rastgele</translation>
     </message>
     <message>
         <source>Map preview:</source>
-        <translation>Harita önizleme:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Yerel harita çizimi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Harita çizimini düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Small islands</source>
-        <translation>Küçük adalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Medium islands</source>
-        <translation>Orta adalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Large islands</source>
-        <translation>Büyük adalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Map size:</source>
-        <translation>Harita boyutu:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation>Labirent biçemi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translation>Görev:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Map:</source>
-        <translation>Harita:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Tema:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation>Çizili harita yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation>Çizili Haritalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>All files</source>
-        <translation>Tüm dosyalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation>Büyük tüneller</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -533,7 +517,7 @@ Birkaç saniye bekleyin ve yeniden deneyin.</translation>
     </message>
     <message>
         <source>Quit reason: </source>
-        <translation>Çıkma sebebi: </translation>
+        <translation>Çıkma sebebi:</translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -541,38 +525,38 @@ Birkaç saniye bekleyin ve yeniden deneyin.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation>%1 *** %2 odaya katıldı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 katıldı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
-        <translation>%1 *** %2 ayrıldı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
-        <translation>%1 *** %2 ayrıldı (%3)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation>Kullanıcı çıktı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
-        <translation>Uzak sunucu bağlantıyı kapattı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
-        <translation>Sunucu çok eski. Bağlantı kesiliyor.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWPasswordDialog</name>
     <message>
         <source>Login</source>
-        <translation>Oturum aç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>To connect to the server, please log in.
@@ -594,33 +578,33 @@ just enter your nickname.</source>
     <name>HWUploadVideoDialog</name>
     <message>
         <source>Upload video</source>
-        <translation>Video yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HatButton</name>
     <message>
         <source>Change hat (%1)</source>
-        <translation>Şapkayı değiştir (%1)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HatPrompt</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Use selected hat</source>
-        <translation>Seçili şapkayı kullan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Search for a hat:</source>
-        <translation>Şapka ara:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -634,7 +618,7 @@ just enter your nickname.</source>
     <name>KeyBinder</name>
     <message>
         <source>Category</source>
-        <translation>Kategori</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -642,94 +626,93 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Süre: %1d %2s
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Video: %1x%2, </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation>Ses: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation>bilinmiyor</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MapModel</name>
     <message>
         <source>No description available.</source>
-        <translation>Kullanılabilir açıklama yok.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageAdmin</name>
     <message>
         <source>Clear Accounts Cache</source>
-        <translation>Hesap Belleğini Temizle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation>Veri getir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
-        <translation type="unfinished">Son sürüm için sunucu iletisi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Server message for previous versions:</source>
-        <translation>Önceki sürümler için sunucu iletisi:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation>En son sürüm protokol numarası:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>MOTD preview:</source>
-        <translation>MOTD önizleme:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Set data</source>
-        <translation>Veri ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Genel</translation>
+        <translation type="unfinished">Genel</translation>
     </message>
     <message>
         <source>Bans</source>
-        <translation>Engellemeler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation>IP/Takma Ad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Expiration</source>
-        <translation>Dolum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation>Sebep</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Yenile</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Kaldır</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -743,39 +726,39 @@ just enter your nickname.</source>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
-        <translation>Geri al</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Temizle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Load</source>
-        <translation>Yükle</translation>
+        <translation type="unfinished">Yükle</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation>Çizili harita yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save drawn map</source>
-        <translation>Çizili haritayı kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation>Çizili Haritalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>All files</source>
-        <translation>Tüm dosyalar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Eraser</source>
-        <translation>Silgi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -786,93 +769,93 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation>Bu takıma özel tuş ataması için bir eylem seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use my default</source>
-        <translation>Varsayılanı kullan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation>Tüm atamaları sıfırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Custom Controls</source>
-        <translation>Özel Denetimler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation>Şapka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation>İsim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This hedgehog&apos;s name</source>
-        <translation>Bu kirpinin adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation>Kirpi adını rastgele ata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation>Rastgele Takım</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageGameStats</name>
     <message>
         <source>Details</source>
-        <translation>Ayrıntılar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Health graph</source>
-        <translation>Sağlık Grafiği</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation>Sıralama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>En iyi atış ödülü: &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
-        <translation>
-            <numerusform>En iyi öldürücü: &lt;b&gt;%1&lt;/b&gt; bir turda &lt;b&gt;%2&lt;/b&gt; öldürme.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
-        <translation>
-            <numerusform>Bu turda toplam &lt;b&gt;%1&lt;/b&gt; kirpi öldürüldü.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>(%1 kill)</source>
-        <translation>
-            <numerusform>(%1 öldürme)</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; kendi kirpilerini &lt;b&gt;%2&lt;/b&gt; puanla vurmanın güzel olduğunu düşündü</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
-        <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; kendi &lt;b&gt;%2&lt;/b&gt; kirpisini öldürdü</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
-        <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; korktu ve &lt;b&gt;%2&lt;/b&gt; kez turu pas geçti.</numerusform>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -880,73 +863,73 @@ just enter your nickname.</source>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation>Oyunda...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Ekran görüntü klasörünü aç</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageMain</name>
     <message>
         <source>Downloadable Content</source>
-        <translation>İndirilebilir İçerik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
-        <translation>Tek bir bilgisayarda oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play a game across a network</source>
-        <translation>Ağ üzerinde oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
-        <translation>Hedgewars Projesinin arkasında kimlerin olduğunu göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation>Sorunları bildirme, özellik önerme veya Hedgewars oyununu ne kadar sevdiğinizi söylemek için geri bildirim bırakın</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>Websitemizden kullanıcılar tarafından oluşturulmuş indirilebilir içeriğe bakın</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Exit game</source>
-        <translation>Oyundan çık</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Manage videos recorded from game</source>
-        <translation>Oyunda kayıtlı videolarınızı yönetin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Oyun tercihlerini düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play a game across a local area network</source>
-        <translation>Yerel ağda bir oyun oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play a game on an official server</source>
-        <translation>Resmi bir sunucuda oyun oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Feedback</source>
-        <translation>Geri Bildirim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play local network game</source>
-        <translation>Yerel ağ oyunu oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play official network game</source>
-        <translation>Resmi ağ oyunu oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -957,34 +940,38 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Oyun tercihlerini düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageNetGame</name>
     <message>
         <source>Control</source>
-        <translation type="obsolete">Denetim</translation>
+        <translation type="obsolete">Kontrol</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Oyun tercihlerini düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Başla</translation>
+        <translation type="unfinished">Başla</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Güncelle</translation>
+        <translation type="unfinished">Güncelle</translation>
     </message>
     <message>
         <source>Room controls</source>
-        <translation>Oda denetimleri</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageNetServer</name>
+    <message>
+        <source>Click here for details</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <source>Insert your address here</source>
         <translation type="unfinished"></translation>
@@ -1002,111 +989,111 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Delete team</source>
-        <translation>Takımı sil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You can&apos;t edit teams from team selection. Go back to main menu to add, edit or delete teams.</source>
-        <translation>Takım seçiminden takımları düzenleyemezsiniz. Takım eklemek, düzenlemek ve silmek için ana menüye dönün.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New scheme</source>
-        <translation>Yeni plan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation>Planı düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation>Planı sil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation>Yeni silah seti</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation>Silah setini düzenle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation>Silah setini sil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Gelişmiş</translation>
+        <translation type="unfinished">Gelişmiş</translation>
     </message>
     <message>
         <source>Reset to default colors</source>
-        <translation type="unfinished">Varsayılan renklere sıfırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Proxy host</source>
-        <translation type="unfinished">Vekil sunucusu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Proxy port</source>
-        <translation type="unfinished">Vekil portu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Proxy login</source>
-        <translation type="unfinished">Vekil kullanıcı adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Proxy password</source>
-        <translation type="unfinished">Vekil parolası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No proxy</source>
-        <translation type="unfinished">Vekil sunucu yok</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Socks5 proxy</source>
-        <translation type="unfinished">Socks5 vekil sunucusu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>HTTP proxy</source>
-        <translation type="unfinished">HTTp vekil sunucusu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System proxy settings</source>
-        <translation type="unfinished">Sistem vekil ayarları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation type="unfinished">Denetimi kullanan tuşu değiştirmek için bir eylem seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset to default</source>
-        <translation type="unfinished">Varsayılana sıfırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation type="unfinished">Tüm atamaları sıfırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished">Oyun</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished">Grafik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished">Ses</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation type="unfinished">Denetimler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video Recording</source>
-        <translation type="unfinished">Video Kaydı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished">Ağ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Teams</source>
@@ -1114,7 +1101,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished">Planlar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -1122,43 +1109,43 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Frontend</source>
-        <translation type="unfinished">Ön Uç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Custom colors</source>
-        <translation type="unfinished">Özel renkler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Game audio</source>
-        <translation type="unfinished">Oyun sesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Frontend audio</source>
-        <translation type="unfinished">Ön uç sesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Account</source>
-        <translation type="unfinished">Hesap</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Proxy settings</source>
-        <translation type="unfinished">Vekil sunucu ayarları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Çeşitli</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation type="unfinished">Güncellemeler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation type="unfinished">Güncellemeleri Denetle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation type="unfinished">Video kayıt seçenekleri</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1188,41 +1175,41 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Rules:</source>
-        <translation type="unfinished">Kurallar:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation type="unfinished">Silahlar:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
         <translation type="unfinished">
-            <numerusform>%1 oyuncu çevrimiçi</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <source>Search for a room:</source>
-        <translation type="unfinished">Bir oda ara:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation type="unfinished">Oda oluştur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Join room</source>
-        <translation type="unfinished">Odaya katıl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation type="unfinished">Oda durumu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation type="unfinished">Süzgeçleri temizle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open server administration page</source>
-        <translation type="unfinished">Sunucu yönetim sayfasını aç</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1233,7 +1220,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
-        <translation>Takımlar bölgenin farklı taraflarında başlarlar, en fazla iki takım rengi!</translation>
+        <translation>Takımlar bölgenin faklı taraflarında başlarlar, en fazla iki takım rengi!</translation>
     </message>
     <message>
         <source>Land can not be destroyed!</source>
@@ -1253,7 +1240,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>Verdiğin hasarın %80&apos;ini sağlık olarak kazan</translation>
+        <translation>Verdiğin hasarın %%80&apos;ini sağlık olarak kazan</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
@@ -1281,63 +1268,63 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation type="unfinished">Oda sırası yerine oynama sırası rastgeledir.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation type="unfinished">Bir Kralla oyna. O ölürse takımın ölür.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation type="unfinished">Oyuna başlamadan önce kirpileri sırayla yerleştirin.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
-        <translation type="unfinished">Aynı rengi paylaşan tüm takımlar cephaneyi paylaşır.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation type="unfinished">Rastgele haritalar oluştururken kirişleri devre dışı bırak.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation type="unfinished">Rastgele haritalar oluştururken zemin nesnelerini devre dışı bırak.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
-        <translation type="unfinished">Yapay zeka, öldükten sonra yeniden doğar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>All (living) hedgehogs are fully restored at the end of turn</source>
-        <translation type="unfinished">Tüm (yaşayan) kirpiler tur sonunda eski haline gelir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Attacking does not end your turn.</source>
-        <translation type="unfinished">Saldırmak sıranı bitirmez.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation type="unfinished">Silahlar her turda başlangıç değerlerine sıfırlanır.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation type="unfinished">Her kirpinin kendi cephanesi olur. Takımla paylaşmaz.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
-        <translation type="unfinished">Artık rüzgarı dert etmen gerekmiyor.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Wind will affect almost everything.</source>
-        <translation type="unfinished">Rüzgar neredeyse her şeyi etkiler.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopyala</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Teams in each clan take successive turns sharing their turn time.</source>
-        <translation type="unfinished">Her klandaki takımlar kendi sıralarındaki zamanı paylaşarak değişirler.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
@@ -1345,14 +1332,14 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation type="unfinished">Alta yok edilemez bir sınır ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
     <message>
         <source>Default</source>
-        <translation>Varsayılan</translation>
+        <translation>Öntanımlı</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1364,94 +1351,92 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Kopyala</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageSinglePlayer</name>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation type="unfinished">Rastgele ayarlarla bilgisayara karşı hızlı bir oyun oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation type="unfinished">Arkadaşlarınla veya Yapay Zeka takımlarıyla ayarlanmış bir oyun oyna</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Campaign Mode</source>
-        <translation type="unfinished">Mücadele Kipi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation type="unfinished">Yeteneklerini çeşitli eğitim görevleri ile geliştir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
-        <translation type="unfinished">Kayıtlı gösterileri izle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
-        <translation type="unfinished">Önceden kayıtlı bir oyun yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageTraining</name>
     <message>
         <source>No description available</source>
-        <translation type="unfinished">Kullanılabilir açıklama yok</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Select a mission!</source>
-        <translation type="unfinished">Bir görev seç!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation type="unfinished">Oynamak üzere bir görev veya eğitim seç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Start fighting</source>
-        <translation type="unfinished">Dövüşe başla</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PageVideos</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished">Boyut</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>%1 bytes</source>
         <translation type="unfinished">
-            <numerusform>%1 bayt</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <source>(in progress...)</source>
-        <translation type="unfinished">(yapım aşamasında...)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>encoding</source>
-        <translation type="unfinished">kodlanıyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>uploading</source>
-        <translation type="unfinished">yükleniyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Date: %1
 </source>
-        <translation type="unfinished">Tarih: %1
-</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation type="unfinished">Boyut: %1
-</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1478,23 +1463,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Follow</source>
-        <translation type="unfinished">Takip Et</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ignore</source>
-        <translation type="unfinished">Yoksay</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Add friend</source>
-        <translation type="unfinished">Arkadaş ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Unignore</source>
-        <translation type="unfinished">Yoksaymayı kapat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Remove friend</source>
-        <translation type="unfinished">Arkadaş kaldır</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Update</source>
@@ -1502,15 +1487,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation type="unfinished">Kayıtsız Oyuncuların Katılmasını Kısıtla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show games in lobby</source>
-        <translation type="unfinished">Lobideki oyunları göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation type="unfinished">Süren oyunları göster</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1533,59 +1518,59 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation type="unfinished">Başlangıçta güncellemeleri denetle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
-        <translation type="unfinished">Cephane menüsü araç ipuçlarını göster</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save password</source>
-        <translation type="unfinished">Parolayı kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation type="unfinished">Hesap adı ve parolasını kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video is private</source>
-        <translation type="unfinished">Video özel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Record audio</source>
-        <translation type="unfinished">Sesi kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use game resolution</source>
-        <translation type="unfinished">Oyun çözünürlüğünü kullan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Visual effects</source>
-        <translation type="unfinished">Görsel efektler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished">Ses</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>In-game sound effects</source>
-        <translation type="unfinished">Oyun ses efektleri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished">Müzik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>In-game music</source>
-        <translation type="unfinished">Oyun içi müzik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Frontend sound effects</source>
-        <translation type="unfinished">Ön uç ses efektleri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Frontend music</source>
-        <translation type="unfinished">Ön uç müziği</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1596,79 +1581,79 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Level</source>
-        <translation>Seviye</translation>
+        <translation>Bilgisayar</translation>
     </message>
     <message>
         <source>(System default)</source>
-        <translation type="unfinished">(Sistem varsayılanı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Community</source>
-        <translation type="unfinished">Topluluk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Any</source>
-        <translation type="unfinished">Herhangi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Disabled</source>
-        <translation type="unfinished">Kapalı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Cyan</source>
-        <translation type="unfinished">Kırmızı/Camgöbeği</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cyan/Red</source>
-        <translation type="unfinished">Camgöbeği/Kırmızı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Blue</source>
-        <translation type="unfinished">Kırmızı/Mavi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Blue/Red</source>
-        <translation type="unfinished">Mavi/Kırmızı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Green</source>
-        <translation type="unfinished">Kırmızı/Yeşil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Green/Red</source>
-        <translation type="unfinished">Yeşil/Kırmızı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation type="unfinished">Yan yana</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Top-Bottom</source>
-        <translation type="unfinished">Üst-Alt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Cyan grayscale</source>
-        <translation type="unfinished">Kırmızı/Camgöbeği gri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cyan/Red grayscale</source>
-        <translation type="unfinished">Camgöbeği/Kırmızı gri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Blue grayscale</source>
-        <translation type="unfinished">Kırmızı/Mavi gri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Blue/Red grayscale</source>
-        <translation type="unfinished">Mavi/Kırmızı gri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Red/Green grayscale</source>
-        <translation type="unfinished">Kırmızı/Yeşil gri</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Green/Red grayscale</source>
-        <translation type="unfinished">Yeşil/Kırmızı gri</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1699,15 +1684,15 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Team Settings</source>
-        <translation type="unfinished">Takım ayarları</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos</source>
-        <translation type="unfinished">Videolar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Açıklama</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1782,143 +1767,141 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation type="unfinished">Sahte Mayın %</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">İsim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Tür</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Grave</source>
-        <translation type="unfinished">Mezar taşı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Flag</source>
-        <translation type="unfinished">Bayrak</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished">Ses</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished">Dil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Explosives</source>
-        <translation type="unfinished">Patlayıcılar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation type="unfinished">İpucu: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Quality</source>
-        <translation type="unfinished">Kalite</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation type="unfinished">Sağlık Sandık %&apos;si</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation type="unfinished">Sandıklardaki Sağlık</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation type="unfinished">Ani Ölüm Su Yükselmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
-        <translation type="unfinished">Ani Ölüm Sağlık Azaltması</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation type="unfinished">Halat Uzunluk %&apos;si</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Stereo rendering</source>
-        <translation type="unfinished">Stereo hazırlama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Biçem</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Scheme</source>
-        <translation type="unfinished">Plan</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation type="unfinished">Uzakta Zamanı %&apos;si</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
 Do you really want to quit?</source>
-        <translation type="unfinished">Şu anda işlenen videolar var.
-Çıkmak bu işlemi sonlandıracak.
-Gerçekten çıkmak istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation type="unfinished">Lütfen YouTube hesap adını veya Google Hesabınız ile ilişkilendirmiş e-posta adresinizi girin.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Account name (or email): </source>
-        <translation type="unfinished">Hesap adı (veya e-posta): </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Password: </source>
-        <translation type="unfinished">Parola: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video title: </source>
-        <translation type="unfinished">Video başlığı: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video description: </source>
-        <translation type="unfinished">Video açıklaması: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tags (comma separated): </source>
-        <translation type="unfinished">Etiketler (virgülle ayrılmış): </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Açıklama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation type="unfinished">Takma ad</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Format</source>
-        <translation type="unfinished">Biçim</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Audio codec</source>
-        <translation type="unfinished">Ses kodlayıcı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Video codec</source>
-        <translation type="unfinished">Video kodlayıcı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Framerate</source>
-        <translation type="unfinished">Kare oranı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation type="unfinished">Bit oranı (Kbps)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation type="unfinished">Bu geliştirme derlemesi &apos;yapım aşamasındadır&apos; ve oyunun diğer sürümleri ile uyumlu olmayabilir; bazı özellikler bozuk veya tamamlanmamış olabilir!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -1926,35 +1909,35 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>Fullscreen Resolution</source>
-        <translation type="unfinished">Tam Ekran Çözünürlüğü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Windowed Resolution</source>
-        <translation type="unfinished">Pencere Çözünürlüğü</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Your Email</source>
-        <translation type="unfinished">E-postanız</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Summary</source>
-        <translation type="unfinished">Özet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Send system information</source>
-        <translation type="unfinished">Sistem bilgisi gönder</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Type the security code:</source>
-        <translation type="unfinished">Güvenlik kodunu yaz:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Revision</source>
-        <translation type="unfinished">Gözden Geçirme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
-        <translation type="unfinished">Bu program %1 altında dağıtılmaktadır</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1965,11 +1948,11 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation type="unfinished">kirpi %1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>anonymous</source>
-        <translation type="unfinished">anonim</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1980,7 +1963,7 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>-r%1 (%2)</source>
-        <translation type="unfinished">-r%1 (%2)</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1995,95 +1978,73 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>File association failed.</source>
-        <translation type="unfinished">Dosya ilişkilendirme başarısız.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation type="unfinished">Google.com ile kimlik açma başarısız</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation type="unfinished">Kullanıcı adı veya parolası yanlış</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation type="unfinished">Youtube.com üst verisi gönderilirken hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
-        <translation type="unfinished">Takımlar - Emin misiniz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation type="unfinished">&apos;%1&apos; takımını gerçekten silmek istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation type="unfinished">Varsayılan &apos;%1&apos; planı silinemez</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
-        <translation type="unfinished">Lütfen listeden bir kayıt seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Unable to start server</source>
-        <translation type="unfinished">Sunucu başlatılamadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Error</source>
-        <translation type="unfinished">Hedgewars - Hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation type="unfinished">Hedgewars - Başarılı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>All file associations have been set</source>
-        <translation type="unfinished">Tüm dosya ilişkilendirmeleri ayarlandı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
         <translation type="obsolete">%1 dizini oluşturulamadı</translation>
     </message>
     <message>
-        <source>Failed to open data directory:
-%1
-
-Please check your installation!</source>
-        <translation type="obsolete">Veri dizini açılamadı:
-%1
-
-Lütfen kurulumunuzu denetleyin!</translation>
-    </message>
-    <message>
-        <source>TCP - Error</source>
-        <translation type="obsolete">TCP - Hata</translation>
-    </message>
-    <message>
         <source>Unable to start the server: %1.</source>
         <translation type="obsolete">Sunucu başlatılamadı: %1.</translation>
     </message>
     <message>
-        <source>Unable to run engine at </source>
-        <translation type="obsolete">Motor şurada başlatılamadı: </translation>
-    </message>
-    <message>
-        <source>Error code: %1</source>
-        <translation type="obsolete">Hata kodu: %1</translation>
-    </message>
-    <message>
         <source>Video upload - Error</source>
-        <translation type="unfinished">Video yükleme - Hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Netgame - Error</source>
-        <translation type="unfinished">Ağ oyunu - Hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please select a server from the list</source>
-        <translation type="unfinished">Lütfen listeden bir sunucu seçin</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please enter room name</source>
@@ -2091,7 +2052,7 @@ Lütfen kurulumunuzu denetleyin!</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation type="unfinished">Oyunu Kaydet - Hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please select record from the list</source>
@@ -2099,15 +2060,15 @@ Lütfen kurulumunuzu denetleyin!</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation type="unfinished">Adlandırma başarısız: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation type="unfinished">Dosya silinemedi: </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation type="unfinished">Oda Adı - Hata</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please select room from the list</source>
@@ -2115,128 +2076,122 @@ Lütfen kurulumunuzu denetleyin!</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation type="unfinished">Oda Adı - Emin misiniz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
-        <translation type="unfinished">Katılmaya çalıştığınız oyun başlamış.
-Hala odaya katılmak istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation type="unfinished">Planlar - Uyarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
-        <translation type="unfinished">Planlar - Emin misiniz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation type="unfinished">Gerçekten &apos;%1&apos; oyun planını silmek istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation type="unfinished">Videolar - Emin misiniz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation type="unfinished">Gerçekten &apos;%1&apos; videosunu silmek istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
-            <numerusform>Gerçekten %1 dosyayı kaldırmak istiyor musunuz?</numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation type="unfinished">Gerçekten %1 yüklemesini iptal etmek istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>File error</source>
-        <translation type="unfinished">Dosya hatası</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation type="unfinished">&apos;%1&apos; yazmak için açılamıyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation type="unfinished">&apos;%1&apos; okumak için açılamıyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation type="unfinished">&apos;%1&apos; cephanesi kullanılamıyor!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
-        <translation type="unfinished">Silahlar - Uyarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished">Varsayılan &apos;%1&apos; silah setinin üzerine yazılamaz!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation type="unfinished">Varsayılan &apos;%1&apos; silah seti silinemez!</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
-        <translation type="unfinished">Silahlar - Emin misiniz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation type="unfinished">Gerçekten &apos;%1&apos; silah setini silmek istiyor musunuz?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
-        <translation type="unfinished">Hedgewars - Takma ad kayıtlı değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>System Information Preview</source>
-        <translation type="unfinished">Sistem Bilgi Önizlemesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to generate captcha</source>
-        <translation type="unfinished">Captcha oluşturulamadı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Failed to download captcha</source>
-        <translation type="unfinished">Captcha indirilemedi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
-        <translation type="unfinished">Lütfen tüm alanları doldurun. E-posta isteğe bağlıdır.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Warning</source>
-        <translation type="unfinished">Hedgewars - Uyarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgewars - Information</source>
-        <translation type="unfinished">Hedgewars - Bilgi</translation>
-    </message>
-    <message>
-        <source>Hedgewars</source>
-        <translation type="obsolete">Hedgewars</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Not all players are ready</source>
-        <translation type="unfinished">Tüm oyuncular hazır değil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation type="unfinished">Oyunu başlatmak istiyor musunuz?
-Tüm oyuncular hazır değil.</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QPushButton</name>
     <message>
         <source>default</source>
-        <translation>varsayılan</translation>
+        <translation>öntanımlı</translation>
     </message>
     <message>
         <source>OK</source>
@@ -2288,51 +2243,51 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation type="unfinished">Dosya uzantılarını ilişkilendir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>More info</source>
-        <translation type="unfinished">Daha fazla bilgi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Set default options</source>
-        <translation type="unfinished">Varsayılan seçenekleri ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open videos directory</source>
-        <translation type="unfinished">Video dizinini aç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Oynat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload to YouTube</source>
-        <translation type="unfinished">YouTube&apos;a Yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation type="unfinished">Yüklemeyi iptal et</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished">Varsayılan kodlama parametrelerini geri al</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation type="unfinished">Sisteminizdeki video dizinini aç</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished">Bu videoyu oynat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished">Bu videoyu sil</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished">Bu videoyu Youtube hesabınıza yükle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2359,7 +2314,7 @@ Tüm oyuncular hazır değil.</translation>
     <name>RoomNamePrompt</name>
     <message>
         <source>Enter a name for your room.</source>
-        <translation type="unfinished">Odanız için bir ad girin.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2367,30 +2322,30 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation type="unfinished">Oda oluştur</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>RoomsListModel</name>
     <message>
         <source>In progress</source>
-        <translation type="unfinished">Sürüyor</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation type="unfinished">Oda Adı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>C</source>
-        <translation type="unfinished">K</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>T</source>
-        <translation type="unfinished">T</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">Sahip</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Map</source>
@@ -2398,7 +2353,7 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation type="unfinished">Kurallar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -2406,22 +2361,22 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Random Map</source>
-        <translation type="unfinished">Rastgele Harita</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Random Maze</source>
-        <translation type="unfinished">Rastgele Labirent</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation type="unfinished">El Çizimi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation type="unfinished">Harita beslemesi, oyun tarafından oluşturulan tüm rastgele değerler için bir tabandır.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2429,30 +2384,30 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Set seed</source>
-        <translation type="unfinished">Besleme ayarla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation type="unfinished">Silah seti</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation type="unfinished">Olasılıklar</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation type="unfinished">Kutulardaki cephane</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delays</source>
-        <translation type="unfinished">Gecikmeler</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>new</source>
@@ -2460,7 +2415,7 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation type="unfinished">kopya</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2486,7 +2441,7 @@ Error code: %2</source>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation type="unfinished">%1 takımı</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2497,11 +2452,11 @@ Error code: %2</source>
     </message>
     <message>
         <source>Search for a theme:</source>
-        <translation type="unfinished">Tema arayın:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use selected theme</source>
-        <translation type="unfinished">Seçili temayı kullan</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2628,7 +2583,7 @@ Error code: %2</source>
     </message>
     <message>
         <source>change mode</source>
-        <translation>kipi değiştir</translation>
+        <translation>modu değiştir</translation>
     </message>
     <message>
         <source>capture</source>
@@ -2640,23 +2595,23 @@ Error code: %2</source>
     </message>
     <message>
         <source>long jump</source>
-        <translation type="unfinished">uzun zıplama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation type="unfinished">yüksek zıplama</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>zoom in</source>
-        <translation type="unfinished">yakınlaştırma</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>zoom out</source>
-        <translation type="unfinished">uzaklaştırma</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>reset zoom</source>
-        <translation type="unfinished">yakınlaştırmayı sıfırla</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>slot 10</source>
@@ -2664,22 +2619,22 @@ Error code: %2</source>
     </message>
     <message>
         <source>mute audio</source>
-        <translation type="unfinished">sesi kapat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>record</source>
-        <translation type="unfinished">kaydet</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation type="unfinished">kirpi bilgisi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Movement</source>
-        <translation type="unfinished">Hareket</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Weapons</source>
@@ -2687,117 +2642,117 @@ Error code: %2</source>
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished">Kamera</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Çeşitli</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>binds (descriptions)</name>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation type="unfinished">Boşluklardan ve engellerden zıplayarak kaçın:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation type="unfinished">Seçili silahını ateşle veya bir yardımcı öge tetikle:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation type="unfinished">Bir silah seç veya imleç altında konum işaretle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation type="unfinished">Geçerli kirpiyi değiştir (mümkünse):</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation type="unfinished">Bir silah veya yardımcı öge al:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation type="unfinished">Bombalarda ve zamanlı silahlarda zamanlayıcıyı ayarla:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation type="unfinished">Kamerayı etkin kirpiye götür:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation type="unfinished">Kamera veya imleci fare kullanmadan hareket ettir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation type="unfinished">Kamera yakınlaştırma seviyesini değiştir:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation type="unfinished">Takımla veya tüm katılanlarla konuş</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation type="unfinished">Oyunu beklet, devam et veya oyundan ayrıl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation type="unfinished">Oynarken oyunun sesini değiştir:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation type="unfinished">Tam ekran kipini değiştir:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation type="unfinished">Ekran görüntüsü al:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation type="unfinished">Kirpilerin üzerindeki etiketleri aç/kapat</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Record video:</source>
-        <translation type="unfinished">Video kaydet:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hedgehog movement</source>
-        <translation type="unfinished">Kirpi hareketi</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>binds (keys)</name>
     <message>
         <source>Axis</source>
-        <translation type="unfinished">Eksen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>(Up)</source>
-        <translation type="unfinished">(Yukarı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>(Down)</source>
-        <translation type="unfinished">(Aşağı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished">Şapka</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>(Left)</source>
-        <translation type="unfinished">(Sol)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>(Right)</source>
-        <translation type="unfinished">(Sağ)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Button</source>
-        <translation type="unfinished">Düğme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Keyboard</source>
-        <translation type="unfinished">Klavye</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Delete</source>
@@ -2805,398 +2760,398 @@ Error code: %2</source>
     </message>
     <message>
         <source>Mouse: Left button</source>
-        <translation type="unfinished">Fare: Sol düğme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mouse: Middle button</source>
-        <translation type="unfinished">Fare: Orta düğme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mouse: Right button</source>
-        <translation type="unfinished">Fare: Sağ düğme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mouse: Wheel up</source>
-        <translation type="unfinished">Fare: Tekerlek yukarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Mouse: Wheel down</source>
-        <translation type="unfinished">Fare: Tekerlek aşağı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished">Backspace</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Tab</source>
-        <translation type="unfinished">Sekme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Temizle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Return</source>
-        <translation type="unfinished">Enter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Pause</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Escape</source>
-        <translation type="unfinished">Escape</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Space</source>
-        <translation type="unfinished">Boşluk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 0</source>
-        <translation type="unfinished">Nümerik 0</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 1</source>
-        <translation type="unfinished">Nümerik 1</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 2</source>
-        <translation type="unfinished">Nümerik 2</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 3</source>
-        <translation type="unfinished">Nümerik 3</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 4</source>
-        <translation type="unfinished">Nümerik 4</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 5</source>
-        <translation type="unfinished">Nümerik 5</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 6</source>
-        <translation type="unfinished">Nümerik 6</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 7</source>
-        <translation type="unfinished">Nümerik 7</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 8</source>
-        <translation type="unfinished">Nümerik 8</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad 9</source>
-        <translation type="unfinished">Nümerik 9</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad .</source>
-        <translation type="unfinished">Nümerik .</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad /</source>
-        <translation type="unfinished">Nümerik /</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad *</source>
-        <translation type="unfinished">Nümerik *</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad -</source>
-        <translation type="unfinished">Nümerik -</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Numpad +</source>
-        <translation type="unfinished">Nümerik +</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished">Enter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Equals</source>
-        <translation type="unfinished">Eşittir</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up</source>
-        <translation type="unfinished">Yukarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Down</source>
-        <translation type="unfinished">Aşağı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right</source>
-        <translation type="unfinished">Sağ</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left</source>
-        <translation type="unfinished">Sol</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished">Ekle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Home</source>
-        <translation type="unfinished">Ev</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>End</source>
-        <translation type="unfinished">Son</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="unfinished">Sayfa yukarı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="unfinished">Sayfa aşağı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Num lock</source>
-        <translation type="unfinished">Nümerik kilit</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Caps lock</source>
-        <translation type="unfinished">Büyük harf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Scroll lock</source>
-        <translation type="unfinished">Kaydırma kilidi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right shift</source>
-        <translation type="unfinished">Sağ üst karakter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left shift</source>
-        <translation type="unfinished">Sol üst karakter</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right ctrl</source>
-        <translation type="unfinished">Sağ kontrol</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left ctrl</source>
-        <translation type="unfinished">Sol kontrol</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right alt</source>
-        <translation type="unfinished">Sağ alt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left alt</source>
-        <translation type="unfinished">Sol alt</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right meta</source>
-        <translation type="unfinished">Sağ meta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left meta</source>
-        <translation type="unfinished">Sol meta</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>A button</source>
-        <translation type="unfinished">A düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>B button</source>
-        <translation type="unfinished">B düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>X button</source>
-        <translation type="unfinished">X düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Y button</source>
-        <translation type="unfinished">Y düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>LB button</source>
-        <translation type="unfinished">LB düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>RB button</source>
-        <translation type="unfinished">RB düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Back button</source>
-        <translation type="unfinished">Geri düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Start button</source>
-        <translation type="unfinished">Start düğmesi</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick</source>
-        <translation type="unfinished">Sol çubuk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick</source>
-        <translation type="unfinished">Sağ çubuk</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Right)</source>
-        <translation type="unfinished">Sol çubuk (Sağ)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Left)</source>
-        <translation type="unfinished">Sol çubuk (Sol)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Down)</source>
-        <translation type="unfinished">Sol çubuk (Aşağı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left stick (Up)</source>
-        <translation type="unfinished">Sol çubuk (Yukarı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Left trigger</source>
-        <translation type="unfinished">Sol tetik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right trigger</source>
-        <translation type="unfinished">Sağ tetik</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Down)</source>
-        <translation type="unfinished">Sağ çubuk (Aşağı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Up)</source>
-        <translation type="unfinished">Sağ çubuk (Yukarı)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Right)</source>
-        <translation type="unfinished">Sağ çubuk (Sağ)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Right stick (Left)</source>
-        <translation type="unfinished">Sağ çubuk (Sol)</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished">DPad</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>server</name>
     <message>
-        <source>Not room master</source>
-        <translation type="unfinished">Oda uzmanı değil</translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished">Bozuk kirpi bilgisi</translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished">çok fazla takım</translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished">çok fazla kirpi</translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished">Listede aynı isimde başka bir takım var</translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished">tur sürüyor</translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished">kısıtlı</translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished">REMOVE_TEAM: böyle bir takım yok</translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished">Takım sahibi değil!</translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished">İki klandan daha az!</translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished">Oda adı zaten mevcut</translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished">Takma ad zaten seçilmiş</translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished">Geçersiz takma ad</translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished">Protokol zaten biliniyor</translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished">Hatalı sayı</translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
-        <translation type="unfinished">Takma ad zaten kullanımda</translation>
-    </message>
-    <message>
         <source>No checker rights</source>
-        <translation type="unfinished">Denetim hakları yok</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation type="unfinished">Kimlik doğrulama başarısız</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished">Kovulduktan sonra 60 saniye sakinleşme</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="unfinished">kovuldu</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="unfinished">Ping zaman aşımı</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>bye</source>
-        <translation type="unfinished">hoşça kal</translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished">Geçersiz oda adı</translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished">Böyle bir oda yok</translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished">Katılma kısıtlı</translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished">Sadece kayıtlı kullanıcılar</translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished">Bu odadan engellendiniz</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="unfinished">Boş yapılandırma girdisi</translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not room master</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many teams</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many hedgehogs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>round in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>REMOVE_TEAM: no such team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not team owner!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room with such name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Joining restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Registered users only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You are banned in this room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
