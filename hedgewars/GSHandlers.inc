@@ -5074,7 +5074,11 @@ begin
     Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
               '%', cWhiteColor, fntSmall)
     end;
-    if GameTicks mod 10 = 0 then dec(Gear^.Health);
+    if Gear^.Message and (gmUp or gmDown) <> 0 then
+        begin
+        if GameTicks mod 40 = 0 then dec(Gear^.Health)
+        end
+    else if GameTicks mod 10 = 0 then dec(Gear^.Health);
 end;
 
 
@@ -5119,8 +5123,9 @@ var
     HHGear: PGear;
     landRect: TSDL_Rect;
     ndX, ndY: hwFloat;
-    i, t, gX, gY: LongInt;
+    i, j, t, gX, gY: LongInt;
     hogs: PGearArrayS;
+    vg: PVisualGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
@@ -5128,8 +5133,8 @@ begin
         DeleteGear(Gear);
         AfterAttack;
         exit
-        end
-    else if Gear^.Message and (gmUp or gmDown) = 0 then updateFuel(Gear);
+        end;
+    updateFuel(Gear);
 
     with Gear^ do
         begin
@@ -5197,6 +5202,21 @@ begin
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
                     end;
+(*
+ Any ideas for something that would look good here?
+                if (Target.X <> NoPointX) and ((Timer = iceCollideWithGround) or (Timer = iceCollideWithWater)) and (GameTicks mod max((groundFreezingTime-((GameTicks - Power)*2)),2) = 0) then //and CheckLandValue(Target.X, Target.Y, lfIce) then
+                    begin
+                        vg:= AddVisualGear(Target.X+random(20)-10, Target.Y+random(40)-10, vgtDust, 1);
+                        if vg <> nil then
+                            begin
+                            i:= random(100) + 155;
+                            vg^.Tint:= IceColor or $FF;
+                            vg^.Angle:= random(360);
+                            vg^.dx:= 0.001 * random(80);
+                            vg^.dy:= 0.001 * random(80)
+                            end
+                    end;
+*)
 
 // freeze nearby hogs
                 hogs := GearsNear(int2hwFloat(Target.X), int2hwFloat(Target.Y), gtHedgehog, Gear^.Radius*2);
@@ -5222,14 +5242,16 @@ begin
                 X:= HHGear^.X;
                 Y:= HHGear^.Y
                 end;
-            {if (gX > max(LAND_WIDTH,4096)*2) or
+            if (gX > max(LAND_WIDTH,4096)*2) or
                     (gX < -max(LAND_WIDTH,4096)) or
                     (gY < -max(LAND_HEIGHT,4096)) or
                     (gY > max(LAND_HEIGHT,4096)+512) then
-            begin
-                X:= HHGear^.X;
-                Y:= HHGear^.Y
-            end}
+                begin
+                //X:= HHGear^.X;
+                //Y:= HHGear^.Y
+                Target.X:= gX;
+                Target.Y:= gY;
+                end
         end
     end;
 end;
