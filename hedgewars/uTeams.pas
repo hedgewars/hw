@@ -201,8 +201,8 @@ repeat
                         for i:= 0 to Pred(HedgehogsNumber) do
                             with Hedgehogs[i] do
                                 if Effects[heFrozen] > 255 then
-                                    Effects[heFrozen]:= max(255,Effects[heFrozen]-50000);
-            end;
+                                    Effects[heFrozen]:= max(255,Effects[heFrozen]-50000)
+            end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
 
 SwitchCurrentHedgehog(@(CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog]));
@@ -250,6 +250,13 @@ if PlacingHogs then
     end;
 
 inc(CurrentTeam^.Clan^.TurnNumber);
+with CurrentTeam^.Clan^ do
+    for t:= 0 to Pred(TeamsNumber) do
+        with Teams[t]^ do
+            for i:= 0 to Pred(HedgehogsNumber) do
+                with Hedgehogs[i] do
+                    if Effects[heFrozen] > 255 then
+                        Effects[heFrozen]:= max(255,Effects[heFrozen]-50000);
 
 CurWeapon:= GetCurAmmoEntry(CurrentHedgehog^);
 if CurWeapon^.Count = 0 then
