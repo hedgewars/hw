@@ -2100,7 +2100,7 @@ var
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
-            isDamaging: true;
+            isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
