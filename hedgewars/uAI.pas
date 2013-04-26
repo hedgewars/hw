@@ -366,7 +366,6 @@ var BackMe, WalkMe: TGear;
     switchImmediatelyAvailable: boolean;
     Actions: TActions;
 begin
-AddFileLog('Think thread started');
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 StartTicks:= GameTicks;
 currHedgehogIndex:= CurrentTeam^.CurrHedgehog;
