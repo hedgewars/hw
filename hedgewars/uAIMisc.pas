@@ -33,11 +33,12 @@ const MAXBONUS = 1024;
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
-    skip, matters: boolean;
+    skip, matters, dead: boolean;
     end;
 TTargets = record
     Count: Longword;
     ar: array[0..Pred(cMaxHHs)] of TTarget;
+    reset: boolean;
     end;
 TJumpType = (jmpNone, jmpHJump, jmpLJump);
 TGoInfo = record
@@ -55,6 +56,7 @@ procedure initModule;
 procedure freeModule;
 
 procedure FillTargets;
+procedure ResetTargets; inline;
 procedure AddBonus(x, y: LongInt; r: Longword; s: LongInt); inline;
 procedure FillBonuses(isAfterAttack: boolean);
 procedure AwareOfExplosion(x, y, r: LongInt); inline;
@@ -66,9 +68,11 @@ function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
 function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
-function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
+function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; inline;
+function  RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 function  RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
-function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+function  RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt; inline;
+function  RealRateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 function  RateHammer(Me: PGear): LongInt;
 
 function  HHGo(Gear, AltGear: PGear; var GoInfo: TGoInfo): boolean;
@@ -99,11 +103,20 @@ var
         X, Y, Radius: LongInt
         end = (X: 0; Y: 0; Radius: 0);
 
+procedure ResetTargets; inline;
+var i: LongWord;
+begin
+if Targets.reset then
+    for i:= 0 to Targets.Count do
+        Targets.ar[i].dead:= false;
+Targets.reset:= false;
+end;
 procedure FillTargets;
 var i, t: Longword;
     f, e: LongInt;
 begin
 Targets.Count:= 0;
+Targets.reset:= false;
 f:= 0;
 e:= 0;
 for t:= 0 to Pred(TeamsCount) do
@@ -119,6 +132,7 @@ for t:= 0 to Pred(TeamsCount) do
                     with Targets.ar[Targets.Count], Hedgehogs[i] do
                         begin
                         skip:= false;
+                        dead:= false;
                         matters:= (Hedgehogs[i].Gear^.AIHints and aihDoesntMatter) = 0;
 
                         Point.X:= hwRound(Gear^.X);
@@ -326,7 +340,7 @@ end;
 
 
 
-function TraceFall(eX, eY: LongInt; x, y, dX, dY: Real; r: LongWord): LongInt;
+function TraceFall(eX, eY: LongInt; var x, y: Real; dX, dY: Real; r: LongWord): LongInt;
 var skipLandCheck: boolean;
     rCorner: real;
     dmg: LongInt;
@@ -391,14 +405,20 @@ begin
     end;
 end;
 
-function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt;
+function RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 begin
-    RateExplosion:= RateExplosion(Me, x, y, r, 0);
+    RateExplosion:= RealRateExplosion(Me, x, y, r, 0);
+    ResetTargets;
+end;
+function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; inline;
+begin
+    RateExplosion:= RealRateExplosion(Me, x, y, r, Flags);
+    ResetTargets;
 end;
 
-function RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
+function RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
 var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
-    dX, dY: real;
+    pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
 fallDmg:= 0;
@@ -421,46 +441,55 @@ else erasure:= 0;
 hadSkips:= false;
 
 for i:= 0 to Targets.Count do
-    with Targets.ar[i] do
-      if not matters then hadSkips:= true
-        else
-        begin
-        dmg:= 0;
-        if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
-            dmg:= trunc(dmgMod * min((dmgBase - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)))) div 2, r));
-
-        if dmg > 0 then
-            begin
-            if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
-                begin
-                dX:= 0.005 * dmg + 0.01;
-                dY:= dX;
-                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
-                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
-                     fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
-                else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod)
-                end;
-            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
-                if Score > 0 then
-                    inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
-                else
-                    dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
-            else if (dmg+fallDmg) >= abs(Score) then
-                if Score > 0 then
-                    inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
-                else
-                    dec(rate, KillScore * friendlyfactor div 100 * 1024)
+    if not Targets.ar[i].dead then
+        with Targets.ar[i] do
+          if not matters then hadSkips:= true
             else
-                if Score > 0 then
-                    inc(rate, (dmg + fallDmg) * 1024)
-                else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
+            begin
+            dmg:= 0;
+            if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
+                dmg:= trunc(dmgMod * min((dmgBase - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)))) div 2, r));
+
+            if dmg > 0 then
+                begin
+                pX:= Point.x;
+                pY:= Point.y;
+                if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
+                    begin
+                    dX:= 0.005 * dmg + 0.01;
+                    dY:= dX;
+                    if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
+                       (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                         fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0) * dmgMod)
+                    else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure) * dmgMod)
+                    end;
+                if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                    if Score > 0 then
+                        inc(rate, (KillScore + Score div 10) * 1024)   // Add a bit of a bonus for bigger hog drownings
+                    else
+                        dec(rate, (KillScore * friendlyfactor div 100 - Score div 10) * 1024) // and more of a punishment for drowning bigger friendly hogs
+                else if (dmg+fallDmg) >= abs(Score) then
+                    begin
+                    dead:= true;
+                    Targets.reset:= true;
+                    if dX < 0.035 then
+                        inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or (Flags and afTrackFall)));
+                    if Score > 0 then
+                        inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
+                    else
+                        dec(rate, KillScore * friendlyfactor div 100 * 1024)
+                    end
+                else
+                    if Score > 0 then
+                        inc(rate, (dmg + fallDmg) * 1024)
+                    else dec(rate, (dmg + fallDmg) * friendlyfactor div 100 * 1024)
+                end;
             end;
-        end;
 
 if hadSkips and (rate = 0) then
-    RateExplosion:= BadTurn
+    RealRateExplosion:= BadTurn
     else
-    RateExplosion:= rate;
+    RealRateExplosion:= rate;
 end;
 
 function RateShove(x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
@@ -506,9 +535,14 @@ for i:= 0 to Pred(Targets.Count) do
 RateShove:= rate * 1024
 end;
 
-function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
+function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt; inline;
+begin
+    RateShotgun:= RealRateShotgun(Me, gdX, gdY, x, y);
+    ResetTargets;
+end;
+function RealRateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
 var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
-    dX, dY: real;
+    pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
 rate:= 0;
@@ -532,48 +566,57 @@ else erasure:= 0;
 hadSkips:= false;
 
 for i:= 0 to Targets.Count do
-    with Targets.ar[i] do
-      if not matters then hadSkips:= true
-        else
-        begin
-        dmg:= 0;
-        if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
-            begin
-            dmg:= min(baseDmg - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y))), 25);
-            dmg:= trunc(dmg * dmgMod);
-            end;
-        if dmg > 0 then
-            begin
-            dX:= gdX * dmg;
-            dY:= gdY * dmg;
-            if dX < 0 then dX:= dX - 0.01
-            else dX:= dX + 0.01;
-            if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
-               (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
-                 fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, 0) * dmgMod)
-            else fallDmg:= trunc(TraceFall(x, y, Point.x, Point.y, dX, dY, erasure) * dmgMod);
-            if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
-                if Score > 0 then
-                    inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
-                else
-                    dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
-            else if (dmg+fallDmg) >= abs(Score) then
-                if Score > 0 then
-                    inc(rate, KillScore)
-                else
-                    dec(rate, KillScore * friendlyfactor div 100)
+    if not Targets.ar[i].dead then
+        with Targets.ar[i] do
+          if not matters then hadSkips:= true
             else
-                if Score > 0 then
-                    inc(rate, dmg+fallDmg)
-            else
-                dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+            begin
+            dmg:= 0;
+            if abs(Point.x - x) + abs(Point.y - y) < baseDmg then
+                begin
+                dmg:= min(baseDmg - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y))), 25);
+                dmg:= trunc(dmg * dmgMod);
+                end;
+            if dmg > 0 then
+                begin
+                pX:= Point.x;
+                pY:= Point.y;
+                dX:= gdX * dmg;
+                dY:= gdY * dmg;
+                if dX < 0 then dX:= dX - 0.01
+                else dX:= dX + 0.01;
+                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
+                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                     fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0) * dmgMod)
+                else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure) * dmgMod);
+                if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                    if Score > 0 then
+                        inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                    else
+                        dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                else if (dmg+fallDmg) >= abs(Score) then
+                    begin
+                    dead:= true;
+                    Targets.reset:= true;
+                    if dX < 0.035 then
+                        inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall) div 1024);
+                    if Score > 0 then
+                        inc(rate, KillScore)
+                    else
+                        dec(rate, KillScore * friendlyfactor div 100)
+                    end
+                else
+                    if Score > 0 then
+                        inc(rate, dmg+fallDmg)
+                else
+                    dec(rate, (dmg+fallDmg) * friendlyfactor div 100)
+                end;
             end;
-        end;
 
 if hadSkips and (rate = 0) then
-    RateShotgun:= BadTurn
+    RealRateShotgun:= BadTurn
     else
-    RateShotgun:= rate * 1024;
+    RealRateShotgun:= rate * 1024;
 end;
 
 function RateHammer(Me: PGear): LongInt;
