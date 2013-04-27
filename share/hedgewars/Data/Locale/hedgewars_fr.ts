@@ -486,7 +486,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Theme</translation>
+        <translation>Theme: </translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -655,7 +655,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps</translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -1848,7 +1848,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Conseil : </translation>
+        <translation>Conseil: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2113,11 +2113,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation>Impossible de renommer en</translation>
+        <translation>Impossible de renommer en </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation>Impossible de supprimer le fichier</translation>
+        <translation>Impossible de supprimer le fichier </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
