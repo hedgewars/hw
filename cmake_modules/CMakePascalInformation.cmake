@@ -168,10 +168,6 @@ if(NOT CMAKE_Pascal_COMPILE_OBJECT)
         if(APPLE)
             #add user framework directory
             set(CMAKE_Pascal_UNIX_FLAGS "-Ff~/Library/Frameworks ${CMAKE_Pascal_UNIX_FLAGS}")
-            #when sysroot is set, make sure that fpc picks it
-            if(CMAKE_OSX_SYSROOT)
-                set(CMAKE_Pascal_UNIX_FLAGS "-XD${CMAKE_OSX_SYSROOT} ${CMAKE_Pascal_UNIX_FLAGS}")
-            endif(CMAKE_OSX_SYSROOT)
         endif(APPLE)
     endif(UNIX)
 
