@@ -801,7 +801,7 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     btnTheme->setFixedHeight(64);
     btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
-    btnTheme->setText(tr("Theme: ") + current.data(Qt::DisplayRole).toString());
+    btnTheme->setText(tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString()));
     updateThemeButtonSize();
 }
 
@@ -932,5 +932,5 @@ void HWMapContainer::intSetIconlessTheme(const QString & name)
 
     m_theme = name;
     btnTheme->setIcon(QIcon());
-    btnTheme->setText(tr("Theme: ") + name);
+    btnTheme->setText(tr("Theme: %1").arg(name));
 }
