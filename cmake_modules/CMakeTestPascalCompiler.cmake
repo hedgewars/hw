@@ -26,7 +26,7 @@ if(NOT CMAKE_Pascal_COMPILER_WORKS)
     try_compile(CMAKE_Pascal_COMPILER_WORKS
                 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakeTmp
                 ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_FILES_DIRECTORY}/CMakeTmp
-                projectName
+                test
                 OUTPUT_VARIABLE RESULT_OUTPUT
                 )
     set(PASCAL_TEST_WAS_RUN 1)
