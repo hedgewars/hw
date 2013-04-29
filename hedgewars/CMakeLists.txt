@@ -127,6 +127,11 @@ if(APPLE)
         list(APPEND HW_LINK_LIBS SDLmain)
         add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     endif()
+
+    #when sysroot is set, make sure that fpc picks it
+    if(CMAKE_OSX_SYSROOT)
+        set(add_flag_append "-XD${CMAKE_OSX_SYSROOT}")
+    endif(CMAKE_OSX_SYSROOT)
 endif(APPLE)
 
 if(FFMPEG_FOUND)
