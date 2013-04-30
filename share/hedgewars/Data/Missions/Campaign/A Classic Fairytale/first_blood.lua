@@ -220,6 +220,9 @@ function AnimationSetup()
 end
 -----------------------------Events------------------------------------
 function CheckNeedToTurn(gear)
+  if youngKilled then
+    return false
+  end
   if gear == princess then
     if princessKilled ~= true then
       if (GetX(princess) > GetX(youngh) and princessFace == "Right")
