@@ -903,7 +903,9 @@ function CheckWon()
 end
 
 function DoWon()
-  SaveCampaignVar("Progress", "3")
+  if progress and progress<3 then
+    SaveCampaignVar("Progress", "3")
+  end
   AddAnim(winAnim)
   AddFunction({func = FinishWon, args = {}})
 end
@@ -974,6 +976,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))

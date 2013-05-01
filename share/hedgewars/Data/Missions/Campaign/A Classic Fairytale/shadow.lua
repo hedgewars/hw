@@ -761,7 +761,9 @@ function DoStronglingsDead()
   SaveCampaignVar("M2RamonDead", "0")
   SaveCampaignVar("M2SpikyDead", "0")
   AddFunction({func = KillCyborg, args = {}})
-  SaveCampaignVar("Progress", "2")
+  if progress and progress<2 then
+    SaveCampaignVar("Progress", "2")
+  end
   SaveCampaignVar("M2Choice", "" .. choice)
 end
 
@@ -783,7 +785,9 @@ function DoStronglingsDeadRefused()
   end
   AddAnim(refusedFinalAnim)
   AddFunction({func = KillCyborg, args = {}})
-  SaveCampaignVar("Progress", "2")
+  if progress and progress<2 then
+    SaveCampaignVar("Progress", "2")
+  end
   SaveCampaignVar("M2Choice", "" .. choice)
 end
 
@@ -791,7 +795,9 @@ function DoStronglingsDeadAttacked()
   SaveCampaignVar("M2DenseDead", "1")
   SaveCampaignVar("M2RamonDead", "0")
   SaveCampaignVar("M2SpikyDead", "0")
-  SaveCampaignVar("Progress", "2")
+  if progress and progress<2 then
+    SaveCampaignVar("Progress", "2")
+  end
   SaveCampaignVar("M2Choice", "" .. choice)
   AddAnim(attackedFinalAnim)
   AddFunction({func = KillCyborg, args = {}})
@@ -854,6 +860,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   HideHogs()
   AddAmmo(leaks, amSwitch, 100)
   AddAmmo(dense, amSwitch, 100)
