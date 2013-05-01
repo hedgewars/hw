@@ -541,7 +541,9 @@ end
 
 function DoCannibalKilled()
   AddAnim(cannKilledAnim)
-  SaveCampaignVar("Progress", "1")
+  if not progress then
+    SaveCampaignVar("Progress", "1")
+  end
 end
 
 function DoCannibalKilledEarly()
@@ -633,6 +635,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   TurnTimeLeft = -1
   FollowGear(youngh)
 	ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training|Hint: Animations can be skipped with the [Precise] key."), -amSkip, 0)

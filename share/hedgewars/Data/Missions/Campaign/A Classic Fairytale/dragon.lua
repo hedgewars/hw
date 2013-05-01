@@ -399,7 +399,9 @@ end
 
 function DoMissionFinished()
   AddCaption(loc("Salvation was one step closer now..."))
-  SaveCampaignVar("Progress", "6")
+  if progress and progress<6 then
+    SaveCampaignVar("Progress", "6")
+  end
   ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
@@ -451,6 +453,7 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
 end
 
