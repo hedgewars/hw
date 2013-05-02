@@ -31,13 +31,13 @@ procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
-procedure ResurrectHedgehog(gear: PGear);
+procedure ResurrectHedgehog(var gear: PGear);
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
-function  CheckGearDrowning(Gear: PGear): boolean;
+function  CheckGearDrowning(var Gear: PGear): boolean;
 procedure CheckCollision(Gear: PGear); inline;
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 
@@ -337,7 +337,7 @@ begin
         Gear^.DirAngle := Gear^.DirAngle - 360
 end;
 
-function CheckGearDrowning(Gear: PGear): boolean;
+function CheckGearDrowning(var Gear: PGear): boolean;
 var 
     skipSpeed, skipAngle, skipDecay: hwFloat;
     i, maxDrops, X, Y: LongInt;
@@ -390,7 +390,11 @@ begin
                     if Gear^.Kind = gtHedgehog then
                         begin
                         if Gear^.Hedgehog^.Effects[heResurrectable] <> 0 then
-                            ResurrectHedgehog(Gear)
+                            begin
+                            // Gear could become nil after this, just exit to skip splashes
+                            ResurrectHedgehog(Gear);
+                            exit
+                            end
                         else
                             begin
                             Gear^.doStep := @doStepDrowningGear;
@@ -465,7 +469,7 @@ begin
 end;
 
 
-procedure ResurrectHedgehog(gear: PGear);
+procedure ResurrectHedgehog(var gear: PGear);
 var tempTeam : PTeam;
     sparkles: PVisualGear;
     gX, gY: LongInt;
@@ -507,7 +511,7 @@ begin
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
-    end;
+        end;
     RecountTeamHealth(tempTeam);
 end;
 
