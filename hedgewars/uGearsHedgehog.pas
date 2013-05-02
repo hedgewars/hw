@@ -961,8 +961,11 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) do
-        Gear^.Y:= Gear^.Y+_1;
+    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) and (Gear <> nil) do
+        Gear^.Y:= Gear^.Y + _1;
+
+    // could become nil in CheckGearDrowning if ai's hog fails to respawn in ai survival
+    if Gear = nil then exit;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0
     end
@@ -982,7 +985,10 @@ if (Gear^.State and gstMoving) <> 0 then
         Gear^.dY:= _0;
         Gear^.Y:= Gear^.Y + _1
         end;
+
     CheckGearDrowning(Gear);
+    // could become nil if ai's hog fails to respawn in ai survival
+    if Gear = nil then exit;
     // hide target cursor if current hog is drowning
     if (Gear^.State and gstDrowning) <> 0 then
         if (CurrentHedgehog^.Gear = Gear) then
