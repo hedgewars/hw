@@ -220,10 +220,7 @@ begin
 
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
-                    begin
-                        resetPosition();
-                        ParseCommand('quit', true);
-                    end
+                        ParseCommand('quit', true)
                     else
                         ProcessMouse(event.button, true);
 
