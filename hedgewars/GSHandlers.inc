@@ -515,17 +515,20 @@ end;
 procedure doStepSnowball(Gear: PGear);
 var kick, i: LongInt;
     particle: PVisualGear;
+    gdX, gdY: hwFloat;
 begin
     AllInactive := false;
     if (GameFlags and gfMoreWind) = 0 then
         Gear^.dX := Gear^.dX + cWindSpeed;
+    gdX := Gear^.dX;
+    gdY := Gear^.dY;
     doStepFallingGear(Gear);
     CalcRotationDirAngle(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        kick:= hwRound((hwAbs(Gear^.dX)+hwAbs(Gear^.dY)) * _20);
-        Gear^.dY.isNegative:= not Gear^.dY.isNegative;
-        Gear^.dX.isNegative:= not Gear^.dX.isNegative;
+        kick:= hwRound((hwAbs(gdX)+hwAbs(gdY)) * _20);
+        Gear^.dX:= gdX;
+        Gear^.dY:= gdY;
         AmmoShove(Gear, 0, kick);
         for i:= 15 + kick div 10 downto 0 do
             begin
@@ -2416,25 +2419,24 @@ procedure doStepMortar(Gear: PGear);
 var
     dX, dY, gdX, gdY: hwFloat;
     i: LongInt;
-    dxn, dyn: boolean;
 begin
     AllInactive := false;
-    dxn := Gear^.dX.isNegative;
-    dyn := Gear^.dY.isNegative;
+    gdX := Gear^.dX;
+    gdY := Gear^.dY;
 
     doStepFallingGear(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
-        gdX := Gear^.dX;
-        gdY := Gear^.dY;
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLAutoSound);
+        gdX.isNegative := not gdX.isNegative;
+        gdY.isNegative := not gdY.isNegative;
+        gdX:= gdX*_0_2;
+        gdY:= gdY*_0_2;
 
-        gdX.isNegative := not dxn;
-        gdY.isNegative := not dyn;
         for i:= 0 to 4 do
             begin
-            dX := gdX + (GetRandomf - _0_5) * _0_03;
-            dY := gdY + (GetRandomf - _0_5) * _0_03;
+            dX := gdX + rndSign(GetRandomf) * _0_03;
+            dY := gdY + rndSign(GetRandomf) * _0_03;
             AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtCluster, 0, dX, dY, 25);
             end;
 
