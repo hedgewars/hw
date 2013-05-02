@@ -377,7 +377,7 @@ if Me^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if (Me^.State and gstAttacked) = 0 then
+if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -426,7 +426,8 @@ if (Me^.State and gstAttacked) = 0 then
 else
     begin
     BackMe:= Me^;
-    while (not StopThinking) and (BestActions.Count = 0) do
+    i:= 12;
+    while (not StopThinking) and (BestActions.Count = 0) and (i > 0) do
         begin
 (*
         // Maybe this would get a bit of movement out of them? Hopefully not *toward* water. Need to check how often he'd choose that strategy
@@ -439,6 +440,7 @@ else
         Actions.Pos:= 0;
         Actions.Score:= 0;
         Walk(@WalkMe, Actions);
+        dec(i);
         if not StopThinking then
             SDL_Delay(100)
         end
@@ -477,7 +479,7 @@ if Targets.Count = 0 then
     exit
     end;
 
-FillBonuses((Me^.State and gstAttacked) <> 0);
+FillBonuses(((Me^.State and gstAttacked) <> 0) and (not isInMultiShoot));
 
 SDL_LockMutex(ThreadLock);
 ThinkThread:= SDL_CreateThread(@Think{$IFDEF SDL13}, 'think'{$ENDIF}, Me);
