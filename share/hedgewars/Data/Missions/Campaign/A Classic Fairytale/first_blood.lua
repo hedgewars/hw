@@ -56,6 +56,7 @@ punchTaken = false
 canKilled = false
 desertTaken = false
 challengeFailed = false
+deleteCrate = false
 difficultyChoice = false
 princessFace = "Left"
 elderFace = "Left"
@@ -469,6 +470,7 @@ end
 
 function DoTimesUp()
   challengeFailed = true
+  deleteCrate = true
   DeleteGear(crates[1])
   TurnTimeLeft = -1
   AddCaption(loc("And so happenned that Leaks A Lot failed to complete the challenge! He landed, pressured by shame..."))
@@ -668,6 +670,8 @@ function onGearDelete(gear)
     rope2Taken = true
   elseif gear == ropeCrate3 then
     rope3Taken = true
+  elseif gear == crates[1] and deleteCrate == true then
+    deleteCrate = false
   elseif gear == crates[1] and challengeFailed == false then
     crates[1] = nil
     cratesCollected = cratesCollected + 1
