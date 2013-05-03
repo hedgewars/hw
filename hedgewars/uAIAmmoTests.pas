@@ -308,7 +308,7 @@ repeat
         EX:= trunc(x);
         EY:= trunc(y);
 
-        value:= RateShove(trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
+        value:= RateShove(Me, trunc(x), trunc(y), 5, 1, trunc((abs(dX)+abs(dY))*20), -dX, -dY, afTrackFall);
         // LOL copypasta: this is score for digging with... snowball
         //if value = 0 then
         //    value:= - Metric(Targ.X, Targ.Y, EX, EY) div 64;
@@ -802,10 +802,10 @@ begin
         dx:= sin(a / cMaxAngle * pi) * 0.5;
         dy:= cos(a / cMaxAngle * pi) * 0.5;
 
-        v1:= RateShove(x - 10, y + 2
+        v1:= RateShove(Me, x - 10, y + 2
                 , 32, 30, 115
                 , -dx, -dy, trackFall);
-        v2:= RateShove(x + 10, y + 2
+        v2:= RateShove(Me, x + 10, y + 2
                 , 32, 30, 115
                 , dx, -dy, trackFall);
         if (v1 > valueResult) or (v2 > valueResult) then
@@ -848,11 +848,11 @@ begin
     v1:= 0;
     for i:= 0 to 8 do
         begin
-        v1:= v1 + RateShove(x - 5, y - 10 * i
+        v1:= v1 + RateShove(Me, x - 5, y - 10 * i
                 , 19, 30, 40
                 , -0.45, -0.9, trackFall or afSetSkip);
         end;
-    v1:= v1 + RateShove(x - 5, y - 90
+    v1:= v1 + RateShove(Me, x - 5, y - 90
             , 19, 30, 40
             , -0.45, -0.9, trackFall);
 
@@ -861,11 +861,11 @@ begin
     v2:= 0;
     for i:= 0 to 8 do
         begin
-        v2:= v2 + RateShove(x + 5, y - 10 * i
+        v2:= v2 + RateShove(Me, x + 5, y - 10 * i
                 , 19, 30, 40
                 , 0.45, -0.9, trackFall or afSetSkip);
         end;
-    v2:= v2 + RateShove(x + 5, y - 90
+    v2:= v2 + RateShove(Me, x + 5, y - 90
             , 19, 30, 40
             , 0.45, -0.9, trackFall);
 
@@ -907,19 +907,19 @@ begin
     {first RateShove checks farthermost of two whip's AmmoShove attacks
     to encourage distant attacks (damaged hog is excluded from view of second
     RateShove call)}
-    v1:= RateShove(x - 13, y
+    v1:= RateShove(Me, x - 13, y
             , 30, 30, 25
             , -1, -0.8, trackFall or afSetSkip);
     v1:= v1 +
-        RateShove(x - 2, y
+        RateShove(Me, x - 2, y
             , 30, 30, 25
             , -1, -0.8, trackFall);
     // now try opposite direction
-    v2:= RateShove(x + 13, y
+    v2:= RateShove(Me, x + 13, y
             , 30, 30, 25
             , 1, -0.8, trackFall or afSetSkip);
     v2:= v2 +
-        RateShove(x + 2, y
+        RateShove(Me, x + 2, y
             , 30, 30, 25
             , 1, -0.8, trackFall);
 
@@ -986,7 +986,7 @@ begin
     for i:= 0 to 512 div step - 2 do
         begin
         valueResult:= valueResult +
-            RateShove(trunc(x), trunc(y)
+            RateShove(Me, trunc(x), trunc(y)
                 , 30, 30, 25
                 , cx, -0.9, trackFall or afSetSkip);
 
@@ -998,14 +998,14 @@ begin
         x:= hwFloat2Float(Me^.X);
         y:= hwFloat2Float(Me^.Y);
         tx:= trunc(x);
-        v:= RateShove(tx, trunc(y)
+        v:= RateShove(Me, tx, trunc(y)
                 , 30, 30, 25
                 , -cx, -0.9, trackFall);
         for i:= 1 to 512 div step - 2 do
             begin
             y:= y + dy;
             v:= v +
-                RateShove(tx, trunc(y)
+                RateShove(Me, tx, trunc(y)
                     , 30, 30, 25
                     , -cx, -0.9, trackFall or afSetSkip);
             end
@@ -1016,7 +1016,7 @@ begin
         valueResult:= v
         end;
 
-    v:= RateShove(trunc(x), trunc(y)
+    v:= RateShove(Me, trunc(x), trunc(y)
             , 30, 30, 25
             , cx, -0.9, trackFall);
     valueResult:= valueResult + v - KillScore * friendlyfactor div 100 * 1024;
