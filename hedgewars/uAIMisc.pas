@@ -428,7 +428,7 @@ begin
 end;
 
 function RealRateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt;
-var i, fallDmg, dmg, dmgBase, rate, erasure: LongInt;
+var i, fallDmg, dmg, dmgBase, rate, subrate, erasure: LongInt;
     pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
@@ -488,7 +488,10 @@ for i:= 0 to Targets.Count do
                         dead:= true;
                         Targets.reset:= true;
                         if dX < 0.035 then
-                            inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or (Flags and afTrackFall)));
+                            begin
+                            subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or (Flags and afTrackFall));
+                            if abs(subrate) > 2000 then inc(Rate,subrate)
+                            end;
                         if Score > 0 then
                              inc(rate, KillScore * 1024 + (dmg + fallDmg)) // tiny bonus for dealing more damage than needed to kill
                         else dec(rate, KillScore * friendlyfactor div 100 * 1024)
@@ -506,8 +509,9 @@ for i:= 0 to Targets.Count do
                     dead:= true;
                     Targets.reset:= true;
                     if Kind = gtExplosives then
-                         inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall)))
-                    else inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall)))
+                         subrate:= RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall))
+                    else subrate:= RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall));
+                    if abs(subrate) > 2000 then inc(Rate,subrate);
                     end
                 end
             end;
@@ -519,7 +523,7 @@ if hadSkips and (rate = 0) then
 end;
 
 function RateShove(Me: PGear; x, y, r, power, kick: LongInt; gdX, gdY: real; Flags: LongWord): LongInt;
-var i, fallDmg, dmg, rate: LongInt;
+var i, fallDmg, dmg, rate, subrate: LongInt;
     dX, dY, pX, pY: real;
 begin
 fallDmg:= 0;
@@ -557,7 +561,10 @@ for i:= 0 to Pred(Targets.Count) do
                     dead:= true;
                     Targets.reset:= true;
                     if dX < 0.035 then
-                        inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or (Flags and afTrackFall)) div 1024);
+                        begin
+                        subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
+                        if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
+                        end;
                     if Score > 0 then
                         inc(rate, KillScore)
                     else
@@ -577,8 +584,9 @@ for i:= 0 to Pred(Targets.Count) do
                 dead:= true;
                 Targets.reset:= true;
                 if Kind = gtExplosives then
-                     inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall)) div 1024)
-                else inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall)) div 1024)
+                     subrate:= RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall))
+                else subrate:= RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall));
+                if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
                 end
             end
         end;
@@ -586,7 +594,7 @@ RateShove:= rate * 1024
 end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
-var i, dmg, fallDmg, baseDmg, rate, erasure: LongInt;
+var i, dmg, fallDmg, baseDmg, rate, subrate, erasure: LongInt;
     pX, pY, dX, dY: real;
     hadSkips: boolean;
 begin
@@ -648,7 +656,10 @@ for i:= 0 to Targets.Count do
                         dead:= true;
                         Targets.reset:= true;
                         if dX < 0.035 then
-                            inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall) div 1024);
+                            begin
+                            subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
+                            if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
+                            end;
                         if Score > 0 then
                             inc(rate, KillScore)
                         else
@@ -664,8 +675,9 @@ for i:= 0 to Targets.Count do
                     dead:= true;
                     Targets.reset:= true;
                     if Kind = gtExplosives then
-                         inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or afTrackFall) div 1024)
-                    else inc(Rate,RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or afTrackFall) div 1024)
+                         subrate:= RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or afTrackFall)
+                    else subrate:= RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or afTrackFall);
+                    if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
                     end
                 end
             end;
