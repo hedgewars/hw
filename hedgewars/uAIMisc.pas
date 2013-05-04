@@ -733,9 +733,8 @@ rate:= 0;
 
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
-      if matters then
          // hammer hit radius is 8, shift is 10
-        if abs(Point.x - x) + abs(Point.y - y) < 18 then
+      if matters and (Kind = gtHedgehog) and (abs(Point.x - x) + abs(Point.y - y) < 18) then
             begin
             r:= trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
 
