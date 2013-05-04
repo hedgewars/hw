@@ -503,6 +503,10 @@ for i:= 0 to Targets.Count do
                     begin
                     dX:= 0.005 * dmg + 0.01 * Density;
                     dY:= dX;
+                    if (Kind = gtExplosives) and 
+                       (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
+                        ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
+                        dX:= 0;
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
                        (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
                          fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Kind) * dmgMod)
