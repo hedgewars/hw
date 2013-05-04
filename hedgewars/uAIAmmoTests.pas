@@ -686,7 +686,7 @@ begin
 if Level > 4 then exit(BadTurn);
 dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
-ap.ExplR:= 0;
+ap.ExplR:= 1;
 ap.Time:= 0;
 ap.Power:= 1;
 
@@ -716,14 +716,8 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5)
     or (d > 48);
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 5 then
-    begin
-    fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00125 * 20, vY * 0.00125 * 20);
-    if fallDmg < 0 then
-        valueResult:= 204800
-    else valueResult:= Max(0, (4 - d div 12) * trunc((7 + fallDmg) * dmgMod) * 1024)
-    end
-else
-    valueResult:= BadTurn;
+     valueResult:= RateShove(Me, Targ.X, Targ.Y, 1, 7, 20, vX*0.125, vY*0.125, afTrackFall)
+else valueResult:= BadTurn;
 TestDesertEagle:= valueResult
 end;
 
@@ -766,15 +760,8 @@ until (Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4)
     or (d > 22);
 
 if Abs(Targ.X - trunc(x)) + Abs(Targ.Y - trunc(y)) < 4 then
-    begin
-    fallDmg:= TraceShoveFall(Targ.X, Targ.Y, vX * 0.00166 * dmg, vY * 0.00166 * dmg);
-    if fallDmg < 0 then
-        TestSniperRifle:= BadTurn
-    else
-        TestSniperRifle:= Max(0, trunc((dmg + fallDmg) * dmgMod) * 1024)
-    end
-else
-    TestSniperRifle:= BadTurn
+     TestSniperRifle:= RateShove(Me, Targ.X, Targ.Y, 1, trunc(dmg), 20, vX*0.166, vY*0.166, afTrackFall)
+else TestSniperRifle:= BadTurn;
 end;
 
 
