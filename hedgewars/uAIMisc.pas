@@ -501,7 +501,7 @@ for i:= 0 to Targets.Count do
                 pY:= Point.y;
                 if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
                     begin
-                    dX:= 0.005 * dmg + 0.01 * Density;
+                    dX:= (0.005 * dmg + 0.01) / Density;
                     dY:= dX;
                     if (Kind = gtExplosives) and 
                        (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
@@ -672,8 +672,8 @@ for i:= 0 to Targets.Count do
                 begin
                 pX:= Point.x;
                 pY:= Point.y;
-                dX:= gdX * dmg * Density;
-                dY:= gdY * dmg * Density;
+                dX:= gdX * dmg / Density;
+                dY:= gdY * dmg / Density;
                 if dX < 0 then dX:= dX - 0.01
                 else dX:= dX + 0.01;
                 if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
