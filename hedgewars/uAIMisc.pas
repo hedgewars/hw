@@ -310,10 +310,10 @@ begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x] <> 0) or
-       (Land[y+r, x] <> 0) or
-       (Land[y, x+r] <> 0) or
-       (Land[y, x-r] <> 0) then
+    if (Land[y-r, x-r] <> 0) or
+       (Land[y+r, x-r] <> 0) or
+       (Land[y-r, x+r] <> 0) or
+       (Land[y+r, x+r] <> 0) then
        exit(true);
 
     TestCollWithEverything := false;
@@ -324,10 +324,10 @@ begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x] > lfAllObjMask) or
-       (Land[y+r, x] > lfAllObjMask) or
-       (Land[y, x-r] > lfAllObjMask) or
-       (Land[y, x+r] > lfAllObjMask) then
+    if (Land[y-r, x-r] > lfAllObjMask) or
+       (Land[y+r, x-r] > lfAllObjMask) or
+       (Land[y-r, x-r] > lfAllObjMask) or
+       (Land[y+r, x+r] > lfAllObjMask) then
        exit(true);
 
     TestCollExcludingObjects:= false;
@@ -338,10 +338,10 @@ begin
     if not CheckBounds(x, y, r) then
         exit(false);
 
-    if (Land[y-r, x] and lfNotCurrentMask <> 0) or
-       (Land[y+r, x] and lfNotCurrentMask <> 0) or
-       (Land[y, x-r] and lfNotCurrentMask <> 0) or
-       (Land[y, x+r] and lfNotCurrentMask <> 0) then
+    if (Land[y-r, x-r] and lfNotCurrentMask <> 0) or
+       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
+       (Land[y+r, x-r] and lfNotCurrentMask <> 0) or
+       (Land[y+r, x+r] and lfNotCurrentMask <> 0) then
        exit(true);
 
     TestColl:= false;
@@ -368,7 +368,7 @@ end;
 
 function TraceFall(eX, eY: LongInt; var x, y: Real; dX, dY: Real; r: LongWord; Kind: TGearType): LongInt;
 var skipLandCheck: boolean;
-    rCorner: real;
+    rCorner, dxdy: real;
     dmg, radius: LongInt;
 begin
     skipLandCheck:= true;
@@ -395,32 +395,26 @@ begin
                 dmg := 1 + trunc((abs(dY) - 0.4) * 70);
                 if dmg >= 1 then exit(dmg)
                 end
-// so. the problem w/ explosives is it only uses dX or dY depending on impact, and we don't know which we hit.  Maybe we didn't even hit, given TestColl check corners.
             else 
                 begin
-                if ((dY > 0.2) and (Land[trunc(y)+radius, trunc(x)] > lfAllObjMask)) or 
-                   ((dY < -0.2) and (Land[trunc(y)-radius, trunc(x)] > lfAllObjMask)) then
-                    begin
-                    dmg := 1 + trunc(abs(dY) * 70);
-                    if dmg >= 1 then exit(dmg)
-                    end
+                dxdy:= abs(dX)+abs(dY);
 // so we don't know at present if a barrel is already rolling.  Would need to add that to target info I guess
-                else if ((Kind = gtMine) or (abs(dX) > 0.15) or ((abs(dY) > 0.15) and  (abs(dX) > 0.02))) and
-                        (((dX > 0.2) and (Land[trunc(y), trunc(x)+radius] > lfAllObjMask)) or 
-                         ((dX < -0.2) and (Land[trunc(y), trunc(x)-radius] > lfAllObjMask))) then
+// a barrel oriented vertically only considers dY. however, AI doesn't know to use hammer, and could only bat vertically w/ bat, so probably shouldn't matter
+                if (dxdy > 0.3) then
                     begin
-                    dmg := 1 + trunc(abs(dX) * 70);
-                    if dmg >= 1 then exit(dmg)
+                    dmg := 1 + trunc(dxdy * 25);
+                    exit(dmg)
                     end
                 end;
             exit(0)
             end;
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1)
+        if (y > cWaterLine) or (x > leftX) or (x < rightX) then exit(-1)
         end
 end;
 
 function TraceShoveFall(var x, y: Real; dX, dY: Real; Kind: TGearType): LongInt;
 var dmg, radius: LongInt;
+    dxdy: real;
 begin
 //v:= random($FFFFFFFF);
     if Kind = gtHedgehog then 
@@ -451,27 +445,20 @@ begin
                 if dmg >= 1 then
                     exit(dmg);
                 end
-// so. the problem w/ explosives is it only uses dX or dY depending on impact, and we don't know which we hit.  Maybe we didn't even hit, given TestColl check corners.
             else 
                 begin
-                if ((dY > 0.2) and (Land[trunc(y)+radius, trunc(x)] > lfAllObjMask)) or 
-                   ((dY < -0.2) and (Land[trunc(y)-radius, trunc(x)] > lfAllObjMask)) then
-                    begin
-                    dmg := 1 + trunc(abs(dY) * 70);
-                    if dmg >= 1 then exit(dmg)
-                    end
+                dxdy:= abs(dX)+abs(dY);
 // so we don't know at present if a barrel is already rolling.  Would need to add that to target info I guess
-                else if ((Kind = gtMine) or (abs(dX) > 0.15) or ((abs(dY) > 0.15) and  (abs(dX) > 0.02))) and
-                        (((dX > 0.2) and (Land[trunc(y), trunc(x)+radius] > lfAllObjMask)) or 
-                         ((dX < -0.2) and (Land[trunc(y), trunc(x)-radius] > lfAllObjMask))) then
+// a barrel oriented vertically only considers dY. however, AI doesn't know to use hammer, and could only bat vertically w/ bat, so probably shouldn't matter
+                if (dxdy > 0.3) then
                     begin
-                    dmg := 1 + trunc(abs(dX) * 70);
-                    if dmg >= 1 then exit(dmg)
+                    dmg := 1 + trunc(dxdy * 25);
+                    exit(dmg)
                     end
                 end;
             exit(0)
         end;
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then
+        if (y > cWaterLine) or (x > leftX) or (x < rightX) then
             // returning -1 for drowning so it can be considered in the Rate routine
             exit(-1)
     end;

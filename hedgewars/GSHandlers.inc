@@ -1407,6 +1407,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 var vg: PVisualGear;
+    dxdy: hwFloat;
 begin
     if (Gear^.State and gstMoving) <> 0 then
         begin
@@ -1425,14 +1426,13 @@ begin
         doStepFallingGear(Gear);
     if (Gear^.Health = 0) then
         begin
-        if (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
-            inc(Gear^.Damage, hwRound(Gear^.dY * _70))
-        else if (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
-            inc(Gear^.Damage, hwRound(Gear^.dX * _70))
-        else if  (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
-            inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
-        else if (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
-            inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
+        dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
+        if (dxdy > _0_3) and 
+           ((TestCollisionYwithGear(Gear, 1) <> 0) or
+             TestCollisionXwithGear(Gear, 1) or
+            (TestCollisionYwithGear(Gear, -1) <> 0) or
+             TestCollisionXwithGear(Gear, -1)) then
+            inc(Gear^.Damage, hwRound(dxdy * _25));
 
         if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
             begin
@@ -1575,6 +1575,7 @@ procedure doStepRollingBarrel(Gear: PGear);
 var
     i: LongInt;
     particle: PVisualGear;
+    dxdy: hwFloat;
 begin
     if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
         SetLittle(Gear^.dY);
@@ -1585,26 +1586,23 @@ begin
         begin
         DeleteCI(Gear);
         AllInactive := false;
-        if (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+        dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
+        if (dxdy > _0_3) then
             begin
-            Gear^.State := Gear^.State or gsttmpFlag;
-            inc(Gear^.Damage, hwRound(Gear^.dY * _70));
-            for i:= min(12, hwRound(Gear^.dY*_10)) downto 0 do
+            if (TestCollisionYwithGear(Gear, 1) <> 0) then
                 begin
-                particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,vgtDust);
-                if particle <> nil then
-                    particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
+                Gear^.State := Gear^.State or gsttmpFlag;
+                inc(Gear^.Damage, hwRound(dxdy * _25));
+                for i:= min(12, hwRound(dxdy*_10)) downto 0 do
+                    begin
+                    particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12,vgtDust);
+                    if particle <> nil then
+                        particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
+                    end
                 end
-            end
-        else if (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
-                inc(Gear^.Damage, hwRound(Gear^.dX * _70))
-
-        else if (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
-                inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
-
-        else if (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
-                inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
-
+            else if TestCollisionXwithGear(Gear, 1) or (TestCollisionYwithGear(Gear, -1) <> 0) or TestCollisionXwithGear(Gear, -1) then
+                inc(Gear^.Damage, hwRound(dxdy * _25))
+            end;
         doStepFallingGear(Gear);
         CalcRotationDirAngle(Gear);
         //CheckGearDrowning(Gear)
@@ -1678,7 +1676,8 @@ begin
         begin
         //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
         if (hwAbs(Gear^.dX) > _0_15) or ((hwAbs(Gear^.dY) > _0_15) and (hwAbs(Gear^.dX) > _0_02)) then
-            Gear^.doStep := @doStepRollingBarrel;
+            Gear^.doStep := @doStepRollingBarrel
+        else Gear^.dX:= _0;
 
         if (Gear^.Health > 0) and ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
             if (cBarrelHealth div Gear^.Health) > 2 then
