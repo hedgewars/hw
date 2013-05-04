@@ -115,63 +115,67 @@ end;
 procedure FillTargets;
 var i, t: Longword;
     f, e: LongInt;
-    iter: PGear;
+    Gear: PGear;
 begin
 Targets.Count:= 0;
 Targets.reset:= false;
 f:= 0;
 e:= 0;
-iter:= GearsList;
-while iter <> nil do
+Gear:= GearsList;
+while Gear <> nil do
     begin
-    if  ((iter^.Kind = gtHedgehog) and
-            (iter <> ThinkingHH) and
-            (iter^.Health > iter^.Damage) and
-            not(iter^.Hedgehog^.Team^.hasgone)) or
-        ((iter^.Kind = gtExplosives) and
-            (iter^.Health > iter^.Damage)) or
-        ((iter^.Kind = gtMine) and
-            (iter^.Health = 0) and
-            (iter^.Damage < 35)) and
+    if  ((Gear^.Kind = gtHedgehog) and
+            (Gear <> ThinkingHH) and
+            (Gear^.Health > Gear^.Damage) and
+            not(Gear^.Hedgehog^.Team^.hasgone)) or
+        ((Gear^.Kind = gtExplosives) and
+            (Gear^.Health > Gear^.Damage)) or
+        ((Gear^.Kind = gtMine) and
+            ((Gear^.Health = 0) and
+             (Gear^.Damage < 35)) or
+            ((Gear^.Health > 0) and 
+             (cMineDudPercent > 95) and
+             (cMinesTime < 3000)) 
+             ) and
         (Targets.Count < 256) then
         begin
         with Targets.ar[Targets.Count] do
             begin
             skip:= false;
             dead:= false;
-            Kind:= iter^.Kind;
-            matters:= (iter^.AIHints and aihDoesntMatter) = 0;
+            Kind:= Gear^.Kind;
+            matters:= (Gear^.AIHints and aihDoesntMatter) = 0;
 
-            Point.X:= hwRound(iter^.X);
-            Point.Y:= hwRound(iter^.Y);
-            if (iter^.Kind = gtHedgehog) then
+            Point.X:= hwRound(Gear^.X);
+            Point.Y:= hwRound(Gear^.Y);
+            if (Gear^.Kind = gtHedgehog) then
                 begin
-                if (iter^.Hedgehog^.Team^.Clan = CurrentTeam^.Clan) then
+                if (Gear^.Hedgehog^.Team^.Clan = CurrentTeam^.Clan) then
                     begin
-                    Score:= iter^.Damage - iter^.Health;
+                    Score:= Gear^.Damage - Gear^.Health;
                     inc(f)
                     end
                 else 
                     begin
-                    Score:= iter^.Health - iter^.Damage;
+                    Score:= Gear^.Health - Gear^.Damage;
                     inc(e)
                     end;
                 Density:= 1;
                 end
-            else if iter^.Kind = gtExplosives then
+            else if Gear^.Kind = gtExplosives then
                 begin
-                Score:= iter^.Health - iter^.Damage;
+                Score:= Gear^.Health - Gear^.Damage;
                 Density:= 2
                 end
-            else if iter^.Kind = gtMine then 
+            else if Gear^.Kind = gtMine then 
                 begin
-                Score:= max(0,35-iter^.Damage);
+                Score:= max(0,35-Gear^.Damage);
                 Density:= 1/3
                 end
             end;
         inc(Targets.Count)
         end;
-    iter:= iter^.NextGear
+    Gear:= Gear^.NextGear
     end;
 
 if e > f then friendlyfactor:= 300 + (e - f) * 30
