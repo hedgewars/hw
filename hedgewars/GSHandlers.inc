@@ -1425,13 +1425,13 @@ begin
         doStepFallingGear(Gear);
     if (Gear^.Health = 0) then
         begin
-        if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+        if (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             inc(Gear^.Damage, hwRound(Gear^.dY * _70))
-        else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
+        else if (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
             inc(Gear^.Damage, hwRound(Gear^.dX * _70))
-        else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+        else if  (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
             inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
-        else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
+        else if (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
             inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
 
         if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
@@ -1585,7 +1585,7 @@ begin
         begin
         DeleteCI(Gear);
         AllInactive := false;
-        if not Gear^.dY.isNegative and (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
+        if (Gear^.dY > _0_2) and (TestCollisionYwithGear(Gear, 1) <> 0) then
             begin
             Gear^.State := Gear^.State or gsttmpFlag;
             inc(Gear^.Damage, hwRound(Gear^.dY * _70));
@@ -1596,13 +1596,13 @@ begin
                     particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
                 end
             end
-        else if not Gear^.dX.isNegative and (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
+        else if (Gear^.dX > _0_2) and TestCollisionXwithGear(Gear, 1) then
                 inc(Gear^.Damage, hwRound(Gear^.dX * _70))
 
-        else if Gear^.dY.isNegative and (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
+        else if (Gear^.dY < -_0_2) and (TestCollisionYwithGear(Gear, -1) <> 0) then
                 inc(Gear^.Damage, hwRound(Gear^.dY * -_70))
 
-        else if Gear^.dX.isNegative and (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
+        else if (Gear^.dX < -_0_2) and TestCollisionXwithGear(Gear, -1) then
                 inc(Gear^.Damage, hwRound(Gear^.dX * -_70));
 
         doStepFallingGear(Gear);

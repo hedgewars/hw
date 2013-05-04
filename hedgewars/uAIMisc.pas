@@ -33,6 +33,7 @@ const MAXBONUS = 1024;
 type TTarget = record
     Point: TPoint;
     Score: LongInt;
+    Density: real;
     skip, matters, dead: boolean;
     Kind: TGearType;
     end;
@@ -66,7 +67,7 @@ function  RatePlace(Gear: PGear): LongInt;
 function  TestColl(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingObjects(x, y, r: LongInt): boolean; inline;
 function  TestCollExcludingMe(Me: PGear; x, y, r: LongInt): boolean; inline;
-function  TraceShoveFall(x, y, dX, dY: Real): LongInt;
+function  TraceShoveFall(x, y, dX, dY: Real; Kind: TGearType): LongInt;
 
 function  RateExplosion(Me: PGear; x, y, r: LongInt): LongInt; inline;
 function  RateExplosion(Me: PGear; x, y, r: LongInt; Flags: LongWord): LongInt; inline;
@@ -144,6 +145,7 @@ while iter <> nil do
             Point.X:= hwRound(iter^.X);
             Point.Y:= hwRound(iter^.Y);
             if (iter^.Kind = gtHedgehog) then
+                begin
                 if (iter^.Hedgehog^.Team^.Clan = CurrentTeam^.Clan) then
                     begin
                     Score:= iter^.Damage - iter^.Health;
@@ -153,9 +155,19 @@ while iter <> nil do
                     begin
                     Score:= iter^.Health - iter^.Damage;
                     inc(e)
-                    end
-            else if iter^.Kind = gtExplosives then Score:= iter^.Health - iter^.Damage
-            else if iter^.Kind = gtMine then Score:= max(0,35-iter^.Damage)
+                    end;
+                Density:= 1;
+                end
+            else if iter^.Kind = gtExplosives then
+                begin
+                Score:= iter^.Health - iter^.Damage;
+                Density:= 2
+                end
+            else if iter^.Kind = gtMine then 
+                begin
+                Score:= max(0,35-iter^.Damage);
+                Density:= 1/3
+                end
             end;
         inc(Targets.Count)
         end;
@@ -351,38 +363,60 @@ end;
 
 
 
-function TraceFall(eX, eY: LongInt; var x, y: Real; dX, dY: Real; r: LongWord): LongInt;
+function TraceFall(eX, eY: LongInt; var x, y: Real; dX, dY: Real; r: LongWord; Kind: TGearType): LongInt;
 var skipLandCheck: boolean;
     rCorner: real;
-    dmg: LongInt;
+    dmg, radius: LongInt;
 begin
     skipLandCheck:= true;
     if x - eX < 0 then dX:= -dX;
     if y - eY < 0 then dY:= -dY;
     // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
+    if Kind = gtHedgehog then 
+        radius:= cHHRadius
+    else if Kind = gtExplosives then
+        radius:= 16
+    else if Kind = gtMine then
+        radius:= 2;
     rCorner:= r * 0.75;
     while true do
-    begin
+        begin
         x:= x + dX;
         y:= y + dY;
         dY:= dY + cGravityf;
         skipLandCheck:= skipLandCheck and (r <> 0) and (abs(eX-x) + abs(eY-y) < r) and ((abs(eX-x) < rCorner) or (abs(eY-y) < rCorner));
-        if not skipLandCheck and TestCollExcludingObjects(trunc(x), trunc(y), cHHRadius) then
-        begin
-            if 0.4 < dY then
+        if not skipLandCheck and TestCollExcludingObjects(trunc(x), trunc(y), radius) then
             begin
+            if (Kind = gtHedgehog) and (0.4 < dY) then
+                begin
                 dmg := 1 + trunc((abs(dY) - 0.4) * 70);
-                if dmg >= 1 then
-                    exit(dmg);
-            end;
+                if dmg >= 1 then exit(dmg)
+                end
+// so. the problem w/ explosives is it only uses dX or dY depending on impact, and we don't know which we hit.  Maybe we didn't even hit, given TestColl check corners.
+            else 
+                begin
+                if ((dY > 0.2) and (Land[trunc(y)+radius, trunc(x)] > lfAllObjMask)) or 
+                   ((dY < -0.2) and (Land[trunc(y)-radius, trunc(x)] > lfAllObjMask)) then
+                    begin
+                    dmg := 1 + trunc(abs(dY) * 70);
+                    if dmg >= 1 then exit(dmg)
+                    end
+// so we don't know at present if a barrel is already rolling.  Would need to add that to target info I guess
+                else if ((Kind = gtMine) or (abs(dX) > 0.15) or ((abs(dY) > 0.15) and  (abs(dX) > 0.02))) and
+                        (((dX > 0.2) and (Land[trunc(y), trunc(x)+radius] > lfAllObjMask)) or 
+                         ((dX < -0.2) and (Land[trunc(y), trunc(x)-radius] > lfAllObjMask))) then
+                    begin
+                    dmg := 1 + trunc(abs(dX) * 70);
+                    if dmg >= 1 then exit(dmg)
+                    end
+                end;
             exit(0)
-        end;
-        if (y > cWaterLine) or (x > 4096) or (x < 0) then
-            exit(-1);
-    end;
+            end;
+        if (y > cWaterLine) or (x > 4096) or (x < 0) then exit(-1)
+        end
 end;
 
-function TraceShoveFall(x, y, dX, dY: Real): LongInt;
+function TraceShoveFall(x, y, dX, dY: Real; Kind: TGearType): LongInt;
 var dmg: LongInt;
 begin
 //v:= random($FFFFFFFF);
@@ -467,12 +501,12 @@ for i:= 0 to Targets.Count do
                 pY:= Point.y;
                 if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
                     begin
-                    dX:= 0.005 * dmg + 0.01;
+                    dX:= 0.005 * dmg + 0.01 * Density;
                     dY:= dX;
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
                        (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
-                         fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0) * dmgMod)
-                    else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure) * dmgMod)
+                         fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Kind) * dmgMod)
+                    else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Kind) * dmgMod)
                     end;
                 if Kind = gtHedgehog then
                     begin
@@ -546,7 +580,7 @@ for i:= 0 to Pred(Targets.Count) do
             pY:= Point.y;
             if (Flags and afSetSkip <> 0) then skip:= true;
             if (Flags and afTrackFall <> 0) and (Score > 0) then
-                fallDmg:= trunc(TraceShoveFall(pX, pY - 2, dX, dY) * dmgMod);
+                fallDmg:= trunc(TraceShoveFall(pX, pY - 2, dX, dY, Kind) * dmgMod);
             if Kind = gtHedgehog then
                 begin
                 if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
@@ -634,14 +668,14 @@ for i:= 0 to Targets.Count do
                 begin
                 pX:= Point.x;
                 pY:= Point.y;
-                dX:= gdX * dmg;
-                dY:= gdY * dmg;
+                dX:= gdX * dmg * Density;
+                dY:= gdY * dmg * Density;
                 if dX < 0 then dX:= dX - 0.01
                 else dX:= dX + 0.01;
                 if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
                    (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
-                     fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0) * dmgMod)
-                else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure) * dmgMod);
+                     fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Kind) * dmgMod)
+                else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Kind) * dmgMod);
                 if Kind = gtHedgehog then
                     begin
                     if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
