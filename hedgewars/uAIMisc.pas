@@ -490,6 +490,7 @@ with Targets.ar[Targets.Count] do
     skip:= false;
     matters:= true;
     Kind:= gtHedgehog;
+    Density:= 1;
     Score:= - ThinkingHH^.Health
     end;
 // rate explosion
@@ -662,6 +663,7 @@ with Targets.ar[Targets.Count] do
     skip:= false;
     matters:= true;
     Kind:= gtHedgehog;
+    Density:= 1;
     Score:= - ThinkingHH^.Health
     end;
 // rate shot
