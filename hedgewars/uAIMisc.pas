@@ -489,6 +489,7 @@ with Targets.ar[Targets.Count] do
     Point.y:= hwRound(Me^.Y);
     skip:= false;
     matters:= true;
+    Kind:= gtHedgehog;
     Score:= - ThinkingHH^.Health
     end;
 // rate explosion
@@ -660,6 +661,7 @@ with Targets.ar[Targets.Count] do
     Point.y:= hwRound(Me^.Y);
     skip:= false;
     matters:= true;
+    Kind:= gtHedgehog;
     Score:= - ThinkingHH^.Health
     end;
 // rate shot
