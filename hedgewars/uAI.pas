@@ -126,7 +126,7 @@ for i:= 0 to Pred(Targets.Count) do
             then
             begin
 {$HINTS OFF}
-            Score:= AmmoTests[a].proc(Me, Targets.ar[i].Point, BotLevel, ap);
+            Score:= AmmoTests[a].proc(Me, Targets.ar[i], BotLevel, ap);
 {$HINTS ON}
             if Actions.Score + Score > BestActions.Score then
                 if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel) * 2048) then
