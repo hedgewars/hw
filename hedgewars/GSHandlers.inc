@@ -1427,7 +1427,7 @@ begin
     if (Gear^.Health = 0) then
         begin
         dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
-        if (dxdy > _0_3) and 
+        if (dxdy > _0_35) and 
            ((TestCollisionYwithGear(Gear, 1) <> 0) or
              TestCollisionXwithGear(Gear, 1) or
             (TestCollisionYwithGear(Gear, -1) <> 0) or
@@ -1566,11 +1566,6 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-(*
-TODO
-Increase damage as barrel smokes?
-Try tweaking friction some more
-*)
 procedure doStepRollingBarrel(Gear: PGear);
 var
     i: LongInt;
@@ -1587,7 +1582,7 @@ begin
         DeleteCI(Gear);
         AllInactive := false;
         dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
-        if (dxdy > _0_3) then
+        if (dxdy > _0_35) then
             begin
             if (TestCollisionYwithGear(Gear, 1) <> 0) then
                 begin
@@ -1676,7 +1671,10 @@ begin
         begin
         //if V > _0_03 then Gear^.State:= Gear^.State or gstAnimation;
         if (hwAbs(Gear^.dX) > _0_15) or ((hwAbs(Gear^.dY) > _0_15) and (hwAbs(Gear^.dX) > _0_02)) then
-            Gear^.doStep := @doStepRollingBarrel
+            begin
+            Gear^.doStep := @doStepRollingBarrel;
+            exit;
+            end
         else Gear^.dX:= _0;
 
         if (Gear^.Health > 0) and ((Gear^.Health * 100 div cBarrelHealth) < random(90)) and ((GameTicks and $FF) = 0) then
