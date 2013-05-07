@@ -386,8 +386,8 @@ begin
                 begin
                 if (Kind = gtHedgehog) and (0.4 < dY) then
                     begin
-                    dmg := 1 + trunc((abs(dY) - 0.4) * 70);
-                    if dmg >= 1 then exit(dmg)
+                    dmg := 1 + trunc((dY - 0.4) * 70);
+                    exit(dmg)
                     end
                 else 
                     begin
@@ -399,12 +399,12 @@ begin
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
-                        dmg := 1 + trunc(dxdy * 25);
+                        dmg := trunc(dxdy * 25);
                         exit(dmg)
                         end
                     else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
-                        dmg := 1 + trunc(dy * 70);
+                        dmg := trunc(dy * 70);
                         exit(dmg)
                         end
                     end;
@@ -438,9 +438,8 @@ begin
                 begin
                 if (Kind = gtHedgehog) and (0.4 < dY) then
                     begin
-                    dmg := 1 + trunc((abs(dY) - 0.4) * 70);
-                    if dmg >= 1 then
-                        exit(dmg);
+                    dmg := trunc((dY - 0.4) * 70);
+                    exit(dmg);
                     end
                 else 
                     begin
@@ -452,12 +451,12 @@ begin
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
-                        dmg := 1 + trunc(dxdy * 25);
+                        dmg := trunc(dxdy * 25);
                         exit(dmg)
                         end
                     else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
-                        dmg := 1 + trunc(dy * 70);
+                        dmg := trunc(dy * 70);
                         exit(dmg)
                         end
                     end;
