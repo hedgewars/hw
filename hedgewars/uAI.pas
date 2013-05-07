@@ -486,7 +486,9 @@ ThinkThread:= SDL_CreateThread(@Think{$IFDEF SDL13}, 'think'{$ENDIF}, Me);
 SDL_UnlockMutex(ThreadLock);
 end;
 
-//var scoreShown: boolean = false;
+{$IFDEF DEBUGAI}
+var scoreShown: boolean = false;
+{$ENDIF}
 
 procedure ProcessBot;
 const cStopThinkTime = 40;
@@ -508,17 +510,21 @@ with CurrentHedgehog^ do
                 if Gear^.Message <> 0 then
                     exit;
 
-                //scoreShown:= false;
+{$IFDEF DEBUGAI}
+                scoreShown:= false;
+{$ENDIF}
                 StartThink(Gear);
                 StartTicks:= GameTicks
 
             end else
                 begin
-                {if not scoreShown then
+{$IFDEF DEBUGAI}
+                if not scoreShown then
                     begin
                     if BestActions.Score > 0 then ParseCommand('/say Expected score = ' + inttostr(BestActions.Score div 1024), true);
                     scoreShown:= true
-                    end;}
+                    end;
+{$ENDIF}
                 ProcessAction(BestActions, Gear)
                 end
         else if ((GameTicks - StartTicks) > cMaxAIThinkTime)
