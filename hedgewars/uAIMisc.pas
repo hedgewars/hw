@@ -145,6 +145,7 @@ while Gear <> nil do
             dead:= false;
             Kind:= Gear^.Kind;
             Radius:= Gear^.Radius;
+            Density:= hwFloat2Float(Gear^.Density)/3;
             Flags:= Gear^.State;
             matters:= (Gear^.AIHints and aihDoesntMatter) = 0;
 
@@ -162,18 +163,11 @@ while Gear <> nil do
                     Score:= Gear^.Health - Gear^.Damage;
                     inc(e)
                     end;
-                Density:= 1;
                 end
             else if Gear^.Kind = gtExplosives then
-                begin
-                Score:= Gear^.Health - Gear^.Damage;
-                Density:= 2
-                end
+                Score:= Gear^.Health - Gear^.Damage
             else if Gear^.Kind = gtMine then 
-                begin
                 Score:= max(0,35-Gear^.Damage);
-                Density:= 1/3
-                end
             end;
         inc(Targets.Count)
         end;
@@ -502,10 +496,10 @@ with Targets.ar[Targets.Count] do
     matters:= true;
     Kind:= gtHedgehog;
     Density:= 1;
+    Radius:= cHHRadius;
     Score:= - ThinkingHH^.Health
     end;
 // rate explosion
-dmgBase:= r + cHHRadius div 2;
 
 if (Flags and afErasesLand <> 0) and (GameFlags and gfSolidLand = 0) then erasure:= r
 else erasure:= 0;
@@ -519,6 +513,7 @@ for i:= 0 to Targets.Count do
             else
             begin
             dmg:= 0;
+            dmgBase:= r + Radius div 2;
             if abs(Point.x - x) + abs(Point.y - y) < dmgBase then
                 dmg:= trunc(dmgMod * min((dmgBase - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)))) div 2, r));
 
@@ -675,6 +670,7 @@ with Targets.ar[Targets.Count] do
     matters:= true;
     Kind:= gtHedgehog;
     Density:= 1;
+    Radius:= cHHRadius;
     Score:= - ThinkingHH^.Health
     end;
 // rate shot
