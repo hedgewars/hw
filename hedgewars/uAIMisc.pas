@@ -410,7 +410,7 @@ begin
                     end;
             exit(0)
             end;
-        if (y > cWaterLine) or (x > leftX) or (x < rightX) then exit(-1)
+        if (y > cWaterLine) or (x > rightX) or (x < leftX) then exit(-1)
         end
 end;
 
@@ -463,7 +463,7 @@ begin
                     end;
             exit(0)
         end;
-        if (y > cWaterLine) or (x > leftX) or (x < rightX) then
+        if (y > cWaterLine) or (x > rightX) or (x < leftX) then
             // returning -1 for drowning so it can be considered in the Rate routine
             exit(-1)
     end;
