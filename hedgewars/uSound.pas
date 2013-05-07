@@ -155,7 +155,7 @@ var cInitVolume: LongInt;
             (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
             (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
             (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
-            (FileName:          'JustYouWait.ogg'; Path: ptVoices),// sndJustYouWait
+            (FileName:          'Justyouwait.ogg'; Path: ptVoices),// sndJustyouwait
             (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
             (FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
             (FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
