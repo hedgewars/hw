@@ -651,7 +651,8 @@ for i:= 0 to Pred(Targets.Count) do
                     end
                 end
             end;
-RateShove:= rate * 1024
+RateShove:= rate * 1024;
+ResetTargets
 end;
 
 function RateShotgun(Me: PGear; gdX, gdY: real; x, y: LongInt): LongInt;
