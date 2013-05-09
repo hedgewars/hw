@@ -33,7 +33,7 @@ const MAXBONUS = 1024;
 type TTarget = record // starting to look more and more like a gear
     Point: TPoint;
     Score, Radius: LongInt;
-    Flags: LongWord;
+    State: LongWord;
     Density: real;
     skip, matters, dead: boolean;
     Kind: TGearType;
@@ -146,7 +146,7 @@ while Gear <> nil do
             Kind:= Gear^.Kind;
             Radius:= Gear^.Radius;
             Density:= hwFloat2Float(Gear^.Density)/3;
-            Flags:= Gear^.State;
+            State:= Gear^.State;
             matters:= (Gear^.AIHints and aihDoesntMatter) = 0;
 
             Point.X:= hwRound(Gear^.X);
@@ -394,8 +394,8 @@ begin
                     dxdy:= abs(dX)+abs(dY);
                     if ((Kind = gtMine) and (dxdy > 0.35)) or 
                        ((Kind = gtExplosives) and 
-                            (((Flags and gstTmpFlag <> 0) and (dxdy > 0.35)) or
-                             ((Flags and gstTmpFlag <> 0) and 
+                            (((State and gstTmpFlag <> 0) and (dxdy > 0.35)) or
+                             ((State and gstTmpFlag <> 0) and 
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
@@ -446,8 +446,8 @@ begin
                     dxdy:= abs(dX)+abs(dY);
                     if ((Kind = gtMine) and (dxdy > 0.35)) or 
                        ((Kind = gtExplosives) and 
-                            (((Flags and gstTmpFlag <> 0) and (dxdy > 0.35)) or
-                             ((Flags and gstTmpFlag <> 0) and 
+                            (((State and gstTmpFlag <> 0) and (dxdy > 0.35)) or
+                             ((State and gstTmpFlag <> 0) and 
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
@@ -591,64 +591,66 @@ dY:= gdY * 0.01 * kick;
 rate:= 0;
 for i:= 0 to Pred(Targets.Count) do
     with Targets.ar[i] do
-      if skip then
-        if (Flags and afSetSkip = 0) then skip:= false else {still skip}
-      else if matters then
-        begin
-        dmg:= 0;
-        if abs(Point.x - x) + abs(Point.y - y) < r then
-            dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
-
-        if dmg > 0 then
+        if skip then
             begin
-            pX:= Point.x;
-            pY:= Point.y-2;
-            fallDmg:= 0;
-            if (Flags and afSetSkip <> 0) then skip:= true;
-            if (Flags and afTrackFall <> 0) and (Score > 0) then
-                fallDmg:= trunc(TraceShoveFall(pX, pY, dX, dY, Targets.ar[i]) * dmgMod);
-            if Kind = gtHedgehog then
+            if Flags and afSetSkip = 0 then skip:= false
+            end
+        else if matters then
+            begin
+            dmg:= 0;
+            if abs(Point.x - x) + abs(Point.y - y) < r then
+                dmg:= r - trunc(sqrt(sqr(Point.x - x)+sqr(Point.y - y)));
+
+            if dmg > 0 then
                 begin
-                if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                pX:= Point.x;
+                pY:= Point.y-2;
+                fallDmg:= 0;
+                if (Flags and afSetSkip <> 0) then skip:= true;
+                if (Flags and afTrackFall <> 0) and (Score > 0) then
+                    fallDmg:= trunc(TraceShoveFall(pX, pY, dX, dY, Targets.ar[i]) * dmgMod);
+                if Kind = gtHedgehog then
                     begin
-                    if Score > 0 then
-                        inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                    if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
+                        begin
+                        if Score > 0 then
+                            inc(rate, KillScore + Score div 10)   // Add a bit of a bonus for bigger hog drownings
+                        else
+                            dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                        end
+                    else if power+fallDmg >= abs(Score) then
+                        begin
+                        dead:= true;
+                        Targets.reset:= true;
+                        if dX < 0.035 then
+                            begin
+                            subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
+                            if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
+                            end;
+                        if Score > 0 then
+                            inc(rate, KillScore)
+                        else
+                            dec(rate, KillScore * friendlyfactor div 100)
+                        end
                     else
-                        dec(rate, KillScore * friendlyfactor div 100 - Score div 10) // and more of a punishment for drowning bigger friendly hogs
+                        begin
+                        if Score > 0 then
+                            inc(rate, power+fallDmg)
+                        else
+                            dec(rate, (power+fallDmg) * friendlyfactor div 100)
+                        end
                     end
-                else if power+fallDmg >= abs(Score) then
+                else if (fallDmg >= 0) and ((dmg+fallDmg) >= Score) then
                     begin
                     dead:= true;
                     Targets.reset:= true;
-                    if dX < 0.035 then
-                        begin
-                        subrate:= RealRateExplosion(Me, round(pX), round(pY), 61, afErasesLand or afTrackFall);
-                        if abs(subrate) > 2000 then inc(Rate,subrate div 1024)
-                        end;
-                    if Score > 0 then
-                        inc(rate, KillScore)
-                    else
-                        dec(rate, KillScore * friendlyfactor div 100)
-                    end
-                else
-                    begin
-                    if Score > 0 then
-                        inc(rate, power+fallDmg)
-                    else
-                        dec(rate, (power+fallDmg) * friendlyfactor div 100)
+                    if Kind = gtExplosives then
+                         subrate:= RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall))
+                    else subrate:= RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall));
+                    if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
                     end
                 end
-            else if (fallDmg >= 0) and ((dmg+fallDmg) >= Score) then
-                begin
-                dead:= true;
-                Targets.reset:= true;
-                if Kind = gtExplosives then
-                     subrate:= RealRateExplosion(Me, round(pX), round(pY), 151, afErasesLand or (Flags and afTrackFall))
-                else subrate:= RealRateExplosion(Me, round(pX), round(pY), 101, afErasesLand or (Flags and afTrackFall));
-                if abs(subrate) > 2000 then inc(Rate,subrate div 1024);
-                end
-            end
-        end;
+            end;
 RateShove:= rate * 1024
 end;
 
