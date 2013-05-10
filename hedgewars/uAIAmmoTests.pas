@@ -679,12 +679,11 @@ TestShotgun:= BadTurn
 end;
 
 function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-var Vx, Vy, x, y, t, dmgMod: real;
+var Vx, Vy, x, y, t: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
 if Level > 4 then exit(BadTurn);
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 1;
 ap.Time:= 0;
@@ -723,12 +722,11 @@ end;
 
 
 function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
-var Vx, Vy, x, y, t, dmg, dmgMod: real;
+var Vx, Vy, x, y, t, dmg: real;
     d: Longword;
     fallDmg: LongInt;
 begin
 if Level > 3 then exit(BadTurn);
-dmgMod:= 0.01 * hwFloat2Float(cDamageModifier) * cDamagePercent;
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
