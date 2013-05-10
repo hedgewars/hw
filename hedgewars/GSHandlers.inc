@@ -1657,7 +1657,7 @@ begin
         exit
         end;
 
-    if ((Gear^.Kind <> gtExplosives) and (Gear^.Damage > 0)) or (Gear^.Health<=0) then
+    if ((k <> gtExplosives) and (Gear^.Damage > 0)) or ((k = gtExplosives) and (Gear^.Health<=0)) then
         begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
