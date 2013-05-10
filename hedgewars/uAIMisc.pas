@@ -371,8 +371,6 @@ begin
     odX:= dX;
     odY:= dY;
     skipLandCheck:= true;
-    if x - eX < 0 then dX:= -dX;
-    if y - eY < 0 then dY:= -dY;
     // ok. attempt approximate search for an unbroken trajectory into water.  if it continues far enough, assume out of map
     rCorner:= r * 0.75;
     while true do
@@ -395,7 +393,7 @@ begin
                     if ((Kind = gtMine) and (dxdy > 0.35)) or 
                        ((Kind = gtExplosives) and 
                             (((State and gstTmpFlag <> 0) and (dxdy > 0.35)) or
-                             ((State and gstTmpFlag <> 0) and 
+                             ((State and gstTmpFlag = 0) and 
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
@@ -444,14 +442,14 @@ begin
                 else 
                     begin
                     dxdy:= abs(dX)+abs(dY);
-                    if ((Kind = gtMine) and (dxdy > 0.35)) or 
+                    if ((Kind = gtMine) and (dxdy > 0.4)) or 
                        ((Kind = gtExplosives) and 
-                            (((State and gstTmpFlag <> 0) and (dxdy > 0.35)) or
-                             ((State and gstTmpFlag <> 0) and 
+                            (((State and gstTmpFlag <> 0) and (dxdy > 0.4)) or
+                             ((State and gstTmpFlag = 0) and 
                                 ((abs(odX) > 0.15) or ((abs(odY) > 0.15) and 
                                 (abs(odX) > 0.02))) and (dxdy > 0.35)))) then
                         begin
-                        dmg := trunc(dxdy * 25);
+                        dmg := trunc(dxdy * 50);
                         exit(dmg)
                         end
                     else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
@@ -521,14 +519,18 @@ for i:= 0 to Targets.Count do
                 pX:= Point.x;
                 pY:= Point.y;
                 fallDmg:= 0;
-                if (Flags and afTrackFall <> 0) and (dmg < abs(Score)) then
+                if (Flags and afTrackFall <> 0) and (Score > 0) and (dmg < Score) then
                     begin
                     dX:= (0.005 * dmg + 0.01) / Density;
                     dY:= dX;
-                    if (Kind = gtExplosives) and 
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
                        (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                         dX:= 0;
+
+                    if pX - x < 0 then dX:= -dX;
+                    if pY - y < 0 then dY:= -dY;
+
                     if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
                        (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
                          fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Targets.ar[i]) * dmgMod)
@@ -607,8 +609,13 @@ for i:= 0 to Pred(Targets.Count) do
                 pY:= Point.y-2;
                 fallDmg:= 0;
                 if (Flags and afSetSkip <> 0) then skip:= true;
-                if (Flags and afTrackFall <> 0) and (Score > 0) then
-                    fallDmg:= trunc(TraceShoveFall(pX, pY, dX, dY, Targets.ar[i]) * dmgMod);
+                if not(dead) and (Flags and afTrackFall <> 0) and (Score > 0) and (power < Score) then
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
+                       (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
+                        ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
+                        fallDmg:= trunc(TraceShoveFall(pX, pY, 0, dY, Targets.ar[i]) * dmgMod)
+                    else
+                        fallDmg:= trunc(TraceShoveFall(pX, pY, dX, dY, Targets.ar[i]) * dmgMod);
                 if Kind = gtHedgehog then
                     begin
                     if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
@@ -697,16 +704,23 @@ for i:= 0 to Targets.Count do
                 end;
             if dmg > 0 then
                 begin
-                pX:= Point.x;
-                pY:= Point.y;
-                dX:= gdX * dmg / Density;
-                dY:= gdY * dmg / Density;
-                if dX < 0 then dX:= dX - 0.01
-                else dX:= dX + 0.01;
-                if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
-                   (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
-                     fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Targets.ar[i]) * dmgMod)
-                else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Targets.ar[i]) * dmgMod);
+                if not(dead) and (Score > 0) and (dmg < Score) then
+                    begin
+                    pX:= Point.x;
+                    pY:= Point.y;
+                    dX:= gdX * dmg / Density;
+                    dY:= gdY * dmg / Density;
+                    if dX < 0 then dX:= dX - 0.01
+                    else dX:= dX + 0.01;
+                    if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
+                       (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
+                        ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then 
+                       dX:= 0;
+                    if (x and LAND_WIDTH_MASK = 0) and ((y+cHHRadius+2) and LAND_HEIGHT_MASK = 0) and
+                       (Land[y+cHHRadius+2, x] and lfIndestructible <> 0) then
+                         fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, 0, Targets.ar[i]) * dmgMod)
+                    else fallDmg:= trunc(TraceFall(x, y, pX, pY, dX, dY, erasure, Targets.ar[i]) * dmgMod)
+                    end;
                 if Kind = gtHedgehog then
                     begin
                     if fallDmg < 0 then // drowning. score healthier hogs higher, since their death is more likely to benefit the AI
