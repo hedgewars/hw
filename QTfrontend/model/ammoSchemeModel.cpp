@@ -194,7 +194,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(false)         // place hog      14
             << QVariant(true)          // shared ammo    15
             << QVariant(true)          // disable girders 16
-            << QVariant(false)         // disable land objects 17
+            << QVariant(true)         // disable land objects 17
             << QVariant(false)         // AI survival    18
             << QVariant(false)         // inf. attack    19
             << QVariant(true)          // reset weps     20
