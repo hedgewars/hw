@@ -476,7 +476,7 @@ repeat
     else
         Score:= BadTurn;
 
-     if valueResult < Score then
+     if Score > 0 then
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level * 2));
         ap.Power:= trunc(sqrt(r) * cMaxPower) + AIrndSign(random(Level) * 15);
@@ -683,7 +683,7 @@ var Vx, Vy, x, y, t: real;
     d: Longword;
     fallDmg, valueResult: LongInt;
 begin
-if Level > 4 then exit(BadTurn);
+if (Level > 4) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 1;
 ap.Time:= 0;
@@ -726,7 +726,7 @@ var Vx, Vy, x, y, t, dmg: real;
     d: Longword;
     fallDmg: LongInt;
 begin
-if Level > 3 then exit(BadTurn);
+if (Level > 3) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
 ap.ExplR:= 0;
 ap.Time:= 0;
