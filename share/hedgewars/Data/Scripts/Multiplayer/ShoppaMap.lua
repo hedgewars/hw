@@ -344,16 +344,17 @@ function onGameInit()
     TemplateFilter = 0
     TotGen = 0
     Tries = 0
-    if GetRandom(2) == 0 then
-        AddPoint(-50,2030,10)
-        AddPoint(4150,2030)
+    if band(GameFlags,gfBottomBorder) == 0 and GetRandom(2) == 0 then
+        AddPoint(-50,2010,7)
+        AddPoint(4150,2010)
         for i = 0,GetRandom(3) do
             x = GetRandom(4096)
-            AddPoint(x,2200,GetRandom(50),true)
+            w = GetRandom(40)+10
+            AddPoint(x,2200,w,true)
             AddPoint(x,1900)
+            AddCollision(x,2010,w*10+6,76)
         end
     end
-        
         
     if GetRandom(2) == 0 then
         l = GetRandom(3)+1
