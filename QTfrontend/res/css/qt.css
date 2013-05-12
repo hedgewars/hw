@@ -333,3 +333,7 @@ border-top-left-radius: 0px;
 TeamSelWidget, #gameStackContainer, #GBoxOptions {
 border-radius: 10px;
 }
+
+TeamSelWidget {
+min-height: 500px;
+}

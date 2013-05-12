@@ -450,11 +450,11 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Charger un carte dessinée</translation>
+        <translation>Charger un dessin</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Editer un carte dessinée</translation>
+        <translation>Editer un dessin</translation>
     </message>
     <message>
         <source>Small islands</source>
