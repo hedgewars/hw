@@ -2262,6 +2262,7 @@ ScriptSetInteger('gfForts', gfForts);
 ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);
 ScriptSetInteger('gfSolidLand', gfSolidLand);
 ScriptSetInteger('gfBorder', gfBorder);
+ScriptSetInteger('gfBottomBorder', gfBottomBorder);
 ScriptSetInteger('gfDivideTeams', gfDivideTeams);
 ScriptSetInteger('gfLowGravity', gfLowGravity);
 ScriptSetInteger('gfLaserSight', gfLaserSight);
