@@ -941,11 +941,10 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 5
-	MapGen = 0
-  TemplateFilter = 6
-  TemplateNumber = 27
-	Theme = "Nature"
-  SuddenDeathTurns = 3000
+    Map = "A_Classic_Fairytale_journey"
+    Theme = "Nature"
+
+    SuddenDeathTurns = 3000
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
