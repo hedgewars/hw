@@ -608,9 +608,7 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-	MapGen = 0
-  TemplateFilter = 6
-  TemplateNumber = 33
+	Map = "A_Classic_Fairytale_first_blood"
 	Theme = "Nature"
 
 

@@ -845,11 +845,9 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-	MapGen = 0
-  TemplateFilter = 6
-  TemplateNumber = 22
+	Map = "A_Classic_Fairytale_shadow"
 	Theme = "Nature"
-  SuddenDeathTurns = 3000
+    SuddenDeathTurns = 3000
 
   AddHogs()
   PlaceHogs()
