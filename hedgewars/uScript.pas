@@ -2039,7 +2039,8 @@ else
     // call the script file
     lua_pcall(luaState, 0, 0, 0);
     ScriptLoaded:= true
-    end
+    end;
+    hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 end;
 
 procedure SetGlobals;

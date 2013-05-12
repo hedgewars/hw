@@ -46,6 +46,7 @@ function pfsExists(fname: shortstring): boolean;
 
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
+procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
 uses uUtils, uVariables, sysutils;
