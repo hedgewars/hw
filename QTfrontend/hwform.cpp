@@ -598,6 +598,10 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 #endif
 
     qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
+    if (lastid == ID_PAGE_MAIN)
+    {
+        ui.pageMain->toggleNetworkChoice();
+    }
 
     // pageEnter and pageLeave events
     ((AbstractPage*)ui.Pages->widget(lastid))->triggerPageLeave();

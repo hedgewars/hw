@@ -120,8 +120,8 @@ QLayout * PageMain::footerLayoutDefinition()
 void PageMain::connectSignals()
 {
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    //connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    //connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     // TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 

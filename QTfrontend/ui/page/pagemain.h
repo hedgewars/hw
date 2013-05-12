@@ -41,6 +41,9 @@ class PageMain : public AbstractPage
         QPushButton * BtnVideos;
         QLabel * mainNote;
 
+    public slots:
+        void toggleNetworkChoice();
+
     private:
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
@@ -49,8 +52,6 @@ class PageMain : public AbstractPage
 
         QString randomTip() const;
 
-    private slots:
-        void toggleNetworkChoice();
 };
 
 #endif
