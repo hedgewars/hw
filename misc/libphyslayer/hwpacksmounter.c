@@ -33,3 +33,24 @@ PHYSFS_DECL void hedgewarsMountPackages()
 
     PHYSFS_freeList(filesList);
 }
+
+PHYSFS_DECL void hedgewarsMountPackage(char * fileName)
+{
+    int fileNameLength = strlen(fileName);
+    if (fileNameLength > 4)
+        if (strcmp(fileName + fileNameLength - 4, ".hwp") == 0)
+        {
+            const char * dir = PHYSFS_getRealDir(fileName);
+            if(dir)
+            {
+                char * fullPath = (char *)malloc(strlen(dir) + fileNameLength + 2);
+                strcpy(fullPath, dir);
+                strcat(fullPath, "/");
+                strcat(fullPath, fileName);
+
+                PHYSFS_mount(fullPath, NULL, 0);
+
+                free(fullPath);
+            }
+        }
+}
