@@ -352,7 +352,10 @@ function onGameInit()
             w = GetRandom(40)+10
             AddPoint(x,2200,w,true)
             AddPoint(x,1900)
-            AddCollision(x,2010,w*10+6,76)
+            table.insert(ObjectList,{x-div(w*9,2),
+                                     2010-div(100,2),
+                                     x+div(w*9,2),
+                                     2010+div(100,2)})
         end
     end
         
