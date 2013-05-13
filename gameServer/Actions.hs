@@ -216,12 +216,12 @@ processAction (ChangeMaster delegateId)= do
                 , name = newRoomName
                 , isRestrictedJoins = False
                 , isRestrictedTeams = False
-                , isRegisteredOnly = False
-                , readyPlayers = if isReady newMaster then readyPlayers r else readyPlayers r + 1})
-        , ModifyClient2 newMasterId (\c -> c{isMaster = True, isReady = True})
+                , isRegisteredOnly = False}
+                )
+        , ModifyClient2 newMasterId (\c -> c{isMaster = True})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+hr", nick newMaster]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
         ]
 
     newRoom' <- io $ room'sM rnc id ri
