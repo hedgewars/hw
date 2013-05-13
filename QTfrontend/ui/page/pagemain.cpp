@@ -189,3 +189,10 @@ void PageMain::toggleNetworkChoice()
     if (visible)    BtnNet->setIcon(originalNetworkIcon);
     else            BtnNet->setIcon(disabledNetworkIcon);
 }
+
+void PageMain::resetNetworkChoice()
+{
+    BtnNetLocal->setVisible(false);
+    BtnNetOfficial->setVisible(false);
+    BtnNet->setIcon(originalNetworkIcon);
+}
