@@ -1377,13 +1377,11 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
 
     //nick and pass stuff
-    QString nickname = config->value("net/nick", "").toString();
-
     hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
-    if (hwnet->m_private_game == false)
-        if (AskForNickAndPwd() != 0)
-            return;
+    if (hwnet->m_private_game == false && AskForNickAndPwd() != 0)
+        return;
 
+    QString nickname = config->value("net/nick", "").toString();
     ui.pageRoomsList->setUser(nickname);
     ui.pageNetGame->setUser(nickname);
 
@@ -1396,16 +1394,18 @@ int HWForm::AskForNickAndPwd(void)
     config->clearTempHash();
 
     //initialize
-    QString hash = config->passwordHash();
-    QString temphash = config->tempHash();
-    QString nickname = config->value("net/nick", "").toString();
+    QString hash;
+    QString temphash;
+    QString nickname;
     QString password;
 
-    //if something from login is missing, start dialog loop
-    if (nickname.isEmpty() || hash.isEmpty())
-    {
-        while (nickname.isEmpty() || (hash.isEmpty() && temphash.isEmpty())) //while a nickname, or both hashes are missing
-        {
+    do {
+        nickname = config->value("net/nick", "").toString();
+        hash = config->passwordHash();
+        temphash = config->tempHash();
+
+        //if something from login is missing, start dialog loop
+        if (nickname.isEmpty() || hash.isEmpty()) {
             //open dialog
             HWPasswordDialog * pwDialog = new HWPasswordDialog(this);
             // make the "new account" button dialog open a browser with the registration page
@@ -1422,62 +1422,54 @@ int HWForm::AskForNickAndPwd(void)
             if (pwDialog->exec() != QDialog::Accepted) {
                 delete pwDialog;
                 GoBack();
-                return -1;
+                break;
             }
 
             //set nick and pass from the dialog
             nickname = pwDialog->leNickname->text();
             password = pwDialog->lePassword->text();
+            bool save = pwDialog->cbSave->isChecked();
+            //clean up
+            delete pwDialog;
 
             //check the nickname variable
             if (nickname.isEmpty()) {
                 int retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
                 GoBack();
-                delete pwDialog;
                 if (retry) {
                     if (hwnet->m_private_game) {
                         QStringList list = hwnet->getHost().split(":");
                         NetConnectServer(list.at(0), list.at(1).toShort());
                     } else
                         NetConnectOfficialServer();
-                    }
-                return -1;
+                }
+                break; //loop restart
+            } else {
+                //update nickname if it's fine
+                config->setValue("net/nick", nickname);
+                config->updNetNick();
             }
 
-            if (!password.isEmpty()) {
+            //check the password variable
+            if (password.isEmpty()) {
+                config->clearPasswordHash();
+                break;
+            }  else {
                 //calculate temphash and set it into config
                 temphash = QCryptographicHash::hash(password.toUtf8(), QCryptographicHash::Md5).toHex();
                 config->setTempHash(temphash);
 
                 //if user wants to save password
-                bool save = pwDialog->cbSave->isChecked();
                 config->setValue("net/savepassword", save);
-                if (save) // user wants to save password
-                {
+                if (save) {
+                    // user wants to save password
                     ui.pageOptions->CBSavePassword->setChecked(true);
                     config->setPasswordHash(temphash);
                 }
             }
-            else {
-                delete pwDialog;
-                config->setValue("net/nick", nickname);
-                config->updNetNick();
-                config->clearPasswordHash();
-                break;
-            }
-
-            delete pwDialog;
-
-            //update nickname
-            config->setValue("net/nick", nickname);
-            config->updNetNick();
-
-            //and all the variables
-            hash = config->passwordHash();
-            temphash = config->tempHash();
-            nickname = config->value("net/nick", "").toString();
         }
-    }
+    } while (nickname.isEmpty() || (hash.isEmpty() && temphash.isEmpty())); //while a nickname, or both hashes are missing
+
     return 0;
 }
 
