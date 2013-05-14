@@ -498,7 +498,11 @@ begin
     or (Gear^.Kind = gtBall) then
         CalcRotationDirAngle(Gear)
     else if (GameTicks and $1F) = 0 then
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        begin
+        if hwRound(Gear^.Y) > cWaterLine then
+             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
+        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -515,7 +519,11 @@ begin
         exit
         end;
     if (GameTicks and $3F) = 0 then
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
+        begin
+        if hwRound(Gear^.Y) > cWaterLine then
+             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
+        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2438,7 +2446,11 @@ begin
         end;
 
     if (GameTicks and $3F) = 0 then
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        begin
+        if hwRound(Gear^.Y) > cWaterLine then
+             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
+        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -2938,7 +2950,11 @@ begin
     doStepFallingGear(Gear);
 
     if (GameTicks and $3F) = 0 then
-        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
+        begin
+        if hwRound(Gear^.Y) > cWaterLine then
+             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
+        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
+        end;
 
     if ((Gear^.State and gstCollision) <> 0) then
         begin
