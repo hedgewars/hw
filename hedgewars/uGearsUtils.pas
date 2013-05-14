@@ -407,7 +407,7 @@ begin
                         if Gear^.Kind = gtFlake then
                             exit // skip splashes 
                 end
-            else if (Y > cWaterLine + cVisibleWater) and 
+            else if (Y > cWaterLine + cVisibleWater*4) and 
                     ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack)) then
                 Gear^.doStep:= @doStepDrowningGear;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
