@@ -178,11 +178,18 @@ begin
     if Gear^.dY.Round > 2 then
         Gear^.dY.QWordValue:= 8589934592;
 
+    if (Gear^.State and gstSubmersible <> 0) and (hwRound(Gear^.Y) > cWaterLine) then
+        begin
+        Gear^.dX:= Gear^.dX * _0_999;
+        Gear^.dY:= Gear^.dY * _0_999
+        end;
+
     Gear^.State := Gear^.State and (not gstCollision);
     collV := 0;
     collH := 0;
     tdX := Gear^.dX;
     tdY := Gear^.dY;
+
 
 
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
