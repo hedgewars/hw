@@ -408,7 +408,7 @@ begin
                             exit // skip splashes 
                 end;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
             and (CurAmmoGear^.dY < _0_01))) then
                 if Gear^.Density * Gear^.dY > _1 then
                     PlaySound(sndSplash)
@@ -420,7 +420,7 @@ begin
 
         if ((cReducedQuality and rqPlainSplash) = 0)
         and (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
         and (CurAmmoGear^.dY < _0_01)))) then
             begin
             splash:= AddVisualGear(X, cWaterLine, vgtSplash);
@@ -461,7 +461,7 @@ begin
                         end
                 end
             end;
-        if isSubmersible and (CurAmmoGear^.Pos = 0) then
+        if isSubmersible and (Gear = CurAmmoGear) and (CurAmmoGear^.Pos = 0) then
             CurAmmoGear^.Pos := 1000
         end
     else
