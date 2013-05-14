@@ -3274,7 +3274,7 @@ begin
     if // (Gear^.Health = 0)
         (HHGear^.Damage <> 0)
         //or CheckGearDrowning(HHGear)
-        or (cWaterLine + 512 < hwRound(HHGear^.Y))
+        or (cWaterLine + cVisibleWater * 4 < hwRound(HHGear^.Y))
         or (TurnTimeLeft = 0)
         // allow brief ground touches - to be fair on this, might need another counter
         or (((GameTicks and $1FF) = 0) and (not HHGear^.dY.isNegative) and (TestCollisionYwithGear(HHGear, 1) <> 0))

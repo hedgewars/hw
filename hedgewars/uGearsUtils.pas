@@ -369,7 +369,7 @@ begin
         vdX:= hwFloat2Float(Gear^.dX);
         vdY:= hwFloat2Float(Gear^.dY);
         // this could perhaps be a tiny bit higher.
-        if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        if  (cWaterLine + 64 + Gear^.Radius > Y) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) 
         and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
             begin
             Gear^.dY.isNegative := true;
@@ -406,7 +406,10 @@ begin
                         Gear^.doStep := @doStepDrowningGear;
                         if Gear^.Kind = gtFlake then
                             exit // skip splashes 
-                end;
+                end
+            else if (Y > cWaterLine + cVisibleWater) and 
+                    ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack)) then
+                Gear^.doStep:= @doStepDrowningGear;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
             or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
             and (CurAmmoGear^.dY < _0_01))) then
