@@ -361,7 +361,7 @@ begin
             else DeleteGear(Gear);
             exit
             end;
-        isSubmersible:= ((Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack)) or (Gear^.State and gstNoDrown <> 0);
+        isSubmersible:= ((Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0)) or (Gear^.State and gstSubmersible <> 0);
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
@@ -408,7 +408,7 @@ begin
                             exit // skip splashes 
                 end
             else if (Y > cWaterLine + cVisibleWater*4) and 
-                    ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack)) then
+                    ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.State and gstSubmersible = 0)) then
                 Gear^.doStep:= @doStepDrowningGear;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
             or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)

@@ -212,7 +212,7 @@ const
     gstLoser          = $00080000;
     gstHHGone         = $00100000;
     gstInvisible      = $00200000;
-    gstNoDrown        = $00400000;
+    gstSubmersible        = $00400000;
 
     // gear messages
     gmLeft           = $00000001;

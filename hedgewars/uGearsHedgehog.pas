@@ -259,16 +259,8 @@ with Gear^,
                 begin
                 if (CurAmmoGear^.AmmoType = amJetpack) and (Gear^.Message and gmPrecise <> 0) then
                     begin
-                    if hwRound(Gear^.Y) > cWaterLine then
-                        begin
-                        newDx:= xx*cMaxPower/cPowerDivisor/2;
-                        newDy:= yy*cMaxPower/cPowerDivisor/2
-                        end
-                    else
-                        begin
-                        newDx:= xx*cMaxPower/cPowerDivisor;
-                        newDy:= yy*cMaxPower/cPowerDivisor
-                        end
+                    newDx:= xx*cMaxPower/cPowerDivisor;
+                    newDy:= yy*cMaxPower/cPowerDivisor
                     end
                 else
                     begin
@@ -409,7 +401,7 @@ with Gear^,
                end;
             if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack) and
                (Gear^.Message and gmPrecise <> 0) and (hwRound(Y) > cWaterLine) then
-                newGear^.State:= newGear^.State or gstNoDrown;
+                newGear^.State:= newGear^.State or gstSubmersible;
 
             case CurAmmoType of
                      amGrenade, amMolotov,
@@ -534,7 +526,9 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and (hwRound(CurAmmoGear^.Y) > cWaterLine) then
+                     TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
+                else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;

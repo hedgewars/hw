@@ -278,7 +278,9 @@ with Hedgehog do
                 PackAmmo(Ammo, Ammoz[AmmoType].Slot);
                 //SwitchNotHeldAmmo(Hedgehog);
                 if CurAmmoType = amKnife then LoadHedgehogHat(Hedgehog, Hedgehog.Hat);
-                CurAmmoType:= amNothing
+                if CurAmmoGear <> nil then 
+                    SetWeapon(CurAmmoGear^.AmmoType)
+                else CurAmmoType:= amNothing;
                 end
             end
     end;
