@@ -3181,10 +3181,11 @@ begin
     move:= _0_02;
     fuel:= 5;
     end;*)
-
-    if Gear^.Health > 0 then
+    if HHGear^.Message and gmPrecise <> 0 then
+        HedgehogChAngle(HHGear)
+    else if Gear^.Health > 0 then
         begin
-        if (HHGear^.Message and gmUp) <> 0 then
+        if HHGear^.Message and gmUp <> 0 then
             begin
             if (not HHGear^.dY.isNegative) or (HHGear^.Y > -_256) then
                 begin
@@ -3251,10 +3252,12 @@ begin
         Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) + '%', cWhiteColor, fntSmall)
         end;
 
-    if HHGear^.Message and (gmAttack or gmUp or gmPrecise or gmLeft or gmRight) <> 0 then
+    if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
+       (HHGear^.Message and gmPrecise = 0) then
         Gear^.State := Gear^.State and (not gsttmpFlag);
 
-    HHGear^.Message := HHGear^.Message and (not (gmUp or gmPrecise or gmLeft or gmRight));
+    if HHGear^.Message and gmPrecise = 0 then
+        HHGear^.Message := HHGear^.Message and (not (gmUp or gmLeft or gmRight));
     HHGear^.State := HHGear^.State or gstMoving;
 
     Gear^.X := HHGear^.X;
