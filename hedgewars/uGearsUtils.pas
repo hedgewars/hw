@@ -361,7 +361,7 @@ begin
             else DeleteGear(Gear);
             exit
             end;
-        isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
+        isSubmersible:= ((Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack)) or (Gear^.State and gstNoDrown <> 0);
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;

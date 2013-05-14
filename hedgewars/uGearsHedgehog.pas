@@ -257,8 +257,24 @@ with Gear^,
             and ((Gear^.Message and gmLJump) <> 0)
             and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
                 begin
-                newDx:= dX;
-                newDy:= dY;
+                if (CurAmmoGear^.AmmoType = amJetpack) and (Gear^.Message and gmPrecise <> 0) then
+                    begin
+                    if hwRound(Gear^.Y) > cWaterLine then
+                        begin
+                        newDx:= xx*cMaxPower/cPowerDivisor/2;
+                        newDy:= yy*cMaxPower/cPowerDivisor/2
+                        end
+                    else
+                        begin
+                        newDx:= xx*cMaxPower/cPowerDivisor;
+                        newDy:= yy*cMaxPower/cPowerDivisor
+                        end
+                    end
+                else
+                    begin
+                    newDx:= dX;
+                    newDy:= dY
+                    end;
                 altUse:= true
                 end
             else
@@ -385,11 +401,15 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
             end;
-            if altUse and (newGear <> nil) then
+            if altUse and (newGear <> nil) and 
+               ((CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack) or (Gear^.Message and gmPrecise = 0)) then
                begin
                newGear^.dX:= newDx / newGear^.Density;
                newGear^.dY:= newDY / newGear^.Density
                end;
+            if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack) and
+               (Gear^.Message and gmPrecise <> 0) and (hwRound(Y) > cWaterLine) then
+                newGear^.State:= newGear^.State or gstNoDrown;
 
             case CurAmmoType of
                      amGrenade, amMolotov,
@@ -798,7 +818,7 @@ with HHGear^.Hedgehog^ do
         da:= 2
     else da:= 1;
 
-if (((HHGear^.Message and gmPrecise) = 0) or ((GameTicks mod 5) = 1)) then
+if ((HHGear^.Message and gmPrecise = 0) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack))) or (GameTicks mod 5 = 1) then
     if ((HHGear^.Message and gmUp) <> 0) and (HHGear^.Angle >= CurMinAngle + da) then
         dec(HHGear^.Angle, da)
     else

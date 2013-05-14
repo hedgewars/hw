@@ -1765,7 +1765,6 @@ var
             Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
-                          ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
