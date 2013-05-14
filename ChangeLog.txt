@@ -2,15 +2,21 @@
 * bugfixes
 
 0.9.18 -> 0.9.19:
- + new icegun weapon
- + main graphical user interface overhaul
- + up and down keys navigate in chat history
- + several commands from chat available
- + support hwplay:// scheme syntax
- + supply full revision and hash information in version tag
- + better set of options for driving engine
+ + New Freezer weapon - freezes terrain, water, hedgehogs
+ + Saucer can aim weapons and fire underwater
+ + Main graphical user interface overhaul
+ + Up and down keys navigate in chat history
+ + Several commands from chat available
+ + Support hwplay:// scheme syntax
+ + Supply full revision and hash information in version tag
+ + Better set of options for driving engine
+ + Downloadable content can now be stored in packages for easy uninstall
+ + Lua scripts can load a sidecar overlay package of game resources
+ + Math improvements for better performance/reliability
+ + Smarter AI - now uses drill rocket accurately and is aware of barrels and dud mines.
  * rope sliding
  * forbid kicking on 1v1 matches
+ * desync fixes
 
 0.9.17 -> 0.9.18:
 
