@@ -14,9 +14,16 @@
  + Lua scripts can load a sidecar overlay package of game resources
  + Math improvements for better performance/reliability
  + Smarter AI - now uses drill rocket accurately and is aware of barrels and dud mines.
- * rope sliding
- * forbid kicking on 1v1 matches
- * desync fixes
+ + New fort, Steel Tower
+ + New theme, Fruit
+ + New hats - some national ones, Portal, harlequin, more animals...
+ + Translation updates - Turkish, French, German, Japanese, Portuguese, Italian, Russian - Campaign french should work correctly now
+ + Theme object masks
+ * Rope sliding should behave more like pre-0.9.18 again
+ * Forbid kicking on 1v1 matches
+ * Desync fixes
+ * Fixed fort mode
+ * Making very large maps now works properly with targetted weapons
 
 0.9.17 -> 0.9.18:
 
