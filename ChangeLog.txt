@@ -19,11 +19,15 @@
  + New hats - some national ones, Portal, harlequin, more animals...
  + Translation updates - Turkish, French, German, Japanese, Portuguese, Italian, Russian - Campaign french should work correctly now
  + Theme object masks
+ + Easier weapon selection in shoppa. F1 will select from F5 if there are no weps in F1-F4
+ + Cleaver radius shrunk to improve usability on horizontal throws
+ * You can now move out of the way when throwing a sticky mine or cleaver straight up
  * Rope sliding should behave more like pre-0.9.18 again
  * Forbid kicking on 1v1 matches
  * Desync fixes
  * Fixed fort mode
  * Making very large maps now works properly with targetted weapons
+ * ParseCommand should be safe to use in Lua now, at any time
 
 0.9.17 -> 0.9.18:
 
