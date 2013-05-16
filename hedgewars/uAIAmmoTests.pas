@@ -171,7 +171,7 @@ repeat
         if Level = 1 then
             value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
         else value:= RateExplosion(Me, EX, EY, 101);
-        if (value = 0) and (Targ.Kind = gtHedgehog) then
+        if (value = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             value:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, EX, EY) div 64;
         if valueResult <= value then
             begin
@@ -607,7 +607,7 @@ begin
     if (EY < cWaterLine) and (dY >= 0) then
         begin
         Score:= RateExplosion(Me, EX, EY, 91);
-        if (Score = 0) then
+        if (Score = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             if (dY > 0.15) then
                 Score:= - abs(Targ.Point.Y - EY) div 32
             else
@@ -618,7 +618,7 @@ begin
     else
         Score:= BadTurn;
 
-    if BadTurn < Score then
+    if Score > 0 then
         begin
         ap.Angle:= DxDy2AttackAnglef(Vx, Vy) + AIrndSign(random(Level));
         ap.Power:= 1;
@@ -662,7 +662,7 @@ repeat
         y:= y + vY * 8;
         valueResult:= RateShotgun(Me, vX, vY, rx, ry);
 
-        if (valueResult = 0) and (Targ.Kind = gtHedgehog) then
+        if (valueResult = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
             valueResult:= 1024 - Metric(Targ.Point.X, Targ.Point.Y, rx, ry) div 64
         else
             dec(valueResult, Level * 4000);
