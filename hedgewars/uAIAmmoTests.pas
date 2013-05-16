@@ -607,8 +607,8 @@ begin
     if (EY < cWaterLine) and (dY >= 0) then
         begin
         Score:= RateExplosion(Me, EX, EY, 91);
-        if (Score = 0) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
-            if (dY > 0.15) then
+        if (Score = 0) then
+            if (dY > 0.15) and (Targ.Kind = gtHedgehog) and (Targ.Score > 0) then
                 Score:= - abs(Targ.Point.Y - EY) div 32
             else
                 Score:= BadTurn
