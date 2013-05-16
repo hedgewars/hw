@@ -16,41 +16,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QDir>
-#include <QFile>
-#include <QTextStream>
-#include <QPushButton>
-#include <QListWidget>
-#include <QStackedLayout>
-#include <QLineEdit>
-#include <QLabel>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QCloseEvent>
-#include <QCheckBox>
-#include <QTextBrowser>
-#include <QAction>
-#include <QTimer>
-#include <QScrollBar>
-#include <QDataWidgetMapper>
-#include <QTableView>
-#include <QCryptographicHash>
-#include <QSignalMapper>
-#include <QShortcut>
-#include <QDesktopServices>
-#include <QInputDialog>
-#include <QPropertyAnimation>
-#include <QSettings>
-
 #include "campaign.h"
-#include "gameuiconfig.h"
-#include "hwconsts.h"
-#include "gamecfgwidget.h"
-#include "bgwidget.h"
-#include "mouseoverfilter.h"
-#include "tcpBase.h"
 
-#include "DataManager.h"
+#include "hwconsts.h"
+
+#include <QSettings>
 
 extern QString campaign, campaignTeam;
 
