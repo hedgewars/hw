@@ -22,7 +22,6 @@
 
 #include <QSettings>
 
-extern QString campaign, campaignTeam;
 
 QStringList getCampMissionList(QString & campaign)
 {
