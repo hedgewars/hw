@@ -2176,7 +2176,7 @@ var
                 AmmoType: amLandGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2201,7 +2201,7 @@ var
                 AmmoType: amIceGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 9;
+            Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
