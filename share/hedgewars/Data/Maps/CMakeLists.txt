@@ -6,6 +6,7 @@ foreach(dir
     Battlefield
     Blizzard
     Blox
+    Bones
     Bubbleflow
     Cake
     Castle
