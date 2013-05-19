@@ -14,6 +14,7 @@ foreach(dir
     Cogs
     Control
     CrazyMission
+    Crystal
     CTF_Blizzard
     EarthRise
     Eyes
