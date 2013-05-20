@@ -19,6 +19,7 @@ foreach(dir
     CTF_Blizzard
     EarthRise
     Eyes
+    Grassy
     Hammock
     HedgeFortress
     Hedgelove
