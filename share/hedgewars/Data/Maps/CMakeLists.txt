@@ -6,7 +6,6 @@ foreach(dir
     Battlefield
     Blizzard
     Blox
-    Bones
     Bubbleflow
     Cake
     Castle
@@ -15,13 +14,10 @@ foreach(dir
     Cogs
     Control
     CrazyMission
-    Crystal
     CTF_Blizzard
     EarthRise
     Eyes
-    Grassy
     Hammock
-    Haunty
     HedgeFortress
     Hedgelove
     Hedgewars
@@ -37,6 +33,11 @@ foreach(dir
     portal
     Ropes
     Ruler
+    SB_Bones
+    SB_Crystal
+    SB_Grassy
+    SB_Haunty
+    SB_Oaks
     Sheep
     ShoppaKing
     Sticks
