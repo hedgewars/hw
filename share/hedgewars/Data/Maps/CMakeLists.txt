@@ -21,6 +21,7 @@ foreach(dir
     Eyes
     Grassy
     Hammock
+    Haunty
     HedgeFortress
     Hedgelove
     Hedgewars
