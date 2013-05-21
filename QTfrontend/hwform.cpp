@@ -319,8 +319,6 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageMain->BtnNetLocal, SIGNAL(clicked()), this, SLOT(GoToNet()));
     connect(ui.pageMain->BtnNetOfficial, SIGNAL(clicked()), this, SLOT(NetConnectOfficialServer()));
 
-    connect(ui.pageConnecting, SIGNAL(cancelConnection()), this, SLOT(GoBack()));
-
     connect(ui.pageVideos, SIGNAL(goBack()), config, SLOT(SaveVideosOptions()));
 
     ammoSchemeModel = new AmmoSchemeModel(this, cfgdir->absolutePath() + "/schemes.ini");

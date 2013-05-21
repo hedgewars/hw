@@ -381,7 +381,7 @@ processAction CheckRegistered = do
         if p < 38 then
             processAction $ ByeClient $ loc "Nickname is already in use"
             else
-            processAction $ NoticeMessage NickAlreadyInUse
+            mapM_ processAction [NoticeMessage NickAlreadyInUse, ModifyClient $ \c -> c{nick = B.empty}]
         else
         do
         db <- gets (dbQueries . serverInfo)
