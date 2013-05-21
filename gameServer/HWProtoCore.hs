@@ -43,12 +43,12 @@ handleCmd ("CMD" : parameters) =
     where
         h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
         h ["STATS"] = handleCmd ["STATS"]
-        h ["PART", msg] = handleCmd ["PART", msg]
-        h ["QUIT", msg] = handleCmd ["QUIT", msg]
-        h ["GLOBAL", msg] = do
+        h ("PART":m:ms) = handleCmd ["PART", B.unwords $ m:ms]
+        h ("QUIT":m:ms) = handleCmd ["QUIT", B.unwords $ m:ms]
+        h ("GLOBAL":m:ms) = do
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            return [AnswerClients chans ["CHAT", "[global notice]", msg]]
+            return [AnswerClients chans ["CHAT", "[global notice]", B.unwords $ m:ms]]
         h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
 
 handleCmd cmd = do
