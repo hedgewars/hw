@@ -348,6 +348,10 @@ handleCmd_inRoom ["BAN", banNick] = do
         else
         return []
 
+handleCmd_inRoom ("RND":rs) = do
+    n <- clientNick
+    s <- roomClientsChans
+    return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 

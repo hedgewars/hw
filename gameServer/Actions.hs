@@ -20,6 +20,7 @@ import Control.Arrow
 import Control.Exception
 import System.Process
 import Network.Socket
+import System.Random
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -613,6 +614,12 @@ processAction Stats = do
                     , "</td></tr>"])
             . Set.toList $ keys
     processAction $ Warning versionsStats
+
+
+processAction (Random chans items) = do
+    let i = if null items then ["heads", "tails"] else items
+    n <- io $ randomRIO (0, length i - 1)
+    processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
 
 
 #if defined(OFFICIAL_SERVER)
