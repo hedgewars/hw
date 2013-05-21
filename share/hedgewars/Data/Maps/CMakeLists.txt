@@ -38,6 +38,7 @@ foreach(dir
     SB_Grassy
     SB_Haunty
     SB_Oaks
+    SB_Tentacles
     Sheep
     ShoppaKing
     Sticks

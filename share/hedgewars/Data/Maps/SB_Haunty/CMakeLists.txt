@@ -2,4 +2,4 @@ install(FILES
     map.png
     map.cfg
     preview.png
-    DESTINATION ${SHAREPATH}Data/Maps/Haunty)
+    DESTINATION ${SHAREPATH}Data/Maps/SB_Haunty)

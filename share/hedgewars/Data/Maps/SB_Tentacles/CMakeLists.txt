@@ -3,4 +3,4 @@ install(FILES
     mask.png
     map.cfg
     preview.png
-    DESTINATION ${SHAREPATH}Data/Maps/SB_Crystal)
+    DESTINATION ${SHAREPATH}Data/Maps/SB_Tentacles)
