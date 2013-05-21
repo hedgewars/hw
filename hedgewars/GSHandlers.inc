@@ -5109,17 +5109,6 @@ begin
     LastDamage:= nil;
     X:= Hedgehog^.Gear^.X;
     Y:= Hedgehog^.Gear^.Y;
-    //unfreeze all semifrozen hogs - make this generic hog cleanup
-(*
-    iter := GearsList;
-    while iter <> nil do
-        begin
-        if (iter^.Kind = gtHedgehog) and
-        (iter^.Hedgehog^.Effects[heFrozen] and $FF = 0) then
-        iter^.Hedgehog^.Effects[heFrozen]:= 0;
-        iter:= iter^.NextGear
-        end
-*)
   end;
 end;
 
@@ -5134,7 +5123,7 @@ const groundFreezingTime:Longint = 1000;
 const iceRadius = 32;
 const iceHeight = 40;
 var
-    HHGear: PGear;
+    HHGear, iter: PGear;
     landRect: TSDL_Rect;
     ndX, ndY: hwFloat;
     i, j, t, gX, gY: LongInt;
@@ -5204,6 +5193,28 @@ begin
                     landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
                     landRect.h := min(2*iceRadius, LAND_HEIGHT - landRect.y - 1);
                     UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
+                    
+                    // Freeze nearby mines/explosives/cases too
+                    iter := GearsList;
+                    while iter <> nil do
+                        begin
+                        if ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and 
+                           (abs(Gear^.X.Round-target.x)+abs(Gear^.Y.Round-target.y)+2<Gear^.Radius*2) and (Distance(Gear^.X-int2hwFloat(target.x),Gear^.Y-int2hwFloat(target.y))<int2hwFloat(Gear^.Radius*2)) then
+                            begin
+                            iter^.State:= iter^.State or gstFrozen;
+                            if iter^.Kind = gtMine then // dud mine block
+                                begin
+                                vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+                                if vg <> nil then
+                                    vg^.Scale:= 0.5;
+                                PlaySound(sndVaporize);
+                                Gear^.Health := 0;
+                                Gear^.Damage := 0;
+                                Gear^.State := Gear^.State and (not gstAttacking)
+                                end
+                            end;
+                        iter:= iter^.NextGear
+                        end;
 
                     // FillRoundInLandWithIce(Target.X, Target.Y, iceRadius);
                     SetAllHHToActive;
