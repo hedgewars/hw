@@ -93,13 +93,7 @@ begin
             ScriptCall('onGameStart');
             GameState:= gsGame;
             end;
-        gsConfirm, gsGame:
-            begin
-            if not cOnlyStats then DrawWorld(Lag);
-            DoGameTick(Lag);
-            if not cOnlyStats then ProcessVisualGears(Lag);
-            end;
-        gsChat:
+        gsConfirm, gsGame, gsChat:
             begin
             if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
@@ -168,10 +162,10 @@ begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
                         end
-                    else
-                        ProcessKey(event.key);
+                    else 
+                        if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if GameState <> gsChat then
+                    if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
                 SDL_WINDOWEVENT:
@@ -213,19 +207,19 @@ begin
                     if GameState = gsChat then
                         KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym)
                     else
-                        ProcessKey(event.key);
+                        if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if GameState <> gsChat then
+                    if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
                         ParseCommand('quit', true)
                     else
-                        ProcessMouse(event.button, true);
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
 
                 SDL_MOUSEBUTTONUP:
-                    ProcessMouse(event.button, false);
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
 
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
