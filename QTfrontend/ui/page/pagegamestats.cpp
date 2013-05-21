@@ -101,11 +101,22 @@ QLayout * PageGameStats::bodyLayoutDefinition()
 QLayout * PageGameStats::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
+    
+    mainNote = new QLabel(this);
+    mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mainNote->setWordWrap(true);
+    
+    bottomLayout->addWidget(mainNote, 0);
+    bottomLayout->setStretch(0,1);
 
-    btnRestart = addButton(":/res/Start.png", bottomLayout, 0, true);
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
+    btnRestart = addButton(":/res/Start.png", bottomLayout, 1, true);
+    btnRestart->setWhatsThis(tr("Play again"));
+    btnRestart->setFixedWidth(58);
+    btnRestart->setFixedHeight(81);
+    btnRestart->setStyleSheet("QPushButton{margin-top:24px}");
+    btnSave = addButton(":/res/Save.png", bottomLayout, 2, true);
+    btnSave->setWhatsThis(tr("Save"));
     btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
 
     return bottomLayout;
 }

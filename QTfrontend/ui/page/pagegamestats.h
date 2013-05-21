@@ -45,6 +45,7 @@ class PageGameStats : public AbstractPage
 
         QPushButton *btnSave;
         QPushButton *btnRestart;
+        QLabel *mainNote;
         QLabel *labelGameStats;
         QLabel *labelGameWin;
         QLabel *labelGameRank;
