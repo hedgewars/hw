@@ -1061,36 +1061,36 @@ begin
                         if ((Gear^.Pos and posCaseAmmo) <> 0) then
                             begin
                             if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprCase, x - 24, y - 28, 0)
+                            else
                                 begin
-                                DrawSprite(sprCase, x - 24, y - 28, 0);
-                                exit
-                                end;
-                            i:= (GameTicks shr 6) mod 64;
-                            if i > 18 then i:= 0;
-                            DrawSprite(sprCase, x - 24, y - 24, i)
+                                i:= (GameTicks shr 6) mod 64;
+                                if i > 18 then i:= 0;
+                                DrawSprite(sprCase, x - 24, y - 24, i)
+                                end
                             end
                         else if ((Gear^.Pos and posCaseHealth) <> 0) then
                             begin
                             if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprFAid, x - 24, y - 28, 0)
+                            else
                                 begin
-                                DrawSprite(sprFAid, x - 24, y - 28, 0);
-                                exit
-                                end;
-                            i:= ((GameTicks shr 6) + 38) mod 64;
-                            if i > 13 then i:= 0;
-                            DrawSprite(sprFAid, x - 24, y - 24, i);
+                                i:= ((GameTicks shr 6) + 38) mod 64;
+                                if i > 13 then i:= 0;
+                                DrawSprite(sprFAid, x - 24, y - 24, i)
+                                end
                             end
                         else if ((Gear^.Pos and posCaseUtility) <> 0) then
                             begin
                             if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprUtility, x - 24, y - 28, 0)
+                            else
                                 begin
-                                DrawSprite(sprUtility, x - 24, y - 28, 0);
-                                exit
-                                end;
-                            i:= (GameTicks shr 6) mod 70;
-                            if i > 23 then i:= 0;
-                            i:= i mod 12;
-                            DrawSprite(sprUtility, x - 24, y - 24, i);
+                                i:= (GameTicks shr 6) mod 70;
+                                if i > 23 then i:= 0;
+                                i:= i mod 12;
+                                DrawSprite(sprUtility, x - 24, y - 24, i)
+                                end
                             end
                         end;
                     if Gear^.Timer < 1833 then
