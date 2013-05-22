@@ -1586,6 +1586,7 @@ begin
     if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
         SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
+    if Gear^.Health < cBarrelHealth then Gear^.State:= Gear^.State and not gstFrozen;
 
     if ((Gear^.dX.QWordValue <> 0)
     or (Gear^.dY.QWordValue <> 0))  then
@@ -1671,6 +1672,7 @@ begin
                 Gear^.Message := Gear^.Message and (not (gmLJump or gmHJump));
         exit
         end;
+    if (k = gtExplosives) and (Gear^.Health < cBarrelHealth) then Gear^.State:= Gear^.State and not gstFrozen;
 
     if ((k <> gtExplosives) and (Gear^.Damage > 0)) or ((k = gtExplosives) and (Gear^.Health<=0)) then
         begin
@@ -5230,6 +5232,8 @@ begin
                                 DeleteCI(iter);
                                 AddGearCI(iter)
                                 end
+                            else // gtExplosives
+                                iter^.Health:= iter^.Health + cBarrelHealth
                             end;
                         iter:= iter^.NextGear
                         end;
