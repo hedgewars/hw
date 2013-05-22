@@ -1424,6 +1424,7 @@ procedure doStepMine(Gear: PGear);
 var vg: PVisualGear;
     dxdy: hwFloat;
 begin
+    if Gear^.Health = 0 then dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
     if (Gear^.State and gstMoving) <> 0 then
         begin
         DeleteCI(Gear);
@@ -1441,7 +1442,6 @@ begin
         doStepFallingGear(Gear);
     if (Gear^.Health = 0) then
         begin
-        dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
         if (dxdy > _0_4) and (Gear^.State and gstCollision <> 0) then
             inc(Gear^.Damage, hwRound(dxdy * _50));
 
