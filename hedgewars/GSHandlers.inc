@@ -5161,7 +5161,7 @@ begin
 
             if Target.X <> NoPointX then
                 begin
-                CheckCollisionWithLand(Gear);
+                CheckCollision(Gear);
                 if (State and gstCollision) <> 0 then
                     begin
                     if Timer = iceWaitCollision then
@@ -5198,19 +5198,37 @@ begin
                     iter := GearsList;
                     while iter <> nil do
                         begin
-                        if ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and 
-                           (abs(Gear^.X.Round-target.x)+abs(Gear^.Y.Round-target.y)+2<Gear^.Radius*2) and (Distance(Gear^.X-int2hwFloat(target.x),Gear^.Y-int2hwFloat(target.y))<int2hwFloat(Gear^.Radius*2)) then
+                        if (iter^.State and gstFrozen = 0) and
+                           ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and 
+                           (abs(iter^.X.Round-target.x)+abs(iter^.Y.Round-target.y)+2<2*iceRadius) and (Distance(iter^.X-int2hwFloat(target.x),iter^.Y-int2hwFloat(target.y))<int2hwFloat(iceRadius*2)) then
                             begin
+                            for t:= 0 to 5 do
+                                begin
+                                vg:= AddVisualGear(hwRound(iter^.X)+random(4)-8, hwRound(iter^.Y)+random(8), vgtDust, 1);
+                                if vg <> nil then
+                                    begin
+                                    i:= random(100) + 155;
+                                    vg^.Tint:= i shl 24 or i shl 16 or $FF shl 8 or Longword(random(200) + 55);
+                                    vg^.Angle:= random(360);
+                                    vg^.dx:= 0.001 * random(80);
+                                    vg^.dy:= 0.001 * random(80)
+                                    end
+                                end;
                             iter^.State:= iter^.State or gstFrozen;
                             if iter^.Kind = gtMine then // dud mine block
                                 begin
-                                vg:= AddVisualGear(hwRound(Gear^.X) - 4  + Random(8), hwRound(Gear^.Y) - 4 - Random(4), vgtSmoke);
+                                vg:= AddVisualGear(hwRound(iter^.X) - 4  + Random(8), hwRound(iter^.Y) - 4 - Random(4), vgtSmoke);
                                 if vg <> nil then
                                     vg^.Scale:= 0.5;
                                 PlaySound(sndVaporize);
-                                Gear^.Health := 0;
-                                Gear^.Damage := 0;
-                                Gear^.State := Gear^.State and (not gstAttacking)
+                                iter^.Health := 0;
+                                iter^.Damage := 0;
+                                iter^.State := iter^.State and (not gstAttacking)
+                                end
+                            else if iter^.Kind = gtCase then
+                                begin
+                                DeleteCI(iter);
+                                AddGearCI(iter)
                                 end
                             end;
                         iter:= iter^.NextGear

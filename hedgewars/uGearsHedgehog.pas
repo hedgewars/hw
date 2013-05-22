@@ -1079,7 +1079,7 @@ or (CurAmmoGear <> nil) then // we are moving
             HHGear^.Message:= HHGear^.Message or gmAttack;
     // check for case with ammo
     t:= CheckGearNear(HHGear, gtCase, 36, 36);
-    if t <> nil then
+    if (t <> nil) and (t^.State and gstFrozen = 0) then
         PickUp(HHGear, t)
     end;
 
