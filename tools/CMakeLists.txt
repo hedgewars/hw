@@ -33,6 +33,7 @@ if (APPLE)
     if(NOT NOPNG)
         #get the neme of the library (harmelss if it is static)
         string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
+        string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
     endif()
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})

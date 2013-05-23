@@ -16,6 +16,7 @@ if(NOT ${NOPNG})
     #same here, for libpng and hwengine, let's assume the version pulled by macdeployqt is the same
     #(yes libpng is pulled by macdeployqt even when NOVIDEOREC is active)
     execute_process(COMMAND install_name_tool -change ${PNG_LIBRARY} @executable_path/../Frameworks/${PNG_LIBNAME} ${engine_full_path})
+    execute_process(COMMAND install_name_tool -change ${ZLIB_LIBRARY} @executable_path/../Frameworks/${ZLIB_LIBNAME} ${engine_full_path})
 endif()
 
 if(doBundle EQUAL 1)
