@@ -899,6 +899,14 @@ just enter your nickname.</source>
             <numerusform>Ο &lt;b&gt;%1&lt;/b&gt; φοβήθηκε και παραχώρησε τη σειρά του &lt;b&gt;%2&lt;/b&gt; φορές.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

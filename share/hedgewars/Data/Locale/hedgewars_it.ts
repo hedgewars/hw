@@ -933,6 +933,14 @@ inserisci solo il tuo soprannome.</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; aveva paura e ha passato il turno &lt;b&gt;%2&lt;/b&gt; volte.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Salva</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

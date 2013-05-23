@@ -928,6 +928,14 @@ entrez juste votre pseudo.</translation>
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Enregistrer</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

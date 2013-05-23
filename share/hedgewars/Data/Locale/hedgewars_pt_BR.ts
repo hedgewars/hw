@@ -898,6 +898,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; estava assustado e passou o turno &lt;b&gt;%2&lt;/b&gt; vezes.&lt;/p&gt;.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Salvar</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

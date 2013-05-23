@@ -335,44 +335,44 @@ Please check your installation!</source>
 <context>
     <name>HWForm</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="480"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="478"/>
         <source>DefaultTeam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="638"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="636"/>
         <source>Game aborted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1123"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1121"/>
         <source>Nickname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1128"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1437"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1126"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1435"/>
         <source>No nickname supplied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1123"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1121"/>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="484"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="482"/>
         <source>%1&apos;s Team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1077"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1075"/>
         <source>Hedgewars - Nick registered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1078"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1076"/>
         <source>This nick is registered, and you haven&apos;t specified a password.
 
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
@@ -381,81 +381,81 @@ Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1106"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1104"/>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1111"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1109"/>
         <source>
 
 Your password wasn&apos;t saved either.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1128"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1437"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1126"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1435"/>
         <source>Hedgewars - Empty nickname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1154"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1152"/>
         <source>Hedgewars - Wrong password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1154"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1152"/>
         <source>You entered a wrong password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1175"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1173"/>
         <source>Try Again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1539"/>
         <source>Hedgewars - Connection error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1541"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1539"/>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1698"/>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2017"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1696"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2015"/>
         <source>Cannot save record to file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1947"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1945"/>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1948"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1946"/>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2009"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2007"/>
         <source>Demo name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2009"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2007"/>
         <source>Demo name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2077"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2075"/>
         <source>This page requires an internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -705,7 +705,7 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1561"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1559"/>
         <source>Quit reason: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1048,12 +1048,22 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="182"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="113"/>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="118"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="193"/>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="190"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="201"/>
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1062,7 +1072,7 @@ just enter your nickname.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="197"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="208"/>
         <source>A total of &lt;b&gt;%1&lt;/b&gt; hedgehog(s) were killed during this round.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1071,7 +1081,7 @@ just enter your nickname.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="261"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="272"/>
         <source>(%1 kill)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1080,7 +1090,7 @@ just enter your nickname.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="272"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="283"/>
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1089,7 +1099,7 @@ just enter your nickname.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="280"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="291"/>
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1098,7 +1108,7 @@ just enter your nickname.</source>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="288"/>
+        <location filename="../../../../QTfrontend/ui/page/pagegamestats.cpp" line="299"/>
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1444,17 +1454,17 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="623"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="624"/>
         <source>Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="636"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="637"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="650"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="651"/>
         <source>Video recording options</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1475,52 +1485,52 @@ just enter your nickname.</source>
 <context>
     <name>PageRoomsList</name>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="63"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="64"/>
         <source>Search for a room:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="90"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="91"/>
         <source>Create room</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="94"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="95"/>
         <source>Join room</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="141"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="153"/>
         <source>Room state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="165"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="177"/>
         <source>Rules:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="179"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="191"/>
         <source>Weapons:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="190"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="202"/>
         <source>Clear filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="208"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="220"/>
         <source>Admin features</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="210"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="222"/>
         <source>Open server administration page</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="595"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="609"/>
         <source>%1 players online</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1870,12 +1880,12 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="150"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="162"/>
         <source>Show games in lobby</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="153"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="165"/>
         <source>Show games in-progress</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1930,12 +1940,12 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="609"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="610"/>
         <source>Append date and time to record file name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="629"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="630"/>
         <source>Check for updates at startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1966,12 +1976,12 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="690"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="691"/>
         <source>Record audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="739"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="740"/>
         <source>Use game resolution</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2074,8 +2084,8 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="199"/>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="272"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="211"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="286"/>
         <source>Any</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2221,12 +2231,12 @@ just enter your nickname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="598"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="599"/>
         <source>This setting will be effective at next restart.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="715"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="716"/>
         <source>Resolution</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2408,27 +2418,27 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="659"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="660"/>
         <source>Format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="679"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="680"/>
         <source>Audio codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="704"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="705"/>
         <source>Video codec</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="745"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="746"/>
         <source>Framerate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="759"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="760"/>
         <source>Bitrate (Kbps)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2436,7 +2446,7 @@ Do you really want to quit?</source>
 <context>
     <name>QLineEdit</name>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="954"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="952"/>
         <source>unnamed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2478,38 +2488,38 @@ Do you really want to quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="983"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="981"/>
         <location filename="../../../../QTfrontend/ui/page/pagescheme.cpp" line="500"/>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1009"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1007"/>
         <source>Please select a record from the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1104"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1102"/>
         <source>Hedgewars - Nick not registered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1500"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1498"/>
         <source>Unable to start server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1561"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1559"/>
         <source>Connection to server is lost</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2084"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2082"/>
         <source>Not all players are ready</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="2085"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="2083"/>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
         <translation type="unfinished"></translation>
@@ -2542,18 +2552,18 @@ Not all players are ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1987"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1985"/>
         <location filename="../../../../QTfrontend/ui/widget/feedbackdialog.cpp" line="439"/>
         <source>Hedgewars - Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1988"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1986"/>
         <source>All file associations have been set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/hwform.cpp" line="1993"/>
+        <location filename="../../../../QTfrontend/hwform.cpp" line="1991"/>
         <source>File association failed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2631,22 +2641,22 @@ Not all players are ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="546"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="560"/>
         <source>Room Name - Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="547"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="561"/>
         <source>Please select room from the list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="582"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="596"/>
         <source>Room Name - Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="583"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="597"/>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
@@ -2822,7 +2832,7 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="615"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="616"/>
         <source>Associate file extensions</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2855,12 +2865,12 @@ Do you still want to join the room?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="772"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="773"/>
         <source>Set default options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="773"/>
+        <location filename="../../../../QTfrontend/ui/page/pageoptions.cpp" line="774"/>
         <source>Restore default coding parameters</source>
         <translation type="unfinished"></translation>
     </message>
