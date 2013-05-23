@@ -587,11 +587,12 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage = new QComboBox(groupMisc);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
             QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
-            CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
+            CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
             for(int i = 0; i < locs.count(); i++)
             {
-                QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
+                QString lname = locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1");
+                QLocale loc(lname);
+                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", lname);
             }
 
             QLabel *restartNoticeLabel = new QLabel(groupMisc);
