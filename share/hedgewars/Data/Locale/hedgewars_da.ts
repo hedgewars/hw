@@ -901,6 +901,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; blev bange og sprang over sin tur &lt;b&gt;%2&lt;/b&gt; gange.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gem</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

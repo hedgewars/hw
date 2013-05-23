@@ -913,6 +913,14 @@ just enter your nickname.</source>
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Зберегти</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>

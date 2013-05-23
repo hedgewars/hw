@@ -909,6 +909,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; byl vystrašený a přeskočil tah &lt;b&gt;%2&lt;/b&gt; krát.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Uložit</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>
