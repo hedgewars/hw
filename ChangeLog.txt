@@ -2,7 +2,7 @@
 * bugfixes
 
 0.9.18 -> 0.9.19:
- + New Freezer weapon - freezes terrain, water, hedgehogs
+ + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
  + Saucer can aim weapons and fire underwater
  + Main graphical user interface overhaul
  + Up and down keys navigate in chat history
@@ -13,14 +13,16 @@
  + Downloadable content can now be stored in packages for easy uninstall
  + Lua scripts can load a sidecar overlay package of game resources
  + Math improvements for better performance/reliability
- + Smarter AI - now uses drill rocket accurately and is aware of barrels and dud mines.
+ + Smarter AI - now uses drill rocket accurately and is aware of barrels and dud mines.  More aggressive in infinite attack, lua can tell to target specific hogs, such as in Mutant
  + New fort, Steel Tower
  + New theme, Fruit
  + New hats - some national ones, Portal, harlequin, more animals...
+ + New maps based on StarBound. SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacles
  + Translation updates - Turkish, French, German, Japanese, Portuguese, Italian, Russian - Campaign french should work correctly now
  + Theme object masks
  + Easier weapon selection in shoppa. F1 will select from F5 if there are no weps in F1-F4
  + Cleaver radius shrunk to improve usability on horizontal throws
+ + Map hog limit is now just a suggestion, not enforced
  * You can now move out of the way when throwing a sticky mine or cleaver straight up
  * Rope sliding should behave more like pre-0.9.18 again
  * Forbid kicking on 1v1 matches
@@ -28,6 +30,7 @@
  * Fixed fort mode
  * Making very large maps now works properly with targetted weapons
  * ParseCommand should be safe to use in Lua now, at any time
+ * Mudball works more reliably, fixes to various weps (blowtorch, explosives, mines..)
 
 0.9.17 -> 0.9.18:
 
