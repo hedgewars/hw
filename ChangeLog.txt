@@ -30,7 +30,7 @@
  * Fixed fort mode
  * Making very large maps now works properly with targetted weapons
  * ParseCommand should be safe to use in Lua now, at any time
- * Mudball works more reliably, fixes to various weps (blowtorch, explosives, mines..)
+ * Fixes to many weapons. Mudball, blowtorch, explosives, cluster bomb spread, portal.
 
 0.9.17 -> 0.9.18:
 
