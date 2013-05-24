@@ -112,7 +112,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
     Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
-    QString netNick = value("net/nick", "").toString();
+    QString netNick = value("net/nick", tr("Guest")+QString("%1").arg(rand())).toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
     bool savePwd = value("net/savepassword",true).toBool();
     Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
