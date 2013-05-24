@@ -23,6 +23,8 @@
  + Easier weapon selection in shoppa. F1 will select from F5 if there are no weps in F1-F4
  + Cleaver radius shrunk to improve usability on horizontal throws
  + Map hog limit is now just a suggestion, not enforced
+ + Static map theme is now just the default, can be changed
+ + Themeable static maps (provide a mask.png without a map.png)
  * You can now move out of the way when throwing a sticky mine or cleaver straight up
  * Rope sliding should behave more like pre-0.9.18 again
  * Forbid kicking on 1v1 matches
