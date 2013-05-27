@@ -153,7 +153,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 
     config = new GameUIConfig(this, DataManager::instance().settingsFileName());
     frontendEffects = config->value("frontend/effects", true).toBool();
-    playerHash = QString(QCryptographicHash::hash(config->value("net/nick","").toString().toUtf8(), QCryptographicHash::Md5).toHex());
+    playerHash = QString(QCryptographicHash::hash(config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8(), QCryptographicHash::Md5).toHex());
 
     ui.pageRoomsList->setSettings(config);
     ui.pageNetGame->setSettings(config);
@@ -470,7 +470,7 @@ void HWForm::UpdateTeamsLists()
 
     if(teamslist.empty())
     {
-        QString currentNickName = config->value("net/nick","").toString().toUtf8();
+        QString currentNickName = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString().toUtf8();
         QString teamName;
 
         if (currentNickName.isEmpty())
@@ -1379,7 +1379,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     if (hwnet->m_private_game == false && AskForNickAndPwd() != 0)
         return;
 
-    QString nickname = config->value("net/nick", "").toString();
+    QString nickname = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString();
     ui.pageRoomsList->setUser(nickname);
     ui.pageNetGame->setUser(nickname);
 
@@ -1398,7 +1398,7 @@ int HWForm::AskForNickAndPwd(void)
     QString password;
 
     do {
-        nickname = config->value("net/nick", "").toString();
+        nickname = config->value("net/nick",tr("Guest")+QString("%1").arg(rand())).toString();
         hash = config->passwordHash();
         temphash = config->tempHash();
 
