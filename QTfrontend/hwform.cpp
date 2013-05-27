@@ -194,6 +194,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     //connect (updateData, SIGNAL(activated()), &DataManager::instance(), SLOT(reload()));
 #endif
 
+	previousCampaignName = "";
     UpdateTeamsLists();
     InitCampaignPage();
     UpdateCampaignPage(0);
@@ -306,7 +307,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
-
+    connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
 
     connect(ui.pageSelectWeapon->BtnDelete, SIGNAL(clicked()),
             ui.pageSelectWeapon->pWeapons, SLOT(deleteWeaponsName())); // executed first
@@ -1901,11 +1902,67 @@ void HWForm::UpdateCampaignPage(int index)
     QString tName = team.name();
     unsigned int n = missionEntries.count();
     unsigned int m = getCampProgress(tName, campaignName);
+    
+    // if the campaign name changes update the campaignMissionDescriptions list
+    // this will be used later in UpdateCampaignPageMission() to update
+    // the mission description in the campaign page
+    bool updateMissionList = false;    
+    QSettings * m_info;
+    if(previousCampaignName.compare(campaignName)!=0) 
+    {
+		previousCampaignName = campaignName;
+		updateMissionList = true;
+		// the following code was based on pagetraining.cpp
+		DataManager & dataMgr = DataManager::instance();    
+		// get locale
+		QSettings settings(dataMgr.settingsFileName(),
+						   QSettings::IniFormat);
+		QString loc = settings.value("misc/locale", "").toString();		
+		if (loc.isEmpty())
+			loc = QLocale::system().name();
+		QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
+		// if file is non-existant try with language only
+		if (!QFile::exists(campaignDescFile))
+			campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
 
+		// fallback if file for current locale is non-existant
+		if (!QFile::exists(campaignDescFile))
+			campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
+		  
+		m_info = new QSettings(campaignDescFile, QSettings::IniFormat, this);
+		m_info->setIniCodec("UTF-8");
+		campaignMissionDescriptions.clear();
+		ui.pageCampaign->CBMission->clear();
+	}
+	
     for (unsigned int i = qMin(m + 1, n); i > 0; i--)
     {
-        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
+        if(updateMissionList) 
+        {
+			campaignMissionDescriptions += m_info->value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
+                                            tr("No description available")).toString();
+		} 
+        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));       
     }
+    if(updateMissionList)
+		delete m_info;
+    UpdateCampaignPageMission(index);
+}
+
+void HWForm::UpdateCampaignPageMission(int index) 
+{    
+    // update thumbnail
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
+    QString image = getCampaignImage(campaignName,mNum);
+    ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
+    // update description
+    // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
+    // this will cause segfault. This check prevents illegal memory reads
+    if(index > -1 && index < campaignMissionDescriptions.count()) {
+		ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
+		ui.pageCampaign->lbldescription->setText(campaignMissionDescriptions[index]);
+	}
 }
 
 void HWForm::UpdateCampaignPageProgress(int index)
