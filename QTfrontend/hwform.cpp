@@ -1540,7 +1540,7 @@ void HWForm::ForcedDisconnect(const QString & reason)
         if (retry) {
             if (hwnet->m_private_game) {
                 QStringList list = hwnet->getHost().split(":");
-                NetConnectServer(list.at(0), list.at(1).toShort());
+                NetConnectServer(list.at(0), list.at(1).toUInt());
             } else
                 NetConnectOfficialServer();
         }
