@@ -74,9 +74,9 @@ handleCmd_loggedin ["INFO", asknick] = do
     let cl = rnc `client` fromJust maybeClientId
     let roomId = clientRoom rnc clientId
     let clRoom = room rnc roomId
-    let roomMasterSign = if isMaster cl then "@" else ""
+    let roomMasterSign = if isMaster cl then "+" else ""
     let adminSign = if isAdministrator cl then "@" else ""
-    let rInfo = if roomId /= lobbyId then B.concat [roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
+    let rInfo = if roomId /= lobbyId then B.concat [adminSign, roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
     let roomStatus = if isJust $ gameInfo clRoom then
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else
