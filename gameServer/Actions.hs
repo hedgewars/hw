@@ -207,8 +207,9 @@ processAction (ChangeMaster delegateId)= do
     rnc <- gets roomsClients
     newMasterId <- liftM (\ids -> fromMaybe (last . filter (/= ci) $ ids) delegateId) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
+    oldMasterId <- io $ room'sM rnc masterID ri
+    oldMaster <- io $ client'sM rnc id oldMasterId
     oldRoomName <- io $ room'sM rnc name ri
-    oldMaster <- client's nick
     kicked <- client's isKickedFromServer
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     let newRoomName = if (proto < 42) || kicked then nick newMaster else oldRoomName
@@ -220,9 +221,9 @@ processAction (ChangeMaster delegateId)= do
                 , isRegisteredOnly = False}
                 )
         , ModifyClient2 newMasterId (\c -> c{isMaster = True})
-        , ModifyClient (\c -> c{isMaster = False})
+        , ModifyClient2 oldMasterId (\c -> c{isMaster = False})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", nick oldMaster]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
         ]
 
