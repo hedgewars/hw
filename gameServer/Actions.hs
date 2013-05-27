@@ -220,6 +220,7 @@ processAction (ChangeMaster delegateId)= do
                 , isRegisteredOnly = False}
                 )
         , ModifyClient2 newMasterId (\c -> c{isMaster = True})
+        , ModifyClient (\c -> c{isMaster = False})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
         , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
