@@ -1815,7 +1815,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template0FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1826,7 +1826,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template1FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1837,7 +1837,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template2FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1848,7 +1848,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template3FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1859,7 +1859,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template4FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1870,7 +1870,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template5FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1881,7 +1881,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template6FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1892,7 +1892,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template7FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1903,7 +1903,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template8FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1914,7 +1914,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template9FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1925,7 +1925,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template10FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1936,7 +1936,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template11FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1947,7 +1947,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template12FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1958,7 +1958,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template13FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1969,7 +1969,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template14FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1980,7 +1980,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template15FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -1991,7 +1991,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template16FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -2002,7 +2002,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template17FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 2848;
+        TemplateHeight: 1424; TemplateWidth: 3072;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 18;
@@ -2013,7 +2013,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template18FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2024,7 +2024,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template19FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2035,7 +2035,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template20FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2046,7 +2046,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template21FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2057,7 +2057,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template22FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2068,7 +2068,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template23FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2079,7 +2079,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template24FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2090,7 +2090,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template25FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2101,7 +2101,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template26FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2112,7 +2112,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template27FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2123,7 +2123,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template28FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2134,7 +2134,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template29FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2145,7 +2145,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template30FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2156,7 +2156,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template31FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2167,7 +2167,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template32FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2178,7 +2178,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template33FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2189,7 +2189,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template34FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
@@ -2200,7 +2200,7 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         FillPointsCount: Succ(High(Template35FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
-        TemplateHeight: 1424; TemplateWidth: 3900;
+        TemplateHeight: 1424; TemplateWidth: 4096;
         canMirror: true; canFlip: false; isNegative: false; canInvert: false;
         hasGirders: true;
         MaxHedgeHogs: 36;
