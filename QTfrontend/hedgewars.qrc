@@ -28,6 +28,16 @@
         <file>res/botlevels/net3.png</file>
         <file>res/botlevels/net4.png</file>
         <file>res/botlevels/net5.png</file>
+        <file>res/campaign/A Classic Fairytale/first_blood.png</file>
+        <file>res/campaign/A Classic Fairytale/shadow.png</file>
+        <file>res/campaign/A Classic Fairytale/journey.png</file>
+        <file>res/campaign/A Classic Fairytale/united.png</file>
+        <file>res/campaign/A Classic Fairytale/backstab.png</file>
+        <file>res/campaign/A Classic Fairytale/dragon.png</file>
+        <file>res/campaign/A Classic Fairytale/family.png</file>
+        <file>res/campaign/A Classic Fairytale/queen.png</file>
+        <file>res/campaign/A Classic Fairytale/enemy.png</file>
+        <file>res/campaign/A Classic Fairytale/epil.png</file>
         <file>res/bonus.png</file>
         <file>res/Hedgehog.png</file>
         <file>res/net.png</file>
