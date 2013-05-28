@@ -211,6 +211,10 @@ endif (CMAKE_BUILD_TYPE)
 
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
 if(NOT ${MINIMAL_FLAGS})
+    if(WINDOWS)
+        #this flags prevents a few dll hell problems
+        set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
+    endif(WINDOWS)
     set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
     set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
     set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
