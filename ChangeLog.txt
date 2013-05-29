@@ -5,6 +5,7 @@
  + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
  + Saucer can aim weapons and fire underwater
  + Main graphical user interface overhaul
+ + Splashscreen on Windows *_*
  + Up and down keys navigate in chat history
  + Several commands from chat available
  + Support hwplay:// scheme syntax
@@ -25,6 +26,7 @@
  + Map hog limit is now just a suggestion, not enforced
  + Static map theme is now just the default, can be changed
  + Themeable static maps (provide a mask.png without a map.png)
+ + Split seed with '|' to keep the land shape but change the hog placement
  * You can now move out of the way when throwing a sticky mine or cleaver straight up
  * Rope sliding should behave more like pre-0.9.18 again
  * Forbid kicking on 1v1 matches
