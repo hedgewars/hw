@@ -250,7 +250,8 @@ var cInitVolume: LongInt;
             (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
             (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
             (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
-            (FileName:             'ice_beam.ogg'; Path: ptSounds) // sndIceBeam
+            (FileName:             'ice_beam.ogg'; Path: ptSounds),// sndIceBeam
+            (FileName:           'hog_freeze.ogg'; Path: ptSounds) // sndHogFreeze
             );
 
 
