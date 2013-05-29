@@ -3,6 +3,7 @@ glob:CMakeFiles
 glob:moc_*.cxx
 glob:qrc_*.cxx
 glob:*.o
+glob:*.a
 glob:*.qm
 glob:Makefile
 glob:bin
@@ -63,3 +64,5 @@ glob:*.exe
 glob:_CPack_Packages/
 glob:version_info.txt
 glob:*.tar.*
+glob:*.or
+glob:*.res
