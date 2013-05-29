@@ -249,7 +249,8 @@ var cInitVolume: LongInt;
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
             (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
             (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
-            (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds) // sndFrozenHogImpact
+            (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
+            (FileName:             'ice_beam.ogg'; Path: ptSounds) // sndIceBeam
             );
 
 
