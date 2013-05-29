@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
