@@ -5092,9 +5092,16 @@ begin
     end;
     if Gear^.Message and (gmUp or gmDown) <> 0 then
         begin
+        StopSoundChan(Gear^.SoundChannel);
+        Gear^.SoundChannel:= -1;
         if GameTicks mod 40 = 0 then dec(Gear^.Health)
         end
-    else if GameTicks mod 10 = 0 then dec(Gear^.Health);
+    else 
+        begin
+        if Gear^.SoundChannel = -1 then
+            Gear^.SoundChannel := LoopSound(sndIceBeam);
+        if GameTicks mod 10 = 0 then dec(Gear^.Health)
+        end
 end;
 
 
@@ -5135,6 +5142,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) then
         begin
+        StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
         AfterAttack;
         exit
