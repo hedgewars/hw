@@ -5224,6 +5224,7 @@ begin
                                     vg^.dy:= 0.001 * random(80)
                                     end
                                 end;
+                            PlaySound(sndHogFreeze);
                             iter^.State:= iter^.State or gstFrozen;
                             if iter^.Kind = gtMine then // dud mine block
                                 begin
@@ -5253,6 +5254,7 @@ begin
 
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
+                    PlaySound(sndHogFreeze);
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
