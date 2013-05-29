@@ -7,6 +7,7 @@
 ' References
 '   http://superuser.com/questions/59465/is-it-possible-to-download-using-the-windows-command-line
 '   http://stackoverflow.com/questions/1021557/how-to-unzip-a-file-using-the-command-line
+'   http://stackoverflow.com/questions/424331/get-the-current-temporary-directory-path-in-vbscript
 
 Set ArgObj = WScript.Arguments
 
@@ -23,7 +24,8 @@ Else
     End if
 End if
 
-strHDLocation = "C:\Windows\Temp\temp.zip"
+' Temporary directory
+strHDLocation = WScript.CreateObject("Scripting.FileSystemObject").GetSpecialFolder(2) + "\hwlibtemp.zip"
 
 ' Fetch the file
 WScript.Echo ( "Trying to download from " & strFileURL)
@@ -37,7 +39,7 @@ If objXMLHTTP.Status = 200 Then
     objADOStream.Type = 1 'adTypeBinary
 
     objADOStream.Write objXMLHTTP.ResponseBody
-    objADOStream.Position = 0    'Set the stream position to the start
+    objADOStream.Position = 0 'Set the stream position to the start
 
     Set objFSO = Createobject("Scripting.FileSystemObject")
     If objFSO.Fileexists(strHDLocation) Then objFSO.DeleteFile strHDLocation
@@ -46,12 +48,12 @@ If objXMLHTTP.Status = 200 Then
     objADOStream.SaveToFile strHDLocation
     objADOStream.Close
     Set objADOStream = Nothing
+    Set objXMLHTTP = Nothing
 Else
     WScript.Echo ("Error downloading file (error code: " & objXMLHTTP.Status & ")")
     Set objXMLHTTP = Nothing
     WScript.Quit
 End if
-Set objXMLHTTP = Nothing
 
 WScript.Echo ( "Extracting file to " & strOutputPath)
 Set objShell = CreateObject( "Shell.Application" )

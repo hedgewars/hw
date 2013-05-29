@@ -13,7 +13,8 @@ echo Fetching all DLLs...
 if %BUILD_TYPE%=="Debug" (
     for %%G in (QtCored4 QtGuid4 QtNetworkd4) do xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
-for %%G in (QtCore4 QtGui4 QtNetwork4 libgcc_s_dw2-1 mingwm10) do (
+:: should you libgcc dynamically you should try adding libgcc_s_dw2-1 and mingwm10
+for %%G in (QtCore4 QtGui4 QtNetwork4) do (
     xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
 

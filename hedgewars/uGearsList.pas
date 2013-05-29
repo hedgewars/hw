@@ -469,7 +469,8 @@ case Kind of
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
-                gear^.Damage:= 100
+                gear^.Damage:= 100;
+                gear^.State:= gstSubmersible
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;

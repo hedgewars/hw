@@ -155,7 +155,7 @@ var cInitVolume: LongInt;
             (FileName:               'Yessir.ogg'; Path: ptVoices),// sndYesSir
             (FileName:                'Laugh.ogg'; Path: ptVoices),// sndLaugh
             (FileName:            'Illgetyou.ogg'; Path: ptVoices),// sndIllGetYou
-            (FileName:          'JustYouWait.ogg'; Path: ptVoices),// sndJustYouWait
+            (FileName:          'Justyouwait.ogg'; Path: ptVoices),// sndJustyouwait
             (FileName:             'Incoming.ogg'; Path: ptVoices),// sndIncoming
             (FileName:               'Missed.ogg'; Path: ptVoices),// sndMissed
             (FileName:               'Stupid.ogg'; Path: ptVoices),// sndStupid
@@ -248,7 +248,10 @@ var cInitVolume: LongInt;
             (FileName:                 'bump.ogg'; Path: ptSounds),// sndBump
             (FileName:            'hogchant3.ogg'; Path: ptSounds),// sndResurrector
             (FileName:                'plane.ogg'; Path: ptSounds),// sndPlane
-            (FileName:               'TARDIS.ogg'; Path: ptSounds) // sndTardis
+            (FileName:               'TARDIS.ogg'; Path: ptSounds),// sndTardis
+            (FileName:    'frozen_hog_impact.ogg'; Path: ptSounds),// sndFrozenHogImpact
+            (FileName:             'ice_beam.ogg'; Path: ptSounds),// sndIceBeam
+            (FileName:           'hog_freeze.ogg'; Path: ptSounds) // sndHogFreeze
             );
 
 

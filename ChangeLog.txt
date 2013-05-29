@@ -2,15 +2,39 @@
 * bugfixes
 
 0.9.18 -> 0.9.19:
- + new icegun weapon
- + main graphical user interface overhaul
- + up and down keys navigate in chat history
- + several commands from chat available
- + support hwplay:// scheme syntax
- + supply full revision and hash information in version tag
- + better set of options for driving engine
- * rope sliding
- * forbid kicking on 1v1 matches
+ + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
+ + Saucer can aim weapons and fire underwater
+ + Main graphical user interface overhaul
+ + Splashscreen on Windows *_*
+ + Up and down keys navigate in chat history
+ + Several commands from chat available
+ + Support hwplay:// scheme syntax
+ + Supply full revision and hash information in version tag
+ + Better set of options for driving engine
+ + Downloadable content can now be stored in packages for easy uninstall
+ + Lua scripts can load a sidecar overlay package of game resources
+ + Math improvements for better performance/reliability
+ + Smarter AI - now uses drill rocket accurately and is aware of barrels and dud mines.  More aggressive in infinite attack, lua can tell to target specific hogs, such as in Mutant
+ + New fort, Steel Tower
+ + New theme, Fruit
+ + New hats - some national ones, Portal, harlequin, more animals...
+ + New maps based on StarBound. SB_Bones, SB_Crystal, SB_Grassy, SB_Grove, SB_Haunty, SB_Oaks, SB_Shrooms, SB_Tentacles
+ + Translation updates - Turkish, French, German, Japanese, Portuguese, Italian, Russian - Campaign french should work correctly now
+ + Theme object masks
+ + Easier weapon selection in shoppa. F1 will select from F5 if there are no weps in F1-F4
+ + Cleaver radius shrunk to improve usability on horizontal throws
+ + Map hog limit is now just a suggestion, not enforced
+ + Static map theme is now just the default, can be changed
+ + Themeable static maps (provide a mask.png without a map.png)
+ + Split seed with '|' to keep the land shape but change the hog placement
+ * You can now move out of the way when throwing a sticky mine or cleaver straight up
+ * Rope sliding should behave more like pre-0.9.18 again
+ * Forbid kicking on 1v1 matches
+ * Desync fixes
+ * Fixed fort mode
+ * Making very large maps now works properly with targetted weapons
+ * ParseCommand should be safe to use in Lua now, at any time
+ * Fixes to many weapons. Mudball, blowtorch, explosives, cluster bomb spread, portal.
 
 0.9.17 -> 0.9.18:
 

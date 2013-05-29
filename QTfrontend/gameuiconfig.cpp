@@ -112,7 +112,7 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBFrontendMusic->setChecked(value("frontend/music", true).toBool());
     Form->ui.pageOptions->SLVolume->setValue(value("audio/volume", 100).toUInt());
 
-    QString netNick = value("net/nick", "").toString();
+    QString netNick = value("net/nick", tr("Guest")+QString("%1").arg(rand())).toString();
     Form->ui.pageOptions->editNetNick->setText(netNick);
     bool savePwd = value("net/savepassword",true).toBool();
     Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
@@ -521,14 +521,28 @@ void GameUIConfig::clearPasswordHash()
     setValue("net/passwordhash", QString());
     setValue("net/passwordlength", 0);
     setValue("net/savepassword", false); //changes the savepassword value to false in order to not let the user save an empty password in PAGE_SETUP
-    reloadValues(); //reloads the values of PAGE_SETUP
+    Form->ui.pageOptions->editNetPassword->setEnabled(false);
+    Form->ui.pageOptions->editNetPassword->setText("");
 }
 
 void GameUIConfig::setPasswordHash(const QString & passwordhash)
 {
     setValue("net/passwordhash", passwordhash);
-    setValue("net/passwordlength", passwordhash.size()/4);
-    setNetPasswordLength(passwordhash.size()/4);  //the hash.size() is divided by 4 let PAGE_SETUP use a reasonable number of stars to display the PW
+    if (passwordhash!=NULL && passwordhash.size() > 0)
+    {
+    // WTF - the whole point of "password length" was to have the dots match what they typed.  This is totally pointless, and all hashes are the same length for a given hash so might as well hardcode it.
+    // setValue("net/passwordlength", passwordhash.size()/4);
+        setValue("net/passwordlength", 8);
+
+    // More WTF
+    //setNetPasswordLength(passwordhash.size()/4);  //the hash.size() is divided by 4 let PAGE_SETUP use a reasonable number of stars to display the PW
+        setNetPasswordLength(8);
+    }
+    else
+    {
+        setValue("net/passwordlength", 0);
+        setNetPasswordLength(0);
+    }
 }
 
 QString GameUIConfig::passwordHash()

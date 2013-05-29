@@ -268,8 +268,13 @@ int main(int argc, char *argv[])
 
         QString cc = settings.value("misc/locale", QString()).toString();
         if (cc.isEmpty())
-            cc = HWApplication::keyboardInputLocale().name();
-            // QLocale::system().name() returns only "C"...
+        {
+            cc = QLocale::system().name();
+
+            // Fallback to current input locale if "C" locale is returned
+            if(cc == "C")
+                cc = HWApplication::keyboardInputLocale().name();
+        }
 
         // load locale file into translator
         if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))

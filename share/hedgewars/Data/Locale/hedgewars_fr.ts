@@ -100,7 +100,7 @@
     </message>
     <message>
         <source>Please give us feedback!</source>
-        <translation>Nous avons besoin de votre avis!</translation>
+        <translation type="obsolete">Nous avons besoin de votre avis!</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
@@ -108,11 +108,23 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation>Si vous trouvez un bug, vous pouvez vérifier si il est déjà connu ici (anglais): </translation>
+        <translation type="obsolete">Si vous trouvez un bug, vous pouvez vérifier si il est déjà connu ici (anglais): </translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
-        <translation>Votre adresse email est optionelle, mais il est possible que nous essayons de vous contacter.</translation>
+        <translation type="obsolete">Votre adresse email est optionelle, mais il est possible que nous essayons de vous contacter.</translation>
+    </message>
+    <message>
+        <source>Send us feedback!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -227,11 +239,11 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>%1 has been removed from your friends list</source>
-        <translation>%1 a été retiré de votre liste d'amis</translation>
+        <translation>%1 a été retiré de votre liste d&apos;amis</translation>
     </message>
     <message>
         <source>%1 has been added to your friends list</source>
-        <translation>%1 a été ajouté à votre liste d'amis</translation>
+        <translation>%1 a été ajouté à votre liste d&apos;amis</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
@@ -239,7 +251,7 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation>Entrez %1 si vous voulez utiliser cette Feuille de style (Stylesheet) à l'avenir, entrez %2 pour rétablir l'ancienne apparence!</translation>
+        <translation>Entrez %1 si vous voulez utiliser cette Feuille de style (Stylesheet) à l&apos;avenir, entrez %2 pour rétablir l&apos;ancienne apparence!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
@@ -255,14 +267,26 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation>Impossible d'enregistrer la feuille de style (Stylesheet) dans %1</translation>
+        <translation>Impossible d&apos;enregistrer la feuille de style (Stylesheet) dans %1</translation>
+    </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HWForm</name>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation>Impossible de sauvegarder l'enregistrement dans le fichier %1</translation>
+        <translation>Impossible de sauvegarder l&apos;enregistrement dans le fichier %1</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -301,7 +325,7 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation>Quelqu'un utilise déjà le pseudo %1 sur le serveur
+        <translation>Quelqu&apos;un utilise déjà le pseudo %1 sur le serveur
 Veuillez choisir un autre pseudo:</translation>
     </message>
     <message>
@@ -318,9 +342,9 @@ Veuillez choisir un autre pseudo:</translation>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Ce pseudo est enregistré, vous n'avez spécifié aucun mot de passe.
+        <translation>Ce pseudo est enregistré, vous n&apos;avez spécifié aucun mot de passe.
 	
-Si ce pseudo n'est pas le votre, veuillez enregistrer votre propre pseudo sur www.hedgewars.org
+Si ce pseudo n&apos;est pas le votre, veuillez enregistrer votre propre pseudo sur www.hedgewars.org
 
 Mot de passe:</translation>
     </message>
@@ -328,9 +352,9 @@ Mot de passe:</translation>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation>Votre pseudo n'est pas enregistré.
-Pour éviter que d'autre joueurs l'utilisent,
-veuillez l'enregistrer sur www.hedgewars.org</translation>
+        <translation>Votre pseudo n&apos;est pas enregistré.
+Pour éviter que d&apos;autre joueurs l&apos;utilisent,
+veuillez l&apos;enregistrer sur www.hedgewars.org</translation>
     </message>
     <message>
         <source>
@@ -338,7 +362,7 @@ veuillez l'enregistrer sur www.hedgewars.org</translation>
 Your password wasn&apos;t saved either.</source>
         <translation>
 		
-Votre mot de passe non plus n'a pas été sauvegardé.</translation>
+Votre mot de passe non plus n&apos;a pas été sauvegardé.</translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
@@ -358,13 +382,17 @@ Votre mot de passe non plus n'a pas été sauvegardé.</translation>
     </message>
     <message>
         <source>Hedgewars - Connection error</source>
-        <translation >Hedgewars - Erreur de connexion</translation>
+        <translation>Hedgewars - Erreur de connexion</translation>
     </message>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
         <translation>Vous vous êtes reconnecté trop rapidement.
 Attendez quelques secondes et réessayez.</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -450,11 +478,11 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Charger un carte dessinée</translation>
+        <translation>Charger un dessin</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Editer un carte dessinée</translation>
+        <translation>Editer un dessin</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -486,7 +514,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Theme</translation>
+        <translation type="obsolete">Theme: </translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -503,6 +531,10 @@ Attendez quelques secondes et réessayez.</translation>
     <message>
         <source>Large tunnels</source>
         <translation>Grands tunnels</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -548,7 +580,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 vient d&apos;arriver</translation>
+        <translation type="obsolete">%1 *** %2 vient d&apos;arriver</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -560,7 +592,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>User quit</source>
-        <translation>S'est déconnecté</translation>
+        <translation>S&apos;est déconnecté</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
@@ -568,7 +600,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
-        <translation>La version du serveur n'est pas à jour. Déconnexion.</translation>
+        <translation>La version du serveur n&apos;est pas à jour. Déconnexion.</translation>
     </message>
 </context>
 <context>
@@ -583,7 +615,7 @@ Attendez quelques secondes et réessayez.</translation>
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
         <translation>Pour vous connecter sur le serveur, veuillez entrer vos identifiants.
-Si vous n'avez pas de compte sur www.hedgewars.org,
+Si vous n&apos;avez pas de compte sur www.hedgewars.org,
 entrez juste votre pseudo.</translation>
     </message>
     <message>
@@ -655,7 +687,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps</translation>
+        <translation>%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -744,6 +776,17 @@ entrez juste votre pseudo.</translation>
     </message>
 </context>
 <context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
@@ -790,7 +833,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation>Choisissez une action afin d'y attribuer une touche pour cette équipe</translation>
+        <translation>Choisissez une action afin d&apos;y attribuer une touche pour cette équipe</translation>
     </message>
     <message>
         <source>Use my default</source>
@@ -885,6 +928,14 @@ entrez juste votre pseudo.</translation>
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Enregistrer</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>
@@ -897,7 +948,7 @@ entrez juste votre pseudo.</translation>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Ouvrir le dossier de captures d'écran</translation>
+        <translation>Ouvrir le dossier de captures d&apos;écran</translation>
     </message>
 </context>
 <context>
@@ -1088,7 +1139,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation>Choisissez une action afin d'y attribuer une touche</translation>
+        <translation>Choisissez une action afin d&apos;y attribuer une touche</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -1148,7 +1199,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Frontend audio</source>
-        <translation>Son de l'interface</translation>
+        <translation>Son de l&apos;interface</translation>
     </message>
     <message>
         <source>Account</source>
@@ -1172,7 +1223,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation>Option d'enregistrement vidéo</translation>
+        <translation>Option d&apos;enregistrement vidéo</translation>
     </message>
 </context>
 <context>
@@ -1194,7 +1245,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation>Rejoindre</translation>
+        <translation type="obsolete">Rejoindre</translation>
     </message>
     <message>
         <source>Admin features</source>
@@ -1249,7 +1300,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Open server administration page</source>
-        <translation>Ouvre la page d'administration du serveur</translation>
+        <translation>Ouvre la page d&apos;administration du serveur</translation>
     </message>
 </context>
 <context>
@@ -1398,11 +1449,11 @@ entrez juste votre pseudo.</translation>
     <name>PageSinglePlayer</name>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation>Jouer une partie rapide contre l'ordinateur avec des règles aléatoires</translation>
+        <translation>Jouer une partie rapide contre l&apos;ordinateur avec des règles aléatoires</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation>Jouer une partie sur cet ordinateur contre vos amis ou l'IA</translation>
+        <translation>Jouer une partie sur cet ordinateur contre vos amis ou l&apos;IA</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
@@ -1528,7 +1579,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation>Bloquer l'acces au joueurs non-enregistrés</translation>
+        <translation>Bloquer l&apos;acces au joueurs non-enregistrés</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -1607,11 +1658,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Frontend sound effects</source>
-        <translation>Effet sonores de l'interface</translation>
+        <translation>Effet sonores de l&apos;interface</translation>
     </message>
     <message>
         <source>Frontend music</source>
-        <translation>Musique de l'interface</translation>
+        <translation>Musique de l&apos;interface</translation>
     </message>
 </context>
 <context>
@@ -1638,11 +1689,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>In lobby</source>
-        <translation>En attente</translation>
+        <translation type="obsolete">En attente</translation>
     </message>
     <message>
         <source>In progress</source>
-        <translation>En cours</translation>
+        <translation type="obsolete">En cours</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1848,7 +1899,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Conseil : </translation>
+        <translation>Conseil: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1952,7 +2003,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>Cette version est "en cours de développement" il est possible qu'elle ne soit pas compatible avec les autres versions du jeu, des parties peuvent ne pas fonctionner ou être incompletes!</translation>
+        <translation>Cette version est &quot;en cours de développement&quot; il est possible qu&apos;elle ne soit pas compatible avec les autres versions du jeu, des parties peuvent ne pas fonctionner ou être incompletes!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -1989,6 +2040,10 @@ Voulez-vous vraiment quitter?</translation>
     <message>
         <source>This program is distributed under the %1</source>
         <translation>Ce programme est distribué par %1</translation>
+    </message>
+    <message>
+        <source>This setting will be effective at next restart.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2034,7 +2089,7 @@ Voulez-vous vraiment quitter?</translation>
     <message>
         <source>Error while authenticating at google.com:
 </source>
-        <translation>Erreur lors de l'authentification à google.com:
+        <translation>Erreur lors de l&apos;authentification à google.com:
 </translation>
     </message>
     <message>
@@ -2044,7 +2099,7 @@ Voulez-vous vraiment quitter?</translation>
     <message>
         <source>Error while sending metadata to youtube.com:
 </source>
-        <translation>Erreur lors de l'envoi des metadata à youtube.com:
+        <translation>Erreur lors de l&apos;envoi des metadata à youtube.com:
 </translation>
     </message>
     <message>
@@ -2053,11 +2108,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation>Voulez-vous vraiment supprimer l'équipe "%1"</translation>
+        <translation>Voulez-vous vraiment supprimer l&apos;équipe &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation>Impossible de retirer la règle par défaut "%1"</translation>
+        <translation>Impossible de retirer la règle par défaut &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
@@ -2077,7 +2132,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
-        <translation>Les associations d'extensions de fichiers ont été effectuées</translation>
+        <translation>Les associations d&apos;extensions de fichiers ont été effectuées</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -2101,11 +2156,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation>Veuillez saisir le nom d'une room</translation>
+        <translation>Veuillez saisir le nom d&apos;une room</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
-        <translation>Jouer l'enregistrement - Erreur</translation>
+        <translation>Jouer l&apos;enregistrement - Erreur</translation>
     </message>
     <message>
         <source>Please select record from the list</source>
@@ -2113,11 +2168,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Cannot rename to </source>
-        <translation>Impossible de renommer en</translation>
+        <translation>Impossible de renommer en </translation>
     </message>
     <message>
         <source>Cannot delete file </source>
-        <translation>Impossible de supprimer le fichier</translation>
+        <translation>Impossible de supprimer le fichier </translation>
     </message>
     <message>
         <source>Room Name - Error</source>
@@ -2147,7 +2202,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation>Etes-vous sûr de vouloir supprimer cette règle : "%1" ?</translation>
+        <translation>Etes-vous sûr de vouloir supprimer cette règle : &quot;%1&quot; ?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
@@ -2155,7 +2210,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation>Etes-vous sûr de vouloir supprimer cette vidéo : "%1" ?</translation>
+        <translation>Etes-vous sûr de vouloir supprimer cette vidéo : &quot;%1&quot; ?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
@@ -2166,7 +2221,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Voulez-vous arreter l'importation de %1?</translation>
+        <translation>Voulez-vous arreter l&apos;importation de %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -2174,7 +2229,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation>Impossible d'écrire le fichier %1</translation>
+        <translation>Impossible d&apos;écrire le fichier %1</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
@@ -2182,7 +2237,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Impossible d'utiliser cette arme : "%1"</translation>
+        <translation>Impossible d&apos;utiliser cette arme : &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -2190,11 +2245,11 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Impossible de remplacer le set d'arme "%1"</translation>
+        <translation>Impossible de remplacer le set d&apos;arme &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation>Impossible de supprimer le set d'arme par défaut "%1"</translation>
+        <translation>Impossible de supprimer le set d&apos;arme par défaut &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
@@ -2202,7 +2257,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation>Etes-vous sûr de vouloir supprimer le set d'arme "%1"?</translation>
+        <translation>Etes-vous sûr de vouloir supprimer le set d&apos;arme &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
@@ -2303,7 +2358,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>More info</source>
-        <translation>Plus d'info</translation>
+        <translation>Plus d&apos;info</translation>
     </message>
     <message>
         <source>Set default options</source>
@@ -2323,7 +2378,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Cancel uploading</source>
-        <translation>Annuler l'importation</translation>
+        <translation>Annuler l&apos;importation</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
@@ -3099,116 +3154,112 @@ zoom</translation>
 <context>
     <name>server</name>
     <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Authentication failed</source>
-        <translation>Echec d'authentification</translation>
+        <translation type="obsolete">Echec d&apos;authentification</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation>Bannis pour 60 sec après un kick</translation>
+        <translation type="obsolete">Bannis pour 60 sec après un kick</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation>Exclus (kick)</translation>
+        <translation type="obsolete">Exclus (kick)</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation>Met trop de temps à répondre</translation>
+        <translation type="obsolete">Met trop de temps à répondre</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation>Aurevoir</translation>
+        <translation type="obsolete">Aurevoir</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation>Configuration vide</translation>
+        <translation type="obsolete">Configuration vide</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation>Vous n'êtes pas le propriétaire de la room</translation>
+        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de la room</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation>Info hérisson corrompus</translation>
+        <translation type="obsolete">Info hérisson corrompus</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation>trop d'équipes</translation>
+        <translation type="obsolete">trop d&apos;équipes</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation>trop de hérissons</translation>
+        <translation type="obsolete">trop de hérissons</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation>Il y a déja une équipe avec le même nom dans la liste</translation>
+        <translation type="obsolete">Il y a déja une équipe avec le même nom dans la liste</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation>La partie est en cour</translation>
+        <translation type="obsolete">La partie est en cour</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation>Ajout interdis</translation>
+        <translation type="obsolete">Ajout interdis</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation>REMOVE_TEAM: aucune équipe de ce nom</translation>
+        <translation type="obsolete">REMOVE_TEAM: aucune équipe de ce nom</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation>Vous n'êtes pas le propriétaire de cette équipe!</translation>
+        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation>Il faut 2 clans minimum!</translation>
+        <translation type="obsolete">Il faut 2 clans minimum!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation>Ce nom de room existe déjà</translation>
+        <translation type="obsolete">Ce nom de room existe déjà</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation>Nom de room invalide</translation>
+        <translation type="obsolete">Nom de room invalide</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation>Cette room n'existe pas</translation>
+        <translation type="obsolete">Cette room n&apos;existe pas</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation>Accès interdis</translation>
+        <translation type="obsolete">Accès interdis</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation>Accès réservé aux utilisateurs enregistré</translation>
+        <translation type="obsolete">Accès réservé aux utilisateurs enregistré</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation>Vous avez été bannis de cette room</translation>
+        <translation type="obsolete">Vous avez été bannis de cette room</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation>Pseudo déjà choisis</translation>
+        <translation type="obsolete">Pseudo déjà choisis</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation>Pseudo invalide</translation>
+        <translation type="obsolete">Pseudo invalide</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation>Protocole déjà connu</translation>
+        <translation type="obsolete">Protocole déjà connu</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation>Mauvais numéro</translation>
+        <translation type="obsolete">Mauvais numéro</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation>Ce pseudo est actuellement utilisé sur le serveur</translation>
+        <translation type="obsolete">Ce pseudo est actuellement utilisé sur le serveur</translation>
     </message>
 </context>
 </TS>

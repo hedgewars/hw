@@ -109,7 +109,9 @@ function AfterFinalAnim()
   else
     SaveCampaignVar("M4DenseDead", "0")
   end
-  SaveCampaignVar("Progress", "4")
+  if progress and progress<4 then
+    SaveCampaignVar("Progress", "4")
+  end
   ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
@@ -416,6 +418,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   GetVariables()
   SetupAmmo()
   SetupPlace()

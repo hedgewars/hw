@@ -22,6 +22,7 @@ Executable hedgewars-server
     bytestring,
     bytestring-show,
     network >= 2.3,
+    random,
     time,
     mtl >= 2,
     dataenc,

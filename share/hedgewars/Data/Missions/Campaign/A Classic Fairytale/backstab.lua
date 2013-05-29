@@ -760,7 +760,9 @@ function AfterWave3DeadAnim()
     SaveCampaignVar("M5ChiefDead", "0")
   end
   SaveCampaignVar("M5Choice", "" .. choice)
-  SaveCampaignVar("Progress", "5")
+  if progress and progress<5 then
+    SaveCampaignVar("Progress", "5")
+  end
 
   for i = 1, 7 do 
     if natives[i] == deployedHog then
@@ -814,6 +816,7 @@ function RestoreWave(index)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m4DenseDead = tonumber(GetCampaignVar("M4DenseDead"))

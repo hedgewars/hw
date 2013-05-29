@@ -5,7 +5,7 @@
     <name>About</name>
     <message>
         <source>Unknown Compiler</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный компилятор</translation>
     </message>
 </context>
 <context>
@@ -30,31 +30,31 @@
     <name>BanDialog</name>
     <message>
         <source>IP</source>
-        <translation type="unfinished">IP</translation>
+        <translation>IP</translation>
     </message>
     <message>
         <source>Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Псевдоним</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Причина</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>Длительность</translation>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>ОК</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>you know why</source>
@@ -62,57 +62,57 @@
     </message>
     <message>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Предупреждение</translation>
     </message>
     <message>
         <source>Please, specify %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Пожалуйста, укажите %1</translation>
     </message>
     <message>
         <source>nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>псевдоним</translation>
     </message>
     <message>
         <source>permanent</source>
-        <translation type="unfinished"></translation>
+        <translation>постоянный</translation>
     </message>
 </context>
 <context>
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать значение по умолчанию</translation>
     </message>
 </context>
 <context>
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please give us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Отослать отзыв</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation type="unfinished"></translation>
+        <translation>Мы всегда рады новым предложениям, идям или сообщениям об ошибках.</translation>
     </message>
     <message>
-        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="unfinished"></translation>
+        <source>Send us feedback!</source>
+        <translation>Пришлите нам отзыв!</translation>
     </message>
     <message>
-        <source>Your email address is optional, but we may want to contact you.</source>
-        <translation type="unfinished"></translation>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation>Если вы нашли ошибку, можете проверить, не было ли уже сообщения о ней здесь:</translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
+        <translation>Адрес e-mail необязателен, но необходим, если вы хотите получить ответ.</translation>
     </message>
 </context>
 <context>
@@ -146,73 +146,76 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема игры определяет набор оружия</translation>
     </message>
     <message>
         <source>Map</source>
-        <translation type="unfinished">Карта</translation>
+        <translation>Карта</translation>
     </message>
     <message>
         <source>Game options</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки игры</translation>
     </message>
 </context>
 <context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 минута</numerusform>
+            <numerusform>%1 минуты</numerusform>
+            <numerusform>%1 минут</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 час</numerusform>
+            <numerusform>%1 часа</numerusform>
+            <numerusform>%1 часов</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 час</numerusform>
+            <numerusform>%1 часа</numerusform>
+            <numerusform>%1 часов</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 день</numerusform>
+            <numerusform>%1 дня</numerusform>
+            <numerusform>%1 дней</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 день</numerusform>
+            <numerusform>%1 дня</numerusform>
+            <numerusform>%1 дней</numerusform>
         </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Схема &quot;%1&quot; не поддерживается</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Не могу создать папку %1</translation>
+        <translation>Не могу создать папку %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не могу открыть папку:
+%1
+
+Пожалуйста, проверьте установку приложения!</translation>
     </message>
 </context>
 <context>
@@ -264,6 +267,18 @@ Please check your installation!</source>
         <source>Failed to save StyleSheet to %1</source>
         <translation>Ошибка при сохранении стиля в %1</translation>
     </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation>%1 вошёл</translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation>%1 вышел</translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation>%1 вышел (%2)</translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -313,7 +328,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>%1&apos;s Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда %1</translation>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
@@ -362,6 +377,11 @@ Your password wasn&apos;t saved either.</source>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
+        <translation>Вы переподключились слишком быстро.
+Пожалуйста, попробуйте снова через несколько секунд.</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -416,91 +436,91 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Map type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип карты:</translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation type="unfinished"></translation>
+        <translation>Изображение</translation>
     </message>
     <message>
         <source>Mission map</source>
-        <translation type="unfinished"></translation>
+        <translation>Миссия</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
-        <translation type="unfinished">Рисованная карта</translation>
+        <translation>Рисованная карта</translation>
     </message>
     <message>
         <source>Randomly generated</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайно сгенерированная</translation>
     </message>
     <message>
         <source>Random maze</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайный лабиринт</translation>
     </message>
     <message>
         <source>Random</source>
-        <translation type="unfinished">Случайно</translation>
+        <translation>Случайно</translation>
     </message>
     <message>
         <source>Map preview:</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпросмотр карты:</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить рисованную карту</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактировать рисованную карту</translation>
     </message>
     <message>
         <source>Small islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Маленькие острова</translation>
     </message>
     <message>
         <source>Medium islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Средние острова</translation>
     </message>
     <message>
         <source>Large islands</source>
-        <translation type="unfinished"></translation>
+        <translation>Большие острова</translation>
     </message>
     <message>
         <source>Map size:</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер карты:</translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль лабиринта:</translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translation type="unfinished"></translation>
+        <translation>Миссия:</translation>
     </message>
     <message>
         <source>Map:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Theme: </source>
-        <translation type="unfinished"></translation>
+        <translation>Карта:</translation>
     </message>
     <message>
         <source>Load drawn map</source>
-        <translation type="unfinished">Загрузить рисованную карту</translation>
+        <translation>Загрузить рисованную карту</translation>
     </message>
     <message>
         <source>Drawn Maps</source>
-        <translation type="unfinished">Рисованные карты</translation>
+        <translation>Рисованные карты</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation type="unfinished">Все файлы</translation>
+        <translation>Все файлы</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Большие туннели</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>Тема: %1</translation>
     </message>
 </context>
 <context>
@@ -546,7 +566,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 вошёл</translation>
+        <translation type="obsolete">%1 *** %2 вошёл</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -584,11 +604,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Псевдоним:</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пароль:</translation>
     </message>
 </context>
 <context>
@@ -606,22 +626,22 @@ just enter your nickname.</source>
     <name>HatButton</name>
     <message>
         <source>Change hat (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сменить шляпу (%1)</translation>
     </message>
 </context>
 <context>
     <name>HatPrompt</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Use selected hat</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать выбранную шляпу</translation>
     </message>
     <message>
         <source>Search for a hat:</source>
-        <translation type="unfinished"></translation>
+        <translation>Поиск по шляпам:</translation>
     </message>
 </context>
 <context>
@@ -635,7 +655,7 @@ just enter your nickname.</source>
     <name>KeyBinder</name>
     <message>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Категория</translation>
     </message>
 </context>
 <context>
@@ -643,30 +663,30 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation type="unfinished">Длительность: %1мин %2сек</translation>
+        <translation>Длительность: %1мин %2сек</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation type="unfinished">Видео: %1x%2, </translation>
+        <translation>Видео: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation type="unfinished">%1 кадров/сек,</translation>
+        <translation>%1 кадров/сек,</translation>
     </message>
     <message>
         <source>Audio: </source>
-        <translation type="unfinished">Аудио: </translation>
+        <translation>Аудио: </translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>неизвестно</translation>
     </message>
 </context>
 <context>
     <name>MapModel</name>
     <message>
         <source>No description available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Описание отсутствует.</translation>
     </message>
 </context>
 <context>
@@ -701,35 +721,35 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Основные настройки</translation>
+        <translation>Основные настройки</translation>
     </message>
     <message>
         <source>Bans</source>
-        <translation type="unfinished"></translation>
+        <translation>Баны</translation>
     </message>
     <message>
         <source>IP/Nick</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Псевдоним</translation>
     </message>
     <message>
         <source>Expiration</source>
-        <translation type="unfinished"></translation>
+        <translation>Окончание</translation>
     </message>
     <message>
         <source>Reason</source>
-        <translation type="unfinished"></translation>
+        <translation>Причина</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновить</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
 </context>
 <context>
@@ -737,6 +757,17 @@ just enter your nickname.</source>
     <message>
         <source>Connecting...</source>
         <translation>Соединение...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation>Идёт загрузка пожалуйста, подождите.</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -790,35 +821,35 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Use my default</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать мои настройки по умолчанию</translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить все привязки</translation>
     </message>
     <message>
         <source>Custom Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка управления</translation>
     </message>
     <message>
         <source>Hat</source>
-        <translation type="unfinished">Шляпа</translation>
+        <translation>Шляпа</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Название</translation>
+        <translation>Название</translation>
     </message>
     <message>
         <source>This hedgehog&apos;s name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя этого ежа</translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать случайное имя для этого ежа</translation>
     </message>
     <message>
         <source>Random Team</source>
-        <translation type="unfinished">Случайная команда</translation>
+        <translation>Случайная команда</translation>
     </message>
 </context>
 <context>
@@ -887,6 +918,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; испугался и пропустил &lt;b&gt;%2&lt;/b&gt; ходов.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Сохранить</translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>
@@ -942,23 +981,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play a game across a local area network</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть по локальной сети</translation>
     </message>
     <message>
         <source>Play a game on an official server</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть на официальном сервере</translation>
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished"></translation>
+        <translation>Отзыв</translation>
     </message>
     <message>
         <source>Play local network game</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть по локальной сети</translation>
     </message>
     <message>
         <source>Play official network game</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть на официальном сервере</translation>
     </message>
 </context>
 <context>
@@ -969,7 +1008,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation type="unfinished">Редактировать настройки игры</translation>
+        <translation>Редактировать настройки игры</translation>
     </message>
 </context>
 <context>
@@ -980,19 +1019,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation type="unfinished">Редактировать настройки игры</translation>
+        <translation>Редактировать настройки игры</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation type="unfinished">Старт</translation>
+        <translation>Старт</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Обновить</translation>
+        <translation>Обновить</translation>
     </message>
     <message>
         <source>Room controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Управление комнатой</translation>
     </message>
 </context>
 <context>
@@ -1094,47 +1133,47 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Reset to default</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить на значения по умолчанию</translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить все привязки</translation>
     </message>
     <message>
         <source>Game</source>
-        <translation type="unfinished"></translation>
+        <translation>Игра</translation>
     </message>
     <message>
         <source>Graphics</source>
-        <translation type="unfinished"></translation>
+        <translation>Графика</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Звук</translation>
     </message>
     <message>
         <source>Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Управление</translation>
     </message>
     <message>
         <source>Video Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись видео</translation>
     </message>
     <message>
         <source>Network</source>
-        <translation type="unfinished"></translation>
+        <translation>Сеть</translation>
     </message>
     <message>
         <source>Teams</source>
-        <translation type="unfinished">Команды</translation>
+        <translation>Команды</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation type="unfinished"></translation>
+        <translation>Схемы</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Оружие</translation>
+        <translation>Оружие</translation>
     </message>
     <message>
         <source>Frontend</source>
@@ -1142,7 +1181,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Custom colors</source>
-        <translation type="unfinished">Свои цвета</translation>
+        <translation>Свои цвета</translation>
     </message>
     <message>
         <source>Game audio</source>
@@ -1158,23 +1197,23 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Proxy settings</source>
-        <translation type="unfinished">Настройки прокси</translation>
+        <translation>Настройки прокси</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Разное</translation>
+        <translation>Разное</translation>
     </message>
     <message>
         <source>Updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновления</translation>
     </message>
     <message>
         <source>Check for updates</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверить обновления</translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation type="unfinished">Настройки видео</translation>
+        <translation>Настройки видео</translation>
     </message>
 </context>
 <context>
@@ -1232,27 +1271,27 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Search for a room:</source>
-        <translation type="unfinished"></translation>
+        <translation>Искать комнату:</translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать комнату</translation>
     </message>
     <message>
         <source>Join room</source>
-        <translation type="unfinished"></translation>
+        <translation>Войти в комнату</translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation type="unfinished"></translation>
+        <translation>Состояние комнаты</translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить фильтры</translation>
     </message>
     <message>
         <source>Open server administration page</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть страницу администрирования сервера</translation>
     </message>
 </context>
 <context>
@@ -1476,12 +1515,12 @@ just enter your nickname.</source>
     <message>
         <source>Date: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Дата: %1</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Размер: %1</translation>
     </message>
 </context>
 <context>
@@ -1532,7 +1571,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Запретить вход незарегистрированным игрокам</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -1540,7 +1579,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Показать текущие игры</translation>
     </message>
 </context>
 <context>
@@ -1591,11 +1630,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Visual effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Визуальные эффекты</translation>
     </message>
     <message>
         <source>Sound</source>
-        <translation type="unfinished"></translation>
+        <translation>Звук</translation>
     </message>
     <message>
         <source>In-game sound effects</source>
@@ -1603,7 +1642,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Music</source>
-        <translation type="unfinished"></translation>
+        <translation>Музыка</translation>
     </message>
     <message>
         <source>In-game music</source>
@@ -1964,15 +2003,15 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="unfinished">Полный экран</translation>
+        <translation>Полный экран</translation>
     </message>
     <message>
         <source>Fullscreen Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешение в полноэкранном режиме</translation>
     </message>
     <message>
         <source>Windowed Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешение в оконном режиме</translation>
     </message>
     <message>
         <source>Your Email</source>
@@ -1996,6 +2035,10 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This setting will be effective at next restart.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2241,12 +2284,13 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Not all players are ready</source>
-        <translation type="unfinished"></translation>
+        <translation>Не все игроки готовы</translation>
     </message>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы действительно хотите запустить игру?
+Не все игроки готовы.</translation>
     </message>
 </context>
 <context>
@@ -2376,15 +2420,15 @@ Not all players are ready.</source>
     <name>RoomNamePrompt</name>
     <message>
         <source>Enter a name for your room.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите название для вашей комнаты.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать комнату</translation>
     </message>
 </context>
 <context>
@@ -2438,19 +2482,19 @@ Not all players are ready.</source>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation type="unfinished"></translation>
+        <translation>Зерно карты - это основа для всех псведослучайных значений, используемых в игре.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Set seed</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить зерно</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
@@ -2496,29 +2540,29 @@ Error code: %2</source>
     <name>TeamSelWidget</name>
     <message>
         <source>At least two teams are required to play!</source>
-        <translation type="unfinished"></translation>
+        <translation>Для игры нужны как минимум две команды!</translation>
     </message>
 </context>
 <context>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation type="unfinished"></translation>
+        <translation>Команда %1</translation>
     </message>
 </context>
 <context>
     <name>ThemePrompt</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>Search for a theme:</source>
-        <translation type="unfinished"></translation>
+        <translation>Искать тему:</translation>
     </message>
     <message>
         <source>Use selected theme</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать выбранную тему</translation>
     </message>
 </context>
 <context>
@@ -2689,26 +2733,26 @@ Error code: %2</source>
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation type="unfinished"></translation>
+        <translation>информация о еже</translation>
     </message>
 </context>
 <context>
     <name>binds (categories)</name>
     <message>
         <source>Movement</source>
-        <translation type="unfinished"></translation>
+        <translation>Передвижение</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation type="unfinished">Оружие</translation>
+        <translation>Оружие</translation>
     </message>
     <message>
         <source>Camera</source>
-        <translation type="unfinished"></translation>
+        <translation>Камера</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
-        <translation type="unfinished">Разное</translation>
+        <translation>Разное</translation>
     </message>
 </context>
 <context>
@@ -2779,7 +2823,7 @@ Error code: %2</source>
     </message>
     <message>
         <source>Hedgehog movement</source>
-        <translation type="unfinished"></translation>
+        <translation>Движение ежа</translation>
     </message>
 </context>
 <context>
@@ -3098,121 +3142,6 @@ Error code: %2</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

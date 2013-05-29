@@ -99,19 +99,19 @@
         <translation>Enviar Feedback</translation>
     </message>
     <message>
-        <source>Please give us feedback!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
+        <source>Send us feedback!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your email address is optional, but we may want to contact you.</source>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -261,6 +261,18 @@ Por favor verifica a tua instalação!</translation>
         <source>Failed to save StyleSheet to %1</source>
         <translation>Não foi possível gravar o StyleSheet em %1</translation>
     </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -369,6 +381,10 @@ A tua palavra-passe também não foi gravada.</translation>
 Please wait a few seconds and try again.</source>
         <translation>Tentás-te voltar ao servidor num espaço de tempo demasiado curto.
 Por favor, aguarda alguns segundos e tenta novamente.</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -494,7 +510,7 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Tema: </translation>
+        <translation type="obsolete">Tema: </translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -507,6 +523,10 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     <message>
         <source>All files</source>
         <translation>Todos os ficheiros</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -552,7 +572,7 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 entrou</translation>
+        <translation type="obsolete">%1 *** %2 entrou</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -747,6 +767,17 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
@@ -887,6 +918,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão amedrontado que passou &lt;b&gt;%2&lt;/b&gt; turno.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; estava tão amedrontado que passou &lt;b&gt;%2&lt;/b&gt; turnos.</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Gravar</translation>
     </message>
 </context>
 <context>
@@ -1954,6 +1993,10 @@ Deseja mesmo sair?</translation>
     <message>
         <source>This program is distributed under the %1</source>
         <translation>Este programa é distribuído sob a %1</translation>
+    </message>
+    <message>
+        <source>This setting will be effective at next restart.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3094,115 +3137,115 @@ Error code: %2</source>
     <name>server</name>
     <message>
         <source>Not room master</source>
-        <translation type="unfinished">Não és o anfitrião da sala</translation>
+        <translation type="obsolete">Não és o anfitrião da sala</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished">Informação dos ouriços corrompida</translation>
+        <translation type="obsolete">Informação dos ouriços corrompida</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation type="unfinished">demasiadas equipas</translation>
+        <translation type="obsolete">demasiadas equipas</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation type="unfinished">demasiados ouriços</translation>
+        <translation type="obsolete">demasiados ouriços</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished">Já existe uma equipa com o mesmo nome na lista</translation>
+        <translation type="obsolete">Já existe uma equipa com o mesmo nome na lista</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="unfinished">partida em progresso</translation>
+        <translation type="obsolete">partida em progresso</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="unfinished">limitada</translation>
+        <translation type="obsolete">limitada</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished">REMOVE_TEAM: equipa inexistente</translation>
+        <translation type="obsolete">REMOVE_TEAM: equipa inexistente</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation type="unfinished">A equipa não te pertence!</translation>
+        <translation type="obsolete">A equipa não te pertence!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="unfinished">Menos de 2 clãs!</translation>
+        <translation type="obsolete">Menos de 2 clãs!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="unfinished">Já existe uma sala com esse nome</translation>
+        <translation type="obsolete">Já existe uma sala com esse nome</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="unfinished">Utilizador já em uso</translation>
+        <translation type="obsolete">Utilizador já em uso</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation type="unfinished">Nome de utilizador ilegal</translation>
+        <translation type="obsolete">Nome de utilizador ilegal</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="unfinished">Protocolo já conhecido</translation>
+        <translation type="obsolete">Protocolo já conhecido</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation type="unfinished">Número inválido</translation>
+        <translation type="obsolete">Número inválido</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="unfinished">Nome de utilizador já em uso</translation>
+        <translation type="obsolete">Nome de utilizador já em uso</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="unfinished">Não possui permissões para verificar</translation>
+        <translation type="obsolete">Não possui permissões para verificar</translation>
     </message>
     <message>
         <source>Authentication failed</source>
-        <translation type="unfinished">A autenticação falhou</translation>
+        <translation type="obsolete">A autenticação falhou</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished">É necessário aguardar 60 segundos após uma expulsão</translation>
+        <translation type="obsolete">É necessário aguardar 60 segundos após uma expulsão</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="unfinished">expulso</translation>
+        <translation type="obsolete">expulso</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="unfinished">Ping timeout</translation>
+        <translation type="obsolete">Ping timeout</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation type="unfinished">tchau (bye)</translation>
+        <translation type="obsolete">tchau (bye)</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation type="unfinished">Nome da sala ilegal</translation>
+        <translation type="obsolete">Nome da sala ilegal</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation type="unfinished">Sala inexistente</translation>
+        <translation type="obsolete">Sala inexistente</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="unfinished">Entrada restrita</translation>
+        <translation type="obsolete">Entrada restrita</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="unfinished">Apenas utilizadores registados</translation>
+        <translation type="obsolete">Apenas utilizadores registados</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="unfinished">Estás banido desta sala</translation>
+        <translation type="obsolete">Estás banido desta sala</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="unfinished">Campo vazio na configuração</translation>
+        <translation type="obsolete">Campo vazio na configuração</translation>
     </message>
 </context>
 </TS>

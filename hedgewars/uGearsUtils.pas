@@ -31,13 +31,13 @@ procedure spawnHealthTagForHH(HHGear: PGear; dmg: Longword);
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 procedure CheckHHDamage(Gear: PGear);
 procedure CalcRotationDirAngle(Gear: PGear);
-procedure ResurrectHedgehog(gear: PGear);
+procedure ResurrectHedgehog(var gear: PGear);
 
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt); inline;
 procedure FindPlace(var Gear: PGear; withFall: boolean; Left, Right: LongInt; skipProximity: boolean);
 
 function  CheckGearNear(Gear: PGear; Kind: TGearType; rX, rY: LongInt): PGear;
-function  CheckGearDrowning(Gear: PGear): boolean;
+function  CheckGearDrowning(var Gear: PGear): boolean;
 procedure CheckCollision(Gear: PGear); inline;
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 
@@ -263,6 +263,7 @@ end;
     
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 begin
+if Hedgehog^.Effects[heFrozen] <> 0 then exit;
 if (Source = dsFall) or (Source = dsExplosion) then
     case random(3) of
         0: PlaySoundV(sndOoff1, Hedgehog^.Team^.voicepack);
@@ -289,32 +290,34 @@ var
     i: LongWord;
     particle: PVisualGear;
 begin
-    if _0_4 < Gear^.dY then
+if _0_4 < Gear^.dY then
+    begin
+    dmg := ModifyDamage(1 + hwRound((Gear^.dY - _0_4) * 70), Gear);
+    if Gear^.Hedgehog^.Effects[heFrozen] = 0 then
+         PlaySound(sndBump)
+    else PlaySound(sndFrozenHogImpact);
+    if dmg < 1 then
+        exit;
+
+    for i:= min(12, (3 + dmg div 10)) downto 0 do
         begin
-        dmg := ModifyDamage(1 + hwRound((hwAbs(Gear^.dY) - _0_4) * 70), Gear);
-        PlaySound(sndBump);
-        if dmg < 1 then
-            exit;
+        particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
+        if particle <> nil then
+            particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
+        end;
 
-        for i:= min(12, (3 + dmg div 10)) downto 0 do
-            begin
-            particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
-            if particle <> nil then
-                particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
-            end;
+    if (Gear^.Invulnerable) then
+        exit;
 
-        if (Gear^.Invulnerable) then
-            exit;
+    //if _0_6 < Gear^.dY then
+    //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
+    //else
+    //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
 
-        //if _0_6 < Gear^.dY then
-        //    PlaySound(sndOw4, Gear^.Hedgehog^.Team^.voicepack)
-        //else
-        //    PlaySound(sndOw1, Gear^.Hedgehog^.Team^.voicepack);
-
-        if Gear^.LastDamage <> nil then
-            ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
-        else
-            ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
+    if Gear^.LastDamage <> nil then
+        ApplyDamage(Gear, Gear^.LastDamage, dmg, dsFall)
+    else
+        ApplyDamage(Gear, CurrentHedgehog, dmg, dsFall);
     end
 end;
 
@@ -337,7 +340,7 @@ begin
         Gear^.DirAngle := Gear^.DirAngle - 360
 end;
 
-function CheckGearDrowning(Gear: PGear): boolean;
+function CheckGearDrowning(var Gear: PGear): boolean;
 var 
     skipSpeed, skipAngle, skipDecay: hwFloat;
     i, maxDrops, X, Y: LongInt;
@@ -361,7 +364,7 @@ begin
             else DeleteGear(Gear);
             exit
             end;
-        isSubmersible:= (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack);
+        isSubmersible:= ((Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0)) or (Gear^.State and gstSubmersible <> 0);
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
@@ -369,7 +372,7 @@ begin
         vdX:= hwFloat2Float(Gear^.dX);
         vdY:= hwFloat2Float(Gear^.dY);
         // this could perhaps be a tiny bit higher.
-        if  (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        if  (cWaterLine + 64 + Gear^.Radius > Y) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed) 
         and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
             begin
             Gear^.dY.isNegative := true;
@@ -390,7 +393,11 @@ begin
                     if Gear^.Kind = gtHedgehog then
                         begin
                         if Gear^.Hedgehog^.Effects[heResurrectable] <> 0 then
-                            ResurrectHedgehog(Gear)
+                            begin
+                            // Gear could become nil after this, just exit to skip splashes
+                            ResurrectHedgehog(Gear);
+                            exit
+                            end
                         else
                             begin
                             Gear^.doStep := @doStepDrowningGear;
@@ -402,9 +409,12 @@ begin
                         Gear^.doStep := @doStepDrowningGear;
                         if Gear^.Kind = gtFlake then
                             exit // skip splashes 
-                end;
+                end
+            else if (Y > cWaterLine + cVisibleWater*4) and 
+                    ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.State and gstSubmersible = 0)) then
+                Gear^.doStep:= @doStepDrowningGear;
             if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
             and (CurAmmoGear^.dY < _0_01))) then
                 if Gear^.Density * Gear^.dY > _1 then
                     PlaySound(sndSplash)
@@ -416,7 +426,7 @@ begin
 
         if ((cReducedQuality and rqPlainSplash) = 0)
         and (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and ((CurAmmoGear^.Pos = 0)
+        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
         and (CurAmmoGear^.dY < _0_01)))) then
             begin
             splash:= AddVisualGear(X, cWaterLine, vgtSplash);
@@ -457,7 +467,7 @@ begin
                         end
                 end
             end;
-        if isSubmersible and (CurAmmoGear^.Pos = 0) then
+        if isSubmersible and (Gear = CurAmmoGear) and (CurAmmoGear^.Pos = 0) then
             CurAmmoGear^.Pos := 1000
         end
     else
@@ -465,7 +475,7 @@ begin
 end;
 
 
-procedure ResurrectHedgehog(gear: PGear);
+procedure ResurrectHedgehog(var gear: PGear);
 var tempTeam : PTeam;
     sparkles: PVisualGear;
     gX, gY: LongInt;
@@ -507,7 +517,7 @@ begin
         RenderHealth(gear^.Hedgehog^);
         ScriptCall('onGearResurrect', gear^.uid);
         gear^.State := gstWait;
-    end;
+        end;
     RecountTeamHealth(tempTeam);
 end;
 

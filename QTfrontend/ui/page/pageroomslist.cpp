@@ -28,6 +28,7 @@
 #include <QGroupBox>
 #include <QMenu>
 #include <QDebug>
+#include <QSplitter>
 
 #include <QSortFilterProxyModel>
 
@@ -107,7 +108,18 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     topLayout->setRowStretch(1, 0);
     topLayout->setColumnStretch(3, 1);
 
+    // Rooms list and chat with splitter
+    m_splitter = new QSplitter();
+    m_splitter->setChildrenCollapsible(false);
+    pageLayout->addWidget(m_splitter, 100);
+
     // Room list
+    QWidget * roomsListWidget = new QWidget(this);
+    m_splitter->setOrientation(Qt::Vertical);
+    m_splitter->addWidget(roomsListWidget);
+
+    QVBoxLayout * roomsLayout = new QVBoxLayout(roomsListWidget);
+    roomsLayout->setMargin(0);
 
     roomsList = new RoomTableView(this);
     roomsList->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -118,7 +130,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList->setSelectionMode(QAbstractItemView::SingleSelection);
     roomsList->setStyleSheet("QTableView { border-top-left-radius: 0px; }");
     roomsList->setFocusPolicy(Qt::NoFocus);
-    pageLayout->addWidget(roomsList, 200);
+    roomsLayout->addWidget(roomsList, 200);
 
     // Room filters container
 
@@ -126,9 +138,9 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     filtersContainer->setMaximumWidth(800);
     filtersContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-    pageLayout->addSpacing(7);
-    pageLayout->addWidget(filtersContainer, 0, Qt::AlignHCenter);
-    pageLayout->addSpacing(7);
+    roomsLayout->addSpacing(7);
+    roomsLayout->addWidget(filtersContainer, 0, Qt::AlignHCenter);
+    roomsLayout->addSpacing(7);
     
     QHBoxLayout * filterLayout = new QHBoxLayout(filtersContainer);
     filterLayout->setSpacing(0);
@@ -194,7 +206,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     // Lobby chat
 
     chatWidget = new HWChatWidget(this, false);
-    pageLayout->addWidget(chatWidget, 350);
+    m_splitter->addWidget(chatWidget);
 
     CBRules->addItem(QComboBox::tr("Any"));
 
@@ -251,6 +263,8 @@ void PageRoomsList::moveSelectionDown()
 
 void PageRoomsList::roomSelectionChanged(const QModelIndex & current, const QModelIndex & previous)
 {
+    Q_UNUSED(previous);
+
     BtnJoin->setEnabled(current.isValid());
 }
 
@@ -732,14 +746,24 @@ void PageRoomsList::setSettings(QSettings *settings)
 
 bool PageRoomsList::restoreHeaderState()
 {
-    if (!m_gameSettings->contains("frontend/roomslist_header"))
-        return false;
-    return roomsList->horizontalHeader()->restoreState(QByteArray::fromBase64(
-        (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
+    if (m_gameSettings->contains("frontend/roomslist_splitter"))
+    {
+        m_splitter->restoreState(QByteArray::fromBase64(
+            (m_gameSettings->value("frontend/roomslist_splitter").toByteArray())));
+    }
+
+    if (m_gameSettings->contains("frontend/roomslist_header"))
+    {
+        return roomsList->horizontalHeader()->restoreState(QByteArray::fromBase64(
+            (m_gameSettings->value("frontend/roomslist_header").toByteArray())));
+    } else return false;
 }
 
 void PageRoomsList::saveHeaderState()
 {
     m_gameSettings->setValue("frontend/roomslist_header",
         QString(roomsList->horizontalHeader()->saveState().toBase64()));
+
+    m_gameSettings->setValue("frontend/roomslist_splitter",
+        QString(m_splitter->saveState().toBase64()));
 }

@@ -20,6 +20,7 @@ import Control.Arrow
 import Control.Exception
 import System.Process
 import Network.Socket
+import System.Random
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -206,8 +207,9 @@ processAction (ChangeMaster delegateId)= do
     rnc <- gets roomsClients
     newMasterId <- liftM (\ids -> fromMaybe (last . filter (/= ci) $ ids) delegateId) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id newMasterId
+    oldMasterId <- io $ room'sM rnc masterID ri
+    oldMaster <- io $ client'sM rnc id oldMasterId
     oldRoomName <- io $ room'sM rnc name ri
-    oldMaster <- client's nick
     kicked <- client's isKickedFromServer
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     let newRoomName = if (proto < 42) || kicked then nick newMaster else oldRoomName
@@ -216,12 +218,13 @@ processAction (ChangeMaster delegateId)= do
                 , name = newRoomName
                 , isRestrictedJoins = False
                 , isRestrictedTeams = False
-                , isRegisteredOnly = False
-                , readyPlayers = if isReady newMaster then readyPlayers r else readyPlayers r + 1})
-        , ModifyClient2 newMasterId (\c -> c{isMaster = True, isReady = True})
+                , isRegisteredOnly = False}
+                )
+        , ModifyClient2 newMasterId (\c -> c{isMaster = True})
+        , ModifyClient2 oldMasterId (\c -> c{isMaster = False})
         , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMaster]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+hr", nick newMaster]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", nick oldMaster]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
         ]
 
     newRoom' <- io $ room'sM rnc id ri
@@ -381,7 +384,7 @@ processAction CheckRegistered = do
         if p < 38 then
             processAction $ ByeClient $ loc "Nickname is already in use"
             else
-            processAction $ NoticeMessage NickAlreadyInUse
+            mapM_ processAction [NoticeMessage NickAlreadyInUse, ModifyClient $ \c -> c{nick = B.empty}]
         else
         do
         db <- gets (dbQueries . serverInfo)
@@ -613,6 +616,12 @@ processAction Stats = do
                     , "</td></tr>"])
             . Set.toList $ keys
     processAction $ Warning versionsStats
+
+
+processAction (Random chans items) = do
+    let i = if null items then ["heads", "tails"] else items
+    n <- io $ randomRIO (0, length i - 1)
+    processAction $ AnswerClients chans ["CHAT", "[random]", i !! n]
 
 
 #if defined(OFFICIAL_SERVER)

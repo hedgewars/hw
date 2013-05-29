@@ -144,6 +144,11 @@ handleCmd_lobby ["FOLLOW", asknick] = do
         else
         liftM ((:) (AnswerClients [clChan] ["JOINING", roomName])) $ handleCmd_lobby ["JOIN_ROOM", roomName]
 
+
+handleCmd_lobby ("RND":rs) = do
+    c <- liftM sendChan thisClient
+    return [Random [c] rs]
+
     ---------------------------
     -- Administrator's stuff --
 

@@ -575,6 +575,7 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m5Choice = tonumber(GetCampaignVar("M5Choice"))
@@ -606,7 +607,9 @@ function SaveCampaignVariables()
   SaveCampaignVar("M8PrincessLeader", princessLeader)
   SaveCampaignVar("M8EnemyFled", enemyFled)
   SaveCampaignVar("M8Scene", "" .. scene)
-  SaveCampaignVar("Progress", "8")
+  if progress and progress<8 then
+    SaveCampaignVar("Progress", "8")
+  end
 end
 
 function SetupPlace()
