@@ -174,7 +174,7 @@
 02:01=%1 śpi z rybami
 02:01=%1 uważa, że fizyka płynów w tej grze jest do bani!
 02:01=%1 wygląda na spragnionego
-02:01=Morze Ciebie wzywa, %1
+02:01=Morze Cię wzywa, %1
 02:01=%1 zaginął na morzu
 02:01=%1 powinien przynieść zestaw do nurkowania
 02:01=%1 ma pogrzeb na morzu
@@ -286,7 +286,7 @@
 02:05=Dobre życie... w formie skrzyneczki!
 02:05=Ktoś dzwonił po doktora?
 02:05=Świeże bandaże!
-02:05=To pomoże poczuć się Tobie lepiej
+02:05=Po tym poczujesz sie lepiej!
 02:05=Pomniejszy Eliksir Żywotności! Eeee... To chyba nie ta nazwa.
 02:05=Zbierz mnie!
 02:05=Zbierz to!
@@ -309,6 +309,7 @@
 02:05=W Hedgewars opieka zdrowotna naprawdę wymiata!
 02:05=Na zdrowie!
 02:05=Szczepionka!
+02:05=Ostatnio coś niewyraźnie wyglądasz. Weź tę apteczkę!
 
 ; New ammo crate
 02:06=Więcej broni!
@@ -541,6 +542,8 @@
 03:53=Typ 40
 ;03:54=Zbuduj coś przydatnego
 03:54=Narzędzie
+03:55=Przełammy lody!
+03:56=Nie przytnij sobie igieł!
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Atakuj przeciwników zwykłym granatem.|Wybuchnie kiedy zapalnik skończy odliczanie.|1-5: Ustawia zapalnik|Atak: Przytrzymaj by rzucić z większą siłą
@@ -599,6 +602,8 @@
 04:53=Wybierz się na podróż w czasie i przestrzeni|zostawiając inne jeże na polu walki.|Bądź przygotowany na powrót w dowolnym momencie.|Gdy rozpocznie się|Nagła Śmierć lub większość jeży zostanie wybita.|Uwaga. Nie zadziała podczas Nagłej Śmierci,|gdy jesteś sam lub jeśli jesteś Królem.
 ;04:54=INCOMPLETE
 04:54=Wystrzel strumień kleistej mazi.|Buduj mosty, zasypuj wrogów, zatykaj tunele.|Uważaj by nie zasypać samego siebie!
+04:55=Epoka lodowcowa powraca!!|Zamroź jeże, uczyń podłoże śliskim lub zapobiegnij|utonięciu zamrażając wodę.|Atak: Strzał
+04:56=Rzuć w przeciwnika dwoma tasakami i zablokuj mu |drogę lub użyj ich do wspinaczki! Jednak uważaj! |Te tasaki są naprawdę ostre!|Atak: Przytrzymaj by rzucić z większą siłą (dwukrotnie)
 
 ; Game goal strings
 05:00=Ustawienia gry

@@ -284,7 +284,9 @@ end
 
 function DoPrincessFreed()
   AnimSay(princess, loc("Thank you, my hero!"), SAY_SAY, 0)
-  SaveCampaignVar("Progress", "7")
+  if progress and progress<7 then
+    SaveCampaignVar("Progress", "7")
+  end
   ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
@@ -390,6 +392,7 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m5Choice = tonumber(GetCampaignVar("M5Choice"))

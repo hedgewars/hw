@@ -189,12 +189,12 @@ begin
         {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
         {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
         {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
-        {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
+        {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
         {--height}               6 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
         {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--volume}               8 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
         {--nomusic}              9 : SetMusic           ( false );
         {--nosound}             10 : SetSound           ( false );
         {--fullscreen}          11 : cFullScreen       := true;

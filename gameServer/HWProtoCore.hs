@@ -43,12 +43,14 @@ handleCmd ("CMD" : parameters) =
     where
         h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
         h ["STATS"] = handleCmd ["STATS"]
-        h ["PART", msg] = handleCmd ["PART", msg]
-        h ["QUIT", msg] = handleCmd ["QUIT", msg]
-        h ["GLOBAL", msg] = do
+        h ("PART":m:ms) = handleCmd ["PART", B.unwords $ m:ms]
+        h ("QUIT":m:ms) = handleCmd ["QUIT", B.unwords $ m:ms]
+        h ("RND":rs) = handleCmd ("RND":rs)
+        h ("GLOBAL":m:ms) = do
+            cl <- thisClient
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            return [AnswerClients chans ["CHAT", "[global notice]", msg]]
+            return [AnswerClients chans ["CHAT", "[global notice]", B.unwords $ m:ms] | isAdministrator cl]
         h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
 
 handleCmd cmd = do
@@ -72,9 +74,9 @@ handleCmd_loggedin ["INFO", asknick] = do
     let cl = rnc `client` fromJust maybeClientId
     let roomId = clientRoom rnc clientId
     let clRoom = room rnc roomId
-    let roomMasterSign = if isMaster cl then "@" else ""
+    let roomMasterSign = if isMaster cl then "+" else ""
     let adminSign = if isAdministrator cl then "@" else ""
-    let rInfo = if roomId /= lobbyId then B.concat [roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
+    let rInfo = if roomId /= lobbyId then B.concat [adminSign, roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
     let roomStatus = if isJust $ gameInfo clRoom then
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else

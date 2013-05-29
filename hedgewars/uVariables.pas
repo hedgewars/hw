@@ -1765,7 +1765,6 @@ var
             Ammo: (Propz: ammoprop_NoRoundEnd or
                           ammoprop_ForwMsgs or
                           ammoprop_AttackInMove or
-                          ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Utility or
                           ammoprop_NeedUpDown or
@@ -2100,7 +2099,7 @@ var
             TimeAfterTurn: 3000;
             minAngle: 0;
             maxAngle: 0;
-            isDamaging: true;
+            isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
@@ -2177,7 +2176,7 @@ var
                 AmmoType: amLandGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 2;
+            Slot: 6;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2202,11 +2201,11 @@ var
                 AmmoType: amIceGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 9;
+            Slot: 2;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
-            isDamaging: true;
+            isDamaging: false;
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;

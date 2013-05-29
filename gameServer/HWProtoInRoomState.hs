@@ -169,17 +169,15 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
     chans <- roomClientsChans
-    if isMaster cl then
-        return []
-        else
-        return [
-            ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-            ModifyClient (\c -> c{isReady = not $ isReady cl}),
-            AnswerClients chans $ if clientProto cl < 38 then
-                    [if isReady cl then "NOT_READY" else "READY", nick cl]
-                    else
-                    ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
-            ]
+
+    return [
+        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+        ModifyClient (\c -> c{isReady = not $ isReady cl}),
+        AnswerClients chans $ if clientProto cl < 38 then
+                [if isReady cl then "NOT_READY" else "READY", nick cl]
+                else
+                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
+        ]
 
 
 handleCmd_inRoom ["START_GAME"] = do
@@ -350,6 +348,10 @@ handleCmd_inRoom ["BAN", banNick] = do
         else
         return []
 
+handleCmd_inRoom ("RND":rs) = do
+    n <- clientNick
+    s <- roomClientsChans
+    return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 

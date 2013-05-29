@@ -27,6 +27,7 @@ class AmmoSchemeModel;
 class QTableView;
 class RoomsListModel;
 class QSortFilterProxyModel;
+class QSplitter;
 
 class RoomTableView : public QTableView
 {
@@ -101,6 +102,7 @@ class PageRoomsList : public AbstractPage
         QSortFilterProxyModel * weaponsFilteredModel;
         QAction * showGamesInLobby;
         QAction * showGamesInProgress;
+        QSplitter * m_splitter;
 
         AmmoSchemeModel * ammoSchemeModel;
 

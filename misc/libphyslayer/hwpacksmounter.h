@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 PHYSFS_DECL void hedgewarsMountPackages();
-
+PHYSFS_DECL void hedgewarsMountPackage(char * fileName);
 
 #ifdef __cplusplus
 }

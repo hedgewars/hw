@@ -29,6 +29,7 @@ class PageMain : public AbstractPage
 
     public:
         PageMain(QWidget * parent = 0);
+        void resetNetworkChoice();
 
         QPushButton * BtnSinglePlayer;
         QPushButton * BtnNet;

@@ -99,19 +99,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Please give us feedback!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
+        <source>Send us feedback!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Your email address is optional, but we may want to contact you.</source>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -260,6 +260,18 @@ Please check your installation!</source>
         <source>Failed to save StyleSheet to %1</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWForm</name>
@@ -357,6 +369,10 @@ Your password wasn&apos;t saved either.</source>
     <message>
         <source>You reconnected too fast.
 Please wait a few seconds and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -478,10 +494,6 @@ Please wait a few seconds and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Theme: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Load drawn map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -495,6 +507,10 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>Large tunnels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -541,7 +557,7 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 has joined</translation>
+        <translation type="obsolete">%1 *** %2 has joined</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -735,6 +751,17 @@ just enter your nickname.</source>
     </message>
 </context>
 <context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
@@ -881,6 +908,14 @@ just enter your nickname.</source>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</numerusform>
             <numerusform></numerusform>
         </translation>
+    </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1969,6 +2004,10 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>This program is distributed under the %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This setting will be effective at next restart.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3071,121 +3110,6 @@ Error code: %2</source>
     </message>
     <message>
         <source>DPad</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>server</name>
-    <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Authentication failed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>60 seconds cooldown after kick</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>kicked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Ping timeout</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>bye</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Empty config entry</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Corrupted hedgehogs info</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many teams</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>too many hedgehogs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There&apos;s already a team with same name in the list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>round in progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>REMOVE_TEAM: no such team</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Not team owner!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Less than two clans!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Room with such name already exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal room name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No such room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Registered users only</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You are banned in this room</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname already chosen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Illegal nickname</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Protocol already known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Bad number</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Nickname is already in use</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

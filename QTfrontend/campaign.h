@@ -19,21 +19,8 @@
 #ifndef CAMPAIGN_H
 #define CAMPAIGN_H
 
-#include <QMainWindow>
-#include <QStack>
-#include <QTime>
-#include <QPointer>
-#include <QPropertyAnimation>
-#include <QUrl>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
-
-#include "netserver.h"
-#include "game.h"
-#include "ui_hwform.h"
-#include "SDLInteraction.h"
-#include "bgwidget.h"
+#include <QString>
+#include <QStringList>
 
 QStringList getCampMissionList(QString & campaign);
 unsigned int getCampProgress(QString & teamName, QString & campName);

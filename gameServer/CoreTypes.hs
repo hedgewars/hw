@@ -75,6 +75,7 @@ data Action =
     | CheckRecord
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
+    | Random [ClientChan] [B.ByteString]
 
 type ClientChan = Chan [B.ByteString]
 

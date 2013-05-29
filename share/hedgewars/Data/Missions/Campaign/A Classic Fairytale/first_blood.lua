@@ -56,6 +56,7 @@ punchTaken = false
 canKilled = false
 desertTaken = false
 challengeFailed = false
+deleteCrate = false
 difficultyChoice = false
 princessFace = "Left"
 elderFace = "Left"
@@ -220,6 +221,9 @@ function AnimationSetup()
 end
 -----------------------------Events------------------------------------
 function CheckNeedToTurn(gear)
+  if youngKilled then
+    return false
+  end
   if gear == princess then
     if princessKilled ~= true then
       if (GetX(princess) > GetX(youngh) and princessFace == "Right")
@@ -466,6 +470,7 @@ end
 
 function DoTimesUp()
   challengeFailed = true
+  deleteCrate = true
   DeleteGear(crates[1])
   TurnTimeLeft = -1
   AddCaption(loc("And so happenned that Leaks A Lot failed to complete the challenge! He landed, pressured by shame..."))
@@ -538,7 +543,9 @@ end
 
 function DoCannibalKilled()
   AddAnim(cannKilledAnim)
-  SaveCampaignVar("Progress", "1")
+  if not progress then
+    SaveCampaignVar("Progress", "1")
+  end
 end
 
 function DoCannibalKilledEarly()
@@ -603,9 +610,7 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-	MapGen = 0
-  TemplateFilter = 6
-  TemplateNumber = 33
+	Map = "A_Classic_Fairytale_first_blood"
 	Theme = "Nature"
 
 
@@ -630,6 +635,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   TurnTimeLeft = -1
   FollowGear(youngh)
 	ShowMission(loc("A Classic Fairytale"), loc("First Blood"), loc("Finish your training|Hint: Animations can be skipped with the [Precise] key."), -amSkip, 0)
@@ -664,6 +670,8 @@ function onGearDelete(gear)
     rope2Taken = true
   elseif gear == ropeCrate3 then
     rope3Taken = true
+  elseif gear == crates[1] and deleteCrate == true then
+    deleteCrate = false
   elseif gear == crates[1] and challengeFailed == false then
     crates[1] = nil
     cratesCollected = cratesCollected + 1

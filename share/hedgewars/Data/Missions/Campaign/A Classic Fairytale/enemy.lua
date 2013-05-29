@@ -400,7 +400,9 @@ function WonMission()
 end
 
 function WinMission()
-  SaveCampaignVar("Progress", "9")
+  if progress and progress<9 then
+    SaveCampaignVar("Progress", "9")
+  end
   ParseCommand("teamgone " .. loc("011101001"))
   TurnTimeLeft = 0
 end
@@ -420,6 +422,7 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m5Choice = tonumber(GetCampaignVar("M5Choice"))

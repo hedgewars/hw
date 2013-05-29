@@ -13,7 +13,7 @@ Basic_Training_-_Shotgun.desc="On tire d'abord, on pose les questions après !"
 Basic_Training_-_Sniper_Rifle.name=Initiation au Sniper
 Basic_Training_-_Sniper_Rifle.desc="Pan ! En pleine tête !"
 
-Basic_Training_-_Rope.name=Initiation à la Grappin
+Basic_Training_-_Rope.name=Initiation au Grappin
 Basic_Training_-_Rope.desc="Bouge de là et Balance toi !"
 
 User_Mission_-_Dangerous_Ducklings.name=Mission: Canards dangereux

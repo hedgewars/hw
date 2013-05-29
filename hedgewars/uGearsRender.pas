@@ -979,6 +979,8 @@ var
     aAngle: real;
     startX, endX, startY, endY: LongInt;
 begin
+    if Gear^.State and gstFrozen <> 0 then Tint($A0, $A0, $FF, $FF);
+    //if Gear^.State and gstFrozen <> 0 then Tint(IceColor or $FF);
     if Gear^.Target.X <> NoPointX then
         if Gear^.AmmoType = amBee then
             DrawSpriteRotatedF(sprTargetBee, Gear^.Target.X + WorldDx, Gear^.Target.Y + WorldDy, 0, 0, (RealTicks shr 3) mod 360)
@@ -1038,11 +1040,13 @@ begin
       gtPickHammer: DrawSprite(sprPHammer, x - 16, y - 50 + LongInt(((GameTicks shr 5) and 1) * 2), 0);
             gtRope: DrawRope(Gear);
 
-            gtMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
+            gtMine: begin
+                    if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprMineOff, x, y, 0, Gear^.DirAngle)
-                       else if Gear^.Health <> 0 then
-                           DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
-                       else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
+                    else if Gear^.Health <> 0 then
+                       DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
+                    else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
+                    end;
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)
@@ -1056,26 +1060,38 @@ begin
                         begin
                         if ((Gear^.Pos and posCaseAmmo) <> 0) then
                             begin
-                            i:= (GameTicks shr 6) mod 64;
-                            if i > 18 then
-                                i:= 0;
-                            DrawSprite(sprCase, x - 24, y - 24, i);
+                            if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprCase, x - 24, y - 28, 0)
+                            else
+                                begin
+                                i:= (GameTicks shr 6) mod 64;
+                                if i > 18 then i:= 0;
+                                DrawSprite(sprCase, x - 24, y - 24, i)
+                                end
                             end
                         else if ((Gear^.Pos and posCaseHealth) <> 0) then
                             begin
-                            i:= ((GameTicks shr 6) + 38) mod 64;
-                            if i > 13 then
-                                i:= 0;
-                            DrawSprite(sprFAid, x - 24, y - 24, i);
+                            if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprFAid, x - 24, y - 28, 0)
+                            else
+                                begin
+                                i:= ((GameTicks shr 6) + 38) mod 64;
+                                if i > 13 then i:= 0;
+                                DrawSprite(sprFAid, x - 24, y - 24, i)
+                                end
                             end
                         else if ((Gear^.Pos and posCaseUtility) <> 0) then
                             begin
-                            i:= (GameTicks shr 6) mod 70;
-                            if i > 23 then
-                                i:= 0;
-                            i:= i mod 12;
-                            DrawSprite(sprUtility, x - 24, y - 24, i);
-                            end;
+                            if Gear^.State and gstFrozen <> 0 then
+                                DrawSprite(sprUtility, x - 24, y - 28, 0)
+                            else
+                                begin
+                                i:= (GameTicks shr 6) mod 70;
+                                if i > 23 then i:= 0;
+                                i:= i mod 12;
+                                DrawSprite(sprUtility, x - 24, y - 24, i)
+                                end
+                            end
                         end;
                     if Gear^.Timer < 1833 then
                         begin
@@ -1096,7 +1112,7 @@ begin
                     else if Gear^.State and gsttmpFlag = 0 then
                         DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 0, 0, Gear^.DirAngle)
                     else
-                        DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle);
+                        DrawSpriteRotatedF(sprExplosivesRoll, x, y + 4, 1, 0, Gear^.DirAngle)
                     end;
         gtDynamite: DrawSprite(sprDynamite, x - 16, y - 25, Gear^.Tag and 1, Gear^.Tag shr 1);
      gtClusterBomb: DrawSpriteRotated(sprClusterBomb, x, y, 0, Gear^.DirAngle);
@@ -1285,6 +1301,7 @@ begin
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then
           DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
+    if Gear^.State and gstFrozen <> 0 then Tint($FF, $FF, $FF, $FF)
 end;
 
 end.

@@ -425,8 +425,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                         {
                             if (nick == mynick)
                             {
-                                if (isChief && !setFlag) ToggleReady();
-                                else emit setMyReadyStatus(setFlag);
+                                emit setMyReadyStatus(setFlag);
                             }
                             m_playersModel->setFlag(nick, PlayersListModel::Ready, setFlag);
                         }
