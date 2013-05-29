@@ -5284,7 +5284,10 @@ begin
                                 if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] < 256 then
                                     hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] := hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] + 1
                                 else if hogs.ar^[i]^.Hedgehog^.Effects[heFrozen] = 256 then
+                                    begin
                                     hogs.ar^[i]^.Hedgehog^.Effects[heFrozen]:= 200000-1;//cHedgehogTurnTime + cReadyDelay
+                                    PlaySound(sndHogFreeze);
+                                    end;
                                 end;
                 inc(Pos)
                 end
