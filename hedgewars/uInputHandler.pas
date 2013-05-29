@@ -289,8 +289,8 @@ DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
 DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
 
 DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomout';
-DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
+DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
 
 DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
 
