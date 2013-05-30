@@ -1,4 +1,4 @@
-local MUTANT_VERSION = "v0.9.4"
+local MUTANT_VERSION = "v0.9.5"
 
 --[[                  ___                   ___
                     (   )                 (   )
@@ -13,42 +13,9 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 (___)(___)(___'.__.'   `.__.`.__.'_(___)(___)`.__.
 
 
-----  IMPORTANT!
-----
-----  You should save (press Ctrl+S) this script to:
-----  Program Files\Hedgewars\share\hedgewars\Data\Scripts\Multiplayer\Mutant.lua
-----     or (on Linux):
-----  ~/.hedgewars/Data/Scripts/Multiplayer/Mutant.lua
-----
-----  (or wherever scripts like Highlander.lua, Racer.lua are on your system)
-----
-----  Also, if you didn't have Mutant script yet, you need to restart Hedgewars for it to find the script file.
-----
-
-
-----  GAME RULES
-----
 ----  Recommended settings:
 ----    * one hedgehog per team
 ----    * 'Small' one-island map
-----
-----  First one to kill anyone becomes Mutant. Mutant has super-weapons
-----  and a lot of health, which however depletes if he doesn't frag fast.
-----  Goal of Mutant is to use his weapons to hold his status for as long
-----  as he can.
-----  Goal of others is to hunt the Mutant down. The one who kills Mutant,
-----  becomes Mutant himself.
-----  The player with least points (or most deaths) is Bottom Feeder. He
-----  can gain points by killing anyone. Other normal players only get points
-----  for killing Mutant.
-----
-----  Points:
-----    +2 for becoming a Mutant
-----    +1 to a Mutant for killing anyone
-----    +1 to a Bottom Feeder for killing anyone
-----    -1 to anyone for a suicide
-----   other kills don't give you points.
-----
 
 --]]
 
@@ -63,11 +30,11 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
             -Find a girlfriend
             -Fix Sheepluva's hat  +[p]
             -Cookies
-
 -----------------------]]
 
 local hhs = {}
 local numhhs = 0
+local meh = false
 
 local gameOver=false
 
@@ -99,6 +66,33 @@ local teams = {}
 local circles = {}
 local circleFrame = -1
 
+function showStartingInfo()
+
+	ruleSet = loc("RULES") .. ": " ..
+	" |" .. --" |" ..
+	loc("The first player to kill someone becomes the Mutant.") .. "|" ..
+	loc("The Mutant has super-weapons and a lot of health.") .. "|" ..
+	loc("The Mutant loses health quickly if he doesn't keep scoring kills.") .. "|" ..
+	" |" ..
+	loc("Normal players can only score points by killing the mutant.") .. "|" ..
+	" |" .. "" ..
+	loc("The player with least points (or most deaths) becomes the Bottom Feeder.") .. "|" ..
+	loc("The Bottom Feeder can score points by killing anyone.") .. "|" ..
+	" |" ..
+	loc("POINTS") .. ": " ..
+	" |" ..
+	loc("+2 for becoming a Mutant") .. "|" ..
+	loc("+1 to a Mutant for killing anyone") .. "|" ..
+	loc("+1 to a Bottom Feeder for killing anyone") .. "|" ..
+	loc("-1 to anyone for a suicide") .. "|" ..
+	loc("Other kills don't give you points.")
+
+	ShowMission(loc("Mutant"),
+                loc("a Hedgewars tag game"),
+                ruleSet, 0, 5000)
+
+end
+
 function onGameInit()
     TurnTime = 20000
     WaterRise = 0
@@ -107,7 +101,6 @@ function onGameInit()
     HealthCaseAmount=0
     MinesTime=1000
     CaseFreq = 2
-
 end
 
 
@@ -136,12 +129,12 @@ function onGameStart()
     if hogLimitHit then
         AddCaption(loc("ONE HOG PER TEAM! KILLING EXCESS HEDGES"))
     end
+    showStartingInfo()
 end
 
 
 
 function giveWeapons(gear)
-
     if gear == mutant then
         AddAmmo(gear, amRope)
         for i=1, #mt_weapons do
@@ -243,7 +236,6 @@ function countBodies()
         elseif killsCounter > 8 then
             AddCaption(loc("INSANITY"))
         end
-
 end
 
 function onGameTick()
@@ -287,6 +279,7 @@ function onGameTick()
                     end
             end
     end
+
 end
 
 function saveStuff(gear)
@@ -301,7 +294,8 @@ function armageddon(gear)
 end
 
 function updateScore()
-local showScore = ""
+
+    local showScore = ""
 
     for i=0, TeamsCount-1 do
         if teams[i]~= nil then
@@ -383,15 +377,18 @@ local only_low_score = true
         runOnHogsInTeam(setFeeder, lowest_score_team)
     end
 
-    ShowMission(    loc("Score"),
+    if meh == false then
+		meh = true
+	else
+		ShowMission(    loc("Score"),
                     loc("-------"),
                     showScore, 0, 200)
+	end
 
     end
 end
 
 function backToNormal(gear)
-
     SetHogName(gear, getGearValue(gear,"Name"))
     SetHogHat(gear, 'NoHat')
     SetHogHat(gear, getGearValue(gear,"Hat"))
@@ -411,7 +408,6 @@ function setAIHints()
 end
 
 function removeFeeder(gear)
-
     if gear~=nil then
         setGearValue(gear,"Feeder",false)
         if gear~= mutant then
@@ -423,7 +419,6 @@ function removeFeeder(gear)
 end
 
 function setFeeder(gear)
-
     if gear~= mutant and gear~= nil then
         SetHogName(gear,"BOTTOM FEEDER")
         SetHogHat(gear, 'poke_slowpoke')
@@ -475,11 +470,6 @@ function teamScan()
         end
 
         ---***---
-end
-
-
-function onGearDamage(gear, dmg)
-
 end
 
 function set_Mutant_and_Score(gear)
@@ -619,7 +609,7 @@ end
 
 --[[
 S T A R R I N G
-
     prof - Coding, implementing and evangelism
     vos  - Initial idea and script improvements
+    mikade - Moving the `how to play` into the game so that people know `how to play`, and whitespace :D
 --]]
