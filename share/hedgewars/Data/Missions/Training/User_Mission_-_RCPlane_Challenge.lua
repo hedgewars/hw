@@ -20,7 +20,7 @@ function onGameInit()
 	Explosives = 0
 
 	AddTeam(loc("Wannabe Flyboys"), 14483456, "Simple", "Island", "Default", "Hedgewars")
-	player = AddHog(loc("Ace"), 0, 80, "Gasmask") --NoHat
+	player = AddHog(loc("Ace"), 0, 80, "Gasmask")
 	SetGearPosition(player, 1380, 1500)
 
 end
@@ -313,6 +313,10 @@ function onGearDelete(gear)
 		cratesLeft = cratesLeft - 1
 
 		if cratesLeft == 0 then
+
+			if planesUsed == 1 then
+				AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Prestigious Pilot"),0xffba00ff,capgrpMessage2)
+			end
 
 			ShowMission     (
                                 loc("CHALLENGE COMPLETE"),
