@@ -43,6 +43,9 @@ User_Mission_-_The_Great_Escape.desc="You think you can cage me!?"
 User_Mission_-_Rope_Knock_Challenge.name=Challenge: Rope Knocking
 User_Mission_-_Rope_Knock_Challenge.desc="Look behind you!"
 
+User_Mission_-_Nobody_Laugh.name=Mission: Nobody Laugh
+User_Mission_-_Nobody_Laugh.desc="This ain't no joke."
+
 User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
 User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 
