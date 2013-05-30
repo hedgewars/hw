@@ -1,6 +1,6 @@
 --------------------------------
 -- HIGHLANDER / HOGS OF WAR
--- version 0.4
+-- version 0.4b
 -- by mikade
 --------------------------------
 
@@ -63,10 +63,15 @@
 -- add more whitespace
 -- break everything
 
+-----------
+--0.4b
+-----------
+-- as per request, add ice-gun
+
 -------------------------
 -- ideas for the future
 -------------------------
--- add ice gun, structure
+-- add structure
 -- allow switcher, resurrector
 -- add abuse
 -- nerf teleport
@@ -90,7 +95,7 @@ local airWeapons = 	{amAirAttack, amMineStrike, amNapalm, amDrillStrike --[[,amP
 local atkArray = 	{
 					amBazooka, amBee, amMortar, amDrill, --[[amSnowball,]]
 					amGrenade, amClusterBomb, amMolotov, amWatermelon, amHellishBomb, amGasBomb,
-					amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun,
+					amShotgun, amDEagle, amFlamethrower, amSniperRifle, amSineGun, amIceGun,
 					amFirePunch, amWhip, amBaseballBat, --[[amKamikaze,]] amSeduction, --[[amHammer,]]
 					amMine, amDynamite, amCake, amBallgun, amRCPlane, amSMine,
 					amRCPlane, amSMine,
