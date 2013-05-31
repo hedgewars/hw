@@ -222,12 +222,12 @@ int main(int argc, char *argv[])
         }
         else // couldn't retrieve documents folder? almost impossible, but in case fall back to classic path
         {
-            checkForDir(cfgdir->absolutePath() + "/.hedgewars_0.9.19");
-            cfgdir->cd(".hedgewars_0.9.19");
+            checkForDir(cfgdir->absolutePath() + "/.hedgewars");
+            cfgdir->cd(".hedgewars");
         }
 #else
-        checkForDir(cfgdir->absolutePath() + "/.hedgewars_0.9.19");
-        cfgdir->cd(".hedgewars_0.9.19");
+        checkForDir(cfgdir->absolutePath() + "/.hedgewars");
+        cfgdir->cd(".hedgewars");
 #endif
     }
 
