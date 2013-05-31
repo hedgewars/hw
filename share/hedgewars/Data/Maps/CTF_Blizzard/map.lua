@@ -91,7 +91,7 @@
 -- add support for more players
 -- re-enable sudden death, but set water rise to 0
 
-HedgewarsScriptLoad("Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things
