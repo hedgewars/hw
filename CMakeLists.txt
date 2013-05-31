@@ -377,5 +377,5 @@ if(NOT ANDROID)
 endif()
 
 
-include(${CMAKE_MODULE_PATH}/CPackConfig.cmake)
+include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
