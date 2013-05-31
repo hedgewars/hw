@@ -1,6 +1,6 @@
 -- Hedgewars - Roperace for 2+ Players
 
-HedgewarsScriptLoad("Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 -- store number of hedgehogs
 local numhhs = 0

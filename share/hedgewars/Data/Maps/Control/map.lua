@@ -49,7 +49,7 @@
 --script begins
 -----------------
 
-HedgewarsScriptLoad("Scripts/Locale.lua")()
+HedgewarsScriptLoad("/Scripts/Locale.lua")
 
 ---------------------------------------------------------------
 ----------lots of bad variables and things
