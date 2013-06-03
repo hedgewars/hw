@@ -1374,6 +1374,9 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(ui.pageNetGame->pGameCFG, SIGNAL(paramChanged(const QString &, const QStringList &)), hwnet, SLOT(onParamChanged(const QString &, const QStringList &)));
     connect(hwnet, SIGNAL(configAsked()), ui.pageNetGame->pGameCFG, SLOT(fullNetConfig()));
 
+    // using proxy slot to prevent loss of game messages when they're sent to not yet connected slot of game object
+    connect(hwnet, SIGNAL(FromNet(const QByteArray &)), this, SLOT(FromNetProxySlot(const QByteArray &)), Qt::QueuedConnection);
+
     //nick and pass stuff
     hwnet->m_private_game = !(hostName == NETGAME_DEFAULT_SERVER && port == NETGAME_DEFAULT_PORT);
     if (hwnet->m_private_game == false && AskForNickAndPwd() != 0)
@@ -1726,6 +1729,11 @@ void HWForm::StartCampaign()
 
 void HWForm::CreateNetGame()
 {
+    // go back in pages to prevent user from being stuck on certain pages
+    if(ui.Pages->currentIndex() == ID_PAGE_GAMESTATS ||
+       ui.Pages->currentIndex() == ID_PAGE_INGAME)
+        GoBack();
+
     QString ammo;
     ammo = ui.pageNetGame->pGameCFG->WeaponsName->itemData(
                ui.pageNetGame->pGameCFG->WeaponsName->currentIndex()
@@ -1736,7 +1744,6 @@ void HWForm::CreateNetGame()
     connect(game, SIGNAL(SendNet(const QByteArray &)), hwnet, SLOT(SendNet(const QByteArray &)));
     connect(game, SIGNAL(SendChat(const QString &)), hwnet, SLOT(chatLineToNet(const QString &)));
     connect(game, SIGNAL(SendTeamMessage(const QString &)), hwnet, SLOT(SendTeamMessage(const QString &)));
-    connect(hwnet, SIGNAL(FromNet(const QByteArray &)), game, SLOT(FromNet(const QByteArray &)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(chatStringFromNet(const QString &)), game, SLOT(FromNetChat(const QString &)), Qt::QueuedConnection);
 
     game->StartNet();
@@ -1826,6 +1833,13 @@ void HWForm::NetGameSlave()
     }
 
     ui.pageNetGame->setMasterMode(false);
+}
+
+void HWForm::FromNetProxySlot(const QByteArray & msg)
+{
+    if(game)
+        game->FromNet(msg);
+
 }
 
 void HWForm::selectFirstNetScheme()
