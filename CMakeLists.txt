@@ -24,7 +24,7 @@ option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
-option(SYSTEM_PHYSFS "Use system physfs (off)" OFF)
+option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
 option(ANDROID "Enable Android build (off)" OFF)
@@ -315,7 +315,7 @@ endif()
 
 
 #physfs discovery
-if (${SYSTEM_PHYSFS})
+if (${PHYSFS_SYSTEM})
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         find_package(PhysFS)
     endif()
