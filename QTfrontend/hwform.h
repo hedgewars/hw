@@ -145,6 +145,8 @@ class HWForm : public QMainWindow
         void startGame();
         void restartGame();
 
+        void FromNetProxySlot(const QByteArray &);
+
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);
         int  AskForNickAndPwd(void);
