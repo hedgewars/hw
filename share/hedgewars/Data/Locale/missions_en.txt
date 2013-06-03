@@ -49,5 +49,5 @@ User_Mission_-_Nobody_Laugh.desc="This ain't no joke."
 User_Mission_-_RCPlane_Challenge.name=Challenge: RC Plane
 User_Mission_-_RCPlane_Challenge.desc="Feeling pretty confident, eh, flyboy?"
 
-portal.name= Mission: Portal training mission
+portal.name=Mission: Portal Mind Challenge
 portal.desc="Use the portal to move fast and far, use it to kill, use it with caution!"
