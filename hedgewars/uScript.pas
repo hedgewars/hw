@@ -83,7 +83,8 @@ uses LuaPas,
     SDLh,
     SysUtils, 
     uIO,
-    uPhysFSLayer
+    uPhysFSLayer,
+    typinfo
     ;
 
 var luaState : Plua_State;
@@ -1285,6 +1286,28 @@ begin
     lc_endgame:= 0
 end;
 
+function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
+var statInfo : TStatInfoType;
+begin
+	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
+	if lua_gettop(L) <> 2 then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SendStat!');
+        end
+    else
+		begin
+		SendStat(statInfo,lua_tostring(L, 2));
+		end;
+    lc_sendstat:= 0
+end;
+
+function lc_sendstats(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    SendStats;
+    lc_sendstats:= 0
+end;
+
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     fall: boolean;
@@ -2382,6 +2405,8 @@ lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
+lua_register(luaState, _P'SendStat', @lc_sendstat);
+lua_register(luaState, _P'SendStats', @lc_sendstats);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, _P'GetGearPosition', @lc_getgearposition);
