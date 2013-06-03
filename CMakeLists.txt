@@ -255,10 +255,10 @@ unset(CMAKE_REQUIRED_FLAGS)
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
     if(${allow_parse_args})
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
-    else()
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
+    else()
+        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 
