@@ -300,6 +300,12 @@ void PageGameStats::GameStats(char type, const QString & info)
             AddStatText(message);
             break;
         }
+        case 'c' :
+        {
+            QString message = "<p><img src=\":/res/StatsCustomAchievement.png\"> "+info+" </p>";
+            AddStatText(message);
+            break;
+        }
 
     }
 }
