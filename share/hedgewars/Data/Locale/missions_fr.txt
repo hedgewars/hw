@@ -45,3 +45,6 @@ User_Mission_-_Rope_Knock_Challenge.desc="Regarde derrière toi !"
 
 User_Mission_-_RCPlane_Challenge.name=Challenge: Avion télécommandé
 User_Mission_-_RCPlane_Challenge.desc="Plutôt confiant, hein, aviateur ?"
+
+portal.name=Portal Casse Tête
+portal.desc="Utilisez le fusil à portail pour voyager loin et rapidemment ou pour tuer ! Utiliser avec prudence !"
