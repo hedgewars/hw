@@ -100,19 +100,19 @@
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation type="unfinished"></translation>
+        <translation>Estamos sempre abertos a novas sugestões, ideias, ou submissões de bugs encontrados.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Envia-nos feedback!</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation type="unfinished"></translation>
+        <translation>Se encontraste um bug, podes verificar se já foi submetido aqui: </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation type="unfinished"></translation>
+        <translation>O teu e-mail é opcional, mas necessário se quiseres que te contactemos de volta.</translation>
     </message>
 </context>
 <context>
@@ -195,18 +195,18 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Esquema &apos;%1&apos; não suportado</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation type="unfinished">Não foi possível criar o diretório %1</translation>
+        <translation>Não foi possível criar o diretório %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation type="unfinished">Erro ao abrir o diretório:
+        <translation>Erro ao abrir o diretório:
 %1
 
 Por favor verifica a tua instalação!</translation>
@@ -263,15 +263,15 @@ Por favor verifica a tua instalação!</translation>
     </message>
     <message>
         <source>%1 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 entrou</translation>
     </message>
     <message>
         <source>%1 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 saíu</translation>
     </message>
     <message>
         <source>%1 has left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 saíu (%2)</translation>
     </message>
 </context>
 <context>
@@ -384,7 +384,7 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta página requer ligação à internet</translation>
     </message>
 </context>
 <context>
@@ -526,7 +526,7 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema: %1</translation>
     </message>
 </context>
 <context>
@@ -606,15 +606,18 @@ Por favor, aguarda alguns segundos e tenta novamente.</translation>
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor faz login para aceder ao servidor.
+		
+Se ainda não tens uma conta em www.hedgewars.org,
+simplesmente insere o teu nome de utilizador.</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilizador:</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Password:</translation>
     </message>
 </context>
 <context>
@@ -770,11 +773,11 @@ just enter your nickname.</source>
     <name>PageDataDownload</name>
     <message>
         <source>Loading, please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>A carregar, aguarda por favor.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta página requer ligação à internet.</translation>
     </message>
 </context>
 <context>
@@ -921,11 +924,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play again</source>
-        <translation type="unfinished"></translation>
+        <translation>Jogar novamente</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Gravar</translation>
+        <translation>Gravar</translation>
     </message>
 </context>
 <context>
@@ -1035,11 +1038,11 @@ just enter your nickname.</source>
     <name>PageNetServer</name>
     <message>
         <source>Click here for details</source>
-        <translation type="unfinished"></translation>
+        <translation>Clica aqui para detalhes</translation>
     </message>
     <message>
         <source>Insert your address here</source>
-        <translation type="unfinished"></translation>
+        <translation>Insere aqui o teu endereço</translation>
     </message>
 </context>
 <context>
@@ -1996,7 +1999,7 @@ Deseja mesmo sair?</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation type="unfinished"></translation>
+        <translation>Esta opção entrará em efeito quando o jogo for reiniciado.</translation>
     </message>
 </context>
 <context>
@@ -2385,23 +2388,23 @@ Nem todos os jogadores estão prontos.</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Repor</translation>
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Define a porta por omisão do servidor Hedgewars</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation type="unfinished"></translation>
+        <translation>Convida os teus amigos para o teu servidor com apenas 1 click!</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Clica para copiar o URL do teu servidor. Partilha este link com os teus amigos para que se possam juntar a ti.</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar o servidor privado</translation>
     </message>
 </context>
 <context>
@@ -2516,19 +2519,20 @@ Nem todos os jogadores estão prontos.</translation>
     <name>TCPBase</name>
     <message>
         <source>Unable to start server at %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível iniciar o servidor em %1.</translation>
     </message>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Não foi possível iniciar o motor de jogo em %1
+Código de erro:: %2</translation>
     </message>
 </context>
 <context>
     <name>TeamSelWidget</name>
     <message>
         <source>At least two teams are required to play!</source>
-        <translation type="unfinished"></translation>
+        <translation>São necessárias pelo menos 2 equipas (para jogar)!</translation>
     </message>
 </context>
 <context>
