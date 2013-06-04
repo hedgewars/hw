@@ -774,7 +774,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Kind = gtFlame) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
+    if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and 
+       (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
         Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then
