@@ -120,22 +120,22 @@
 02:00=Schlecht, schlecht, %1 …
 02:00=%1 sollte lieber WarMUX spielen
 02:00=%1 hat versucht, die Kugeln mit den Zähnen zu fangen
-02:00=%1 findet seinen Platz in der Walhall
+02:00=%1 findet einen Platz in der Walhall
 02:00=%1 geht den Weg der Dinosaurier
 02:00=%1 bringt die Igelspezies einen Schritt näher zum Aussterben
 02:00=%1 wird vermisst werden
 02:00=%1 ist ab jetzt ein Ex-Igel
 02:00=%1 sieht sich die Radieschen von unten an
-02:00=%1 hat aufgehört, zu sein
+02:00=%1 hat aufgehört zu existieren
 02:00=Verabschieden Sie sich von %1
 02:00=Für %1 gibt es keine Hoffnung mehr
 02:00=%1 trat von der Lebensbühne ab
 02:00=%1 erleidet ein spontanes multiples Organversagen
 02:00=%1 ist mausetot
-02:00=%1s Lebensuhr ist abgelaufen
+02:00=Für %1 ist die Lebensuhr abgelaufen
 02:00=Beraubt des Lebens, ruht %1 in Frieden
 02:00=%1 hatte eine geringe Schadenstoleranz
-02:00=%1 hat all seine Extraleben aufgebraucht
+02:00=%1 hat alle Extraleben aufgebraucht
 02:00=Ist ein Arzt im Haus?!
 02:00=%1 ist tot
 02:00=%1 ist hinüber
@@ -143,6 +143,13 @@
 02:00=Schade um %1
 02:00=Wir trauern um %1
 02:00=%1 beißt ins Gras
+02:00=%1 ist jetzt im Igel-Himmel
+02:00=%1 spielt nicht mehr mit
+02:00=%1 ist ausgeschieden
+02:00=Hat %1 eigentlich ein Testament gemacht?
+02:00=%1 spürt keinen Schmerz mehr
+02:00=%1 muss nicht mehr leiden
+02:00=%1 hat eine Abkürzung gefunden …
 
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
@@ -163,30 +170,29 @@
 02:01=%1 geht unter die Perlentaucher!
 02:01=%1 über Bord!
 02:01=%1 verlässt das sinkende Schiff
-02:01=%1 überschätzt seinen Auftrieb!
+02:01=%1 überschätzt den eigenen Auftrieb!
 02:01=%1 erliegt dem Sog der Tiefe!
 02:01=%1 geht der Sache auf den Grund!
 02:01=%1 wäre fast verdurstet!
 02:01=%1 macht »Gluck, gluck, gluck!«
 02:01=%1 macht »Platsch!«
-02:01=%1 vergaß seine Schwimmflügel
+02:01=%1 hätte die Schwimmflügel diesmal nicht zu Hause lassen sollen
 02:01=%1 hätte Schwimmunterricht nehmen sollen
-02:01=%1 ließ sein Surfbrett zu Hause
+02:01=%1 ließ das Surfbrett zu Hause
 02:01=%1 wird gewaschen
 02:01=%1 ist ein nasser Igel
-02:01=%1 hat seine Schwimmweste vergessen
+02:01=%1 hat die Schwimmweste vergessen
 02:01=%1 macht »Plitsch-platsch!«
 02:01=%1 sieht durstig aus
 02:01=%1 ist auf dem Meer verschollen
 02:01=%1 bekommt eine Seebestattung
-02:01=%1 übt sein Rückenschwimmen
-02:01=%1 geht auf der Suche nach der Titanic
+02:01=%1 übt Rückenschwimmen
 02:01=%1 ist nicht Jesus
 02:01=%1 hat ein Leck
 02:01=Wie viele Igel wohl da unten liegen?
 02:01=%1 macht das Meer etwas höher
 02:01=%1 ist absolut nicht Marinetauglich
-02:01=%1 glaubt, er sei ein Fisch
+02:01=%1 hält sich für einen Fisch
 02:01=Wenigstens ging die Sache nicht ins Klo, %1!
 02:01=Sonic konnte nicht schwimmen, %1 auch nicht
 02:01=%1 spielt »Flipper der Delphin«
@@ -203,6 +209,15 @@
 02:01=%1, Igel, der mit dem Blubb
 02:01=Nächster Halt: Meeresgrund
 02:01=%1 hätte den Schwimmkurs nicht schwänzen sollen
+02:01=Fischers Fritze fischt frische ... Igel?!
+02:01=Grüß die Fische von uns, %1!
+02:01=%1 erkundet das Meer
+02:01=%1 folgt dem Ruf der Meere
+02:01=%1 ist jetzt ein Seeigel!
+02:01=Igel haben keine Kiemen, %1!
+02:01=%1 lässt sich diese  einmalige  Tauchgelegenheit nicht entgehen
+02:01=Und wir dachten %1 könnte nicht noch tiefer sinken …
+02:01=%1 zieht eine Etage tiefer
 
 ; Round starts
 02:02=Auf in die Schlacht!
@@ -272,6 +287,8 @@
 02:05=Vorräte!
 02:05=Ein Erste-Hilfe-Koffer!
 02:05=Ein Grund zur Hoffnung!
+02:05=Frisch aus dem Jungbrunnen
+02:05=Lebenszeit in Kisten
 
 ; New ammo crate
 02:06=Nachschub!
@@ -295,6 +312,10 @@
 02:06=Lassen Sie nicht zu, dass sich der Feind sie holt!
 02:06=Schönes neues Spielzeug!
 02:06=Eine geheimnisvolle Kiste!
+02:06=Ein eckiges Ü-Ei!
+02:06=Die Holzkiste der Pandora!
+02:06=Willst du mit mir spielen?
+02:06=Quadratisch, praktisch, … gefährlich?
 
 ; New utility crate
 02:07=Nützliches?
@@ -307,6 +328,7 @@
 02:07=Dies sollte gut sein!
 02:07=Verwenden Sie diese mit Bedacht
 02:07=Uff, diese Box ist schwer
+02:07=Futter für Strategen
 
 ; Hog (%1) skips his turn
 02:08=%1 ist so ein Langeweiler …
@@ -346,6 +368,15 @@
 02:08=%1 hat sich fast zu Tode erschrocken
 02:08=%1 ist eingeschlafen
 02:08=%1 ist wohl nur aus Versehen hier
+02:08=%1 steckt den Kopf in den Sand
+02:08=%1 spielt lieber Skat
+02:08=%1 guckt zu
+02:08=%1 vertraut auf das Karma
+02:08=%1 igelt sich ein
+02:08=%1 zählt Schäfchen
+02:08=%1 lässt sich die Sonne auf den Bauch scheinen
+02:08=%1 genießt die Stille
+02:08=%1 fragt sich ob es schon Zeit für den Winterschlaf ist
 
 ; Hog (%1) hurts himself only
 02:09=%1 sollte lieber zielen üben!
@@ -355,20 +386,17 @@
 02:09=%1 hat keinen Selbsterhaltungstrieb
 02:09=%1 ist durcheinander
 02:09=%1 vermasselt’s
-02:09=Das war ein schlechter Schuss, %1
+02:09=Das hat wohl nicht ganz geklappt, %1
 02:09=%1 geht ein wenig zu sorglos mit gefährlichen Waffen um
 02:09=%1 sollte eine Änderung der Laufbahn betrachten
-02:09=Das. War. Schlecht!
 02:09=Nein, nein, nein, %1, Sie müssen auf den Feind schießen!
 02:09=%1 bewegt sich einen Schritt näher zum Selbstmord
 02:09=%1, Helfer des Feindes
-02:09=Das war dumm, %1
+02:09=%1 hatte das anders geplant
 02:09=%1 lebt nach dem Mantra des »Ohne Schmerz kein Sieg!«
 02:09=%1 ist verwirrt
-02:09=%1 ist geistig verwirrt
 02:09=%1 verletzt sich selbst
 02:09=%1 blamiert sich!
-02:09=%1 ist ein Trottel!
 02:09=%1 ist ungeschickt
 02:09=%1 zeigt dem Feind, wozu er fähig ist
 02:09=%1 ist nicht perfekt
@@ -378,8 +406,15 @@
 02:09=Wie peinlich!
 02:09=Ich hoffe, dass das niemand gesehen hat, %1
 02:09=%1 sollte dringend die Gebrauchsanweisung noch einmal durchlesen
-02:09=%1s hat eindeutig versagt
 02:09=%1s Schuss ging nach hinten los!
+02:09=%1 macht sich mit den Waffen vertraut
+02:09=%1 schießt ein Eigentor
+02:09=%1 kennt keinen Schmerz
+02:09=%1 mag Bumerangs und Jo-Jos
+02:09=Wer Anderen eine Grube gräbt …
+02:09=%1 wird vom Pech verfolgt
+02:09=Auch %1 macht mal Fehler
+02:09=Hoppla?!
 
 ; Hog (%1) shot an home run (using the bat and another hog)
 02:10=Home Run!
@@ -389,6 +424,10 @@
 02:10=%1 vor, noch ein Tor!
 02:10=Ausgezeichnet, %1!
 02:10=Bravo, %1!
+02:10=Sehr sportlich, %1!
+02:10=Flieg, Iglein, flieg!
+02:10=%1 lässt Igel fliegen
+02:10=%1 ist Physikstudent
 
 ; Hog (%1) has to leave (team is gone)
 02:11=%1 muss ins Bett!
@@ -406,6 +445,10 @@
 02:11=%1 verschwindet
 02:11=%1 ist futsch
 02:11=%1 hat wohl besseres zu tun
+02:11=%1 löst sich in Luft auf
+02:11=%1 bringt den Müll raus
+02:11=%1 flieht
+02:11=%1 braucht Urlaub
 
 ; Weapon Categories
 03:00=Zeitzünder-Granate
