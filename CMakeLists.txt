@@ -402,6 +402,7 @@ if(NOPASCAL)
     if (NOT ghc_executable)
         message(FATAL_ERROR "A Haskell compiler is required to build engine in C")
     endif()
+    add_subdirectory(hedgewars/sdlmain_osx)
     #pascal to c converter
     add_subdirectory(tools/pas2c)
     add_subdirectory(project_files/hwc)

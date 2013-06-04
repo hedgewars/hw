@@ -148,22 +148,8 @@ if(APPLE)
 
     #on OSX we need to provide the SDL_main() function when building as executable
     if(NOT ${LIBENGINE})
-        #let's look for the installed sdlmain file; if it is not found, let's build our own
-        find_package(SDL REQUIRED)
-        #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-        string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
-        #find libsdmain.a
-        find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_library_only}/Resources/)
-
-        if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
-            include_directories(${SDL_INCLUDE_DIR})
-            add_library (SDLmain STATIC sdlmain_osx/SDLMain.m)
-            #add a dependency to the hwengine target
-            list(APPEND engine_sources SDLmain)
-            set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
-        endif()
-
-        list(APPEND pascal_flags "-k${SDLMAIN_LIB}")
+        add_subdirectory(sdlmain_osx)
+        list(APPEND pascal_flags "-k${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
     endif()
 
     #when you have multiple ld installation make sure you get the one bundled with the compiler
@@ -266,6 +252,10 @@ add_dependencies(hwengine physlayer)
 if(${FFMPEG_FOUND})
     add_dependencies(hwengine avwrapper)
 endif()
+
+if(APPLE)
+    add_dependencies(hwengine SDLmain)
+endif(APPLE)
 
 #this command is a workaround to some inlining issues present in older FreePascal versions and fixed in 2.6
 if((FREEPASCAL_VERSION VERSION_LESS "2.6") AND (NOT ${FFMPEG_FOUND}))
