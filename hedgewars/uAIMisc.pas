@@ -131,7 +131,7 @@ while Gear <> nil do
     if  (((Gear^.Kind = gtHedgehog) and
             (Gear <> ThinkingHH) and
             (Gear^.Health > Gear^.Damage) and
-            not(Gear^.Hedgehog^.Team^.hasgone)) or
+            (not Gear^.Hedgehog^.Team^.hasgone)) or
         ((Gear^.Kind = gtExplosives) and
             (Gear^.Health > Gear^.Damage)) or
         ((Gear^.Kind = gtMine) and
@@ -401,7 +401,7 @@ begin
                         dmg := trunc(dxdy * 25);
                         exit(dmg)
                         end
-                    else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
+                    else if (Kind = gtExplosives) and (not(abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
                         dmg := trunc(dy * 70);
                         exit(dmg)
@@ -453,7 +453,7 @@ begin
                         dmg := trunc(dxdy * 50);
                         exit(dmg)
                         end
-                    else if (Kind = gtExplosives) and not((abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
+                    else if (Kind = gtExplosives) and (not(abs(odX) > 0.15) or ((abs(odY) > 0.15) and (abs(odX) > 0.02))) and (dY > 0.2) then
                         begin
                         dmg := trunc(dy * 70);
                         exit(dmg)
@@ -610,7 +610,7 @@ for i:= 0 to Pred(Targets.Count) do
                 pY:= Point.y-2;
                 fallDmg:= 0;
                 if (Flags and afSetSkip <> 0) then skip:= true;
-                if not(dead) and (Flags and afTrackFall <> 0) and (Score > 0) and (power < Score) then
+                if (not dead) and (Flags and afTrackFall <> 0) and (Score > 0) and (power < Score) then
                     if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and 
                        (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
@@ -705,7 +705,7 @@ for i:= 0 to Targets.Count do
                 end;
             if dmg > 0 then
                 begin
-                if not(dead) and (Score > 0) and (dmg < Score) then
+                if (not dead) and (Score > 0) and (dmg < Score) then
                     begin
                     pX:= Point.x;
                     pY:= Point.y;
