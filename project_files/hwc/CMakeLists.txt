@@ -59,28 +59,8 @@ target_link_libraries(hwengine  fpcrtl
                                 #TODO: add other libraries
                             )
 if(APPLE)
-    target_link_libraries(hwengine IOKit)
+    target_link_libraries(hwengine IOKit SDLmain)
 endif()
-
-#TODO: move this away in its proper findxxx.cmake
-if(APPLE)
-    #let's look for the installed sdlmain file; if it is not found, let's build our own
-    find_package(SDL REQUIRED)
-    #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
-    string(REGEX REPLACE "(.*);-.*" "\\1" sdl_dir "${SDL_LIBRARY}")
-    #find libsdmain.a
-    find_file(SDLMAIN_LIB libSDLMain.a PATHS ${sdl_dir}/Resources/)
-
-    if(SDLMAIN_LIB MATCHES "SDLMAIN_LIB-NOTFOUND")
-        include_directories(${SDL_INCLUDE_DIR})
-        add_library (SDLmain STATIC ${CMAKE_SOURCE_DIR}/hedgewars/sdlmain_osx/SDLMain.m)
-        #add a dependency to the hwengine target
-        set(SDLMAIN_LIB "${LIBRARY_OUTPUT_PATH}/libSDLmain.a")
-    endif()
-
-    target_link_libraries(hwengine ${SDLMAIN_LIB})
-endif(APPLE)
-
 
 install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/hwengine${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION ${target_binary_install_dir})
 
