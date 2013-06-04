@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer, uCursor
+     , uPhysFSLayer, uCursor, uRandom
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
@@ -94,6 +94,7 @@ begin
                 DisableSomeWeapons;
             AddClouds;
             AddFlakes;
+            SetRandomSeed(cSeed, false);
             AssignHHCoords;
             AddMiscGears;
             StoreLoad(false);
@@ -107,7 +108,7 @@ begin
             ScriptCall('onGameStart');
             GameState:= gsGame;
             end;
-        gsConfirm, gsGame:
+        gsConfirm, gsGame, gsChat:
             begin
             if not cOnlyStats then
 {$IFDEF WEBGL}
@@ -116,12 +117,6 @@ begin
                 // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 DrawWorld(Lag);
 {$ENDIF}
-            DoGameTick(Lag);
-            if not cOnlyStats then ProcessVisualGears(Lag);
-            end;
-        gsChat:
-            begin
-            if not cOnlyStats then DrawWorld(Lag);
             DoGameTick(Lag);
             if not cOnlyStats then ProcessVisualGears(Lag);
             end;
@@ -200,10 +195,10 @@ begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
                         end
-                    else
-                        ProcessKey(event.key);
+                    else 
+                        if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if GameState <> gsChat then
+                    if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
                 SDL_WINDOWEVENT:
@@ -245,22 +240,19 @@ begin
                     if GameState = gsChat then
                         KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym)
                     else
-                        ProcessKey(event.key);
+                        if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
-                    if GameState <> gsChat then
+                    if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
                 SDL_MOUSEBUTTONDOWN:
                     if GameState = gsConfirm then
-                    begin
-                        resetPosition();
-                        ParseCommand('quit', true);
-                    end
+                        ParseCommand('quit', true)
                     else
-                        ProcessMouse(event.button, true);
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
 
                 SDL_MOUSEBUTTONUP:
-                    ProcessMouse(event.button, false);
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
 
                 SDL_ACTIVEEVENT:
                     if (event.active.state and SDL_APPINPUTFOCUS) <> 0 then
@@ -390,7 +382,7 @@ begin
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
     AddFileLog('Prefix: "' + PathPrefix +'"');
     AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
-    
+
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 

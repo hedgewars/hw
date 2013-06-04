@@ -4,7 +4,6 @@ module HWProtoCore where
 import Control.Monad.Reader
 import Data.Maybe
 import qualified Data.ByteString.Char8 as B
-import qualified Data.List as L
 --------------------------------------
 import CoreTypes
 import Actions
@@ -30,26 +29,28 @@ handleCmd ("QUIT" : xs) = return [ByeClient msg]
 handleCmd ["PONG"] = do
     cl <- thisClient
     if pingsQueue cl == 0 then
-        return $ actionsPending cl ++ [ModifyClient (\c -> c{actionsPending = []})]
+        return [ProtocolError "Protocol violation"]
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
-handleCmd ("CMD" : parameters) =
-    let c = concatMap B.words parameters in
-        if not $ null c then
-            h $ (upperCase . head $ c) : tail c
-            else
-            return []
+handleCmd ["CMD", parameters] = do
+        let (cmd, plist) = B.break (== ' ') parameters
+        let param = B.dropWhile (== ' ') plist
+        h (upperCase cmd) param
     where
-        h ["DELEGATE", n] = handleCmd ["DELEGATE", n]
-        h ["STATS"] = handleCmd ["STATS"]
-        h ["PART", msg] = handleCmd ["PART", msg]
-        h ["QUIT", msg] = handleCmd ["QUIT", msg]
-        h ["GLOBAL", msg] = do
+        h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
+        h "STATS" _ = handleCmd ["STATS"]
+        h "PART" m | not $ B.null m = handleCmd ["PART", m]
+                   | otherwise = handleCmd ["PART"]
+        h "QUIT" m | not $ B.null m = handleCmd ["QUIT", m]
+                   | otherwise = handleCmd ["QUIT"]
+        h "RND" p = handleCmd ("RND" : B.words p)
+        h "GLOBAL" p = do
+            cl <- thisClient
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
-            return [AnswerClients chans ["CHAT", "[global notice]", msg]]
-        h c = return [Warning . B.concat . L.intersperse " " $ "Unknown cmd" : c]
+            return [AnswerClients chans ["CHAT", "[global notice]", p] | isAdministrator cl]
+        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
 
 handleCmd cmd = do
     (ci, irnc) <- ask
@@ -72,9 +73,9 @@ handleCmd_loggedin ["INFO", asknick] = do
     let cl = rnc `client` fromJust maybeClientId
     let roomId = clientRoom rnc clientId
     let clRoom = room rnc roomId
-    let roomMasterSign = if isMaster cl then "@" else ""
+    let roomMasterSign = if isMaster cl then "+" else ""
     let adminSign = if isAdministrator cl then "@" else ""
-    let rInfo = if roomId /= lobbyId then B.concat [roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
+    let rInfo = if roomId /= lobbyId then B.concat [adminSign, roomMasterSign, "room ", name clRoom] else adminSign `B.append` "lobby"
     let roomStatus = if isJust $ gameInfo clRoom then
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else

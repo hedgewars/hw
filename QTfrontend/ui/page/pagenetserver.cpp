@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,6 +78,16 @@ QLayout * PageNetServer::bodyLayoutDefinition()
     BtnShare->setText(QPushButton::tr("Invite your friends to your server in just 1 click!"));
     BtnShare->setWhatsThis(QPushButton::tr("Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you."));
     gbLayout->addWidget(BtnShare, 2, 1);
+
+    labelURL = new QLabel(gb);
+    labelURL->setText(
+              "<style type=\"text/css\"> a { color: #ffcc00; } </style>"
+              "<div align=\"center\">"
+              "<a href=\"https://code.google.com/p/hedgewars/wiki/HWPlaySchemeSyntax\">" +
+              tr("Click here for details") +
+              "</a></div>");
+    labelURL->setOpenExternalLinks(true);
+    gbLayout->addWidget(labelURL, 3, 1);
 
     return pageLayout;
 }

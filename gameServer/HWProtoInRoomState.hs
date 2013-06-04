@@ -59,7 +59,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
         let roomTeams = teams rm
-        let hhNum = let p = if not $ null roomTeams then hhnum $ head roomTeams else 4 in newTeamHHNum roomTeams p
+        let hhNum = let p = if not $ null roomTeams then minimum [hhnum $ head roomTeams, canAddNumber roomTeams] else 4 in newTeamHHNum roomTeams p
         let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ roomTeams then
@@ -79,10 +79,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 AnswerClients clChan ["TEAM_ACCEPTED", tName],
                 AnswerClients othChans $ teamToNet $ newTeam,
                 AnswerClients roomChans ["TEAM_COLOR", tName, teamColor],
-                ModifyClient $ \c -> c{actionsPending = actionsPending cl
-                    ++ [AnswerClients clChan ["HH_NUM", tName, showB $ hhnum newTeam]]
-                    },
-                AnswerClients [sendChan cl] ["PING"]
+                AnswerClients roomChans ["HH_NUM", tName, showB $ hhnum newTeam]
                 ]
         where
         canAddNumber rt = (48::Int) - (sum $ map hhnum rt)
@@ -172,17 +169,15 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
     chans <- roomClientsChans
-    if isMaster cl then
-        return []
-        else
-        return [
-            ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-            ModifyClient (\c -> c{isReady = not $ isReady cl}),
-            AnswerClients chans $ if clientProto cl < 38 then
-                    [if isReady cl then "NOT_READY" else "READY", nick cl]
-                    else
-                    ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
-            ]
+
+    return [
+        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
+        ModifyClient (\c -> c{isReady = not $ isReady cl}),
+        AnswerClients chans $ if clientProto cl < 38 then
+                [if isReady cl then "NOT_READY" else "READY", nick cl]
+                else
+                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
+        ]
 
 
 handleCmd_inRoom ["START_GAME"] = do
@@ -353,6 +348,10 @@ handleCmd_inRoom ["BAN", banNick] = do
         else
         return []
 
+handleCmd_inRoom ("RND":rs) = do
+    n <- clientNick
+    s <- roomClientsChans
+    return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 

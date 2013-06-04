@@ -75,6 +75,7 @@ data Action =
     | CheckRecord
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
+    | Random [ClientChan] [B.ByteString]
 
 type ClientChan = Chan [B.ByteString]
 
@@ -108,8 +109,7 @@ data ClientInfo =
         isKickedFromServer :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
-        teamsInGame :: Word,
-        actionsPending :: [Action]
+        teamsInGame :: Word
     }
 
 instance Eq ClientInfo where
@@ -238,8 +238,8 @@ newServerInfo =
     ServerInfo
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
-        "<font color=yellow><h3 align=center>Hedgewars 0.9.18 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        43 -- latestReleaseVersion
+        "<font color=yellow><h3 align=center>Hedgewars 0.9.19 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
+        45 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""

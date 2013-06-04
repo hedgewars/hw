@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +38,9 @@ void TeamSelWidget::addTeam(HWTeam team)
         curPlayingTeams.push_back(team);
         connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
+        blockSignals(true);
         dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
     }
@@ -210,7 +212,9 @@ void TeamSelWidget::changeTeamStatus(HWTeam team)
     {
         connect(framePlaying->getTeamWidget(team), SIGNAL(hhNmChanged(const HWTeam&)),
                 this, SLOT(hhNumChanged(const HWTeam&)));
+        blockSignals(true);
         dynamic_cast<TeamShowWidget*>(framePlaying->getTeamWidget(team))->hhNumChanged();
+        blockSignals(false);
         connect(framePlaying->getTeamWidget(team), SIGNAL(teamColorChanged(const HWTeam&)),
                 this, SLOT(proxyTeamColorChanged(const HWTeam&)));
         emit teamColorChanged(((TeamShowWidget*)framePlaying->getTeamWidget(team))->getTeam());
@@ -258,12 +262,16 @@ TeamSelWidget::TeamSelWidget(QWidget* parent) :
 
     // Add notice about number of required teams.
     numTeamNotice = new QLabel(tr("At least two teams are required to play!"));
+    numTeamNotice->setWordWrap(true);
     mainLayout.addWidget(numTeamNotice);
 
     QPalette p;
     p.setColor(QPalette::Window, QColor(0x00, 0x00, 0x00));
     addScrArea(framePlaying, p.color(QPalette::Window).light(105), 150);
     addScrArea(frameDontPlaying, p.color(QPalette::Window).dark(105), 0);
+
+    this->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    this->setMinimumWidth(200);
 }
 
 void TeamSelWidget::setAcceptOuter(bool acceptOuter)

@@ -33,6 +33,14 @@ foreach(dir
     portal
     Ropes
     Ruler
+    SB_Bones
+    SB_Crystal
+    SB_Grassy
+    SB_Grove
+    SB_Haunty
+    SB_Oaks
+    SB_Shrooms
+    SB_Tentacles
     Sheep
     ShoppaKing
     Sticks

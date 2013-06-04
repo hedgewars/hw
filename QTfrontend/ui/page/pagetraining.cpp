@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -118,7 +118,7 @@ PageTraining::PageTraining(QWidget* parent) : AbstractPage(parent)
     DataManager & dataMgr = DataManager::instance();
 
     // get locale
-    QSettings settings("physfs://hedgewars.ini",
+    QSettings settings(dataMgr.settingsFileName(),
                        QSettings::IniFormat);
 
     QString loc = settings.value("misc/locale", "").toString();

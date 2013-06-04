@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -129,6 +129,7 @@ class HWForm : public QMainWindow
         void UpdateCampaignPageProgress(int index);
         void InitCampaignPage();
         void showFeedbackDialog();
+        void showFeedbackDialogNetChecked();
 
         void NetGameChangeStatus(bool isMaster);
         void NetGameMaster();
@@ -142,6 +143,9 @@ class HWForm : public QMainWindow
         void openRegistrationPage();
 
         void startGame();
+        void restartGame();
+
+        void FromNetProxySlot(const QByteArray &);
 
     private:
         void _NetConnect(const QString & hostName, quint16 port, QString nick);

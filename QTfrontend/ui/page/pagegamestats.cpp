@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -97,13 +97,26 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     return pageLayout;
 }
 
+//TODO button placement, image etc
 QLayout * PageGameStats::footerLayoutDefinition()
 {
     QHBoxLayout * bottomLayout = new QHBoxLayout();
+    
+    mainNote = new QLabel(this);
+    mainNote->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    mainNote->setWordWrap(true);
+    
+    bottomLayout->addWidget(mainNote, 0);
+    bottomLayout->setStretch(0,1);
 
-    btnSave = addButton(":/res/Save.png", bottomLayout, 0, true);
+    btnRestart = addButton(":/res/Start.png", bottomLayout, 1, true);
+    btnRestart->setWhatsThis(tr("Play again"));
+    btnRestart->setFixedWidth(58);
+    btnRestart->setFixedHeight(81);
+    btnRestart->setStyleSheet("QPushButton{margin-top:24px}");
+    btnSave = addButton(":/res/Save.png", bottomLayout, 2, true);
+    btnSave->setWhatsThis(tr("Save"));
     btnSave->setStyleSheet("QPushButton{margin: 24px 0 0 0;}");
-    bottomLayout->setAlignment(btnSave, Qt::AlignRight | Qt::AlignBottom);
 
     return bottomLayout;
 }
@@ -112,6 +125,7 @@ void PageGameStats::connectSignals()
 {
     connect(this, SIGNAL(pageEnter()), this, SLOT(renderStats()));
     connect(btnSave, SIGNAL(clicked()), this, SIGNAL(saveDemoRequested()));
+    connect(btnRestart, SIGNAL(clicked()), this, SIGNAL(restartGameRequested()));
 }
 
 PageGameStats::PageGameStats(QWidget* parent) : AbstractPage(parent)
@@ -131,6 +145,11 @@ void PageGameStats::clear()
     labelGameRank->setText("");
     playerPosition = 0;
     lastColor = 0;
+}
+
+void PageGameStats::restartBtnVisible(bool visible)
+{
+    btnRestart->setVisible(visible);
 }
 
 void PageGameStats::renderStats()

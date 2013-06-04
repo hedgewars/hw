@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2008 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,10 +99,6 @@ class HWNewNet : public QObject
         void AuthFailed();
         void EnteredGame();
         void LeftRoom(const QString & reason);
-        void nickAdded(const QString& nick, bool notifyNick);
-        void nickRemoved(const QString& nick);
-        void nickAddedLobby(const QString& nick, bool notifyNick);
-        void nickRemovedLobby(const QString& nick);
         void FromNet(const QByteArray & buf);
         void adminAccess(bool);
         void roomMaster(bool);
@@ -117,11 +113,16 @@ class HWNewNet : public QObject
         void RemoveNetTeam(const HWTeam&);
         void hhnumChanged(const HWTeam&);
         void teamColorChanged(const HWTeam&);
-        void chatStringLobby(const QString&);
-        void chatStringLobby(const QString&, const QString&);
+        void playerInfo(
+            const QString & nick,
+            const QString & ip,
+            const QString & version,
+            const QString & roomInfo);
+        void lobbyChatMessage(const QString & nick, const QString & message);
+        void lobbyChatAction(const QString & nick, const QString & action);
+        void roomChatMessage(const QString & nick, const QString & message);
+        void roomChatAction(const QString & nick, const QString & action);
         void chatStringFromNet(const QString&);
-        void chatStringFromMe(const QString&);
-        void chatStringFromMeLobby(const QString&);
 
         void roomsList(const QStringList&);
         void serverMessage(const QString &);
@@ -137,6 +138,7 @@ class HWNewNet : public QObject
     public slots:
         void ToggleReady();
         void chatLineToNet(const QString& str);
+        void chatLineToNetWithEcho(const QString&);
         void chatLineToLobby(const QString& str);
         void SendTeamMessage(const QString& str);
         void SendNet(const QByteArray & buf);

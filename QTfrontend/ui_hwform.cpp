@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
     HWForm->setMinimumSize(QSize(720, 450));
     QString title = QMainWindow::tr("Hedgewars %1").arg(*cVersionString);
 #ifdef DEBUG
-    title += QMainWindow::tr("-r%1 (%2)").arg(*cRevisionString, *cHashString);
+    title += QString("-r%1 (%2)").arg(*cRevisionString, *cHashString);
 #endif
     HWForm->setWindowTitle(title);
     centralWidget = new QWidget(HWForm);

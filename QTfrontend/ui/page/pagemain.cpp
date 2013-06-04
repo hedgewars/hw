@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,8 +120,8 @@ QLayout * PageMain::footerLayoutDefinition()
 void PageMain::connectSignals()
 {
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
-    connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    //connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
+    //connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     // TODO: add signal-forwarding required by (currently missing) encapsulation
 }
 
@@ -136,7 +136,7 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
 #ifdef DEBUG
     setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
 #else
-    setDefaultDescription(QLabel::tr("Tip: ") + randomTip());
+    setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
 #endif
 
 }
@@ -188,4 +188,11 @@ void PageMain::toggleNetworkChoice()
     BtnNetOfficial->setVisible(!visible);
     if (visible)    BtnNet->setIcon(originalNetworkIcon);
     else            BtnNet->setIcon(disabledNetworkIcon);
+}
+
+void PageMain::resetNetworkChoice()
+{
+    BtnNetLocal->setVisible(false);
+    BtnNetOfficial->setVisible(false);
+    BtnNet->setIcon(originalNetworkIcon);
 }

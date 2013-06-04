@@ -9,14 +9,15 @@ foreach(dir
     Castle
     Cheese
     Christmas
+    City
     Compost
+    CrazyMission
     Deepspace
     Desert
-    City
-    CrazyMission
     EarthRise
     Eyes
     Freeway
+    Fruit
     Golf
     Halloween
     Hell

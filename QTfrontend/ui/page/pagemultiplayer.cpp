@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,15 +31,13 @@
 
 QLayout * PageMultiplayer::bodyLayoutDefinition()
 {
-    QGridLayout * pageLayout = new QGridLayout();
+    QHBoxLayout * pageLayout = new QHBoxLayout();
 
     gameCFG = new GameCFGWidget(this);
-    pageLayout->addWidget(gameCFG, 0, 0, 1, 2);
-
-    pageLayout->setRowStretch(2, 1);
+    pageLayout->addWidget(gameCFG, 3, Qt::AlignTop);
 
     teamsSelect = new TeamSelWidget(this);
-    pageLayout->addWidget(teamsSelect, 0, 2, 3, 2);
+    pageLayout->addWidget(teamsSelect, 2, Qt::AlignTop);
 
     return pageLayout;
 }

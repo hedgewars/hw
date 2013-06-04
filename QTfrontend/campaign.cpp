@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,43 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#include <QDir>
-#include <QFile>
-#include <QTextStream>
-#include <QPushButton>
-#include <QListWidget>
-#include <QStackedLayout>
-#include <QLineEdit>
-#include <QLabel>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QCloseEvent>
-#include <QCheckBox>
-#include <QTextBrowser>
-#include <QAction>
-#include <QTimer>
-#include <QScrollBar>
-#include <QDataWidgetMapper>
-#include <QTableView>
-#include <QCryptographicHash>
-#include <QSignalMapper>
-#include <QShortcut>
-#include <QDesktopServices>
-#include <QInputDialog>
-#include <QPropertyAnimation>
+#include "campaign.h"
+
+#include "hwconsts.h"
+
 #include <QSettings>
 
-#include "campaign.h"
-#include "gameuiconfig.h"
-#include "hwconsts.h"
-#include "gamecfgwidget.h"
-#include "bgwidget.h"
-#include "mouseoverfilter.h"
-#include "tcpBase.h"
-
-#include "DataManager.h"
-
-extern QString campaign, campaignTeam;
 
 QStringList getCampMissionList(QString & campaign)
 {

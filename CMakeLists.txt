@@ -24,7 +24,7 @@ option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
-option(SYSTEM_PHYSFS "Use system physfs (off)" OFF)
+option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
 option(LIBENGINE "Enable hwengine library (off)" OFF)
 option(ANDROID "Enable Android build (off)" OFF)
@@ -88,7 +88,7 @@ endif()
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
 set(CPACK_PACKAGE_VERSION_PATCH 19)
-set(HEDGEWARS_PROTO_VER 44)
+set(HEDGEWARS_PROTO_VER 45)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 set(required_clang_version 3.0)
 
@@ -198,8 +198,8 @@ if(APPLE)
     if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
         if(minimum_macosx_version VERSION_EQUAL "10.4")
             set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-            set(CMAKE_C_COMPILER "gcc-4.0")
-            set(CMAKE_CXX_COMPILER "g++-4.0")
+            set(CMAKE_C_COMPILER "/Developer/usr/bin/gcc-4.0")
+            set(CMAKE_CXX_COMPILER "/Developer/usr/bin/g++-4.0")
         else()
             string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
             set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
@@ -227,6 +227,10 @@ endif (CMAKE_BUILD_TYPE)
 
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
 if(NOT ${MINIMAL_FLAGS})
+    if(WINDOWS)
+        #this flags prevents a few dll hell problems
+        set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
+    endif(WINDOWS)
     set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
     set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
     set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
@@ -241,25 +245,36 @@ else()
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
 endif()
 
-#TODO: find out why we need this...
+
+#TESTING TIME
 include(CheckCCompilerFlag)
+
+#check for noexecstack on ELF, should be set on Gentoo and similar
 set(CMAKE_REQUIRED_FLAGS "-Wl,-z -Wl,noexecstack")
 check_c_compiler_flag("" HAVE_NOEXECSTACK) #empty because we are testing a linker flag
 if(HAVE_NOEXECSTACK)
     list(APPEND pascal_flags "-k-z" "-knoexecstack")
-    if(NOT ${MINIMAL_FLAGS})
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-    endif()
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+endif()
+unset(CMAKE_REQUIRED_FLAGS)
+
+#check for ASLR and DEP security features on Windows
+#both supported in binutils >= 2.20, available since Vista and XP SP2 respectively
+set(CMAKE_REQUIRED_FLAGS "-Wl,--nxcompat -Wl,--dynamicbase")
+check_c_compiler_flag("" HAVE_WINASLRDEP) #empty because we are testing a linker flag
+if(HAVE_WINASLRDEP)
+    list(APPEND pascal_flags "-k--nxcompat" "-k--dynamicbase")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 endif()
 unset(CMAKE_REQUIRED_FLAGS)
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
     if(${allow_parse_args})
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
-    else()
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
+    else()
+        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 
@@ -344,7 +359,7 @@ endif()
 
 
 #physfs discovery
-if (${SYSTEM_PHYSFS})
+if (${PHYSFS_SYSTEM})
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         find_package(PhysFS)
     endif()
@@ -410,5 +425,5 @@ else(WEBGL)
     endif(ANDROID)
 endif(WEBGL)
 
-include(${CMAKE_MODULE_PATH}/CPackConfig.cmake)
+include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
