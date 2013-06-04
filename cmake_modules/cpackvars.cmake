@@ -71,6 +71,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     #qt extra files
     "moc_.*\\\\.cxx_parameters"
     "\\\\.qrc.depends$"
+    "\\\\.qm$"
     #other cmake generated files
     "Makefile$"
     "Doxyfile"
