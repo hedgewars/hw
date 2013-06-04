@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -603,19 +603,19 @@ begin
     tmpsurf:= IMG_Load_RW(rwopsOpenRead(s), true);
 
     if tmpsurf = nil then
-    begin
+        begin
         OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
-    end;
+        end;
 
     if ((imageFlags and ifIgnoreCaps) = 0) and ((tmpsurf^.w > MaxTextureSize) or (tmpsurf^.h > MaxTextureSize)) then
-    begin
+        begin
         SDL_FreeSurface(tmpsurf);
         OutError(msgFailedSize, ((not cOnlyStats) and ((imageFlags and ifCritical) <> 0)));
         // dummy surface to replace non-critical textures that failed to load due to their size
         LoadImage:= SDL_CreateRGBSurface(SDL_SWSURFACE, 2, 2, 32, RMask, GMask, BMask, AMask);
         exit;
-    end;
+        end;
 
     tmpsurf:= doSurfaceConversion(tmpsurf);
 

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2039,7 +2039,8 @@ else
     // call the script file
     lua_pcall(luaState, 0, 0, 0);
     ScriptLoaded:= true
-    end
+    end;
+    hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 end;
 
 procedure SetGlobals;
@@ -2261,6 +2262,7 @@ ScriptSetInteger('gfForts', gfForts);
 ScriptSetInteger('gfMultiWeapon', gfMultiWeapon);
 ScriptSetInteger('gfSolidLand', gfSolidLand);
 ScriptSetInteger('gfBorder', gfBorder);
+ScriptSetInteger('gfBottomBorder', gfBottomBorder);
 ScriptSetInteger('gfDivideTeams', gfDivideTeams);
 ScriptSetInteger('gfLowGravity', gfLowGravity);
 ScriptSetInteger('gfLaserSight', gfLaserSight);

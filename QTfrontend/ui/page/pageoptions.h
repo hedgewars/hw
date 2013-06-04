@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -77,8 +77,8 @@ class PageOptions : public AbstractPage
         QComboBox *CBTeamName;
         IconedGroupBox *AGGroupBox;
         QComboBox *CBResolution;
-        QLineEdit *windowWidthEdit;
-        QLineEdit *windowHeightEdit;
+        QSpinBox *windowWidthEdit;
+        QSpinBox *windowHeightEdit;
         QComboBox *CBStereoMode;
         QCheckBox *CBFrontendSound;
         QCheckBox *CBFrontendMusic;

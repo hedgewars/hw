@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -275,11 +275,13 @@ QLayout * PageOptions::bodyLayoutDefinition()
             winLabelX->setFixedWidth(40);
             winLabelX->setAlignment(Qt::AlignCenter);
 
-            windowWidthEdit = new QLineEdit(groupGame);
-            windowWidthEdit->setValidator(new QIntValidator(this));
+            // TODO: less random max. also:
+            // make some min/max-consts, shared with engine?
+            windowWidthEdit = new QSpinBox(groupGame);
+            windowWidthEdit->setRange(640, 102400);
             windowWidthEdit->setFixedSize(55, CBResolution->height());
-            windowHeightEdit = new QLineEdit(groupGame);
-            windowHeightEdit->setValidator(new QIntValidator(this));
+            windowHeightEdit = new QSpinBox(groupGame);
+            windowHeightEdit->setRange(480, 102400);
             windowHeightEdit->setFixedSize(55, CBResolution->height());
 
             winResLayout->addWidget(windowWidthEdit, 0);
@@ -585,12 +587,18 @@ QLayout * PageOptions::bodyLayoutDefinition()
             CBLanguage = new QComboBox(groupMisc);
             groupMisc->layout()->addWidget(CBLanguage, 0, 1);
             QStringList locs = DataManager::instance().entryList("Locale", QDir::Files, QStringList("hedgewars_*.qm"));
-            CBLanguage->addItem(QComboBox::tr("(System default)"), QString(""));
+            CBLanguage->addItem(QComboBox::tr("(System default)"), QString());
             for(int i = 0; i < locs.count(); i++)
             {
-                QLocale loc(locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1"));
-                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", loc.name());
+                QString lname = locs[i].replace(QRegExp("hedgewars_(.*)\\.qm"), "\\1");
+                QLocale loc(lname);
+                CBLanguage->addItem(QLocale::languageToString(loc.language()) + " (" + QLocale::countryToString(loc.country()) + ")", lname);
             }
+
+            QLabel *restartNoticeLabel = new QLabel(groupMisc);
+            restartNoticeLabel->setText(QLabel::tr("This setting will be effective at next restart."));
+            groupMisc->layout()->addWidget(restartNoticeLabel, 1, 1);
+
 
             // Divider
 
@@ -600,14 +608,14 @@ QLayout * PageOptions::bodyLayoutDefinition()
 
             CBNameWithDate = new QCheckBox(groupMisc);
             CBNameWithDate->setText(QCheckBox::tr("Append date and time to record file name"));
-            groupMisc->layout()->addWidget(CBNameWithDate, 2, 0, 1, 2);
+            groupMisc->layout()->addWidget(CBNameWithDate, 3, 0, 1, 2);
 
             // Associate file extensions
 
             BtnAssociateFiles = new QPushButton(groupMisc);
             BtnAssociateFiles->setText(QPushButton::tr("Associate file extensions"));
             BtnAssociateFiles->setVisible(!custom_data && !custom_config);
-            groupMisc->layout()->addWidget(BtnAssociateFiles, 3, 0, 1, 2);
+            groupMisc->layout()->addWidget(BtnAssociateFiles, 4, 0, 1, 2);
         }
 
 #ifdef __APPLE__

@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include <QStringList>
 #include <QStandardItemModel>
 #include <QFileInfo>
+#include <QSettings>
+#include <QColor>
 
 #include "hwconsts.h"
 #include "HWApplication.h"
@@ -160,6 +162,41 @@ QStandardItemModel * DataManager::bindsModel()
     }
 
     return m_bindsModel;
+}
+
+QString DataManager::settingsFileName()
+{
+    if(m_settingsFileName.isEmpty())
+    {
+        QFile settingsFile("physfs://settings.ini");
+
+        if(!settingsFile.exists())
+        {
+            QFile oldSettingsFile("physfs://hedgewars.ini");
+
+            settingsFile.open(QFile::WriteOnly);
+            settingsFile.close();
+
+            if(oldSettingsFile.exists())
+            {
+                QSettings sOld(oldSettingsFile.fileName(), QSettings::IniFormat);
+                QSettings sNew(settingsFile.fileName(), QSettings::IniFormat);
+                sNew.setIniCodec("UTF-8");
+
+                foreach(const QString & key, sOld.allKeys())
+                {
+                    if(key.startsWith("colors/color"))
+                        sNew.setValue(key, sOld.value(key).value<QColor>().name());
+                    else
+                        sNew.setValue(key, sOld.value(key));
+                }
+            }
+        }
+
+        m_settingsFileName = settingsFile.fileName();
+    }
+
+    return m_settingsFileName;
 }
 
 void DataManager::reload()

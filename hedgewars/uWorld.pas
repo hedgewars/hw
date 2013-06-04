@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1387,7 +1387,7 @@ for t:= 0 to Pred(TeamsCount) do
         // draw health bars right border
         inc(r.x, cTeamHealthWidth + 2);
         r.w:= 3;
-        DrawTextureFromRect(TeamHealthBarWidth + 16, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
 
         if (not highlight) and (not hasGone) then
             for i:= 0 to cMaxHHIndex do
@@ -1424,8 +1424,8 @@ for t:= 0 to Pred(TeamsCount) do
             // draw health bar
             r.w:= TeamHealthBarWidth + 1;
             r.h:= HealthTex^.h - 4;
-            DrawTextureFromRect(16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
-            if (not hasGone) and (TeamHealth > 1) then
+            DrawTextureFromRect(15, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
+            if not hasGone and (TeamHealth > 1) then
                 begin
                 Tint(Clan^.Color shl 8 or $FF);
                 for i:= 0 to cMaxHHIndex do

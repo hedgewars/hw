@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -261,18 +261,24 @@ int main(int argc, char *argv[])
     engine->setWriteDir(cfgdir->absolutePath());
     engine->mountPacks();
 
-    DataManager::ensureFileExists("physfs://hedgewars.ini");
-
     QTranslator Translator;
     {
-        QSettings settings("physfs://hedgewars.ini", QSettings::IniFormat);
+        QSettings settings(DataManager::instance().settingsFileName(), QSettings::IniFormat);
+        settings.setIniCodec("UTF-8");
+
         QString cc = settings.value("misc/locale", QString()).toString();
-        if(cc.isEmpty())
+        if (cc.isEmpty())
+        {
             cc = QLocale::system().name();
 
+            // Fallback to current input locale if "C" locale is returned
+            if(cc == "C")
+                cc = HWApplication::keyboardInputLocale().name();
+        }
+
         // load locale file into translator
-        if(!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
-            qWarning("Failed to install translation");
+        if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
+            qWarning("Failed to install translation (%s)", qPrintable(cc));
         app.installTranslator(&Translator);
     }
 

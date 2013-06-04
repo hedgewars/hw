@@ -1,11 +1,9 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 
-
 local player = nil -- This variable will point to the hog's gear
 local instructor = nil
 local enemy = nil
---local givenSpeech = false
 
 local speechStage = 0
 
@@ -33,21 +31,17 @@ function onGameInit()
 
 	AddTeam(loc("Bloody Rookies"), 14483456, "Simple", "Island", "Default")
 	player = AddHog(loc("Hunter"), 0, 1, "NoHat")
+	instructor = AddHog(loc("Instructor"), 0, 100, "sf_vega")
 
-	--AddTeam("Instructors", 14483456, "Simple", "Island", "Default")
-	instructor = AddHog(loc("Instructor"), 1, 1, "sf_vega")
-
-	AddTeam("Blue Team", 29439, "Simple", "Island", "Default")
-	enemy = AddHog("Filthy Blue", 1, 100, "Skull")
+	AddTeam(loc("Blue Team"), 29439, "Simple", "Island", "Default")
+	enemy = AddHog(loc("Filthy Blue"), 1, 100, "Skull")
 
 	SetGearPosition(player,146,902)
 	SetGearPosition(instructor,317,902)
 	SetGearPosition(enemy,1918,837)
 
-
 	HogSay(player, ".............................", SAY_THINK)
 	HogTurnLeft(instructor, true)
-
 
 end
 
@@ -59,15 +53,7 @@ function onGameStart()
 
 	FollowGear(player)
 
-	--spawnTarget()
-
-	-- Show some nice mission goals.
-	-- Parameters are: caption, sub caption, description,
-	-- extra text, icon and time to show.
-	-- A negative icon parameter (-n) represents the n-th weapon icon
-	-- A positive icon paramter (n) represents the (n+1)-th mission icon
-	-- A timeframe of 0 is replaced with the default time to show.
-	ShowMission(loc("Dangerous Ducklings"), "", loc("Eliminate the Blue Team"), -amRope, 1);
+	ShowMission(loc("Dangerous Ducklings"), "", loc("Eliminate the Blue Team"), -amRope, 5000);
 
 end
 
@@ -101,15 +87,14 @@ function onGameTick()
 
 	end
 
-
 	-- if player falls in water or if player ignores speech
 	if (CurrentHedgehog ~= nil) and (CurrentHedgehog == player) then
-		if (GetY(player) > 2060) and (gameLost == false) then
+		if (GetY(player) > WaterLine) and (gameLost == false) then
 			HogSay(instructor, loc("DAMMIT, ROOKIE!"), SAY_SHOUT)
 			gameLost = true
 		end
 
-		if (GetX(player) > 1324) and (GetY(player) > 1908) and (notListening == false) and (speechStage < 3) then
+		if (GetX(player) > 300) and (GetY(player) > 880) and (notListening == false) and (speechStage < 3) then
 			HogSay(instructor, loc("DAMMIT, ROOKIE! GET OFF MY HEAD!"), SAY_SHOUT)
 			notListening = true
 		end
@@ -126,10 +111,11 @@ function onGameTick()
 		endTimer = endTimer + 1
 		if (CurrentHedgehog ~= nil) and (CurrentHedgehog == instructor) then
 			if endTimer >= 3000 then
-				SetHealth(instructor,0)
-				TurnTimeLeft = 0
+				--SetHealth(instructor,0)
+				TurnTimeLeft = 1
+				ParseCommand("teamgone " .. loc("Bloody Rookies"))
 			end
-			ShowMission(loc("MISSION FAILED"), loc(":("), loc("You've failed. Try again."), -amRope, 1);
+			ShowMission(loc("MISSION FAILED"), loc(":("), loc("You've failed. Try again."), -amRope, 5000);
 		end
 	end
 
@@ -146,9 +132,12 @@ function onGearDelete(gear)
 	if GetGearType(gear) == gtHedgehog then
 		if gear == player then
 			gameLost = true
-		elseif gear == instructor then
+		elseif (gear == instructor) and (GetY(gear) > WaterLine) then
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			TurnTimeLeft = 3000
+			AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Naughty Ninja"),0xffba00ff,capgrpMessage2)
+			ParseCommand("teamgone " .. loc("Blue Team"))
+			gameWon = true
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
 			gameWon = true

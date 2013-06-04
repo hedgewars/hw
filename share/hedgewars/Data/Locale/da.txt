@@ -175,7 +175,6 @@
 02:01=%1 leger delfin
 02:01=%1 er taget til Lalandia
 02:01=%1 har fundet den forsvundne by Atlantis
-02:01=%1 håber på en hovedrolle i Bioshock 3
 02:01=Du burde arbejde lidt med din hundesvømning, %1
 02:01=%1 burde have medbragt jetski
 02:01=%1 bryder sig ikke om vandsport
@@ -447,8 +446,8 @@
 03:51=Lige til at samle op
 03:52=UBRUGT
 03:53=Årgang 40
-03:54=Byg noget
-03:55=Værktøj
+;03:54=Byg noget
+03:54=Værktøj
 
 ; Weapon Descriptions (use |as line breaks)
 04:00=Angrib dine fjender med en simpel granat.|Den eksploderer når uret når nul.|1-5: Indstil uret|Angrib: Hold knappen inde for at kaste hårdere
@@ -505,8 +504,8 @@
 04:51=Få et skud lige ind med en Mudderklat.|Bider en smule og slår fjender omkuld.
 04:52=UBRUGT
 04:53=Tag på et eventyr gennem tid og rum,|mens du efterlader kampen til dine kammerater.|Vær klar til at vende tilbage når som helst,|eller hvis Pludselig Død indtræder|eller alle dine andre pindsvin dør.|Advarsel! Virker ikke under Pludselig Død,|hvis du er alene eller er Konge.
-04:54=UFÆRDIG
-04:55=Sprøjt rundt med klistrende flammer.|Byg broer, begrav fjender, luk tunneler af.|Pas på ikke selv at få noget på dig.
+;04:54=UFÆRDIG
+04:54=Sprøjt rundt med klistrende flammer.|Byg broer, begrav fjender, luk tunneler af.|Pas på ikke selv at få noget på dig.
 
 ; Game goal strings
 05:00=Spilsystemer

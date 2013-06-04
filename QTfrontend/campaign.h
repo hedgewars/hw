@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +19,8 @@
 #ifndef CAMPAIGN_H
 #define CAMPAIGN_H
 
-#include <QMainWindow>
-#include <QStack>
-#include <QTime>
-#include <QPointer>
-#include <QPropertyAnimation>
-#include <QUrl>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QNetworkAccessManager>
-
-#include "netserver.h"
-#include "game.h"
-#include "ui_hwform.h"
-#include "SDLInteraction.h"
-#include "bgwidget.h"
+#include <QString>
+#include <QStringList>
 
 QStringList getCampMissionList(QString & campaign);
 unsigned int getCampProgress(QString & teamName, QString & campName);

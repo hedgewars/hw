@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,6 +38,13 @@
 #include <QTextStream>
 #include "ThemeModel.h"
 
+// last game info
+QList<QVariant> lastGameStartArgs = QList<QVariant>();
+GameType lastGameType = gtNone;
+GameCFGWidget * lastGameCfg = NULL;
+QString lastGameAmmo = NULL;
+TeamSelWidget * lastGameTeamSel = NULL;
+
 QString training, campaign, campaignScript, campaignTeam; // TODO: Cleaner solution?
 
 HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, TeamSelWidget* pTeamSelWidget) :
@@ -48,6 +55,10 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     this->config = config;
     this->gamecfg = gamecfg;
     netSuspend = false;
+
+    lastGameCfg = gamecfg;
+    lastGameAmmo = ammo;
+    lastGameTeamSel = pTeamSelWidget;
 }
 
 HWGame::~HWGame()
@@ -228,6 +239,7 @@ void HWGame::ParseMessage(const QByteArray & msg)
                     SendQuickConfig();
                     break;
                 }
+                case gtNone:
                 case gtSave:
                 case gtDemo:
                     break;
@@ -306,8 +318,8 @@ void HWGame::ParseMessage(const QByteArray & msg)
             int size = msg.size();
             QString newResolution = QString().append(msg.mid(2)).left(size - 4);
             QStringList wh = newResolution.split('x');
-            config->Form->ui.pageOptions->windowWidthEdit->setText(wh[0]);
-            config->Form->ui.pageOptions->windowHeightEdit->setText(wh[1]);
+            config->Form->ui.pageOptions->windowWidthEdit->setValue(wh[0].toInt());
+            config->Form->ui.pageOptions->windowHeightEdit->setValue(wh[1].toInt());
             break;
         }
         default:
@@ -343,7 +355,7 @@ void HWGame::onClientRead()
         readbuffer.remove(0, msglen + 1);
         ParseMessage(msg);
     }
-    
+
     flushNetBuffer();
 }
 
@@ -352,7 +364,7 @@ void HWGame::flushNetBuffer()
     if(m_netSendBuffer.size())
     {
         emit SendNet(m_netSendBuffer);
-        
+
         m_netSendBuffer.clear();
     }
 }
@@ -435,6 +447,9 @@ void HWGame::StartNet()
 
 void HWGame::StartLocal()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtLocal;
+
     gameType = gtLocal;
     demo.clear();
     Start(false);
@@ -443,6 +458,9 @@ void HWGame::StartLocal()
 
 void HWGame::StartQuick()
 {
+    lastGameStartArgs.clear();
+    lastGameType = gtQLocal;
+
     gameType = gtQLocal;
     demo.clear();
     Start(false);
@@ -451,6 +469,10 @@ void HWGame::StartQuick()
 
 void HWGame::StartTraining(const QString & file)
 {
+    lastGameStartArgs.clear();
+    lastGameStartArgs.append(file);
+    lastGameType = gtTraining;
+
     gameType = gtTraining;
     training = "Missions/Training/" + file + ".lua";
     demo.clear();
@@ -460,6 +482,12 @@ void HWGame::StartTraining(const QString & file)
 
 void HWGame::StartCampaign(const QString & camp, const QString & campScript, const QString & campTeam)
 {
+    lastGameStartArgs.clear();
+    lastGameStartArgs.append(camp);
+    lastGameStartArgs.append(campScript);
+    lastGameStartArgs.append(campTeam);
+    lastGameType = gtCampaign;
+
     gameType = gtCampaign;
     campaign = camp;
     campaignScript = "Missions/Campaign/" + camp + "/" + campScript;

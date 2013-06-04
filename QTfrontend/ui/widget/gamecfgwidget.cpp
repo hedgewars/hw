@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -599,7 +599,7 @@ void GameCFGWidget::scriptChanged(int index)
             GameSchemes->setEnabled(false);
             GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
-        else
+        else if (m_master)
         {
             GameSchemes->setEnabled(true);
             int num = GameSchemes->findText(scheme);
@@ -614,7 +614,7 @@ void GameCFGWidget::scriptChanged(int index)
             WeaponsName->setEnabled(false);
             WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
-        else
+        else if (m_master)
         {
             WeaponsName->setEnabled(true);
             int num = WeaponsName->findText(weapons);

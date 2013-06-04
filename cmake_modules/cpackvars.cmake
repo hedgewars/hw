@@ -23,9 +23,9 @@ if(WIN32 AND NOT UNIX)
     set(CPACK_NSIS_URL_INFO_ABOUT "http://www.hedgewars.org/")
     set(CPACK_NSIS_CONTACT "unC0Rr@gmail.com")
     set(CPACK_NSIS_MODIFY_PATH OFF)
-    set(CPACK_NSIS_EXECUTABLES_DIRECTORY "${target_binary_install_dir}")
+    set(CPACK_NSIS_EXECUTABLES_DIRECTORY ".")
     set(CPACK_NSIS_MUI_FINISHPAGE_RUN "hedgewars${CMAKE_EXECUTABLE_SUFFIX}")
-    set(CPACK_GENERATOR "ZIP;NSIS")
+    set(CPACK_NSIS_CREATE_ICONS "CreateShortCut '$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\Hedgewars.lnk' '$INSTDIR\\\\hedgewars.exe'")
     set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "hedgewars")
 endif(WIN32 AND NOT UNIX)
 
@@ -35,6 +35,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     ".swp"
     #version control
     "\\\\.hg"
+    "\\\\.orig$"
     #output binary/library
     "\\\\.exe$"
     "\\\\.a$"
@@ -44,6 +45,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.ppu$"
     "\\\\.o$"
     "\\\\.cxx$"
+    "\\\\.hi$"
     #graphics
     "\\\\.xcf$"
     "\\\\.svg$"
@@ -52,11 +54,10 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.sifz$"
     #misc
     "\\\\.core$"
-    "\\\\.sh$"
-    "\\\\.orig$"
     "\\\\.layout$"
     "\\\\.db$"
     "\\\\.dof$"
+    "\\\\.or$"
     #archives
     "\\\\.zip$"
     "\\\\.gz$"
@@ -67,26 +68,32 @@ set(CPACK_SOURCE_IGNORE_FILES
     "config\\\\.inc$"
     "hwengine\\\\.desktop$"
     "Info\\\\.plist$"
+    #qt extra files
+    "moc_.*\\\\.cxx_parameters"
+    "\\\\.qrc.depends$"
+    "\\\\.qm$"
     #other cmake generated files
-    "Makefile"
+    "Makefile$"
     "Doxyfile"
     "CMakeFiles"
     "[dD]ebug$"
     "[rR]elease$"
     "CPack"
     "cmake_install\\\\.cmake$"
+    "cmake_uninstall\\\\.cmake$"
     "CMakeCache\\\\.txt$"
+    "build_windows_.*\\\\.bat$"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libtremor"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+#    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
+#    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/winutils/bin"
     "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/promotional_art"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/bin/checkstack*"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/tools/drawMapTest"
     "^${CMAKE_CURRENT_SOURCE_DIR}/doc"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/templates"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tmp"
     "^${CMAKE_CURRENT_SOURCE_DIR}/utils"
     "^${CMAKE_CURRENT_SOURCE_DIR}/share/hedgewars/Data/Maps/test"
@@ -96,4 +103,3 @@ set(CPACK_SOURCE_IGNORE_FILES
 )
 
 include(CPack)
-

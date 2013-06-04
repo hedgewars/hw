@@ -399,8 +399,11 @@ end
 
 function DoMissionFinished()
   AddCaption(loc("Salvation was one step closer now..."))
-  SaveCampaignVar("Progress", "6")
-  ParseCommand("teamgone " .. loc("011101001"))
+  if progress and progress<6 then
+    SaveCampaignVar("Progress", "6")
+  end
+  RestoreHedge(cyborg)
+  DeleteGear(cyborg)
   TurnTimeLeft = 0
 end
 
@@ -419,8 +422,8 @@ function CheckGearDead(gear)
 end
 
 function EndMission()
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  RestoreHedge(cyborg)
+  DeleteGear(cyborg)
   TurnTimeLeft = 0
 end
 
@@ -451,6 +454,7 @@ function RestoreHedge(hedge)
 end
 
 function GetVariables()
+  progress = tonumber(GetCampaignVar("Progress"))
   m5DeployedNum = tonumber(GetCampaignVar("M5DeployedNum"))
 end
 

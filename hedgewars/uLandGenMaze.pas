@@ -1,3 +1,5 @@
+{$INCLUDE "options.inc"}
+
 unit uLandGenMaze;
 
 interface

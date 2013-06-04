@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -471,7 +471,8 @@ case Kind of
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
-                gear^.Damage:= 100
+                gear^.Damage:= 100;
+                gear^.State:= gstSubmersible
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;

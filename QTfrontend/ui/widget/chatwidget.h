@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,14 +86,39 @@ class HWChatWidget : public QWidget
         void beforeContentAdd();
         void afterContentAdd();
 
+        /**
+         * @brief Checks whether the message contains a highlight.
+         * @param sender the sender of the message
+         * @param message the message
+         * @return true if the sender is somebody else and the message contains a highlight, otherwise false
+         */
+        bool containsHighlight(const QString & sender, const QString & message);
+        /**
+         * @brief Escapes HTML chars in the message and converts URls to HTML links.
+         * @param message the message to be converted to HTML
+         * @return the HTML message
+         */
+        QString messageToHTML(const QString & message);
+        void printChatString(
+            const QString & nick,
+            const QString & str,
+            const QString & cssClassPart,
+            bool highlight);
+
     public slots:
-        void onChatString(const QString& str);
-        void onChatString(const QString& nick, const QString& str);
+        void onChatAction(const QString & nick, const QString & str);
+        void onChatMessage(const QString & nick, const QString & str);
         void onServerMessage(const QString& str);
         void nickAdded(const QString& nick, bool notifyNick);
         void nickRemoved(const QString& nick);
+        void nickRemoved(const QString& nick, const QString& message);
         void clear();
         void adminAccess(bool);
+        void onPlayerInfo(
+            const QString & nick,
+            const QString & ip,
+            const QString & version,
+            const QString & roomInfo);
 
     signals:
         void chatLine(const QString& str);

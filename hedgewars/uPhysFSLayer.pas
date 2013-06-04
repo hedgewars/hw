@@ -9,6 +9,8 @@ const PhyslayerLibName = 'libphyslayer';
 {$IFNDEF WIN32}
     {$linklib physfs}
     {$linklib physlayer}
+
+    {statically linking physfs brings IOKit dependency on OSX}
     {$IFDEF DARWIN}
         {$linkframework IOKit}
     {$ENDIF}
@@ -34,6 +36,7 @@ function pfsExists(fname: shortstring): boolean;
 
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
+procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 {$IFNDEF PAS2C}
 //apparently pas2c doesn't render the functions below if it finds 'implementation' first

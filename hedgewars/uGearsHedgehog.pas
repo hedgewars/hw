@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -257,8 +257,16 @@ with Gear^,
             and ((Gear^.Message and gmLJump) <> 0)
             and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) <> 0) then
                 begin
-                newDx:= dX;
-                newDy:= dY;
+                if (CurAmmoGear^.AmmoType = amJetpack) and (Gear^.Message and gmPrecise <> 0) then
+                    begin
+                    newDx:= xx*cMaxPower/cPowerDivisor;
+                    newDy:= yy*cMaxPower/cPowerDivisor
+                    end
+                else
+                    begin
+                    newDx:= dX;
+                    newDy:= dY
+                    end;
                 altUse:= true
                 end
             else
@@ -385,11 +393,15 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 5000);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
             end;
-            if altUse and (newGear <> nil) then
+            if altUse and (newGear <> nil) and 
+               ((CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack) or (Gear^.Message and gmPrecise = 0)) then
                begin
                newGear^.dX:= newDx / newGear^.Density;
                newGear^.dY:= newDY / newGear^.Density
                end;
+            if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack) and
+               (Gear^.Message and gmPrecise <> 0) and (hwRound(Y) > cWaterLine) then
+                newGear^.State:= newGear^.State or gstSubmersible;
 
             case CurAmmoType of
                      amGrenade, amMolotov,
@@ -513,7 +525,9 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
+                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and (hwRound(CurAmmoGear^.Y) > cWaterLine) then
+                     TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
+                else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
             if ((Ammoz[a].Ammo.Propz and ammoprop_NoRoundEnd) = 0) and (HHGear <> nil) then
                 HHGear^.State:= HHGear^.State or gstAttacked;
@@ -546,6 +560,7 @@ if Gear^.Timer > 1 then
     end
 else if Gear^.Timer = 1 then
     begin
+    Gear^.Hedgehog^.Effects[heFrozen]:= 0;
     Gear^.State:= Gear^.State or gstNoDamage;
     doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, CurrentHedgehog, EXPLAutoSound);
     AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtGrave, 0, _0, _0, 0)^.Hedgehog:= Gear^.Hedgehog;
@@ -797,7 +812,7 @@ with HHGear^.Hedgehog^ do
         da:= 2
     else da:= 1;
 
-if (((HHGear^.Message and gmPrecise) = 0) or ((GameTicks mod 5) = 1)) then
+if ((HHGear^.Message and gmPrecise = 0) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack))) or (GameTicks mod 5 = 1) then
     if ((HHGear^.Message and gmUp) <> 0) and (HHGear^.Angle >= CurMinAngle + da) then
         dec(HHGear^.Angle, da)
     else
@@ -960,8 +975,11 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) do
-        Gear^.Y:= Gear^.Y+_1;
+    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) and (Gear <> nil) do
+        Gear^.Y:= Gear^.Y + _1;
+
+    // could become nil in CheckGearDrowning if ai's hog fails to respawn in ai survival
+    if Gear = nil then exit;
     SetLittle(Gear^.dX);
     Gear^.dY:= _0
     end
@@ -981,7 +999,10 @@ if (Gear^.State and gstMoving) <> 0 then
         Gear^.dY:= _0;
         Gear^.Y:= Gear^.Y + _1
         end;
+
     CheckGearDrowning(Gear);
+    // could become nil if ai's hog fails to respawn in ai survival
+    if Gear = nil then exit;
     // hide target cursor if current hog is drowning
     if (Gear^.State and gstDrowning) <> 0 then
         if (CurrentHedgehog^.Gear = Gear) then
@@ -1063,7 +1084,7 @@ or (CurAmmoGear <> nil) then // we are moving
             HHGear^.Message:= HHGear^.Message or gmAttack;
     // check for case with ammo
     t:= CheckGearNear(HHGear, gtCase, 36, 36);
-    if t <> nil then
+    if (t <> nil) and (t^.State and gstFrozen = 0) then
         PickUp(HHGear, t)
     end;
 

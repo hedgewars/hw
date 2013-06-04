@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,7 +86,8 @@ function hwRound(const t: hwFloat): LongInt; inline; // Does NOT really round bu
 function hwAbs(const t: hwFloat): hwFloat; inline; // Returns the value of t with positive sign.
 function hwSqr(const t: hwFloat): hwFloat; inline; // Returns the square value of parameter t.
 function hwPow(const t: hwFloat; p: LongWord): hwFloat; inline; // Returns the power of the value
-function hwSqrt(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function hwSqrt1(const t: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
+function hwSqrt(const x: hwFloat): hwFloat; inline; // Returns the the positive square root of parameter t.
 function Distance(const dx, dy: hwFloat): hwFloat; // Returns the distance between two points in 2-dimensional space, of which the parameters are the horizontal and vertical distance.
 function DistanceI(const dx, dy: LongInt): hwFloat; // Same as above for integer parameters.
 function AngleSin(const Angle: Longword): hwFloat;
@@ -274,7 +275,7 @@ else
     end
 end;
 
-function isZero(const z: hwFloat): boolean; inline; 
+function isZero(const z: hwFloat): boolean; inline;
 begin
 isZero := z.QWordValue = 0;
 end;
@@ -287,7 +288,7 @@ else
     if z1.QWordValue = z2.QWordValue then
         b:= false
     else
-        b:= not((z1.QWordValue = z2.QWordValue) or ((z2.QWordValue < z1.QWordValue) <> z1.isNegative))
+        b:= (z2.QWordValue < z1.QWordValue) = z1.isNegative
 end;
 
 operator > (const z1, z2: hwFloat) b : boolean; inline;
@@ -418,24 +419,23 @@ z.QWordValue:= z1.QWordValue * abs(z2)
 end;
 
 operator / (const z1: hwFloat; z2: hwFloat) z : hwFloat; inline;
-var t: hwFloat;
+var t: QWord;
 begin
 z.isNegative:= z1.isNegative xor z2.isNegative;
 z.Round:= z1.QWordValue div z2.QWordValue;
-t:= z1 - z2 * z.Round;
-if t.QWordValue = 0 then
-    z.Frac:= 0
-else
+t:= z1.QWordValue - z2.QWordValue * z.Round;
+z.Frac:= 0;
+
+if t <> 0 then
     begin
-    while ((t.QWordValue and $8000000000000000) = 0) and ((z2.QWordValue and $8000000000000000) = 0) do
+    while ((t and $FF00000000000000) = 0) and ((z2.QWordValue and $FF00000000000000) = 0) do
         begin
-        t.QWordValue:= t.QWordValue shl 1;
-        z2.QWordValue:= z2.QWordValue shl 1
+        t:= t shl 8;
+        z2.QWordValue:= z2.QWordValue shl 8
         end;
+
     if z2.Round > 0 then
-        z.Frac:= (t.QWordValue) div (z2.Round)
-    else
-        z.Frac:= 0
+        inc(z.QWordValue, t div z2.Round);
     end
 end;
 
@@ -491,14 +491,14 @@ while p > 0 do
     end
 end;
 
-function hwSqrt(const t: hwFloat): hwFloat;
+function hwSqrt1(const t: hwFloat): hwFloat;
 const pwr = 8; // even value, feel free to adjust
       rThreshold = 1 shl (pwr + 32);
       lThreshold = 1 shl (pwr div 2 + 32);
 var l, r: QWord;
     c: hwFloat;
 begin
-hwSqrt.isNegative:= false;
+hwSqrt1.isNegative:= false;
 
 if t.Round = 0 then
     begin
@@ -531,12 +531,47 @@ repeat
         l:= c.QWordValue
 until r - l <= 1;
 
-hwSqrt.QWordValue:= l
+hwSqrt1.QWordValue:= l
 end;
 
-function Distance(const dx, dy: hwFloat): hwFloat;
+function hwSqrt(const x: hwFloat): hwFloat;
+var r, t, s, q: QWord;
+    i: integer;
 begin
-Distance:= hwSqrt(hwSqr(dx) + hwSqr(dy))
+hwSqrt.isNegative:= false;
+
+t:= $4000000000000000;
+r:= 0;
+q:= x.QWordValue;
+
+for i:= 0 to 31 do
+    begin
+    s:= r + t;
+    r:= r shr 1;
+    if s <= q then
+        begin
+        dec(q, s);
+        inc(r, t);
+        end;
+    t:= t shr 2;
+    end;
+
+hwSqrt.QWordValue:= r shl 16
+end;
+
+
+
+function Distance(const dx, dy: hwFloat): hwFloat;
+var r: QWord;
+begin
+r:= dx.QWordValue or dy.QWordValue;
+
+if r < $10000 then
+    begin
+    Distance.QWordValue:= r;
+    Distance.isNegative:= false
+    end else
+    Distance:= hwSqrt(hwSqr(dx) + hwSqr(dy))
 end;
 
 function DistanceI(const dx, dy: LongInt): hwFloat;

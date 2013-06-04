@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -173,9 +173,9 @@ const videoarray: array [0..4] of shortstring = ('--fullscreen-width','--fullscr
       mediaarray: array [0..9] of shortstring = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allarray: array [0..13] of shortstring = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
       reallyAll: array[0..30] of shortstring = (
-                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width', 
+                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
-                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick', 
+                '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
   {misc}        '--stats-only', '--gci', '--help');
@@ -192,12 +192,12 @@ begin
         {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
         {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
         {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
-        {--fullscreen-width}     3 : cFullscreenWidth  := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--fullscreen-height}    4 : cFullscreenHeight := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--width}                5 : cWindowedWidth    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--height}               6 : cWindowedHeight   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
+        {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
+        {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
+        {--height}               6 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
         {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--volume}               8 : SetVolume          ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--volume}               8 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
         {--nomusic}              9 : SetMusic           ( false );
         {--nosound}             10 : SetSound           ( false );
         {--fullscreen}          11 : cFullScreen       := true;

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -768,7 +768,8 @@ while i > 0 do
     begin
     dec(i);
     Gear:= t^.ar[i];
-    if (Ammo^.Kind = gtFlame) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
+    if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and 
+       (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
         Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
     tmpDmg:= ModifyDamage(Damage, Gear);
     if (Gear^.State and gstNoDamage) = 0 then

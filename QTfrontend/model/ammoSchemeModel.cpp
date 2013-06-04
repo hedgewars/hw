@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -194,7 +194,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(false)         // place hog      14
             << QVariant(true)          // shared ammo    15
             << QVariant(true)          // disable girders 16
-            << QVariant(false)         // disable land objects 17
+            << QVariant(true)         // disable land objects 17
             << QVariant(false)         // AI survival    18
             << QVariant(false)         // inf. attack    19
             << QVariant(true)          // reset weps     20
@@ -407,7 +407,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(true)          // team divide    2
             << QVariant(false)         // solid land     3
             << QVariant(false)         // border         4
-            << QVariant(true)          // low gravity    5
+            << QVariant(false)         // low gravity    5
             << QVariant(false)         // laser sight    6
             << QVariant(false)         // invulnerable   7
             << QVariant(false)         // reset health   8

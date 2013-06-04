@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -83,7 +83,7 @@ with cinfos[Count] do
     X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
     Radius:= Gear^.Radius;
-    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
+    ChangeRoundInLand(X, Y, Radius - 1, true, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen <> 0)));
     cGear:= Gear
     end;
 Gear^.CollisionIndex:= Count;
@@ -104,7 +104,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or (Gear^.Kind = gtCase));
+        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen <> 0)));
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;

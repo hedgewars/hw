@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2012 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,12 +35,6 @@ interface
 {$ENDIF}
 
 {$IFDEF UNIX}
-    {$IFNDEF DARWIN}
-        {necessary for statically linking physfs (divdi3 undefined on 32 bit)}
-        {$IFDEF CPU32}
-            {$linklib stdc++}
-        {$ENDIF}
-    {$ENDIF}
     {$IFDEF HAIKU}
         {$linklib root}
     {$ELSE}
@@ -962,11 +956,10 @@ function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
-function  SDL_CreateThread(fn: Pointer; name: PChar; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 {$ELSE}
-function  SDL_CreateThread(fn: Pointer; data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; mask: LongWord): LongInt; cdecl; external SDLLibName;
 {$ENDIF}
+
 
 function  SDL_GetMouseState(x, y: PLongInt): Byte; cdecl; external SDLLibName;
 function  SDL_GetKeyName(key: LongWord): PChar; cdecl; external SDLLibName;
@@ -985,7 +978,13 @@ procedure SDL_WM_SetIcon(icon: PSDL_Surface; mask : Byte); cdecl; external SDLLi
 procedure SDL_WM_SetCaption(title: PChar; icon: PChar); cdecl; external SDLLibName;
 function  SDL_WM_ToggleFullScreen(surface: PSDL_Surface): LongInt; cdecl; external SDLLibName;
 
+
+// remember to mark the threaded functions as 'cdecl; export;'
+// (or have fun debugging nil arguments)
+function  SDL_CreateThread(fn: Pointer; {$IFDEF SDL13}name: PChar;{$ENDIF} data: Pointer): PSDL_Thread; cdecl; external SDLLibName;
 procedure SDL_WaitThread(thread: PSDL_Thread; status: PLongInt); cdecl; external SDLLibName;
+procedure SDL_KillThread(thread: PSDL_Thread); cdecl; external SDLLibName;
+
 function  SDL_CreateMutex: PSDL_mutex; cdecl; external SDLLibName;
 procedure SDL_DestroyMutex(mutex: PSDL_mutex); cdecl; external SDLLibName;
 function  SDL_LockMutex(mutex: PSDL_mutex): LongInt; cdecl; external SDLLibName name 'SDL_mutexP';

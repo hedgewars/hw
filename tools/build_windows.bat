@@ -13,7 +13,8 @@ echo Fetching all DLLs...
 if %BUILD_TYPE%=="Debug" (
     for %%G in (QtCored4 QtGuid4 QtNetworkd4) do xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
-for %%G in (QtCore4 QtGui4 QtNetwork4 libgcc_s_dw2-1 mingwm10) do (
+:: should you libgcc dynamically you should try adding libgcc_s_dw2-1 and mingwm10
+for %%G in (QtCore4 QtGui4 QtNetwork4) do (
     xcopy /d/y %QTDIR%\%%G.dll %CD%\bin\
 )
 
@@ -39,7 +40,8 @@ call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
 set ERRORLEVEL=
-cmake . -G "MinGW Makefiles" -DCMAKE_PREFIX_PATH="%CD%\misc\winutils\" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" -DCMAKE_BUILD_TYPE="%BUILD_TYPE%"
+cmake . -G "MinGW Makefiles" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DCMAKE_PREFIX_PATH="%CD%\misc\winutils\\"
+:: prefix should be last
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 

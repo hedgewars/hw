@@ -903,7 +903,9 @@ function CheckWon()
 end
 
 function DoWon()
-  SaveCampaignVar("Progress", "3")
+  if progress and progress<3 then
+    SaveCampaignVar("Progress", "3")
+  end
   AddAnim(winAnim)
   AddFunction({func = FinishWon, args = {}})
 end
@@ -939,11 +941,10 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 5
-	MapGen = 0
-  TemplateFilter = 6
-  TemplateNumber = 27
-	Theme = "Nature"
-  SuddenDeathTurns = 3000
+    Map = "A_Classic_Fairytale_journey"
+    Theme = "Nature"
+
+    SuddenDeathTurns = 3000
 
 	AddTeam(loc("Natives"), 29439, "Bone", "Island", "HillBilly", "cm_birdy")
 	leaks = AddHog(loc("Leaks A Lot"), 0, 100, "Rambo")
@@ -974,6 +975,7 @@ function onGameInit()
 end
 
 function onGameStart()
+  progress = tonumber(GetCampaignVar("Progress"))
   m2Choice = tonumber(GetCampaignVar("M2Choice"))
   m2DenseDead = tonumber(GetCampaignVar("M2DenseDead"))
   m2RamonDead = tonumber(GetCampaignVar("M2RamonDead"))
