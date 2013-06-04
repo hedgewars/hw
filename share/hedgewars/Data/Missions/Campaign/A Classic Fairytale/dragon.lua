@@ -402,7 +402,8 @@ function DoMissionFinished()
   if progress and progress<6 then
     SaveCampaignVar("Progress", "6")
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  RestoreHedge(cyborg)
+  DeleteGear(cyborg)
   TurnTimeLeft = 0
 end
 
@@ -421,8 +422,8 @@ function CheckGearDead(gear)
 end
 
 function EndMission()
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  RestoreHedge(cyborg)
+  DeleteGear(cyborg)
   TurnTimeLeft = 0
 end
 
