@@ -939,7 +939,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play a game across a network</source>
-        <translation>Spiele über ein Netwerk</translation>
+        <translation>Spiele über ein Netzwerk</translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
@@ -2154,7 +2154,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>Netgame - Error</source>
-        <translation>Netwerkspiel - Fehler</translation>
+        <translation>Netzwerkspiel - Fehler</translation>
     </message>
     <message>
         <source>Please select a server from the list</source>
