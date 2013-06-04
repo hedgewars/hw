@@ -35,6 +35,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     ".swp"
     #version control
     "\\\\.hg"
+    "\\\\.orig$"
     #output binary/library
     "\\\\.exe$"
     "\\\\.a$"
@@ -53,11 +54,10 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.sifz$"
     #misc
     "\\\\.core$"
-    "\\\\.sh$"
-    "\\\\.orig$"
     "\\\\.layout$"
     "\\\\.db$"
     "\\\\.dof$"
+    "\\\\.or$"
     #archives
     "\\\\.zip$"
     "\\\\.gz$"
@@ -68,8 +68,11 @@ set(CPACK_SOURCE_IGNORE_FILES
     "config\\\\.inc$"
     "hwengine\\\\.desktop$"
     "Info\\\\.plist$"
+    #qt extra files
+    "moc_.*\\\\.cxx_parameters"
+    "\\\\.qrc.depends$"
     #other cmake generated files
-    "Makefile"
+    "Makefile$"
     "Doxyfile"
     "CMakeFiles"
     "[dD]ebug$"
@@ -85,6 +88,7 @@ set(CPACK_SOURCE_IGNORE_FILES
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libopenalbridge"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/winutils/bin"
     "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/promotional_art"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/drawMapTest"
