@@ -162,7 +162,13 @@ processAction (MoveToRoom ri) = do
     rnc <- gets roomsClients
 
     io $ do
-        modifyClient rnc (\cl -> cl{teamsInGame = 0, isReady = False, isMaster = False, isInGame = False, clientClan = Nothing}) ci
+        modifyClient rnc (
+            \cl -> cl{teamsInGame = 0
+                , isReady = False
+                , isMaster = False
+                , isInGame = False
+                , isJoinedMidGame = False
+                , clientClan = Nothing}) ci
         modifyRoom rnc (\r -> r{playersIn = playersIn r + 1}) ri
         moveClientToRoom rnc ri ci
 
@@ -290,7 +296,7 @@ processAction UnreadyRoomClients = do
     pr <- client's clientProto
     mapM_ processAction [
         AnswerClients (map sendChan roomPlayers) $ notReadyMessage pr . map nick . filter (not . isMaster) $ roomPlayers
-        , ModifyRoomClients (\cl -> cl{isReady = isMaster cl})
+        , ModifyRoomClients (\cl -> cl{isReady = isMaster cl, isJoinedMidGame = False})
         , ModifyRoom (\r -> r{readyPlayers = 1})
         ]
     where
@@ -301,10 +307,17 @@ processAction FinishGame = do
     rnc <- gets roomsClients
     ri <- clientRoomA
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+    joinedMidGame <- liftM (filter isJoinedMidGame) $ roomClientsS ri
     answerRemovedTeams <- io $
-         room'sM rnc (map (\t -> AnswerClients thisRoomChans ["REMOVE_TEAM", t]) . leftTeams . fromJust . gameInfo) ri
+         room'sM rnc (\r -> let gi = fromJust $ gameInfo r in 
+                        concatMap (\c -> 
+                            (answerFullConfigParams c (mapParams r) (params r))
+                            ++
+                            (map (\t -> AnswerClients [sendChan c] ["REMOVE_TEAM", t]) $ leftTeams gi) 
+                        ) joinedMidGame
+                     ) ri
 
-    mapM_ processAction $
+    mapM_ processAction $ (
         SaveReplay
         : ModifyRoom
             (\r -> r{
@@ -312,10 +325,11 @@ processAction FinishGame = do
                 readyPlayers = 0
                 }
             )
-        : UnreadyRoomClients
         : SendUpdateOnThisRoom
         : AnswerClients thisRoomChans ["ROUND_FINISHED"]
         : answerRemovedTeams
+        )
+        ++ [UnreadyRoomClients]
 
 
 processAction (SendTeamRemovalMessage teamName) = do
