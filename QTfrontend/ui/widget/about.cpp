@@ -52,11 +52,8 @@ About::About(QWidget * parent) :
     QLabel *imageLabel = new QLabel;
     QImage image(":/res/Hedgehog.png");
     imageLabel->setPixmap(QPixmap::fromImage(image));
-    imageLabel->setScaledContents(true);
-    imageLabel->setMinimumWidth(2.8);
-    imageLabel->setMaximumWidth(280);
-    imageLabel->setMinimumHeight(30);
-    imageLabel->setMaximumHeight(300);
+    imageLabel->setFixedWidth(273);
+    imageLabel->setFixedHeight(300);
 
     leftLayout->addWidget(imageLabel, 0, Qt::AlignHCenter);
 
