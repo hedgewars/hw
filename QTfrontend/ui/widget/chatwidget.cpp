@@ -176,7 +176,7 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     QWidget(parent),
     mainLayout(this)
 {
-    this->gameSettings = gameSettings;
+    this->gameSettings = NULL;
     this->notify = notify;
 
     m_isAdmin = false;
