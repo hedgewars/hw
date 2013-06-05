@@ -20,7 +20,7 @@
 
 unit uAIAmmoTests;
 interface
-uses SDLh, uConsts, uFloat, uTypes, uAIMisc;
+uses uConsts, uFloat, uTypes, uAIMisc;
 const
     amtest_Rare     = $00000001; // check only several positions
     amtest_NoTarget = $00000002; // each pos, but no targetting
@@ -681,7 +681,7 @@ end;
 function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t: real;
     d: Longword;
-    fallDmg, valueResult: LongInt;
+    {fallDmg, }valueResult: LongInt;
 begin
 if (Level > 4) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
@@ -724,7 +724,7 @@ end;
 function TestSniperRifle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t, dmg: real;
     d: Longword;
-    fallDmg: LongInt;
+    //fallDmg: LongInt;
 begin
 if (Level > 3) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint

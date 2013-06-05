@@ -113,7 +113,7 @@ if Targets.reset then
 Targets.reset:= false;
 end;
 procedure FillTargets;
-var i, t: Longword;
+var //i, t: Longword;
     f, e: LongInt;
     Gear: PGear;
 begin

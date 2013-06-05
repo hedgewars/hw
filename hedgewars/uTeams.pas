@@ -110,7 +110,7 @@ GameOver:= true
 end;
 
 procedure SwitchHedgehog;
-var c, i, t, j: LongWord;
+var c, i, t: LongWord;
     PrevHH, PrevTeam : LongWord;
 begin
 TargetPoint.X:= NoPointX;
