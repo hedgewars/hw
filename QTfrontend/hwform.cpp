@@ -102,7 +102,7 @@
 #include "DataManager.h"
 #include "AutoUpdater.h"
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #define WINVER 0x0500
 #include <windows.h>
 #else
@@ -110,7 +110,7 @@
 #include <sys/types.h>
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <sys/sysctl.h>
 #endif
 
@@ -1923,7 +1923,7 @@ QString HWForm::getDemoArguments()
 
     QString prefix = "\"" + datadir->absolutePath() + "\"";
     QString userPrefix = "\"" + cfgdir->absolutePath() + "\"";
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     prefix = prefix.replace("/","\\");
     userPrefix = userPrefix.replace("/","\\");
 #endif
