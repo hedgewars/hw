@@ -24,7 +24,8 @@ uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
-
+    SendStatsOn : boolean = true;
+    
 procedure initModule;
 procedure freeModule;
 
@@ -162,12 +163,13 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0
                 end;
-
-for t:= 0 to Pred(ClansCount) do
-    with ClansArray[t]^ do
-        begin
-        SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
-        end;
+                
+if SendStatsOn then
+	for t:= 0 to Pred(ClansCount) do
+		with ClansArray[t]^ do
+			begin
+			SendStat(siClanHealth, IntToStr(Color) + ' ' + IntToStr(ClanHealth));
+			end;
 
 Kills:= 0;
 KillsClan:= 0;
@@ -207,103 +209,104 @@ var i, t: LongInt;
     maxTeamDamageName : shortstring;
     winnersClan : PClan;
 begin
-msd:= 0; msdhh:= nil;
-msk:= 0; mskhh:= nil;
-mskcnt:= 0;
-maxTeamKills := 0;
-maxTurnSkips := 0;
-maxTeamDamage := 0;
-winnersClan:= nil;
+if SendStatsOn then
+	msd:= 0; msdhh:= nil;
+	msk:= 0; mskhh:= nil;
+	mskcnt:= 0;
+	maxTeamKills := 0;
+	maxTurnSkips := 0;
+	maxTeamDamage := 0;
+	winnersClan:= nil;
 
-for t:= 0 to Pred(TeamsCount) do
-    with TeamsArray[t]^ do
-    begin
-        if not ExtDriven then
-            SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
-        for i:= 0 to cMaxHHIndex do
-            begin
-            if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
-                begin
-                msdhh:= @Hedgehogs[i];
-                msd:= Hedgehogs[i].stats.MaxStepDamageGiven
-                end;
-            if Hedgehogs[i].stats.MaxStepKills >= msk then
-                if Hedgehogs[i].stats.MaxStepKills = msk then
-                    inc(mskcnt)
-                else
-                    begin
-                    mskcnt:= 1;
-                    mskhh:= @Hedgehogs[i];
-                    msk:= Hedgehogs[i].stats.MaxStepKills
-                    end;
-        end;
+	for t:= 0 to Pred(TeamsCount) do
+		with TeamsArray[t]^ do
+		begin
+			if not ExtDriven then
+				SendStat(siTeamStats, GetTeamStatString(TeamsArray[t]));
+			for i:= 0 to cMaxHHIndex do
+				begin
+				if Hedgehogs[i].stats.MaxStepDamageGiven > msd then
+					begin
+					msdhh:= @Hedgehogs[i];
+					msd:= Hedgehogs[i].stats.MaxStepDamageGiven
+					end;
+				if Hedgehogs[i].stats.MaxStepKills >= msk then
+					if Hedgehogs[i].stats.MaxStepKills = msk then
+						inc(mskcnt)
+					else
+						begin
+						mskcnt:= 1;
+						mskhh:= @Hedgehogs[i];
+						msk:= Hedgehogs[i].stats.MaxStepKills
+						end;
+			end;
 
-        { send player stats for winner teams }
-        if Clan^.ClanHealth > 0 then
-            begin
-            winnersClan:= Clan;
-            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                IntToStr(stats.Kills) + ' ' + TeamName);
-        end;
+			{ send player stats for winner teams }
+			if Clan^.ClanHealth > 0 then
+				begin
+				winnersClan:= Clan;
+				SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+					IntToStr(stats.Kills) + ' ' + TeamName);
+			end;
 
-        { determine maximum values of TeamKills, TurnSkips, TeamDamage }
-        if stats.TeamKills > maxTeamKills then
-            begin
-            maxTeamKills := stats.TeamKills;
-            maxTeamKillsName := TeamName;
-        end;
-        if stats.TurnSkips > maxTurnSkips then
-            begin
-            maxTurnSkips := stats.TurnSkips;
-            maxTurnSkipsName := TeamName;
-        end;
-        if stats.TeamDamage > maxTeamDamage then
-            begin
-            maxTeamDamage := stats.TeamDamage;
-            maxTeamDamageName := TeamName;
-        end;
+			{ determine maximum values of TeamKills, TurnSkips, TeamDamage }
+			if stats.TeamKills > maxTeamKills then
+				begin
+				maxTeamKills := stats.TeamKills;
+				maxTeamKillsName := TeamName;
+			end;
+			if stats.TurnSkips > maxTurnSkips then
+				begin
+				maxTurnSkips := stats.TurnSkips;
+				maxTurnSkipsName := TeamName;
+			end;
+			if stats.TeamDamage > maxTeamDamage then
+				begin
+				maxTeamDamage := stats.TeamDamage;
+				maxTeamDamageName := TeamName;
+			end;
 
-    end;
+		end;
 
-{ now send player stats for loser teams }
-for t:= 0 to Pred(TeamsCount) do
-    begin
-    with TeamsArray[t]^ do
-        begin
-        if Clan^.ClanHealth = 0 then
-            begin
-            SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
-                IntToStr(stats.Kills) + ' ' + TeamName);
-        end;
-    end;
-end;
+	{ now send player stats for loser teams }
+	for t:= 0 to Pred(TeamsCount) do
+		begin
+		with TeamsArray[t]^ do
+			begin
+			if Clan^.ClanHealth = 0 then
+				begin
+				SendStat(siPlayerKills, IntToStr(Clan^.Color) + ' ' +
+					IntToStr(stats.Kills) + ' ' + TeamName);
+			end;
+		end;
+	end;
 
-if msdhh <> nil then
-    SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
-if mskcnt = 1 then
-    SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
+	if msdhh <> nil then
+		SendStat(siMaxStepDamage, IntToStr(msd) + ' ' + msdhh^.Name + ' (' + msdhh^.Team^.TeamName + ')');
+	if mskcnt = 1 then
+		SendStat(siMaxStepKills, IntToStr(msk) + ' ' + mskhh^.Name + ' (' + mskhh^.Team^.TeamName + ')');
 
-if maxTeamKills > 1 then
-    SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
-if maxTurnSkips > 2 then
-    SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
-if maxTeamDamage > 30 then
-    SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
+	if maxTeamKills > 1 then
+		SendStat(siMaxTeamKills, IntToStr(maxTeamKills) + ' ' + maxTeamKillsName);
+	if maxTurnSkips > 2 then
+		SendStat(siMaxTurnSkips, IntToStr(maxTurnSkips) + ' ' + maxTurnSkipsName);
+	if maxTeamDamage > 30 then
+		SendStat(siMaxTeamDamage, IntToStr(maxTeamDamage) + ' ' + maxTeamDamageName);
 
-if KilledHHs > 0 then
-    SendStat(siKilledHHs, IntToStr(KilledHHs));
+	if KilledHHs > 0 then
+		SendStat(siKilledHHs, IntToStr(KilledHHs));
 
-// now to console
-if winnersClan <> nil then 
-    begin
-    WriteLnToConsole('WINNERS');
-    for t:= 0 to winnersClan^.TeamsNumber - 1 do
-        WriteLnToConsole(winnersClan^.Teams[t]^.TeamName);
-    end
-else
-    WriteLnToConsole('DRAW');
+	// now to console
+	if winnersClan <> nil then 
+		begin
+		WriteLnToConsole('WINNERS');
+		for t:= 0 to winnersClan^.TeamsNumber - 1 do
+			WriteLnToConsole(winnersClan^.Teams[t]^.TeamName);
+		end
+	else
+		WriteLnToConsole('DRAW');
 
-WriteLnToConsole('');
+	WriteLnToConsole('');
 end;
 
 procedure initModule;
