@@ -34,7 +34,7 @@
 
 #include <string>
 
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
 #define WINVER 0x0500
 #include <windows.h>
 #else
@@ -42,7 +42,7 @@
 #include <sys/types.h>
 #endif
 
-#ifdef Q_WS_MAC
+#ifdef Q_OS_MAC
 #include <sys/sysctl.h>
 #ifndef _SC_NPROCESSORS_ONLN
 #define _SC_NPROCESSORS_ONLN 58
@@ -207,7 +207,7 @@ void FeedbackDialog::GenerateSpecs()
     QString processor_name = "Processor: ";
 
     // platform specific code
-#ifdef Q_WS_MACX
+#ifdef Q_OS_MACX
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
 
     uint64_t memsize;
@@ -240,7 +240,7 @@ void FeedbackDialog::GenerateSpecs()
         default: os_version += "\"Unknown version\"\n"; break;
     }
 #endif
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     SYSTEM_INFO sysinfo;
     GetSystemInfo(&sysinfo);
     number_of_cores += QString::number(sysinfo.dwNumberOfProcessors) + "\n";
@@ -262,7 +262,7 @@ void FeedbackDialog::GenerateSpecs()
     }
     kernel_line += "Windows kernel\n";
 #endif
-#ifdef Q_WS_X11
+#ifdef Q_OS_X11
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     long pages = sysconf(_SC_PHYS_PAGES),
 /*
@@ -277,7 +277,7 @@ void FeedbackDialog::GenerateSpecs()
 #endif
 
     // uname -a
-#if defined(Q_WS_X11) || defined(Q_WS_MACX)
+#if defined(Q_OS_X11) || defined(Q_OS_MAC)
     QProcess *process = new QProcess();
     QStringList arguments = QStringList("-a");
     process->start("uname", arguments);
@@ -286,7 +286,7 @@ void FeedbackDialog::GenerateSpecs()
     delete process;
 #endif
 
-#if (!defined(Q_WS_MACX) && defined(__i386__)) || defined(__x86_64__)
+#if (!defined(Q_OS_MAC) && defined(__i386__)) || defined(__x86_64__)
     // cpu info
     quint32 registers[4];
     quint32 i;

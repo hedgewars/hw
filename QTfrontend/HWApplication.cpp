@@ -23,11 +23,11 @@
 #include "hwform.h"
 #include "MessageDialog.h"
 
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
 #include "signal.h"
 #endif
 
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
 void terminateFrontend(int signal)
 {
     Q_UNUSED(signal);
@@ -38,7 +38,7 @@ void terminateFrontend(int signal)
 HWApplication::HWApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {
-#if !defined(Q_WS_WIN)
+#if !defined(Q_OS_WIN)
     signal(SIGINT, &terminateFrontend);
 #endif
 #if 0
