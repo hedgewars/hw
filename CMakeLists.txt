@@ -42,50 +42,13 @@ if(UNIX AND NOT APPLE)
 endif()
 
 
-#detect Mercurial revision and init rev/hash information
-find_program(HGCOMMAND hg)
-if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
-    execute_process(COMMAND ${HGCOMMAND} identify -in
-                    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-                    OUTPUT_VARIABLE internal_version
-                    ERROR_QUIET
-                )
-    #check local repo status
-    string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
-    string(REGEX REPLACE "[0-9a-zA-Z]+(.*) ([0-9]+)(.*)" "\\2" HEDGEWARS_REVISION ${internal_version})
-    string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" HEDGEWARS_HASH ${internal_version})
-
-    if(HGCHANGED)
-        message(${WARNING} "You have uncommitted changes in your repository!")
-    endif()
-    #let's assume that if you have hg you might be interested in debugging
-    set(default_build_type "DEBUG")
-    #write down hash and rev for easy picking should hg be missing
-    file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${HEDGEWARS_REVISION}\nhash ${HEDGEWARS_HASH}\n")
-else()
-    set(default_build_type "RELEASE")
-    # when compiling outside rev control, fetch revision and hash information from version_info.txt
-    find_file(version_info version_info.txt PATH ${CMAKE_SOURCE_DIR}/share)
-    if(version_info)
-        file(STRINGS ${version_info} internal_version REGEX "rev")
-        string(REGEX REPLACE "rev ([0-9]*)" "\\1" HEDGEWARS_REVISION ${internal_version})
-        file(STRINGS ${version_info} internal_version REGEX "hash")
-        string(REGEX REPLACE "hash ([a-zA-Z0-9]*)" "\\1" HEDGEWARS_HASH ${internal_version})
-    else()
-        message(${WARNING} "${CMAKE_SOURCE_DIR}/share/version_info.txt not found, revision information "
-                           "will be incorrect!!! Contact your source provider to fix this!")
-        set(HEDGEWARS_REVISION "0000")
-        set(HEDGEWARS_HASH "unknown")
-    endif()
-endif()
-
-
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
 set(CPACK_PACKAGE_VERSION_PATCH 20)
 set(HEDGEWARS_PROTO_VER 46)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
+include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
@@ -122,79 +85,8 @@ else()
     endif()
 endif()
 
-
-if(APPLE)
-    set(CMAKE_FIND_FRAMEWORK "FIRST")
-
-    #what system are we building for
-    set(minimum_macosx_version $ENV{MACOSX_DEPLOYMENT_TARGET})
-
-    #detect on which system we are: if sw_vers cannot be found for any reason (re)use minimum_macosx_version
-    find_program(sw_vers sw_vers)
-    if(sw_vers)
-        execute_process(COMMAND ${sw_vers} "-productVersion"
-                        OUTPUT_VARIABLE current_macosx_version
-                        OUTPUT_STRIP_TRAILING_WHITESPACE)
-        string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" current_macosx_version ${current_macosx_version})
-    else()
-        if(NOT minimum_macosx_version)
-            message(FATAL_ERROR "sw_vers not found! Need explicit MACOSX_DEPLOYMENT_TARGET variable set")
-        else()
-            message(${WARNING} "sw_vers not found! Fallback to MACOSX_DEPLOYMENT_TARGET variable")
-            set(current_macosx_version ${minimum_macosx_version})
-        endif()
-    endif()
-
-    #if nothing is set, we deploy only for the current system
-    if(NOT minimum_macosx_version)
-        set(minimum_macosx_version ${current_macosx_version})
-    endif()
-
-    #lower systems don't have enough processing power anyway
-    if (minimum_macosx_version VERSION_LESS "10.4")
-        message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
-    endif()
-
-    #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-    if(current_macosx_version VERSION_EQUAL "10.4")
-        find_package(SDL_mixer REQUIRED)
-        set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
-        set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-        set(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        list(APPEND pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}")
-    endif()
-
-    #CMAKE_OSX_ARCHITECTURES and CMAKE_OSX_SYSROOT need to be set for universal binary and correct linking
-    if(NOT CMAKE_OSX_ARCHITECTURES)
-        if(current_macosx_version VERSION_LESS "10.6")
-            if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
-                set(CMAKE_OSX_ARCHITECTURES "ppc7400")
-            else()
-                set(CMAKE_OSX_ARCHITECTURES "i386")
-            endif()
-        else()
-            set(CMAKE_OSX_ARCHITECTURES "x86_64")
-        endif()
-    endif()
-
-    #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
-    #we need to provide the correct one when host and target differ
-    if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
-        if(minimum_macosx_version VERSION_EQUAL "10.4")
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-            set(CMAKE_C_COMPILER "/Developer/usr/bin/gcc-4.0")
-            set(CMAKE_CXX_COMPILER "/Developer/usr/bin/g++-4.0")
-        else()
-            string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
-        endif()
-    endif()
-
-    #add user framework directory, other paths can be passed via FPFLAGS
-    list(APPEND pascal_flags "-Ff~/Library/Frameworks")
-    #set deployment target
-    list(APPEND pascal_flags "-k-macosx_version_min" "-k${minimum_macosx_version}" "-XR${CMAKE_OSX_SYSROOT}")
-endif(APPLE)
+#platform specific init code
+include(${CMAKE_MODULE_PATH}/platform.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
@@ -211,10 +103,6 @@ endif (CMAKE_BUILD_TYPE)
 
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
 if(NOT ${MINIMAL_FLAGS})
-    if(WINDOWS)
-        #this flags prevents a few dll hell problems
-        set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
-    endif(WINDOWS)
     set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
     set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
     set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
