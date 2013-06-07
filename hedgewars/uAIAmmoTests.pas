@@ -330,7 +330,7 @@ end;
 function TestMolotov(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
-    TestTime: Longword;
+    TestTime: LongInt;
     x, y, dY, meX, meY: real;
     t: LongInt;
 begin
@@ -382,7 +382,7 @@ function TestGrenade(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackPa
 const tDelta = 24;
 var Vx, Vy, r: real;
     Score, EX, EY, valueResult: LongInt;
-    TestTime: Longword;
+    TestTime: LongInt;
     x, y, meX, meY, dY: real;
     t: LongInt;
 begin

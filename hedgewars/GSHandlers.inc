@@ -5122,13 +5122,13 @@ begin
 end;
 
 procedure doStepIceGun(Gear: PGear);
-const iceWaitCollision:Longint = 0;
-const iceCollideWithGround:Longint = 1;
+const iceWaitCollision = 0;
+const iceCollideWithGround = 1;
 //const iceWaitNextTarget:Longint = 2;
 //const iceCollideWithHog:Longint = 4;
-const iceCollideWithWater:Longint = 5;
+const iceCollideWithWater = 5;
 //const waterFreezingTime:Longint = 500;
-const groundFreezingTime:Longint = 1000;
+const groundFreezingTime = 1000;
 const iceRadius = 32;
 const iceHeight = 40;
 var
@@ -5218,7 +5218,7 @@ begin
                                 if vg <> nil then
                                     begin
                                     i:= random(100) + 155;
-                                    vg^.Tint:= i shl 24 or i shl 16 or $FF shl 8 or Longword(random(200) + 55);
+                                    vg^.Tint:= (i shl 24) or (i shl 16) or ($FF shl 8) or (random(200) + 55);
                                     vg^.Angle:= random(360);
                                     vg^.dx:= 0.001 * random(80);
                                     vg^.dy:= 0.001 * random(80)
