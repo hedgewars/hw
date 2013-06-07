@@ -5135,7 +5135,7 @@ var
     HHGear, iter: PGear;
     landRect: TSDL_Rect;
     ndX, ndY: hwFloat;
-    i, j, t, gX, gY: LongInt;
+    i, t, gX, gY: LongInt;
     hogs: PGearArrayS;
     vg: PVisualGear;
 begin

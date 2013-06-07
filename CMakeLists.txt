@@ -83,8 +83,8 @@ endif()
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 19)
-set(HEDGEWARS_PROTO_VER 44)
+set(CPACK_PACKAGE_VERSION_PATCH 20)
+set(HEDGEWARS_PROTO_VER 46)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
@@ -255,10 +255,10 @@ unset(CMAKE_REQUIRED_FLAGS)
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
     if(${allow_parse_args})
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
-    else()
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
+    else()
+        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 

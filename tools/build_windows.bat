@@ -40,7 +40,8 @@ call %QTDIR%\qtenv2.bat
 
 echo Running cmake...
 set ERRORLEVEL=
-cmake . -G "MinGW Makefiles" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DCMAKE_PREFIX_PATH="%CD%\misc\winutils\" ::prefix should be last
+cmake . -G "MinGW Makefiles" -DPNG_LIBRARY="%CD%\misc\winutils\bin\libpng13.dll" -DCMAKE_BUILD_TYPE="%BUILD_TYPE%" -DCMAKE_PREFIX_PATH="%CD%\misc\winutils\\"
+:: prefix should be last
 
 if %ERRORLEVEL% NEQ 0 goto exitpoint
 
