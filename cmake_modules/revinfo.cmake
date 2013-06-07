@@ -12,7 +12,7 @@ if(HGCOMMAND AND (EXISTS ${CMAKE_SOURCE_DIR}/.hg))
     string(REGEX REPLACE "([0-9a-zA-Z]+)(.*) [0-9]+(.*)" "\\1" HEDGEWARS_HASH ${internal_version})
 
     if(HGCHANGED)
-        message(${WARNING} "You have uncommitted changes in your repository!")
+        message("*** You have uncommitted changes in your repository ***")
     endif()
     #let's assume that if you have hg you might be interested in debugging
     set(default_build_type "DEBUG")
@@ -28,8 +28,8 @@ else()
         file(STRINGS ${version_info} internal_version REGEX "hash")
         string(REGEX REPLACE "hash ([a-zA-Z0-9]*)" "\\1" HEDGEWARS_HASH ${internal_version})
     else()
-        message(${WARNING} "${CMAKE_SOURCE_DIR}/share/version_info.txt not found, revision information "
-                           "will be incorrect!!! Contact your source provider to fix this!")
+        message(WARNING "${CMAKE_SOURCE_DIR}/share/version_info.txt not found, revision information "
+                        "will be incorrect!!! Contact your source provider to fix this!")
         set(HEDGEWARS_REVISION "0000")
         set(HEDGEWARS_HASH "unknown")
     endif()
