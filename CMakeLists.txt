@@ -94,6 +94,9 @@ else (CMAKE_BUILD_TYPE)
 endif (CMAKE_BUILD_TYPE)
 
 
+#perform safe check that enable/disable compilation features
+include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
+
 #set default flags values for all projects (unless MINIMAL_FLAGS is true)
 if(NOT ${MINIMAL_FLAGS})
     set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
@@ -109,29 +112,6 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
 endif()
-
-
-#TESTING TIME
-include(CheckCCompilerFlag)
-
-#check for noexecstack on ELF, should be set on Gentoo and similar
-set(CMAKE_REQUIRED_FLAGS "-Wl,-z -Wl,noexecstack")
-check_c_compiler_flag("" HAVE_NOEXECSTACK) #empty because we are testing a linker flag
-if(HAVE_NOEXECSTACK)
-    list(APPEND pascal_flags "-k-z" "-knoexecstack")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-endif()
-unset(CMAKE_REQUIRED_FLAGS)
-
-#check for ASLR and DEP security features on Windows
-#both supported in binutils >= 2.20, available since Vista and XP SP2 respectively
-set(CMAKE_REQUIRED_FLAGS "-Wl,--nxcompat -Wl,--dynamicbase")
-check_c_compiler_flag("" HAVE_WINASLRDEP) #empty because we are testing a linker flag
-if(HAVE_WINASLRDEP)
-    list(APPEND pascal_flags "-k--nxcompat" "-k--dynamicbase")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-endif()
-unset(CMAKE_REQUIRED_FLAGS)
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
