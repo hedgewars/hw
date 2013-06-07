@@ -62,8 +62,43 @@ void DrawMapWidget::resizeEvent(QResizeEvent * event)
 {
     Q_UNUSED(event);
 
+    int height = this->height();
+    int width = this->width();
+
+    if ((m_scene->height() > 0) && (m_scene->width() > 0) && (height > 0))
+    {
+        qreal saspect = m_scene->width() / m_scene->height();
+
+        qreal h = height;
+        qreal w = width;
+        qreal waspect = w / h;
+
+        if (waspect < saspect)
+        {
+            h = w / saspect;
+        }
+        else if (waspect > saspect)
+        {
+            w = saspect * h;
+        }
+
+        int fixedh = (int)h;
+        int fixedw = (int)w;
+
+        if (ui->graphicsView->width() != fixedw)
+        {
+            ui->graphicsView->setFixedWidth(fixedw);
+        }
+
+        if (ui->graphicsView->height() != fixedh)
+        {
+            ui->graphicsView->setFixedHeight(fixedh);
+        }
+
+    }
+
     if(ui->graphicsView && ui->graphicsView->scene())
-        ui->graphicsView->fitInView(ui->graphicsView->scene()->sceneRect(), Qt::KeepAspectRatio);
+        ui->graphicsView->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
 }
 
 void DrawMapWidget::showEvent(QShowEvent * event)

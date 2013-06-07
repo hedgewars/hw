@@ -32,7 +32,7 @@
  * Forbid kicking on 1v1 matches
  * Desync fixes
  * Fixed fort mode
- * Making very large maps now works properly with targetted weapons
+ * Making very large maps now works properly with targeted weapons
  * ParseCommand should be safe to use in Lua now, at any time
  * Fixes to many weapons. Mudball, blowtorch, explosives, cluster bomb spread, portal.
 

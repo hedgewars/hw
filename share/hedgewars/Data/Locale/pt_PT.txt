@@ -78,7 +78,7 @@
 01:16=Pouco
 01:17=Normal
 01:18=Muito
-01:19=Excessivo
+01:19=Imenso
 01:20=Ressalto: %1
 01:21=Áudio Silenciado
 
