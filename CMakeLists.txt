@@ -2,13 +2,6 @@ project(hedgewars)
 
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0)
-if(CMAKE_VERSION VERSION_LESS "2.8")
-    set(WARNING "WARNING: ")
-    set(allow_parse_args FALSE)
-else()
-    set(WARNING WARNING)
-    set(allow_parse_args TRUE)
-endif()
 foreach(hwpolicy CMP0003 CMP0012 CMP0017)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} NEW)
@@ -142,11 +135,11 @@ unset(CMAKE_REQUIRED_FLAGS)
 
 #parse additional parameters
 if(FPFLAGS OR GHFLAGS)
-    if(${allow_parse_args})
+    if(CMAKE_VERSION VERSION_GREATER "2.6")
         separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
+        message("*** FPFLAGS and GHFLAGS are available only when using CMake >= 2.8 ***")
     endif()
 endif()
 

@@ -102,7 +102,7 @@ set(engine_sources
     )
 
 if(${BUILD_ENGINE_LIBRARY})
-    message(${WARNING} "Engine will be built as library (experimental)")
+    message("*** Engine will be built as library (experimental) ***")
     list(APPEND pascal_flags "-dHWLIBRARY")
 
     # create position independent code, only required for x68_64 builds, similar to -fPIC
