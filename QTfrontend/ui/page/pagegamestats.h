@@ -49,6 +49,7 @@ class PageGameStats : public AbstractPage
         QLabel *labelGameStats;
         QLabel *labelGameWin;
         QLabel *labelGameRank;
+        QLabel *labelGraphTitle;
         FitGraphicsView * graphic;
 
     public slots:

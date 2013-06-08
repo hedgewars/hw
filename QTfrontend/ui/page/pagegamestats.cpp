@@ -44,6 +44,9 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     pageLayout->setSpacing(20);
     pageLayout->setColumnStretch(0, 1);
     pageLayout->setColumnStretch(1, 1);
+    pageLayout->setRowStretch(0, 1);    
+    pageLayout->setRowStretch(1, 20);
+    //pageLayout->setRowStretch(1, -1); this should work but there is unnecessary empty space betwin lines if used
     pageLayout->setContentsMargins(7, 7, 7, 0);
 
     QGroupBox * gb = new QGroupBox(this);
@@ -61,15 +64,15 @@ QLayout * PageGameStats::bodyLayoutDefinition()
     gbl->addWidget(l);
     gbl->addWidget(labelGameStats);
     gb->setLayout(gbl);
-    pageLayout->addWidget(gb, 1, 1, 1, 2);
+    pageLayout->addWidget(gb, 1, 1);
 
     // graph
     graphic = new FitGraphicsView(gb);
-    l = new QLabel(this);
-    l->setTextFormat(Qt::RichText);
-    l->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
-    l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    gbl->addWidget(l);
+    labelGraphTitle = new QLabel(this);
+    labelGraphTitle->setTextFormat(Qt::RichText);
+    labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
+    labelGraphTitle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    gbl->addWidget(labelGraphTitle);
     gbl->addWidget(graphic);
     graphic->scale(1.0, -1.0);
     graphic->setBackgroundBrush(QBrush(Qt::black));
@@ -154,28 +157,37 @@ void PageGameStats::restartBtnVisible(bool visible)
 
 void PageGameStats::renderStats()
 {
-    QGraphicsScene * scene = new QGraphicsScene();
+	graphic->show();
+	labelGraphTitle-> show();
+	// if not health data sent
+	if(healthPoints.size() == 0) {
+		labelGraphTitle->hide();
+		graphic->hide();
+	} else {
+		labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
+		QGraphicsScene * scene = new QGraphicsScene();
 
-    QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
-    while (i != healthPoints.constEnd())
-    {
-        quint32 c = i.key();
-        //QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
-        QVector<quint32> hps = i.value();
+		QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
+		while (i != healthPoints.constEnd())
+		{
+			quint32 c = i.key();
+			//QColor clanColor = QColor(qRgb((c >> 16) & 255, (c >> 8) & 255, c & 255));
+			QVector<quint32> hps = i.value();
 
-        QPainterPath path;
-        if (hps.size())
-            path.moveTo(0, hps[0]);
+			QPainterPath path;
+			if (hps.size())
+				path.moveTo(0, hps[0]);
 
-        for(int t = 1; t < hps.size(); ++t)
-            path.lineTo(t, hps[t]);
+			for(int t = 1; t < hps.size(); ++t)
+				path.lineTo(t, hps[t]);
 
-        scene->addPath(path, QPen(c));
-        ++i;
-    }
+			scene->addPath(path, QPen(c));
+			++i;
+		}
 
-    graphic->setScene(scene);
-    graphic->fitInView(graphic->sceneRect());
+		graphic->setScene(scene);
+		graphic->fitInView(graphic->sceneRect());
+	}
 }
 
 void PageGameStats::GameStats(char type, const QString & info)
@@ -215,6 +227,12 @@ void PageGameStats::GameStats(char type, const QString & info)
             quint32 clan = info.left(i).toInt();
             quint32 hp = info.mid(i + 1).toUInt();
             healthPoints[clan].append(hp);
+            break;
+        }
+        case 'g' :
+        {
+			// TODO: change default picture or add change pic capability
+			labelGraphTitle->setText("<br><h1><img src=\":/res/StatsR.png\"> " + info + "</h1>");
             break;
         }
         case 'T':   // local team stats
