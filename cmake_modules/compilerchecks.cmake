@@ -4,6 +4,19 @@ include(CheckCCompilerFlag)
 #when you need to check for a linker flag, just leave the argument of "check_c_compiler_flag" empty
 
 
+#stack protection
+check_c_compiler_flag("-fstack-protector" HAVE_STACKPROTECTOR)
+if(HAVE_STACKPROTECTOR)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
+endif()
+
+#symbol visibility
+check_c_compiler_flag("-fvisibility=hidden" HAVE_VISIBILITYH)
+if(HAVE_VISIBILITYH)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
+endif()
+
+
 #check for noexecstack on ELF, Gentoo security
 set(CMAKE_REQUIRED_FLAGS "-Wl,-z,noexecstack")
 check_c_compiler_flag("" HAVE_NOEXECSTACK)
