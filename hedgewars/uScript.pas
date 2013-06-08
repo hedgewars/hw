@@ -1289,31 +1289,46 @@ end;
 function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
 var statInfo : TStatInfoType;
 var i : LongInt;
+var color : shortstring;
 begin
 	//TODO print better error messages
 	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
-	if (lua_gettop(L) <> 2) and (statInfo <> siPlayerKills) then
+	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
+			or (statInfo <> siClanHealth)) then
         begin
         LuaError('Lua: Wrong number of parameters passed to SendStat!');
         end
-    else if (lua_gettop(L) <> 3) and (statInfo = siPlayerKills) then
+    else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills) 
+			or (statInfo = siClanHealth)) then
 		begin
         LuaError('Lua: Wrong number of parameters passed to SendStat!');
         end
     else
 		begin
-		if(statInfo = siPlayerKills) then
+		if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
 			begin
 			// 3: team name
 			for i:= 0 to Pred(TeamsCount) do
 				begin
 				with TeamsArray[i]^ do
 					begin
-					if TeamName = lua_tostring(L, 3) then
-						SendStat(siPlayerKills, uUtils.IntToStr(Clan^.Color) + ' ' +
-							lua_tostring(L, 2) + ' ' + TeamName);
-					end;
+						if TeamName = lua_tostring(L, 3) then
+							begin
+							color := uUtils.IntToStr(Clan^.Color);
+							Break;
+							end
+					end				
 				end;
+			if (statInfo = siPlayerKills) then
+				begin
+					SendStat(siPlayerKills, color + ' ' +
+						lua_tostring(L, 2) + ' ' + TeamsArray[i]^.TeamName);
+				end
+			else if (statInfo = siClanHealth) then
+				begin
+					SendStat(siClanHealth, color + ' ' +
+						lua_tostring(L, 2));
+				end
 			end
 		else
 			begin
