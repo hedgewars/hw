@@ -96,7 +96,7 @@ if not GameOver then
                             if (Gear <> nil) then
                                 Gear^.State:= gstWinner;
             if Flawless then
-                AddVoice(sndFlawless, Teams[0]^.voicepack) 
+                AddVoice(sndFlawless, Teams[0]^.voicepack)
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
@@ -190,18 +190,22 @@ repeat
                     CurrHedgehog:= Succ(CurrHedgehog) mod HedgehogsNumber;
                 until ((Hedgehogs[CurrHedgehog].Gear <> nil) and (Hedgehogs[CurrHedgehog].Effects[heFrozen] < 256)) or (CurrHedgehog = PrevHH)
                 end
-        until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 50256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
+        until ((CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256)) or (PrevTeam = CurrTeam) or ((CurrTeam = TagTeamIndex) and ((GameFlags and gfTagTeam) <> 0))
         end;
         if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
             begin
-            inc(CurrentTeam^.Clan^.TurnNumber);
             with CurrentTeam^.Clan^ do
                 for t:= 0 to Pred(TeamsNumber) do
                     with Teams[t]^ do
                         for i:= 0 to Pred(HedgehogsNumber) do
                             with Hedgehogs[i] do
-                                if Effects[heFrozen] > 255 then
-                                    Effects[heFrozen]:= max(255,Effects[heFrozen]-50000)
+                                begin
+                                if Effects[heFrozen] > 255 then Effects[heFrozen]:= max(255,Effects[heFrozen]-50000);
+                                if (Gear <> nil) and (Effects[heFrozen] < 256) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+                                    CurrHedgehog:= i
+                                end;
+            if (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear = nil) or (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] > 255) then
+                inc(CurrentTeam^.Clan^.TurnNumber);
             end
 until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen] < 256);
 
