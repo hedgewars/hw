@@ -68,6 +68,7 @@ class PageGameStats : public AbstractPage
         QMap<quint32, QVector<quint32> > healthPoints;
         unsigned int playerPosition;
         quint32 lastColor;
+        bool defaultGraphTitle;
 
     protected:
         QLayout * bodyLayoutDefinition();

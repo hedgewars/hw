@@ -1294,7 +1294,7 @@ begin
 	//TODO print better error messages
 	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
 	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
-			or (statInfo <> siClanHealth)) then
+			and (statInfo <> siClanHealth)) then
         begin
         LuaError('Lua: Wrong number of parameters passed to SendStat!');
         end
