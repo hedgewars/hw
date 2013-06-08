@@ -40,6 +40,7 @@ void FitGraphicsView::resizeEvent(QResizeEvent * event)
 
 QLayout * PageGameStats::bodyLayoutDefinition()
 {
+	defaultGraphTitle = true;	
     QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setSpacing(20);
     pageLayout->setColumnStretch(0, 1);
@@ -159,12 +160,16 @@ void PageGameStats::renderStats()
 {
 	graphic->show();
 	labelGraphTitle-> show();
+	if(defaultGraphTitle) {
+		labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
+	} else {
+		defaultGraphTitle = true;
+	}
 	// if not health data sent
 	if(healthPoints.size() == 0) {
 		labelGraphTitle->hide();
 		graphic->hide();
 	} else {
-		labelGraphTitle->setText("<br><h1><img src=\":/res/StatsH.png\"> " + PageGameStats::tr("Health graph") + "</h1>");
 		QGraphicsScene * scene = new QGraphicsScene();
 
 		QMap<quint32, QVector<quint32> >::const_iterator i = healthPoints.constBegin();
@@ -232,6 +237,7 @@ void PageGameStats::GameStats(char type, const QString & info)
         case 'g' :
         {
 			// TODO: change default picture or add change pic capability
+			defaultGraphTitle = false;
 			labelGraphTitle->setText("<br><h1><img src=\":/res/StatsR.png\"> " + info + "</h1>");
             break;
         }
