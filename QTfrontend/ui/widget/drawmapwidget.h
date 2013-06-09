@@ -25,7 +25,6 @@
 #include <QGraphicsView>
 #include <QLabel>
 
-#include "qaspectratiolayout.h"
 #include "drawmapscene.h"
 
 
@@ -61,12 +60,13 @@ namespace Ui
                 QVBoxLayout * vbox = new QVBoxLayout(drawMapWidget);
                 vbox->setMargin(0);
                 lblPoints = new QLabel("0", drawMapWidget);
-                vbox->addWidget(lblPoints);
-                QAspectRatioLayout * arLayout = new QAspectRatioLayout();
-                arLayout->setMargin(0);
+                QLayout * arLayout = new QVBoxLayout();
+                arLayout->setAlignment(Qt::AlignCenter);
                 vbox->addLayout(arLayout);
 
                 graphicsView = new DrawMapView(drawMapWidget);
+                graphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+                graphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
                 arLayout->addWidget(graphicsView);
 
                 retranslateUi(drawMapWidget);

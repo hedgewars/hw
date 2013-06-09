@@ -6,7 +6,7 @@ import Data.List
 
 import RoomsAndClients
 import CoreTypes
-import Actions
+
 
 thisClient :: Reader (ClientIndex, IRnC) ClientInfo
 thisClient = do

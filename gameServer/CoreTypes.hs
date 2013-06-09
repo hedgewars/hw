@@ -107,6 +107,7 @@ data ClientInfo =
         isAdministrator :: Bool,
         isChecker :: Bool,
         isKickedFromServer :: Bool,
+        isJoinedMidGame :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
         teamsInGame :: Word

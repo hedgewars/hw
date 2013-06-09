@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoLobbyState where
 
-import qualified Data.Map as Map
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
@@ -51,7 +50,7 @@ handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
             [
                 AddRoom rName roomPassword
                 , AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+hr", nick cl]
-                , ModifyClient (\c -> c{isMaster = True, isReady = True})
+                , ModifyClient (\c -> c{isMaster = True, isReady = True, isJoinedMidGame = False})
                 , ModifyRoom (\r -> r{readyPlayers = 1})
             ]
 
@@ -87,12 +86,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             [
                 MoveToRoom jRI
+                , ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom})
                 , AnswerClients [sendChan cl] $ "JOINED" : nicks
                 , AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
                 , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
             ]
             ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
-            ++ answerFullConfig cl (mapParams jRoom) (params jRoom)
+            ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
 
@@ -105,18 +105,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             (ingame, inroomlobby) = partition isInGame clients
             f fl lst = ["CLIENT_FLAGS" : fl : map nick lst | not $ null lst]
 
-        toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
-
-        answerFullConfig cl mpr pr
-            | clientProto cl < 38 = map (toAnswer cl) $
-                 (reverse . map (\(a, b) -> (a, [b])) $ Map.toList mpr)
-                 ++ (("SCHEME", pr Map.! "SCHEME")
-                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
-
-            | otherwise = map (toAnswer cl) $
-                 ("FULLMAPCONFIG", Map.elems mpr)
-                 : ("SCHEME", pr Map.! "SCHEME")
-                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
+        -- get config from gameInfo if possible, otherwise from room
+        answerFullConfig cl jRoom = let f r g = (if isJust $ gameInfo jRoom then g . fromJust . gameInfo else r) jRoom
+                                    in answerFullConfigParams cl (f mapParams giMapParams) (f params giParams)
 
         answerTeams cl jRoom = let f = if isJust $ gameInfo jRoom then teamsAtStart . fromJust . gameInfo else teams in answerAllTeams cl $ f jRoom
 

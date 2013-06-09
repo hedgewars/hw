@@ -278,7 +278,7 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
         return "";
 
     int s = float(pContext->duration)/AV_TIME_BASE;
-    QString desc = QString(tr("Duration: %1m %2s\n")).arg(s/60).arg(s%60);
+    QString desc = tr("Duration: %1m %2s").arg(s/60).arg(s%60) + "\n";
     for (int i = 0; i < (int)pContext->nb_streams; i++)
     {
         AVStream* pStream = pContext->streams[i];
@@ -290,11 +290,11 @@ QString LibavInteraction::getFileInfo(const QString & filepath)
 
         if (pCodec->codec_type == AVMEDIA_TYPE_VIDEO)
         {
-            desc += QString(tr("Video: %1x%2, ")).arg(pCodec->width).arg(pCodec->height);
+            desc += QString(tr("Video: %1x%2")).arg(pCodec->width).arg(pCodec->height) + ", ";
             if (pStream->avg_frame_rate.den)
             {
                 float fps = float(pStream->avg_frame_rate.num)/pStream->avg_frame_rate.den;
-                desc += QString(tr("%1 fps, ")).arg(fps, 0, 'f', 2);
+                desc += QString(tr("%1 fps")).arg(fps, 0, 'f', 2) + ", ";
             }
         }
         else if (pCodec->codec_type == AVMEDIA_TYPE_AUDIO)
