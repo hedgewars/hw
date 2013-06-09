@@ -3,6 +3,9 @@
 include(CheckCCompilerFlag)
 #when you need to check for a linker flag, just leave the argument of "check_c_compiler_flag" empty
 
+# CMAKE_C{XX}_FLAGS is for compiler flags (c and c++)
+# CMAKE_EXE_LINKER_FLAGS is for linker flags (also add them to pascal_flags and haskell_flags)
+
 
 #TODO: should there be two different checks for C and CXX?
 
@@ -27,8 +30,7 @@ check_c_compiler_flag("" HAVE_NOEXECSTACK)
 if(HAVE_NOEXECSTACK)
     list(APPEND pascal_flags "-k-z" "-knoexecstack")
     list(APPEND haskell_flags "-optl" "-z" "-optl" "noexecstack")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 endif()
 
 #check for full relro on ELF, Debian security
@@ -37,8 +39,7 @@ check_c_compiler_flag("" HAVE_RELROFULL)
 if(HAVE_RELROFULL)
     list(APPEND pascal_flags "-k-z" "-krelro" "-k-z" "-know")
     list(APPEND haskell_flags "-optl" "-z" "-optl" "relro" "-optl" "-z" "-optl" "now")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 else()
     #if full relro is not available, try partial relro
     set(CMAKE_REQUIRED_FLAGS "-Wl,-z,relro")
@@ -46,8 +47,7 @@ else()
     if(HAVE_RELROPARTIAL)
         list(APPEND pascal_flags "-k-z" "-krelro")
         list(APPEND haskell_flags "-optl" "-z" "-optl" "relro")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
     endif()
 endif()
 
@@ -57,8 +57,7 @@ check_c_compiler_flag("" HAVE_WINASLR)
 if(HAVE_WINASLR)
     list(APPEND pascal_flags "-k--nxcompat")
     list(APPEND haskell_flags "-optl" "--nxcompat")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 endif()
 
 #check for DEP on Windows XP SP2 or later, requires binutils >= 2.20
@@ -67,8 +66,7 @@ check_c_compiler_flag("" HAVE_WINDEP)
 if(HAVE_WINDEP)
     list(APPEND pascal_flags "-k--dynamicbase")
     list(APPEND haskell_flags "-optl" "--dynamicbase")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 endif()
 
 
