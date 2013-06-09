@@ -327,16 +327,19 @@ QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 
 void FileEngineHandler::mount(const QString &path)
 {
+    qDebug(QString("[PHYSFS] Mounting '%1' to '/'").arg(path).toLocal8Bit().data());
     PHYSFS_mount(path.toUtf8().constData(), NULL, 0);
 }
 
 void FileEngineHandler::mount(const QString & path, const QString & mountPoint)
 {
+    qDebug(QString("[PHYSFS] Mounting '%1' to '%2'").arg(path).arg(mountPoint).toLocal8Bit().data());
     PHYSFS_mount(path.toUtf8().constData(), mountPoint.toUtf8().constData(), 0);
 }
 
 void FileEngineHandler::setWriteDir(const QString &path)
 {
+    qDebug(QString("[PHYSFS] Setting write dir to '%1'").arg(path).toLocal8Bit().data());
     PHYSFS_setWriteDir(path.toUtf8().constData());
 }
 
