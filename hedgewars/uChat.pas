@@ -48,8 +48,8 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     LocalStrs: array[0 .. MaxStrIndex] of shortstring;
     missedCount: LongWord;
     lastStr: LongWord;
-    localLastStr: LongWord;
-    history: LongWord;
+    localLastStr: LongInt;
+    history: LongInt;
     visibleCount: LongWord;
     InputStr: TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char

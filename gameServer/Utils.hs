@@ -137,5 +137,25 @@ roomInfo n r = [
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
 
+
+answerFullConfigParams ::
+            ClientInfo
+            -> Map.Map B.ByteString B.ByteString
+            -> Map.Map B.ByteString [B.ByteString]
+            -> [Action]
+answerFullConfigParams cl mpr pr
+        | clientProto cl < 38 = map (toAnswer cl) $
+                (reverse . map (\(a, b) -> (a, [b])) $ Map.toList mpr)
+                ++ (("SCHEME", pr Map.! "SCHEME")
+                : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
+
+        | otherwise = map (toAnswer cl) $
+                ("FULLMAPCONFIG", Map.elems mpr)
+                : ("SCHEME", pr Map.! "SCHEME")
+                : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
+    where
+        toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
+
+
 loc :: B.ByteString -> B.ByteString
 loc = id

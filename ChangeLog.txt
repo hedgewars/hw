@@ -1,6 +1,9 @@
 + features
 * bugfixes
 
+0.9.19 -> ???:
+ * increase precision in damage calcs; extra damage affects fire properly now
+
 0.9.18 -> 0.9.19:
  + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
  + Saucer can aim weapons and fire underwater
@@ -59,6 +62,7 @@
  + Reduce amount of memory needed for engine to store land data
  + Countless other small fixes and improvements
  + Detect desyncs early
+ + Mudball will not cause any direct damage anymore
  * Fix cake getting stuck in barrels, crates and hedgehogs
  * Fix all knowns bugs which caused network game hang when players close engine or quit
  * Fix drill strike bug when drill's timer gets ridiculously high value instead of explosion

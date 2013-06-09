@@ -44,7 +44,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/page/pagenetserver.h \
     ../QTfrontend/ui/page/pagegamestats.h \
     ../QTfrontend/ui/dialog/input_ip.h \
-    ../QTfrontend/ui/qaspectratiolayout.h \
     ../QTfrontend/ui/widget/bgwidget.h \
     ../QTfrontend/ui/widget/fpsedit.h \
     ../QTfrontend/ui/widget/FreqSpinBox.h \
@@ -123,7 +122,6 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/model/MapModel.cpp \
     ../QTfrontend/model/ThemeModel.cpp \
     ../QTfrontend/model/netserverslist.cpp \
-    ../QTfrontend/ui/qaspectratiolayout.cpp \
     ../QTfrontend/ui/page/pagemain.cpp \
     ../QTfrontend/ui/page/pagetraining.cpp \
     ../QTfrontend/ui/page/pageroomslist.cpp \
