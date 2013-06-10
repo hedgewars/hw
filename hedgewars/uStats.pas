@@ -24,7 +24,7 @@ uses uConsts, uTypes;
 
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
-    SendStatsOn : boolean = true;
+    SendHealthStatsOn : boolean = true;
     
 procedure initModule;
 procedure freeModule;
@@ -164,7 +164,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageGiven:= 0
                 end;
                 
-if SendStatsOn then
+if SendHealthStatsOn then
 	for t:= 0 to Pred(ClansCount) do
 		with ClansArray[t]^ do
 			begin
@@ -209,7 +209,7 @@ var i, t: LongInt;
     maxTeamDamageName : shortstring;
     winnersClan : PClan;
 begin
-if SendStatsOn then
+if SendHealthStatsOn then
 	msd:= 0; msdhh:= nil;
 	msk:= 0; mskhh:= nil;
 	mskcnt:= 0;

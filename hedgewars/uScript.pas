@@ -1337,11 +1337,11 @@ begin
     lc_sendstat:= 0
 end;
 
-function lc_sendstatsoff(L : Plua_State) : LongInt; Cdecl;
+function lc_sendhealthstatsoff(L : Plua_State) : LongInt; Cdecl;
 begin
     L:= L; // avoid compiler hint
-    uStats.SendStatsOn := false;
-    lc_sendstatsoff:= 0
+    uStats.SendHealthStatsOn := false;
+    lc_sendhealthstatsoff:= 0
 end;
 
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
@@ -2442,7 +2442,7 @@ lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
-lua_register(luaState, _P'SendStatsOff', @lc_sendstatsoff);
+lua_register(luaState, _P'SendHealthStatsOff', @lc_sendhealthstatsoff);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, _P'GetGearPosition', @lc_getgearposition);
