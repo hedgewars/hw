@@ -35,15 +35,6 @@ include(CheckLibraryExists)
 include(CheckCSourceCompiles)
 
 
-# 32bit platforms won't link unless this is set
-# although Windows doesn't like it
-if(NOT WINDOWS)
-    if(CMAKE_SIZEOF_VOID_P LESS 8)
-        add_definitions(-DPHYSFS_NO_64BIT_SUPPORT=1)
-    endif(CMAKE_SIZEOF_VOID_P LESS 8)
-endif(NOT WINDOWS)
-
-
 if(MACOSX)
     # Fallback to older OS X on PowerPC to support wider range of systems...
     if(CMAKE_OSX_ARCHITECTURES MATCHES ppc)
