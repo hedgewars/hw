@@ -164,7 +164,8 @@ type
 
     TStatInfoType = (siGameResult, siMaxStepDamage, siMaxStepKills, siKilledHHs,
             siClanHealth, siTeamStats, siPlayerKills, siMaxTeamDamage,
-            siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle);
+            siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
+            siPointType);
 
     // Various "emote" animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);

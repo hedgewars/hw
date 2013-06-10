@@ -40,6 +40,7 @@ void FitGraphicsView::resizeEvent(QResizeEvent * event)
 
 QLayout * PageGameStats::bodyLayoutDefinition()
 {
+	kindOfPoints = QString("");
 	defaultGraphTitle = true;	
     QGridLayout * pageLayout = new QGridLayout();
     pageLayout->setSpacing(20);
@@ -256,7 +257,11 @@ void PageGameStats::GameStats(char type, const QString & info)
             }
             break;
         }
-
+		case 'p' :
+        {
+            kindOfPoints = info;
+            break;
+        }
         case 'P' :
         {
             int i = info.indexOf(' ');
@@ -293,7 +298,13 @@ void PageGameStats::GameStats(char type, const QString & info)
             }
 
             QString message;
-            QString killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
+            QString killstring;
+            if(kindOfPoints.compare("") == 0) {
+				killstring = PageGameStats::tr("(%1 kill)", "", kills).arg(kills);
+			} else {
+				killstring = PageGameStats::tr("(%1 %2)", "", kills).arg(kills).arg(kindOfPoints);
+				kindOfPoints = QString("");
+			}
 
             message = QString("<p><h2>%1 %2. <font color=\"%4\">%3</font> ").arg(image, QString::number(playerPosition), playername, clanColor.name()) + killstring + "</h2></p>";
 
