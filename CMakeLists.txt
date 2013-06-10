@@ -46,40 +46,9 @@ include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
 
-#where to build libs and bins
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-
-#resource paths
-if(UNIX AND NOT APPLE)
-    set(target_binary_install_dir "bin")
-    set(target_library_install_dir "lib")
-
-    string(SUBSTRING "${DATA_INSTALL_DIR}" 0 1 sharepath_start)
-    if (NOT (${sharepath_start} MATCHES "/"))
-        set(HEDGEWARS_DATADIR "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/")
-    else()
-        set(HEDGEWARS_DATADIR "${DATA_INSTALL_DIR}/")
-    endif()
-    set(HEDGEWARS_FULL_DATADIR "${HEDGEWARS_DATADIR}")
-else()
-    set(target_binary_install_dir "./")
-
-    if(APPLE)
-        set(target_library_install_dir "../Frameworks/")
-        set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/")
-        set(HEDGEWARS_DATADIR "../Resources/")
-        set(HEDGEWARS_FULL_DATADIR "/Applications/${CMAKE_INSTALL_PREFIX}/${HEDGEWARS_DATADIR}")
-    elseif(WIN32)
-        set(target_library_install_dir "./")
-        set(HEDGEWARS_DATADIR "./")
-        set(HEDGEWARS_FULL_DATADIR "${CMAKE_INSTALL_PREFIX}/")
-        link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
-    endif()
-endif()
-
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
+include(${CMAKE_MODULE_PATH}/paths.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
