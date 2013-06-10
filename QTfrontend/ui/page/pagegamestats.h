@@ -50,6 +50,7 @@ class PageGameStats : public AbstractPage
         QLabel *labelGameWin;
         QLabel *labelGameRank;
         QLabel *labelGraphTitle;
+        QString kindOfPoints;
         FitGraphicsView * graphic;
 
     public slots:
