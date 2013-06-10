@@ -19,9 +19,9 @@ if(HAVE_STACKPROTECTOR)
     set(CMAKE_SHARED_LIBRARY_CXX_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector-all -fstack-protector")
 endif()
 
-#symbol visibility
-check_c_compiler_flag("-fvisibility=hidden" HAVE_VISIBILITYH)
-if(HAVE_VISIBILITYH)
+#symbol visibility, not supported on Windows (so we error out to avoid spam)
+check_c_compiler_flag("-fvisibility=hidden -Werror" HAVE_VISIBILITY)
+if(HAVE_VISIBILITY)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
 endif()
