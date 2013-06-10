@@ -1291,17 +1291,16 @@ var statInfo : TStatInfoType;
 var i : LongInt;
 var color : shortstring;
 begin
-	//TODO print better error messages
 	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
 	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
 			and (statInfo <> siClanHealth)) then
         begin
-        LuaError('Lua: Wrong number of parameters passed to SendStat!');
+        LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 2 parameters.');
         end
     else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills) 
 			or (statInfo = siClanHealth)) then
 		begin
-        LuaError('Lua: Wrong number of parameters passed to SendStat!');
+        LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 3 parameters.');
         end
     else
 		begin
@@ -1343,13 +1342,6 @@ begin
     L:= L; // avoid compiler hint
     uStats.SendStatsOn := false;
     lc_sendstatsoff:= 0
-end;
-
-function lc_sendstats(L : Plua_State) : LongInt; Cdecl;
-begin
-    L:= L; // avoid compiler hint
-    SendStats;
-    lc_sendstats:= 0
 end;
 
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
@@ -2451,7 +2443,6 @@ lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
 lua_register(luaState, _P'SendStat', @lc_sendstat);
 lua_register(luaState, _P'SendStatsOff', @lc_sendstatsoff);
-lua_register(luaState, _P'SendStats', @lc_sendstats);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, _P'GetGearPosition', @lc_getgearposition);
