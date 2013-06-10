@@ -2,7 +2,7 @@ project(hedgewars)
 
 #initialise cmake environment
 cmake_minimum_required(VERSION 2.6.0)
-foreach(hwpolicy CMP0003 CMP0012 CMP0017)
+foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} NEW)
     endif()
