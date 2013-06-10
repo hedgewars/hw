@@ -322,13 +322,8 @@ void __PHYSFS_sort(void *entries, size_t max,
 #define __PHYSFS_ARRAYLEN(x) ( (sizeof (x)) / (sizeof (x[0])) )
 
 #ifdef PHYSFS_NO_64BIT_SUPPORT
-/* if a 32bit compiler sees something with this many bits: 0xFFFFFFFFFFFFFFFF
- *  it doesn't know if it really means 64bit or if it's supposed to squeeze
- *  it into 32 bit, so without the ULL it squeezes the number to 32 bit,
- *  with it it forces it to be 64bits
- */
-#define __PHYSFS_SI64(x) ((PHYSFS_sint64) (x##LL))
-#define __PHYSFS_UI64(x) ((PHYSFS_uint64) (x##ULL))
+#define __PHYSFS_SI64(x) ((PHYSFS_sint64) (x))
+#define __PHYSFS_UI64(x) ((PHYSFS_uint64) (x))
 #elif (defined __GNUC__)
 #define __PHYSFS_SI64(x) x##LL
 #define __PHYSFS_UI64(x) x##ULL
