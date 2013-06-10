@@ -5,15 +5,18 @@ include(CheckCCompilerFlag)
 
 # CMAKE_C{XX}_FLAGS is for compiler flags (c and c++)
 # CMAKE_EXE_LINKER_FLAGS is for linker flags (also add them to pascal_flags and haskell_flags)
-
+# CMAKE_SHARED_LIBRARY_<lang>_FLAGS same but for shared libraries
 
 #TODO: should there be two different checks for C and CXX?
 
-#stack protection
+#stack protection, when found it needs to go in the linker flags too (-lssp is added)
 check_c_compiler_flag("-fstack-protector" HAVE_STACKPROTECTOR)
 if(HAVE_STACKPROTECTOR)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fstack-protector")
+    set(CMAKE_SHARED_LIBRARY_C_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector")
+    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector")
 endif()
 
 #symbol visibility
