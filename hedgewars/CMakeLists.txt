@@ -186,21 +186,19 @@ endif()
 
 
 if(${FFMPEG_FOUND})
+    list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
+
     # TODO: this check is only for SDL < 2
     # fpc will take care of linking but we need to have this library installed
     find_package(GLUT REQUIRED)
 
-    #TODO: convert avwrapper to .pas unit so we can skip this step
     include_directories(${FFMPEG_INCLUDE_DIR})
-    list(APPEND pascal_flags "-dUSE_VIDEO_RECORDING")
-    if(WIN32)
-        # there are some problems with linking our avwrapper as static lib, so link it as shared
-        add_library(avwrapper SHARED avwrapper.c)
-        target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
-        install(PROGRAMS "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}avwrapper${CMAKE_SHARED_LIBRARY_SUFFIX}" DESTINATION ${target_library_install_dir})
-    else()
-        add_library(avwrapper STATIC avwrapper.c)
-    endif()
+    add_library(avwrapper avwrapper.c)
+    #TODO: find good VERSION and SOVERSION values
+    target_link_libraries(avwrapper ${FFMPEG_LIBRARIES})
+    install(TARGETS avwrapper RUNTIME DESTINATION ${target_binary_install_dir}
+                              LIBRARY DESTINATION ${target_library_install_dir}
+                              ARCHIVE DESTINATION ${target_library_install_dir})
 endif()
 
 
