@@ -16,6 +16,8 @@ option(NOSERVER "Disable gameServer build (off)]" OFF)
 option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
+#libraries are built shared unless explicitly added as a static
+option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
 option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
