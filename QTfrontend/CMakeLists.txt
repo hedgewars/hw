@@ -189,10 +189,6 @@ add_executable(hedgewars ${console_access}
     ${hwfr_rez_src}
     )
 
-if((UNIX AND NOT APPLE) AND ${BUILD_ENGINE_LIBRARY})
-    set_target_properties(hedgewars PROPERTIES LINK_FLAGS "-Wl,-rpath,${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}")
-endif()
-
 list(APPEND HW_LINK_LIBS
     ${PHYSFS_LIBRARY}
     ${PHYSLAYER_LIBRARY}
