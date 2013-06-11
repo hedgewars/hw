@@ -59,3 +59,6 @@ endif()
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 
+#install_name_tool magic for OS X
+set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
+
