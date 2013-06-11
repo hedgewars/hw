@@ -28,6 +28,14 @@
 #define AVIO_FLAG_WRITE AVIO_WRONLY
 #endif
 
+#if (defined _MSC_VER)
+#define AVWRAP_DECL __declspec(dllexport)
+#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
+#define AVWRAP_DECL __attribute__((visibility("default")))
+#else
+#define AVWRAP_DECL
+#endif
+
 static AVFormatContext* g_pContainer;
 static AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
@@ -371,7 +379,7 @@ static int WriteFrame(AVFrame* pFrame)
     }
 }
 
-void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
+AVWRAP_DECL void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
 {
     g_pVFrame->data[0] = pY;
     g_pVFrame->data[1] = pCb;
@@ -379,7 +387,7 @@ void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
     WriteFrame(g_pVFrame);
 }
 
-void AVWrapper_Init(
+AVWRAP_DECL void AVWrapper_Init(
          void (*pAddFileLogRaw)(const char*),
          const char* pFilename,
          const char* pDesc,
@@ -472,7 +480,7 @@ void AVWrapper_Init(
     g_pVFrame->pts = -1;
 }
 
-void AVWrapper_Close()
+AVWRAP_DECL void AVWrapper_Close()
 {
     // output buffered frames
     if (g_pVCodec->capabilities & CODEC_CAP_DELAY)
