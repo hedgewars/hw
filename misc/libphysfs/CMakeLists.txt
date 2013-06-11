@@ -171,6 +171,7 @@ endif(UNIX)
 if(WINDOWS)
     set(PHYSFS_HAVE_CDROM_SUPPORT TRUE)
     set(PHYSFS_HAVE_THREAD_SUPPORT TRUE)
+    list(APPEND OTHER_LDFLAGS ${SDL_LIBRARY})
 endif(WINDOWS)
 
 if(NOT PHYSFS_HAVE_CDROM_SUPPORT)
@@ -242,51 +243,26 @@ endif(PHYSFS_ARCHIVE_ZIP)
 #    set(PHYSFS_FEATURES "${PHYSFS_FEATURES} CD-ROM")
 #endif(PHYSFS_ARCHIVE_ISO9660)
 
-
-##as needed by Hedgewars configuration
-if(WINDOWS)
-    option(PHYSFS_BUILD_STATIC "Build static library" FALSE)
-    option(PHYSFS_BUILD_SHARED "Build shared library" TRUE)
-    list(APPEND OTHER_LDFLAGS ${SDL_LIBRARY})
-else(WINDOWS)
-    option(PHYSFS_BUILD_STATIC "Build static library" TRUE)
-    option(PHYSFS_BUILD_SHARED "Build shared library" FALSE)
-endif(WINDOWS)
-
-if(PHYSFS_BUILD_STATIC)
-    add_library(physfs STATIC ${PHYSFS_SRCS})
-    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
-    set(lib_prefix ${CMAKE_STATIC_LIBRARY_PREFIX}) ##
-    set(lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX}) ##
-endif(PHYSFS_BUILD_STATIC)
-
-if(PHYSFS_BUILD_SHARED)
-    add_library(physfs SHARED ${PHYSFS_SRCS})
-    set_target_properties(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
-    set_target_properties(physfs PROPERTIES SOVERSION ${PHYSFS_SOVERSION})
-    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
-    target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
-    install(TARGETS physfs RUNTIME DESTINATION ${target_library_install_dir}) ##
-    set(lib_prefix ${CMAKE_SHARED_LIBRARY_PREFIX}) ##
-    set(lib_suffix ${CMAKE_SHARED_LIBRARY_SUFFIX}) ##
-endif(PHYSFS_BUILD_SHARED)
-
-if(NOT PHYSFS_BUILD_SHARED AND NOT PHYSFS_BUILD_STATIC)
-    message(FATAL "Both shared and static libraries are disabled!")
-endif(NOT PHYSFS_BUILD_SHARED AND NOT PHYSFS_BUILD_STATIC)
-
-# CMake FAQ says I need this...
-if(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
-    set_target_properties(physfs PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-endif(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
+##Hedgewars modifications
+add_library(physfs ${PHYSFS_SRCS})
+set_target_properties(physfs PROPERTIES
+                          VERSION ${PHYSFS_VERSION}
+                          SOVERSION ${PHYSFS_SOVERSION}
+                          OUTPUT_NAME ${physfs_output_name})
+target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
+install(TARGETS physfs RUNTIME DESTINATION ${target_binary_install_dir}
+                       LIBRARY DESTINATION ${target_library_install_dir}
+                       ARCHIVE DESTINATION ${target_library_install_dir})
+get_target_property(physfs_fullpath physfs LOCATION)
 
 ## added standard variables emulating the FindPhysFS.cmake ones (FORCE or cmake won't pick 'em)
-set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "" FORCE)
-set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}${physfs_output_name}${lib_suffix} CACHE STRING "" FORCE)
+set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "Physfs include dir" FORCE)
+set(PHYSFS_LIBRARY ${physfs_fullpath} CACHE STRING "Physfs library path" FORCE)
 
 
-## removed install, language bindings and test program
+## removed language bindings and test program
 ## simplified configuration output
+## merged shared and static library building
 
 #message(STATUS "PhysFS will be built with ${PHYSFS_FEATURES} support")
 
