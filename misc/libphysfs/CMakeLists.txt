@@ -52,28 +52,8 @@ endif(MACOSX)
 
 # Add some gcc-specific command lines.
 if(CMAKE_COMPILER_IS_GNUCC)
-    # Always build with debug symbols...you can strip it later.
+    # Always build with debug symbols... you can strip it later.
     add_definitions(-g -fsigned-char)
-
-    # Stupid BeOS generates warnings in the system headers.
-    if(NOT BEOS)
-        add_definitions(-Wall)
-    endif(NOT BEOS)
-
-    CHECK_C_SOURCE_COMPILES("
-        #if ((defined(__GNUC__)) && (__GNUC__ >= 4))
-        int main(int argc, char **argv) { int is_gcc4 = 1; return 0; }
-        #else
-        #error This is not gcc4.
-        #endif
-    " PHYSFS_IS_GCC4)
-
-    if(PHYSFS_IS_GCC4)
-        # Not supported on several operating systems at this time.
-        if(NOT SOLARIS AND NOT WINDOWS)
-            add_definitions(-fvisibility=hidden)
-        endif(NOT SOLARIS AND NOT WINDOWS)
-    endif(PHYSFS_IS_GCC4)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
@@ -239,6 +219,7 @@ endif(PHYSFS_ARCHIVE_ZIP)
 #    add_definitions(-DPHYSFS_SUPPORTS_ISO9660=1)
 #    set(PHYSFS_FEATURES "${PHYSFS_FEATURES} CD-ROM")
 #endif(PHYSFS_ARCHIVE_ISO9660)
+
 
 ##Hedgewars modifications
 add_library(physfs ${PHYSFS_SRCS})
