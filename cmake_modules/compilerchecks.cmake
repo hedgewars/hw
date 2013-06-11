@@ -72,6 +72,14 @@ if(HAVE_WINDEP)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
 endif()
 
+#this is actually an optimisation
+set(CMAKE_REQUIRED_FLAGS "-Wl,--as-needed")
+check_c_compiler_flag("" HAVE_ASNEEDED)
+if(HAVE_ASNEEDED)
+    list(APPEND pascal_flags "-k--as-needed")
+    list(APPEND haskell_flags "-optl" "--as-needed")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_REQUIRED_FLAGS}")
+endif()
 
 #always unset or these flags will be spread everywhere
 unset(CMAKE_REQUIRED_FLAGS)
