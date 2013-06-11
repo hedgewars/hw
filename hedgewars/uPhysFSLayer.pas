@@ -9,11 +9,6 @@ const PhyslayerLibName = 'libphyslayer';
 {$IFNDEF WIN32}
     {$linklib physfs}
     {$linklib physlayer}
-
-    {statically linking physfs brings IOKit dependency on OSX}
-    {$IFDEF DARWIN}
-        {$linkframework IOKit}
-    {$ENDIF}
 {$ENDIF}
 
 procedure initModule;
