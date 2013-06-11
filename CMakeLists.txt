@@ -173,7 +173,7 @@ if (${PHYSFS_SYSTEM})
     endif()
 else()
     message(STATUS "PhysFS will be provided by the bundled sources")
-    set(physfs_output_name "hw_physfs")
+    set(physfs_output_name "hwphysfs")
     add_subdirectory(misc/libphysfs)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
