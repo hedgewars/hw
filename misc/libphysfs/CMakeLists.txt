@@ -74,9 +74,6 @@ if(CMAKE_COMPILER_IS_GNUCC)
             add_definitions(-fvisibility=hidden)
         endif(NOT SOLARIS AND NOT WINDOWS)
     endif(PHYSFS_IS_GCC4)
-
-    # Don't use -rpath.
-    set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
