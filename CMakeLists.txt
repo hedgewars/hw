@@ -141,8 +141,6 @@ if(LUA_FOUND)
 else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
-    #linking with liblua.a requires system readline
-    list(APPEND pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline")
 endif()
 
 

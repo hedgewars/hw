@@ -54,6 +54,11 @@ procedure freeModule;
 
 implementation
 {$IFDEF USE_LUA_SCRIPT}
+
+{$IFNDEF WIN32}
+    {$linklib lua}
+{$ENDIF}
+
 uses LuaPas,
     uConsole,
     uConsts,
