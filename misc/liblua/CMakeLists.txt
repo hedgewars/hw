@@ -14,7 +14,7 @@ add_library(lua ${lua_src})
 set_target_properties(lua PROPERTIES
                           VERSION "5.1.4"
                           SOVERSION 1
-                          OUTPUT_NAME ${lua_output_name}))
+                          OUTPUT_NAME ${lua_output_name})
 install(TARGETS lua RUNTIME DESTINATION ${target_binary_install_dir}
                     LIBRARY DESTINATION ${target_library_install_dir}
                     ARCHIVE DESTINATION ${target_library_install_dir})
