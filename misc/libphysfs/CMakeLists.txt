@@ -48,11 +48,13 @@ if(MACOSX)
     # Fallback to older OS X on PowerPC to support wider range of systems...
     if(CMAKE_OSX_ARCHITECTURES MATCHES ppc)
         add_definitions(-DMAC_OS_X_VERSION_MIN_REQUIRED=1020)
-        set(OTHER_LDFLAGS ${OTHER_LDFLAGS} " -mmacosx-version-min=10.2")
+        list(APPEND OTHER_LDFLAGS "-mmacosx-version-min=10.2")
     endif(CMAKE_OSX_ARCHITECTURES MATCHES ppc)
 
     # Need these everywhere...
     add_definitions(-fno-common)
+    find_library(foundation_framework NAMES Foundation)
+    list(APPEND OTHER_LDFLAGS ${foundation_framework})
     find_library(iokit_framework NAMES IOKit)
     list(APPEND OTHER_LDFLAGS ${iokit_framework})
 endif(MACOSX)
