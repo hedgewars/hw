@@ -234,7 +234,7 @@ install(TARGETS physfs RUNTIME DESTINATION ${target_binary_install_dir}
 get_target_property(physfs_fullpath physfs LOCATION)
 
 ## added standard variables emulating the FindPhysFS.cmake ones (FORCE or cmake won't pick 'em)
-set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "Physfs include dir" FORCE)
+set(PHYSFS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Physfs include dir" FORCE)
 set(PHYSFS_LIBRARY ${physfs_fullpath} CACHE STRING "Physfs library path" FORCE)
 
 
