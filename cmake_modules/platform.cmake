@@ -81,7 +81,7 @@ if(MINGW)
 endif(MINGW)
 
 if(WIN32)
-    if(NOT BUILD_SHARED_LIB)
+    if(NOT ${BUILD_SHARED_LIB})
         message(FATAL_ERROR "Static linking is not supported on Windows")
     endif()
 endif(WIN32)
