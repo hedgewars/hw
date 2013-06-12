@@ -55,7 +55,7 @@ void Ui_HWForm::setupUi(HWForm *HWForm)
     HWForm->resize(QSize(640, 480).expandedTo(HWForm->minimumSizeHint()));
     HWForm->setMinimumSize(QSize(720, 450));
     QString title = QMainWindow::tr("Hedgewars %1").arg(*cVersionString);
-#ifdef DEBUG
+#ifdef QT_DEBUG
     title += QString("-r%1 (%2)").arg(*cRevisionString, *cHashString);
 #endif
     HWForm->setWindowTitle(title);
