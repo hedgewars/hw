@@ -195,6 +195,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
 
 	previousCampaignName = "";
+	previousTeamName = "";
     UpdateTeamsLists();
     InitCampaignPage();
     UpdateCampaignPage(0);
@@ -1893,7 +1894,7 @@ void HWForm::InitCampaignPage()
 void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
-
+    
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBMission->clear();
 
@@ -1906,11 +1907,16 @@ void HWForm::UpdateCampaignPage(int index)
     // if the campaign name changes update the campaignMissionDescriptions list
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
-    bool updateMissionList = false;    
+    bool updateMissionList = false;
     QSettings * m_info;
-    if(previousCampaignName.compare(campaignName)!=0) 
+    if(previousCampaignName.compare(campaignName)!=0 || 
+			previousTeamName.compare(tName) != 0) 
     {
+		if (previousTeamName.compare(tName) != 0 && 
+				previousTeamName.compare("") != 0)
+			index = qMin(m + 1, n);
 		previousCampaignName = campaignName;
+		previousTeamName = tName;
 		updateMissionList = true;
 		// the following code was based on pagetraining.cpp
 		DataManager & dataMgr = DataManager::instance();    
@@ -1946,6 +1952,7 @@ void HWForm::UpdateCampaignPage(int index)
     }
     if(updateMissionList)
 		delete m_info;
+
     UpdateCampaignPageMission(index);
 }
 

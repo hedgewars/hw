@@ -16,4 +16,4 @@ A Classic Fairytale-queen.desc="Leaks a lot has to fight once again. In order to
 
 A Classic Fairytale-enemy.desc="What a great twist! Leaks a lot has to fight side by side with the… “cannibals” against the common enemy. The evil cyborgs!"
 
-A Classic Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings"
+A Classic Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
