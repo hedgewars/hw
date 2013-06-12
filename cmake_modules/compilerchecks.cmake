@@ -9,9 +9,11 @@ include(CheckCCompilerFlag)
 
 #TODO: should there be two different checks for C and CXX?
 
-#stack protection, when found it needs to go in the linker flags too (-lssp is added)
+#stack protection, when found it needs to go in the linker flags too
+#it is disabled on win32 because it adds a dll and messes with linker
+#(see 822312 654424 on bugzilla.redhat.com)
 check_c_compiler_flag("-fstack-protector-all -fstack-protector" HAVE_STACKPROTECTOR)
-if(HAVE_STACKPROTECTOR)
+if(HAVE_STACKPROTECTOR AND (NOT WIN32))
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-all -fstack-protector")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-all -fstack-protector")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fstack-protector-all -fstack-protector")
