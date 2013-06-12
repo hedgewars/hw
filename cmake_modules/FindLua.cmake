@@ -1,37 +1,26 @@
-# Find the Lua library
-# --------------------
-# On Android/Windows/OSX this just defines the name of the library that
-#  will be compiled from our bundled sources
-# On Linux it will try to load the system library and fallback to compiling
-#  the bundled one when nothing is found
+# Find liblua
+#
+# Once done this will define
+#  LUA_FOUND - system has Lua
+#  LUA_INCLUDE_DIR - the Lua include directory
+#  LUA_LIBRARY - The library needed to use Lua
+# Copyright (c) 2013, Vittorio Giovara <vittorio.giovara@gmail.com>
+#
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
 
-set(LUA_FOUND false)
-set(LUA_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/liblua)
+include(FindPackageHandleStandardArgs)
 
-if (ANDROID)
-    SET(LUA_DEFAULT "liblua5.1.so")
-else (ANDROID)
-    IF(WIN32)
-        SET(LUA_DEFAULT lua.dll)
-    ELSE(WIN32)
-        IF(APPLE)
-            SET(LUA_DEFAULT lua)
-        ELSE(APPLE)
-            #locate the system's lua library
-            FIND_LIBRARY(LUA_DEFAULT NAMES lua51 lua5.1 lua-5.1 lua PATHS /lib /usr/lib /usr/local/lib /usr/pkg/lib)
-            IF(${LUA_DEFAULT} MATCHES "LUA_DEFAULT-NOTFOUND")
-                set(LUA_DEFAULT lua)
-            ELSE()
-                set(LUA_FOUND true)
-                message(STATUS "LibLua 5.1 found at ${LUA_DEFAULT}")
-                find_path(LUA_INCLUDE_DIR lua.h)
-                #remove the path (fpc doesn't like it - why?)
-                GET_FILENAME_COMPONENT(LUA_DEFAULT ${LUA_DEFAULT} NAME)
-            ENDIF()
-        ENDIF(APPLE)
-    ENDIF(WIN32)
-ENDIF(ANDROID)
+find_path(LUA_INCLUDE_DIR lua.h
+                          PATHS /usr/include /usr/local/include /usr/pkg/include
+                          PATH_SUFFIXES lua5.1)
+find_library(LUA_LIBRARY NAMES lua51 lua5.1 lua-5.1 lua
+                         PATHS /lib /usr/lib /usr/local/lib /usr/pkg/lib)
 
-SET(LUA_LIBRARY ${LUA_DEFAULT} CACHE STRING "Lua library to link to; file name without path only!")
-
+find_package_handle_standard_args(Lua DEFAULT_MSG LUA_LIBRARY LUA_INCLUDE_DIR)
+mark_as_advanced(LUA_INCLUDE_DIR LUA_LIBRARY)
 

@@ -14,8 +14,11 @@ interface
 uses uConsts;
 {.$DEFINE LUA_GETHOOK}
 
-{$INCLUDE "config.inc"}
-const LuaLibName = cLuaLibrary;
+const LuaLibName = {$IFDEF LUA_INTERNAL}'libhwlua'{$ELSE}'liblua'{$ENDIF};
+
+{$IFNDEF WIN32}
+    {$linklib lua}
+{$ENDIF}
 
 type
     size_t   = Cardinal;

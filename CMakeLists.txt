@@ -21,6 +21,12 @@ option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
 option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
+if(WIN32 OR APPLE)
+    option(LUA_SYSTEM "Use system lua (off)" OFF)
+else()
+    option(LUA_SYSTEM "Use system lua (on)" ON)
+endif()
+
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
 option(ANDROID "Enable Android build (off)" OFF)
 
@@ -135,12 +141,21 @@ endif()
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #lua discovery
-find_package(Lua)
-if(LUA_FOUND)
-    message(STATUS "Found LUA: ${LUA_DEFAULT}")
+if (${LUA_SYSTEM})
+    if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
+        find_package(Lua)
+    endif()
+
+    if (LUA_LIBRARY AND LUA_INCLUDE_DIR)
+        set(LUA_FOUND TRUE)
+    else()
+        message(FATAL_ERROR "Missing Lua! Rerun cmake with -DLUA_SYSTEM=off to build the internal version")
+    endif()
 else()
     message(STATUS "LUA will be provided by the bundled sources")
     add_subdirectory(misc/liblua)
+    set(lua_output_name "hwlua")
+    list(APPEND pascal_flags "-XLAlua=${lua_output_name}" "-dLUA_INTERNAL")
 endif()
 
 
