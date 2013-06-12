@@ -73,8 +73,8 @@ if(APPLE)
 
 endif(APPLE)
 
-if(WINDOWS)
+if(WIN32)
     #this flags prevents a few dll hell problems
     set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
-endif(WINDOWS)
+endif(WIN32)
 
