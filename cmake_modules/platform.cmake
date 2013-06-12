@@ -73,8 +73,13 @@ if(APPLE)
 
 endif(APPLE)
 
-if(WINDOWS)
+if(MINGW)
     #this flags prevents a few dll hell problems
     set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
-endif(WINDOWS)
+endif(MINGW)
 
+if(WIN32)
+    if(NOT BUILD_SHARED_LIB)
+        message(FATAL_ERROR "Static linking is not supported on Windows")
+    endif()
+endif(WIN32)
