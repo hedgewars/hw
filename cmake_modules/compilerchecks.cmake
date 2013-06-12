@@ -16,7 +16,7 @@ if(HAVE_STACKPROTECTOR)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-all -fstack-protector")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fstack-protector-all -fstack-protector")
     set(CMAKE_SHARED_LIBRARY_C_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector-all -fstack-protector")
-    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector-all -fstack-protector")
+    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS  "${CMAKE_SHARED_LIBRARY_CXX_FLAGS} -fstack-protector-all -fstack-protector")
 endif()
 
 #symbol visibility, not supported on Windows (so we error out to avoid spam)
