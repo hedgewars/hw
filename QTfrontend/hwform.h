@@ -127,6 +127,7 @@ class HWForm : public QMainWindow
         void Music(bool checked);
         void UpdateCampaignPage(int index);
         void UpdateCampaignPageProgress(int index);
+        void UpdateCampaignPageMission(int index);
         void InitCampaignPage();
         void showFeedbackDialog();
         void showFeedbackDialogNetChecked();
@@ -192,6 +193,9 @@ class HWForm : public QMainWindow
         HWNamegen * namegen;
         AmmoSchemeModel * ammoSchemeModel;
         QStack<int> PagesStack;
+        QString previousCampaignName;
+        QString previousTeamName;
+        QStringList campaignMissionDescriptions;
         QTime eggTimer;
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
