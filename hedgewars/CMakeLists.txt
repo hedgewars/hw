@@ -150,7 +150,7 @@ if(LUA_FOUND AND LUA_SYSTEM)
     get_filename_component(LUA_LIBRARY_NAME ${LUA_LIBRARY} NAME)
     #NAME_WE would strip the .1 (or .2) next to the ".so"
     string(REGEX REPLACE "${CMAKE_SHARED_LIBRARY_PREFIX}(.*)${CMAKE_SHARED_LIBRARY_SUFFIX}" "\\1" LUA_LIBRARY_NAME "${LUA_LIBRARY_NAME}")
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LUA_LIBRARY_DIR} -k-L${LUA_LIBRARY_DIR} -XLAlua=${LUA_LIBRARY_NAME}")
+    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LUA_LIBRARY_DIR} -XLAlua=${LUA_LIBRARY_NAME}")
 else()
     add_definitions(-dLUA_INTERNAL)
     list(APPEND HW_LINK_LIBS lua)
@@ -164,7 +164,7 @@ if(NOT PHYSFS_FOUND)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
     #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
+    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH} -XLAphysfs=${physfs_output_name}")
 endif()
 list(APPEND HW_LINK_LIBS physlayer)
 
