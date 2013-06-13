@@ -209,7 +209,7 @@ static int WriteAudioFrame()
 
     // Write the compressed frame to the media file.
     Packet.stream_index = g_pAStream->index;
-    if (av_interleaved_write_frame(g_pContainer, &Packet) != 0) 
+    if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
         FatalError("Error while writing audio frame");
     return 1;
 }
@@ -321,7 +321,7 @@ static int WriteFrame(AVFrame* pFrame)
             AudioTime = (double)g_pAStream->pts.val*g_pAStream->time_base.num/g_pAStream->time_base.den;
         while (AudioTime < VideoTime && WriteAudioFrame());
     }
-    
+
     if (!g_pVStream)
         return 0;
 
@@ -357,7 +357,7 @@ static int WriteFrame(AVFrame* pFrame)
             Packet.pts = av_rescale_q(Packet.pts, g_pVideo->time_base, g_pVStream->time_base);
         if (Packet.dts != AV_NOPTS_VALUE)
             Packet.dts = av_rescale_q(Packet.dts, g_pVideo->time_base, g_pVStream->time_base);
-#else 
+#else
         Packet.size = avcodec_encode_video(g_pVideo, g_OutBuffer, OUTBUFFER_SIZE, pFrame);
         if (Packet.size < 0)
             FatalError("avcodec_encode_video failed");
@@ -374,7 +374,7 @@ static int WriteFrame(AVFrame* pFrame)
         Packet.stream_index = g_pVStream->index;
         if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
             FatalError("Error while writing video frame");
-            
+
         return 1;
     }
 }
@@ -398,7 +398,7 @@ AVWRAP_DECL void AVWrapper_Init(
          int Width, int Height,
          int FramerateNum, int FramerateDen,
          int VQuality)
-{    
+{
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
 
