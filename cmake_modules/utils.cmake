@@ -1,4 +1,5 @@
 
+#find package helpers
 macro(find_package_or_fail _PKG_NAME)
     find_package(${_PKG_NAME})
     string(TOUPPER ${_PKG_NAME} _PKG_NAME_UP)
@@ -25,17 +26,7 @@ macro(find_package_or_disable_msg _PKG_NAME _VAR_NAME _MSG)
     endif(NOT ${_VAR_NAME})
 endmacro(find_package_or_disable_msg _PKG_NAME _VAR_NAME _MSG)
 
-macro(append_linker_flag _FLAG)
-    list(APPEND pascal_flags "-k${_FLAG}")
-    list(APPEND haskell_flags "-optl" "${_FLAG}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,${_FLAG}")
-    set(CMAKE_SHARED_LIBRARY_C_FLAGS "${CMAKE_SHARED_LIBRARY_C_FLAGS} -Wl,${_FLAG}")
-    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CXX_FLAGS} -Wl,${_FLAG}")
-endmacro(append_linker_flag _FLAG)
-
-#TODO: find_package_or_bundle
-
-
+#variable manipulation macros
 macro(add_flag_append _VAR_NAME _FLAG)
     set(${_VAR_NAME} "${${_VAR_NAME}} ${_FLAG}")
 endmacro(add_flag_append _VAR_NAME _FLAG)
@@ -43,4 +34,16 @@ endmacro(add_flag_append _VAR_NAME _FLAG)
 macro(add_flag_prepend _VAR_NAME _FLAG)
     set(${_VAR_NAME} "${_FLAG} ${${_VAR_NAME}}")
 endmacro(add_flag_prepend _VAR_NAME _FLAG)
+
+macro(add_linker_flag _FLAG)
+    list(APPEND haskell_flags "-optl" "${_FLAG}")
+    add_flag_prepend(CMAKE_Pascal_FLAGS "-k${_FLAG}")
+    add_flag_prepend(CMAKE_EXE_LINKER_FLAGS "-Wl,${_FLAG}")
+    add_flag_prepend(CMAKE_SHARED_LIBRARY_C_FLAGS "-Wl,${_FLAG}")
+    add_flag_prepend(CMAKE_SHARED_LIBRARY_CXX_FLAGS "-Wl,${_FLAG}")
+endmacro(add_linker_flag _FLAG)
+
+#TODO: find_package_or_bundle
+
+
 
