@@ -61,7 +61,7 @@ set(CMAKE_INSTALL_RPATH_ESCAPED "$$ORIGIN/../${target_library_install_dir}/:$$OR
 
 if(UNIX AND NOT APPLE)
     #make sure $ORIGIN is respected
-    append_linker_flag("-zorigin")
+    add_linker_flag("-zorigin")
     #apply RPATH settings to pascal and haskell executables
     add_flag_append(CMAKE_Pascal_FLAGS "-k-rpath '${CMAKE_INSTALL_RPATH_ESCAPED}'")
     list(APPEND haskell_flags "-optl" "-Wl,-rpath,'${CMAKE_INSTALL_RPATH_ESCAPED}'")
