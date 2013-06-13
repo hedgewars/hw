@@ -9,7 +9,7 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
 endforeach()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
-
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)]" OFF)
@@ -92,49 +92,35 @@ else()
 endif()
 
 #parse additional parameters
-if(FPFLAGS OR GHFLAGS)
-    if(CMAKE_VERSION VERSION_GREATER "2.6")
-        separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
+if(FPFLAGS)
+    add_flag_prepend(CMAKE_Pascal_FLAGS ${FPFLAGS})
+endif()
+if(GHFLAGS)
+    if(${allow_parse_args})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message("*** FPFLAGS and GHFLAGS are available only when using CMake >= 2.8 ***")
+        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}            # user flags
-                 "-B"                                 # compile all units
-                 "-vm4079,4080,4081"                  # fpc verbosity output format
-                 "-FE${PROJECT_BINARY_DIR}/bin"       # fpc binaries output directory
-                 "-FU${PROJECT_BINARY_DIR}/hedgewars" # fpc units output directory
-                 "-Fl${PROJECT_BINARY_DIR}/bin"       # fpc linking directory (win/unix)
-                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (for out of source builds)
-                 "-k-L${PROJECT_BINARY_DIR}/bin"      # ld linking directory (unix/osx)
-                 "-Cs2000000"                         # stack size
-                 "-vewnq"                             # fpc output verbosity
-                 "-dDEBUGFILE"                        # macro for engine output
-                 )
+
 list(APPEND haskell_flags ${ghflags_parsed} # user flags
                  "-O2"                      # optimise for faster code
                  )
 
+#-vm4079,4080,4081
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-" # disable all optimisations
-                             "-g"  # enable debug symbols
-                             "-gl" # add line info to bt
-                             "-gv" # allow valgrind
-                             )
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
                               )
 else()
-    list(APPEND pascal_flags "-Os" # optimise for size
-                             "-Xs" # strip binary
-                             "-Si" # turn on inlining
-                             )
     list(APPEND haskell_flags "-w" # no warnings
                               )
 endif()
@@ -192,10 +178,6 @@ else()
     endif()
     set(physfs_output_name "hwphysfs")
     add_subdirectory(misc/libphysfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
 find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")
