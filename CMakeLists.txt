@@ -108,6 +108,7 @@ list(APPEND haskell_flags ${ghflags_parsed} # user flags
                  "-O2"                      # optimise for faster code
                  )
 
+message(${LIBRARY_OUTPUT_PATH})
 #-vm4079,4080,4081
 add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
@@ -143,7 +144,6 @@ else()
     endif()
     set(lua_output_name "hwlua")
     add_subdirectory(misc/liblua)
-    list(APPEND pascal_flags "-XLAlua=${lua_output_name}" "-dLUA_INTERNAL")
 endif()
 
 

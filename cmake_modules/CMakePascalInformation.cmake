@@ -101,7 +101,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
-set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT}" CACHE STRING "Flags for Pascal compiler.")
+set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT} ${CMAKE_Pascal_FLAGS}" CACHE STRING "Flags for Pascal compiler.")
 
 include(CMakeCommonLanguageInclude)
 
