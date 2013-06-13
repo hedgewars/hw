@@ -190,8 +190,7 @@ add_executable(hedgewars ${console_access}
     )
 
 list(APPEND HW_LINK_LIBS
-    ${PHYSFS_LIBRARY}
-    ${PHYSLAYER_LIBRARY}
+    physfs physlayer
     ${QT_LIBRARIES}
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
