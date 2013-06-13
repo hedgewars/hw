@@ -142,16 +142,19 @@ find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
 if(PNG_FOUND)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIB_DIR})
+    add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
 endif()
 
 if(LUA_FOUND AND LUA_SYSTEM)
-    list(APPEND HW_LINK_LIBS lua)
     get_filename_component(LUA_LIBRARY_DIR ${LUA_LIBRARY} PATH)
     get_filename_component(LUA_LIBRARY_NAME ${LUA_LIBRARY} NAME)
     #NAME_WE would strip the .1 (or .2) next to the ".so"
     string(REGEX REPLACE "${CMAKE_SHARED_LIBRARY_PREFIX}(.*)${CMAKE_SHARED_LIBRARY_SUFFIX}" "\\1" LUA_LIBRARY_NAME "${LUA_LIBRARY_NAME}")
     add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LUA_LIBRARY_DIR} -k-L${LUA_LIBRARY_DIR} -XLAlua=${LUA_LIBRARY_NAME}")
+else()
+    add_definitions(-dLUA_INTERNAL)
+    list(APPEND HW_LINK_LIBS lua)
+    add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
 
