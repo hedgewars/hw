@@ -25,6 +25,13 @@ macro(find_package_or_disable_msg _PKG_NAME _VAR_NAME _MSG)
     endif(NOT ${_VAR_NAME})
 endmacro(find_package_or_disable_msg _PKG_NAME _VAR_NAME _MSG)
 
+macro(append_linker_flag _FLAG)
+    list(APPEND pascal_flags "-k${_FLAG}")
+    list(APPEND haskell_flags "-optl" "${_FLAG}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,${_FLAG}")
+    set(CMAKE_SHARED_LIBRARY_C_FLAGS "${CMAKE_SHARED_LIBRARY_C_FLAGS} -Wl,${_FLAG}")
+    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CXX_FLAGS} -Wl,${_FLAG}")
+endmacro(append_linker_flag _FLAG)
 
 #TODO: find_package_or_bundle
 

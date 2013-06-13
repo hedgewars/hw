@@ -53,7 +53,8 @@ include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
-
+#general utilities
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
 include(${CMAKE_MODULE_PATH}/paths.cmake)
@@ -138,7 +139,6 @@ else()
                               )
 endif()
 
-include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #lua discovery
 if (${LUA_SYSTEM})

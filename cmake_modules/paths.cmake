@@ -50,11 +50,11 @@ set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CM
 set(CMAKE_INSTALL_RPATH_ESCAPED "$$ORIGIN/../${target_library_install_dir}/:$$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
 
 if(UNIX AND NOT APPLE)
-    list(APPEND pascal_flags "-k-rpath" "-k'${CMAKE_INSTALL_RPATH_ESCAPED}'" "-k-z" "-korigin")
-    list(APPEND haskell_flags "-optl" "-Wl,-rpath,'${CMAKE_INSTALL_RPATH_ESCAPED},-z,origin'")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-z,origin")
-    set(CMAKE_SHARED_LIBRARY_C_FLAGS "${CMAKE_SHARED_LIBRARY_C_FLAGS} -Wl,-z,origin")
-    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CXX_FLAGS} -Wl,-z,origin")
+    #make sure $ORIGIN is respected
+    append_linker_flag("-zorigin")
+    #apply RPATH settings to pascal and haskell executables
+    list(APPEND pascal_flags "-k-rpath" "-k'${CMAKE_INSTALL_RPATH_ESCAPED}'")
+    list(APPEND haskell_flags "-optl" "-Wl,-rpath,'${CMAKE_INSTALL_RPATH_ESCAPED}'")
 endif()
 
 #add the automatically determined parts of the RPATH
