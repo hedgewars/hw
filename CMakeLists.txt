@@ -134,6 +134,9 @@ if (${LUA_SYSTEM})
 
     if (LUA_LIBRARY AND LUA_INCLUDE_DIR)
         set(LUA_FOUND TRUE)
+        #use an IMPORTED tharget so that we can just use 'lua' to link
+        add_library(lua UNKNOWN IMPORTED)
+        set_target_properties(lua PROPERTIES IMPORTED_LOCATION ${LUA_LIBRARY})
     else()
         message(FATAL_ERROR "Missing Lua! Rerun cmake with -DLUA_SYSTEM=off to build the internal version")
     endif()
@@ -170,6 +173,10 @@ if (${PHYSFS_SYSTEM})
 
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
+    else()
+        #use an IMPORTED tharget so that we can just use 'physfs' to link
+        add_library(physfs UNKNOWN IMPORTED)
+        set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
     endif()
 else()
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
