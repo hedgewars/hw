@@ -40,7 +40,7 @@ function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
-function FillRoundInLand(X, Y, Radius: LongInt; fill: fillType): LongWord;
+function FillRoundInLand2(X, Y, Radius: LongInt; fill: fillType): LongWord;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
@@ -240,16 +240,16 @@ if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
     inc(FillLandCircleSegment, FillLandCircleLine(y - dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
 end;
 
-function FillRoundInLand(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
-var dx, dy, d: LongInt;
+function FillRoundInLand2(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
+var dx, dy, d, r: LongInt;
 begin
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
-FillRoundInLand := 0;
+r := 0;
 while (dx < dy) do
     begin
-    inc(FillRoundInLand, FillLandCircleSegment(x, y, dx, dy, fill));
+    inc(r, FillLandCircleSegment(x, y, dx, dy, fill));
     if (d < 0) then
         d:= d + 4 * dx + 6
     else
@@ -260,7 +260,9 @@ while (dx < dy) do
     inc(dx)
     end;
 if (dx = dy) then
-    inc (FillRoundInLand, FillLandCircleSegment(x, y, dx, dy, fill));
+    inc(r, FillLandCircleSegment(x, y, dx, dy, fill));
+
+FillRoundInLand2:= r
 end;
 
 
@@ -341,13 +343,13 @@ end;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 begin
 if not doSet and isCurrent then
-    FillRoundInLand(X, Y, Radius, setNotCurrentMask)
+    FillRoundInLand2(X, Y, Radius, setNotCurrentMask)
 else if not doSet and (not IsCurrent) then
-    FillRoundInLand(X, Y, Radius, changePixelSetNotCurrent)
+    FillRoundInLand2(X, Y, Radius, changePixelSetNotCurrent)
 else if doSet and IsCurrent then
-    FillRoundInLand(X, Y, Radius, setCurrentHog)
+    FillRoundInLand2(X, Y, Radius, setCurrentHog)
 else if doSet and (not IsCurrent) then
-    FillRoundInLand(X, Y, Radius, changePixelNotSetNotCurrent);
+    FillRoundInLand2(X, Y, Radius, changePixelNotSetNotCurrent);
 end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
@@ -377,11 +379,11 @@ function DrawExplosion(X, Y, Radius: LongInt): Longword;
 var
     tx, ty, dx, dy: Longint;
 begin
-    DrawExplosion := FillRoundInLand(x, y, Radius, backgroundPixel);
+    DrawExplosion := FillRoundInLand2(x, y, Radius, backgroundPixel);
     if Radius > 20 then
-        FillRoundInLand(x, y, Radius - 15, nullPixel);
+        FillRoundInLand2(x, y, Radius - 15, nullPixel);
     FillRoundInLand(X, Y, Radius, 0);
-    FillRoundInLand(x, y, Radius + 4, ebcPixel);
+    FillRoundInLand2(x, y, Radius + 4, ebcPixel);
     tx:= Max(X - Radius - 5, 0);
     dx:= Min(X + Radius + 5, LAND_WIDTH) - tx;
     ty:= Max(Y - Radius - 5, 0);

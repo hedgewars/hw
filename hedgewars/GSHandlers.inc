@@ -5210,7 +5210,7 @@ begin
 
                 if (Timer = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
-                    FillRoundInLand(target.x, target.y, iceRadius, icePixel);
+                    FillRoundInLand2(target.x, target.y, iceRadius, icePixel);
                     landRect.x := min(max(target.x - iceRadius, 0), LAND_WIDTH - 1);
                     landRect.y := min(max(target.y - iceRadius, 0), LAND_HEIGHT - 1);
                     landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
@@ -5223,7 +5223,7 @@ begin
                         begin
                         if (iter^.State and gstFrozen = 0) and
                            ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and 
-                           (abs(iter^.X.Round-target.x)+abs(iter^.Y.Round-target.y)+2<2*iceRadius) and (Distance(iter^.X-int2hwFloat(target.x),iter^.Y-int2hwFloat(target.y))<int2hwFloat(iceRadius*2)) then
+                           (Distance(iter^.X-int2hwFloat(target.x),iter^.Y-int2hwFloat(target.y))<int2hwFloat(iceRadius*2)) then
                             begin
                             for t:= 0 to 5 do
                                 begin
@@ -5412,8 +5412,7 @@ if (Gear^.State and gstTmpFlag <> 0) then
 
 // Search out a new target, as target seek time has expired, target is dead, target is out of range, or we did not have a target
 if (HHGear = nil) or (Gear^.Timer = 0) or
-   (((abs(HHGear^.X.Round-Gear^.X.Round) + abs(HHGear^.Y.Round-Gear^.Y.Round) + 2) >  Gear^.Angle) and
-        (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > int2hwFloat(Gear^.Angle)))
+   (Distance(HHGear^.X-Gear^.X,HHGear^.Y-Gear^.Y) > int2hwFloat(Gear^.Angle))
     then
     begin
     hogs := GearsNear(Gear^.X, Gear^.Y, gtHedgehog, Gear^.Angle);

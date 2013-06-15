@@ -31,8 +31,8 @@ interface
 uses uFloat;
 
 procedure SetRandomSeed(Seed: shortstring; dropAdditionalPart: boolean); // Sets the seed that should be used for generating pseudo-random values.
-function  GetRandomf: hwFloat; overload; // Returns a pseudo-random hwFloat.
-function  GetRandom(m: LongWord): LongWord; overload; inline; // Returns a positive pseudo-random integer smaller than m.
+function  GetRandomf: hwFloat; // Returns a pseudo-random hwFloat.
+function  GetRandom(m: LongWord): LongWord; inline; // Returns a positive pseudo-random integer smaller than m.
 procedure AddRandomness(r: LongWord); inline;
 function  rndSign(num: hwFloat): hwFloat; // Returns num with a random chance of having a inverted sign.
 
@@ -92,7 +92,7 @@ GetRandomf.isNegative:= false;
 GetRandomf.QWordValue:= GetNext
 end;
 
-function GetRandom(m: LongWord): LongWord; overload; inline;
+function GetRandom(m: LongWord): LongWord; inline;
 begin
 GetNext;
 GetRandom:= GetNext mod m
