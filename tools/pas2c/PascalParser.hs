@@ -24,9 +24,10 @@ pascalUnit = do
     return u
 
 iD = do
-    i <- liftM (flip Identifier BTUnknown) (identifier pas)
+    i <- identifier pas
     comments
-    return i
+    when (i == "not") $ unexpected "'not' used as an identifier"
+    return $ Identifier i BTUnknown
 
 unit = do
     string "unit" >> comments
