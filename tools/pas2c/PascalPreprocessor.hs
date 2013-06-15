@@ -1,3 +1,4 @@
+{-# LANGUAGE ScopedTypeVariables #-}
 module PascalPreprocessor where
 
 import Text.Parsec
@@ -5,6 +6,7 @@ import Control.Monad.IO.Class
 import Control.Monad
 import System.IO
 import qualified Data.Map as Map
+import Control.Exception(catch, IOException)
 import Data.Char
 
 
@@ -81,7 +83,7 @@ preprocess inputPath alternateInputPath fn = do
         char '"'
         spaces
         char '}'
-        f <- liftIO (readFile (inputPath ++ fn) `catch` (\exc -> readFile (alternateInputPath ++ fn) `catch` error ("File not found: " ++ fn)))
+        f <- liftIO (readFile (inputPath ++ fn) `catch` (\(exc :: IOException) -> readFile (alternateInputPath ++ fn) `catch` (\(_ :: IOException) -> error ("File not found: " ++ fn))))
         c <- getInput
         setInput $ f ++ c
         return ""
