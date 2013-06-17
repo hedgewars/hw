@@ -174,8 +174,12 @@ processAction (MoveToRoom ri) = do
 
     chans <- liftM (map sendChan) $ roomClientsS ri
     clNick <- client's nick
+    allClientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
 
-    processAction $ AnswerClients chans ["JOINED", clNick]
+    mapM_ processAction [
+        AnswerClients chans ["JOINED", clNick]
+        , AnswerClients allClientsChans ["CLIENT_FLAGS", "+i", clNick]
+        ]
 
 
 processAction (MoveToLobby msg) = do
@@ -195,6 +199,9 @@ processAction (MoveToLobby msg) = do
             processAction RemoveRoom
         else
         mapM_ processAction [RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
+
+    allClientsChans <- liftM (Prelude.map sendChan . Prelude.filter isVisible) $! allClientsS
+    processAction $ AnswerClients allClientsChans ["CLIENT_FLAGS", "-i", clNick]
 
     -- when not removing room
     ready <- client's isReady

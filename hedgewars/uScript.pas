@@ -83,7 +83,8 @@ uses LuaPas,
     SDLh,
     SysUtils,
     uIO,
-    uPhysFSLayer
+    uPhysFSLayer,
+    typinfo
     ;
 
 var luaState : Plua_State;
@@ -1285,6 +1286,64 @@ begin
     lc_endgame:= 0
 end;
 
+function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
+var statInfo : TStatInfoType;
+var i : LongInt;
+var color : shortstring;
+begin
+	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
+	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
+			and (statInfo <> siClanHealth)) then
+        begin
+        LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 2 parameters.');
+        end
+    else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills) 
+			or (statInfo = siClanHealth)) then
+		begin
+        LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 3 parameters.');
+        end
+    else
+		begin
+		if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
+			begin
+			// 3: team name
+			for i:= 0 to Pred(TeamsCount) do
+				begin
+				with TeamsArray[i]^ do
+					begin
+						if TeamName = lua_tostring(L, 3) then
+							begin
+							color := uUtils.IntToStr(Clan^.Color);
+							Break;
+							end
+					end				
+				end;
+			if (statInfo = siPlayerKills) then
+				begin
+					SendStat(siPlayerKills, color + ' ' +
+						lua_tostring(L, 2) + ' ' + TeamsArray[i]^.TeamName);
+				end
+			else if (statInfo = siClanHealth) then
+				begin
+					SendStat(siClanHealth, color + ' ' +
+						lua_tostring(L, 2));
+				end
+			end
+		else
+			begin
+			SendStat(statInfo,lua_tostring(L, 2));
+			end;
+		end;
+    lc_sendstat:= 0
+end;
+
+function lc_sendhealthstatsoff(L : Plua_State) : LongInt; Cdecl;
+begin
+    L:= L; // avoid compiler hint
+    uStats.SendHealthStatsOn := false;
+    lc_sendhealthstatsoff:= 0
+end;
+
 function lc_findplace(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
     fall: boolean;
@@ -2382,6 +2441,8 @@ lua_register(luaState, _P'SpawnFakeUtilityCrate', @lc_spawnfakeutilitycrate);
 lua_register(luaState, _P'WriteLnToConsole', @lc_writelntoconsole);
 lua_register(luaState, _P'GetGearType', @lc_getgeartype);
 lua_register(luaState, _P'EndGame', @lc_endgame);
+lua_register(luaState, _P'SendStat', @lc_sendstat);
+lua_register(luaState, _P'SendHealthStatsOff', @lc_sendhealthstatsoff);
 lua_register(luaState, _P'FindPlace', @lc_findplace);
 lua_register(luaState, _P'SetGearPosition', @lc_setgearposition);
 lua_register(luaState, _P'GetGearPosition', @lc_getgearposition);

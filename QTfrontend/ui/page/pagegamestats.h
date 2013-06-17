@@ -49,6 +49,8 @@ class PageGameStats : public AbstractPage
         QLabel *labelGameStats;
         QLabel *labelGameWin;
         QLabel *labelGameRank;
+        QLabel *labelGraphTitle;
+        QString kindOfPoints;
         FitGraphicsView * graphic;
 
     public slots:
@@ -67,6 +69,7 @@ class PageGameStats : public AbstractPage
         QMap<quint32, QVector<quint32> > healthPoints;
         unsigned int playerPosition;
         quint32 lastColor;
+        bool defaultGraphTitle;
 
     protected:
         QLayout * bodyLayoutDefinition();

@@ -50,3 +50,14 @@ QString getCampaignScript(QString campaign, unsigned int mNum)
     campfile.setIniCodec("UTF-8");
     return campfile.value(QString("Mission %1/Script").arg(mNum)).toString();
 }
+
+QString getCampaignImage(QString campaign, unsigned int mNum)
+{
+	return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(".png"));
+}
+
+QString getCampaignMissionName(QString campaign, unsigned int mNum) 
+{
+	return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(""));
+}
+

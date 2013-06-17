@@ -414,7 +414,7 @@ void PageVideos::cellChanged(int row, int column)
             setName(item, newName);
         }
     }
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     // there is a bug in qt, QDir::rename() doesn't fail on such names but damages files
     if (newName.contains(QRegExp("[\"*:<>?\\/|]")))
     {
