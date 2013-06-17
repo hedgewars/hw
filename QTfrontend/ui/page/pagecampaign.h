@@ -28,7 +28,7 @@ class PageCampaign : public AbstractPage
     public:
         PageCampaign(QWidget* parent = 0);
 
-		QPushButton *btnPreview;
+        QPushButton *btnPreview;
         QPushButton *BtnStartCampaign;
         QLabel *lbldescription;
         QLabel *lbltitle;

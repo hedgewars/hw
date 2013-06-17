@@ -20,8 +20,8 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uGears, uRandom, uFloat, uStats, uVisualGears, uCollisions, GLunit,
-     uSound, uStore, uTypes
+uses uConsts, uInputHandler, uRandom, uFloat, uStats, uVisualGears,
+     uCollisions, GLunit, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 
@@ -34,6 +34,8 @@ procedure AfterSwitchHedgehog;
 procedure InitTeams;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
+procedure RestoreHog(HH: PHedgehog);
+
 procedure RestoreTeamsFromSave;
 function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
@@ -494,6 +496,17 @@ with team^ do
 RecountClanHealth(team^.Clan);
 
 AddVisualGear(0, 0, vgtTeamHealthSorter)
+end;
+
+procedure RestoreHog(HH: PHedgehog);
+begin
+    HH^.Gear:=HH^.GearHidden;
+    HH^.GearHidden:= nil;
+    InsertGearToList(HH^.Gear);
+    HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
+    AddGearCI(HH^.Gear);
+    HH^.Gear^.Active:= true;
+    ScriptCall('onHogRestore', HH^.Gear^.Uid)
 end;
 
 procedure RestoreTeamsFromSave;

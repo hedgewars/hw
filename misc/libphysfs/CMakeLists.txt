@@ -35,15 +35,6 @@ include(CheckLibraryExists)
 include(CheckCSourceCompiles)
 
 
-# 32bit platforms won't link unless this is set
-# although Windows doesn't like it
-if(NOT WINDOWS)
-    if(CMAKE_SIZEOF_VOID_P LESS 8)
-        add_definitions(-DPHYSFS_NO_64BIT_SUPPORT=1)
-    endif(CMAKE_SIZEOF_VOID_P LESS 8)
-endif(NOT WINDOWS)
-
-
 if(MACOSX)
     # Fallback to older OS X on PowerPC to support wider range of systems...
     if(CMAKE_OSX_ARCHITECTURES MATCHES ppc)
@@ -61,31 +52,8 @@ endif(MACOSX)
 
 # Add some gcc-specific command lines.
 if(CMAKE_COMPILER_IS_GNUCC)
-    # Always build with debug symbols...you can strip it later.
+    # Always build with debug symbols... you can strip it later.
     add_definitions(-g -fsigned-char)
-
-    # Stupid BeOS generates warnings in the system headers.
-    if(NOT BEOS)
-        add_definitions(-Wall)
-    endif(NOT BEOS)
-
-    CHECK_C_SOURCE_COMPILES("
-        #if ((defined(__GNUC__)) && (__GNUC__ >= 4))
-        int main(int argc, char **argv) { int is_gcc4 = 1; return 0; }
-        #else
-        #error This is not gcc4.
-        #endif
-    " PHYSFS_IS_GCC4)
-
-    if(PHYSFS_IS_GCC4)
-        # Not supported on several operating systems at this time.
-        if(NOT SOLARIS AND NOT WINDOWS)
-            add_definitions(-fvisibility=hidden)
-        endif(NOT SOLARIS AND NOT WINDOWS)
-    endif(PHYSFS_IS_GCC4)
-
-    # Don't use -rpath.
-    set(CMAKE_SKIP_RPATH ON CACHE BOOL "Skip RPATH" FORCE)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if(CMAKE_C_COMPILER_ID STREQUAL "SunPro")
@@ -180,6 +148,7 @@ endif(UNIX)
 if(WINDOWS)
     set(PHYSFS_HAVE_CDROM_SUPPORT TRUE)
     set(PHYSFS_HAVE_THREAD_SUPPORT TRUE)
+    list(APPEND OTHER_LDFLAGS ${SDL_LIBRARY})
 endif(WINDOWS)
 
 if(NOT PHYSFS_HAVE_CDROM_SUPPORT)
@@ -252,50 +221,26 @@ endif(PHYSFS_ARCHIVE_ZIP)
 #endif(PHYSFS_ARCHIVE_ISO9660)
 
 
-##as needed by Hedgewars configuration
-if(WINDOWS)
-    option(PHYSFS_BUILD_STATIC "Build static library" FALSE)
-    option(PHYSFS_BUILD_SHARED "Build shared library" TRUE)
-    list(APPEND OTHER_LDFLAGS ${SDL_LIBRARY})
-else(WINDOWS)
-    option(PHYSFS_BUILD_STATIC "Build static library" TRUE)
-    option(PHYSFS_BUILD_SHARED "Build shared library" FALSE)
-endif(WINDOWS)
-
-if(PHYSFS_BUILD_STATIC)
-    add_library(physfs STATIC ${PHYSFS_SRCS})
-    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
-    set(lib_prefix ${CMAKE_STATIC_LIBRARY_PREFIX}) ##
-    set(lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX}) ##
-endif(PHYSFS_BUILD_STATIC)
-
-if(PHYSFS_BUILD_SHARED)
-    add_library(physfs SHARED ${PHYSFS_SRCS})
-    set_target_properties(physfs PROPERTIES VERSION ${PHYSFS_VERSION})
-    set_target_properties(physfs PROPERTIES SOVERSION ${PHYSFS_SOVERSION})
-    set_target_properties(physfs PROPERTIES OUTPUT_NAME ${physfs_output_name}) ##
-    target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
-    install(TARGETS physfs RUNTIME DESTINATION ${target_library_install_dir}) ##
-    set(lib_prefix ${CMAKE_SHARED_LIBRARY_PREFIX}) ##
-    set(lib_suffix ${CMAKE_SHARED_LIBRARY_SUFFIX}) ##
-endif(PHYSFS_BUILD_SHARED)
-
-if(NOT PHYSFS_BUILD_SHARED AND NOT PHYSFS_BUILD_STATIC)
-    message(FATAL "Both shared and static libraries are disabled!")
-endif(NOT PHYSFS_BUILD_SHARED AND NOT PHYSFS_BUILD_STATIC)
-
-# CMake FAQ says I need this...
-if(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
-    set_target_properties(physfs PROPERTIES CLEAN_DIRECT_OUTPUT 1)
-endif(PHYSFS_BUILD_SHARED AND PHYSFS_BUILD_STATIC)
+##Hedgewars modifications
+add_library(physfs ${PHYSFS_SRCS})
+set_target_properties(physfs PROPERTIES
+                          VERSION ${PHYSFS_VERSION}
+                          SOVERSION ${PHYSFS_SOVERSION}
+                          OUTPUT_NAME ${physfs_output_name})
+target_link_libraries(physfs ${optional_library_libs} ${OTHER_LDFLAGS})
+install(TARGETS physfs RUNTIME DESTINATION ${target_binary_install_dir}
+                       LIBRARY DESTINATION ${target_library_install_dir}
+                       ARCHIVE DESTINATION ${target_library_install_dir})
+get_target_property(physfs_fullpath physfs LOCATION)
 
 ## added standard variables emulating the FindPhysFS.cmake ones (FORCE or cmake won't pick 'em)
-set(PHYSFS_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphysfs/ CACHE STRING "" FORCE)
-set(PHYSFS_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}${physfs_output_name}${lib_suffix} CACHE STRING "" FORCE)
+set(PHYSFS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Physfs include dir" FORCE)
+set(PHYSFS_LIBRARY ${physfs_fullpath} CACHE STRING "Physfs library path" FORCE)
 
 
-## removed install, language bindings and test program
+## removed language bindings and test program
 ## simplified configuration output
+## merged shared and static library building
 
 #message(STATUS "PhysFS will be built with ${PHYSFS_FEATURES} support")
 

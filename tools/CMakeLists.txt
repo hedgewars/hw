@@ -48,8 +48,6 @@ if (APPLE)
     find_program(macdeployqt_executable NAMES macdeployqt macdeployqt-mac PATHS ${qt_base_dir}/bin)
     if(NOT macdeployqt_executable)
         message(FATAL_ERROR "The utility macdeployqt is required to create the bundle (seached: ${qt_base_dir})")
-    else()
-        message(STATUS "Found macdeployqt: ${macdeployqt_executable}")
     endif()
 
     #dummy target, we're interested in the postscript file

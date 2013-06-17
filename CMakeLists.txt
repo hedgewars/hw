@@ -1,7 +1,7 @@
 project(hedgewars)
 
 #initialise cmake environment
-cmake_minimum_required(VERSION 2.6.0)
+cmake_minimum_required(VERSION 2.6.4)
 foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
     if(POLICY ${hwpolicy})
         cmake_policy(SET ${hwpolicy} NEW)
@@ -9,17 +9,25 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
 endforeach()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
-
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
 option(NOSERVER "Disable gameServer build (off)]" OFF)
 option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
+#libraries are built shared unless explicitly added as a static
+option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
 option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
-option(LIBENGINE "Enable hwengine library (off)" OFF)
+if(WIN32 OR APPLE)
+    option(LUA_SYSTEM "Use system lua (off)" OFF)
+else()
+    option(LUA_SYSTEM "Use system lua (on)" ON)
+endif()
+
+option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
 option(ANDROID "Enable Android build (off)" OFF)
 
 if(UNIX AND NOT APPLE)
@@ -50,52 +58,11 @@ set(required_clang_version 3.0)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
-if (${NOPASCAL})
-    find_package(Clang)
-    # Check LLVM/Clang version
-	if (CLANG_VERSION VERSION_LESS required_clang_version)
-		message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
-	else()
-		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
-	endif()
-endif(${NOPASCAL})
-
-
-
-#where to build libs and bins
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-
-#resource paths
-if(UNIX AND NOT APPLE)
-    set(target_binary_install_dir "bin")
-    set(target_library_install_dir "lib")
-
-    string(SUBSTRING "${DATA_INSTALL_DIR}" 0 1 sharepath_start)
-    if (NOT (${sharepath_start} MATCHES "/"))
-        set(HEDGEWARS_DATADIR "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/")
-    else()
-        set(HEDGEWARS_DATADIR "${DATA_INSTALL_DIR}/")
-    endif()
-    set(HEDGEWARS_FULL_DATADIR "${HEDGEWARS_DATADIR}")
-else()
-    set(target_binary_install_dir "./")
-
-    if(APPLE)
-        set(target_library_install_dir "../Frameworks/")
-        set(CMAKE_INSTALL_PREFIX "Hedgewars.app/Contents/MacOS/")
-        set(HEDGEWARS_DATADIR "../Resources/")
-        set(HEDGEWARS_FULL_DATADIR "/Applications/${CMAKE_INSTALL_PREFIX}/${HEDGEWARS_DATADIR}")
-    elseif(WIN32)
-        set(target_library_install_dir "./")
-        set(HEDGEWARS_DATADIR "./")
-        set(HEDGEWARS_FULL_DATADIR "${CMAKE_INSTALL_PREFIX}/")
-        link_directories("${EXECUTABLE_OUTPUT_PATH}" "${CMAKE_SOURCE_DIR}/misc/winutils/bin")
-    endif()
-endif()
-
+#general utilities
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
+include(${CMAKE_MODULE_PATH}/paths.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
@@ -117,67 +84,62 @@ include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
 if(NOT ${MINIMAL_FLAGS})
     set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
     set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g -DDEBUG ${CMAKE_C_FLAGS_DEBUG}")
-    set(CMAKE_CXX_FLAGS ${CMAKE_C_FLAGS})
-    set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
-    set(CMAKE_CXX_FLAGS_DEBUG ${CMAKE_C_FLAGS_DEBUG})
+    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g ${CMAKE_C_FLAGS_DEBUG}")
+    set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_CXX_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
+    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -O0 -g ${CMAKE_CXX_FLAGS_DEBUG}")
 else()
     #CMake adds a lot of additional configuration flags, so let's clear them up
     set(CMAKE_C_FLAGS_RELEASE "")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -DDEBUG")
+    set(CMAKE_C_FLAGS_DEBUG "-Wall")
     set(CMAKE_CXX_FLAGS_RELEASE "")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -DDEBUG")
+    set(CMAKE_CXX_FLAGS_DEBUG "-Wall")
 endif()
 
 #parse additional parameters
-if(FPFLAGS OR GHFLAGS)
-    if(CMAKE_VERSION VERSION_GREATER "2.6")
-        separate_arguments(fpflags_parsed UNIX_COMMAND ${FPFLAGS})
+if(FPFLAGS)
+    add_flag_prepend(CMAKE_Pascal_FLAGS ${FPFLAGS})
+endif()
+if(GHFLAGS)
+    if(${allow_parse_args})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message("*** FPFLAGS and GHFLAGS are available only when using CMake >= 2.8 ***")
+        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 
-list(APPEND pascal_flags ${fpflags_parsed}            # user flags
-                 "-B"                                 # compile all units
-                 "-vm4079,4080,4081"                  # fpc verbosity output format
-                 "-FE${PROJECT_BINARY_DIR}/bin"       # fpc binaries output directory
-                 "-FU${PROJECT_BINARY_DIR}/hedgewars" # fpc units output directory
-                 "-Fl${PROJECT_BINARY_DIR}/bin"       # fpc linking directory (win/unix)
-                 "-Fi${PROJECT_BINARY_DIR}/hedgewars" # fpc .inc path (for out of source builds)
-                 "-k-L${PROJECT_BINARY_DIR}/bin"      # ld linking directory (unix/osx)
-                 "-Cs2000000"                         # stack size
-                 "-vewnq"                             # fpc output verbosity
-                 "-dDEBUGFILE"                        # macro for engine output
-                 )
+
 list(APPEND haskell_flags ${ghflags_parsed} # user flags
                  "-O2"                      # optimise for faster code
                  )
 
+#-vm4079,4080,4081
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
 if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
-    list(APPEND pascal_flags "-O-" # disable all optimisations
-                             "-g"  # enable debug symbols
-                             "-gl" # add line info to bt
-                             "-gv" # allow valgrind
-                             )
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
                               )
 else()
-    list(APPEND pascal_flags "-Os" # optimise for size
-                             "-Xs" # strip binary
-                             "-Si" # turn on inlining
-                             )
     list(APPEND haskell_flags "-w" # no warnings
                               )
 endif()
 
-include(${CMAKE_MODULE_PATH}/utils.cmake)
+if (${NOPASCAL})
+    find_package(Clang)
+    # Check LLVM/Clang version
+	if (CLANG_VERSION VERSION_LESS required_clang_version)
+		message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
+	else()
+		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
+	endif()
+endif(${NOPASCAL})
+
 
 #Haskell compiler discovery (for server and engine in c)
 if((NOT NOSERVER) OR NOPASCAL)
@@ -208,14 +170,25 @@ endif()
 
 
 #lua discovery
-find_package(Lua)
-if(LUA_FOUND AND (NOT WEBGL))
-    message(STATUS "Found LUA: ${LUA_DEFAULT}")
+if (${LUA_SYSTEM})
+    if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
+        find_package(Lua)
+    endif()
+
+    if (LUA_LIBRARY AND LUA_INCLUDE_DIR)
+        set(LUA_FOUND TRUE)
+        #use an IMPORTED tharget so that we can just use 'lua' to link
+        add_library(lua UNKNOWN IMPORTED)
+        set_target_properties(lua PROPERTIES IMPORTED_LOCATION ${LUA_LIBRARY})
+    else()
+        message(FATAL_ERROR "Missing Lua! Rerun cmake with -DLUA_SYSTEM=off to build the internal version")
+    endif()
 else()
-    message(STATUS "Using internal LUA library")
+    if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
+        message(STATUS "LUA will be provided by the bundled sources")
+    endif()
+    set(lua_output_name "hwlua")
     add_subdirectory(misc/liblua)
-    #linking with liblua.a requires system readline
-    list(APPEND pascal_flags "-k${EXECUTABLE_OUTPUT_PATH}/lib${LUA_LIBRARY}.a" "-k-lreadline")
 endif()
 
 
@@ -243,15 +216,17 @@ if (${PHYSFS_SYSTEM})
 
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
+    else()
+        #use an IMPORTED tharget so that we can just use 'physfs' to link
+        add_library(physfs UNKNOWN IMPORTED)
+        set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
     endif()
 else()
-    message(STATUS "PhysFS will be provided by the bundled sources")
-    set(physfs_output_name "hw_physfs")
+    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+        message(STATUS "PhysFS will be provided by the bundled sources")
+    endif()
+    set(physfs_output_name "hwphysfs")
     add_subdirectory(misc/libphysfs)
-    #-XLA is a beta fpc flag that renames libraries before passing them to the linker
-    #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
-    #(should be harmless on other platforms)
-    list(APPEND pascal_flags "-XLAphysfs=${physfs_output_name}" "-dPHYSFS_INTERNAL")
 endif()
 
 find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")

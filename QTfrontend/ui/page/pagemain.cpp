@@ -133,7 +133,7 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
         setAttribute(Qt::WA_NoSystemBackground, true);
     mainNote->setOpenExternalLinks(true);
 
-#ifdef DEBUG
+#ifdef QT_DEBUG
     setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
 #else
     setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));

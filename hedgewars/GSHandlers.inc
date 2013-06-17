@@ -132,17 +132,6 @@ begin
     HH^.Gear:= nil
 end;
 
-procedure RestoreHog(HH: PHedgehog);
-begin
-    HH^.Gear:=HH^.GearHidden;
-    HH^.GearHidden:= nil;
-    InsertGearToList(HH^.Gear);
-    HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
-    AddGearCI(HH^.Gear);
-    HH^.Gear^.Active:= true;
-    ScriptCall('onHogRestore', HH^.Gear^.Uid)
-end;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
