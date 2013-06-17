@@ -1,3 +1,5 @@
+find_package(GHC REQUIRED)
+
 set(pas2c_sources
         Main.hs
         PascalBasics.hs
@@ -19,7 +21,7 @@ set(ghc_flags
     )
 
 add_custom_command(OUTPUT "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-        COMMAND "${ghc_executable}"
+        COMMAND "${GHC_EXECUTABLE}"
         ARGS ${ghc_flags}
         MAIN_DEPENDENCY ${hwserv_main}
         DEPENDS ${hwserver_sources}
