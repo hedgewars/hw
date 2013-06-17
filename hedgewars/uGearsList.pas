@@ -265,7 +265,7 @@ case Kind of
                         end;
                     State:= State or gstInvisible;
                     Health:= random(vobFrameTicks);
-                    Timer:= random(vobFramesCount);
+                    if gear^.Timer = 0 then Timer:= random(vobFramesCount);
                     Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
                     end
                 end;
@@ -277,7 +277,7 @@ case Kind of
                 end;
          gtBee: begin
                 gear^.Radius:= 5;
-                gear^.Timer:= 500;
+                if gear^.Timer = 0 then gear^.Timer:= 500;
                 gear^.RenderTimer:= true;
                 gear^.Elasticity:= _0_9;
                 gear^.Tag:= 0;
@@ -286,16 +286,16 @@ case Kind of
                 gear^.Radius:= 250;
                 end;
  gtShotgunShot: begin
-                gear^.Timer:= 900;
+                if gear^.Timer = 0 then gear^.Timer:= 900;
                 gear^.Radius:= 2
                 end;
   gtPickHammer: begin
                 gear^.Radius:= 10;
-                gear^.Timer:= 4000
+                if gear^.Timer = 0 then gear^.Timer:= 4000
                 end;
    gtHammerHit: begin
                 gear^.Radius:= 8;
-                gear^.Timer:= 125
+                if gear^.Timer = 0 then gear^.Timer:= 125
                 end;
         gtRope: begin
                 gear^.Radius:= 3;
@@ -311,10 +311,13 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1;
-                if cMinesTime < 0 then
-                    gear^.Timer:= getrandom(51)*100
-                else
-                    gear^.Timer:= cMinesTime;
+                if gear^.Timer = 0 then
+                    begin
+                    if cMinesTime < 0 then
+                        gear^.Timer:= getrandom(51)*100
+                    else
+                        gear^.Timer:= cMinesTime
+                    end
                 end;
        gtSMine: begin
                 gear^.Health:= 10;
@@ -323,7 +326,7 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1_6;
-                gear^.Timer:= 500;
+                if gear^.Timer = 0 then gear^.Timer:= 500;
                 end;
        gtKnife: begin
                 gear^.Density:= _4;
@@ -334,7 +337,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
                 gear^.Elasticity:= _0_3;
-                gear^.Timer:= 500
+                if gear^.Timer = 0 then gear^.Timer:= 500
                 end;
   gtExplosives: begin
                 gear^.ImpactSound:= sndGrenadeImpact;
@@ -359,7 +362,7 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_03;
                 gear^.Density:= _2;
-                gear^.Timer:= 5000;
+                if gear^.Timer = 0 then gear^.Timer:= 5000;
                 end;
      gtCluster: begin
                 gear^.Radius:= 2;
@@ -389,7 +392,7 @@ case Kind of
                 end;
    gtBlowTorch: begin
                 gear^.Radius:= cHHRadius + cBlowTorchC;
-                gear^.Timer:= 7500
+                if gear^.Timer = 0 then gear^.Timer:= 7500
                 end;
     gtSwitcher: begin
                 gear^.Z:= cCurrHHZ
@@ -399,10 +402,8 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 10;
                 gear^.Elasticity:= _0_3;
-                gear^.Timer:= 0
                 end;
       gtTardis: begin
-                gear^.Timer:= 0;
                 gear^.Pos:= 1;
                 gear^.Z:= cCurrHHZ+1;
                 end;
@@ -438,7 +439,7 @@ case Kind of
                 gear^.Friction:= _0_96;
                 gear^.Density:= _1_5;
                 gear^.RenderTimer:= true;
-                gear^.Timer:= 5000
+                if gear^.Timer = 0 then gear^.Timer:= 5000
                 end;
        gtDrill: begin
                 if gear^.Timer = 0 then
@@ -454,23 +455,23 @@ case Kind of
                 gear^.AdvBounce:= 1;
                 gear^.Radius:= 5;
                 gear^.Tag:= random(8);
-                gear^.Timer:= 5000;
+                if gear^.Timer = 0 then gear^.Timer:= 5000;
                 gear^.Elasticity:= _0_7;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1_5;
                 end;
      gtBallgun: begin
-                gear^.Timer:= 5001;
+                if gear^.Timer = 0 then gear^.Timer:= 5001;
                 end;
      gtRCPlane: begin
-                gear^.Timer:= 15000;
+                if gear^.Timer = 0 then gear^.Timer:= 15000;
                 gear^.Health:= 3;
                 gear^.Radius:= 8
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
                 gear^.Damage:= 100;
-                gear^.State:= gstSubmersible
+                gear^.State:= Gear^.State or gstSubmersible
                 end;
      gtMolotov: begin
                 gear^.Radius:= 6;
@@ -478,7 +479,6 @@ case Kind of
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
-                gear^.Timer:= 0;
                 gear^.Health := 2000;
                 gear^.FlightTime := 2;
                 end;
@@ -511,18 +511,18 @@ case Kind of
                 end;
 gtFlamethrower: begin
                 gear^.Tag:= 10;
-                gear^.Timer:= 10;
+                if gear^.Timer = 0 then gear^.Timer:= 10;
                 gear^.Health:= 500;
                 gear^.Damage:= 100;
                 end;
      gtLandGun: begin
                 gear^.Tag:= 10;
-                gear^.Timer:= 10;
+                if gear^.Timer = 0 then gear^.Timer:= 10;
                 gear^.Health:= 1000;
                 gear^.Damage:= 100;
                 end;
  gtPoisonCloud: begin
-                gear^.Timer:= 5000;
+                if gear^.Timer = 0 then gear^.Timer:= 5000;
                 gear^.dY:= int2hwfloat(-4 + longint(getRandom(8))) / 1000;
                 end;
  gtResurrector: begin
@@ -533,7 +533,7 @@ gtFlamethrower: begin
                 gear^.Tag := 47;
                 end;
   gtNapalmBomb: begin
-                gear^.Timer:= 1000;
+                if gear^.Timer = 0 then gear^.Timer:= 1000;
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;
                 end;
