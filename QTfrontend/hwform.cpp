@@ -597,7 +597,9 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
     updateXfire();
 #endif
 
+#ifdef QT_DEBUG
     qDebug("Leaving %s, entering %s", qPrintable(stringifyPageId(lastid)), qPrintable(stringifyPageId(id)));
+#endif
     if (lastid == ID_PAGE_MAIN)
     {
         ui.pageMain->resetNetworkChoice();
