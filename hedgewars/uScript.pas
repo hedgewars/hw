@@ -1292,7 +1292,7 @@ var statInfo : TStatInfoType;
 var i : LongInt;
 var color : shortstring;
 begin
-	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
+	statInfo := TStatInfoType(lua_tostring(L, 1));
 	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
 			and (statInfo <> siClanHealth)) then
         begin
