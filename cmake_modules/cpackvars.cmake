@@ -58,6 +58,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.db$"
     "\\\\.dof$"
     "\\\\.or$"
+    "\\\\.stackdump$"
     #archives
     "\\\\.zip$"
     "\\\\.gz$"

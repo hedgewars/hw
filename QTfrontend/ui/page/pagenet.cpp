@@ -73,7 +73,7 @@ QLayout * PageNet::footerLayoutDefinition()
     BtnNetSvrStart = formattedButton(QPushButton::tr("Start server"));
     BtnNetSvrStart->setMinimumWidth(180);
     QString serverPath = bindir->absolutePath() + "/hedgewars-server";
-#ifdef Q_WS_WIN
+#ifdef Q_OS_WIN
     serverPath += + ".exe";
 #endif
     QFile server(serverPath);

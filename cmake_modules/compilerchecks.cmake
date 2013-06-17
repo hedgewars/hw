@@ -5,20 +5,25 @@ include(CheckCCompilerFlag)
 
 # CMAKE_C{XX}_FLAGS is for compiler flags (c and c++)
 # CMAKE_EXE_LINKER_FLAGS is for linker flags (also add them to pascal_flags and haskell_flags)
-
+# CMAKE_SHARED_LIBRARY_<lang>_FLAGS same but for shared libraries
 
 #TODO: should there be two different checks for C and CXX?
 
-#stack protection
-check_c_compiler_flag("-fstack-protector" HAVE_STACKPROTECTOR)
-if(HAVE_STACKPROTECTOR)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
+#stack protection, when found it needs to go in the linker flags too
+#it is disabled on win32 because it adds a dll and messes with linker
+#(see 822312 654424 on bugzilla.redhat.com)
+check_c_compiler_flag("-fstack-protector-all -fstack-protector" HAVE_STACKPROTECTOR)
+if(HAVE_STACKPROTECTOR AND (NOT WIN32))
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-all -fstack-protector")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-all -fstack-protector")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fstack-protector-all -fstack-protector")
+    set(CMAKE_SHARED_LIBRARY_C_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector-all -fstack-protector")
+    set(CMAKE_SHARED_LIBRARY_CXX_FLAGS  "${CMAKE_SHARED_LIBRARY_C_FLAGS} -fstack-protector-all -fstack-protector")
 endif()
 
-#symbol visibility
-check_c_compiler_flag("-fvisibility=hidden" HAVE_VISIBILITYH)
-if(HAVE_VISIBILITYH)
+#symbol visibility, not supported on Windows (so we error out to avoid spam)
+check_c_compiler_flag("-fvisibility=hidden -Werror" HAVE_VISIBILITY)
+if(HAVE_VISIBILITY)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
 endif()
