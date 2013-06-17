@@ -12,25 +12,17 @@ set(PHYSLAYER_SRCS
     hwpacksmounter.c
 )
 
-set(build_type STATIC)
-set(lib_prefix ${CMAKE_STATIC_LIBRARY_PREFIX})
-set(lib_suffix ${CMAKE_STATIC_LIBRARY_SUFFIX})
-
-if(WIN32)
-    set(build_type SHARED)
-    set(lib_prefix ${CMAKE_SHARED_LIBRARY_PREFIX})
-    set(lib_suffix ${CMAKE_SHARED_LIBRARY_SUFFIX})
-endif(WIN32)
-
 #compiles and links actual library
-add_library (physlayer ${build_type} ${PHYSLAYER_SRCS})
+add_library (physlayer ${PHYSLAYER_SRCS})
+#TODO: find good VERSION and SOVERSION values
+target_link_libraries(physlayer ${SDL_LIBRARY} lua physfs)
+install(TARGETS physlayer RUNTIME DESTINATION ${target_binary_install_dir}
+                          LIBRARY DESTINATION ${target_library_install_dir}
+                          ARCHIVE DESTINATION ${target_library_install_dir})
+get_target_property(physlayer_fullpath physlayer LOCATION)
 
-if(WIN32)
-    target_link_libraries(physlayer ${SDL_LIBRARY} ${LUA_LIBRARY} ${PHYSFS_LIBRARY})
-    install(TARGETS physlayer RUNTIME DESTINATION ${target_library_install_dir})
-endif()
 
 ## added standard variables (FORCE or cmake won't pick 'em)
-set(PHYSLAYER_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/misc/libphyslayer/ CACHE STRING "" FORCE)
-set(PHYSLAYER_LIBRARY ${LIBRARY_OUTPUT_PATH}/${lib_prefix}physlayer${lib_suffix} CACHE STRING "" FORCE)
+set(PHYSLAYER_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE STRING "Physlayer include dir" FORCE)
+set(PHYSLAYER_LIBRARY ${physlayer_fullpath} CACHE STRING "Physlayer library" FORCE)
 

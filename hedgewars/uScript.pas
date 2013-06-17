@@ -54,6 +54,7 @@ procedure freeModule;
 
 implementation
 {$IFDEF USE_LUA_SCRIPT}
+
 uses LuaPas,
     uConsole,
     uConsts,
