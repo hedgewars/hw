@@ -8,7 +8,7 @@ find_package(SDL_image REQUIRED)
 find_package(SDL_ttf REQUIRED)
 
 #compile our rtl implementation
-include_directories(${GLEW_INCLUDE_DIRS})
+include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rtl)
 add_subdirectory(rtl)
 
