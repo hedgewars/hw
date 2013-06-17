@@ -3,17 +3,12 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
-const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhw_physfs'{$ELSE}'libphysfs'{$ENDIF};
+const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhwphysfs'{$ELSE}'libphysfs'{$ENDIF};
 const PhyslayerLibName = 'libphyslayer';
 
 {$IFNDEF WIN32}
     {$linklib physfs}
     {$linklib physlayer}
-
-    {statically linking physfs brings IOKit dependency on OSX}
-    {$IFDEF DARWIN}
-        {$linkframework IOKit}
-    {$ENDIF}
 {$ENDIF}
 
 procedure initModule;

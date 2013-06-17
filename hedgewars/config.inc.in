@@ -25,5 +25,4 @@ const cNetProtoVersion = ${HEDGEWARS_PROTO_VER};
       cVersionString = '${HEDGEWARS_VERSION}';
       cRevisionString = '${HEDGEWARS_REVISION}';
       cHashString = '${HEDGEWARS_HASH}';
-      cLuaLibrary = '${LUA_LIBRARY}';
       cDefaultPathPrefix = '${HEDGEWARS_FULL_DATADIR}/Data';

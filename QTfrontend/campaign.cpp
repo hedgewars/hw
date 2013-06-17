@@ -53,11 +53,11 @@ QString getCampaignScript(QString campaign, unsigned int mNum)
 
 QString getCampaignImage(QString campaign, unsigned int mNum)
 {
-	return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(".png"));
+    return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(".png"));
 }
 
-QString getCampaignMissionName(QString campaign, unsigned int mNum) 
+QString getCampaignMissionName(QString campaign, unsigned int mNum)
 {
-	return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(""));
+    return getCampaignScript(campaign,mNum).replace(QString(".lua"),QString(""));
 }
 

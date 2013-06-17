@@ -28,6 +28,14 @@
 #define AVIO_FLAG_WRITE AVIO_WRONLY
 #endif
 
+#if (defined _MSC_VER)
+#define AVWRAP_DECL __declspec(dllexport)
+#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
+#define AVWRAP_DECL __attribute__((visibility("default")))
+#else
+#define AVWRAP_DECL
+#endif
+
 static AVFormatContext* g_pContainer;
 static AVOutputFormat* g_pFormat;
 static AVStream* g_pAStream;
@@ -201,7 +209,7 @@ static int WriteAudioFrame()
 
     // Write the compressed frame to the media file.
     Packet.stream_index = g_pAStream->index;
-    if (av_interleaved_write_frame(g_pContainer, &Packet) != 0) 
+    if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
         FatalError("Error while writing audio frame");
     return 1;
 }
@@ -313,7 +321,7 @@ static int WriteFrame(AVFrame* pFrame)
             AudioTime = (double)g_pAStream->pts.val*g_pAStream->time_base.num/g_pAStream->time_base.den;
         while (AudioTime < VideoTime && WriteAudioFrame());
     }
-    
+
     if (!g_pVStream)
         return 0;
 
@@ -349,7 +357,7 @@ static int WriteFrame(AVFrame* pFrame)
             Packet.pts = av_rescale_q(Packet.pts, g_pVideo->time_base, g_pVStream->time_base);
         if (Packet.dts != AV_NOPTS_VALUE)
             Packet.dts = av_rescale_q(Packet.dts, g_pVideo->time_base, g_pVStream->time_base);
-#else 
+#else
         Packet.size = avcodec_encode_video(g_pVideo, g_OutBuffer, OUTBUFFER_SIZE, pFrame);
         if (Packet.size < 0)
             FatalError("avcodec_encode_video failed");
@@ -366,12 +374,12 @@ static int WriteFrame(AVFrame* pFrame)
         Packet.stream_index = g_pVStream->index;
         if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
             FatalError("Error while writing video frame");
-            
+
         return 1;
     }
 }
 
-void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
+AVWRAP_DECL void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
 {
     g_pVFrame->data[0] = pY;
     g_pVFrame->data[1] = pCb;
@@ -379,7 +387,7 @@ void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
     WriteFrame(g_pVFrame);
 }
 
-void AVWrapper_Init(
+AVWRAP_DECL void AVWrapper_Init(
          void (*pAddFileLogRaw)(const char*),
          const char* pFilename,
          const char* pDesc,
@@ -390,7 +398,7 @@ void AVWrapper_Init(
          int Width, int Height,
          int FramerateNum, int FramerateDen,
          int VQuality)
-{    
+{
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
 
@@ -472,7 +480,7 @@ void AVWrapper_Init(
     g_pVFrame->pts = -1;
 }
 
-void AVWrapper_Close()
+AVWRAP_DECL void AVWrapper_Close()
 {
     // output buffered frames
     if (g_pVCodec->capabilities & CODEC_CAP_DELAY)
