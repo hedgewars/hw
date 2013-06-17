@@ -1,5 +1,5 @@
 
-include_directories(${GLEW_INCLUDE_PATH})
+include_directories(${GLEW_INCLUDE_DIR})
 
 file(GLOB fpcrtl_src *.c)
 

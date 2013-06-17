@@ -1,38 +1,29 @@
+# Find GLEW
 #
-# Try to find GLEW library and include path.
 # Once done this will define
+#  GLEW_FOUND - system has Sparkle
+#  GLEW_INCLUDE_DIR - the Sparkle include directory
+#  GLEW_LIBRARY - The library needed to use Sparkle
+# Copyright (c) 2013, Vittorio Giovara <vittorio.giovara@gmail.com>
 #
-# GLEW_FOUND
-# GLEW_INCLUDE_DIRS
-# GLEW_LIBRARY
-# 
+# Distributed under the OSI-approved BSD License (the "License");
+# see accompanying file Copyright.txt for details.
+#
+# This software is distributed WITHOUT ANY WARRANTY; without even the
+# implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the License for more information.
 
-if (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
-  # in cache already
-  set(GLEW_FOUND TRUE)
-else (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
+include(FindPackageHandleStandardArgs)
 
-    IF (WIN32)
-        FIND_PATH( GLEW_INCLUDE_DIRS GL/glew.h
-            $ENV{PROGRAMFILES}/GLEW/include
-            ${PROJECT_SOURCE_DIR}/src/nvgl/glew/include
-            DOC "The directory where GL/glew.h resides")
-        FIND_LIBRARY( GLEW_LIBRARY
-            NAMES glew GLEW glew32 glew32s
-            PATHS
-            $ENV{PROGRAMFILES}/GLEW/lib
-            ${PROJECT_SOURCE_DIR}/src/nvgl/glew/bin
-            ${PROJECT_SOURCE_DIR}/src/nvgl/glew/lib
-        DOC "The GLEW library")
-    ELSE (WIN32)
-        FIND_PATH( GLEW_INCLUDE_DIRS GL/glew.h
+find_path( GLEW_INCLUDE_DIR GL/glew.h
             /usr/include
             /usr/local/include
             /sw/include
             /opt/local/include
+            $ENV{PROGRAMFILES}/GLEW/include
             DOC "The directory where GL/glew.h resides")
-        FIND_LIBRARY( GLEW_LIBRARY
-            NAMES GLEW glew
+find_library( GLEW_LIBRARY
+            NAMES GLEW glew glew32 glew32s
             PATHS
             /usr/lib64
             /usr/lib
@@ -40,26 +31,9 @@ else (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
             /usr/local/lib
             /sw/lib
             /opt/local/lib
+            $ENV{PROGRAMFILES}/GLEW/lib
             DOC "The GLEW library")
-    ENDIF (WIN32)
 
-    IF (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
-        SET( GLEW_FOUND 1 CACHE STRING "Set to 1 if GLEW is found, 0 otherwise")
-    ELSE (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
-        SET( GLEW_FOUND 0 CACHE STRING "Set to 1 if GLEW is found, 0 otherwise")
-    ENDIF (GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
-
-endif(GLEW_LIBRARY AND GLEW_INCLUDE_DIRS)
-
-if (GLEW_FOUND)
-    if (NOT GLEW_FIND_QUIETLY)
-        message(STATUS "Found GLEW: ${GLEW_LIBRARY}, ${GLEW_INCLUDE_DIRS}")
-    endif (NOT GLEW_FIND_QUIETLY)
-else (GLEW_FOUND)
-    if (GLEW_FIND_REQUIRED)
-        message(FATAL_ERROR "Could NOT find GLEW")
-    endif (GLEW_FIND_REQUIRED)
-endif (GLEW_FOUND)
-
-#MARK_AS_ADVANCED( GLEW_FOUND )
+find_package_handle_standard_args(GLEW DEFAULT_MSG GLEW_INCLUDE_DIR GLEW_LIBRARY)
+mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)
 
