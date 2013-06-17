@@ -36,7 +36,8 @@ if(APPLE)
         find_package(SDL_mixer REQUIRED)
         set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
         set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-        set(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
+        set(CMAKE_CX_FLAGS "${CMAKE_CX_FLAGS} ${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
         list(APPEND pascal_flags "-k${DYLIB_SMPEG}" "-k${DYLIB_MIKMOD}")
     endif()
 
@@ -73,8 +74,14 @@ if(APPLE)
 
 endif(APPLE)
 
-if(WIN32)
+if(MINGW)
     #this flags prevents a few dll hell problems
-    set(CMAKE_C_FLAGS "-static-libgcc ${CMAKE_C_FLAGS}")
-endif(WIN32)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -static-libgcc ")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc ")
+endif(MINGW)
 
+if(WIN32)
+    if(NOT ${BUILD_SHARED_LIB})
+        message(FATAL_ERROR "Static linking is not supported on Windows")
+    endif()
+endif(WIN32)

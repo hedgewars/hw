@@ -28,9 +28,6 @@ end.
 {$ELSE}
 
 {$IFNDEF WIN32}
-    {$linklib avcodec}
-    {$linklib avformat}
-    {$linklib avutil}
     {$linklib avwrapper}
 {$ENDIF}
 
