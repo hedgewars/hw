@@ -8,7 +8,7 @@ import System.IO
 import qualified Data.Map as Map
 import Control.Exception(catch, IOException)
 import Data.Char
-
+import Prelude hiding (catch)
 
 -- comments are removed
 comment = choice [
