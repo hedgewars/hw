@@ -130,42 +130,22 @@ else()
                               )
 endif()
 
-if (${NOPASCAL})
+
+#build engine without freepascal
+if(${NOPASCAL})
     find_package(Clang)
     # Check LLVM/Clang version
-	if (CLANG_VERSION VERSION_LESS required_clang_version)
-		message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
-	else()
-		message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
-	endif()
+    if(CLANG_VERSION VERSION_LESS required_clang_version)
+	message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
+    else()
+        message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
+    endif()
 endif(${NOPASCAL})
 
 
-#Haskell compiler discovery (for server and engine in c)
-if((NOT NOSERVER) OR NOPASCAL)
-    if(GHC)
-        set(ghc_executable ${GHC})
-    else()
-        find_program(ghc_executable ghc)
-    endif()
-
-    if(ghc_executable)
-        exec_program(${ghc_executable} ARGS "-V" OUTPUT_VARIABLE ghc_version_long)
-        string(REGEX REPLACE ".*([0-9]+\\.[0-9]+\\.[0-9]+)" "\\1" ghc_version "${ghc_version_long}")
-        message(STATUS "Found GHC: ${ghc_executable} (version ${ghc_version})")
-    else()
-        message(STATUS "Could NOT find GHC, needed by gameServer and pas2c")
-    endif()
-endif()
-
-
-#check gameServer
-if((ghc_executable) AND (NOT NOSERVER) AND (NOT WEBGL))
-    set(HAVE_NETSERVER true)
+#server
+if(NOT NOSERVER)
     add_subdirectory(gameServer)
-else()
-    message(STATUS "Skipping gameServer target")
-    set(HAVE_NETSERVER false)
 endif()
 
 
@@ -234,11 +214,9 @@ find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
 
+#TODO: nowadays this could be merged inside hedgewars/CMakeLists.txt
 if(NOPASCAL)
-    if (NOT ghc_executable)
-        message(FATAL_ERROR "A Haskell compiler is required to build engine in C")
-    endif()
-    add_subdirectory(hedgewars/sdlmain_osx)
+    add_subdirectory(hedgewars/sdlmain)
     #pascal to c converter
     add_subdirectory(tools/pas2c)
     add_subdirectory(project_files/hwc)
