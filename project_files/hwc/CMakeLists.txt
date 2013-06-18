@@ -37,7 +37,10 @@ add_custom_command(OUTPUT ${engine_sources}
              -i "${CMAKE_SOURCE_DIR}/hedgewars"
              -o "${CMAKE_CURRENT_BINARY_DIR}"
              -a "${CMAKE_CURRENT_BINARY_DIR}"
-        DEPENDS pas2c ${engine_sources_pas}
+        DEPENDS pas2c
+                ${engine_sources_pas}
+                ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas
+                ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas
     )
 add_custom_target(engine_c DEPENDS ${engine_sources})
 
