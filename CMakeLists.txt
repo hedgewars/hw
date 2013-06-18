@@ -30,11 +30,8 @@ endif()
 option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
 option(ANDROID "Enable Android build (off)" OFF)
 
-if(UNIX AND NOT APPLE)
-    option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
-else()
-    option(NOAUTOUPDATE "Disable OS X Sparkle update checking" OFF)
-endif()
+option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
+option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 
 option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
 option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
@@ -94,6 +91,7 @@ else()
     set(CMAKE_CXX_FLAGS_RELEASE "")
     set(CMAKE_CXX_FLAGS_DEBUG "-Wall")
 endif()
+
 
 #parse additional parameters
 if(FPFLAGS)
