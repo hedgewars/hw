@@ -27,21 +27,23 @@ list(REMOVE_ITEM engine_sources_pas "${CMAKE_SOURCE_DIR}/hedgewars/hwLibrary.pas
 
 foreach(sourcefile ${engine_sources_pas})
     get_filename_component(sourcename ${sourcefile} NAME_WE) #drops .pas
-    set(engine_sources "${CMAKE_CURRENT_BINARY_DIR}/${sourcename}.c" ${engine_sources})
+    list(APPEND engine_sources "${CMAKE_CURRENT_BINARY_DIR}/${sourcename}.c")
+
+    #invoke pas2c on each pas files
+    add_custom_command(OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${sourcename}.c"
+                       COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
+                       ARGS -n "${sourcename}"
+                            -i "${CMAKE_SOURCE_DIR}/hedgewars"
+                            -o "${CMAKE_CURRENT_BINARY_DIR}"
+                            -a "${CMAKE_CURRENT_BINARY_DIR}"
+                       DEPENDS pas2c                                            #converter tool
+                               ${sourcefile}                                    #original pascal file
+                               ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas    #special, external functions
+                               ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas      #special, fpcrtl_ functions
+                      )
 endforeach()
 
-#invoke pas2c on our pas files
-add_custom_command(OUTPUT ${engine_sources}
-        COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-        ARGS -n "hwengine"
-             -i "${CMAKE_SOURCE_DIR}/hedgewars"
-             -o "${CMAKE_CURRENT_BINARY_DIR}"
-             -a "${CMAKE_CURRENT_BINARY_DIR}"
-        DEPENDS pas2c
-                ${engine_sources_pas}
-                ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas
-                ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas
-    )
+#wrap conversion for all source in this command
 add_custom_target(engine_c DEPENDS ${engine_sources})
 
 
