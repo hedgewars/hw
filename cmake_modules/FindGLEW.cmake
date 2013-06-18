@@ -34,6 +34,6 @@ find_library( GLEW_LIBRARY
             $ENV{PROGRAMFILES}/GLEW/lib
             DOC "The GLEW library")
 
-find_package_handle_standard_args(GLEW DEFAULT_MSG GLEW_INCLUDE_DIR GLEW_LIBRARY)
-mark_as_advanced(GLEW_INCLUDE_DIR GLEW_LIBRARY)
+find_package_handle_standard_args(GLEW DEFAULT_MSG GLEW_LIBRARY GLEW_INCLUDE_DIR)
+mark_as_advanced(GLEW_LIBRARY GLEW_INCLUDE_DIR)
 

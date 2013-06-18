@@ -116,7 +116,7 @@ if(APPLE)
         endif()
         list(LENGTH CMAKE_OSX_ARCHITECTURES num_of_archs)
         if(num_of_archs GREATER 1)
-            message(${WARNING} "Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one")
+            message("*** Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one ***")
         endif()
     elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
         #if that variable is not set check if we are on x86_64 and if so force it, else use default
@@ -125,7 +125,6 @@ if(APPLE)
 
     #on OSX we need to provide the SDL_main() function when building as executable
     if(NOT BUILD_ENGINE_LIBRARY)
-        add_subdirectory(sdlmain)
         list(APPEND HW_LINK_LIBS SDLmain)
         add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     endif()
