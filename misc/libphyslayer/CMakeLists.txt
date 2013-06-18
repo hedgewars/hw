@@ -4,8 +4,7 @@ include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})
 
-## extra functions needed by Hedgewars
-## TODO: maybe it's better to have them in a separate library?
+
 set(PHYSLAYER_SRCS
     physfsrwops.c
     physfslualoader.c
