@@ -84,8 +84,7 @@ uses LuaPas,
     SDLh,
     SysUtils,
     uIO,
-    uPhysFSLayer,
-    typinfo
+    uPhysFSLayer
     ;
 
 var luaState : Plua_State;
@@ -1292,49 +1291,49 @@ var statInfo : TStatInfoType;
 var i : LongInt;
 var color : shortstring;
 begin
-	statInfo := TStatInfoType(lua_tostring(L, 1));
-	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
-			and (statInfo <> siClanHealth)) then
+    statInfo := TStatInfoType(lua_tointeger(L, 1));
+    if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills)
+            and (statInfo <> siClanHealth)) then
         begin
         LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 2 parameters.');
         end
-    else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills) 
-			or (statInfo = siClanHealth)) then
-		begin
+    else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills)
+            or (statInfo = siClanHealth)) then
+        begin
         LuaError('Lua: Wrong number of parameters passed to SendStat! Expected 3 parameters.');
         end
     else
-		begin
-		if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
-			begin
-			// 3: team name
-			for i:= 0 to Pred(TeamsCount) do
-				begin
-				with TeamsArray[i]^ do
-					begin
-						if TeamName = lua_tostring(L, 3) then
-							begin
-							color := uUtils.IntToStr(Clan^.Color);
-							Break;
-							end
-					end				
-				end;
-			if (statInfo = siPlayerKills) then
-				begin
-					SendStat(siPlayerKills, color + ' ' +
-						lua_tostring(L, 2) + ' ' + TeamsArray[i]^.TeamName);
-				end
-			else if (statInfo = siClanHealth) then
-				begin
-					SendStat(siClanHealth, color + ' ' +
-						lua_tostring(L, 2));
-				end
-			end
-		else
-			begin
-			SendStat(statInfo,lua_tostring(L, 2));
-			end;
-		end;
+        begin
+        if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
+            begin
+            // 3: team name
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                with TeamsArray[i]^ do
+                    begin
+                        if TeamName = lua_tostring(L, 3) then
+                            begin
+                            color := uUtils.IntToStr(Clan^.Color);
+                            Break;
+                            end
+                    end
+                end;
+            if (statInfo = siPlayerKills) then
+                begin
+                    SendStat(siPlayerKills, color + ' ' +
+                        lua_tostring(L, 2) + ' ' + TeamsArray[i]^.TeamName);
+                end
+            else if (statInfo = siClanHealth) then
+                begin
+                    SendStat(siClanHealth, color + ' ' +
+                        lua_tostring(L, 2));
+                end
+            end
+        else
+            begin
+            SendStat(statInfo,lua_tostring(L, 2));
+            end;
+        end;
     lc_sendstat:= 0
 end;
 

@@ -146,11 +146,6 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
-if(${BUILD_ENGINE_LIBRARY})
-    add_definitions(-DHWLIBRARY=1)
-    set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    list(APPEND HW_LINK_LIBS ${hwlibname})
-endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
 
@@ -181,10 +176,10 @@ endif()
 if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
     set(console_access "WIN32")
 endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
-if(${LIBENGINE})
-    add_definitions(-DHWLIBRARY)
-    set(HW_LINK_LIBS hwengine ${HW_LINK_LIBS})
-    link_directories(${EXECUTABLE_OUTPUT_PATH})
+if(${BUILD_ENGINE_LIBRARY})
+    add_definitions(-DHWLIBRARY=1)
+    set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    list(APPEND HW_LINK_LIBS ${hwlibname})
 endif()
 
 add_executable(hedgewars ${console_access}

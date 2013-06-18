@@ -104,7 +104,7 @@ if(GHFLAGS)
     if(${allow_parse_args})
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
+        message("*** FPFLAGS and GHFLAGS are available only when using CMake >= 2.8 ***")
     endif()
 endif()
 
@@ -124,6 +124,7 @@ if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
+                              "-fno-warn-unused-do-bind"
                               )
 else()
     list(APPEND haskell_flags "-w" # no warnings
@@ -136,7 +137,7 @@ if(${NOPASCAL})
     find_package(Clang)
     # Check LLVM/Clang version
     if(CLANG_VERSION VERSION_LESS required_clang_version)
-	message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
+        message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
     else()
         message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
     endif()
@@ -214,9 +215,12 @@ find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
 
+if(NOT BUILD_ENGINE_LIBRARY AND APPLE)
+    add_subdirectory(hedgewars/sdlmain)
+endif()
+
 #TODO: nowadays this could be merged inside hedgewars/CMakeLists.txt
 if(NOPASCAL)
-    add_subdirectory(hedgewars/sdlmain)
     #pascal to c converter
     add_subdirectory(tools/pas2c)
     add_subdirectory(project_files/hwc)
@@ -229,7 +233,7 @@ if(WEBGL)
     #WEBGL deps
 else(WEBGL)
     #Android related build scripts
-    #TODO: when ANDROID, LIBENGINE should be set
+    #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
     if(ANDROID)
         add_subdirectory(project_files/Android-build)
     else(ANDROID)
