@@ -1,21 +1,36 @@
-# Load LLVM/Clang
-if (CLANG)
-    set(CLANG_EXECUTABLE ${CLANG})
-else()
-    find_program(CLANG_EXECUTABLE
+# - Try to find the Clang/LLVM executable
+# Once done this will define
+#
+#  CLANG_FOUND       - system has Clang
+#  CLANG_VERSION     - Clang version
+#  CLANG_EXECUTABLE  - Clang executable
+#
+# Copyright (c) 2013, Vittorio Giovara <vittorio.giovara@gmail.com>
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+
+find_program(CLANG_EXECUTABLE
         NAMES clang-mp-3.3 clang-mp-3.2 clang-mp-3.1 clang-mp-3.0 clang
         PATHS /opt/local/bin /usr/local/bin /usr/bin)
-endif()
 
-# Check LLVM/Clang version
 if (CLANG_EXECUTABLE)
-    exec_program(${CLANG_EXECUTABLE} ARGS "-v" OUTPUT_VARIABLE CLANG_VERSION_FULL)
+    execute_process(COMMAND ${CLANG_EXECUTABLE} --version
+                    OUTPUT_VARIABLE CLANG_VERSION_OUTPUT
+                    ERROR_VARIABLE CLANG_VERSION_ERROR
+                    RESULT_VARIABLE CLANG_VERSION_RESULT
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    )
 
-    string(REGEX MATCH "[0-9]+\\.[0-9]+" CLANG_VERSION_LONG "${CLANG_VERSION_FULL}")
-    string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" CLANG_VERSION "${CLANG_VERSION_LONG}")
-else()
-    message(FATAL_ERROR "No LLVM/Clang compiler found (required for engine_c target)")
+    if(${CLANG_VERSION_RESULT} EQUAL 0)
+        string(REGEX MATCH "[0-9]+\\.[0-9]+" CLANG_VERSION "${CLANG_VERSION_OUTPUT}")
+        string(REGEX REPLACE "([0-9]+\\.[0-9]+)" "\\1" CLANG_VERSION "${CLANG_VERSION}")
+    else()
+        message(SEND_ERROR "Command \"${CLANG_EXECUTABLE} --version\" failed with output: ${CLANG_VERSION_ERROR}")
+    endif()
 endif()
 
-set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
-set(CMAKE_CXX_COMPILER ${CLANG_EXECUTABLE})
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(Clang DEFAULT_MSG CLANG_EXECUTABLE CLANG_VERSION)
+mark_as_advanced(CLANG_VERSION)
+
