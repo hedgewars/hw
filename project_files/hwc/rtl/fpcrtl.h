@@ -65,6 +65,7 @@
 #define luapas_luaopen_table                luaopen_table
 
 #define sdlh_IMG_Load                       IMG_Load
+#define sdlh_IMG_Load_RW                    IMG_Load_RW
 
 #ifndef EMSCRIPTEN
 #define sdlh_Mix_AllocateChannels           Mix_AllocateChannels
@@ -77,6 +78,7 @@
 #define sdlh_Mix_HaltChannel                Mix_HaltChannel
 #define sdlh_Mix_HaltMusic                  Mix_HaltMusic
 #define sdlh_Mix_LoadMUS                    Mix_LoadMUS
+#define sdlh_Mix_LoadMUS_RW                 Mix_LoadMUS_RW
 #define sdlh_Mix_LoadWAV_RW                 Mix_LoadWAV_RW
 #define sdlh_Mix_OpenAudio                  Mix_OpenAudio
 #define sdlh_Mix_PauseMusic                 Mix_PauseMusic
@@ -96,6 +98,7 @@
 #define sdlh_Mix_HaltChannel                stub_Mix_HaltChannel
 #define sdlh_Mix_HaltMusic                  stub_Mix_HaltMusic
 #define sdlh_Mix_LoadMUS                    stub_Mix_LoadMUS
+#define sdlh_Mix_LoadMUS_RW                 stub_Mix_LoadMUS_RW
 #define sdlh_Mix_LoadWAV_RW                 stub_Mix_LoadWAV_RW
 #define sdlh_Mix_OpenAudio                  stub_Mix_OpenAudio
 #define sdlh_Mix_PauseMusic                 stub_Mix_PauseMusic
@@ -141,6 +144,11 @@
 #define sdlh_SDL_RWFromFile                 SDL_RWFromFile
 #define sdlh_SDL_SetColorKey                SDL_SetColorKey
 #define sdlh_SDL_SetVideoMode               SDL_SetVideoMode
+#define sdlh_SDL_WaitThread                 SDL_WaitThread
+#define sdlh_SDL_CreateMutex                SDL_CreateMutex
+#define sdlh_SDL_DestroyMutex               SDL_DestroyMutex
+#define sdlh_SDL_LockMutex                  SDL_mutexP
+#define sdlh_SDL_UnlockMutex                SDL_mutexV
 #ifndef EMSCRIPTEN
 #define sdlh_SDL_ShowCursor                 SDL_ShowCursor
 #else
@@ -165,6 +173,7 @@
 #define sdlh_SDLNet_TCP_Send                SDLNet_TCP_Send
 #define sdlh_TTF_Init                       TTF_Init
 #define sdlh_TTF_OpenFont                   TTF_OpenFont
+#define sdlh_TTF_OpenFontRW                 TTF_OpenFontRW
 #define sdlh_TTF_Quit                       TTF_Quit
 #define sdlh_TTF_RenderUTF8_Blended         TTF_RenderUTF8_Blended
 #define sdlh_TTF_RenderUTF8_Solid           TTF_RenderUTF8_Solid
