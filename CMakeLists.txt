@@ -54,7 +54,6 @@ set(CPACK_PACKAGE_VERSION_PATCH 20)
 set(HEDGEWARS_PROTO_VER 46)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
-set(required_clang_version 3.0)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
@@ -135,12 +134,13 @@ endif()
 #build engine without freepascal
 if(${NOPASCAL})
     find_package(Clang)
-    # Check LLVM/Clang version
-    if(CLANG_VERSION VERSION_LESS required_clang_version)
-        message(FATAL_ERROR "LLVM/Clang compiler required version is ${required_clang_version} but version ${CLANG_VERSION} was found!")
-    else()
-        message(STATUS "Found CLANG: ${CLANG_EXECUTABLE} (version ${CLANG_VERSION})")
+
+    if(CLANG_VERSION VERSION_LESS "3.0")
+        message(FATAL_ERROR "LLVM/Clang compiler required version is 3.0 but version ${CLANG_VERSION} was found!")
     endif()
+
+    set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
+    set(CMAKE_CXX_COMPILER ${CLANG_EXECUTABLE})
 endif(${NOPASCAL})
 
 
