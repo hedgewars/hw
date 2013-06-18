@@ -63,6 +63,7 @@
 #define luapas_luaopen_math                 luaopen_math
 #define luapas_luaopen_string               luaopen_string
 #define luapas_luaopen_table                luaopen_table
+#define luapas_lua_load                     lua_load
 
 #define sdlh_IMG_Load                       IMG_Load
 #define sdlh_IMG_Load_RW                    IMG_Load_RW

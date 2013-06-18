@@ -85,6 +85,7 @@ uses LuaPas,
     SysUtils,
     uIO,
     uPhysFSLayer
+{$IFDEF PAS2C}, hwpacksmounter{$ENDIF}
     ;
 
 var luaState : Plua_State;

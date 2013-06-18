@@ -144,63 +144,6 @@ glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
 end;
 
-
-procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture);
-var
-    rr: TSDL_Rect;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
-    //VertexBuffer, TextureBuffer: TVertexRect;
-    _l, _r, _t, _b: GLfloat;
-begin
-if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
-    exit;
-
-// do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
-    exit;
-if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
-    exit;
-
-rr.x:= X;
-rr.y:= Y;
-rr.w:= W;
-rr.h:= H;
-
-_l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
-_r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;
-_t:= r^.y / SourceTexture^.h * SourceTexture^.ry;
-_b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
-
-glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
-
-VertexBuffer[0].X:= X;
-VertexBuffer[0].Y:= Y;
-VertexBuffer[1].X:= rr.w + X;
-VertexBuffer[1].Y:= Y;
-VertexBuffer[2].X:= rr.w + X;
-VertexBuffer[2].Y:= rr.h + Y;
-VertexBuffer[3].X:= X;
-VertexBuffer[3].Y:= rr.h + Y;
-
-TextureBuffer[0].X:= _l;
-TextureBuffer[0].Y:= _t;
-TextureBuffer[1].X:= _r;
-TextureBuffer[1].Y:= _t;
-TextureBuffer[2].X:= _r;
-TextureBuffer[2].Y:= _b;
-TextureBuffer[3].X:= _l;
-TextureBuffer[3].Y:= _b;
-
-SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
-
-{$IFDEF GL2}
-UpdateModelviewProjection;
-{$ENDIF}
-
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-end;
-
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
 begin
     DrawTexture(X, Y, Texture, 1.0);
