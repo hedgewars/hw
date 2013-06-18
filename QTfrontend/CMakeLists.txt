@@ -57,6 +57,7 @@ include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
+include_directories(${LUA_INCLUDE_DIR}) #brought by physlayer hwpacksmounter.h
 
 
 if(UNIX)
@@ -208,6 +209,11 @@ if(WIN32 AND NOT UNIX)
         uuid
         )
 endif()
+
+if(CMAKE_CXX_COMPILER MATCHES "clang*")
+    list(APPEND HW_LINK_LIBS stdc++)
+endif()
+
 
 target_link_libraries(hedgewars ${HW_LINK_LIBS})
 
