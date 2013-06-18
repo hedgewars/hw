@@ -29,11 +29,11 @@ function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
-{ $IFNDEF PAS2C}
+{$IFNDEF PAS2C}
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
-{ $ENDIF}
+{$ENDIF}
 
 implementation
 uses uUtils, uVariables;
