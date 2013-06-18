@@ -29,16 +29,16 @@ function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
+{ $IFNDEF PAS2C}
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
+{ $ENDIF}
+
+implementation
+uses uUtils, uVariables;
 
 {$IFNDEF PAS2C}
-//apparently pas2c doesn't render the functions below if it finds 'implementation' first
-implementation
-uses uUtils, uVariables, sysutils;
-{$ENDIF}
-
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
@@ -52,10 +52,6 @@ function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 
 procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
-
-{$IFDEF PAS2C}
-implementation
-uses uUtils, uVariables;
 {$ENDIF}
 
 (*****************************************************************)
