@@ -275,22 +275,34 @@ begin
 end;
 
 function SelectTemplate: LongInt;
+var l: LongInt;
 begin
     if (cReducedQuality and rqLowRes) <> 0 then
         SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))]
     else
+    begin
+        if cTemplateFilter = 0 then
+            begin
+            l:= getRandom(GroupedTemplatesCount);
+            repeat
+                inc(cTemplateFilter);
+                dec(l, TemplateCounts[cTemplateFilter]);
+            until l < 0;
+            end else getRandom(1);
+        
         case cTemplateFilter of
-        0: SelectTemplate:= getrandom(Succ(High(EdgeTemplates)));
-        1: SelectTemplate:= SmallTemplates[getrandom(Succ(High(SmallTemplates)))];
-        2: SelectTemplate:= MediumTemplates[getrandom(Succ(High(MediumTemplates)))];
-        3: SelectTemplate:= LargeTemplates[getrandom(Succ(High(LargeTemplates)))];
-        4: SelectTemplate:= CavernTemplates[getrandom(Succ(High(CavernTemplates)))];
-        5: SelectTemplate:= WackyTemplates[getrandom(Succ(High(WackyTemplates)))];
+        0: OutError('Ask unC0Rr about what you did wrong', true);
+        1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+        2: SelectTemplate:= MediumTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+        3: SelectTemplate:= LargeTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+        4: SelectTemplate:= CavernTemplates[getrandom(TemplateCounts[cTemplateFilter])];
+        5: SelectTemplate:= WackyTemplates[getrandom(TemplateCounts[cTemplateFilter])];
 // For lua only!
         6: begin
            SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
            GetRandom(2) // burn 1
            end;
+        end
     end;
 
     WriteLnToConsole('Selected template #'+inttostr(SelectTemplate)+' using filter #'+inttostr(cTemplateFilter));
@@ -517,7 +529,7 @@ if tmpsurf = nil then
     tmpsurf:= LoadDataImage(ptMissionMaps, mapName + '/map', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
     end;
 // (bare) Sanity check. Considering possible LongInt comparisons as well as just how much system memoery it would take
-TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (tmpsurf^.w * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
+TryDo((tmpsurf^.w < $40000000) and (tmpsurf^.h < $40000000) and (QWord(tmpsurf^.w) * tmpsurf^.h < 6*1024*1024*1024), 'Map dimensions too big!', true);
 
 ResizeLand(tmpsurf^.w, tmpsurf^.h);
 LoadMapConfig;
