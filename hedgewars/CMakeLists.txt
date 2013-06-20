@@ -18,7 +18,6 @@ set(engine_sources
     uFloat.pas
     uConsts.pas
     LuaPas.pas
-    PNGh.pas
     uTypes.pas
     uUtils.pas
     uVariables.pas
@@ -140,6 +139,7 @@ endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
 if(PNG_FOUND)
+    list(APPEND engine_sources PNGh.pas)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
