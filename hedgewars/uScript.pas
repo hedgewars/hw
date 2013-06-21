@@ -231,8 +231,7 @@ function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
-        if (GameFlags and lua_tointeger(L, i)) = 0 then
-            GameFlags := GameFlags + LongWord(lua_tointeger(L, i));
+        GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
     ScriptSetInteger('GameFlags', GameFlags);
     lc_enablegameflags:= 0;
 end;
@@ -241,8 +240,7 @@ function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
-        if (GameFlags and lua_tointeger(L, i)) <> 0 then
-            GameFlags := GameFlags - LongWord(lua_tointeger(L, i));
+        GameFlags := GameFlags and not(LongWord(lua_tointeger(L, i)));
     ScriptSetInteger('GameFlags', GameFlags);
     lc_disablegameflags:= 0;
 end;

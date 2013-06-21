@@ -308,7 +308,7 @@ function Animate(steps)
       AnimSwitchHog(steps[animPos].args[1])
   end
 
-  SetInputMask(band(0xFFFFFFFF, bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon)))
+  SetInputMask(bnot(gmAnimate+gmAttack+gmDown+gmHJump+gmLeft+gmLJump+gmRight+gmSlot+gmSwitch+gmTimer+gmUp+gmWeapon))
   retVal = steps[animPos].func(unpack(steps[animPos].args))
   if (retVal ~= false) then
     animPos = animPos + 1
