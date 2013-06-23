@@ -279,10 +279,10 @@ QLayout * PageOptions::bodyLayoutDefinition()
             // make some min/max-consts, shared with engine?
             windowWidthEdit = new QSpinBox(groupGame);
             windowWidthEdit->setRange(640, 102400);
-            windowWidthEdit->setFixedSize(55, CBResolution->height());
+            windowWidthEdit->setFixedSize(60, CBResolution->height());
             windowHeightEdit = new QSpinBox(groupGame);
             windowHeightEdit->setRange(480, 102400);
-            windowHeightEdit->setFixedSize(55, CBResolution->height());
+            windowHeightEdit->setFixedSize(60, CBResolution->height());
 
             winResLayout->addWidget(windowWidthEdit, 0);
             winResLayout->addWidget(winLabelX, 0);
@@ -365,6 +365,39 @@ QLayout * PageOptions::bodyLayoutDefinition()
             WeaponTooltip = new QCheckBox(groupGame);
             WeaponTooltip->setText(QCheckBox::tr("Show ammo menu tooltips"));
             groupGame->layout()->addWidget(WeaponTooltip, 9, 0, 1, 2);
+
+            groupGame->addDivider();
+
+            lblTags = new QLabel(groupGame);
+            lblTags->setText(QLabel::tr("Displayed tags above hogs and translucent tags"));
+            groupGame->layout()->addWidget(lblTags, 11, 0, 1, 2);
+
+            tagsContainer = new QWidget();
+            QHBoxLayout * tagsLayout = new QHBoxLayout(tagsContainer);
+            tagsLayout->setSpacing(0);
+            groupGame->layout()->addWidget(tagsContainer, 12, 0, 1, 2);
+
+            CBTeamTag = new QCheckBox(groupGame);
+            CBTeamTag->setText(QCheckBox::tr("Team"));
+            CBTeamTag->setWhatsThis(QCheckBox::tr("Enable team tags by default"));
+
+            CBHogTag = new QCheckBox(groupGame);
+            CBHogTag->setText(QCheckBox::tr("Hog"));
+            CBHogTag->setWhatsThis(QCheckBox::tr("Enable hedgehog tags by default"));
+
+            CBHealthTag = new QCheckBox(groupGame);
+            CBHealthTag->setText(QCheckBox::tr("Health"));
+            CBHealthTag->setWhatsThis(QCheckBox::tr("Enable health tags by default"));
+
+            CBTagOpacity = new QCheckBox(groupGame);
+            CBTagOpacity->setText(QCheckBox::tr("Translucent"));
+            CBTagOpacity->setWhatsThis(QCheckBox::tr("Enable translucent tags by default"));
+
+            tagsLayout->addWidget(CBTeamTag, 0);
+            tagsLayout->addWidget(CBHogTag, 0);
+            tagsLayout->addWidget(CBHealthTag, 0);
+            tagsLayout->addWidget(CBTagOpacity, 0);
+            tagsLayout->addStretch(1); 
         }
 
         { // group: frontend

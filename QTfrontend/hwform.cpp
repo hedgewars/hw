@@ -2009,7 +2009,11 @@ QString HWForm::getDemoArguments()
                    + (config->isShowFPSEnabled() ? " --showfps" : "")
                    + (config->isAltDamageEnabled() ? " --altdmg" : "")
                    + " --frame-interval " + QString::number(config->timerInterval())
-                   + " --raw-quality " + QString::number(config->translateQuality()));
+                   + " --raw-quality " + QString::number(config->translateQuality()))
+                   + (!config->Form->ui.pageOptions->CBTeamTag->isChecked() ? " --no-teamtag" : "")
+                   + (!config->Form->ui.pageOptions->CBHogTag->isChecked() ? " --no-hogtag" : "")
+                   + (!config->Form->ui.pageOptions->CBHealthTag->isChecked() ? " --no-healthtag" : "")
+                   + (config->Form->ui.pageOptions->CBTagOpacity->isChecked() ? " --translucent-tags" : "");
 }
 
 void HWForm::AssociateFiles()

@@ -57,6 +57,10 @@ begin
     WriteLn(stdout, ' --fullscreen');
     WriteLn(stdout, ' --showfps');
     WriteLn(stdout, ' --altdmg');
+    WriteLn(stdout, ' --no-teamtag');
+    WriteLn(stdout, ' --no-hogtag');
+    WriteLn(stdout, ' --no-healthtag');
+    WriteLn(stdout, ' --translucent-tags');
     WriteLn(stdout, ' --stats-only');
     WriteLn(stdout, ' --help');
     WriteLn(stdout, '');
@@ -168,14 +172,14 @@ const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-h
       audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
       otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
       mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..14] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality');
-      reallyAll: array[0..30] of shortstring = (
+      allArray: Array [1..18] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+      reallyAll: array[0..34] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help');
+  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -220,6 +224,10 @@ begin
         {--stats-only}          28 : statsOnlyGame();
         {--gci}                 29 : GciEasterEgg();
         {--help}                30 : DisplayUsage();
+        {--no-teamtag}          31 : cTagsMask := cTagsMask and not htTeamName;
+        {--no-hogtag}           32 : cTagsMask := cTagsMask and not htName;
+        {--no-healthtag}        33 : cTagsMask := cTagsMask and not htHealth;
+        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent 
     else
         begin
         //Asusme the first "non parameter" is the replay file, anything else is invalid
@@ -255,7 +263,7 @@ begin
         isValid:= (cmd<>'--depth');
 
         // check if the parameter is a boolean one
-        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg');
+        isBool:= (cmd = '--nomusic') or (cmd = '--nosound') or (cmd = '--fullscreen') or (cmd = '--showfps') or (cmd = '--altdmg') or (cmd = '--no-teamtag') or (cmd = '--no-hogtag') or (cmd = '--no-healthtag') or (cmd = '--translucent-tags');
         if isBool and (arg='0') then
             isValid:= false;
         if (cmd='--nomusic') or (cmd='--nosound') then

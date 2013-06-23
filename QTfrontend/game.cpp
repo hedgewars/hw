@@ -17,6 +17,7 @@
  */
 
 #include <QString>
+#include <QCheckBox>
 #include <QByteArray>
 #include <QUuid>
 #include <QColor>
@@ -414,6 +415,15 @@ QStringList HWGame::getArguments()
         arguments << "--nick";
         arguments << nick;
     }
+
+    if (!config->Form->ui.pageOptions->CBTeamTag->isChecked())
+        arguments << "--no-teamtag";
+    if (!config->Form->ui.pageOptions->CBHogTag->isChecked())
+        arguments << "--no-hogtag";
+    if (!config->Form->ui.pageOptions->CBHealthTag->isChecked())
+        arguments << "--no-healthtag";
+    if (config->Form->ui.pageOptions->CBTagOpacity->isChecked())
+        arguments << "--translucent-tags";
 
     return arguments;
 }

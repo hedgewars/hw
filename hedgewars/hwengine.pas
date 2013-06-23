@@ -401,7 +401,7 @@ begin
 
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-    ParseCommand('rotmask', true);
+    //ParseCommand('rotmask', true);
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -533,6 +533,7 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 begin
     preInitEverything();
+    cTagsMask:= htTeamName or htName or htHealth; // this one doesn't fit nicely w/ reset of other variables. suggestions welcome
     GetParams();
 
     if GameType = gmtLandPreview then
