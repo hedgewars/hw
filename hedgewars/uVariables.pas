@@ -2466,7 +2466,6 @@ begin
     cWaterRise          := 47;
     cHealthDecrease     := 5;
 
-    cTagsMask       := 0;
     InitStepsFlags  := 0;
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
