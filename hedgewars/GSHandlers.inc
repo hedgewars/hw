@@ -5214,9 +5214,9 @@ begin
                                     end
                                 end;
                             PlaySound(sndHogFreeze);
-                            iter^.State:= iter^.State or gstFrozen;
                             if iter^.Kind = gtMine then // dud mine block
                                 begin
+                                iter^.State:= iter^.State or gstFrozen;
                                 vg:= AddVisualGear(hwRound(iter^.X) - 4  + Random(8), hwRound(iter^.Y) - 4 - Random(4), vgtSmoke);
                                 if vg <> nil then
                                     vg^.Scale:= 0.5;
@@ -5228,10 +5228,14 @@ begin
                             else if iter^.Kind = gtCase then
                                 begin
                                 DeleteCI(iter);
+                                iter^.State:= iter^.State or gstFrozen;
                                 AddGearCI(iter)
                                 end
                             else // gtExplosives
+                                begin
+                                iter^.State:= iter^.State or gstFrozen;
                                 iter^.Health:= iter^.Health + cBarrelHealth
+                                end
                             end;
                         iter:= iter^.NextGear
                         end;
