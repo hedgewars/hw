@@ -77,6 +77,7 @@ goals = {
 }
 -----------------------------Animations--------------------------------
 function Skipanim(anim)
+WriteLnToConsole("SWITCH HOG")
   AnimSwitchHog(youngh)
   if goals[anim] ~= nil then
     ShowMission(unpack(goals[anim]))
@@ -111,9 +112,11 @@ function AnimationSetup()
   table.insert(elderDamagedAnim, {func = AnimWait, args = {elderh, 500}, skipFunc = Skipanim, skipArgs = elderDamagedAnim})
   table.insert(elderDamagedAnim, {func = AnimSay, args = {elderh, loc("Violence is not the answer to your problems!"), SAY_SAY, 3000}})
   table.insert(elderDamagedAnim, {func = AnimGearWait, args = {youngh, 500}})
-  
+  WriteLnToConsole("START DIALOG")
+  WriteLnToConsole("END GAME START")
   AddSkipFunction(startDialogue, Skipanim, {startDialogue})
-  table.insert(startDialogue, {func = AnimWait, args = {youngh, 3500}, skipFunc = Skipanim, skipArgs = startDialogue})
+  --table.insert(startDialogue, {func = AnimWait, args = {youngh, 3500}, skipFunc = Skipanim, skipArgs = startDialogue})
+  table.insert(startDialogue, {func = WriteLnToConsole, args = {"FIRST PRINT"}})
   table.insert(startDialogue, {func = AnimCaption, args = {youngh, loc("Once upon a time, on an island with great natural resources, lived two tribes in heated conflict..."),  5000}})
   table.insert(startDialogue, {func = AnimCaption, args = {youngh, loc("One tribe was peaceful, spending their time hunting and training, enjoying the small pleasures of life..."), 5000}})
   table.insert(startDialogue, {func = AnimCaption, args = {youngh, loc("The other one were all cannibals, spending their time eating the organs of fellow hedgehogs..."), 5000}})
@@ -125,7 +128,7 @@ function AnimationSetup()
   table.insert(startDialogue, {func = AnimTurn, args = {princess, "Right"}})
   table.insert(startDialogue, {func = AnimSwitchHog, args = {youngh}})
   table.insert(startDialogue, {func = AnimShowMission, args = {youngh, loc("First Blood"), loc("First Steps"), loc("Press [Left] or [Right] to move around, [Enter] to jump"), 1, 4000}}) 
-
+WriteLnToConsole("START DIALOG END")
   AddSkipFunction(onShroomAnim, SkipOnShroom, {onShroomAnim})
   table.insert(onShroomAnim, {func = AnimSay, args = {elderh, loc("I can see you have been training diligently."), SAY_SAY, 4000}, skipFunc = Skipanim, skipArgs = onShroomAnim})
   table.insert(onShroomAnim, {func = AnimSay, args = {elderh, loc("The wind whispers that you are ready to become familiar with tools, now..."), SAY_SAY, 4000}})
@@ -635,6 +638,7 @@ function onGameInit()
 end
 
 function onGameStart()
+
   progress = tonumber(GetCampaignVar("Progress"))
   TurnTimeLeft = -1
   FollowGear(youngh)
@@ -705,6 +709,7 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
+WriteLnToConsole("NEW TURN")
   if CurrentHedgehog == cannibal and cannibalVisible == false then
     SetState(cannibal, gstInvisible)
   end
