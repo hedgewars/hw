@@ -1041,13 +1041,17 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
+WriteLnToConsole("ON NEW TURN")
   if AnimInProgress() then
+WriteLnToConsole("ON NEW TURN 1")
     TurnTimeLeft = -1
   elseif stage == endStage and CurrentHedgehog ~= leaks then
+WriteLnToConsole("ON NEW TURN 2")
     AnimSwitchHog(leaks)
     SetGearMessage(leaks, 0)
     TurnTimeLeft = -1
   elseif GetHogTeamName(CurrentHedgehog) ~= loc("Natives") then
+WriteLnToConsole("ON NEW TURN 3")
     for i = 1, 4 do
       if cannibalDead[i] ~= true then
         if GetX(cannibals[i]) < GetX(leaks) then
@@ -1060,6 +1064,7 @@ function onNewTurn()
     SetInputMask(band(0xFFFFFFFF, bnot(gmLeft + gmRight + gmLJump + gmHJump)))
     TurnTimeLeft = 20000
   else
+WriteLnToConsole("ON NEW TURN 4")
     SetInputMask(0xFFFFFFFF)
     TurnsLeft = TurnsLeft - 1
   end
