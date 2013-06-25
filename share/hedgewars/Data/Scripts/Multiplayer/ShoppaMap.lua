@@ -31,7 +31,9 @@ end
 -- 700x700 for object space
 function DrawStar(x, y, d, f)
 -- default scale is 700x700 or so
-    s = 700
+    local s = 700
+    local i = 0
+    local j = 0
     if not(d == 1) then s = div(s,d) end
     if NoOverlap(x,y,s,s) then
         AddCollision(x,y,s,s)
@@ -158,7 +160,7 @@ function DrawCircle(x, y, w)
 end
 
 function DrawCrescent(x, y, w, s)
-    b = div(w*(GetRandom(4)+1)*10+6,6)
+    local b = div(w*(GetRandom(4)+1)*10+6,6)
     
     if NoOverlap(x,y,w*10+6,w*10+6) then
         AddCollision(x,y,w*10+6,w*10+6)
@@ -178,8 +180,9 @@ function DrawCrescent(x, y, w, s)
 end
 
 function DrawCones(x,w,h,c)
-    y = 2048-h
-    hw = div(w,2)
+    local i = 0
+    local y = 2048-h
+    local hw = div(w,2)
     if NoOverlap(x+div(w*c,2),y+div(h,2),w*c,h) then
         AddCollision(x+div(w*c,2),y+div(h,2),w*c,h)
         x = x + hw
@@ -204,6 +207,10 @@ function DrawCones(x,w,h,c)
 end
 
 function DrawPlateau(x,y,l,t,b)
+    local bo = 0
+    local to = 0
+    local bSucc = false
+    local tSucc = false
     if NoOverlapXY(x-28,y-28,x+l+28,y+l+28) then
         AddPoint(x,y,5)
         AddPoint(x+l,y)
@@ -299,13 +306,15 @@ function NoOverlap(x,y,w,h)
     h = h
     x = x-div(w,2)
     y = y-div(h,2)
-    x2 = x+w
-    y2 = y+h
-    return NoOverlapXY(x,y,x2,y2)
+    return NoOverlapXY(x,y,x+w,y+h)
 end
 function NoOverlapXY(x,y,x2,y2)
-    i=1
-    l=table.getn(ObjectList)
+    local i = 1
+    local l = table.getn(ObjectList)
+    local ox = 0
+    local oy = 0
+    local ox2 = 0
+    local oy2 = 0
     while i<=l do
         ox = ObjectList[i][1]
         oy = ObjectList[i][2]
@@ -322,8 +331,12 @@ function NoOverlapXY(x,y,x2,y2)
 end
 
 function dbg()
-    i=1
-    l=table.getn(ObjectList)
+    local i = 1
+    local l = table.getn(ObjectList)
+    local ox = 0
+    local oy = 0
+    local ox2 = 0
+    local oy2 = 0
     while i<=l do
         ox = ObjectList[i][1]
         oy = ObjectList[i][2]
@@ -342,8 +355,14 @@ end
 function onGameInit()
     MapGen = 2
     TemplateFilter = 0
-    TotGen = 0
-    Tries = 0
+    local TotGen = 0
+    local Tries = 0
+    local i = 0
+    local l = 0
+    local x = 0
+    local y = 0
+    local w = 0
+    local h = 0 
     if band(GameFlags,gfBottomBorder) == 0 and GetRandom(2) == 0 then
         AddPoint(-50,2010,7)
         AddPoint(4150,2010)
