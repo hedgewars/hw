@@ -9,6 +9,9 @@
 -- Save and Load All Check Points
 -- Save hero health
 -- Decide and implement if hero will use gas bombs...
+-- ofc add custom stats page
+-- PROBLEM : What if one makes a bad choice and wants to replay it map, how to reset?
+-- POSSIBLE SOLUTIONS: In game function keys, frontend button...
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -26,6 +29,8 @@ local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 local dialog04 = {}
+local dialog05 = {}
+local dialog06 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate on top of the column").."|"..loc("Use the sleep gas bomb if the guards spot you!"), 1, 4500},
@@ -105,9 +110,17 @@ function onGameInit()
 	end
 	-- do checkpoint stuff needed before game starts
 	if checkPointReached == 1 then
-		-- do nothing
+		-- Start of the game
 	elseif checkPointReached == 2 then
-		AnimSetGearPosition(hero.gear, saucerX, saucerY)	
+		-- Hero on the column, just took space ship unnoticed
+		AnimSetGearPosition(hero.gear, saucerX, saucerY)
+	elseif checkPointReached == 3 then
+		-- Hero near column, without space ship unnoticed
+	elseif checkPointReached == 4 then
+		-- Hero visited moon for fuels
+		AnimSetGearPosition(hero.gear, 1110, 850)
+	elseif checkPointReached == 5 then
+		-- Hero has visited a planet, he has plenty of fuels and can change planet
 	end
 	
 	AnimInit()
@@ -139,6 +152,26 @@ function onGameStart()
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amJetpack, 1)
 		AddAnim(dialog02)
+	elseif checkPointReached == 3 then
+		-- Hero near column, without space ship unnoticed
+	elseif checkPointReached == 4 then
+		-- Hero visited moon for fuels
+		AddAnim(dialog05)
+	elseif checkPointReached == 5 then
+		-- Hero has visited a planet, he has plenty of fuels and can change planet
+	end
+	-- always check for landings
+	if GetCampaignVar("Planet") ~= "moon" then
+		AddEvent(onMoonLanding, {hero.gear}, moonLanding, {hero.gear}, 0)
+	end
+	if GetCampaignVar("Planet") ~= "desertPlanet" then
+		AddEvent(onDesertPlanetLanding, {hero.gear}, desertPlanetLanding, {hero.gear}, 0)
+	end	
+	if GetCampaignVar("Planet") ~= "fruitPlanet" then
+		AddEvent(onFruitPlanetLanding, {hero.gear}, fruitPlanetLanding, {hero.gear}, 0)
+	end
+	if GetCampaignVar("Planet") ~= "icePlanet" then
+		AddEvent(onIcePlanetLanding, {hero.gear}, icePlanetLanding, {hero.gear}, 0)
 	end
 end
 
@@ -203,6 +236,34 @@ function onHeroOutOfGuardSight(gear)
 	end
 	return false
 end
+--
+function onMoonLanding(gear)
+	if GetX(gear) > 1010 and GetX(gear) < 1220  and GetY(gear) < 1300 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onFruitPlanetLanding(gear)
+	if GetX(gear) > 2240 and GetX(gear) < 2540  and GetY(gear) < 1100 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onDesertPlanetLanding(gear)
+	if GetX(gear) > 3568 and GetX(gear) < 4052  and GetY(gear) < 500 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onIcePlanetLanding(gear)
+	if GetX(gear) > 1330 and GetX(gear) < 1650  and GetY(gear) < 500 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
 
 -------------- OUTCOMES ------------------
 
@@ -228,6 +289,32 @@ function heroOutOfGuardSight(gear)
 	AddAnim(dialog04)
 end
 
+function moonLanding(gear)
+	WriteLnToConsole("MOON LANDING, HOORAY!")
+	AnimCaption(hero.gear,loc("Welcome to the moon!"))
+	SaveCampaignVar("CosmosCheckPoint", "4")
+	SaveCampaignVar("Planet", "moon")
+	EndGame()
+end
+
+function fruitPlanetLanding(gear)
+	if checkPointReached < 5 then
+		AddAnim(dialog06)
+	end
+end
+
+function desertPlanetLanding(gear)
+	if checkPointReached < 5 then
+		AddAnim(dialog06)
+	end
+end
+
+function icePlanetLanding(gear)
+	if checkPointReached < 5 then
+		AddAnim(dialog06)
+	end
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -238,6 +325,8 @@ function Skipanim(anim)
 		AnimSwitchHog(hero.gear)
 	elseif anim == dialog03 then
 		startCombat()
+	elseif anim == dialog05 or anim == dialog06 then
+		EndGame()
 	end
 end
 
@@ -279,10 +368,20 @@ function AnimationSetup()
 	table.insert(dialog04, {func = AnimCaption, args = {guard1.gear, loc("You are out of danger, time to go to the moon!"),  4000}})
 	table.insert(dialog04, {func = AnimSay, args = {guard1.gear, loc("I guess we lost him!"), SAY_SAY, 3000}})
 	table.insert(dialog04, {func = AnimSay, args = {guard2.gear, loc("We should better report this and continue our watch!"), SAY_SAY, 5000}})
-	table.insert(dialog04, {func = AnimSwitchHog, args = {hero.gear}})	
+	table.insert(dialog04, {func = AnimSwitchHog, args = {hero.gear}})
+	-- DIALOG 05 - Hero returned from moon without fuels
+	AddSkipFunction(dialog05, Skipanim, {dialog05})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("I guess I can't go far without fuels!"), SAY_THINK, 6000}})
+	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Go to go back"), SAY_THINK, 2000}})
+	table.insert(dialog05, {func = EndGame, args = {hero.gear}})
+	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
+	AddSkipFunction(dialog06, Skipanim, {dialog06})
+	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
+	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I run out of fuels..."), SAY_THINK, 3000}})
+	table.insert(dialog06, {func = EndGame, args = {hero.gear}})
 end
 
-------------------- custom animation functions --------------------------
+------------------- custom "animation" functions --------------------------
 
 function startCombat()
 	-- use this so guard2 will gain control
