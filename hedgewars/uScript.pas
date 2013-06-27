@@ -84,6 +84,7 @@ uses LuaPas,
     SDLh,
     SysUtils, 
     uIO,
+    uVisualGearsList,
     uPhysFSLayer,
     typinfo
     ;
