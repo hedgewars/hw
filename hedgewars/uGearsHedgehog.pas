@@ -800,7 +800,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         MakeHedgehogsStep(Gear);
 
     SetAllHHToActive(false);
-    AddGearCI(Gear)
+    AddCI(Gear)
     end
 end;
 
@@ -1145,7 +1145,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 
     if ((HHGear^.State and (gstMoving or gstDrowning)) = 0) then
         begin
-        AddGearCI(HHGear);
+        AddCI(HHGear);
         if wasJumping then
             GHStepTicks:= 410
         else
@@ -1227,7 +1227,7 @@ else
         begin
         Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
         if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
-        AddGearCI(Gear);
+        AddCI(Gear);
         exit
         end
     else dec(Gear^.Timer)

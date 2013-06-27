@@ -49,7 +49,7 @@ function  GearByUID(uid : Longword) : PGear;
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{$ENDIF}
-    uLocale, uAI, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
+    uLocale, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
     , uVisualGearsList, uGearsHandlersMess;

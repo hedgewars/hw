@@ -1543,7 +1543,7 @@ begin
         doStepFallingGear(Gear);
         if (Gear^.State and gstMoving) = 0 then
             begin
-            AddGearCI(Gear);
+            AddCI(Gear);
             Gear^.dX := _0;
             Gear^.dY := _0
             end;
@@ -1628,7 +1628,7 @@ begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
             Gear^.dY:= _0;
-            AddGearCI(Gear);
+            AddCI(Gear);
             end;
         end
     else
@@ -1727,7 +1727,7 @@ begin
     else
         begin
         Gear^.State := Gear^.State or gsttmpFlag;
-        AddGearCI(Gear)
+        AddCI(Gear)
         end;
 
 (*
@@ -1743,7 +1743,7 @@ Attempt to make a barrel knock itself over an edge.  Would need more checks to a
             else if (((y+1 and LAND_HEIGHT_MASK)) = 0) and (((x-(Gear^.Radius-2)) and LAND_WIDTH_MASK) = 0) and (Land[y+1, x-(Gear^.Radius-2)] = 0) then
                 Gear^.dX:= _0_08;
             end;
-    if Gear^.dX.QWordValue = 0 then AddGearCI(Gear)
+    if Gear^.dX.QWordValue = 0 then AddCI(Gear)
     end; *)
 
     if not Gear^.dY.isNegative and (Gear^.dY < _0_001) and (TestCollisionYwithGear(Gear, 1) <> 0) then
@@ -1919,7 +1919,7 @@ begin
         end;
 
     if (Gear^.dY.QWordValue = 0) then
-        AddGearCI(Gear)
+        AddCI(Gear)
     else if (Gear^.dY.QWordValue <> 0) then
         DeleteCI(Gear)
 end;
@@ -4932,7 +4932,7 @@ begin
 
     if (Gear^.State and gstMoving) <> 0 then
         begin
-        AddGearCI(Gear);
+        AddCI(Gear);
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving);
@@ -4943,7 +4943,7 @@ begin
 
     if Gear^.Pos = 1 then
         begin
-        AddGearCI(Gear);
+        AddCI(Gear);
         AfterAttack;
         if Gear = CurAmmoGear then
             CurAmmoGear:= nil;
@@ -4960,7 +4960,7 @@ begin
                 begin
                 DeleteCI(Gear);
                 Gear^.Y:= Gear^.Y - _0_5;
-                AddGearCI(Gear);
+                AddCI(Gear);
                 end;
             inc(Gear^.Timer);
             end;
@@ -4975,7 +4975,7 @@ begin
                 begin
                 DeleteCI(Gear);
                 Gear^.Y:= Gear^.Y - _0_5;
-                AddGearCI(Gear);
+                AddCI(Gear);
                 end;
             inc(Gear^.Timer);
             end
@@ -5349,7 +5349,7 @@ begin
                                 begin
                                 DeleteCI(iter);
                                 iter^.State:= iter^.State or gstFrozen;
-                                AddGearCI(iter)
+                                AddCI(iter)
                                 end
                             else // gtExplosives
                                 begin
@@ -5614,7 +5614,7 @@ begin
         if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Health:= 0;
         Gear^.Timer:= 500;
-        AddGearCI(Gear)
+        AddCI(Gear)
         end
     else if GameTicks and $3F = 0 then
         begin

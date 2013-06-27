@@ -33,7 +33,7 @@ type PGearArray = ^TGearArray;
 procedure initModule;
 procedure freeModule;
 
-procedure AddGearCI(Gear: PGear);
+procedure AddCI(Gear: PGear);
 procedure DeleteCI(Gear: PGear);
 
 function  CheckGearsCollision(Gear: PGear): PGearArray;
@@ -72,7 +72,7 @@ var Count: Longword;
     cinfos: array[0..MAXRECTSINDEX] of TCollisionEntry;
     ga: TGearArray;
 
-procedure AddGearCI(Gear: PGear);
+procedure AddCI(Gear: PGear);
 var t: PGear;
 begin
 if Gear^.CollisionIndex >= 0 then
