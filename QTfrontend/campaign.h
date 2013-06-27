@@ -27,5 +27,6 @@ unsigned int getCampProgress(QString & teamName, QString & campName);
 QString getCampaignScript(QString campaign, unsigned int mNum);
 QString getCampaignImage(QString campaign, unsigned int mNum);
 QString getCampaignMissionName(QString campaign, unsigned int mNum);
+QHash<QString,QString> getUnlockedMissions2(QString & campaignName, QString & teamName);
 
 #endif

@@ -1896,7 +1896,6 @@ void HWForm::InitCampaignPage()
 void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
-
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBMission->clear();
 
@@ -1906,6 +1905,7 @@ void HWForm::UpdateCampaignPage(int index)
     unsigned int n = missionEntries.count();
     unsigned int m = getCampProgress(tName, campaignName);
 
+	getUnlockedMissions2(campaignName, tName);
     // if the campaign name changes update the campaignMissionDescriptions list
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
