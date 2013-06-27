@@ -1489,7 +1489,7 @@ begin
             gear^.X:= int2hwfloat(x);
             gear^.Y:= int2hwfloat(y);
             if col then
-                AddGearCI(gear);
+                AddCI(gear);
             SetAllToActive
             end
         end;
