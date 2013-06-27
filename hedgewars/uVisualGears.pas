@@ -29,7 +29,7 @@ unit uVisualGears;
  * E.g.: background flakes, visual effects: explosion, smoke trails, etc.
  *)
 interface
-uses uConsts, uFloat, GLunit, uTypes, uWorld;
+uses uConsts, GLunit, uTypes;
 
 procedure initModule;
 procedure freeModule;
@@ -47,8 +47,8 @@ procedure ChangeToSDFlakes;
 procedure KickFlakes(Radius, X, Y: LongInt);
 
 implementation
-uses uSound, uVariables, uTextures, uRender, Math, uRenderUtils, uStore, uUtils
-    , uVisualGearsHandlers, uVisualGearsList;
+uses uVariables, uRender, Math, uRenderUtils, uStore, uUtils
+    , uVisualGearsList;
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
 var s: shortstring;

@@ -33,8 +33,8 @@ procedure CheckIce(Gear: PGear); inline;
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
-    uCommands, uLocale, uUtils, uVisualGears, uStats, uIO, uScript,
-    uGearsList, uGears, uCollisions, uRandom, uStore, uTeams,
+    uCommands, uLocale, uUtils, uStats, uIO, uScript,
+    uGearsList, uCollisions, uRandom, uStore, uTeams,
     uGearsUtils, uVisualGearsList;
 
 var GHStepTicks: LongWord = 0;

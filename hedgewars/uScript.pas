@@ -58,7 +58,6 @@ implementation
 uses LuaPas,
     uConsole,
     uConsts,
-    uVisualGears,
     uGears,
     uGearsList,
     uGearsUtils,
@@ -85,6 +84,7 @@ uses LuaPas,
     SysUtils, 
     uIO,
     uVisualGearsList,
+    uGearsHandlersMess,
     uPhysFSLayer,
     typinfo
     ;

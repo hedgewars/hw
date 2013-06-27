@@ -73,9 +73,6 @@ set(engine_sources
     uScript.pas
     hwengine.pas
 
-    GSHandlers.inc
-    VGSHandlers.inc
-    ArgParsers.inc
     options.inc
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
