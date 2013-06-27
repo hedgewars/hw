@@ -72,20 +72,23 @@ endif (CMAKE_BUILD_TYPE)
 #perform safe check that enable/disable compilation features
 include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
 
-#set default flags values for all projects (unless MINIMAL_FLAGS is true)
-if(NOT ${MINIMAL_FLAGS})
-    set(CMAKE_C_FLAGS "-pipe ${CMAKE_C_FLAGS}")
-    set(CMAKE_C_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_C_FLAGS_RELEASE}")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall -O0 -g ${CMAKE_C_FLAGS_DEBUG}")
-    set(CMAKE_CXX_FLAGS "-pipe ${CMAKE_CXX_FLAGS}")
-    set(CMAKE_CXX_FLAGS_RELEASE "-w -Os -fomit-frame-pointer ${CMAKE_CXX_FLAGS_RELEASE}")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall -O0 -g ${CMAKE_CXX_FLAGS_DEBUG}")
-else()
-    #CMake adds a lot of additional configuration flags, so let's clear them up
-    set(CMAKE_C_FLAGS_RELEASE "")
-    set(CMAKE_C_FLAGS_DEBUG "-Wall")
-    set(CMAKE_CXX_FLAGS_RELEASE "")
-    set(CMAKE_CXX_FLAGS_DEBUG "-Wall")
+#set default compiler flags
+add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_C_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
+add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
+
+#CMake adds a lot of additional configuration flags, so let's clear them up
+if(${MINIMAL_FLAGS})
+    unset(CMAKE_C_FLAGS_RELEASE)
+    unset(CMAKE_C_FLAGS_DEBUG)
+    unset(CMAKE_CXX_FLAGS_RELEASE)
+    unset(CMAKE_CXX_FLAGS_DEBUG)
 endif()
 
 
@@ -94,22 +97,14 @@ if(FPFLAGS)
     add_flag_prepend(CMAKE_Pascal_FLAGS ${FPFLAGS})
 endif()
 if(GHFLAGS)
-    if(${allow_parse_args})
+    if(${CMAKE_VERSION} VERSION_GREATER 2.6)
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
         message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 
-
-list(APPEND haskell_flags ${ghflags_parsed} # user flags
-                 "-O2"                      # optimise for faster code
-                 )
-
-#-vm4079,4080,4081
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
-add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
+list(APPEND haskell_flags ${ghflags_parsed} "-O2")
 
 #get BUILD_TYPE and enable/disable optimisation
 message(STATUS "Using ${CMAKE_BUILD_TYPE} configuration")
