@@ -1926,12 +1926,12 @@ begin
         end
     else
         begin
-        if sticky then
+        if sticky and (GameTicks and $F = 0) then
             begin
             Gear^.Radius := 7;
             tdX:= Gear^.dX;
             tdY:= Gear^.dY;
-            Gear^.dX.QWordValue:= 214748365;
+            Gear^.dX.QWordValue:= 120000000;
             Gear^.dY.QWordValue:= 429496730;
             Gear^.dX.isNegative:= getrandom(2)<>1;
             Gear^.dY.isNegative:= true;
