@@ -1,4 +1,4 @@
-(*
+ (*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uRandom, uFloat, uStats, uVisualGears,
+uses uConsts, uInputHandler, uRandom, uFloat, uStats, 
      uCollisions, GLunit, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList
+    uGearsUtils, uGearsList, uVisualGearsList
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
