@@ -24,6 +24,129 @@
  *            should NOT occur!
  *            Use safe functions and data types! (e.g. GetRandom() and hwFloat)
  *)
+ 
+ {$INCLUDE "options.inc"}
+
+unit uGearsHandlersMess;
+interface
+uses uTypes, uFloat;
+
+procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
+procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
+procedure HideHog(HH: PHedgehog);
+procedure doStepDrowningGear(Gear: PGear);
+procedure doStepFallingGear(Gear: PGear);
+procedure doStepBomb(Gear: PGear);
+procedure doStepMolotov(Gear: PGear);
+procedure doStepCluster(Gear: PGear);
+procedure doStepShell(Gear: PGear);
+procedure doStepSnowball(Gear: PGear);
+procedure doStepSnowflake(Gear: PGear);
+procedure doStepGrave(Gear: PGear);
+procedure doStepBeeWork(Gear: PGear);
+procedure doStepBee(Gear: PGear);
+procedure doStepShotIdle(Gear: PGear);
+procedure doStepShotgunShot(Gear: PGear);
+procedure spawnBulletTrail(Bullet: PGear);
+procedure doStepBulletWork(Gear: PGear);
+procedure doStepDEagleShot(Gear: PGear);
+procedure doStepSniperRifleShot(Gear: PGear);
+procedure doStepActionTimer(Gear: PGear);
+procedure doStepPickHammerWork(Gear: PGear);
+procedure doStepPickHammer(Gear: PGear);
+procedure doStepBlowTorchWork(Gear: PGear);
+procedure doStepBlowTorch(Gear: PGear);
+procedure doStepMine(Gear: PGear);
+procedure doStepSMine(Gear: PGear);
+procedure doStepDynamite(Gear: PGear);
+procedure doStepRollingBarrel(Gear: PGear);
+procedure doStepCase(Gear: PGear);
+procedure doStepTarget(Gear: PGear);
+procedure doStepIdle(Gear: PGear);
+procedure doStepShover(Gear: PGear);
+procedure doStepWhip(Gear: PGear);
+procedure doStepFlame(Gear: PGear);
+procedure doStepFirePunchWork(Gear: PGear);
+procedure doStepFirePunch(Gear: PGear);
+procedure doStepParachuteWork(Gear: PGear);
+procedure doStepParachute(Gear: PGear);
+procedure doStepAirAttackWork(Gear: PGear);
+procedure doStepAirAttack(Gear: PGear);
+procedure doStepAirBomb(Gear: PGear);
+procedure doStepGirder(Gear: PGear);
+procedure doStepTeleportAfter(Gear: PGear);
+procedure doStepTeleportAnim(Gear: PGear);
+procedure doStepTeleport(Gear: PGear);
+procedure doStepSwitcherWork(Gear: PGear);
+procedure doStepSwitcher(Gear: PGear);
+procedure doStepMortar(Gear: PGear);
+procedure doStepKamikazeWork(Gear: PGear);
+procedure doStepKamikazeIdle(Gear: PGear);
+procedure doStepKamikaze(Gear: PGear);
+procedure doStepCakeExpl(Gear: PGear);
+procedure doStepCakeDown(Gear: PGear);
+procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeUp(Gear: PGear);
+procedure doStepCakeFall(Gear: PGear);
+procedure doStepCake(Gear: PGear);
+procedure doStepSeductionWork(Gear: PGear);
+procedure doStepSeductionWear(Gear: PGear);
+procedure doStepSeduction(Gear: PGear);
+procedure doStepWaterUp(Gear: PGear);
+procedure doStepDrillDrilling(Gear: PGear);
+procedure doStepDrill(Gear: PGear);
+procedure doStepBallgunWork(Gear: PGear);
+procedure doStepBallgun(Gear: PGear);
+procedure doStepRCPlaneWork(Gear: PGear);
+procedure doStepRCPlane(Gear: PGear);
+procedure doStepJetpackWork(Gear: PGear);
+procedure doStepJetpack(Gear: PGear);
+procedure doStepBirdyDisappear(Gear: PGear);
+procedure doStepBirdyFly(Gear: PGear);
+procedure doStepBirdyDescend(Gear: PGear);
+procedure doStepBirdyAppear(Gear: PGear);
+procedure doStepBirdy(Gear: PGear);
+procedure doStepEggWork(Gear: PGear);
+procedure doPortalColorSwitch();
+procedure doStepPortal(Gear: PGear);
+procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
+procedure doStepMovingPortal_real(Gear: PGear);
+procedure doStepMovingPortal(Gear: PGear);
+procedure doStepPortalShot(newPortal: PGear);
+procedure doStepPiano(Gear: PGear);
+procedure doStepSineGunShotWork(Gear: PGear);
+procedure doStepSineGunShot(Gear: PGear);
+procedure doStepFlamethrowerWork(Gear: PGear);
+procedure doStepFlamethrower(Gear: PGear);
+procedure doStepLandGunWork(Gear: PGear);
+procedure doStepLandGun(Gear: PGear);
+procedure doStepPoisonCloud(Gear: PGear);
+procedure doStepHammer(Gear: PGear);
+procedure doStepHammerHitWork(Gear: PGear);
+procedure doStepHammerHit(Gear: PGear);
+procedure doStepResurrectorWork(Gear: PGear);
+procedure doStepResurrector(Gear: PGear);
+procedure doStepNapalmBomb(Gear: PGear);
+procedure doStepStructure(Gear: PGear);
+procedure doStepTardisWarp(Gear: PGear);
+procedure doStepTardis(Gear: PGear);
+procedure updateFuel(Gear: PGear);
+procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
+procedure doStepIceGun(Gear: PGear);
+procedure doStepAddAmmo(Gear: PGear);
+procedure doStepGenericFaller(Gear: PGear);
+procedure doStepCreeper(Gear: PGear);
+procedure doStepKnife(Gear: PGear);
+
+var
+    upd: Longword;
+    snowLeft,snowRight: LongInt;
+
+implementation
+uses uConsts, uVariables, uVisualGearsList, uRandom, uCollisions, uGearsList, uUtils, uSound
+    , SDLh, uScript, uGearsHedgehog, uGearsUtils, uIO, uCaptions, uLandGraphics
+    , uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture, uCommands
+    , uStore, uAI, uStats;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
 var
@@ -2865,9 +2988,6 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDrill(Gear: PGear);
-forward;
-
 procedure doStepDrillDrilling(Gear: PGear);
 var
     t: PGearArray;
@@ -5636,3 +5756,5 @@ begin
         end;
 end;
 *)
+
+end.
