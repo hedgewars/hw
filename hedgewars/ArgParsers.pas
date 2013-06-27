@@ -15,6 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
+ 
+{$INCLUDE "options.inc"}
+
+unit ArgParsers;
+interface
+
+procedure GetParams;
+
+implementation
+uses uConsole, uVariables, uTypes, uUtils, uSound, uConsts;
+var isInternal: Boolean;
 
 procedure GciEasterEgg;
 begin
@@ -353,4 +364,6 @@ begin
     *)
 end;
 {$ENDIF}
+
+end.
 
