@@ -93,37 +93,12 @@ endif()
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-if(APPLE)
-    if(CMAKE_OSX_ARCHITECTURES)
-        #parse this system variable and adjust only the powerpc syntax to be compatible with -P
-        string(REGEX MATCH "[pP][pP][cC]+" powerpc_build "${CMAKE_OSX_ARCHITECTURES}")
-        string(REGEX MATCH "[iI]386+" i386_build "${CMAKE_OSX_ARCHITECTURES}")
-        string(REGEX MATCH "[xX]86_64+" x86_64_build "${CMAKE_OSX_ARCHITECTURES}")
-        if(x86_64_build)
-            add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
-        elseif(i386_build)
-            add_flag_prepend(CMAKE_Pascal_FLAGS -Pi386)
-        elseif(powerpc_build)
-            add_flag_prepend(CMAKE_Pascal_FLAGS -Ppowerpc)
-        else()
-            message(FATAL_ERROR "Unknown architecture present in CMAKE_OSX_ARCHITECTURES (${CMAKE_OSX_ARCHITECTURES})")
-        endif()
-        list(LENGTH CMAKE_OSX_ARCHITECTURES num_of_archs)
-        if(num_of_archs GREATER 1)
-            message(${WARNING} "Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one")
-        endif()
-    elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
-        #if that variable is not set check if we are on x86_64 and if so force it, else use default
-        add_flag_prepend(CMAKE_Pascal_FLAGS -Px86_64)
-    endif()
-
+if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
     #on OSX we need to provide the SDL_main() function when building as executable
-    if(NOT BUILD_ENGINE_LIBRARY)
-        add_subdirectory(sdlmain)
-        list(APPEND HW_LINK_LIBS SDLmain)
-        add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
-    endif()
-endif(APPLE)
+    add_subdirectory(sdlmain)
+    list(APPEND HW_LINK_LIBS SDLmain)
+    add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
+endif()
 
 if(FFMPEG_FOUND)
     add_subdirectory(avwrapper)
