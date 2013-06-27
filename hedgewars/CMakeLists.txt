@@ -105,6 +105,8 @@ if(FFMPEG_FOUND)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
+    #only for SDL < 2, linking carried out by fpc
+    find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
 endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
