@@ -35,7 +35,7 @@ implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
     uCommands, uLocale, uUtils, uVisualGears, uStats, uIO, uScript,
     uGearsList, uGears, uCollisions, uRandom, uStore, uTeams,
-    uGearsUtils;
+    uGearsUtils, uVisualGearsList;
 
 var GHStepTicks: LongWord = 0;
 

@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList
+    uGearsUtils, uGearsList, uVisualGearsList
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
