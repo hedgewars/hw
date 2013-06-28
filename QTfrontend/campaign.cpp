@@ -127,7 +127,8 @@ QStringList getDescriptions(QString & campaignName, QString & teamName)
 		for(unsigned int i=1;i<=unlockedMissions;i++)
 		{
 			QString missionNum = QString("%1").arg(i);
-			descriptionList += m_info.value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
+			int missionNumber = teamfile.value("Campaign " + campaignName + "/Mission"+missionNum, -1).toInt();
+			descriptionList += m_info.value(campaignName+"-"+ getCampaignMissionName(campaignName,missionNumber) + ".desc",
                                             QObject::tr("No description available")).toString();
 		}
 	}
@@ -183,7 +184,8 @@ QStringList getImages(QString & campaignName, QString & teamName)
 		for(unsigned int i=1;i<=unlockedMissions;i++)
 		{
 			QString missionNum = QString("%1").arg(i);
-			imageList += campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+			int missionNumber = teamfile.value("Campaign " + campaignName + "/Mission"+missionNum, -1).toInt();
+			imageList += campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
 		}
 	}
 	return imageList;
