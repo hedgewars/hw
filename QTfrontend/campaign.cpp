@@ -19,7 +19,7 @@
 #include "campaign.h"
 #include "hwconsts.h"
 #include <QSettings>
-#include <QHash>
+#include <QMap>
 #include <QDebug>
 
 QStringList getCampMissionList(QString & campaign)
@@ -36,16 +36,10 @@ QStringList getCampMissionList(QString & campaign)
     return missionList;
 }
 
-unsigned int getCampProgress(QString & teamName, QString & campName)
-{
-    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
-    teamfile.setIniCodec("UTF-8");
-    return teamfile.value("Campaign " + campName + "/Progress", 0).toInt();
-}
-
-QHash<QString,QString> getUnlockedMissions2(QString & campaignName, QString & teamName)
-{
-	QHash<QString,QString> hash;
+// works ok
+QStringList getCampMissionList2(QString & campaignName, QString & teamName)
+{    
+    QStringList missionList;
 	QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     unsigned int progress = teamfile.value("Campaign " + campaignName + "/Progress", 0).toInt();
@@ -58,9 +52,54 @@ QHash<QString,QString> getUnlockedMissions2(QString & campaignName, QString & te
     unsigned int missionsNumber = campfile.value("MissionNum", 0).toInt();
     qDebug("HERE is number of missions : %d",missionsNumber);  
     
-    if(progress>0)
+    if(progress>=0 and unlockedMissions==0)
     {
-		for(unsigned int i=1;i<=missionsNumber;i++)
+		for(unsigned int i=progress+1;i>0;i--)
+		{
+			missionList += campfile.value(QString("Mission %1/Name").arg(i)).toString();
+		}
+	} 
+	else if(unlockedMissions>0)
+	{
+		qDebug("IN HERE !!!");  
+		for(unsigned int i=1;i<=unlockedMissions;i++)
+		{
+			QString missionNum = QString("%1").arg(i);
+			int missionNumber = teamfile.value("Campaign " + campaignName + "/Mission"+missionNum, -1).toInt();
+			qDebug("Campaign %s Mission %d",campaignName.toUtf8().constData(),i);  
+			qDebug("MISSION NUMBER : %d",missionNumber);  
+			missionList += campfile.value(QString("Mission %1/Name").arg(missionNumber)).toString();
+			qDebug(campfile.value(QString("Mission %1/Name").arg(missionNumber)).toString().toUtf8().constData());
+		}
+	}
+	return missionList;
+}
+
+unsigned int getCampProgress(QString & teamName, QString & campName)
+{
+    QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    return teamfile.value("Campaign " + campName + "/Progress", 0).toInt();
+}
+
+QMap<QString,QString> getUnlockedMissions2(QString & campaignName, QString & teamName)
+{
+	QMap<QString,QString> hash;
+	QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    unsigned int progress = teamfile.value("Campaign " + campaignName + "/Progress", 0).toInt();
+    qDebug("HERE is progress : %d",progress);
+    unsigned int unlockedMissions = teamfile.value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    qDebug("HERE is unlocked missions : %d",unlockedMissions);
+    
+    QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
+    campfile.setIniCodec("UTF-8");
+    unsigned int missionsNumber = campfile.value("MissionNum", 0).toInt();
+    qDebug("HERE is number of missions : %d",missionsNumber);  
+    
+    if(progress>=0 and unlockedMissions==0)
+    {
+		for(unsigned int i=1;i<=progress+1;i++)
 		{
 			hash[getCampaignScript(campaignName,i)] = campfile.value(QString("Mission %1/Name").arg(i)).toString();
 		}

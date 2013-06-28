@@ -1900,12 +1900,12 @@ void HWForm::UpdateCampaignPage(int index)
     ui.pageCampaign->CBMission->clear();
 
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
-    QStringList missionEntries = getCampMissionList(campaignName);
     QString tName = team.name();
+    QStringList missionEntries = getCampMissionList2(campaignName,tName);
     unsigned int n = missionEntries.count();
     unsigned int m = getCampProgress(tName, campaignName);
 
-	getUnlockedMissions2(campaignName, tName);
+	//unlockedMissionsHash = getUnlockedMissions2(campaignName, tName);
     // if the campaign name changes update the campaignMissionDescriptions list
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
@@ -1942,7 +1942,7 @@ void HWForm::UpdateCampaignPage(int index)
         campaignMissionDescriptions.clear();
         ui.pageCampaign->CBMission->clear();
     }
-
+/*
     for (unsigned int i = qMin(m + 1, n); i > 0; i--)
     {
         if(updateMissionList)
@@ -1951,7 +1951,16 @@ void HWForm::UpdateCampaignPage(int index)
                                             tr("No description available")).toString();
         }
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
-    }
+    }*/
+    for(int i=0;i<missionEntries.size();i++)
+    {
+		/*if(updateMissionList)
+        {
+            campaignMissionDescriptions += m_info->value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
+                                            tr("No description available")).toString();
+        }*/
+        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(missionEntries.size()-i) + QString(missionEntries[i]), QString(missionEntries[i]));
+	}
     if(updateMissionList)
         delete m_info;
 

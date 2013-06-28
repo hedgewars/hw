@@ -28,6 +28,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
+#include <QMap>
 
 #include "netserver.h"
 #include "game.h"
@@ -200,6 +201,7 @@ class HWForm : public QMainWindow
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
         QByteArray m_lastDemo;
+        QMap<QString,QString> unlockedMissionsHash;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;
