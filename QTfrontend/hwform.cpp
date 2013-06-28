@@ -1895,6 +1895,7 @@ void HWForm::InitCampaignPage()
 
 void HWForm::UpdateCampaignPage(int index)
 {
+	qDebug("UpdateCampaignPage");
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBMission->clear();
@@ -1910,7 +1911,6 @@ void HWForm::UpdateCampaignPage(int index)
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
     bool updateMissionList = false;
-    QSettings * m_info;
     if(previousCampaignName.compare(campaignName)!=0 ||
             previousTeamName.compare(tName) != 0)
     {
@@ -1920,55 +1920,17 @@ void HWForm::UpdateCampaignPage(int index)
         previousCampaignName = campaignName;
         previousTeamName = tName;
         updateMissionList = true;
-        // the following code was based on pagetraining.cpp
-        DataManager & dataMgr = DataManager::instance();
-        // get locale
-        QSettings settings(dataMgr.settingsFileName(),
-                           QSettings::IniFormat);
-        QString loc = settings.value("misc/locale", "").toString();
-        if (loc.isEmpty())
-            loc = QLocale::system().name();
-        QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
-        // if file is non-existant try with language only
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
-
-        // fallback if file for current locale is non-existant
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
-
-        m_info = new QSettings(campaignDescFile, QSettings::IniFormat, this);
-        m_info->setIniCodec("UTF-8");
-        campaignMissionDescriptions.clear();
-        ui.pageCampaign->CBMission->clear();
     }
-/*
-    for (unsigned int i = qMin(m + 1, n); i > 0; i--)
-    {
-        if(updateMissionList)
-        {
-            campaignMissionDescriptions += m_info->value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
-                                            tr("No description available")).toString();
-        }
-        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
-    }*/
+    campaignMissionDescriptions = getDescriptions(campaignName,tName);
     for(int i=0;i<missionEntries.size();i++)
     {
-		/*if(updateMissionList)
-        {
-            campaignMissionDescriptions += m_info->value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
-                                            tr("No description available")).toString();
-        }*/
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(missionEntries.size()-i) + QString(missionEntries[i]), QString(missionEntries[i]));
 	}
-    if(updateMissionList)
-        delete m_info;
-
-    UpdateCampaignPageMission(index);
 }
 
 void HWForm::UpdateCampaignPageMission(int index)
 {
+	qDebug("UpdateCampaignPageMission");
     // update thumbnail
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
     unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
@@ -1976,8 +1938,10 @@ void HWForm::UpdateCampaignPageMission(int index)
     ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
     // update description
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
-    // this will cause segfault. This check prevents illegal memory reads
+    // this will cause segfault. This check prevents illegal memory reads    
+    qDebug("INDEX IS %d and number of descs is %d",index,campaignMissionDescriptions.count());
     if(index > -1 && index < campaignMissionDescriptions.count()) {
+		qDebug("INSIDE IF *******");
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionDescriptions[index]);
     }

@@ -19,3 +19,5 @@ A Classic Fairytale-enemy.desc="What a great twist! Leaks a lot has to fight sid
 A Classic Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in peace and get praised by his new friends and his tribe. Be proud for what you succeed! You can play again previous missions and see the other possible endings."
 
 A Space Adventure-cosmos.desc="Hogera, the planet of hogs is about to be hit by a gigantic meteorite. In this race for survival you have to lead PAoTH's best pilot, Hog Solo, in a space trip around the neighbor planets to collect all the 4 pieces of the long lost anti gravity device!"
+A Space Adventure-moon01.desc="MOON TEST"
+A Space Adventure-ice.desc="ICE TEST"
