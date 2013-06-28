@@ -20,7 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, GLunit, uTypes, uAILandMarks;
+uses SDLh, uLandTemplates, uFloat, uConsts, uTypes, uAILandMarks;
 
 procedure initModule;
 procedure freeModule;

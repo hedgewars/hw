@@ -21,7 +21,7 @@
 unit uTeams;
 interface
 uses uConsts, uInputHandler, uRandom, uFloat, uStats, 
-     uCollisions, GLunit, uSound, uStore, uTypes, uScript
+     uCollisions, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 
