@@ -1722,11 +1722,12 @@ void HWForm::startTraining(const QString & scriptName)
 void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
-
-    QComboBox *combo = ui.pageCampaign->CBMission;
+	// what if no picture? :D
+    //QComboBox *combo = ui.pageCampaign->CBMission;
     QString camp = ui.pageCampaign->CBCampaign->currentText();
-    unsigned int mNum = combo->count() - combo->currentIndex();
-    QString miss = getCampaignScript(camp, mNum);
+    //unsigned int mNum = combo->count() - combo->currentIndex();
+    //QString miss = getCampaignScript(camp, mNum);
+    QString miss = campaignMissionImages[ui.pageCampaign->CBMission->currentIndex()].replace(QString(".png"),QString(".lua"));
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
 
     game->StartCampaign(camp, miss, campTeam);
