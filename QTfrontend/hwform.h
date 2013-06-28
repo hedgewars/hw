@@ -28,7 +28,6 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
-#include <QMap>
 
 #include "netserver.h"
 #include "game.h"
@@ -196,9 +195,7 @@ class HWForm : public QMainWindow
         AmmoSchemeModel * ammoSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
-        QString previousTeamName;
-        QStringList campaignMissionDescriptions;
-        QStringList campaignMissionImages;        
+        QString previousTeamName;     
         QList<MissionInfo> campaignMissionInfo;
         QTime eggTimer;
         BGWidget * wBackground;

@@ -1722,11 +1722,7 @@ void HWForm::startTraining(const QString & scriptName)
 void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
-	// what if no picture? :D
-    //QComboBox *combo = ui.pageCampaign->CBMission;
     QString camp = ui.pageCampaign->CBCampaign->currentText();
-    //unsigned int mNum = combo->count() - combo->currentIndex();
-    //QString miss = getCampaignScript(camp, mNum);
     QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
 
@@ -1896,43 +1892,29 @@ void HWForm::InitCampaignPage()
 
 void HWForm::UpdateCampaignPage(int index)
 {
-	qDebug("UpdateCampaignPage");
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    ui.pageCampaign->CBMission->clear();
-
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
-    QString tName = team.name();
-    QStringList missionEntries = getCampMissionList2(campaignName,tName);
+    QString tName = team.name();    
     
-    campaignMissionInfo = getCampMissionList3(campaignName,tName);
-
-	//unlockedMissionsHash = getUnlockedMissions2(campaignName, tName);
-    // if the campaign name changes update the campaignMissionDescriptions list
-    // this will be used later in UpdateCampaignPageMission() to update
-    // the mission description in the campaign page
-	campaignMissionDescriptions.clear();
-	campaignMissionImages.clear();
+    campaignMissionInfo = getCampMissionList(campaignName,tName);    
 	ui.pageCampaign->CBMission->clear();
-    campaignMissionDescriptions = getDescriptions(campaignName,tName);
-    campaignMissionImages = getImages(campaignName,tName);
-    for(int i=0;i<missionEntries.size();i++)
+	
+    for(int i=0;i<campaignMissionInfo.size();i++)
     {
+		// Maybe not enforce the prefix Mission %1, isn't so nice for the misison with no
+		// specific order
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(campaignMissionInfo.size()-i) + QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
 	}
 }
 
 void HWForm::UpdateCampaignPageMission(int index)
 {
-	qDebug("UpdateCampaignPageMission");
-    // update thumbnail
+    // update thumbnail and description
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
-    // update description
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
-    // this will cause segfault. This check prevents illegal memory reads    
-    qDebug("INDEX IS %d and number of descs is %d",index,campaignMissionDescriptions.count());
-    if(index > -1 && index < campaignMissionDescriptions.count()) {
-		qDebug("INSIDE IF *******");
+    // this will cause segfault. This check prevents illegal memory reads
+    if(index > -1 && index < campaignMissionInfo.count()) {
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
 		ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+campaignMissionInfo[index].image)));
