@@ -89,9 +89,6 @@ if(APPLE)
         add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
         add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
     endif()
-
-    #add user framework directory, other paths can be passed via FPFLAGS
-    add_flag_append(CMAKE_Pascal_FLAGS "-Ff~/Library/Frameworks")
 endif(APPLE)
 
 if(MINGW)
