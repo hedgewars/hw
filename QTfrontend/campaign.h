@@ -22,6 +22,15 @@
 #include <QString>
 #include <QStringList>
 
+class MissionInfo
+{
+	public:
+		QString name;
+		QString description;
+		QString script;
+		QString image;
+};
+
 QStringList getCampMissionList(QString & campaign);
 unsigned int getCampProgress(QString & teamName, QString & campName);
 QString getCampaignScript(QString campaign, unsigned int mNum);
@@ -31,5 +40,6 @@ QMap<QString,QString> getUnlockedMissions2(QString & campaignName, QString & tea
 QStringList getCampMissionList2(QString & campaignName, QString & teamName);
 QStringList getDescriptions(QString & campaignName, QString & teamName);
 QStringList getImages(QString & campaignName, QString & teamName);
+QList<MissionInfo> getCampMissionList3(QString & campaignName, QString & teamName);
 
 #endif
