@@ -4,6 +4,7 @@ module HWProtoLobbyState where
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -77,7 +78,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning $ loc "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning $ loc "Joining restricted"]
-            else if isRegisteredOnly jRoom then
+            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]
