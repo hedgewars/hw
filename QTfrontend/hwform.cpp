@@ -1903,24 +1903,13 @@ void HWForm::UpdateCampaignPage(int index)
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
     QString tName = team.name();
     QStringList missionEntries = getCampMissionList2(campaignName,tName);
-    unsigned int n = missionEntries.count();
-    unsigned int m = getCampProgress(tName, campaignName);
 
 	//unlockedMissionsHash = getUnlockedMissions2(campaignName, tName);
     // if the campaign name changes update the campaignMissionDescriptions list
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
-    bool updateMissionList = false;
-    if(previousCampaignName.compare(campaignName)!=0 ||
-            previousTeamName.compare(tName) != 0)
-    {
-        if (previousTeamName.compare(tName) != 0 &&
-                previousTeamName.compare("") != 0)
-            index = qMin(m + 1, n);
-        previousCampaignName = campaignName;
-        previousTeamName = tName;
-        updateMissionList = true;
-    }
+	campaignMissionDescriptions.clear();
+	ui.pageCampaign->CBMission->clear();
     campaignMissionDescriptions = getDescriptions(campaignName,tName);
     for(int i=0;i<missionEntries.size();i++)
     {
