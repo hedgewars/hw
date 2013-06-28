@@ -12,6 +12,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 
+#set the sources with the correct order of dependencies so that cmake won't be confused
 set(engine_sources
     SDLh.pas
     uSinTable.pas
@@ -36,6 +37,7 @@ set(engine_sources
     uPhysFSLayer.pas
     uStore.pas
     uSound.pas
+    ArgParsers.pas
     uRandom.pas
     uLocale.pas
     uStats.pas
@@ -52,10 +54,13 @@ set(engine_sources
     uLand.pas
     uAmmos.pas
 
+    #this is where dependency tracking becomes hard
     uAIMisc.pas
     uAIActions.pas
     uAI.pas
     uWorld.pas
+    uVisualGearsList.pas
+    uVisualGearsHandlers.pas
     uVisualGears.pas
     uTeams.pas
 
@@ -65,14 +70,18 @@ set(engine_sources
     uGears.pas
     uGame.pas
     uCommandHandlers.pas
+    uGearsRender.pas
+    uGearsHedgehog.pas
     uGearsHandlers.pas
     uGearsHandlersRope.pas
-    uGearsHedgehog.pas
-    uGearsRender.pas
+    uGearsHandlersMess.pas
     uGearsUtils.pas
+
+    #these interact with everything, so compile last
     uScript.pas
     hwengine.pas
 
+    #we also have uTouch.pas
     options.inc
     ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
@@ -108,7 +117,7 @@ endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
 if(PNG_FOUND)
-    list(APPEND engine_sources PNGh.pas)
+    list(INSERT engine_sources 0 PNGh.pas)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
