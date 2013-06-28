@@ -134,6 +134,61 @@ QStringList getDescriptions(QString & campaignName, QString & teamName)
 	return descriptionList;
 }
 
+QStringList getImages(QString & campaignName, QString & teamName)
+{    
+    QStringList imageList;
+	QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
+    teamfile.setIniCodec("UTF-8");
+    unsigned int progress = teamfile.value("Campaign " + campaignName + "/Progress", 0).toInt();
+    qDebug("HERE is progress : %d",progress);
+    unsigned int unlockedMissions = teamfile.value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
+    qDebug("HERE is unlocked missions : %d",unlockedMissions);
+    
+    QSettings campfile("physfs://Missions/Campaign/" + campaignName + "/campaign.ini", QSettings::IniFormat, 0);
+    campfile.setIniCodec("UTF-8");
+    unsigned int missionsNumber = campfile.value("MissionNum", 0).toInt();
+    qDebug("HERE is number of missions : %d",missionsNumber);  
+    
+    
+    DataManager & dataMgr = DataManager::instance();
+        // get locale
+        QSettings settings(dataMgr.settingsFileName(),
+                           QSettings::IniFormat);
+        QString loc = settings.value("misc/locale", "").toString();
+        if (loc.isEmpty())
+            loc = QLocale::system().name();
+        QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
+        // if file is non-existant try with language only
+        if (!QFile::exists(campaignDescFile))
+            campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
+
+        // fallback if file for current locale is non-existant
+        if (!QFile::exists(campaignDescFile))
+            campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
+
+        QSettings m_info(campaignDescFile, QSettings::IniFormat, 0);
+        m_info.setIniCodec("UTF-8");
+    
+    if(progress>=0 and unlockedMissions==0)
+    {
+		for(unsigned int i=progress+1;i>0;i--)
+		{
+			//update descruiptions here
+			imageList += campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+		}
+	} 
+	else if(unlockedMissions>0)
+	{
+		qDebug("IN HERE !!!");  
+		for(unsigned int i=1;i<=unlockedMissions;i++)
+		{
+			QString missionNum = QString("%1").arg(i);
+			imageList += campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+		}
+	}
+	return imageList;
+}
+
 unsigned int getCampProgress(QString & teamName, QString & campName)
 {
     QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);

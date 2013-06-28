@@ -1892,7 +1892,6 @@ void HWForm::InitCampaignPage()
     }
 }
 
-
 void HWForm::UpdateCampaignPage(int index)
 {
 	qDebug("UpdateCampaignPage");
@@ -1909,8 +1908,10 @@ void HWForm::UpdateCampaignPage(int index)
     // this will be used later in UpdateCampaignPageMission() to update
     // the mission description in the campaign page
 	campaignMissionDescriptions.clear();
+	campaignMissionImages.clear();
 	ui.pageCampaign->CBMission->clear();
     campaignMissionDescriptions = getDescriptions(campaignName,tName);
+    campaignMissionImages = getImages(campaignName,tName);
     for(int i=0;i<missionEntries.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(missionEntries.size()-i) + QString(missionEntries[i]), QString(missionEntries[i]));
@@ -1922,9 +1923,6 @@ void HWForm::UpdateCampaignPageMission(int index)
 	qDebug("UpdateCampaignPageMission");
     // update thumbnail
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
-    unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
-    QString image = getCampaignImage(campaignName,mNum);
-    ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
     // update description
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads    
@@ -1933,6 +1931,7 @@ void HWForm::UpdateCampaignPageMission(int index)
 		qDebug("INSIDE IF *******");
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionDescriptions[index]);
+    ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+campaignMissionImages[index])));
     }
 }
 
