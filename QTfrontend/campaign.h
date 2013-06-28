@@ -30,5 +30,6 @@ QString getCampaignMissionName(QString campaign, unsigned int mNum);
 QMap<QString,QString> getUnlockedMissions2(QString & campaignName, QString & teamName);
 QStringList getCampMissionList2(QString & campaignName, QString & teamName);
 QStringList getDescriptions(QString & campaignName, QString & teamName);
+QStringList getImages(QString & campaignName, QString & teamName);
 
 #endif

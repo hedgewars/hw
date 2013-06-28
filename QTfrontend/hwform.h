@@ -197,11 +197,11 @@ class HWForm : public QMainWindow
         QString previousCampaignName;
         QString previousTeamName;
         QStringList campaignMissionDescriptions;
+        QStringList campaignMissionImages;
         QTime eggTimer;
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
         QByteArray m_lastDemo;
-        QMap<QString,QString> unlockedMissionsHash;
 
         QPropertyAnimation *animationNewSlide;
         QPropertyAnimation *animationOldSlide;
