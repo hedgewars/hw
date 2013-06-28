@@ -199,6 +199,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     UpdateTeamsLists();
     InitCampaignPage();
     UpdateCampaignPage(0);
+    UpdateCampaignPageMission(0);
     UpdateWeapons();
 
     // connect all goBack signals
