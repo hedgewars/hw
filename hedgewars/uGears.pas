@@ -52,7 +52,7 @@ uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{
     uLocale, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
-    , uVisualGearsList, uGearsHandlersMess;
+    , uVisualGearsList, uGearsHandlersMess, uAI;
 
 var skipFlag: boolean;
 
