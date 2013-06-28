@@ -1727,7 +1727,7 @@ void HWForm::StartCampaign()
     QString camp = ui.pageCampaign->CBCampaign->currentText();
     //unsigned int mNum = combo->count() - combo->currentIndex();
     //QString miss = getCampaignScript(camp, mNum);
-    QString miss = campaignMissionImages[ui.pageCampaign->CBMission->currentIndex()].replace(QString(".png"),QString(".lua"));
+    QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
 
     game->StartCampaign(camp, miss, campTeam);
@@ -1904,6 +1904,8 @@ void HWForm::UpdateCampaignPage(int index)
     QString campaignName = ui.pageCampaign->CBCampaign->currentText();
     QString tName = team.name();
     QStringList missionEntries = getCampMissionList2(campaignName,tName);
+    
+    campaignMissionInfo = getCampMissionList3(campaignName,tName);
 
 	//unlockedMissionsHash = getUnlockedMissions2(campaignName, tName);
     // if the campaign name changes update the campaignMissionDescriptions list
@@ -1916,7 +1918,7 @@ void HWForm::UpdateCampaignPage(int index)
     campaignMissionImages = getImages(campaignName,tName);
     for(int i=0;i<missionEntries.size();i++)
     {
-        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(missionEntries.size()-i) + QString(missionEntries[i]), QString(missionEntries[i]));
+        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(campaignMissionInfo.size()-i) + QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
 	}
 }
 
@@ -1932,8 +1934,8 @@ void HWForm::UpdateCampaignPageMission(int index)
     if(index > -1 && index < campaignMissionDescriptions.count()) {
 		qDebug("INSIDE IF *******");
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
-        ui.pageCampaign->lbldescription->setText(campaignMissionDescriptions[index]);
-    ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+campaignMissionImages[index])));
+        ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
+		ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+campaignMissionInfo[index].image)));
     }
 }
 
