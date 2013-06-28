@@ -49,7 +49,7 @@ function  GearByUID(uid : Longword) : PGear;
 
 implementation
 uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{$ENDIF}
-    uLocale, uAmmos, uStats, uVisualGears, uScript, GLunit, uVariables,
+    uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
     , uVisualGearsList, uGearsHandlersMess, uAI;
@@ -312,7 +312,7 @@ case step of
                     
                     ChangeToSDClouds;
                     ChangeToSDFlakes;
-                    glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99);
+                    SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255);
                     Ammoz[amTardis].SkipTurns:= 9999;
                     Ammoz[amTardis].Probability:= 0;
                     end;

@@ -54,6 +54,7 @@ procedure InitOffscreenOpenGL;
 
 procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
+procedure SetSkyColor(r, g, b: real);
 
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCommands
@@ -1258,11 +1259,11 @@ begin
         // clean the window from any previous content
         glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
-            glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
+            SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255)
         else if ((cReducedQuality and rqNoBackground) = 0) then 
-            glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
+            SetSkyColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255)
         else
-            glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+            SetSkyColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255);
 
         // reload everything we had before
         ReloadCaptions(false);
@@ -1271,6 +1272,31 @@ begin
         // redraw all land
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
         end;
+end;
+
+procedure WarpMouse(x, y: Word); inline;
+begin
+{$IFDEF SDL13}
+    SDL_WarpMouseInWindow(SDLwindow, x, y);
+{$ELSE}
+    x:= x; y:= y; // avoid hints
+{$ENDIF}
+end;
+
+procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
+begin
+    if GameType = gmtRecord then
+        exit;
+{$IFDEF SDL13}
+    SDL_GL_SwapWindow(SDLwindow);
+{$ELSE}
+    SDL_GL_SwapBuffers();
+{$ENDIF}
+end;
+
+procedure SetSkyColor(r, g, b: real);
+begin
+    glClearColor(r, g, b, 0.99)
 end;
 
 procedure initModule;
@@ -1310,25 +1336,4 @@ begin
 {$ENDIF}
     SDL_Quit();
 end;
-
-procedure WarpMouse(x, y: Word); inline;
-begin
-{$IFDEF SDL13}
-    SDL_WarpMouseInWindow(SDLwindow, x, y);
-{$ELSE}
-    x:= x; y:= y; // avoid hints
-{$ENDIF}
-end;
-
-procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
-begin
-    if GameType = gmtRecord then
-        exit;
-{$IFDEF SDL13}
-    SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
-end;
-
 end.
