@@ -20,8 +20,8 @@ set(engine_sources
     uConsts.pas
     LuaPas.pas
     uTypes.pas
-    uUtils.pas
     uVariables.pas
+    uUtils.pas
     uMisc.pas
     uConsole.pas
     uDebug.pas

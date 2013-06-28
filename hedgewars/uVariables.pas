@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math;
 
 var
 /////// init flags ///////
@@ -2324,7 +2324,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-
+uses strutils;
 
 procedure preInitModule;
 begin
@@ -2366,10 +2366,9 @@ begin
 end;
 
 procedure initModule;
-var s: ShortString;
 begin
-    cLocale:= cLocaleFName;
-    SplitByChar(cLocale, s, '.');
+    // TODO: we could just have one cLocale variables and drop strutils
+    cLocale:= ExtractDelimited(0, cLocaleFName, StdWordDelims);
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
@@ -2415,10 +2414,10 @@ begin
 
     WaterOpacity:= $80;
 
-    cDrownSpeed.QWordValue  := 257698038;       // 0.06
+    cDrownSpeed.QWordValue  := 257698038;   // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
-    cWindSpeed.QWordValue   := 0;      // 0.0
+    cWindSpeed.QWordValue   := 0;           // 0.0
     cWindSpeedf             := 0.0;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
@@ -2537,19 +2536,6 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
-
-    mobileRecord.getScreenDPI:= @getScreenDPI; //TODO: define external function.
-    {$IFDEF IPHONEOS}
-    mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
-    mobileRecord.GameLoading:= @startLoadingIndicator;
-    mobileRecord.GameLoaded:= @stopLoadingIndicator;
-    mobileRecord.SaveLoadingEnded:= @saveFinishedSynching;
-    {$ELSE}
-    mobileRecord.PerformRumble:= nil;
-    mobileRecord.GameLoading:= nil;
-    mobileRecord.GameLoaded:= nil;
-    mobileRecord.SaveLoadingEnded:= nil;
-    {$ENDIF}
 end;
 
 procedure freeModule;

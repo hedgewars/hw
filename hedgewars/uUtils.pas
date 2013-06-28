@@ -505,6 +505,20 @@ begin
 {$I+}
 {$ENDIF}
 
+    //mobile stuff
+    mobileRecord.getScreenDPI:= @getScreenDPI; //TODO: define external function.
+{$IFDEF IPHONEOS}
+    mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
+    mobileRecord.GameLoading:= @startLoadingIndicator;
+    mobileRecord.GameLoaded:= @stopLoadingIndicator;
+    mobileRecord.SaveLoadingEnded:= @saveFinishedSynching;
+{$ELSE}
+    mobileRecord.PerformRumble:= nil;
+    mobileRecord.GameLoading:= nil;
+    mobileRecord.GameLoaded:= nil;
+    mobileRecord.SaveLoadingEnded:= nil;
+{$ENDIF}
+
 end;
 
 procedure freeModule;
