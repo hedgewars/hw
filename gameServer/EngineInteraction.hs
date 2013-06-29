@@ -32,17 +32,22 @@ splitMessages :: B.ByteString -> [B.ByteString]
 splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt (1 + fromIntegral (BW.head b)) b)
 
 
-checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString)
+checkNetCmd :: B.ByteString -> (B.ByteString, B.ByteString, Maybe (Maybe B.ByteString))
 checkNetCmd msg = check decoded
     where
         decoded = liftM (splitMessages . BW.pack) $ Base64.decode $ B.unpack msg
-        check Nothing = (B.empty, B.empty)
-        check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b)
+        check Nothing = (B.empty, B.empty, Nothing)
+        check (Just msgs) = let (a, b) = (filter isLegal msgs, filter isNonEmpty a) in (encode a, encode b, lft a)
         encode = B.pack . Base64.encode . BW.unpack . B.concat
         isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
+        lft = foldr l Nothing
+        l m n = let m' = B.head $ B.tail m; tst = flip Set.member in 
+                      if not $ tst timedMessages m' then n
+                        else if '+' /= m' then Just Nothing else Just $ Just m
         isNonEmpty = (/=) '+' . B.head . B.tail
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
+        timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgc12345" ++ slotMessages
 
 
 replayToDemo :: [TeamInfo]
@@ -50,18 +55,18 @@ replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString [B.ByteString]
         -> [B.ByteString]
         -> [B.ByteString]
-replayToDemo teams mapParams params msgs = concat [
+replayToDemo ti mParams prms msgs = concat [
         [em "TD"]
         , maybeScript
         , maybeMap
-        , [eml ["etheme ", head $ params Map.! "THEME"]]
-        , [eml ["eseed ", mapParams Map.! "SEED"]]
+        , [eml ["etheme ", head $ prms Map.! "THEME"]]
+        , [eml ["eseed ", mParams Map.! "SEED"]]
         , [eml ["e$gmflags ", showB gameFlags]]
         , schemeFlags
-        , [eml ["e$template_filter ", mapParams Map.! "TEMPLATE"]]
+        , [eml ["e$template_filter ", mParams Map.! "TEMPLATE"]]
         , [eml ["e$mapgen ", mapgen]]
         , mapgenSpecific
-        , concatMap teamSetup teams
+        , concatMap teamSetup ti
         , msgs
         , [em "!"]
         ]
@@ -69,13 +74,13 @@ replayToDemo teams mapParams params msgs = concat [
         em = toEngineMsg
         eml = em . B.concat
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
-        maybeScript = let s = head $ params Map.! "SCRIPT" in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
-        maybeMap = let m = mapParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
-        scheme = tail $ params Map.! "SCHEME"
-        mapgen = mapParams Map.! "MAPGEN"
+        maybeScript = let s = head $ prms Map.! "SCRIPT" in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
+        maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
+        scheme = tail $ prms Map.! "SCHEME"
+        mapgen = mParams Map.! "MAPGEN"
         mapgenSpecific = case mapgen of
-            "+maze+" -> [eml ["e$maze_size ", head $ params Map.! "MAZE_SIZE"]]
-            "+drawn" -> drawnMapData . head $ params Map.! "DRAWNMAP"
+            "+maze+" -> [eml ["e$maze_size ", head $ prms Map.! "MAZE_SIZE"]]
+            "+drawn" -> drawnMapData . head $ prms Map.! "DRAWNMAP"
             _ -> []
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
@@ -83,7 +88,7 @@ replayToDemo teams mapParams params msgs = concat [
             $ filter (\(_, (n, _)) -> not $ B.null n)
             $ zip (drop (length gameFlagConsts) scheme) schemeParams
         ammoStr :: B.ByteString
-        ammoStr = head . tail $ params Map.! "AMMO"
+        ammoStr = head . tail $ prms Map.! "AMMO"
         ammo = let l = B.length ammoStr `div` 4; ((a, b), (c, d)) = (B.splitAt l . fst &&& B.splitAt l . snd) . B.splitAt (l * 2) $ ammoStr in
                    (map (\(x, y) -> eml [x, " ", y]) $ zip ["eammloadt", "eammprob", "eammdelay", "eammreinf"] [a, b, c, d])
                    ++ [em "eammstore" | scheme !! 14 == "true" || scheme !! 20 == "false"]

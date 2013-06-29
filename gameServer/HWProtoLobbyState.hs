@@ -115,10 +115,13 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
         watchRound cl jRoom chans = if isNothing $ gameInfo jRoom then
                     []
                 else
-                    [AnswerClients [sendChan cl]  ["RUN_GAME"]
-                    , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
-                    , ModifyClient (\c -> c{isInGame = True})
-                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom)]
+                    AnswerClients [sendChan cl]  ["RUN_GAME"]
+                    : AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
+                    : ModifyClient (\c -> c{isInGame = True})
+                    : (AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom))
+                    : [AnswerClients [sendChan cl] $ "EM" : [fromJust msg] | isJust msg]
+            where
+            msg = lastFilteredTimedMsg . fromJust . gameInfo $ jRoom
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =
