@@ -24,8 +24,8 @@ set(engine_sources
     uUtils.pas
     uMisc.pas
     uConsole.pas
-    uDebug.pas
     uCommands.pas
+    uDebug.pas
     uInputHandler.pas
     uTextures.pas
     uRenderUtils.pas

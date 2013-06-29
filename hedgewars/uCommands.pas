@@ -36,7 +36,7 @@ procedure ParseTeamCommand(s: shortstring);
 procedure StopMessages(Message: Longword);
 
 implementation
-uses uConsts, uVariables, uConsole, uUtils, uDebug, SDLh;
+uses uConsts, uVariables, uConsole, uUtils, SDLh;
 
 type  PVariable = ^TVariable;
     TVariable = record
@@ -52,12 +52,14 @@ procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boole
 begin
 RegisterVariable(Name, p, Trusted, false);
 end;
+
 procedure RegisterVariable(Name: shortstring; p: TCommandHandler; Trusted: boolean; Rand: boolean);
-var
-    value: PVariable;
+var value: PVariable;
 begin
 New(value);
-TryDo(value <> nil, 'RegisterVariable: value = nil', true);
+if value = nil then
+    ParseCommand('fatal RegisterVariable: value = nil', true);
+
 FillChar(value^, sizeof(TVariable), 0);
 value^.Name:= Name;
 value^.Handler:= p;
