@@ -411,6 +411,9 @@ end;
 procedure chFatalError(var s: shortstring);
 begin
     SendIPC('E' + s);
+    // TODO: should we try to clean more stuff here?
+    SDL_Quit;
+    halt(2)
 end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
