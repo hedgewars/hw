@@ -24,7 +24,7 @@ interface
 procedure GetParams;
 
 implementation
-uses uConsole, uVariables, uTypes, uUtils, uSound, uConsts;
+uses uVariables, uTypes, uUtils, uSound, uConsts;
 var isInternal: Boolean;
 
 procedure GciEasterEgg;

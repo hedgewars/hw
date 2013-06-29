@@ -31,11 +31,9 @@ set(engine_sources
     uRenderUtils.pas
     uRender.pas
     uCaptions.pas
-    uLandTexture.pas
     uIO.pas
     uChat.pas
     uPhysFSLayer.pas
-    uStore.pas
     uSound.pas
     ArgParsers.pas
     uRandom.pas
@@ -46,27 +44,28 @@ set(engine_sources
     uAILandMarks.pas
     adler32.pas
     uLandTemplates.pas
+    uLandTexture.pas
     uLandGraphics.pas
     uLandPainted.pas
     uLandOutline.pas
     uLandGenMaze.pas
-    uLandObjects.pas
-    uLand.pas
-    uAmmos.pas
 
     #this is where dependency tracking becomes hard
+    uStore.pas
+    uAmmos.pas
+    uLandObjects.pas
+    uLand.pas
+    uGearsList.pas
+    uCollisions.pas
     uAIMisc.pas
     uAIActions.pas
+    uAIAmmoTests.pas
     uAI.pas
     uWorld.pas
     uVisualGearsList.pas
     uVisualGearsHandlers.pas
     uVisualGears.pas
-    uTeams.pas
 
-    uGearsList.pas
-    uCollisions.pas
-    uAIAmmoTests.pas
     uGears.pas
     uGame.pas
     uCommandHandlers.pas
@@ -76,6 +75,7 @@ set(engine_sources
     uGearsHandlersRope.pas
     uGearsHandlersMess.pas
     uGearsUtils.pas
+    uTeams.pas
 
     #these interact with everything, so compile last
     uScript.pas
