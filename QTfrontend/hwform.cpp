@@ -1917,7 +1917,7 @@ void HWForm::UpdateCampaignPageMission(int index)
     if(index > -1 && index < campaignMissionInfo.count()) {
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
-		ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+campaignMissionInfo[index].image)));
+		ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
     }
 }
 
