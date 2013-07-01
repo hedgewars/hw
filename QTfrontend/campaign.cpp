@@ -24,8 +24,7 @@
 #include <QLocale>
 
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName)
-{    
-	// TODO: add default image if there isn't an available one
+{
     QList<MissionInfo> missionInfoList;
 	QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
@@ -63,7 +62,10 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             missionInfo.script = campfile.value(QString("Mission %1/Script").arg(i)).toString();
 			missionInfo.description = m_info.value(campaignName+"-"+ missionInfo.script.replace(QString(".lua"),QString("")) + ".desc",
                                             QObject::tr("No description available")).toString();
-            missionInfo.image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+            QString image = campfile.value(QString("Mission %1/Script").arg(i)).toString().replace(QString(".lua"),QString(".png"));
+            missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+            if (!QFile::exists(missionInfo.image))
+				missionInfo.image = ":/res/CampaignDefault.png";
 			missionInfoList.append(missionInfo);
 		}
 	} 
@@ -78,7 +80,10 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
             missionInfo.script = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString();
 			missionInfo.description = m_info.value(campaignName+"-"+ missionInfo.script.replace(QString(".lua"),QString("")) + ".desc",
                                             QObject::tr("No description available")).toString();
-            missionInfo.image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
+            QString image = campfile.value(QString("Mission %1/Script").arg(missionNumber)).toString().replace(QString(".lua"),QString(".png"));
+            missionInfo.image = ":/res/campaign/"+campaignName+"/"+image;
+            if (!QFile::exists(missionInfo.image))
+				missionInfo.image = ":/res/CampaignDefault.png";
 			missionInfoList.append(missionInfo);
 		}
 	}
