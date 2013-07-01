@@ -58,7 +58,6 @@ implementation
 uses LuaPas,
     uConsole,
     uConsts,
-    uVisualGears,
     uGears,
     uGearsList,
     uGearsUtils,
@@ -84,6 +83,8 @@ uses LuaPas,
     SDLh,
     SysUtils, 
     uIO,
+    uVisualGearsList,
+    uGearsHandlersMess,
     uPhysFSLayer,
     typinfo
     ;
@@ -1488,7 +1489,7 @@ begin
             gear^.X:= int2hwfloat(x);
             gear^.Y:= int2hwfloat(y);
             if col then
-                AddGearCI(gear);
+                AddCI(gear);
             SetAllToActive
             end
         end;

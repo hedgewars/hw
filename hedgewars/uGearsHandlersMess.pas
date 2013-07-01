@@ -24,6 +24,129 @@
  *            should NOT occur!
  *            Use safe functions and data types! (e.g. GetRandom() and hwFloat)
  *)
+ 
+ {$INCLUDE "options.inc"}
+
+unit uGearsHandlersMess;
+interface
+uses uTypes, uFloat;
+
+procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
+procedure makeHogsWorry(x, y: hwFloat; r: LongInt);
+procedure HideHog(HH: PHedgehog);
+procedure doStepDrowningGear(Gear: PGear);
+procedure doStepFallingGear(Gear: PGear);
+procedure doStepBomb(Gear: PGear);
+procedure doStepMolotov(Gear: PGear);
+procedure doStepCluster(Gear: PGear);
+procedure doStepShell(Gear: PGear);
+procedure doStepSnowball(Gear: PGear);
+procedure doStepSnowflake(Gear: PGear);
+procedure doStepGrave(Gear: PGear);
+procedure doStepBeeWork(Gear: PGear);
+procedure doStepBee(Gear: PGear);
+procedure doStepShotIdle(Gear: PGear);
+procedure doStepShotgunShot(Gear: PGear);
+procedure spawnBulletTrail(Bullet: PGear);
+procedure doStepBulletWork(Gear: PGear);
+procedure doStepDEagleShot(Gear: PGear);
+procedure doStepSniperRifleShot(Gear: PGear);
+procedure doStepActionTimer(Gear: PGear);
+procedure doStepPickHammerWork(Gear: PGear);
+procedure doStepPickHammer(Gear: PGear);
+procedure doStepBlowTorchWork(Gear: PGear);
+procedure doStepBlowTorch(Gear: PGear);
+procedure doStepMine(Gear: PGear);
+procedure doStepSMine(Gear: PGear);
+procedure doStepDynamite(Gear: PGear);
+procedure doStepRollingBarrel(Gear: PGear);
+procedure doStepCase(Gear: PGear);
+procedure doStepTarget(Gear: PGear);
+procedure doStepIdle(Gear: PGear);
+procedure doStepShover(Gear: PGear);
+procedure doStepWhip(Gear: PGear);
+procedure doStepFlame(Gear: PGear);
+procedure doStepFirePunchWork(Gear: PGear);
+procedure doStepFirePunch(Gear: PGear);
+procedure doStepParachuteWork(Gear: PGear);
+procedure doStepParachute(Gear: PGear);
+procedure doStepAirAttackWork(Gear: PGear);
+procedure doStepAirAttack(Gear: PGear);
+procedure doStepAirBomb(Gear: PGear);
+procedure doStepGirder(Gear: PGear);
+procedure doStepTeleportAfter(Gear: PGear);
+procedure doStepTeleportAnim(Gear: PGear);
+procedure doStepTeleport(Gear: PGear);
+procedure doStepSwitcherWork(Gear: PGear);
+procedure doStepSwitcher(Gear: PGear);
+procedure doStepMortar(Gear: PGear);
+procedure doStepKamikazeWork(Gear: PGear);
+procedure doStepKamikazeIdle(Gear: PGear);
+procedure doStepKamikaze(Gear: PGear);
+procedure doStepCakeExpl(Gear: PGear);
+procedure doStepCakeDown(Gear: PGear);
+procedure doStepCakeWork(Gear: PGear);
+procedure doStepCakeUp(Gear: PGear);
+procedure doStepCakeFall(Gear: PGear);
+procedure doStepCake(Gear: PGear);
+procedure doStepSeductionWork(Gear: PGear);
+procedure doStepSeductionWear(Gear: PGear);
+procedure doStepSeduction(Gear: PGear);
+procedure doStepWaterUp(Gear: PGear);
+procedure doStepDrillDrilling(Gear: PGear);
+procedure doStepDrill(Gear: PGear);
+procedure doStepBallgunWork(Gear: PGear);
+procedure doStepBallgun(Gear: PGear);
+procedure doStepRCPlaneWork(Gear: PGear);
+procedure doStepRCPlane(Gear: PGear);
+procedure doStepJetpackWork(Gear: PGear);
+procedure doStepJetpack(Gear: PGear);
+procedure doStepBirdyDisappear(Gear: PGear);
+procedure doStepBirdyFly(Gear: PGear);
+procedure doStepBirdyDescend(Gear: PGear);
+procedure doStepBirdyAppear(Gear: PGear);
+procedure doStepBirdy(Gear: PGear);
+procedure doStepEggWork(Gear: PGear);
+procedure doPortalColorSwitch();
+procedure doStepPortal(Gear: PGear);
+procedure loadNewPortalBall(oldPortal: PGear; destroyGear: Boolean);
+procedure doStepMovingPortal_real(Gear: PGear);
+procedure doStepMovingPortal(Gear: PGear);
+procedure doStepPortalShot(newPortal: PGear);
+procedure doStepPiano(Gear: PGear);
+procedure doStepSineGunShotWork(Gear: PGear);
+procedure doStepSineGunShot(Gear: PGear);
+procedure doStepFlamethrowerWork(Gear: PGear);
+procedure doStepFlamethrower(Gear: PGear);
+procedure doStepLandGunWork(Gear: PGear);
+procedure doStepLandGun(Gear: PGear);
+procedure doStepPoisonCloud(Gear: PGear);
+procedure doStepHammer(Gear: PGear);
+procedure doStepHammerHitWork(Gear: PGear);
+procedure doStepHammerHit(Gear: PGear);
+procedure doStepResurrectorWork(Gear: PGear);
+procedure doStepResurrector(Gear: PGear);
+procedure doStepNapalmBomb(Gear: PGear);
+procedure doStepStructure(Gear: PGear);
+procedure doStepTardisWarp(Gear: PGear);
+procedure doStepTardis(Gear: PGear);
+procedure updateFuel(Gear: PGear);
+procedure updateTarget(Gear:PGear; newX, newY:HWFloat);
+procedure doStepIceGun(Gear: PGear);
+procedure doStepAddAmmo(Gear: PGear);
+procedure doStepGenericFaller(Gear: PGear);
+procedure doStepCreeper(Gear: PGear);
+procedure doStepKnife(Gear: PGear);
+
+var
+    upd: Longword;
+    snowLeft,snowRight: LongInt;
+
+implementation
+uses uConsts, uVariables, uVisualGearsList, uRandom, uCollisions, uGearsList, uUtils, uSound
+    , SDLh, uScript, uGearsHedgehog, uGearsUtils, uIO, uCaptions, uLandGraphics
+    , uGearsHandlers, uTextures, uRenderUtils, uAmmos, uTeams, uLandTexture, uCommands
+    , uStore, uAI, uStats;
 
 procedure doStepPerPixel(Gear: PGear; step: TGearStepProcedure; onlyCheckIfChanged: boolean);
 var
@@ -1420,7 +1543,7 @@ begin
         doStepFallingGear(Gear);
         if (Gear^.State and gstMoving) = 0 then
             begin
-            AddGearCI(Gear);
+            AddCI(Gear);
             Gear^.dX := _0;
             Gear^.dY := _0
             end;
@@ -1505,7 +1628,7 @@ begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
             Gear^.dY:= _0;
-            AddGearCI(Gear);
+            AddCI(Gear);
             end;
         end
     else
@@ -1604,7 +1727,7 @@ begin
     else
         begin
         Gear^.State := Gear^.State or gsttmpFlag;
-        AddGearCI(Gear)
+        AddCI(Gear)
         end;
 
 (*
@@ -1620,7 +1743,7 @@ Attempt to make a barrel knock itself over an edge.  Would need more checks to a
             else if (((y+1 and LAND_HEIGHT_MASK)) = 0) and (((x-(Gear^.Radius-2)) and LAND_WIDTH_MASK) = 0) and (Land[y+1, x-(Gear^.Radius-2)] = 0) then
                 Gear^.dX:= _0_08;
             end;
-    if Gear^.dX.QWordValue = 0 then AddGearCI(Gear)
+    if Gear^.dX.QWordValue = 0 then AddCI(Gear)
     end; *)
 
     if not Gear^.dY.isNegative and (Gear^.dY < _0_001) and (TestCollisionYwithGear(Gear, 1) <> 0) then
@@ -1796,7 +1919,7 @@ begin
         end;
 
     if (Gear^.dY.QWordValue = 0) then
-        AddGearCI(Gear)
+        AddCI(Gear)
     else if (Gear^.dY.QWordValue <> 0) then
         DeleteCI(Gear)
 end;
@@ -1926,12 +2049,12 @@ begin
         end
     else
         begin
-        if sticky then
+        if sticky and (GameTicks and $F = 0) then
             begin
             Gear^.Radius := 7;
             tdX:= Gear^.dX;
             tdY:= Gear^.dY;
-            Gear^.dX.QWordValue:= 214748365;
+            Gear^.dX.QWordValue:= 120000000;
             Gear^.dY.QWordValue:= 429496730;
             Gear^.dX.isNegative:= getrandom(2)<>1;
             Gear^.dY.isNegative:= true;
@@ -2865,9 +2988,6 @@ begin
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
-procedure doStepDrill(Gear: PGear);
-forward;
-
 procedure doStepDrillDrilling(Gear: PGear);
 var
     t: PGearArray;
@@ -4812,7 +4932,7 @@ begin
 
     if (Gear^.State and gstMoving) <> 0 then
         begin
-        AddGearCI(Gear);
+        AddCI(Gear);
         Gear^.dX:= _0;
         Gear^.dY:= _0;
         Gear^.State:= Gear^.State and (not gstMoving);
@@ -4823,7 +4943,7 @@ begin
 
     if Gear^.Pos = 1 then
         begin
-        AddGearCI(Gear);
+        AddCI(Gear);
         AfterAttack;
         if Gear = CurAmmoGear then
             CurAmmoGear:= nil;
@@ -4840,7 +4960,7 @@ begin
                 begin
                 DeleteCI(Gear);
                 Gear^.Y:= Gear^.Y - _0_5;
-                AddGearCI(Gear);
+                AddCI(Gear);
                 end;
             inc(Gear^.Timer);
             end;
@@ -4855,7 +4975,7 @@ begin
                 begin
                 DeleteCI(Gear);
                 Gear^.Y:= Gear^.Y - _0_5;
-                AddGearCI(Gear);
+                AddCI(Gear);
                 end;
             inc(Gear^.Timer);
             end
@@ -5129,7 +5249,7 @@ var
     vg: PVisualGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or (HHGear^.Damage <> 0) or (HHGear^.dX.QWordValue > 4294967)  then
+    if (Gear^.Message and gmAttack <> 0) or (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (HHGear^.dX.QWordValue > 4294967)  then
         begin
         StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
@@ -5229,7 +5349,7 @@ begin
                                 begin
                                 DeleteCI(iter);
                                 iter^.State:= iter^.State or gstFrozen;
-                                AddGearCI(iter)
+                                AddCI(iter)
                                 end
                             else // gtExplosives
                                 begin
@@ -5494,7 +5614,7 @@ begin
         if Gear^.Health > 0 then AmmoShove(Gear, Gear^.Health, 0);
         Gear^.Health:= 0;
         Gear^.Timer:= 500;
-        AddGearCI(Gear)
+        AddCI(Gear)
         end
     else if GameTicks and $3F = 0 then
         begin
@@ -5636,3 +5756,5 @@ begin
         end;
 end;
 *)
+
+end.

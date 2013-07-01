@@ -217,11 +217,15 @@ handleCmd_inRoom ["EM", msg] = do
 
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
         return $ AnswerClients chans ["EM", legalMsgs]
-            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = nonEmptyMsgs : roundMsgs g}) $ gameInfo r}) | not $ B.null nonEmptyMsgs]
+            : [ModifyRoom (\r -> r{gameInfo = liftM 
+                (\g -> g{
+                    roundMsgs = if B.null nonEmptyMsgs then roundMsgs g else nonEmptyMsgs : roundMsgs g
+                    , lastFilteredTimedMsg = fromMaybe (lastFilteredTimedMsg g) lastFTMsg})
+                $ gameInfo r})]
         else
         return []
     where
-        (legalMsgs, nonEmptyMsgs) = checkNetCmd msg
+        (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd msg
 
 
 handleCmd_inRoom ["ROUNDFINISHED", _] = do
