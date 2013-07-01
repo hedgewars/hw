@@ -1723,7 +1723,7 @@ void HWForm::StartCampaign()
     CreateGame(0, 0, 0);
 
     QComboBox *combo = ui.pageCampaign->CBMission;
-    QString camp = ui.pageCampaign->CBCampaign->currentText();
+    QString camp = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     unsigned int mNum = combo->count() - combo->currentIndex();
     QString miss = getCampaignScript(camp, mNum);
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
@@ -1888,7 +1888,7 @@ void HWForm::InitCampaignPage()
     unsigned int n = entries.count();
     for(unsigned int i = 0; i < n; i++)
     {
-        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]), QString(entries[i]));
+        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]).replace(QString("_"),QString(" ")), QString(entries[i]).replace(QString("_"),QString(" ")));
     }
 }
 
@@ -1900,7 +1900,7 @@ void HWForm::UpdateCampaignPage(int index)
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBMission->clear();
 
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     QStringList missionEntries = getCampMissionList(campaignName);
     QString tName = team.name();
     unsigned int n = missionEntries.count();
@@ -1961,7 +1961,7 @@ void HWForm::UpdateCampaignPage(int index)
 void HWForm::UpdateCampaignPageMission(int index)
 {
     // update thumbnail
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
     QString image = getCampaignImage(campaignName,mNum);
     ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
