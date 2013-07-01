@@ -1722,10 +1722,9 @@ void HWForm::startTraining(const QString & scriptName)
 void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
-    QString camp = ui.pageCampaign->CBCampaign->currentText();
+    QString camp = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
-
     game->StartCampaign(camp, miss, campTeam);
 }
 
@@ -1886,7 +1885,7 @@ void HWForm::InitCampaignPage()
     unsigned int n = entries.count();
     for(unsigned int i = 0; i < n; i++)
     {
-        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]), QString(entries[i]));
+        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]).replace(QString("_"),QString(" ")), QString(entries[i]).replace(QString("_"),QString(" ")));
     }
 }
 
@@ -1894,7 +1893,7 @@ void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     QString tName = team.name();    
     
     campaignMissionInfo = getCampMissionList(campaignName,tName);    
@@ -1911,7 +1910,7 @@ void HWForm::UpdateCampaignPage(int index)
 void HWForm::UpdateCampaignPageMission(int index)
 {
     // update thumbnail and description
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads
     if(index > -1 && index < campaignMissionInfo.count()) {

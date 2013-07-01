@@ -144,6 +144,7 @@ data GameInfo =
     GameInfo
     {
         roundMsgs :: [B.ByteString],
+        lastFilteredTimedMsg :: Maybe B.ByteString,
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
@@ -161,6 +162,7 @@ newGameInfo :: [TeamInfo]
 newGameInfo =
     GameInfo
         []
+        Nothing
         []
 
 data RoomInfo =

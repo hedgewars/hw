@@ -1,4 +1,4 @@
-(*
+ (*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
@@ -20,8 +20,8 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uRandom, uFloat, uStats, uVisualGears,
-     uCollisions, GLunit, uSound, uStore, uTypes, uScript
+uses uConsts, uInputHandler, uRandom, uFloat, uStats, 
+     uCollisions, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 
@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList
+    uGearsUtils, uGearsList, uVisualGearsList
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
@@ -126,7 +126,7 @@ with CurrentHedgehog^ do
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
            if Gear <> nil then
-               AddGearCI(Gear)
+               AddCI(Gear)
            end
         end;
 
@@ -504,7 +504,7 @@ begin
     HH^.GearHidden:= nil;
     InsertGearToList(HH^.Gear);
     HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
-    AddGearCI(HH^.Gear);
+    AddCI(HH^.Gear);
     HH^.Gear^.Active:= true;
     ScriptCall('onHogRestore', HH^.Gear^.Uid)
 end;
@@ -688,8 +688,8 @@ begin
     CurrentHedgehog:= newHog;
    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = amKnife) then
        LoadHedgehogHat(CurrentHedgehog^, 'Reserved/chef');
-    if oldCI then AddGearCI(oldHH^.Gear);
-    if newCI then AddGearCI(newHog^.Gear)
+    if oldCI then AddCI(oldHH^.Gear);
+    if newCI then AddCI(newHog^.Gear)
 end;
 
 

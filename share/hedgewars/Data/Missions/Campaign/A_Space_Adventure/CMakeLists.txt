@@ -6,4 +6,4 @@ install(FILES
     ${Config}
     ${Missions}
     ${Packs}
-    DESTINATION "${SHAREPATH}Data/Missions/Campaign/A Classic Fairytale")
+    DESTINATION "${SHAREPATH}Data/Missions/Campaign/A_Space_Adventure")

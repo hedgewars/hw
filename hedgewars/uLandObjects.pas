@@ -32,7 +32,7 @@ procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
 
 implementation
-uses uStore, uConsts, uConsole, uRandom, uSound, GLunit
+uses uStore, uConsts, uConsole, uRandom, uSound
      , uTypes, uVariables, uUtils, uDebug, SysUtils
      , uPhysFSLayer;
 
@@ -535,7 +535,7 @@ while not pfsEOF(f) do
             SkyColor.g:= t;
             SkyColor.b:= t
             end;
-        glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99);
+        SetSkyColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255);
         SDSkyColor.r:= SkyColor.r;
         SDSkyColor.g:= SkyColor.g;
         SDSkyColor.b:= SkyColor.b;
@@ -794,7 +794,7 @@ while not pfsEOF(f) do
                 RQSkyColor.g:= t;
                 RQSkyColor.b:= t
                 end;
-            glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+            SetSkyColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255);
             SDSkyColor.r:= RQSkyColor.r;
             SDSkyColor.g:= RQSkyColor.g;
             SDSkyColor.b:= RQSkyColor.b;

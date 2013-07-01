@@ -11,9 +11,10 @@ include(CheckCCompilerFlag)
 
 #stack protection, when found it needs to go in the linker flags too
 #it is disabled on win32 because it adds a dll and messes with linker
+#some bsd installations reported problems too
 #(see 822312 654424 on bugzilla.redhat.com)
 check_c_compiler_flag("-fstack-protector-all -fstack-protector" HAVE_STACKPROTECTOR)
-if(HAVE_STACKPROTECTOR AND (NOT WIN32))
+if(HAVE_STACKPROTECTOR AND ((NOT WIN32) OR (CMAKE_SYSTEM_NAME MATCHES BSD.OS)))
     add_flag_append(CMAKE_C_FLAGS "-fstack-protector-all -fstack-protector")
     add_flag_append(CMAKE_CXX_FLAGS "-fstack-protector-all -fstack-protector")
     add_flag_append(CMAKE_EXE_LINKER_FLAGS "-fstack-protector-all -fstack-protector")

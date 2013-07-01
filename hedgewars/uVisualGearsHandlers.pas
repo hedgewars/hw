@@ -24,6 +24,57 @@
  * => The usage of safe functions or data types (e.g. GetRandom() or hwFloat)
  * is usually not necessary and therefore undesirable.
  *)
+ 
+{$INCLUDE "options.inc"} 
+ 
+unit uVisualGearsHandlers;
+
+interface
+uses uTypes;
+
+var doStepHandlers: array[TVisualGearType] of TVGearStepProcedure;
+
+procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
+procedure doStepBeeTrace(Gear: PVisualGear; Steps: Longword);
+procedure doStepCloud(Gear: PVisualGear; Steps: Longword);
+procedure doStepExpl(Gear: PVisualGear; Steps: Longword);
+procedure doStepNote(Gear: PVisualGear; Steps: Longword);
+procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
+procedure doStepEgg(Gear: PVisualGear; Steps: Longword);
+procedure doStepFire(Gear: PVisualGear; Steps: Longword);
+procedure doStepShell(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmallDamage(Gear: PVisualGear; Steps: Longword);
+procedure doStepBubble(Gear: PVisualGear; Steps: Longword);
+procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
+procedure doStepAmmo(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmoke(Gear: PVisualGear; Steps: Longword);
+procedure doStepDust(Gear: PVisualGear; Steps: Longword);
+procedure doStepSplash(Gear: PVisualGear; Steps: Longword);
+procedure doStepDroplet(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmokeRing(Gear: PVisualGear; Steps: Longword);
+procedure doStepFeather(Gear: PVisualGear; Steps: Longword);
+procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
+procedure doStepTeamHealthSorter(Gear: PVisualGear; Steps: Longword);
+procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
+procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
+procedure doStepHealthTagWork(Gear: PVisualGear; Steps: Longword);
+procedure doStepHealthTagWorkUnderWater(Gear: PVisualGear; Steps: Longword);
+procedure doStepHealthTag(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmokeTrace(Gear: PVisualGear; Steps: Longword);
+procedure doStepExplosionWork(Gear: PVisualGear; Steps: Longword);
+procedure doStepExplosion(Gear: PVisualGear; Steps: Longword);
+procedure doStepBigExplosionWork(Gear: PVisualGear; Steps: Longword);
+procedure doStepBigExplosion(Gear: PVisualGear; Steps: Longword);
+procedure doStepChunk(Gear: PVisualGear; Steps: Longword);
+procedure doStepBulletHit(Gear: PVisualGear; Steps: Longword);
+procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
+procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
+procedure doStepStraightShot(Gear: PVisualGear; Steps: Longword);
+
+procedure initModule;
+
+implementation
+uses uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
@@ -800,3 +851,47 @@ else
     end
 end;
 
+
+const handlers: array[TVisualGearType] of TVGearStepProcedure =
+        (
+            @doStepFlake,
+            @doStepCloud,
+            @doStepExpl,
+            @doStepExpl,
+            @doStepFire,
+            @doStepSmallDamage,
+            @doStepTeamHealthSorter,
+            @doStepSpeechBubble,
+            @doStepBubble,
+            @doStepSteam,
+            @doStepAmmo,
+            @doStepSmoke,
+            @doStepSmoke,
+            @doStepShell,
+            @doStepDust,
+            @doStepSplash,
+            @doStepDroplet,
+            @doStepSmokeRing,
+            @doStepBeeTrace,
+            @doStepEgg,
+            @doStepFeather,
+            @doStepHealthTag,
+            @doStepSmokeTrace,
+            @doStepSmokeTrace,
+            @doStepExplosion,
+            @doStepBigExplosion,
+            @doStepChunk,
+            @doStepNote,
+            @doStepLineTrail,
+            @doStepBulletHit,
+            @doStepCircle,
+            @doStepSmoothWindBar,
+            @doStepStraightShot
+        );
+
+procedure initModule;
+begin
+    doStepHandlers:= handlers
+end;
+
+end.

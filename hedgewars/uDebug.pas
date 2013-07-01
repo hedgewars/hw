@@ -33,11 +33,7 @@ procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 WriteLnToConsole(Msg);
 if isFatalError then
-    begin
     ParseCommand('fatal ' + lastConsoleline, true);
-    SDL_Quit;
-    halt(1)
-    end
 end;
 
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);
