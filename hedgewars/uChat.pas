@@ -58,13 +58,13 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 const
     colors: array[#0..#6] of TSDL_Color = (
-            (r:$FF; g:$FF; b:$FF; unused:$FF), // unused, feel free to take it for anything
-            (r:$FF; g:$FF; b:$FF; unused:$FF), // chat message [White]
-            (r:$FF; g:$00; b:$FF; unused:$FF), // action message [Purple]
-            (r:$90; g:$FF; b:$90; unused:$FF), // join/leave message [Lime]
-            (r:$FF; g:$FF; b:$A0; unused:$FF), // team message [Light Yellow]
-            (r:$FF; g:$00; b:$00; unused:$FF), // error messages [Red]
-            (r:$00; g:$FF; b:$FF; unused:$FF)  // input line [Light Blue]
+            (r:$FF; g:$FF; b:$FF; a:$FF), // unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$FF; a:$FF), // chat message [White]
+            (r:$FF; g:$00; b:$FF; a:$FF), // action message [Purple]
+            (r:$90; g:$FF; b:$90; a:$FF), // join/leave message [Lime]
+            (r:$FF; g:$FF; b:$A0; a:$FF), // team message [Light Yellow]
+            (r:$FF; g:$00; b:$00; a:$FF), // error messages [Red]
+            (r:$00; g:$FF; b:$FF; a:$FF)  // input line [Light Blue]
             );
     ChatCommandz: array [TChatCmd] of record
             ChatCmd: string[31];
