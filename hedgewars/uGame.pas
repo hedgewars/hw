@@ -27,8 +27,8 @@ procedure DoGameTick(Lag: LongInt);
     implementation
 ////////////////////
 uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
-    uVisualGears, uTypes, uVariables, uCommands, uConsts, uVisualGearsList
-    {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
+     uTypes, uVariables, uCommands, uConsts, uVisualGearsList
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;

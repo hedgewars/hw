@@ -211,6 +211,10 @@
 		61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6165924E11CA9CB400D6E256 /* MapConfigViewController-iPhone.xib */; };
 		61A976B3136F668500DD9878 /* uCursor.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61A976B2136F668500DD9878 /* uCursor.pas */; };
 		61AC067412B2E32D000B52A2 /* Appirater.m in Sources */ = {isa = PBXBuildFile; fileRef = 61AC067312B2E32D000B52A2 /* Appirater.m */; };
+		61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1D17837C78009F283D /* ArgParsers.pas */; };
+		61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A1E17837C78009F283D /* uVisualGearsList.pas */; };
+		61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */; };
+		61B37A841783822C009F283D /* uVisualGearsHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 61B37A831783822C009F283D /* uVisualGearsHandlers.pas */; };
 		61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61B7A33712CC21080086B604 /* StatsPageViewController.m */; };
 		61B9A86814423A9D001541C1 /* GameConfigViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */; };
 		61C079E411F35A300072BF46 /* EditableCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61C079E311F35A300072BF46 /* EditableCellView.m */; };
@@ -471,7 +475,6 @@
 		612CABAA1391CE68005E9596 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		61370652117B1D50004EE44A /* Entitlements-Distribution.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Entitlements-Distribution.plist"; sourceTree = "<group>"; };
 		6147DAD21253DCDE0010357E /* savesButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = savesButton.png; path = Resources/Frontend/savesButton.png; sourceTree = "<group>"; };
-		614E333D11DE9A93009DBA4E /* VGSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = VGSHandlers.inc; path = ../../hedgewars/VGSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		6154A53114C37E4A00F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/About.strings; sourceTree = "<group>"; };
 		6154A53E14C37E5400F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6154A54014C37EB100F6EEF6 /* Romanian */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Romanian; path = Locale/Romanian.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -591,7 +594,6 @@
 		6172FEEE1298D25D00D73365 /* smallerBackground~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "smallerBackground~iphone.png"; path = "Resources/Frontend/smallerBackground~iphone.png"; sourceTree = "<group>"; };
 		6174F7C612CD62E300205D6F /* smallerTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = smallerTitle.png; path = Resources/Frontend/smallerTitle.png; sourceTree = "<group>"; };
 		6174F7C712CD62E300205D6F /* smallerTitle@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "smallerTitle@2x.png"; path = "Resources/Frontend/smallerTitle@2x.png"; sourceTree = "<group>"; };
-		617987E4114AA34C00BA94A9 /* GSHandlers.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = GSHandlers.inc; path = ../../hedgewars/GSHandlers.inc; sourceTree = SOURCE_ROOT; };
 		617987E7114AA34C00BA94A9 /* hwengine.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwengine.pas; path = ../../hedgewars/hwengine.pas; sourceTree = SOURCE_ROOT; };
 		617987E9114AA34C00BA94A9 /* hwLibrary.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = hwLibrary.pas; path = ../../hedgewars/hwLibrary.pas; sourceTree = SOURCE_ROOT; };
 		617987EB114AA34C00BA94A9 /* options.inc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = options.inc; path = ../../hedgewars/options.inc; sourceTree = SOURCE_ROOT; };
@@ -677,6 +679,10 @@
 		61A976B2136F668500DD9878 /* uCursor.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uCursor.pas; path = ../../hedgewars/uCursor.pas; sourceTree = SOURCE_ROOT; };
 		61AC067212B2E32D000B52A2 /* Appirater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Appirater.h; path = Classes/Appirater.h; sourceTree = "<group>"; };
 		61AC067312B2E32D000B52A2 /* Appirater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Appirater.m; path = Classes/Appirater.m; sourceTree = "<group>"; };
+		61B37A1D17837C78009F283D /* ArgParsers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = ArgParsers.pas; path = ../../hedgewars/ArgParsers.pas; sourceTree = SOURCE_ROOT; };
+		61B37A1E17837C78009F283D /* uVisualGearsList.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGearsList.pas; path = ../../hedgewars/uVisualGearsList.pas; sourceTree = SOURCE_ROOT; };
+		61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersMess.pas; path = ../../hedgewars/uGearsHandlersMess.pas; sourceTree = SOURCE_ROOT; };
+		61B37A831783822C009F283D /* uVisualGearsHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uVisualGearsHandlers.pas; path = ../../hedgewars/uVisualGearsHandlers.pas; sourceTree = SOURCE_ROOT; };
 		61B7A33612CC21080086B604 /* StatsPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatsPageViewController.h; sourceTree = "<group>"; };
 		61B7A33712CC21080086B604 /* StatsPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsPageViewController.m; sourceTree = "<group>"; };
 		61B9A86714423A9D001541C1 /* GameConfigViewController-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = "GameConfigViewController-iPad.xib"; sourceTree = "<group>"; };
@@ -1034,17 +1040,6 @@
 			name = Headers;
 			sourceTree = "<group>";
 		};
-		61798892114AA56300BA94A9 /* inc */ = {
-			isa = PBXGroup;
-			children = (
-				61589C5A144B4322007BFAA4 /* config.inc */,
-				617987EB114AA34C00BA94A9 /* options.inc */,
-				617987E4114AA34C00BA94A9 /* GSHandlers.inc */,
-				614E333D11DE9A93009DBA4E /* VGSHandlers.inc */,
-			);
-			name = inc;
-			sourceTree = "<group>";
-		};
 		6179936611501D1E00BA94A9 /* Overlay */ = {
 			isa = PBXGroup;
 			children = (
@@ -1244,12 +1239,17 @@
 		9283015C0F10E48900CC5A3C /* Pascal Sources */ = {
 			isa = PBXGroup;
 			children = (
+				61B37A831783822C009F283D /* uVisualGearsHandlers.pas */,
+				61B37A7F178381DB009F283D /* uGearsHandlersMess.pas */,
+				61B37A1D17837C78009F283D /* ArgParsers.pas */,
+				61B37A1E17837C78009F283D /* uVisualGearsList.pas */,
+				61589C5A144B4322007BFAA4 /* config.inc */,
+				617987EB114AA34C00BA94A9 /* options.inc */,
 				610FB7C71661390E002FB2A7 /* uPhysFSLayer.pas */,
 				619349C5160BAF3E00A08518 /* uAILandMarks.pas */,
 				619349C6160BAF3E00A08518 /* uGearsHandlers.pas */,
 				619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */,
 				615BE3D3155C5DDF003CA34D /* uInputHandler.pas */,
-				61798892114AA56300BA94A9 /* inc */,
 				61D08D7114AEA7FE0007C078 /* uGearsHedgehog.pas */,
 				61D08D7214AEA7FE0007C078 /* uGearsList.pas */,
 				61D08D7314AEA7FE0007C078 /* uGearsUtils.pas */,
@@ -1659,7 +1659,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "HG=/usr/local/bin/hg\nSOURCE_DIR=${PROJECT_DIR}/../../\n\n#create config.inc\necho \"Updating config file...\"\nPRON=`grep HEDGEWARS_PROTO_VER ${SOURCE_DIR}/CMakeLists.txt | grep -o -E [0-9]+`\nMAJN=`grep CPACK_PACKAGE_VERSION_MAJOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nMINN=`grep CPACK_PACKAGE_VERSION_MINOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nPATN=`grep CPACK_PACKAGE_VERSION_PATCH ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nREVN=`$HG id -n ${SOURCE_DIR}`\nHASH=`$HG id -i ${SOURCE_DIR}`\n\necho \"{Do not change this file, use the project target to regenerate}\" > ${PROJECT_DIR}/config.inc\necho \"const cNetProtoVersion = $PRON;\" >> ${PROJECT_DIR}/config.inc\necho \"const cVersionString = '$MAJN.$MINN.$PATN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cRevisionString = '$REVN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cHashString = '$HASH';\" >> ${PROJECT_DIR}/config.inc\necho \"const cLuaLibrary = '';\" >> ${PROJECT_DIR}/config.inc";
+			shellScript = "HG=/usr/local/bin/hg\nSOURCE_DIR=${PROJECT_DIR}/../../\n\n#create config.inc\necho \"Updating config file...\"\nPRON=`grep HEDGEWARS_PROTO_VER ${SOURCE_DIR}/CMakeLists.txt | grep -o -E [0-9]+`\nMAJN=`grep CPACK_PACKAGE_VERSION_MAJOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nMINN=`grep CPACK_PACKAGE_VERSION_MINOR ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nPATN=`grep CPACK_PACKAGE_VERSION_PATCH ${SOURCE_DIR}/CMakeLists.txt | grep -o -E \"[0-9]+\"`\nREVN=`$HG id -n ${SOURCE_DIR}`\nHASH=`$HG id -i ${SOURCE_DIR}`\n\necho \"{Do not change this file, use the project target to regenerate}\" > ${PROJECT_DIR}/config.inc\necho \"const cNetProtoVersion = $PRON;\" >> ${PROJECT_DIR}/config.inc\necho \"const cVersionString = '$MAJN.$MINN.$PATN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cRevisionString = '$REVN';\" >> ${PROJECT_DIR}/config.inc\necho \"const cHashString = '$HASH';\" >> ${PROJECT_DIR}/config.inc\n";
 		};
 		9283011B0F10CB2D00CC5A3C /* Build libfpc.a */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1805,6 +1805,10 @@
 				619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */,
 				619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */,
 				610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */,
+				61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */,
+				61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */,
+				61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */,
+				61B37A841783822C009F283D /* uVisualGearsHandlers.pas in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1961,7 +1965,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
+				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2066,7 +2070,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Distribution.plist";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
+				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.7.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2213,7 +2217,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
+				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.6.0;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
@@ -2282,7 +2286,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Entitlements-Development.plist";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FPC_COMMON_OPTIONS = "-dIPHONEOS -Cs2000000 -vwi -B  -Sgix -Fi${PROJECT_DIR}";
+				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/2.6.0;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;

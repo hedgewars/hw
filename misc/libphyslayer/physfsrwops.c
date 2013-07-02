@@ -32,7 +32,7 @@
 #endif
 
 #if TARGET_SDL13
-static long SDLCALL physfsrwops_seek(struct SDL_RWops *rw, long offset, int whence)
+static SDLCALL Sint64 physfsrwops_seek(struct SDL_RWops *rw, Sint64 offset, int whence)
 #else
 static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
 #endif
