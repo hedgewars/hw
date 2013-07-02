@@ -374,13 +374,6 @@
 			remoteGlobalIDString = FD6526630DE8FCCB002AD96B;
 			remoteInfo = libSDL;
 		};
-		61A19AEB14D2010A004B1E6D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 61A19AE314D2010A004B1E6D /* SDL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 006E982211955059001DE610;
-			remoteInfo = testsdl;
-		};
 		61A19B6514D20B6C004B1E6D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
@@ -1083,7 +1076,6 @@
 			isa = PBXGroup;
 			children = (
 				61A19AEA14D2010A004B1E6D /* libSDL2.a */,
-				61A19AEC14D2010A004B1E6D /* testsdl.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1476,13 +1468,6 @@
 			fileType = archive.ar;
 			path = libSDL2.a;
 			remoteRef = 61A19AE914D2010A004B1E6D /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		61A19AEC14D2010A004B1E6D /* testsdl.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = testsdl.app;
-			remoteRef = 61A19AEB14D2010A004B1E6D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		61A19B6614D20B6C004B1E6D /* libSDL2_image.a */ = {

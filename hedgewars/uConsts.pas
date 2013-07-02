@@ -47,8 +47,8 @@ const
     cameraKeyboardSpeed : ShortInt = 10;
 
     // color constants
-    cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
-    cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
+    cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; a:$FF);
+    cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; a:$FF);
 
     cWhiteColor           : Longword = $FFFFFFFF;
     cYellowColor          : Longword = $FFFFFF00;
