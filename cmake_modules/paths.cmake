@@ -61,8 +61,10 @@ set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CM
 set(CMAKE_INSTALL_RPATH_ESCAPED "\\\\$$ORIGIN/../${target_library_install_dir}/:\\\\$$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
 
 if(UNIX AND NOT APPLE)
-    #make sure $ORIGIN is respected
-    add_linker_flag("-zorigin")
+    if(CMAKE_COMPILER_IS_GNUCC)
+       #make sure $ORIGIN is respected
+        add_linker_flag("-zorigin")
+    endif()
     #apply RPATH settings to pascal executables
     add_flag_append(CMAKE_Pascal_FLAGS "-k-rpath -k'${CMAKE_INSTALL_RPATH_ESCAPED}'")
     #until we link with external things there is no need to set rpath on haskell
