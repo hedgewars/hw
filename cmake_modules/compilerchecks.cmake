@@ -29,7 +29,7 @@ endif()
 
 
 if(UNIX)
-    #symbol visibility, not supported on Windows (error out then)
+    #symbol visibility
     check_c_compiler_flag("-fvisibility=hidden" HAVE_VISIBILITY)
     if(HAVE_VISIBILITY)
         add_flag_append(CMAKE_C_FLAGS "-fvisibility=hidden")
@@ -37,7 +37,7 @@ if(UNIX)
     endif()
 
     #check for noexecstack on ELF, Gentoo security
-    set(CMAKE_REQUIRED_FLAGS "-Wl,-z,noexecstack")
+    set(CMAKE_REQUIRED_FLAGS "-Wl,-znoexecstack")
     check_c_compiler_flag("" HAVE_NOEXECSTACK)
     if(HAVE_NOEXECSTACK)
         add_linker_flag("-znoexecstack")
@@ -58,11 +58,12 @@ if(UNIX)
         endif()
     endif()
 
-    #this is actually an optimisation
-    set(CMAKE_REQUIRED_FLAGS "-Wl,--as-needed")
-    check_c_compiler_flag("" HAVE_ASNEEDED)
-    if(HAVE_ASNEEDED)
-        add_linker_flag("--as-needed")
+    if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+        set(CMAKE_REQUIRED_FLAGS "-Wl,--as-needed")
+        check_c_compiler_flag("" HAVE_ASNEEDED)
+        if(HAVE_ASNEEDED)
+            add_linker_flag("--as-needed")
+        endif()
     endif()
 else(UNIX)
     #check for ASLR on Windows Vista or later, requires binutils >= 2.20
