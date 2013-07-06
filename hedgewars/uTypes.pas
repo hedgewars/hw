@@ -469,15 +469,15 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
     POnScreenWidget = ^TOnScreenWidget;
     TOnScreenWidget = record
-        show          : boolean;                      // if false widget will not be drawn
-        sprite        : TSprite;                    // a convenience type
-        frame         : TSDL_Rect;                   // graphical coordinates
-        active        : TSDL_Rect;                  // active touch region
-        fadeAnimStart : Longword;            // time the fade started, 0 means don't fade
-        moveAnim      : TWidgetMovement;          // the animation associated to the widget
+        show          : boolean;            // if false widget will not be drawn
+        sprite        : TSprite;            // a convenience type
+        frame         : TSDL_Rect;          // graphical coordinates
+        active        : TSDL_Rect;          // active touch region
+        fadeAnimStart : Longword;           // time the fade started
+                                            //     (0 means do not fade)
+        moveAnim      : TWidgetMovement;    // animation associated to widget
         end;
 
-{$IFDEF SDL13}
     PTouch_Data = ^TTouch_Data;
     TTouch_Data = record
         id                       : TSDL_FingerId;
@@ -487,7 +487,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
         timeSinceDown            : Longword;
         pressedWidget            : POnScreenWidget;
         end;
-{$ENDIF}
 
 implementation
 
