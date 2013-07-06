@@ -298,7 +298,9 @@ procedure CleanupInput;
 begin
     FreezeEnterKey;
     history:= 0;
+{$IFNDEF SDL2}
     SDL_EnableKeyRepeat(0,0);
+{$ENDIF}
     GameState:= gsGame;
     ResetKbd;
 end;
@@ -421,7 +423,9 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
+{$IFNDEF SDL2}
     SDL_EnableKeyRepeat(200,45);
+{$ENDIF}
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else

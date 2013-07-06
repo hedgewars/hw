@@ -136,7 +136,7 @@ procedure MainLoop;
 var event: TSDL_Event;
     PrevTime, CurrTime: Longword;
     isTerminated: boolean;
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     previousGameState: TGameState;
 {$ELSE}
     prevFocusState: boolean;
@@ -148,17 +148,17 @@ begin
     begin
         SDL_PumpEvents();
 
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL2}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
-{$IFDEF SDL13}
+{$IFDEF SDL2}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
                         end
-                    else 
+                    else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
@@ -339,7 +339,11 @@ begin
     if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
 
+{$IFDEF SDL2}
+    SDL_StartTextInput();
+{$ELSE}
     SDL_EnableUNICODE(1);
+{$ENDIF}
     SDL_ShowCursor(0);
 
     WriteToConsole('Init SDL_ttf... ');
