@@ -9,6 +9,8 @@
 
 -- TODO
 -- Fix some glitches when gaining control on animations
+-- Round time after check point 2
+-- Enemys take control
 -- Continue with the rest :P
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
@@ -18,6 +20,8 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 -- globals
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Moon, stop for fuels!")
+local weaponsAcquired = false
+local checkPointReached = 1 -- 1 is start of the game
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -53,6 +57,7 @@ local teamD = {}
 hero.name = "Hog Solo"
 hero.x = 1380
 hero.y = 1750
+hero.dead = false
 paoth1.name = "Joe"
 paoth1.x = 1430
 paoth1.y = 1750
@@ -90,7 +95,7 @@ teamD.color = tonumber("38D61C",16) -- green
 
 function onGameInit()
 	Seed = 1
-	GameFlags = gfInfAttack + gfSolidLand + gfDisableWind 
+	GameFlags = gfSolidLand + gfDisableWind
 	TurnTime = 45000
 	CaseFreq = 0
 	MinesNum = 0
@@ -105,34 +110,45 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAoTH
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	paoth1.gear = AddHog(paoth1.name, 0, 100, "war_desertgrenadier1")
+	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
-	paoth2.gear = AddHog(paoth2.name, 0, 100, "war_desertgrenadier1")
+	paoth2.gear = AddHog(paoth2.name, 0, 100, "scif_2001Y")
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
-	paoth3.gear = AddHog(paoth3.name, 0, 100, "war_desertgrenadier1")
+	paoth3.gear = AddHog(paoth3.name, 0, 100, "hair_purple")
 	AnimSetGearPosition(paoth3.gear, paoth3.x, paoth3.y)
 	HogTurnLeft(paoth3.gear, true)
-	paoth4.gear = AddHog(paoth4.name, 0, 100, "war_desertgrenadier1")
+	paoth4.gear = AddHog(paoth4.name, 0, 100, "scif_2001Y")
 	AnimSetGearPosition(paoth4.gear, paoth4.x, paoth4.y)
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.gear = AddHog(professor.name, 0, 100, "war_desertgrenadier1")
+	professor.gear = AddHog(professor.name, 0, 100, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	minion1.gear = AddHog(minion1.name, 0, 100, "war_desertgrenadier1")
+	minion1.gear = AddHog(minion1.name, 1, 100, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)
-	minion2.gear = AddHog(minion2.name, 0, 100, "war_desertgrenadier1")
+	minion2.gear = AddHog(minion2.name, 1, 100, "Gasmask")
 	AnimSetGearPosition(minion2.gear, minion2.x, minion2.y)
 	HogTurnLeft(minion2.gear, true)
-	minion3.gear = AddHog(minion3.name, 0, 100, "war_desertgrenadier1")
+	minion3.gear = AddHog(minion3.name, 1, 100, "Gasmask")
 	AnimSetGearPosition(minion3.gear, minion3.x, minion3.y)
-	HogTurnLeft(minion3.gear, true)	
+	HogTurnLeft(minion3.gear, true)
+	
+	-- get the check point
+	if tonumber(GetCampaignVar("Moon01CheckPoint")) then
+		checkPointReached = tonumber(GetCampaignVar("Moon01CheckPoint"))
+	end
+	
+	if checkPointReached == 1 then
+		-- Start of the game
+	elseif checkPointReached == 2 then
+		AnimSetGearPosition(hero.gear, parachuteX, weaponsY)
+	end
 	
 	AnimInit()
 	AnimationSetup()	
@@ -145,17 +161,29 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
-	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)
+	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)	
 	
-	AddAmmo(hero.gear, amRope, 2)
-	SpawnAmmoCrate(bazookaX, weaponsY, amBazooka)
-	SpawnAmmoCrate(parachuteX, weaponsY, amParachute)
-	SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
-	SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
-	
-	AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)
+	-- check for death has to go first
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
-	AddAnim(dialog01)
+	if checkPointReached == 1 then
+		AddAmmo(hero.gear, amRope, 2)
+		SpawnAmmoCrate(bazookaX, weaponsY, amBazooka)
+		SpawnAmmoCrate(parachuteX, weaponsY, amParachute)
+		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
+		SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
+		AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)
+		AddAnim(dialog01)
+	elseif checkPointReached == 2 then	
+		AddAmmo(hero.gear, amBazooka, 2)
+		AddAmmo(hero.gear, amParachute, 2)
+		AddAmmo(hero.gear, amGrenade, 2)
+		AddAmmo(hero.gear, amDEagle, 2)
+		SetWind(80)		
+		GameFlags = bor(GameFlags,gfDisableWind)
+		weaponsAcquired = true
+		AddAnim(dialog02)
+	end
 end
 
 function onAmmoStoreInit()
@@ -172,11 +200,32 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+	if CurrentHedgehog ~= hero.gear then
+		TurnTimeLeft = 0
+	end
+end
+
+function onNewTurn()
+	if not weaponsAcquired and CurrentHedgehog ~= hero.gear then
+		TurnTimeLeft = 0
+	elseif not weaponsAcquired and CurrentHedgehog == hero.gear then
+		TurnTimeLeft = -1
+	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth1.gear
+		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear
+		or CurrentHedgehog == professor.gear then
+		TurnTimeLeft = 0
+	end
 end
 
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)   
+	end
+end
+
+function onGearDelete(gear)
+	if gear == hero.gear then
+		hero.dead = true
 	end
 end
 
@@ -189,10 +238,27 @@ function onWeaponsPlatform(gear)
 	return false
 end
 
+function onHeroDeath(gear)
+	if hero.dead then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
-function weaponsPlatform(gear)
+function weaponsPlatform(gear)	
+	SaveCampaignVar("Moon01CheckPoint", "2")
+	TurnTimeLeft = 0
+	weaponsAqcuired = true
+	SetWind(80)		
+	GameFlags = bor(GameFlags,gfDisableWind)
 	AddAnim(dialog02)
+end
+
+function heroDeath(gear)
+	
+	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
@@ -225,4 +291,12 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! YEAAAAAH!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry up and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
+end
+
+------------------- custom "animation" functions --------------------------
+
+function startCombat()
+	-- use this so guard2 will gain control
+	AnimSwitchHog(minion3.gear)
+	TurnTimeLeft = 0
 end
