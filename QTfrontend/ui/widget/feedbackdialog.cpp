@@ -273,8 +273,8 @@ void FeedbackDialog::GenerateSpecs()
 #else
          available_pages = 0,
 #endif*/
-    quint page_size = sysconf(_SC_PAGE_SIZE);
-    quint total = pages * page_size / 1024 / 1024;
+    quint32 page_size = sysconf(_SC_PAGE_SIZE);
+    quint32 total = pages * page_size / 1024 / 1024;
     total_ram += QString::number(total) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif
