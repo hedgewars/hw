@@ -123,6 +123,35 @@ About::About(QWidget * parent) :
         SDL_UnloadObject(sdlnet_handle);
     }
 
+    void *sdlimage_handle = SDL_LoadObject(sopath("SDL_image"));
+    if (sdlimage_handle != NULL) {
+        SDL_version *(*sdlimage_ver_get)(void) = NULL;
+        sdlimage_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlimage_handle, "IMG_Linked_Version");
+        if (sdlimage_ver_get != NULL) {
+            SDL_version *sdlimage_ver = sdlimage_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_image</a> version: %1.%2.%3<br>")
+                .arg(sdlimage_ver->major)
+                .arg(sdlimage_ver->minor)
+                .arg(sdlimage_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
+
+    void *sdlttf_handle = SDL_LoadObject(sopath("SDL_ttf"));
+    if (sdlttf_handle != NULL) {
+        SDL_version *(*sdlttf_ver_get)(void) = NULL;
+        sdlttf_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlttf_handle, "TTF_Linked_Version");
+        if (sdlttf_ver_get != NULL) {
+            SDL_version *sdlttf_ver = sdlttf_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_ttf</a> version: %1.%2.%3<br>")
+                .arg(sdlttf_ver->major)
+                .arg(sdlttf_ver->minor)
+                .arg(sdlttf_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
+
+
     libinfo.append(QString("<a href=\"http://qt-project.org/\">Qt</a> version: %1<br>").arg(QT_VERSION_STR));
 
 #ifdef VIDEOREC
