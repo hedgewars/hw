@@ -257,12 +257,14 @@ void FeedbackDialog::GenerateSpecs()
         case QSysInfo::WV_2003: os_version += "Windows Server 2003\n"; break;
         case QSysInfo::WV_VISTA: os_version += "Windows Vista\n"; break;
         case QSysInfo::WV_WINDOWS7: os_version += "Windows 7\n"; break;
-        //case QSysInfo::WV_WINDOWS8: os_version += "Windows 8\n"; break; //QT 5+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+        case QSysInfo::WV_WINDOWS8: os_version += "Windows 8\n"; break;
+#endif
         default: os_version += "Windows (Unknown version)\n"; break;
     }
     kernel_line += "Windows kernel\n";
 #endif
-#ifdef Q_OS_X11
+#ifdef Q_OS_LINUX
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     long pages = sysconf(_SC_PHYS_PAGES),
 /*
@@ -271,13 +273,14 @@ void FeedbackDialog::GenerateSpecs()
 #else
          available_pages = 0,
 #endif*/
-    page_size = sysconf(_SC_PAGE_SIZE);
-    total_ram += QString::number(pages*page_size/1024/1024) + " MB\n";
+    quint page_size = sysconf(_SC_PAGE_SIZE);
+    quint total = pages * page_size / 1024 / 1024;
+    total_ram += QString::number(total) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif
 
     // uname -a
-#if defined(Q_OS_X11) || defined(Q_OS_MAC)
+#if defined(Q_OS_LINUX) || defined(Q_OS_MAC)
     QProcess *process = new QProcess();
     QStringList arguments = QStringList("-a");
     process->start("uname", arguments);
