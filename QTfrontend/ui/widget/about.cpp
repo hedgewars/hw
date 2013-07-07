@@ -99,16 +99,20 @@ About::About(QWidget * parent) :
     libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
+    const SDL_version *sdl_ver = SDL_Linked_Version();
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
-        .arg(SDL_MAJOR_VERSION)
-        .arg(SDL_MINOR_VERSION)
-        .arg(SDL_PATCHLEVEL));
+        .arg(sdl_ver->major)
+        .arg(sdl_ver->minor)
+        .arg(sdl_ver->patch));
 
+    const SDL_version *sdlmixer_ver = Mix_Linked_Version();
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_mixer</a> version: %1.%2.%3<br>")
-        .arg(MIX_MAJOR_VERSION)
-        .arg(MIX_MINOR_VERSION)
-        .arg(MIX_PATCHLEVEL));
+        .arg(sdlmixer_ver->major)
+        .arg(sdlmixer_ver->minor)
+        .arg(sdlmixer_ver->patch));
 
+    // the remaining sdl modules used only in engine, so instead of needlessly linking them here
+    // we dynamically call the function returning the linked version
     void *sdlnet_handle = SDL_LoadObject(sopath("SDL_net"));
     if (sdlnet_handle != NULL) {
         SDL_version *(*sdlnet_ver_get)(void) = NULL;
@@ -165,6 +169,8 @@ About::About(QWidget * parent) :
         .arg(PHYSFS_VER_MAJOR)
         .arg(PHYSFS_VER_MINOR)
         .arg(PHYSFS_VER_PATCH));
+
+    // TODO: how to add Lua information?
 
     QLabel * lblLibInfo = new QLabel();
     lblLibInfo->setOpenExternalLinks(true);
