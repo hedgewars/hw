@@ -308,6 +308,7 @@ const
     SDLK_q         = 113;
     SDLK_w         = 119;
     SDLK_DELETE    = 127;
+    SDLK_KP_ENTER  = 271;
     SDLK_UP        = 273;
     SDLK_DOWN      = 274;
     SDLK_RIGHT     = 275;

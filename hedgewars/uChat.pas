@@ -327,7 +327,7 @@ begin
                 SetLine(InputStr, '', true)
             else CleanupInput
             end;
-        SDLK_RETURN:
+        SDLK_RETURN, SDLK_KP_ENTER:
             begin
             if Length(InputStr.s) > 0 then
                 begin
