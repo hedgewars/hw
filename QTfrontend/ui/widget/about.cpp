@@ -39,6 +39,15 @@ extern "C"
 }
 #endif
 
+
+#if defined(Q_OS_WINDOWS)
+#define sopath(x) x ".dll"
+#elif defined(Q_OS_MAC)
+#define sopath(x) "@executable_path/../Frameworks/" x ".framework/" x
+#else
+#define sopath(x) x //TODO
+#endif
+
 #include "about.h"
 
 About::About(QWidget * parent) :
@@ -99,6 +108,20 @@ About::About(QWidget * parent) :
         .arg(MIX_MAJOR_VERSION)
         .arg(MIX_MINOR_VERSION)
         .arg(MIX_PATCHLEVEL));
+
+    void *sdlnet_handle = SDL_LoadObject(sopath("SDL_net"));
+    if (sdlnet_handle != NULL) {
+        SDL_version *(*sdlnet_ver_get)(void) = NULL;
+        sdlnet_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlnet_handle, "SDLNet_Linked_Version");
+        if (sdlnet_ver_get != NULL) {
+            SDL_version *sdlnet_ver = sdlnet_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_net</a> version: %1.%2.%3<br>")
+                .arg(sdlnet_ver->major)
+                .arg(sdlnet_ver->minor)
+                .arg(sdlnet_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
 
     libinfo.append(QString("<a href=\"http://qt-project.org/\">Qt</a> version: %1<br>").arg(QT_VERSION_STR));
 
