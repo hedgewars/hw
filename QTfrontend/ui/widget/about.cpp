@@ -95,6 +95,11 @@ About::About(QWidget * parent) :
         .arg(SDL_MINOR_VERSION)
         .arg(SDL_PATCHLEVEL));
 
+    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_mixer</a> version: %1.%2.%3<br>")
+        .arg(MIX_MAJOR_VERSION)
+        .arg(MIX_MINOR_VERSION)
+        .arg(MIX_PATCHLEVEL));
+
     libinfo.append(QString("<a href=\"http://qt-project.org/\">Qt</a> version: %1<br>").arg(QT_VERSION_STR));
 
 #ifdef VIDEOREC
