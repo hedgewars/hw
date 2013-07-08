@@ -266,13 +266,7 @@ void FeedbackDialog::GenerateSpecs()
 #endif
 #ifdef Q_OS_LINUX
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
-    long pages = sysconf(_SC_PHYS_PAGES),
-/*
-#ifndef Q_OS_FREEBSD
-         available_pages = sysconf(_SC_AVPHYS_PAGES),
-#else
-         available_pages = 0,
-#endif*/
+    quint32 pages = sysconf(_SC_PHYS_PAGES);
     quint32 page_size = sysconf(_SC_PAGE_SIZE);
     quint32 total = pages * page_size / 1024 / 1024;
     total_ram += QString::number(total) + " MB\n";
