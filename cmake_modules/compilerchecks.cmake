@@ -20,9 +20,6 @@ if(NOT (WIN32 OR (CMAKE_SYSTEM_NAME MATCHES BSD.OS) OR (CMAKE_SYSTEM_NAME MATCHE
     if(HAVE_STACKPROTECTOR)
         add_flag_append(CMAKE_C_FLAGS "-fstack-protector-all -fstack-protector")
         add_flag_append(CMAKE_CXX_FLAGS "-fstack-protector-all -fstack-protector")
-        add_flag_append(CMAKE_EXE_LINKER_FLAGS "-fstack-protector-all -fstack-protector")
-        add_flag_append(CMAKE_SHARED_LIBRARY_C_FLAGS "-fstack-protector-all -fstack-protector")
-        add_flag_append(CMAKE_SHARED_LIBRARY_CXX_FLAGS "-fstack-protector-all -fstack-protector")
     endif()
 endif()
 
@@ -41,6 +38,13 @@ if(UNIX)
     check_c_compiler_flag("" HAVE_NOEXECSTACK)
     if(HAVE_NOEXECSTACK)
         add_linker_flag("-znoexecstack")
+    endif()
+
+    #check for origin on ELF, BSD $ORIGIN support
+    set(CMAKE_REQUIRED_FLAGS "-Wl,-zorigin")
+    check_c_compiler_flag("" HAVE_ORIGIN)
+    if(HAVE_ORIGIN)
+        add_linker_flag("-zorigin")
     endif()
 
     #check for full relro on ELF, Debian security
