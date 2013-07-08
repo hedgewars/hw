@@ -91,11 +91,12 @@ const
     // SDL_Init() flags
     SDL_INIT_TIMER          = $00000001;
     SDL_INIT_AUDIO          = $00000010;
-    SDL_INIT_VIDEO          = $00000020;
-    SDL_INIT_JOYSTICK       = $00000200;
+    SDL_INIT_VIDEO          = $00000020; // implies SDL_INIT_EVENTS (sdl2)
+    SDL_INIT_JOYSTICK       = $00000200; // implies SDL_INIT_EVENTS (sdl2)
 {$IFDEF SDL2}
     SDL_INIT_HAPTIC         = $00001000;
-    SDL_INIT_GAMECONTROLLER = $00002000; // implicitly activates JOYSTICK */
+    SDL_INIT_GAMECONTROLLER = $00002000; // implies SDL_INIT_JOYSTICK
+    SDL_INIT_EVENTS         = $00004000;
 {$ELSE}
     SDL_INIT_CDROM          = $00000100;
     SDL_INIT_EVENTTHREAD    = $01000000;
@@ -452,20 +453,21 @@ type
 
 {$IFDEF ANDROID}
     TAndroidio = record
-        fileName, inputStream, readableByteChannel, readMethod, assetFileDescriptor : Pointer;
+        fileName, inputStream, readableByteChannel: Pointer;
+        readMethod, assetFileDescriptor: Pointer;
         position, size, offset: Int64;
         fd: LongInt;
         end;
 {$ELSE}
 {$IFDEF WIN32}
     TWinbuffer = record
-        data = pointer;
-        size, left : LongInt;
+        data: Pointer;
+        size, left: LongInt;
         end;
     TWindowsio = record
-        append = {$IFDEF SDL2}Boolean{$ELSE}LongInt{$ENDIF};
-        h = pointer;
-        buffer = TWinbuffer;
+        append : {$IFDEF SDL2}Boolean{$ELSE}LongInt{$ENDIF};
+        h : Pointer;
+        buffer : TWinbuffer;
         end;
 {$ENDIF}
 {$ENDIF}
@@ -899,7 +901,7 @@ type
     TMixMusic = record
                 end;
 
-    TPostMix = procedure(udata: pointer; stream: PByte; len: LongInt); cdecl;
+    TPostMix = procedure(udata: Pointer; stream: PByte; len: LongInt); cdecl;
 
     {* SDL_net *}
     TIPAddress = record
@@ -1118,7 +1120,7 @@ function  Mix_HaltMusic: LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_FadeInChannelTimed(channel: LongInt; chunk: PMixChunk; loops: LongInt; fadems: LongInt; ticks: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 function  Mix_FadeOutChannel(channel: LongInt; fadems: LongInt): LongInt; cdecl; external SDL_MixerLibName;
 
-procedure Mix_SetPostMix( mix_func: TPostMix; arg: pointer); cdecl; external SDL_MixerLibName;
+procedure Mix_SetPostMix( mix_func: TPostMix; arg: Pointer); cdecl; external SDL_MixerLibName;
 
 (*  SDL_image  *)
 function  IMG_Init(flags: LongInt): LongInt; {$IFDEF SDL_IMAGE_NEWER}cdecl; external SDL_ImageLibName{$ELSE}inline{$ENDIF};
