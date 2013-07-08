@@ -45,7 +45,7 @@ extern "C"
 #elif defined(Q_OS_MAC)
 #define sopath(x) "@executable_path/../Frameworks/" x ".framework/" x
 #else
-#define sopath(x) x //TODO
+#define sopath(x) "lib" x ".so"
 #endif
 
 #include "about.h"
