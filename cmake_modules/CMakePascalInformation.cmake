@@ -50,8 +50,7 @@ endif()
 
 if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
 #-Wl,-rpath,
-    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
-    string(REGEX REPLACE "," "" CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG})
+    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG "-k-rpath")
 endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
 
 if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
@@ -60,7 +59,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
 
 if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 #-Wl,-rpath-link,
-    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
+    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG "-k-rpath-link")
 endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 
 # for most systems a module is the same as a shared library
@@ -99,7 +98,7 @@ endif(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
 
 # Copy C version of this flag which is normally determined in platform file.
 if(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
-    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
+    set(CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
 endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
