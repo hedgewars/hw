@@ -33,31 +33,34 @@ endif(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
 # so if these are not set just copy the flags from the c version
 
 # No flags supported during linking as a shell script takes care of it
+# however to avoid interferences we escape -Wl flags to the Pascal -k
 if(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
-#-dynamiclib -Wl,-headerpad_max_install_names for C
-    set(CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
+#-shared
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
 endif(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
 
-if(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
-    #another similarity, fpc: -fPIC  Same as -Cg
-    #(maybe required only for x86_64)
-    set(CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
-endif(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS)
+if(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS AND CMAKE_SHARED_LIBRARY_C_FLAGS)
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
+endif()
 
-if(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
-    set(CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
-endif(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS)
+if(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS AND CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
+#-rdynamic
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
+endif()
 
-#if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
-#    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
-#endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
+if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
+#-Wl,-rpath,
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG})
+    string(REGEX REPLACE "," "" CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG})
+endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
 
-#if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
-#    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP})
-#endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
+if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
+    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP ${CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG_SEP})
+endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
 
 if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
-    set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
+#-Wl,-rpath-link,
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_RPATH_LINK_C_FLAG})
 endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 
 # for most systems a module is the same as a shared library
@@ -70,12 +73,12 @@ endif(NOT CMAKE_MODULE_EXISTS)
 
 # repeat for modules
 if(NOT CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS)
-    set(CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_MODULE_CREATE_C_FLAGS})
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_MODULE_CREATE_C_FLAGS})
 endif(NOT CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS)
 
-if(NOT CMAKE_SHARED_MODULE_Pascal_FLAGS)
-    set(CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_MODULE_C_FLAGS})
-endif(NOT CMAKE_SHARED_MODULE_Pascal_FLAGS)
+if(NOT CMAKE_SHARED_MODULE_Pascal_FLAGS AND CMAKE_SHARED_MODULE_C_FLAGS)
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_MODULE_Pascal_FLAGS ${CMAKE_SHARED_MODULE_C_FLAGS})
+endif()
 
 if(NOT CMAKE_SHARED_MODULE_RUNTIME_Pascal_FLAG)
     set(CMAKE_SHARED_MODULE_RUNTIME_Pascal_FLAG ${CMAKE_SHARED_MODULE_RUNTIME_C_FLAG})
@@ -96,7 +99,7 @@ endif(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
 
 # Copy C version of this flag which is normally determined in platform file.
 if(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
-    set(CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
+    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
 endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
@@ -161,16 +164,25 @@ if(NOT CMAKE_Pascal_COMPILE_OBJECT)
     if(UNIX)
         #when you have multiple ld installation make sure you get the one bundled with the system C compiler
         include(Platform/${CMAKE_SYSTEM_NAME}-GNU-C.cmake OPTIONAL)
-        if(CMAKE_C_COMPILER)
+        if(CMAKE_COMPILER_IS_GNUCC)
             get_filename_component(CMAKE_C_COMPILER_DIR ${CMAKE_C_COMPILER} PATH)
             set(CMAKE_Pascal_UNIX_FLAGS "-FD${CMAKE_C_COMPILER_DIR}")
-        endif(CMAKE_C_COMPILER)
+        endif(CMAKE_COMPILER_IS_GNUCC)
         if(APPLE)
-            #add user framework directory
-            set(CMAKE_Pascal_UNIX_FLAGS "-Ff~/Library/Frameworks ${CMAKE_Pascal_UNIX_FLAGS}")
+            #TODO: take care of CMAKE_INSTALL_NAME_DIR for shared targets
+        else(APPLE)
+            if(CMAKE_INSTALL_RPATH)
+                #need to escape twice because we use a script to link
+                #\\\\ is just \\ which escapes '\' in the final script
+                #same for $$ which escapes '$' in cmake
+                string(REGEX REPLACE "\\$" "\\\\$$" CMAKE_INSTALL_RPATH_ESCAPED ${CMAKE_INSTALL_RPATH})
+                #normally this flag is found in <LINK_LIBRARIES> but that's not active here
+                set(CMAKE_Pascal_UNIX_FLAGS "${CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG} -k'${CMAKE_INSTALL_RPATH_ESCAPED}' ${CMAKE_Pascal_UNIX_FLAGS}")
+            endif()
         endif(APPLE)
     endif(UNIX)
 
+    #-Cn is mandatory as it's what creates the ppas.* script
     set(CMAKE_Pascal_COMPILE_OBJECT
         "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> ${CMAKE_Pascal_UNIX_FLAGS} <FLAGS> <SOURCE>")
 endif(NOT CMAKE_Pascal_COMPILE_OBJECT)
