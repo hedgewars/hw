@@ -10,7 +10,8 @@
 -- TODO
 -- Fix some glitches when gaining control on animations
 -- Round time after check point 2
--- Enemys take control
+-- Check if enemy weapons are good
+-- Create event to end game if professor killed
 -- Continue with the rest :P
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
@@ -21,14 +22,17 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Moon, stop for fuels!")
 local weaponsAcquired = false
+local battleZone = false
 local checkPointReached = 1 -- 1 is start of the game
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
+local dialog03 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
-	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAoTH hogs!"), 1, 5000}
+	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAoTH hogs!"), 1, 5000},
+	[dialog03] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000}
 }
 -- crates
 local weaponsY = 100
@@ -157,14 +161,25 @@ end
 function onGameStart()
 	-- wait for the first turn to start
 	AnimWait(hero.gear, 3000)
-
 	FollowGear(hero.gear)
 	
 	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
-	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)	
+	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)
+	
+	
+	AddAmmo(minion1.gear, amDEagle, 2)
+	AddAmmo(minion2.gear, amDEagle, 2)
+	AddAmmo(minion3.gear, amDEagle, 2)
+	AddAmmo(minion1.gear, amBazooka, 2)
+	AddAmmo(minion2.gear, amBazooka, 2)
+	AddAmmo(minion3.gear, amBazooka, 2)
+	AddAmmo(minion1.gear, amGrenade, 2)
+	AddAmmo(minion2.gear, amGrenade, 2)
+	AddAmmo(minion3.gear, amGrenade, 2)
 	
 	-- check for death has to go first
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onBattleZone, {hero.gear}, battleZone, {hero.gear}, 0)
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amRope, 2)
@@ -173,6 +188,7 @@ function onGameStart()
 		SpawnAmmoCrate(grenadeX, weaponsY, amGrenade)
 		SpawnAmmoCrate(deserteagleX, weaponsY, amDEagle)
 		AddEvent(onWeaponsPlatform, {hero.gear}, weaponsPlatform, {hero.gear}, 0)
+		TurnTimeLeft = 0
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then	
 		AddAmmo(hero.gear, amBazooka, 2)
@@ -182,6 +198,7 @@ function onGameStart()
 		SetWind(80)		
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
+		TurnTimeLeft = 0
 		AddAnim(dialog02)
 	end
 end
@@ -194,30 +211,40 @@ function onAmmoStoreInit()
 end
 
 function onGameTick()
+	--WriteLnToConsole("ON GAME TICK")
 	AnimUnWait()
 	if ShowAnimation() == false then
 		return
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
-	if CurrentHedgehog ~= hero.gear then
+	if CurrentHedgehog ~= hero.gear and not battleZone then
 		TurnTimeLeft = 0
 	end
 end
 
 function onNewTurn()
-	if not weaponsAcquired and CurrentHedgehog ~= hero.gear then
+	WriteLnToConsole("ON NEW TURN")
+	WriteLnToConsole("HOG IS "..CurrentHedgehog.." minion 1 is "..minion1.gear)
+		
+	if not weaponsAcquired and not battleZone and CurrentHedgehog ~= hero.gear then
+		WriteLnToConsole("TURN CASE 1")
 		TurnTimeLeft = 0
-	elseif not weaponsAcquired and CurrentHedgehog == hero.gear then
+	elseif not weaponsAcquired and not battleZone and CurrentHedgehog == hero.gear then
+		WriteLnToConsole("TURN CASE 2")
 		TurnTimeLeft = -1
-	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth1.gear
-		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear
-		or CurrentHedgehog == professor.gear then
+	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
+		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
+		WriteLnToConsole("TURN CASE 3")
+		TurnTimeLeft = 0
+	elseif CurrentHedgehog == professor.gear then
+		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	end
 end
 
 function onPrecise()
+	WriteLnToConsole("ON PRECISE")
 	if GameTime > 3000 then
 		SetAnimSkip(true)   
 	end
@@ -232,7 +259,8 @@ end
 -------------- EVENTS ------------------
 
 function onWeaponsPlatform(gear)
-	if GetX(gear) > bazookaX-200 and GetX(gear) < deserteagleX+400  and GetY(gear) < weaponsY+150 and StoppedGear(gear) then
+	if not hero.dead and GetX(gear) > bazookaX-200 and GetX(gear) < deserteagleX+400  
+		and GetY(gear) < weaponsY+150 and StoppedGear(gear) then
 		return true
 	end
 	return false
@@ -240,6 +268,13 @@ end
 
 function onHeroDeath(gear)
 	if hero.dead then
+		return true
+	end
+	return false
+end
+
+function onBattleZone(gear)
+	if not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
 		return true
 	end
 	return false
@@ -261,12 +296,21 @@ function heroDeath(gear)
 	EndGame()
 end
 
+function battleZone(gear)
+	TurnTimeLeft = 0
+	battleZone = true
+	AddAnim(dialog03)
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
+    if anim == dialog03 then
+		startCombat()
+	end
 end
 
 function AnimationSetup()
@@ -291,6 +335,13 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! YEAAAAAH!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry up and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
+	-- DIALOG 03 - Hero spotted and has no weapons
+	AddSkipFunction(dialog03, Skipanim, {dialog03})
+	table.insert(dialog03, {func = AnimCaption, args = {hero.gear, loc("Get ready to fight!"), 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {minion1.gear, loc("Look boss! There is the target!"), SAY_SHOUT, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Oops, I've been spotted and I have no weapons! I am doomed!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = startCombat, args = {hero.gear}})
 end
 
 ------------------- custom "animation" functions --------------------------
