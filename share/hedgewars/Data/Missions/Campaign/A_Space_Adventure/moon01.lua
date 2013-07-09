@@ -43,7 +43,6 @@ local bazookaX = 70
 local parachuteX = 110
 local grenadeX = 160
 local deserteagleX = 200
-local torchblowX = 3270
 -- hogs
 local hero = {}
 local paoth1 = {}
@@ -171,9 +170,9 @@ function onGameStart()
 	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
 	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)
 	
-	AddAmmo(minion1.gear, amDEagle, 2)
-	AddAmmo(minion2.gear, amDEagle, 2)
-	AddAmmo(minion3.gear, amDEagle, 2)
+	AddAmmo(minion1.gear, amDEagle, 10)
+	AddAmmo(minion2.gear, amDEagle, 10)
+	AddAmmo(minion3.gear, amDEagle, 10)
 	AddAmmo(minion1.gear, amBazooka, 2)
 	AddAmmo(minion2.gear, amBazooka, 2)
 	AddAmmo(minion3.gear, amBazooka, 2)
@@ -300,6 +299,13 @@ function onProfessorDeath(gear)
 	return false
 end
 
+function onMinionsDeath(gear)
+	if GetHealth(mimion1.gear) or GetHealth(mimion2.gear) or GetHealth(mimion3.gear) then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function weaponsPlatform(gear)	
@@ -334,6 +340,11 @@ end
 
 function professorDeath(gear)
 	-- do stats stuff here
+	EndGame()
+end
+
+function minionsDeath(gear)
+	-- do staffs here
 	EndGame()
 end
 
