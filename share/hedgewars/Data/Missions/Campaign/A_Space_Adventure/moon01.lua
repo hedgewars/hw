@@ -8,11 +8,11 @@
 -- there is and rescue them.
 
 -- TODO
--- Fix some glitches when gaining control on animations
+-- Fix some glitches when gaining control on animations, on skip I get control of the talking hog
 -- Round time after check point 2
 -- Check if enemy weapons are good
--- Create event to end game if professor killed
--- Continue with the rest :P
+-- Stats
+-- check points
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -22,17 +22,19 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Moon, stop for fuels!")
 local weaponsAcquired = false
-local battleZone = false
+local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
+local dialog04 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
 	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAoTH hogs!"), 1, 5000},
-	[dialog03] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000}
+	[dialog03] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000},
+	[dialog04] = dialog03
 }
 -- crates
 local weaponsY = 100
@@ -77,6 +79,8 @@ paoth4.y = 1800
 professor.name = "Pr.Hogevil"
 professor.x = 3710
 professor.y = 1650
+professor.dead = false
+professor.health = 100
 minion1.name = "Minion"
 minion1.x = 2460
 minion1.y = 1450
@@ -179,7 +183,9 @@ function onGameStart()
 	
 	-- check for death has to go first
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onProfessorDeath, {professor.gear}, professorDeath, {professor.gear}, 0)
 	AddEvent(onBattleZone, {hero.gear}, battleZone, {hero.gear}, 0)
+	AddEvent(onProfessorHit, {professor.gear}, professorHit, {professor.gear}, 1)
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amRope, 2)
@@ -226,11 +232,20 @@ end
 function onNewTurn()
 	WriteLnToConsole("ON NEW TURN")
 	WriteLnToConsole("HOG IS "..CurrentHedgehog.." minion 1 is "..minion1.gear)
+	
+	if weaponsAcquired then
+		WriteLnToConsole("weapons acq+++")
+	end
+	
+	if battleZoneReached then
+		WriteLnToConsole("battleZone acq+++")
+	end
 		
-	if not weaponsAcquired and not battleZone and CurrentHedgehog ~= hero.gear then
+	-- rounds start if hero got his weapons or got near the enemies
+	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
 		WriteLnToConsole("TURN CASE 1")
 		TurnTimeLeft = 0
-	elseif not weaponsAcquired and not battleZone and CurrentHedgehog == hero.gear then
+	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
 		WriteLnToConsole("TURN CASE 2")
 		TurnTimeLeft = -1
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
@@ -238,6 +253,7 @@ function onNewTurn()
 		WriteLnToConsole("TURN CASE 3")
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == professor.gear then
+		WriteLnToConsole("TURN CASE 4")
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	end
@@ -253,6 +269,8 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	elseif gear == professor.dead then
+		professor.dead = true
 	end
 end
 
@@ -275,6 +293,23 @@ end
 
 function onBattleZone(gear)
 	if not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
+		WriteLnToConsole("ON BATTLE ZONE!!!")
+		return true
+	end
+	return false
+end
+
+function onProfessorHit(gear)
+	-- TODO NOT TALK ON HERO'S TURN...
+	if not professor.dead and GetHealth(gear) < professor.health and CurrentHedgehog ~= hero.gear then
+		professor.health = GetHealth(gear)
+		return true
+	end
+	return false
+end
+
+function onProfessorDeath(gear)
+	if professor.dead then
 		return true
 	end
 	return false
@@ -292,14 +327,29 @@ function weaponsPlatform(gear)
 end
 
 function heroDeath(gear)
-	
+	-- do stats stuff here
 	EndGame()
 end
 
 function battleZone(gear)
 	TurnTimeLeft = 0
-	battleZone = true
-	AddAnim(dialog03)
+	battleZoneReached = true
+	if weaponsAqcuired then
+		AddAnim(dialog04)
+	else
+		AddAnim(dialog03)
+	end
+end
+
+function professorHit(gear)
+	if currentHedgehog ~= hero.gear then
+		AnimSay(professor.gear,loc("Don't hit me you fools!"), SAY_SHOUT, 2000)
+	end
+end
+
+function professorDeath(gear)
+	-- do stats stuff here
+	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
@@ -310,6 +360,9 @@ function Skipanim(anim)
     end
     if anim == dialog03 then
 		startCombat()
+	else
+		--TODO check if this is ok
+		AnimSwitchHog(hero.gear)
 	end
 end
 
@@ -342,12 +395,21 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Oops, I've been spotted and I have no weapons! I am doomed!"), SAY_THINK, 4000}})
 	table.insert(dialog03, {func = startCombat, args = {hero.gear}})
+	-- DIALOG 04 - Hero spotted and *HAS* weapons
+	AddSkipFunction(dialog04, Skipanim, {dialog04})
+	table.insert(dialog04, {func = AnimCaption, args = {hero.gear, loc("Get ready to fight!"), 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {minion1.gear, loc("Look boss! There is the target!"), SAY_SHOUT, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {professor.gear, loc("Prepare for battle!"), SAY_SHOUT, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Here we go!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = startCombat, args = {hero.gear}})
 end
 
 ------------------- custom "animation" functions --------------------------
 
 function startCombat()
 	-- use this so guard2 will gain control
+	HealthCaseProb = 100 
+	HealthCaseAmount = 50
 	AnimSwitchHog(minion3.gear)
 	TurnTimeLeft = 0
 end
