@@ -55,5 +55,20 @@ if (APPLE)
     install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake
             CODE "message(STATUS \"Your app bundle is ready\")")
 
+    #create the .dmg for deployment
+    #first make sure .app exists, then remove any old .dmg with same name, finally run the script
+    add_custom_target(dmg COMMAND if [ ! -a Hedgewars.app ]; then make install\; fi;
+                          COMMAND rm -f ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
+                          COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/create-dmg.sh
+                                  --volname "Hedgewars ${HEDGEWARS_VERSION}"
+                                # --volicon icon.icns
+                                  --window-size 600 470
+                                  --icon-size 96
+                                  --icon "Hedgewars" 190 190
+                                  --app-drop-link 410 190
+                                  --background "${CMAKE_CURRENT_SOURCE_DIR}/../misc/dmgBackground.png"
+                                  ${CMAKE_BINARY_DIR}/Hedgewars-${HEDGEWARS_VERSION}.dmg
+                                  ${CMAKE_BINARY_DIR}/Hedgewars.app
+                          WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
