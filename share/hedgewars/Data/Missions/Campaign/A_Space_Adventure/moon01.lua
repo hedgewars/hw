@@ -13,6 +13,7 @@
 -- Check if enemy weapons are good
 -- Stats
 -- check points
+-- add a dialog at the end and second event if all minions are dead
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -170,7 +171,6 @@ function onGameStart()
 	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
 	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)
 	
-	
 	AddAmmo(minion1.gear, amDEagle, 2)
 	AddAmmo(minion2.gear, amDEagle, 2)
 	AddAmmo(minion3.gear, amDEagle, 2)
@@ -217,7 +217,6 @@ function onAmmoStoreInit()
 end
 
 function onGameTick()
-	--WriteLnToConsole("ON GAME TICK")
 	AnimUnWait()
 	if ShowAnimation() == false then
 		return
@@ -229,38 +228,22 @@ function onGameTick()
 	end
 end
 
-function onNewTurn()
-	WriteLnToConsole("ON NEW TURN")
-	WriteLnToConsole("HOG IS "..CurrentHedgehog.." minion 1 is "..minion1.gear)
-	
-	if weaponsAcquired then
-		WriteLnToConsole("weapons acq+++")
-	end
-	
-	if battleZoneReached then
-		WriteLnToConsole("battleZone acq+++")
-	end
-		
+function onNewTurn()		
 	-- rounds start if hero got his weapons or got near the enemies
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
-		WriteLnToConsole("TURN CASE 1")
 		TurnTimeLeft = 0
 	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
-		WriteLnToConsole("TURN CASE 2")
 		TurnTimeLeft = -1
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
 		or CurrentHedgehog == paoth3.gear or CurrentHedgehog == paoth4.gear then
-		WriteLnToConsole("TURN CASE 3")
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == professor.gear then
-		WriteLnToConsole("TURN CASE 4")
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	end
 end
 
 function onPrecise()
-	WriteLnToConsole("ON PRECISE")
 	if GameTime > 3000 then
 		SetAnimSkip(true)   
 	end
@@ -269,7 +252,7 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
-	elseif gear == professor.dead then
+	elseif gear == professor.gear then
 		professor.dead = true
 	end
 end
@@ -293,17 +276,19 @@ end
 
 function onBattleZone(gear)
 	if not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
-		WriteLnToConsole("ON BATTLE ZONE!!!")
 		return true
 	end
 	return false
 end
 
 function onProfessorHit(gear)
-	-- TODO NOT TALK ON HERO'S TURN...
-	if not professor.dead and GetHealth(gear) < professor.health and CurrentHedgehog ~= hero.gear then
-		professor.health = GetHealth(gear)
-		return true
+	if GetHealth(gear) then
+		if CurrentHedgehog ~= hero.gear and GetHealth(gear) < professor.health then
+			professor.health = GetHealth(gear)
+			return true
+		elseif GetHealth(gear) < professor.health then
+			professor.health = GetHealth(gear)
+		end
 	end
 	return false
 end
@@ -361,7 +346,6 @@ function Skipanim(anim)
     if anim == dialog03 then
 		startCombat()
 	else
-		--TODO check if this is ok
 		AnimSwitchHog(hero.gear)
 	end
 end
