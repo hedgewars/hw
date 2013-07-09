@@ -50,10 +50,10 @@ if (APPLE)
         message(FATAL_ERROR "The utility macdeployqt is required to create the bundle (seached: ${qt_base_dir})")
     endif()
 
-    #dummy target, we're interested in the postscript file
-    add_custom_target(bundle)
-    set_target_properties(bundle PROPERTIES POST_INSTALL_SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
-
+    #create the .app bundle
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CreateMacBundle.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake)
+    install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/CreateMacBundle.cmake
+            CODE "message(STATUS \"Your app bundle is ready\")")
+
 endif()
 
