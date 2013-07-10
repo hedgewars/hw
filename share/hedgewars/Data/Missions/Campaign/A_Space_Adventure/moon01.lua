@@ -183,6 +183,7 @@ function onGameStart()
 	-- check for death has to go first
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onProfessorDeath, {professor.gear}, professorDeath, {professor.gear}, 0)
+	AddEvent(onMinionsDeath, {professor.gear}, minionsDeath, {professor.gear}, 0)
 	AddEvent(onBattleZone, {hero.gear}, battleZone, {hero.gear}, 0)
 	AddEvent(onProfessorHit, {professor.gear}, professorHit, {professor.gear}, 1)
 
@@ -300,7 +301,7 @@ function onProfessorDeath(gear)
 end
 
 function onMinionsDeath(gear)
-	if GetHealth(mimion1.gear) or GetHealth(mimion2.gear) or GetHealth(mimion3.gear) then
+	if not (GetHealth(minion1.gear) or GetHealth(minion2.gear) or GetHealth(minion3.gear)) then
 		return true
 	end
 	return false
@@ -340,11 +341,25 @@ end
 
 function professorDeath(gear)
 	-- do stats stuff here
+	if GetHealth(minion1.gear) then
+		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	elseif GetHealth(minion2.gear) then
+		AnimSay(minion2.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	elseif GetHealth(minion3.gear) then
+		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
+	end
+	ParseCommand("teamgone " .. teamB.name)
+	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
+	AnimWait(hero.gear,5000)
 	EndGame()
 end
 
 function minionsDeath(gear)
 	-- do staffs here
+	AnimSay(professor.gear, loc("I may lost that battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
+	ParseCommand("teamgone " .. teamC.name)
+	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
+	AnimWait(hero.gear,5000)	
 	EndGame()
 end
 
