@@ -35,7 +35,7 @@ local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
 	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAoTH hogs!"), 1, 5000},
 	[dialog03] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000},
-	[dialog04] = dialog03
+	[dialog04] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000}
 }
 -- crates
 local weaponsY = 100
@@ -104,7 +104,7 @@ teamD.color = tonumber("38D61C",16) -- green
 function onGameInit()
 	Seed = 1
 	GameFlags = gfSolidLand + gfDisableWind
-	TurnTime = 45000
+	TurnTime = 25000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 3000
@@ -136,18 +136,18 @@ function onGameInit()
 	HogTurnLeft(paoth4.gear, true)
 	-- Professor
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.gear = AddHog(professor.name, 0, 100, "tophats")
+	professor.gear = AddHog(professor.name, 0, 120, "tophats")
 	AnimSetGearPosition(professor.gear, professor.x, professor.y)
 	HogTurnLeft(professor.gear, true)
 	-- Minions
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	minion1.gear = AddHog(minion1.name, 1, 100, "Gasmask")
+	minion1.gear = AddHog(minion1.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion1.gear, minion1.x, minion1.y)
 	HogTurnLeft(minion1.gear, true)
-	minion2.gear = AddHog(minion2.name, 1, 100, "Gasmask")
+	minion2.gear = AddHog(minion2.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion2.gear, minion2.x, minion2.y)
 	HogTurnLeft(minion2.gear, true)
-	minion3.gear = AddHog(minion3.name, 1, 100, "Gasmask")
+	minion3.gear = AddHog(minion3.name, 1, 50, "Gasmask")
 	AnimSetGearPosition(minion3.gear, minion3.x, minion3.y)
 	HogTurnLeft(minion3.gear, true)
 	
@@ -201,10 +201,10 @@ function onGameStart()
 		TurnTimeLeft = 0
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then	
-		AddAmmo(hero.gear, amBazooka, 2)
-		AddAmmo(hero.gear, amParachute, 2)
-		AddAmmo(hero.gear, amGrenade, 2)
-		AddAmmo(hero.gear, amDEagle, 2)
+		AddAmmo(hero.gear, amBazooka, 3)
+		AddAmmo(hero.gear, amParachute, 1)
+		AddAmmo(hero.gear, amGrenade, 6)
+		AddAmmo(hero.gear, amDEagle, 4)
 		SetWind(60)		
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
@@ -214,10 +214,10 @@ function onGameStart()
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amBazooka, 0, 0, 0, 2)
-	SetAmmo(amParachute, 0, 0, 0, 2)
-	SetAmmo(amGrenade, 0, 0, 0, 2)
-	SetAmmo(amDEagle, 0, 0, 0, 2)
+	SetAmmo(amBazooka, 0, 0, 0, 3)
+	SetAmmo(amParachute, 0, 0, 0, 1)
+	SetAmmo(amGrenade, 0, 0, 0, 6)
+	SetAmmo(amDEagle, 0, 0, 0, 4)
 end
 
 function onGameTick()
@@ -236,6 +236,9 @@ function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
+	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
+		battleZoneReached = true
+		AddAnim(dialog04)
 	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
@@ -279,7 +282,7 @@ function onHeroDeath(gear)
 end
 
 function onBattleZone(gear)
-	if not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
+	if not battleZoneReached and not hero.dead and GetX(gear) > 1900 and StoppedGear(gear) then
 		return true
 	end
 	return false
