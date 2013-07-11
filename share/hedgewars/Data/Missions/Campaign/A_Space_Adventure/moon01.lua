@@ -114,7 +114,11 @@ function onGameInit()
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
 	-- Hog Solo
 	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	if GetCampaignVar("HeroHealth") then
+		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
+	else
+		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	end
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAoTH
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
@@ -201,7 +205,7 @@ function onGameStart()
 		AddAmmo(hero.gear, amParachute, 2)
 		AddAmmo(hero.gear, amGrenade, 2)
 		AddAmmo(hero.gear, amDEagle, 2)
-		SetWind(80)		
+		SetWind(60)		
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
 		TurnTimeLeft = 0
@@ -310,10 +314,11 @@ end
 -------------- OUTCOMES ------------------
 
 function weaponsPlatform(gear)	
-	SaveCampaignVar("Moon01CheckPoint", "2")
+	SaveCampaignVar("Moon01CheckPoint", "2")	
+	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 	TurnTimeLeft = 0
 	weaponsAqcuired = true
-	SetWind(80)		
+	SetWind(60)		
 	GameFlags = bor(GameFlags,gfDisableWind)
 	AddAnim(dialog02)
 end
@@ -418,8 +423,6 @@ end
 
 function startCombat()
 	-- use this so guard2 will gain control
-	HealthCaseProb = 100 
-	HealthCaseAmount = 50
 	AnimSwitchHog(minion3.gear)
 	TurnTimeLeft = 0
 end

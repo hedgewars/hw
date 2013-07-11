@@ -292,8 +292,11 @@ end
 function moonLanding(gear)
 	WriteLnToConsole("MOON LANDING, HOORAY!")
 	AnimCaption(hero.gear,loc("Welcome to the moon!"))
-	SaveCampaignVar("CosmosCheckPoint", "4")
-	SaveCampaignVar("UnlockedMissions", "2")	
+	if checkPointReached ~= 5 then
+		SaveCampaignVar("CosmosCheckPoint", "4")
+		SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
+	end
+	SaveCampaignVar("UnlockedMissions", "2")
 	SaveCampaignVar("Mission1", "2")
 	SaveCampaignVar("Mission2", "1")
 	EndGame()
