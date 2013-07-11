@@ -160,6 +160,9 @@ function onGameStart()
 	elseif checkPointReached == 5 then
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 	end
+	
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onNoFuelAtLand, {hero.gear}, noFuelAtLand, {hero.gear}, 0)
 	-- always check for landings
 	if GetCampaignVar("Planet") ~= "moon" then
 		AddEvent(onMoonLanding, {hero.gear}, moonLanding, {hero.gear}, 0)
@@ -214,52 +217,67 @@ end
 -------------- EVENTS ------------------
 
 function onHeroBeforeTreePosition(gear)
-	if GetX(gear) > 2444 then
+	if GetHealth(hero.gear) and GetX(gear) > 2350 then
 		return true
 	end
 	return false
 end
 
 function onHeroAtSaucerPosition(gear)
-	if GetX(gear) >= saucerX-32 and GetX(gear) <= saucerX+32 and GetY(gear) >= saucerY-32 and GetY(gear) <= saucerY+32 then
+	if GetHealth(hero.gear) and GetX(gear) >= saucerX-25 and GetX(gear) <= saucerX+32 and GetY(gear) >= saucerY-32 and GetY(gear) <= saucerY+32 then
 		saucerAcquired = true
 	end
-	if saucerAcquired and StoppedGear(gear) then
+	if saucerAcquired and GetHealth(hero.gear) and StoppedGear(gear) then
 		return true
 	end
 	return false
 end
 
 function onHeroOutOfGuardSight(gear)
-	if GetX(gear) < 3100 and GetY(gear) > saucerY-25 and StoppedGear(gear) and not guard1.keepTurning then
+	if GetHealth(hero.gear) and GetX(gear) < 3100 and GetY(gear) > saucerY-25 and StoppedGear(gear) and not guard1.keepTurning then
 		return true
 	end
 	return false
 end
---
+
+-- TODO somehow make it to count fall damage
 function onMoonLanding(gear)
-	if GetX(gear) > 1010 and GetX(gear) < 1220  and GetY(gear) < 1300 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 1010 and GetX(gear) < 1220  and GetY(gear) < 1300 and GetY(gear) > 750 and StoppedGear(gear) then
 		return true
 	end
 	return false
 end
 
 function onFruitPlanetLanding(gear)
-	if GetX(gear) > 2240 and GetX(gear) < 2540  and GetY(gear) < 1100 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 2240 and GetX(gear) < 2540  and GetY(gear) < 1100 and StoppedGear(gear) then
 		return true
 	end
 	return false
 end
 
 function onDesertPlanetLanding(gear)
-	if GetX(gear) > 3568 and GetX(gear) < 4052  and GetY(gear) < 500 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 3568 and GetX(gear) < 4052  and GetY(gear) < 500 and StoppedGear(gear) then
 		return true
 	end
 	return false
 end
 
 function onIcePlanetLanding(gear)
-	if GetX(gear) > 1330 and GetX(gear) < 1650  and GetY(gear) < 500 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 1330 and GetX(gear) < 1650  and GetY(gear) < 500 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onNoFuelAtLand(gear)
+	if GetHealth(hero.gear) and GetY(gear) > 1400 and GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onHeroDeath(gear)
+	if not GetHealth(gear) then
 		return true
 	end
 	return false
@@ -318,6 +336,14 @@ function icePlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
 	end
+end
+
+function noFuelAtLand(gear)
+	AddAnim(dialog06)
+end
+
+function heroDeath(gear)
+	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
