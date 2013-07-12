@@ -99,7 +99,7 @@ while test "${1:0:1}" = "-"; do
       EULA_RSRC=$2
       shift; shift;;
     --no-internet-enable)
-      NOINERNET=1
+      NOINTERNET=1
       shift;;
     -*)
       echo "Unknown option $1. Run with --help for help."
@@ -211,7 +211,7 @@ if [ ! -z "${EULA_RSRC}" -a "${EULA_RSRC}" != "-null-" ]; then
         "${AUX_PATH}/dmg-license.py" "${DMG_DIR}/${DMG_NAME}" "${EULA_RSRC}"
 fi
 
-if [ ! -z "${NOINERNET}" -a "${NOINERNET}" == 1 ]; then
+if [ ! -z "${NOINTERNET}" -a "${NOINTERNET}" == 1 ]; then
         echo "not setting 'internet-enable' on the dmg"
 else
         hdiutil internet-enable -yes "${DMG_DIR}/${DMG_NAME}"
