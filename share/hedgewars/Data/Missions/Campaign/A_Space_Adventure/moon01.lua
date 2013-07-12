@@ -211,6 +211,8 @@ function onGameStart()
 		TurnTimeLeft = 0
 		AddAnim(dialog02)
 	end
+	
+	SendHealthStatsOff()
 end
 
 function onAmmoStoreInit()
@@ -327,7 +329,10 @@ function weaponsPlatform(gear)
 end
 
 function heroDeath(gear)
-	-- do stats stuff here
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("You have to get the weapons and rescue the PAoTH researchers")) --11
+	SendStat('siPlayerKills','1',teamC.name)
+	SendStat('siPlayerKills','0',teamD.name)
 	EndGame()
 end
 
@@ -348,7 +353,6 @@ function professorHit(gear)
 end
 
 function professorDeath(gear)
-	-- do stats stuff here
 	if GetHealth(minion1.gear) then
 		AnimSay(minion1.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
 	elseif GetHealth(minion2.gear) then
@@ -358,7 +362,14 @@ function professorDeath(gear)
 	end
 	ParseCommand("teamgone " .. teamB.name)
 	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
-	AnimWait(hero.gear,5000)
+	AnimWait(hero.gear,5000)	
+	
+	SendStat('siGameResult', loc("Hog Solo win, conrgatulations!")) --1
+	SendStat('siCustomAchievement', loc("Eliminated the professor Hogevil")) --11
+	SendStat('siCustomAchievement', loc("Drove the minions away")) --11
+	SendStat('siPlayerKills','1',teamD.name)
+	SendStat('siPlayerKills','0',teamC.name)
+	
 	EndGame()
 end
 
@@ -368,6 +379,13 @@ function minionsDeath(gear)
 	ParseCommand("teamgone " .. teamC.name)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)	
+	
+	SendStat('siGameResult', loc("Hog Solo win, conrgatulations!")) --1
+	SendStat('siCustomAchievement', loc("Eliminated the evil minions")) --11
+	SendStat('siCustomAchievement', loc("Drove the professor away")) --11
+	SendStat('siPlayerKills','1',teamD.name)
+	SendStat('siPlayerKills','0',teamC.name)
+	
 	EndGame()
 end
 
