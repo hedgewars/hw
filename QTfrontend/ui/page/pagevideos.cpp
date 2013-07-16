@@ -845,7 +845,7 @@ static QString protectPass(QString str)
     for (int i = 0; i < array.size(); i++)
         array[i] = array[i] ^ 0xC4 ^ i;
     array = array.toBase64();
-    return QString::fromAscii(array.data());
+    return QString::fromLatin1(array.data());
 }
 
 static QString unprotectPass(QString str)

@@ -291,7 +291,7 @@ void HWUploadVideoDialog::startUpload()
     QNetworkReply *reply = (QNetworkReply*)sender();
     reply->deleteLater();
 
-    location = QString::fromAscii(reply->rawHeader("Location"));
+    location = QString::fromLatin1(reply->rawHeader("Location"));
     if (location.isEmpty())
     {
         QString errorStr = QMessageBox::tr("Error while sending metadata to youtube.com:\n");
