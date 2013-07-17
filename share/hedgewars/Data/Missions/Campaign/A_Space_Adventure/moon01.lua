@@ -77,8 +77,8 @@ paoth4.name = "Boris"
 paoth4.x = 3860
 paoth4.y = 1800
 professor.name = "Pr.Hogevil"
-professor.x = 3710
-professor.y = 1650
+professor.x = 3800
+professor.y = 1600
 professor.dead = false
 professor.health = 100
 minion1.name = "Minion"
@@ -114,7 +114,7 @@ function onGameInit()
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
 	-- Hog Solo
 	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	if GetCampaignVar("HeroHealth") then
+	if GetCampaignVar("HeroHealth") and string.len(GetCampaignVar("HeroHealth")) > 0 then
 		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
 	else
 		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -236,6 +236,7 @@ end
 
 function onNewTurn()		
 	-- rounds start if hero got his weapons or got near the enemies
+	WriteLnToConsole(GetX(professor.gear))
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
 	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
