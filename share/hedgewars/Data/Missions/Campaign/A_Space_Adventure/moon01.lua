@@ -370,7 +370,7 @@ function professorDeath(gear)
 	SendStat('siCustomAchievement', loc("Drove the minions away")) --11
 	SendStat('siPlayerKills','1',teamD.name)
 	SendStat('siPlayerKills','0',teamC.name)
-	
+	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
 	EndGame()
 end
 
@@ -386,7 +386,7 @@ function minionsDeath(gear)
 	SendStat('siCustomAchievement', loc("Drove the professor away")) --11
 	SendStat('siPlayerKills','1',teamD.name)
 	SendStat('siPlayerKills','0',teamC.name)
-	
+	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels	
 	EndGame()
 end
 
