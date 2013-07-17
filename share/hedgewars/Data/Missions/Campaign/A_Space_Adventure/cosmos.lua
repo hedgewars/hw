@@ -121,6 +121,15 @@ function onGameInit()
 		AnimSetGearPosition(hero.gear, 1110, 850)
 	elseif checkPointReached == 5 then
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
+		if GetCampaignVar("Planet") == "moon" then
+			AnimSetGearPosition(hero.gear, 1110, 850)
+		elseif GetCampaignVar("Planet") == "desertPlanet" then
+			AnimSetGearPosition(hero.gear, 3670, 270)
+		elseif GetCampaignVar("Planet") == "fruitPlanet" then
+			AnimSetGearPosition(hero.gear, 2400, 375)
+		elseif GetCampaignVar("Planet") == "icePlanet" then
+			AnimSetGearPosition(hero.gear, 1440, 260)
+		end
 	end
 	
 	AnimInit()
@@ -159,6 +168,7 @@ function onGameStart()
 		AddAnim(dialog05)
 	elseif checkPointReached == 5 then
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
+		AddAmmo(hero.gear, amJetpack, 99)
 	end
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
@@ -308,8 +318,8 @@ function heroOutOfGuardSight(gear)
 end
 
 function moonLanding(gear)
-	WriteLnToConsole("MOON LANDING, HOORAY!")
 	AnimCaption(hero.gear,loc("Welcome to the moon!"))
+	SaveCampaignVar("Planet", "moon")
 	if checkPointReached ~= 5 then
 		SaveCampaignVar("CosmosCheckPoint", "4")
 		SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
@@ -335,6 +345,13 @@ end
 function icePlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
+	else
+		AnimCaption(hero.gear,loc("Welcome to the planet of ice!"))
+		SaveCampaignVar("Planet", "icePlanet")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "5")
+		SaveCampaignVar("Mission2", "1")
+		EndGame()
 	end
 end
 
