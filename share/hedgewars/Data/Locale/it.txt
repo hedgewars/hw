@@ -93,7 +93,7 @@
 02:00=%1 puzza di cadavere!
 02:00=%1 ha un grande futuro dietro le spalle
 02:00=%1 è ormai mangime per vermi
-02:00=L'orrore...l'orrore!
+02:00=%1 vede l'Orrore...
 02:00=%1 rende l'anima!
 02:00=%1 passa nel mondo dei più!
 02:00=Ciao %1, ti dimenticheremo presto!

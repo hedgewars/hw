@@ -7,7 +7,7 @@ Hedgewars è disponibile sul Mac Appstore! Cerca Hedgewars sul tuo Mac e scarica
 ✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭✭
 
 La versione per iOS offre alcune fantastiche esclusive, come
-* iPad VGA Out: attacca un display esterno e gioca a piena risoluzione;
+* iPad VGA Out: attacca uno schermo esterno e gioca a piena risoluzione;
 * Supporto retina display: gioca ad una risoluzione più alta per tutta la durata della partita;
 * Multitasking: metti in pausa il gioco in qualunque istante;
 * Ripristino del gioco: potrai ripristinare la partita in qualunque momento.
