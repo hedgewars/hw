@@ -2378,7 +2378,7 @@ Not all players are ready.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
