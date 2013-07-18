@@ -236,7 +236,6 @@ end
 
 function onNewTurn()		
 	-- rounds start if hero got his weapons or got near the enemies
-	WriteLnToConsole(GetX(professor.gear))
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
 	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
