@@ -5249,7 +5249,7 @@ var
     vg: PVisualGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Message and gmAttack <> 0) or (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (HHGear^.dX.QWordValue > 4294967)  then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (HHGear^.dX.QWordValue > 4294967)  then
         begin
         StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);
