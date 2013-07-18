@@ -2452,7 +2452,7 @@ Non tutti i giocatori sono pronti.</translation>
         <translation>Invita i tuoi amici sul tuo serve con 1 solo clic!</translation>
     </message>
     <message>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Clicca per copiare il tuo URL univoco del serve negli appunti. Invia questo collegamento ai tuoi amici e potranno unirsi a te.</translation>
     </message>
     <message>
