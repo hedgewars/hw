@@ -5,12 +5,21 @@
 -- knows where the device is hidden. Hero will be
 -- able to use only the ice gun for this mission.
 
+-- TODO
+-- alter map so hero may climb to the higher place
+-- maybe use rope challenge to go there
+-- add checkpoints
+-- fix the stats
+-- add mines to the higher place/final stage
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
 local heroAtAntiFlyArea = false
+local heroVisitedAntiFlyArea = false
+local heroAtFinaleStep = false
 -- crates
 local icegunY = 1950
 local icegunX = 260
@@ -82,17 +91,17 @@ function onGameInit()
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	bandit1.gear = AddHog(bandit1.name, 0, 100, "tophats")
+	bandit1.gear = AddHog(bandit1.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)	
 	HogTurnLeft(bandit1.gear, true)
-	bandit2.gear = AddHog(bandit2.name, 0, 100, "tophats")
+	bandit2.gear = AddHog(bandit2.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit2.gear, bandit2.x, bandit2.y)
-	bandit3.gear = AddHog(bandit3.name, 0, 100, "tophats")
+	bandit3.gear = AddHog(bandit3.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit3.gear, bandit3.x, bandit3.y)
-	bandit4.gear = AddHog(bandit4.name, 0, 100, "tophats")
+	bandit4.gear = AddHog(bandit4.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit4.gear, bandit4.x, bandit4.y)
 	HogTurnLeft(bandit4.gear, true)
-	bandit5.gear = AddHog(bandit5.name, 0, 100, "tophats")
+	bandit5.gear = AddHog(bandit5.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit5.gear, bandit5.x, bandit5.y)
 	HogTurnLeft(bandit5.gear, true)
 	
@@ -105,23 +114,33 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 1)
+	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
 	
 	AddAmmo(hero.gear, amJetpack, 99)
 	AddAmmo(hero.gear, amBazooka, 1)
+	AddAmmo(bandit1.gear, amBazooka, 5)
+	AddAmmo(bandit2.gear, amBazooka, 4)
+	AddAmmo(bandit3.gear, amMine, 2)
+	AddAmmo(bandit3.gear, amGrenade, 3)
+	AddAmmo(bandit4.gear, amBazooka, 5)
+	AddAmmo(bandit5.gear, amBazooka, 5)
 	SpawnAmmoCrate(icegunX, icegunY, amIceGun)
 	
 end
 
 function onNewTurn()		
-	-- rounds start if hero got his weapons or got near the enemies
-	if not heroAtAntiFlyArea and CurrentHedgehog ~= hero.gear then
-	WriteLnToConsole(" IF 1")
+	-- round has to start if hero goes near the column
+	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
-	elseif not heroAtAntiFlyArea and CurrentHedgehog == hero.gear then
-	WriteLnToConsole(" IF 2")
+	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
+	elseif not heroAtFinaleStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
+		AnimSwitchHog(hero.gear)
+		TurnTimeLeft = 0
+	elseif CurrentHedgehog == ally.gear then
+		TurnTimeLeft = 0
 	end
 end
 
@@ -135,7 +154,7 @@ function onGameTick()
 end
 
 function onAmmoStoreInit()
-	SetAmmo(amIceGun, 0, 0, 0, 1)
+	SetAmmo(amIceGun, 0, 0, 0, 8)
 end
 
 function onGearDelete(gear)
@@ -167,32 +186,43 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onHeroFinalStep(gear)
+	if not hero.dead and GetY(gear) < 900 and GetX(gear) > 1400 then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
-	TurnTimeLeft = 0	
-	FollowGear(hero.gear)
-	AddAmmo(hero.gear, amJetpack, 0)
-	AnimSwitchHog(bandit1.gear)	
-	FollowGear(hero.gear)
-	TurnTimeLeft = 0
+	if TurnTimeLeft < -1 then
+		heroVisitedAntiFlyArea = true
+		TurnTimeLeft = 0	
+		FollowGear(hero.gear)
+		AddAmmo(hero.gear, amJetpack, 0)
+		AnimSwitchHog(bandit1.gear)	
+		FollowGear(hero.gear)
+		TurnTimeLeft = 0
+	else
+		AddAmmo(hero.gear, amJetpack, 0)	
+	end
 end
 
 function nonAntiFlyArea(gear)
 	heroAtAntiFlyArea = false
-	TurnTimeLeft = 0	
-	FollowGear(hero.gear)
 	AddAmmo(hero.gear, amJetpack, 99)
-	AnimSwitchHog(bandit1.gear)	
-	FollowGear(hero.gear)
-	TurnTimeLeft = 0	
 end
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
 	-- more custom stats
 	EndGame()
+end
+
+function heroFinalStep(gear)
+	heroAtFinaleStep = true
 end
 
 -------------- ANIMATIONS ------------------
