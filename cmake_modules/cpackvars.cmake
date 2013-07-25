@@ -84,7 +84,6 @@ set(CPACK_SOURCE_IGNORE_FILES
     "cmake_uninstall\\\\.cmake$"
     "CMakeCache\\\\.txt$"
     "build_windows_.*\\\\.bat$"
-#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/libfreetype"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
