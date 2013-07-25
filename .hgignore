@@ -29,8 +29,6 @@ glob:project_files/HedgewarsMobile/Data/
 glob:project_files/HedgewarsMobile/build/
 glob:gameServer/dist/
 glob:misc/liblua/Xcode/build/
-glob:misc/libfreetype/Xcode/build/
-glob:misc/libfreetype/Xcode-iOS/build/
 glob:misc/libphysfs/Xcode/build/
 glob:misc/libphyslayer/Xcode/build/
 glob:moc_*.cxx_parameters
