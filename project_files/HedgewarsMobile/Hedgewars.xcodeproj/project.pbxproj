@@ -180,7 +180,6 @@
 		619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C5160BAF3E00A08518 /* uAILandMarks.pas */; };
 		619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C6160BAF3E00A08518 /* uGearsHandlers.pas */; };
 		619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */; };
-		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
 		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
@@ -304,13 +303,6 @@
 			remoteGlobalIDString = BE48FD6807AFA17000BB41DA;
 			remoteInfo = "Static Library";
 		};
-		610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = libTremor;
-		};
 		610FB7EF16613980002FB2A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
@@ -352,13 +344,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = Physlayer;
-		};
-		6195981C1364BCD200B429B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = libTremor;
 		};
 		619599431364C82B00B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -637,7 +622,6 @@
 		619349C5160BAF3E00A08518 /* uAILandMarks.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAILandMarks.pas; path = ../../hedgewars/uAILandMarks.pas; sourceTree = SOURCE_ROOT; };
 		619349C6160BAF3E00A08518 /* uGearsHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlers.pas; path = ../../hedgewars/uGearsHandlers.pas; sourceTree = SOURCE_ROOT; };
 		619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersRope.pas; path = ../../hedgewars/uGearsHandlersRope.pas; sourceTree = SOURCE_ROOT; };
-		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
 		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		6199E81512463EA800DADF8C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -739,7 +723,6 @@
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
 				616245D114E6160200CC97FB /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
-				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
 				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
 				61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */,
 				61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */,
@@ -852,7 +835,6 @@
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
-				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
 				61A19AE314D2010A004B1E6D /* SDL.xcodeproj */,
 				61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */,
 				61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */,
@@ -1052,14 +1034,6 @@
 			isa = PBXGroup;
 			children = (
 				617D794816D933B00091D4D6 /* libPhyslayer.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		619598191364BCD200B429B6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6195981D1364BCD200B429B6 /* libTremor.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1322,7 +1296,6 @@
 				610FB7E816613980002FB2A7 /* PBXTargetDependency */,
 				610FB7EA16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7EC16613980002FB2A7 /* PBXTargetDependency */,
-				610FB7EE16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7F016613980002FB2A7 /* PBXTargetDependency */,
 				617D791D16D932EC0091D4D6 /* PBXTargetDependency */,
 				617D794A16D933BC0091D4D6 /* PBXTargetDependency */,
@@ -1413,10 +1386,6 @@
 					ProductGroup = 61A19BC214D20CDA004B1E6D /* Products */;
 					ProjectRef = 61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */;
 				},
-				{
-					ProductGroup = 619598191364BCD200B429B6 /* Products */;
-					ProjectRef = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1447,13 +1416,6 @@
 			fileType = archive.ar;
 			path = libPhyslayer.a;
 			remoteRef = 617D794716D933B00091D4D6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6195981D1364BCD200B429B6 /* libTremor.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libTremor.a;
-			remoteRef = 6195981C1364BCD200B429B6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		619599441364C82B00B429B6 /* libLua.a */ = {
@@ -1829,11 +1791,6 @@
 			isa = PBXTargetDependency;
 			name = "Static Library";
 			targetProxy = 610FB7EB16613980002FB2A7 /* PBXContainerItemProxy */;
-		};
-		610FB7EE16613980002FB2A7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libTremor;
-			targetProxy = 610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */;
 		};
 		610FB7F016613980002FB2A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
