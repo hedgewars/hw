@@ -81,7 +81,7 @@
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation>Usa Default</translation>
+        <translation>Usa predefinito</translation>
     </message>
 </context>
 <context>
@@ -96,7 +96,7 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation>Invia Commento</translation>
+        <translation>Invia commento</translation>
     </message>
     <message>
         <source>Please give us feedback!</source>
@@ -108,7 +108,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="obsolete">Se torvi u nbaco, puoi vedere se è già conosciuto qui (in inglese): </translation>
+        <translation type="obsolete">Se trovi un baco, puoi vedere se è già conosciuto qui (in inglese): </translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
@@ -116,15 +116,15 @@
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Mandaci un commento!</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation type="unfinished"></translation>
+        <translation>Se trovi un baco, puoi vedere se è già conosciuto qui: </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il tuo indirizzo di posta elettronica è opzionale, ma potremmo volerti contattare.</translation>
     </message>
 </context>
 <context>
@@ -207,18 +207,18 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Schema &apos;%1&apos; non supportato</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Impossibile creare la directory %1</translation>
+        <translation>Impossibile creare la cartella %1</translation>
     </message>
     <message>
         <source>Failed to open data directory:
 %1
 
 Please check your installation!</source>
-        <translation>Impossibile creare la directory dati:
+        <translation>Impossibile creare la cartella dati:
 %1
 
 Per favore controlla l&apos;installazione!</translation>
@@ -251,11 +251,11 @@ Per favore controlla l&apos;installazione!</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation>StyleSheet importata da %1</translation>
+        <translation>Foglio di stile importato da %1</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation>Inserisci %1 se vuoi utilizzare la StyleSheet corrente in futuro, inserisci %2 per resettarla!</translation>
+        <translation>Inserisci %1 se vuoi utilizzare il foglio di stile corrente in futuro, inserisci %2 per azzerarlo!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
@@ -263,34 +263,34 @@ Per favore controlla l&apos;installazione!</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation>StyleSheet scartata</translation>
+        <translation>Foglio di stile scartato</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation>StyleSheet salvata in %1</translation>
+        <translation>Foglio di stile salvato in %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation>Impossibile salvare la StyleSheet in %1! Errore interno!</translation>
+        <translation>Impossibile salvare il foglio di stile in %1! Errore interno!</translation>
     </message>
     <message>
         <source>%1 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è entrato</translation>
     </message>
     <message>
         <source>%1 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è uscito</translation>
     </message>
     <message>
         <source>%1 has left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 è uscito (%2)</translation>
     </message>
 </context>
 <context>
     <name>HWForm</name>
     <message>
         <source>Cannot save record to file %1</source>
-        <translation>Impossibile salvare il record al file %1</translation>
+        <translation>Impossibile salvare il campo nel file %1</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
@@ -396,7 +396,7 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa pagina richiede una connessione a Internet.</translation>
     </message>
 </context>
 <context>
@@ -534,11 +534,11 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     </message>
     <message>
         <source>Large tunnels</source>
-        <translation type="unfinished"></translation>
+        <translation>Tunnel larghi</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tema: %1</translation>
     </message>
 </context>
 <context>
@@ -718,7 +718,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Fetch data</source>
-        <translation>Dati Fetch</translation>
+        <translation>Recupera dati</translation>
     </message>
     <message>
         <source>Server message for latest version:</source>
@@ -784,11 +784,11 @@ inserisci solo il tuo soprannome.</translation>
     <name>PageDataDownload</name>
     <message>
         <source>Loading, please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>Caricamento, attendere prego.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa pagina richiede una connessione a Internet.</translation>
     </message>
 </context>
 <context>
@@ -866,7 +866,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation>Genera casualmetne il nome di questo riccio</translation>
+        <translation>Genera casualmente il nome di questo riccio</translation>
     </message>
     <message>
         <source>Random Team</source>
@@ -935,11 +935,11 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Play again</source>
-        <translation type="unfinished"></translation>
+        <translation>Gioca ancora</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Salva</translation>
+        <translation>Salva</translation>
     </message>
 </context>
 <context>
@@ -960,11 +960,11 @@ inserisci solo il tuo soprannome.</translation>
     <name>PageMain</name>
     <message>
         <source>Downloadable Content</source>
-        <translation>Contenuti Scaricabili</translation>
+        <translation>Contenuti scaricabili</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
-        <translation>Gioca una partita offline</translation>
+        <translation>Gioca una partita su computer singolo</translation>
     </message>
     <message>
         <source>Play a game across a network</source>
@@ -976,11 +976,11 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation>Lascia un feedback segnalando problemi, suggerendo nuove funzionalità o solamente indicando il tuo livello di gradimento del gioco.</translation>
+        <translation>Lascia un commento qui per segnalare problemi, suggerire nuove funzionalità o anche solo per il indicare il tuo livello di gradimento del gioco.</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>Accedi al download di contenuti creati dalla comunità dal nostro sito web</translation>
+        <translation>Accedi ai contenuti scaricabili creati dalla comunità dal nostro sito web</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -1053,7 +1053,7 @@ inserisci solo il tuo soprannome.</translation>
     <name>PageNetServer</name>
     <message>
         <source>Click here for details</source>
-        <translation type="unfinished"></translation>
+        <translation>Clicca qui per dettagli</translation>
     </message>
     <message>
         <source>Insert your address here</source>
@@ -1368,7 +1368,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>Gioca con un Re. Se il Re muore la tua squadra perderà.</translation>
+        <translation>Gioca con un re. Se il re muore la tua squadra perderà.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
@@ -1519,7 +1519,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>encoding</source>
-        <translation>encoding</translation>
+        <translation>codifica</translation>
     </message>
     <message>
         <source>uploading</source>
@@ -1732,7 +1732,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Side-by-side</source>
-        <translation>Side-by-side</translation>
+        <translation>Affiancato</translation>
     </message>
     <message>
         <source>Top-Bottom</source>
@@ -1866,15 +1866,15 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
-        <translation>Nome dello Schema:</translation>
+        <translation>Nome dello schema:</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Caduta Casse</translation>
+        <translation>Caduta casse</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
-        <translation>% Mine Difettose</translation>
+        <translation>% Mine difettose</translation>
     </message>
     <message>
         <source>Name</source>
@@ -1914,15 +1914,15 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation>% Casse Salute</translation>
+        <translation>% Casse salute</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation>Vita nelle Casse Salute</translation>
+        <translation>Vita nelle casse salute</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
-        <translation>Salita dell&apos;Acqua nel Sudden Death</translation>
+        <translation>Salita dell&apos;acqua nel Sudden Death</translation>
     </message>
     <message>
         <source>Sudden Death Health Decrease</source>
@@ -1930,7 +1930,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>% Rope Length</source>
-        <translation>% Lunghezza della Corda</translation>
+        <translation>% Lunghezza della corda</translation>
     </message>
     <message>
         <source>Stereo rendering</source>
@@ -1946,7 +1946,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation>% Tempo Regalo (Get Away Time)</translation>
+        <translation>% Tempo regalo</translation>
     </message>
     <message>
         <source>This program is distributed under the GNU General Public License v2</source>
@@ -1998,19 +1998,19 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Audio codec</source>
-        <translation>Codec audio</translation>
+        <translation>Codifica audio</translation>
     </message>
     <message>
         <source>Video codec</source>
-        <translation>Codec video</translation>
+        <translation>Codifica video</translation>
     </message>
     <message>
         <source>Framerate</source>
-        <translation>Framerate</translation>
+        <translation>Velocità fotogrammi</translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation>Bitrate (Kbps)</translation>
+        <translation>Velocità (Kbps)</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2054,7 +2054,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation type="unfinished"></translation>
+        <translation>Questa impostazione avrà effetto al prossimo riavvio.</translation>
     </message>
 </context>
 <context>
@@ -2449,11 +2449,11 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation>Invita i tuoi amici sul tuo serve con 1 solo clic!</translation>
+        <translation>Invita i tuoi amici sul tuo server con 1 solo clic!</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>Clicca per copiare il tuo URL univoco del serve negli appunti. Invia questo collegamento ai tuoi amici e potranno unirsi a te.</translation>
+        <translation>Clicca per copiare il tuo URL univoco del server negli appunti. Invia questo collegamento ai tuoi amici e potranno unirsi a te.</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -2483,7 +2483,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation>Nome della Stanza</translation>
+        <translation>Nome della stanza</translation>
     </message>
     <message>
         <source>C</source>
@@ -2515,7 +2515,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Random Maze</source>
-        <translation>Labirinto Casuale</translation>
+        <translation>Labirinto casuale</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
