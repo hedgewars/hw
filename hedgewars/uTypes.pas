@@ -413,10 +413,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
      cdeclPtr = procedure; cdecl;
      cdeclIntPtr = procedure(num: LongInt); cdecl;
-     functionDoublePtr = function: Double;
 
      TMobileRecord = record
-                     getScreenDPI: functionDoublePtr;
                      PerformRumble: cdeclIntPtr;
                      GameLoading: cdeclPtr;
                      GameLoaded: cdeclPtr;

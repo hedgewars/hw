@@ -244,7 +244,7 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}
 
 //positioning of the buttons
-buttonScale:= mobileRecord.getScreenDPI()/cDefaultZoomLevel;
+buttonScale:= 1 / cDefaultZoomLevel;
 
 
 with JumpWidget do

@@ -558,7 +558,7 @@ begin
     isOnCrosshair:= isOnRect((x-HalfRectSize), (y-HalfRectSize), RectSize, RectSize, finger);
     printFinger(finger);
     WriteLnToConsole(inttostr(finger.x) + '   ' + inttostr(x));
-    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(round(mobileRecord.getScreenDPI() * 10)));
+    WriteLnToConsole(inttostr(x) + '  ' + inttostr(y) + '   ' + inttostr(10));
 end;
 
 function isOnCurrentHog(finger: TTouch_Data): boolean;
@@ -640,8 +640,8 @@ begin
     for index := 0 to High(fingers) do 
         fingers[index].id := nilFingerId;
 
-    rectSize:= round(baseRectSize * mobileRecord.getScreenDPI());
-    halfRectSize:= rectSize shl 1;
+    rectSize:= baseRectSize;
+    halfRectSize:= baseRectSize shl 1;
 end;
 
 procedure freeModule;
