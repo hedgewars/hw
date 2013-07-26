@@ -70,7 +70,6 @@ procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 
 function  isPhone: Boolean; inline;
-function  getScreenDPI: Double; inline; //cdecl; external;
 
 {$IFDEF IPHONEOS}
 procedure startLoadingIndicator; cdecl; external;
@@ -428,16 +427,6 @@ begin
 {$ENDIF}
 end;
 
-//This dummy function should be reimplemented (externally).
-function getScreenDPI: Double; inline;
-begin
-{$IFDEF ANDROID}
-//    getScreenDPI:= Android_JNI_getDensity();
-    getScreenDPI:= 1;
-{$ELSE}
-    getScreenDPI:= 1;
-{$ENDIF}
-end;
 
 function  sanitizeForLog(s: shortstring): shortstring;
 var i: byte;
@@ -506,7 +495,6 @@ begin
 {$ENDIF}
 
     //mobile stuff
-    mobileRecord.getScreenDPI:= @getScreenDPI; //TODO: define external function.
 {$IFDEF IPHONEOS}
     mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
     mobileRecord.GameLoading:= @startLoadingIndicator;
