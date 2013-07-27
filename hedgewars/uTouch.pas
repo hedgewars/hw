@@ -93,7 +93,6 @@ var
     finger: PTouch_Data;
     xr, yr: LongWord;
 begin
-{$IFDEF USE_TOUCH_INTERFACE}
 xr:= round(x * cScreenWidth);
 yr:= round(y * cScreenHeight);
 
@@ -181,7 +180,6 @@ if buttonsDown = 0 then
             end;
         end;
     end;
-{$ENDIF}
 end;
 
 procedure onTouchMotion(x, y, dx, dy: Single; pointerId: TSDL_FingerId);
@@ -240,7 +238,6 @@ var
     widget: POnScreenWidget;
     xr, yr: LongWord;
 begin
-{$IFDEF USE_TOUCH_INTERFACE}
 xr:= round(x * cScreenWidth);
 yr:= round(y * cScreenHeight);
 
@@ -301,7 +298,6 @@ if targetting then
     AddCaption('Press the target button to mark the target', cWhiteColor, capgrpAmmoInfo);
 
 deleteFinger(pointerId);
-{$ENDIF}
 end;
 
 procedure onTouchDoubleClick(finger: TTouch_Data);
@@ -311,14 +307,11 @@ end;
 
 procedure onTouchLongClick(finger: TTouch_Data);
 begin
-{$IFDEF USE_TOUCH_INTERFACE}
 if isOnWidget(jumpWidget, finger) then
     begin
     ParseTeamCommand('ljump');
     exit;
     end;
-
-{$ENDIF}
 end;
 
 procedure onTouchClick(finger: TTouch_Data);
@@ -347,7 +340,6 @@ if bShowAmmoMenu then
     exit;
     end;
 
-{$IFDEF USE_TOUCH_INTERFACE}
 if isOnCurrentHog(finger) or isOnWidget(AMWidget, finger) then
     begin
     bShowAmmoMenu := true;
@@ -359,7 +351,6 @@ if isOnWidget(jumpWidget, finger) then
     ParseTeamCommand('hjump');
     exit;
     end;
-{$ENDIF}
 end;
 
 function addFinger(x,y: Longword; id: TSDL_FingerId): PTouch_Data;
