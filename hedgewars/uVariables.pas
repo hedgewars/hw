@@ -2368,7 +2368,7 @@ end;
 procedure initModule;
 begin
     // TODO: we could just have one cLocale variables and drop strutils
-    cLocale:= ExtractDelimited(0, cLocaleFName, StdWordDelims);
+    cLocale:= ExtractDelimited(1, cLocaleFName, StdWordDelims);
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;

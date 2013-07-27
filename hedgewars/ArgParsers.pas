@@ -21,11 +21,15 @@
 unit ArgParsers;
 interface
 
+{$IFNDEF HWLIBRARY}
 procedure GetParams;
+{$ELSE}
+procedure parseCommandLine(argc: LongInt; argv: PPChar);
+{$ENDIF}
 
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
-var isInternal: Boolean;
+var isInternal: Boolean {$IFDEF HWLIBRARY} = true{$ENDIF};
 
 procedure GciEasterEgg;
 begin

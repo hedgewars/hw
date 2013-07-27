@@ -41,6 +41,11 @@ begin
     versionStr^:= cVersionString;
 end;
 
+function HW_versionString: PChar; cdecl; export;
+begin
+    exit(cVersionString + '-r' + cRevisionString + ' (' + cHashString + ')');
+end;
+
 // equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup
 procedure HW_terminate(closeFrontend: boolean); cdecl; export;
 begin
@@ -118,6 +123,7 @@ exports
     GenLandPreview,
     LoadLocaleWrapper,
     HW_versionInfo,
+    HW_versionString,
     HW_terminate,
     HW_getNumberOfWeapons,
     HW_getMaxNumberOfHogs,

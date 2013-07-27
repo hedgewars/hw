@@ -2413,7 +2413,7 @@ Les joueurs ne sont pas tous prêts.</translation>
         <translation>Invitez vos amis sur votre serveur en 1 clique!</translation>
     </message>
     <message>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Cliquez pour copier votre URL serveur unique. Envoyez ce lien a vos amis et il pourront vous rejoindre.</translation>
     </message>
     <message>

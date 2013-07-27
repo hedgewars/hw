@@ -27,8 +27,8 @@ procedure DoGameTick(Lag: LongInt);
     implementation
 ////////////////////
 uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
-    uVisualGears, uTypes, uVariables, uCommands, uConsts, uVisualGearsList
-    {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
+     uTypes, uVariables, uCommands, uConsts, uVisualGearsList
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
@@ -51,7 +51,7 @@ if GameType <> gmtRecord then
     else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) then
         Lag:= 2500;
 
-    if (GameType = gmtDemo) then 
+    if (GameType = gmtDemo) then
         if isSpeed then
             begin
             i:= RealTicks-SpeedStart;
@@ -90,7 +90,7 @@ while (GameState <> gsExit) and (i <= Lag) do
         if CurrentHedgehog^.BotLevel <> 0 then
             ProcessBot;
         ProcessGears;
-        {$IFDEF SDL13}ProcessTouch;{$ENDIF}
+        {$IFDEF SDL2}ProcessTouch;{$ENDIF}
         end
     else
         begin

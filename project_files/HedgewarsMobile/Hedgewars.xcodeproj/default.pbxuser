@@ -11,9 +11,6 @@
 		activeExecutable = 617987D7114AA2CD00BA94A9 /* HedgewarsMobile */;
 		activeSDKPreference = iphonesimulator3.2;
 		activeTarget = 1D6058900D05DD3D006BFB54 /* HedgewarsMobile */;
-		addToTargets = (
-			61C3251C1179A300001E70B1 /* openalbridge */,
-		);
 		breakpoints = (
 		);
 		codeSenseManager = 617987E0114AA2EB00BA94A9 /* Code sense */;
@@ -2774,9 +2771,6 @@
 		vrLen = 779;
 		vrLoc = 123261;
 	};
-	61C3251C1179A300001E70B1 /* openalbridge */ = {
-		activeExec = 0;
-	};
 	61C325231179A314001E70B1 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 6184DEA211795DBD00AF6EFA /* UIImageExtra.m */;
@@ -2825,22 +2819,6 @@
 			sepNavVisRange = "{829, 414}";
 		};
 	};
-	61C3253E1179A336001E70B1 /* openalbridge.c */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {768, 7860}}";
-			sepNavSelRange = "{4909, 0}";
-			sepNavVisRange = "{4612, 631}";
-			sepNavWindowFrame = "{{622, 369}, {1086, 797}}";
-		};
-	};
-	61C325401179A336001E70B1 /* openalbridge.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1027, 720}}";
-			sepNavSelRange = "{2053, 0}";
-			sepNavVisRange = "{3, 2114}";
-			sepNavWindowFrame = "{{622, 369}, {1086, 797}}";
-		};
-	};
 	61C325411179A336001E70B1 /* wrappers.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1027, 2175}}";
@@ -2865,16 +2843,6 @@
 		rLoc = 26;
 		rType = 0;
 		vrLen = 274;
-		vrLoc = 0;
-	};
-	61C325691179A3A0001E70B1 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 61C325401179A336001E70B1 /* openalbridge.h */;
-		name = "openalbridge.h: 1";
-		rLen = 0;
-		rLoc = 0;
-		rType = 0;
-		vrLen = 684;
 		vrLoc = 0;
 	};
 	61C325DD1179A993001E70B1 /* PBXTextBookmark */ = {

@@ -2399,7 +2399,7 @@ Nem todos os jogadores estão prontos.</translation>
         <translation>Convida os teus amigos para o teu servidor com apenas 1 click!</translation>
     </message>
     <message>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Clica para copiar o URL do teu servidor. Partilha este link com os teus amigos para que se possam juntar a ti.</translation>
     </message>
     <message>
