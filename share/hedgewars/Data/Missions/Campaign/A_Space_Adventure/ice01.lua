@@ -113,6 +113,47 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
+	-- Add mines
+	AddGear(1612, 940, gtMine, 0, 0, 0, 0)
+	AddGear(1622, 945, gtMine, 0, 0, 0, 0)
+	AddGear(1645, 950, gtMine, 0, 0, 0, 0)
+	AddGear(1655, 960, gtMine, 0, 0, 0, 0)
+	AddGear(1665, 965, gtMine, 0, 0, 0, 0)
+	
+	
+	AddGear(1800, 1000, gtMine, 0, 0, 0, 0)
+	AddGear(1810, 1005, gtMine, 0, 0, 0, 0)
+	AddGear(1820, 1010, gtMine, 0, 0, 0, 0)
+	AddGear(1830, 1015, gtMine, 0, 0, 0, 0)
+	AddGear(1840, 1020, gtMine, 0, 0, 0, 0)
+	
+	
+	AddGear(1900, 1020, gtMine, 0, 0, 0, 0)
+	AddGear(1910, 1020, gtMine, 0, 0, 0, 0)
+	AddGear(1920, 1020, gtMine, 0, 0, 0, 0)
+	AddGear(1930, 1030, gtMine, 0, 0, 0, 0)
+	AddGear(1940, 1040, gtMine, 0, 0, 0, 0)
+	
+	
+	AddGear(2130, 1110, gtMine, 0, 0, 0, 0)
+	AddGear(2140, 1120, gtMine, 0, 0, 0, 0)
+	AddGear(2180, 1120, gtMine, 0, 0, 0, 0)
+	AddGear(2200, 1130, gtMine, 0, 0, 0, 0)
+	AddGear(2210, 1130, gtMine, 0, 0, 0, 0)
+	
+	local x=2300
+	local step=0
+	while x<3100 do
+		AddGear(x, 1150, gtMine, 0, 0, 0, 0)
+		step = step + 1
+		if step == 5 then
+			step = 0
+			x = x + math.random(100,300)
+		else
+			x = x + math.random(10,30)
+		end
+	end
+	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 1)
 	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
