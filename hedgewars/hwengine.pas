@@ -189,17 +189,15 @@ begin
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
                     end;
-{$IF 0}
-                //TODO: touch has become relative to the window size and has different parameters
+
                 SDL_FINGERMOTION:
-                    onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
+                    onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
 
                 SDL_FINGERDOWN:
                     onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
-{$ENDIF}
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
