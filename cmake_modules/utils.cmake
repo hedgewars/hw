@@ -37,10 +37,14 @@ endmacro(add_flag_prepend _VAR_NAME _FLAG)
 
 macro(add_linker_flag _FLAG)
     list(APPEND haskell_flags "-optl" "-Wl,${_FLAG}")
-    add_flag_append(CMAKE_Pascal_FLAGS "-k${_FLAG}")
-    add_flag_append(CMAKE_EXE_LINKER_FLAGS "-Wl,${_FLAG}")
+    #executables
+    add_flag_append(CMAKE_C_LINK_FLAGS "-Wl,${_FLAG}")
+    add_flag_append(CMAKE_CXX_LINK_FLAGS "-Wl,${_FLAG}")
+    add_flag_append(CMAKE_Pascal_LINK_FLAGS "-k${_FLAG}")
+    #libraries
     add_flag_append(CMAKE_SHARED_LIBRARY_C_FLAGS "-Wl,${_FLAG}")
     add_flag_append(CMAKE_SHARED_LIBRARY_CXX_FLAGS "-Wl,${_FLAG}")
+    #CMAKE_SHARED_LIBRARY_Pascal_FLAGS is already set by CMAKE_Pascal_LINK_FLAGS
 endmacro(add_linker_flag _FLAG)
 
 #TODO: find_package_or_bundle

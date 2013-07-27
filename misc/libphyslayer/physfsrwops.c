@@ -32,7 +32,15 @@
 #endif
 
 #if TARGET_SDL13
-static long SDLCALL physfsrwops_seek(struct SDL_RWops *rw, long offset, int whence)
+static SDLCALL Sint64 physfsrwops_size(struct SDL_RWops *rw)
+{
+    PHYSFS_File *handle = (PHYSFS_File *) rw->hidden.unknown.data1;
+    return PHYSFS_fileLength(handle);
+}
+#endif
+
+#if TARGET_SDL13
+static SDLCALL Sint64 physfsrwops_seek(struct SDL_RWops *rw, Sint64 offset, int whence)
 #else
 static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
 #endif
@@ -42,7 +50,6 @@ static int physfsrwops_seek(SDL_RWops *rw, int offset, int whence)
 
     if (whence == SEEK_SET)
         pos = (PHYSFS_sint64) offset;
-
     else if (whence == SEEK_CUR)
     {
         const PHYSFS_sint64 current = PHYSFS_tell(handle);
@@ -173,6 +180,9 @@ static SDL_RWops *create_rwops(PHYSFS_File *handle)
         retval = SDL_AllocRW();
         if (retval != NULL)
         {
+#if TARGET_SDL13
+            retval->size  = physfsrwops_size;
+#endif
             retval->seek  = physfsrwops_seek;
             retval->read  = physfsrwops_read;
             retval->write = physfsrwops_write;

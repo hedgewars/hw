@@ -48,7 +48,7 @@ procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
 
 implementation
-uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL13}uTouch,{$ENDIF}
+uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL2}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
@@ -151,7 +151,7 @@ begin
                         dec(Gear^.Hedgehog^.InitialHealth, 5)
                     end
                 end;
-            if tmp > 0 then 
+            if tmp > 0 then
                 begin
                 inc(Gear^.Damage, min(tmp, max(0,Gear^.Health - 1 - Gear^.Damage)));
                 HHHurt(Gear^.Hedgehog, dsPoison);
@@ -172,7 +172,7 @@ if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 if GameTicks = NewTurnTick then
     begin
     ScriptCall('onNewTurn');
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     uTouch.NewTurnBeginning();
 {$ENDIF}
     end;
@@ -201,7 +201,7 @@ while t <> nil do
         DeleteGear(curHandledGear)
     else
         begin
-        if curHandledGear^.Message and gmRemoveFromList <> 0 then 
+        if curHandledGear^.Message and gmRemoveFromList <> 0 then
             begin
             RemoveGearFromList(curHandledGear);
             // since I can't think of any good reason this would ever be separate from a remove from list, going to keep it inside this block
@@ -235,13 +235,13 @@ case step of
         if delay = 0 then
             inc(step)
         end;
-        
+
     stChDmg:
     if CheckNoDamage then
         inc(step)
     else
         step:= stDelay;
-        
+
     stSweep:
     if SweepDirty then
         begin
@@ -250,7 +250,7 @@ case step of
         end
     else
         inc(step);
-        
+
     stTurnReact:
         begin
         if (not bBetweenTurns) and (not isInMultiShoot) then
@@ -261,7 +261,7 @@ case step of
         else
             inc(step, 2);
         end;
-        
+
     stAfterDelay:
         begin
         if delay = 0 then
@@ -304,12 +304,12 @@ case step of
                 if cHealthDecrease <> 0 then
                     begin
                     SuddenDeathDmg:= true;
-                        
+
                     // flash
                     ScreenFade:= sfFromWhite;
                     ScreenFadeValue:= sfMax;
                     ScreenFadeSpeed:= 1;
-                    
+
                     ChangeToSDClouds;
                     ChangeToSDFlakes;
                     SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255);
@@ -419,7 +419,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
-        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) and 
+        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) and
             not(isInMultiShoot and (CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) then
                 begin
                 if (TurnTimeLeft = 5000)
@@ -518,7 +518,7 @@ begin
             end;
         t:= t^.NextGear
         end;
-   
+
     if ((GameFlags and gfResetWeps) <> 0) and (not PlacingHogs) then
         ResetWeapons;
 
@@ -749,7 +749,7 @@ begin
     FollowGear := AddGear(x, y, gtCase, 0, _0, _0, 0);
     cCaseFactor := 0;
     FollowGear^.Pos := posCaseDummy;
-    
+
     if explode then
         FollowGear^.Pos := FollowGear^.Pos + posCaseExplode;
     if poison then
@@ -852,7 +852,7 @@ begin
             // if team matches current hedgehog team, default to current hedgehog
             if (i = 0) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Team = TeamsArray[t]) then
                 hh:= CurrentHedgehog
-            else 
+            else
                 begin
             // otherwise use the first living hog or the hog amongs the remaining ones indicated by i
                 j:= 0;
@@ -868,7 +868,7 @@ begin
                     inc(j)
                     end
                 end;
-        if hh <> nil then 
+        if hh <> nil then
             begin
             Gear:= AddVisualGear(0, 0, vgtSpeechBubble);
             if Gear <> nil then

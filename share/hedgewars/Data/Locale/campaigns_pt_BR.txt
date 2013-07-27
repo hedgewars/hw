@@ -1,0 +1,19 @@
+A_Classic_Fairytale-first_blood.desc="Ajude Vaza Demais a completar seu treinamento e a se tornar um guerreiro ouriço. Você será treinado na arte da corda, do paraquedas, do shoryuken e da pistola."
+
+A_Classic_Fairytale-shadow.desc="Vaza Demais e Nuvem Densa saíram para caçar. Esteja preparado para os perigos à sua espera na floresta. Lembre-se de fazer suas escolhas sabiamente."
+
+A_Classic_Fairytale-journey.desc="Vaza Demais tem que ir ao outro lado da ilha. Seja rápido e cauteloso."
+
+A_Classic_Fairytale-united.desc="Depois de sua longa jornada, Vaza Demais está finalmente de volta à vila. Entretanto, não há tempo para descanso. Você tem que defender a vila da fúria dos canibais."
+
+A_Classic_Fairytale-backstab.desc="Os monstruosos canibais estão caçando Vaza Demais e seus amigos. Derrote-os de uma vez e proteja seus aliados. Use seus recursos para derrotas os inimigos que chegam!"
+
+A_Classic_Fairytale-dragon.desc="Vaza Demais tem que chegar ao outro lado do lago. Torne-se um mestre na corda e evite ser atingido pelos tiros dos inimigos."
+
+A_Classic_Fairytale-family.desc="Vaza Demais tem que salvar mais uma vez seus aliados. Elimine os ouriços inimigos e liberte seus companheiros. Use seus recursos com cuidado já que são limitados. Cave alguns buracos no lugar certo e se aproxime da princesa."
+
+A_Classic_Fairytale-queen.desc="Vaza Demais tem que lutar mais uma vez. Para vencer, ele terá que lutar contra o traidor e usar todos os recursos disponíveis. Derrote o inimigo!"
+
+A_Classic_Fairytale-enemy.desc="Que grande virada! Vaza Demais tem que lutar lado a lado com os… “canibais” contra o inimigo comum. Os ciborgues malignos!"
+
+A_Classic_Fairytale-epil.desc="Parabéns! Vaza Demais pode finalmente ficar em paz e ser exaltado pelos seus novos amigos e sua tribo. Orgulhe-se do que conquistou! Você pode jogar missões anteriores novamente e ver outros finais possíveis."

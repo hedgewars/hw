@@ -33,7 +33,6 @@ option(ANDROID "Enable Android build (off)" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 
-set(FPFLAGS "" CACHE STRING "Additional Freepascal flags")
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
@@ -93,14 +92,11 @@ endif()
 
 
 #parse additional parameters
-if(FPFLAGS)
-    add_flag_prepend(CMAKE_Pascal_FLAGS ${FPFLAGS})
-endif()
 if(GHFLAGS)
     if(${CMAKE_VERSION} VERSION_GREATER 2.6)
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message(${WARNING} "FPFLAGS and GHFLAGS are available only when using CMake >= 2.8")
+        message(${WARNING} "GHFLAGS are available only when using CMake >= 2.8")
     endif()
 endif()
 

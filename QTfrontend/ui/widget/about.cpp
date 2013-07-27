@@ -39,6 +39,15 @@ extern "C"
 }
 #endif
 
+
+#if defined(Q_OS_WINDOWS)
+#define sopath(x) x ".dll"
+#elif defined(Q_OS_MAC)
+#define sopath(x) "@executable_path/../Frameworks/" x ".framework/" x
+#else
+#define sopath(x) "lib" x ".so"
+#endif
+
 #include "about.h"
 
 About::About(QWidget * parent) :
@@ -90,10 +99,62 @@ About::About(QWidget * parent) :
     libinfo.append(QString(tr("Unknown Compiler")).arg(__VERSION__) + QString("<br>"));
 #endif
 
+    const SDL_version *sdl_ver = SDL_Linked_Version();
     libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL</a> version: %1.%2.%3<br>")
-        .arg(SDL_MAJOR_VERSION)
-        .arg(SDL_MINOR_VERSION)
-        .arg(SDL_PATCHLEVEL));
+        .arg(sdl_ver->major)
+        .arg(sdl_ver->minor)
+        .arg(sdl_ver->patch));
+
+    const SDL_version *sdlmixer_ver = Mix_Linked_Version();
+    libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_mixer</a> version: %1.%2.%3<br>")
+        .arg(sdlmixer_ver->major)
+        .arg(sdlmixer_ver->minor)
+        .arg(sdlmixer_ver->patch));
+
+    // the remaining sdl modules used only in engine, so instead of needlessly linking them here
+    // we dynamically call the function returning the linked version
+    void *sdlnet_handle = SDL_LoadObject(sopath("SDL_net"));
+    if (sdlnet_handle != NULL) {
+        SDL_version *(*sdlnet_ver_get)(void) = NULL;
+        sdlnet_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlnet_handle, "SDLNet_Linked_Version");
+        if (sdlnet_ver_get != NULL) {
+            SDL_version *sdlnet_ver = sdlnet_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_net</a> version: %1.%2.%3<br>")
+                .arg(sdlnet_ver->major)
+                .arg(sdlnet_ver->minor)
+                .arg(sdlnet_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
+
+    void *sdlimage_handle = SDL_LoadObject(sopath("SDL_image"));
+    if (sdlimage_handle != NULL) {
+        SDL_version *(*sdlimage_ver_get)(void) = NULL;
+        sdlimage_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlimage_handle, "IMG_Linked_Version");
+        if (sdlimage_ver_get != NULL) {
+            SDL_version *sdlimage_ver = sdlimage_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_image</a> version: %1.%2.%3<br>")
+                .arg(sdlimage_ver->major)
+                .arg(sdlimage_ver->minor)
+                .arg(sdlimage_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
+
+    void *sdlttf_handle = SDL_LoadObject(sopath("SDL_ttf"));
+    if (sdlttf_handle != NULL) {
+        SDL_version *(*sdlttf_ver_get)(void) = NULL;
+        sdlttf_ver_get = (SDL_version *(*)(void)) SDL_LoadFunction(sdlttf_handle, "TTF_Linked_Version");
+        if (sdlttf_ver_get != NULL) {
+            SDL_version *sdlttf_ver = sdlttf_ver_get();
+            libinfo.append(QString("<a href=\"http://www.libsdl.org/\">SDL_ttf</a> version: %1.%2.%3<br>")
+                .arg(sdlttf_ver->major)
+                .arg(sdlttf_ver->minor)
+                .arg(sdlttf_ver->patch));
+        }
+        SDL_UnloadObject(sdlnet_handle);
+    }
+
 
     libinfo.append(QString("<a href=\"http://qt-project.org/\">Qt</a> version: %1<br>").arg(QT_VERSION_STR));
 
@@ -108,6 +169,8 @@ About::About(QWidget * parent) :
         .arg(PHYSFS_VER_MAJOR)
         .arg(PHYSFS_VER_MINOR)
         .arg(PHYSFS_VER_PATCH));
+
+    // TODO: how to add Lua information?
 
     QLabel * lblLibInfo = new QLabel();
     lblLibInfo->setOpenExternalLinks(true);
