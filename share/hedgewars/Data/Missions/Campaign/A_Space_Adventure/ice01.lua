@@ -6,11 +6,12 @@
 -- able to use only the ice gun for this mission.
 
 -- TODO
--- alter map so hero may climb to the higher place
 -- maybe use rope challenge to go there
 -- add checkpoints
 -- fix the stats
--- Add first checkpoint save if icegun is taken
+-- manually set the frozen hogs to last frozen for fixed number of turns
+-- SetState(bandit1.gear,bor(GetState(bandit1.gear),gstFrozen))
+-- SetEffect(bandit1.gear,heFrozen,9999999)
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -57,6 +58,7 @@ ally.y = 1840
 bandit1.name = "Thanta"
 bandit1.x = 3240
 bandit1.y = 1280
+bandit1.dead = false
 bandit2.name = "Billy Frost"
 bandit2.x = 1480
 bandit2.y = 1990
@@ -64,10 +66,10 @@ bandit3.name = "Ice Jake"
 bandit3.x = 1860
 bandit3.y = 1150
 bandit4.name = "John Snow"
-bandit4.x = 3250
+bandit4.x = 3200
 bandit4.y = 970
 bandit5.name = "White Tee"
-bandit5.x = 3300
+bandit5.x = 3280
 bandit5.y = 600
 teamA.name = loc("Allies")
 teamA.color = tonumber("FF0000",16) -- red
@@ -108,10 +110,10 @@ function onGameInit()
 	AnimSetGearPosition(bandit2.gear, bandit2.x, bandit2.y)
 	bandit3.gear = AddHog(bandit3.name, 1, 100, "tophats")
 	AnimSetGearPosition(bandit3.gear, bandit3.x, bandit3.y)
-	bandit4.gear = AddHog(bandit4.name, 1, 100, "tophats")
+	bandit4.gear = AddHog(bandit4.name, 1, 40, "tophats")
 	AnimSetGearPosition(bandit4.gear, bandit4.x, bandit4.y)
 	HogTurnLeft(bandit4.gear, true)
-	bandit5.gear = AddHog(bandit5.name, 1, 100, "tophats")
+	bandit5.gear = AddHog(bandit5.name, 1, 40, "tophats")
 	AnimSetGearPosition(bandit5.gear, bandit5.x, bandit5.y)
 	HogTurnLeft(bandit5.gear, true)
 	
@@ -123,7 +125,13 @@ function onGameInit()
 	if checkPointReached == 1 then
 		-- Start of the game
 	elseif checkPointReached == 2 then
+		iceGunTaken = true
 		AnimSetGearPosition(hero.gear, 840, 1650)
+	elseif checkPointReached == 3 then		
+		iceGunTaken = true
+		heroAtFinaleStep = true
+		heroVisitedAntiFlyArea = true
+		AnimSetGearPosition(hero.gear, 1450, 910)
 	end
 	
 	AnimInit()
@@ -176,6 +184,7 @@ function onGameStart()
 	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
+	AddEvent(onThantaDeath, {bandit1.gear}, thantaDeath, {bandit1.gear}, 1)
 	
 	AddAmmo(hero.gear, amJetpack, 99)
 	AddAmmo(bandit1.gear, amBazooka, 5)
@@ -191,8 +200,12 @@ function onGameStart()
 		AddEvent(onColumnCheckPoint, {hero.gear}, columnCheckPoint, {hero.gear}, 0)
 		AddEvent(onHeroAtIceGun, {hero.gear}, heroAtIceGun, {hero.gear}, 0)
 		AddAnim(dialog01)
-	elseif checkPointReached == 2 then		
+	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amIceGun, 8)
+		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
+	elseif checkPointReached == 3 then
+		AddAmmo(hero.gear, amIceGun, 6)
+		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
 	end
 	
 end
@@ -204,6 +217,9 @@ function onNewTurn()
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
 	elseif not heroAtFinaleStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
+		AnimSwitchHog(hero.gear)
+		TurnTimeLeft = 0
+	elseif heroAtFinaleStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == ally.gear then
@@ -227,6 +243,8 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	elseif gear == bandit1.gear then
+		bandit1.dead = true
 	end
 end
 
@@ -260,7 +278,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroFinalStep(gear)
-	if not hero.dead and GetY(gear) < 900 and GetX(gear) > 1400 then
+	if not hero.dead and GetY(gear) < 960 and GetX(gear) > 1400 then
 		return true
 	end
 	return false
@@ -275,6 +293,13 @@ end
 
 function onHeroAtIceGun(gear)
 	if not hero.dead and GetX(gear) < icegunX+15 and GetX(gear) > icegunX-15 and GetY(gear) > icegunY-15 and GetY(gear) < icegunY+15 then
+		return true
+	end
+	return false
+end
+
+function onThantaDeath(gear)
+	if bandit1.dead then
 		return true
 	end
 	return false
@@ -310,16 +335,25 @@ end
 
 function heroFinalStep(gear)
 	heroAtFinaleStep = true
+	SaveCampaignVar("Ice01CheckPoint", "3")
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))	
+	WriteLnToConsole("Final Step")
 end
 
 function columnCheckPoint(gear)
-	SaveCampaignVar("Ice01CheckPoint", "2")
-	WriteLnToConsole("I AM HERE")
+	SaveCampaignVar("Ice01CheckPoint", "2")	
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
 end
 
 function heroAtIceGun(gear)
 	iceGunTaken=true
+end
+
+function thantaDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	-- more custom stats
+	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
