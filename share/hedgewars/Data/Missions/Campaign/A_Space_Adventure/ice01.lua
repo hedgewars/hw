@@ -223,7 +223,9 @@ function onGameStart()
 	elseif checkPointReached == 3 then
 		AddAmmo(hero.gear, amIceGun, 6)
 		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
-	end	
+	end
+	
+	SendHealthStatsOff()
 end
 
 function onNewTurn()		
@@ -412,7 +414,11 @@ end
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	-- more custom stats
+	SendStat('siCustomAchievement', loc("To win the game you have to go next to Thanta")) --11
+	SendStat('siCustomAchievement', loc("Most of the time you'll be able to use only the icegun")) --11
+	SendStat('siCustomAchievement', loc("Use the bazooka and the flying saucer to get the icegun")) --11
+	SendStat('siPlayerKills','1',teamB.name)
+	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
 end
 
@@ -435,7 +441,12 @@ end
 
 function thantaDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	-- more custom stats
+	SendStat('siCustomAchievement', loc("Noooo, Thanta has to stay alive!")) --11
+	SendStat('siCustomAchievement', loc("To win the game you have to go next to Thanta")) --11
+	SendStat('siCustomAchievement', loc("Most of the time you'll be able to use only the icegun")) --11
+	SendStat('siCustomAchievement', loc("Use the bazooka and the flying saucer to get the icegun")) --11
+	SendStat('siPlayerKills','1',teamB.name)
+	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
 end
 
@@ -482,7 +493,7 @@ function AnimationSetup()
 	AddSkipFunction(dialog02, Skipanim, {dialog01})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's part..."), 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please pare me. You can take all my treasures!"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please spare me. You can take all my treasures!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I just want the strange device you found!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {bandit1.gear, 4000}})
@@ -493,8 +504,11 @@ end
 -------------- Other Functions -------------------
 
 function actionsOnWin()
-	SendStat('siGameResult', loc("Congratulations, you got the part!"))
-	SaveCampaignVar("IcePlanetPartAcquired", "true")
-	-- more custom stats
+	SaveCampaignVar("IcePlanetPartAcquired", "true")	
+	SendStat('siGameResult', loc("Congratulations, you got the part!")) --1
+	SendStat('siCustomAchievement', loc("At the end of the game your health was ")..GetHealth(hero.gear)) --11
+	-- maybe add number of tries for each part?
+	SendStat('siPlayerKills','1',teamC.name)
+	SendStat('siPlayerKills','0',teamB.name)
 	EndGame()
 end
