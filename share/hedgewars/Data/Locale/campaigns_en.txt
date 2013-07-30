@@ -20,6 +20,6 @@ A_Classic_Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in
 
 A_Space_Adventure-cosmos.desc="Hogera, the planet of hogs is about to be hit by a gigantic meteorite. In this race for survival you have to lead PAoTH's best pilot, Hog Solo, in a space trip around the neighbor planets to collect all the 4 pieces of the long lost anti gravity device!"
 A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his saucer but professor Hogevil has gone there first and set an ambush! Rescue the catpured PAoTH researchers and drive professor Hogevil away!"
-A_Space_Adventure-ice.desc="ICE TEST"
+A_Space_Adventure-ice01.desc="Welcome to the planet of ice. Here, it's so cold that most of Hog Solo's weapons won't work. You have to get the lost part from the bandit leader Thanta using the weapons that you'll find there!"
 
 
