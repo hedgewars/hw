@@ -6,12 +6,9 @@
 -- able to use only the ice gun for this mission.
 
 -- TODO
--- maybe use rope challenge to go there
--- add checkpoints
+-- TEST TEST AND MORE TEST
+-- increase health in checkpoint 3
 -- fix the stats
--- manually set the frozen hogs to last frozen for fixed number of turns
--- SetState(bandit1.gear,bor(GetState(bandit1.gear),gstFrozen))
--- SetEffect(bandit1.gear,heFrozen,9999999)
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -191,6 +188,7 @@ function onGameStart()
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
 	AddEvent(onThantaDeath, {bandit1.gear}, thantaDeath, {bandit1.gear}, 1)
+	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 1)
 	
 	AddAmmo(hero.gear, amJetpack, 99)
 	AddAmmo(bandit1.gear, amBazooka, 5)
@@ -370,6 +368,14 @@ function onThantaDeath(gear)
 	return false
 end
 
+function onHeroWin(gear)
+	if (not hero.dead and not bandit1.dead) and (GetX(hero.gear)>=GetX(bandit1.gear)-15 and GetX(hero.gear)<=GetX(bandit1.gear)+15)
+		and (GetY(hero.gear)>=GetY(bandit1.gear)-15 and GetY(hero.gear)<=GetY(bandit1.gear)+15) then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function antiFlyArea(gear)
@@ -417,6 +423,12 @@ end
 
 function thantaDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	-- more custom stats
+	EndGame()
+end
+
+function heroWin(gear)
+	SendStat('siGameResult', loc("Congratulations, you got the part!"))
 	-- more custom stats
 	EndGame()
 end
