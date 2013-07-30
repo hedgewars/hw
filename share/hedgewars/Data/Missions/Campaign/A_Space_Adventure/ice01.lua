@@ -227,7 +227,7 @@ function onNewTurn()
 		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
 			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
 			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
-			AnimSwitchHog(hero.gear)
+			TurnTimeLeft = 0
 		else
 			AnimSwitchHog(hero.gear)
 			TurnTimeLeft = 0
