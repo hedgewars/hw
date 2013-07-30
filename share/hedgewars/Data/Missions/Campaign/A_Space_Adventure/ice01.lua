@@ -22,7 +22,7 @@ local campaignName = loc("A Space Adventure")
 local missionName = loc("Ice planet, a frozen adventure!")
 local heroAtAntiFlyArea = false
 local heroVisitedAntiFlyArea = false
-local heroAtFinaleStep = false
+local heroAtFinalStep = false
 local iceGunTaken = false
 local checkPointReached = 1 -- 1 is normal spawn
 -- dialogs
@@ -59,6 +59,8 @@ bandit1.name = "Thanta"
 bandit1.x = 3240
 bandit1.y = 1280
 bandit1.dead = false
+bandit1.frozen = false
+bandit1.roundsToUnfreeze = 0
 bandit2.name = "Billy Frost"
 bandit2.x = 1480
 bandit2.y = 1990
@@ -68,9 +70,13 @@ bandit3.y = 1150
 bandit4.name = "John Snow"
 bandit4.x = 3200
 bandit4.y = 970
+bandit4.frozen = false
+bandit4.roundsToUnfreeze = 0
 bandit5.name = "White Tee"
 bandit5.x = 3280
 bandit5.y = 600
+bandit5.frozen = false
+bandit5.roundsToUnfreeze = 0
 teamA.name = loc("Allies")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Frozen Bandits")
@@ -103,7 +109,7 @@ function onGameInit()
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Frozen Bandits
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	bandit1.gear = AddHog(bandit1.name, 1, 100, "tophats")
+	bandit1.gear = AddHog(bandit1.name, 1, 120, "tophats")
 	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)	
 	HogTurnLeft(bandit1.gear, true)
 	bandit2.gear = AddHog(bandit2.name, 1, 100, "tophats")
@@ -129,7 +135,7 @@ function onGameInit()
 		AnimSetGearPosition(hero.gear, 840, 1650)
 	elseif checkPointReached == 3 then		
 		iceGunTaken = true
-		heroAtFinaleStep = true
+		heroAtFinalStep = true
 		heroVisitedAntiFlyArea = true
 		AnimSetGearPosition(hero.gear, 1450, 910)
 	end
@@ -213,17 +219,76 @@ end
 function onNewTurn()		
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
+		WriteLnToConsole("NEW TURN 1")
 		TurnTimeLeft = 0
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
+		WriteLnToConsole("NEW TURN 2")
 		TurnTimeLeft = -1
-	elseif not heroAtFinaleStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
+	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
+		WriteLnToConsole("NEW TURN 3")
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
-	elseif heroAtFinaleStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
-		AnimSwitchHog(hero.gear)
-		TurnTimeLeft = 0
+	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
+		WriteLnToConsole("NEW TURN 4")
+		-- have to check if all next hogs are frozen, then switch to hero
+		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
+			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
+			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
+			AnimSwitchHog(hero.gear)
+		else
+			AnimSwitchHog(hero.gear)
+			TurnTimeLeft = 0
+		end
 	elseif CurrentHedgehog == ally.gear then
+		WriteLnToConsole("NEW TURN 6")
 		TurnTimeLeft = 0
+	end
+	WriteLnToConsole("THIS IS THE TURN OF THE "..CurrentHedgehog)
+	if heroAtFinalStep then
+		WriteLnToConsole("hero at final step TRUE")
+	else
+		WriteLnToConsole("hero at final step FALSE")
+	end
+	WriteLnToConsole("Turn time left is "..TurnTimeLeft)
+	WriteLnToConsole("BANDIT 1 TO UNFREEZE "..bandit1.roundsToUnfreeze)
+	-- frozen hogs accounting
+	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
+		WriteLnToConsole("HEEEEEEEEEEEEEEEREEEEEEEEEEEEEEEEE")
+		if bandit1.frozen then
+			if bandit1.roundsToUnfreeze == 0 then
+				SetEffect(bandit1.gear, heFrozen, 255)
+				bandit1.frozen = false
+			else
+				bandit1.roundsToUnfreeze = bandit1.roundsToUnfreeze - 1
+			end
+		end
+		if bandit4.frozen then
+			if bandit4.roundsToUnfreeze == 0 then
+				SetEffect(bandit4.gear, heFrozen, 255)
+				bandit4.frozen = false
+			else
+				bandit4.roundsToUnfreeze = bandit4.roundsToUnfreeze - 1
+			end
+		end
+		if bandit5.frozen then
+			if bandit5.roundsToUnfreeze == 0 then
+				SetEffect(bandit5.gear, heFrozen, 255)
+				bandit5.frozen = false
+			else
+				bandit5.roundsToUnfreeze = bandit5.roundsToUnfreeze - 1
+			end
+		end
+	else	
+		WriteLnToConsole("EEEEEEEEELSSSSSSSEEEEEEEEEEEEEEE")
+		if bandit1.frozen then
+			SetEffect(bandit1.gear, heFrozen, 9999999999)
+		end
+		if bandit4.frozen then
+			SetEffect(bandit4.gear, heFrozen, 9999999999)
+		end
+		if bandit5.frozen then
+			SetEffect(bandit5.gear, heFrozen, 9999999999)
+		end
 	end
 end
 
@@ -234,6 +299,23 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
+	
+	if GetEffect(bandit1.gear, heFrozen) > 256 and not bandit1.frozen then
+		WriteLnToConsole("IN TICK FROZEN!!!")
+		bandit1.frozen = true
+		SetEffect(bandit1.gear, heFrozen, 9999999999)
+		bandit1.roundsToUnfreeze = 1
+	end
+	if GetEffect(bandit4.gear, heFrozen) > 256 and not bandit4.frozen then
+		bandit4.frozen = true
+		SetEffect(bandit4.gear, heFrozen, 9999999999)
+		bandit4.roundsToUnfreeze = 2
+	end
+	if GetEffect(bandit5.gear, heFrozen) > 256 and not bandit5.frozen then
+		bandit5.frozen = true
+		SetEffect(bandit5.gear, heFrozen, 9999999999)
+		bandit5.roundsToUnfreeze = 2
+	end
 end
 
 function onAmmoStoreInit()
@@ -334,7 +416,7 @@ function heroDeath(gear)
 end
 
 function heroFinalStep(gear)
-	heroAtFinaleStep = true
+	heroAtFinalStep = true
 	SaveCampaignVar("Ice01CheckPoint", "3")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))	
 	WriteLnToConsole("Final Step")
