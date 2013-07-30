@@ -43,7 +43,6 @@ local bandit5 = {}
 local teamA = {}
 local teamB = {}
 local teamC = {}
-local teamD = {}
 -- hedgehogs values
 hero.name = "Hog Solo"
 hero.x = 340

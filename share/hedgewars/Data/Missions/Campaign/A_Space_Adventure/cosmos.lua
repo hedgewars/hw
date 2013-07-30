@@ -339,6 +339,13 @@ end
 function desertPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
+	else		
+		AnimCaption(hero.gear,loc("Welcome to the desert planet!"))
+		SaveCampaignVar("Planet", "desertPlanet")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "4")
+		SaveCampaignVar("Mission2", "1")
+		EndGame()
 	end
 end
 
