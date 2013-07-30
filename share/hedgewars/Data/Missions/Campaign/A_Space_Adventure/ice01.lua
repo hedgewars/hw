@@ -95,9 +95,27 @@ function onGameInit()
 	Map = "ice01_map"
 	Theme = "Snow"
 	
+	-- get the check point
+	if tonumber(GetCampaignVar("Ice01CheckPoint")) then
+		checkPointReached = tonumber(GetCampaignVar("Ice01CheckPoint"))
+	end
+	-- get hero health
+	local heroHealth = 100
+	if tonumber(GetCampaignVar("HeroHealth")) then
+		heroHealth = tonumber(GetCampaignVar("HeroHealth"))
+	end
+	
+	if heroHealth ~= 100 then
+		heroHealth = heroHealth + 5
+		if heroHealth > 100 then
+			heroHealth = 100
+		end
+		SaveCampaignVar("HeroHealth", heroHealth)	
+	end
+	
 	-- Hog Solo
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- Ally
@@ -119,11 +137,6 @@ function onGameInit()
 	bandit5.gear = AddHog(bandit5.name, 1, 40, "tophats")
 	AnimSetGearPosition(bandit5.gear, bandit5.x, bandit5.y)
 	HogTurnLeft(bandit5.gear, true)
-	
-	-- get the check point
-	if tonumber(GetCampaignVar("Ice01CheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("Ice01CheckPoint"))
-	end
 	
 	if checkPointReached == 1 then
 		-- Start of the game
@@ -210,8 +223,7 @@ function onGameStart()
 	elseif checkPointReached == 3 then
 		AddAmmo(hero.gear, amIceGun, 6)
 		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
-	end
-	
+	end	
 end
 
 function onNewTurn()		
