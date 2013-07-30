@@ -219,18 +219,13 @@ end
 function onNewTurn()		
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
-		WriteLnToConsole("NEW TURN 1")
 		TurnTimeLeft = 0
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
-		WriteLnToConsole("NEW TURN 2")
 		TurnTimeLeft = -1
 	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
-		WriteLnToConsole("NEW TURN 3")
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
-		WriteLnToConsole("NEW TURN 4")
-		-- have to check if all next hogs are frozen, then switch to hero
 		if (GetHealth(bandit1.gear) and GetEffect(bandit1.gear,heFrozen) > 256) and
 			((GetHealth(bandit4.gear) and GetEffect(bandit4.gear,heFrozen) > 256) or not GetHealth(bandit4.gear)) and
 			((GetHealth(bandit5.gear) and GetEffect(bandit5.gear,heFrozen) > 256) or not GetHealth(bandit5.gear)) then
@@ -240,20 +235,10 @@ function onNewTurn()
 			TurnTimeLeft = 0
 		end
 	elseif CurrentHedgehog == ally.gear then
-		WriteLnToConsole("NEW TURN 6")
 		TurnTimeLeft = 0
 	end
-	WriteLnToConsole("THIS IS THE TURN OF THE "..CurrentHedgehog)
-	if heroAtFinalStep then
-		WriteLnToConsole("hero at final step TRUE")
-	else
-		WriteLnToConsole("hero at final step FALSE")
-	end
-	WriteLnToConsole("Turn time left is "..TurnTimeLeft)
-	WriteLnToConsole("BANDIT 1 TO UNFREEZE "..bandit1.roundsToUnfreeze)
 	-- frozen hogs accounting
 	if CurrentHedgehog == hero.gear and heroAtFinalStep and TurnTimeLeft > 0 then
-		WriteLnToConsole("HEEEEEEEEEEEEEEEREEEEEEEEEEEEEEEEE")
 		if bandit1.frozen then
 			if bandit1.roundsToUnfreeze == 0 then
 				SetEffect(bandit1.gear, heFrozen, 255)
@@ -278,8 +263,7 @@ function onNewTurn()
 				bandit5.roundsToUnfreeze = bandit5.roundsToUnfreeze - 1
 			end
 		end
-	else	
-		WriteLnToConsole("EEEEEEEEELSSSSSSSEEEEEEEEEEEEEEE")
+	else
 		if bandit1.frozen then
 			SetEffect(bandit1.gear, heFrozen, 9999999999)
 		end
@@ -301,7 +285,6 @@ function onGameTick()
 	CheckEvents()
 	
 	if GetEffect(bandit1.gear, heFrozen) > 256 and not bandit1.frozen then
-		WriteLnToConsole("IN TICK FROZEN!!!")
 		bandit1.frozen = true
 		SetEffect(bandit1.gear, heFrozen, 9999999999)
 		bandit1.roundsToUnfreeze = 1
