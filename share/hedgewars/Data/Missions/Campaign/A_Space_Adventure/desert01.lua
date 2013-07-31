@@ -118,6 +118,31 @@ function onGameStart()
 	SpawnAmmoCrate(constructX, constructY, amConstruction)
 	
 	SpawnHealthCrate(3300, 970)
+	
+	-- adding mines - BOOM!
+	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
+	AddGear(270, 460, gtMine, 0, 0, 0, 0)
+	AddGear(3460, 60, gtMine, 0, 0, 0, 0)
+	AddGear(3500, 240, gtMine, 0, 0, 0, 0)
+	AddGear(3410, 670, gtMine, 0, 0, 0, 0)
+	AddGear(3450, 720, gtMine, 0, 0, 0, 0)
+	
+	local x = 800
+	while x < 1650 do
+		AddGear(x, 900, gtMine, 0, 0, 0, 0)
+		x = x + math.random(8,20)
+	end
+	x = 1890
+	while x < 2988 do
+		AddGear(x, 760, gtMine, 0, 0, 0, 0)
+		x = x + math.random(8,20)
+	end
+	x = 2480
+	while x < 3300 do
+		AddGear(x, 1450, gtMine, 0, 0, 0, 0)
+		x = x + math.random(8,20)
+	end
+	
 end
 
 function onAmmoStoreInit()
