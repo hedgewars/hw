@@ -76,6 +76,7 @@ function onGameInit()
 	MinesTime = 1
 	Explosives = 0
 	Delay = 3
+	HealthCaseAmount = 30
 	Map = "desert01_map"
 	Theme = "Desert"
 	
@@ -115,6 +116,8 @@ function onGameStart()
 	SpawnAmmoCrate(rope3X, rope3Y, amRope)
 	SpawnAmmoCrate(portalX, portalY, amPortalGun)
 	SpawnAmmoCrate(constructX, constructY, amConstruction)
+	
+	SpawnHealthCrate(3300, 970)
 end
 
 function onAmmoStoreInit()
