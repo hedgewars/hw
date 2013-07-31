@@ -5,27 +5,47 @@
 -- crates. It is told that one crate contains the
 -- lost part.
 
+-- TODO
+-- maybe use same name in missionName and frontend mission name..
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
+-- globals
+local campaignName = loc("A Space Adventure")
+local missionName = loc("Desert planet, lost in sand!")
+local checkPointReached = 1 -- 1 is normal spawn
 -- hogs
 local hero = {}
-local bandit1 = {}
+local ally = {}
+local smuggler1 = {}
+local smuggler2 = {}
+local smuggler3 = {}
 -- teams
 local teamA = {}
 local teamB = {}
 local teamC = {}
-local teamD = {}
 -- hedgehogs values
 hero.name = "Hog Solo"
-hero.x = 340
-hero.y = 200
-bandit1.name = "Thanta"
-bandit1.x = 500
-bandit1.y = 1280
-teamB.name = loc("Frozen Bandits")
+hero.x = 1740
+hero.y = 40
+hero.dead = false
+ally.name = "Chief Sandologist"
+ally.x = 1660
+ally.y = 40
+smuggler1.name = "Sanndy"
+smuggler1.x = 320
+smuggler1.y = 235
+smuggler2.name = "Spike"
+smuggler2.x = 736
+smuggler2.y = 860
+smuggler3.name = "Sandstorm"
+smuggler3.x = 1940
+smuggler3.y = 1625
+teamA.name = loc("PAotH")
+teamA.color = tonumber("FF0000",16) -- red
+teamB.name = loc("Smugglers")
 teamB.color = tonumber("0033FF",16) -- blues
 teamC.name = loc("Hog Solo")
 teamC.color = tonumber("38D61C",16) -- green
@@ -34,7 +54,6 @@ teamC.color = tonumber("38D61C",16) -- green
 
 function onGameInit()
 	Seed = 1
-	--GameFlags = gfDisableWind
 	TurnTime = 25000
 	CaseFreq = 0
 	MinesNum = 0
@@ -49,12 +68,18 @@ function onGameInit()
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	-- Frozen Bandits
+	-- PAotH undercover scientist and chief Sandologist
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	ally.gear = AddHog(ally.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(ally.gear, ally.x, ally.y)
+	-- Smugglers
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	bandit1.gear = AddHog(bandit1.name, 1, 120, "tophats")
-	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)	
-	HogTurnLeft(bandit1.gear, true)
-	
+	smuggler1.gear = AddHog(smuggler1.name, 1, 120, "tophats")
+	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y
+	smuggler2.gear = AddHog(smuggler2.name, 1, 120, "tophats")
+	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)	
+	smuggler1.gear = AddHog(smuggler3.name, 1, 120, "tophats")
+	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
 	--AnimInit()
 	--AnimationSetup()	
@@ -65,5 +90,11 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	AddAmmo(hero.gear, amRope, 10)
+end
+
+function onGearDelete(gear)
+	if gear == hero.gear then
+		hero.dead = true
+	end
 end
 

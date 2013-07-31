@@ -84,7 +84,6 @@ teamC.color = tonumber("38D61C",16) -- green
 
 function onGameInit()
 	Seed = 1
-	--GameFlags = gfDisableWind
 	TurnTime = 25000
 	CaseFreq = 0
 	MinesNum = 0
