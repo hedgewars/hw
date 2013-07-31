@@ -8,6 +8,7 @@
 -- TODO
 -- maybe use same name in missionName and frontend mission name..
 -- in this map I have to track the weapons the player has in checkpoints
+-- GENRAL NOTE: change hats :D
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -17,6 +18,12 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, lost in sand!")
 local checkPointReached = 1 -- 1 is normal spawn
+-- dialogs
+local dialog01 = {}
+-- mission objectives
+local goals = {
+	[dialog01] = {missionName, loc("Getting ready"), loc("The part is hidden in one of the crates! Go and get it!"), 1, 4500},
+}
 -- crates
 local btorch1Y = 60
 local btorch1X = 2700
@@ -98,12 +105,12 @@ function onGameInit()
 	smuggler3.gear = AddHog(smuggler3.name, 1, 120, "tophats")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
-	--AnimInit()
-	--AnimationSetup()	
+	AnimInit()
+	AnimationSetup()	
 end
 
 function onGameStart()
-	--AnimWait(hero.gear, 3000)
+	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
 	AddAmmo(hero.gear, amRope, 10)
@@ -143,6 +150,16 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
+	AddAnim(dialog01)
+end
+
+function onGameTick()
+	AnimUnWait()
+	if ShowAnimation() == false then
+		return
+	end
+	ExecuteAfterAnimations()
+	CheckEvents()
 end
 
 function onAmmoStoreInit()
@@ -158,3 +175,41 @@ function onGearDelete(gear)
 	end
 end
 
+function onPrecise()
+	if GameTime > 3000 then
+		SetAnimSkip(true)   
+	end
+end
+
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+end
+
+function AnimationSetup()
+	-- DIALOG 01 - Start, getting info about the device
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the planet of sand, you have to double check your moves..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finaly you are here..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you for meeting me in such a short notice!"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("No problem, I would do anything for M!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now listen carefully! Below us there are tunnels that have been created naturally over the years"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heared the local tribes saying that many years ago some PAotH scientists were dumping their waste here"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("M confimed that there isn't such a PAotH activity logged"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("So, I believe that it's a good place to start"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware though! Many smugglers come often to explore these tunnels and scavage whatever valuable item they can find"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("They won't hesitate to attack you in order to take your valuables!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 6000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("OK, I'll be extra careful!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is the tunnel entrance"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
+end
