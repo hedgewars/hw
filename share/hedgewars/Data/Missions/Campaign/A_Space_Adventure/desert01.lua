@@ -29,6 +29,8 @@ local btorch1Y = 60
 local btorch1X = 2700
 local btorch2Y = 1800
 local btorch2X = 1010
+local btorch3Y = 980
+local btorch3X = 3260
 local rope1Y = 970
 local rope1X = 3200
 local rope2Y = 1900
@@ -118,6 +120,7 @@ function onGameStart()
 	-- spawn crates	
 	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
 	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
+	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
 	SpawnAmmoCrate(rope1X, rope1Y, amRope)
 	SpawnAmmoCrate(rope2X, rope2Y, amRope)
 	SpawnAmmoCrate(rope3X, rope3Y, amRope)
@@ -125,6 +128,7 @@ function onGameStart()
 	SpawnAmmoCrate(constructX, constructY, amConstruction)
 	
 	SpawnHealthCrate(3300, 970)
+	SpawnHealthCrate(480, 460)
 	
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
@@ -147,6 +151,11 @@ function onGameStart()
 	x = 2480
 	while x < 3300 do
 		AddGear(x, 1450, gtMine, 0, 0, 0, 0)
+		x = x + math.random(8,20)
+	end
+	x = 1570
+	while x < 2900 do
+		AddGear(x, 470, gtMine, 0, 0, 0, 0)
 		x = x + math.random(8,20)
 	end
 	
