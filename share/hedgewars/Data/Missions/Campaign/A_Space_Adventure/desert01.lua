@@ -23,7 +23,7 @@ hero.name = "Hog Solo"
 hero.x = 340
 hero.y = 200
 bandit1.name = "Thanta"
-bandit1.x = 200
+bandit1.x = 500
 bandit1.y = 1280
 teamB.name = loc("Frozen Bandits")
 teamB.color = tonumber("0033FF",16) -- blues
@@ -61,8 +61,9 @@ function onGameInit()
 end
 
 function onGameStart()
-	AnimWait(hero.gear, 3000)
+	--AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
+	AddAmmo(hero.gear, amRope, 10)
 end
 
