@@ -75,10 +75,10 @@ function onGameInit()
 	-- Smugglers
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	smuggler1.gear = AddHog(smuggler1.name, 1, 120, "tophats")
-	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y
+	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 120, "tophats")
 	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)	
-	smuggler1.gear = AddHog(smuggler3.name, 1, 120, "tophats")
+	smuggler3.gear = AddHog(smuggler3.name, 1, 120, "tophats")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
 	--AnimInit()
