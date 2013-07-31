@@ -7,6 +7,7 @@
 
 -- TODO
 -- maybe use same name in missionName and frontend mission name..
+-- in this map I have to track the weapons the player has in checkpoints
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -16,6 +17,21 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, lost in sand!")
 local checkPointReached = 1 -- 1 is normal spawn
+-- crates
+local btorch1Y = 60
+local btorch1X = 2700
+local btorch2Y = 1800
+local btorch2X = 1010
+local rope1Y = 970
+local rope1X = 3200
+local rope2Y = 1900
+local rope2X = 680
+local rope3Y = 1850
+local rope3X = 2460
+local portalY = 480
+local portalX = 1465
+local constructY = 1630
+local constructX = 3350
 -- hogs
 local hero = {}
 local ally = {}
@@ -90,6 +106,22 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	AddAmmo(hero.gear, amRope, 10)
+	
+	-- spawn crates	
+	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
+	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
+	SpawnAmmoCrate(rope1X, rope1Y, amRope)
+	SpawnAmmoCrate(rope2X, rope2Y, amRope)
+	SpawnAmmoCrate(rope3X, rope3Y, amRope)
+	SpawnAmmoCrate(portalX, portalY, amPortalGun)
+	SpawnAmmoCrate(constructX, constructY, amConstruction)
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amBlowTorch, 0, 0, 0, 1)
+	SetAmmo(amRope, 0, 0, 0, 1)
+	SetAmmo(amPortalGun, 0, 0, 0, 1)	
+	SetAmmo(amConstruction, 0, 0, 0, 1)
 end
 
 function onGearDelete(gear)
