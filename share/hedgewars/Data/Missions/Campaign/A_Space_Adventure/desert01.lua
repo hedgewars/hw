@@ -8,7 +8,7 @@
 -- TODO
 -- maybe use same name in missionName and frontend mission name..
 -- in this map I have to track the weapons the player has in checkpoints
--- GENRAL NOTE: change hats :D
+-- GENERAL NOTE: change hats :D
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -17,6 +17,8 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 -- globals
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, lost in sand!")
+local heroIsInBattle = false
+local ongoingBattle = 0
 local checkPointReached = 1 -- 1 is normal spawn
 -- dialogs
 local dialog01 = {}
@@ -60,7 +62,7 @@ ally.name = "Chief Sandologist"
 ally.x = 1660
 ally.y = 40
 smuggler1.name = "Sanndy"
-smuggler1.x = 320
+smuggler1.x = 400
 smuggler1.y = 235
 smuggler2.name = "Spike"
 smuggler2.x = 736
@@ -79,7 +81,7 @@ teamC.color = tonumber("38D61C",16) -- green
 
 function onGameInit()
 	Seed = 1
-	TurnTime = 25000
+	TurnTime = 20000
 	CaseFreq = 0
 	MinesNum = 0
 	MinesTime = 1
@@ -100,11 +102,11 @@ function onGameInit()
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	smuggler1.gear = AddHog(smuggler1.name, 1, 120, "tophats")
+	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "tophats")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
-	smuggler2.gear = AddHog(smuggler2.name, 1, 120, "tophats")
+	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "tophats")
 	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)	
-	smuggler3.gear = AddHog(smuggler3.name, 1, 120, "tophats")
+	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "tophats")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
 	AnimInit()
@@ -115,7 +117,20 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
-	AddAmmo(hero.gear, amRope, 10)
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
+	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
+	
+	-- hero ammo
+	AddAmmo(hero.gear, amRope, 2)
+	AddAmmo(hero.gear, amBazooka, 3)
+	AddAmmo(hero.gear, amParachute, 1)
+	AddAmmo(hero.gear, amGrenade, 6)
+	AddAmmo(hero.gear, amDEagle, 4)
+	-- smugglers ammo
+	AddAmmo(smuggler1.gear, amBazooka, 2)
+	AddAmmo(smuggler1.gear, amGrenade, 2)
+	AddAmmo(smuggler1.gear, amDEagle, 2)
 	
 	-- spawn crates	
 	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
@@ -128,7 +143,7 @@ function onGameStart()
 	SpawnAmmoCrate(constructX, constructY, amConstruction)
 	
 	SpawnHealthCrate(3300, 970)
-	SpawnHealthCrate(480, 460)
+	SpawnHealthCrate(680, 460)
 	
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
@@ -159,7 +174,22 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
+	SendHealthStatsOff()
 	AddAnim(dialog01)
+end
+
+function onNewTurn()
+	if CurrentHedgehog ~= hero.gear and not heroIsInBattle then
+		TurnTimeLeft = 0
+	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
+		TurnTimeLeft = -1
+	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
+		AnimSwitchHog(hero.gear)
+		TurnTimeLeft = 0
+	elseif CurrentHedgehog == ally.gear then
+		TurnTimeLeft = 0
+	end
+	WriteLnToConsole("CURRENT HEDGEHOG IS "..CurrentHedgehog)
 end
 
 function onGameTick()
@@ -190,12 +220,66 @@ function onPrecise()
 	end
 end
 
+-------------- EVENTS ------------------
+
+function onHeroDeath(gear)
+	if hero.dead then
+		return true
+	end
+	return false
+end
+
+function onHeroAtFirstBattle(gear)
+	if not hero.dead and not heroIsInBattle and GetX(hero.gear) <= 1450 
+			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-5 then
+		return true
+	end
+	return false
+end
+
+function onHeroFleeFirstBattle(gear)
+	if not hero.dead and GetHealth(smuggler1.gear) and heroIsInBattle and ongoingBattle == 1 and (GetX(hero.gear) > 1450 
+			or (GetY(hero.gear) < GetY(smuggler1.gear)-80 or GetY(hero.gear) > GetY(smuggler1.gear)+300)) then
+		return true
+	end
+	return false
+end
+
+-------------- OUTCOMES ------------------
+
+function heroDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("To win the game you have to find the right crate")) --11
+	SendStat('siCustomAchievement', loc("You can avoid some battles")) --11
+	SendStat('siCustomAchievement', loc("Use your ammo wisely")) --11
+	SendStat('siPlayerKills','1',teamB.name)
+	SendStat('siPlayerKills','0',teamC.name)
+	EndGame()
+end
+
+function heroAtFirstBattle(gear)
+	WriteLnToConsole("**HERO AT FIRST BATTLE")
+	TurnTimeLeft = 0
+	heroIsInBattle = true
+	ongoingBattle = 1	
+	AnimSwitchHog(smuggler1.gear)
+	TurnTimeLeft = 0
+end
+
+function heroFleeFirstBattle(gear)
+	WriteLnToConsole("++HERO FLEE FIRST BATTLE")
+	TurnTimeLeft = 0
+	heroIsInBattle = false
+	ongoingBattle = 0
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
+    AnimSwitchHog(hero.gear)
 end
 
 function AnimationSetup()
