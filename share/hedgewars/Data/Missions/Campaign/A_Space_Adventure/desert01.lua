@@ -133,7 +133,7 @@ function onGameInit()
 	elseif checkPointReached == 4 then
 		AnimSetGearPosition(hero.gear, 1160, 1180)
 	elseif checkPointReached == 5 then
-		AnimSetGearPosition(hero.gear, girderX, girderY)
+		AnimSetGearPosition(hero.gear, girderX+40, girderY-30)
 	end
 	
 	AnimInit()
