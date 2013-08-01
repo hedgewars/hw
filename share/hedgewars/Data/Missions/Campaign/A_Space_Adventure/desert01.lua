@@ -204,36 +204,12 @@ function onGameStart()
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 or checkPointReached == 3 then
 		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
-		-- hero ammo
-		local ammo = GetCampaignVar("HeroAmmo")
-		AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
-		AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
-		AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
-		AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
-		AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
-		AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
-		-- weird, if 0 bazooka isn't displayed in the weapons menu
-		if tonumber(ammo:sub(7,7)) > 0 then
-			AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
-		end
-		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+		loadHeroAmmo()
 		
 		secondBattle()
 	elseif checkPointReached == 4 then
 		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
-		-- hero ammo
-		local ammo = GetCampaignVar("HeroAmmo")
-		AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
-		AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
-		AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
-		AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
-		AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
-		AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
-		-- weird, if 0 bazooka isn't displayed in the weapons menu
-		if tonumber(ammo:sub(7,7)) > 0 then
-			AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
-		end
-		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+		loadHeroAmmo()
 	end
 	
 	SendHealthStatsOff()
@@ -368,40 +344,15 @@ function heroFleeFirstBattle(gear)
 end
 
 function heroAtCheckpoint2(gear)
-	-- save checkpoint
-	SaveCampaignVar("Desert01CheckPoint", "2")	
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
-			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
-	
-	secondBattle()
+	saveCheckPoint("2")
 end
 
 function heroAtCheckpoint3(gear)
-	-- save checkpoint
-	SaveCampaignVar("Desert01CheckPoint", "3")	
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
-			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
-	
-	secondBattle()
+	saveCheckPoint("3")
 end
 
 function heroAtCheckpoint4(gear)
-	-- save checkpoint
-	SaveCampaignVar("Desert01CheckPoint", "4")	
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
-			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+	saveCheckPoint("4")
 end
 
 -------------- ANIMATIONS ------------------
@@ -450,5 +401,28 @@ function secondBattle()
 end
 
 function saveCheckPoint(cpoint)
+	-- save checkpoint
+	SaveCampaignVar("Desert01CheckPoint", cpoint)	
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
+	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
+	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
+			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+end
 
+function loadHeroAmmo()
+	-- hero ammo
+	local ammo = GetCampaignVar("HeroAmmo")
+	AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
+	AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
+	AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
+	AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
+	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
+	AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
+	-- weird, if 0 bazooka isn't displayed in the weapons menu
+	if tonumber(ammo:sub(7,7)) > 0 then
+		AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
+	end
+	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
 end
