@@ -91,9 +91,19 @@ function onGameInit()
 	Map = "desert01_map"
 	Theme = "Desert"
 	
+	-- get the check point
+	if tonumber(GetCampaignVar("Desert01CheckPoint")) then
+		checkPointReached = tonumber(GetCampaignVar("Desert01CheckPoint"))
+	end
+	-- get hero health
+	local heroHealth = 100
+	if checkPointReached > 1 and tonumber(GetCampaignVar("HeroHealth")) then
+		heroHealth = tonumber(GetCampaignVar("HeroHealth"))
+	end
+	
 	-- Hog Solo
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
@@ -109,6 +119,13 @@ function onGameInit()
 	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "tophats")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
+	if checkPointReached == 1 then
+		-- Start of the game
+	elseif checkPointReached == 2 then
+		AnimSetGearPosition(hero.gear, 1050, 615)
+		HogTurnLeft(hero.gear, true)
+	end
+	
 	AnimInit()
 	AnimationSetup()	
 end
@@ -120,13 +137,8 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
+	AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 	
-	-- hero ammo
-	AddAmmo(hero.gear, amRope, 2)
-	AddAmmo(hero.gear, amBazooka, 3)
-	AddAmmo(hero.gear, amParachute, 1)
-	AddAmmo(hero.gear, amGrenade, 6)
-	AddAmmo(hero.gear, amDEagle, 4)
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
 	AddAmmo(smuggler1.gear, amGrenade, 2)
@@ -174,8 +186,33 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
+	if checkPointReached == 1 then
+		-- hero ammo
+		AddAmmo(hero.gear, amRope, 2)
+		AddAmmo(hero.gear, amBazooka, 3)
+		AddAmmo(hero.gear, amParachute, 1)
+		AddAmmo(hero.gear, amGrenade, 6)
+		AddAmmo(hero.gear, amDEagle, 4)
+	
+		AddAnim(dialog01)
+	elseif checkPointReached == 2 then
+		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
+		-- hero ammo
+		local ammo = GetCampaignVar("HeroAmmo")
+		AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
+		AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
+		AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
+		AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
+		AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
+		AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
+		-- weird, if 0 bazooka isn't displayed in the weapons menu
+		if tonumber(ammo:sub(7,7)) > 0 then
+			AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
+		end
+		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+	end
+	
 	SendHealthStatsOff()
-	AddAnim(dialog01)
 end
 
 function onNewTurn()
@@ -239,7 +276,15 @@ end
 
 function onHeroFleeFirstBattle(gear)
 	if not hero.dead and GetHealth(smuggler1.gear) and heroIsInBattle and ongoingBattle == 1 and (GetX(hero.gear) > 1450 
-			or (GetY(hero.gear) < GetY(smuggler1.gear)-80 or GetY(hero.gear) > GetY(smuggler1.gear)+300)) then
+			or (GetY(hero.gear) < GetY(smuggler1.gear)-80 or GetY(hero.gear) > smuggler1.y+300)) then
+		return true
+	end
+	return false
+end
+
+function onHeroAtCheckpoint2(gear)
+	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
+			and GetY(hero.gear) > 590 then
 		return true
 	end
 	return false
@@ -259,6 +304,7 @@ end
 
 function heroAtFirstBattle(gear)
 	WriteLnToConsole("**HERO AT FIRST BATTLE")
+	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
 	TurnTimeLeft = 0
 	heroIsInBattle = true
 	ongoingBattle = 1	
@@ -268,9 +314,20 @@ end
 
 function heroFleeFirstBattle(gear)
 	WriteLnToConsole("++HERO FLEE FIRST BATTLE")
+	AnimSay(smuggler1.gear, loc("Run away you coward!"), SAY_SHOUT, 4000)
 	TurnTimeLeft = 0
 	heroIsInBattle = false
 	ongoingBattle = 0
+end
+
+function heroAtCheckpoint2(gear)
+	SaveCampaignVar("Desert01CheckPoint", "2")	
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
+	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
+	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
+			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)	
 end
 
 -------------- ANIMATIONS ------------------
@@ -304,5 +361,5 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is the tunnel entrance"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})	
 end
