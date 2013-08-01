@@ -380,7 +380,7 @@ function minionsDeath(gear)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)	
 	
-	SendStat('siGameResult', loc("Hog Solo win, conrgatulations!")) --1
+	SendStat('siGameResult', loc("Hog Solo won, conrgatulations!")) --1
 	SendStat('siCustomAchievement', loc("Eliminated the evil minions")) --11
 	SendStat('siCustomAchievement', loc("Drove the professor away")) --11
 	SendStat('siPlayerKills','1',teamD.name)
