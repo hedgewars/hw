@@ -9,6 +9,8 @@
 -- maybe use same name in missionName and frontend mission name..
 -- in this map I have to track the weapons the player has in checkpoints
 -- GENERAL NOTE: change hats :D
+-- Idea: game will be successfully end when the 2 lower crates are collected
+-- it would be more defficult (and sadistic) if one should collect *all* the crates
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -143,6 +145,7 @@ function onGameStart()
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroAtCheckpoint4, {hero.gear}, heroAtCheckpoint4, {hero.gear}, 0)
+	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
 	
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
@@ -224,6 +227,9 @@ function onNewTurn()
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
+		AnimSwitchHog(hero.gear)
+		TurnTimeLeft = 0
+	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler2.gear) and ongoingBattle == 3 then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == ally.gear then
@@ -313,6 +319,14 @@ function onHeroAtCheckpoint4(gear)
 	return false
 end
 
+function onHeroAtThirdBattle(gear)
+	if not hero.dead and GetX(hero.gear) > 2000 and GetX(hero.gear) < 2200
+			and GetY(hero.gear) > 1430 and GetY(hero.gear) < 1670 then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
@@ -353,6 +367,14 @@ end
 
 function heroAtCheckpoint4(gear)
 	saveCheckPoint("4")
+end
+
+function heroAtThirdBattle(gear)
+	heroIsInBattle = true
+	ongoingBattle = 3
+	AnimSay(smuggler3.gear, loc("Who's there! I'll get you..."), SAY_SHOUT, 5000)	
+	AnimSwitchHog(smuggler3.gear)
+	TurnTimeLeft = 0
 end
 
 -------------- ANIMATIONS ------------------
