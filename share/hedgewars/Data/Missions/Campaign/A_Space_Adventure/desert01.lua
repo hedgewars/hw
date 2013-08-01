@@ -21,6 +21,7 @@ local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, lost in sand!")
 local heroIsInBattle = false
 local ongoingBattle = 0
+local cratesFound = 0
 local checkPointReached = 1 -- 1 is normal spawn
 -- dialogs
 local dialog01 = {}
@@ -31,8 +32,8 @@ local goals = {
 -- crates
 local btorch1Y = 60
 local btorch1X = 2700
-local btorch2Y = 1800
-local btorch2X = 1010
+local btorch2Y = 1900
+local btorch2X = 2150
 local btorch3Y = 980
 local btorch3X = 3260
 local rope1Y = 970
@@ -43,8 +44,8 @@ local rope3Y = 1850
 local rope3X = 2460
 local portalY = 480
 local portalX = 1465
-local constructY = 1630
-local constructX = 3350
+local girderY = 1630
+local girderX = 3350
 -- hogs
 local hero = {}
 local ally = {}
@@ -146,11 +147,14 @@ function onGameStart()
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroAtCheckpoint4, {hero.gear}, heroAtCheckpoint4, {hero.gear}, 0)
 	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
+	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
+	AddEvent(onCheckForWin2, {hero.gear}, checkForWin2, {hero.gear}, 0)
 	
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
 	AddAmmo(smuggler1.gear, amGrenade, 2)
-	AddAmmo(smuggler1.gear, amDEagle, 2)
+	AddAmmo(smuggler1.gear, amDEagle, 2)	
+	AddAmmo(smuggler3.gear, amRope, 2)
 	
 	-- spawn crates	
 	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
@@ -159,8 +163,8 @@ function onGameStart()
 	SpawnAmmoCrate(rope1X, rope1Y, amRope)
 	SpawnAmmoCrate(rope2X, rope2Y, amRope)
 	SpawnAmmoCrate(rope3X, rope3Y, amRope)
-	SpawnAmmoCrate(portalX, portalY, amPortalGun)
-	SpawnAmmoCrate(constructX, constructY, amConstruction)
+	SpawnAmmoCrate(portalX, portalY, amPortalGun)	
+	SpawnAmmoCrate(girderX, girderY, amGirder)
 	
 	SpawnHealthCrate(3300, 970)
 	SpawnHealthCrate(680, 460)
@@ -183,7 +187,7 @@ function onGameStart()
 		AddGear(x, 760, gtMine, 0, 0, 0, 0)
 		x = x + math.random(8,20)
 	end
-	x = 2480
+	x = 2500
 	while x < 3300 do
 		AddGear(x, 1450, gtMine, 0, 0, 0, 0)
 		x = x + math.random(8,20)
@@ -194,6 +198,7 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
+	AddAmmo(hero.gear, amTeleport, 4)
 	if checkPointReached == 1 then	
 		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
@@ -251,7 +256,7 @@ function onAmmoStoreInit()
 	SetAmmo(amBlowTorch, 0, 0, 0, 1)
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)	
-	SetAmmo(amConstruction, 0, 0, 0, 1)
+	SetAmmo(amGirder, 0, 0, 0, 3)
 end
 
 function onGearDelete(gear)
@@ -327,6 +332,22 @@ function onHeroAtThirdBattle(gear)
 	return false
 end
 
+function onCheckForWin1(gear)
+	if not hero.dead and GetX(hero.gear) > btorch2X-30 and GetX(hero.gear) < btorch2X+30
+			and GetY(hero.gear) > btorch2Y-30 and GetY(hero.gear) < btorch2Y+30 then
+		return true
+	end
+	return false
+end
+
+function onCheckForWin2(gear)
+	if not hero.dead and GetX(hero.gear) > girderX-30 and GetX(hero.gear) < girderX+30
+			and GetY(hero.gear) > girderY-30 and GetY(hero.gear) < girderY+30 then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
@@ -375,6 +396,14 @@ function heroAtThirdBattle(gear)
 	AnimSay(smuggler3.gear, loc("Who's there! I'll get you..."), SAY_SHOUT, 5000)	
 	AnimSwitchHog(smuggler3.gear)
 	TurnTimeLeft = 0
+end
+
+function checkForWin1(gear)
+	checkForWin()
+end
+
+function checkForWin2(gear)
+	checkForWin()
 end
 
 -------------- ANIMATIONS ------------------
@@ -447,4 +476,17 @@ function loadHeroAmmo()
 		AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
 	end
 	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+end
+
+function checkForWin()
+	if cratesFound ==  0 then
+		-- have to look more		
+		AnimSay(hero.gear, loc("Haven't found it yet..."), SAY_THINK, 5000)
+		cratesFound = cratesFound + 1
+	elseif cratesFound == 1 then
+		-- end game
+		AnimSay(hero.gear, loc("Hoo Ray!!!"), SAY_SHOUT, 5000)
+		-- do stats etc
+		EndGame()
+	end
 end
