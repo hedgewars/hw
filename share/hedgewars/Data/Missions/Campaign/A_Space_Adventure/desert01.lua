@@ -492,7 +492,10 @@ function checkForWin()
 	elseif cratesFound == 1 then
 		-- end game
 		AnimSay(hero.gear, loc("Hoo Ray!!!"), SAY_SHOUT, 5000)
-		-- do stats etc
+		SendStat('siGameResult', loc("Congratulations, you got the part!")) --1
+		SendStat('siCustomAchievement', loc("To win the game you had to collect 2 crates with no specific order")) --11
+		SendStat('siPlayerKills','1',teamC.name)
+		SendStat('siPlayerKills','0',teamB.name)
 		EndGame()
 	end
 end
