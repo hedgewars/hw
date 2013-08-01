@@ -205,4 +205,3 @@ endif()
 
 include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
-message(${CMAKE_SYSTEM_NAME})
