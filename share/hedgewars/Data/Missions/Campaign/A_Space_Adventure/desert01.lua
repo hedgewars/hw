@@ -159,7 +159,6 @@ function onGameStart()
 	AddAmmo(smuggler3.gear, amRope, 2)
 	
 	-- spawn crates	
-	SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
 	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
 	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
 	SpawnAmmoCrate(rope1X, rope1Y, amRope)
@@ -169,7 +168,6 @@ function onGameStart()
 	SpawnAmmoCrate(girderX, girderY, amGirder)
 	
 	SpawnHealthCrate(3300, 970)
-	SpawnHealthCrate(680, 460)
 	
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
@@ -204,6 +202,9 @@ function onGameStart()
 	if checkPointReached == 1 then	
 		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
+		-- crates
+		SpawnAmmoCrate(btorch1X, btorch1Y, amBlowTorch)
+		SpawnHealthCrate(680, 460)
 		-- hero ammo
 		AddAmmo(hero.gear, amRope, 2)
 		AddAmmo(hero.gear, amBazooka, 3)
