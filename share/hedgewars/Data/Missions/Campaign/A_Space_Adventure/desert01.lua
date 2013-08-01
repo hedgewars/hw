@@ -210,6 +210,10 @@ function onGameStart()
 			AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
 		end
 		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+		
+		-- second battle
+		heroIsInBattle = true
+		ongoingBattle = 2
 	end
 	
 	SendHealthStatsOff()
@@ -221,6 +225,9 @@ function onNewTurn()
 	elseif CurrentHedgehog == hero.gear and not heroIsInBattle then
 		TurnTimeLeft = -1
 	elseif (CurrentHedgehog == smuggler2.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 1 then
+		AnimSwitchHog(hero.gear)
+		TurnTimeLeft = 0
+	elseif (CurrentHedgehog == smuggler1.gear or CurrentHedgehog == smuggler3.gear) and ongoingBattle == 2 then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == ally.gear then
@@ -248,6 +255,9 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
+		heroIsInBattle = false
+		ongoingBattle = 0
 	end
 end
 
@@ -282,6 +292,7 @@ function onHeroFleeFirstBattle(gear)
 	return false
 end
 
+-- saves the location of the hero and prompts him for the second battle
 function onHeroAtCheckpoint2(gear)
 	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
 			and GetY(hero.gear) > 590 then
@@ -321,13 +332,19 @@ function heroFleeFirstBattle(gear)
 end
 
 function heroAtCheckpoint2(gear)
+	-- save checkpoint
 	SaveCampaignVar("Desert01CheckPoint", "2")	
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
 			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
 			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
-	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)	
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+	
+	-- second battle
+	heroIsInBattle = true
+	ongoingBattle = 2
+	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)
 end
 
 -------------- ANIMATIONS ------------------
