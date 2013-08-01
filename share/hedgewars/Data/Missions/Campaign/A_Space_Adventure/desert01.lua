@@ -132,6 +132,8 @@ function onGameInit()
 		HogTurnLeft(hero.gear, true)
 	elseif checkPointReached == 4 then
 		AnimSetGearPosition(hero.gear, 1160, 1180)
+	elseif checkPointReached == 5 then
+		AnimSetGearPosition(hero.gear, girderX, girderY)
 	end
 	
 	AnimInit()
@@ -215,7 +217,7 @@ function onGameStart()
 		loadHeroAmmo()
 		
 		secondBattle()
-	elseif checkPointReached == 4 then
+	elseif checkPointReached == 4 or checkPointReached == 5 then
 		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
 		loadHeroAmmo()
 	end
@@ -361,7 +363,6 @@ function heroDeath(gear)
 end
 
 function heroAtFirstBattle(gear)
-	WriteLnToConsole("**HERO AT FIRST BATTLE")
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
 	TurnTimeLeft = 0
 	heroIsInBattle = true
@@ -371,7 +372,6 @@ function heroAtFirstBattle(gear)
 end
 
 function heroFleeFirstBattle(gear)
-	WriteLnToConsole("++HERO FLEE FIRST BATTLE")
 	AnimSay(smuggler1.gear, loc("Run away you coward!"), SAY_SHOUT, 4000)
 	TurnTimeLeft = 0
 	heroIsInBattle = false
@@ -398,12 +398,18 @@ function heroAtThirdBattle(gear)
 	TurnTimeLeft = 0
 end
 
+-- for some weird reson I couldn't call the same action for both events
 function checkForWin1(gear)
 	checkForWin()
 end
 
 function checkForWin2(gear)
-	checkForWin()
+	-- ok lets place one more checkpoint as next part seems challenging without rope
+	if cratesFound ==  0 then
+		saveCheckPoint("5")
+	end
+	
+	checkForWin()	
 end
 
 -------------- ANIMATIONS ------------------
