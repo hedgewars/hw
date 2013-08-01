@@ -127,6 +127,8 @@ function onGameInit()
 	elseif checkPointReached == 3 then
 		AnimSetGearPosition(hero.gear, 1680, 920)
 		HogTurnLeft(hero.gear, true)
+	elseif checkPointReached == 4 then
+		AnimSetGearPosition(hero.gear, 1160, 1180)
 	end
 	
 	AnimInit()
@@ -140,8 +142,7 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
-	AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
-	AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
+	AddEvent(onHeroAtCheckpoint4, {hero.gear}, heroAtCheckpoint4, {hero.gear}, 0)
 	
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
@@ -190,7 +191,9 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
-	if checkPointReached == 1 then
+	if checkPointReached == 1 then	
+		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
+		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
 		-- hero ammo
 		AddAmmo(hero.gear, amRope, 2)
 		AddAmmo(hero.gear, amBazooka, 3)
@@ -216,6 +219,21 @@ function onGameStart()
 		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
 		
 		secondBattle()
+	elseif checkPointReached == 4 then
+		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
+		-- hero ammo
+		local ammo = GetCampaignVar("HeroAmmo")
+		AddAmmo(hero.gear, amRope, tonumber(ammo:sub(3,3)))
+		AddAmmo(hero.gear, amBazooka, tonumber(ammo:sub(1,1)))
+		AddAmmo(hero.gear, amParachute, tonumber(ammo:sub(4,4)))
+		AddAmmo(hero.gear, amGrenade, tonumber(ammo:sub(2,2)))
+		AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(5,5)))
+		AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
+		-- weird, if 0 bazooka isn't displayed in the weapons menu
+		if tonumber(ammo:sub(7,7)) > 0 then
+			AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
+		end
+		AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
 	end
 	
 	SendHealthStatsOff()
@@ -311,6 +329,14 @@ function onHeroAtCheckpoint3(gear)
 	return false
 end
 
+function onHeroAtCheckpoint4(gear)
+	if not hero.dead and GetX(hero.gear) > 1110 and GetX(hero.gear) < 1300
+			and GetY(hero.gear) > 1100 and GetY(hero.gear) < 1220 then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
@@ -367,6 +393,17 @@ function heroAtCheckpoint3(gear)
 	secondBattle()
 end
 
+function heroAtCheckpoint4(gear)
+	-- save checkpoint
+	SaveCampaignVar("Desert01CheckPoint", "4")	
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
+	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
+	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
+			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -410,4 +447,8 @@ function secondBattle()
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)	
 	AnimSwitchHog(smuggler2.gear)
 	TurnTimeLeft = 0
+end
+
+function saveCheckPoint(cpoint)
+
 end
