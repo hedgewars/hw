@@ -7,7 +7,6 @@
 
 -- TODO
 -- maybe use same name in missionName and frontend mission name..
--- in this map I have to track the weapons the player has in checkpoints
 -- GENERAL NOTE: change hats :D
 -- Idea: game will be successfully end when the 2 lower crates are collected
 -- it would be more defficult (and sadistic) if one should collect *all* the crates
@@ -198,7 +197,6 @@ function onGameStart()
 		x = x + math.random(8,20)
 	end
 	
-	AddAmmo(hero.gear, amTeleport, 4)
 	if checkPointReached == 1 then	
 		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
