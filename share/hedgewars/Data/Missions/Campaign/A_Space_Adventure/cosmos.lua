@@ -357,7 +357,8 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Planet", "icePlanet")
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "5")
-		SaveCampaignVar("Mission2", "1")
+		SaveCampaignVar("Mission2", "6")
+		SaveCampaignVar("Mission3", "1")
 		EndGame()
 	end
 end
