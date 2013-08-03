@@ -86,7 +86,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
-	AddAmmo(hero.gear, amJetpack, 3)
+	AddAmmo(hero.gear, amJetpack, 2)
 	
 	-- place a waypoint
 	placeNextWaypoint()
@@ -125,9 +125,13 @@ function placeNextWaypoint()
 		WriteLnToConsole("Before "..TurnTimeLeft)
 		if currentWaypoint % 2 == 0 then
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
-			TurnTimeLeft = TurnTimeLeft + 10000		
+			if TurnTimeLeft <= 10000 then
+				TurnTimeLeft = TurnTimeLeft + 8000
+			end		
 		else
-			TurnTimeLeft = TurnTimeLeft + 8000
+			if TurnTimeLeft <= 7000 then
+				TurnTimeLeft = TurnTimeLeft + 6000
+			end
 		end		
 		WriteLnToConsole("After "..TurnTimeLeft)
 		radius = radius - 4
