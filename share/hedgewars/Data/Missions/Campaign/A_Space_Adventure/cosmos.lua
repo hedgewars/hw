@@ -355,7 +355,7 @@ function icePlanetLanding(gear)
 	else
 		AnimCaption(hero.gear,loc("Welcome to the planet of ice!"))
 		SaveCampaignVar("Planet", "icePlanet")
-		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
