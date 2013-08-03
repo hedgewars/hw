@@ -9,14 +9,15 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local campaignName = loc("A Space Adventure")
-local missionName = loc("Ice planet, a frozen adventure!")
+local missionName = loc("Ice planet, A Saucer Race!")
+local challengeStarted = false
 local currentWaypoint = 1
 local radius = 75
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Use your saucer and pass from the rings!"), 1, 4500},
 }
 -- hogs
 local hero = {}
@@ -59,6 +60,7 @@ local waypoints = {
 -------------- LuaAPI EVENT HANDLERS ------------------
 
 function onGameInit()
+	GameFlags = gfInvulnerable
 	Seed = 1
 	TurnTime = 15000
 	CaseFreq = 0
@@ -79,12 +81,14 @@ function onGameInit()
 	HogTurnLeft(ally.gear, true)
 	
 	AnimInit()
-	--AnimationSetup()	
+	AnimationSetup()	
 end
-local wp = 0
+
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
+	
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
 	AddAmmo(hero.gear, amJetpack, 2)
 	
@@ -92,6 +96,22 @@ function onGameStart()
 	placeNextWaypoint()
 	
 	SendHealthStatsOff()
+	AddAnim(dialog01)
+end
+
+function onNewTurn()
+	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
+		heroLost()
+	end
+end
+
+function onGameTick()
+	AnimUnWait()
+	if ShowAnimation() == false then
+		return
+	end
+	ExecuteAfterAnimations()
+	CheckEvents()
 end
 
 function onGameTick20()
@@ -109,10 +129,59 @@ function onGearDelete(gear)
 	end
 end
 
+function onPrecise()
+	if GameTime > 3000 then
+		SetAnimSkip(true)   
+	end
+end
+
+-------------- EVENTS ------------------
+
+function onHeroDeath(gear)
+	if hero.dead then
+		return true
+	end
+	return false
+end
+
+-------------- OUTCOMES ------------------
+
+function heroDeath(gear)
+	heroLost()
+end
+
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+    startFlying()
+end
+
+function AnimationSetup()
+	-- DIALOG 01 - Start, some story telling
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the ice planet flying saucer stadium..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the olympic stadium of saucer flying..."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream one day to come here and compete with the best!"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and get the place that you deserve between the best..."), SAY_SAY, 6000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass from the rings..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("... can you do it?"), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = startFlying, args = {hero.gear}})	
+end
+
 ------------------ Other Functions -------------------
 
+function startFlying()
+	AnimSwitchHog(ally.gear)
+	TurnTimeLeft = 0
+	challengeStarted = true
+end
+
 function placeNextWaypoint()
-	WriteLnToConsole("IN PLACE NEXT POINT")
 	if currentWaypoint > 1 then
 		local wp = waypoints[currentWaypoint-1]
 		DeleteVisualGear(wp.gear)
@@ -121,19 +190,17 @@ function placeNextWaypoint()
 		local wp = waypoints[currentWaypoint]
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
 		SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, 0xff0000ff)
-		-- add bonus time and "fuel"		
-		WriteLnToConsole("Before "..TurnTimeLeft)
+		-- add bonus time and "fuel"
 		if currentWaypoint % 2 == 0 then
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
-			if TurnTimeLeft <= 10000 then
+			if TurnTimeLeft <= 20000 then
 				TurnTimeLeft = TurnTimeLeft + 8000
 			end		
 		else
-			if TurnTimeLeft <= 7000 then
+			if TurnTimeLeft <= 14000 then
 				TurnTimeLeft = TurnTimeLeft + 6000
 			end
-		end		
-		WriteLnToConsole("After "..TurnTimeLeft)
+		end	
 		radius = radius - 4
 		currentWaypoint = currentWaypoint + 1
 		return true
@@ -151,4 +218,15 @@ function checkIfHeroInWaypoint()
 		end
 	end
 	return false
+end
+
+function heroLost()
+	SendStat('siGameResult', loc("Oh man! Learn how to fly!")) --1
+	SendStat('siCustomAchievement', loc("To win the game you have to pass into the rings in time")) --11
+	SendStat('siCustomAchievement', loc("You'll get extra time in case you need it when you pass a ring")) --11
+	SendStat('siCustomAchievement', loc("Every 2 rings you'll get extra flying saucers")) --11
+	SendStat('siCustomAchievement', loc("Use space button twice to change flying saucer while being on air")) --11
+	SendStat('siCustomAchievement', loc("Pause the game to have a look where is the next ring")) --11
+	SendStat('siPlayerKills','0',teamA.name)
+	EndGame()
 end
