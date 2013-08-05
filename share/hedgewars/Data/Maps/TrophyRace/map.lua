@@ -162,3 +162,9 @@ end
 --		
 --	end
 --end
+
+function onAchievementsDeclaration()
+    if besthog ~= nil then
+      DeclareAchievement("rope race", GetHogTeamName(besthog), besttime)
+    end
+end
