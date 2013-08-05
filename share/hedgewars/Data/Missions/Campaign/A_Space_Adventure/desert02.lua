@@ -1,7 +1,7 @@
 ------------------- ABOUT ----------------------
 --
--- Hero has to pass as fast as possible inside the
--- rings as in the racer mode
+-- Hero has to get to the surface as soon as possible.
+-- Tunnel is about to get flooded.
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
@@ -10,17 +10,11 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 -- globals
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, Journey down below!")
-local challengeStarted = false
-local currentWaypoint = 1
-local radius = 75
-local totalTime = 15000
-local totalSaucers = 3
-local gameEnded = false
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Use your saucer and pass from the rings!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope and get asap to the surface!"), 1, 4500},
 }
 -- hogs
 local hero = {}
@@ -62,8 +56,9 @@ function onGameInit()
 	TurnTime = 6000
 	Delay = 2
 	CaseFreq = 0
-	MinesNum = 0
-	MinesTime = 1
+	MinesNum = 500
+	MinesTime = 1000
+	MineDudPercent = 75
 	Explosives = 0
 	SuddenDeathTurns = 1
 	WaterRise = 150
@@ -85,6 +80,7 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onHeroSafe, {hero.gear}, heroSafe, {hero.gear}, 0)
 	
 	AddAmmo(hero.gear, amRope, 99)
 	
@@ -138,7 +134,8 @@ end
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
-	heroLost()
+	-- hero lost stuff
+	EndGame()
 end
 
 function heroSafe(gear)
@@ -151,7 +148,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end
+    end    
+	TurnTimeLeft = 0
 end
 
 function AnimationSetup()
