@@ -30,7 +30,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "43"
+protocolNumber = "45"
 
 getLines :: Handle -> IO [String]
 getLines h = g
@@ -45,14 +45,16 @@ getLines h = g
                 return $ fromJust l : lst
 
 
-engineListener :: Chan Message -> Handle -> IO ()
-engineListener coreChan h = do
+engineListener :: Chan Message -> Handle -> String -> IO ()
+engineListener coreChan h fileName = do
     output <- getLines h
     debugM "Engine" $ show output
     if isNothing $ L.find start output then
         writeChan coreChan $ CheckFailed "No stats msg"
         else
         writeChan coreChan $ CheckSuccess []
+
+    removeFile fileName
     where
         start = flip L.elem ["WINNERS", "DRAW"]
 
@@ -65,18 +67,16 @@ checkReplay coreChan msgs = do
     hFlush h
     hClose h
 
-    (_, Just hOut, _, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
-                ["/usr/home/unC0Rr/.hedgewars"
-                , "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/share/hedgewars/Data"
-                , fileName
-                , "--set-audio"
-                , "0"
-                , "0"
-                , "0"
+    (_, Just hOut, _, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
+                [fileName
+                , "--user-prefix", "/usr/home/unC0Rr/.hedgewars"
+                , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
+                , "--nomusic"
+                , "--nosound"
                 ])
             {std_out = CreatePipe}
     hSetBuffering hOut LineBuffering
-    void $ forkIO $ engineListener coreChan hOut
+    void $ forkIO $ engineListener coreChan hOut fileName
 
 
 takePacks :: State B.ByteString [[B.ByteString]]
