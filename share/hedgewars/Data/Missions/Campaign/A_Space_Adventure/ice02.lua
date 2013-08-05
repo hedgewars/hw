@@ -13,6 +13,9 @@ local missionName = loc("Ice planet, A Saucer Race!")
 local challengeStarted = false
 local currentWaypoint = 1
 local radius = 75
+local totalTime = 15000
+local totalSaucers = 3
+local gameEnded = false
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -90,7 +93,7 @@ function onGameStart()
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
-	AddAmmo(hero.gear, amJetpack, 2)
+	AddAmmo(hero.gear, amJetpack, 3)
 	
 	-- place a waypoint
 	placeNextWaypoint()
@@ -116,8 +119,18 @@ end
 
 function onGameTick20()
 	if checkIfHeroInWaypoint() then
-		if not placeNextWaypoint() then
+		if not gameEnded and not placeNextWaypoint() then
+			gameEnded = true
 			-- GAME OVER, WIN!
+			totalTime = totalTime - TurnTimeLeft
+			totalTime = totalTime / 1000
+			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
+			local saucersUsed = totalSaucers - saucersLeft
+			SendStat('siGameResult', loc("Hoo Ray! You are a champion!")) --1
+			SendStat('siCustomAchievement', loc("You complete the mission in "..totalTime.." seconds")) --11			
+			SendStat('siCustomAchievement', loc("You have used "..saucersUsed.." flying saucers")) --11			
+			SendStat('siCustomAchievement', loc("You had "..saucersLeft.." more flying saucers left")) --11			
+			SendStat('siPlayerKills','1',teamA.name)
 			EndGame()
 		end
 	end
@@ -193,12 +206,15 @@ function placeNextWaypoint()
 		-- add bonus time and "fuel"
 		if currentWaypoint % 2 == 0 then
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
-			if TurnTimeLeft <= 20000 then
+			totalSaucers = totalSaucers + 1
+			if TurnTimeLeft <= 22000 then
 				TurnTimeLeft = TurnTimeLeft + 8000
+				totalTime = totalTime + 8000
 			end		
 		else
-			if TurnTimeLeft <= 14000 then
+			if TurnTimeLeft <= 16000 then
 				TurnTimeLeft = TurnTimeLeft + 6000
+				totalTime = totalTime + 6000
 			end
 		end	
 		radius = radius - 4
