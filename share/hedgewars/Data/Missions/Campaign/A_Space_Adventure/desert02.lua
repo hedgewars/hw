@@ -128,10 +128,22 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onHeroSafe(gear)
+	if not hero.dead and GetY(hero.gear) < 200 and StoppedGear(hero.gear) then
+		return true
+	end
+	return false
+end
+
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
 	heroLost()
+end
+
+function heroSafe(gear)
+	-- hero win stuff
+	EndGame()
 end
 
 -------------- ANIMATIONS ------------------
