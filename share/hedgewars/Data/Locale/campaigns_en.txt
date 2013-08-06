@@ -23,3 +23,4 @@ A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his sau
 A_Space_Adventure-ice01.desc="Welcome to the planet of ice. Here, it's so cold that most of Hog Solo's weapons won't work. You have to get the lost part from the bandit leader Thanta using the weapons that you'll find there!"
 A_Space_Adventure-ice02.desc="Hog Solo couldn't just visit the Ice planet without visiting the olympic stadium of saucer flying! In this mission you can proove your flying skills and claim your place between the best!"
 A_Space_Adventure-desert01.desc="You have landed to the planet of sand! Hog Solo has to find the missing part in the underground tunnels. Be careful as vicious smugglers await to attack and rob you!"
+A_Space_Adventure-desert02.desc="Hog Solo was searching for the part in this tunnel when it unexpectedly start getting flooded! Get to the surface as soon as possible and be careful not to trigger a mine."
