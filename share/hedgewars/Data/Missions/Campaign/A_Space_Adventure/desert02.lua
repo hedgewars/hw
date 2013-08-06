@@ -10,6 +10,8 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 -- globals
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, Journey down below!")
+local turnCounter = 0
+local startChallenge = false
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -53,7 +55,7 @@ local waypoints = {
 function onGameInit()
 	GameFlags = gfOneClanMode
 	Seed = 1
-	TurnTime = 6000
+	TurnTime = 8000
 	Delay = 2
 	CaseFreq = 0
 	MinesNum = 500
@@ -89,8 +91,8 @@ function onGameStart()
 end
 
 function onNewTurn()
-	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
-		heroLost()
+	if not hero.dead and startChallenge then
+		turnCounter = turnCounter + 1
 	end
 end
 
@@ -125,7 +127,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroSafe(gear)
-	if not hero.dead and GetY(hero.gear) < 200 and StoppedGear(hero.gear) then
+	if not hero.dead and GetY(hero.gear) < 170 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -134,12 +136,19 @@ end
 -------------- OUTCOMES ------------------
 
 function heroDeath(gear)
-	-- hero lost stuff
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("To win the game you have to go to the surface")) --11
+	SendStat('siCustomAchievement', loc("Most mines are not active")) --11
+	SendStat('siCustomAchievement', loc("From the second turn and beyond the water rises")) --11
+	SendStat('siPlayerKills','0',teamA.name)
 	EndGame()
 end
 
 function heroSafe(gear)
-	-- hero win stuff
+	SendStat('siGameResult', loc("Congratulations, you escaped!")) --1
+	SendStat('siCustomAchievement', loc("You have escaped successfully")) --11
+	SendStat('siCustomAchievement', loc("Your escape took you "..turnCounter.." turns")) --11
+	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end
 
@@ -148,8 +157,8 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end    
-	TurnTimeLeft = 0
+    end
+	challengeStart()
 end
 
 function AnimationSetup()
@@ -166,5 +175,6 @@ end
 ------------------ Other Functions -------------------
 
 function challengeStart()
+	startChallenge = true
 	TurnTimeLeft = 0
 end

@@ -241,7 +241,6 @@ function onNewTurn()
 	elseif CurrentHedgehog == ally.gear then
 		TurnTimeLeft = 0
 	end
-	WriteLnToConsole("CURRENT HEDGEHOG IS "..CurrentHedgehog)
 end
 
 function onGameTick()
@@ -442,10 +441,15 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is the tunnel entrance"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})	
+	table.insert(dialog01, {func = startMission, args = {hero.gear}})	
 end
 
 --------------- OTHER FUNCTIONS ------------------
+
+function startMission()
+	AnimSwitchHog(bandit1.gear)
+	TurnTimeLeft = 0
+end
 
 function secondBattle()
 	-- second battle
