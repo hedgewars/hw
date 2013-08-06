@@ -378,10 +378,12 @@ end
 
 function heroAtCheckpoint2(gear)
 	saveCheckPoint("2")
+	secondBattle()
 end
 
 function heroAtCheckpoint3(gear)
 	saveCheckPoint("3")
+	secondBattle()
 end
 
 function heroAtCheckpoint4(gear)
