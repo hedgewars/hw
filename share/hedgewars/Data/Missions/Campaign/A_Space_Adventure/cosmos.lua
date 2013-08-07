@@ -333,6 +333,13 @@ end
 function fruitPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
+	else		
+		AnimCaption(hero.gear,loc("Welcome to the fruit planet!"))
+		SaveCampaignVar("Planet", "fruitPlanet")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "3")
+		SaveCampaignVar("Mission2", "1")
+		EndGame()
 	end
 end
 

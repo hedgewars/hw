@@ -20,7 +20,6 @@ local goals = {
 }
 -- hogs
 local hero = {}
-local ally = {}
 -- teams
 local teamA = {}
 -- hedgehogs values
