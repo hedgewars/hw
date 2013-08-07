@@ -1902,9 +1902,7 @@ void HWForm::UpdateCampaignPage(int index)
 	
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
-		// Maybe not enforce the prefix Mission %1, isn't so nice for the misison with no
-		// specific order
-        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(campaignMissionInfo.size()-i) + QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
+        ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
 	}
 }
 
