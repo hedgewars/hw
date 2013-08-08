@@ -284,7 +284,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroAtFirstBattle(gear)
-	if not hero.dead and not heroIsInBattle and GetX(hero.gear) <= 1450 
+	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 
 			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-5 then
 		return true
 	end

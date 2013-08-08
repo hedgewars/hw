@@ -10,7 +10,6 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 -- globals
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Desert planet, Journey down below!")
-local turnCounter = 0
 local startChallenge = false
 -- dialogs
 local dialog01 = {}
@@ -18,6 +17,10 @@ local dialog01 = {}
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope and get asap to the surface!"), 1, 4500},
 }
+-- health crates
+healthX = 565
+health1Y = 1400
+health2Y = 850
 -- hogs
 local hero = {}
 -- teams
@@ -57,12 +60,14 @@ function onGameInit()
 	TurnTime = 8000
 	Delay = 2
 	CaseFreq = 0
+	HealthCaseAmount = 50
 	MinesNum = 500
 	MinesTime = 1000
 	MineDudPercent = 75
 	Explosives = 0
 	SuddenDeathTurns = 1
 	WaterRise = 150
+	HealthDecrease = 0
 	Map = "desert02_map"
 	Theme = "Desert"
 	
@@ -73,7 +78,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
@@ -83,16 +88,13 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSafe, {hero.gear}, heroSafe, {hero.gear}, 0)
 	
+	SpawnHealthCrate(healthX, health1Y)
+	SpawnHealthCrate(healthX, health2Y)
+	
 	AddAmmo(hero.gear, amRope, 99)
 	
 	SendHealthStatsOff()
 	AddAnim(dialog01)
-end
-
-function onNewTurn()
-	if not hero.dead and startChallenge then
-		turnCounter = turnCounter + 1
-	end
 end
 
 function onGameTick()
@@ -146,7 +148,7 @@ end
 function heroSafe(gear)
 	SendStat('siGameResult', loc("Congratulations, you escaped!")) --1
 	SendStat('siCustomAchievement', loc("You have escaped successfully")) --11
-	SendStat('siCustomAchievement', loc("Your escape took you "..turnCounter.." turns")) --11
+	SendStat('siCustomAchievement', loc("Your escape took you "..TotalRounds.." turns")) --11
 	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end
