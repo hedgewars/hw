@@ -14,6 +14,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Fruit planet, The War!")
 local chooseToBattle = false
+local watermellonsWave = 1
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -27,9 +28,10 @@ local goals = {
 -- hogs
 local hero = {}
 local yellow1 = {}
-local yellow2 = {}
-local yellow3 = {}
 local green1 = {}
+local green2 = {}
+local green3 = {}
+local green4 = {}
 -- teams
 local teamA = {}
 local teamB = {}
@@ -43,11 +45,26 @@ green1.name = "Captain Lime"
 green1.x = 3600
 green1.y = 95
 green2.name = "Mister Pear"
+green2.x = 3600
+green2.y = 1570
 green3.name = "Lady Mango"
+green3.x = 2170
+green3.y = 680
 green4.name = "Green Hog Grape"
+green4.x = 2900
+green4.y = 1650
 yellow1.name = "General Lemon"
-yellow1.x = 1300
-yellow1.y = 1500
+yellow1.x = 140
+yellow1.y = 1980
+local yellowArmy = {
+	[1] = {name = "Robert Yellow Apple", x = 710, y = 1780},
+	[2] = {name = "Summer Squash", x = 304 , y = 1960},
+	[3] = {name = "Tall Potato", x = 830 , y = 3340},
+	[4] = {name = "Yellow Pepper", x = 300 , y = 1960},
+	[5] = {name = "Corn", x = 1320 , y = 540},
+	[6] = {name = "Max Citrus", x = 1900 , y = 1700},
+	[7] = {name = "Naranja Jed", x = 960 , y = 316},
+}
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green  
 teamB.name = loc("Green Bananas")
@@ -80,7 +97,15 @@ function onGameInit()
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	yellow1.gear = AddHog(yellow1.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
-	
+	-- the rest of the Yellow Watermellons
+	for i=1,7 do
+		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 0, 100, "war_desertgrenadier1")
+		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
+		if i>2 then
+			HideHog(yellowArmy[i].gear)
+		end
+	end
+
 	AnimInit()
 	AnimationSetup()	
 end
@@ -210,4 +235,14 @@ end
 
 function startBattle()
 	
+end
+
+function getNextWave()
+	if watermellonsWave == 1 then
+		
+	elseif watermellonsWave == 2 then
+		
+	elseif watermellonsWave == 3 then
+		
+	end
 end
