@@ -194,7 +194,7 @@ function onGameStart()
 		end
 	end
 	
-	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 1)
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
@@ -423,8 +423,7 @@ end
 function heroFinalStep(gear)
 	heroAtFinalStep = true
 	SaveCampaignVar("Ice01CheckPoint", "3")
-	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))	
-	WriteLnToConsole("Final Step")
+	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 end
 
 function columnCheckPoint(gear)
