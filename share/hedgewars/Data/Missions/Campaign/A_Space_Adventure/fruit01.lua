@@ -44,18 +44,18 @@ local teamC = {}
 -- hedgehogs values
 hero.name = "Hog Solo"
 hero.x = 3650
-hero.y = 95
+hero.y = 295
 hero.dead = false
 green1.name = "Captain Lime"
 green1.x = 3600
-green1.y = 95
+green1.y = 295
 green1.dead = false
 green2.name = "Mister Pear"
 green2.x = 3600
 green2.y = 1570
 green3.name = "Lady Mango"
 green3.x = 2170
-green3.y = 680
+green3.y = 980
 green4.name = "Green Hog Grape"
 green4.x = 2900
 green4.y = 1650
@@ -66,10 +66,10 @@ local yellowArmy = {
 	{name = "Robert Yellow Apple", x = 710, y = 1780},
 	{name = "Summer Squash", x = 315 , y = 1960},
 	{name = "Tall Potato", x = 830 , y = 1748},
-	{name = "Yellow Pepper", x = 285 , y = 1960},
-	{name = "Corn", x = 1320 , y = 540},
+	{name = "Yellow Pepper", x = 2160 , y = 820},
+	{name = "Corn", x = 1320 , y = 740},
 	{name = "Max Citrus", x = 1900 , y = 1700},
-	{name = "Naranja Jed", x = 960 , y = 316},
+	{name = "Naranja Jed", x = 960 , y = 516},
 }
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green  
@@ -86,6 +86,7 @@ function onGameInit()
 	MinesTime = 1
 	Explosives = 0
 	Delay = 3
+	SuddenDeathTurns = 0
 	HealthCaseAmount = 50
 	Map = "fruit01_map"
 	Theme = "Fruit"
@@ -136,37 +137,28 @@ function onGameStart()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	-- Green team weapons
-	local greenTeam = {	green1, green2, green3, green4 }
-	for i=1,4 do
-		AddAmmo(greenTeam[i].gear, amBlowTorch, 1)
-		AddAmmo(greenTeam[i].gear, amRope, 1)
-		AddAmmo(greenTeam[i].gear, amBazooka, 4)
-		AddAmmo(greenTeam[i].gear, amGrenade, 3)
-		AddAmmo(greenTeam[i].gear, amFirePunch, 2)
-		AddAmmo(greenTeam[i].gear, amDrill, 1)
-	end
+	AddAmmo(green1.gear, amBlowTorch, 5)
+	AddAmmo(green1.gear, amRope, 5)
+	AddAmmo(green1.gear, amBazooka, 10)
+	AddAmmo(green1.gear, amGrenade, 7)
+	AddAmmo(green1.gear, amFirePunch, 2)
+	AddAmmo(green1.gear, amDrill, 3)	
+	AddAmmo(green1.gear, amSkip, 100)
 	-- Yellow team weapons
 	AddAmmo(yellow1.gear, amBlowTorch, 1)
 	AddAmmo(yellow1.gear, amRope, 1)
-	AddAmmo(yellow1.gear, amBazooka, 3)
-	AddAmmo(yellow1.gear, amGrenade, 1)
-	AddAmmo(yellow1.gear, amFirePunch, 1)
-	AddAmmo(yellow1.gear, amDrill, 1)
-	for i=1,7 do
-		AddAmmo(yellowArmy[i].gear, amBlowTorch, 1)
-		AddAmmo(yellowArmy[i].gear, amRope, 1)
-		AddAmmo(yellowArmy[i].gear, amBazooka, 3)
-		AddAmmo(yellowArmy[i].gear, amGrenade, 3)
-		AddAmmo(yellowArmy[i].gear, amFirePunch, 1)
-		AddAmmo(yellowArmy[i].gear, amDrill, 3)	
-		AddAmmo(yellowArmy[i].gear, amBee, 1)	
-		AddAmmo(yellowArmy[i].gear, amMortar, 2)	
-		AddAmmo(yellowArmy[i].gear, amSniperRifle, 3)	
-		AddAmmo(yellowArmy[i].gear, amDEagle, 2)	
-		AddAmmo(yellowArmy[i].gear, amDynamite, 1)	
-		if i>2 then
-			HideHog(yellowArmy[i].gear)
-		end
+	AddAmmo(yellow1.gear, amBazooka, 10)
+	AddAmmo(yellow1.gear, amGrenade, 10)
+	AddAmmo(yellow1.gear, amFirePunch, 5)
+	AddAmmo(yellow1.gear, amDrill, 3)	
+	AddAmmo(yellow1.gear, amBee, 1)	
+	AddAmmo(yellow1.gear, amMortar, 3)	
+	AddAmmo(yellow1.gear, amSniperRifle, 5)	
+	AddAmmo(yellow1.gear, amDEagle, 4)
+	AddAmmo(yellow1.gear, amDynamite, 1)	
+	AddAmmo(yellow1.gear, amSwitch, 100)
+	for i=3,7 do
+		HideHog(yellowArmy[i].gear)
 	end
 	
 	AddAnim(dialog01)
