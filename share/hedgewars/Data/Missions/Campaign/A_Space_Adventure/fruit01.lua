@@ -14,6 +14,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Fruit planet, The War!")
 local chooseToBattle = false
+local previousHog = 0
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -174,15 +175,11 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == green1.gear then
-		TotalRounds = TotalRounds - 1
-		if GetHealth(green2.gear) then
-			SwitchHog(green2.gear)
-		elseif GetHealth(green3.gear) then
-			SwitchHog(green3.gear)
-		elseif GetHealth(green4.gear) then
-			SwitchHog(green4.gear)
-		end
+		TotalRounds = TotalRounds - 2
+		SwitchHog(previousHog)
+		TurnTimeLeft = 0
 	end
+	previousHog = CurrentHedghog
 	getNextWave()
 end
 
