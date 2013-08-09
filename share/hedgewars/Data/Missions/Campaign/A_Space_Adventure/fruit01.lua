@@ -14,7 +14,6 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 local campaignName = loc("A Space Adventure")
 local missionName = loc("Fruit planet, The War!")
 local chooseToBattle = false
-local watermellonsWave = 1
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -58,9 +57,9 @@ yellow1.x = 140
 yellow1.y = 1980
 local yellowArmy = {
 	[1] = {name = "Robert Yellow Apple", x = 710, y = 1780},
-	[2] = {name = "Summer Squash", x = 304 , y = 1960},
-	[3] = {name = "Tall Potato", x = 830 , y = 3340},
-	[4] = {name = "Yellow Pepper", x = 300 , y = 1960},
+	[2] = {name = "Summer Squash", x = 315 , y = 1960},
+	[3] = {name = "Tall Potato", x = 830 , y = 1748},
+	[4] = {name = "Yellow Pepper", x = 285 , y = 1960},
 	[5] = {name = "Corn", x = 1320 , y = 540},
 	[6] = {name = "Max Citrus", x = 1900 , y = 1700},
 	[7] = {name = "Naranja Jed", x = 960 , y = 316},
@@ -95,15 +94,12 @@ function onGameInit()
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	-- Yellow Watermellons
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	yellow1.gear = AddHog(yellow1.name, 0, 100, "war_desertgrenadier1")
+	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
 	-- the rest of the Yellow Watermellons
 	for i=1,7 do
-		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 0, 100, "war_desertgrenadier1")
+		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
-		if i>2 then
-			HideHog(yellowArmy[i].gear)
-		end
 	end
 
 	AnimInit()
@@ -117,8 +113,37 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSelect, {hero.gear}, heroSelect, {hero.gear}, 0)
 	
+	-- Hog Solo weapons
+	AddAmmo(hero.gear, amRope, 2)
+	AddAmmo(hero.gear, amBazooka, 3)
+	AddAmmo(hero.gear, amParachute, 1)
+	AddAmmo(hero.gear, amGrenade, 6)
+	AddAmmo(hero.gear, amDEagle, 4)
+	-- Other team wapons
+	AddAmmo(yellow1.gear, amBlowTorch, 1)
+	AddAmmo(yellow1.gear, amRope, 1)
+	AddAmmo(yellow1.gear, amBazooka, 3)
+	AddAmmo(yellow1.gear, amGrenade, 1)
+	AddAmmo(yellow1.gear, amFirePunch, 1)
+	AddAmmo(yellow1.gear, amDrill, 1)
+	for i=1,7 do
+		AddAmmo(yellowArmy[i].gear, amBlowTorch, 1)
+		AddAmmo(yellowArmy[i].gear, amRope, 1)
+		AddAmmo(yellowArmy[i].gear, amBazooka, 3)
+		AddAmmo(yellowArmy[i].gear, amGrenade, 1)
+		AddAmmo(yellowArmy[i].gear, amFirePunch, 1)
+		AddAmmo(yellowArmy[i].gear, amDrill, 1)	
+		if i>2 then
+			HideHog(yellowArmy[i].gear)
+		end
+	end
+	
 	AddAnim(dialog01)
 	SendHealthStatsOff()
+end
+
+function onNewTurn()
+	getNextWave()
 end
 
 function onGameTick()
@@ -171,6 +196,7 @@ end
 
 function heroSelect(gear)
 	FollowGear(hero.gear)
+	TurnTimeLeft = 0
 	if GetX(hero.gear) < hero.x then
 		chooseToBattle = true
 		AddAnim(dialog02)
@@ -187,6 +213,8 @@ function Skipanim(anim)
     end
     if anim == dialog01 then
 		AnimSwitchHog(hero.gear)
+	elseif anim == dialog02 or anim == dialog03 then
+		startBattle()
     end
 end
 
@@ -234,15 +262,20 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
-	
+	AnimSwitchHog(yellow1.gear)
+	TurnTimeLeft = 0
 end
 
 function getNextWave()
-	if watermellonsWave == 1 then
-		
-	elseif watermellonsWave == 2 then
-		
-	elseif watermellonsWave == 3 then
-		
+	if TotalRounds == 4 then
+		RestoreHog(yellowArmy[3].gear)
+		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)
+	elseif TotalRounds == 7 then
+		RestoreHog(yellowArmy[4].gear)
+		RestoreHog(yellowArmy[5].gear)
+		AnimCaption(hero.gear, loc("Last wave in 3 turns"), 5000)
+	elseif TotalRounds == 10 then
+		RestoreHog(yellowArmy[6].gear)
+		RestoreHog(yellowArmy[7].gear)
 	end
 end
