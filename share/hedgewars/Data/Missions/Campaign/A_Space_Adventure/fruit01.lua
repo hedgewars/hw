@@ -24,6 +24,11 @@ local goals = {
 	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and try not to let them be killed"), 1, 7000},
 	[dialog03] = {missionName, loc("Ready for Battle?"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 7000},
 }
+-- crates
+local crateWMX = 2170
+local crateWMY = 1950
+local health1X = 2680
+local health1Y = 716
 -- hogs
 local hero = {}
 local yellow1 = {}
@@ -43,6 +48,7 @@ hero.dead = false
 green1.name = "Captain Lime"
 green1.x = 3600
 green1.y = 95
+green1.dead = false
 green2.name = "Mister Pear"
 green2.x = 3600
 green2.y = 1570
@@ -56,13 +62,13 @@ yellow1.name = "General Lemon"
 yellow1.x = 140
 yellow1.y = 1980
 local yellowArmy = {
-	[1] = {name = "Robert Yellow Apple", x = 710, y = 1780},
-	[2] = {name = "Summer Squash", x = 315 , y = 1960},
-	[3] = {name = "Tall Potato", x = 830 , y = 1748},
-	[4] = {name = "Yellow Pepper", x = 285 , y = 1960},
-	[5] = {name = "Corn", x = 1320 , y = 540},
-	[6] = {name = "Max Citrus", x = 1900 , y = 1700},
-	[7] = {name = "Naranja Jed", x = 960 , y = 316},
+	{name = "Robert Yellow Apple", x = 710, y = 1780},
+	{name = "Summer Squash", x = 315 , y = 1960},
+	{name = "Tall Potato", x = 830 , y = 1748},
+	{name = "Yellow Pepper", x = 285 , y = 1960},
+	{name = "Corn", x = 1320 , y = 540},
+	{name = "Max Citrus", x = 1900 , y = 1700},
+	{name = "Naranja Jed", x = 960 , y = 316},
 }
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green  
@@ -79,7 +85,7 @@ function onGameInit()
 	MinesTime = 1
 	Explosives = 0
 	Delay = 3
-	HealthCaseAmount = 30
+	HealthCaseAmount = 50
 	Map = "fruit01_map"
 	Theme = "Fruit"
 	
@@ -92,6 +98,15 @@ function onGameInit()
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	green1.gear = AddHog(green1.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
+	green2.gear = AddHog(green2.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(green2.gear, green2.x, green2.y)
+	HogTurnLeft(green2.gear, true)
+	green3.gear = AddHog(green3.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(green3.gear, green3.x, green3.y)
+	HogTurnLeft(green3.gear, true)
+	green4.gear = AddHog(green4.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(green4.gear, green4.x, green4.y)
+	HogTurnLeft(green4.gear, true)
 	-- Yellow Watermellons
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier1")
@@ -119,7 +134,17 @@ function onGameStart()
 	AddAmmo(hero.gear, amParachute, 1)
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
-	-- Other team wapons
+	-- Green team weapons
+	local greenTeam = {	green1, green2, green3, green4 }
+	for i=1,4 do
+		AddAmmo(greenTeam[i].gear, amBlowTorch, 1)
+		AddAmmo(greenTeam[i].gear, amRope, 1)
+		AddAmmo(greenTeam[i].gear, amBazooka, 4)
+		AddAmmo(greenTeam[i].gear, amGrenade, 3)
+		AddAmmo(greenTeam[i].gear, amFirePunch, 2)
+		AddAmmo(greenTeam[i].gear, amDrill, 1)
+	end
+	-- Yellow team weapons
 	AddAmmo(yellow1.gear, amBlowTorch, 1)
 	AddAmmo(yellow1.gear, amRope, 1)
 	AddAmmo(yellow1.gear, amBazooka, 3)
@@ -130,9 +155,14 @@ function onGameStart()
 		AddAmmo(yellowArmy[i].gear, amBlowTorch, 1)
 		AddAmmo(yellowArmy[i].gear, amRope, 1)
 		AddAmmo(yellowArmy[i].gear, amBazooka, 3)
-		AddAmmo(yellowArmy[i].gear, amGrenade, 1)
+		AddAmmo(yellowArmy[i].gear, amGrenade, 3)
 		AddAmmo(yellowArmy[i].gear, amFirePunch, 1)
-		AddAmmo(yellowArmy[i].gear, amDrill, 1)	
+		AddAmmo(yellowArmy[i].gear, amDrill, 3)	
+		AddAmmo(yellowArmy[i].gear, amBee, 1)	
+		AddAmmo(yellowArmy[i].gear, amMortar, 2)	
+		AddAmmo(yellowArmy[i].gear, amSniperRifle, 3)	
+		AddAmmo(yellowArmy[i].gear, amDEagle, 2)	
+		AddAmmo(yellowArmy[i].gear, amDynamite, 1)	
 		if i>2 then
 			HideHog(yellowArmy[i].gear)
 		end
@@ -143,6 +173,16 @@ function onGameStart()
 end
 
 function onNewTurn()
+	if CurrentHedgehog == green1.gear then
+		TotalRounds = TotalRounds - 1
+		if GetHealth(green2.gear) then
+			SwitchHog(green2.gear)
+		elseif GetHealth(green3.gear) then
+			SwitchHog(green3.gear)
+		elseif GetHealth(green4.gear) then
+			SwitchHog(green4.gear)
+		end
+	end
 	getNextWave()
 end
 
@@ -158,12 +198,32 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	elseif gear == green1.gear then
+		green1.dead = true
 	end
 end
 
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)   
+	end
+end
+
+function onHogHide(gear)
+	for i=3,7 do
+		if gear == yellowArmy[i].gear then
+			yellowArmy[i].hidden = true
+			break
+		end
+	end
+end
+
+function onHogRestore(gear)
+	for i=3,7 do
+		if gear == yellowArmy[i].gear then
+			yellowArmy[i].hidden = false
+			break
+		end
 	end
 end
 
@@ -176,6 +236,32 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onGreen1Death(gear)
+	if green1.dead then
+		return true
+	end
+	return false
+end
+
+function onBattleWin(gear)
+	local win = true
+	for i=1,7 do
+		if i<3 then
+			if GetHealth(yellowArmy[i].gear) then
+				win = false
+			end
+		else
+			if GetHealth(yellowArmy[i].gear) and not yellowArmy[i].hidden then
+				win = false
+			end
+		end
+	end
+	if GetHealth(yellow1.gear) then
+		win = false
+	end
+	return win
+end
+
 function onHeroSelect(gear)
 	if GetX(hero.gear) ~= hero.x then
 		return true
@@ -186,19 +272,25 @@ end
 -------------- OUTCOMES ------------------ I should really s/OUTCOMES/ACTIONS/
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Green Bananas lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("Tips...")) --11
-	SendStat('siPlayerKills','1',teamC.name)
-	SendStat('siPlayerKills','0',teamA.name)
-	SendStat('siPlayerKills','0',teamB.name)
+	gameLost()
+end
+
+function green1Death(gear)
+	gameLost()
+end
+
+function battleWin(gear)
+	-- add stats
 	EndGame()
 end
 
 function heroSelect(gear)
-	FollowGear(hero.gear)
 	TurnTimeLeft = 0
+	FollowGear(hero.gear)
 	if GetX(hero.gear) < hero.x then
-		chooseToBattle = true
+		chooseToBattle = true		
+		AddEvent(onGreen1Death, {green1.gear}, green1Death, {green1.gear}, 0)
+		AddEvent(onBattleWin, {hero.gear}, battleWin, {hero.gear}, 0)
 		AddAnim(dialog02)
 	elseif GetX(hero.gear) > hero.x then
 		AddAnim(dialog03)
@@ -264,6 +356,15 @@ end
 function startBattle()
 	AnimSwitchHog(yellow1.gear)
 	TurnTimeLeft = 0
+end
+
+function gameLost()	
+	SendStat('siGameResult', loc("Green Bananas lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("Tips...")) --11
+	SendStat('siPlayerKills','1',teamC.name)
+	SendStat('siPlayerKills','0',teamA.name)
+	SendStat('siPlayerKills','0',teamB.name)
+	EndGame()
 end
 
 function getNextWave()
