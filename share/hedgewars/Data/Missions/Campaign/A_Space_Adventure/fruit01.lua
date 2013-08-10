@@ -252,7 +252,7 @@ function onBattleWin(gear)
 end
 
 function onEscapeWin(gear)
-	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear > 1980) and StoppedGear(hero.gear) then
+	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear) > 1980 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -294,6 +294,7 @@ function heroSelect(gear)
 		AddEvent(onBattleWin, {hero.gear}, battleWin, {hero.gear}, 0)
 		AddAnim(dialog02)
 	elseif GetX(hero.gear) > hero.x then
+		HogTurnLeft(hero.gear, true)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4 }
 		for i=1,3 do
