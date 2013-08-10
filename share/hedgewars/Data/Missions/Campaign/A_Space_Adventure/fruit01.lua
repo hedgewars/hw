@@ -98,7 +98,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Green Bananas
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.gear = AddHog(green1.name, 1, 100, "war_desertgrenadier1")
+	green1.gear = AddHog(green1.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	green2.gear = AddHog(green2.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
@@ -315,8 +315,8 @@ function heroSelect(gear)
 		HogTurnLeft(hero.gear, true)
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
-		local greenTeam = { green2, green3, green4 }
-		for i=1,3 do
+		local greenTeam = { green1, green2, green3, green4 }
+		for i=1,4 do
 			SetHogLevel(greenTeam[i].gear, 1)
 		end
 		AddAnim(dialog03)
