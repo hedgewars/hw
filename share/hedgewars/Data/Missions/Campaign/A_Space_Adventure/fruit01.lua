@@ -251,6 +251,13 @@ function onBattleWin(gear)
 	return win
 end
 
+function onEscapeWin(gear)
+	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear > 1980) and StoppedGear(hero.gear) then
+		return true
+	end
+	return false
+end
+
 function onHeroSelect(gear)
 	if GetX(hero.gear) ~= hero.x then
 		return true
@@ -273,6 +280,11 @@ function battleWin(gear)
 	EndGame()
 end
 
+function escapeWin(gear)
+	-- add stats
+	EndGame()
+end
+
 function heroSelect(gear)
 	TurnTimeLeft = 0
 	FollowGear(hero.gear)
@@ -282,6 +294,11 @@ function heroSelect(gear)
 		AddEvent(onBattleWin, {hero.gear}, battleWin, {hero.gear}, 0)
 		AddAnim(dialog02)
 	elseif GetX(hero.gear) > hero.x then
+		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
+		local greenTeam = { green2, green3, green4 }
+		for i=1,3 do
+			SetHogLevel(greenTeam[i].gear, 1)
+		end
 		AddAnim(dialog03)
 	end
 end
