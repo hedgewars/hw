@@ -315,8 +315,8 @@ function heroSelect(gear)
 		HogTurnLeft(hero.gear, true)
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
-		local greenTeam = { green1, green2, green3, green4 }
-		for i=1,4 do
+		local greenTeam = { green2, green3, green4 }
+		for i=1,3 do
 			SetHogLevel(greenTeam[i].gear, 1)
 		end
 		AddAnim(dialog03)
@@ -380,6 +380,9 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
+	if not chooseBattle then
+		SetHogLevel(green1.gear, 1)
+	end
 	AnimSwitchHog(yellow1.gear)
 	TurnTimeLeft = 0
 end
