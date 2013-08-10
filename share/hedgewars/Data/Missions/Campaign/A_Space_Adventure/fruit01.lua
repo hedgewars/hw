@@ -98,7 +98,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Green Bananas
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.gear = AddHog(green1.name, 0, 100, "war_desertgrenadier1")
+	green1.gear = AddHog(green1.name, 1, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	green2.gear = AddHog(green2.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
@@ -170,12 +170,14 @@ function onGameStart()
 end
 
 function onNewTurn()
-	if CurrentHedgehog == green1.gear then
-		TotalRounds = TotalRounds - 2
-		SwitchHog(previousHog)
-		TurnTimeLeft = 0
+	if chooseToBattle then
+		if CurrentHedgehog == green1.gear then
+			TotalRounds = TotalRounds - 2
+			SwitchHog(previousHog)
+			TurnTimeLeft = 0
+		end
+		previousHog = CurrentHedghog
 	end
-	previousHog = CurrentHedghog
 	getNextWave()
 end
 
@@ -260,10 +262,18 @@ function onBattleWin(gear)
 end
 
 function onEscapeWin(gear)
+	local escape = false
 	if not hero.dead and GetX(hero.gear) < 170 and GetY(hero.gear) > 1980 and StoppedGear(hero.gear) then
-		return true
+		escape = true
+		local yellowTeam = { yellow1, unpack(yellowArmy) }
+		for i=1,8 do
+			if not yellowTeam[i].hidden and GetHealth(yellowTeam[i].gear) and GetX(yellowTeam[i].gear) < 170 then
+				escape = false
+				break
+			end
+		end
 	end
-	return false
+	return escape
 end
 
 function onHeroSelect(gear)
@@ -303,6 +313,7 @@ function heroSelect(gear)
 		AddAnim(dialog02)
 	elseif GetX(hero.gear) > hero.x then
 		HogTurnLeft(hero.gear, true)
+		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
 		local greenTeam = { green2, green3, green4 }
 		for i=1,3 do
@@ -385,13 +396,23 @@ end
 function getNextWave()
 	if TotalRounds == 4 then
 		RestoreHog(yellowArmy[3].gear)
-		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)
+		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)		
+		if not chooseToBattle and not GetHealth(yellow1.gear) then
+			SetGearPosition(yellowArmy[3].gear, yellow1.x, yellow1.y)
+		end
 	elseif TotalRounds == 7 then
 		RestoreHog(yellowArmy[4].gear)
 		RestoreHog(yellowArmy[5].gear)
 		AnimCaption(hero.gear, loc("Last wave in 3 turns"), 5000)
+		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) then
+			SetGearPosition(yellowArmy[4].gear, yellow1.x, yellow1.y)
+		end
 	elseif TotalRounds == 10 then
 		RestoreHog(yellowArmy[6].gear)
 		RestoreHog(yellowArmy[7].gear)
+		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) 
+				and not GetHealth(yellowArmy[4].gear) then
+			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
+		end
 	end
 end
