@@ -98,7 +98,7 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Green Bananas
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.gear = AddHog(green1.name, 0, 100, "war_desertgrenadier1")
+	green1.gear = AddHog(green1.name, 1, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green1.gear, green1.x, green1.y)
 	green2.gear = AddHog(green2.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
@@ -165,13 +165,16 @@ function onGameStart()
 	SpawnHealthCrate(health1X, health1Y)
 	SpawnAmmoCrate(crateWMX, crateWMY, amWatermelon)
 	
+	SetHogLevel(green1.gear,0)
 	AddAnim(dialog01)
 	SendHealthStatsOff()
 end
 
 function onNewTurn()
+	WriteLnToConsole("NEW TURN "..TotalRounds.." hog "..CurrentHedgehog)
 	if chooseToBattle then
 		if CurrentHedgehog == green1.gear then
+			WriteLnToConsole("IT'S GREEN HOG ")
 			TotalRounds = TotalRounds - 2
 			SwitchHog(previousHog)
 			TurnTimeLeft = 0
@@ -380,9 +383,7 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
-	if not chooseBattle then
-		SetHogLevel(green1.gear, 1)
-	end
+	SetHogLevel(green1.gear, 1)
 	AnimSwitchHog(yellow1.gear)
 	TurnTimeLeft = 0
 end
