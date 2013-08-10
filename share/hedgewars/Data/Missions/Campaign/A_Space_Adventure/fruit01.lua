@@ -29,7 +29,7 @@ local goals = {
 local crateWMX = 2170
 local crateWMY = 1950
 local health1X = 2680
-local health1Y = 716
+local health1Y = 916
 -- hogs
 local hero = {}
 local yellow1 = {}
@@ -75,7 +75,7 @@ teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green  
 teamB.name = loc("Green Bananas")
 teamB.color = tonumber("38D61C",16) -- green
-teamC.name = loc("Yellow Watermellons")
+teamC.name = loc("Yellow Watermelons")
 teamC.color = tonumber("DDFF00",16) -- yellow
 
 function onGameInit()
@@ -109,11 +109,11 @@ function onGameInit()
 	green4.gear = AddHog(green4.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(green4.gear, green4.x, green4.y)
 	HogTurnLeft(green4.gear, true)
-	-- Yellow Watermellons
+	-- Yellow Watermelons
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
-	-- the rest of the Yellow Watermellons
+	-- the rest of the Yellow Watermelons
 	for i=1,7 do
 		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
@@ -161,6 +161,10 @@ function onGameStart()
 		HideHog(yellowArmy[i].gear)
 	end
 	
+	-- crates
+	SpawnHealthCrate(health1X, health1Y)
+	SpawnAmmoCrate(crateWMX, crateWMY, amWatermelon)
+	
 	AddAnim(dialog01)
 	SendHealthStatsOff()
 end
@@ -190,6 +194,10 @@ function onGearDelete(gear)
 	elseif gear == green1.gear then
 		green1.dead = true
 	end
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amWatermelon, 0, 0, 0, 1)
 end
 
 function onPrecise()
@@ -328,7 +336,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time Hog Solo!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrone king Pineapple."), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the kingdom of sand to help to the annual dusting of the king's palace."), SAY_SAY, 8000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However the army of Yellow Watermellons is about to attack any moment now."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
