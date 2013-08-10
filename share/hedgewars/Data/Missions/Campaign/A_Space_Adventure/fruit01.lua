@@ -388,9 +388,20 @@ function startBattle()
 	TurnTimeLeft = 0
 end
 
-function gameLost()	
-	SendStat('siGameResult', loc("Green Bananas lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("Tips...")) --11
+function gameLost()
+	if chooseToBattle then
+		SendStat('siGameResult', loc("Green Bananas lost, try again!")) --1
+		SendStat('siCustomAchievement', loc("You have to eliminate all the visible enemies")) --11
+		SendStat('siCustomAchievement', loc("5 additional enemies will be spawned during the game")) --11
+		SendStat('siCustomAchievement', loc("You are controlling all the active ally units")) --11
+		SendStat('siCustomAchievement', loc("The ally units share their ammo")) --11
+		SendStat('siCustomAchievement', loc("Try to keep as many allies alive as possible")) --11
+	else
+		SendStat('siGameResult', loc("Hog Solo couldn't escape, try again!")) --1
+		SendStat('siCustomAchievement', loc("You have to get to the most left land and remove any enemy hog from there")) --11
+		SendStat('siCustomAchievement', loc("You will play every 3 turns")) --11
+		SendStat('siCustomAchievement', loc("Green hogs won't intenionally hurt you")) --11
+	end	
 	SendStat('siPlayerKills','1',teamC.name)
 	SendStat('siPlayerKills','0',teamA.name)
 	SendStat('siPlayerKills','0',teamB.name)
