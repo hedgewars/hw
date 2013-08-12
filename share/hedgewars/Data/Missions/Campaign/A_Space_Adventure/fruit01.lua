@@ -357,7 +357,7 @@ function heroSelect(gear)
 		HogTurnLeft(hero.gear, true)
 		AddAmmo(green1.gear, amSwitch, 100)
 		AddEvent(onEscapeWin, {hero.gear}, escapeWin, {hero.gear}, 0)
-		local greenTeam = { green2, green3, green4 }
+		local greenTeam = { green2, green3, green4, green5 }
 		for i=1,4 do
 			SetHogLevel(greenTeam[i].gear, 1)
 		end
