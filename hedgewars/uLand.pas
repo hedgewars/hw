@@ -60,29 +60,12 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     end;
 end;
 
-procedure ColorizeLand(Surface: PSDL_Surface);
+
+procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
 begin
-    tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
-    r.y:= 0;
-    while r.y < LAND_HEIGHT do
-    begin
-        r.x:= 0;
-        while r.x < LAND_WIDTH do
-        begin
-            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
-            inc(r.x, tmpsurf^.w)
-        end;
-        inc(r.y, tmpsurf^.h)
-    end;
-    SDL_FreeSurface(tmpsurf);
-
-    // freed in freeModule() below
-    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
-    if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
-
     tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifTransparent);
     for x:= 0 to LAND_WIDTH - 1 do
     begin
@@ -125,6 +108,106 @@ begin
         until yd < 0;
     end;
     SDL_FreeSurface(tmpsurf);
+end;
+
+
+procedure DrawShoppaBorder;
+var x, y, s, i: Longword;
+    c1, c2, c: Longword;
+begin
+    c1:= AMask;
+    c2:= AMask or RMask or GMask;
+
+    // vertical
+    s:= LAND_HEIGHT;
+    
+    for x:= 0 to LAND_WIDTH - 1 do
+        for y:= 0 to LAND_HEIGHT - 1 do
+            if LandPixels[y, x] = 0 then
+                if s < y then
+                    begin
+                    for i:= max(s, y - 8) to y - 1 do
+                        begin
+                        if ((x + i) and 16) = 0 then c:= c1 else c:= c2;
+                        
+                        if (cReducedQuality and rqBlurryLand) = 0 then
+                            LandPixels[i, x]:= c
+                        else
+                            LandPixels[i div 2, x div 2]:= c
+                        end;
+                    s:= LAND_HEIGHT
+                    end
+                else
+            else
+                begin
+                if s > y then s:= y;
+                if s + 8 > y then
+                    begin
+                    if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
+                    
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                        LandPixels[y, x]:= c
+                    else
+                        LandPixels[y div 2, x div 2]:= c
+                    end;            
+                end;
+                
+    // horizontal
+    s:= LAND_WIDTH;
+    
+    for y:= 0 to LAND_HEIGHT - 1 do
+        for x:= 0 to LAND_WIDTH - 1 do
+            if LandPixels[y, x] = 0 then
+                if s < x then
+                    begin
+                    for i:= max(s, x - 8) to x - 1 do
+                        begin
+                        if ((y + i) and 16) = 0 then c:= c1 else c:= c2;
+                        
+                        if (cReducedQuality and rqBlurryLand) = 0 then
+                            LandPixels[y, i]:= c
+                        else
+                            LandPixels[y div 2, i div 2]:= c
+                        end;
+                    s:= LAND_WIDTH
+                    end
+                else
+            else
+                begin
+                if s > x then s:= x;
+                if s + 8 > x then
+                    begin
+                    if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
+                    
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                        LandPixels[y, x]:= c
+                    else
+                        LandPixels[y div 2, x div 2]:= c
+                    end;            
+                end
+end;
+
+procedure ColorizeLand(Surface: PSDL_Surface);
+var tmpsurf: PSDL_Surface;
+    r: TSDL_Rect;
+begin
+    tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
+    r.y:= 0;
+    while r.y < LAND_HEIGHT do
+    begin
+        r.x:= 0;
+        while r.x < LAND_WIDTH do
+        begin
+            SDL_UpperBlit(tmpsurf, nil, Surface, @r);
+            inc(r.x, tmpsurf^.w)
+        end;
+        inc(r.y, tmpsurf^.h)
+    end;
+    SDL_FreeSurface(tmpsurf);
+
+    // freed in freeModule() below
+    LandBackSurface:= LoadDataImage(ptCurrTheme, 'LandBackTex', ifIgnoreCaps or ifTransparent);
+    if (LandBackSurface <> nil) and GrayScale then Surface2GrayScale(LandBackSurface);
 end;
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
@@ -345,10 +428,14 @@ begin
 
     TryDo(tmpsurf <> nil, 'Error creating pre-land surface', true);
     ColorizeLand(tmpsurf);
+    if gameFlags and gfShoppaBorder = 0 then DrawBorderFromImage(tmpsurf);
     AddOnLandObjects(tmpsurf);
 
     LandSurface2LandPixels(tmpsurf);
     SDL_FreeSurface(tmpsurf);
+    
+    if gameFlags and gfShoppaBorder <> 0 then DrawShoppaBorder;
+    
     for x:= leftX+2 to rightX-2 do
         for y:= topY+2 to LAND_HEIGHT-3 do
             if (Land[y, x] = 0) and 
