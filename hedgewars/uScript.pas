@@ -2343,6 +2343,7 @@ ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
 ScriptSetInteger('gfDisableWind', gfDisableWind);
 ScriptSetInteger('gfMoreWind', gfMoreWind);
 ScriptSetInteger('gfTagTeam', gfTagTeam);
+ScriptSetInteger('gfShoppaBorder', gfShoppaBorder);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
