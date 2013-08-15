@@ -9,15 +9,16 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local campaignName = loc("A Space Adventure")
-local missionName = loc("Fruit planet, Searching the Part!")
+local missionName = loc("Fruit planet, Searching the Device!")
 local inBattle = false
+local tookPartInBattle = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 4000},
+	[dialog01] = {missionName, loc("Getting the Device"), loc("With the help of the other hogs search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
 	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and try not to let them be killed"), 1, 4000},
 	[dialog03] = {missionName, loc("Ready for Battle?"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 4000},
 }
@@ -101,12 +102,16 @@ function onGameInit()
 	end
 
 	AnimInit()
-	--AnimationSetup()	
+	AnimationSetup()	
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
+	
+	if GetCampaignVar(Fruit01JoinedBattle) and GetCampaignVar(Fruit01JoinedBattle) == "true" then
+		tookPartInBattle = true
+	end
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
@@ -157,7 +162,12 @@ function onGameStart()
 	AddGear(3085, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)
 	
-	--AddAnim(dialog01)
+	if tookPartInBattle then
+		AddAnim(dialog01)
+	else
+		AddAnim(dialog02)
+	end
+	
 	SendHealthStatsOff()
 end
 
@@ -221,22 +231,31 @@ function Skipanim(anim)
 end
 
 function AnimationSetup()
-	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
+	-- DIALOG 01 - Start, Captain Lime helps Hog Solo because he took part in the battle
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the planet of fruits a terrible war is about to begin..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help."), SAY_SAY, 3000}})
-	table.insert(dialog01, {func = AnimWait, args = {green1.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time Hog Solo!"), SAY_SAY, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrone king Pineapple."), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the kingdom of sand to help to the annual dusting of the king's palace."), SAY_SAY, 8000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else in the planet of fruits Captain Lime helps Hog Solo..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You fought bravely and you helped us win this battle!"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking is hidden."), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send with you two of my best hogs to assist you."), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Good luck!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = ShowMission, args = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 7000}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
+	-- DIALOG02 - Start, Hog Solo escaped from the previous battle
+	AddSkipFunction(dialog02, Skipanim, {dialog02})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Somewhere else in the planet of fruits Hog Solo gets closer to the device..."), 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You are the one who fled! So, you are alive..."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I'm still low on hogs. If you are not afraid I could use a set of extra hands"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 8000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I am sorry but I was looking for a device that may be hidden somewhere around here"), SAY_SAY, 4500}})
+	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 12500}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Many long forgotten things can be found in the same tunnels that we are about to search!"), SAY_SAY, 7000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("If you help us you can keep the device if you find it but we'll keep everything else"), SAY_SAY, 7000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("What do you say? Are you in?"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 1800}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Ok then!"), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 end
 
 ------------- OTHER FUNCTIONS ---------------
