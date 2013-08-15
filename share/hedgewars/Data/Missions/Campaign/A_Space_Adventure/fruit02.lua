@@ -216,10 +216,25 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onDeviceCrates(gear)
+	if not hero.dead and GetY(hero.gear)>1850 and GetX(hero.gear)>1340 then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	EndGame()
+end
+
+function deviceCrates(gear)
+	if not tookPartInBattle then
+		AddAnim(dialog03)
+	else
+	
+	end
 end
 
 -------------- ANIMATIONS ------------------
@@ -256,6 +271,12 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 1800}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Ok then!"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
+	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
+	AddSkipFunction(dialog03, Skipanim, {dialog03})
+	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hoo Ray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! I am gonna shout him when he returns and keep his device for me!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = AnimSwitchHog, args = {hero.gear}})
 end
 
 ------------- OTHER FUNCTIONS ---------------
