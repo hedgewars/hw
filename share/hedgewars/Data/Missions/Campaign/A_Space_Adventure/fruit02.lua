@@ -16,19 +16,21 @@ local tookPartInBattle = false
 local dialog01 = {}
 local dialog02 = {}
 local dialog03 = {}
+local dialog04 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting the Device"), loc("With the help of the other hogs search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and try not to let them be killed"), 1, 4000},
-	[dialog03] = {missionName, loc("Ready for Battle?"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 4000},
+	[dialog02] = {missionName, loc("Getting the Device"), loc("Explore the tunnel with the other hogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
+	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back"), 1, 4000},
+	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assasins before they attack back"), 1, 4000},
 }
 -- crates types=[0:ammo,1:utility,2:health]
 local crates = {
 	{type = 0, name = amDEagle, x = 1680, y = 1650},
 	{type = 0, name = amGirder, x = 1680, y = 1160},
-	{type = 0, name = amWatermelon, x = 1360, y = 1870},
 	{type = 0, name = amRope, x = 1400, y = 1870},
 }
+local weaponCrate = { x = 1360, y = 1870}
 -- hogs
 local hero = {}
 local green1 = {}
@@ -114,10 +116,12 @@ function onGameStart()
 	end
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
 	
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amFirePunch, 3)
 	AddAmmo(hero.gear, amSwitch, 100)
+	AddAmmo(hero.gear, amTeleport, 100)
 	-- Assasins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
@@ -128,6 +132,11 @@ function onGameStart()
 	-- place crates
 	for i=1,table.getn(crates) do
 		SpawnAmmoCrate(crates[i].x, crates[i].y, crates[i].name)
+	end
+	if tookPartInBattle then
+		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
+	else
+		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)		
 	end
 	
 	-- explosives
@@ -172,8 +181,19 @@ function onGameStart()
 end
 
 function onNewTurn()
-	if CurrentHedgehog == green1.gear then
+	WriteLnToConsole("TURNS "..TotalRounds.." and hog: "..CurrentHedgehog)
+	if not inBattle and CurrentHedgehog == green1.gear then
 		TurnTimeLeft = 0
+	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
+		if inBattle then
+			SwitchHog(hero.gear)
+			TurnTimeLeft = 20000
+		else
+			TurnTimeLeft = 0
+		end
+	elseif inBattle then
+		WriteLnToConsole("IN BATTLE")
+		TurnTimeLeft = 20000
 	elseif not inBattle then
 		TurnTimeLeft = -1
 	end
@@ -199,6 +219,7 @@ function onAmmoStoreInit()
 	SetAmmo(amGirder, 0, 0, 0, 3)
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amWatermelon, 0, 0, 0, 1)
+	SetAmmo(amSniperRifle, 0, 0, 0, 1)
 end
 
 function onPrecise()
@@ -223,6 +244,13 @@ function onDeviceCrates(gear)
 	return false
 end
 
+function onSurface(gear)
+	if not hero.dead and GetY(hero.gear)<850 and  StoppedGear(hero.gear) then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
@@ -230,11 +258,24 @@ function heroDeath(gear)
 end
 
 function deviceCrates(gear)
+	TurnTimeLeft = 0
 	if not tookPartInBattle then
 		AddAnim(dialog03)
 	else
-	
+		for i=1,table.getn(redHedgehogs) do
+			RestoreHog(redHedgehogs[i].gear)
+		end
+		AddAnim(dialog04)
 	end
+	AddAmmo(hero.gear, amSwitch, 0)
+	AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
+end
+
+function surface(gear)
+	-- TODO: after going to the surface first round must be played by the player
+	AnimSwitchHog(hero.gear)
+	TurnTimeLeft = 20000
+	inBattle = true
 end
 
 -------------- ANIMATIONS ------------------
@@ -243,6 +284,7 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
+    TurnTimeLeft = 0
 end
 
 function AnimationSetup()
@@ -273,11 +315,24 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG03 - At crates, hero learns that Captain Lime is bad
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
+	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
 	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hoo Ray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! I am gonna shout him when he returns and keep his device for me!"), SAY_THINK, 4000}})
-	table.insert(dialog03, {func = AnimSwitchHog, args = {hero.gear}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! I am gonna shoot him when he returns and keep his device for me!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = goToThesurface, args = {hero.gear}})
+	-- DIALOG04 - At crates, hero learns about the assasins ambush
+	AddSkipFunction(dialog04, Skipanim, {dialog04})
+	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
+	table.insert(dialog04, {func = FollowGear, args = {hero.gear}})
+	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hoo Ray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
+	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})
 end
 
 ------------- OTHER FUNCTIONS ---------------
 
+function goToThesurface()
+	TurnTimeLeft = 0
+end
