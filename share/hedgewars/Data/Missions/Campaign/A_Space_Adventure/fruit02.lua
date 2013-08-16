@@ -12,6 +12,8 @@ local campaignName = loc("A Space Adventure")
 local missionName = loc("Fruit planet, Searching the Device!")
 local inBattle = false
 local tookPartInBattle = false
+local firstRoundAfterBattle = false
+local previousHog = -1
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -181,22 +183,30 @@ function onGameStart()
 end
 
 function onNewTurn()
-	WriteLnToConsole("TURNS "..TotalRounds.." and hog: "..CurrentHedgehog)
+	WriteLnToConsole("TURNS "..TotalRounds.." and hog: "..CurrentHedgehog.." PREVIOUS: "..previousHog)
 	if not inBattle and CurrentHedgehog == green1.gear then
+		WriteLnToConsole("1")
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-		if inBattle then
-			SwitchHog(hero.gear)
-			TurnTimeLeft = 20000
-		else
+			WriteLnToConsole("2")
 			TurnTimeLeft = 0
-		end
 	elseif inBattle then
+		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
+			WriteLnToConsole("IIIIIIIIFFFFFFFFFF")
+			TurnTimeLeft = 0
+			return
+		end
 		WriteLnToConsole("IN BATTLE")
 		TurnTimeLeft = 20000
 	elseif not inBattle then
+	WriteLnToConsole("4")
 		TurnTimeLeft = -1
+	else
+		WriteLnToConsole("6")
+		TurnTimeLeft = 0
 	end
+	previousHog = CurrentHedgehog
+	WriteLnToConsole("5")
 end
 
 function onGameTick()
@@ -273,8 +283,12 @@ end
 
 function surface(gear)
 	-- TODO: after going to the surface first round must be played by the player
-	AnimSwitchHog(hero.gear)
-	TurnTimeLeft = 20000
+	WriteLnToConsole("surface first round")
+	previousHog = -1
+	if firstRoundAfterBattle then
+		WriteLnToConsole("TRUE IT IS!")
+	end
+	WriteLnToConsole("surface in battle")
 	inBattle = true
 end
 
