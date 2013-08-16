@@ -51,6 +51,7 @@ hero.dead = false
 green1.name = "Captain Lime"
 green1.x = 1050
 green1.y = 820
+green1.dead = false
 green2.name = "Mister Pear"
 green2.x = 1350
 green2.y = 820
@@ -66,11 +67,12 @@ local redHedgehogs = {
 teamA.name = loc("Hog Solo and GB")
 teamA.color = tonumber("38D61C",16) -- green
 teamB.name = loc("Captain Lime")
-teamB.color = tonumber("38D61C",16) -- green
+teamB.color = tonumber("38D61D",16) -- greenish
 teamC.name = loc("Fruit Assasins")
 teamC.color = tonumber("FF0000",16) -- red
 
 function onGameInit()
+	GameFlags = gfDisableWind
 	Seed = 1
 	TurnTime = 20000
 	CaseFreq = 0
@@ -78,8 +80,7 @@ function onGameInit()
 	MinesTime = 1
 	Explosives = 0
 	Delay = 3
-	SuddenDeathTurns = 100
-	HealthCaseAmount = 50
+	SuddenDeathTurns = 200
 	Map = "fruit02_map"
 	Theme = "Fruit"
 	
@@ -96,8 +97,11 @@ function onGameInit()
 	HogTurnLeft(green3.gear, true)
 	-- Captain Lime
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.gear =  AddHog(green1.name, 0, 100, "war_desertgrenadier1")
-	AnimSetGearPosition(green1.gear, green1.x, green1.y)
+	green1.human = AddHog(green1.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(green1.human, green1.x, green1.y)
+	green1.bot = AddHog(green1.name, 1, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(green1.bot, green1.x, green1.y)
+	green1.gear = green1.human
 	-- Fruit Assasins
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(redHedgehogs) do
@@ -124,6 +128,11 @@ function onGameStart()
 	AddAmmo(hero.gear, amFirePunch, 3)
 	AddAmmo(hero.gear, amSwitch, 100)
 	AddAmmo(hero.gear, amTeleport, 100)
+	-- Captain Lime weapons
+	AddAmmo(green1.bot, amBazooka, 6)
+	AddAmmo(green1.bot, amGrenade, 6)
+	AddAmmo(green1.bot, amDEagle, 2)
+	HideHog(green1.bot)
 	-- Assasins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
@@ -144,7 +153,7 @@ function onGameStart()
 	-- explosives
 	-- I wanted to use FindPlace but doesn't accept height values...
 	local x1 = 950
-	local x2 = 1305
+	local x2 = 1306
 	local y1 = 1210
 	local y2 = 1620
 	while true do
@@ -153,14 +162,15 @@ function onGameStart()
 		end
 		if x2<x1 then
 			x2 = 1305
-			y2 = y2 -60
+			y2 = y2 - 50
 		end
 		if not TestRectForObstacle(x2+25, y2+25, x2-25, y2-25, true) then
 			AddGear(x2, y2, gtExplosives, 0, 0, 0, 0)
 		end
-		x2 = x2 - 30
+		x2 = x2 - 25
 	end
 	AddGear(3128, 1680, gtExplosives, 0, 0, 0, 0)
+	
 	--mines
 	AddGear(3135, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3145, 1680, gtMine, 0, 0, 0, 0)
@@ -198,9 +208,11 @@ function onNewTurn()
 		end
 		WriteLnToConsole("IN BATTLE")
 		TurnTimeLeft = 20000
+		wind()
 	elseif not inBattle then
 	WriteLnToConsole("4")
 		TurnTimeLeft = -1
+		wind()
 	else
 		WriteLnToConsole("6")
 		TurnTimeLeft = 0
@@ -221,6 +233,8 @@ end
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	elseif gear == green1.bot then
+		green1.dead = true
 	end
 end
 
@@ -261,6 +275,13 @@ function onSurface(gear)
 	return false
 end
 
+function onGaptainLimeDeath(gear)
+	if green1.dead then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
@@ -282,16 +303,30 @@ function deviceCrates(gear)
 end
 
 function surface(gear)
-	-- TODO: after going to the surface first round must be played by the player
 	WriteLnToConsole("surface first round")
 	previousHog = -1
-	if firstRoundAfterBattle then
-		WriteLnToConsole("TRUE IT IS!")
+	if tookPartInBattle then
+	
+	else
+		if GetHealth(green2.gear) then
+			HideHog(green2.gear)
+		end
+		if GetHealth(green3.gear) then
+			HideHog(green3.gear)
+		end
+		DeleteGear(green1.human)
+		RestoreHog(green1.bot)
+		green1.gear = green1.bot
+		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
 	end
 	WriteLnToConsole("surface in battle")
 	inBattle = true
 end
 
+function captainLimeDeath(gear)
+	-- hero win in scenario of escape in 1st part
+	EndGame()
+end
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -349,4 +384,13 @@ end
 
 function goToThesurface()
 	TurnTimeLeft = 0
+end
+
+function wind()
+	if GetY(CurrentHedgehog) > 1350 then
+		WriteLnToConsole("INTO WIND -40")
+		SetWind(-40)
+	else
+		SetWind(math.random(-100,100))
+	end
 end
