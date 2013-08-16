@@ -165,13 +165,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
 
 #ifdef __APPLE__
-    AutoUpdater* updater = NULL;
     if (config->isAutoUpdateEnabled())
     {
-#ifdef __APPLE__
+        AutoUpdater* updater = NULL;
+
 #ifdef SPARKLE_ENABLED
         updater = new SparkleAutoUpdater();
-#endif
 #endif
         if (updater)
         {
@@ -658,7 +657,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         }
 
         QList<HWTeam> teamsList;
-        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++)
+        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); ++it)
         {
             HWTeam team(*it);
             team.loadFromFile();
@@ -704,7 +703,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
 void HWForm::GoToPage(int id)
 {
-    bool stopAnim = false;
+    //bool stopAnim = false;
 
     int lastid = ui.Pages->currentIndex();
     PagesStack.push(ui.Pages->currentIndex());
@@ -721,7 +720,7 @@ void HWForm::GoToPage(int id)
 
 
 #if (QT_VERSION >= 0x040600)
-    if (!stopAnim)
+    //if (!stopAnim)
     {
         /**Start animation :**/
         int coeff = 1;
@@ -817,7 +816,7 @@ void HWForm::GoBack()
         stopAnim = true; */
 
     if ((!hwnet) || (!hwnet->isInRoom()))
-        if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
+        if (id == ID_PAGE_NETGAME)
         {
             stopAnim = true;
             GoBack();
