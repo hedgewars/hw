@@ -46,6 +46,8 @@ dbInteractionLoop dbConn = forever $ do
         SendStats clients rooms ->
                 run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
 
+        StoreAchievements -> return ()
+
 
 dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
