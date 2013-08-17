@@ -12,7 +12,6 @@ local campaignName = loc("A Space Adventure")
 local missionName = loc("Fruit planet, Searching the Device!")
 local inBattle = false
 local tookPartInBattle = false
-local firstRoundAfterBattle = false
 local previousHog = -1
 -- dialogs
 local dialog01 = {}
@@ -26,11 +25,11 @@ local goals = {
 	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back"), 1, 4000},
 	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assasins before they attack back"), 1, 4000},
 }
--- crates types=[0:ammo,1:utility,2:health]
+-- crates
 local crates = {
-	{type = 0, name = amDEagle, x = 1680, y = 1650},
-	{type = 0, name = amGirder, x = 1680, y = 1160},
-	{type = 0, name = amRope, x = 1400, y = 1870},
+	{name = amDEagle, x = 1680, y = 1650},
+	{name = amGirder, x = 1680, y = 1160},
+	{name = amRope, x = 1400, y = 1870},
 }
 local weaponCrate = { x = 1360, y = 1870}
 -- hogs
@@ -42,7 +41,6 @@ local green3 = {}
 local teamA = {}
 local teamB = {}
 local teamC = {}
-local teamD = {}
 -- hedgehogs values
 hero.name = "Hog Solo"
 hero.x = 1200
@@ -116,7 +114,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	WriteLnToConsole("***"..GetCampaignVar("Fruit01JoinedBattle"))
+	
 	if GetCampaignVar("Fruit01JoinedBattle") and GetCampaignVar("Fruit01JoinedBattle") == "true" then
 		tookPartInBattle = true
 	end
@@ -194,16 +192,12 @@ function onGameStart()
 end
 
 function onNewTurn()
-	WriteLnToConsole("TURNS "..TotalRounds.." and hog: "..CurrentHedgehog.." PREVIOUS: "..previousHog)
 	if not inBattle and CurrentHedgehog == green1.gear then
-		WriteLnToConsole("1")
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-			WriteLnToConsole("2")
 			TurnTimeLeft = 0
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
-			WriteLnToConsole("IIIIIIIIFFFFFFFFFF")
 			TurnTimeLeft = 0
 			return
 		end
@@ -213,19 +207,15 @@ function onNewTurn()
 				return
 			end
 		end
-		WriteLnToConsole("IN BATTLE")
 		TurnTimeLeft = 20000
 		wind()
 	elseif not inBattle and CurrentHedgehog == hero.gear then
-	WriteLnToConsole("4")
 		TurnTimeLeft = -1
 		wind()
 	else
-		WriteLnToConsole("6")
 		TurnTimeLeft = 0
 	end
 	previousHog = CurrentHedgehog
-	WriteLnToConsole("5")
 end
 
 function onGameTick()
@@ -303,6 +293,15 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("To win the game you have to get the bottom crates and come back to the surface")) --11
+	SendStat('siCustomAchievement', loc("You can use the other 2 hogs to assist you")) --11
+	if tookPartInBattle then
+		SendStat('siCustomAchievement', loc("You'll have to eliminate the Strawberry Assasins at the end")) --11
+	else
+		SendStat('siCustomAchievement', loc("You'll have to eliminate Captain Lime at the end")) --11	
+	end
+	SendStat('siPlayerKills','0',teamA.name)
 	EndGame()
 end
 
@@ -321,7 +320,6 @@ function deviceCrates(gear)
 end
 
 function surface(gear)
-	WriteLnToConsole("surface first round")
 	previousHog = -1
 	if tookPartInBattle then
 		if GetHealth(green1.gear) then
@@ -340,17 +338,26 @@ function surface(gear)
 	if GetHealth(green3.gear) then
 		HideHog(green3.gear)
 	end
-	WriteLnToConsole("surface in battle")
 	inBattle = true
 end
 
 function captainLimeDeath(gear)
 	-- hero win in scenario of escape in 1st part
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
+	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
+	SendStat('siCustomAchievement', loc("You defended yourself against Captain Lime")) --11
+	SendStat('siPlayerKills','1',teamA.name)
+	SendStat('siPlayerKills','0',teamB.name)
 	EndGame()
 end
 
 function redTeamDeath(gear)
 	-- hero win in battle scenario
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
+	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
+	SendStat('siCustomAchievement', loc("You defended yourself against Strawberry Assasins")) --11
+	SendStat('siPlayerKills','1',teamA.name)
+	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
 end
 
@@ -415,7 +422,6 @@ end
 
 function wind()
 	if GetY(CurrentHedgehog) > 1350 then
-		WriteLnToConsole("INTO WIND -40")
 		SetWind(-40)
 	else
 		SetWind(math.random(-100,100))
