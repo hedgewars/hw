@@ -263,6 +263,7 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
+    | StoreAchievement [(B.ByteString, B.ByteString)] [B.ByteString]
     deriving (Show, Read)
 
 data CoreMessage =

@@ -671,8 +671,11 @@ processAction (CheckFailed msg) = do
     io $ moveFailedRecord fileName
 
 processAction (CheckSuccess info) = do
-    Just (CheckInfo fileName _) <- client's checkInfo
+    Just (CheckInfo fileName teams) <- client's checkInfo
+    io $ writeChan (dbQueries si) $ StoreAchievement fileName (map toPair teams) info
     io $ moveCheckedRecord fileName
+    where
+        toPair t = (teamname t, teamowner t)
 
 #else
 processAction SaveReplay = return ()

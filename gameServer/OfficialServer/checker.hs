@@ -32,11 +32,11 @@ data Message = Packet [B.ByteString]
 serverAddress = "netserver.hedgewars.org"
 protocolNumber = "45"
 
-getLines :: Handle -> IO [String]
+getLines :: Handle -> IO [B.ByteString]
 getLines h = g
     where
         g = do
-            l <- liftM Just (hGetLine h) `Exception.catch` (\(_ :: Exception.IOException) -> return Nothing)
+            l <- liftM Just (B.hGetLine h) `Exception.catch` (\(_ :: Exception.IOException) -> return Nothing)
             if isNothing l then
                 return []
                 else
@@ -47,12 +47,12 @@ getLines h = g
 
 engineListener :: Chan Message -> Handle -> String -> IO ()
 engineListener coreChan h fileName = do
-    output <- getLines h
-    debugM "Engine" $ show output
-    if isNothing $ L.find start output then
+    stats <- liftM (L.dropWhile start) $ getLines h
+    debugM "Engine" $ show stats
+    if null stats then
         writeChan coreChan $ CheckFailed "No stats msg"
         else
-        writeChan coreChan $ CheckSuccess []
+        writeChan coreChan $ CheckSuccess stats
 
     removeFile fileName
     where
