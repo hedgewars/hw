@@ -105,7 +105,7 @@ function onGameInit()
 	-- Fruit Assasins
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(redHedgehogs) do
-		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 0, 100, "war_desertgrenadier1")
+		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
 
@@ -116,8 +116,8 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
-	if GetCampaignVar(Fruit01JoinedBattle) and GetCampaignVar(Fruit01JoinedBattle) == "true" then
+	WriteLnToConsole("***"..GetCampaignVar("Fruit01JoinedBattle"))
+	if GetCampaignVar("Fruit01JoinedBattle") and GetCampaignVar("Fruit01JoinedBattle") == "true" then
 		tookPartInBattle = true
 	end
 	
@@ -136,6 +136,7 @@ function onGameStart()
 	-- Assasins weapons
 	AddAmmo(redHedgehogs[1].gear, amBazooka, 6)
 	AddAmmo(redHedgehogs[1].gear, amGrenade, 6)
+	AddAmmo(redHedgehogs[1].bot, amDEagle, 6)
 	for i=1,table.getn(redHedgehogs) do
 		HideHog(redHedgehogs[i].gear)
 	end
@@ -206,10 +207,16 @@ function onNewTurn()
 			TurnTimeLeft = 0
 			return
 		end
+		for i=1,table.getn(redHedgehogs) do
+			if CurrentHedgehog == redHedgehogs[i].gear and previousHog ~= hero.gear then
+				TurnTimeLeft = 0
+				return
+			end
+		end
 		WriteLnToConsole("IN BATTLE")
 		TurnTimeLeft = 20000
 		wind()
-	elseif not inBattle then
+	elseif not inBattle and CurrentHedgehog == hero.gear then
 	WriteLnToConsole("4")
 		TurnTimeLeft = -1
 		wind()
@@ -282,6 +289,17 @@ function onGaptainLimeDeath(gear)
 	return false
 end
 
+function onRedTeamDeath(gear)
+	local redDead = true
+	for i=1,table.getn(redHedgehogs) do
+		if GetHealth(redHedgehogs[i].gear) then
+			redDead = false
+			break
+		end
+	end
+	return redDead
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
@@ -306,18 +324,21 @@ function surface(gear)
 	WriteLnToConsole("surface first round")
 	previousHog = -1
 	if tookPartInBattle then
-	
+		if GetHealth(green1.gear) then
+			HideHog(green1.gear)
+		end
+		AddEvent(onRedTeamDeath, {green1.gear}, redTeamDeath, {green1.gear}, 0)
 	else
-		if GetHealth(green2.gear) then
-			HideHog(green2.gear)
-		end
-		if GetHealth(green3.gear) then
-			HideHog(green3.gear)
-		end
 		DeleteGear(green1.human)
 		RestoreHog(green1.bot)
 		green1.gear = green1.bot
 		AddEvent(onGaptainLimeDeath, {green1.gear}, captainLimeDeath, {green1.gear}, 0)
+	end
+	if GetHealth(green2.gear) then
+		HideHog(green2.gear)
+	end
+	if GetHealth(green3.gear) then
+		HideHog(green3.gear)
 	end
 	WriteLnToConsole("surface in battle")
 	inBattle = true
@@ -327,6 +348,12 @@ function captainLimeDeath(gear)
 	-- hero win in scenario of escape in 1st part
 	EndGame()
 end
+
+function redTeamDeath(gear)
+	-- hero win in battle scenario
+	EndGame()
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
