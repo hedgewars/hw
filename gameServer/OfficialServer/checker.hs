@@ -47,7 +47,7 @@ getLines h = g
 
 engineListener :: Chan Message -> Handle -> String -> IO ()
 engineListener coreChan h fileName = do
-    stats <- liftM (L.dropWhile start) $ getLines h
+    stats <- liftM (L.takeWhile (not . B.null) . L.dropWhile (not . start)) $ getLines h
     debugM "Engine" $ show stats
     if null stats then
         writeChan coreChan $ CheckFailed "No stats msg"
@@ -63,18 +63,18 @@ checkReplay :: Chan Message -> [B.ByteString] -> IO ()
 checkReplay coreChan msgs = do
     tempDir <- getTemporaryDirectory
     (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
-    B.hPut h . BW.pack . concat . map (fromJust . Base64.decode . B.unpack) $ msgs
+    B.hPut h . BW.pack . concat . map (fromMaybe [] . Base64.decode . B.unpack) $ msgs
     hFlush h
     hClose h
 
-    (_, Just hOut, _, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
+    (_, _, Just hOut, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
                 [fileName
                 , "--user-prefix", "/usr/home/unC0Rr/.hedgewars"
                 , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
                 , "--nomusic"
                 , "--nosound"
                 ])
-            {std_out = CreatePipe}
+            {std_err = CreatePipe}
     hSetBuffering hOut LineBuffering
     void $ forkIO $ engineListener coreChan hOut fileName
 
