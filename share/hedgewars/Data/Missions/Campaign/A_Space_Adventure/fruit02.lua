@@ -195,7 +195,7 @@ function onNewTurn()
 	if not inBattle and CurrentHedgehog == green1.gear then
 		TurnTimeLeft = 0
 	elseif CurrentHedgehog == green2.gear or CurrentHedgehog == green3.gear then
-			TurnTimeLeft = 0
+		TurnTimeLeft = 0
 	elseif inBattle then
 		if CurrentHedgehog == green1.gear and previousHog ~= hero.gear then
 			TurnTimeLeft = 0
@@ -425,5 +425,39 @@ function wind()
 		SetWind(-40)
 	else
 		SetWind(math.random(-100,100))
+	end
+end
+
+function saveHogsPositions()
+	local positions = ""
+	positions = GetX(hero.gear)..","..GetY(hero.gear)
+	if GetHealth(green2.gear) then
+		positions = positions..","..GetX(green2.gear)..","..GetY(green2.gear)
+	end
+	if GetHealth(green3.gear) then
+		positions = positions..","..GetX(green3.gear)..","..GetY(green3.gear)
+	end
+	SaveCampaignVar("HogsPosition", positions)
+end
+
+function loadHogsPositions()
+	local positions;
+	if GetCampaignVar("HogsPosition") then
+		positions = GetCampaignVar("HogsPosition")
+	else
+		return
+	end
+	positions = split(positions,",")
+	if positions[1] then
+		hero.x = positions[1]
+		hero.y = positions[2]
+	end
+	if positions[3] then
+		green2.x = positions[3]
+		green2.y = positions[4]
+	end
+	if positions[5] then
+		green3.x = positions[5]
+		green3.y = positions[6]
 	end
 end
