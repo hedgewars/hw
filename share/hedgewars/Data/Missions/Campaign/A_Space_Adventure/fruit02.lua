@@ -526,13 +526,17 @@ end
 
 function saveWeapons()
 	-- firepunch - gilder - deagle - watermelon - sniper
-	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirepunch)..GetAmmoCount(hero.gear, amGilder)..
+	WriteLnToConsole("SAVE WEAPONS TRIGGERED: "..GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGilder)..
+			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
+	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGilder)..
 			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
 end
 
 function loadWeapons()
 	local ammo = GetCampaignVar("HeroAmmo")
-	AddAmmo(hero.gear, amFirepunch, tonumber(ammo:sub(1,1)))
+	WriteLnToConsole("LOAD WEAPONS "..ammo)
+	WriteLnToConsole("LOAD WEAPONS "..ammo:sub(1,1))
+	AddAmmo(hero.gear, amFirePunch, tonumber(ammo:sub(1,1)))
 	AddAmmo(hero.gear, amGilder, tonumber(ammo:sub(2,2)))
 	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(3,3)))
 	AddAmmo(hero.gear, amWatermelon, tonumber(ammo:sub(4,4)))
