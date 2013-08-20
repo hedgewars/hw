@@ -82,6 +82,16 @@ function onGameInit()
 	Map = "fruit02_map"
 	Theme = "Fruit"
 	
+	-- load checkpoints, problem getting the campaign variable
+	--local h = GetCampaignVar("Desert01CheckPoint")
+	--WriteLnToCosnole("HERE "..h)
+	if GetCampaignVar("Fruit02CheckPoint") then
+		if tonumber(GetCampaignVar("Fruit02CheckPoint")) == 2 then
+			WriteLnToConsole("++++++++++++++HEEEEEEEREEEEEEEEEEEEE")
+			loadHogsPositions()
+		end
+	end
+	
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -121,6 +131,8 @@ function onGameStart()
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
+	--AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
+	--AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
 	
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amFirePunch, 3)
@@ -290,11 +302,28 @@ function onRedTeamDeath(gear)
 	return redDead
 end
 
+function onCheckPoint1(gear)
+	-- before barrel jump
+	if GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945 and GetY(hero.gear) > 808 and GetY(hero.gear) < 852 then
+		return true
+	end
+	return false
+end
+
+function onCheckPoint2(gear)
+	-- before barrel jump
+	if (GetX(green2.gear) > 2850 and GetX(green2.gear) < 2945 and GetY(green2.gear) > 808 and GetY(green2.gear) < 852)
+			or (GetX(green3.gear) > 2850 and GetX(green3.gear) < 2945 and GetY(green3.gear) > 808 and GetY(green3.gear) < 852) then
+		return true
+	end
+	return false
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to get the bottom crates and come back to the surface")) --11
+	SendStat('siCustomAchievement', loc("To win the game Hog Solo has to get the bottom crates and come back to the surface")) --11
 	SendStat('siCustomAchievement', loc("You can use the other 2 hogs to assist you")) --11
 	if tookPartInBattle then
 		SendStat('siCustomAchievement', loc("You'll have to eliminate the Strawberry Assasins at the end")) --11
@@ -359,6 +388,18 @@ function redTeamDeath(gear)
 	SendStat('siPlayerKills','1',teamA.name)
 	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
+end
+
+function checkPoint1(gear)
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
+	SaveCampaignVar("Fruit02CheckPoint", 2)
+	saveHogsPositions()
+end
+
+function checkPoint2(gear)
+	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
+	SaveCampaignVar("Fruit02CheckPoint", 2)
+	saveHogsPositions()
 end
 
 -------------- ANIMATIONS ------------------
@@ -429,7 +470,7 @@ function wind()
 end
 
 function saveHogsPositions()
-	local positions = ""
+	local positions;
 	positions = GetX(hero.gear)..","..GetY(hero.gear)
 	if GetHealth(green2.gear) then
 		positions = positions..","..GetX(green2.gear)..","..GetY(green2.gear)
@@ -441,23 +482,48 @@ function saveHogsPositions()
 end
 
 function loadHogsPositions()
+	WriteLnToConsole("load hogs positions")
 	local positions;
 	if GetCampaignVar("HogsPosition") then
 		positions = GetCampaignVar("HogsPosition")
 	else
 		return
 	end
+	WriteLnToConsole("positions : "..positions)
 	positions = split(positions,",")
+	WriteLnToConsole("--------------- "..hero.x)
 	if positions[1] then
 		hero.x = positions[1]
 		hero.y = positions[2]
 	end
 	if positions[3] then
-		green2.x = positions[3]
-		green2.y = positions[4]
+		green2.x = tonumber(positions[3])
+		green2.y = tonumber(positions[4])
 	end
 	if positions[5] then
-		green3.x = positions[5]
-		green3.y = positions[6]
+		green3.x = tonumber(positions[5])
+		green3.y = tonumber(positions[6])
 	end
+end
+
+function isHeroAtWrongPlace()
+	if GetX(hero.gear) > 1480 and GetX(hero.gear) < 1892 and GetY(hero.gear) > 1000 and GetY(hero.gear) < 1220 then
+		return true
+	end
+	return false
+end
+
+function split(s, delimiter)
+	local res = {}
+	local first = ""
+	for i=1,s:len() do
+		if s:sub(1,1) == delimiter then
+			table.insert(res, tonumber(first))
+			first = ""
+		else
+			first = first..s:sub(1,1)
+		end
+		s = s:sub(2)
+	end
+	return res
 end
