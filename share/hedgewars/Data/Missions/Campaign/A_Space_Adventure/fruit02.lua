@@ -13,6 +13,7 @@ local missionName = loc("Fruit planet, Searching the Device!")
 local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
+local checkPointReached = 1 -- 1 is normal spawn
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -82,16 +83,20 @@ function onGameInit()
 	Map = "fruit02_map"
 	Theme = "Fruit"
 	
+	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
 	-- load checkpoints, problem getting the campaign variable
 	--local h = GetCampaignVar("Desert01CheckPoint")
-	--WriteLnToCosnole("HERE "..h)
-	if GetCampaignVar("Fruit02CheckPoint") then
-		if tonumber(GetCampaignVar("Fruit02CheckPoint")) == 2 then
+	--WriteLnToCosnole("HERE "..GetCampaignVar("Fruit02CheckPoint"))
+	if tonumber(GetCampaignVar("Fruit02CheckPoint")) then
+		WriteLnToConsole("**TRUE**")
+		checkPointReached = tonumber(GetCampaignVar("Fruit02CheckPoint"))
+		if checkPointReached == 2 or checkPointReached == 3 then
 			WriteLnToConsole("++++++++++++++HEEEEEEEREEEEEEEEEEEEE")
 			loadHogsPositions()
 		end
 	end
 	
+	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -131,11 +136,8 @@ function onGameStart()
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
-	--AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
-	--AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
 	
 	-- Hog Solo and GB weapons
-	AddAmmo(hero.gear, amFirePunch, 3)
 	AddAmmo(hero.gear, amSwitch, 100)
 	AddAmmo(hero.gear, amTeleport, 100)
 	-- Captain Lime weapons
@@ -198,6 +200,18 @@ function onGameStart()
 		AddAnim(dialog01)
 	else
 		AddAnim(dialog02)
+	end
+	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
+	if checkPointReached == 1 then
+		AddAmmo(hero.gear, amFirePunch, 3)
+		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
+		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)	
+	elseif checkPointReached == 2 then
+		loadWeapons()
+		AddEvent(onCheckPoint2, {hero.gear}, checkPoint2, {hero.gear}, 0)
+	elseif checkPointReached == 3 then
+		loadWeapons()
+		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
 	end
 	
 	SendHealthStatsOff()
@@ -304,7 +318,8 @@ end
 
 function onCheckPoint1(gear)
 	-- before barrel jump
-	if GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945 and GetY(hero.gear) > 808 and GetY(hero.gear) < 852 then
+	if GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945 and GetY(hero.gear) > 808 and GetY(hero.gear) < 852
+			and	not isHeroAtWrongPlace() then
 		return true
 	end
 	return false
@@ -312,8 +327,9 @@ end
 
 function onCheckPoint2(gear)
 	-- before barrel jump
-	if (GetX(green2.gear) > 2850 and GetX(green2.gear) < 2945 and GetY(green2.gear) > 808 and GetY(green2.gear) < 852)
-			or (GetX(green3.gear) > 2850 and GetX(green3.gear) < 2945 and GetY(green3.gear) > 808 and GetY(green3.gear) < 852) then
+	if ((GetX(green2.gear) > 2850 and GetX(green2.gear) < 2945 and GetY(green2.gear) > 808 and GetY(green2.gear) < 852)
+			or (GetX(green3.gear) > 2850 and GetX(green3.gear) < 2945 and GetY(green3.gear) > 808 and GetY(green3.gear) < 852))
+			and not isHeroAtWrongPlace() then
 		return true
 	end
 	return false
@@ -394,12 +410,14 @@ function checkPoint1(gear)
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
 	SaveCampaignVar("Fruit02CheckPoint", 2)
 	saveHogsPositions()
+	saveWeapons()
 end
 
 function checkPoint2(gear)
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
-	SaveCampaignVar("Fruit02CheckPoint", 2)
+	SaveCampaignVar("Fruit02CheckPoint", 3)
 	saveHogsPositions()
+	saveWeapons()
 end
 
 -------------- ANIMATIONS ------------------
@@ -506,6 +524,21 @@ function loadHogsPositions()
 	end
 end
 
+function saveWeapons()
+	-- firepunch - gilder - deagle - watermelon - sniper
+	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirepunch)..GetAmmoCount(hero.gear, amGilder)..
+			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
+end
+
+function loadWeapons()
+	local ammo = GetCampaignVar("HeroAmmo")
+	AddAmmo(hero.gear, amFirepunch, tonumber(ammo:sub(1,1)))
+	AddAmmo(hero.gear, amGilder, tonumber(ammo:sub(2,2)))
+	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(3,3)))
+	AddAmmo(hero.gear, amWatermelon, tonumber(ammo:sub(4,4)))
+	AddAmmo(hero.gear, amSniperRifle, tonumber(ammo:sub(5,5)))
+end
+
 function isHeroAtWrongPlace()
 	if GetX(hero.gear) > 1480 and GetX(hero.gear) < 1892 and GetY(hero.gear) > 1000 and GetY(hero.gear) < 1220 then
 		return true
@@ -513,6 +546,7 @@ function isHeroAtWrongPlace()
 	return false
 end
 
+-- splits number by delimiter
 function split(s, delimiter)
 	local res = {}
 	local first = ""
