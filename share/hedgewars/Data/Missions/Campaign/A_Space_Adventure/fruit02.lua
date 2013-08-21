@@ -81,20 +81,16 @@ function onGameInit()
 	Map = "fruit02_map"
 	Theme = "Fruit"
 	
-	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
 	-- load checkpoints, problem getting the campaign variable
 	local health = 100
 	if tonumber(GetCampaignVar("Fruit02CheckPoint")) then
-		WriteLnToConsole("**TRUE**")
 		checkPointReached = tonumber(GetCampaignVar("Fruit02CheckPoint"))
 		if checkPointReached ~= 1 then
-			WriteLnToConsole("++++++++++++++HEEEEEEEREEEEEEEEEEEEE")
 			loadHogsPositions()
 			health = tonumber(GetCampaignVar("HeroHealth"))
 		end
 	end
 	
-	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
@@ -137,7 +133,6 @@ function onGameStart()
 	
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amSwitch, 100)
-	AddAmmo(hero.gear, amTeleport, 100)
 	-- Captain Lime weapons
 	AddAmmo(green1.bot, amBazooka, 6)
 	AddAmmo(green1.bot, amGrenade, 6)
@@ -184,7 +179,6 @@ function onGameStart()
 	AddGear(3085, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)	
 
-	WriteLnToConsole("CHECKPOINT IS "..checkPointReached)
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amFirePunch, 3)
 		AddEvent(onCheckPoint1, {hero.gear}, checkPoint1, {hero.gear}, 0)
@@ -541,16 +535,13 @@ function saveHogsPositions()
 end
 
 function loadHogsPositions()
-	WriteLnToConsole("load hogs positions")
 	local positions;
 	if GetCampaignVar("HogsPosition") then
 		positions = GetCampaignVar("HogsPosition")
 	else
 		return
 	end
-	WriteLnToConsole("positions : "..positions)
 	positions = split(positions,",")
-	WriteLnToConsole("--------------- "..hero.x)
 	if positions[1] then
 		hero.x = positions[1]
 		hero.y = positions[2]
@@ -562,21 +553,17 @@ function loadHogsPositions()
 	if positions[5] then
 		green3.x = tonumber(positions[5])
 		green3.y = tonumber(positions[6])
-		WriteLnToConsole("---------"..green3.y)
 	end
 end
 
 function saveWeapons()
 	-- firepunch - gilder - deagle - watermelon - sniper
-	WriteLnToConsole("SAVE WEAPONS TRIGGERED: "..GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGilder)..
-			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amFirePunch)..GetAmmoCount(hero.gear, amGirder)..
 			GetAmmoCount(hero.gear, amDEagle)..GetAmmoCount(hero.gear, amWatermelon)..GetAmmoCount(hero.gear, amSniperRifle))
 end
 
 function loadWeapons()
 	local ammo = GetCampaignVar("HeroAmmo")
-	WriteLnToConsole("GILDER "..tonumber(ammo:sub(2,2)))
 	AddAmmo(hero.gear, amFirePunch, tonumber(ammo:sub(1,1)))
 	AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(2,2)))
 	AddAmmo(hero.gear, amDEagle, tonumber(ammo:sub(3,3)))
