@@ -185,3 +185,40 @@ function onGearDelete(gear)
 		professor.dead = true
 	end
 end
+
+function onPrecise()
+	if GameTime > 3000 then
+		SetAnimSkip(true)   
+	end
+end
+
+-------------- EVENTS ------------------
+
+function onHeroDeath(gear)
+	if hero.dead then
+		return true
+	end
+	return false
+end
+
+-------------- ACTIONS ------------------
+
+function heroDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("To win the game you have to eliminate your enemies")) --11
+	SendStat('siPlayerKills','1',teamC.name)
+	SendStat('siPlayerKills','0',teamA.name)
+	EndGame()
+end
+
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+end
+
+function AnimationSetup()
+	-- TODO ADD DIALOGS
+end
