@@ -1,0 +1,187 @@
+------------------- ABOUT ----------------------
+--
+-- This is the mission to acquire the last part.
+-- This mission is the cameo of Professor Hogevil
+-- who has took hostages H and Dr. Cornelius.
+-- Hog Solo has to defeat him and his thugs.
+
+HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Animate.lua")
+
+----------------- VARIABLES --------------------
+-- globals
+local campaignName = loc("A Space Adventure")
+local missionName = loc("Desert planet, lost in sand!")
+-- dialogs
+-- missions objectives
+-- crates
+local portalCrate = {x = 1520, y = 1950}
+local cakeCrate = {x = 325, y = 1500}
+-- hogs
+local hero = {}
+local paoth1 = {}
+local paoth2 = {}
+local professor = {}
+local thug1 = {}
+local thug2 = {}
+local thug3 = {}
+local thug4 = {}
+local thug5 = {}
+local thug6 = {}
+local thug7 = {}
+local thugs = { thug1, thug2, thug3, thug4, thug5, thug6, thug7 }
+-- teams
+local teamA = {}
+local teamB = {}
+local teamC = {}
+-- hedgehogs values
+hero.name = "Hog Solo"
+hero.x = 520
+hero.y = 845
+hero.dead = false
+paoth1.name = "H"
+paoth1.x = 3730
+paoth1.y = 1480
+paoth2.name = "Dr. Cornelius"
+paoth2.x = 3800
+paoth2.y = 1480
+professor.name = "Prof. Hogevil"
+professor.x = 3630
+professor.y = 1480
+professor.dead = false
+thug1.x = 1265
+thug1.y = 1400
+thug1.health = 100
+thug2.x = 2035
+thug2.y = 1320
+thug2.health = 100
+thug3.x = 1980
+thug3.y = 815
+thug3.health = 35
+thug3.turnLeft = true
+thug4.x = 2830
+thug4.y = 1960
+thug4.health = 80
+thug5.x = 2890
+thug5.y = 1960
+thug5.health = 80
+thug6.x = 2940
+thug6.y = 1960
+thug6.health = 80
+thug7.x = 2990
+thug7.y = 1960
+thug7.health = 80
+teamA.name = loc("Hog Solo")
+teamA.color = tonumber("38D61C",16) -- green
+teamB.name = loc("PAotH")
+teamB.color = tonumber("FF0000",16) -- red
+teamC.name = loc("Professor")
+teamC.color = tonumber("0033FF",16) -- blue
+
+-------------- LuaAPI EVENT HANDLERS ------------------
+
+function onGameInit()
+	Seed = 1
+	TurnTime = 25000
+	CaseFreq = 0
+	MinesNum = 3
+	MinesTime = 1500
+	Explosives = 2
+	Delay = 3
+	SuddenDeathTurns = 100
+	Map = "death01_map"
+	Theme = "Hell"
+	
+	-- Hog Solo
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(hero.gear, hero.x, hero.y)
+	-- PAotH
+	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	paoth1.gear = AddHog(paoth1.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
+	HogTurnLeft(paoth1.gear, true)
+	paoth2.gear = AddHog(paoth2.name, 0, 100, "war_desertgrenadier1")
+	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
+	HogTurnLeft(paoth2.gear, true)
+	-- Professor and Thugs
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	professor.gear = AddHog(professor.name, 0, 300, "war_desertgrenadier1")
+	AnimSetGearPosition(professor.gear, professor.x, professor.y)
+	HogTurnLeft(professor.gear, true)
+	for i=1,table.getn(thugs) do
+		thugs[i].gear = AddHog("thug #"..i, 1, thugs[i].health, "war_desertgrenadier1")
+		AnimSetGearPosition(thugs[i].gear, thugs[i].x, thugs[i].y)
+		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
+	end
+	
+	AnimInit()
+	--AnimationSetup()
+end
+
+function onGameStart()
+	AnimWait(hero.gear, 3000)
+	FollowGear(hero.gear)
+	
+	-- add crates
+	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
+	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
+	-- add explosives
+	AddGear(1900, 850, gtExplosives, 0, 0, 0, 0)
+	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
+	AddGear(1900, 750, gtExplosives, 0, 0, 0, 0)
+	AddGear(1900, 710, gtExplosives, 0, 0, 0, 0)
+	-- add mines
+	AddGear(3520, 1650, gtMine, 0, 0, 0, 0)
+	AddGear(3480, 1680, gtMine, 0, 0, 0, 0)
+	AddGear(3440, 1690, gtMine, 0, 0, 0, 0)
+	AddGear(3400, 1710, gtMine, 0, 0, 0, 0)
+	-- add girders
+	PlaceGirder(3770, 1370, 4)
+	PlaceGirder(3700, 1460, 6)
+	PlaceGirder(3840, 1460, 6)
+	
+	-- add ammo
+	-- hero ammo
+	AddAmmo(hero.gear, amRope, 2)
+	AddAmmo(hero.gear, amBazooka, 3)
+	AddAmmo(hero.gear, amParachute, 1)
+	AddAmmo(hero.gear, amGrenade, 6)
+	AddAmmo(hero.gear, amDEagle, 4)
+	-- evil ammo
+	AddAmmo(professor.gear, amRope, 4)
+	AddAmmo(professor.gear, amBazooka, 8)
+	AddAmmo(professor.gear, amSwitch, 100)
+	AddAmmo(professor.gear, amGrenade, 8)
+	AddAmmo(professor.gear, amDEagle, 8)
+	
+	SendHealthStatsOff()
+end
+
+function onNewTurn()
+	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
+		TurnTimeLeft = 0
+	end
+end
+
+function onGameTick()
+	AnimUnWait()
+	if ShowAnimation() == false then
+		return
+	end
+	ExecuteAfterAnimations()
+	CheckEvents()
+end
+
+function onAmmoStoreInit()
+	SetAmmo(amCake, 0, 0, 0, 1)
+	SetAmmo(amPortalGun, 0, 0, 0, 1)
+end
+
+function onGearDelete(gear)
+	if gear == hero.gear then
+		hero.dead = true
+	elseif gear == professor.gear then
+		professor.dead = true
+	end
+end
