@@ -11,9 +11,13 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local campaignName = loc("A Space Adventure")
-local missionName = loc("Desert planet, lost in sand!")
+local missionName = loc("Death planet")
 -- dialogs
+local dialog01 = {}
 -- missions objectives
+local goals = {
+	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!"), 1, 4500},
+}
 -- crates
 local portalCrate = {x = 1520, y = 1950}
 local cakeCrate = {x = 325, y = 1500}
@@ -122,7 +126,7 @@ function onGameInit()
 	end
 	
 	AnimInit()
-	--AnimationSetup()
+	AnimationSetup()
 end
 
 function onGameStart()
@@ -166,8 +170,10 @@ function onGameStart()
 	AddAmmo(professor.gear, amDEagle, 8)
 	
 	HideHog(professor.bot)
-	DeleteGear(professor.human)
+	--DeleteGear(professor.human)
 	--RestoreHog(professor.bot)
+	AddAnim(dialog01)
+	
 	SendHealthStatsOff()
 end
 
@@ -255,9 +261,31 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
+    startBattle()
 end
 
 function AnimationSetup()
-	-- TODO ADD DIALOGS
-	
+	-- DIALOG01, GAME START, INTRODUCTION
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Death Planet, where no other hog lives..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome HogSolo, surpised to see me?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, now I got the last part and I have your friends captured..."), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, will you give me the other parts?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = AnimWait, args = {professor.human, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = startBattle, args = {}})	
+end
+
+-------------- OTHER FUNCTIONS -----------------
+
+function startBattle()
+	DeleteGear(professor.human)
+	RestoreHog(professor.bot)
+	AnimSwitchHog(professor.gear)
+	TurnTimeLeft = 0
 end
