@@ -46,8 +46,8 @@ paoth2.name = "Dr. Cornelius"
 paoth2.x = 3800
 paoth2.y = 1480
 professor.name = "Prof. Hogevil"
-professor.x = 3630
-professor.y = 1480
+--professor.x = 3630
+--professor.y = 1480
 professor.dead = false
 thug1.x = 1265
 thug1.y = 1400
@@ -88,6 +88,7 @@ function onGameInit()
 	MinesTime = 1500
 	Explosives = 2
 	Delay = 3
+	HealthCaseAmount = 50
 	SuddenDeathTurns = 100
 	Map = "death01_map"
 	Theme = "Hell"
@@ -104,11 +105,16 @@ function onGameInit()
 	paoth2.gear = AddHog(paoth2.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
-	-- Professor and Thugs
+	-- Professor and Thugs	
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.gear = AddHog(professor.name, 0, 300, "war_desertgrenadier1")
-	AnimSetGearPosition(professor.gear, professor.x, professor.y)
-	HogTurnLeft(professor.gear, true)
+	professor.human = AddHog(professor.name, 0, 300, "war_desertgrenadier1")
+	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
+	HogTurnLeft(professor.human, true)
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
+	professor.bot = AddHog(professor.name, 1, 300, "war_desertgrenadier1")
+	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
+	HogTurnLeft(professor.bot, true)
+	professor.gear = professor.bot
 	for i=1,table.getn(thugs) do
 		thugs[i].gear = AddHog("thug #"..i, 1, thugs[i].health, "war_desertgrenadier1")
 		AnimSetGearPosition(thugs[i].gear, thugs[i].x, thugs[i].y)
@@ -129,6 +135,7 @@ function onGameStart()
 	-- add crates
 	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
+	SpawnHealthCrate(cakeCrate.x + 40, cakeCrate.y)
 	-- add explosives
 	AddGear(1900, 850, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
@@ -158,6 +165,9 @@ function onGameStart()
 	AddAmmo(professor.gear, amGrenade, 8)
 	AddAmmo(professor.gear, amDEagle, 8)
 	
+	HideHog(professor.bot)
+	DeleteGear(professor.human)
+	--RestoreHog(professor.bot)
 	SendHealthStatsOff()
 end
 
