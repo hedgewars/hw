@@ -123,6 +123,9 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onEnemiesDeath, {hero.gear}, enemiesDeath, {hero.gear}, 0)
+	
 	-- add crates
 	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
@@ -201,6 +204,21 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onEnemiesDeath(gear)
+	local allDead = true
+	if professor.dead then
+		for i=1,table.getn(thugs) do
+			if GetHealth(thugs[i]) then
+				allDead = false
+				break
+			end
+		end
+	else
+		allDead = false
+	end
+	return allDead
+end
+
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
@@ -208,6 +226,16 @@ function heroDeath(gear)
 	SendStat('siCustomAchievement', loc("To win the game you have to eliminate your enemies")) --11
 	SendStat('siPlayerKills','1',teamC.name)
 	SendStat('siPlayerKills','0',teamA.name)
+	EndGame()
+end
+
+function enemiesDeath(gear)
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
+	SendStat('siCustomAchievement', loc("You have successfuly eliminated Professor Hogevil")) --11
+	SendStat('siCustomAchievement', loc("You have rescued H and Dr. Cornelius")) --11
+	SendStat('siCustomAchievement', loc("You have acquired the device")) --11
+	SendStat('siPlayerKills','1',teamA.name)
+	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
 end
 
@@ -221,4 +249,5 @@ end
 
 function AnimationSetup()
 	-- TODO ADD DIALOGS
+	
 end
