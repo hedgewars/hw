@@ -31,6 +31,7 @@ local reached = false
 
 -- hog with best time
 local besthog = nil
+local besthogteam = ""
 
 -- hog with worst time (per round)
 local worsthog = nil
@@ -112,6 +113,7 @@ function onGameTick20()
 			if ttime < besttime then
 				besttime = ttime
 				besthog = CurrentHedgehog
+                besthogteam = GetHogTeamName(besthog)
 				hscore = hscore .. loc("NEW fastest lap: ")
 			else
 				hscore = hscore .. loc("Fastest lap: ")
@@ -165,6 +167,6 @@ end
 
 function onAchievementsDeclaration()
     if besthog ~= nil then
-      DeclareAchievement("rope race", GetHogTeamName(besthog), "TrophyRace", besttime)
+      DeclareAchievement("rope race", besthogteam, "TrophyRace", besttime)
     end
 end
