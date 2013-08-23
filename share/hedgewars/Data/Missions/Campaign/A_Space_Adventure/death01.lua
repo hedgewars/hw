@@ -21,6 +21,8 @@ local goals = {
 -- crates
 local portalCrate = {x = 1520, y = 1950}
 local cakeCrate = {x = 325, y = 1500}
+local ropeCrate = {x = 1860, y = 500}
+local pickHammerCrate = {x = 1860, y = 400}
 -- hogs
 local hero = {}
 local paoth1 = {}
@@ -46,7 +48,7 @@ hero.dead = false
 paoth1.name = "H"
 paoth1.x = 3730
 paoth1.y = 1480
-paoth2.name = "Dr. Cornelius"
+paoth2.name = "Dr.Cornelius"
 paoth2.x = 3800
 paoth2.y = 1480
 professor.name = "Prof. Hogevil"
@@ -78,7 +80,7 @@ thug7.health = 80
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green
 teamB.name = loc("PAotH")
-teamB.color = tonumber("FF0000",16) -- red
+teamB.color = tonumber("0033FF",16) -- blue because otherwise enemies attack them
 teamC.name = loc("Professor")
 teamC.color = tonumber("0033FF",16) -- blue
 
@@ -103,19 +105,19 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- PAotH
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	paoth1.gear = AddHog(paoth1.name, 0, 100, "war_desertgrenadier1")
+	paoth1.gear = AddHog(paoth1.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
 	HogTurnLeft(paoth1.gear, true)
-	paoth2.gear = AddHog(paoth2.name, 0, 100, "war_desertgrenadier1")
+	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
 	-- Professor and Thugs	
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.human = AddHog(professor.name, 0, 300, "war_desertgrenadier1")
+	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
 	HogTurnLeft(professor.human, true)
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	professor.bot = AddHog(professor.name, 1, 300, "war_desertgrenadier1")
+	professor.bot = AddHog(professor.name, 1, 300, "tophats")
 	AnimSetGearPosition(professor.bot, paoth1.x - 100, paoth1.y)
 	HogTurnLeft(professor.bot, true)
 	professor.gear = professor.bot
@@ -139,7 +141,10 @@ function onGameStart()
 	-- add crates
 	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
+	SpawnAmmoCrate(ropeCrate.x, ropeCrate.y, amRope)
+	SpawnAmmoCrate(pickHammerCrate.x, pickHammerCrate.y, amPickHammer)
 	SpawnHealthCrate(cakeCrate.x + 40, cakeCrate.y)
+	SpawnHealthCrate(portalCrate.x + 40, portalCrate.y)
 	-- add explosives
 	AddGear(1900, 850, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
@@ -170,8 +175,6 @@ function onGameStart()
 	AddAmmo(professor.gear, amDEagle, 8)
 	
 	HideHog(professor.bot)
-	--DeleteGear(professor.human)
-	--RestoreHog(professor.bot)
 	AddAnim(dialog01)
 	
 	SendHealthStatsOff()
@@ -179,6 +182,7 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear then
+		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	end
 end
@@ -195,6 +199,8 @@ end
 function onAmmoStoreInit()
 	SetAmmo(amCake, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
+	SetAmmo(amRope, 0, 0, 0, 2)
+	SetAmmo(amPickHammer, 0, 0, 0, 1)
 end
 
 function onGearDelete(gear)
