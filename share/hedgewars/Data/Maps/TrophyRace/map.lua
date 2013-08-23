@@ -165,6 +165,6 @@ end
 
 function onAchievementsDeclaration()
     if besthog ~= nil then
-      DeclareAchievement("rope race", GetHogTeamName(besthog), besttime)
+      DeclareAchievement("rope race", GetHogTeamName(besthog), "TrophyRace", besttime)
     end
 end
