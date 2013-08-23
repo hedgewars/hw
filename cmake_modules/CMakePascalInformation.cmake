@@ -8,7 +8,6 @@ set(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
 include(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
 # This section should actually be in Platform/${CMAKE_SYSTME_NAME}-fpc.cmake
-set(CMAKE_Pascal_FLAGS_INIT "-l- -v0ewn")
 set(CMAKE_Pascal_FLAGS_DEBUG_INIT "-g -gl -gp -gh")
 set(CMAKE_Pascal_FLAGS_MINSIZEREL_INIT "-Os -dNDEBUG")
 set(CMAKE_Pascal_FLAGS_RELEASE_INIT "-O3 -dNDEBUG")
@@ -103,7 +102,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
-set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT} ${CMAKE_Pascal_FLAGS}" CACHE STRING "Flags for Pascal compiler." FORCE)
+#set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT} ${CMAKE_Pascal_FLAGS}" CACHE STRING "Flags for Pascal compiler." FORCE)
 
 include(CMakeCommonLanguageInclude)
 
