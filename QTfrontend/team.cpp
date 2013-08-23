@@ -276,17 +276,6 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth, GameUIConfig * config) co
     sl.push_back(QString("evoicepack " + m_voicepack));
     sl.push_back(QString("eflag " + m_flag));
 
-    if (!m_isNetTeam)
-    {
-        for(int i = 0; i < BINDS_NUMBER; i++)
-        {
-            if(m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default")
-                sl.push_back(QString("ebind " + config->bind(i) + " " + m_binds[i].action));
-            else
-                sl.push_back(QString("ebind " + m_binds[i].strbind + " " + m_binds[i].action));
-        }
-    }
-
     for (int t = 0; t < m_numHedgehogs; t++)
     {
         sl.push_back(QString("eaddhh %1 %2 %3")
