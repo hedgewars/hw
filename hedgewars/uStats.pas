@@ -35,7 +35,7 @@ procedure Skipped;
 procedure TurnReaction;
 procedure SendStats;
 procedure hedgehogFlight(Gear: PGear; time: Longword);
-procedure declareAchievement(id, teamname: shortstring; value: LongInt);
+procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
 
 implementation
 uses uSound, uLocale, uVariables, uUtils, uIO, uCaptions, uDebug, uMisc, uConsole, uScript;
@@ -311,12 +311,13 @@ if SendHealthStatsOn then
     ScriptCall('onAchievementsDeclaration');
 end;
 
-procedure declareAchievement(id, teamname: shortstring; value: LongInt);
+procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
 begin
     if (length(id) = 0) or (length(teamname) = 0) then exit;
     WriteLnToConsole('ACHIEVEMENT');
     WriteLnToConsole(id);
     WriteLnToConsole(teamname);
+    WriteLnToConsole(location);
     WriteLnToConsole(inttostr(value));
 end;
 

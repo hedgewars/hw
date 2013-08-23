@@ -9,8 +9,11 @@ import System.IO
 import Data.Maybe
 import Database.HDBC
 import Database.HDBC.MySQL
+import Data.List (lookup)
+import qualified Data.ByteString.Char8 as B
 --------------------------
 import CoreTypes
+import Utils
 
 
 dbQueryAccount =
@@ -18,6 +21,11 @@ dbQueryAccount =
 
 dbQueryStats =
     "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
+
+dbQueryAchievement =
+    "INSERT INTO achievements (typeid, userid, value, filename, location) \
+    \ VALUES ((SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
+    \ ?, ?, ?)"
 
 dbInteractionLoop dbConn = forever $ do
     q <- liftM read getLine
@@ -45,9 +53,22 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
+--StoreAchievements (B.pack fileName) (map toPair teams) info
+        StoreAchievements fileName teams info -> 
+            mapM_ (run dbConn dbQueryAchievement) $ (parseStats fileName teams) info
 
-        StoreAchievements {} -> return ()
-
+parseStats :: B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
+parseStats fileName teams = ps
+    where
+    ps ("DRAW" : bs) = ps bs
+    ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
+    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
+        [SqlByteString typ
+        , SqlByteString $ fromMaybe "" (lookup teamname teams)
+        , SqlInt32 (readInt_ value)
+        , SqlByteString fileName
+        , SqlByteString location
+        ] : ps bs
 
 dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
