@@ -312,8 +312,8 @@ if SendHealthStatsOn then
 end;
 
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
-begin
-    if (length(id) = 0) or (length(teamname) = 0) then exit;
+begin 
+if (length(id) = 0) or (length(teamname) = 0) or (length(location) = 0) then exit;
     WriteLnToConsole('ACHIEVEMENT');
     WriteLnToConsole(id);
     WriteLnToConsole(teamname);
