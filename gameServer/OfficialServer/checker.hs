@@ -24,6 +24,12 @@ import qualified Data.List as L
 import System.Posix
 #endif
 
+readInt_ :: (Num a) => B.ByteString -> a
+readInt_ str =
+  case B.readInt str of
+       Just (i, t) | B.null t -> fromIntegral i
+       _                      -> 0 
+
 data Message = Packet [B.ByteString]
              | CheckFailed B.ByteString
              | CheckSuccess [B.ByteString]
@@ -47,7 +53,7 @@ getLines h = g
 
 engineListener :: Chan Message -> Handle -> String -> IO ()
 engineListener coreChan h fileName = do
-    stats <- liftM (L.takeWhile (not . B.null) . L.dropWhile (not . start)) $ getLines h
+    stats <- liftM (ps . L.dropWhile (not . start)) $ getLines h
     debugM "Engine" $ show stats
     if null stats then
         writeChan coreChan $ CheckFailed "No stats msg"
@@ -57,7 +63,11 @@ engineListener coreChan h fileName = do
     removeFile fileName
     where
         start = flip L.elem ["WINNERS", "DRAW"]
-
+        ps ("DRAW" : bs) = "DRAW" : ps bs
+        ps ("WINNERS" : n : bs) = let c = readInt_ n in "WINNERS" : n : take c bs ++ (ps $ drop c bs)
+        ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
+            "ACHIEVEMENT" : typ : teamname : location : value : ps bs
+        ps _ = []
 
 checkReplay :: Chan Message -> [B.ByteString] -> IO ()
 checkReplay coreChan msgs = do
@@ -155,7 +165,7 @@ main = withSocketsDo $ do
 #endif
 
     updateGlobalLogger "Core" (setLevel DEBUG)
-    updateGlobalLogger "Network" (setLevel DEBUG)
+    updateGlobalLogger "Network" (setLevel WARNING)
     updateGlobalLogger "Check" (setLevel DEBUG)
     updateGlobalLogger "Engine" (setLevel DEBUG)
 
