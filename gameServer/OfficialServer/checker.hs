@@ -73,6 +73,7 @@ checkReplay coreChan msgs = do
                 , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
                 , "--nomusic"
                 , "--nosound"
+                , "--stats-only"
                 ])
             {std_err = CreatePipe}
     hSetBuffering hOut LineBuffering
