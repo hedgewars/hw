@@ -186,6 +186,9 @@ function onGameStart()
 	if GetCampaignVar("Planet") ~= "icePlanet" then
 		AddEvent(onIcePlanetLanding, {hero.gear}, icePlanetLanding, {hero.gear}, 0)
 	end
+	if GetCampaignVar("Planet") ~= "deathPlanet" then
+		AddEvent(onDeathPlanetLanding, {hero.gear}, deathPlanetLanding, {hero.gear}, 0)
+	end
 end
 
 function onGameTick()
@@ -279,6 +282,13 @@ function onIcePlanetLanding(gear)
 	return false
 end
 
+function onDeathPlanetLanding(gear)
+	if GetHealth(hero.gear) and GetX(gear) > 310 and GetX(gear) < 675  and GetY(gear) < 400 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
 function onNoFuelAtLand(gear)
 	if GetHealth(hero.gear) and GetY(gear) > 1400 and GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
 		return true
@@ -367,6 +377,19 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
+		EndGame()
+	end
+end
+
+function deathPlanetLanding(gear)
+	if checkPointReached < 5 then
+		AddAnim(dialog06)
+	else
+		AnimCaption(hero.gear,loc("Welcome to the Death Planet!"))
+		SaveCampaignVar("Planet", "deathPlanet")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "9")
+		SaveCampaignVar("Mission2", "1")
 		EndGame()
 	end
 end
