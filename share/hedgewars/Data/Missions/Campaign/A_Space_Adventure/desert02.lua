@@ -8,8 +8,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Desert planet, Journey down below!")
+local missionName = loc("Running for survival")
 local startChallenge = false
 -- dialogs
 local dialog01 = {}
@@ -26,7 +25,7 @@ local hero = {}
 -- teams
 local teamA = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 1600
 hero.y = 1950
 hero.dead = false
@@ -146,7 +145,7 @@ function heroDeath(gear)
 end
 
 function heroSafe(gear)
-	SendStat('siGameResult', loc("Congratulations, you escaped!")) --1
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You have escaped successfully")) --11
 	SendStat('siCustomAchievement', loc("Your escape took you "..TotalRounds.." turns")) --11
 	SendStat('siPlayerKills','1',teamA.name)

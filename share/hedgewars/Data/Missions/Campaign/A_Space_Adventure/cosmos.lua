@@ -18,8 +18,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Cosmos")
+local missionName = loc("Spacetrip")
 local timeForGuard1ToTurn = 1000 * 5 -- 5 sec
 local timeForGuard1ToTurnLeft = timeForGuard1ToTurn
 local saucerAcquired = false
@@ -33,9 +32,9 @@ local dialog05 = {}
 local dialog06 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate on top of the column").."|"..loc("Use the sleep gas bomb if the guards spot you!"), 1, 4500},
-	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Drive carefully as your fuels are limited"), 1, 4500},
-	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away or use the gas bomb to neutralize the guards").."|"..loc("Beware, any damage taken will stay until you take some medicine or visit moon"), 1, 7000}
+	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
+	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuels are limited"), 1, 4500},
+	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon mission"), 1, 7000}
 }
 -- crates
 local saucerX = 3270
@@ -141,7 +140,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 
 	FollowGear(hero.gear)
-	ShowMission(loc("A Space Adventure"), loc("Cosmos"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
+	ShowMission(loc("Spacetrip"), loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
 	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), -amSkip, 0)
 	
 	-- do checkpoint stuff needed after game starts
@@ -306,7 +305,7 @@ end
 -------------- OUTCOMES ------------------
 
 function heroBeforeTreePosition(gear)
-	AnimSay(gear,loc("Now I have to climb the trees"), SAY_SAY, 4000)
+	AnimSay(gear,loc("Now I have to climb these trees"), SAY_SAY, 4000)
 	AnimCaption(hero.gear, loc("Use the rope to get to the crate"),  4000)
 end
 
@@ -344,7 +343,7 @@ function fruitPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
 	else		
-		AnimCaption(hero.gear,loc("Welcome to the fruit planet!"))
+		AnimCaption(hero.gear,loc("Welcome to the Fruit Planet!"))
 		SaveCampaignVar("Planet", "fruitPlanet")
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "3")
@@ -357,7 +356,7 @@ function desertPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
 	else		
-		AnimCaption(hero.gear,loc("Welcome to the desert planet!"))
+		AnimCaption(hero.gear,loc("Welcome to the Desert Planet!"))
 		SaveCampaignVar("Planet", "desertPlanet")
 		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "4")
@@ -371,7 +370,7 @@ function icePlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
 	else
-		AnimCaption(hero.gear,loc("Welcome to the planet of ice!"))
+		AnimCaption(hero.gear,loc("Welcome to the Planet of Ice!"))
 		SaveCampaignVar("Planet", "icePlanet")
 		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "5")
@@ -421,18 +420,17 @@ function AnimationSetup()
 	-- DIALOG 01 - Start
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {doctor.gear, 3000}})
-	--table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2500}, skipFunc = Skipanim, skipArgs = dialog01})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near secret base 17 of PAoTH in the rural Hogland..."),  4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near secret base 17 of PAotH in the rural Hogland..."),  4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are..."), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the East there is secret base 17"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("You have to continue alone from now on."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Be careful, the future of Hogera is in your hands!"), SAY_SAY, 7200}})
 	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("We'll use our communicators to contact you"), SAY_SAY, 2600}})
-	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("In am also entrusting you with a rope and a sleep gas bomb"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("You may find them handy"), SAY_SAY, 2300}})
+	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("In am also entrusting you with some rope"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("You may find it handy"), SAY_SAY, 2300}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you Dr.Cornelius"), SAY_SAY, 1600}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I'll make good use of them"), SAY_SAY, 4500}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("It would be wiser to steal the space ship while PAoTH guards are taking a brake!"), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I'll make good use of it"), SAY_SAY, 4500}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("It would be wiser to steal the space ship while PAotH guards are taking a brake!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Remember! Many will seek the anti-gravity device! Now go, hurry up!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - Hero got the saucer
@@ -441,12 +439,12 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("CheckPoint reached!"),  4000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Got the saucer!"), SAY_SHOUT, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Nice!"), SAY_SHOUT, 1000}})
-	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Now use it and go to the moon PAoTH station to get more fuels!"), SAY_SHOUT, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Now use it and go to the moon PAotH station to get more fuels!"), SAY_SHOUT, 5000}})
     table.insert(dialog02, {func = AnimGearWait, args = {hero.gear, 500}})
     -- DIALOG 03 - Hero got spotted by guard
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {guard1.gear, 4000}})
-	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to battle or flee!"),  4000}})	
+	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"),  4000}})	
 	table.insert(dialog03, {func = AnimSay, args = {guard1.gear, loc("Hey").." "..guard2.name.."! "..loc("Look, someone is stealing the saucer!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard2.gear, loc("I'll get him!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = startCombat, args = {guard1.gear}})

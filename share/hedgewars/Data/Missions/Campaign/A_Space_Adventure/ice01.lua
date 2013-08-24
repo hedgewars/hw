@@ -14,8 +14,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Ice planet, a frozen adventure!")
+local missionName = loc("A frozen adventure")
 local heroAtAntiFlyArea = false
 local heroVisitedAntiFlyArea = false
 local heroAtFinalStep = false
@@ -44,31 +43,31 @@ local teamA = {}
 local teamB = {}
 local teamC = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 340
 hero.y = 1840
 hero.dead = false
-ally.name = "Paul McHoggy"
+ally.name = loc("Paul McHoggy")
 ally.x = 300
 ally.y = 1840
-bandit1.name = "Thanta"
+bandit1.name = loc("Thanta")
 bandit1.x = 3240
 bandit1.y = 1280
 bandit1.dead = false
 bandit1.frozen = false
 bandit1.roundsToUnfreeze = 0
-bandit2.name = "Billy Frost"
+bandit2.name = loc("Billy Frost")
 bandit2.x = 1480
 bandit2.y = 1990
-bandit3.name = "Ice Jake"
+bandit3.name = loc("Ice Jake")
 bandit3.x = 1860
 bandit3.y = 1150
-bandit4.name = "John Snow"
+bandit4.name = loc("John Snow")
 bandit4.x = 3200
 bandit4.y = 970
 bandit4.frozen = false
 bandit4.roundsToUnfreeze = 0
-bandit5.name = "White Tee"
+bandit5.name = loc("White Tee")
 bandit5.x = 3280
 bandit5.y = 600
 bandit5.frozen = false
@@ -472,13 +471,13 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, welcome to moon
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the ice planet, where ice rules..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet, where ice rules..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finaly you are here..."), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Hi! Nice to meet you"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefuly! The bandit leader, Thanta has recently found a very strange device"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("He doesn't know it but this device is a part of the antigravity device"), SAY_SAY, 2500}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefuly! The bandit leader, Thanta, has recently found a very strange device"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("He doesn't know it but this device is a part of the anti-gravity device"), SAY_SAY, 2500}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 8000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Nice, then I should get the part as soon as possible!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 4000}})

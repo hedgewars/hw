@@ -21,7 +21,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local campaignName = loc("A Space Adventure")
-local missionName = loc("Moon, stop for fuels!")
+local missionName = loc("The first stop")
 local weaponsAcquired = false
 local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
@@ -33,7 +33,7 @@ local dialog04 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go to the upper platform and get the weapons in the crates!"), 1, 4500},
-	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAoTH hogs!"), 1, 5000},
+	[dialog02] = {missionName, loc("Prepare to fight"), loc("Go down and save these PAotH hogs!"), 1, 5000},
 	[dialog03] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000},
 	[dialog04] = {missionName, loc("The fight begins!"), loc("Neutralize your enemies and be careful!"), 1, 5000}
 }
@@ -60,34 +60,34 @@ local teamB = {}
 local teamC = {}
 local teamD = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 1380
 hero.y = 1750
 hero.dead = false
-paoth1.name = "Joe"
+paoth1.name = loc("Joe")
 paoth1.x = 1430
 paoth1.y = 1750
-paoth2.name = "Bruce"
+paoth2.name = loc("Bruce")
 paoth2.x = 3760
 paoth2.y = 1800
-paoth3.name = "Helena"
+paoth3.name = loc("Helena")
 paoth3.x = 3800
 paoth3.y = 1800
-paoth4.name = "Boris"
+paoth4.name = loc("Boris")
 paoth4.x = 3860
 paoth4.y = 1800
-professor.name = "Pr.Hogevil"
+professor.name = loc("Prof. Hogevil")
 professor.x = 3800
 professor.y = 1600
 professor.dead = false
 professor.health = 100
-minion1.name = "Minion"
+minion1.name = loc("Minion")
 minion1.x = 2460
 minion1.y = 1450
-minion2.name = "Minion"
+minion2.name = loc("Minion")
 minion2.x = 2450
 minion2.y = 1900
-minion3.name = "Minion"
+minion3.name = loc("Minion")
 minion3.x = 3500
 minion3.y = 1750
 teamA.name = loc("PAoTH")
@@ -172,7 +172,7 @@ function onGameStart()
 	FollowGear(hero.gear)
 	
 	ShowMission(campaignName, missionName, loc("Hog Solo has to refuel his saucer.")..
-	"|"..loc("Rescue the imprisoned PAoTH team and get your fuels!"), -amSkip, 0)
+	"|"..loc("Rescue the imprisoned PAotH team and get your fuels!"), -amSkip, 0)
 	
 	AddAmmo(minion1.gear, amDEagle, 10)
 	AddAmmo(minion2.gear, amDEagle, 10)
@@ -330,7 +330,7 @@ end
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("You have to get the weapons and rescue the PAoTH researchers")) --11
+	SendStat('siCustomAchievement', loc("You have to get the weapons and rescue the PAotH researchers")) --11
 	SendStat('siPlayerKills','1',teamC.name)
 	SendStat('siPlayerKills','0',teamD.name)
 	EndGame()
@@ -380,7 +380,7 @@ function minionsDeath(gear)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)	
 	
-	SendStat('siGameResult', loc("Hog Solo won, conrgatulations!")) --1
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("Eliminated the evil minions")) --11
 	SendStat('siCustomAchievement', loc("Drove the professor away")) --11
 	SendStat('siPlayerKills','1',teamD.name)
@@ -406,10 +406,10 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, welcome to moon
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near PAoTH base at moon..."),  4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near PAotH base at moon..."),  4000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Hey Hog Solo! Finaly you have come..."), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("It seems that Professor Hogevil learned for your arrival!"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Now he have captured the rest of the PAoTH team and awaits to capture you!"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Now he have captured the rest of the PAotH team and awaits to capture you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("We have to hurry! Are you armed?"), SAY_SAY, 4300}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("No, I am afraid I had to travel light"), SAY_SAY, 2500}})

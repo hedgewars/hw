@@ -24,8 +24,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Fruit planet, The War!")
+local missionName = loc("Bad timing")
 local chooseToBattle = false
 local previousHog = 0
 -- dialogs
@@ -35,8 +34,8 @@ local dialog03 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 4000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and try not to let them be killed"), 1, 4000},
-	[dialog03] = {missionName, loc("Ready for Battle?"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 4000},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and eliminate all the enemies"), 1, 4000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 4000},
 }
 -- crates
 local crateWMX = 2170
@@ -57,37 +56,37 @@ local teamB = {}
 local teamC = {}
 local teamD = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 3350
 hero.y = 365
 hero.dead = false
-green1.name = "Captain Lime"
+green1.name = loc("Captain Lime")
 green1.x = 3300
 green1.y = 395
 green1.dead = false
-green2.name = "Mister Pear"
+green2.name = loc("Mister Pear")
 green2.x = 3600
 green2.y = 1570
-green3.name = "Lady Mango"
+green3.name = loc("Lady Mango")
 green3.x = 2170
 green3.y = 980
-green4.name = "Green Hog Grape"
+green4.name = loc("Green Hog Grape")
 green4.x = 2900
 green4.y = 1650
-green5.name = "Mr Mango"
+green5.name = loc("Mr Mango")
 green5.x = 1350
 green5.y = 850
-yellow1.name = "General Lemon"
+yellow1.name = loc("General Lemon")
 yellow1.x = 140
 yellow1.y = 1980
 local yellowArmy = {
-	{name = "Robert Yellow Apple", x = 710, y = 1780, health = 100},
-	{name = "Summer Squash", x = 315 , y = 1960, health = 100},
-	{name = "Tall Potato", x = 830 , y = 1748, health = 80},
-	{name = "Yellow Pepper", x = 2160 , y = 820, health = 60},
-	{name = "Corn", x = 1320 , y = 740, health = 60},
-	{name = "Max Citrus", x = 1900 , y = 1700, health = 40},
-	{name = "Naranja Jed", x = 960 , y = 516, health = 40},
+	{name = loc("Robert Yellow Apple"), x = 710, y = 1780, health = 100},
+	{name = loc("Summer Squash"), x = 315 , y = 1960, health = 100},
+	{name = loc("Tall Potato"), x = 830 , y = 1748, health = 80},
+	{name = loc("Yellow Pepper"), x = 2160 , y = 820, health = 60},
+	{name = loc("Corn"), x = 1320 , y = 740, health = 60},
+	{name = loc("Max Citrus"), x = 1900 , y = 1700, health = 40},
+	{name = loc("Naranja Jed"), x = 960 , y = 516, health = 40},
 }
 teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green  
@@ -382,13 +381,13 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the planet of fruits a terrible war is about to begin..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Planet of Fruits a terrible war is about to begin..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help."), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {green1.gear, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You couldn't have come to a worse time Hog Solo!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("The clan of the Red Strawberry wants to take over the dominion and overthrone king Pineapple."), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the kingdom of sand to help to the annual dusting of the king's palace."), SAY_SAY, 8000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Under normal circumstances we could easily defeat them but we have kindly sent most of our men to the kingdom of Sand to help to the annual dusting of the king's palace."), SAY_SAY, 8000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("However the army of Yellow Watermelons is about to attack any moment now."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I would gladly help you if we won this battle but under these circumstances I'll only help you if you fight for our side."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("What do you say? Will you fight for us?"), SAY_SAY, 3000}})
@@ -413,7 +412,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad... Then you should really leave!"), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here"), SAY_SAY, 3000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place that you can fly would be the most left one"), SAY_SAY, 5000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place that you can fly would be the most left part of the map"), SAY_SAY, 5000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our anti flying weapons"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time you coward..."), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = startBattle, args = {hero.gear}})
