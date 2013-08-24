@@ -25,18 +25,23 @@ include(FindPackageHandleStandardArgs)
 # use pkg-config to get the directories and then use these values
 # in the FIND_PATH() and FIND_LIBRARY() calls
 find_package(PkgConfig)
-if (PKG_CONFIG_FOUND)
-    pkg_check_modules(_FFMPEG_AVCODEC libavcodec ${VERBOSITY})
-    pkg_check_modules(_FFMPEG_AVFORMAT libavformat ${VERBOSITY})
-    pkg_check_modules(_FFMPEG_AVUTIL libavutil ${VERBOSITY})
-endif (PKG_CONFIG_FOUND)
+if(PKG_CONFIG_FOUND)
+    if(NOT LIBAVCODEC_INCLUDE_DIR OR NOT LIBAVCODEC_LIBRARY)
+        pkg_check_modules(_FFMPEG_AVCODEC libavcodec)
+    endif()
+    if(NOT LIBAVFORMAT_LIBRARY)
+        pkg_check_modules(_FFMPEG_AVFORMAT libavformat)
+    endif()
+    if(NOT LIBAVUTIL_LIBRARY)
+        pkg_check_modules(_FFMPEG_AVUTIL libavutil)
+    endif()
+endif(PKG_CONFIG_FOUND)
 
 find_path(LIBAVCODEC_INCLUDE_DIR
     NAMES libavcodec/avcodec.h
-    PATHS ${_AVCODEC_INCLUDE_DIRS}
-        /usr/include /usr/local/include #system level
-        /opt/local/include #macports
-        /sw/include #fink
+    PATHS ${_FFMPEG_AVCODEC_INCLUDE_DIRS}    #pkg-config
+          /usr/include /usr/local/include    #system level
+          /opt/local/include /sw/include     #macports & fink
     PATH_SUFFIXES libav ffmpeg
 )
 
@@ -44,26 +49,23 @@ find_path(LIBAVCODEC_INCLUDE_DIR
 
 find_library(LIBAVCODEC_LIBRARY
     NAMES avcodec
-    PATHS ${_AVCODEC_LIBRARY_DIRS}
-        /usr/lib /usr/local/lib #system level
-        /opt/local/lib #macports
-        /sw/lib #fink
+    PATHS ${_FFMPEG_AVCODEC_LIBRARY_DIRS}   #pkg-config
+          /usr/lib /usr/local/lib           #system level
+          /opt/local/lib /sw/lib            #macports & fink
 )
 
 find_library(LIBAVFORMAT_LIBRARY
     NAMES avformat
-    PATHS ${_AVFORMAT_LIBRARY_DIRS}
-        /usr/lib /usr/local/lib #system level
-        /opt/local/lib #macports
-        /sw/lib #fink
+    PATHS ${_FFMPEG_AVFORMAT_LIBRARY_DIRS}  #pkg-config
+          /usr/lib /usr/local/lib           #system level
+          /opt/local/lib /sw/lib            #macports & fink
 )
 
 find_library(LIBAVUTIL_LIBRARY
     NAMES avutil
-    PATHS ${_AVUTIL_LIBRARY_DIRS}
-        /usr/lib /usr/local/lib #system level
-        /opt/local/lib #macports
-        /sw/lib #fink
+    PATHS ${_FFMPEG_AVUTIL_LIBRARY_DIRS}    #pkg-config
+          /usr/lib /usr/local/lib           #system level
+          /opt/local/lib /sw/lib            #macports & fink
 )
 
 find_package_handle_standard_args(FFMPEG DEFAULT_MSG LIBAVCODEC_LIBRARY LIBAVCODEC_INCLUDE_DIR
