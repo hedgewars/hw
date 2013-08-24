@@ -10,8 +10,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Death planet")
+local missionName = loc("The last encounter")
 -- dialogs
 local dialog01 = {}
 -- missions objectives
@@ -52,8 +51,6 @@ paoth2.name = "Dr.Cornelius"
 paoth2.x = 3800
 paoth2.y = 1480
 professor.name = "Prof. Hogevil"
---professor.x = 3630
---professor.y = 1480
 professor.dead = false
 thug1.x = 1265
 thug1.y = 1400
@@ -122,7 +119,7 @@ function onGameInit()
 	HogTurnLeft(professor.bot, true)
 	professor.gear = professor.bot
 	for i=1,table.getn(thugs) do
-		thugs[i].gear = AddHog("thug #"..i, 1, thugs[i].health, "war_desertgrenadier1")
+		thugs[i].gear = AddHog(loc("thug").." #"..i, 1, thugs[i].health, "war_desertgrenadier1")
 		AnimSetGearPosition(thugs[i].gear, thugs[i].x, thugs[i].y)
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
@@ -245,7 +242,7 @@ end
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to eliminate your enemies")) --11
+	SendStat('siCustomAchievement', loc("To win the game you have to eliminate all your enemies")) --11
 	SendStat('siPlayerKills','1',teamC.name)
 	SendStat('siPlayerKills','0',teamA.name)
 	EndGame()
@@ -254,8 +251,8 @@ end
 function enemiesDeath(gear)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You have successfuly eliminated Professor Hogevil")) --11
-	SendStat('siCustomAchievement', loc("You have rescued H and Dr. Cornelius")) --11
-	SendStat('siCustomAchievement', loc("You have acquired the device")) --11
+	SendStat('siCustomAchievement', loc("You have rescued H and Dr.Cornelius")) --11
+	SendStat('siCustomAchievement', loc("You have acquired the last part")) --11
 	SendStat('siPlayerKills','1',teamA.name)
 	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
@@ -274,12 +271,12 @@ function AnimationSetup()
 	-- DIALOG01, GAME START, INTRODUCTION
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Death Planet, where no other hog lives..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome HogSolo, surpised to see me?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the uninhabitable Death Planet..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surpised to see me?"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})	
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})	
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, now I got the last part and I have your friends captured..."), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, will you give me the other parts?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Will you give me the other parts?"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})	
 	table.insert(dialog01, {func = AnimWait, args = {professor.human, 3000}})

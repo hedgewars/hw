@@ -8,8 +8,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Fruit planet, Searching the Device!")
+local missionName = loc("Getting to the device")
 local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
@@ -21,8 +20,8 @@ local dialog03 = {}
 local dialog04 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting the Device"), loc("With the help of the other hogs search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
-	[dialog02] = {missionName, loc("Getting the Device"), loc("Explore the tunnel with the other hogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
+	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("With the help of the other hogs search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
+	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
 	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back"), 1, 4000},
 	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assasins before they attack back"), 1, 4000},
 }
@@ -41,25 +40,25 @@ local teamA = {}
 local teamB = {}
 local teamC = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 1200
 hero.y = 820
 hero.dead = false
-green1.name = "Captain Lime"
+green1.name = loc("Captain Lime")
 green1.x = 1050
 green1.y = 820
 green1.dead = false
-green2.name = "Mister Pear"
+green2.name = loc("Mister Pear")
 green2.x = 1350
 green2.y = 820
-green3.name = "Lady Mango"
+green3.name = loc("Lady Mango")
 green3.x = 1450
 green3.y = 820
 local redHedgehogs = {
-	{ name = "Poisonous Apple" },
-	{ name = "Dark Strawberry" },
-	{ name = "Watermelon Heart" },
-	{ name = "Deadly Grape" }
+	{ name = loc("Poisonous Apple") },
+	{ name = loc("Dark Strawberry") },
+	{ name = loc("Watermelon Heart") },
+	{ name = loc("Deadly Grape") }
 }
 teamA.name = loc("Hog Solo and GB")
 teamA.color = tonumber("38D61C",16) -- green
@@ -470,7 +469,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else in the planet of fruits Captain Lime helps Hog Solo..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You fought bravely and you helped us win this battle!"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking is hidden."), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking for is hidden."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send with you two of my best hogs to assist you."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Good luck!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
@@ -484,7 +483,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 8000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I am sorry but I was looking for a device that may be hidden somewhere around here"), SAY_SAY, 4500}})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 12500}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Many long forgotten things can be found in the same tunnels that we are about to search!"), SAY_SAY, 7000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Many long forgotten things can be found in the same tunnels that we are about to explore!"), SAY_SAY, 7000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("If you help us you can keep the device if you find it but we'll keep everything else"), SAY_SAY, 7000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("What do you say? Are you in?"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 1800}})

@@ -8,8 +8,7 @@ HedgewarsScriptLoad("/Scripts/Animate.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local campaignName = loc("A Space Adventure")
-local missionName = loc("Ice planet, A Saucer Race!")
+local missionName = loc("Hard flying")
 local challengeStarted = false
 local currentWaypoint = 1
 local radius = 75
@@ -29,11 +28,11 @@ local ally = {}
 local teamA = {}
 local teamB = {}
 -- hedgehogs values
-hero.name = "Hog Solo"
+hero.name = loc("Hog Solo")
 hero.x = 750
 hero.y = 130
 hero.dead = false
-ally.name = "Paul McHoggy"
+ally.name = loc("Paul McHoggy")
 ally.x = 860
 ally.y = 130
 teamA.name = loc("Hog Solo")
@@ -242,7 +241,6 @@ function heroLost()
 	SendStat('siCustomAchievement', loc("You'll get extra time in case you need it when you pass a ring")) --11
 	SendStat('siCustomAchievement', loc("Every 2 rings you'll get extra flying saucers")) --11
 	SendStat('siCustomAchievement', loc("Use space button twice to change flying saucer while being on air")) --11
-	SendStat('siCustomAchievement', loc("Pause the game to have a look where is the next ring")) --11
 	SendStat('siPlayerKills','0',teamA.name)
 	EndGame()
 end
