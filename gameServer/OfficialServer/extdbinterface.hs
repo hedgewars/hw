@@ -60,6 +60,7 @@ dbInteractionLoop dbConn = forever $ do
 parseStats :: B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
 parseStats fileName teams = ps
     where
+    ps [] = []
     ps ("DRAW" : bs) = ps bs
     ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
     ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
@@ -69,6 +70,8 @@ parseStats fileName teams = ps
         , SqlByteString fileName
         , SqlByteString location
         ] : ps bs
+    ps (b:bs) = ps bs
+
 
 dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
