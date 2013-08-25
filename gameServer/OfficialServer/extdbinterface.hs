@@ -24,7 +24,7 @@ dbQueryStats =
 
 dbQueryAchievement =
     "INSERT INTO achievements (time, typeid, userid, value, filename, location) \
-    \ VALUES ((SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
+    \ VALUES (?, (SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
     \ ?, ?, ?)"
 
 dbInteractionLoop dbConn = forever $ do
