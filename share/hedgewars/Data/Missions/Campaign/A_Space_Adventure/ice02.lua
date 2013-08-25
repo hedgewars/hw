@@ -15,11 +15,17 @@ local radius = 75
 local totalTime = 15000
 local totalSaucers = 3
 local gameEnded = false
+local RED = 0xff0000ff
+local GREEN = 0x38d61cff
+local challengeObjectives = loc("To win the game you have to pass into the rings in time")..
+	"|"..loc("You'll get extra time in case you need it when you pass a ring").."|"..
+	loc("Every 2 rings, the ring color will be green and you'll get an extra flying saucer").."|"..
+	loc("Use space button twice to change flying saucer while being on air")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Use your saucer and pass from the rings!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), challengeObjectives, 1, 4500},
 }
 -- hogs
 local hero = {}
@@ -89,6 +95,7 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
+	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
@@ -175,11 +182,12 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, some story telling
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the ice planet flying saucer stadium..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet flying saucer stadium..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("This is the olympic stadium of saucer flying..."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("All the saucer pilots dream one day to come here and compete with the best!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now you have the chance to try and get the place that you deserve between the best..."), SAY_SAY, 6000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use the saucer and pass from the rings..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Pause the game by pressing \"P\" for more details"), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("... can you do it?"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = startFlying, args = {hero.gear}})	
@@ -201,24 +209,34 @@ function placeNextWaypoint()
 	if currentWaypoint < 16 then
 		local wp = waypoints[currentWaypoint]
 		wp.gear = AddVisualGear(1,1,vgtCircle,1,true)
-		SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, 0xff0000ff)
 		-- add bonus time and "fuel"
 		if currentWaypoint % 2 == 0 then
+			PlaySound(sndBump) -- what's the crate sound?
+			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, RED)
 			AddAmmo(hero.gear, amJetpack, GetAmmoCount(hero.gear, amJetpack)+1)
 			totalSaucers = totalSaucers + 1
+			local message = loc("Got 1 more saucer")
 			if TurnTimeLeft <= 22000 then
 				TurnTimeLeft = TurnTimeLeft + 8000
 				totalTime = totalTime + 8000
-			end		
+				message = message..loc(" and 8 more seconds added to the clock")
+			end
+			AnimCaption(hero.gear, message, 4000)
 		else
+			SetVisualGearValues(wp.gear, wp.x,wp.y, 20, 200, 0, 0, 100, radius, 3, GREEN)
 			if TurnTimeLeft <= 16000 then
 				TurnTimeLeft = TurnTimeLeft + 6000
 				totalTime = totalTime + 6000
+				if currentWaypoint ~= 1 then
+					AnimCaption(hero.gear, loc("6 more seconds added to the clock"), 4000)
+				end
 			end
 		end	
 		radius = radius - 4
 		currentWaypoint = currentWaypoint + 1
 		return true
+	else
+		AnimCaption(hero.gear, loc("Congratulations, you won!"), 4000)
 	end
 	return false
 end
