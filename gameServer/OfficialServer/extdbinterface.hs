@@ -23,7 +23,7 @@ dbQueryStats =
     "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
 
 dbQueryAchievement =
-    "INSERT INTO achievements (typeid, userid, value, filename, location) \
+    "INSERT INTO achievements (time, typeid, userid, value, filename, location) \
     \ VALUES ((SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
     \ ?, ?, ?)"
 
@@ -57,14 +57,18 @@ dbInteractionLoop dbConn = forever $ do
         StoreAchievements fileName teams info -> 
             mapM_ (run dbConn dbQueryAchievement) $ (parseStats fileName teams) info
 
+readTime = read . B.unpack . B.take 19 . B.drop 8
+
 parseStats :: B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
 parseStats fileName teams = ps
     where
+    time = readTime fileName
     ps [] = []
     ps ("DRAW" : bs) = ps bs
     ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
     ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
-        [SqlByteString typ
+        [ SqlUTCTime time
+        , SqlByteString typ
         , SqlByteString $ fromMaybe "" (lookup teamname teams)
         , SqlInt32 (readInt_ value)
         , SqlByteString fileName
