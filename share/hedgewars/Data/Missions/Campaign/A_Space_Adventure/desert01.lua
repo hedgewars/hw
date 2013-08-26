@@ -13,6 +13,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -496,6 +497,7 @@ function checkForWin()
 		cratesFound = cratesFound + 1
 	elseif cratesFound == 1 then
 		-- end game
+		saveCompletedStatus(5)
 		AnimSay(hero.gear, loc("Hoo Ray!!!"), SAY_SHOUT, 5000)
 		SendStat('siGameResult', loc("Congratulations, you won!")) --1
 		SendStat('siCustomAchievement', loc("To win the game you had to collect the 2 crates with no specific order")) --11

@@ -15,6 +15,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -22,6 +23,7 @@ local missionName = loc("Spacetrip")
 local timeForGuard1ToTurn = 1000 * 5 -- 5 sec
 local timeForGuard1ToTurnLeft = timeForGuard1ToTurn
 local saucerAcquired = false
+local status
 local checkPointReached = 1 -- 1 is start of the game
 -- dialogs
 local dialog01 = {}
@@ -30,11 +32,13 @@ local dialog03 = {}
 local dialog04 = {}
 local dialog05 = {}
 local dialog06 = {}
+local dialog07 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
 	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuels are limited"), 1, 4500},
-	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon mission"), 1, 7000}
+	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon mission"), 1, 7000},
+	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit first the planets of Ice, Desert and Fruit"), 1, 6000}
 }
 -- crates
 local saucerX = 3270
@@ -102,7 +106,8 @@ function onGameInit()
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard2.gear, guard2.x, guard2.y)
-	
+	-- completed main missions
+	status = getCompletedStatus()
 	-- get the check point
 	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
 		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
@@ -128,6 +133,8 @@ function onGameInit()
 			AnimSetGearPosition(hero.gear, 2400, 375)
 		elseif GetCampaignVar("Planet") == "icePlanet" then
 			AnimSetGearPosition(hero.gear, 1440, 260)
+		elseif GetCampaignVar("Planet") == "deathPlanet" then
+			AnimSetGearPosition(hero.gear, 620, 530)
 		end
 	end
 	
@@ -282,7 +289,7 @@ function onIcePlanetLanding(gear)
 end
 
 function onDeathPlanetLanding(gear)
-	if GetHealth(hero.gear) and GetX(gear) > 310 and GetX(gear) < 675  and GetY(gear) < 400 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 310 and GetX(gear) < 700  and GetY(gear) < 760 and StoppedGear(gear) then
 		return true
 	end
 	return false
@@ -383,6 +390,8 @@ end
 function deathPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
+	elseif not (status.fruit02 and status.ice01 and status.deset01) then
+		AddAnim(dialog07)
 	else
 		AnimCaption(hero.gear,loc("Welcome to the Death Planet!"))
 		SaveCampaignVar("Planet", "deathPlanet")
@@ -464,6 +473,10 @@ function AnimationSetup()
 	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
 	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I run out of fuels..."), SAY_THINK, 3000}})
 	table.insert(dialog06, {func = EndGame, args = {hero.gear}})
+	-- DIALOG 07 - Hero lands on Death Planet but isn't allowed yet to play this map
+	AddSkipFunction(dialog07, Skipanim, {dialog07})
+	table.insert(dialog07, {func = AnimCaption, args = {hero.gear, loc("This planet seems dangerous!"),  5000}})
+	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other parts"), SAY_THINK, 4000}})
 end
 
 ------------------- custom "animation" functions --------------------------

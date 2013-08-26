@@ -7,6 +7,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -249,6 +250,7 @@ function heroDeath(gear)
 end
 
 function enemiesDeath(gear)
+	saveCompletedStatus(6)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You have successfuly eliminated Professor Hogevil")) --11
 	SendStat('siCustomAchievement', loc("You have rescued H and Dr.Cornelius")) --11
