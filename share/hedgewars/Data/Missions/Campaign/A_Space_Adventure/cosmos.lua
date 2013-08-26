@@ -390,7 +390,7 @@ end
 function deathPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
-	elseif not (status.fruit02 and status.ice01 and status.deset01) then
+	elseif not (status.fruit02 and status.ice01 and status.desert01) then
 		AddAnim(dialog07)
 	else
 		AnimCaption(hero.gear,loc("Welcome to the Death Planet!"))
