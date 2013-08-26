@@ -195,6 +195,8 @@ function onGameStart()
 	if GetCampaignVar("Planet") ~= "deathPlanet" then
 		AddEvent(onDeathPlanetLanding, {hero.gear}, deathPlanetLanding, {hero.gear}, 0)
 	end
+	
+	SendHealthStatsOff()
 end
 
 function onGameTick()
@@ -343,7 +345,7 @@ function moonLanding(gear)
 	SaveCampaignVar("UnlockedMissions", "2")
 	SaveCampaignVar("Mission1", "2")
 	SaveCampaignVar("Mission2", "1")
-	EndGame()
+	sendStats(loc("the moon"))
 end
 
 function fruitPlanetLanding(gear)
@@ -355,7 +357,7 @@ function fruitPlanetLanding(gear)
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "3")
 		SaveCampaignVar("Mission2", "1")
-		EndGame()
+		sendStats(loc("the Fruit Planet"))
 	end
 end
 
@@ -369,7 +371,7 @@ function desertPlanetLanding(gear)
 		SaveCampaignVar("Mission1", "4")
 		SaveCampaignVar("Mission2", "7")
 		SaveCampaignVar("Mission3", "1")
-		EndGame()
+		sendStats(loc("the Desert Planet"))
 	end
 end
 
@@ -383,7 +385,7 @@ function icePlanetLanding(gear)
 		SaveCampaignVar("Mission1", "5")
 		SaveCampaignVar("Mission2", "6")
 		SaveCampaignVar("Mission3", "1")
-		EndGame()
+		sendStats(loc("the Ice Planet"))
 	end
 end
 
@@ -398,7 +400,7 @@ function deathPlanetLanding(gear)
 		SaveCampaignVar("UnlockedMissions", "2")
 		SaveCampaignVar("Mission1", "9")
 		SaveCampaignVar("Mission2", "1")
-		EndGame()
+		sendStats(loc("the Planet of Death"))
 	end
 end
 
@@ -485,4 +487,12 @@ function startCombat()
 	-- use this so guard2 will gain control
 	AnimSwitchHog(hero.gear)
 	TurnTimeLeft = 0
+end
+
+function sendStats(planet)
+	SendStat('siGameResult', loc("Hog Solo arrived to "..planet)) --1
+	SendStat('siCustomAchievement', loc("Return to the mission menu by pressing the \"Go back\" button")) --11
+	SendStat('siCustomAchievement', loc("Choose another planet by replaying the mission")) --11
+	SendStat('siPlayerKills','1',teamC.name)
+	EndGame()
 end
