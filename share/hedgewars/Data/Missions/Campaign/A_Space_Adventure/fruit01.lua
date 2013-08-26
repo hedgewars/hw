@@ -146,6 +146,8 @@ function onGameInit()
 		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, "war_desertgrenadier1")
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
 	end
+	
+	initCheckpoint("fruit01")
 
 	AnimInit()
 	AnimationSetup()	

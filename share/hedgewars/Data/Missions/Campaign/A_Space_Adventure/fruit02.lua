@@ -83,12 +83,10 @@ function onGameInit()
 	
 	-- load checkpoints, problem getting the campaign variable
 	local health = 100
-	if tonumber(GetCampaignVar("Fruit02CheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("Fruit02CheckPoint"))
-		if checkPointReached ~= 1 then
-			loadHogsPositions()
-			health = tonumber(GetCampaignVar("HeroHealth"))
-		end
+	checkPointReached = initCheckpoint("fruit02")
+	if checkPointReached ~= 1 then
+		loadHogsPositions()
+		health = tonumber(GetCampaignVar("HeroHealth"))
 	end
 	
 	-- Hog Solo and Green Bananas
@@ -442,19 +440,19 @@ function redTeamDeath(gear)
 end
 
 function checkPoint1(gear)
-	saveCheckPoint(2)
+	saveCheckPointLocal(2)
 end
 
 function checkPoint2(gear)
-	saveCheckPoint(3)
+	saveCheckPointLocal(3)
 end
 
 function checkPoint3(gear)
-	saveCheckPoint(4)
+	saveCheckPointLocal(4)
 end
 
 function checkPoint4(gear)
-	saveCheckPoint(5)
+	saveCheckPointLocal(5)
 end
 
 -------------- ANIMATIONS ------------------
@@ -599,9 +597,9 @@ function split(s, delimiter)
 	return res
 end
 
-function saveCheckPoint(cpoint)
+function saveCheckPointLocal(cpoint)
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
-	SaveCampaignVar("Fruit02CheckPoint", cpoint)
+	saveCheckpoint(cpoint)
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	saveHogsPositions()
 	saveWeapons()

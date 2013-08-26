@@ -153,10 +153,7 @@ function onGameInit()
 	HogTurnLeft(minion3.gear, true)
 	
 	-- get the check point
-	if tonumber(GetCampaignVar("Moon01CheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("Moon01CheckPoint"))
-	end
-	
+	checkPointReached = initCheckpoint("moon01")
 	if checkPointReached == 1 then
 		-- Start of the game
 	elseif checkPointReached == 2 then
@@ -319,8 +316,8 @@ end
 
 -------------- OUTCOMES ------------------
 
-function weaponsPlatform(gear)	
-	SaveCampaignVar("Moon01CheckPoint", "2")	
+function weaponsPlatform(gear)
+	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 	TurnTimeLeft = 0
 	weaponsAqcuired = true

@@ -125,6 +125,8 @@ function onGameInit()
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
 	
+	initCheckpoint("death01")
+	
 	AnimInit()
 	AnimationSetup()
 end

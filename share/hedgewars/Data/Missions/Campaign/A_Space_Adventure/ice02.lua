@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -87,6 +88,8 @@ function onGameInit()
 	ally.gear = AddHog(ally.name, 0, 100, "tophats")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
+	
+	initCheckpoint("ice02")
 	
 	AnimInit()
 	AnimationSetup()	
