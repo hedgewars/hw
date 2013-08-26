@@ -95,9 +95,7 @@ function onGameInit()
 	Theme = "Desert"
 	
 	-- get the check point
-	if tonumber(GetCampaignVar("Desert01CheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("Desert01CheckPoint"))
-	end
+	checkPointReached = initCheckpoint("desert01")
 	-- get hero health
 	local heroHealth = 100
 	if checkPointReached > 1 and tonumber(GetCampaignVar("HeroHealth")) then
@@ -378,17 +376,17 @@ function heroFleeFirstBattle(gear)
 end
 
 function heroAtCheckpoint2(gear)
-	saveCheckPoint("2")
+	saveCheckPointLocal("2")
 	secondBattle()
 end
 
 function heroAtCheckpoint3(gear)
-	saveCheckPoint("3")
+	saveCheckPointLocal("3")
 	secondBattle()
 end
 
 function heroAtCheckpoint4(gear)
-	saveCheckPoint("4")
+	saveCheckPointLocal("4")
 end
 
 function heroAtThirdBattle(gear)
@@ -407,7 +405,7 @@ end
 function checkForWin2(gear)
 	-- ok lets place one more checkpoint as next part seems challenging without rope
 	if cratesFound ==  0 then
-		saveCheckPoint("5")
+		saveCheckPointLocal("5")
 	end
 	
 	checkForWin()	
@@ -463,9 +461,9 @@ function secondBattle()
 	TurnTimeLeft = 0
 end
 
-function saveCheckPoint(cpoint)
+function saveCheckPointLocal(cpoint)
 	-- save checkpoint
-	SaveCampaignVar("Desert01CheckPoint", cpoint)	
+	saveCheckpoint(cpoint)	
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..

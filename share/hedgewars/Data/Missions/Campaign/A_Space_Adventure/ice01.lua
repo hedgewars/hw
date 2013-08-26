@@ -94,9 +94,7 @@ function onGameInit()
 	Theme = "Snow"
 	
 	-- get the check point
-	if tonumber(GetCampaignVar("Ice01CheckPoint")) then
-		checkPointReached = tonumber(GetCampaignVar("Ice01CheckPoint"))
-	end
+	checkPointReached = initCheckpoint("ice01")
 	-- get hero health
 	local heroHealth = 100
 	if tonumber(GetCampaignVar("HeroHealth")) then
@@ -422,12 +420,12 @@ end
 
 function heroFinalStep(gear)
 	heroAtFinalStep = true
-	SaveCampaignVar("Ice01CheckPoint", "3")
+	saveCheckpoint("3")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 end
 
 function columnCheckPoint(gear)
-	SaveCampaignVar("Ice01CheckPoint", "2")	
+	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
 end

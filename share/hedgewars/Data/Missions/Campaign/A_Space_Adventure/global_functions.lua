@@ -50,3 +50,18 @@ function getCompletedStatus()
 	end
 	return status
 end
+
+function initCheckpoint(mission)
+	local checkPoint = 1
+	if GetCampaignVar("CurrentMission") ~= mission then
+		SaveCampaignVar("CurrentMission", mission)
+		SaveCampaignVar("CurrentMissionCheckpoint", 1)
+	else
+		checkPoint = tonumber(GetCampaignVar("currentMissionCheckpoint"))
+	end
+	return checkPoint
+end
+
+function saveCheckpoint(cp)
+	SaveCampaignVar("CurrentMissionCheckpoint", cp)
+end
