@@ -416,7 +416,7 @@ function noFuelAtLand(gear)
 end
 
 function heroDeath(gear)
-	EndGame()
+	sendStatsOnRetry()
 end
 
 -------------- ANIMATIONS ------------------
@@ -430,7 +430,7 @@ function Skipanim(anim)
 	elseif anim == dialog03 then
 		startCombat()
 	elseif anim == dialog05 or anim == dialog06 then
-		EndGame()
+		sendStatsOnRetry()
 	end
 end
 
@@ -476,12 +476,12 @@ function AnimationSetup()
 	AddSkipFunction(dialog05, Skipanim, {dialog05})
 	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("I guess I can't go far without fuels!"), SAY_THINK, 6000}})
 	table.insert(dialog05, {func = AnimSay, args = {hero.gear, loc("Go to go back"), SAY_THINK, 2000}})
-	table.insert(dialog05, {func = EndGame, args = {hero.gear}})
+	table.insert(dialog05, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
 	AddSkipFunction(dialog06, Skipanim, {dialog06})
 	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
 	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I run out of fuels..."), SAY_THINK, 3000}})
-	table.insert(dialog06, {func = EndGame, args = {hero.gear}})
+	table.insert(dialog06, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 07 - Hero lands on Death Planet but isn't allowed yet to play this map
 	AddSkipFunction(dialog07, Skipanim, {dialog07})
 	table.insert(dialog07, {func = AnimCaption, args = {hero.gear, loc("This planet seems dangerous!"),  5000}})
@@ -501,5 +501,14 @@ function sendStats(planet)
 	SendStat('siCustomAchievement', loc("Return to the mission menu by pressing the \"Go back\" button")) --11
 	SendStat('siCustomAchievement', loc("Choose another planet by replaying the mission")) --11
 	SendStat('siPlayerKills','1',teamC.name)
+	EndGame()
+end
+
+function sendStatsOnRetry()
+	SendStat('siGameResult', loc("You have to travel again")) --1
+	SendStat('siCustomAchievement', loc("Your first destination is moon in order to get more fuels")) --11
+	SendStat('siCustomAchievement', loc("You have to complete the moon main mission in order to travel to other planets")) --11
+	SendStat('siCustomAchievement', loc("You have to be careful and not die!")) --11
+	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
 end
