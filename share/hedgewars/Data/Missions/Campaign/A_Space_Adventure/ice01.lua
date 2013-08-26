@@ -11,6 +11,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -500,7 +501,7 @@ end
 -------------- Other Functions -------------------
 
 function actionsOnWin()
-	SaveCampaignVar("IcePlanetPartAcquired", "true")	
+	saveCompletedStatus(4)	
 	SendStat('siGameResult', loc("Congratulations, you got the part!")) --1
 	SendStat('siCustomAchievement', loc("At the end of the game your health was ")..GetHealth(hero.gear)) --11
 	-- maybe add number of tries for each part?

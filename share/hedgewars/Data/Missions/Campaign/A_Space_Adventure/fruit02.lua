@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -420,6 +421,7 @@ end
 
 function captainLimeDeath(gear)
 	-- hero win in scenario of escape in 1st part
+	saveCompletedStatus(3)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
 	SendStat('siCustomAchievement', loc("You defended yourself against Captain Lime")) --11
@@ -430,6 +432,7 @@ end
 
 function redTeamDeath(gear)
 	-- hero win in battle scenario
+	saveCompletedStatus(3)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
 	SendStat('siCustomAchievement', loc("You defended yourself against Strawberry Assasins")) --11

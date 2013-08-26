@@ -17,6 +17,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -364,6 +365,7 @@ function professorDeath(gear)
 	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
 	AnimWait(hero.gear,5000)	
 	
+	saveCompletedStatus(1)
 	SendStat('siGameResult', loc("Hog Solo win, conrgatulations!")) --1
 	SendStat('siCustomAchievement', loc("Eliminated the professor Hogevil")) --11
 	SendStat('siCustomAchievement', loc("Drove the minions away")) --11
@@ -380,6 +382,7 @@ function minionsDeath(gear)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)	
 	
+	saveCompletedStatus(1)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("Eliminated the evil minions")) --11
 	SendStat('siCustomAchievement', loc("Drove the professor away")) --11

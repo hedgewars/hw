@@ -21,6 +21,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
@@ -326,6 +327,7 @@ end
 
 function battleWin(gear)
 	-- add stats
+	saveVariables()
 	SendStat('siGameResult', loc("Green Bananas won!")) --1
 	SendStat('siCustomAchievement', loc("You have eliminated all the visible enemy hogs!")) --11
 	SendStat('siPlayerKills','1',teamA.name)
@@ -336,6 +338,7 @@ end
 
 function escapeWin(gear)
 	-- add stats
+	saveVariables()
 	SendStat('siGameResult', loc("Hog Solo escaped successfully!")) --1
 	SendStat('siCustomAchievement', loc("You have reached the flying area successfully!")) --11
 	SendStat('siPlayerKills','1',teamA.name)
@@ -471,4 +474,12 @@ function getNextWave()
 			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
 		end
 	end
+end
+
+function saveVariables()
+	saveCompletedStatus(2)
+	SaveCampaignVar("UnlockedMissions", "3")
+	SaveCampaignVar("Mission1", "3")
+	SaveCampaignVar("Mission2", "8")
+	SaveCampaignVar("Mission3", "1")
 end
