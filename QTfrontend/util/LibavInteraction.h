@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#ifndef LIBAV_ITERACTION
-#define LIBAV_ITERACTION
+#ifndef LIBAV_INTERACTION
+#define LIBAV_INTERACTION
 
 #include <QComboBox>
 
@@ -48,4 +48,4 @@ public:
     QString getFileInfo(const QString & filepath);
 };
 
-#endif // LIBAV_ITERACTION
+#endif // LIBAV_INTERACTION
