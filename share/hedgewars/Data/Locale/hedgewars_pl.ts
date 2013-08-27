@@ -2456,7 +2456,7 @@ Nie wszyscy gracze są gotowi.</translation>
         <translation>Zaproś swoich znajomych jednym kliknięciem!</translation>
     </message>
     <message>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation>Kliknij by skopiować unikalny link twojego serwera do schowka. Wyślij link swoim znajomym aby mogli dołączyć do gry.</translation>
     </message>
     <message>

@@ -76,7 +76,7 @@ QLayout * PageNetServer::bodyLayoutDefinition()
 
     BtnShare = new QPushButton(gb);
     BtnShare->setText(QPushButton::tr("Invite your friends to your server in just 1 click!"));
-    BtnShare->setWhatsThis(QPushButton::tr("Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you."));
+    BtnShare->setWhatsThis(QPushButton::tr("Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you."));
     gbLayout->addWidget(BtnShare, 2, 1);
 
     labelURL = new QLabel(gb);

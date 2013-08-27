@@ -1,0 +1,53 @@
+Basic_Training_-_Bazooka.name=Treino básico de bazuca
+Basic_Training_-_Bazooka.desc="O segredo é usar o vento ao seu favor!"
+
+Basic_Training_-_Grenade.name=Treino básico de granada
+Basic_Training_-_Grenade.desc="Lembre, você tira o pino E arremessa!"
+
+Basic_Training_-_Cluster_Bomb.name=Treino básico de bomba de estilhaço
+Basic_Training_-_Cluster_Bomb.desc="Alguém está precisando de um banho quente!"
+
+Basic_Training_-_Shotgun.name=Treino básico de escopeta
+Basic_Training_-_Shotgun.desc="Atire primeiro, pergunte depois!"
+
+Basic_Training_-_Sniper_Rifle.name=Treino básico de Rifle Sniper
+Basic_Training_-_Sniper_Rifle.desc="Bum! Na cabeça!"
+
+Basic_Training_-_Rope.name=Treino básico de corda
+Basic_Training_-_Rope.desc="Saia daí e balance!"
+
+User_Mission_-_Dangerous_Ducklings.name=Missão: Patinhos perigosos
+User_Mission_-_Dangerous_Ducklings.desc="Certo, recruta! Hora de colocar em prática o que aprendeu nos Treinos Básicos!"
+
+User_Mission_-_Diver.name=Missão: Mergulhador
+User_Mission_-_Diver.desc="Essa coisa de 'investida anfíbio' é mais difícil do que parece..."
+
+User_Mission_-_Teamwork.name=Missão: Trabalho em equipe
+User_Mission_-_Teamwork.desc="Às vezes, o amor doi."
+
+User_Mission_-_Spooky_Tree.name=Missão: Árvore medonha
+User_Mission_-_Spooky_Tree.desc="Muitas caixas por aqui. Só espero que aquele pássaro não esteja com fome."
+
+User_Mission_-_Bamboo_Thicket.name=Missão: Floresta de bambus
+User_Mission_-_Bamboo_Thicket.desc="A morte vem de cima."
+
+User_Mission_-_That_Sinking_Feeling.name=Missão: Aquela sensação de afundar
+User_Mission_-_That_Sinking_Feeling.desc="A água está subindo rapidamente e o tempo é contado. Muitos tentaram, muitos falharam. Consegue salvar todos?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Missão: Newton e a rede
+User_Mission_-_Newton_and_the_Hammock.desc="Lembrem-se, ouriçozinhos: A velocidade de um corpo permanece constante a menos que aja sobre ele uma força externa!"
+
+User_Mission_-_The_Great_Escape.name=Missão: A grande fuga
+User_Mission_-_The_Great_Escape.desc="Está pensando que consegue me prender!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Challenge: Corda que doi
+User_Mission_-_Rope_Knock_Challenge.desc="Atrás de você!"
+
+User_Mission_-_Nobody_Laugh.name=Missão: Ninguém ri
+User_Mission_-_Nobody_Laugh.desc="Isso não é piada."
+
+User_Mission_-_RCPlane_Challenge.name=Desafio: Aeromodelo
+User_Mission_-_RCPlane_Challenge.desc="Está bem confiante, né, aviador?"
+
+portal.name=Missão: Desafio dos portais
+portal.desc="Use o portal para se mover rápido e para longe, use-o para matar, use-o com cuidado!"

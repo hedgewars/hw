@@ -428,7 +428,12 @@ type
 
     (* SDL_RWops and friends *)
     PSDL_RWops = ^TSDL_RWops;
+{$IFDEF SDL2}
+    TSize  = function( context: PSDL_RWops): Int64; cdecl;
+    TSeek  = function( context: PSDL_RWops; offset: Int64; whence: LongInt ): Int64; cdecl;
+{$ELSE}
     TSeek  = function( context: PSDL_RWops; offset: LongInt; whence: LongInt ): LongInt; cdecl;
+{$ENDIF}
     TRead  = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; maxnum : LongInt ): LongInt;  cdecl;
     TWrite = function( context: PSDL_RWops; Ptr: Pointer; size: LongInt; num: LongInt ): LongInt; cdecl;
     TClose = function( context: PSDL_RWops ): LongInt; cdecl;
@@ -473,6 +478,9 @@ type
 {$ENDIF}
 
     TSDL_RWops = record
+{$IFDEF SDL2}
+        size: TSize;
+{$ENDIF}
         seek: TSeek;
         read: TRead;
         write: TWrite;
