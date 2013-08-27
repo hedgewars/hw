@@ -30,6 +30,10 @@ extern "C"
 
 #include "HWApplication.h"
 
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(54, 25, 0)
+#define CodecID AVCodecID
+#endif
+
 struct Codec
 {
     CodecID id;

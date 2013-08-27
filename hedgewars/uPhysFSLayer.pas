@@ -133,7 +133,7 @@ var i: LongInt;
 begin
 {$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
-    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF} ' hedgewars';
+    cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
 {$ELSE}
     cPhysfsId:= ParamStr(0);
 {$ENDIF}
@@ -145,6 +145,8 @@ begin
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
     i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, false);
     AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
+    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Teams'), '/Teams', false);
+    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Teams: ' + inttostr(i));
 
     hedgewarsMountPackages;
 end;

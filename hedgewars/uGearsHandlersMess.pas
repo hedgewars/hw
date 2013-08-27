@@ -1432,6 +1432,13 @@ begin
     if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then
         dec(TurnTimeLeft);
 
+    if Gear^.Hedgehog^.Gear = nil then
+        begin
+        DeleteGear(Gear);
+        AfterAttack;
+        exit
+        end;
+
     HHGear := Gear^.Hedgehog^.Gear;
 
     HedgehogChAngle(HHGear);
@@ -1493,13 +1500,13 @@ begin
         end;
 
     if b then
-    begin
+        begin
         DrawTunnel(HHGear^.X + Gear^.dX * cHHRadius,
         HHGear^.Y + Gear^.dY * cHHRadius - _1 -
         ((hwAbs(Gear^.dX) / (hwAbs(Gear^.dX) + hwAbs(Gear^.dY))) * _0_5 * 7),
         Gear^.dX, Gear^.dY,
         cHHStepTicks, cHHRadius * 2 + 7);
-    end;
+        end;
 
     if (TurnTimeLeft = 0) or (Gear^.Timer = 0)
     or ((HHGear^.Message and gmAttack) <> 0) then
@@ -2004,11 +2011,13 @@ var
     sticky: Boolean;
     vgt: PVisualGear;
     tdX,tdY: HWFloat;
+    landPixel: Word;
 begin
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
 
-    if TestCollisionYwithGear(Gear, 1) = 0 then
+    landPixel:= TestCollisionYwithGear(Gear, 1);
+    if landPixel = 0 then
         begin
         AllInactive := false;
 
@@ -2047,8 +2056,23 @@ begin
             exit
             end
         end
-    else
+    else 
         begin
+        if (Gear^.Timer = 1) and (GameTicks and $3 = 0) then
+            begin
+            Gear^.Y:= Gear^.Y+_6;
+            if (landPixel and lfIce <> 0) or (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
+                begin
+                gX := hwRound(Gear^.X);
+                gY := hwRound(Gear^.Y)-6;
+                DrawExplosion(gX, gY, 4);
+                PlaySound(sndVaporize);
+                AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSteam);
+                DeleteGear(Gear);
+                exit
+                end;
+            Gear^.Y:= Gear^.Y-_6
+            end;
         if sticky and (GameTicks and $F = 0) then
             begin
             Gear^.Radius := 7;
@@ -2099,7 +2123,7 @@ begin
 
                 if Gear^.Health > 0 then
                     dec(Gear^.Health);
-                Gear^.Timer := 450 - Gear^.Tag * 8
+                Gear^.Timer := 450 - Gear^.Tag * 8 + GetRandom(2)
                 end
             else
                 begin
@@ -2113,7 +2137,7 @@ begin
                     end;
 
 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
-                Gear^.Timer := 100 - Gear^.Tag * 3;
+                Gear^.Timer := 100 - Gear^.Tag * 3 + GetRandom(2);
                 if (Gear^.Damage > 3000+Gear^.Tag*1500) then
                     Gear^.Health := 0
                 end
@@ -5249,7 +5273,7 @@ var
     vg: PVisualGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    if (Gear^.Message and gmAttack <> 0) or (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (HHGear^.dX.QWordValue > 4294967)  then
+    if (Gear^.Message and gmAttack <> 0) or (Gear^.Health = 0) or (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (HHGear^.dX.QWordValue > 4294967)  then
         begin
         StopSoundChan(Gear^.SoundChannel);
         DeleteGear(Gear);

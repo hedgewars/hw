@@ -429,7 +429,7 @@ void FeedbackDialog::LoadCaptchaImage()
 
 void FeedbackDialog::finishedSlot(QNetworkReply* reply)
 {
-    if (reply && reply->error() == QNetworkReply::NoError)
+    if (reply->error() == QNetworkReply::NoError)
     {
             QMessageBox infoMsg(this);
             infoMsg.setIcon(QMessageBox::Information);

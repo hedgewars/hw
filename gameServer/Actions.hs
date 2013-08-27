@@ -346,7 +346,8 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = rmTeamMsg : roundMsgs g
+                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then (:) (fromJust $ lastFilteredTimedMsg g) else id) 
+                      $ rmTeamMsg : roundMsgs g
                 }) $ gameInfo r
             })
         ]
@@ -670,8 +671,12 @@ processAction (CheckFailed msg) = do
     io $ moveFailedRecord fileName
 
 processAction (CheckSuccess info) = do
-    Just (CheckInfo fileName _) <- client's checkInfo
+    Just (CheckInfo fileName teams) <- client's checkInfo
+    si <- gets serverInfo
+    io $ writeChan (dbQueries si) $ StoreAchievements (B.pack fileName) (map toPair teams) info
     io $ moveCheckedRecord fileName
+    where
+        toPair t = (teamname t, teamowner t)
 
 #else
 processAction SaveReplay = return ()

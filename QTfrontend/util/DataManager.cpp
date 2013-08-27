@@ -199,6 +199,15 @@ QString DataManager::settingsFileName()
     return m_settingsFileName;
 }
 
+QString DataManager::safeFileName(QString fileName)
+{
+    fileName.replace('\\', '_');
+    fileName.replace('/', '_');
+    fileName.replace(':', '_');
+
+    return fileName;
+}
+
 void DataManager::reload()
 {
     // removed for now (also code was a bit unclean, could lead to segfault if

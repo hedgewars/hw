@@ -80,7 +80,6 @@
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
 		616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */; };
-		616245D114E6160200CC97FB /* libFreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6162456714E6159C00CC97FB /* libFreetype.a */; };
 		6163EE7E11CC2600001C0453 /* SingleWeaponViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6163EE7D11CC2600001C0453 /* SingleWeaponViewController.m */; };
 		6165920D11CA9BA200D6E256 /* FlagsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E111CA9BA200D6E256 /* FlagsViewController.m */; };
 		6165920E11CA9BA200D6E256 /* FortsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591E311CA9BA200D6E256 /* FortsViewController.m */; };
@@ -180,7 +179,6 @@
 		619349C8160BAF3E00A08518 /* uAILandMarks.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C5160BAF3E00A08518 /* uAILandMarks.pas */; };
 		619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C6160BAF3E00A08518 /* uGearsHandlers.pas */; };
 		619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */ = {isa = PBXBuildFile; fileRef = 619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */; };
-		6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6195981D1364BCD200B429B6 /* libTremor.a */; };
 		619599451364C83D00B429B6 /* libLua.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 619599441364C82B00B429B6 /* libLua.a */; };
 		6199E81612463EA800DADF8C /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81512463EA800DADF8C /* CFNetwork.framework */; };
 		6199E81A12463EC400DADF8C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6199E81912463EC400DADF8C /* SystemConfiguration.framework */; };
@@ -262,13 +260,6 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
-		610FB7E116613980002FB2A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = libFreetype;
-		};
 		610FB7E316613980002FB2A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */;
@@ -304,26 +295,12 @@
 			remoteGlobalIDString = BE48FD6807AFA17000BB41DA;
 			remoteInfo = "Static Library";
 		};
-		610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
-			remoteInfo = libTremor;
-		};
 		610FB7EF16613980002FB2A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = BE1FA72F07AF4C45004B6283;
 			remoteInfo = libSDL_image;
-		};
-		6162456614E6159C00CC97FB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = libFreetype;
 		};
 		617D78DF16D932310091D4D6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -352,13 +329,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = Physlayer;
-		};
-		6195981C1364BCD200B429B6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
-			remoteInfo = libTremor;
 		};
 		619599431364C82B00B429B6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -637,9 +607,7 @@
 		619349C5160BAF3E00A08518 /* uAILandMarks.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uAILandMarks.pas; path = ../../hedgewars/uAILandMarks.pas; sourceTree = SOURCE_ROOT; };
 		619349C6160BAF3E00A08518 /* uGearsHandlers.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlers.pas; path = ../../hedgewars/uGearsHandlers.pas; sourceTree = SOURCE_ROOT; };
 		619349C7160BAF3E00A08518 /* uGearsHandlersRope.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uGearsHandlersRope.pas; path = ../../hedgewars/uGearsHandlersRope.pas; sourceTree = SOURCE_ROOT; };
-		619598181364BCD200B429B6 /* Tremor.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Tremor.xcodeproj; path = ../../misc/libtremor/Xcode/Tremor.xcodeproj; sourceTree = SOURCE_ROOT; };
 		6195993F1364C82B00B429B6 /* Lua.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Lua.xcodeproj; path = ../../misc/liblua/Xcode/Lua.xcodeproj; sourceTree = SOURCE_ROOT; };
-		619599BA1364E65900B429B6 /* Freetype.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Freetype.xcodeproj; path = "../../misc/libfreetype/Xcode-iOS/Freetype.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		6199E81512463EA800DADF8C /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		6199E81912463EC400DADF8C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		6199E836124647DE00DADF8C /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
@@ -737,9 +705,7 @@
 				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
 				617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
-				616245D114E6160200CC97FB /* libFreetype.a in Frameworks */,
 				619599451364C83D00B429B6 /* libLua.a in Frameworks */,
-				6195981F1364BCEF00B429B6 /* libTremor.a in Frameworks */,
 				61A19AFC14D20170004B1E6D /* libSDL2.a in Frameworks */,
 				61A19B7714D20B7A004B1E6D /* libSDL2_image.a in Frameworks */,
 				61A19C2414D20F5A004B1E6D /* libSDL2_mixer.a in Frameworks */,
@@ -850,9 +816,7 @@
 			children = (
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
-				619599BA1364E65900B429B6 /* Freetype.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
-				619598181364BCD200B429B6 /* Tremor.xcodeproj */,
 				61A19AE314D2010A004B1E6D /* SDL.xcodeproj */,
 				61A19B6114D20B6C004B1E6D /* SDL_image.xcodeproj */,
 				61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */,
@@ -929,14 +893,6 @@
 				615E76BB14E4421200FBA131 /* MGSplitViewController.m */,
 			);
 			name = MGSplitViewController;
-			sourceTree = "<group>";
-		};
-		6162456314E6159C00CC97FB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6162456714E6159C00CC97FB /* libFreetype.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		6163EE4C11CC2478001C0453 /* Settings Page */ = {
@@ -1052,14 +1008,6 @@
 			isa = PBXGroup;
 			children = (
 				617D794816D933B00091D4D6 /* libPhyslayer.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		619598191364BCD200B429B6 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				6195981D1364BCD200B429B6 /* libTremor.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1316,13 +1264,11 @@
 			);
 			dependencies = (
 				9283015A0F10E41300CC5A3C /* PBXTargetDependency */,
-				610FB7E216613980002FB2A7 /* PBXTargetDependency */,
 				610FB7E416613980002FB2A7 /* PBXTargetDependency */,
 				610FB7E616613980002FB2A7 /* PBXTargetDependency */,
 				610FB7E816613980002FB2A7 /* PBXTargetDependency */,
 				610FB7EA16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7EC16613980002FB2A7 /* PBXTargetDependency */,
-				610FB7EE16613980002FB2A7 /* PBXTargetDependency */,
 				610FB7F016613980002FB2A7 /* PBXTargetDependency */,
 				617D791D16D932EC0091D4D6 /* PBXTargetDependency */,
 				617D794A16D933BC0091D4D6 /* PBXTargetDependency */,
@@ -1378,10 +1324,6 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 6162456314E6159C00CC97FB /* Products */;
-					ProjectRef = 619599BA1364E65900B429B6 /* Freetype.xcodeproj */;
-				},
-				{
 					ProductGroup = 619599401364C82B00B429B6 /* Products */;
 					ProjectRef = 6195993F1364C82B00B429B6 /* Lua.xcodeproj */;
 				},
@@ -1413,10 +1355,6 @@
 					ProductGroup = 61A19BC214D20CDA004B1E6D /* Products */;
 					ProjectRef = 61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */;
 				},
-				{
-					ProductGroup = 619598191364BCD200B429B6 /* Products */;
-					ProjectRef = 619598181364BCD200B429B6 /* Tremor.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -1428,13 +1366,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		6162456714E6159C00CC97FB /* libFreetype.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libFreetype.a;
-			remoteRef = 6162456614E6159C00CC97FB /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		617D78E016D932310091D4D6 /* libPhysfs.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1447,13 +1378,6 @@
 			fileType = archive.ar;
 			path = libPhyslayer.a;
 			remoteRef = 617D794716D933B00091D4D6 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		6195981D1364BCD200B429B6 /* libTremor.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libTremor.a;
-			remoteRef = 6195981C1364BCD200B429B6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		619599441364C82B00B429B6 /* libLua.a */ = {
@@ -1800,11 +1724,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		610FB7E216613980002FB2A7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libFreetype;
-			targetProxy = 610FB7E116613980002FB2A7 /* PBXContainerItemProxy */;
-		};
 		610FB7E416613980002FB2A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Static Library";
@@ -1829,11 +1748,6 @@
 			isa = PBXTargetDependency;
 			name = "Static Library";
 			targetProxy = 610FB7EB16613980002FB2A7 /* PBXContainerItemProxy */;
-		};
-		610FB7EE16613980002FB2A7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = libTremor;
-			targetProxy = 610FB7ED16613980002FB2A7 /* PBXContainerItemProxy */;
 		};
 		610FB7F016613980002FB2A7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

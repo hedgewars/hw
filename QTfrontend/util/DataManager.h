@@ -119,6 +119,8 @@ class DataManager: public QObject
 
         QString settingsFileName();
 
+        static QString safeFileName(QString fileName);
+
         static bool ensureFileExists(const QString & fileName);
 
     public slots:
