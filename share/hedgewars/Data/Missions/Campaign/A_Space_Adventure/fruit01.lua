@@ -426,7 +426,6 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
-	--HideHog(green1.human)
 	RestoreHog(green1.bot)
 	DeleteGear(green1.human)
 	green1.gear = green1.bot

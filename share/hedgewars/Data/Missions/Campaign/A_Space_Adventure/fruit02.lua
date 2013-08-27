@@ -275,7 +275,7 @@ end
 
 function onAmmoStoreInit()
 	SetAmmo(amDEagle, 0, 0, 0, 6)
-	SetAmmo(amGirder, 0, 0, 0, 3)
+	SetAmmo(amGirder, 0, 0, 0, 2)
 	SetAmmo(amRope, 0, 0, 0, 1)
 	SetAmmo(amWatermelon, 0, 0, 0, 1)
 	SetAmmo(amSniperRifle, 0, 0, 0, 1)
