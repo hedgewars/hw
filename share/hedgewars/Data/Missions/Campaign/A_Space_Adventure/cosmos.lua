@@ -153,7 +153,7 @@ function onGameStart()
 	-- do checkpoint stuff needed after game starts
 	if checkPointReached == 1 then	
 		AddAnim(dialog01)
-		AddAmmo(hero.gear, amJetpack, 2)
+		AddAmmo(hero.gear, amRope, 2)
 		AddAmmo(guard1.gear, amDEagle, 2)
 		AddAmmo(guard2.gear, amDEagle, 2)
 		SpawnAmmoCrate(saucerX, saucerY, amJetpack)	
@@ -333,26 +333,27 @@ function heroOutOfGuardSight(gear)
 end
 
 function moonLanding(gear)
-	AnimCaption(hero.gear,loc("Welcome to the moon!"))
-	SaveCampaignVar("Planet", "moon")
 	if checkPointReached == 1 then
 		-- player climbed the moon with rope
 		FollowGear(doctor.gear)
 		AnimSay(doctor.gear, loc("One cannot simply walk in moon with rope!"), SAY_SHOUT, 4000)
-		SendStat('siGameResult', loc("Hog Solo has to travel to the moon by flying saucer")) --1
+		SendStat('siGameResult', loc("This is the wrong way!")) --1
 		SendStat('siCustomAchievement', loc("Collect the crate with the flying saucer")) --11
 		SendStat('siCustomAchievement', loc("Fly to the moon")) --11
 		SendStat('siPlayerKills','0',teamC.name)
 		EndGame()
+	else
+		if checkPointReached ~= 5 then
+			SaveCampaignVar("CosmosCheckPoint", "4")
+			SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
+		end
+		AnimCaption(hero.gear,loc("Welcome to the moon!"))
+		SaveCampaignVar("Planet", "moon")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "2")
+		SaveCampaignVar("Mission2", "1")
+		sendStats(loc("the moon"))
 	end
-	if checkPointReached ~= 5 then
-		SaveCampaignVar("CosmosCheckPoint", "4")
-		SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
-	end
-	SaveCampaignVar("UnlockedMissions", "2")
-	SaveCampaignVar("Mission1", "2")
-	SaveCampaignVar("Mission2", "1")
-	sendStats(loc("the moon"))
 end
 
 function fruitPlanetLanding(gear)
