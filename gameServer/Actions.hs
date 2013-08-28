@@ -651,9 +651,17 @@ processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
 
-    io $ do
+    allci <- io $ do
         r <- room'sM rnc id ri
         saveReplay r
+        allClientsM rnc
+
+    readyCheckersIds <- liftM (filter (client'sM isReadyChecker rnc)) allClientsS
+    when (not $ null readyCheckersIds) $ do
+        modify (\s -> s{clientIndex = Just $ head readyCheckersIds})
+        processAction CheckRecord
+    where
+        isReadyChecker cl = isChecker cl && isReady cl
 
 
 processAction CheckRecord = do
@@ -666,9 +674,11 @@ processAction CheckRecord = do
             , ModifyClient $ \c -> c{checkInfo = cinfo}
             ]
 
+
 processAction (CheckFailed msg) = do
     Just (CheckInfo fileName _) <- client's checkInfo
     io $ moveFailedRecord fileName
+
 
 processAction (CheckSuccess info) = do
     Just (CheckInfo fileName teams) <- client's checkInfo
