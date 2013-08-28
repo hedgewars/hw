@@ -17,7 +17,10 @@ import Utils
 
 
 dbQueryAccount =
-    "SELECT users.pass, users_roles.rid FROM users LEFT JOIN users_roles ON (users.uid = users_roles.uid AND users_roles.rid = 3) WHERE users.name = ?"
+    "SELECT users.pass, \ 
+    \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3), \
+    \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 13) \
+    \ FROM users WHERE users.name = ?"
 
 dbQueryStats =
     "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
@@ -35,16 +38,17 @@ dbInteractionLoop dbConn = forever $ do
         CheckAccount clId clUid clNick _ -> do
                 statement <- prepare dbConn dbQueryAccount
                 execute statement [SqlByteString clNick]
-                passAndRole <- fetchRow statement
+                result <- fetchRow statement
                 finish statement
                 let response =
-                        if isJust passAndRole then
+                        if isJust result then let [pass, adm, contr] = fromJust $ result
                         (
                             clId,
                             clUid,
                             HasAccount
-                                (fromSql . head . fromJust $ passAndRole)
-                                (fromSql (last . fromJust $ passAndRole) == Just (3 :: Int))
+                                (fromSql pass)
+                                (fromSql adm == Just (1 :: Int))
+                                (fromSql contr == Just (1 :: Int))
                         )
                         else
                         (clId, clUid, Guest)

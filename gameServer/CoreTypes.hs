@@ -106,6 +106,7 @@ data ClientInfo =
         isInGame :: Bool,
         isAdministrator :: Bool,
         isChecker :: Bool,
+        isContributor :: Bool,
         isKickedFromServer :: Bool,
         isJoinedMidGame :: Bool,
         clientClan :: !(Maybe B.ByteString),
@@ -254,7 +255,7 @@ newServerInfo =
         []
 
 data AccountInfo =
-    HasAccount B.ByteString Bool
+    HasAccount B.ByteString Bool Bool
     | Guest
     | Admin
     deriving (Show, Read)

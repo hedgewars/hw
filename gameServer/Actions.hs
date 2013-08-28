@@ -421,16 +421,16 @@ processAction ClearAccountsCache = do
 
 processAction (ProcessAccountInfo info) = do
     case info of
-        HasAccount passwd isAdmin -> do
+        HasAccount passwd isAdmin isContr -> do
             b <- isBanned
             c <- client's isChecker
-            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
+            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
         Guest -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $
                 if c then
-                    checkerLogin "" False
+                    checkerLogin "" False False
                     else
                     processAction JoinLobby
         Admin -> do
@@ -441,30 +441,36 @@ processAction (ProcessAccountInfo info) = do
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-    checkerLogin _ False = processAction $ ByeClient $ loc "No checker rights"
-    checkerLogin p True = do
+    checkerLogin _ False _ = processAction $ ByeClient $ loc "No checker rights"
+    checkerLogin p True _ = do
         wp <- client's webPassword
         processAction $
             if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient $ loc "Authentication failed"
-    playerLogin p a = do
+    playerLogin p a contr = do
         chan <- client's sendChan
-        mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = p, isAdministrator = a})]
+        mapM_ processAction [
+            AnswerClients [chan] ["ASKPASSWORD"]
+            , ModifyClient (\c -> c{webPassword = p, isAdministrator = a, isContributor = contr})
+            ]
 
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
+    isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
     let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
-    let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin]]
+    let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
+    let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin], ["c" | isContr]]
     mapM_ processAction . concat $ [
         [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
         , [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
+        , [AnswerClients [chan] ("CLIENT_FLAGS" : "+c" : contrNicks) | not $ null contrNicks]
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
         , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]
@@ -611,6 +617,7 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
+
 processAction RestartServer = do
     sp <- gets (shutdownPending . serverInfo)
     when (not sp) $ do
@@ -623,6 +630,7 @@ processAction RestartServer = do
             _ <- createProcess (proc "./hedgewars-server" args)
             return ()
         processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
+
 
 processAction Stats = do
     cls <- allClientsS
