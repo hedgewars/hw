@@ -41,7 +41,7 @@ dbInteractionLoop dbConn = forever $ do
                 result <- fetchRow statement
                 finish statement
                 let response =
-                        if isJust result then let [pass, adm, contr] = fromJust $ result
+                        if isJust result then let [pass, adm, contr] = fromJust result in
                         (
                             clId,
                             clUid,
