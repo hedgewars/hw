@@ -681,7 +681,7 @@ processAction CheckRecord = do
     when (not . null $ l) $
         mapM_ processAction [
             AnswerClients [c] ("REPLAY" : l)
-            , ModifyClient $ \c -> c{checkInfo = cinfo}
+            , ModifyClient $ \c -> c{checkInfo = cinfo, isReady = False}
             ]
 
 
