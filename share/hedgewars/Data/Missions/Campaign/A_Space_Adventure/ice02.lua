@@ -92,7 +92,7 @@ function onGameInit()
 	initCheckpoint("ice02")
 	
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
