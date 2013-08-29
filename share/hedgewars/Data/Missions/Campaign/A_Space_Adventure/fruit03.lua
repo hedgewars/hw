@@ -120,7 +120,6 @@ function onNewTurn()
 		timeLeft = 0
 	end
 	turnHogs()
-	WriteLnToConsole("NEW TURN")
 end
 
 function onGameTick20()
@@ -129,20 +128,9 @@ function onGameTick20()
 	end
 end
 
-function onGearDamage(gear, damage)
-	FollowGear(gear)
-	WriteLnToConsole("GEAR DAMAGED")
-end
-
-function onGearDelete(gear)
-	WriteLnToConsole("HERO : "..hero.gear)
-	WriteLnToConsole("GEAR : "..gear)
-	WriteLnToConsole("UPPER BOUND : "..enemiesOdd[table.getn(enemiesOdd)].gear)
-	WriteLnToConsole("UPPER BOUND : "..enemiesEven[table.getn(enemiesEven)].gear)
-	
+function onGearDelete(gear)	
 	if (gear > hero.gear and gear <= enemiesOdd[table.getn(enemiesOdd)].gear) or 
 			(gear > hero.gear and gear <= enemiesEven[table.getn(enemiesEven)].gear) then
-		WriteLnToConsole("NOT HERO GEAR")
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
 		if availableTeleports < 2 then
@@ -152,7 +140,6 @@ function onGearDelete(gear)
 			AddAmmo(hero.gear, amSniperRifle, availableSniper + 1 )
 		end
 	end
-	WriteLnToConsole("GEAR KILLED")
 end
 
 -------------- EVENTS ------------------
