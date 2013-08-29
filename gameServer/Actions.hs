@@ -666,8 +666,10 @@ processAction SaveReplay = do
         filterM (client'sM rnc isReadyChecker) allci
 
     when (not $ null readyCheckersIds) $ do
-        modify (\s -> s{clientIndex = Just $ head readyCheckersIds})
-        processAction CheckRecord
+        oldci <- gets clientIndex
+        withStateT (\s -> s{clientIndex = Just $ head readyCheckersIds})
+            $ processAction CheckRecord
+        modify (\s -> s{clientIndex = oldci})
     where
         isReadyChecker cl = isChecker cl && isReady cl
 
