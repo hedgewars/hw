@@ -95,7 +95,6 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
 	--hero ammo
-	AddAmmo(hero.gear, amSkip, 1)
 	AddAmmo(hero.gear, amTeleport, 2)
 	AddAmmo(hero.gear, amSniperRifle, 2)
 	AddAmmo(hero.gear, amWatermelon, 2)
@@ -114,7 +113,10 @@ end
 
 function onNewTurn()
 	if CurrentHedgehog == hero.gear then
-		TurnTimeLeft = TurnTime + timeLeft
+		if GetAmmoCount(hero.gear, amSkip) == 0 then
+			TurnTimeLeft = TurnTime + timeLeft
+			AddAmmo(hero.gear, amSkip, 1)
+		end
 		timeLeft = 0
 	end
 	turnHogs()
@@ -122,14 +124,8 @@ function onNewTurn()
 end
 
 function onGameTick20()
-	--WriteLnToConsole("TURN TIME LEFT : "..timeLeft)
-	if CurrentHedgehog == hero.gear and GetAmmoCount(hero.gear, amSkip) == 0 then
-		AddAmmo(hero.gear, amSkip, 1)
-		--WriteLnToConsole("----- TURN TIME LEFT : "..TurnTimeLeft)
+	if CurrentHedgehog == hero.gear and TurnTimeLeft ~= 0 then
 		timeLeft = TurnTimeLeft
-		--WriteLnToConsole("***** TURN TIME LEFT : "..timeLeft)
-		TurnTimeLeft = 0
-	--WriteLnToConsole("NEW TURN TIME LEFT : "..timeLeft)
 	end
 end
 
