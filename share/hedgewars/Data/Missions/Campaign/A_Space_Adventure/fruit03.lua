@@ -108,18 +108,28 @@ function onGameStart()
 	SendHealthStatsOff()
 end
 
+function onNewTurn()
+	WriteLnToConsole("NEW TURN")
+end
+
 function onGameTick20()
 	turnHogs()
 end
 
 function onGearDamage(gear, damage)
 	FollowGear(gear)
+	WriteLnToConsole("GEAR DAMAGED")
 end
 
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
+	else
+		AddAmmo(hero.gear, amTeleport, 2)
+		AddAmmo(hero.gear, amSniperRifle, 2)
+		AddAmmo(hero.gear, amWatermelon, 2)
 	end
+	WriteLnToConsole("GEAR KILLED")
 end
 
 -------------- EVENTS ------------------
@@ -141,21 +151,23 @@ end
 ------------------ Other Functions -------------------
 
 function turnHogs()
-	for i=1,table.getn(enemiesEven) do
-		if GetHealth(enemiesEven[i].gear) then
-			if GetX(enemiesEven[i].gear) < GetX(hero.gear) and enemiesEven[i].turnLeft then
-				HogTurnLeft(enemiesEven[i].gear, false)
-			elseif GetX(enemiesEven[i].gear) > GetX(hero.gear) and not enemiesEven[i].turnLeft then
-				HogTurnLeft(enemiesEven[i].gear, true)
+	if GetHealth(hero.gear) then
+		for i=1,table.getn(enemiesEven) do
+			if GetHealth(enemiesEven[i].gear) then
+				if GetX(enemiesEven[i].gear) < GetX(hero.gear) and enemiesEven[i].turnLeft then
+					HogTurnLeft(enemiesEven[i].gear, false)
+				elseif GetX(enemiesEven[i].gear) > GetX(hero.gear) and not enemiesEven[i].turnLeft then
+					HogTurnLeft(enemiesEven[i].gear, true)
+				end
 			end
 		end
-	end
-	for i=1,table.getn(enemiesOdd) do
-		if GetHealth(enemiesOdd[i].gear) then
-			if GetX(enemiesOdd[i].gear) < GetX(hero.gear) and enemiesOdd[i].turnLeft then
-				HogTurnLeft(enemiesOdd[i].gear, false)
-			elseif GetX(enemiesOdd[i].gear) > GetX(hero.gear) and not enemiesOdd[i].turnLeft then
-				HogTurnLeft(enemiesOdd[i].gear, true)
+		for i=1,table.getn(enemiesOdd) do
+			if GetHealth(enemiesOdd[i].gear) then
+				if GetX(enemiesOdd[i].gear) < GetX(hero.gear) and enemiesOdd[i].turnLeft then
+					HogTurnLeft(enemiesOdd[i].gear, false)
+				elseif GetX(enemiesOdd[i].gear) > GetX(hero.gear) and not enemiesOdd[i].turnLeft then
+					HogTurnLeft(enemiesOdd[i].gear, true)
+				end
 			end
 		end
 	end
