@@ -659,12 +659,12 @@ processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
 
-    allci <- io $ do
+    readyCheckersIds <- io $ do
         r <- room'sM rnc id ri
         saveReplay r
-        allClientsM rnc
+        allci <- allClientsM rnc
+        filterM (client'sM rnc isReadyChecker) allci
 
-    readyCheckersIds <- liftM (filter (client'sM isReadyChecker rnc)) allClientsS
     when (not $ null readyCheckersIds) $ do
         modify (\s -> s{clientIndex = Just $ head readyCheckersIds})
         processAction CheckRecord
