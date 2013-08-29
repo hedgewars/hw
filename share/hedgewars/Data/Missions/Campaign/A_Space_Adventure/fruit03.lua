@@ -13,6 +13,20 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 local missionName = loc("Precise shooting")
 local timeLeft = 10000
 local lastWeaponUsed = amSniperRifle
+local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
+	loc("You can only use the Sniper Rifle or the Watermelon bomb").."|"..
+	loc("You'll have only 2 watermelon bombs during the game").."|"..
+	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 3 rifles").."|"..
+	loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports").."|"..
+	loc("The first turn will last 25 sec and every other turn 15 sec").."|"..
+	loc("If you skip the game your time left will be added to your next turn").."|"..
+	loc("Some parts of the land are indestructible")
+-- dialogs
+local dialog01 = {}
+-- mission objectives
+local goals = {
+	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+}
 -- hogs
 local hero = {
 	name = loc("Hog Solo"),
@@ -85,12 +99,13 @@ function onGameInit()
 	initCheckpoint("fruit03")
 	
 	AnimInit()
-	--AnimationSetup()
+	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
+	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	
@@ -109,6 +124,7 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
 	
 	SendHealthStatsOff()
+	AddAnim(dialog01)
 end
 
 function onNewTurn()
@@ -120,6 +136,15 @@ function onNewTurn()
 		timeLeft = 0
 	end
 	turnHogs()
+end
+
+function onGameTick()
+	AnimUnWait()
+	if ShowAnimation() == false then
+		return
+	end
+	ExecuteAfterAnimations()
+	CheckEvents()
 end
 
 function onGameTick20()
@@ -142,6 +167,12 @@ function onGearDelete(gear)
 	end
 end
 
+function onPrecise()
+	if GameTime > 3000 then
+		SetAnimSkip(true)   
+	end
+end
+
 -------------- EVENTS ------------------
 
 function onHeroDeath(gear)
@@ -156,6 +187,33 @@ end
 -- game ends anyway but I want to sent custom stats probably...
 function heroDeath(gear)
 	EndGame()
+end
+
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+    startBattle()
+end
+
+function AnimationSetup()
+	-- DIALOG 01 - Start, game instructions
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Fruit Planet Hog Solo got lost..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...and got ambushed by the Red Strawberies"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the Sniper Rifle or the Watermelon bomb"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 3 rifles"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("The first turn will last 25 sec and every other turn 15 sec"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Some parts of the land are indestructible"), 5000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = startBattle, args = {hero.gear}})	
 end
 
 ------------------ Other Functions -------------------
@@ -181,4 +239,12 @@ function turnHogs()
 			end
 		end
 	end
+end
+
+function startBattle()
+	AnimSwitchHog(enemiesOdd[table.getn(enemiesOdd)].gear)
+	TurnTimeLeft = 0
+	-- these 2 are needed in order hero has 10 sec more in the first turn
+	timeLeft = 10000
+	AddAmmo(hero.gear, amSkip, 0)
 end
