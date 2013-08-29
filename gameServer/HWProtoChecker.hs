@@ -18,7 +18,7 @@ handleCmd_checker ["CHECKED", "FAIL", msg] = do
     if not isChecking then
         return []
         else
-        return [CheckFailed msg, ModifyClient $ \c -> c{isReady = False, checkInfo = Nothing}]
+        return [CheckFailed msg, ModifyClient $ \c -> c{checkInfo = Nothing}]
 
 
 handleCmd_checker ("CHECKED" : "OK" : info) = do
@@ -26,6 +26,6 @@ handleCmd_checker ("CHECKED" : "OK" : info) = do
     if not isChecking then
         return []
         else
-        return [CheckSuccess info, ModifyClient $ \c -> c{isReady = False, checkInfo = Nothing}]
+        return [CheckSuccess info, ModifyClient $ \c -> c{checkInfo = Nothing}]
 
 handleCmd_checker _ = return [ProtocolError "Unknown command"]
