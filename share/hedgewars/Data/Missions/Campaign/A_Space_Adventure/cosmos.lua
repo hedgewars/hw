@@ -363,14 +363,16 @@ function fruitPlanetLanding(gear)
 		AnimCaption(hero.gear,loc("Welcome to the Fruit Planet!"))
 		SaveCampaignVar("Planet", "fruitPlanet")
 		if status.fruit02 then
-			SaveCampaignVar("UnlockedMissions", "3")
+			SaveCampaignVar("UnlockedMissions", "4")
 			SaveCampaignVar("Mission1", "3")
 			SaveCampaignVar("Mission2", "8")
-			SaveCampaignVar("Mission3", "1")
+			SaveCampaignVar("Mission3", "10")
+			SaveCampaignVar("Mission4", "1")
 		else
-			SaveCampaignVar("UnlockedMissions", "2")
+			SaveCampaignVar("UnlockedMissions", "3")
 			SaveCampaignVar("Mission1", "3")
-			SaveCampaignVar("Mission2", "1")
+			SaveCampaignVar("Mission2", "10")
+			SaveCampaignVar("Mission3", "1")
 		end
 		sendStats(loc("the Fruit Planet"))
 	end
