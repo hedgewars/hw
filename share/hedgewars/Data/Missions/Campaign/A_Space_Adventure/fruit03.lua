@@ -74,11 +74,13 @@ function onGameInit()
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
+		enemiesEven[i].turnLeft = false
 	end	
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
+		enemiesOdd[i].turnLeft = false
 	end
 	
 	initCheckpoint("fruit03")
@@ -110,6 +112,10 @@ function onGameTick20()
 	turnHogs()
 end
 
+function onGearDamage(gear, damage)
+	FollowGear(gear)
+end
+
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
@@ -137,18 +143,18 @@ end
 function turnHogs()
 	for i=1,table.getn(enemiesEven) do
 		if GetHealth(enemiesEven[i].gear) then
-			if GetX(enemiesEven[i].gear) < GetX(hero.gear) then
+			if GetX(enemiesEven[i].gear) < GetX(hero.gear) and enemiesEven[i].turnLeft then
 				HogTurnLeft(enemiesEven[i].gear, false)
-			elseif GetX(enemiesEven[i].gear) > GetX(hero.gear) then
+			elseif GetX(enemiesEven[i].gear) > GetX(hero.gear) and not enemiesEven[i].turnLeft then
 				HogTurnLeft(enemiesEven[i].gear, true)
 			end
 		end
 	end
 	for i=1,table.getn(enemiesOdd) do
 		if GetHealth(enemiesOdd[i].gear) then
-			if GetX(enemiesOdd[i].gear) < GetX(hero.gear) then
+			if GetX(enemiesOdd[i].gear) < GetX(hero.gear) and enemiesOdd[i].turnLeft then
 				HogTurnLeft(enemiesOdd[i].gear, false)
-			elseif GetX(enemiesOdd[i].gear) > GetX(hero.gear) then
+			elseif GetX(enemiesOdd[i].gear) > GetX(hero.gear) and not enemiesOdd[i].turnLeft then
 				HogTurnLeft(enemiesOdd[i].gear, true)
 			end
 		end
