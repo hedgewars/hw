@@ -108,6 +108,7 @@ function onGameStart()
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
 	
 	--hero ammo
 	AddAmmo(hero.gear, amTeleport, 2)
@@ -182,10 +183,38 @@ function onHeroDeath(gear)
 	return false
 end
 
+function onHeroWin(gear)
+	local enemies = enemiesOdd
+	for i=1,table.getn(enemiesEven) do
+		table.insert(enemies, enemiesEven[i])
+	end
+	local allDead = true
+	for i=1,table.getn(enemies) do
+		if GetHealth(enemies[i].gear) then
+			allDead = false
+			break
+		end
+	end
+	return allDead
+end
+
 -------------- ACTIONS ------------------
 
 -- game ends anyway but I want to sent custom stats probably...
 function heroDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("You have to eliminate all the enemies")) --11			
+	SendStat('siCustomAchievement', loc("Read the Challenge Objectives from within the mission for more details")) --11		
+	SendStat('siPlayerKills','1',teamB.name)
+	SendStat('siPlayerKills','0',teamA.name)
+	EndGame()
+end
+
+function heroWin(gear)
+	SendStat('siGameResult', loc("Congratulations, you won!")) --1
+	SendStat('siCustomAchievement', loc("You complete the mission in "..TotalRounds.." rounds")) --11			
+	-- TODO SendStat('siCustomAchievement', loc("You will gain some extra ammo the next time you play the Getting to the device mission")) --11		
+	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end
 
