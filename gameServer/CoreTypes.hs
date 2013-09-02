@@ -76,6 +76,8 @@ data Action =
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
     | Random [ClientChan] [B.ByteString]
+    | QueryReplay B.ByteString
+    | ShowReplay B.ByteString
 
 type ClientChan = Chan [B.ByteString]
 
@@ -258,6 +260,7 @@ data AccountInfo =
     HasAccount B.ByteString Bool Bool
     | Guest
     | Admin
+    | ReplayName B.ByteString
     deriving (Show, Read)
 
 data DBQuery =
@@ -265,6 +268,7 @@ data DBQuery =
     | ClearCache
     | SendStats Int Int
     | StoreAchievements B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
 
 data CoreMessage =
