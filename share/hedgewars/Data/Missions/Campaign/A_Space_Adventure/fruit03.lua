@@ -35,23 +35,23 @@ local hero = {
 }
 local enemiesOdd = {
 	{name = "Hog 1", x = 2000 , y = 175},
-	{name = "Hog 3", x = 1950 , y = 1110},
-	{name = "Hog 5", x = 1270 , y = 1480},
-	{name = "Hog 7", x = 240 , y = 790},
-	{name = "Hog 9", x = 620 , y = 1950},
-	{name = "Hog 11", x = 720 , y = 1950},
-	{name = "Hog 13", x = 1620 , y = 1950},
-	{name = "Hog 15", x = 1720 , y = 1950},
+	{name = "Hog III", x = 1950 , y = 1110},
+	{name = "Hog 100", x = 1270 , y = 1480},
+	{name = "Hog Saturn", x = 240 , y = 790},
+	{name = "Hog nueve", x = 620 , y = 1950},
+	{name = "Hog onze", x = 720 , y = 1950},
+	{name = "Hog dertien", x = 1620 , y = 1950},
+	{name = "Hog 3x5", x = 1720 , y = 1950},
 }
 local enemiesEven = {
-	{name = "Hog 2", x = 660, y = 140},
-	{name = "Hog 4", x = 1120, y = 1250},
-	{name = "Hog 6", x = 1290, y = 1250},
-	{name = "Hog 8", x = 820, y = 1950},
-	{name = "Hog 10", x = 920, y = 1950},
-	{name = "Hog 12", x = 1820, y = 1950},
-	{name = "Hog 14", x = 1920, y = 1950},
-	{name = "Hog 16", x = 1200, y = 560},
+	{name = "Hog two", x = 660, y = 140},
+	{name = "Hog D", x = 1120, y = 1250},
+	{name = "Hog exi", x = 1290, y = 1250},
+	{name = "Hog octo", x = 820, y = 1950},
+	{name = "Hog decar", x = 920, y = 1950},
+	{name = "Hog Hephaestus", x = 1820, y = 1950},
+	{name = "Hog 7+7", x = 1920, y = 1950},
+	{name = "Hog EOF", x = 1200, y = 560},
 }
 -- teams
 local teamA = {
