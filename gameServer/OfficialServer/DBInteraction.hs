@@ -77,6 +77,14 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
                     writeChan cChan $ ClientAccountInfo clId clUid (snd $ fromJust cacheEntry)
                     return (accountsCache, req)
 
+        GetReplayName {} -> do
+            SIO.hPutStrLn hIn $ show q
+            hFlush hIn
+
+            (clId', clUid', accountInfo) <- SIO.hGetLine hOut >>= (maybeException . maybeRead)
+
+            writeChan cChan $ ClientAccountInfo clId' clUid' accountInfo
+
         ClearCache -> return (Map.empty, req)
         StoreAchievements {} -> (
                 (SIO.hPutStrLn hIn $ show q) >>

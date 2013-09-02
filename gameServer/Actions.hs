@@ -437,6 +437,7 @@ processAction (ProcessAccountInfo info) = do
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
             processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
+        ReplayName fn -> processAction $ ShowReplay fn
     where
     isBanned = do
         processAction $ CheckBanned False
@@ -698,9 +699,20 @@ processAction (CheckSuccess info) = do
     where
         toPair t = (teamname t, teamowner t)
 
+processAction (QueryReplay name) = do
+    (Just ci) <- gets clientIndex
+    si <- gets serverInfo
+    uid <- client's clUID
+    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) name
+
 #else
 processAction SaveReplay = return ()
 processAction CheckRecord = return ()
 processAction (CheckFailed _) = return ()
 processAction (CheckSuccess _) = return ()
+processAction (QueryReplay _) = return ()
 #endif
+
+processAction (ShowReplay name) = do
+    return ()
+

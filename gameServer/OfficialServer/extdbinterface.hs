@@ -30,6 +30,9 @@ dbQueryAchievement =
     \ VALUES (?, (SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
     \ ?, ?, ?)"
 
+dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
+
+
 dbInteractionLoop dbConn = forever $ do
     q <- liftM read getLine
     hPutStrLn stderr $ show q
@@ -55,13 +58,24 @@ dbInteractionLoop dbConn = forever $ do
                 print response
                 hFlush stdout
 
+        GetReplayName clId clUid fileId -> do
+                statement <- prepare dbConn dbQueryReplayFilename
+                execute statement [SqlByteString fileId]
+                result <- fetchRow statement
+                finish statement
+                let fn = if (isJust result) then fromJust . fromSql . head $ result else ""
+                print (clId, clUid, ReplayName fn)
+                hFlush stdout
+
         SendStats clients rooms ->
                 run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
 --StoreAchievements (B.pack fileName) (map toPair teams) info
         StoreAchievements fileName teams info -> 
             mapM_ (run dbConn dbQueryAchievement) $ (parseStats fileName teams) info
 
+
 readTime = read . B.unpack . B.take 19 . B.drop 8
+
 
 parseStats :: B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
 parseStats fileName teams = ps
