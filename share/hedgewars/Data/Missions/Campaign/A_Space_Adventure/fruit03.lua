@@ -16,7 +16,7 @@ local lastWeaponUsed = amSniperRifle
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
 	loc("You can only use the Sniper Rifle or the Watermelon bomb").."|"..
 	loc("You'll have only 2 watermelon bombs during the game").."|"..
-	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 3 rifles").."|"..
+	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles").."|"..
 	loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports").."|"..
 	loc("The first turn will last 25 sec and every other turn 15 sec").."|"..
 	loc("If you skip the game your time left will be added to your next turn").."|"..
@@ -156,15 +156,14 @@ function onGameTick20()
 	end
 end
 
-function onGearDelete(gear)	
-	if (gear > hero.gear and gear <= enemiesOdd[table.getn(enemiesOdd)].gear) or 
-			(gear > hero.gear and gear <= enemiesEven[table.getn(enemiesEven)].gear) then
+function onGearDelete(gear)
+	if (isHog(gear)) then
 		local availableTeleports = GetAmmoCount(hero.gear,amTeleport)
 		local availableSniper = GetAmmoCount(hero.gear,amSniperRifle)
 		if availableTeleports < 2 then
 			AddAmmo(hero.gear, amTeleport, availableTeleports + 1 )
 		end
-		if availableSniper < 3 then
+		if availableSniper < 4 then
 			AddAmmo(hero.gear, amSniperRifle, availableSniper + 1 )
 		end
 	end
@@ -238,7 +237,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Use your available weapons in order to eliminate the enemies"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You can only use the Sniper Rifle or the Watermelon bomb"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only 2 watermelon bombs during the game"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 3 rifles"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("The first turn will last 25 sec and every other turn 15 sec"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
@@ -278,4 +277,23 @@ function startBattle()
 	-- these 2 are needed in order hero has 10 sec more in the first turn
 	timeLeft = 10000
 	AddAmmo(hero.gear, amSkip, 0)
+end
+
+function isHog(gear)
+	local hog = false
+	for i=1,table.getn(enemiesOdd) do
+		if gear == enemiesOdd[i].gear then
+			hog = true
+			break
+		end
+	end
+	if not hog then
+		for i=1,table.getn(enemiesEven) do
+			if gear == enemiesEven then
+				hog = true
+				break
+			end
+		end
+	end
+	return hog
 end
