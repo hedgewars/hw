@@ -157,5 +157,15 @@ answerFullConfigParams cl mpr pr
         toAnswer cl (paramName, paramStrs) = AnswerClients [sendChan cl] $ "CFG" : paramName : paramStrs
 
 
+answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action]
+answerAllTeams cl = concatMap toAnswer
+    where
+        clChan = sendChan cl
+        toAnswer team =
+            [AnswerClients [clChan] $ teamToNet team,
+            AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
+            AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
+
+
 loc :: B.ByteString -> B.ByteString
 loc = id

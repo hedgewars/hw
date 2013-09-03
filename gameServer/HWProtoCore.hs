@@ -50,7 +50,7 @@ handleCmd ["CMD", parameters] = do
             rnc <- liftM snd ask
             let chans = map (sendChan . client rnc) $ allClients rnc
             return [AnswerClients chans ["CHAT", "[global notice]", p] | isAdministrator cl]
-        h "WATCH" = return . QueryReplay
+        h "WATCH" f = return [QueryReplay f]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
 
 handleCmd cmd = do

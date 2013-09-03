@@ -14,16 +14,6 @@ import RoomsAndClients
 import EngineInteraction
 
 
-answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action]
-answerAllTeams cl = concatMap toAnswer
-    where
-        clChan = sendChan cl
-        toAnswer team =
-            [AnswerClients [clChan] $ teamToNet team,
-            AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
-            AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
-
-
 handleCmd_lobby :: CmdHandler
 
 
