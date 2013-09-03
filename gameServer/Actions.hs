@@ -17,7 +17,7 @@ import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
-import Control.Exception
+import Control.Exception as E
 import System.Process
 import Network.Socket
 import System.Random
@@ -714,5 +714,24 @@ processAction (QueryReplay _) = return ()
 #endif
 
 processAction (ShowReplay name) = do
-    return ()
+    c <- client's sendChan
+    cl <- client's id
 
+    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" name then B.drop 8 name else name]
+
+    checkInfo <- liftIO $ E.handle (\(e :: SomeException) ->
+                    warningM "REPLAYS" (B.unpack $ B.concat ["Problems reading ", fileName, ": ", B.pack $ show e]) >> return Nothing) $ do
+            (t, p1, p2, msgs) <- liftM read $ readFile (B.unpack fileName)
+            return $ Just (t, Map.fromList p1, Map.fromList p2, reverse msgs)
+
+    let (teams, params1, params2, roundMsgs) = fromJust checkInfo
+
+    when (isJust checkInfo) $ do
+        mapM_ processAction $ concat [
+            [AnswerClients [c] ["JOINED", nick cl]]
+            , answerFullConfigParams cl params1 params2
+            , answerAllTeams cl teams
+            , [AnswerClients [c]  ["RUN_GAME"]]
+            , [AnswerClients [c] $ "EM" : roundMsgs]
+            , [AnswerClients [c] ["KICKED"]]
+            ]
