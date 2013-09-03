@@ -63,7 +63,7 @@ dbInteractionLoop dbConn = forever $ do
                 execute statement [SqlByteString fileId]
                 result <- fetchRow statement
                 finish statement
-                let fn = if (isJust result) then fromJust . fromSql . head $ result else ""
+                let fn = if (isJust result) then fromJust . fromSql . head . fromJust $ result else ""
                 print (clId, clUid, ReplayName fn)
                 hFlush stdout
 

@@ -84,6 +84,7 @@ pipeDbConnectionLoop queries cChan hIn hOut accountsCache req =
             (clId', clUid', accountInfo) <- SIO.hGetLine hOut >>= (maybeException . maybeRead)
 
             writeChan cChan $ ClientAccountInfo clId' clUid' accountInfo
+            return (accountsCache, req)
 
         ClearCache -> return (Map.empty, req)
         StoreAchievements {} -> (
