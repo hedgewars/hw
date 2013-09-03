@@ -414,9 +414,10 @@ function deathPlanetLanding(gear)
 	else
 		AnimCaption(hero.gear,loc("Welcome to the Death Planet!"))
 		SaveCampaignVar("Planet", "deathPlanet")
-		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "9")
-		SaveCampaignVar("Mission2", "1")
+		SaveCampaignVar("Mission2", "11")
+		SaveCampaignVar("Mission3", "1")
 		sendStats(loc("the Planet of Death"))
 	end
 end

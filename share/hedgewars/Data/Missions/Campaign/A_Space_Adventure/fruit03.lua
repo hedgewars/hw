@@ -34,24 +34,24 @@ local hero = {
 	y = 560
 }
 local enemiesOdd = {
-	{name = "Hog 1", x = 2000 , y = 175},
-	{name = "Hog III", x = 1950 , y = 1110},
-	{name = "Hog 100", x = 1270 , y = 1480},
-	{name = "Hog Saturn", x = 240 , y = 790},
-	{name = "Hog nueve", x = 620 , y = 1950},
-	{name = "Hog onze", x = 720 , y = 1950},
-	{name = "Hog dertien", x = 1620 , y = 1950},
-	{name = "Hog 3x5", x = 1720 , y = 1950},
+	{name = loc("Hog 1"), x = 2000 , y = 175},
+	{name = loc("Hog III"), x = 1950 , y = 1110},
+	{name = loc("Hog 100"), x = 1270 , y = 1480},
+	{name = loc("Hog Saturn"), x = 240 , y = 790},
+	{name = loc("Hog nueve"), x = 620 , y = 1950},
+	{name = loc("Hog onze"), x = 720 , y = 1950},
+	{name = loc("Hog dertien"), x = 1620 , y = 1950},
+	{name = loc("Hog 3x5"), x = 1720 , y = 1950},
 }
 local enemiesEven = {
-	{name = "Hog two", x = 660, y = 140},
-	{name = "Hog D", x = 1120, y = 1250},
-	{name = "Hog exi", x = 1290, y = 1250},
-	{name = "Hog octo", x = 820, y = 1950},
-	{name = "Hog decar", x = 920, y = 1950},
-	{name = "Hog Hephaestus", x = 1820, y = 1950},
-	{name = "Hog 7+7", x = 1920, y = 1950},
-	{name = "Hog EOF", x = 1200, y = 560},
+	{name = loc("Hog two"), x = 660, y = 140},
+	{name = loc("Hog D"), x = 1120, y = 1250},
+	{name = loc("Hog exi"), x = 1290, y = 1250},
+	{name = loc("Hog octo"), x = 820, y = 1950},
+	{name = loc("Hog decar"), x = 920, y = 1950},
+	{name = loc("Hog Hephaestus"), x = 1820, y = 1950},
+	{name = loc("Hog 7+7"), x = 1920, y = 1950},
+	{name = loc("Hog EOF"), x = 1200, y = 560},
 }
 -- teams
 local teamA = {
@@ -201,7 +201,6 @@ end
 
 -------------- ACTIONS ------------------
 
--- game ends anyway but I want to sent custom stats probably...
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
 	SendStat('siCustomAchievement', loc("You have to eliminate all the enemies")) --11			
