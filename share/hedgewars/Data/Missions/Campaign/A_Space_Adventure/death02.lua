@@ -109,8 +109,8 @@ function onGearDelete(gear)
 	if isHog(gear) then
 		SetHealth(hero.gear, 100)
 		local deadHog = getHog(gear)
-		if deadHog.weapon == amDynamite then
-			hero.dynamiteAmmo = 0
+		if deadHog.weapon == amMortar then
+			hero.mortarAmmo = 0
 		elseif deadHog.weapon == amFirePunch then
 			hero.firepunchAmmo = 0
 		elseif deadHog.weapon == amDEagle then
