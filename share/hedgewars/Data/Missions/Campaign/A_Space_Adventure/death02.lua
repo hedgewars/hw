@@ -11,12 +11,19 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("Killing the specialists")
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
-	loc("Each time you play this missions enemy hogs will have a random playing order").."|"..
-	loc("Each enemy hog can use only the weapon that he is named of").."|"..
-	loc("If you kill a hog with the weapon that he uses your hp will be 100").."|"..
-	loc("If you kill a hog with another weapon you'll get 35% of the damaged dealt").."|"..
+	loc("Each time you play this missions enemy hogs will play in a random order").."|"..
+	loc("At the start of the game each enemy hog has only the weapon that he is named of").."|"..
+	loc("A random hog will inherit the weapons of the deceased hogs").."|"..
+	loc("If you kill a hog with the weapon your hp will be 100").."|"..
+	loc("If you injure a hog you'll get 35% of the damage dealt").."|"..
 	loc("Every time you kill an enemy hog your ammo will get reseted").."|"..
 	loc("Rope won't get reseted")
+-- dialogs
+local dialog01 = {}
+-- mission objectives
+local goals = {
+	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+}
 -- hogs
 local hero = {
 	name = loc("Hog Solo"),
@@ -72,7 +79,7 @@ function onGameInit()
 	initCheckpoint("death02")
 	
 	AnimInit()
-	--AnimationSetup()
+	AnimationSetup()
 end
 
 function onGameStart()
@@ -89,6 +96,7 @@ function onGameStart()
 	refreshHeroAmmo()
 
 	SendHealthStatsOff()
+	AddAnim(dialog01)
 end
 
 function onNewTurn()
@@ -184,7 +192,38 @@ function heroWin(gear)
 	EndGame()
 end
 
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+    startBattle()
+end
+
+function AnimationSetup()
+	-- DIALOG 01 - Start, game instructions
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Planet of Death..."), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...Hog Solo fights for his life"), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named of"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hog will inherit the weapons of the deceased hogs"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hog with the weapon your hp will be 100"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hog you'll get 35% of the damage dealt"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reseted"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reseted"), 2000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = startBattle, args = {hero.gear}})	
+end
+
 ------------ Other Functions -------------------
+
+function startBattle()
+	AnimSwitchHog(hero.gear)
+	TurnTimeLeft = TurnTime
+end
 
 function shuffleHogs(hogs)
     local hogsNumber = table.getn(hogs)
