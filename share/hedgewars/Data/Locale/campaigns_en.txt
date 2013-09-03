@@ -28,3 +28,4 @@ A_Space_Adventure-fruit01.desc="In the fruit planet things aren't going so well.
 A_Space_Adventure-fruit02.desc="Hog Solo gets closer to the lost part in the Fruit Planet. Will Captain Lime help him acquire the part or not?"
 A_Space_Adventure-fruit03.desc="Hog Solo got lost and got ambushed by the Red Strawberies. Help him eliminate them and win some extra ammo for the Getting to the device mission."
 A_Space_Adventure-death01.desc="In the Death Planet, the most infertile planet around, Hog Solo is very close to get the last part of the device! However an upleasant surprise awaits him..."
+A_Space_Adventure-death02.desc="Again Hog Solo has got himself in a difficult situation. Help him defeat the “5 deadly hogs“ in their own game!"
