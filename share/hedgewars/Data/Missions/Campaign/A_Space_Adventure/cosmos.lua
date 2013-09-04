@@ -384,10 +384,11 @@ function desertPlanetLanding(gear)
 	else		
 		AnimCaption(hero.gear,loc("Welcome to the Desert Planet!"))
 		SaveCampaignVar("Planet", "desertPlanet")
-		SaveCampaignVar("UnlockedMissions", "3")
+		SaveCampaignVar("UnlockedMissions", "4")
 		SaveCampaignVar("Mission1", "4")
 		SaveCampaignVar("Mission2", "7")
-		SaveCampaignVar("Mission3", "1")
+		SaveCampaignVar("Mission3", "12")
+		SaveCampaignVar("Mission4", "1")
 		sendStats(loc("the Desert Planet"))
 	end
 end
