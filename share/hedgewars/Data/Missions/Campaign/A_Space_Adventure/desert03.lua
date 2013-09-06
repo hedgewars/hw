@@ -107,7 +107,7 @@ function onGameTick()
 end
 
 function onGameTick20()
-	checkTargetsDestroied()
+	checkTargetsDestroyed()
 end
 
 function onAmmoStoreInit()
@@ -168,7 +168,7 @@ end
 
 ----------------- Other Functions -----------------
 
-function checkTargetsDestroied()
+function checkTargetsDestroyed()
 	if currentTarget == 1 then
 		if not GetHealth(targets[1].gear) then
 			AddCaption(loc("Level 1 clear!"))
@@ -207,6 +207,10 @@ function setTargets(ct)
 end
 
 function win()
+	SendStat('siGameResult', loc("Congratulations, you are the best!")) --1
+	SendStat('siCustomAchievement', loc("You have destroyed all the targets")) --11	
+	SendStat('siCustomAchievement', loc("You are indeed the best PAotH pilot")) --11
+	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end
 
