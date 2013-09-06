@@ -12,8 +12,14 @@ local missionName = loc("Precise flying")
 local challengeObjectives = loc("Use the rc plane and destroy the all the targets").."|"..
 	loc("Each time you destroy your level targets you'll get teleported to the next level").."|"..
 	loc("You'll have only one rc plane at the start of the mission").."|"..
-	loc("During the game you can get new plane by getting the weapon crates")
+	loc("During the game you can get new planes by getting the weapon crates")
 local currentTarget = 1
+-- dialogs
+local dialog01 = {}
+-- mission objectives
+local goals = {
+	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
+}
 -- hogs
 local hero = {
 	name = loc("Hog Solo"),
@@ -69,7 +75,7 @@ function onGameInit()
 	initCheckpoint("desert03")
 	
 	AnimInit()
-	--AnimationSetup()
+	AnimationSetup()
 end
 
 function onGameStart()
@@ -88,6 +94,7 @@ function onGameStart()
 	AddAmmo(hero.gear, amRCPlane, 1)
 
 	SendHealthStatsOff()
+	AddAnim(dialog01)
 end
 
 function onGameTick()
@@ -138,6 +145,25 @@ end
 
 function lose(gear)
 	gameOver()
+end
+
+-------------- ANIMATIONS ------------------
+
+function Skipanim(anim)
+	if goals[anim] ~= nil then
+		ShowMission(unpack(goals[anim]))
+    end
+end
+
+function AnimationSetup()
+	-- DIALOG 01 - Start, game instructions
+	AddSkipFunction(dialog01, Skipanim, {dialog01})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Desert Planet, Hog Solo found some time to play with his RC plane..."), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy your level targets you'll get teleported to the next level"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one rc plane at the start of the mission"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new planes by getting the weapon crates"), 5000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})	
 end
 
 ----------------- Other Functions -----------------
