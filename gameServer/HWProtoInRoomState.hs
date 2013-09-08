@@ -287,6 +287,9 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
         else
+        if illegalName newName then 
+            [Warning $ loc "Illegal room name"]
+        else
         if isJust $ find (\r -> newName == name r) rs then
             [Warning $ loc "Room with such name already exists"]
         else
