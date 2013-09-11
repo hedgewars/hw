@@ -14,6 +14,7 @@ local challengeObjectives = loc("Use your available weapons in order to catch th
 	loc("You have to stand very close to him")
 local currentPosition = 1
 local previousTimeLeft = 0
+local startChallenge = false
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -60,7 +61,7 @@ function onGameInit()
 	
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
+	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
@@ -80,9 +81,9 @@ function onGameStart()
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
 	
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
-	AddEvent(onLose, {hero.gear}, lose, {hero.gear}, 0)
 	
 	AddAmmo(hero.gear, amRope, 1)
+	AddAmmo(hero.gear, amSkip, 1)
 	AddAmmo(hero.gear, amTeleport, 100)
 	
 	SendHealthStatsOff()
@@ -92,13 +93,16 @@ end
 
 function onNewTurn()
 	WriteLnToConsole("NEW TURN "..CurrentHedgehog)
-	if CurrentHedgehog == hero.gear then
-		TurnTimeLeft = runner.places[currentPosition].turnTime + previousTimeLeft
-		WriteLnToConsole("Turn Time is "..TurnTimeLeft)
-		previousTimeLeft = 0
-		WriteLnToConsole("STILL HERE AND "..TurnTimeLeft.." prev hog = "..hogTurn)
-	else
-		TurnTimeLeft = 0
+	if startChallenge then
+		if CurrentHedgehog ~= hero.gear then
+			TurnTimeLeft = 0
+		else
+			if GetAmmoCount(hero.gear, amRope) == 0  then
+				lose()
+			end
+			TurnTimeLeft = runner.places[currentPosition].turnTime + previousTimeLeft
+			previousTimeLeft = 0
+		end
 	end
 end
 
@@ -132,24 +136,11 @@ function onHeroDeath(gear)
 	return false
 end
 
-function onLose(gear)
-	if (GetAmmoCount(hero.gear, amRope) == 0 and previousTimeLeft == 0) or (CurrentHedgehog == hero.gear and TurnTimeLeft == 0)then
-		return true
-	end
-	return false
-end
-
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	-- game over
 	WriteLnToConsole("END GAME 1")
-	EndGame()
-end
-
-function lose(gear)
-	-- game over
-	WriteLnToConsole("END GAME 2")
 	EndGame()
 end
 
@@ -187,6 +178,9 @@ function isHeroNextToRunner()
 end
 
 function moveRunner()
+	if not startChallenge then
+		startChallenge = true
+	end
 	AddAmmo(hero.gear, amRope, 1)
 	-- add anim dialogs here
 	if currentPosition ~= 1 then
@@ -197,7 +191,24 @@ function moveRunner()
 	currentPosition = currentPosition + 1
 	SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
 	WriteLnToConsole("HERE 1")
-	AnimSwitchHog(runner.gear)
-	TurnTimeLeft = 0
+		WriteLnToConsole("HERE A")
+		TurnTimeLeft = 0
 	WriteLnToConsole("HERE 2")
+end
+
+function lose()
+	-- game over
+	WriteLnToConsole("ROPE "..GetAmmoCount(hero.gear, amRope))
+	WriteLnToConsole("PREVIOUS TIME "..previousTimeLeft)
+	WriteLnToConsole("HOG "..CurrentHedgehog)
+	WriteLnToConsole("TurnTimeLeft "..TurnTimeLeft)
+	WriteLnToConsole("END GAME 2")
+	EndGame()
+end
+
+function heroOutOfRope()
+	if GetAmmoCount(hero.gear, amRope) == 0  then
+		return true
+	end
+	return false
 end
