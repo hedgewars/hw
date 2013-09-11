@@ -349,9 +349,10 @@ function moonLanding(gear)
 		end
 		AnimCaption(hero.gear,loc("Welcome to the moon!"))
 		SaveCampaignVar("Planet", "moon")
-		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "2")
-		SaveCampaignVar("Mission2", "1")
+		SaveCampaignVar("Mission2", "13")
+		SaveCampaignVar("Mission3", "1")
 		sendStats(loc("the moon"))
 	end
 end
