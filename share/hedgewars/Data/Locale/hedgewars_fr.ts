@@ -104,7 +104,7 @@
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
-        <translation>Toutes suggestions, idées ou rapport de bug sont les bienvenus</translation>
+        <translation>Toutes suggestions, idées ou rapport de bug sont les bienvenues.</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
@@ -116,15 +116,15 @@
     </message>
     <message>
         <source>Send us feedback!</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyez-nous votre avis ressenti !</translation>
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous trouvez un bug, sachez s&apos;il a été reporté ici:</translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adresse email est optionnelle, mais nécessaire si vous voulez que l&apos;on vous recontacte.</translation>
     </message>
 </context>
 <context>
@@ -153,7 +153,7 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation>La règle choisis va choisir automatiquement les armes</translation>
+        <translation>La règle choisie choisira automatiquement les armes</translation>
     </message>
     <message>
         <source>Map</source>
@@ -161,7 +161,7 @@
     </message>
     <message>
         <source>Game options</source>
-        <translation>Option de jeu</translation>
+        <translation>Options de jeu</translation>
     </message>
 </context>
 <context>
@@ -247,11 +247,11 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>Stylesheet imported from %1</source>
-        <translation>Feuille de style (Stylesheet) importée de %1</translation>
+        <translation>Feuille de style importée depuis %1</translation>
     </message>
     <message>
         <source>Enter %1 if you want to use the current StyleSheet in future, enter %2 to reset!</source>
-        <translation>Entrez %1 si vous voulez utiliser cette Feuille de style (Stylesheet) à l&apos;avenir, entrez %2 pour rétablir l&apos;ancienne apparence!</translation>
+        <translation>Entrez %1 si vous voulez utiliser cette Feuille de style à l&apos;avenir, entrez %2 pour rétablir l&apos;ancienne apparence!</translation>
     </message>
     <message>
         <source>Couldn&apos;t read %1</source>
@@ -259,27 +259,27 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>StyleSheet discarded</source>
-        <translation>Feuille de style (Stylesheet) effacée</translation>
+        <translation>Feuille de style effacée</translation>
     </message>
     <message>
         <source>StyleSheet saved to %1</source>
-        <translation>Feuille de style (Stylesheet) enregistrée dans %1</translation>
+        <translation>Feuille de style enregistrée dans %1</translation>
     </message>
     <message>
         <source>Failed to save StyleSheet to %1</source>
-        <translation>Impossible d&apos;enregistrer la feuille de style (Stylesheet) dans %1</translation>
+        <translation>Impossible d&apos;enregistrer la feuille de style dans %1</translation>
     </message>
     <message>
         <source>%1 has joined</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 est arrivé</translation>
     </message>
     <message>
         <source>%1 has left</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 est parti</translation>
     </message>
     <message>
         <source>%1 has left (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 est parti (%2)</translation>
     </message>
 </context>
 <context>
@@ -295,7 +295,7 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation>Fichier de demo d&apos;Hedgewars</translation>
+        <translation>Fichier de démo d&apos;Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
@@ -304,11 +304,11 @@ Veuillez verifier que votre jeu est installé correctement!</translation>
     </message>
     <message>
         <source>Demo name</source>
-        <translation>Nom de la Demo</translation>
+        <translation>Nom de la Démo</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation>Nom de la Demo:</translation>
+        <translation>Nom de la Démo:</translation>
     </message>
     <message>
         <source>Game aborted</source>
@@ -342,8 +342,8 @@ Veuillez choisir un autre pseudo:</translation>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Ce pseudo est enregistré, vous n&apos;avez spécifié aucun mot de passe.
-	
+        <translation>Ce pseudo est enregistré et vous n&apos;avez spécifié aucun mot de passe.
+
 Si ce pseudo n&apos;est pas le votre, veuillez enregistrer votre propre pseudo sur www.hedgewars.org
 
 Mot de passe:</translation>
@@ -361,8 +361,8 @@ veuillez l&apos;enregistrer sur www.hedgewars.org</translation>
 
 Your password wasn&apos;t saved either.</source>
         <translation>
-		
-Votre mot de passe non plus n&apos;a pas été sauvegardé.</translation>
+
+Votre mot de passe n&apos;a pas été sauvegardé non plus.</translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
@@ -392,7 +392,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette page nécessite une connexion internet.</translation>
     </message>
 </context>
 <context>
@@ -403,7 +403,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>Erreur lors de l&apos;ouverture du fichier de demo %1</translation>
+        <translation>Erreur lors de l&apos;ouverture du fichier de démo %1</translation>
     </message>
 </context>
 <context>
@@ -474,7 +474,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Map preview:</source>
-        <translation>Apperçu de la carte</translation>
+        <translation>Aperçu de la carte:</translation>
     </message>
     <message>
         <source>Load map drawing</source>
@@ -482,7 +482,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Editer un dessin</translation>
+        <translation>Editer une carte</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -490,7 +490,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Medium islands</source>
-        <translation>Moyennes îles</translation>
+        <translation>Îles moyennes</translation>
     </message>
     <message>
         <source>Large islands</source>
@@ -498,15 +498,15 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Map size:</source>
-        <translation>Taille de la carte</translation>
+        <translation>Taille de la carte:</translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation>Style du labyrinthe</translation>
+        <translation>Style du labyrinthe:</translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translation>Mission</translation>
+        <translation>Mission:</translation>
     </message>
     <message>
         <source>Map:</source>
@@ -526,7 +526,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation>Tout les fichiers</translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <source>Large tunnels</source>
@@ -534,7 +534,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème: %1</translation>
     </message>
 </context>
 <context>
@@ -568,7 +568,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Room destroyed</source>
-        <translation>Room fermée</translation>
+        <translation>Salle fermée</translation>
     </message>
     <message>
         <source>You got kicked</source>
@@ -576,7 +576,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined the room</source>
-        <translation>%1 *** %2 a rejoint la room</translation>
+        <translation>%1 *** %2 a rejoint la salle</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
@@ -596,7 +596,7 @@ Attendez quelques secondes et réessayez.</translation>
     </message>
     <message>
         <source>Remote host has closed connection</source>
-        <translation>Le serveur à fermé la connection</translation>
+        <translation>Le serveur a fermé la connection</translation>
     </message>
     <message>
         <source>The server is too old. Disconnecting now.</source>
@@ -614,17 +614,18 @@ Attendez quelques secondes et réessayez.</translation>
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation>Pour vous connecter sur le serveur, veuillez entrer vos identifiants.
+        <translation>Pour vous connecter sur le serveur, veuillez entrer vos identifiants
+.
 Si vous n&apos;avez pas de compte sur www.hedgewars.org,
-entrez juste votre pseudo.</translation>
+entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Pseudo</translation>
+        <translation>Pseudo:</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe</translation>
+        <translation>Mot de passe:</translation>
     </message>
 </context>
 <context>
@@ -741,7 +742,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Bans</source>
-        <translation>Bans</translation>
+        <translation>Banniseements</translation>
     </message>
     <message>
         <source>IP/Nick</source>
@@ -757,7 +758,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation>Rafraichir</translation>
+        <translation>Rafrâichir</translation>
     </message>
     <message>
         <source>Add</source>
@@ -779,11 +780,11 @@ entrez juste votre pseudo.</translation>
     <name>PageDataDownload</name>
     <message>
         <source>Loading, please wait.</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement, veuillez patienter.</translation>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette page nécessite une connexion internet.</translation>
     </message>
 </context>
 <context>
@@ -818,7 +819,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>All files</source>
-        <translation>Tout les fichiers</translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <source>Eraser</source>
@@ -837,11 +838,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Use my default</source>
-        <translation>Touche par defaut</translation>
+        <translation>Touche par défaut</translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation>Reinitialiser toutes les touches</translation>
+        <translation>Réinitialiser toutes les touches</translation>
     </message>
     <message>
         <source>Custom Controls</source>
@@ -857,11 +858,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>This hedgehog&apos;s name</source>
-        <translation>Le nom de ce herisson</translation>
+        <translation>Le nom de cet hérisson</translation>
     </message>
     <message>
         <source>Randomize this hedgehog&apos;s name</source>
-        <translation>Choisis un nom aléatoire pour ce herisson</translation>
+        <translation>Choisir un nom aléatoire pour cet hérisson</translation>
     </message>
     <message>
         <source>Random Team</source>
@@ -904,7 +905,7 @@ entrez juste votre pseudo.</translation>
         <source>(%1 kill)</source>
         <translation>
             <numerusform>(%1 tué)</numerusform>
-            <numerusform></numerusform>
+            <numerusform>(%1 tués)</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -930,7 +931,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Play again</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejouer</translation>
     </message>
     <message>
         <source>Save</source>
@@ -975,7 +976,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>Acces au contenu téléchargeable créé par les joueurs, disponible sur notre site</translation>
+        <translation>Accès au contenu téléchargeable créé par les joueurs, disponible sur notre site</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -983,7 +984,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Manage videos recorded from game</source>
-        <translation>Gérer les vidéos de parties enregistrées</translation>
+        <translation>Gérer les vidéos des parties enregistrées</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
@@ -1041,18 +1042,18 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Room controls</source>
-        <translation>Contrôle de la room</translation>
+        <translation>Options de la salle</translation>
     </message>
 </context>
 <context>
     <name>PageNetServer</name>
     <message>
         <source>Click here for details</source>
-        <translation>Clique pour plus de détails</translation>
+        <translation>Cliquer ici pour plus de détails</translation>
     </message>
     <message>
         <source>Insert your address here</source>
-        <translation>Insert ton adresse ici</translation>
+        <translation>Insérez votre adresse ici</translation>
     </message>
 </context>
 <context>
@@ -1063,7 +1064,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Edit team</source>
-        <translation>Éditer l&apos;Équipe</translation>
+        <translation>Éditer l&apos;équipe</translation>
     </message>
     <message>
         <source>Delete team</source>
@@ -1079,23 +1080,23 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Edit scheme</source>
-        <translation>Modifier règles</translation>
+        <translation>Modifier les règles</translation>
     </message>
     <message>
         <source>Delete scheme</source>
-        <translation>Supprimer règles</translation>
+        <translation>Supprimer les règles</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation>Nouvel ensemble d&apos;armes</translation>
+        <translation>Nouvel set d&apos;armes</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation>Modifier un ensemble d&apos;armes</translation>
+        <translation>Modifier un set d&apos;armes</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation>Supprimer un ensemble d&apos;armes</translation>
+        <translation>Supprimer un set d&apos;armes</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1107,19 +1108,19 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Proxy host</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy de l&apos;hôte</translation>
     </message>
     <message>
         <source>Proxy port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port du proxy</translation>
     </message>
     <message>
         <source>Proxy login</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiants du proxy</translation>
     </message>
     <message>
         <source>Proxy password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe du proxy</translation>
     </message>
     <message>
         <source>No proxy</source>
@@ -1131,7 +1132,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>HTTP proxy</source>
-        <translation type="unfinished"></translation>
+        <translation>Proxy HTTP</translation>
     </message>
     <message>
         <source>System proxy settings</source>
@@ -1143,11 +1144,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Reset to default</source>
-        <translation>Par défaut</translation>
+        <translation>Réinitialiser par défaut</translation>
     </message>
     <message>
         <source>Reset all binds</source>
-        <translation>Remettre les touches par défaut</translation>
+        <translation>Réinitialiser les touches par défaut</translation>
     </message>
     <message>
         <source>Game</source>
@@ -1195,11 +1196,11 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Game audio</source>
-        <translation>Son du jeu</translation>
+        <translation>Sons du jeu</translation>
     </message>
     <message>
         <source>Frontend audio</source>
-        <translation>Son de l&apos;interface</translation>
+        <translation>Sons de l&apos;interface</translation>
     </message>
     <message>
         <source>Account</source>
@@ -1207,7 +1208,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Proxy settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurations du proxy</translation>
     </message>
     <message>
         <source>Miscellaneous</source>
@@ -1223,7 +1224,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation>Option d&apos;enregistrement vidéo</translation>
+        <translation>Options d&apos;enregistrement vidéo</translation>
     </message>
 </context>
 <context>
@@ -1280,19 +1281,19 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Search for a room:</source>
-        <translation>Chercher une room</translation>
+        <translation>Chercher une salle:</translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation>Créer une room</translation>
+        <translation>Créer une salle</translation>
     </message>
     <message>
         <source>Join room</source>
-        <translation>Rejoindre</translation>
+        <translation>Rejoindre </translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation>Etat de la room</translation>
+        <translation>État de la salle</translation>
     </message>
     <message>
         <source>Clear filters</source>
@@ -1300,7 +1301,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Open server administration page</source>
-        <translation>Ouvre la page d&apos;administration du serveur</translation>
+        <translation>Ouvrir la page d&apos;administration du serveur</translation>
     </message>
 </context>
 <context>
@@ -1347,11 +1348,12 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Lower gravity</source>
+        <translatorcomment>ou faible gravité ?</translatorcomment>
         <translation>Gravité faible</translation>
     </message>
     <message>
         <source>Assisted aiming with laser sight</source>
-        <translation>Visée assistée par un laser</translation>
+        <translation>Visée assistée par laser</translation>
     </message>
     <message>
         <source>All hogs have a personal forcefield</source>
@@ -1359,15 +1361,15 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Order of play is random instead of in room order.</source>
-        <translation>Ordre de jeu aléatoire plutôt que par ordre dans la room.</translation>
+        <translation>Ordre de jeu aléatoire plutôt que par ordre dans la salle.</translation>
     </message>
     <message>
         <source>Play with a King. If he dies, your side dies.</source>
-        <translation>Jouez avec un Roi. S&apos;il meurs, votre côté perds.</translation>
+        <translation>Jouez avec un Roi. S&apos;il meurt, votre côté perd.</translation>
     </message>
     <message>
         <source>Take turns placing your hedgehogs before the start of play.</source>
-        <translation>Placez vos hérissons chacun à votre tour avant de commencer à jouer.</translation>
+        <translation>Placez vos hérissons tour à tour avant de commencer à jouer.</translation>
     </message>
     <message>
         <source>Ammo is shared between all teams that share a colour.</source>
@@ -1461,7 +1463,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation>Améliorez vos competences avec un large choix de missions</translation>
+        <translation>Améliorez vos compétences avec un large choix de missions</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
@@ -1484,7 +1486,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Pick the mission or training to play</source>
-        <translation>Choisis une mission ou entraine-toi à jouer</translation>
+        <translation>Choisis une mission ou entraîne-toi à jouer</translation>
     </message>
     <message>
         <source>Start fighting</source>
@@ -1547,7 +1549,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Info</source>
-        <translation>Info</translation>
+        <translation>Infos</translation>
     </message>
     <message>
         <source>Ban</source>
@@ -1579,7 +1581,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation>Bloquer l&apos;acces au joueurs non-enregistrés</translation>
+        <translation>Bloquer l&apos;accès aux joueurs non-enregistrés</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -1610,7 +1612,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation>Vérifiez la présence de mises à jour au démarrage</translation>
+        <translation>Vérifier la présence de mises à jour au démarrage</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
@@ -1622,7 +1624,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Save account name and password</source>
-        <translation>Enregistrer le nom de compte et mot de passe</translation>
+        <translation>Enregistrer le nom de compte et le mot de passe</translation>
     </message>
     <message>
         <source>Video is private</source>
@@ -1863,7 +1865,7 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>Crate Drops</source>
-        <translation>Lachers de caisse</translation>
+        <translation>Lâcher de caisse</translation>
     </message>
     <message>
         <source>% Dud Mines</source>
@@ -1939,19 +1941,19 @@ entrez juste votre pseudo.</translation>
     </message>
     <message>
         <source>% Get Away Time</source>
-        <translation>% de temp de fuite</translation>
+        <translation>% de temps de fuite</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
 Exiting now will abort them.
 Do you really want to quit?</source>
         <translation>Il y a des vidéos actuellement en cours de traitement.
-Quitter maintenant arretera le processus
+Quitter maintenant arrêtera le processus
 Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Please provide either the YouTube account name or the email address associated with the Google Account.</source>
-        <translation>Veuillez indiquer votre email et mot de passe de conexion à youtube</translation>
+        <translation>Veuillez indiquer votre email et votre mot de passe de conexion à Youtube.</translation>
     </message>
     <message>
         <source>Account name (or email): </source>
@@ -2003,7 +2005,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>Cette version est &quot;en cours de développement&quot; il est possible qu&apos;elle ne soit pas compatible avec les autres versions du jeu, des parties peuvent ne pas fonctionner ou être incompletes!</translation>
+        <translation>Cette version est &quot;en cours de développement&quot; il est possible qu&apos;elle ne soit pas compatible avec les autres versions du jeu, des parties peuvent ne pas fonctionner ou être incomplètes!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2027,11 +2029,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Send system information</source>
-        <translation>Envoyer des informations système</translation>
+        <translation>Envoyer les informations du système</translation>
     </message>
     <message>
         <source>Type the security code:</source>
-        <translation>Entrez le code de sécurité</translation>
+        <translation>Entrez le code de sécurité:</translation>
     </message>
     <message>
         <source>Revision</source>
@@ -2043,7 +2045,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le changement sera opérationnel au prochain redémarrage.</translation>
     </message>
 </context>
 <context>
@@ -2094,7 +2096,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Login or password is incorrect</source>
-        <translation>Identifiant ou mot de passe incorrecte</translation>
+        <translation>Identifiant ou mot de passe incorrect</translation>
     </message>
     <message>
         <source>Error while sending metadata to youtube.com:
@@ -2104,11 +2106,11 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Teams - Are you sure?</source>
-        <translation>Equipes - Etes-vous sûr?</translation>
+        <translation>Équipes - Etes-vous sûr?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation>Voulez-vous vraiment supprimer l&apos;équipe &quot;%1&quot;</translation>
+        <translation>Êtes-vous sûr de vouloir supprimer l&apos;équipe &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
@@ -2156,7 +2158,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Please enter room name</source>
-        <translation>Veuillez saisir le nom d&apos;une room</translation>
+        <translation>Veuillez saisir le nom d&apos;une salle</translation>
     </message>
     <message>
         <source>Record Play - Error</source>
@@ -2176,21 +2178,21 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>Room Name - Error</source>
-        <translation>Nom de la room - Erreur</translation>
+        <translation>Nom de la salle - Erreur</translation>
     </message>
     <message>
         <source>Please select room from the list</source>
-        <translation>Veuillez choisir une room dans la liste</translation>
+        <translation>Veuillez choisir une salle dans la liste</translation>
     </message>
     <message>
         <source>Room Name - Are you sure?</source>
-        <translation>Nom de la room - Etes-vous sûr?</translation>
+        <translation>Nom de la salle - Etes-vous sûr?</translation>
     </message>
     <message>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
         <translation>Vous essayez de rejoindre une partie qui a déjà commencée. 
-Voulez-vous tout de même rejoindre la room?</translation>
+Voulez-vous tout de même rejoindre la partie?</translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
@@ -2221,7 +2223,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Voulez-vous arreter l&apos;importation de %1?</translation>
+        <translation>Êtes-vous sûr de vouloir arrêter l&apos;importation de %1?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -2229,7 +2231,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation>Impossible d&apos;écrire le fichier %1</translation>
+        <translation>Impossible d&apos;ouvrir le fichier %1 pour écriture</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
@@ -2237,7 +2239,7 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Impossible d&apos;utiliser cette arme : &quot;%1&quot;</translation>
+        <translation>Impossible d&apos;utiliser cette arme : &quot;%1&quot;!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
@@ -2245,11 +2247,11 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Impossible de remplacer le set d&apos;arme &quot;%1&quot;</translation>
+        <translation>Impossible de remplacer le set d&apos;armes &quot;%1&quot;!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation>Impossible de supprimer le set d&apos;arme par défaut &quot;%1&quot;</translation>
+        <translation>Impossible de supprimer le set d&apos;armes par défaut &quot;%1&quot;!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
@@ -2269,11 +2271,11 @@ Voulez-vous tout de même rejoindre la room?</translation>
     </message>
     <message>
         <source>Failed to generate captcha</source>
-        <translation>Echec de la génération du Captcha</translation>
+        <translation>Échec de la génération du Captcha</translation>
     </message>
     <message>
         <source>Failed to download captcha</source>
-        <translation>Echec du téléchargement du Captcha</translation>
+        <translation>Échec du téléchargement du Captcha</translation>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
@@ -2358,7 +2360,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>More info</source>
-        <translation>Plus d&apos;info</translation>
+        <translation>Plus d&apos;infos</translation>
     </message>
     <message>
         <source>Set default options</source>
@@ -2410,11 +2412,11 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
-        <translation>Invitez vos amis sur votre serveur en 1 clique!</translation>
+        <translation>Invitez vos amis sur votre serveur en 1 clic!</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>Cliquez pour copier votre URL serveur unique. Envoyez ce lien a vos amis et il pourront vous rejoindre.</translation>
+        <translation>Cliquez pour copier votre unique URL du serveur. Envoyez ce lien a vos amis pour qu&apos;ils vous rejoignent.</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -2425,7 +2427,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     <name>RoomNamePrompt</name>
     <message>
         <source>Enter a name for your room.</source>
-        <translation>Entrez un nom pour votre room.</translation>
+        <translation>Entrez un nom pour votre salle.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2433,7 +2435,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Create room</source>
-        <translation>Créer une room</translation>
+        <translation>Créer une salle</translation>
     </message>
 </context>
 <context>
@@ -2444,7 +2446,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Room Name</source>
-        <translation>Nom de la room</translation>
+        <translation>Nom de la salle</translation>
     </message>
     <message>
         <source>C</source>
@@ -2487,7 +2489,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation>Cette carte est la base pour toutes valeurs aléatoire générées par le jeu.</translation>
+        <translation>Cette carte est la base pour toutes les valeurs aléatoire générées par le jeu.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2495,7 +2497,7 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
     <message>
         <source>Set seed</source>
-        <translation>Générer une base (graine)</translation>
+        <translation>Générer une base</translation>
     </message>
     <message>
         <source>Close</source>
@@ -2538,14 +2540,15 @@ Les joueurs ne sont pas tous prêts.</translation>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation>Impossible de lancer le jeu sur %1</translation>
+        <translation>Impossible de lancer le jeu sur %1
+Erreur du code : %2</translation>
     </message>
 </context>
 <context>
     <name>TeamSelWidget</name>
     <message>
         <source>At least two teams are required to play!</source>
-        <translation>Il doit y avoir deux équipes minimum pour jouer!</translation>
+        <translation>Il doit y avoir deux équipes au minimum pour jouer!</translation>
     </message>
 </context>
 <context>
@@ -2662,19 +2665,19 @@ Error code: %2</source>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>trouver hérisson</translation>
+        <translation>trouver l&apos;hérisson</translation>
     </message>
     <message>
         <source>ammo menu</source>
-        <translation>menu armes</translation>
+        <translation>menu d&apos;armes</translation>
     </message>
     <message>
         <source>volume down</source>
-        <translation>diminuer volume</translation>
+        <translation>diminuer le volume</translation>
     </message>
     <message>
         <source>volume up</source>
-        <translation>augmenter volume</translation>
+        <translation>augmenter le volume</translation>
     </message>
     <message>
         <source>change mode</source>
@@ -2739,7 +2742,7 @@ zoom</translation>
     </message>
     <message>
         <source>hedgehog info</source>
-        <translation>Info hérisson</translation>
+        <translation>Informations sur l&apos;hérisson</translation>
     </message>
 </context>
 <context>
@@ -2813,7 +2816,7 @@ zoom</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation>Basculez le mode plein écran:</translation>
+        <translation>Basculez en mode plein écran:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
