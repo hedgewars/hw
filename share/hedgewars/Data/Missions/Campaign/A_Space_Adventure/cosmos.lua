@@ -295,14 +295,15 @@ function onDeathPlanetLanding(gear)
 end
 
 function onNoFuelAtLand(gear)
-	if GetHealth(hero.gear) and GetY(gear) > 1400 and GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
+	if checkPointReached > 1 and GetHealth(hero.gear) and GetY(gear) > 1400 and 
+			GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
 		return true
 	end
 	return false
 end
 
 function onHeroDeath(gear)
-	if not GetHealth(gear) then
+	if not GetHealth(hero.gear) then
 		return true
 	end
 	return false
@@ -319,6 +320,7 @@ function heroAtSaucerPosition(gear)
 	TurnTimeLeft = 0
 	-- save check point	
 	SaveCampaignVar("CosmosCheckPoint", "2")
+	checkPointReached = 2
 	AddAnim(dialog02)
 	-- check if he was spotted by the guard
 	if guard1.turn then
