@@ -153,7 +153,7 @@ function onGameStart()
 	-- do checkpoint stuff needed after game starts
 	if checkPointReached == 1 then	
 		AddAnim(dialog01)
-		AddAmmo(hero.gear, amRope, 2)
+		AddAmmo(hero.gear, amRope, 1)
 		AddAmmo(guard1.gear, amDEagle, 2)
 		AddAmmo(guard2.gear, amDEagle, 2)
 		SpawnAmmoCrate(saucerX, saucerY, amJetpack)	
