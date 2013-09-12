@@ -323,7 +323,7 @@ function heroAtSaucerPosition(gear)
 	checkPointReached = 2
 	AddAnim(dialog02)
 	-- check if he was spotted by the guard
-	if guard1.turn then
+	if guard1.turn and GetX(hero.gear) > saucerX-150 then
 		guard1.keepTurning = false
 		AddAnim(dialog03)
 	end	
