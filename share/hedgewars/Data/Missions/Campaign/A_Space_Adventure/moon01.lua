@@ -186,7 +186,6 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onProfessorDeath, {professor.gear}, professorDeath, {professor.gear}, 0)
 	AddEvent(onMinionsDeath, {professor.gear}, minionsDeath, {professor.gear}, 0)
-	AddEvent(onBattleZone, {hero.gear}, battleZone, {hero.gear}, 0)
 	AddEvent(onProfessorHit, {professor.gear}, professorHit, {professor.gear}, 1)
 
 	if checkPointReached == 1 then
@@ -209,6 +208,8 @@ function onGameStart()
 		TurnTimeLeft = 0
 		AddAnim(dialog02)
 	end
+	-- this event check goes here to be executed after the onWeaponsPlatform check
+	AddEvent(onBattleZone, {hero.gear}, battleZone, {hero.gear}, 0)
 	
 	SendHealthStatsOff()
 end
@@ -267,8 +268,8 @@ end
 -------------- EVENTS ------------------
 
 function onWeaponsPlatform(gear)
-	if not hero.dead and GetX(gear) > bazookaX-200 and GetX(gear) < deserteagleX+400  
-		and GetY(gear) < weaponsY+150 and StoppedGear(gear) then
+	if not hero.dead and (GetAmmoCount(hero.gear, amBazooka) > 0 or GetAmmoCount(hero.gear, amParachute) > 0 or 
+			GetAmmoCount(hero.gear, amGrenade) > 0 or GetAmmoCount(hero.gear, amDEagle) > 0) and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -323,7 +324,10 @@ function weaponsPlatform(gear)
 	weaponsAqcuired = true
 	SetWind(60)		
 	GameFlags = bor(GameFlags,gfDisableWind)
-	AddAnim(dialog02)
+	AddAmmo(hero.gear, amRope, 0)
+	if GetX(hero.gear) < 1900 then
+		AddAnim(dialog02)
+	end
 end
 
 function heroDeath(gear)
