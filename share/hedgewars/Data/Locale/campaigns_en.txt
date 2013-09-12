@@ -20,6 +20,7 @@ A_Classic_Fairytale-epil.desc="Congratulations! Leaks a lot can finally leave in
 
 A_Space_Adventure-cosmos.desc="Hogera, the planet of hogs is about to be hit by a gigantic meteorite. In this race for survival you have to lead PAotH's best pilot, Hog Solo, in a space trip around the neighbor planets to collect all the 4 pieces of the long lost anti gravity device!"
 A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his saucer but professor Hogevil has gone there first and set an ambush! Rescue the catpured PAotH researchers and drive professor Hogevil away!"
+A_Space_Adventure-moon02.desc="Hog Solo visits an hermit, old PAotH veteran, who lives in moon in order to collect some intel about Pr. Hogevil. However, he has to beat the hermit, Soneek the Crazy Runner, in a chase game first!"
 A_Space_Adventure-ice01.desc="Welcome to the planet of ice. Here, it's so cold that most of Hog Solo's weapons won't work. You have to get the lost part from the bandit leader Thanta using the weapons that you'll find there!"
 A_Space_Adventure-ice02.desc="Hog Solo couldn't just visit the Ice Planet without visiting the olympic stadium of saucer flying! In this mission you can proove your flying skills and claim your place between the best!"
 A_Space_Adventure-desert01.desc="You have landed to the planet of sand! Hog Solo has to find the missing part in the underground tunnels. Be careful as vicious smugglers await to attack and rob you!"
