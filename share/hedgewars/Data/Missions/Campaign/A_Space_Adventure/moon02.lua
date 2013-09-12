@@ -9,7 +9,7 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
 -- globals
-local missionName = loc("Chasing ghosts in moon")
+local missionName = loc("Chasing the blue hog")
 local challengeObjectives = loc("Use your available weapons in order to catch the other hog").."|"..
 	loc("You have to stand very close to him")
 local currentPosition = 1
@@ -66,7 +66,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Crazy Runner
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	runner.gear = AddHog(runner.name, 0, 100, "war_desertgrenadier1")
+	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)
 	
