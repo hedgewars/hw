@@ -17,6 +17,7 @@ local previousTimeLeft = 0
 local startChallenge = false
 -- dialogs
 local dialog01 = {}
+local dialog02 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Challenge Objectives"), challengeObjectives, 1, 4500},
@@ -84,7 +85,6 @@ function onGameStart()
 	
 	AddAmmo(hero.gear, amRope, 1)
 	AddAmmo(hero.gear, amSkip, 1)
-	AddAmmo(hero.gear, amTeleport, 100)
 	
 	SendHealthStatsOff()
 	hogTurn = runner.gear
@@ -92,7 +92,6 @@ function onGameStart()
 end
 
 function onNewTurn()
-	WriteLnToConsole("NEW TURN "..CurrentHedgehog)
 	if startChallenge then
 		if CurrentHedgehog ~= hero.gear then
 			TurnTimeLeft = 0
@@ -140,7 +139,6 @@ end
 
 function heroDeath(gear)
 	-- game over
-	WriteLnToConsole("END GAME 1")
 	EndGame()
 end
 
@@ -164,7 +162,22 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("We'll play a game first"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("I'll let you know whatever I know about him if you manage to catch me 3 times"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})	
-	table.insert(dialog01, {func = moveRunner, args = {}})	
+	table.insert(dialog01, {func = moveRunner, args = {}})
+	-- DIALOG 02 - Hog Solo story    
+	AddSkipFunction(dialog02, Skipanim, {dialog02})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3200}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("The truth about Pr. Hogevil"), 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Amazing! I was never beaten in running before!"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("So, let me tell you what I know about Pr. Hogevil..."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Pr. Hogevil, then known as James Hogus, worked for PAotH back in my time"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("He was the lab assistant of Dr. Goodhogan, the inventor of the anti-gravity device"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("In one of the last tests during the construction of the device an accident happpened"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("In this accident Pr. Hogevil lost all his nails from his head!"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("That's why he always wears a hat since then"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("After that incident he got underground and start working his plan to steal the device"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("He is a very taugh and very determined hedgehog. I would be extremely careful if I were you"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("I should go now, goodbye!"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = win, args = {}})
 end
 
 ------------- other functions ---------------
@@ -178,37 +191,35 @@ function isHeroNextToRunner()
 end
 
 function moveRunner()
-	if not startChallenge then
-		startChallenge = true
-	end
-	AddAmmo(hero.gear, amRope, 1)
-	-- add anim dialogs here
-	if currentPosition ~= 1 then
-		PlaySound(sndVictory)
-		AnimSay(runner.gear, loc("You got me"), SAY_SAY, 3000)
-		previousTimeLeft = TurnTimeLeft
-	end
-	currentPosition = currentPosition + 1
-	SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
-	WriteLnToConsole("HERE 1")
-		WriteLnToConsole("HERE A")
+	if currentPosition > 3 then
+		if GetX(hero.gear) > GetX(runner.gear) then
+			HogTurnLeft(runner.gear, false)
+		end
 		TurnTimeLeft = 0
-	WriteLnToConsole("HERE 2")
+		AddAnim(dialog02)
+	else
+		if not startChallenge then
+			startChallenge = true
+		end
+		AddAmmo(hero.gear, amRope, 1)
+		if currentPosition ~= 1 then
+			PlaySound(sndVictory)
+			if currentPosition > 1 and currentPosition < 4 then
+				AnimCaption(hero.gear, loc("Go get him again"), 3000)
+				AnimSay(runner.gear, loc("You got me"), SAY_SAY, 3000)
+			end
+			previousTimeLeft = TurnTimeLeft
+		end
+		currentPosition = currentPosition + 1
+		SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
+		TurnTimeLeft = 0
+	end
 end
 
 function lose()
-	-- game over
-	WriteLnToConsole("ROPE "..GetAmmoCount(hero.gear, amRope))
-	WriteLnToConsole("PREVIOUS TIME "..previousTimeLeft)
-	WriteLnToConsole("HOG "..CurrentHedgehog)
-	WriteLnToConsole("TurnTimeLeft "..TurnTimeLeft)
-	WriteLnToConsole("END GAME 2")
 	EndGame()
 end
 
-function heroOutOfRope()
-	if GetAmmoCount(hero.gear, amRope) == 0  then
-		return true
-	end
-	return false
+function win()
+	EndGame()
 end
