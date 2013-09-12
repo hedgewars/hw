@@ -376,12 +376,16 @@ function heroFleeFirstBattle(gear)
 end
 
 function heroAtCheckpoint2(gear)
-	saveCheckPointLocal("2")
+	if GetAmmoCount(hero.gear, amRope) > 0 or GetAmmoCount(hero.gear, amParachute) > 0 then
+		saveCheckPointLocal("2")
+	end
 	secondBattle()
 end
 
 function heroAtCheckpoint3(gear)
-	saveCheckPointLocal("3")
+	if GetAmmoCount(hero.gear, amRope) > 0 then
+		saveCheckPointLocal("3")
+	end
 	secondBattle()
 end
 
