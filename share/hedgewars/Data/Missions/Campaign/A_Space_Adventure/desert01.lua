@@ -418,6 +418,9 @@ function Skipanim(anim)
 		ShowMission(unpack(goals[anim]))
     end
     AnimSwitchHog(hero.gear)
+	if anim == dialog01 then
+		startMission()
+	end
 end
 
 function AnimationSetup()
@@ -448,7 +451,7 @@ end
 --------------- OTHER FUNCTIONS ------------------
 
 function startMission()
-	AnimSwitchHog(bandit1.gear)
+	AnimSwitchHog(ally.gear)
 	TurnTimeLeft = 0
 end
 
