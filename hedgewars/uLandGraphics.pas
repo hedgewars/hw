@@ -125,6 +125,7 @@ var
     icePixels: PLongwordArray;
     w: LongWord;
 begin
+    if cOnlyStats then exit;
     // So. 3 parameters here. Ice colour, Ice opacity, and a bias on the greyscaled pixel towards lightness
     iceSurface:= SpritesData[sprIceTexture].Surface;
     icePixels := iceSurface^.pixels;
