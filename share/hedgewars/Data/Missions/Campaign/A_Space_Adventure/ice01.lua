@@ -1,7 +1,7 @@
 ------------------- ABOUT ----------------------
 --
 -- In this cold planet hero seeks for a part of the
--- antigravity device. He has to capture Icy Pit who
+-- antigravity device. He has to capture Thanta who
 -- knows where the device is hidden. Hero will be
 -- able to use only the ice gun for this mission.
 
@@ -21,6 +21,7 @@ local heroVisitedAntiFlyArea = false
 local heroAtFinalStep = false
 local iceGunTaken = false
 local checkPointReached = 1 -- 1 is normal spawn
+local heroDamageAtCurrentTurn = 0
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -197,9 +198,10 @@ function onGameStart()
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
 	AddEvent(onThantaDeath, {bandit1.gear}, thantaDeath, {bandit1.gear}, 1)
-	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 1)
+	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
 	
 	AddAmmo(hero.gear, amJetpack, 99)
+	AddAmmo(hero.gear, amTeleport, 99)
 	AddAmmo(bandit1.gear, amBazooka, 5)
 	AddAmmo(bandit2.gear, amBazooka, 4)
 	AddAmmo(bandit3.gear, amMine, 2)
@@ -224,7 +226,8 @@ function onGameStart()
 	SendHealthStatsOff()
 end
 
-function onNewTurn()		
+function onNewTurn()
+	heroDamageAtCurrentTurn = 0
 	-- round has to start if hero goes near the column
 	if not heroVisitedAntiFlyArea and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
@@ -327,6 +330,12 @@ function onPrecise()
 	end
 end
 
+function onGearDamage(gear, damage)
+	if gear == hero.gear then
+		heroDamageAtCurrentTurn = heroDamageAtCurrentTurn + damage
+	end
+end
+
 -------------- EVENTS ------------------
 
 function onAntiFlyArea(gear)
@@ -379,8 +388,8 @@ function onThantaDeath(gear)
 end
 
 function onHeroWin(gear)
-	if (not hero.dead and not bandit1.dead) and (GetX(hero.gear)>=GetX(bandit1.gear)-80 and GetX(hero.gear)<=GetX(bandit1.gear)+80)
-		and (GetY(hero.gear)>=GetY(bandit1.gear)-30 and GetY(hero.gear)<=GetY(bandit1.gear)+30) then
+	if (not hero.dead and not bandit1.dead) and heroDamageAtCurrentTurn == 0 and (GetX(hero.gear)>=GetX(bandit1.gear)-80
+		and GetX(hero.gear)<=GetX(bandit1.gear)+80)	and (GetY(hero.gear)>=GetY(bandit1.gear)-30 and GetY(hero.gear)<=GetY(bandit1.gear)+30) then
 		return true
 	end
 	return false
