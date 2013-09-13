@@ -28,6 +28,7 @@ local dialog02 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta"), 1, 4500},
+	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you got the part!"), 1, 3500},
 }
 -- crates
 local icegunY = 1950
@@ -469,7 +470,7 @@ end
 function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
-    end    
+    end
     if anim == dialog02 then
 		actionsOnWin()
 	end
@@ -494,7 +495,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 02 - Hero got to Thant2
-	AddSkipFunction(dialog02, Skipanim, {dialog01})
+	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's part..."), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please spare me. You can take all my treasures!"), SAY_SAY, 3000}})
