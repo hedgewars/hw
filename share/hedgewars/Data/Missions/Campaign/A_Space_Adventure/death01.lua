@@ -171,6 +171,7 @@ function onGameStart()
 	AddAmmo(hero.gear, amParachute, 1)
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
+	AddAmmo(hero.gear, amSkip, 100)
 	-- evil ammo
 	AddAmmo(professor.gear, amRope, 4)
 	AddAmmo(professor.gear, amBazooka, 8)
