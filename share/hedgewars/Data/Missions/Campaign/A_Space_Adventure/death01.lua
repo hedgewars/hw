@@ -19,10 +19,12 @@ local goals = {
 	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!"), 1, 4500},
 }
 -- crates
-local portalCrate = {x = 1520, y = 1950}
+local portalCrate = {x = 1935, y = 1830}
+local batCrate = {x = 1975, y = 1830}
+local blowtorchCrate = {x = 1520, y = 1950}
 local cakeCrate = {x = 325, y = 1500}
 local ropeCrate = {x = 1860, y = 500}
-local pickHammerCrate = {x = 1860, y = 400}
+local pickHammerCrate = {x = 1900, y = 400}
 -- hogs
 local hero = {}
 local paoth1 = {}
@@ -140,11 +142,13 @@ function onGameStart()
 	
 	-- add crates
 	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
+	SpawnAmmoCrate(batCrate.x, batCrate.y, amBaseballBat)
+	SpawnAmmoCrate(blowtorchCrate.x, blowtorchCrate.y, amBlowTorch)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
 	SpawnAmmoCrate(ropeCrate.x, ropeCrate.y, amRope)
 	SpawnAmmoCrate(pickHammerCrate.x, pickHammerCrate.y, amPickHammer)
 	SpawnHealthCrate(cakeCrate.x + 40, cakeCrate.y)
-	SpawnHealthCrate(portalCrate.x + 40, portalCrate.y)
+	SpawnHealthCrate(blowtorchCrate.x + 40, blowtorchCrate.y)
 	-- add explosives
 	AddGear(1900, 850, gtExplosives, 0, 0, 0, 0)
 	AddGear(1900, 800, gtExplosives, 0, 0, 0, 0)
@@ -199,6 +203,8 @@ end
 function onAmmoStoreInit()
 	SetAmmo(amCake, 0, 0, 0, 1)
 	SetAmmo(amPortalGun, 0, 0, 0, 1)
+	SetAmmo(amBaseballBat, 0, 0, 0, 1)
+	SetAmmo(amBlowTorch, 0, 0, 0, 2)
 	SetAmmo(amRope, 0, 0, 0, 2)
 	SetAmmo(amPickHammer, 0, 0, 0, 1)
 end
