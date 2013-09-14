@@ -166,6 +166,7 @@ function onGameStart()
 	AddAmmo(hero.gear, amParachute, 1)
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
+	AddAmmo(hero.gear, amSkip, 100)
 	-- Green team weapons
 	local greenArmy = { green1, green2 }
 	for i=1,2 do
