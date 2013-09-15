@@ -19,7 +19,8 @@ local goals = {
 	[dialog01] = {missionName, loc("The final part"), loc("Defeat Professor Hogevil!"), 1, 4500},
 }
 -- crates
-local portalCrate = {x = 1935, y = 1830}
+local teleportCrate = {x = 1935, y = 1830}
+local drillCrate = {x = 3810, y = 1705}
 local batCrate = {x = 1975, y = 1830}
 local blowtorchCrate = {x = 1520, y = 1950}
 local cakeCrate = {x = 325, y = 1500}
@@ -57,10 +58,10 @@ professor.name = "Prof. Hogevil"
 professor.dead = false
 thug1.x = 1265
 thug1.y = 1400
-thug1.health = 100
+thug1.health = 70
 thug2.x = 2035
 thug2.y = 1320
-thug2.health = 100
+thug2.health = 95
 thug3.x = 1980
 thug3.y = 815
 thug3.health = 35
@@ -141,7 +142,9 @@ function onGameStart()
 	AddEvent(onEnemiesDeath, {hero.gear}, enemiesDeath, {hero.gear}, 0)
 	
 	-- add crates
-	SpawnAmmoCrate(portalCrate.x, portalCrate.y, amPortalGun)
+	SpawnAmmoCrate(teleportCrate.x, teleportCrate.y, amTeleport)
+	SpawnAmmoCrate(drillCrate.x, drillCrate.y, amTeleport)
+	SpawnAmmoCrate(drillCrate.x, drillCrate.y, amDrill)
 	SpawnAmmoCrate(batCrate.x, batCrate.y, amBaseballBat)
 	SpawnAmmoCrate(blowtorchCrate.x, blowtorchCrate.y, amBlowTorch)
 	SpawnAmmoCrate(cakeCrate.x, cakeCrate.y, amCake)
@@ -159,6 +162,9 @@ function onGameStart()
 	AddGear(3480, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3440, 1690, gtMine, 0, 0, 0, 0)
 	AddGear(3400, 1710, gtMine, 0, 0, 0, 0)
+	AddGear(2100, 1730, gtMine, 0, 0, 0, 0)
+	AddGear(2150, 1730, gtMine, 0, 0, 0, 0)
+	AddGear(2200, 1750, gtMine, 0, 0, 0, 0)
 	-- add girders
 	PlaceGirder(3770, 1370, 4)
 	PlaceGirder(3700, 1460, 6)
@@ -203,11 +209,12 @@ end
 
 function onAmmoStoreInit()
 	SetAmmo(amCake, 0, 0, 0, 1)
-	SetAmmo(amPortalGun, 0, 0, 0, 1)
-	SetAmmo(amBaseballBat, 0, 0, 0, 1)
-	SetAmmo(amBlowTorch, 0, 0, 0, 2)
+	SetAmmo(amTeleport, 0, 0, 0, 1)
+	SetAmmo(amBaseballBat, 0, 0, 0, 4)
+	SetAmmo(amBlowTorch, 0, 0, 0, 1)
 	SetAmmo(amRope, 0, 0, 0, 2)
 	SetAmmo(amPickHammer, 0, 0, 0, 1)
+	SetAmmo(amDrill, 0, 0, 0, 1)
 end
 
 function onGearDelete(gear)
