@@ -65,3 +65,31 @@ end
 function saveCheckpoint(cp)
 	SaveCampaignVar("CurrentMissionCheckpoint", cp)
 end
+
+-- saves what bonuses are available
+-- times is how many times the bonus will be available, this will be mission specific
+function saveBonus(index, times)
+	--        1         2        3
+	-- order: desert03, fruit03, death02
+	local bonus = "000"
+	if tonumber(GetCampaignVar("SideMissionsBonuses")) then
+		bonus = GetCampaignVar("SideMissionsBonuses")
+	end
+	if i == 1 then
+		bonus = times..bonus:sub(index+1)
+	elseif i == bonus:len() then
+		bonus = bonus:sub(1,index-1)..times
+	else
+		bonus = bonus:sub(1,index-1)..times..bonus:sub(index+1)
+	end
+	SaveCampaignVar("SideMissionsBonuses",bonus)
+end
+
+function getBonus(index)
+	local bonus = 0
+	if tonumber(GetCampaignVar("SideMissionsBonuses")) then
+		bonusString = GetCampaignVar("SideMissionsBonuses")
+		bonus = bonusString:sub(index,index)
+	end
+	return bonus
+end

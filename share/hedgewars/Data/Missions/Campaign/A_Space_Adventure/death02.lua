@@ -185,6 +185,7 @@ function heroDeath(gear)
 end
 
 function heroWin(gear)
+	saveBonus(3, 4)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You complete the mission in "..TotalRounds.." rounds")) --11			
 	-- TODO SendStat('siCustomAchievement', loc("You have gained some extra life")) --11		
