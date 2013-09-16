@@ -109,15 +109,15 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- PAotH undercover scientist and chief Sandologist
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	ally.gear = AddHog(ally.name, 0, 100, "war_desertgrenadier1")
+	ally.gear = AddHog(ally.name, 0, 100, "Cowboy")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	-- Smugglers
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "tophats")
+	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
-	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "tophats")
+	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")
 	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)	
-	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "tophats")
+	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "beefeater")
 	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
 	
 	if checkPointReached == 1 then

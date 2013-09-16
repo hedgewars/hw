@@ -118,32 +118,33 @@ function onGameInit()
 	HogTurnLeft(hero.gear, true)
 	-- Captain Lime
 	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green1.bot = AddHog(green1.name, 1, 200, "war_desertgrenadier1")
+	green1.bot = AddHog(green1.name, 1, 200, "war_desertofficer")
 	AnimSetGearPosition(green1.bot, green1.x, green1.y)
-	green1.human =  AddHog(green1.name, 0, 200, "war_desertgrenadier1")
+	green1.human =  AddHog(green1.name, 0, 200, "war_desertofficer")
 	AnimSetGearPosition(green1.human, green1.x, green1.y)
 	green1.gear = green1.human
 	-- Green Bananas
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	green2.gear = AddHog(green2.name, 0, 100, "war_desertgrenadier1")
+	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
 	HogTurnLeft(green2.gear, true)
-	green3.gear = AddHog(green3.name, 0, 100, "war_desertgrenadier1")
+	green3.gear = AddHog(green3.name, 0, 100, "hair_red")
 	AnimSetGearPosition(green3.gear, green3.x, green3.y)
 	HogTurnLeft(green3.gear, true)
-	green4.gear = AddHog(green4.name, 0, 100, "war_desertgrenadier1")
+	green4.gear = AddHog(green4.name, 0, 100, "war_desertsapper1")
 	AnimSetGearPosition(green4.gear, green4.x, green4.y)
 	HogTurnLeft(green4.gear, true)
-	green5.gear = AddHog(green5.name, 0, 100, "war_desertgrenadier1")
+	green5.gear = AddHog(green5.name, 0, 100, "war_sovietcomrade2")
 	AnimSetGearPosition(green5.gear, green5.x, green5.y)
 	HogTurnLeft(green5.gear, true)
 	-- Yellow Watermelons
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier1")
+	yellow1.gear = AddHog(yellow1.name, 1, 100, "war_desertgrenadier2")
 	AnimSetGearPosition(yellow1.gear, yellow1.x, yellow1.y)
 	-- the rest of the Yellow Watermelons
+	local yellowHats = { "fr_apple", "fr_banana", "fr_lemon", "fr_orange" }
 	for i=1,7 do
-		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, "war_desertgrenadier1")
+		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, yellowHats[math.random(1,4)])
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
 	end
 	
