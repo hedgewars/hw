@@ -208,6 +208,7 @@ function onGameStart()
 		AddAmmo(hero.gear, amParachute, 1)
 		AddAmmo(hero.gear, amGrenade, 6)
 		AddAmmo(hero.gear, amDEagle, 4)
+		AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
 	
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 or checkPointReached == 3 then
@@ -472,10 +473,11 @@ function saveCheckPointLocal(cpoint)
 	-- save checkpoint
 	saveCheckpoint(cpoint)	
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
-	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal
+	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal - rcplane
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
 			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..GetAmmoCount(hero.gear, amPortalGun))
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..
+			GetAmmoCount(hero.gear, amPortalGun)..GetAmmoCount(hero.gear, amRCPlane))
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
 end
 
@@ -493,6 +495,7 @@ function loadHeroAmmo()
 		AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
 	end
 	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
+	AddAmmo(hero.gear, amRCPlane, tonumber(ammo:sub(9,9)))
 end
 
 function checkForWin()

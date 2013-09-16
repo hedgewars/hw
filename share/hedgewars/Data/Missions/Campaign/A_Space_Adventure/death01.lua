@@ -178,6 +178,12 @@ function onGameStart()
 	AddAmmo(hero.gear, amGrenade, 6)
 	AddAmmo(hero.gear, amDEagle, 4)
 	AddAmmo(hero.gear, amSkip, 100)
+	local bonus = tonumber(getBonus(3))
+	if bonus > 0 then
+		SetHealth(hero.gear, 120)
+		AddAmmo(hero.gear, amLaserSight, 1)
+		saveBonus(3, bonus-1)
+	end
 	-- evil ammo
 	AddAmmo(professor.gear, amRope, 4)
 	AddAmmo(professor.gear, amBazooka, 8)
