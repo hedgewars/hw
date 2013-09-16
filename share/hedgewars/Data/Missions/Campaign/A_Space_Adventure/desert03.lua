@@ -211,6 +211,7 @@ function win()
 	SendStat('siGameResult', loc("Congratulations, you are the best!")) --1
 	SendStat('siCustomAchievement', loc("You have destroyed all the targets")) --11	
 	SendStat('siCustomAchievement', loc("You are indeed the best PAotH pilot")) --11
+	SendStat('siCustomAchievement', loc("Next you play \"Searching in the dust\" you'll have an RC plane available")) --11
 	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end

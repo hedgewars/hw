@@ -188,7 +188,7 @@ function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You complete the mission in "..TotalRounds.." rounds")) --11			
-	-- TODO SendStat('siCustomAchievement', loc("You have gained some extra life")) --11		
+	SendStat('siCustomAchievement', loc("The next 4 times you'll play the \"The last encounter\" mission you'll get 20 more hit points and a Laser Sight")) --11		
 	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end

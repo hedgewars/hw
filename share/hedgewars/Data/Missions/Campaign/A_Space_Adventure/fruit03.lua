@@ -214,7 +214,7 @@ function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat('siGameResult', loc("Congratulations, you won!")) --1
 	SendStat('siCustomAchievement', loc("You complete the mission in "..TotalRounds.." rounds")) --11			
-	-- TODO SendStat('siCustomAchievement', loc("You will gain some extra ammo the next time you play the Getting to the device mission")) --11		
+	SendStat('siCustomAchievement', loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission")) --11		
 	SendStat('siPlayerKills','1',teamA.name)
 	EndGame()
 end
