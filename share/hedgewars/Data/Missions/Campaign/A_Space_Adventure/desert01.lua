@@ -156,7 +156,7 @@ function onGameStart()
 	AddAmmo(smuggler1.gear, amDEagle, 2)	
 	AddAmmo(smuggler3.gear, amRope, 2)
 	
-	-- spawn crates	
+	-- spawn crates
 	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
 	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
 	SpawnAmmoCrate(rope1X, rope1Y, amRope)
