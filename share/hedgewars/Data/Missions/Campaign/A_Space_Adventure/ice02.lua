@@ -85,7 +85,7 @@ function onGameInit()
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	-- Ally
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	ally.gear = AddHog(ally.name, 0, 100, "tophats")
+	ally.gear = AddHog(ally.name, 0, 100, "war_airwarden02")
 	AnimSetGearPosition(ally.gear, ally.x, ally.y)
 	HogTurnLeft(ally.gear, true)
 	
