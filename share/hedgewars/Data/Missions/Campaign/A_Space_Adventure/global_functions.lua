@@ -1,7 +1,7 @@
 function saveCompletedStatus(planetNum)
-	--        1       2        3        4      5         6
-	-- order: moon01, fruit01, fruit02, ice01, desert01, death01
-	local status = "000000"
+	--        1       2        3        4      5         6        7
+	-- order: moon01, fruit01, fruit02, ice01, desert01, death01, final
+	local status = "0000000"
 	if tonumber(GetCampaignVar("MainMissionsStatus")) then
 		status = GetCampaignVar("MainMissionsStatus")
 	end
@@ -26,7 +26,8 @@ function getCompletedStatus()
 		fruit02 = false,
 		ice01 = false,
 		desert01 = false,
-		death01 = false
+		death01 = false,
+		final = false
 	}
 	if allStatus ~= "" then
 		if allStatus:sub(1,1) == "1" then
@@ -46,6 +47,9 @@ function getCompletedStatus()
 		end
 		if allStatus:sub(6,6) == "1" then
 			status.death01 = true
+		end
+		if allStatus:sub(7,7) == "1" then
+			status.final = true
 		end
 	end
 	return status

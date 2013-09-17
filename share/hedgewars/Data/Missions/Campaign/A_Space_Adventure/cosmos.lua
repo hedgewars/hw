@@ -33,6 +33,7 @@ local dialog04 = {}
 local dialog05 = {}
 local dialog06 = {}
 local dialog07 = {}
+local dialog08 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
@@ -195,6 +196,10 @@ function onGameStart()
 	end
 	if GetCampaignVar("Planet") ~= "deathPlanet" then
 		AddEvent(onDeathPlanetLanding, {hero.gear}, deathPlanetLanding, {hero.gear}, 0)
+	end
+	
+	if status.death01 and not status.final then
+		AddAnim(dialog08)
 	end
 	
 	SendHealthStatsOff()
@@ -505,6 +510,16 @@ function AnimationSetup()
 	AddSkipFunction(dialog07, Skipanim, {dialog07})
 	table.insert(dialog07, {func = AnimCaption, args = {hero.gear, loc("This planet seems dangerous!"),  5000}})
 	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other parts"), SAY_THINK, 4000}})
+	-- DIALOG 08 - Hero wins death01
+	AddSkipFunction(dialog08, Skipanim, {dialog08})
+	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite shadow..."),  4000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great Hog Solo! However we aren't out of danger yet!"), SAY_SHOUT, 4500}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to get it out of order"), SAY_SHOUT, 5000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts"), SAY_SHOUT, 3000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("PAotH has sent explosives but unfortunately the trigger mechanism seems to be faulty!"), SAY_SHOUT, 5000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need you to go there and detonate them yourself! Good luck!"), SAY_SHOUT, 500}})
+	table.insert(dialog08, {func = AnimWait, args = {doctor.gear, 3000}})
+	table.insert(dialog08, {func = AnimSwitchHog, args = {hero.gear}})
 end
 
 ------------------- custom "animation" functions --------------------------
