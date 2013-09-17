@@ -87,7 +87,13 @@ function onGameInit()
 	MinesNum = 0
 	Explosives = 0
 	Delay = 5
-	Map = "cosmos_map" -- custom map included in file
+	-- completed main missions
+	status = getCompletedStatus()
+	if status.death01 then
+		Map = "cosmos2_map"
+	else
+		Map = "cosmos_map" -- custom map included in file
+	end
 	Theme = "Nature"
 	-- I had originally hero in PAoTH team and changed it, may reconsider though
 	-- PAoTH
@@ -106,8 +112,6 @@ function onGameInit()
 	AnimSetGearPosition(guard1.gear, guard1.x, guard1.y)
 	guard2.gear = AddHog(guard2.name, 1, 100, "policecap")
 	AnimSetGearPosition(guard2.gear, guard2.x, guard2.y)
-	-- completed main missions
-	status = getCompletedStatus()
 	-- get the check point
 	if tonumber(GetCampaignVar("CosmosCheckPoint")) then
 		checkPointReached = tonumber(GetCampaignVar("CosmosCheckPoint"))
