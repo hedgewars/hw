@@ -13,7 +13,9 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 -- globals
 local missionName = loc("The big bang")
 local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!")
-
+local explosives = {}
+local currentHealth = 1
+local currentDamage = 0
 -- hogs
 local hero = {
 	name = loc("Hog Solo"),
@@ -48,7 +50,6 @@ function onGameInit()
 	initCheckpoint("final")
 	
 	AnimInit()
-	--AnimationSetup()
 end
 
 function onGameStart()
@@ -59,8 +60,9 @@ function onGameStart()
 	-- explosives
 	x = 400
 	while x < 815 do
-		AddGear(x, 500, gtExplosives, 0, 0, 0, 0)
+		local gear = AddGear(x, 500, gtExplosives, 0, 0, 0, 0)
 		x = x + math.random(15,40)
+		table.insert(explosives, gear)
 	end
 	-- mines
 	local x = 360
@@ -77,13 +79,75 @@ function onGameStart()
 	
 	-- ammo
 	AddAmmo(hero.gear, amPortalGun, 1)	
-	AddAmmo(hero.gear, amFirePunch, 1)	
+	AddAmmo(hero.gear, amFirePunch, 1)
+	
+	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
+	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
 	
 	SendHealthStatsOff()
+end
+
+function onGameTick()
+	AnimUnWait()
+	if ShowAnimation() == false then
+		return
+	end
+	ExecuteAfterAnimations()
+	CheckEvents()
 end
 
 function onAmmoStoreInit()
 	SetAmmo(amRCPlane, 0, 0, 0, 1)
 	SetAmmo(amPickHammer, 0, 0, 0, 2)
 	SetAmmo(amGirder, 0, 0, 0, 1)
+end
+
+function onNewTurn()
+	currentDamage = 0
+	currentHealth = GetHealth(hero.gear)
+end
+
+function onGearDamage(gear, damage)
+	if gear == hero.gear then
+		currentDamage = currentDamage + damage
+	end
+end
+
+-------------- EVENTS ------------------
+
+function onHeroDeath(gear)
+	if not GetHealth(hero.gear) then
+		return true
+	end
+	return false
+end
+
+function onHeroWin(gear)
+	local win = true
+	for i=1,table.getn(explosives) do
+		if GetHealth(explosives[i]) then
+			win = false
+			break
+		end
+	end
+	if currentHealth <= currentDamage then
+		win = false
+	end
+	return win
+end
+
+-------------- ACTIONS ------------------
+
+function heroDeath(gear)
+	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
+	SendStat('siCustomAchievement', loc("You have to destroy all the explosives without dying!")) --11
+	SendStat('siPlayerKills','0',teamA.name)
+	EndGame()
+end
+
+function heroWin(gear)
+	SendStat('siGameResult', loc("Congratulations, you have saved Hogera!")) --1
+	SendStat('siCustomAchievement', loc("Hogera is safe!")) --11
+	SendStat('siPlayerKills','1',teamA.name)
+	EndGame()
 end
