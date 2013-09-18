@@ -5,14 +5,6 @@
 -- planet and above the planets that he'll later
 -- visit.
 
--- TODO
--- Save and Load All Check Points
--- Save hero health
--- Decide and implement if hero will use gas bombs...
--- ofc add custom stats page
--- PROBLEM : What if one makes a bad choice and wants to replay it map, how to reset?
--- POSSIBLE SOLUTIONS: In game function keys, frontend button...
-
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
@@ -280,7 +272,6 @@ function onHeroOutOfGuardSight(gear)
 	return false
 end
 
--- TODO somehow make it to count fall damage
 function onMoonLanding(gear)
 	if GetHealth(hero.gear) and GetX(gear) > 1010 and GetX(gear) < 1220  and GetY(gear) < 1300 and GetY(gear) > 750 and StoppedGear(gear) then
 		return true
@@ -338,7 +329,7 @@ function onHeroDeath(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function heroBeforeTreePosition(gear)
 	AnimSay(gear,loc("Now I have to climb these trees"), SAY_SAY, 4000)

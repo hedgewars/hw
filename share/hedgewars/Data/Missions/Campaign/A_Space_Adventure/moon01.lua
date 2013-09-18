@@ -7,14 +7,6 @@
 -- So hero has to get whatever available equipement
 -- there is and rescue them.
 
--- TODO
--- Fix some glitches when gaining control on animations, on skip I get control of the talking hog
--- Round time after check point 2
--- Check if enemy weapons are good
--- Stats
--- check points
--- add a dialog at the end and second event if all minions are dead
-
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
@@ -315,7 +307,7 @@ function onMinionsDeath(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function weaponsPlatform(gear)
 	saveCheckpoint("2")

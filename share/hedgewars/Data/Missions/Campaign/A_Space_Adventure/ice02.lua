@@ -166,7 +166,7 @@ function onHeroDeath(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	heroLost()

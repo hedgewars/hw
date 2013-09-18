@@ -4,10 +4,6 @@
 -- to search for the missing part. However, a war
 -- has broke out and hero has to take part or leave.
 
--- TODO:
--- * remove unwanted delay after first dialog
--- * check strings
--- * rethink the difficulty level
 -- NOTES:
 -- There is an ugly hack out there! I use 2 Captain Limes
 -- One in human level and one in bot level
@@ -319,7 +315,7 @@ function onHeroSelect(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------ I should really s/OUTCOMES/ACTIONS/
+-------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	gameLost()
