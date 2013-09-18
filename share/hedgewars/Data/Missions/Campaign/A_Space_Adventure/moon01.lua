@@ -107,7 +107,7 @@ function onGameInit()
 	Theme = "Cheese" -- Because ofc moon is made of cheese :)
 	-- Hog Solo
 	AddTeam(teamD.name, teamD.color, "Bone", "Island", "HillBilly", "cm_birdy")
-	if GetCampaignVar("HeroHealth") and string.len(GetCampaignVar("HeroHealth")) > 0 then
+	if tonumber(GetCampaignVar("HeroHealth")) then
 		hero.gear = AddHog(hero.name, 0, tonumber(GetCampaignVar("HeroHealth")), "war_desertgrenadier1")
 	else
 		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -150,6 +150,11 @@ function onGameInit()
 		-- Start of the game
 	elseif checkPointReached == 2 then
 		AnimSetGearPosition(hero.gear, parachuteX, weaponsY)
+		if GetHealth(hero.gear) + 5 > 100 then			
+			SaveCampaignVar("HeroHealth", 100)
+		else
+			SaveCampaignVar("HeroHealth", GetHealth(hero.gear) + 5)
+		end
 	end
 	
 	AnimInit()
