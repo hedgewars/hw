@@ -5,9 +5,6 @@
 -- crates. It is told that one crate contains the
 -- lost part.
 
--- TODO
--- maybe use same name in missionName and frontend mission name..
--- GENERAL NOTE: change hats :D
 -- Idea: game will be successfully end when the 2 lower crates are collected
 -- it would be more defficult (and sadistic) if one should collect *all* the crates
 
@@ -348,7 +345,7 @@ function onCheckForWin2(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1

@@ -136,7 +136,7 @@ function onHeroSafe(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function heroDeath(gear)
 	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1

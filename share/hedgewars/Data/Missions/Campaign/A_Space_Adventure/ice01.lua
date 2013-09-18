@@ -5,10 +5,6 @@
 -- knows where the device is hidden. Hero will be
 -- able to use only the ice gun for this mission.
 
--- TODO
--- TEST TEST AND MORE TEST
--- fix the stats
-
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
@@ -395,7 +391,7 @@ function onHeroWin(gear)
 	return false
 end
 
--------------- OUTCOMES ------------------
+-------------- ACTIONS ------------------
 
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
