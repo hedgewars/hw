@@ -277,6 +277,7 @@ function enemiesDeath(gear)
 	SendStat('siCustomAchievement', loc("You have successfuly eliminated Professor Hogevil")) --11
 	SendStat('siCustomAchievement', loc("You have rescued H and Dr.Cornelius")) --11
 	SendStat('siCustomAchievement', loc("You have acquired the last part")) --11
+	SendStat('siCustomAchievement', loc("Now go and play the menu mission to complete the campaign")) --11
 	SendStat('siPlayerKills','1',teamA.name)
 	SendStat('siPlayerKills','0',teamC.name)
 	EndGame()
