@@ -140,6 +140,8 @@ function onGameInit()
 			AnimSetGearPosition(hero.gear, 1440, 260)
 		elseif GetCampaignVar("Planet") == "deathPlanet" then
 			AnimSetGearPosition(hero.gear, 620, 530)
+		elseif GetCampaignVar("Planet") == "meteorite" then
+			AnimSetGearPosition(hero.gear, 3080, 850)
 		end
 	end
 	
@@ -200,6 +202,9 @@ function onGameStart()
 	
 	if status.death01 and not status.final then
 		AddAnim(dialog08)
+		if GetCampaignVar("Planet") ~= "meteorite" then
+			AddEvent(onMeteoriteLanding, {hero.gear}, meteoriteLanding, {hero.gear}, 0)
+		end
 	end
 	
 	SendHealthStatsOff()
@@ -297,7 +302,14 @@ function onIcePlanetLanding(gear)
 end
 
 function onDeathPlanetLanding(gear)
-	if GetHealth(hero.gear) and GetX(gear) > 310 and GetX(gear) < 700  and GetY(gear) < 760 and StoppedGear(gear) then
+	if GetHealth(hero.gear) and GetX(gear) > 280 and GetX(gear) < 700  and GetY(gear) < 720 and StoppedGear(gear) then
+		return true
+	end
+	return false
+end
+
+function onMeteoriteLanding(gear)
+	if GetHealth(hero.gear) and GetX(gear) > 2990 and GetX(gear) < 3395  and GetY(gear) < 940 and StoppedGear(gear) then
 		return true
 	end
 	return false
@@ -432,6 +444,21 @@ function deathPlanetLanding(gear)
 		SaveCampaignVar("Mission2", "11")
 		SaveCampaignVar("Mission3", "1")
 		sendStats(loc("the Planet of Death"))
+	end
+end
+
+function meteoriteLanding(gear)
+	if checkPointReached < 5 then
+		AddAnim(dialog06)
+	elseif not (status.fruit02 and status.ice01 and status.desert01) then
+		AddAnim(dialog07)
+	else
+		AnimCaption(hero.gear,loc("Welcome to the meteorite!"))
+		SaveCampaignVar("Planet", "meteorite")
+		SaveCampaignVar("UnlockedMissions", "2")
+		SaveCampaignVar("Mission1", "14")
+		SaveCampaignVar("Mission2", "1")
+		sendStats(loc("the meteorite"))
 	end
 end
 
