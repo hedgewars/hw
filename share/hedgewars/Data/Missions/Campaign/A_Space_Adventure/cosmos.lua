@@ -25,6 +25,10 @@ local timeForGuard1ToTurnLeft = timeForGuard1ToTurn
 local saucerAcquired = false
 local status
 local checkPointReached = 1 -- 1 is start of the game
+local objectives = loc("Go to moon by the flying saucer and complete the main mission").."|"..
+loc("Come back to this mission and visit the other planets to collect the crates").."|"..
+loc("Visit the Death Planet after completing all the other planets' main missions").."|"..
+loc("Come back to this mission after collecting all the parts")
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -38,8 +42,12 @@ local dialog08 = {}
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
 	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuels are limited"), 1, 4500},
-	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon mission"), 1, 7000},
-	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit first the planets of Ice, Desert and Fruit"), 1, 6000}
+	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon's main mission"), 1, 7000},
+	[dialog04] = {missionName, loc("Objectives"), objectives, 1, 7000},
+	[dialog05] = {missionName, loc("Objectives"), objectives, 1, 7000},
+	[dialog06] = {missionName, loc("Objectives"), objectives, 1, 7000},
+	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit first the planets of Ice, Desert and Fruit"), 1, 6000},
+	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000}
 }
 -- crates
 local saucerX = 3270
