@@ -370,6 +370,7 @@ function moonLanding(gear)
 			SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 		end
 		AnimCaption(hero.gear,loc("Welcome to the moon!"))
+		SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 		SaveCampaignVar("Planet", "moon")
 		SaveCampaignVar("UnlockedMissions", "3")
 		SaveCampaignVar("Mission1", "2")
@@ -447,6 +448,7 @@ function deathPlanetLanding(gear)
 end
 
 function meteoriteLanding(gear)
+	-- first two conditionals are not possible but I'll leave it there...
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
 	elseif not (status.fruit02 and status.ice01 and status.desert01) then
