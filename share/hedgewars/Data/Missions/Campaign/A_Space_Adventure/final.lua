@@ -139,15 +139,15 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("You have to destroy all the explosives without dying!")) --11
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function heroWin(gear)
-	SendStat('siGameResult', loc("Congratulations, you have saved Hogera!")) --1
-	SendStat('siCustomAchievement', loc("Hogera is safe!")) --11
-	SendStat('siPlayerKills','1',teamA.name)
+	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
+	SendStat(siCustomAchievement, loc("Hogera is safe!"))
+	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end

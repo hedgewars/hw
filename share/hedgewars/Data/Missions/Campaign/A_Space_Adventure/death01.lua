@@ -264,22 +264,22 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to eliminate all your enemies")) --11
-	SendStat('siPlayerKills','1',teamC.name)
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to eliminate all your enemies"))
+	SendStat(siPlayerKills,'1',teamC.name)
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function enemiesDeath(gear)
 	saveCompletedStatus(6)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("You have successfuly eliminated Professor Hogevil")) --11
-	SendStat('siCustomAchievement', loc("You have rescued H and Dr.Cornelius")) --11
-	SendStat('siCustomAchievement', loc("You have acquired the last part")) --11
-	SendStat('siCustomAchievement', loc("Now go and play the menu mission to complete the campaign")) --11
-	SendStat('siPlayerKills','1',teamA.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("You have successfuly eliminated Professor Hogevil"))
+	SendStat(siCustomAchievement, loc("You have rescued H and Dr.Cornelius"))
+	SendStat(siCustomAchievement, loc("You have acquired the last part"))
+	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign"))
+	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 

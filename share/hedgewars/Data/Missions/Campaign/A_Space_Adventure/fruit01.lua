@@ -328,22 +328,22 @@ end
 function battleWin(gear)
 	-- add stats
 	saveVariables()
-	SendStat('siGameResult', loc("Green Bananas won!")) --1
-	SendStat('siCustomAchievement', loc("You have eliminated all the visible enemy hogs!")) --11
-	SendStat('siPlayerKills','1',teamA.name)
-	SendStat('siPlayerKills','1',teamB.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Green Bananas won!"))
+	SendStat(siCustomAchievement, loc("You have eliminated all the visible enemy hogs!"))
+	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'1',teamB.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 
 function escapeWin(gear)
 	-- add stats
 	saveVariables()
-	SendStat('siGameResult', loc("Hog Solo escaped successfully!")) --1
-	SendStat('siCustomAchievement', loc("You have reached the flying area successfully!")) --11
-	SendStat('siPlayerKills','1',teamA.name)
-	SendStat('siPlayerKills','0',teamB.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Hog Solo escaped successfully!"))
+	SendStat(siCustomAchievement, loc("You have reached the flying area successfully!"))
+	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'0',teamB.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 
@@ -433,21 +433,21 @@ end
 
 function gameLost()
 	if chooseToBattle then
-		SendStat('siGameResult', loc("Green Bananas lost, try again!")) --1
-		SendStat('siCustomAchievement', loc("You have to eliminate all the visible enemies")) --11
-		SendStat('siCustomAchievement', loc("5 additional enemies will be spawned during the game")) --11
-		SendStat('siCustomAchievement', loc("You are controlling all the active ally units")) --11
-		SendStat('siCustomAchievement', loc("The ally units share their ammo")) --11
-		SendStat('siCustomAchievement', loc("Try to keep as many allies alive as possible")) --11
+		SendStat(siGameResult, loc("Green Bananas lost, try again!"))
+		SendStat(siCustomAchievement, loc("You have to eliminate all the visible enemies"))
+		SendStat(siCustomAchievement, loc("5 additional enemies will be spawned during the game"))
+		SendStat(siCustomAchievement, loc("You are controlling all the active ally units"))
+		SendStat(siCustomAchievement, loc("The ally units share their ammo"))
+		SendStat(siCustomAchievement, loc("Try to keep as many allies alive as possible"))
 	else
-		SendStat('siGameResult', loc("Hog Solo couldn't escape, try again!")) --1
-		SendStat('siCustomAchievement', loc("You have to get to the most left land and remove any enemy hog from there")) --11
-		SendStat('siCustomAchievement', loc("You will play every 3 turns")) --11
-		SendStat('siCustomAchievement', loc("Green hogs won't intenionally hurt you")) --11
+		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
+		SendStat(siCustomAchievement, loc("You have to get to the most left land and remove any enemy hog from there"))
+		SendStat(siCustomAchievement, loc("You will play every 3 turns"))
+		SendStat(siCustomAchievement, loc("Green hogs won't intenionally hurt you"))
 	end	
-	SendStat('siPlayerKills','1',teamC.name)
-	SendStat('siPlayerKills','0',teamA.name)
-	SendStat('siPlayerKills','0',teamB.name)
+	SendStat(siPlayerKills,'1',teamC.name)
+	SendStat(siPlayerKills,'0',teamA.name)
+	SendStat(siPlayerKills,'0',teamB.name)
 	EndGame()
 end
 

@@ -359,10 +359,10 @@ function moonLanding(gear)
 		-- player climbed the moon with rope
 		FollowGear(doctor.gear)
 		AnimSay(doctor.gear, loc("One cannot simply walk in moon with rope!"), SAY_SHOUT, 4000)
-		SendStat('siGameResult', loc("This is the wrong way!")) --1
-		SendStat('siCustomAchievement', loc("Collect the crate with the flying saucer")) --11
-		SendStat('siCustomAchievement', loc("Fly to the moon")) --11
-		SendStat('siPlayerKills','0',teamC.name)
+		SendStat(siGameResult, loc("This is the wrong way!"))
+		SendStat(siCustomAchievement, loc("Collect the crate with the flying saucer"))
+		SendStat(siCustomAchievement, loc("Fly to the moon"))
+		SendStat(siPlayerKills,'0',teamC.name)
 		EndGame()
 	else
 		if checkPointReached ~= 5 then
@@ -559,18 +559,18 @@ function startCombat()
 end
 
 function sendStats(planet)
-	SendStat('siGameResult', loc("Hog Solo arrived to "..planet)) --1
-	SendStat('siCustomAchievement', loc("Return to the mission menu by pressing the \"Go back\" button")) --11
-	SendStat('siCustomAchievement', loc("Choose another planet by replaying the mission")) --11
-	SendStat('siPlayerKills','1',teamC.name)
+	SendStat(siGameResult, loc("Hog Solo arrived to "..planet))
+	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button"))
+	SendStat(siCustomAchievement, loc("Choose another planet by replaying the mission"))
+	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end
 
 function sendStatsOnRetry()
-	SendStat('siGameResult', loc("You have to travel again")) --1
-	SendStat('siCustomAchievement', loc("Your first destination is moon in order to get more fuels")) --11
-	SendStat('siCustomAchievement', loc("You have to complete the moon main mission in order to travel to other planets")) --11
-	SendStat('siCustomAchievement', loc("You have to be careful and not die!")) --11
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("You have to travel again"))
+	SendStat(siCustomAchievement, loc("Your first destination is moon in order to get more fuels"))
+	SendStat(siCustomAchievement, loc("You have to complete the moon main mission in order to travel to other planets"))
+	SendStat(siCustomAchievement, loc("You have to be careful and not die!"))
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end

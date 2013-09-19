@@ -135,11 +135,11 @@ function onGameTick20()
 			totalTime = totalTime / 1000
 			local saucersLeft = GetAmmoCount(hero.gear, amJetpack)
 			local saucersUsed = totalSaucers - saucersLeft
-			SendStat('siGameResult', loc("Hoo Ray! You are a champion!")) --1
-			SendStat('siCustomAchievement', loc("You complete the mission in "..totalTime.." seconds")) --11			
-			SendStat('siCustomAchievement', loc("You have used "..saucersUsed.." flying saucers")) --11			
-			SendStat('siCustomAchievement', loc("You had "..saucersLeft.." more flying saucers left")) --11			
-			SendStat('siPlayerKills','1',teamA.name)
+			SendStat(siGameResult, loc("Hoo Ray! You are a champion!"))
+			SendStat(siCustomAchievement, loc("You complete the mission in "..totalTime.." seconds"))			
+			SendStat(siCustomAchievement, loc("You have used "..saucersUsed.." flying saucers"))			
+			SendStat(siCustomAchievement, loc("You had "..saucersLeft.." more flying saucers left"))			
+			SendStat(siPlayerKills,'1',teamA.name)
 			EndGame()
 		end
 	end
@@ -257,11 +257,11 @@ function checkIfHeroInWaypoint()
 end
 
 function heroLost()
-	SendStat('siGameResult', loc("Oh man! Learn how to fly!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to pass into the rings in time")) --11
-	SendStat('siCustomAchievement', loc("You'll get extra time in case you need it when you pass a ring")) --11
-	SendStat('siCustomAchievement', loc("Every 2 rings you'll get extra flying saucers")) --11
-	SendStat('siCustomAchievement', loc("Use space button twice to change flying saucer while being on air")) --11
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Oh man! Learn how to fly!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to pass into the rings in time"))
+	SendStat(siCustomAchievement, loc("You'll get extra time in case you need it when you pass a ring"))
+	SendStat(siCustomAchievement, loc("Every 2 rings you'll get extra flying saucers"))
+	SendStat(siCustomAchievement, loc("Use space button twice to change flying saucer while being on air"))
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
