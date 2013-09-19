@@ -328,10 +328,10 @@ function weaponsPlatform(gear)
 end
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("You have to get the weapons and rescue the PAotH researchers")) --11
-	SendStat('siPlayerKills','1',teamC.name)
-	SendStat('siPlayerKills','0',teamD.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("You have to get the weapons and rescue the PAotH researchers"))
+	SendStat(siPlayerKills,'1',teamC.name)
+	SendStat(siPlayerKills,'0',teamD.name)
 	EndGame()
 end
 
@@ -364,11 +364,11 @@ function professorDeath(gear)
 	AnimWait(hero.gear,5000)	
 	
 	saveCompletedStatus(1)
-	SendStat('siGameResult', loc("Hog Solo win, conrgatulations!")) --1
-	SendStat('siCustomAchievement', loc("Eliminated the professor Hogevil")) --11
-	SendStat('siCustomAchievement', loc("Drove the minions away")) --11
-	SendStat('siPlayerKills','1',teamD.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Hog Solo win, conrgatulations!"))
+	SendStat(siCustomAchievement, loc("Eliminated the professor Hogevil"))
+	SendStat(siCustomAchievement, loc("Drove the minions away"))
+	SendStat(siPlayerKills,'1',teamD.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels
 	EndGame()
 end
@@ -381,11 +381,11 @@ function minionsDeath(gear)
 	AnimWait(hero.gear,5000)	
 	
 	saveCompletedStatus(1)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("Eliminated the evil minions")) --11
-	SendStat('siCustomAchievement', loc("Drove the professor away")) --11
-	SendStat('siPlayerKills','1',teamD.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("Eliminated the evil minions"))
+	SendStat(siCustomAchievement, loc("Drove the professor away"))
+	SendStat(siPlayerKills,'1',teamD.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	SaveCampaignVar("CosmosCheckPoint", "5") -- hero got fuels	
 	EndGame()
 end

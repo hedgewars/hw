@@ -139,19 +139,19 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to go to the surface")) --11
-	SendStat('siCustomAchievement', loc("Most mines are not active")) --11
-	SendStat('siCustomAchievement', loc("From the second turn and beyond the water rises")) --11
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to go to the surface"))
+	SendStat(siCustomAchievement, loc("Most mines are not active"))
+	SendStat(siCustomAchievement, loc("From the second turn and beyond the water rises"))
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function heroSafe(gear)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("You have escaped successfully")) --11
-	SendStat('siCustomAchievement', loc("Your escape took you "..TotalRounds.." turns")) --11
-	SendStat('siPlayerKills','1',teamA.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("You have escaped successfully"))
+	SendStat(siCustomAchievement, loc("Your escape took you "..TotalRounds.." turns"))
+	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
 

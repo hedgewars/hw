@@ -216,18 +216,18 @@ function moveRunner()
 end
 
 function lose()
-	SendStat('siGameResult', loc("Too slow! Try again...")) --1
-	SendStat('siCustomAchievement', loc("You have to caught the other hog 3 times")) --11
-	SendStat('siCustomAchievement', loc("The time that you'll have left when you reach the hog will be added to the next turn")) --11
-	SendStat('siCustomAchievement', loc("Each turn you'll have only one rope to use")) --11
-	SendStat('siCustomAchievement', loc("You'll lose if you die or if your time is up")) --11
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Too slow! Try again..."))
+	SendStat(siCustomAchievement, loc("You have to caught the other hog 3 times"))
+	SendStat(siCustomAchievement, loc("The time that you'll have left when you reach the hog will be added to the next turn"))
+	SendStat(siCustomAchievement, loc("Each turn you'll have only one rope to use"))
+	SendStat(siCustomAchievement, loc("You'll lose if you die or if your time is up"))
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function win()
-	SendStat('siGameResult', loc("Congratulations, you are the fastest!")) --1
-	SendStat('siCustomAchievement', loc("You have managed to caught the other hog in time")) --11
-	SendStat('siPlayerKills','1',teamA.name)
+	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
+	SendStat(siCustomAchievement, loc("You have managed to caught the other hog in time"))
+	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end

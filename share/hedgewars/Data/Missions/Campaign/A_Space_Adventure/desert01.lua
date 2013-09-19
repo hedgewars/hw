@@ -348,12 +348,12 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game you have to find the right crate")) --11
-	SendStat('siCustomAchievement', loc("You can avoid some battles")) --11
-	SendStat('siCustomAchievement', loc("Use your ammo wisely")) --11
-	SendStat('siPlayerKills','1',teamB.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate"))
+	SendStat(siCustomAchievement, loc("You can avoid some battles"))
+	SendStat(siCustomAchievement, loc("Use your ammo wisely"))
+	SendStat(siPlayerKills,'1',teamB.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 
@@ -504,10 +504,10 @@ function checkForWin()
 		-- end game
 		saveCompletedStatus(5)
 		AnimSay(hero.gear, loc("Hoo Ray!!!"), SAY_SHOUT, 5000)
-		SendStat('siGameResult', loc("Congratulations, you won!")) --1
-		SendStat('siCustomAchievement', loc("To win the game you had to collect the 2 crates with no specific order")) --11
-		SendStat('siPlayerKills','1',teamC.name)
-		SendStat('siPlayerKills','0',teamB.name)
+		SendStat(siGameResult, loc("Congratulations, you won!"))
+		SendStat(siCustomAchievement, loc("To win the game you had to collect the 2 crates with no specific order"))
+		SendStat(siPlayerKills,'1',teamC.name)
+		SendStat(siPlayerKills,'0',teamB.name)
 		EndGame()
 	end
 end

@@ -202,20 +202,20 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("You have to eliminate all the enemies")) --11			
-	SendStat('siCustomAchievement', loc("Read the Challenge Objectives from within the mission for more details")) --11		
-	SendStat('siPlayerKills','1',teamB.name)
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))			
+	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))		
+	SendStat(siPlayerKills,'1',teamB.name)
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
 function heroWin(gear)
 	saveBonus(2, 1)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("You complete the mission in "..TotalRounds.." rounds")) --11			
-	SendStat('siCustomAchievement', loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission")) --11		
-	SendStat('siPlayerKills','1',teamA.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))			
+	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission"))		
+	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
 

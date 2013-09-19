@@ -375,15 +375,15 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat('siGameResult', loc("Hog Solo lost, try again!")) --1
-	SendStat('siCustomAchievement', loc("To win the game Hog Solo has to get the bottom crates and come back to the surface")) --11
-	SendStat('siCustomAchievement', loc("You can use the other 2 hogs to assist you")) --11
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("To win the game Hog Solo has to get the bottom crates and come back to the surface"))
+	SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
 	if tookPartInBattle then
-		SendStat('siCustomAchievement', loc("You'll have to eliminate the Strawberry Assasins at the end")) --11
+		SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assasins at the end"))
 	else
-		SendStat('siCustomAchievement', loc("You'll have to eliminate Captain Lime at the end")) --11	
+		SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))	
 	end
-	SendStat('siPlayerKills','0',teamA.name)
+	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
 
@@ -426,22 +426,22 @@ end
 function captainLimeDeath(gear)
 	-- hero win in scenario of escape in 1st part
 	saveCompletedStatus(3)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
-	SendStat('siCustomAchievement', loc("You defended yourself against Captain Lime")) --11
-	SendStat('siPlayerKills','1',teamA.name)
-	SendStat('siPlayerKills','0',teamB.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("You retrieved the lost part"))
+	SendStat(siCustomAchievement, loc("You defended yourself against Captain Lime"))
+	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'0',teamB.name)
 	EndGame()
 end
 
 function redTeamDeath(gear)
 	-- hero win in battle scenario
 	saveCompletedStatus(3)
-	SendStat('siGameResult', loc("Congratulations, you won!")) --1
-	SendStat('siCustomAchievement', loc("You retrieved the lost part")) --11
-	SendStat('siCustomAchievement', loc("You defended yourself against Strawberry Assasins")) --11
-	SendStat('siPlayerKills','1',teamA.name)
-	SendStat('siPlayerKills','0',teamC.name)
+	SendStat(siGameResult, loc("Congratulations, you won!"))
+	SendStat(siCustomAchievement, loc("You retrieved the lost part"))
+	SendStat(siCustomAchievement, loc("You defended yourself against Strawberry Assasins"))
+	SendStat(siPlayerKills,'1',teamA.name)
+	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()
 end
 
