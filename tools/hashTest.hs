@@ -44,7 +44,9 @@ test = do
 
 didIunderstand' = do
     a <- liftM lines getContents
+    print $ length a
     print . IS.size . IS.fromList . map (testHash . map fromEnum) $ a
     where
-        testHash s = let l = length s in
+        testHash s = let l = length s in (
                          (s !! (l - 2) * s !! 1) + s !! (l - 1) - s !! 0
+                         ) `mod` 256

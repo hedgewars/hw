@@ -314,8 +314,6 @@ DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
 DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
-
-SetDefaultBinds();
 end;
 
 procedure SetBinds(var binds: TBinds);
