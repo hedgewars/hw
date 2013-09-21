@@ -363,7 +363,7 @@ TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
 
 for t:= 0 to cKbdMaxIndex do
-    team^.Binds[t]:= '';
+    team^.Binds[t]:= DefaultBinds[t];
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -607,7 +607,7 @@ begin
                     inc(i, 3)
                     end;
                 end;
-            
+
             if i < length(l) then
                 begin
                 l:= copy(l, i + 1, length(l) - i);
@@ -618,7 +618,7 @@ begin
                     end
                 end
             end;
-            
+
         pfsClose(f)
         end
 end;
@@ -666,7 +666,7 @@ end;
 
 procedure chBind(var id: shortstring);
 var KeyName, Modifier, tmp: shortstring;
-    b: LongInt;
+    i, b: LongInt;
 begin
 KeyName:= '';
 Modifier:= '';
@@ -691,7 +691,17 @@ b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
+    begin 
+    // add bind: first check if this cmd is already bound, and remove old bind
+    i:= cKbdMaxIndex;
+    repeat
+        dec(i)
+    until (i < 0) or (CurrentTeam^.Binds[i] = KeyName);
+    if (i >= 0) then
+        CurrentTeam^.Binds[i]:= '';
+
     CurrentTeam^.Binds[b]:= KeyName;
+    end
 end;
 
 procedure chTeamGone(var s:shortstring);
