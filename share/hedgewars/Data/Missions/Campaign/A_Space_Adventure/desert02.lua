@@ -99,6 +99,10 @@ function onGameStart()
 	AddAnim(dialog01)
 end
 
+function onNewTurn()
+	ParseCommand("setweap " .. string.char(amRope))
+end
+
 function onGameTick()
 	AnimUnWait()
 	if ShowAnimation() == false then
