@@ -24,6 +24,8 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 local missionName = loc("Bad timing")
 local chooseToBattle = false
 local previousHog = 0
+local heroPlayedFirstTurn = false
+local startBattleCalled = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -202,15 +204,21 @@ function onGameStart()
 end
 
 function onNewTurn()
-	if chooseToBattle then
-		if CurrentHedgehog == green1.gear then
-			TotalRounds = TotalRounds - 2
-			AnimSwitchHog(previousHog)
-			TurnTimeLeft = 0
+	if not heroPlayedFirstTurn and CurrentHedgehog ~= hero.gear and startBattleCalled then
+		TurnTimeLeft = 0
+	elseif not heroPlayedFirstTurn and CurrentHedgehog == hero.gear and startBattleCalled then
+		heroPlayedFirstTurn = true
+	else
+		if chooseToBattle then
+			if CurrentHedgehog == green1.gear then
+				TotalRounds = TotalRounds - 2
+				AnimSwitchHog(previousHog)
+				TurnTimeLeft = 0
+			end
+			previousHog = CurrentHedgehog
 		end
-		previousHog = CurrentHedgehog
+		getNextWave()
 	end
-	getNextWave()
 end
 
 function onGameTick()
@@ -409,6 +417,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be fool son, they'll be more"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare the rest!"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
@@ -418,6 +427,7 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place that you can fly would be the most left part of the map"), SAY_SAY, 5000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our anti flying weapons"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time you coward..."), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog03, {func = startBattle, args = {hero.gear}})
 end
 
@@ -427,8 +437,8 @@ function startBattle()
 	RestoreHog(green1.bot)
 	DeleteGear(green1.human)
 	green1.gear = green1.bot
-	AnimSwitchHog(hero.gear)
-	TurnTimeLeft = TurnTime
+	startBattleCalled = true
+	TurnTimeLeft = 0
 end
 
 function gameLost()
