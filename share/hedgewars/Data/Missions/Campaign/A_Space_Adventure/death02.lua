@@ -39,7 +39,7 @@ local enemies = {
 	{ name = loc("Mortar"), x = 1890, y = 520, weapon = amMortar, additionalWeapons = {}},
 	{ name = loc("Desert Eagle"), x = 1390, y = 790, weapon = amDEagle, additionalWeapons = {}},
 	{ name = loc("Grenade"), x = 186, y = 48, weapon = amGrenade, additionalWeapons = {}},
-	{ name = loc("Shyryuken"), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
+	{ name = loc("Shoryuken"), x = 330, y = 270, weapon = amFirePunch, additionalWeapons = {}},
 	{ name = loc("Bazooka"), x = 1950, y = 150, weapon = amBazooka, additionalWeapons = {}},
 }
 -- teams
