@@ -145,6 +145,8 @@ begin
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
     i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, false);
     AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
+    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Teams'), '/Teams', false);
+    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Teams: ' + inttostr(i));
 
     hedgewarsMountPackages;
 end;

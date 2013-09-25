@@ -11,7 +11,7 @@ import HandlerUtils
 
 handleCmd_checker :: CmdHandler
 
-handleCmd_checker ["READY"] = return [CheckRecord]
+handleCmd_checker ["READY"] = return [ModifyClient $ \c -> c{isReady = True}, CheckRecord]
 
 handleCmd_checker ["CHECKED", "FAIL", msg] = do
     isChecking <- liftM (isJust . checkInfo) thisClient

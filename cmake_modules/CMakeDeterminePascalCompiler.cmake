@@ -45,6 +45,7 @@ if(NOT CMAKE_Pascal_COMPILER_VERSION)
                     OUTPUT_VARIABLE CMAKE_Pascal_COMPILER_VERSION
                     OUTPUT_STRIP_TRAILING_WHITESPACE
                     ) # we assume no error for something so simple
+    set(CMAKE_Pascal_COMPILER_ARG1 "-l- -v0ewn")
 endif(NOT CMAKE_Pascal_COMPILER_VERSION)
 mark_as_advanced(CMAKE_Pascal_COMPILER_VERSION)
 

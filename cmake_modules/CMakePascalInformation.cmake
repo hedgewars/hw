@@ -8,7 +8,6 @@ set(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
 include(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 
 # This section should actually be in Platform/${CMAKE_SYSTME_NAME}-fpc.cmake
-set(CMAKE_Pascal_FLAGS_INIT "-l- -v0ewn")
 set(CMAKE_Pascal_FLAGS_DEBUG_INIT "-g -gl -gp -gh")
 set(CMAKE_Pascal_FLAGS_MINSIZEREL_INIT "-Os -dNDEBUG")
 set(CMAKE_Pascal_FLAGS_RELEASE_INIT "-O3 -dNDEBUG")
@@ -59,7 +58,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
 
 if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 #-Wl,-rpath-link,
-    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG "-k-rpath-link")
+    set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG "-k-rpath-link")
 endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 
 # for most systems a module is the same as a shared library
@@ -103,7 +102,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
 set(CMAKE_VERBOSE_MAKEFILE FALSE CACHE BOOL "If this value is on, makefiles will be generated without the .SILENT directive, and all commands will be echoed to the console during the make.  This is useful for debugging only. With Visual Studio IDE projects all commands are done without /nologo.")
 
-set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT} ${CMAKE_Pascal_FLAGS}" CACHE STRING "Flags for Pascal compiler." FORCE)
+#set(CMAKE_Pascal_FLAGS "$ENV{FPFLAGS} ${CMAKE_Pascal_FLAGS_INIT} ${CMAKE_Pascal_FLAGS}" CACHE STRING "Flags for Pascal compiler." FORCE)
 
 include(CMakeCommonLanguageInclude)
 
@@ -183,7 +182,7 @@ if(NOT CMAKE_Pascal_COMPILE_OBJECT)
 
     #-Cn is mandatory as it's what creates the ppas.* script
     set(CMAKE_Pascal_COMPILE_OBJECT
-        "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> ${CMAKE_Pascal_UNIX_FLAGS} <FLAGS> <SOURCE>")
+        "<CMAKE_Pascal_COMPILER> -Cn -FE${EXECUTABLE_OUTPUT_PATH} -FU${CMAKE_CURRENT_BINARY_DIR}/<OBJECT_DIR> ${CMAKE_Pascal_UNIX_FLAGS} <FLAGS> <CMAKE_Pascal_LINK_FLAGS> <SOURCE>")
 endif(NOT CMAKE_Pascal_COMPILE_OBJECT)
 
 # link Pascal objects in a single executable

@@ -72,13 +72,13 @@ endif (CMAKE_BUILD_TYPE)
 include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
 
 #set default compiler flags
-add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_C_FLAGS "-Wall -pipe -fPIC")
 add_flag_append(CMAKE_C_FLAGS_RELEASE "-Os")
 add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe -fPIC")
 add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-Os")
 add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -fPIC")
 add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
 add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 

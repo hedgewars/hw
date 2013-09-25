@@ -64,5 +64,5 @@ clientByNick :: B.ByteString -> Reader (ClientIndex, IRnC) (Maybe ClientIndex)
 clientByNick n = do
     (_, rnc) <- ask
     let allClientIDs = allClients rnc
-    return $ find (\clId -> n == nick (client rnc clId)) allClientIDs
+    return $ find (\clId -> let cl = client rnc clId in n == nick cl && not (isChecker cl)) allClientIDs
 
