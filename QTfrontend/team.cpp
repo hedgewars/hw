@@ -171,7 +171,7 @@ HWTeam & HWTeam::operator = (const HWTeam & other)
 
 bool HWTeam::loadFromFile()
 {
-    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(m_name), QSettings::IniFormat, 0);
+    QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     m_name = teamfile.value("Team/Name", m_name).toString();
     m_grave = teamfile.value("Team/Grave", "Statue").toString();
@@ -204,7 +204,7 @@ bool HWTeam::loadFromFile()
 
 bool HWTeam::fileExists()
 {
-    QFile f(QString("physfs://Teams/%1.hwt").arg(m_name));
+    QFile f(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
     return f.exists();
 }
 
@@ -212,7 +212,7 @@ bool HWTeam::deleteFile()
 {
     if(m_isNetTeam)
         return false;
-    QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(m_name));
+    QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name)));
     cfgfile.remove();
     return true;
 }
@@ -221,12 +221,12 @@ bool HWTeam::saveToFile()
 {
     if (OldTeamName != m_name)
     {
-        QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(OldTeamName));
+        QFile cfgfile(QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(OldTeamName)));
         cfgfile.remove();
         OldTeamName = m_name;
     }
 
-    QString fileName = QString("physfs://Teams/%1.hwt").arg(m_name);
+    QString fileName = QString("physfs://Teams/%1.hwt").arg(DataManager::safeFileName(m_name));
     DataManager::ensureFileExists(fileName);
     QSettings teamfile(fileName, QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
@@ -275,17 +275,6 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth, GameUIConfig * config) co
     sl.push_back(QString("efort " + m_fort));
     sl.push_back(QString("evoicepack " + m_voicepack));
     sl.push_back(QString("eflag " + m_flag));
-
-    if (!m_isNetTeam)
-    {
-        for(int i = 0; i < BINDS_NUMBER; i++)
-        {
-            if(m_binds[i].strbind.isEmpty() || m_binds[i].strbind == "default")
-                sl.push_back(QString("ebind " + config->bind(i) + " " + m_binds[i].action));
-            else
-                sl.push_back(QString("ebind " + m_binds[i].strbind + " " + m_binds[i].action));
-        }
-    }
 
     for (int t = 0; t < m_numHedgehogs; t++)
     {

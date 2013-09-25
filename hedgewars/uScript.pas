@@ -1894,6 +1894,17 @@ begin
         ScriptLoad(lua_tostring(L, 1));
     lc_hedgewarsscriptload:= 0;
 end;
+
+
+function lc_declareachievement(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 4 then
+        LuaError('Lua: Wrong number of parameters passed to DeclareAchievement!')
+    else
+        declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
+    lc_declareachievement:= 0
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -2344,6 +2355,7 @@ ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
 ScriptSetInteger('gfDisableWind', gfDisableWind);
 ScriptSetInteger('gfMoreWind', gfMoreWind);
 ScriptSetInteger('gfTagTeam', gfTagTeam);
+ScriptSetInteger('gfShoppaBorder', gfShoppaBorder);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
@@ -2516,6 +2528,7 @@ lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
+lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
 
 ScriptClearStack; // just to be sure stack is empty

@@ -24,19 +24,25 @@ import qualified Data.List as L
 import System.Posix
 #endif
 
+readInt_ :: (Num a) => B.ByteString -> a
+readInt_ str =
+  case B.readInt str of
+       Just (i, t) | B.null t -> fromIntegral i
+       _                      -> 0 
+
 data Message = Packet [B.ByteString]
              | CheckFailed B.ByteString
              | CheckSuccess [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "43"
+protocolNumber = "45"
 
-getLines :: Handle -> IO [String]
+getLines :: Handle -> IO [B.ByteString]
 getLines h = g
     where
         g = do
-            l <- liftM Just (hGetLine h) `Exception.catch` (\(_ :: Exception.IOException) -> return Nothing)
+            l <- liftM Just (B.hGetLine h) `Exception.catch` (\(_ :: Exception.IOException) -> return Nothing)
             if isNothing l then
                 return []
                 else
@@ -45,38 +51,43 @@ getLines h = g
                 return $ fromJust l : lst
 
 
-engineListener :: Chan Message -> Handle -> IO ()
-engineListener coreChan h = do
-    output <- getLines h
-    debugM "Engine" $ show output
-    if isNothing $ L.find start output then
+engineListener :: Chan Message -> Handle -> String -> IO ()
+engineListener coreChan h fileName = do
+    stats <- liftM (ps . L.dropWhile (not . start)) $ getLines h
+    debugM "Engine" $ show stats
+    if null stats then
         writeChan coreChan $ CheckFailed "No stats msg"
         else
-        writeChan coreChan $ CheckSuccess []
+        writeChan coreChan $ CheckSuccess stats
+
+    removeFile fileName
     where
         start = flip L.elem ["WINNERS", "DRAW"]
-
+        ps ("DRAW" : bs) = "DRAW" : ps bs
+        ps ("WINNERS" : n : bs) = let c = readInt_ n in "WINNERS" : n : take c bs ++ (ps $ drop c bs)
+        ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
+            "ACHIEVEMENT" : typ : teamname : location : value : ps bs
+        ps _ = []
 
 checkReplay :: Chan Message -> [B.ByteString] -> IO ()
 checkReplay coreChan msgs = do
     tempDir <- getTemporaryDirectory
     (fileName, h) <- openBinaryTempFile tempDir "checker-demo"
-    B.hPut h . BW.pack . concat . map (fromJust . Base64.decode . B.unpack) $ msgs
+    B.hPut h . BW.pack . concat . map (fromMaybe [] . Base64.decode . B.unpack) $ msgs
     hFlush h
     hClose h
 
-    (_, Just hOut, _, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/bin/hwengine"
-                ["/usr/home/unC0Rr/.hedgewars"
-                , "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.18/share/hedgewars/Data"
-                , fileName
-                , "--set-audio"
-                , "0"
-                , "0"
-                , "0"
+    (_, _, Just hOut, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
+                [fileName
+                , "--user-prefix", "/usr/home/unC0Rr/.hedgewars"
+                , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
+                , "--nomusic"
+                , "--nosound"
+                , "--stats-only"
                 ])
-            {std_out = CreatePipe}
+            {std_err = CreatePipe}
     hSetBuffering hOut LineBuffering
-    void $ forkIO $ engineListener coreChan hOut
+    void $ forkIO $ engineListener coreChan hOut fileName
 
 
 takePacks :: State B.ByteString [[B.ByteString]]
@@ -154,7 +165,7 @@ main = withSocketsDo $ do
 #endif
 
     updateGlobalLogger "Core" (setLevel DEBUG)
-    updateGlobalLogger "Network" (setLevel DEBUG)
+    updateGlobalLogger "Network" (setLevel WARNING)
     updateGlobalLogger "Check" (setLevel DEBUG)
     updateGlobalLogger "Engine" (setLevel DEBUG)
 

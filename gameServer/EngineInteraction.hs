@@ -43,7 +43,7 @@ checkNetCmd msg = check decoded
         lft = foldr l Nothing
         l m n = let m' = B.head $ B.tail m; tst = flip Set.member in 
                       if not $ tst timedMessages m' then n
-                        else if '+' /= m' then Just Nothing else Just $ Just m
+                        else if '+' /= m' then Just Nothing else Just . Just . B.pack . Base64.encode . BW.unpack $ m
         isNonEmpty = (/=) '+' . B.head . B.tail
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"

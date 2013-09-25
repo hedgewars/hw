@@ -71,6 +71,7 @@ begin
             end;
         gsStart:
             begin
+            SetDefaultBinds;
             if HasBorder then
                 DisableSomeWeapons;
             AddClouds;

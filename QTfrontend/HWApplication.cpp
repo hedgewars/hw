@@ -38,6 +38,8 @@ void terminateFrontend(int signal)
 HWApplication::HWApplication(int &argc, char **argv) :
     QApplication(argc, argv)
 {
+    form = 0;
+
 #if !defined(Q_OS_WIN)
     signal(SIGINT, &terminateFrontend);
 #endif
