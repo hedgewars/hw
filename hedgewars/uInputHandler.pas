@@ -40,6 +40,8 @@ procedure InitKbdKeyTable;
 procedure SetBinds(var binds: TBinds);
 procedure SetDefaultBinds;
 procedure chDefaultBind(var id: shortstring);
+procedure loadBinds(cmd, s: shortstring);
+procedure addBind(var binds: TBinds; var id: shortstring);
 
 procedure ControllerInit;
 procedure ControllerAxisEvent(joy, axis: Byte; value: Integer);
@@ -47,7 +49,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug;
+uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer;
 
 const
     LSHIFT = $0200;
@@ -70,7 +72,6 @@ var tkbd: array[0..cKbdMaxIndex] of boolean;
     //ControllerBalls: array[0..5] of array[0..19] of array[0..1] of Integer;
     //ControllerHats: array[0..5] of array[0..19] of Byte;
     //ControllerButtons: array[0..5] of array[0..19] of Byte;
-    usingDBinds: boolean;
 
 function  KeyNameToCode(name: shortstring): LongInt; inline;
 begin
@@ -314,6 +315,8 @@ DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
 DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
+
+loadBinds('dbind', cPathz[ptData] + '/settings.ini');
 end;
 
 procedure SetBinds(var binds: TBinds);
@@ -447,22 +450,68 @@ begin
     ProcessKey(k +  ControllerNumAxes[joy]*2 + ControllerNumHats[joy]*4 + button, pressed);
 end;
 
-// Bind that isn't a team bind, but overrides defaultbinds.
-// When first called, DefaultBinds is cleared, because we assume we are getting a full list of dbinds.
-procedure chDefaultBind(var id: shortstring);
+procedure loadBinds(cmd, s: shortstring);
+var i: LongInt;
+    f: PFSFile;
+    p, l: shortstring;
+    b: byte;
+begin
+    AddFileLog('[BINDS] Loading binds from: ' + s);
+
+    l:= '';
+    if pfsExists(s) then
+        begin
+        f:= pfsOpenRead(s);
+        while (not pfsEOF(f)) and (l <> '[Binds]') do
+            pfsReadLn(f, l);
+
+        while (not pfsEOF(f)) and (l <> '') do
+            begin
+            pfsReadLn(f, l);
+
+            p:= '';
+            i:= 1;
+            while (i <= length(l)) and (l[i] <> '=') do
+                begin
+                if l[i] <> '%' then
+                    begin
+                    p:= p + l[i];
+                    inc(i)
+                    end else
+                    begin
+                    l[i]:= '$';
+                    val(copy(l, i, 3), b);
+                    p:= p + char(b);
+                    inc(i, 3)
+                    end;
+                end;
+
+            if i < length(l) then
+                begin
+                l:= copy(l, i + 1, length(l) - i);
+                if l <> 'default' then
+                    begin
+                    p:= cmd + ' ' + l + ' ' + p;
+                    ParseCommand(p, true)
+                    end
+                end
+            end;
+
+        pfsClose(f)
+        end 
+        else
+            AddFileLog('[BINDS] file not found');
+end;
+
+
+procedure addBind(var binds: TBinds; var id: shortstring);
 var KeyName, Modifier, tmp: shortstring;
-    b: LongInt;
+    i, b: LongInt;
 begin
 KeyName:= '';
 Modifier:= '';
 
-if (not usingDBinds) then
-    begin
-    usingDBinds:= true;
-    FillByte(DefaultBinds, SizeOf(DefaultBinds), 0);
-    end;
-
-if (Pos('mod:', id) <> 0) then
+if(Pos('mod:', id) <> 0)then
     begin
     tmp:= '';
     SplitBySpace(id, tmp);
@@ -479,12 +528,27 @@ b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
-    DefaultBinds[b]:= KeyName;
+    begin 
+    // add bind: first check if this cmd is already bound, and remove old bind
+    i:= cKbdMaxIndex;
+    repeat
+        dec(i)
+    until (i < 0) or (binds[i] = KeyName);
+    if (i >= 0) then
+        binds[i]:= '';
+
+    binds[b]:= KeyName;
+    end
+end;
+
+// Bind that isn't a team bind, but overrides defaultbinds.
+procedure chDefaultBind(var id: shortstring);
+begin
+    addBind(DefaultBinds, id)
 end;
 
 procedure initModule;
 begin
-    usingDBinds:= false;
     RegisterVariable('dbind', @chDefaultBind, true );
 end;
 

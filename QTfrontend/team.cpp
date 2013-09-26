@@ -261,7 +261,7 @@ bool HWTeam::saveToFile()
     return true;
 }
 
-QStringList HWTeam::teamGameConfig(quint32 InitHealth, GameUIConfig * config) const
+QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
 {
     QStringList sl;
     if (m_isNetTeam)
