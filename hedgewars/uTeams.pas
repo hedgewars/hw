@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList, uVisualGearsList, uPhysFSLayer
+    uGearsUtils, uGearsList, uVisualGearsList
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
@@ -570,57 +570,13 @@ end;
 
 procedure loadTeamBinds(s: shortstring);
 var i: LongInt;
-    f: PFSFile;
-    p, l: shortstring;
-    b: byte;
 begin
-    l:= '';
-    
     for i:= 1 to length(s) do
         if s[i] in ['\', '/', ':'] then s[i]:= '_';
-        
+
     s:= cPathz[ptTeams] + '/' + s + '.hwt';
-    if pfsExists(s) then
-        begin
-        AddFileLog('Loading binds from: ' + s);
-        f:= pfsOpenRead(s);
-        while (not pfsEOF(f)) and (l <> '[Binds]') do
-            pfsReadLn(f, l);
 
-        while (not pfsEOF(f)) and (l <> '') do
-            begin
-            pfsReadLn(f, l);
-
-            p:= '';
-            i:= 1;
-            while (i <= length(l)) and (l[i] <> '=') do
-                begin
-                if l[i] <> '%' then
-                    begin
-                    p:= p + l[i];
-                    inc(i)
-                    end else
-                    begin
-                    l[i]:= '$';
-                    val(copy(l, i, 3), b);
-                    p:= p + char(b);
-                    inc(i, 3)
-                    end;
-                end;
-
-            if i < length(l) then
-                begin
-                l:= copy(l, i + 1, length(l) - i);
-                if l <> 'default' then
-                    begin
-                    p:= 'bind ' + l + ' ' + p;
-                    ParseCommand(p, true)
-                    end
-                end
-            end;
-
-        pfsClose(f)
-        end
+    loadBinds('bind', s);
 end;
 
 procedure chAddTeam(var s: shortstring);
@@ -665,43 +621,11 @@ begin
 end;
 
 procedure chBind(var id: shortstring);
-var KeyName, Modifier, tmp: shortstring;
-    i, b: LongInt;
 begin
-KeyName:= '';
-Modifier:= '';
+    if CurrentTeam = nil then
+        exit;
 
-if CurrentTeam = nil then
-    exit;
-
-if(Pos('mod:', id) <> 0)then
-    begin
-    tmp:= '';
-    SplitBySpace(id, tmp);
-    Modifier:= id;
-    id:= tmp;
-    end;
-
-SplitBySpace(id, KeyName);
-if KeyName[1]='"' then
-    Delete(KeyName, 1, 1);
-if KeyName[byte(KeyName[0])]='"' then
-    Delete(KeyName, byte(KeyName[0]), 1);
-b:= KeyNameToCode(id, Modifier);
-if b = 0 then
-    OutError(errmsgUnknownVariable + ' "' + id + '"', false)
-else
-    begin 
-    // add bind: first check if this cmd is already bound, and remove old bind
-    i:= cKbdMaxIndex;
-    repeat
-        dec(i)
-    until (i < 0) or (CurrentTeam^.Binds[i] = KeyName);
-    if (i >= 0) then
-        CurrentTeam^.Binds[i]:= '';
-
-    CurrentTeam^.Binds[b]:= KeyName;
-    end
+    addBind(CurrentTeam^.Binds, id)
 end;
 
 procedure chTeamGone(var s:shortstring);

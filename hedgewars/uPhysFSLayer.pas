@@ -143,10 +143,8 @@ begin
 
     i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, false);
     AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
-    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, false);
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
-    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Teams'), '/Teams', false);
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Teams: ' + inttostr(i));
+    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/'), '/', false);
+    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/: ' + inttostr(i));
 
     hedgewarsMountPackages;
 end;

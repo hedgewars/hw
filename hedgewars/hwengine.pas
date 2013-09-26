@@ -453,7 +453,7 @@ begin
         uChat.initModule;
         uCollisions.initModule;
         uGears.initModule;
-        uInputHandler.initModule;   //stub
+        uInputHandler.initModule;
         uMisc.initModule;
         uLandTexture.initModule;    //stub
         uScript.initModule;
