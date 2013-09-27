@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList, uVisualGearsList
+    uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
@@ -714,8 +714,26 @@ if TeamsCount > 0 then
     for i:= 0 to Pred(TeamsCount) do
         begin
         for h:= 0 to cMaxHHIndex do
-            if TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil then
-                Dispose(TeamsArray[i]^.Hedgehogs[h].GearHidden);
+            with TeamsArray[i]^.Hedgehogs[h] do
+                begin
+                if GearHidden <> nil then
+                    Dispose(GearHidden);
+                    
+                FreeTexture(NameTagTex);
+                FreeTexture(HealthTagTex);
+                FreeTexture(HatTex);
+                end;
+                
+        with TeamsArray[i]^ do
+            begin
+            FreeTexture(NameTagTex);
+            FreeTexture(CrosshairTex);
+            FreeTexture(GraveTex);
+            FreeTexture(HealthTex);
+            FreeTexture(AIKillsTex);
+            FreeTexture(FlagTex);
+            end;
+        
         Dispose(TeamsArray[i]);
     end;
 for i:= 0 to Pred(ClansCount) do
