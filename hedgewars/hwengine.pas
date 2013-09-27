@@ -32,7 +32,7 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers
+     , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
@@ -441,6 +441,7 @@ begin
     if complete then
     begin
         uPhysFSLayer.initModule;
+        uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}   //stub
@@ -493,6 +494,7 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
+        uTextures.freeModule;
         uPhysFSLayer.freeModule;
     end;
 
