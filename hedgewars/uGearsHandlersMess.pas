@@ -5117,11 +5117,12 @@ if (Gear^.Pos = 4) then
     begin
     cnt:= 0;
     for j:= 0 to Pred(HH^.Team^.Clan^.TeamsNumber) do
-        for i:= 0 to Pred(HH^.Team^.Clan^.Teams[j]^.HedgehogsNumber) do
-            if (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear <> nil)
-            and ((HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.State and gstDrowning) = 0)
-            and (HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Health > HH^.Team^.Clan^.Teams[j]^.Hedgehogs[i].Gear^.Damage) then
-                inc(cnt);
+        with HH^.Team^.Clan^.Teams[j]^ do
+            for i:= 0 to Pred(HedgehogsNumber) do
+                if (Hedgehogs[i].Gear <> nil)
+                and ((Hedgehogs[i].Gear^.State and gstDrowning) = 0)
+                and (Hedgehogs[i].Gear^.Health > Hedgehogs[i].Gear^.Damage) then
+                    inc(cnt);
     if (cnt = 0) or SuddenDeathDmg or (Gear^.Timer = 0) then
         begin
         if HH^.GearHidden <> nil then
