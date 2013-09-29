@@ -173,6 +173,8 @@ type
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
 
+    TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
+
     THHFont = record
             Handle: PTTF_Font;
             Height: LongInt;

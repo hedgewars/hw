@@ -82,6 +82,7 @@ var
     GameType        : TGameType;
     InputMask       : LongWord;
     GameFlags       : Longword;
+    WorldEdge       : TWorldEdge;
     TurnTimeLeft    : Longword;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
@@ -2446,6 +2447,7 @@ begin
 
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
+    WorldEdge           := weNone;
     TurnTimeLeft        := 0;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
