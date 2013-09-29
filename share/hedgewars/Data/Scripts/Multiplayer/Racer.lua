@@ -524,6 +524,10 @@ function PlaceWayPoint(x,y)
 
 end
 
+function onSpecialPoint(x,y,flag)
+    PlaceWayPoint(x,y)
+end
+
 function onNewTurn()
 
         CheckForNewRound()

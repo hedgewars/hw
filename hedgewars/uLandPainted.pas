@@ -27,7 +27,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uDebug;
+uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uDebug, uScript;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -88,7 +88,11 @@ begin
     radius:= 0;
 
     pe:= pointsListHead;
-    TryDo((pe = nil) or (pe^.point.flags and $80 <> 0), 'Corrupted draw data', true);
+    while (pe <> nil) and (pe^.point.flags and $80 = 0) do
+        begin
+        ScriptCall('onSpecialPoint', pe^.point.X, pe^.point.Y, pe^.point.flags);
+        pe:= pe^.next;
+        end;
 
     while(pe <> nil) do
         begin
@@ -110,7 +114,7 @@ begin
             end;
 
         prevPoint:= pe^.point;
-        pe:= pe^.next;  
+        pe:= pe^.next;
         end;
 end;
 

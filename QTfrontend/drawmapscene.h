@@ -66,6 +66,7 @@ class DrawMapScene : public QGraphicsScene
         QList<QGraphicsItem *> oldItems;
         QGraphicsEllipseItem * m_cursor;
         bool m_isCursorShown;
+        QByteArray m_specialPoints;
 
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
