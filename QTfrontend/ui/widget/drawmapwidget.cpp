@@ -160,6 +160,7 @@ void DrawMapWidget::load(const QString & fileName)
         }
         else
             m_scene->decode(qUncompress(QByteArray::fromBase64(f.readAll())));
+            //m_scene->decode(f.readAll());
     }
 }
 
