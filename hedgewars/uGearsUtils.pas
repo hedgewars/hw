@@ -53,6 +53,8 @@ procedure SetAllHHToActive(Ice: boolean);
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
 
+function WorldWrap(var Gear: PGear): boolean;
+
 
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
@@ -486,7 +488,10 @@ begin
             CurAmmoGear^.Pos := 1000
         end
     else
-        CheckGearDrowning := false;
+        begin
+        if Gear^.Kind = gtHedgehog then Gear^.State:= Gear^.State and not gstSubmersible;
+        CheckGearDrowning := false
+        end
 end;
 
 
@@ -1198,5 +1203,75 @@ if (t > 0) then
 GetUtility:= i
 end;
 
+(*
+Intended to check Gear X/Y against the map left/right edges and apply one of the world modes
+* Normal - infinite world, do nothing
+* Wrap (entering left edge exits at same height on right edge)
+* Bounce (striking edge is treated as a 100% elasticity bounce)
+* From the depths (same as from sky, but from sea, with submersible flag set)
+
+Trying to make the checks a little broader than on first pass to catch things that don't move normally.
+*)
+function WorldWrap(var Gear: PGear): boolean;
+var tdx: hwFloat;
+begin
+WorldWrap:= false;
+// for playing around since it isn't hooked up yet
+//WorldEdge:= weBounce;
+if WorldEdge = weNone then exit(false);
+if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
+   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
+    begin
+    if WorldEdge = weWrap then
+        begin
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+        end
+    else if WorldEdge = weBounce then
+        begin
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+            begin
+            Gear^.dX.isNegative:= false;
+            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+            end
+        else 
+            begin
+            Gear^.dX.isNegative:= true;
+            Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+            end
+        end
+    else if WorldEdge = weSea then
+        begin
+        if (hwRound(Gear^.Y) > cWaterLine) and (Gear^.State and gstSubmersible <> 0) then
+            Gear^.State:= Gear^.State and not gstSubmersible
+        else
+            begin
+            Gear^.State:= Gear^.State or gstSubmersible;
+            Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
+            Gear^.Y:= int2hwFloat(cWaterLine+cVisibleWater+Gear^.Radius*2);
+            tdx:= Gear^.dX;
+            Gear^.dX:= Gear^.dY;
+            Gear^.dY:= tdx;
+            Gear^.dY.isNegative:= true
+            end
+        end;
+(*
+* Window in the sky (Gear moved high into the sky, Y is used to determine X) [unfortunately, not a safe thing to do. shame, I thought aerial bombardment would be kinda neat
+This one would be really easy to freeze game unless it was flagged unfortunately.
+
+    else 
+        begin
+        Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
+        Gear^.Y:= -_2048-_256-_256;
+        tdx:= Gear^.dX;
+        Gear^.dX:= Gear^.dY;
+        Gear^.dY:= tdx;
+        Gear^.dY.isNegative:= false
+        end
+*)
+    WorldWrap:= true
+    end;
+end;
 
 end.

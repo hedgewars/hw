@@ -284,6 +284,8 @@ var
     collV, collH: LongInt;
     land: word;
 begin
+    WorldWrap(Gear);
+
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
     if Gear^.dX.Round > 2 then
         Gear^.dX.QWordValue:= 8589934592;
@@ -301,8 +303,6 @@ begin
     collH := 0;
     tdX := Gear^.dX;
     tdY := Gear^.dY;
-
-
 
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
     if (hwRound(Gear^.X) < min(LAND_WIDTH div -2, -2048))
@@ -889,6 +889,7 @@ var
     flower: PVisualGear;
 
 begin
+    WorldWrap(Gear);
     AllInactive := false;
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
@@ -4637,6 +4638,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepPoisonCloud(Gear: PGear);
 begin
+    WorldWrap(Gear);
     if Gear^.Timer = 0 then
         begin
         DeleteGear(Gear);
