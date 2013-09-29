@@ -594,6 +594,11 @@ begin
 ignoreNearObjects:= false; // try not skipping proximity at first
 ignoreOverlap:= false; // this not only skips proximity, but allows overlapping objects (barrels, mines, hogs, crates).  Saving it for a 3rd pass.  With this active, winning AI Survival goes back to virtual impossibility
 tryAgain:= true;
+if WorldEdge <> weNone then 
+    begin
+    Left:= max(Left,leftX+Gear^.Radius);
+    Right:= min(Right,rightX-Gear^.Radius)
+    end;
 while tryAgain do
     begin
     delta:= LAND_WIDTH div 16;
