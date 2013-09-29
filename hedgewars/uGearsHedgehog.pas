@@ -828,7 +828,6 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
 begin
-WorldWrap(Gear);
 land:= 0;
 isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
 if Gear^.dX.QWordValue > 8160437862 then
@@ -1275,6 +1274,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
 begin
+WorldWrap(Gear);
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
 if (Gear^.Message and gmDestroy) <> 0 then
     begin

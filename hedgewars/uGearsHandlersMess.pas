@@ -1124,6 +1124,13 @@ var
     oX, oY: hwFloat;
     VGear: PVisualGear;
 begin
+    if WorldWrap(Gear) then
+        begin
+        SpawnBulletTrail(Gear);
+        inc(Gear^.PortalCounter);
+        Gear^.Elasticity:= Gear^.X;
+        Gear^.Friction:= Gear^.Y
+        end;
     AllInactive := false;
     inc(Gear^.Timer);
     i := 80;
@@ -2014,6 +2021,7 @@ var
     tdX,tdY: HWFloat;
     landPixel: Word;
 begin
+    WorldWrap(Gear);
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
 
@@ -3188,11 +3196,27 @@ const cAngleSpeed =   3;
 var
     HHGear: PGear;
     i: LongInt;
-    dX, dY: hwFloat;
+    dX, dY, X, Y : hwFloat;
     fChanged: boolean;
     trueAngle: Longword;
     t: PGear;
 begin
+    if WorldWrap(Gear) then
+        begin
+        // recycling as temp vars
+        Y.isNegative:= false;
+        Y.QWordValue:= 4294967296 * 112;
+        X.isNegative:= false;
+        X.QWordValue:= 4294967296 * 35;
+        dX.isNegative:= false;
+        dX.QWordValue:= 4294967296 * 1152;
+
+        dY:=hwAbs(Gear^.dX*4);
+        dY:= dY + hwPow(dY,3)/_6 + _3 * hwPow(dY,5) / _40 + _5 * hwPow(dY,7) / Y + X * hwPow(dY,9) / dX;
+        Gear^.Angle:= hwRound(dY*_2048 / _PI);
+        if not Gear^.dY.isNegative then Gear^.Angle:= 2048-Gear^.Angle;
+        if Gear^.dX.isNegative then Gear^.Angle:= 4096-Gear^.Angle;
+        end;
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
@@ -4098,6 +4122,7 @@ var
     x, y, tx, ty: LongInt;
     s: hwFloat;
 begin
+    WorldWrap(Gear);
     x := hwRound(Gear^.X);
     y := hwRound(Gear^.Y);
     tx := 0;
