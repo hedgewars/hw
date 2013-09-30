@@ -1129,6 +1129,8 @@ var i, t, h: LongInt;
     highlight: Boolean;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
+    lw, lh: GLfloat;
+    WorldEnd, WorldFade : array[0..3] of HwColor4f;
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
@@ -1238,8 +1240,71 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
 if WorldEdge <> weNone then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
+
+    FillChar(WorldFade, sizeof(WorldFade), 0);
+    WorldFade[0].a:= 255;
+    WorldFade[1].a:= 255;
+    FillChar(WorldEnd, sizeof(WorldEnd), 0);
+    WorldEnd[0].a:= 255;
+    WorldEnd[1].a:= 255;
+    WorldEnd[2].a:= 255;
+    WorldEnd[3].a:= 255;
+
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glPushMatrix;
+    glTranslatef(WorldDx, WorldDy, 0);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
+
+    VertexBuffer[0].X:= leftX-120;
+    VertexBuffer[0].Y:= -3000;
+    VertexBuffer[1].X:= leftX-120;
+    VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
+    VertexBuffer[2].X:= leftX-70;
+    VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
+    VertexBuffer[3].X:= leftX-70;
+    VertexBuffer[3].Y:= -3000;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    VertexBuffer[0].X:= rightX+120;
+    VertexBuffer[1].X:= rightX+120;
+    VertexBuffer[2].X:= rightX+70;
+    VertexBuffer[3].X:= rightX+70;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldEnd[0]);
+
+    VertexBuffer[0].X:= -5000;
+    VertexBuffer[1].X:= -5000;
+    VertexBuffer[2].X:= leftX-120;
+    VertexBuffer[3].X:= leftX-120;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    VertexBuffer[0].X:= rightX+5000;
+    VertexBuffer[1].X:= rightX+5000;
+    VertexBuffer[2].X:= rightX+120;
+    VertexBuffer[3].X:= rightX+120;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    glPopMatrix;
+    glDisableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
+    glEnable(GL_TEXTURE_2D);
+
     DrawLine(leftX-100, -3000, leftX-100, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
-    DrawLine(rightX+100, -3000, rightX+100, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF)
+    DrawLine(rightX+100, -3000, rightX+100, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
     end;
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
