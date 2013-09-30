@@ -193,6 +193,8 @@ void DrawMapScene::clearMap()
         removeItem(items().first());
     }
 
+    items().clear();
+
     oldPaths = paths;
 
     paths.clear();
