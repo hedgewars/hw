@@ -1238,8 +1238,8 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
 if WorldEdge <> weNone then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
-    DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
-    DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF)
+    DrawLine(leftX-100, -3000, leftX-100, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
+    DrawLine(rightX+100, -3000, rightX+100, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF)
     end;
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels

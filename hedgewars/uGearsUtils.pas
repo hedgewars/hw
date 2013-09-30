@@ -489,7 +489,7 @@ begin
         end
     else
         begin
-        if Gear^.Kind = gtHedgehog then Gear^.State:= Gear^.State and not gstSubmersible;
+        if not (Gear^.Kind in [gtJetpack, gtBee]) then Gear^.State:= Gear^.State and not gstSubmersible;  // making it temporary for most gears is more attractive I think
         CheckGearDrowning := false
         end
 end;
@@ -1224,26 +1224,26 @@ WorldWrap:= false;
 // for playing around since it isn't hooked up yet
 //WorldEdge:= weBounce;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
-   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
+if (hwRound(Gear^.X)-Gear^.Radius < (leftX-100)) or
+   (hwRound(Gear^.X)+Gear^.Radius > (rightX+100)) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
-             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX-100) then
+             Gear^.X:= int2hwfloat(rightX-Gear^.Radius+100)
+        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius-100)
         end
     else if WorldEdge = weBounce then
         begin
         if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
             begin
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+            Gear^.X:= int2hwfloat(leftX+Gear^.Radius-100)
             end
         else 
             begin
             Gear^.dX.isNegative:= true;
-            Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+            Gear^.X:= int2hwfloat(rightX-Gear^.Radius+100)
             end
         end
     else if WorldEdge = weSea then
