@@ -384,8 +384,7 @@ begin
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
-    if Gear^.Kind <> gtBee then
-        CheckGearDrowning(Gear);
+    CheckGearDrowning(Gear);
     //if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) < _0_0002) and
     if (not isFalling) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_02.QWordValue) then
         Gear^.State := Gear^.State and (not gstMoving)
@@ -969,6 +968,7 @@ begin
         dec(Gear^.Timer)
     else
         begin
+        Gear^.State:= Gear^.State and not gstSubmersible;
         if nuw then
            begin
             StopSoundChan(Gear^.SoundChannel);
@@ -3201,9 +3201,8 @@ var
     trueAngle: Longword;
     t: PGear;
 begin
-    if WorldWrap(Gear) then
+    if WorldWrap(Gear) and (WorldEdge <> weWrap) then
         begin
-        // recycling as temp vars
         Y.isNegative:= false;
         Y.QWordValue:= 4294967296 * 112;
         X.isNegative:= false;

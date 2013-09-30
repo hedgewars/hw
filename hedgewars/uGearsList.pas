@@ -281,6 +281,7 @@ case Kind of
                 gear^.RenderTimer:= true;
                 gear^.Elasticity:= _0_9;
                 gear^.Tag:= 0;
+                gear^.State:= Gear^.State or gstSubmersible
                 end;
    gtSeduction: begin
                 gear^.Radius:= 250;
