@@ -1056,6 +1056,7 @@ begin
     repeat
         Gear^.X := Gear^.X + Gear^.dX;
         Gear^.Y := Gear^.Y + Gear^.dY;
+        WorldWrap(Gear);
         CheckCollision(Gear);
         if (Gear^.State and gstCollision) <> 0 then
             begin
@@ -1121,16 +1122,9 @@ end;
 procedure doStepBulletWork(Gear: PGear);
 var
     i, x, y: LongWord;
-    oX, oY: hwFloat;
+    oX, oY, tX, tY, cX, cY: hwFloat;
     VGear: PVisualGear;
 begin
-    if WorldWrap(Gear) then
-        begin
-        SpawnBulletTrail(Gear);
-        inc(Gear^.PortalCounter);
-        Gear^.Elasticity:= Gear^.X;
-        Gear^.Friction:= Gear^.Y
-        end;
     AllInactive := false;
     inc(Gear^.Timer);
     i := 80;
@@ -1139,6 +1133,22 @@ begin
     repeat
         Gear^.X := Gear^.X + Gear^.dX;
         Gear^.Y := Gear^.Y + Gear^.dY;
+        tX:= Gear^.X;
+        tY:= Gear^.Y;
+        if WorldWrap(Gear) then
+            begin
+            cX:= Gear^.X;
+            cY:= Gear^.Y;
+            Gear^.X:= tX;
+            Gear^.Y:= tY;
+            SpawnBulletTrail(Gear);
+            Gear^.X:= cX;
+            Gear^.Y:= cY;
+            inc(Gear^.PortalCounter);
+            Gear^.Elasticity:= Gear^.X;
+            Gear^.Friction:= Gear^.Y;
+            SpawnBulletTrail(Gear);
+            end;
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
 
