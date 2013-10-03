@@ -383,6 +383,23 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(SB_GetAwayTime,14,2,1,1);
 
     l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("World Edge"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,15,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconEarth.png"));
+    glBSLayout->addWidget(l,15,1,1,1);
+    CB_WorldEdge = new QComboBox(gbBasicSettings);
+    CB_WorldEdge->insertItem(0, tr("None (Default)"));
+    CB_WorldEdge->insertItem(1, tr("Wrap (World wraps)"));
+    CB_WorldEdge->insertItem(2, tr("Bounce (Edges reflect)"));
+    CB_WorldEdge->insertItem(3, tr("Sea (Edges connect to sea)"));
+    /* CB_WorldEdge->insertItem(4, tr("Skybox")); */
+    glBSLayout->addWidget(CB_WorldEdge,15,2,1,1);
+
+
+    l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Scheme Name:"));
 
     LE_name = new QLineEdit(this);
@@ -471,6 +488,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_HealthDecrease, 38);
     mapper->addMapping(SB_RopeModifier, 39);
     mapper->addMapping(SB_GetAwayTime, 40);
+    mapper->addMapping(CB_WorldEdge, 41);
 
     mapper->toFirst();
 }

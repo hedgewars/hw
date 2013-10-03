@@ -797,6 +797,11 @@ begin
   CampaignVariable := s;
 end;
 
+procedure chWorldEdge(var s: shortstring);
+begin
+WorldEdge:= TWorldEdge(StrToInt(s))
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -882,6 +887,7 @@ begin
     RegisterVariable('-cur_r'  , @chCurR_m       , true );
     RegisterVariable('campvar' , @chCampVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
+    RegisterVariable('worldedge',@chWorldEdge    , false);
 end;
 
 procedure freeModule;

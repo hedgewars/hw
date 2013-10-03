@@ -1221,8 +1221,6 @@ function WorldWrap(var Gear: PGear): boolean;
 var tdx: hwFloat;
 begin
 WorldWrap:= false;
-// for playing around since it isn't hooked up yet
-//WorldEdge:= weBounce;
 if WorldEdge = weNone then exit(false);
 if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
    (hwRound(Gear^.X)+Gear^.Radius > rightX) then

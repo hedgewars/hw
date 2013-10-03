@@ -91,6 +91,7 @@ class PageScheme : public AbstractPage
         QSpinBox * SB_Explosives;
         QSpinBox * SB_RopeModifier;
         QSpinBox * SB_GetAwayTime;
+        QComboBox * CB_WorldEdge;
         QLineEdit * LE_name;
 
         QGroupBox * gbGameModes;
