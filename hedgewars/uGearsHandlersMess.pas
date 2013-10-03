@@ -1323,6 +1323,7 @@ var
     HHGear: PGear;
 begin
     AllInactive := false;
+    WorldWrap(Gear);
     HHGear := Gear^.Hedgehog^.Gear;
     dec(Gear^.Timer);
     if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then
@@ -1446,6 +1447,7 @@ var
     prevX: LongInt;
 begin
     AllInactive := false;
+    WorldWrap(Gear);
     dec(Gear^.Timer);
     if ((GameFlags and gfInfAttack) <> 0) and (TurnTimeLeft > 0) then
         dec(TurnTimeLeft);
