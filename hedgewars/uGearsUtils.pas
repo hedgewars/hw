@@ -1224,26 +1224,26 @@ WorldWrap:= false;
 // for playing around since it isn't hooked up yet
 //WorldEdge:= weBounce;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X)-Gear^.Radius < (leftX-100)) or
-   (hwRound(Gear^.X)+Gear^.Radius > (rightX+100)) then
+if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
+   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX-100) then
-             Gear^.X:= int2hwfloat(rightX-Gear^.Radius+100)
-        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius-100)
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
         end
     else if WorldEdge = weBounce then
         begin
         if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
             begin
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX+Gear^.Radius-100)
+            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
             end
         else 
             begin
             Gear^.dX.isNegative:= true;
-            Gear^.X:= int2hwfloat(rightX-Gear^.Radius+100)
+            Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
             end
         end
     else if WorldEdge = weSea then
