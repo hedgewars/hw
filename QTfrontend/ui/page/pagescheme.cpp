@@ -488,7 +488,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_HealthDecrease, 38);
     mapper->addMapping(SB_RopeModifier, 39);
     mapper->addMapping(SB_GetAwayTime, 40);
-    mapper->addMapping(CB_WorldEdge, 41);
+    mapper->addMapping(CB_WorldEdge, 41, "currentIndex");
 
     mapper->toFirst();
 }
