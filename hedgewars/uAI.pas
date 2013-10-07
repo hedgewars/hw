@@ -106,7 +106,7 @@ end;
 procedure TestAmmos(var Actions: TActions; Me: PGear; rareChecks: boolean);
 var BotLevel: Byte;
     ap: TAttackParams;
-    Score, i, dAngle: LongInt;
+    Score, i, t, n, dAngle: LongInt;
     a, aa: TAmmoType;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
@@ -182,7 +182,15 @@ for i:= 0 to Pred(Targets.Count) do
                         end else
                         if (Ammoz[a].Ammo.Propz and ammoprop_AttackingPut) = 0 then
                             begin
+                            if (AmmoTests[a].flags and amtest_MultipleAttacks) = 0 then
+                                n:= 1 else n:= ap.AttacksNum;
+
                             AddAction(BestActions, aia_attack, aim_push, 650 + random(300), 0, 0);
+                            for t:= 2 to n do
+                                begin
+                                AddAction(BestActions, aia_attack, aim_push, 150, 0, 0);
+                                AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
+                                end;
                             AddAction(BestActions, aia_attack, aim_release, ap.Power, 0, 0);
                             end;
 
