@@ -22,13 +22,14 @@ unit uAIAmmoTests;
 interface
 uses uConsts, uFloat, uTypes, uAIMisc;
 const
-    amtest_Rare     = $00000001; // check only several positions
-    amtest_NoTarget = $00000002; // each pos, but no targetting
+    amtest_Rare            = $00000001; // check only several positions
+    amtest_NoTarget        = $00000002; // each pos, but no targetting
+    amtest_MultipleAttacks = $00000004; // test could result in multiple attacks, set AttacksNum
 
 var windSpeed: real;
 
 type TAttackParams = record
-        Time: Longword;
+        Time, AttacksNum: Longword;
         Angle, Power: LongInt;
         ExplX, ExplY, ExplR: LongInt;
         AttackPutX, AttackPutY: LongInt;
@@ -72,7 +73,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amSkip
             (proc: nil;              flags: 0), // amRope
             (proc: nil;              flags: 0), // amMine
-            (proc: @TestDesertEagle; flags: 0), // amDEagle
+            (proc: @TestDesertEagle; flags: amtest_MultipleAttacks), // amDEagle
             (proc: nil;              flags: 0), // amDynamite
             (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
             (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
@@ -715,8 +716,13 @@ until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5)
     or (d > 48);
 
 if Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5 then
-     valueResult:= RateShove(Me, Targ.Point.X, Targ.Point.Y, 1, 7, 20, vX*0.125, vY*0.125, afTrackFall)
-else valueResult:= BadTurn;
+    begin
+    ap.AttacksNum:= 1 + (d + 8) div 12;
+    valueResult:= RateShove(Me, Targ.Point.X, Targ.Point.Y, 1, 7, 20, vX*0.125, vY*0.125, afTrackFall) - ap.AttacksNum
+    end
+else
+    valueResult:= BadTurn;
+
 TestDesertEagle:= valueResult
 end;
 
