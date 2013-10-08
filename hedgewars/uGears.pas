@@ -401,7 +401,8 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             if (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.State and gstAttacked = 0)
             and (CurAmmoGear = nil) then
                 SweepDirty;
-            CheckNoDamage;
+            if (CurrentHedgehog^.Gear = nil) or (CurrentHedgehog^.Gear^.State and gstHHDriven = 0) or (CurrentHedgehog^.Gear^.Damage = 0) then
+                CheckNoDamage;
             AliveCount:= 0; // shorter version of check for win to allow typical step activity to proceed
             for i:= 0 to Pred(ClansCount) do
                 if ClansArray[i]^.ClanHealth > 0 then
