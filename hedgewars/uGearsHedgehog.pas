@@ -848,7 +848,7 @@ if isFalling then
     if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then
         Gear^.dY:= _0;
     Gear^.State:= Gear^.State or gstMoving;
-    if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstDriven <> 0) and
+    if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
         begin
         // TODO: why so aggressive at setting FollowGear when falling?
