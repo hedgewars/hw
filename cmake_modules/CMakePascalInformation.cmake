@@ -2,6 +2,7 @@
 # It also loads the available platform file for the system-compiler
 # if it exists.
 
+# in case fpc ever becomes included in cmake
 get_filename_component(CMAKE_BASE_NAME ${CMAKE_Pascal_COMPILER} NAME_WE)
 set(CMAKE_SYSTEM_AND_Pascal_COMPILER_INFO_FILE
     ${CMAKE_ROOT}/Modules/Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME}.cmake)
@@ -33,17 +34,18 @@ endif(CMAKE_USER_MAKE_RULES_OVERRIDE_Pascal)
 
 # No flags supported during linking as a shell script takes care of it
 # however to avoid interferences we escape -Wl flags to the Pascal -k
-if(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
-#-shared
-    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
-endif(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
+#if(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
+#-shared (linux) / -dynamiclib -Wl,-headerpad_max_install_names (darwin)
+#    string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS})
+#endif(NOT CMAKE_SHARED_LIBRARY_CREATE_Pascal_FLAGS)
 
 if(NOT CMAKE_SHARED_LIBRARY_Pascal_FLAGS AND CMAKE_SHARED_LIBRARY_C_FLAGS)
+#-fPIC
     string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_C_FLAGS})
 endif()
 
 if(NOT CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS AND CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
-#-rdynamic
+#-rdynamic (linux) / (empty on darwin)
     string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_LIBRARY_LINK_Pascal_FLAGS ${CMAKE_SHARED_LIBRARY_LINK_C_FLAGS})
 endif()
 
@@ -71,6 +73,7 @@ endif(NOT CMAKE_MODULE_EXISTS)
 
 # repeat for modules
 if(NOT CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS)
+# ? (linux) / -bundle -Wl,-headerpad_max_install_names (darwin)
     string(REGEX REPLACE "-Wl," "-k" CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS ${CMAKE_SHARED_MODULE_CREATE_C_FLAGS})
 endif(NOT CMAKE_SHARED_MODULE_CREATE_Pascal_FLAGS)
 
@@ -86,6 +89,7 @@ if(NOT CMAKE_SHARED_MODULE_RUNTIME_Pascal_FLAG_SEP)
     set(CMAKE_SHARED_MODULE_RUNTIME_Pascal_FLAG_SEP ${CMAKE_SHARED_MODULE_RUNTIME_C_FLAG_SEP})
 endif(NOT CMAKE_SHARED_MODULE_RUNTIME_Pascal_FLAG_SEP)
 
+# now other system things
 if(NOT CMAKE_INCLUDE_FLAG_Pascal)
     #amazing, fpc: -I<x>  Add <x> to include path
     set(CMAKE_INCLUDE_FLAG_Pascal ${CMAKE_INCLUDE_FLAG_C})
@@ -97,6 +101,7 @@ endif(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
 
 # Copy C version of this flag which is normally determined in platform file.
 if(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
+#-soname (linux) / -install-name (dawin)
     set(CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG ${CMAKE_SHARED_LIBRARY_SONAME_C_FLAG})
 endif(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 
