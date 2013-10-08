@@ -165,5 +165,9 @@
         <file>res/splash.png</file>
         <file>res/html/about.html</file>
         <file>res/xml/tips.xml</file>
+        <file>res/chat/hedgehogcontributor.png</file>
+        <file>res/chat/hedgehogcontributor_gray.png</file>
+        <file>res/chat/roomadmincontributor.png</file>
+        <file>res/chat/roomadmincontributor_gray.png</file>
     </qresource>
 </RCC>
