@@ -2399,6 +2399,7 @@ procedure doStepGirder(Gear: PGear);
 var
     HHGear: PGear;
     x, y, tx, ty: hwFloat;
+    rx: LongInt;
 begin
     AllInactive := false;
 
@@ -2407,8 +2408,13 @@ begin
     ty := int2hwFloat(Gear^.Target.Y);
     x := HHGear^.X;
     y := HHGear^.Y;
+    rx:= hwRound(x);
 
-    if (Distance(tx - x, ty - y) > _256)
+    if ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or 
+            (
+            (Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y) > _256) and
+            (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
+            )))
     or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprAmGirder].Width div 2, Gear^.Target.Y - SpritesData[sprAmGirder].Height div 2, sprAmGirder, Gear^.State, true, false)) then
         begin
         PlaySound(sndDenied);
