@@ -66,6 +66,7 @@ class PageEditTeam : public AbstractPage
         HWTeam data();
         QString m_playerHash;
         KeyBinder * binder;
+        bool m_loaded;
 
         QLayout * bodyLayoutDefinition();
         QLayout * footerLayoutDefinition();
@@ -77,6 +78,8 @@ class PageEditTeam : public AbstractPage
         QPushButton * btnRandomHogName[HEDGEHOGS_PER_TEAM];
         QPushButton * btnRandomTeam;
         QPushButton * btnTestSound;
+
+        void lazyLoad();
 
     private slots:
         void saveTeam();
