@@ -99,6 +99,11 @@ if(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
     set(CMAKE_INCLUDE_FLAG_SEP_Pascal ${CMAKE_INCLUDE_FLAG_SEP_C})
 endif(NOT CMAKE_INCLUDE_FLAG_SEP_Pascal)
 
+if(NOT CMAKE_Pascal_FRAMEWORK_SEARCH_FLAG)
+    #however -F won't work, -Ff is Pascal equivalent
+    set(CMAKE_Pascal_FRAMEWORK_SEARCH_FLAG "-Ff")
+endif(NOT CMAKE_Pascal_FRAMEWORK_SEARCH_FLAG)
+
 # Copy C version of this flag which is normally determined in platform file.
 if(NOT CMAKE_SHARED_LIBRARY_SONAME_Pascal_FLAG)
 #-soname (linux) / -install-name (dawin)
