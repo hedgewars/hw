@@ -1276,7 +1276,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
 begin
-WorldWrap(Gear);
+if WorldWrap(Gear) and (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
+   CurAmmoGear^.PortalCounter:= 1;
+
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
 if (Gear^.Message and gmDestroy) <> 0 then
     begin
