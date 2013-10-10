@@ -1276,7 +1276,8 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
 begin
-if WorldWrap(Gear) and (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
+if WorldWrap(Gear) and (WorldEdge <> weBounce) and 
+  (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
    CurAmmoGear^.PortalCounter:= 1;
 
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
