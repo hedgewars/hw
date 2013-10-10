@@ -1,5 +1,10 @@
 
 if(APPLE)
+    if(${CMAKE_VERSION} VERSION_GREATER "2.8.10.2" AND
+       ${CMAKE_VERSION} VERSION_LESS "2.8.12.1")
+        message(FATAL_ERROR "This version of CMake is known *not* to work, please update or use a lower version")
+    endif()
+
     set(CMAKE_FIND_FRAMEWORK "FIRST")
 
     #what system are we building for

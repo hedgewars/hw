@@ -5,6 +5,9 @@
 # the cmake variable CMAKE_GENERATOR_PASCAL which can be defined by a generator
 # as a default compiler
 
+# NOTE: on Darwin cmake >= 2.8.11 until cmake <= 2.8.12.1 will add an incompatible
+# -F flag to <FLAGS> so you won't be able to use those versions with this script
+
 if(NOT CMAKE_Pascal_COMPILER)
     # prefer the environment variable FPC
     if($ENV{FPC} MATCHES ".+")
