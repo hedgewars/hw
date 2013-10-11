@@ -131,7 +131,7 @@ endif()
 
 #build engine without freepascal
 if(${NOPASCAL})
-    find_package(Clang)
+    find_package(Clang REQUIRED)
 
     if(CLANG_VERSION VERSION_LESS "3.0")
         message(FATAL_ERROR "LLVM/Clang compiler required version is 3.0 but version ${CLANG_VERSION} was found!")
