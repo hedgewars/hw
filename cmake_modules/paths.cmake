@@ -51,6 +51,10 @@ set(CMAKE_SKIP_INSTALL_RPATH FALSE)
 #it's safe to use our RPATH because it is relative
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
+#add the automatically determined parts of the RPATH
+#which point to directories outside the build tree to the install RPATH
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
+
 #paths where to find libraries (final slash not optional):
 # - the first is relative to the executable
 # - the second is the same directory of the executable (so it runs in bin/)

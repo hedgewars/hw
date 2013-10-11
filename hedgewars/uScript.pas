@@ -58,7 +58,6 @@ implementation
 uses LuaPas,
     uConsole,
     uConsts,
-    uVisualGears,
     uGears,
     uGearsList,
     uGearsUtils,
@@ -84,8 +83,14 @@ uses LuaPas,
     SDLh,
     SysUtils,
     uIO,
-    uPhysFSLayer
-{$IFDEF PAS2C}, hwpacksmounter{$ENDIF}
+    uVisualGearsList,
+    uGearsHandlersMess,
+    uPhysFSLayer,
+{$IFDEF PAS2C}
+    hwpacksmounter
+{$ELSE},
+    typinfo
+{$ENDIF}
     ;
 
 var luaState : Plua_State;
@@ -231,8 +236,7 @@ function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
-        if (GameFlags and lua_tointeger(L, i)) = 0 then
-            GameFlags := GameFlags + LongWord(lua_tointeger(L, i));
+        GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
     ScriptSetInteger('GameFlags', GameFlags);
     lc_enablegameflags:= 0;
 end;
@@ -241,8 +245,7 @@ function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
     for i:= 1 to lua_gettop(L) do
-        if (GameFlags and lua_tointeger(L, i)) <> 0 then
-            GameFlags := GameFlags - LongWord(lua_tointeger(L, i));
+        GameFlags := (GameFlags and (not (LongWord(lua_tointeger(L, i)))));
     ScriptSetInteger('GameFlags', GameFlags);
     lc_disablegameflags:= 0;
 end;
@@ -1490,7 +1493,7 @@ begin
             gear^.X:= int2hwfloat(x);
             gear^.Y:= int2hwfloat(y);
             if col then
-                AddGearCI(gear);
+                AddCI(gear);
             SetAllToActive
             end
         end;
@@ -1894,6 +1897,17 @@ begin
     else
         ScriptLoad(lua_tostring(L, 1));
     lc_hedgewarsscriptload:= 0;
+end;
+
+
+function lc_declareachievement(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if lua_gettop(L) <> 4 then
+        LuaError('Lua: Wrong number of parameters passed to DeclareAchievement!')
+    else
+        declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
+    lc_declareachievement:= 0
 end;
 ///////////////////
 
@@ -2344,6 +2358,7 @@ ScriptSetInteger('gfPerHogAmmo', gfPerHogAmmo);
 ScriptSetInteger('gfDisableWind', gfDisableWind);
 ScriptSetInteger('gfMoreWind', gfMoreWind);
 ScriptSetInteger('gfTagTeam', gfTagTeam);
+ScriptSetInteger('gfShoppaBorder', gfShoppaBorder);
 
 ScriptSetInteger('gmLeft', gmLeft);
 ScriptSetInteger('gmRight', gmRight);
@@ -2513,6 +2528,7 @@ lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
+lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
 
 ScriptClearStack; // just to be sure stack is empty

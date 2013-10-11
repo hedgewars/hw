@@ -17,7 +17,7 @@ import qualified Data.ByteString.Char8 as B
 import Control.DeepSeq
 import Data.Unique
 import Control.Arrow
-import Control.Exception
+import Control.Exception as E
 import System.Process
 import Network.Socket
 import System.Random
@@ -346,7 +346,8 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = rmTeamMsg : roundMsgs g
+                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then (:) (fromJust $ lastFilteredTimedMsg g) else id) 
+                      $ rmTeamMsg : roundMsgs g
                 }) $ gameInfo r
             })
         ]
@@ -420,50 +421,57 @@ processAction ClearAccountsCache = do
 
 processAction (ProcessAccountInfo info) = do
     case info of
-        HasAccount passwd isAdmin -> do
+        HasAccount passwd isAdmin isContr -> do
             b <- isBanned
             c <- client's isChecker
-            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin
+            when (not b) $ (if c then checkerLogin else playerLogin) passwd isAdmin isContr
         Guest -> do
             b <- isBanned
             c <- client's isChecker
             when (not b) $
                 if c then
-                    checkerLogin "" False
+                    checkerLogin "" False False
                     else
                     processAction JoinLobby
         Admin -> do
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
             chan <- client's sendChan
             processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
+        ReplayName fn -> processAction $ ShowReplay fn
     where
     isBanned = do
         processAction $ CheckBanned False
         liftM B.null $ client's nick
-    checkerLogin _ False = processAction $ ByeClient $ loc "No checker rights"
-    checkerLogin p True = do
+    checkerLogin _ False _ = processAction $ ByeClient $ loc "No checker rights"
+    checkerLogin p True _ = do
         wp <- client's webPassword
         processAction $
             if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient $ loc "Authentication failed"
-    playerLogin p a = do
+    playerLogin p a contr = do
         chan <- client's sendChan
-        mapM_ processAction [AnswerClients [chan] ["ASKPASSWORD"], ModifyClient (\c -> c{webPassword = p, isAdministrator = a})]
+        mapM_ processAction [
+            AnswerClients [chan] ["ASKPASSWORD"]
+            , ModifyClient (\c -> c{webPassword = p, isAdministrator = a, isContributor = contr})
+            ]
 
 processAction JoinLobby = do
     chan <- client's sendChan
     clientNick <- client's nick
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
+    isContr <- client's isContributor
     loggedInClients <- liftM (Prelude.filter isVisible) $! allClientsS
     let (lobbyNicks, clientsChans) = unzip . L.map (nick &&& sendChan) $ loggedInClients
     let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
-    let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin]]
+    let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
+    let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin], ["c" | isContr]]
     mapM_ processAction . concat $ [
         [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
         , [AnswerClients [chan] ("LOBBY:JOINED" : clientNick : lobbyNicks)]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
+        , [AnswerClients [chan] ("CLIENT_FLAGS" : "+c" : contrNicks) | not $ null contrNicks]
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
         , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]
@@ -610,6 +618,7 @@ processAction StatsAction = do
     where
           st irnc = (length $ allRooms irnc, length $ allClients irnc)
 
+
 processAction RestartServer = do
     sp <- gets (shutdownPending . serverInfo)
     when (not sp) $ do
@@ -622,6 +631,7 @@ processAction RestartServer = do
             _ <- createProcess (proc "./hedgewars-server" args)
             return ()
         processAction $ ModifyServerInfo (\s -> s{shutdownPending = True})
+
 
 processAction Stats = do
     cls <- allClientsS
@@ -650,9 +660,19 @@ processAction SaveReplay = do
     ri <- clientRoomA
     rnc <- gets roomsClients
 
-    io $ do
+    readyCheckersIds <- io $ do
         r <- room'sM rnc id ri
         saveReplay r
+        allci <- allClientsM rnc
+        filterM (client'sM rnc isReadyChecker) allci
+
+    when (not $ null readyCheckersIds) $ do
+        oldci <- gets clientIndex
+        withStateT (\s -> s{clientIndex = Just $ head readyCheckersIds})
+            $ processAction CheckRecord
+        modify (\s -> s{clientIndex = oldci})
+    where
+        isReadyChecker cl = isChecker cl && isReady cl
 
 
 processAction CheckRecord = do
@@ -662,20 +682,56 @@ processAction CheckRecord = do
     when (not . null $ l) $
         mapM_ processAction [
             AnswerClients [c] ("REPLAY" : l)
-            , ModifyClient $ \c -> c{checkInfo = cinfo}
+            , ModifyClient $ \c -> c{checkInfo = cinfo, isReady = False}
             ]
+
 
 processAction (CheckFailed msg) = do
     Just (CheckInfo fileName _) <- client's checkInfo
     io $ moveFailedRecord fileName
 
+
 processAction (CheckSuccess info) = do
-    Just (CheckInfo fileName _) <- client's checkInfo
+    Just (CheckInfo fileName teams) <- client's checkInfo
+    si <- gets serverInfo
+    io $ writeChan (dbQueries si) $ StoreAchievements (B.pack fileName) (map toPair teams) info
     io $ moveCheckedRecord fileName
+    where
+        toPair t = (teamname t, teamowner t)
+
+processAction (QueryReplay name) = do
+    (Just ci) <- gets clientIndex
+    si <- gets serverInfo
+    uid <- client's clUID
+    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) name
 
 #else
 processAction SaveReplay = return ()
 processAction CheckRecord = return ()
 processAction (CheckFailed _) = return ()
 processAction (CheckSuccess _) = return ()
+processAction (QueryReplay _) = return ()
 #endif
+
+processAction (ShowReplay name) = do
+    c <- client's sendChan
+    cl <- client's id
+
+    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" name then B.drop 8 name else name]
+
+    checkInfo <- liftIO $ E.handle (\(e :: SomeException) ->
+                    warningM "REPLAYS" (B.unpack $ B.concat ["Problems reading ", fileName, ": ", B.pack $ show e]) >> return Nothing) $ do
+            (t, p1, p2, msgs) <- liftM read $ readFile (B.unpack fileName)
+            return $ Just (t, Map.fromList p1, Map.fromList p2, reverse msgs)
+
+    let (teams, params1, params2, roundMsgs) = fromJust checkInfo
+
+    when (isJust checkInfo) $ do
+        mapM_ processAction $ concat [
+            [AnswerClients [c] ["JOINED", nick cl]]
+            , answerFullConfigParams cl params1 params2
+            , answerAllTeams cl teams
+            , [AnswerClients [c]  ["RUN_GAME"]]
+            , [AnswerClients [c] $ "EM" : roundMsgs]
+            , [AnswerClients [c] ["KICKED"]]
+            ]

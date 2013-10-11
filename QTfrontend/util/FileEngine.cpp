@@ -54,7 +54,7 @@ bool FileEngine::open(QIODevice::OpenMode openMode)
     }
 
     if (!m_handle) {
-        qWarning(QString("[PHYSFS] Failed to open %1, reason: %2").arg(m_fileName).arg(FileEngineHandler::errorStr()).toLocal8Bit().constData());
+        qWarning("%s", QString("[PHYSFS] Failed to open %1, reason: %2").arg(m_fileName).arg(FileEngineHandler::errorStr()).toLocal8Bit().constData());
         return false;
     }
 
@@ -311,7 +311,7 @@ FileEngineHandler::FileEngineHandler(char *argv0)
 {
     PHYSFS_init(argv0);
 
-    qDebug(QString("[PHYSFS] Init: %1").arg(errorStr()).toLocal8Bit().constData());
+    qDebug("%s", QString("[PHYSFS] Init: %1").arg(errorStr()).toLocal8Bit().constData());
 }
 
 FileEngineHandler::~FileEngineHandler()
@@ -330,19 +330,19 @@ QAbstractFileEngine* FileEngineHandler::create(const QString &filename) const
 void FileEngineHandler::mount(const QString &path)
 {
     PHYSFS_mount(path.toUtf8().constData(), NULL, 0);
-    qDebug(QString("[PHYSFS] Mounting '%1' to '/': %2").arg(path).arg(errorStr()).toLocal8Bit().constData());
+    qDebug("%s", QString("[PHYSFS] Mounting '%1' to '/': %2").arg(path).arg(errorStr()).toLocal8Bit().constData());
 }
 
 void FileEngineHandler::mount(const QString & path, const QString & mountPoint)
 {
     PHYSFS_mount(path.toUtf8().constData(), mountPoint.toUtf8().constData(), 0);
-    qDebug(QString("[PHYSFS] Mounting '%1' to '%2': %3").arg(path).arg(mountPoint).arg(errorStr()).toLocal8Bit().data());
+    qDebug("%s", QString("[PHYSFS] Mounting '%1' to '%2': %3").arg(path).arg(mountPoint).arg(errorStr()).toLocal8Bit().data());
 }
 
 void FileEngineHandler::setWriteDir(const QString &path)
 {
     PHYSFS_setWriteDir(path.toUtf8().constData());
-    qDebug(QString("[PHYSFS] Setting write dir to '%1': %2").arg(path).arg(errorStr()).toLocal8Bit().data());
+    qDebug("%s", QString("[PHYSFS] Setting write dir to '%1': %2").arg(path).arg(errorStr()).toLocal8Bit().data());
 }
 
 void FileEngineHandler::mountPacks()

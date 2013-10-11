@@ -82,6 +82,7 @@ var
     GameType        : TGameType;
     InputMask       : LongWord;
     GameFlags       : Longword;
+    WorldEdge       : TWorldEdge;
     TurnTimeLeft    : Longword;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
@@ -2344,7 +2345,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-
+uses strutils;
 
 procedure preInitModule;
 begin
@@ -2386,10 +2387,13 @@ begin
 end;
 
 procedure initModule;
-var s: ShortString;
 begin
-    cLocale:= cLocaleFName;
-    SplitByChar(cLocale, s, '.');
+{$IFDEF PAS2C}
+    cLocale:= 'en';
+{$ELSE}
+    // TODO: we could just have one cLocale variables and drop strutils
+    cLocale:= ExtractDelimited(1, cLocaleFName, StdWordDelims);
+{$ENDIF}
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
@@ -2435,10 +2439,10 @@ begin
 
     WaterOpacity:= $80;
 
-    cDrownSpeed.QWordValue  := 257698038;       // 0.06
+    cDrownSpeed.QWordValue  := 257698038;   // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
-    cWindSpeed.QWordValue   := 0;      // 0.0
+    cWindSpeed.QWordValue   := 0;           // 0.0
     cWindSpeedf             := 0.0;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
@@ -2467,6 +2471,7 @@ begin
 
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
+    WorldEdge           := weNone;
     TurnTimeLeft        := 0;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
@@ -2486,7 +2491,6 @@ begin
     cWaterRise          := 47;
     cHealthDecrease     := 5;
 
-    cTagsMask       := 0;
     InitStepsFlags  := 0;
     RealTicks       := 0;
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
@@ -2565,19 +2569,6 @@ begin
     aVertex:= 0;
     aTexCoord:= 1;
     aColor:= 2;
-
-    mobileRecord.getScreenDPI:= @getScreenDPI; //TODO: define external function.
-    {$IFDEF IPHONEOS}
-    mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
-    mobileRecord.GameLoading:= @startLoadingIndicator;
-    mobileRecord.GameLoaded:= @stopLoadingIndicator;
-    mobileRecord.SaveLoadingEnded:= @saveFinishedSynching;
-    {$ELSE}
-    mobileRecord.PerformRumble:= nil;
-    mobileRecord.GameLoading:= nil;
-    mobileRecord.GameLoaded:= nil;
-    mobileRecord.SaveLoadingEnded:= nil;
-    {$ENDIF}
 end;
 
 procedure freeModule;

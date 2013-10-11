@@ -3,6 +3,7 @@ file(GLOB txttrans5 ?????.txt)
 file(GLOB tsfiles *.ts)
 file(GLOB luafiles *.lua)
 file(GLOB missionfiles missions_*.txt)
+file(GLOB campaignfiles campaigns_*.txt)
 
 QT4_ADD_TRANSLATION(QM ${tsfiles})
 
@@ -17,6 +18,7 @@ install(FILES
     ${QM}
     ${luafiles}
     ${missionfiles}
+    ${campaignfiles}
     DESTINATION ${SHAREPATH}Data/Locale
 )
 

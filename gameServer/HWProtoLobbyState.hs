@@ -4,6 +4,7 @@ module HWProtoLobbyState where
 import Data.Maybe
 import Data.List
 import Control.Monad.Reader
+import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
 import Actions
@@ -11,16 +12,6 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
-
-
-answerAllTeams :: ClientInfo -> [TeamInfo] -> [Action]
-answerAllTeams cl = concatMap toAnswer
-    where
-        clChan = sendChan cl
-        toAnswer team =
-            [AnswerClients [clChan] $ teamToNet team,
-            AnswerClients [clChan] ["TEAM_COLOR", teamname team, teamcolor team],
-            AnswerClients [clChan] ["HH_NUM", teamname team, showB $ hhnum team]]
 
 
 handleCmd_lobby :: CmdHandler
@@ -77,7 +68,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             [Warning $ loc "No such room"]
             else if isRestrictedJoins jRoom then
             [Warning $ loc "Joining restricted"]
-            else if isRegisteredOnly jRoom then
+            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]
@@ -114,10 +105,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
         watchRound cl jRoom chans = if isNothing $ gameInfo jRoom then
                     []
                 else
-                    [AnswerClients [sendChan cl]  ["RUN_GAME"]
-                    , AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
-                    , ModifyClient (\c -> c{isInGame = True})
-                    , AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom)]
+                    AnswerClients [sendChan cl]  ["RUN_GAME"]
+                    : AnswerClients chans ["CLIENT_FLAGS", "+g", nick cl]
+                    : ModifyClient (\c -> c{isInGame = True})
+                    : [AnswerClients [sendChan cl] $ "EM" : toEngineMsg "e$spectate 1" : (reverse . roundMsgs . fromJust . gameInfo $ jRoom)]
 
 
 handleCmd_lobby ["JOIN_ROOM", roomName] =

@@ -26,10 +26,9 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound,
-    uLocale, uCaptions,
-    uVisualGears, uTypes, uVariables, uCommands, uConsts
-    {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
+uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
+     uTypes, uVariables, uCommands, uConsts, uVisualGearsList
+     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
@@ -91,7 +90,7 @@ while (GameState <> gsExit) and (i <= Lag) do
         if CurrentHedgehog^.BotLevel <> 0 then
             ProcessBot;
         ProcessGears;
-        {$IFDEF SDL13}ProcessTouch;{$ENDIF}
+        {$IFDEF SDL2}ProcessTouch;{$ENDIF}
         end
     else
         begin

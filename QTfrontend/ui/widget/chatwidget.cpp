@@ -930,3 +930,17 @@ void HWChatWidget::afterContentAdd()
         chatText->verticalScrollBar()->setValue(m_scrollBarPos);
     }
 }
+
+void HWChatWidget::resizeEvent(QResizeEvent * event)
+{
+    Q_UNUSED(event);
+
+    afterContentAdd();
+}
+
+void HWChatWidget::showEvent(QShowEvent * event)
+{
+    Q_UNUSED(event);
+
+     afterContentAdd();
+}

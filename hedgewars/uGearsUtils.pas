@@ -20,7 +20,7 @@
 
 unit uGearsUtils;
 interface
-uses uTypes;
+uses uTypes, uFloat;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
@@ -41,16 +41,33 @@ function  CheckGearDrowning(var Gear: PGear): boolean;
 procedure CheckCollision(Gear: PGear); inline;
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 
+procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
+function  GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
+procedure SpawnBoxOfSmth;
+procedure ShotgunShot(Gear: PGear);
+
+procedure SetAllToActive;
+procedure SetAllHHToActive; inline;
+procedure SetAllHHToActive(Ice: boolean);
+
+function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
+function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
+
+function WorldWrap(var Gear: PGear): boolean;
+
+
+
 function MakeHedgehogsStep(Gear: PGear) : boolean;
 
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
 
 implementation
-uses uFloat, uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
+uses uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
-    uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, uGears,
-    uGearsList, Math;
+    uLocale, uTextures, uRenderUtils, uRandom, SDLh, uDebug, 
+    uGearsList, Math, uVisualGearsList, uGearsHandlersMess,
+    uGearsHedgehog;
 
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 begin
@@ -471,7 +488,11 @@ begin
             CurAmmoGear^.Pos := 1000
         end
     else
-        CheckGearDrowning := false;
+        begin
+        if (not ((Gear^.Kind = gtJetpack) or (Gear^.Kind = gtBee))) then
+            Gear^.State:= (Gear^.State and (not gstSubmersible));  // making it temporary for most gears is more attractive I think
+        CheckGearDrowning := false
+        end
 end;
 
 
@@ -575,6 +596,11 @@ begin
 ignoreNearObjects:= false; // try not skipping proximity at first
 ignoreOverlap:= false; // this not only skips proximity, but allows overlapping objects (barrels, mines, hogs, crates).  Saving it for a 3rd pass.  With this active, winning AI Survival goes back to virtual impossibility
 tryAgain:= true;
+if WorldEdge <> weNone then 
+    begin
+    Left:= max(Left,leftX+Gear^.Radius);
+    Right:= min(Right,rightX-Gear^.Radius)
+    end;
 while tryAgain do
     begin
     delta:= LAND_WIDTH div 16;
@@ -771,6 +797,492 @@ begin
         end
         end
         end;
+end;
+
+
+procedure ShotgunShot(Gear: PGear);
+var t: PGear;
+    dmg, r, dist: LongInt;
+    dx, dy: hwFloat;
+begin
+Gear^.Radius:= cShotgunRadius;
+t:= GearsList;
+while t <> nil do
+    begin
+    case t^.Kind of
+        gtHedgehog,
+            gtMine,
+            gtSMine,
+            gtKnife,
+            gtCase,
+            gtTarget,
+            gtExplosives: begin//,
+//            gtStructure: begin
+//addFileLog('ShotgunShot radius: ' + inttostr(Gear^.Radius) + ', t^.Radius = ' + inttostr(t^.Radius) + ', distance = ' + inttostr(dist) + ', dmg = ' + inttostr(dmg));
+                    dmg:= 0;
+                    r:= Gear^.Radius + t^.Radius;
+                    dx:= Gear^.X-t^.X;
+                    dx.isNegative:= false;
+                    dy:= Gear^.Y-t^.Y;
+                    dy.isNegative:= false;
+                    if r-hwRound(dx+dy) > 0 then
+                        begin
+                        dist:= hwRound(Distance(dx, dy));
+                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        end;
+                    if dmg > 0 then
+                        begin
+                        if (not t^.Invulnerable) then
+                            ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
+                        else
+                            Gear^.State:= Gear^.State or gstWinner;
+
+                        DeleteCI(t);
+                        t^.dX:= t^.dX + Gear^.dX * dmg * _0_01 + SignAs(cHHKick, Gear^.dX);
+                        t^.dY:= t^.dY + Gear^.dY * dmg * _0_01;
+                        t^.State:= t^.State or gstMoving;
+                        if t^.Kind = gtKnife then t^.State:= t^.State and (not gstCollision);
+                        t^.Active:= true;
+                        FollowGear:= t
+                        end
+                    end;
+            gtGrave: begin
+                    dmg:= 0;
+                    r:= Gear^.Radius + t^.Radius;
+                    dx:= Gear^.X-t^.X;
+                    dx.isNegative:= false;
+                    dy:= Gear^.Y-t^.Y;
+                    dy.isNegative:= false;
+                    if r-hwRound(dx+dy) > 0 then
+                        begin
+                        dist:= hwRound(Distance(dx, dy));
+                        dmg:= ModifyDamage(min(r - dist, 25), t);
+                        end;
+                    if dmg > 0 then
+                        begin
+                        t^.dY:= - _0_1;
+                        t^.Active:= true
+                        end
+                    end;
+        end;
+    t:= t^.NextGear
+    end;
+if (GameFlags and gfSolidLand) = 0 then
+    DrawExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), cShotgunRadius)
+end;
+
+procedure AmmoShove(Ammo: PGear; Damage, Power: LongInt);
+var t: PGearArray;
+    Gear: PGear;
+    i, j, tmpDmg: LongInt;
+    VGear: PVisualGear;
+begin
+t:= CheckGearsCollision(Ammo);
+// Just to avoid hogs on rope dodging fire.
+if (CurAmmoGear <> nil) and ((CurAmmoGear^.Kind = gtRope) or (CurAmmoGear^.Kind = gtJetpack) or (CurAmmoGear^.Kind = gtBirdy))
+and (CurrentHedgehog^.Gear <> nil) and (CurrentHedgehog^.Gear^.CollisionIndex = -1)
+and (sqr(hwRound(Ammo^.X) - hwRound(CurrentHedgehog^.Gear^.X)) + sqr(hwRound(Ammo^.Y) - hwRound(CurrentHedgehog^.Gear^.Y)) <= sqr(cHHRadius + Ammo^.Radius)) then
+    begin
+    t^.ar[t^.Count]:= CurrentHedgehog^.Gear;
+    inc(t^.Count)
+    end;
+
+i:= t^.Count;
+
+if (Ammo^.Kind = gtFlame) and (i > 0) then
+    Ammo^.Health:= 0;
+while i > 0 do
+    begin
+    dec(i);
+    Gear:= t^.ar[i];
+    if ((Ammo^.Kind = gtFlame) or (Ammo^.Kind = gtBlowTorch)) and 
+       (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heFrozen] > 255) then
+        Gear^.Hedgehog^.Effects[heFrozen]:= max(255,Gear^.Hedgehog^.Effects[heFrozen]-10000);
+    tmpDmg:= ModifyDamage(Damage, Gear);
+    if (Gear^.State and gstNoDamage) = 0 then
+        begin
+
+        if (Ammo^.Kind = gtDEagleShot) or (Ammo^.Kind = gtSniperRifleShot) then 
+            begin
+            VGear := AddVisualGear(hwround(Ammo^.X), hwround(Ammo^.Y), vgtBulletHit);
+            if VGear <> nil then
+                VGear^.Angle := DxDy2Angle(-Ammo^.dX, Ammo^.dY);
+            end;
+
+        if (Gear^.Kind = gtHedgehog) and (Ammo^.State and gsttmpFlag <> 0) and (Ammo^.Kind = gtShover) then
+            Gear^.FlightTime:= 1;
+
+
+        case Gear^.Kind of
+            gtHedgehog,
+            gtMine,
+            gtSMine,
+            gtKnife,
+            gtTarget,
+            gtCase,
+            gtExplosives: //,
+            //gtStructure:
+            begin
+            if (Ammo^.Kind = gtDrill) then
+                begin
+                Ammo^.Timer:= 0;
+                exit;
+                end;
+            if (not Gear^.Invulnerable) then
+                begin
+                if (Ammo^.Kind = gtKnife) and (tmpDmg > 0) then
+                    for j:= 1 to max(1,min(3,tmpDmg div 5)) do
+                        begin
+                        VGear:= AddVisualGear(hwRound(Ammo^.X-((Ammo^.X-Gear^.X)/_2)), hwRound(Ammo^.Y-((Ammo^.Y-Gear^.Y)/_2)), vgtStraightShot);
+                        if VGear <> nil then
+                            with VGear^ do
+                                begin
+                                Tint:= $FFCC00FF;
+                                Angle:= random(360);
+                                dx:= 0.0005 * (random(100));
+                                dy:= 0.0005 * (random(100));
+                                if random(2) = 0 then
+                                    dx := -dx;
+                                if random(2) = 0 then
+                                    dy := -dy;
+                                FrameTicks:= 600+random(200);
+                                State:= ord(sprStar)
+                                end
+                        end;
+                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg, dsShove)
+                end
+            else
+                Gear^.State:= Gear^.State or gstWinner;
+            if (Gear^.Kind = gtExplosives) and (Ammo^.Kind = gtBlowtorch) then 
+                begin
+                if (Ammo^.Hedgehog^.Gear <> nil) then
+                    Ammo^.Hedgehog^.Gear^.State:= Ammo^.Hedgehog^.Gear^.State and (not gstNotKickable);
+                ApplyDamage(Gear, Ammo^.Hedgehog, tmpDmg * 100, dsUnknown); // crank up damage for explosives + blowtorch
+                end;
+
+            if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
+                begin
+                Gear^.dX:= Ammo^.dX * Power * _0_005;
+                Gear^.dY:= Ammo^.dY * Power * _0_005
+                end
+            else if ((Ammo^.Kind <> gtFlame) or (Gear^.Kind = gtHedgehog)) and (Power <> 0) then
+                begin
+                Gear^.dX:= Ammo^.dX * Power * _0_01;
+                Gear^.dY:= Ammo^.dY * Power * _0_01
+                end;
+
+            if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
+                begin
+                Gear^.Active:= true;
+                DeleteCI(Gear);
+                Gear^.State:= Gear^.State or gstMoving;
+                if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
+                // move the gear upwards a bit to throw it over tiny obstacles at start
+                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+                    begin
+                    if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
+                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                        Gear^.Y:= Gear^.Y - _1;
+                    end
+                end;
+
+
+            if (Ammo^.Kind <> gtFlame) or ((Ammo^.State and gsttmpFlag) = 0) then
+                FollowGear:= Gear
+            end;
+        end
+        end;
+    end;
+if i <> 0 then
+    SetAllToActive
+end;
+
+
+function CountGears(Kind: TGearType): Longword;
+var t: PGear;
+    count: Longword = 0;
+begin
+
+t:= GearsList;
+while t <> nil do
+    begin
+    if t^.Kind = Kind then
+        inc(count);
+    t:= t^.NextGear
+    end;
+CountGears:= count;
+end;
+
+procedure SetAllToActive;
+var t: PGear;
+begin
+AllInactive:= false;
+t:= GearsList;
+while t <> nil do
+    begin
+    t^.Active:= true;
+    t:= t^.NextGear
+    end
+end;
+
+procedure SetAllHHToActive; inline;
+begin
+SetAllHHToActive(true)
+end;
+
+
+procedure SetAllHHToActive(Ice: boolean);
+var t: PGear;
+begin
+AllInactive:= false;
+t:= GearsList;
+while t <> nil do
+    begin
+    if (t^.Kind = gtHedgehog) or (t^.Kind = gtExplosives) then
+        begin
+        if (t^.Kind = gtHedgehog) and Ice then CheckIce(t);
+        t^.Active:= true
+        end;
+    t:= t^.NextGear
+    end
+end;
+
+
+var GearsNearArray : TPGearArray;
+function GearsNear(X, Y: hwFloat; Kind: TGearType; r: LongInt): PGearArrayS;
+var
+    t: PGear;
+    s: Longword;
+begin
+    r:= r*r;
+    s:= 0;
+    SetLength(GearsNearArray, s);
+    t := GearsList;
+    while t <> nil do 
+        begin
+        if (t^.Kind = Kind) 
+            and ((X - t^.X)*(X - t^.X) + (Y - t^.Y)*(Y-t^.Y) < int2hwFloat(r)) then
+            begin
+            inc(s);
+            SetLength(GearsNearArray, s);
+            GearsNearArray[s - 1] := t;
+            end;
+        t := t^.NextGear;
+    end;
+
+    GearsNear.size:= s;
+    GearsNear.ar:= @GearsNearArray
+end;
+
+
+procedure SpawnBoxOfSmth;
+var t, aTot, uTot, a, h: LongInt;
+    i: TAmmoType;
+begin
+if (PlacingHogs) or
+    (cCaseFactor = 0)
+    or (CountGears(gtCase) >= 5)
+    or (GetRandom(cCaseFactor) <> 0) then
+       exit;
+
+FollowGear:= nil;
+aTot:= 0;
+uTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+        inc(aTot, Ammoz[i].Probability)
+    else
+        inc(uTot, Ammoz[i].Probability);
+
+t:=0;
+a:=aTot;
+h:= 1;
+
+if (aTot+uTot) <> 0 then
+    if ((GameFlags and gfInvulnerable) = 0) then
+        begin
+        h:= cHealthCaseProb * 100;
+        t:= GetRandom(10000);
+        a:= (10000-h)*aTot div (aTot+uTot)
+        end
+    else
+        begin
+        t:= GetRandom(aTot+uTot);
+        h:= 0
+        end;
+
+
+if t<h then
+    begin
+    FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+    FollowGear^.Health:= cHealthCaseAmount;
+    FollowGear^.Pos:= posCaseHealth;
+    AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
+    end
+else if (t<a+h) then
+    begin
+    t:= aTot;
+    if (t > 0) then
+        begin
+        FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        FollowGear^.Pos:= posCaseAmmo;
+        FollowGear^.AmmoType:= i;
+        AddCaption(GetEventString(eidNewAmmoPack), cWhiteColor, capgrpAmmoInfo);
+        end
+    end
+else
+    begin
+    t:= uTot;
+    if (t > 0) then
+        begin
+        FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
+        t:= GetRandom(t);
+        i:= Low(TAmmoType);
+        FollowGear^.Pos:= posCaseUtility;
+        FollowGear^.AmmoType:= i;
+        AddCaption(GetEventString(eidNewUtilityPack), cWhiteColor, capgrpAmmoInfo);
+        end
+    end;
+
+// handles case of no ammo or utility crates - considered also placing booleans in uAmmos and altering probabilities
+if (FollowGear <> nil) then
+    begin
+    FindPlace(FollowGear, true, 0, LAND_WIDTH);
+
+    if (FollowGear <> nil) then
+        AddVoice(sndReinforce, CurrentTeam^.voicepack)
+    end
+end;
+
+
+function GetAmmo(Hedgehog: PHedgehog): TAmmoType;
+var t, aTot: LongInt;
+    i: TAmmoType;
+begin
+Hedgehog:= Hedgehog; // avoid hint
+
+aTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+        inc(aTot, Ammoz[i].Probability);
+
+t:= aTot;
+i:= Low(TAmmoType);
+if (t > 0) then
+    begin
+    t:= GetRandom(t);
+    while t >= 0 do
+        begin
+        inc(i);
+        if (Ammoz[i].Ammo.Propz and ammoprop_Utility) = 0 then
+            dec(t, Ammoz[i].Probability)
+        end
+    end;
+GetAmmo:= i
+end;
+
+function GetUtility(Hedgehog: PHedgehog): TAmmoType;
+var t, uTot: LongInt;
+    i: TAmmoType;
+begin
+
+uTot:= 0;
+for i:= Low(TAmmoType) to High(TAmmoType) do
+    if ((Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0)
+    and ((Hedgehog^.Team^.HedgehogsNumber > 1) or (Ammoz[i].Ammo.AmmoType <> amSwitch)) then
+        inc(uTot, Ammoz[i].Probability);
+
+t:= uTot;
+i:= Low(TAmmoType);
+if (t > 0) then
+    begin
+    t:= GetRandom(t);
+    while t >= 0 do
+        begin
+        inc(i);
+        if ((Ammoz[i].Ammo.Propz and ammoprop_Utility) <> 0) and ((Hedgehog^.Team^.HedgehogsNumber > 1)
+        or (Ammoz[i].Ammo.AmmoType <> amSwitch)) then
+            dec(t, Ammoz[i].Probability)
+        end
+    end;
+GetUtility:= i
+end;
+
+(*
+Intended to check Gear X/Y against the map left/right edges and apply one of the world modes
+* Normal - infinite world, do nothing
+* Wrap (entering left edge exits at same height on right edge)
+* Bounce (striking edge is treated as a 100% elasticity bounce)
+* From the depths (same as from sky, but from sea, with submersible flag set)
+
+Trying to make the checks a little broader than on first pass to catch things that don't move normally.
+*)
+function WorldWrap(var Gear: PGear): boolean;
+var tdx: hwFloat;
+begin
+WorldWrap:= false;
+if WorldEdge = weNone then exit(false);
+if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
+   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
+    begin
+    if WorldEdge = weWrap then
+        begin
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+        end
+    else if WorldEdge = weBounce then
+        begin
+        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+            begin
+            Gear^.dX.isNegative:= false;
+            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+            end
+        else 
+            begin
+            Gear^.dX.isNegative:= true;
+            Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
+            end
+        end
+    else if WorldEdge = weSea then
+        begin
+        if (hwRound(Gear^.Y) > cWaterLine) and (Gear^.State and gstSubmersible <> 0) then
+            Gear^.State:= Gear^.State and (not gstSubmersible)
+        else
+            begin
+            Gear^.State:= Gear^.State or gstSubmersible;
+            Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
+            Gear^.Y:= int2hwFloat(cWaterLine+cVisibleWater+Gear^.Radius*2);
+            tdx:= Gear^.dX;
+            Gear^.dX:= Gear^.dY;
+            Gear^.dY:= tdx;
+            Gear^.dY.isNegative:= true
+            end
+        end;
+(*
+* Window in the sky (Gear moved high into the sky, Y is used to determine X) [unfortunately, not a safe thing to do. shame, I thought aerial bombardment would be kinda neat
+This one would be really easy to freeze game unless it was flagged unfortunately.
+
+    else 
+        begin
+        Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
+        Gear^.Y:= -_2048-_256-_256;
+        tdx:= Gear^.dX;
+        Gear^.dX:= Gear^.dY;
+        Gear^.dY:= tdx;
+        Gear^.dY.isNegative:= false
+        end
+*)
+    WorldWrap:= true
+    end;
 end;
 
 end.

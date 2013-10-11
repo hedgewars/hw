@@ -92,6 +92,10 @@ local currX = {}
 local currY = {}
 local currCount = 0
 
+local specialPointsX = {}
+local specialPointsY = {}
+local specialPointsCount = 0
+
 --------------------------
 -- hog and team tracking variales
 --------------------------
@@ -489,6 +493,10 @@ function onGameStart()
         lastRound = TotalRounds
         RoundHasChanged = false -- true
 
+        for i = 0, (specialPointsCount-1) do
+                PlaceWayPoint(specialPointsX[i], specialPointsY[i])
+        end
+
         RebuildTeamInfo()
 
         ShowMission     (
@@ -501,7 +509,7 @@ function onGameStart()
                                 "", 4, 4000
                                 )
 
-	TryRepositionHogs()
+        TryRepositionHogs()
 
 end
 
@@ -524,10 +532,16 @@ function PlaceWayPoint(x,y)
 
 end
 
+function onSpecialPoint(x,y,flag)
+    specialPointsX[specialPointsCount] = x
+    specialPointsY[specialPointsCount] = y
+    specialPointsCount = specialPointsCount + 1
+end
+
 function onNewTurn()
 
         CheckForNewRound()
-	TryRepositionHogs()
+        TryRepositionHogs()
 
         racerActive = false
 

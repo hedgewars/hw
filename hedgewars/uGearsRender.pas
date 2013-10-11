@@ -50,15 +50,7 @@ var RopePoints: record
                 end;
 
 implementation
-uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGears;
-
-const
-    // hog tag mask
-    //htNone        = $00;
-    htTeamName    = $01;
-    htName        = $02;
-    htHealth      = $04;
-    htTransparent = $08;
+uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
 begin
@@ -692,6 +684,25 @@ begin
                     end;
                 amGirder: begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
+                    if WorldEdge = weWrap then
+                        begin
+                        if hwRound(Gear^.X) < leftX+256 then
+                            DrawSpriteClipped(sprGirder,
+                                            rightX+(ox-leftX)-256,
+                                            oy-256,
+                                            LongInt(topY)+WorldDy,
+                                            LongInt(rightX)+WorldDx,
+                                            cWaterLine+WorldDy,
+                                            LongInt(leftX)+WorldDx);
+                        if hwRound(Gear^.X) > rightX-256 then
+                            DrawSpriteClipped(sprGirder,
+                                            leftX-(rightX-ox)-256,
+                                            oy-256,
+                                            LongInt(topY)+WorldDy,
+                                            LongInt(rightX)+WorldDx,
+                                            cWaterLine+WorldDy,
+                                            LongInt(leftX)+WorldDx)
+                        end;
                     DrawSpriteClipped(sprGirder,
                                     ox-256,
                                     oy-256,

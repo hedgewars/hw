@@ -76,6 +76,8 @@ data Action =
     | CheckFailed B.ByteString
     | CheckSuccess [B.ByteString]
     | Random [ClientChan] [B.ByteString]
+    | QueryReplay B.ByteString
+    | ShowReplay B.ByteString
 
 type ClientChan = Chan [B.ByteString]
 
@@ -106,6 +108,7 @@ data ClientInfo =
         isInGame :: Bool,
         isAdministrator :: Bool,
         isChecker :: Bool,
+        isContributor :: Bool,
         isKickedFromServer :: Bool,
         isJoinedMidGame :: Bool,
         clientClan :: !(Maybe B.ByteString),
@@ -144,6 +147,7 @@ data GameInfo =
     GameInfo
     {
         roundMsgs :: [B.ByteString],
+        lastFilteredTimedMsg :: Maybe B.ByteString,
         leftTeams :: [B.ByteString],
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
@@ -161,6 +165,7 @@ newGameInfo :: [TeamInfo]
 newGameInfo =
     GameInfo
         []
+        Nothing
         []
 
 data RoomInfo =
@@ -252,15 +257,18 @@ newServerInfo =
         []
 
 data AccountInfo =
-    HasAccount B.ByteString Bool
+    HasAccount B.ByteString Bool Bool
     | Guest
     | Admin
+    | ReplayName B.ByteString
     deriving (Show, Read)
 
 data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
+    | StoreAchievements B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
 
 data CoreMessage =

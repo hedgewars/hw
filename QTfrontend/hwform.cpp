@@ -165,13 +165,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
 #endif
 
 #ifdef __APPLE__
-    AutoUpdater* updater = NULL;
     if (config->isAutoUpdateEnabled())
     {
-#ifdef __APPLE__
+        AutoUpdater* updater = NULL;
+
 #ifdef SPARKLE_ENABLED
         updater = new SparkleAutoUpdater();
-#endif
 #endif
         if (updater)
         {
@@ -658,7 +657,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
         }
 
         QList<HWTeam> teamsList;
-        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); it++)
+        for (QStringList::iterator it = tmNames.begin(); it != tmNames.end(); ++it)
         {
             HWTeam team(*it);
             team.loadFromFile();
@@ -704,7 +703,7 @@ void HWForm::OnPageShown(quint8 id, quint8 lastid)
 
 void HWForm::GoToPage(int id)
 {
-    bool stopAnim = false;
+    //bool stopAnim = false;
 
     int lastid = ui.Pages->currentIndex();
     PagesStack.push(ui.Pages->currentIndex());
@@ -721,7 +720,7 @@ void HWForm::GoToPage(int id)
 
 
 #if (QT_VERSION >= 0x040600)
-    if (!stopAnim)
+    //if (!stopAnim)
     {
         /**Start animation :**/
         int coeff = 1;
@@ -817,7 +816,7 @@ void HWForm::GoBack()
         stopAnim = true; */
 
     if ((!hwnet) || (!hwnet->isInRoom()))
-        if (id == ID_PAGE_NETGAME || id == ID_PAGE_NETGAME)
+        if (id == ID_PAGE_NETGAME)
         {
             stopAnim = true;
             GoBack();
@@ -1723,7 +1722,7 @@ void HWForm::StartCampaign()
     CreateGame(0, 0, 0);
 
     QComboBox *combo = ui.pageCampaign->CBMission;
-    QString camp = ui.pageCampaign->CBCampaign->currentText();
+    QString camp = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     unsigned int mNum = combo->count() - combo->currentIndex();
     QString miss = getCampaignScript(camp, mNum);
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
@@ -1888,7 +1887,7 @@ void HWForm::InitCampaignPage()
     unsigned int n = entries.count();
     for(unsigned int i = 0; i < n; i++)
     {
-        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]), QString(entries[i]));
+        ui.pageCampaign->CBCampaign->addItem(QString(entries[i]).replace(QString("_"),QString(" ")), QString(entries[i]).replace(QString("_"),QString(" ")));
     }
 }
 
@@ -1900,7 +1899,7 @@ void HWForm::UpdateCampaignPage(int index)
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     ui.pageCampaign->CBMission->clear();
 
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     QStringList missionEntries = getCampMissionList(campaignName);
     QString tName = team.name();
     unsigned int n = missionEntries.count();
@@ -1961,7 +1960,7 @@ void HWForm::UpdateCampaignPage(int index)
 void HWForm::UpdateCampaignPageMission(int index)
 {
     // update thumbnail
-    QString campaignName = ui.pageCampaign->CBCampaign->currentText();
+    QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
     unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
     QString image = getCampaignImage(campaignName,mNum);
     ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
@@ -2009,7 +2008,11 @@ QString HWForm::getDemoArguments()
                    + (config->isShowFPSEnabled() ? " --showfps" : "")
                    + (config->isAltDamageEnabled() ? " --altdmg" : "")
                    + " --frame-interval " + QString::number(config->timerInterval())
-                   + " --raw-quality " + QString::number(config->translateQuality()));
+                   + " --raw-quality " + QString::number(config->translateQuality()))
+                   + (!config->Form->ui.pageOptions->CBTeamTag->isChecked() ? " --no-teamtag" : "")
+                   + (!config->Form->ui.pageOptions->CBHogTag->isChecked() ? " --no-hogtag" : "")
+                   + (!config->Form->ui.pageOptions->CBHealthTag->isChecked() ? " --no-healthtag" : "")
+                   + (config->Form->ui.pageOptions->CBTagOpacity->isChecked() ? " --translucent-tags" : "");
 }
 
 void HWForm::AssociateFiles()

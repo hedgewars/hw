@@ -11,7 +11,8 @@
 PlayersListModel::PlayersListModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-
+    m_fontInRoom = QFont();
+    m_fontInRoom.setItalic(true);
 }
 
 
@@ -223,6 +224,7 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         << index.data(Ignore).toBool()
         << index.data(InGame).toBool()
         << index.data(RoomFilterRole).toBool()
+        << index.data(InRoom).toBool()
         ;
 
     for(int i = flags.size() - 1; i >= 0; --i)
@@ -253,16 +255,26 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
                 else
                     painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/chat/lamp_off.png"));
             }
+        } else
+        { // we're in lobby
+            if(!index.data(InRoom).toBool())
+                painter.drawPixmap(0, 0, 16, 16, QPixmap(":/res/Flake.png"));
         }
 
         QString mainIconName(":/res/chat/");
 
-        if(index.data(RoomAdmin).toBool())
-            mainIconName += "roomadmin";
-        else if(index.data(ServerAdmin).toBool())
+        if(index.data(ServerAdmin).toBool())
             mainIconName += "serveradmin";
         else
-            mainIconName += "hedgehog";
+        {
+            if(index.data(RoomAdmin).toBool())
+                mainIconName += "roomadmin";
+            else
+                mainIconName += "hedgehog";
+
+            if(index.data(Contributor).toBool())
+                mainIconName += "contributor";
+        }
 
         if(!index.data(Registered).toBool())
             mainIconName += "_gray";

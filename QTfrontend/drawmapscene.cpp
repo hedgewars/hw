@@ -156,7 +156,7 @@ void DrawMapScene::undo()
     if(m_isCursorShown)
         return;
 
-    if(items().size())
+    if(paths.size())
     {
         removeItem(items().first());
         paths.removeFirst();
@@ -183,14 +183,17 @@ void DrawMapScene::clearMap()
     if(!items().size())
         return;
 
+    m_specialPoints.clear();
     oldItems.clear();
 
     // do this since clear() would _destroy_ all items
-    while(items().size())
+    for(int i = paths.size() - 1; i >= 0; --i)
     {
         oldItems.push_front(items().first());
         removeItem(items().first());
     }
+
+    items().clear();
 
     oldPaths = paths;
 
@@ -211,7 +214,7 @@ void DrawMapScene::setErasing(bool erasing)
 
 QByteArray DrawMapScene::encode()
 {
-    QByteArray b;
+    QByteArray b(m_specialPoints);
 
     for(int i = paths.size() - 1; i >= 0; --i)
     {
@@ -247,8 +250,11 @@ void DrawMapScene::decode(QByteArray data)
     oldPaths.clear();
     clear();
     paths.clear();
+    m_specialPoints.clear();
 
     PathParams params;
+
+    bool isSpecial = true;
 
     while(data.size() >= 5)
     {
@@ -258,9 +264,11 @@ void DrawMapScene::decode(QByteArray data)
         data.remove(0, 2);
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
-
+        qDebug() << px << py;
         if(flags & 0x80)
         {
+            isSpecial = false;
+
             if(params.points.size())
             {
                 addPath(pointsToPath(params.points), m_pen);
@@ -278,9 +286,23 @@ void DrawMapScene::decode(QByteArray data)
             else
                 m_pen.setBrush(m_brush);
             params.width = penWidth;
-        }
+        } else
+            if(isSpecial)
+            {
+                QPainterPath path;
+                path.addEllipse(QPointF(px, py), 10, 10);
 
-        params.points.append(QPoint(px, py));
+                addPath(path);
+
+                qint16 x = qToBigEndian(px);
+                qint16 y = qToBigEndian(py);
+                m_specialPoints.append((const char *)&x, 2);
+                m_specialPoints.append((const char *)&y, 2);
+                m_specialPoints.append((const char *)&flags, 1);
+            }
+
+        if(!isSpecial)
+            params.points.append(QPoint(px, py));
     }
 
     if(params.points.size())

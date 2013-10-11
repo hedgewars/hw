@@ -13,6 +13,12 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+if(APPLE AND
+   ${QTVERSION} VERSION_GREATER "4.7.0" AND
+   ${QTVERSION} VERSION_LESS "4.7.4")
+    message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
+endif()
+
 find_package(SDL REQUIRED)       #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
 

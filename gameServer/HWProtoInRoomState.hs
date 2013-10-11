@@ -217,11 +217,15 @@ handleCmd_inRoom ["EM", msg] = do
 
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
         return $ AnswerClients chans ["EM", legalMsgs]
-            : [ModifyRoom (\r -> r{gameInfo = liftM (\g -> g{roundMsgs = nonEmptyMsgs : roundMsgs g}) $ gameInfo r}) | not $ B.null nonEmptyMsgs]
+            : [ModifyRoom (\r -> r{gameInfo = liftM 
+                (\g -> g{
+                    roundMsgs = if B.null nonEmptyMsgs then roundMsgs g else nonEmptyMsgs : roundMsgs g
+                    , lastFilteredTimedMsg = fromMaybe (lastFilteredTimedMsg g) lastFTMsg})
+                $ gameInfo r})]
         else
         return []
     where
-        (legalMsgs, nonEmptyMsgs) = checkNetCmd msg
+        (legalMsgs, nonEmptyMsgs, lastFTMsg) = checkNetCmd msg
 
 
 handleCmd_inRoom ["ROUNDFINISHED", _] = do
@@ -282,6 +286,9 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
     return $
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
+        else
+        if illegalName newName then 
+            [Warning $ loc "Illegal room name"]
         else
         if isJust $ find (\r -> newName == name r) rs then
             [Warning $ loc "Room with such name already exists"]
