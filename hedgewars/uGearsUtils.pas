@@ -1254,7 +1254,7 @@ if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
             Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
             Gear^.Y:= int2hwFloat(cWaterLine+cVisibleWater+Gear^.Radius*2);
             tdx:= Gear^.dX;
-            Gear^.dX:= Gear^.dY;
+            Gear^.dX:= -Gear^.dY;
             Gear^.dY:= tdx;
             Gear^.dY.isNegative:= true
             end
