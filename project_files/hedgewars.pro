@@ -87,7 +87,6 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/achievements.h \
     ../QTfrontend/binds.h \
     ../QTfrontend/ui_hwform.h \
-    ../QTfrontend/KB.h \
     ../QTfrontend/hwconsts.h \
     ../QTfrontend/sdlkeys.h \
     ../QTfrontend/ui/mouseoverfilter.h \

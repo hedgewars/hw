@@ -113,7 +113,6 @@ class HWGame : public TCPBase
         GameType gameType;
         QByteArray m_netSendBuffer;
 
-        void addKeyBindings(QByteArray * buf);
         void commonConfig();
         void SendConfig();
         void SendQuickConfig();

@@ -347,15 +347,16 @@ void HWMapContainer::askForGeneratedPreview()
 
 void HWMapContainer::previewClicked()
 {
-    switch (m_mapInfo.type)
-    {
-        case MapModel::HandDrawnMap:
-            emit drawMapRequested();
-            break;
-        default:
-            setRandomMap();
-            break;
-    }
+    if (isMaster()) // should only perform these if master, but disabling the button when not, causes an unattractive preview.
+        switch (m_mapInfo.type)
+        {
+            case MapModel::HandDrawnMap:
+                emit drawMapRequested();
+                break;
+            default:
+                setRandomMap();
+                break;
+        }
 }
 
 QString HWMapContainer::getCurrentSeed() const

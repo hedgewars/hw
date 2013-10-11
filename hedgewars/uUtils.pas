@@ -21,7 +21,7 @@
 unit uUtils;
 
 interface
-uses uTypes, uFloat, GLunit;
+uses uTypes, uFloat;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
@@ -44,7 +44,7 @@ function  IntToStr(n: LongInt): shortstring;
 function  StrToInt(s: shortstring): LongInt;
 function  FloatToStr(n: hwFloat): shortstring;
 
-function  DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
+function  DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
 function  DxDy2Angle32(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAngle(const _dY, _dX: hwFloat): LongInt;
 function  DxDy2AttackAnglef(const _dY, _dX: extended): LongInt;
@@ -75,7 +75,6 @@ procedure WriteLn(var f: textfile; s: shortstring);
 {$ENDIF}
 
 function  isPhone: Boolean; inline;
-function  getScreenDPI: Double; inline; //cdecl; external;
 
 {$IFDEF IPHONEOS}
 procedure startLoadingIndicator; cdecl; external;
@@ -214,7 +213,7 @@ FloatToStr:= cstr(n) + '_' + inttostr(Lo(n.QWordValue))
 end;
 
 
-function DxDy2Angle(const _dY, _dX: hwFloat): GLfloat; inline;
+function DxDy2Angle(const _dY, _dX: hwFloat): real; inline;
 var dY, dX: Extended;
 begin
 dY:= hwFloat2Float(_dY);
@@ -452,16 +451,6 @@ begin
 {$ENDIF}
 end;
 
-//This dummy function should be reimplemented (externally).
-function getScreenDPI: Double; inline;
-begin
-{$IFDEF ANDROID}
-//    getScreenDPI:= Android_JNI_getDensity();
-    getScreenDPI:= 1;
-{$ELSE}
-    getScreenDPI:= 1;
-{$ENDIF}
-end;
 
 function  sanitizeForLog(s: shortstring): shortstring;
 var i: byte;
@@ -531,6 +520,19 @@ begin
         end;
     Rewrite(f);
 {$I+}
+{$ENDIF}
+
+    //mobile stuff
+{$IFDEF IPHONEOS}
+    mobileRecord.PerformRumble:= @AudioServicesPlaySystemSound;
+    mobileRecord.GameLoading:= @startLoadingIndicator;
+    mobileRecord.GameLoaded:= @stopLoadingIndicator;
+    mobileRecord.SaveLoadingEnded:= @saveFinishedSynching;
+{$ELSE}
+    mobileRecord.PerformRumble:= nil;
+    mobileRecord.GameLoading:= nil;
+    mobileRecord.GameLoaded:= nil;
+    mobileRecord.SaveLoadingEnded:= nil;
 {$ENDIF}
 
 end;

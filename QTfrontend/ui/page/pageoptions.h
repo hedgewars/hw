@@ -90,6 +90,13 @@ class PageOptions : public AbstractPage
         QCheckBox *CBSavePassword;
         QCheckBox *CBAltDamage;
         QCheckBox *CBNameWithDate;
+
+
+        QCheckBox *CBTeamTag;
+        QCheckBox *CBHogTag;
+        QCheckBox *CBHealthTag;
+        QCheckBox *CBTagOpacity;
+
 #ifdef __APPLE__
         QCheckBox *CBAutoUpdate;
         QPushButton *BtnUpdateNow;
@@ -165,7 +172,9 @@ class PageOptions : public AbstractPage
 
         QLabel * lblFullScreenRes;
         QLabel * lblWinScreenRes;
+        QLabel * lblTags;
         QWidget * winResContainer;
+        QWidget * tagsContainer;
 
     private slots:
         void forceFullscreen(int index);

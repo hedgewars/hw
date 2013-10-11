@@ -2783,7 +2783,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagenetserver.cpp" line="79"/>
-        <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

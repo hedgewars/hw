@@ -203,12 +203,18 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
 {
     initPage();
 
-    QRegExp pngSuffix("\\.png$");
-
     m_playerHash = "0000000000000000000000000000000000000000";
+    m_loaded = false;
+}
 
+void PageEditTeam::lazyLoad()
+{
+    if(m_loaded) return;
+    m_loaded = true;
+    qDebug("[LAZYNESS] PageEditTeam::lazyLoad()");
+
+    QRegExp pngSuffix("\\.png$");
     DataManager & dataMgr = DataManager::instance();
-
     QStringList list;
 
 
@@ -236,7 +242,7 @@ PageEditTeam::PageEditTeam(QWidget* parent) :
             pix = pix.copy(0, 0, 32, 32);
         QIcon icon(pix);
 
-        QString grave = QString(file).remove(pngSuffix);
+        QString grave = file.remove(pngSuffix);
 
         CBGrave->addItem(icon, grave);
     }
@@ -327,6 +333,8 @@ void PageEditTeam::testSound()
 void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
+    lazyLoad();
+
     HWTeam newTeam(name);
     loadTeam(newTeam);
 }
@@ -334,6 +342,8 @@ void PageEditTeam::createTeam(const QString & name, const QString & playerHash)
 void PageEditTeam::editTeam(const QString & name, const QString & playerHash)
 {
     m_playerHash = playerHash;
+    lazyLoad();
+
     HWTeam team(name);
     team.loadFromFile();
     loadTeam(team);

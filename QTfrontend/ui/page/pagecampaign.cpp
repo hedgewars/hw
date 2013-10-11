@@ -42,7 +42,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     infoLayout->setRowStretch(1, 1);
 
     // set this as default image first time page is created, this will change in hwform.cpp
-    btnPreview = formattedButton(":/res/campaign/A Classic Fairytale/first_blood.png", true);
+    btnPreview = formattedButton(":/res/campaign/A_Classic_Fairytale/first_blood.png", true);
     infoLayout->setAlignment(btnPreview, Qt::AlignHCenter | Qt::AlignVCenter);
 
     lbldescription = new QLabel();

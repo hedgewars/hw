@@ -1,4 +1,4 @@
-(*
+ (*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2004-2013 Andrey Korotaev <unC0Rr@gmail.com>
  *
@@ -20,8 +20,8 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uRandom, uFloat, uStats, uVisualGears,
-     uCollisions, GLunit, uSound, uStore, uTypes, uScript
+uses uConsts, uInputHandler, uRandom, uFloat, uStats, 
+     uCollisions, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
 
@@ -43,7 +43,7 @@ procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
-    uGearsUtils, uGearsList
+    uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
 var MaxTeamHealth: LongInt;
@@ -126,7 +126,7 @@ with CurrentHedgehog^ do
            DeleteCI(Gear);
            FindPlace(Gear, false, 0, LAND_WIDTH);
            if Gear <> nil then
-               AddGearCI(Gear)
+               AddCI(Gear)
            end
         end;
 
@@ -363,7 +363,7 @@ TeamsArray[TeamsCount]:= team;
 inc(TeamsCount);
 
 for t:= 0 to cKbdMaxIndex do
-    team^.Binds[t]:= '';
+    team^.Binds[t]:= DefaultBinds[t];
 
 c:= Pred(ClansCount);
 while (c >= 0) and (ClansArray[c]^.Color <> TeamColor) do dec(c);
@@ -504,7 +504,7 @@ begin
     HH^.GearHidden:= nil;
     InsertGearToList(HH^.Gear);
     HH^.Gear^.State:= (HH^.Gear^.State and (not (gstHHDriven or gstInvisible or gstAttacking))) or gstAttacked;
-    AddGearCI(HH^.Gear);
+    AddCI(HH^.Gear);
     HH^.Gear^.Active:= true;
     ScriptCall('onHogRestore', HH^.Gear^.Uid)
 end;
@@ -568,6 +568,20 @@ with CurrentTeam^ do
     end
 end;
 
+procedure loadTeamBinds(s: shortstring);
+var i: LongInt;
+begin
+    for i:= 1 to length(s) do
+        if ((s[i] = '\') or
+            (s[i] = '/') or
+            (s[i] = ':')) then
+            s[i]:= '_';
+
+    s:= cPathz[ptTeams] + '/' + s + '.hwt';
+
+    loadBinds('bind', s);
+end;
+
 procedure chAddTeam(var s: shortstring);
 var Color: Longword;
     ts, cs: shortstring;
@@ -586,6 +600,8 @@ if isDeveloperMode then
     AddTeam(Color);
     CurrentTeam^.TeamName:= ts;
     CurrentTeam^.PlayerHash:= s;
+    loadTeamBinds(ts);
+    
     if GameType in [gmtDemo, gmtSave, gmtRecord] then
         CurrentTeam^.ExtDriven:= true;
 
@@ -608,36 +624,12 @@ begin
 end;
 
 procedure chBind(var id: shortstring);
-var KeyName, Modifier, tmp : shortstring;
-    b              : LongInt;
-    i              : Integer;
+var i : Integer;
 begin
-KeyName:= '';
-Modifier:= '';
+    if CurrentTeam = nil then
+        exit;
 
-if CurrentTeam = nil then
-    exit;
-
-i := Pos('mod:', id);
-
-if(i <> 0)then
-    begin
-    tmp:= '';
-    SplitBySpace(id, tmp);
-    Modifier:= id;
-    id:= tmp;
-    end;
-
-SplitBySpace(id, KeyName);
-if KeyName[1]='"' then
-    Delete(KeyName, 1, 1);
-if KeyName[byte(KeyName[0])]='"' then
-    Delete(KeyName, byte(KeyName[0]), 1);
-b:= KeyNameToCode(id, Modifier);
-if b = 0 then
-    OutError(errmsgUnknownVariable + ' "' + id + '"', false)
-else
-    CurrentTeam^.Binds[b]:= KeyName;
+    addBind(CurrentTeam^.Binds, id)
 end;
 
 procedure chTeamGone(var s:shortstring);
@@ -691,8 +683,8 @@ begin
     CurrentHedgehog:= newHog;
    if (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = amKnife) then
        LoadHedgehogHat(CurrentHedgehog^, 'Reserved/chef');
-    if oldCI then AddGearCI(oldHH^.Gear);
-    if newCI then AddGearCI(newHog^.Gear)
+    if oldCI then AddCI(oldHH^.Gear);
+    if newCI then AddCI(newHog^.Gear)
 end;
 
 
@@ -726,8 +718,26 @@ if TeamsCount > 0 then
     for i:= 0 to Pred(TeamsCount) do
         begin
         for h:= 0 to cMaxHHIndex do
-            if TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil then
-                Dispose(TeamsArray[i]^.Hedgehogs[h].GearHidden);
+            with TeamsArray[i]^.Hedgehogs[h] do
+                begin
+                if GearHidden <> nil then
+                    Dispose(GearHidden);
+                    
+                FreeTexture(NameTagTex);
+                FreeTexture(HealthTagTex);
+                FreeTexture(HatTex);
+                end;
+                
+        with TeamsArray[i]^ do
+            begin
+            FreeTexture(NameTagTex);
+            FreeTexture(CrosshairTex);
+            FreeTexture(GraveTex);
+            FreeTexture(HealthTex);
+            FreeTexture(AIKillsTex);
+            FreeTexture(FlagTex);
+            end;
+        
         Dispose(TeamsArray[i]);
     end;
 for i:= 0 to Pred(ClansCount) do

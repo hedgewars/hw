@@ -33,9 +33,9 @@ procedure CheckIce(Gear: PGear); inline;
 
 implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
-    uCommands, uLocale, uUtils, uVisualGears, uStats, uIO, uScript,
-    uGearsList, uGears, uCollisions, uRandom, uStore, uTeams,
-    uGearsUtils;
+    uCommands, uLocale, uUtils, uStats, uIO, uScript,
+    uGearsList, uCollisions, uRandom, uStore, uTeams,
+    uGearsUtils, uVisualGearsList;
 
 var GHStepTicks: LongWord = 0;
 
@@ -799,7 +799,7 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         MakeHedgehogsStep(Gear);
 
     SetAllHHToActive(false);
-    AddGearCI(Gear)
+    AddCI(Gear)
     end
 end;
 
@@ -847,10 +847,12 @@ if isFalling then
     if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then
         Gear^.dY:= _0;
     Gear^.State:= Gear^.State or gstMoving;
-    if (CurrentHedgehog^.Gear = Gear)
-        and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
+    if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
+       (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
         begin
         // TODO: why so aggressive at setting FollowGear when falling?
+        // because hog was being yanked out of frame by other stuff when doing a complicated jump/chute/saucer/roping.
+        // added a couple more conditions to make it a bit less aggressive, at cost of possibly spectator failing to follow a maneuver
         FollowGear:= Gear;
         end;
     if isUnderwater then
@@ -1149,7 +1151,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 
     if ((HHGear^.State and (gstMoving or gstDrowning)) = 0) then
         begin
-        AddGearCI(HHGear);
+        AddCI(HHGear);
         if wasJumping then
             GHStepTicks:= 410
         else
@@ -1231,7 +1233,7 @@ else
         begin
         Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
         if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
-        AddGearCI(Gear);
+        AddCI(Gear);
         exit
         end
     else dec(Gear^.Timer)
@@ -1278,6 +1280,10 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
 begin
+if WorldWrap(Gear) and (WorldEdge <> weBounce) and 
+  (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
+   CurAmmoGear^.PortalCounter:= 1;
+
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
 if (Gear^.Message and gmDestroy) <> 0 then
     begin

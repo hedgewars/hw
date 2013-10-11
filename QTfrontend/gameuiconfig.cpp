@@ -139,8 +139,13 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->CBShowFPS->setChecked(value("fps/show", false).toBool());
     Form->ui.pageOptions->fpsedit->setValue(value("fps/limit", 27).toUInt());
 
-    Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", false).toBool());
+    Form->ui.pageOptions->CBAltDamage->setChecked(value("misc/altdamage", true).toBool());
     Form->ui.pageOptions->CBNameWithDate->setChecked(value("misc/appendTimeToRecords", false).toBool());
+
+    Form->ui.pageOptions->CBTeamTag->setChecked(value("misc/teamtag", true).toBool());
+    Form->ui.pageOptions->CBHogTag->setChecked(value("misc/hogtag", true).toBool());
+    Form->ui.pageOptions->CBHealthTag->setChecked(value("misc/healthtag", true).toBool());
+    Form->ui.pageOptions->CBTagOpacity->setChecked(value("misc/tagopacity", false).toBool());
 
 #ifdef SPARKLE_ENABLED
     Form->ui.pageOptions->CBAutoUpdate->setChecked(value("misc/autoUpdate", true).toBool());
@@ -280,6 +285,12 @@ void GameUIConfig::SaveOptions()
     setValue("fps/limit", Form->ui.pageOptions->fpsedit->value());
 
     setValue("misc/altdamage", isAltDamageEnabled());
+
+    setValue("misc/teamtag",   Form->ui.pageOptions->CBTeamTag->isChecked());
+    setValue("misc/hogtag",    Form->ui.pageOptions->CBHogTag->isChecked());
+    setValue("misc/healthtag", Form->ui.pageOptions->CBHealthTag->isChecked());
+    setValue("misc/tagopacity",Form->ui.pageOptions->CBTagOpacity->isChecked());
+
     setValue("misc/appendTimeToRecords", appendDateTimeToRecordName());
     setValue("misc/locale", language());
 

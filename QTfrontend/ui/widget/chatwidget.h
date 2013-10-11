@@ -68,6 +68,8 @@ class HWChatWidget : public QWidget
     protected:
         virtual void dragEnterEvent(QDragEnterEvent * event);
         virtual void dropEvent(QDropEvent * event);
+        virtual void resizeEvent(QResizeEvent * event);
+        virtual void showEvent(QShowEvent * event);
 
     private:
         static QString * s_styleSheet;

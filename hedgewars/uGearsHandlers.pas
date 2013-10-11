@@ -31,7 +31,10 @@ uses SDLh, uFloat, uCollisions;
 
 
 
-const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),(X: -1; Y: 0));
+const dirs: array[0..3] of TPoint = ((x: 0;  y: -1),
+                                     (x: 1;  y:  0),
+                                     (x: 0;  y:  1),
+                                     (x: -1; y:  0));
 
 procedure PrevAngle(Gear: PGear; dA: LongInt); inline;
 begin

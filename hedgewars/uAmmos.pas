@@ -53,11 +53,12 @@ implementation
 uses uLocale, uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
+     TAmmoArray = array[TAmmoType] of TAmmo;
 var StoresList: array[0..Pred(cMaxHHs)] of PHHAmmo;
     ammoLoadout, ammoProbability, ammoDelay, ammoReinforcement: shortstring;
     InitialCounts: array[0..Pred(cMaxHHs)] of TAmmoCounts;
 
-procedure FillAmmoStore(Ammo: PHHAmmo; var cnts: TAmmoCounts);
+procedure FillAmmoStore(Ammo: PHHAmmo; var newAmmo: TAmmoArray);
 var mi: array[0..cMaxSlotIndex] of byte;
     a: TAmmoType;
 begin
@@ -67,12 +68,10 @@ FillChar(mi, sizeof(mi), 0);
 FillChar(Ammo^, sizeof(Ammo^), 0);
 for a:= Low(TAmmoType) to High(TAmmoType) do
     begin
-    if cnts[a] > 0 then
+    if newAmmo[a].Count > 0 then
         begin
         TryDo(mi[Ammoz[a].Slot] <= cMaxSlotAmmoIndex, 'Ammo slot overflow', true);
-        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= Ammoz[a].Ammo;
-        with Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]] do
-            Count:= cnts[a];
+        Ammo^[Ammoz[a].Slot, mi[Ammoz[a].Slot]]:= newAmmo[a];
         inc(mi[Ammoz[a].Slot])
         end
     end;
@@ -84,6 +83,7 @@ const probability: array [0..8] of LongWord = (0,20,30,60,100,200,400,600,800);
 var cnt: Longword;
     a: TAmmoType;
     ammos: TAmmoCounts;
+    newAmmos: TAmmoArray;
 begin
 TryDo((byte(ammoLoadout[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoProbability[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoDelay[0]) = byte(ord(High(TAmmoType)))) and (byte(ammoReinforcement[0]) = byte(ord(High(TAmmoType)))), 'Incomplete or missing ammo scheme set (incompatible frontend or demo/save?)', true);
 
@@ -141,7 +141,14 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
     else
         InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-FillAmmoStore(StoresList[Pred(StoreCnt)], ammos)
+    
+    for a:= Low(TAmmoType) to High(TAmmoType) do
+        begin
+        newAmmos[a]:= Ammoz[a].Ammo;
+        newAmmos[a].Count:= ammos[a]
+        end;
+        
+FillAmmoStore(StoresList[Pred(StoreCnt)], newAmmos)
 end;
 
 function GetAmmoByNum(num: Longword): PHHAmmo;
@@ -211,23 +218,30 @@ begin
 end;
 
 procedure SetAmmo(var Hedgehog: THedgehog; ammo: TAmmoType; cnt: LongWord);
-var ammos: TAmmoCounts;
+var ammos: TAmmoArray;
     slot, ami: LongInt;
     hhammo: PHHAmmo;
     CurWeapon: PAmmo;
+    a: TAmmoType;
 begin
 {$HINTS OFF}
 FillChar(ammos, sizeof(ammos), 0);
 {$HINTS ON}
 hhammo:= Hedgehog.Ammo;
 
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    begin
+    ammos[a]:= Ammoz[a].Ammo;
+    ammos[a].Count:= 0
+    end;
+
 for slot:= 0 to cMaxSlotIndex do
     for ami:= 0 to cMaxSlotAmmoIndex do
         if hhammo^[slot, ami].Count > 0 then
-            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami].Count;
+            ammos[hhammo^[slot, ami].AmmoType]:= hhammo^[slot, ami];
 
-ammos[ammo]:= cnt;
-if ammos[ammo] > AMMO_INFINITE then ammos[ammo]:= AMMO_INFINITE;
+ammos[ammo].Count:= cnt;
+if ammos[ammo].Count > AMMO_INFINITE then ammos[ammo].Count:= AMMO_INFINITE;
 
 FillAmmoStore(hhammo, ammos);
 CurWeapon:= GetCurAmmoEntry(Hedgehog);
@@ -455,14 +469,22 @@ end;
 procedure ResetWeapons;
 var i, t: Longword;
     a: TAmmoType;
+    newAmmos: TAmmoArray;
 begin
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         for i:= 0 to cMaxHHIndex do
             Hedgehogs[i].CurAmmoType:= amNothing;
 
+for a:= Low(TAmmoType) to High(TAmmoType) do
+    newAmmos[a]:= Ammoz[a].Ammo;
+    
 for i:= 0 to Pred(StoreCnt) do
-    FillAmmoStore(StoresList[i], InitialCounts[i]);
+    begin
+    for a:= Low(TAmmoType) to High(TAmmoType) do
+        newAmmos[a].Count:= InitialCounts[i][a];
+    FillAmmoStore(StoresList[i], newAmmos);
+    end;
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     if Ammoz[a].SkipTurns >= 10000 then

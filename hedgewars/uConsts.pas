@@ -47,8 +47,8 @@ const
     cameraKeyboardSpeed : ShortInt = 10;
 
     // color constants
-    cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; unused:$FF);
-    cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; unused:$FF);
+    cWhiteColorChannels : TSDL_Color = (r:$FF; g:$FF; b:$FF; a:$FF);
+    cNearBlackColorChannels : TSDL_Color = (r:$00; g:$00; b:$10; a:$FF);
 
     cWhiteColor           : Longword = $FFFFFFFF;
     cYellowColor          : Longword = $FFFFFF00;
@@ -99,7 +99,7 @@ const
     lfBouncy         = $0400;  // green
     lfLandMask       = $FF00;  // upper byte is used for terrain, not objects.
 
-    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this doesn't impact play
+    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this does not impact play
     lfNotCurrentMask = $FF7F;  // inverse of above. frequently used
     lfObjMask        = $007F;  // lower 7 bits used for hogs
     lfNotObjMask     = $FF80;  // inverse of above.
@@ -189,6 +189,7 @@ const
     gfMoreWind           = $01000000;
     gfTagTeam            = $02000000;
     gfBottomBorder       = $04000000;
+    gfShoppaBorder       = $08000000;
     // NOTE: When adding new game flags, ask yourself
     // if a "game start notice" would be useful. If so,
     // add one in uWorld.pas - look for "AddGoal".
@@ -285,8 +286,15 @@ const
     posCaseExplode = $00000010;
     posCasePoison  = $00000020;
 
+    // hog tag mask
+    //htNone        = $00;
+    htTeamName    = $01;
+    htName        = $02;
+    htHealth      = $04;
+    htTransparent = $08;
+
     NoPointX = Low(LongInt);
-    cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
+    cTargetPointRef : TPoint = (x: NoPointX; y: 0);
 
     kSystemSoundID_Vibrate = $00000FFF;
 

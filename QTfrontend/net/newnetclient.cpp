@@ -436,6 +436,16 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                         foreach(const QString & nick, nicks)
                             m_playersModel->setFlag(nick, PlayersListModel::Registered, setFlag);
                         break;
+                // flag indicating if a player is in room
+                case 'i':
+                        foreach(const QString & nick, nicks)
+                            m_playersModel->setFlag(nick, PlayersListModel::InRoom, setFlag);
+                        break;
+                // flag indicating if a player is contributor
+                case 'c':
+                        foreach(const QString & nick, nicks)
+                            m_playersModel->setFlag(nick, PlayersListModel::InRoom, setFlag);
+                        break;
                 // flag indicating if a player has engine running
                 case 'g':
                     if(inRoom)

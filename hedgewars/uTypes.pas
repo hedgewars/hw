@@ -179,6 +179,8 @@ type
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed,
                    smHorizontal, smVertical);
 
+    TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
+
     THHFont = record
             Handle: PTTF_Font;
             Height: LongInt;
@@ -424,7 +426,6 @@ type
      funcDoublePtr = function: Double;
 
      TMobileRecord = record
-                     getScreenDPI: funcDoublePtr;
                      PerformRumble: cdeclIntPtr;
                      GameLoading: cdeclPtr;
                      GameLoaded: cdeclPtr;
@@ -479,15 +480,15 @@ type
 
     POnScreenWidget = ^TOnScreenWidget;
     TOnScreenWidget = record
-        show          : boolean;             // if false widget will not be drawn
-        sprite        : TSprite;             // a convenience type
-        frame         : TSDL_Rect;           // graphical coordinates
-        active        : TSDL_Rect;           // active touch region
-        fadeAnimStart : Longword;            // time the fade started, 0 means do not fade
-        moveAnim      : TWidgetMovement;     // the animation associated to the widget
+        show          : boolean;            // if false widget will not be drawn
+        sprite        : TSprite;            // a convenience type
+        frame         : TSDL_Rect;          // graphical coordinates
+        active        : TSDL_Rect;          // active touch region
+        fadeAnimStart : Longword;           // time the fade started
+                                            //     (0 means do not fade)
+        moveAnim      : TWidgetMovement;    // animation associated to widget
         end;
 
-{$IFDEF SDL13}
     PTouch_Data = ^TTouch_Data;
     TTouch_Data = record
         id                       : TSDL_FingerId;
@@ -497,7 +498,6 @@ type
         timeSinceDown            : Longword;
         pressedWidget            : POnScreenWidget;
         end;
-{$ENDIF}
 
 implementation
 

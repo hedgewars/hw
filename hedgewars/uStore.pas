@@ -52,8 +52,11 @@ procedure MakeCrossHairs;
 procedure InitOffscreenOpenGL;
 {$ENDIF}
 
+{$IFDEF SDL2}
 procedure WarpMouse(x, y: Word); inline;
+{$ENDIF}
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
+procedure SetSkyColor(r, g, b: real);
 
 {$IFDEF GL2}
 procedure UpdateModelviewProjection;
@@ -71,12 +74,12 @@ uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils, uCom
     , uPhysFSLayer
     , uDebug
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
-    {$IF NOT DEFINED(SDL13) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
+    {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 //type TGPUVendor = (gvUnknown, gvNVIDIA, gvATI, gvIntel, gvApple);
 
 var MaxTextureSize: LongInt;
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
 {$ELSE}
@@ -633,7 +636,7 @@ var tmpsurf: PSDL_Surface;
 begin
     // check for file in user dir (never critical)
     tmpsurf:= LoadImage(cPathz[path] + '/' + filename, imageFlags);
-    
+
     LoadDataImage:= tmpsurf;
 end;
 
@@ -694,7 +697,7 @@ end;
 
 function glLoadExtension(extension : shortstring) : boolean;
 begin
-//TODO: pas2c doesn't handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
+//TODO: pas2c does not handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
 {$IFNDEF PAS2C}
 {$IF GLunit = gles11}
     // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
@@ -718,17 +721,17 @@ begin
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-{$IFNDEF SDL13} // vsync is default in 1.3
+{$ENDIF}
+{$IFNDEF SDL2} // vsync is default in SDL2
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, LongInt((cReducedQuality and rqDesyncVBlank) = 0));
 {$ENDIF}
-{$ENDIF}
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0); // no depth buffer
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 5);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 6);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 5);
-    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0); // no alpha channel required
-    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16); // buffer has to be 16 bit only
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // try to prefer hardware rendering
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);         // no depth buffer
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 0);         // no alpha channel
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 16);       // buffer should be 16
+    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // prefer hw rendering
 end;
 
 {$IFDEF GL2}
@@ -838,33 +841,25 @@ end;
 {$ENDIF}
 
 procedure SetupOpenGL;
-//var vendor: shortstring = '';
-var buf: array[byte] of char;
-{$IFDEF PAS2C}err: GLenum;{$ENDIF}
-{$IFDEF USE_VIDEO_RECORDING}AuxBufNum: LongInt;{$ENDIF}
+var name: array[byte] of char;
+    AuxBufNum: LongInt = 0;
     tmpstr: AnsiString;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
-    buf[0]:= char(0); // avoid compiler hint
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
 
-{$IFDEF WEBGL}
-    if OpenGLSetupedBefore then
-        begin
-        glViewport(0, 0, cScreenWidth, cScreenHeight);
-        hglMatrixMode(MATRIX_MODELVIEW);
-        hglLoadIdentity();
-        hglScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-        hglTranslatef(0, -cScreenHeight / 2, 0);
-        exit;
-        end
-    OpenGLSetupedBefore := true;
+{$IFDEF SDL2}
+    name:= SDL_GetCurrentVideoDriver();
+{$ELSE}
+    name:= SDL_VideoDriverName(name, sizeof(name));
 {$ENDIF}
 
-{$IFDEF SDL13}
-    // this function creates an opengles1.1 context by default on mobile devices
-    // unless you un-comment this two attributes
+    AuxBufNum:= AuxBufNum;
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(name) + ')');
+
+{$IFDEF MOBILE}
+    // TODO: this function creates an opengles1.1 context
+    // un-comment below and add proper logic to support opengles2.0
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
@@ -873,7 +868,7 @@ begin
     SDL_GL_SetSwapInterval(1);
 {$ENDIF}
 
-    // get the max (horizontal and vertical) size for textures that the gpu can support
+    // get the max (h and v) size for textures that the gpu can support
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
     if MaxTextureSize <= 0 then
         begin
@@ -885,27 +880,20 @@ begin
         cReducedQuality := cReducedQuality or rqNoBackground;
         AddFileLog('Texture size too small for backgrounds, disabling.');
         end;
-
-(*
-    // find out which gpu we are using (for extension compatibility maybe?)
-{$IFDEF IPHONEOS}
-    vendor:= vendor; // avoid hint
-    cGPUVendor:= gvApple;
+{$IFDEF WEBGL}
+    if OpenGLSetupedBefore then
+        begin
+        glViewport(0, 0, cScreenWidth, cScreenHeight);
+        hglMatrixMode(MATRIX_MODELVIEW);
+        hglLoadIdentity();
+        hglScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+        hglTranslatef(0, -cScreenHeight / 2, 0);
+        exit;
+        end
+    OpenGLSetupedBefore := true;
 {$ELSE}
-    vendor:= LowerCase(shortstring(pchar(glGetString(GL_VENDOR))));
-    if StrPos(Str2PChar(vendor), Str2PChar('nvidia')) <> nil then
-        cGPUVendor:= gvNVIDIA
-    else if StrPos(Str2PChar(vendor), Str2PChar('intel')) <> nil then
-        cGPUVendor:= gvATI
-    else if StrPos(Str2PChar(vendor), Str2PChar('ati')) <> nil then
-        cGPUVendor:= gvIntel
-    else
-        AddFileLog('OpenGL Warning - unknown hardware vendor; please report');
-{$ENDIF}
-//SupportNPOTT:= glLoadExtension('GL_ARB_texture_non_power_of_two');
-*)
-
-    // everyone love debugging
+    // everyone loves debugging
+    // find out which gpu we are using (for extension compatibility maybe?)
     AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
     AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
     AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
@@ -914,11 +902,7 @@ begin
     glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
     AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
 {$ENDIF}
-{$IFDEF PAS2C}
-
-    // doesn't seem to print >256 chars
-    AddFileLogRaw(PChar(glGetString(GL_EXTENSIONS)));
-{$ELSE}
+{$IFNDEF PAS2C}
     AddFileLog('  \----- Extensions: ');
 
     // fetch extentions and store them in string
@@ -938,6 +922,7 @@ begin
         tmpint := tmpint + 3;
     end;
     until (tmpint > tmpn);
+{$ENDIF}
 {$ENDIF}
     AddFileLog('');
 
@@ -1434,11 +1419,11 @@ WeaponTooltipTex:= nil
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
-{$IFDEF SDL13}
+{$IFDEF SDL2}
 procedure InitOffscreenOpenGL;
 begin
     // create hidden window
-    SDLwindow:= SDL_CreateWindow('hedgewars (you don''t see this)',
+    SDLwindow:= SDL_CreateWindow('hedgewars video rendering (SDL2 hidden window)',
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
                                  cScreenWidth, cScreenHeight,
                                  SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
@@ -1454,19 +1439,21 @@ begin
     PrgName:= 'hwengine';
     glutInit(@ArgCount, @PrgName);
     glutInitWindowSize(cScreenWidth, cScreenHeight);
-    glutCreateWindow('hedgewars (you don''t see this)'); // we don't need a window, but if this function is not called then OpenGL will not be initialized
+    // we do not need a window, but without this call OpenGL will not initialize
+    glutCreateWindow('hedgewars video rendering (glut hidden window)');
     glutHideWindow();
-    glutDisplayFunc(@SwapBuffers); // we don't need a callback, but it's required for GLUT3
+    // we do not need to set this callback, but it is required for GLUT3 compat
+    glutDisplayFunc(@SwapBuffers);
     SetupOpenGL();
 end;
-{$ENDIF} // SDL13
+{$ENDIF} // SDL2
 {$ENDIF} // USE_VIDEO_RECORDING
 
 procedure chFullScr(var s: shortstring);
 var flags: Longword = 0;
     reinit: boolean = false;
     {$IFNDEF DARWIN}ico: PSDL_Surface;{$ENDIF}
-    {$IFDEF SDL13}x, y: LongInt;{$ENDIF}
+    {$IFDEF SDL2}x, y: LongInt;{$ENDIF}
 begin
     if cOnlyStats then
         begin
@@ -1476,7 +1463,7 @@ begin
     if Length(s) = 0 then
          cFullScreen:= (not cFullScreen)
     else cFullScreen:= s = '1';
-    
+
     if cFullScreen then
         begin
         cScreenWidth:= cFullscreenWidth;
@@ -1489,14 +1476,16 @@ begin
         end;
 
     AddFileLog('Preparing to change video parameters...');
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     if SDLwindow = nil then
 {$ELSE}
     if SDLPrimSurface = nil then
 {$ENDIF}
         begin
         // set window title
-        {$IFNDEF SDL13}SDL_WM_SetCaption(_P'Hedgewars', nil);{$ENDIF}
+    {$IFNDEF SDL2}
+        SDL_WM_SetCaption(_P'Hedgewars', nil);
+    {$ENDIF}
         WriteToConsole('Init SDL_image... ');
         SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
         WriteLnToConsole(msgOK);
@@ -1525,7 +1514,7 @@ begin
         exit;
 {$ELSE}
         SetScale(cDefaultZoomLevel);
-     {$IFDEF USE_CONTEXT_RESTORE}
+    {$IFDEF USE_CONTEXT_RESTORE}
         reinit:= true;
         StoreRelease(true);
         ResetLand;
@@ -1533,7 +1522,7 @@ begin
         //uTextures.freeModule; //DEBUG ONLY
     {$ENDIF}
         AddFileLog('Freeing old primary surface...');
-    {$IFNDEF SDL13}
+    {$IFNDEF SDL2}
     {$IFNDEF WEBGL}
         SDL_FreeSurface(SDLPrimSurface);
         SDLPrimSurface:= nil;
@@ -1544,17 +1533,20 @@ begin
 
     // these attributes must be set up before creating the sdl window
 {$IFNDEF WIN32}
-(* On a large number of testers machines, SDL default to software rendering when opengl attributes were set.
-   These attributes were "set" after CreateWindow in .15, which probably did nothing.
-   IMO we should rely on the gl_config defaults from SDL, and use SDL_GL_GetAttribute to possibly post warnings if any
-   bad values are set.  *)
+(* On a large number of testers machines, SDL default to software rendering
+   when opengl attributes were set. These attributes were "set" after
+   CreateWindow in .15, which probably did nothing.
+   IMO we should rely on the gl_config defaults from SDL, and use
+   SDL_GL_GetAttribute to possibly post warnings if any bad values are set.
+ *)
     SetupOpenGLAttributes();
 {$ENDIF}
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     // these values in x and y make the window appear in the center
     x:= SDL_WINDOWPOS_CENTERED_MASK;
     y:= SDL_WINDOWPOS_CENTERED_MASK;
-    // SDL_WINDOW_RESIZABLE makes the window respond to rotation events on mobile devices
+    // SDL_WINDOW_RESIZABLE makes the window resizable and
+    //  respond to rotation events on mobile devices
     flags:= SDL_WINDOW_OPENGL or SDL_WINDOW_SHOWN or SDL_WINDOW_RESIZABLE;
 
     {$IFDEF MOBILE}
@@ -1564,20 +1556,16 @@ begin
     flags:= flags or SDL_WINDOW_BORDERLESS;
     {$ENDIF}
 
+    if cFullScreen then
+        flags:= flags or SDL_WINDOW_FULLSCREEN;
+
     if SDLwindow = nil then
-        if cFullScreen then
-            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags or SDL_WINDOW_FULLSCREEN)
-        else
-            begin
-            SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
-            end;
+        SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
     SDLTry(SDLwindow <> nil, true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
-        begin
         flags:= flags or SDL_FULLSCREEN;
-        end;
     if not cOnlyStats then
         begin
     {$IFDEF WIN32}
@@ -1586,7 +1574,9 @@ begin
     {$ENDIF}
         SDLPrimSurface:= SDL_SetVideoMode(cScreenWidth, cScreenHeight, 0, flags);
         SDLTry(SDLPrimSurface <> nil, true);
-    {$IFDEF WIN32}SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));{$ENDIF}
+    {$IFDEF WIN32}
+        SDL_putenv(str2pchar('SDL_VIDEO_CENTERED=' + s));
+    {$ENDIF}
         end;
 {$ENDIF}
 
@@ -1597,11 +1587,11 @@ begin
         // clean the window from any previous content
         glClear(GL_COLOR_BUFFER_BIT);
         if SuddenDeathDmg then
-            glClearColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255, 0.99)
+            SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255)
         else if ((cReducedQuality and rqNoBackground) = 0) then
-            glClearColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255, 0.99)
+            SetSkyColor(SkyColor.r / 255, SkyColor.g / 255, SkyColor.b / 255)
         else
-            glClearColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255, 0.99);
+            SetSkyColor(RQSkyColor.r / 255, RQSkyColor.g / 255, RQSkyColor.b / 255);
 
         // reload everything we had before
         ReloadCaptions(false);
@@ -1610,6 +1600,33 @@ begin
         // redraw all land
         UpdateLandTexture(0, LAND_WIDTH, 0, LAND_HEIGHT, false);
         end;
+end;
+
+{$IFDEF SDL2}
+// for sdl1.2 we directly call SDL_WarpMouse()
+// for sdl2 we provide a SDL_WarpMouse() which just calls this function
+// this has the advantage of reducing 'uses' and 'ifdef' statements
+// (SDLwindow is a private member of this module)
+procedure WarpMouse(x, y: Word); inline;
+begin
+    SDL_WarpMouseInWindow(SDLwindow, x, y);
+end;
+{$ENDIF}
+
+procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
+begin
+    if GameType = gmtRecord then
+        exit;
+{$IFDEF SDL2}
+    SDL_GL_SwapWindow(SDLwindow);
+{$ELSE}
+    SDL_GL_SwapBuffers();
+{$ENDIF}
+end;
+
+procedure SetSkyColor(r, g, b: real);
+begin
+    glClearColor(r, g, b, 0.99)
 end;
 
 procedure initModule;
@@ -1635,7 +1652,7 @@ begin
     // init all count texture pointers
     for i:= Low(CountTexz) to High(CountTexz) do
         CountTexz[i] := nil;
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     SDLwindow:= nil;
     SDLGLcontext:= nil;
 {$ELSE}
@@ -1654,31 +1671,10 @@ begin
 {$ENDIF}
     StoreRelease(false);
     TTF_Quit();
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     SDL_GL_DeleteContext(SDLGLcontext);
     SDL_DestroyWindow(SDLwindow);
 {$ENDIF}
     SDL_Quit();
 end;
-
-procedure WarpMouse(x, y: Word); inline;
-begin
-{$IFDEF SDL13}
-    SDL_WarpMouseInWindow(SDLwindow, x, y);
-{$ELSE}
-    x:= x; y:= y; // avoid hints
-{$ENDIF}
-end;
-
-procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
-begin
-    if GameType = gmtRecord then
-        exit;
-{$IFDEF SDL13}
-    SDL_GL_SwapWindow(SDLwindow);
-{$ELSE}
-    SDL_GL_SwapBuffers();
-{$ENDIF}
-end;
-
 end.

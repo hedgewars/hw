@@ -6,6 +6,7 @@
 #include <QIcon>
 #include <QModelIndex>
 #include <QSet>
+#include <QFont>
 
 class PlayersListModel : public QAbstractListModel
 {
@@ -19,7 +20,9 @@ public:
         Registered  = Qt::UserRole + 3,
         Friend      = Qt::UserRole + 4,
         Ignore      = Qt::UserRole + 5,
-        InGame      = Qt::UserRole + 6
+        InGame      = Qt::UserRole + 6,
+        InRoom      = Qt::UserRole + 7,
+        Contributor = Qt::UserRole + 8
     };
 
     enum SpecialRoles {
@@ -61,6 +64,7 @@ private:
     QList<DataEntry> m_data;
     QSet<QString> m_friendsSet, m_ignoredSet;
     QString m_nickname;
+    QFont m_fontInRoom;
 
     void updateIcon(const QModelIndex & index);
     void updateSortData(const QModelIndex & index);

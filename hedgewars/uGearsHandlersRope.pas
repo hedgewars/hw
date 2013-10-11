@@ -33,6 +33,7 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
+    WorldWrap(HHGear);
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
         begin
         DeleteGear(Gear);
@@ -116,7 +117,7 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
 
-    if ((HHGear^.State and gstHHDriven) = 0)
+    if ((HHGear^.State and gstHHDriven) = 0) or WorldWrap(HHGear)
        or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
         PlaySound(sndRopeRelease);

@@ -32,14 +32,12 @@ program hwengine;
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
-     , uPhysFSLayer, uCursor, uRandom
+     , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF}
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch {$ENDIF}
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      {$IFDEF WEBGL}, uWeb{$ENDIF}
      ;
-
-var isInternal: Boolean;
 
 {$IFDEF HWLIBRARY}
 procedure preInitEverything();
@@ -54,8 +52,6 @@ procedure preInitEverything(); forward;
 procedure initEverything(complete:boolean); forward;
 procedure freeEverything(complete:boolean); forward;
 {$ENDIF}
-
-{$INCLUDE "ArgParsers.inc"}
 
 {$IFDEF WEBGL}
 procedure playFile(path: PChar); forward;
@@ -90,6 +86,7 @@ begin
             end;
         gsStart:
             begin
+            SetDefaultBinds;
             if HasBorder then
                 DisableSomeWeapons;
             AddClouds;
@@ -166,7 +163,7 @@ var event: TSDL_Event;
 {$IFNDEF WEBGL}
     PrevTime, CurrTime: LongInt;
     isTerminated: boolean;
-{$IFDEF SDL13}
+{$IFDEF SDL2}
     previousGameState: TGameState;
 {$ELSE}
     prevFocusState: boolean;
@@ -185,17 +182,17 @@ begin
 
         SDL_PumpEvents();
 
-        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL13}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
+        while SDL_PeepEvents(@event, 1, SDL_GETEVENT, {$IFDEF SDL2}SDL_FIRSTEVENT, SDL_LASTEVENT{$ELSE}SDL_ALLEVENTS{$ENDIF}) > 0 do
         begin
             case event.type_ of
-{$IFDEF SDL13}
+{$IFDEF SDL2}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
                         KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
                         end
-                    else 
+                    else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
@@ -228,7 +225,7 @@ begin
                     end;
 
                 SDL_FINGERMOTION:
-                    onTouchMotion(event.tfinger.x, event.tfinger.y,event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
+                    onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
 
                 SDL_FINGERDOWN:
                     onTouchDown(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
@@ -390,7 +387,11 @@ begin
     if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
     WriteLnToConsole(msgOK);
 
+{$IFDEF SDL2}
+    SDL_StartTextInput();
+{$ELSE}
     SDL_EnableUNICODE(1);
+{$ENDIF}
     SDL_ShowCursor(0);
 
     WriteToConsole('Init SDL_ttf... ');
@@ -450,7 +451,7 @@ begin
 
     isDeveloperMode:= false;
     TryDo(InitStepsFlags = cifAllInited, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
-    ParseCommand('rotmask', true);
+    //ParseCommand('rotmask', true);
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
@@ -503,6 +504,7 @@ begin
     if complete then
     begin
         uPhysFSLayer.initModule;
+        uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}   //stub
@@ -515,7 +517,7 @@ begin
         uChat.initModule;
         uCollisions.initModule;
         uGears.initModule;
-        uInputHandler.initModule;   //stub
+        uInputHandler.initModule;
         uMisc.initModule;
         uLandTexture.initModule;    //stub
         uScript.initModule;
@@ -524,6 +526,7 @@ begin
         uStore.initModule;
         uTeams.initModule;
         uVisualGears.initModule;
+        uVisualGearsHandlers.initModule;
         uWorld.initModule;
     end;
 end;
@@ -554,6 +557,7 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}uVideoRec.freeModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
+        uTextures.freeModule;
         uPhysFSLayer.freeModule;
     end;
 
@@ -607,6 +611,7 @@ begin
 {$ENDIF}
 {$ENDIF}
     preInitEverything();
+    cTagsMask:= htTeamName or htName or htHealth; // this one doesn't fit nicely w/ reset of other variables. suggestions welcome
     GetParams();
 
     if GameType = gmtLandPreview then

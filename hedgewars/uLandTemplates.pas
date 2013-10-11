@@ -2327,6 +2327,19 @@ const LargeTemplates: array[0..20] of Longword =
 const CavernTemplates: array[0..5] of Longword = (36, 2, 3, 21, 29, 45);
 //const WackyTemplates: array[0..4] of Longword = (37, 38, 39, 40, 41);
 const WackyTemplates: array[0..4] of Longword = (37, 38, 41, 43, 44);
+const TemplateCounts: array[0..5] of Longword = (
+          0
+        , Succ(High(SmallTemplates))
+        , Succ(High(MediumTemplates))
+        , Succ(High(LargeTemplates))
+        , Succ(High(CavernTemplates))
+        , Succ(High(WackyTemplates))
+        );
+const GroupedTemplatesCount = Succ(High(SmallTemplates))
+        + Succ(High(MediumTemplates))
+        + Succ(High(LargeTemplates))
+        + Succ(High(CavernTemplates))
+        + Succ(High(WackyTemplates));
 
 implementation
 

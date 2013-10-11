@@ -94,24 +94,29 @@ else()
     message(FATAL_ERROR "Couldn't find the android executable in ${ANDROID_SDK}/platform-tools or ${ANDROID_SDK}/tools.")
 endif()
 
-exec_program(${HGCOMMAND}
-    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
-    OUTPUT_VARIABLE dontcare
-)
-exec_program(${HGCOMMAND}
-    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
-    OUTPUT_VARIABLE dontcare
-)
-exec_program(${HGCOMMAND}
-    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/file/SDL_rwops.c
-    OUTPUT_VARIABLE dontcare
-)
-exec_program(${HGCOMMAND}
-    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_mixer/Android.mk
-    OUTPUT_VARIABLE dontcare
-)
-exec_program(${HGCOMMAND}
-    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_ttf/Android.mk
-    OUTPUT_VARIABLE dontcare
-)
+##
+# FIXME: this was useful for early version of SDL 1.3 so is most likely not needed anymore
+#        if so delete the files referenced here from the repository
+#        commenting out because it inteferes with SDL 2 builds
+##
+#exec_program(${HGCOMMAND}
+#    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/core/android/SDL_android.cpp
+#    OUTPUT_VARIABLE dontcare
+#)
+#exec_program(${HGCOMMAND}
+#    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/main/android/SDL_android_main.cpp
+#    OUTPUT_VARIABLE dontcare
+#)
+#exec_program(${HGCOMMAND}
+#    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL/src/file/SDL_rwops.c
+#    OUTPUT_VARIABLE dontcare
+#)
+#exec_program(${HGCOMMAND}
+#    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_mixer/Android.mk
+#    OUTPUT_VARIABLE dontcare
+#)
+#exec_program(${HGCOMMAND}
+#    ARGS revert ${CMAKE_CURRENT_SOURCE_DIR}/SDL-android-project/jni/SDL_ttf/Android.mk
+#    OUTPUT_VARIABLE dontcare
+#)
 
