@@ -704,20 +704,20 @@ begin
 end;
 
 procedure SetupOpenGL;
-var name: array[byte] of char;
+var buf: array[byte] of char;
     AuxBufNum: LongInt = 0;
     tmpstr: AnsiString;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
 {$IFDEF SDL2}
-    name:= SDL_GetCurrentVideoDriver();
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_GetCurrentVideoDriver()) + ')');
 {$ELSE}
-    name:= SDL_VideoDriverName(name, sizeof(name));
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
 {$ENDIF}
 
     AuxBufNum:= AuxBufNum;
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(name) + ')');
 
 {$IFDEF MOBILE}
     // TODO: this function creates an opengles1.1 context
