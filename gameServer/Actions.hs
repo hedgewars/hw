@@ -456,6 +456,7 @@ processAction (ProcessAccountInfo info) = do
 
 processAction JoinLobby = do
     chan <- client's sendChan
+    rnc <- gets roomsClients
     clientNick <- client's nick
     isAuthenticated <- liftM (not . B.null) $ client's webPassword
     isAdmin <- client's isAdministrator
@@ -465,6 +466,10 @@ processAction JoinLobby = do
     let authenticatedNicks = L.map nick . L.filter (not . B.null . webPassword) $ loggedInClients
     let adminsNicks = L.map nick . L.filter isAdministrator $ loggedInClients
     let contrNicks = L.map nick . L.filter isContributor $ loggedInClients
+    inRoomNicks <- io $
+        allClientsM rnc
+        >>= filterM (liftM ((/=) lobbyId) . clientRoomM rnc)
+        >>= mapM (client'sM rnc nick)
     let clFlags = B.concat . L.concat $ [["u" | isAuthenticated], ["a" | isAdmin], ["c" | isContr]]
     mapM_ processAction . concat $ [
         [AnswerClients clientsChans ["LOBBY:JOINED", clientNick]]
@@ -472,6 +477,7 @@ processAction JoinLobby = do
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+u" : authenticatedNicks) | not $ null authenticatedNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+a" : adminsNicks) | not $ null adminsNicks]
         , [AnswerClients [chan] ("CLIENT_FLAGS" : "+c" : contrNicks) | not $ null contrNicks]
+        , [AnswerClients [chan] ("CLIENT_FLAGS" : "+i" : inRoomNicks) | not $ null inRoomNicks]
         , [AnswerClients (chan : clientsChans) ["CLIENT_FLAGS",  B.concat["+" , clFlags], clientNick] | not $ B.null clFlags]
         , [ModifyClient (\cl -> cl{logonPassed = True, isVisible = True})]
         , [SendServerMessage]

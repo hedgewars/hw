@@ -101,7 +101,6 @@ data ClientInfo =
         logonPassed :: Bool,
         isVisible :: Bool,
         clientProto :: !Word16,
-        roomID :: RoomIndex,
         pingsQueue :: !Word,
         isMaster :: Bool,
         isReady :: !Bool,
