@@ -31,9 +31,17 @@ uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
 procedure doStepRopeAfterAttack(Gear: PGear);
 var 
     HHGear: PGear;
+    tX:     hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    WorldWrap(HHGear);
+    tX:= HHGear^.X;
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+       (TestCollisionXwithGear(HHGear, 1) or TestCollisionXwithGear(HHGear, -1))  then
+        begin
+        HHGear^.X:= tX;
+        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2)
+        end;
+
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
         begin
         DeleteGear(Gear);
@@ -117,8 +125,20 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
 
-    if ((HHGear^.State and gstHHDriven) = 0) or WorldWrap(HHGear)
-       or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
+    tX:= HHGear^.X;
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+       (TestCollisionXwithGear(HHGear, 1) or TestCollisionXwithGear(HHGear, -1))  then
+        begin
+        PlaySound(sndRopeRelease);
+        RopeDeleteMe(Gear, HHGear);
+        HHGear^.X:= tX;
+        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2);
+        exit
+        end;
+
+    tX:= HHGear^.X;
+    if ((HHGear^.State and gstHHDriven) = 0) or
+        (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
