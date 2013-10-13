@@ -1275,10 +1275,20 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehog(Gear: PGear);
+var tX: hwFloat;
 begin
-if WorldWrap(Gear) and (WorldEdge <> weBounce) and 
-  (Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
-   CurAmmoGear^.PortalCounter:= 1;
+tX:= Gear^.X;
+if WorldWrap(Gear) then
+    begin
+    if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and 
+       (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
+       CurAmmoGear^.PortalCounter:= 1;
+    if (WorldEdge = weWrap) and (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
+        begin
+        Gear^.X:= tX;
+        Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
+        end
+    end;
 
 CheckSum:= CheckSum xor Gear^.Hedgehog^.BotLevel;
 if (Gear^.Message and gmDestroy) <> 0 then

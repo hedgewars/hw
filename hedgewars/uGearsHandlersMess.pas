@@ -280,11 +280,17 @@ procedure doStepFallingGear(Gear: PGear);
 var
     isFalling: boolean;
     //tmp: QWord;
-    tdX, tdY: hwFloat;
+    tX, tdX, tdY: hwFloat;
     collV, collH: LongInt;
     land: word;
 begin
-    WorldWrap(Gear);
+    tX:= Gear^.X;
+    if WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
+      (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
+        begin
+        Gear^.X:= tX;
+        Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
+        end;
 
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
     if Gear^.dX.Round > 2 then
