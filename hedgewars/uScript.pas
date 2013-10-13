@@ -2088,7 +2088,10 @@ var ret : LongInt;
 begin
 s:= cPathz[ptData] + name;
 if not pfsExists(s) then
+    begin
+    AddFileLog('[LUA] Script not found: ' + name);
     exit;
+    end;
 
 f:= pfsOpenRead(s);
 if f = nil then 
