@@ -4092,7 +4092,8 @@ begin
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil)
         and (iterator = CurrentHedgehog^.Gear)
         and (CurAmmoGear <> nil)
-        and (CurAmmoGear^.Kind =gtRope) then
+        and (CurAmmoGear^.Kind = gtRope)
+        and (CurAmmoGear^.Elasticity <> _0) then
                CurAmmoGear^.PortalCounter:= 1;
 
         if not isbullet and (iterator^.State and gstInvisible = 0)

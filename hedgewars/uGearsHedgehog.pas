@@ -1281,7 +1281,7 @@ tX:= Gear^.X;
 if WorldWrap(Gear) then
     begin
     if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and 
-       (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) then
+       (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) and (CurAmmoGear^.Elasticity <> _0) then
        CurAmmoGear^.PortalCounter:= 1;
     if (WorldEdge = weWrap) and (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
         begin
