@@ -444,7 +444,7 @@ begin
         uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
-{$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}   //stub
+{$IFDEF USE_VIDEO_RECORDING}uVideoRec.initModule;{$ENDIF}
         uAI.initModule;
         uAIMisc.initModule;
         uAILandMarks.initModule;    //stub
