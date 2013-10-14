@@ -23,6 +23,7 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QDebug>
+#include <QCheckBox>
 
 #include "roomnameprompt.h"
 
@@ -32,24 +33,34 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     setWindowFlags(Qt::Sheet);
     setWindowModality(Qt::WindowModal);
     setMinimumSize(360, 130);
-    resize(360, 130);
+    resize(360, 180);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     // Layout
     QVBoxLayout * dialogLayout = new QVBoxLayout(this);
 
     // Label
-    label = new QLabel(tr("Enter a name for your room."));
+    label = new QLabel(tr("Enter a name for your room."), this);
     label->setWordWrap(true);
-    dialogLayout->addWidget(label, 0);
+    dialogLayout->addWidget(label);
 
     // Input box
-    editBox = new QLineEdit();
-    editBox->setText(roomName);
-    editBox->setMaxLength(59); // It didn't like 60 :(
-    editBox->setStyleSheet("QLineEdit { padding: 3px; }");
-    editBox->selectAll();
-    dialogLayout->addWidget(editBox, 1);
+    leRoomName = new QLineEdit(this);
+    leRoomName->setText(roomName);
+    leRoomName->setMaxLength(59); // It didn't like 60 :(
+    leRoomName->setStyleSheet("QLineEdit { padding: 3px; }");
+    leRoomName->selectAll();
+    dialogLayout->addWidget(leRoomName);
+
+    cbSetPassword = new QCheckBox(this);
+    cbSetPassword->setText(tr("set password"));
+    dialogLayout->addWidget(cbSetPassword);
+
+    lePassword = new QLineEdit(this);
+    //lePassword->setMaxLength(30);
+    //lePassword->setStyleSheet("QLineEdit { padding: 3px; }");
+    lePassword->setEnabled(false);
+    dialogLayout->addWidget(lePassword);
 
     dialogLayout->addStretch(1);
 
@@ -73,10 +84,20 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
 
     setStyleSheet("QPushButton { padding: 5px; }");
 
-    connect(btnOkay, SIGNAL(clicked()), this, SLOT(setRoomName()));
+    connect(cbSetPassword, SIGNAL(toggled(bool)), this, SLOT(checkBoxToggled()));
 }
 
-void RoomNamePrompt::setRoomName()
+QString RoomNamePrompt::getRoomName()
 {
-    emit roomNameChosen(editBox->text());
+    return leRoomName->text();
+}
+
+QString RoomNamePrompt::getPassword()
+{
+    return lePassword->text();
+}
+
+void RoomNamePrompt::checkBoxToggled()
+{
+    lePassword->setEnabled(cbSetPassword->isChecked());
 }

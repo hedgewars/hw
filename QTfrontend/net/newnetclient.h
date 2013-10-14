@@ -154,7 +154,7 @@ class HWNewNet : public QObject
         void askServerVars();
 
         void JoinRoom(const QString & room);
-        void CreateRoom(const QString & room);
+        void CreateRoom(const QString & room, const QString &password);
         void updateRoomName(const QString &);
         void askRoomsList();
         void gameFinished(bool correcly);
