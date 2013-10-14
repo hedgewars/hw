@@ -367,6 +367,10 @@ end;
 
 procedure initModule;
 begin
+    // we need to make sure these variables are initialized before the main loop
+    // or the wrapper will keep the default values of preinit
+    cScreenWidth:= min(cWindowedWidth, 640);
+    cScreenHeight:= min(cWindowedHeight, 480);
 end;
 
 procedure freeModule;
