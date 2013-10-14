@@ -70,7 +70,7 @@ class PageRoomsList : public AbstractPage
         void updateNickCounter(int cnt);
 
     signals:
-        void askForCreateRoom(const QString &);
+        void askForCreateRoom(const QString &, const QString &);
         void askForJoinRoom(const QString &);
         void askForRoomList();
         void askJoinConfirmation(const QString &);
@@ -89,7 +89,7 @@ class PageRoomsList : public AbstractPage
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
         void saveHeaderState();
-        void onRoomNameChosen(const QString &);
+        void onRoomNameChosen(const QString &, const QString &password);
         void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
         void moveSelectionUp();
         void moveSelectionDown();

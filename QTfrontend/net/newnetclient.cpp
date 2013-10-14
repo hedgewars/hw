@@ -94,7 +94,7 @@ void HWNewNet::Disconnect()
     NetSocket.disconnectFromHost();
 }
 
-void HWNewNet::CreateRoom(const QString & room)
+void HWNewNet::CreateRoom(const QString & room, const QString & password)
 {
     if(netClientState != InLobby)
     {
@@ -104,7 +104,11 @@ void HWNewNet::CreateRoom(const QString & room)
 
     myroom = room;
 
-    RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
+    if(password.isEmpty())
+        RawSendNet(QString("CREATE_ROOM%1%2").arg(delimeter).arg(room));
+    else
+        RawSendNet(QString("CREATE_ROOM%1%2%1%3").arg(delimeter).arg(room).arg(password));
+
     isChief = true;
 }
 
