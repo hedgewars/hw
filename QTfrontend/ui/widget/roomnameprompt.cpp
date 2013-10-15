@@ -57,8 +57,8 @@ RoomNamePrompt::RoomNamePrompt(QWidget* parent, const QString & roomName) : QDia
     dialogLayout->addWidget(cbSetPassword);
 
     lePassword = new QLineEdit(this);
-    //lePassword->setMaxLength(30);
-    //lePassword->setStyleSheet("QLineEdit { padding: 3px; }");
+    lePassword->setMaxLength(30);
+    lePassword->setStyleSheet("QLineEdit { padding: 3px; }");
     lePassword->setEnabled(false);
     dialogLayout->addWidget(lePassword);
 
