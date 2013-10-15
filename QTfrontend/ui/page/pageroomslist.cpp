@@ -570,7 +570,7 @@ void PageRoomsList::onJoinClick()
     if (!gameInLobby)
         emit askJoinConfirmation(roomName);
     else
-        emit askForJoinRoom(roomName);
+        emit askForJoinRoom(roomName, QString());
 }
 
 void PageRoomsList::onRefreshClick()
@@ -600,7 +600,7 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
 
     if (reallyJoinMsg.exec() == QMessageBox::Ok)
     {
-        emit askForJoinRoom(room);
+        emit askForJoinRoom(room, QString());
     }
 }
 
