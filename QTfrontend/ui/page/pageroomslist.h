@@ -71,7 +71,7 @@ class PageRoomsList : public AbstractPage
 
     signals:
         void askForCreateRoom(const QString &, const QString &);
-        void askForJoinRoom(const QString &);
+        void askForJoinRoom(const QString &, const QString &);
         void askForRoomList();
         void askJoinConfirmation(const QString &);
 

@@ -111,6 +111,7 @@ class HWForm : public QMainWindow
         void NetNickNotRegistered(const QString & nick);
         void NetNickTaken(const QString & nick);
         void NetAuthFailed();
+        void askRoomPassword();
         bool RetryDialog(const QString & title, const QString & label);
         void NetTeamAccepted(const QString& team);
         void AddNetTeam(const HWTeam& team);
