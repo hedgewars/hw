@@ -99,6 +99,8 @@ class GameUIConfig : public QSettings
         bool eventFilter(QObject *object, QEvent *event);
         QString temphash;
         QList<BindAction> m_binds;
+
+        void applyProxySettings();
 };
 
 #endif
