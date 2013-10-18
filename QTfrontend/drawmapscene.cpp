@@ -141,6 +141,7 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             path.lineTo(mouseEvent->scenePos());
             paths.first().points.append(mouseEvent->scenePos().toPoint());
             m_currPath->setPath(path);
+            simplifyLast();
             break;
         }
         case Rectangle: {
@@ -162,9 +163,9 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
             break;
         }
 
-        simplifyLast();
-
         m_currPath = 0;
+
+        emit pathChanged();
     }
 }
 
@@ -395,8 +396,6 @@ void DrawMapScene::simplifyLast()
         QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[m_isCursorShown ? 1 : 0]);
         pathItem->setPath(pointsToPath(paths[0].points));
     }
-
-    emit pathChanged();
 }
 
 int DrawMapScene::pointsCount()
@@ -442,16 +441,16 @@ void DrawMapScene::setPathType(PathType pathType)
 QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &corner)
 {
     QList<QPointF> l;
-    qreal r = (center - corner).manhattanLength();
     qreal rx = qAbs(center.x() - corner.x());
     qreal ry = qAbs(center.y() - corner.y());
+    qreal r = qMax(rx, ry);
 
     if(r < 4)
     {
         l.append(center);
     } else
     {
-        qreal angleDelta = 12 / r;
+        qreal angleDelta = qMax(0.1, qMin(0.7, 120 / r));
         for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
             l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
         l.append(l.first());
