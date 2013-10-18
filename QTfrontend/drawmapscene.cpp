@@ -20,6 +20,7 @@
 #include <QGraphicsPathItem>
 #include <QtEndian>
 #include <QDebug>
+#include <math.h>
 
 #include "drawmapscene.h"
 
@@ -44,6 +45,8 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     setBackgroundBrush(m_eraser);
     m_isErasing = false;
 
+    m_pathType = Polyline;
+
     m_pen.setWidth(76);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
@@ -61,18 +64,41 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     {
         QPainterPath path = m_currPath->path();
 
-        if(mouseEvent->modifiers() & Qt::ControlModifier)
+        switch (m_pathType)
         {
-            int c = path.elementCount();
-            QPointF pos = mouseEvent->scenePos();
-            path.setElementPositionAt(c - 1, pos.x(), pos.y());
+        case Polyline:
+            if(mouseEvent->modifiers() & Qt::ControlModifier)
+            {
+                int c = path.elementCount();
+                QPointF pos = mouseEvent->scenePos();
+                path.setElementPositionAt(c - 1, pos.x(), pos.y());
 
+            }
+            else
+            {
+                path.lineTo(mouseEvent->scenePos());
+                paths.first().points.append(mouseEvent->scenePos().toPoint());
+            }
+            break;
+        case Rectangle: {
+            path = QPainterPath();
+            QPointF p1 = paths.first().initialPoint;
+            QPointF p2 = mouseEvent->scenePos();
+            path.moveTo(p1);
+            path.lineTo(p1.x(), p2.y());
+            path.lineTo(p2);
+            path.lineTo(p2.x(), p1.y());
+            path.lineTo(p1);
+            break;
+            }
+        case Ellipse: {
+            path = QPainterPath();
+            QList<QPointF> points = makeEllipse(paths.first().initialPoint, mouseEvent->scenePos());
+            path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
+            break;
         }
-        else
-        {
-            path.lineTo(mouseEvent->scenePos());
-            paths.first().points.append(mouseEvent->scenePos().toPoint());
         }
+
         m_currPath->setPath(path);
 
         emit pathChanged();
@@ -96,7 +122,8 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     PathParams params;
     params.width = serializePenWidth(m_pen.width());
     params.erasing = m_isErasing;
-    params.points = QList<QPoint>() << mouseEvent->scenePos().toPoint();
+    params.initialPoint = mouseEvent->scenePos().toPoint();
+    params.points = QList<QPoint>() << params.initialPoint;
     paths.prepend(params);
     m_currPath->setPath(path);
 
@@ -107,10 +134,33 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (m_currPath)
     {
-        QPainterPath path = m_currPath->path();
-        path.lineTo(mouseEvent->scenePos());
-        paths.first().points.append(mouseEvent->scenePos().toPoint());
-        m_currPath->setPath(path);
+        switch (m_pathType)
+        {
+        case Polyline: {
+            QPainterPath path = m_currPath->path();
+            path.lineTo(mouseEvent->scenePos());
+            paths.first().points.append(mouseEvent->scenePos().toPoint());
+            m_currPath->setPath(path);
+            break;
+        }
+        case Rectangle: {
+            QPoint p1 = paths.first().initialPoint;
+            QPoint p2 = mouseEvent->scenePos().toPoint();
+            QList<QPoint> rpoints;
+            rpoints << p1 << QPoint(p1.x(), p2.y()) << p2 << QPoint(p2.x(), p1.y()) << p1;
+            paths.first().points = rpoints;
+            break;
+        }
+        case Ellipse:
+            QPoint p1 = paths.first().initialPoint;
+            QPoint p2 = mouseEvent->scenePos().toPoint();
+            QList<QPointF> points = makeEllipse(p1, p2);
+            QList<QPoint> epoints;
+            foreach(const QPointF & p, points)
+                epoints.append(p.toPoint());
+            paths.first().points = epoints;
+            break;
+        }
 
         simplifyLast();
 
@@ -382,4 +432,30 @@ quint8 DrawMapScene::serializePenWidth(int width)
 int DrawMapScene::deserializePenWidth(quint8 width)
 {
     return width * 10 + 6;
+}
+
+void DrawMapScene::setPathType(PathType pathType)
+{
+    m_pathType = pathType;
+}
+
+QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &corner)
+{
+    QList<QPointF> l;
+    qreal r = (center - corner).manhattanLength();
+    qreal rx = qAbs(center.x() - corner.x());
+    qreal ry = qAbs(center.y() - corner.y());
+
+    if(r < 4)
+    {
+        l.append(center);
+    } else
+    {
+        qreal angleDelta = 12 / r;
+        for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
+            l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
+        l.append(l.first());
+    }
+
+    return l;
 }

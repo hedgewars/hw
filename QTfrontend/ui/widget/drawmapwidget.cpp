@@ -123,6 +123,11 @@ void DrawMapWidget::setErasing(bool erasing)
     if(m_scene) m_scene->setErasing(erasing);
 }
 
+void DrawMapWidget::setPathType(DrawMapScene::PathType pathType)
+{
+    if(m_scene) m_scene->setPathType(pathType);
+}
+
 void DrawMapWidget::save(const QString & fileName)
 {
     if(m_scene)
@@ -192,7 +197,7 @@ void DrawMapView::setScene(DrawMapScene *scene)
     QGraphicsView::setScene(scene);
 }
 
-// Why don't I ever recieve this event?
+// Why don't I ever receive this event?
 void DrawMapView::enterEvent(QEvent *event)
 {
     if(m_scene)
