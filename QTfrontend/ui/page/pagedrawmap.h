@@ -22,6 +22,7 @@
 #include "AbstractPage.h"
 
 class DrawMapWidget;
+class QRadioButton;
 
 class PageDrawMap : public AbstractPage
 {
@@ -42,10 +43,14 @@ class PageDrawMap : public AbstractPage
         QPushButton * pbLoad;
         QPushButton * pbSave;
         QCheckBox * cbEraser;
+        QRadioButton * rbPolyline;
+        QRadioButton * rbRectangle;
+        QRadioButton * rbEllipse;
 
     private slots:
         void load();
         void save();
+        void pathTypeSwitched(bool b);
 };
 
 #endif

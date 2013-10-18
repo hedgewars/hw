@@ -29,6 +29,7 @@ struct PathParams
 {
     quint8 width;
     bool erasing;
+    QPoint initialPoint;
     QList<QPoint> points;
 };
 
@@ -38,6 +39,12 @@ class DrawMapScene : public QGraphicsScene
 {
         Q_OBJECT
     public:
+        enum PathType {
+            Polyline  = 0,
+            Rectangle = 1,
+            Ellipse   = 2
+        };
+
         explicit DrawMapScene(QObject *parent = 0);
 
         QByteArray encode();
@@ -54,6 +61,7 @@ class DrawMapScene : public QGraphicsScene
         void setErasing(bool erasing);
         void showCursor();
         void hideCursor();
+        void setPathType(PathType pathType);
 
     private:
         QPen m_pen;
@@ -67,6 +75,7 @@ class DrawMapScene : public QGraphicsScene
         QGraphicsEllipseItem * m_cursor;
         bool m_isCursorShown;
         QByteArray m_specialPoints;
+        PathType m_pathType;
 
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent);
         virtual void mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent);
@@ -77,6 +86,7 @@ class DrawMapScene : public QGraphicsScene
 
         quint8 serializePenWidth(int width);
         int deserializePenWidth(quint8 width);
+        QList<QPointF> makeEllipse(const QPointF & center, const QPointF & corner);
 };
 
 #endif // DRAWMAPSCENE_H
