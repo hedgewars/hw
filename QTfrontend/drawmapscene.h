@@ -87,6 +87,7 @@ class DrawMapScene : public QGraphicsScene
         quint8 serializePenWidth(int width);
         int deserializePenWidth(quint8 width);
         QList<QPointF> makeEllipse(const QPointF & center, const QPointF & corner);
+        QPointF putSomeConstraints(const QPointF & initialPoint, const QPointF & point);
 };
 
 #endif // DRAWMAPSCENE_H
