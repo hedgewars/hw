@@ -20,6 +20,7 @@
 #include <QGraphicsPathItem>
 #include <QtEndian>
 #include <QDebug>
+#include <QTransform>
 #include <math.h>
 
 #include "drawmapscene.h"
@@ -63,6 +64,10 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     if(m_currPath && (mouseEvent->buttons() & Qt::LeftButton))
     {
         QPainterPath path = m_currPath->path();
+        QPointF currentPos = mouseEvent->scenePos();
+
+        if(mouseEvent->modifiers() & Qt::ControlModifier)
+            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
 
         switch (m_pathType)
         {
@@ -70,20 +75,19 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
             if(mouseEvent->modifiers() & Qt::ControlModifier)
             {
                 int c = path.elementCount();
-                QPointF pos = mouseEvent->scenePos();
-                path.setElementPositionAt(c - 1, pos.x(), pos.y());
+                path.setElementPositionAt(c - 1, currentPos.x(), currentPos.y());
 
             }
             else
             {
-                path.lineTo(mouseEvent->scenePos());
+                path.lineTo(currentPos);
                 paths.first().points.append(mouseEvent->scenePos().toPoint());
             }
             break;
         case Rectangle: {
             path = QPainterPath();
             QPointF p1 = paths.first().initialPoint;
-            QPointF p2 = mouseEvent->scenePos();
+            QPointF p2 = currentPos;
             path.moveTo(p1);
             path.lineTo(p1.x(), p2.y());
             path.lineTo(p2);
@@ -93,7 +97,7 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
             }
         case Ellipse: {
             path = QPainterPath();
-            QList<QPointF> points = makeEllipse(paths.first().initialPoint, mouseEvent->scenePos());
+            QList<QPointF> points = makeEllipse(paths.first().initialPoint, currentPos);
             path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
             break;
         }
@@ -134,19 +138,24 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (m_currPath)
     {
+        QPointF currentPos = mouseEvent->scenePos();
+
+        if(mouseEvent->modifiers() & Qt::ControlModifier)
+            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
+
         switch (m_pathType)
         {
         case Polyline: {
             QPainterPath path = m_currPath->path();
             path.lineTo(mouseEvent->scenePos());
-            paths.first().points.append(mouseEvent->scenePos().toPoint());
+            paths.first().points.append(currentPos.toPoint());
             m_currPath->setPath(path);
             simplifyLast();
             break;
         }
         case Rectangle: {
             QPoint p1 = paths.first().initialPoint;
-            QPoint p2 = mouseEvent->scenePos().toPoint();
+            QPoint p2 = currentPos.toPoint();
             QList<QPoint> rpoints;
             rpoints << p1 << QPoint(p1.x(), p2.y()) << p2 << QPoint(p2.x(), p1.y()) << p1;
             paths.first().points = rpoints;
@@ -154,7 +163,7 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
         }
         case Ellipse:
             QPoint p1 = paths.first().initialPoint;
-            QPoint p2 = mouseEvent->scenePos().toPoint();
+            QPoint p2 = currentPos.toPoint();
             QList<QPointF> points = makeEllipse(p1, p2);
             QList<QPoint> epoints;
             foreach(const QPointF & p, points)
@@ -457,4 +466,22 @@ QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &c
     }
 
     return l;
+}
+
+QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPointF &point)
+{
+    QPointF vector = point - initialPoint;
+
+    for(int angle = 0; angle < 180; angle += 15)
+    {
+        QTransform transform;
+        transform.rotate(angle);
+
+        QPointF rotated = transform.map(vector);
+
+        if(rotated.x() == 0) return point;
+        if(qAbs(rotated.y() / rotated.x()) < 0.05) return initialPoint + transform.inverted().map(QPointF(rotated.x(), 0));
+    }
+
+    return point;
 }
