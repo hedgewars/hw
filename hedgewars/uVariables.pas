@@ -83,6 +83,8 @@ var
     InputMask       : LongWord;
     GameFlags       : Longword;
     WorldEdge       : TWorldEdge;
+    LeftImpactTimer : LongWord;
+    RightImpactTimer: LongWord;
     TurnTimeLeft    : Longword;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
@@ -2448,6 +2450,8 @@ begin
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
     WorldEdge           := weNone;
+    LeftImpactTimer     := 0;
+    RightImpactTimer    := 0;
     TurnTimeLeft        := 0;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;

@@ -285,7 +285,7 @@ var
     land: word;
 begin
     tX:= Gear^.X;
-    if WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
+    if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
       (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
         begin
         Gear^.X:= tX;

@@ -44,6 +44,7 @@ procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLf
 procedure DrawCircle            (X, Y, Radius, Width: LongInt);
 procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 
+procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
@@ -348,6 +349,11 @@ begin
     DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
 end;
 
+procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
+begin
+DrawLine(X0, Y0, X1, Y1, Width, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF)
+end;
+
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 var VertexBuffer: array [0..1] of TVertex2f;
 begin
@@ -533,7 +539,7 @@ end;
 procedure Tint(r, g, b, a: Byte); inline;
 var nc, tw: Longword;
 begin
-    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+    nc:= (r shl 24) or (g shl 16) or (b shl 8) or a;
 
     if nc = lastTint then
         exit;
@@ -554,6 +560,7 @@ end;
 
 procedure Tint(c: Longword); inline;
 begin
+    if c = lastTint then exit;
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
