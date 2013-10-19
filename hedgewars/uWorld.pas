@@ -85,6 +85,7 @@ var cWaveWidth, cWaveHeight: LongInt;
     AmmoMenuTex     : PTexture;
     HorizontOffset: LongInt;
     cOffsetY: LongInt;
+    WorldEnd, WorldFade : array[0..3] of HwColor4f;
 
 const cStereo_Sky           = 0.0500;
       cStereo_Horizon       = 0.0250;
@@ -1130,7 +1131,7 @@ var i, t, h: LongInt;
     smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
     lw, lh: GLfloat;
-    WorldEnd, WorldFade : array[0..3] of HwColor4f;
+    c1, c2: LongWord; // couple of colours for edges
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
@@ -1241,15 +1242,6 @@ if WorldEdge <> weNone then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
 
-    FillChar(WorldFade, sizeof(WorldFade), 0);
-    WorldFade[0].a:= 255;
-    WorldFade[1].a:= 255;
-    FillChar(WorldEnd, sizeof(WorldEnd), 0);
-    WorldEnd[0].a:= 255;
-    WorldEnd[1].a:= 255;
-    WorldEnd[2].a:= 255;
-    WorldEnd[3].a:= 255;
-
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
@@ -1303,8 +1295,47 @@ if WorldEdge <> weNone then
     glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
     glEnable(GL_TEXTURE_2D);
 
-    DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
-    DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, $FF, $00, $FF, $FF);
+    // I'd still like to have things happen to the border when a wrap or bounce just occurred, based on a timer 
+    if WorldEdge = weBounce then
+        begin
+        // could maybe alternate order of these on a bounce, or maybe drop the outer ones.
+        if LeftImpactTimer mod 2 = 0 then
+            begin
+            c1:= $5454FFFF; c2:= $FFFFFFFF;
+            end
+        else begin
+            c1:= $FFFFFFFF; c2:= $5454FFFF;
+            end;
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 7.0,   c1);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0,   c2);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0,   c1);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 1.0,   c2);
+        if RightImpactTimer mod 2 = 0 then
+            begin
+            c1:= $5454FFFF; c2:= $FFFFFFFF;
+            end
+        else begin
+            c1:= $FFFFFFFF; c2:= $5454FFFF;
+            end;
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 7.0, c1);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, c2);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, c1);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 1.0, c2)
+        end
+    else if WorldEdge = weWrap then
+        begin
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
+        end
+    else
+        begin
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $2E8B5780);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $2E8B5780)
+        end;
+    if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
+    if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
     end;
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
@@ -1971,6 +2002,16 @@ begin
     AMState:= AMHidden;
     isFirstFrame:= true;
     stereoDepth:= stereoDepth; // avoid hint
+
+    FillChar(WorldFade, sizeof(WorldFade), 0);
+    WorldFade[0].a:= 255;
+    WorldFade[1].a:= 255;
+    FillChar(WorldEnd, sizeof(WorldEnd), 0);
+    WorldEnd[0].a:= 255;
+    WorldEnd[1].a:= 255;
+    WorldEnd[2].a:= 255;
+    WorldEnd[3].a:= 255;
+
 end;
 
 procedure freeModule;

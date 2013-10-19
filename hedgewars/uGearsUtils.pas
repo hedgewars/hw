@@ -61,7 +61,6 @@ function MakeHedgehogsStep(Gear: PGear) : boolean;
 
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
-
 implementation
 uses uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
@@ -1229,20 +1228,25 @@ if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
         begin
         if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
              Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius);
+        LeftImpactTimer:= 150;
+        RightImpactTimer:= 150
         end
     else if WorldEdge = weBounce then
         begin
         if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
             begin
+            LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
             Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
             end
         else 
             begin
+            RightImpactTimer:= 333;
             Gear^.dX.isNegative:= true;
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-            end
+            end;
+        PlaySound(sndMelonImpact);
         end
     else if WorldEdge = weSea then
         begin
