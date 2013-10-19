@@ -3249,7 +3249,7 @@ begin
         dec(Gear^.Timer);
 
     fChanged := false;
-    if ((HHGear^.State and gstHHDriven) = 0) or (Gear^.Timer = 0) then
+    if (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (Gear^.Timer = 0) then
         begin
         fChanged := true;
         if Gear^.Angle > 2048 then
@@ -3294,7 +3294,7 @@ begin
     else
         AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
-    if ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
+    if (HHGear <> nil) and ((HHGear^.Message and gmAttack) <> 0) and (Gear^.Health <> 0) then
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtAirBomb, 0, Gear^.dX * _0_5, Gear^.dY *
@@ -3302,7 +3302,7 @@ begin
         dec(Gear^.Health)
         end;
 
-    if ((HHGear^.Message and gmLJump) <> 0) and ((Gear^.State and gsttmpFlag) = 0) then
+    if (HHGear <> nil) and ((HHGear^.Message and gmLJump) <> 0) and ((Gear^.State and gsttmpFlag) = 0) then
         begin
         Gear^.State := Gear^.State or gsttmpFlag;
         PauseMusic;
