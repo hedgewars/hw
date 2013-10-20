@@ -1246,7 +1246,8 @@ if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
             Gear^.dX.isNegative:= true;
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
             end;
-        PlaySound(sndMelonImpact);
+        if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+            PlaySound(sndMelonImpact)
         end
     else if WorldEdge = weSea then
         begin
