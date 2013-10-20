@@ -700,6 +700,13 @@ if gun then
         draw:= true;
     xx:= hwRound(Gear^.X);
     yy:= hwRound(Gear^.Y);
+    if draw and (WorldEdge = weWrap) and ((xx < leftX+3) or (xx > rightX-3)) then
+        begin
+        if xx < leftX+3 then 
+             xx:= rightX-3
+        else xx:= leftX+3;
+        Gear^.X:= int2hwFloat(xx)
+        end
     end
 else if GameTicks and $7 = 0 then
     begin
