@@ -1148,7 +1148,7 @@ begin
         Gear^.Y := Gear^.Y + Gear^.dY;
         tX:= Gear^.X;
         tY:= Gear^.Y;
-        if WorldWrap(Gear) then
+        if (Gear^.PortalCounter < 30) and WorldWrap(Gear) then
             begin
             cX:= Gear^.X;
             cY:= Gear^.Y;
