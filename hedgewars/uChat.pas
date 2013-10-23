@@ -41,7 +41,7 @@ type TChatLine = record
     Width: LongInt;
     s: shortstring;
     end;
-    TChatCmd = (quit, pause, finish, fullscreen);
+    TChatCmd = (quit, pause, finish, showhistory, fullscreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -73,6 +73,7 @@ const
             (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
             (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
             (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
+            (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
 
