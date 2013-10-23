@@ -420,8 +420,10 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
-        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) and
-            not(isInMultiShoot and (CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])) then
+        if (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
+            or ((CurAmmoGear = nil) or ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking) <> 0)))
+            and not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)) then
+            //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
                 begin
                 if (TurnTimeLeft = 5000)
                 and (cHedgehogTurnTime >= 10000)
