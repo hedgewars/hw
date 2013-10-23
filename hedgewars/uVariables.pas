@@ -844,7 +844,8 @@ var
             Probability: 0;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
-                          ammoprop_NeedUpDown;
+                          ammoprop_NeedUpDown or
+                          ammoprop_DoesntStopTimerInMultiShoot;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -925,7 +926,8 @@ var
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
                           ammoprop_AltAttack or
-                          ammoprop_NeedUpDown;
+                          ammoprop_NeedUpDown or
+                          ammoprop_DoesntStopTimerWhileAttacking;
                     Count: 5;
                     NumPerTurn: 0;
                     Timer: 0;
@@ -977,7 +979,7 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_NeedUpDown;
+            Ammo: (Propz: ammoprop_NeedUpDown or ammoprop_DoesntStopTimerInMultiShoot;
                 Count: 3;
                 NumPerTurn: 3;
                 Timer: 0;
@@ -1739,9 +1741,10 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_NeedUpDown or 
+            Ammo: (Propz: ammoprop_NeedUpDown or
                     ammoprop_OscAim or
-                    ammoprop_NoMoveAfter;
+                    ammoprop_NoMoveAfter or
+                    ammoprop_DoesntStopTimerInMultiShoot;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;
