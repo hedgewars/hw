@@ -409,6 +409,8 @@ var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin
+    if (TurnTimeLeft > 0) then dec(TurnTimeLeft);
+
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
