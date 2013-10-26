@@ -116,7 +116,7 @@ with HHGear^.Hedgehog^ do
     // Try again in the next slot
     if CurAmmoType = prevAmmo then
         begin
-        if slot >= cMaxSlotIndex then slot:= 0 else inc(slot);
+        if slot < cMaxSlotIndex then inc(slot);
         HHGear^.MsgParam:= slot;
         ChangeAmmo(HHGear)
         end
