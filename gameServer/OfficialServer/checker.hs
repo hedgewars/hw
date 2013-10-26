@@ -171,7 +171,7 @@ main = withSocketsDo $ do
 
     Right (login, password) <- runErrorT $ do
         d <- liftIO $ getHomeDirectory
-        conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/hedgewars.ini"
+        conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/settings.ini"
         l <- CF.get conf "net" "nick"
         p <- CF.get conf "net" "passwordhash"
         return (B.pack l, B.pack p)
