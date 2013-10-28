@@ -19,7 +19,7 @@ if(APPLE AND
     message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
 endif()
 
-find_package(SDL REQUIRED)       #video in SDLInteraction
+find_package(SDL1or2)            #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
 
 if(${FFMPEG_FOUND})

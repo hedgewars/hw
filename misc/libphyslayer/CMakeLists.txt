@@ -1,5 +1,5 @@
 
-find_package(SDL REQUIRED)
+find_package(SDL1or2)
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})

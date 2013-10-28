@@ -1,4 +1,4 @@
-find_package(SDL)
+find_package(SDL1or2)
 find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
@@ -157,6 +157,10 @@ check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
 if(HAVE_IMGINIT)
     add_definitions(-dSDL_IMAGE_NEWER)
 endif(HAVE_IMGINIT)
+
+if(NOT (SDL_VERSION VERSION_LESS 2.0))
+    add_definitions(-dSDL2)
+endif()
 
 #needs to be last
 add_definitions(-dDEBUGFILE)
