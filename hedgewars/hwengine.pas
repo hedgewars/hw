@@ -190,7 +190,7 @@ begin
                         cNewScreenHeight:= max(2 * (event.window.data2 div 2), cMinScreenHeight);
                         cScreenResizeDelay:= RealTicks + 500{$IFDEF IPHONEOS}div 2{$ENDIF};
                     end;
-
+{$IFDEF USE_TOUCH_INTERFACE}
                 SDL_FINGERMOTION:
                     onTouchMotion(event.tfinger.x, event.tfinger.y, event.tfinger.dx, event.tfinger.dy, event.tfinger.fingerId);
 
@@ -199,6 +199,7 @@ begin
 
                 SDL_FINGERUP:
                     onTouchUp(event.tfinger.x, event.tfinger.y, event.tfinger.fingerId);
+{$ENDIF}
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then

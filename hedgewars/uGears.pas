@@ -48,7 +48,8 @@ procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
 
 implementation
-uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL2}uTouch,{$ENDIF}
+uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
+    {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
@@ -172,7 +173,7 @@ if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 if GameTicks = NewTurnTick then
     begin
     ScriptCall('onNewTurn');
-{$IFDEF SDL2}
+{$IFDEF USE_TOUCH_INTERFACE}
     uTouch.NewTurnBeginning();
 {$ENDIF}
     end;
