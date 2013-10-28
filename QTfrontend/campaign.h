@@ -20,12 +20,16 @@
 #define CAMPAIGN_H
 
 #include <QString>
-#include <QStringList>
 
-QStringList getCampMissionList(QString & campaign);
-unsigned int getCampProgress(QString & teamName, QString & campName);
-QString getCampaignScript(QString campaign, unsigned int mNum);
-QString getCampaignImage(QString campaign, unsigned int mNum);
-QString getCampaignMissionName(QString campaign, unsigned int mNum);
+class MissionInfo
+{
+	public:
+		QString name;
+		QString description;
+		QString script;
+		QString image;
+};
+
+QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);
 
 #endif

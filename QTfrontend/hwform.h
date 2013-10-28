@@ -34,6 +34,7 @@
 #include "ui_hwform.h"
 #include "SDLInteraction.h"
 #include "bgwidget.h"
+#include "campaign.h"
 
 #ifdef __APPLE__
 #include "InstallController.h"
@@ -195,8 +196,8 @@ class HWForm : public QMainWindow
         AmmoSchemeModel * ammoSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
-        QString previousTeamName;
-        QStringList campaignMissionDescriptions;
+        QString previousTeamName;     
+        QList<MissionInfo> campaignMissionInfo;
         QTime eggTimer;
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;
