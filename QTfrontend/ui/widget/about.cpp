@@ -28,8 +28,13 @@
 #include <QDebug>
 #include "hwconsts.h"
 #include "SDLInteraction.h"
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_version.h"
+#else
 #include "SDL.h"
 #include "SDL_version.h"
+#endif
 #include "physfs.h"
 
 #ifdef VIDEOREC
