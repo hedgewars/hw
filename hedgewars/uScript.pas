@@ -1292,7 +1292,7 @@ var statInfo : TStatInfoType;
 var i : LongInt;
 var color : shortstring;
 begin
-	statInfo := TStatInfoType(GetEnumValue(TypeInfo(TStatInfoType),lua_tostring(L, 1)));
+	statInfo := TStatInfoType(lua_tointeger(L, 1));
 	if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills) 
 			and (statInfo <> siClanHealth)) then
         begin
@@ -2316,6 +2316,7 @@ procedure initModule;
 var at : TGearType;
     vgt: TVisualGearType;
     am : TAmmoType;
+    si : TStatInfoType;
     st : TSound;
     he : THogEffect;
     cg : TCapGroup;
@@ -2398,6 +2399,9 @@ for st:= Low(TSound) to High(TSound) do
 // register ammo types
 for am:= Low(TAmmoType) to High(TAmmoType) do
     ScriptSetInteger(EnumToStr(am), ord(am));
+
+for si:= Low(TStatInfoType) to High(TStatInfoType) do
+    ScriptSetInteger(EnumToStr(si), ord(si));
 
 for he:= Low(THogEffect) to High(THogEffect) do
     ScriptSetInteger(EnumToStr(he), ord(he));
