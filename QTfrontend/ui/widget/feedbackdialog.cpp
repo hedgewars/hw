@@ -283,7 +283,7 @@ void FeedbackDialog::GenerateSpecs()
     delete process;
 #endif
 
-#if (!defined(Q_OS_MAC) && defined(__i386__)) || defined(__x86_64__)
+#if (defined(Q_OS_WIN) && defined(__i386__)) || defined(__x86_64__)
     // cpu info
     quint32 registers[4];
     quint32 i;
