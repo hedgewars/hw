@@ -728,15 +728,17 @@ if TeamsCount > 0 then
             begin
             FreeTexture(NameTagTex);
             FreeTexture(GraveTex);
-            FreeTexture(HealthTex);
             FreeTexture(AIKillsTex);
             FreeTexture(FlagTex);
             end;
 
         Dispose(TeamsArray[i]);
     end;
-for i:= 0 to Pred(ClansCount) do
-    Dispose(ClansArray[i]);
+    for i:= 0 to Pred(ClansCount) do
+        begin
+        FreeTexture(ClansArray[i]^.HealthTex);
+        Dispose(ClansArray[i]);
+        end
     end;
 TeamsCount:= 0;
 ClansCount:= 0;

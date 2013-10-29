@@ -29,6 +29,7 @@ procedure freeModule;
 procedure StoreLoad(reload: boolean);
 procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
+function makeHealthBarTexture(w, h, Color: Longword): PTexture;
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -119,11 +120,36 @@ begin
     SDL_FreeSurface(tmpsurf)
 end;
 
+function makeHealthBarTexture(w, h, Color: Longword): PTexture;
+var
+    rr: TSDL_Rect;
+    texsurf: PSDL_Surface;
+begin
+    rr.x:= 0;
+    rr.y:= 0;
+    rr.w:= w;
+    rr.h:= h;
+
+    texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
+    TryDo(texsurf <> nil, errmsgCreateSurface, true);
+    TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+    DrawRoundRect(@rr, cWhiteColor, cNearBlackColor, texsurf, true);
+
+    rr.x:= 2;
+    rr.y:= 2;
+    rr.w:= w - 4;
+    rr.h:= h - 4;
+
+    DrawRoundRect(@rr, Color, Color, texsurf, false);
+    makeHealthBarTexture:= Surface2Tex(texsurf, false);
+    SDL_FreeSurface(texsurf);
+end;
 
 procedure WriteNames(Font: THWFont);
 var t: LongInt;
     i, maxLevel: LongInt;
-    r, rr: TSDL_Rect;
+    r: TSDL_Rect;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
@@ -136,20 +162,6 @@ for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
         NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
-
-        r.w:= cTeamHealthWidth + 5;
-        r.h:= NameTagTex^.h;
-
-        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-        TryDo(texsurf <> nil, errmsgCreateSurface, true);
-        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-
-        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-        rr:= r;
-        inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-        DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-        HealthTex:= Surface2Tex(texsurf, false);
-        SDL_FreeSurface(texsurf);
 
         r.x:= 0;
         r.y:= 0;
@@ -246,7 +258,15 @@ for t:= 0 to Pred(TeamsCount) do
         SDL_FreeSurface(iconsurf);
         iconsurf:= nil;
         end;
+
+
+for t:= 0 to Pred(ClansCount) do
+    with ClansArray[t]^ do
+        HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, Teams[0]^.NameTagTex^.h, Color);
+
+GenericHealthTexture:= makeHealthBarTexture(cTeamHealthWidth + 5, TeamsArray[0]^.NameTagTex^.h, cWhiteColor)
 end;
+
 
 procedure InitHealth;
 var i, t: LongInt;
@@ -467,7 +487,7 @@ FreeAndNilTexture(SyncTexture);
 FreeAndNilTexture(ConfirmTexture);
 FreeAndNilTexture(ropeIconTex);
 FreeAndNilTexture(HHTexture);
-
+FreeAndNilTexture(GenericHealthTexture);
 // free all ammo name textures
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     FreeAndNilTexture(Ammoz[ai].NameTex);
@@ -479,6 +499,12 @@ for i:= Low(CountTexz) to High(CountTexz) do
     CountTexz[i]:= nil
     end;
 
+    for t:= 0 to Pred(ClansCount) do
+        begin
+        if ClansArray[t] <> nil then
+            FreeAndNilTexture(ClansArray[t]^.HealthTex);
+        end;
+
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
         begin
@@ -486,7 +512,6 @@ for i:= Low(CountTexz) to High(CountTexz) do
             begin
             FreeAndNilTexture(TeamsArray[t]^.NameTagTex);
             FreeAndNilTexture(TeamsArray[t]^.GraveTex);
-            FreeAndNilTexture(TeamsArray[t]^.HealthTex);
             FreeAndNilTexture(TeamsArray[t]^.AIKillsTex);
             FreeAndNilTexture(TeamsArray[t]^.FlagTex);
 

@@ -129,8 +129,9 @@ var
     LAND_HEIGHT      : LongInt;
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
-    
+
     CrosshairTexture : PTexture;
+    GenericHealthTexture : PTexture;
 
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;

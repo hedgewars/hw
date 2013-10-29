@@ -781,8 +781,6 @@ var clan : PClan;
     team : PTeam;
     hh   : THedgehog;
     i, j : LongInt;
-    r, rr: TSDL_Rect;
-    texsurf: PSDL_Surface;
 begin
     if lua_gettop(L) <> 2 then
         LuaError('Lua: Wrong number of parameters passed to SetClanColor!')
@@ -790,6 +788,7 @@ begin
         begin
         clan := ClansArray[lua_tointeger(L, 1)];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
+
         for i:= 0 to Pred(clan^.TeamsNumber) do
             begin
             team:= clan^.Teams[i];
@@ -805,24 +804,11 @@ begin
                 end;
             FreeTexture(team^.NameTagTex);
             team^.NameTagTex:= RenderStringTex(clan^.Teams[i]^.TeamName, clan^.Color, fnt16);
-            r.w:= cTeamHealthWidth + 5;
-            r.h:= team^.NameTagTex^.h;
+            end;
 
-            texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-            TryDo(texsurf <> nil, errmsgCreateSurface, true);
-            TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-
-            DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-            rr:= r;
-            inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-            DrawRoundRect(@rr, clan^.Color, clan^.Color, texsurf, false);
-
-            FreeTexture(team^.HealthTex);
-            team^.HealthTex:= Surface2Tex(texsurf, false);
-            SDL_FreeSurface(texsurf);
-            MakeCrossHairs
-            end
+        clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
+
     lc_setclancolor:= 0
 end;
 
@@ -1898,7 +1884,6 @@ end;
 
 
 function lc_declareachievement(L : Plua_State) : LongInt; Cdecl;
-var gear: PGear;
 begin
     if lua_gettop(L) <> 4 then
         LuaError('Lua: Wrong number of parameters passed to DeclareAchievement!')

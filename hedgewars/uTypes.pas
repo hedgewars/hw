@@ -382,7 +382,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             CurrHedgehog: LongWord;
             NameTagTex: PTexture;
             GraveTex,
-            HealthTex,
             AIKillsTex,
             FlagTex: PTexture;
             Flag: shortstring;
@@ -403,6 +402,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TClan = record
             Color: Longword;
             Teams: array[0..Pred(cMaxTeams)] of PTeam;
+            HealthTex: PTexture;
             TeamsNumber: Longword;
             TagTeamIndex: Longword;
             CurrTeam: LongWord;
