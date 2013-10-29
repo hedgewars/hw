@@ -551,7 +551,7 @@ for i:= 0 to Pred(TeamsCount) do
         with thexchar[i] do
           if team^.TeamHealth > 0 then
             begin
-            dec(t, team^.HealthTex^.h + 2);
+            dec(t, team^.Clan^.HealthTex^.h + 2);
             ny:= t;
             dy:= dy - ny
             end;

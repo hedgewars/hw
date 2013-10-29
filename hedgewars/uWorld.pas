@@ -1234,6 +1234,7 @@ procedure RenderTeamsHealth;
 var t, i, h, smallScreenOffset : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
+    htex: PTexture;
 begin
 if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
     begin
@@ -1251,7 +1252,12 @@ for t:= 0 to Pred(TeamsCount) do
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
+            begin
             Tint(Clan^.Color shl 8 or $FF);
+            htex:= GenericHealthTexture
+            end
+        else
+            htex:= Clan^.HealthTex;
 
          // draw name
         DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
@@ -1263,13 +1269,13 @@ for t:= 0 to Pred(TeamsCount) do
         r.x:= 0;
         r.y:= 0;
         r.w:= 2 + TeamHealthBarWidth;
-        r.h:= HealthTex^.h;
-        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        r.h:= htex^.h;
+        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
         // draw health bars right border
         inc(r.x, cTeamHealthWidth + 2);
         r.w:= 3;
-        DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+        DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
         if not hasGone then
             for i:= 0 to cMaxHHIndex do
