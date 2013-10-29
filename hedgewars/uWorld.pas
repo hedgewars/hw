@@ -1121,17 +1121,206 @@ begin
     stereoDepth:= 0;
 {$ENDIF}
 end;
- 
+
+
+procedure RenderWorldEdge(Lag: Longword);
+var
+    VertexBuffer: array [0..3] of TVertex2f;
+    c1, c2: LongWord; // couple of colours for edges
+begin
+if WorldEdge <> weNone then
+    begin
+(* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
+
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glPushMatrix;
+    glTranslatef(WorldDx, WorldDy, 0);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
+
+    VertexBuffer[0].X:= leftX-20;
+    VertexBuffer[0].Y:= -3000;
+    VertexBuffer[1].X:= leftX-20;
+    VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
+    VertexBuffer[2].X:= leftX+30;
+    VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
+    VertexBuffer[3].X:= leftX+30;
+    VertexBuffer[3].Y:= -3000;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    VertexBuffer[0].X:= rightX+20;
+    VertexBuffer[1].X:= rightX+20;
+    VertexBuffer[2].X:= rightX-30;
+    VertexBuffer[3].X:= rightX-30;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldEnd[0]);
+
+    VertexBuffer[0].X:= -5000;
+    VertexBuffer[1].X:= -5000;
+    VertexBuffer[2].X:= leftX-20;
+    VertexBuffer[3].X:= leftX-20;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    VertexBuffer[0].X:= rightX+5000;
+    VertexBuffer[1].X:= rightX+5000;
+    VertexBuffer[2].X:= rightX+20;
+    VertexBuffer[3].X:= rightX+20;
+
+    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+
+    glPopMatrix;
+    glDisableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
+    glEnable(GL_TEXTURE_2D);
+
+    // I'd still like to have things happen to the border when a wrap or bounce just occurred, based on a timer 
+    if WorldEdge = weBounce then
+        begin
+        // could maybe alternate order of these on a bounce, or maybe drop the outer ones.
+        if LeftImpactTimer mod 2 = 0 then
+            begin
+            c1:= $5454FFFF; c2:= $FFFFFFFF;
+            end
+        else begin
+            c1:= $FFFFFFFF; c2:= $5454FFFF;
+            end;
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 7.0,   c1);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0,   c2);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0,   c1);
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 1.0,   c2);
+        if RightImpactTimer mod 2 = 0 then
+            begin
+            c1:= $5454FFFF; c2:= $FFFFFFFF;
+            end
+        else begin
+            c1:= $FFFFFFFF; c2:= $5454FFFF;
+            end;
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 7.0, c1);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, c2);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, c1);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 1.0, c2)
+        end
+    else if WorldEdge = weWrap then
+        begin
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
+        end
+    else
+        begin
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $2E8B5780);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $2E8B5780)
+        end;
+    if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
+    if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
+    end;
+end;
+
+
+procedure RenderTeamsHealth;
+var t, i, h, smallScreenOffset : LongInt;
+    r: TSDL_Rect;
+    highlight: boolean;
+begin
+if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
+    begin
+    SetScale(1.5);
+    smallScreenOffset:= cScreenHeight div 6;
+    if TeamsCount * 100 > Longword(cScreenHeight) then
+        Tint($FF,$FF,$FF,$80);
+    end
+else smallScreenOffset:= 0;
+for t:= 0 to Pred(TeamsCount) do
+    with TeamsArray[t]^ do
+      if TeamHealth > 0 then
+        begin
+        h:= 0;
+        highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
+
+        if highlight then
+            Tint(Clan^.Color shl 8 or $FF);
+
+         // draw name
+        DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
+
+        // draw flag
+        DrawTexture(-14, cScreenHeight + DrawHealthY + smallScreenOffset, FlagTex);
+
+        // draw health bar
+        r.x:= 0;
+        r.y:= 0;
+        r.w:= 2 + TeamHealthBarWidth;
+        r.h:= HealthTex^.h;
+        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+
+        // draw health bars right border
+        inc(r.x, cTeamHealthWidth + 2);
+        r.w:= 3;
+        DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
+
+        if not hasGone then
+            for i:= 0 to cMaxHHIndex do
+                if Hedgehogs[i].Gear <> nil then
+                    begin
+                    inc(h,Hedgehogs[i].Gear^.Health);
+                    if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                    end;
+
+        // draw ai kill counter for gfAISurvival
+        if (GameFlags and gfAISurvival) <> 0 then
+            begin
+            DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, AIKillsTex);
+            end;
+
+        // if highlighted, draw flag and other contents again to keep their colors
+        // this approach should be faster than drawing all borders one by one tinted or not
+        if highlight then
+            begin
+            if TeamsCount * 100 > Longword(cScreenHeight) then
+                Tint($FF,$FF,$FF,$80)
+            else Tint($FF, $FF, $FF, $FF);
+
+            // draw name
+            r.x:= 2;
+            r.y:= 2;
+            r.w:= NameTagTex^.w - 4;
+            r.h:= NameTagTex^.h - 4;
+            DrawTextureFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
+            // draw flag
+            r.w:= 22;
+            r.h:= 15;
+            DrawTextureFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
+            end;
+        end;
+if smallScreenOffset <> 0 then
+    begin
+    SetScale(cDefaultZoomLevel);
+    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
+        Tint($FF,$FF,$FF,$FF);
+    end;
+end;
+
+
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
-var i, t, h: LongInt;
+var i, t: LongInt;
     r: TSDL_Rect;
     tdx, tdy: Double;
     s: shortstring;
-    highlight: Boolean;
-    smallScreenOffset, offsetX, offsetY, screenBottom: LongInt;
+    offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    lw, lh: GLfloat;
-    c1, c2: LongWord; // couple of colours for edges
 begin
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
@@ -1238,105 +1427,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     end;
 {$WARNINGS ON}
 
-if WorldEdge <> weNone then
-    begin
-(* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
-
-    glDisable(GL_TEXTURE_2D);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-
-    glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
-
-    VertexBuffer[0].X:= leftX-20;
-    VertexBuffer[0].Y:= -3000;
-    VertexBuffer[1].X:= leftX-20;
-    VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[2].X:= leftX+30;
-    VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
-    VertexBuffer[3].X:= leftX+30;
-    VertexBuffer[3].Y:= -3000;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+20;
-    VertexBuffer[1].X:= rightX+20;
-    VertexBuffer[2].X:= rightX-30;
-    VertexBuffer[3].X:= rightX-30;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldEnd[0]);
-
-    VertexBuffer[0].X:= -5000;
-    VertexBuffer[1].X:= -5000;
-    VertexBuffer[2].X:= leftX-20;
-    VertexBuffer[3].X:= leftX-20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    VertexBuffer[0].X:= rightX+5000;
-    VertexBuffer[1].X:= rightX+5000;
-    VertexBuffer[2].X:= rightX+20;
-    VertexBuffer[3].X:= rightX+20;
-
-    glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-    glPopMatrix;
-    glDisableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    glColor4ub($FF, $FF, $FF, $FF); // must not be Tint() as color array seems to stay active and color reset is required
-    glEnable(GL_TEXTURE_2D);
-
-    // I'd still like to have things happen to the border when a wrap or bounce just occurred, based on a timer 
-    if WorldEdge = weBounce then
-        begin
-        // could maybe alternate order of these on a bounce, or maybe drop the outer ones.
-        if LeftImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 7.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0,   c2);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 3.0,   c1);
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 1.0,   c2);
-        if RightImpactTimer mod 2 = 0 then
-            begin
-            c1:= $5454FFFF; c2:= $FFFFFFFF;
-            end
-        else begin
-            c1:= $FFFFFFFF; c2:= $5454FFFF;
-            end;
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 7.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, c2);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 3.0, c1);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 1.0, c2)
-        end
-    else if WorldEdge = weWrap then
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
-        end
-    else
-        begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $2E8B5780);
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $2E8B5780)
-        end;
-    if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
-    if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
-    end;
+RenderWorldEdge(Lag);
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
@@ -1388,100 +1479,7 @@ DrawScreenWidget(@pauseButton);
 DrawScreenWidget(@utilityWidget);
 {$ENDIF}
 
-// Teams Healths
-if TeamsCount * 20 > Longword(cScreenHeight) div 7 then  // take up less screen on small displays
-    begin
-    SetScale(1.5);
-    smallScreenOffset:= cScreenHeight div 6;
-    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
-        Tint($FF,$FF,$FF,$80);
-    end
-else smallScreenOffset:= 0;
-for t:= 0 to Pred(TeamsCount) do
-    with TeamsArray[t]^ do
-      if TeamHealth > 0 then
-        begin
-        h:= 0;
-        highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
-
-        if highlight then
-            Tint(Clan^.Color shl 8 or $FF);
-
-         // draw name
-        DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
-
-        // draw flag
-        DrawTexture(-14, cScreenHeight + DrawHealthY + smallScreenOffset, FlagTex);
-
-        // draw health bar
-        r.x:= 0;
-        r.y:= 0;
-        r.w:= 2 + TeamHealthBarWidth;
-        r.h:= HealthTex^.h;
-        DrawTextureFromRect(14, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
-
-        // draw health bars right border
-        inc(r.x, cTeamHealthWidth + 2);
-        r.w:= 3;
-        DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, HealthTex);
-
-        if not highlight and (not hasGone) then
-            for i:= 0 to cMaxHHIndex do
-                if Hedgehogs[i].Gear <> nil then
-                    begin
-                    inc(h,Hedgehogs[i].Gear^.Health);
-                    if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
-                    end;
-
-        // draw ai kill counter for gfAISurvival
-        if (GameFlags and gfAISurvival) <> 0 then
-            begin
-            DrawTexture(TeamHealthBarWidth + 22, cScreenHeight + DrawHealthY + smallScreenOffset, AIKillsTex);
-            end;
-
-        // if highlighted, draw flag and other contents again to keep their colors
-        // this approach should be faster than drawing all borders one by one tinted or not
-        if highlight then
-            begin
-            if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
-                Tint($FF,$FF,$FF,$80)
-            else Tint($FF, $FF, $FF, $FF);
-
-            // draw name
-            r.x:= 2;
-            r.y:= 2;
-            r.w:= NameTagTex^.w - 4;
-            r.h:= NameTagTex^.h - 4;
-            DrawTextureFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
-            // draw flag
-            r.w:= 22;
-            r.h:= 15;
-            DrawTextureFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
-            // draw health bar
-            r.w:= TeamHealthBarWidth + 1;
-            r.h:= HealthTex^.h - 4;
-            DrawTextureFromRect(15, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, HealthTex);
-            if not hasGone and (TeamHealth > 1) then
-                begin
-                Tint(Clan^.Color shl 8 or $FF);
-                for i:= 0 to cMaxHHIndex do
-                    if Hedgehogs[i].Gear <> nil then
-                        begin
-                        inc(h,Hedgehogs[i].Gear^.Health);
-                        if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
-                        end;
-                if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
-                    Tint($FF,$FF,$FF,$80)
-                else Tint($FF, $FF, $FF, $FF);
-                end;
-            end;
-        end;
-if smallScreenOffset <> 0 then
-    begin
-    SetScale(cDefaultZoomLevel);
-    if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
-        Tint($FF,$FF,$FF,$FF);
-    end;
+RenderTeamsHealth;
 
 // Lag alert
 if isInLag then
