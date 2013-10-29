@@ -381,7 +381,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
             CurrHedgehog: LongWord;
             NameTagTex: PTexture;
-            CrosshairTex,
             GraveTex,
             HealthTex,
             AIKillsTex,
