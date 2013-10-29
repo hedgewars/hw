@@ -110,43 +110,13 @@ WriteInRect:= finalRect
 end;
 
 procedure MakeCrossHairs;
-var t: LongInt;
-    tmpsurf, texsurf: PSDL_Surface;
-    Color, i: Longword;
+var tmpsurf: PSDL_Surface;
 begin
-tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
+    tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
 
-for t:= 0 to Pred(TeamsCount) do
-    with TeamsArray[t]^ do
-    begin
-    texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
-    TryDo(texsurf <> nil, errmsgCreateSurface, true);
+    CrosshairTexture:= Surface2Tex(tmpsurf, false);
 
-    Color:= Clan^.Color;
-    Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
-    SDL_FillRect(texsurf, nil, Color);
-
-    SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
-
-    TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
-
-    if SDL_MustLock(texsurf) then
-        SDLTry(SDL_LockSurface(texsurf) >= 0, true);
-
-    // make black pixel be alpha-transparent
-    for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-        if PLongwordArray(texsurf^.pixels)^[i] = AMask then
-            PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
-
-    if SDL_MustLock(texsurf) then
-        SDL_UnlockSurface(texsurf);
-
-    FreeTexture(CrosshairTex);
-    CrosshairTex:= Surface2Tex(texsurf, false);
-    SDL_FreeSurface(texsurf)
-    end;
-
-SDL_FreeSurface(tmpsurf)
+    SDL_FreeSurface(tmpsurf)
 end;
 
 
@@ -479,8 +449,8 @@ var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
     begin
-    FreeTexture(SpritesData[ii].Texture);
-    SpritesData[ii].Texture:= nil;
+    FreeAndNilTexture(SpritesData[ii].Texture);
+
     if (SpritesData[ii].Surface <> nil) and (not reload) then
         begin
         SDL_FreeSurface(SpritesData[ii].Surface);
@@ -490,30 +460,22 @@ for ii:= Low(TSprite) to High(TSprite) do
 SDL_FreeSurface(MissionIcons);
 
 // free the textures declared in uVariables
-FreeTexture(WeaponTooltipTex);
-WeaponTooltipTex:= nil;
-FreeTexture(PauseTexture);
-PauseTexture:= nil;
-FreeTexture(SyncTexture);
-SyncTexture:= nil;
-FreeTexture(ConfirmTexture);
-ConfirmTexture:= nil;
-FreeTexture(ropeIconTex);
-ropeIconTex:= nil;
-FreeTexture(HHTexture);
-HHTexture:= nil;
+FreeAndNilTexture(CrosshairTexture);
+FreeAndNilTexture(WeaponTooltipTex);
+FreeAndNilTexture(PauseTexture);
+FreeAndNilTexture(SyncTexture);
+FreeAndNilTexture(ConfirmTexture);
+FreeAndNilTexture(ropeIconTex);
+FreeAndNilTexture(HHTexture);
 
 // free all ammo name textures
 for ai:= Low(TAmmoType) to High(TAmmoType) do
-    begin
-    FreeTexture(Ammoz[ai].NameTex);
-    Ammoz[ai].NameTex:= nil
-    end;
+    FreeAndNilTexture(Ammoz[ai].NameTex);
 
 // free all count textures
 for i:= Low(CountTexz) to High(CountTexz) do
     begin
-    FreeTexture(CountTexz[i]);
+    FreeAndNilTexture(CountTexz[i]);
     CountTexz[i]:= nil
     end;
 
@@ -522,26 +484,17 @@ for i:= Low(CountTexz) to High(CountTexz) do
         begin
         if TeamsArray[t] <> nil then
             begin
-            FreeTexture(TeamsArray[t]^.NameTagTex);
-            TeamsArray[t]^.NameTagTex:= nil;
-            FreeTexture(TeamsArray[t]^.CrosshairTex);
-            TeamsArray[t]^.CrosshairTex:= nil;
-            FreeTexture(TeamsArray[t]^.GraveTex);
-            TeamsArray[t]^.GraveTex:= nil;
-            FreeTexture(TeamsArray[t]^.HealthTex);
-            TeamsArray[t]^.HealthTex:= nil;
-            FreeTexture(TeamsArray[t]^.AIKillsTex);
-            TeamsArray[t]^.AIKillsTex:= nil;
-            FreeTexture(TeamsArray[t]^.FlagTex);
-            TeamsArray[t]^.FlagTex:= nil;
+            FreeAndNilTexture(TeamsArray[t]^.NameTagTex);
+            FreeAndNilTexture(TeamsArray[t]^.GraveTex);
+            FreeAndNilTexture(TeamsArray[t]^.HealthTex);
+            FreeAndNilTexture(TeamsArray[t]^.AIKillsTex);
+            FreeAndNilTexture(TeamsArray[t]^.FlagTex);
+
             for i:= 0 to cMaxHHIndex do
                 begin
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
-                TeamsArray[t]^.Hedgehogs[i].NameTagTex:= nil;
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
-                TeamsArray[t]^.Hedgehogs[i].HealthTagTex:= nil;
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
-                TeamsArray[t]^.Hedgehogs[i].HatTex:= nil;
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
                 end;
             end;
         end;

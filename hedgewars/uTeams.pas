@@ -718,22 +718,21 @@ if TeamsCount > 0 then
                 begin
                 if GearHidden <> nil then
                     Dispose(GearHidden);
-                    
+
                 FreeTexture(NameTagTex);
                 FreeTexture(HealthTagTex);
                 FreeTexture(HatTex);
                 end;
-                
+
         with TeamsArray[i]^ do
             begin
             FreeTexture(NameTagTex);
-            FreeTexture(CrosshairTex);
             FreeTexture(GraveTex);
             FreeTexture(HealthTex);
             FreeTexture(AIKillsTex);
             FreeTexture(FlagTex);
             end;
-        
+
         Dispose(TeamsArray[i]);
     end;
 for i:= 0 to Pred(ClansCount) do

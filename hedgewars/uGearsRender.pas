@@ -362,10 +362,11 @@ begin
             CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
             CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
 
-
-            DrawTextureRotated(HH^.Team^.CrosshairTex,
+            Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
+            DrawTextureRotated(CrosshairTexture,
                     12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
                     sign * (Gear^.Angle * 180.0) / cMaxAngle);
+            Tint($FFFFFFFF);
             end;
         hx:= ox + 8 * sign;
         hy:= oy - 2;

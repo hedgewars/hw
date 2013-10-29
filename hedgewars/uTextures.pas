@@ -26,6 +26,7 @@ function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure FreeTexture(tex: PTexture);
+procedure FreeAndNilTexture(var tex: PTexture);
 
 procedure initModule;
 procedure freeModule;
@@ -224,6 +225,12 @@ if tex <> nil then
     glDeleteTextures(1, @tex^.id);
     Dispose(tex);
     end
+end;
+
+procedure FreeAndNilTexture(var tex: PTexture);
+begin
+    FreeTexture(tex);
+    tex:= nil
 end;
 
 procedure initModule;
