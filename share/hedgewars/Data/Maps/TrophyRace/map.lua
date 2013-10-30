@@ -73,7 +73,7 @@ function onAmmoStoreInit()
 end
 
 function onGameTick20()
-    if startTime = 0 and TurnTimeLeft < maxtime then
+    if startTime == 0 and TurnTimeLeft < maxtime then
         startTime = GameTime
     end
     if CurrentHedgehog ~= nil and TurnTimeLeft <= 20 and TurnTimeLeft > 0 then
