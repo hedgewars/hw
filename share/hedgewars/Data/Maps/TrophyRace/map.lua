@@ -72,17 +72,17 @@ function onAmmoStoreInit()
     SetAmmo(amRope, 9, 2, 0)
 end
 
-function onGameTick20()
+function onGameTick()
     if startTime == 0 and TurnTimeLeft < maxtime then
         startTime = GameTime
     end
-    if CurrentHedgehog ~= nil and TurnTimeLeft <= 20 and TurnTimeLeft > 0 then
+    if CurrentHedgehog ~= nil and TurnTimeLeft == 0 then
         SetHealth(CurrentHedgehog, 0)
         x, y = GetGearPosition(CurrentHedgehog)
         AddGear(x, y, gtShell, 0, 0, 0, 0)
         worsttime = 99999
         worsthog = nil
-    elseif TurnTimeLeft > maxtime - 25 and CurrentHedgehog ~= nil then
+    elseif TurnTimeLeft == maxtime-1 and CurrentHedgehog ~= nil then
         if lasthog ~= nil then 
         SetGearPosition(lasthog, p , 0)
         end
