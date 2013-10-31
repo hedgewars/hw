@@ -49,6 +49,8 @@ flushRequests si = do
                 writeChan (coreChan si) $ ClientAccountInfo clId clUid (if clHost `L.elem` localAddressList then Admin else Guest)
             ClearCache -> return ()
             SendStats {} -> return ()
+            GetReplayName {} -> return ()
+            StoreAchievements {} -> return ()
         flushRequests si
 
 pipeDbConnectionLoop :: Chan DBQuery -> Chan CoreMessage -> Handle -> Handle -> Map.Map ByteString (UTCTime, AccountInfo) -> Int -> IO (Map.Map ByteString (UTCTime, AccountInfo), Int)
