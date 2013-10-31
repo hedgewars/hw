@@ -224,6 +224,7 @@ var ammos: TAmmoArray;
     CurWeapon: PAmmo;
     a: TAmmoType;
 begin
+if ammo = amNothing then exit;
 {$HINTS OFF}
 FillChar(ammos, sizeof(ammos), 0);
 {$HINTS ON}
