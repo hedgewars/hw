@@ -684,7 +684,16 @@ processAction SaveReplay = do
 processAction CheckRecord = do
     p <- client's clientProto
     c <- client's sendChan
-    (cinfo, l) <- io $ loadReplay (fromIntegral p)
+    ri <- clientRoomA
+    rnc <- gets roomsClients
+
+    blackList <- liftM (map (recordFileName . fromJust . checkInfo) . filter (isJust . checkInfo)) allClientsS
+
+    readyCheckersIds <- io $ do
+        allci <- allClientsM rnc
+        filterM (client'sM rnc (isJust . checkInfo)) allci
+
+    (cinfo, l) <- io $ loadReplay (fromIntegral p) blackList
     when (not . null $ l) $
         mapM_ processAction [
             AnswerClients [c] ("REPLAY" : l)

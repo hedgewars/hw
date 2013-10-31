@@ -17,13 +17,16 @@ import CoreTypes
 import EngineInteraction
 
 
-pickReplayFile :: Int -> IO String
-pickReplayFile p = do
-    files <- liftM (filter (isSuffixOf ('.' : show p))) $ getDirectoryContents "replays"
+pickReplayFile :: Int -> [String] -> IO String
+pickReplayFile p blackList = do
+    files <- liftM (filter (\f -> sameProto f && notBlacklisted f)) $ getDirectoryContents "replays"
     if (not $ null files) then
         return $ "replays/" ++ head files
         else
         return ""
+    where
+        sameProto = (isSuffixOf ('.' : show p))
+        notBlacklisted = flip notElem blackList
 
 saveReplay :: RoomInfo -> IO ()
 saveReplay r = do
@@ -38,9 +41,9 @@ saveReplay r = do
             (\(e :: IOException) -> warningM "REPLAYS" $ "Couldn't write to " ++ fileName ++ ": " ++ show e)
 
 
-loadReplay :: Int -> IO (Maybe CheckInfo, [B.ByteString])
-loadReplay p = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems reading replay" >> return (Nothing, [])) $ do
-    fileName <- pickReplayFile p
+loadReplay :: Int -> [String] -> IO (Maybe CheckInfo, [B.ByteString])
+loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "Problems reading replay" >> return (Nothing, [])) $ do
+    fileName <- pickReplayFile p blackList
     if (not $ null fileName) then
         loadFile fileName
         else
