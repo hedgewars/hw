@@ -246,3 +246,7 @@ background-color: #ffcc00;
 width: 8px;
 }
 
+PageMultiplayer TeamSelWidget {
+min-height: 500px;
+}
+
