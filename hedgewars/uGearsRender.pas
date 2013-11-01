@@ -65,7 +65,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
     glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
-    Tint($FF, $FF, $FF, $FF);
+    untint;
 
     glPopMatrix;
 
@@ -222,7 +222,7 @@ begin
         DrawSprite(sprHHDeath, ox - 16, oy - 26, Gear^.Pos);
         Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
         DrawSprite(sprHHDeath, ox - 16, oy - 26, Gear^.Pos + 8);
-        Tint($FF, $FF, $FF, $FF);
+        untint;
         exit
         end
     else if (Gear^.State and gstHHGone) <> 0 then
@@ -263,7 +263,7 @@ begin
         begin
         Tint($00, $FF, $40, $40);
         DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
-        Tint($FF, $FF, $FF, $FF)
+        untint
         end;
 
 
@@ -362,12 +362,15 @@ begin
             CrosshairX := Round(hwRound(Gear^.X) + dx * 80 + GetLaunchX(HH^.CurAmmoType, sign * m, Gear^.Angle));
             CrosshairY := Round(hwRound(Gear^.Y) + dy * 80 + GetLaunchY(HH^.CurAmmoType, Gear^.Angle));
 
+            setTintAdd(true);
             Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
             DrawTextureRotated(CrosshairTexture,
                     12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
                     sign * (Gear^.Angle * 180.0) / cMaxAngle);
-            Tint($FFFFFFFF);
+            untint;
+            setTintAdd(false);
             end;
+
         hx:= ox + 8 * sign;
         hy:= oy - 2;
         aangle:= Gear^.Angle * 180 / cMaxAngle - 90;
@@ -422,7 +425,7 @@ begin
                                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
                                     DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
                                         i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                                    Tint($FF, $FF, $FF, $FF)
+                                    untint
                                     end
                                 end
                     end;
@@ -459,7 +462,7 @@ begin
                                     sign,
                                     32,
                                     32);
-                                Tint($FF, $FF, $FF, $FF)
+                                untint
                                 end
                             end;
                     defaultPos:= false
@@ -663,7 +666,7 @@ begin
                              DrawCircle(ox, oy, 248, 4, $FF, $00, $00, $AA);
                              //Tint($FF, $0, $0, $AA);
                              //DrawTexture(ox - 240, oy - 240, SpritesData[sprVampiric].Texture, 10);
-                             //Tint($FF, $FF, $FF, $FF);
+                             //untint;
                              end;
                 amVampiric: DrawSpriteRotatedF(sprHandVamp, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amRCPlane: begin
@@ -832,9 +835,9 @@ begin
                         sign,
                         32,
                         32);
-                    Tint($FF, $FF, $FF, $FF)
+                    untint
                     end;
-                if HH^.Team^.hasGone then Tint($FF, $FF, $FF, $FF)
+                if HH^.Team^.hasGone then untint
                 end
             else
                 begin
@@ -857,7 +860,7 @@ begin
                         sign*m,
                         32,
                         32);
-                    Tint($FF, $FF, $FF, $FF)
+                    untint
                     end
                 end
         end;
@@ -917,7 +920,7 @@ begin
                 DrawTextureCentered(ox, t, Team^.NameTagTex)
                 end;
             if (cTagsMask and htTransparent) <> 0 then
-                Tint($FF, $FF, $FF, $FF)
+                untint
             end;
         if (Gear^.State and gstHHDriven) <> 0 then // Current hedgehog
             begin
@@ -968,7 +971,7 @@ begin
 
 
         if HH^.Effects[heFrozen] < 150000 then
-            Tint($FF, $FF, $FF, $FF);
+            untint;
         end;
 
 
@@ -979,7 +982,7 @@ begin
         Tint($FF, 0, 0, max($40, round($FF * abs(1 - (RealTicks mod 1500) / 750))));
         DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
         end;
-        Tint($FF, $FF, $FF, $FF)
+        untint
 end;
 
 
@@ -1017,7 +1020,7 @@ begin
                   if Gear^.Tag < 0 then aangle:= 360-aangle;
                   Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
                   DrawSpriteRotatedF(sprPlane, x, y, 0, Gear^.Tag, aangle - 90);
-                  Tint($FF, $FF, $FF, $FF);
+                  untint;
                   DrawSpriteRotatedF(sprPlane, x, y, 1, Gear^.Tag, aangle - 90)
                   end;
        gtBall: DrawSpriteRotatedF(sprBalls, x, y, Gear^.Tag,0, Gear^.DirAngle);
@@ -1045,7 +1048,7 @@ begin
                         Tint($f5, $db, $35, max($40, round($FF * abs(1 - (GameTicks mod 1500) / (750 + Gear^.Health)))));
                         //Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - (RealTicks mod 1500) / 750))));
                         DrawSprite(sprVampiric, x - 24, y - 24, 0);
-                        Tint($FF, $FF, $FF, $FF)
+                        untint
                         end
                     end;
              gtBee: DrawSpriteRotatedF(sprBee, x, y, (GameTicks shr 5) mod 2, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
@@ -1139,7 +1142,7 @@ begin
        gtAirAttack: begin
                     Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
                     DrawSpriteRotatedF(sprAirplane, x, y, 0, Gear^.Tag, 0);
-                    Tint($FF, $FF, $FF, $FF);
+                    untint;
                     DrawSpriteRotatedF(sprAirplane, x, y, 1, Gear^.Tag, 0);
                     end;
          gtAirBomb: DrawSpriteRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
@@ -1153,7 +1156,7 @@ begin
           gtTarget: begin
                     Tint($FF, $FF, $FF, round($FF * Gear^.Timer / 1000));
                     DrawSprite(sprTarget, x - 16, y - 16, 0);
-                    Tint($FF, $FF, $FF, $FF);
+                    untint;
                     end;
           gtMortar: DrawSpriteRotated(sprMortar, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
           gtCake: if Gear^.Pos = 6 then
@@ -1207,7 +1210,7 @@ begin
                         Tint($FF, $FF, $FF, $10);
                         for i:= 8 downto 1 do
                             DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y - hwRound(Gear^.dY * 4 * i), 0, 1, 128, 128);
-                        Tint($FF, $FF, $FF, $FF)
+                        untint
                         end;
                     DrawTextureF(SpritesData[sprPiano].Texture, 1, x, y, 0, 1, 128, 128);
                     end;
@@ -1219,13 +1222,13 @@ begin
                     else
                         Tint($C0, $C0, $00, $C0);
                     DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
-                    Tint($FF, $FF, $FF, $FF)
+                    untint
                     end;
      gtResurrector: begin
                     DrawSpriteRotated(sprCross, x, y, 0, 0);
                     Tint($f5, $db, $35, max($00, round($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
                     DrawTexture(x - 108, y - 108, SpritesData[sprVampiric].Texture, 4.5);
-                    Tint($FF, $FF, $FF, $FF);
+                    untint;
                     end;
       gtNapalmBomb: DrawSpriteRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
            gtFlake: if Gear^.State and (gstDrowning or gstTmpFlag) <> 0  then
@@ -1238,7 +1241,7 @@ begin
                         DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
                         //DrawSpriteRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
                         //DrawTexture(x, y, SpritesData[sprVampiric].Texture, 0.1);
-                        Tint($FF, $FF, $FF, $FF);
+                        untint;
                         end
                     else //if not isInLag then
                         begin
@@ -1255,7 +1258,7 @@ begin
 //DrawSprite(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer)
 //DrawSpriteRotatedF(sprFlake, x-SpritesData[sprFlake].Width div 2, y-SpritesData[sprFlake].Height div 2, Gear^.Timer, 1, Gear^.DirAngle);
                         if Gear^.FlightTime > 0 then
-                            Tint($FF, $FF, $FF, $FF);
+                            untint;
                         end;
        //gtStructure: DrawSprite(sprTarget, x - 16, y - 16, 0);
           gtTardis: if Gear^.Pos <> 4 then
@@ -1266,16 +1269,16 @@ begin
                             Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
                         DrawSprite(sprTardis, x-24, y-63,0);
                         if Gear^.Pos = 2 then
-                            Tint($FF, $FF, $FF, $FF)
+                            untint
                         else
                             Tint($FF,$FF,$FF,max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
                         DrawSprite(sprTardis, x-24, y-63,1);
                         if Gear^.Pos <> 2 then
-                            Tint($FF, $FF, $FF, $FF)
+                            untint
 (*
                         Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * abs(1 - (RealTicks mod 500) / 250))));
                         DrawTexture(x-6, y-70, SpritesData[sprVampiric].Texture, 0.25);
-                        Tint($FF, $FF, $FF, $FF)
+                        untint
 *)
                         end;
             gtIceGun: begin
@@ -1313,7 +1316,7 @@ begin
          end;
       if Gear^.RenderTimer and (Gear^.Tex <> nil) then
           DrawTextureCentered(x + 8, y + 8, Gear^.Tex);
-    if Gear^.State and gstFrozen <> 0 then Tint($FF, $FF, $FF, $FF)
+    if Gear^.State and gstFrozen <> 0 then untint
 end;
 
 end.
