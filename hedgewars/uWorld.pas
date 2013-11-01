@@ -892,7 +892,7 @@ glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-Tint($FF, $FF, $FF, $FF);
+untint;
 
 {for i:= -1 to cWaterSprCount do
     DrawSprite(sprWater,
@@ -1297,7 +1297,7 @@ for t:= 0 to Pred(TeamsCount) do
             begin
             if TeamsCount * 100 > Longword(cScreenHeight) then
                 Tint($FF,$FF,$FF,$80)
-            else Tint($FF, $FF, $FF, $FF);
+            else untint;
 
             // draw name
             r.x:= 2;
@@ -1346,7 +1346,7 @@ if (cReducedQuality and rqNoBackground) = 0 then
         ChangeDepth(RM, -cStereo_Horizon);
         DrawRepeated(sprHorizont, sprHorizontL, sprHorizontR, (WorldDx + LAND_WIDTH div 2) * 3 div 5, HorizontOffset);
         if SuddenDeathDmg then
-            Tint($FF, $FF, $FF, $FF);
+            untint;
     end;
 
 DrawVisualGears(0);
@@ -1661,7 +1661,7 @@ if ScreenFade <> sfNone then
         glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
         glEnable(GL_TEXTURE_2D);
-        Tint($FF, $FF, $FF, $FF);
+        untint;
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
         end
@@ -1689,7 +1689,7 @@ if flagPrerecording then
     for i:= 0 to 20 do
         glVertex2f(-(cScreenWidth shr 1) + 30 + sin(i*2*Pi/20)*10, 35 + cos(i*2*Pi/20)*10);
     glEnd();
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     glEnable(GL_TEXTURE_2D);
     end;
 {$ENDIF}

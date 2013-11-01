@@ -175,7 +175,7 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
     DrawFillRect(r);
     Tint($00, $00, $00, $80);
     DrawTexture(9 - cScreenWidth div 2, visibleCount * 16 + 11, InputStr.Tex);
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
     end;
 
@@ -188,7 +188,7 @@ and (Strs[i].Tex <> nil) do
     DrawFillRect(r);
     Tint($00, $00, $00, $80);
     DrawTexture(9 - cScreenWidth div 2, (visibleCount - t) * 16 - 5, Strs[i].Tex);
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
     dec(r.y, 16);
 

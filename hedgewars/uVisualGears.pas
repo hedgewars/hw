@@ -167,7 +167,7 @@ case Layer of
                              end;
                end;
            if Gear^.Tint <> $FFFFFFFF then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -220,9 +220,9 @@ case Layer of
                                   DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                   vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
               end;
-          //if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+          //if (Gear^.Tint <> $FFFFFFFF) or tinted then untint;
           if (Gear^.Tint <> $FFFFFFFF) then
-              Tint($FF,$FF,$FF,$FF);
+              untint;
           Gear:= Gear^.NextGear
           end
        end;
@@ -284,7 +284,7 @@ case Layer of
                    vgtChunk: DrawSpriteRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                end;
            if (Gear^.Tint <> $FFFFFFFF) or tinted then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -368,7 +368,7 @@ case Layer of
                               DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
            end;
            if (Gear^.Tint <> $FFFFFFFF) or tinted then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -396,7 +396,7 @@ case Layer of
                                 DrawTextureRotatedF(SpritesData[sprFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
             end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;
@@ -424,7 +424,7 @@ case Layer of
                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;
@@ -448,7 +448,7 @@ case Layer of
                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;

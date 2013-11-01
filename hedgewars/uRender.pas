@@ -52,6 +52,8 @@ procedure DrawScreenWidget      (widget: POnScreenWidget);
 
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
+procedure untint(); inline;
+procedure setTintAdd            (f: boolean); inline;
 
 
 implementation
@@ -372,7 +374,7 @@ begin
 
     glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     
     glPopMatrix;
     
@@ -405,7 +407,7 @@ VertexBuffer[3].Y:= r.y + r.h;
 glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-Tint($FF, $FF, $FF, $FF);
+untint;
 glEnable(GL_TEXTURE_2D)
 end;
 
@@ -413,7 +415,7 @@ procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 begin
     Tint(r, g, b, a);
     DrawCircle(X, Y, Radius, Width); 
-    Tint($FF, $FF, $FF, $FF);
+    untint;
 end;
 
 procedure DrawCircle(X, Y, Radius, Width: LongInt); 
@@ -527,7 +529,7 @@ with widget^ do
         begin
         Tint($FF, $FF, $FF, alpha);
         DrawTexture(frame.x, frame.y, spritesData[sprite].Texture, buttonScale);
-        Tint($FF, $FF, $FF, $FF);
+        untint;
         end;
     end;
 {$ELSE}
@@ -562,6 +564,19 @@ procedure Tint(c: Longword); inline;
 begin
     if c = lastTint then exit;
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
+end;
+
+procedure untint(); inline;
+begin
+    Tint($FF, $FF, $FF, $FF)
+end;
+
+procedure setTintAdd(f: boolean); inline;
+begin
+    if f then
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD)
+    else
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 end;
 
 end.
