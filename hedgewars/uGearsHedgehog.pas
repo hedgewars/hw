@@ -114,9 +114,9 @@ with HHGear^.Hedgehog^ do
             LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
         end;
     // Try again in the next slot
-    if CurAmmoType = prevAmmo then
+    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then 
         begin
-        if slot < cMaxSlotIndex then inc(slot);
+        inc(slot);
         HHGear^.MsgParam:= slot;
         ChangeAmmo(HHGear)
         end

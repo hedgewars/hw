@@ -29,15 +29,16 @@ local lasthog = nil
 -- active hog reached the goal?
 local reached = false
 
--- hog with best time
-local besthog = nil
-local besthogteam = ""
-
 -- hog with worst time (per round)
 local worsthog = nil
 
+local besthog = nil
+
 -- best time
 local besttime = maxtime + 1
+
+-- best time per team
+local bestTimes = {}
 
 -- worst time (per round)
 local worsttime = 0
@@ -69,14 +70,15 @@ function onGameStart()
 end
 
 function onAmmoStoreInit()
-    SetAmmo(amRope, 9, 2, 0)
+    SetAmmo(amRope, 9, 1, 0)
+    SetAmmo(amSkip, 9, 1, 0)
 end
 
 function onGameTick()
     if startTime == 0 and TurnTimeLeft < maxtime then
         startTime = GameTime
     end
-    if CurrentHedgehog ~= nil and TurnTimeLeft == 0 then
+    if CurrentHedgehog ~= nil and TurnTimeLeft == 1 then
         SetHealth(CurrentHedgehog, 0)
         x, y = GetGearPosition(CurrentHedgehog)
         AddGear(x, y, gtShell, 0, 0, 0, 0)
@@ -84,7 +86,7 @@ function onGameTick()
         worsthog = nil
     elseif TurnTimeLeft == maxtime-1 and CurrentHedgehog ~= nil then
         if lasthog ~= nil then 
-        SetGearPosition(lasthog, p , 0)
+            SetGearPosition(lasthog, p , 0)
         end
         reached = false
         SetGearVelocity(CurrentHedgehog, 1, 0)
@@ -114,10 +116,13 @@ function onGameTick()
             if ttime < clantimes[clan] or clantimes[clan] == 0 then
                 clantimes[clan] = ttime
             end
+            local teamname = GetHogTeamName(CurrentHedgehog)
+            if bestTimes[teamname] == nil or bestTimes[teamname] > ttime then
+                bestTimes[teamname] = ttime
+            end
             if ttime < besttime then
                 besttime = ttime
                 besthog = CurrentHedgehog
-                besthogteam = GetHogTeamName(besthog)
                 hscore = hscore .. loc("NEW fastest lap: ")
             else
                 hscore = hscore .. loc("Fastest lap: ")
@@ -170,7 +175,7 @@ end
 --end
 
 function onAchievementsDeclaration()
-    if besthog ~= nil then
-      DeclareAchievement("rope race", besthogteam, "TrophyRace", besttime)
+    for team,time in pairs(realBestTimes) do
+      DeclareAchievement("rope race", team, "TrophyRace", time)
     end
 end
