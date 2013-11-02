@@ -366,7 +366,7 @@ begin
             Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
             DrawTextureRotated(CrosshairTexture,
                     12, 12, CrosshairX + WorldDx, CrosshairY + WorldDy, 0,
-                    sign * (Gear^.Angle * 180.0) / cMaxAngle);
+                    sign * m * (Gear^.Angle * 180.0) / cMaxAngle);
             untint;
             setTintAdd(false);
             end;
