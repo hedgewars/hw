@@ -121,6 +121,7 @@ if(PNG_FOUND)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
+    add_definitions(-dPNG_SCREENSHOTS)
 endif()
 
 if(LUA_FOUND AND LUA_SYSTEM)
