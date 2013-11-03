@@ -69,6 +69,7 @@ var
     isPaused        : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    isAFK           : boolean;
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
@@ -2296,6 +2297,7 @@ var
 
 
     PauseTexture,
+    AFKTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
@@ -2499,6 +2501,7 @@ begin
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    isAFK           := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;
