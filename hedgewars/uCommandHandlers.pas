@@ -643,7 +643,10 @@ s:= s; // avoid compiler hint
 if gameType <> gmtNet then
     isPaused:= not isPaused
     else
-    isAFK:= not isAFK;
+    if (CurrentTeam^.ExtDriven) or (CurrentHedgehog^.BotLevel > 0) then
+        isAFK:= not isAFK
+    else
+        isAFK:= false; // for real ninjas
 
 if isPaused or isAFK then
     SDL_ShowCursor(1)
