@@ -979,7 +979,7 @@ begin
     //glPushMatrix;
     //glScalef(1.0, 1.0, 1.0);
 
-    if (not isPaused) and (GameType <> gmtRecord) then
+    if (not isPaused) and (not isAFK) and (GameType <> gmtRecord) then
         MoveCamera;
 
     if cStereoMode = smNone then
@@ -1555,6 +1555,8 @@ if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
 if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
+if isAFK then
+    DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture);
 if not isFirstFrame and (missionTimer <> 0) or isPaused or fastUntilLag or (GameState = gsConfirm) then
     begin
     if (ReadyTimeLeft = 0) and (missionTimer > 0) then

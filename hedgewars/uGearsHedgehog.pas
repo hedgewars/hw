@@ -35,9 +35,21 @@ implementation
 uses uConsts, uVariables, uFloat, uAmmos, uSound, uCaptions,
     uCommands, uLocale, uUtils, uStats, uIO, uScript,
     uGearsList, uCollisions, uRandom, uStore, uTeams,
-    uGearsUtils, uVisualGearsList;
+    uGearsUtils, uVisualGearsList, uChat;
 
 var GHStepTicks: LongWord = 0;
+
+procedure AFKSkip;
+var
+    t: byte;
+begin
+    t:= 0;
+    while (TeamsArray[t] <> CurrentTeam) do inc(t);
+
+    SendHogSpeech(#1 + char(t) + 'AFK');
+
+    ParseCommand('/skip', true)
+end;
 
 // Shouldn't more of this ammo switching stuff be moved to uAmmos ?
 function ChangeAmmo(HHGear: PGear): boolean;
@@ -1056,6 +1068,12 @@ if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     exit
     end;
 
+if isAFK and (not CurrentTeam^.ExtDriven) and (CurrentHedgehog^.BotLevel = 0) then
+    begin
+    AFKSkip;
+    exit
+    end;
+
 if (HHGear^.State and gstAnimation) <> 0 then
     begin
     HHGear^.Message:= 0;
@@ -1296,7 +1314,7 @@ if (Gear^.Message and gmDestroy) <> 0 then
     DeleteGear(Gear);
     exit
     end;
-if GameTicks mod 100 = 0 then CheckIce(Gear);
+if GameTicks mod 128 = 0 then CheckIce(Gear);
 (*
 if Gear^.Hedgehog^.Effects[heFrozen] > 0 then
     begin

@@ -403,6 +403,7 @@ SDL_FreeSurface(tmpsurf);
 InitHealth;
 
 PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
+AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
@@ -483,6 +484,7 @@ SDL_FreeSurface(MissionIcons);
 FreeAndNilTexture(CrosshairTexture);
 FreeAndNilTexture(WeaponTooltipTex);
 FreeAndNilTexture(PauseTexture);
+FreeAndNilTexture(AFKTexture);
 FreeAndNilTexture(SyncTexture);
 FreeAndNilTexture(ConfirmTexture);
 FreeAndNilTexture(ropeIconTex);

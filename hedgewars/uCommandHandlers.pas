@@ -641,9 +641,11 @@ procedure chPause(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if gameType <> gmtNet then
-    isPaused:= not isPaused;
+    isPaused:= not isPaused
+    else
+    isAFK:= not isAFK;
 
-if isPaused then
+if isPaused or isAFK then
     SDL_ShowCursor(1)
     else
     SDL_ShowCursor(ord(GameState = gsConfirm))
