@@ -167,7 +167,9 @@ procedure ProcessGears;
 var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
+    prevtime: LongWord;
 begin
+prevtime:= TurnTimeLeft;
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 if GameTicks = NewTurnTick then
@@ -463,7 +465,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 AddRandomness(CheckSum);
-
+TurnClockActive:= prevtime <> TurnTimeLeft;
 inc(GameTicks)
 end;
 

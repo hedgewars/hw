@@ -87,6 +87,7 @@ var
     LeftImpactTimer : LongWord;
     RightImpactTimer: LongWord;
     TurnTimeLeft    : Longword;
+    TurnClockActive : boolean;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
@@ -2461,6 +2462,7 @@ begin
     LeftImpactTimer     := 0;
     RightImpactTimer    := 0;
     TurnTimeLeft        := 0;
+    TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
     cDamagePercent      := 100;
