@@ -5,6 +5,7 @@ if(${USESDL12})
 else(${USESDL12})
     find_package(SDL2 REQUIRED)
     include_directories(${SDL2_INCLUDE_DIR})
+    set(SDL_LIBRARY ${SDL2_LIBRARY})
 endif(${USESDL12})
 
 include_directories(${PHYSFS_INCLUDE_DIR})

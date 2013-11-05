@@ -108,7 +108,7 @@ endif()
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
+if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE AND ${USESDL12})
     #on OSX we need to provide the SDL_main() function when building as executable
     add_subdirectory(sdlmain)
     list(APPEND HW_LINK_LIBS SDLmain)

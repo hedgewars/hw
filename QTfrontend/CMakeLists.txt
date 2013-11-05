@@ -26,7 +26,9 @@ if(${USESDL12})
     include_directories(${SDLMIXER_INCLUDE_DIR})
 else(${USESDL12})
     find_package(SDL2 REQUIRED)
+    find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
     include_directories(${SDL2_INCLUDE_DIR})
+    include_directories(${SDL2MIXER_INCLUDE_DIR})
 endif(${USESDL12})
 
 if(${FFMPEG_FOUND})

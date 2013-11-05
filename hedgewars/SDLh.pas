@@ -55,15 +55,23 @@ interface
 
 {$IFDEF DARWIN}
     {$IFNDEF HWLIBRARY}
-        {$linklib SDLmain}
-        {$PASCALMAINNAME SDL_main}
-        {$linkframework Cocoa}
-        {$linkframework SDL}
-        {$linkframework SDL_net}
-        {$linkframework SDL_image}
-        {$linkframework SDL_ttf}
-        {$linkframework SDL_mixer}
-        {$linkframework OpenGL}
+        {$IFDEF SDL2}
+            {$linkframework SDL2}
+            {$linkframework SDL2_net}
+            {$linkframework SDL2_image}
+            {$linkframework SDL2_ttf}
+            {$linkframework SDL2_mixer}
+        {$ELSE}
+            {$linklib SDLmain}
+            {$PASCALMAINNAME SDL_main}
+            {$linkframework Cocoa}
+            {$linkframework OpenGL}
+            {$linkframework SDL}
+            {$linkframework SDL_net}
+            {$linkframework SDL_image}
+            {$linkframework SDL_ttf}
+            {$linkframework SDL_mixer}
+        {$ENDIF}
     {$ENDIF}
 {$ENDIF}
 
