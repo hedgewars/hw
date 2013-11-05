@@ -242,9 +242,9 @@ if x <> 0 then
     exit
     end;
 
-// These 3 are same as above, only are to make the hedgehog say it on next attack
 if (s[1] = '/') then
     begin
+    // These 3 are same as above, only are to make the hedgehog say it on next attack
     if (copy(s, 1, 5) = '/hsa ') then
         begin
         if CurrentTeam^.ExtDriven then
@@ -297,9 +297,9 @@ if (s[1] = '/') then
                 exit
                 end;
         end
-        else
-            ParseCommand('/say ' + s, true);
     end
+    else
+        ParseCommand('/say ' + s, true);
 end;
 
 procedure CleanupInput;
