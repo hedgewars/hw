@@ -1,7 +1,13 @@
 
-find_package(SDL1or2)
+if(${USESDL12})
+    find_package(SDL REQUIRED)
+    include_directories(${SDL_INCLUDE_DIR})
+else(${USESDL12})
+    find_package(SDL2 REQUIRED)
+    include_directories(${SDL2_INCLUDE_DIR})
+endif(${USESDL12})
+
 include_directories(${PHYSFS_INCLUDE_DIR})
-include_directories(${SDL_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})
 
 ## extra functions needed by Hedgewars

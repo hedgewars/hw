@@ -70,18 +70,34 @@ interface
 
 (*  SDL  *)
 const
-{$IFDEF WIN32}
-    SDLLibName = 'SDL.dll';
-    SDL_TTFLibName = 'SDL_ttf.dll';
-    SDL_MixerLibName = 'SDL_mixer.dll';
-    SDL_ImageLibName = 'SDL_image.dll';
-    SDL_NetLibName = 'SDL_net.dll';
+{$IFDEF SDL2}
+    {$IFDEF WIN32}
+        SDLLibName = 'SDL2.dll';
+        SDL_TTFLibName = 'SDL2_ttf.dll';
+        SDL_MixerLibName = 'SDL2_mixer.dll';
+        SDL_ImageLibName = 'SDL2_image.dll';
+        SDL_NetLibName = 'SDL2_net.dll';
+    {$ELSE}
+        SDLLibName = 'libSDL2';
+        SDL_TTFLibName = 'libSDL2_ttf';
+        SDL_MixerLibName = 'libSDL2_mixer';
+        SDL_ImageLibName = 'libSDL2_image';
+        SDL_NetLibName = 'libSDL2_net';
+    {$ENDIF}
 {$ELSE}
-    SDLLibName = 'libSDL';
-    SDL_TTFLibName = 'libSDL_ttf';
-    SDL_MixerLibName = 'libSDL_mixer';
-    SDL_ImageLibName = 'libSDL_image';
-    SDL_NetLibName = 'libSDL_net';
+    {$IFDEF WIN32}
+        SDLLibName = 'SDL.dll';
+        SDL_TTFLibName = 'SDL_ttf.dll';
+        SDL_MixerLibName = 'SDL_mixer.dll';
+        SDL_ImageLibName = 'SDL_image.dll';
+        SDL_NetLibName = 'SDL_net.dll';
+    {$ELSE}
+        SDLLibName = 'libSDL';
+        SDL_TTFLibName = 'libSDL_ttf';
+        SDL_MixerLibName = 'libSDL_mixer';
+        SDL_ImageLibName = 'libSDL_image';
+        SDL_NetLibName = 'libSDL_net';
+    {$ENDIF}
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////

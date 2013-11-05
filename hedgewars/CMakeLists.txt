@@ -1,13 +1,22 @@
-find_package(SDL1or2)
-find_package(SDL_image)
-find_package(SDL_net)
-find_package(SDL_ttf)
-find_package(SDL_mixer)
+enable_language(Pascal)
+
+if(${USESDL12})
+    find_package(SDL REQUIRED)
+    find_package(SDL_image REQUIRED)
+    find_package(SDL_net REQUIRED)
+    find_package(SDL_ttf REQUIRED)
+    find_package(SDL_mixer REQUIRED)
+else(${USESDL12})
+    find_package(SDL2 REQUIRED)
+    find_package(SDL2_image REQUIRED)
+    find_package(SDL2_net REQUIRED)
+    find_package(SDL2_ttf REQUIRED)
+    find_package(SDL2_mixer REQUIRED)
+    add_definitions(-dSDL2)
+endif(${USESDL12})
 
 include (CheckLibraryExists)
 
-
-enable_language(Pascal)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -111,8 +120,11 @@ if(FFMPEG_FOUND)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
-    #only for SDL < 2, linking carried out by fpc
-    find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
+    
+    if(${USESDL12})
+        #only for SDL < 2, linking carried out by fpc
+        find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
+    endif(${USESDL12})
 endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
@@ -148,20 +160,18 @@ endif()
 list(APPEND HW_LINK_LIBS physlayer)
 
 #Mix_Init/Mix_Quit from SDL_mixer 1.2.10
-check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
-if(HAVE_MIXINIT)
-    add_definitions(-dSDL_MIXER_NEWER)
-endif(HAVE_MIXINIT)
+if(${USESDL12})
+    check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
+    if(HAVE_MIXINIT)
+        add_definitions(-dSDL_MIXER_NEWER)
+    endif(HAVE_MIXINIT)
 
-#IMG_Init/IMG_Quit from SDL_image 1.2.8
-check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
-if(HAVE_IMGINIT)
-    add_definitions(-dSDL_IMAGE_NEWER)
-endif(HAVE_IMGINIT)
-
-if(NOT (SDL_VERSION VERSION_LESS 2.0))
-    add_definitions(-dSDL2)
-endif()
+    #IMG_Init/IMG_Quit from SDL_image 1.2.8
+    check_library_exists(${SDLIMAGE_LIBRARY} IMG_Init "" HAVE_IMGINIT)
+    if(HAVE_IMGINIT)
+        add_definitions(-dSDL_IMAGE_NEWER)
+    endif(HAVE_IMGINIT)
+endif(${USESDL12})
 
 #needs to be last
 add_definitions(-dDEBUGFILE)

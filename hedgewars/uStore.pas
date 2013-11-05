@@ -1138,12 +1138,14 @@ begin
         WriteLnToConsole(msgOK);
         // load engine icon
     {$IFNDEF DARWIN}
+    {$IFNDEF SDL2}
         ico:= LoadDataImage(ptGraphics, 'hwengine', ifIgnoreCaps);
         if ico <> nil then
             begin
             SDL_WM_SetIcon(ico, 0);
             SDL_FreeSurface(ico)
             end;
+    {$ENDIF}
     {$ENDIF}
         end
     else

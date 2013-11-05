@@ -19,8 +19,15 @@ if(APPLE AND
     message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
 endif()
 
-find_package(SDL1or2)            #video in SDLInteraction
-find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+if(${USESDL12})
+    find_package(SDL REQUIRED)            #video in SDLInteraction
+    find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
+    include_directories(${SDL_INCLUDE_DIR})
+    include_directories(${SDLMIXER_INCLUDE_DIR})
+else(${USESDL12})
+    find_package(SDL2 REQUIRED)
+    include_directories(${SDL2_INCLUDE_DIR})
+endif(${USESDL12})
 
 if(${FFMPEG_FOUND})
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
@@ -59,8 +66,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/page)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/ui/widget)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
-include_directories(${SDL_INCLUDE_DIR})
-include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
 
