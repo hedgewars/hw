@@ -1916,7 +1916,7 @@ procedure onFocusStateChanged;
 begin
 if (not cHasFocus) and (GameState <> gsConfirm) then
     ParseCommand('quit', true);
-{$IFDEF SDL2}
+{$IFDEF MOBILE}
 // when created SDL receives an exposure event that calls UndampenAudio at full power, muting audio
 exit;
 {$ENDIF}
