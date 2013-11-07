@@ -1264,7 +1264,7 @@ begin
     if GameType = gmtRecord then
         exit;
 {$IFDEF SDL2}
-    SDLTry(SDL_GL_SwapWindow(SDLwindow) <> 0, 'SDL_GL_SwapWindow', true);
+    SDL_GL_SwapWindow(SDLwindow);
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}

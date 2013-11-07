@@ -363,7 +363,7 @@ begin
             ParseCommand('fullscr 0', true);
         end;
 
-    ControllerInit(); // has to happen before InitKbdKeyTable to map keys
+    //ControllerInit(); // has to happen before InitKbdKeyTable to map keys
     InitKbdKeyTable();
     AddProgress();
 
