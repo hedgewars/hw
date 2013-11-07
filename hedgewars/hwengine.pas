@@ -336,7 +336,7 @@ begin
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
 
     WriteToConsole('Init SDL... ');
-    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, true);
+    if not cOnlyStats then SDLTry(SDL_Init(SDL_INIT_VIDEO or SDL_INIT_NOPARACHUTE) >= 0, 'SDL_Init', true);
     WriteLnToConsole(msgOK);
 
 {$IFDEF SDL2}
@@ -347,7 +347,7 @@ begin
     SDL_ShowCursor(0);
 
     WriteToConsole('Init SDL_ttf... ');
-    SDLTry(TTF_Init() <> -1, true);
+    SDLTry(TTF_Init() <> -1, 'TTF_Init', true);
     WriteLnToConsole(msgOK);
 
 {$IFDEF USE_VIDEO_RECORDING}

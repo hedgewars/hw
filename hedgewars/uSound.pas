@@ -311,7 +311,7 @@ begin
     end;
 
     WriteToConsole('Init SDL_mixer... ');
-    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, true);
+    SDLTry(Mix_Init(MIX_INIT_OGG) <> 0, 'Mix_Init', true);
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
@@ -413,7 +413,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true);
             WriteLnToConsole(msgOK);
             end;
         lastChan[snd]:= Mix_PlayChannelTimed(-1, defVoicepack^.chunks[snd], 0, -1)
@@ -509,7 +509,7 @@ begin
             s:= cPathz[Soundz[snd].Path] + '/' + Soundz[snd].FileName;
             WriteToConsole(msgLoading + s + ' ');
             defVoicepack^.chunks[snd]:= Mix_LoadWAV_RW(rwopsOpenRead(s), 1);
-            SDLTry(defVoicepack^.chunks[snd] <> nil, true);
+            SDLTry(defVoicepack^.chunks[snd] <> nil, 'Mix_LoadWAV_RW', true);
             WriteLnToConsole(msgOK);
             end;
         if fadems > 0 then
@@ -559,10 +559,10 @@ begin
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
-    SDLTry(Mus <> nil, false);
+    SDLTry(Mus <> nil, 'Mix_LoadMUS_RW', false);
     WriteLnToConsole(msgOK);
 
-    SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, false)
+    SDLTry(Mix_FadeInMusic(Mus, -1, 3000) <> -1, 'Mix_FadeInMusic', false)
 end;
 
 procedure SetVolume(vol: LongInt);

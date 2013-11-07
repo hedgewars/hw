@@ -100,7 +100,7 @@ clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
 tmpsurf:= doSurfaceConversion(tmpsurf);
-SDLTry(tmpsurf <> nil, true);
+SDLTry(tmpsurf <> nil, 'TTF_RenderUTF8_Blended, doSurfaceConversion', true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
 SDL_FreeSurface(tmpsurf);
 finalRect.x:= X;
@@ -314,7 +314,7 @@ if not reload then
             s:= cPathz[ptFonts] + '/' + Name;
             WriteToConsole(msgLoading + s + ' (' + inttostr(Height) + 'pt)... ');
             Handle:= TTF_OpenFontRW(rwopsOpenRead(s), true, Height);
-            SDLTry(Handle <> nil, true);
+            SDLTry(Handle <> nil, 'TTF_OpenFontRW', true);
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
@@ -699,15 +699,15 @@ begin
 
     AuxBufNum:= AuxBufNum;
 
-{$IFDEF MOBILE}
+{$IFDEF SDL2}
     // TODO: this function creates an opengles1.1 context
     // un-comment below and add proper logic to support opengles2.0
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
     if SDLGLcontext = nil then
         SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
-    SDL_GL_SetSwapInterval(1);
+    SDLTry(SDLGLcontext <> nil, 'SDLGLcontext', true);
+    SDLTry(SDL_GL_SetSwapInterval(1) = 0, 'SDL_GL_SetSwapInterval', true);
 {$ENDIF}
 
     // get the max (h and v) size for textures that the gpu can support
@@ -1074,7 +1074,7 @@ begin
                                  SDL_WINDOWPOS_CENTERED_MASK, SDL_WINDOWPOS_CENTERED_MASK,
                                  cScreenWidth, cScreenHeight,
                                  SDL_WINDOW_HIDDEN or SDL_WINDOW_OPENGL);
-    SDLTry(SDLwindow <> nil, true);
+    SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
     SetupOpenGL();
 end;
 {$ELSE}
@@ -1134,7 +1134,7 @@ begin
         SDL_WM_SetCaption(_P'Hedgewars', nil);
     {$ENDIF}
         WriteToConsole('Init SDL_image... ');
-        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, true);
+        SDLTry(IMG_Init(IMG_INIT_PNG) <> 0, 'IMG_Init', true);
         WriteLnToConsole(msgOK);
         // load engine icon
     {$IFNDEF DARWIN}
@@ -1208,7 +1208,7 @@ begin
 
     if SDLwindow = nil then
         SDLwindow:= SDL_CreateWindow('Hedgewars', x, y, cScreenWidth, cScreenHeight, flags);
-    SDLTry(SDLwindow <> nil, true);
+    SDLTry(SDLwindow <> nil, 'SDL_CreateWindow', true);
 {$ELSE}
     flags:= SDL_OPENGL or SDL_RESIZABLE;
     if cFullScreen then
@@ -1264,7 +1264,7 @@ begin
     if GameType = gmtRecord then
         exit;
 {$IFDEF SDL2}
-    SDL_GL_SwapWindow(SDLwindow);
+    SDLTry(SDL_GL_SwapWindow(SDLwindow) <> 0, 'SDL_GL_SwapWindow', true);
 {$ELSE}
     SDL_GL_SwapBuffers();
 {$ENDIF}

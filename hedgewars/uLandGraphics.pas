@@ -601,7 +601,7 @@ row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'It should be 32 bpp sprite', true);

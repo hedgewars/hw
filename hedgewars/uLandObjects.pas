@@ -103,7 +103,7 @@ begin
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'Land object should be 32bit', true);
@@ -149,7 +149,7 @@ begin
 WriteToConsole('Generating collision info... ');
 
 if SDL_MustLock(Image) then
-    SDLTry(SDL_LockSurface(Image) >= 0, true);
+    SDLTry(SDL_LockSurface(Image) >= 0, 'SDL_LockSurface', true);
 
 bpp:= Image^.format^.BytesPerPixel;
 TryDo(bpp = 4, 'Land object should be 32bit', true);
