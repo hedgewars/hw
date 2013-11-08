@@ -157,7 +157,7 @@ begin
     ropeDx := HHGear^.X - Gear^.X;
     ropeDy := HHGear^.Y - Gear^.Y;
 
-    if TestCollisionYwithGear(HHGear, 1) = 0 then
+    if not TestCollisionYwithXYShift(HHGear, 0, 1, 1) then
         begin
 
         // depending on the rope vector we know which X-side to check for collision
@@ -168,7 +168,7 @@ begin
             cd:= 1;
 
         // apply gravity if there is no obstacle
-        if not TestCollisionXwithGear(HHGear, cd) then
+        if not (TestCollisionXwithXYShift(HHGear, _1*cd, 0, cd, true)) then
             HHGear^.dY := HHGear^.dY + cGravity * 16;
 
         if (GameFlags and gfMoreWind) <> 0 then
@@ -193,13 +193,15 @@ begin
     ty := HHGear^.Y;
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(ropeDy)))) then
+        if not (TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true)
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(ropeDy), hwSign(ropeDy)))) then
+        //or TestCollisionXwithXYShift(HHGear, _1*hwSign(ropeDx), 0, hwSign(ropeDx), true)) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
-        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, -hwSign(ropeDy)))) then
+        if not (TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true)
+        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1*-hwSign(ropeDy), -hwSign(ropeDy)))) then
+        //or TestCollisionXwithXYShift(HHGear, -_1*hwSign(ropeDx), 0, -hwSign(ropeDx))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -315,12 +317,12 @@ begin
             end;
 
     haveCollision := false;
-    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+    if TestCollisionXwithXYShift(HHGear, _1*hwSign(HHGear^.dX), 0, hwSign(HHGear^.dX), true) then
         begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
         end;
-    if TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(HHGear^.dY)) then
+    if TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(HHGear^.dY), hwSign(HHGear^.dY)) then
         begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true
