@@ -185,6 +185,15 @@ if CurrentBinds[code][0] <> #0 then
     end
 end;
 
+{$IFDEF SDL2}
+procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
+var code: LongInt;
+begin
+    code:= event.keysym.scancode;
+
+    ProcessKey(code, event.type_ = SDL_KEYDOWN);
+end;
+{$ELSE}
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
@@ -192,6 +201,7 @@ begin
     //MaskModifier(code, event.keysym.modifier);
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
+{$ENDIF}
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
@@ -217,6 +227,112 @@ for t:= 0 to cKbdMaxIndex do
         ProcessKey(t, False);
 end;
 
+
+procedure InitDefaultBinds;
+var i: Longword;
+begin
+    DefaultBinds[KeyNameToCode('escape')]:= 'quit';
+    DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
+    DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
+
+    //numpad
+    //DefaultBinds[265]:= '+volup';
+    //DefaultBinds[256]:= '+voldown';
+
+    DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
+    DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
+    DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
+    DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
+    DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
+    DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
+    DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
+    DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
+    DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
+    DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
+
+    DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
+    DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
+    DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
+
+    DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
+
+
+    DefaultBinds[KeyNameToCode('mousel')]:= '/put';
+    DefaultBinds[KeyNameToCode('mouser')]:= 'ammomenu';
+    DefaultBinds[KeyNameToCode('backspace')]:= 'hjump';
+    DefaultBinds[KeyNameToCode('tab')]:= 'switch';
+    DefaultBinds[KeyNameToCode('return')]:= 'ljump';
+    DefaultBinds[KeyNameToCode('space')]:= '+attack';
+    DefaultBinds[KeyNameToCode('up')]:= '+up';
+    DefaultBinds[KeyNameToCode('down')]:= '+down';
+    DefaultBinds[KeyNameToCode('left')]:= '+left';
+    DefaultBinds[KeyNameToCode('right')]:= '+right';
+    DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
+
+
+    DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
+    DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
+    DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
+    DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
+    for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
+    for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
+
+    loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+end;
+
+
+{$IFDEF SDL2}
+procedure InitKbdKeyTable;
+var i, j, k, t: LongInt;
+    s: string[15];
+begin
+    KeyNames[cKeyMaxIndex    ]:= 'mousel';
+    KeyNames[cKeyMaxIndex - 1]:= 'mousem';
+    KeyNames[cKeyMaxIndex - 2]:= 'mouser';
+    KeyNames[cKeyMaxIndex - 3]:= 'wheelup';
+    KeyNames[cKeyMaxIndex - 4]:= 'wheeldown';
+
+    for i:= 0 to cKeyMaxIndex - 5 do
+        begin
+        s:= shortstring(SDL_GetScancodeName(i));
+
+        for t:= 1 to Length(s) do
+            if s[t] = ' ' then
+                s[t]:= '_';
+        KeyNames[i]:= LowerCase(s)
+        end;
+
+
+    // get the size of keyboard array
+    SDL_GetKeyState(@k);
+
+    // Controller(s)
+    for j:= 0 to Pred(ControllerNumControllers) do
+        begin
+        for i:= 0 to Pred(ControllerNumAxes[j]) do
+            begin
+            KeyNames[k + 0]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'u';
+            KeyNames[k + 1]:= 'j' + IntToStr(j) + 'a' + IntToStr(i) + 'd';
+            inc(k, 2);
+            end;
+        for i:= 0 to Pred(ControllerNumHats[j]) do
+            begin
+            KeyNames[k + 0]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'u';
+            KeyNames[k + 1]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'r';
+            KeyNames[k + 2]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'd';
+            KeyNames[k + 3]:= 'j' + IntToStr(j) + 'h' + IntToStr(i) + 'l';
+            inc(k, 4);
+            end;
+        for i:= 0 to Pred(ControllerNumButtons[j]) do
+            begin
+            KeyNames[k]:= 'j' + IntToStr(j) + 'b' + IntToStr(i);
+            inc(k, 1);
+            end;
+        end;
+
+        InitDefaultBinds
+end;
+{$ELSE}
 procedure InitKbdKeyTable;
 var i, j, k, t: LongInt;
     s: string[15];
@@ -270,72 +386,30 @@ for j:= 0 to Pred(ControllerNumControllers) do
         end;
     end;
 
-DefaultBinds[KeyNameToCode('escape')]:= 'quit';
-DefaultBinds[KeyNameToCode(_S'`')]:= 'history';
-DefaultBinds[KeyNameToCode('delete')]:= 'rotmask';
-
-//numpad
-//DefaultBinds[265]:= '+volup';
-//DefaultBinds[256]:= '+voldown';
-
-DefaultBinds[KeyNameToCode(_S'0')]:= '+volup';
-DefaultBinds[KeyNameToCode(_S'9')]:= '+voldown';
-DefaultBinds[KeyNameToCode(_S'8')]:= 'mute';
-DefaultBinds[KeyNameToCode(_S'c')]:= 'capture';
-DefaultBinds[KeyNameToCode(_S'r')]:= 'record';
-DefaultBinds[KeyNameToCode(_S'h')]:= 'findhh';
-DefaultBinds[KeyNameToCode(_S'p')]:= 'pause';
-DefaultBinds[KeyNameToCode(_S's')]:= '+speedup';
-DefaultBinds[KeyNameToCode(_S't')]:= 'chat';
-DefaultBinds[KeyNameToCode(_S'y')]:= 'confirm';
-
-DefaultBinds[KeyNameToCode('mousem')]:= 'zoomreset';
-DefaultBinds[KeyNameToCode('wheelup')]:= 'zoomin';
-DefaultBinds[KeyNameToCode('wheeldown')]:= 'zoomout';
-
-DefaultBinds[KeyNameToCode('f12')]:= 'fullscr';
-
-
-DefaultBinds[KeyNameToCode('mousel')]:= '/put';
-DefaultBinds[KeyNameToCode('mouser')]:= 'ammomenu';
-DefaultBinds[KeyNameToCode('backspace')]:= 'hjump';
-DefaultBinds[KeyNameToCode('tab')]:= 'switch';
-DefaultBinds[KeyNameToCode('return')]:= 'ljump';
-DefaultBinds[KeyNameToCode('space')]:= '+attack';
-DefaultBinds[KeyNameToCode('up')]:= '+up';
-DefaultBinds[KeyNameToCode('down')]:= '+down';
-DefaultBinds[KeyNameToCode('left')]:= '+left';
-DefaultBinds[KeyNameToCode('right')]:= '+right';
-DefaultBinds[KeyNameToCode('left_shift')]:= '+precise';
-
-
-DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
-DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
-DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
-DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
-for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
-for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
-
-loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+    InitDefaultBinds
 end;
+{$ENDIF}
 
-procedure SetBinds(var binds: TBinds);
+
+
 {$IFNDEF MOBILE}
+procedure SetBinds(var binds: TBinds);
 var
     t: LongInt;
-{$ENDIF}
 begin
-{$IFDEF MOBILE}
-    binds:= binds; // avoid hint
-    CurrentBinds:= DefaultBinds;
-{$ELSE}
     for t:= 0 to cKbdMaxIndex do
         if (CurrentBinds[t] <> binds[t]) and tkbd[t] then
             ProcessKey(t, False);
 
     CurrentBinds:= binds;
-{$ENDIF}
 end;
+{$ELSE}
+procedure SetBinds(var binds: TBinds);
+begin
+    binds:= binds; // avoid hint
+    CurrentBinds:= DefaultBinds;
+end;
+{$ENDIF}
 
 procedure SetDefaultBinds;
 begin
