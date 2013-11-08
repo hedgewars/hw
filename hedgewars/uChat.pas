@@ -278,11 +278,14 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 1, 4) <> '/me ') then
+    if (copy(s, 1, 4) = '/me ') then
         begin
-        if CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-            exit;
+        ParseCommand('/say ' + s, true);
+        exit
+        end;
 
+    if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
+        begin
         for i:= Low(TWave) to High(TWave) do
             if (s = Wavez[i].cmd) then
                 begin
