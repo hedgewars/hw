@@ -165,6 +165,18 @@ begin
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
 
+                SDL_MOUSEBUTTONDOWN:
+                    if GameState = gsConfirm then
+                        ParseCommand('quit', true)
+                    else
+                        if (GameState >= gsGame) then ProcessMouse(event.button, true);
+
+                SDL_MOUSEBUTTONUP:
+                    if (GameState >= gsGame) then ProcessMouse(event.button, false);
+
+                SDL_MOUSEWHEEL:
+                    ProcessMouseWheel(event.wheel.x, event.wheel.y);
+
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
                     begin

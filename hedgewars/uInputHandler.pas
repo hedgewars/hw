@@ -30,6 +30,7 @@ function  KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 //procedure MaskModifier(var code: LongInt; modifier: LongWord);
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
+procedure ProcessMouseWheel(x, y: LongInt);
 procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 procedure ProcessKey(code: LongInt; KeyDown: boolean);
 
@@ -82,8 +83,8 @@ function KeyNameToCode(name: shortstring; Modifier: shortstring): LongInt;
 var code: LongInt;
 begin
     name:= LowerCase(name);
-    code:= cKeyMaxIndex;
-    while (code > 0) and (KeyNames[code] <> name) do dec(code);
+    code:= 0;
+    while (code <= cKeyMaxIndex) and (KeyNames[code] <> name) do inc(code);
 
     MaskModifier(Modifier, code);
     KeyNameToCode:= code;
@@ -166,7 +167,12 @@ if(KeyDown and (code = SDLK_w)) then
 
 if CurrentBinds[code][0] <> #0 then
     begin
-    if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
+    if (code < cKeyMaxIndex - 2) // means not mouse buttons
+        and KeyDown
+        and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) 
+        and (CurrentTeam <> nil) 
+        and (not CurrentTeam^.ExtDriven) 
+        then bShowAmmoMenu:= false;
 
     if KeyDown then
         begin
@@ -190,7 +196,7 @@ procedure ProcessKey(event: TSDL_KeyboardEvent); inline;
 var code: LongInt;
 begin
     code:= event.keysym.scancode;
-
+    //writelntoconsole('[KEY] '+inttostr(code)+ ' -> ''' +KeyNames[code] + ''', type = '+inttostr(event.type_));
     ProcessKey(code, event.type_ = SDL_KEYDOWN);
 end;
 {$ELSE}
@@ -205,18 +211,28 @@ end;
 
 procedure ProcessMouse(event: TSDL_MouseButtonEvent; ButtonDown: boolean);
 begin
-case event.button of
-    SDL_BUTTON_LEFT:
-        ProcessKey(KeyNameToCode('mousel'), ButtonDown);
-    SDL_BUTTON_MIDDLE:
-        ProcessKey(KeyNameToCode('mousem'), ButtonDown);
-    SDL_BUTTON_RIGHT:
-        ProcessKey(KeyNameToCode('mouser'), ButtonDown);
-    SDL_BUTTON_WHEELDOWN:
-        ProcessKey(KeyNameToCode('wheeldown'), ButtonDown);
-    SDL_BUTTON_WHEELUP:
-        ProcessKey(KeyNameToCode('wheelup'), ButtonDown);
-    end;
+    //writelntoconsole('[MOUSE] '+inttostr(event.button));
+    case event.button of
+        SDL_BUTTON_LEFT:
+            ProcessKey(KeyNameToCode('mousel'), ButtonDown);
+        SDL_BUTTON_MIDDLE:
+            ProcessKey(KeyNameToCode('mousem'), ButtonDown);
+        SDL_BUTTON_RIGHT:
+            ProcessKey(KeyNameToCode('mouser'), ButtonDown);
+        SDL_BUTTON_WHEELDOWN:
+            ProcessKey(KeyNameToCode('wheeldown'), ButtonDown);
+        SDL_BUTTON_WHEELUP:
+            ProcessKey(KeyNameToCode('wheelup'), ButtonDown);
+        end;
+end;
+
+procedure ProcessMouseWheel(x, y: LongInt);
+begin
+    //writelntoconsole('[MOUSEWHEEL] '+inttostr(x)+', '+inttostr(y));
+    if y > 0 then
+        ProcessKey(KeyNameToCode('wheelup'), true)
+    else if y < 0 then
+        ProcessKey(KeyNameToCode('wheeldown'), true);
 end;
 
 procedure ResetKbd;
