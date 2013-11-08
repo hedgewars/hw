@@ -168,7 +168,7 @@ begin
             cd:= 1;
 
         // apply gravity if there is no obstacle
-        if not (TestCollisionXwithXYShift(HHGear, _1*cd, 0, cd, true)) then
+        if not (TestCollisionXwithXYShift(HHGear, _2*cd, 0, cd, true)) then
             HHGear^.dY := HHGear^.dY + cGravity * 16;
 
         if (GameFlags and gfMoreWind) <> 0 then
@@ -195,13 +195,11 @@ begin
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
         if not (TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true)
         or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(ropeDy), hwSign(ropeDy)))) then
-        //or TestCollisionXwithXYShift(HHGear, _1*hwSign(ropeDx), 0, hwSign(ropeDx), true)) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
         if not (TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true)
         or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1*-hwSign(ropeDy), -hwSign(ropeDy)))) then
-        //or TestCollisionXwithXYShift(HHGear, -_1*hwSign(ropeDx), 0, -hwSign(ropeDx))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -317,7 +315,7 @@ begin
             end;
 
     haveCollision := false;
-    if TestCollisionXwithXYShift(HHGear, _1*hwSign(HHGear^.dX), 0, hwSign(HHGear^.dX), true) then
+    if TestCollisionXwithXYShift(HHGear, _2*hwSign(HHGear^.dX), 0, hwSign(HHGear^.dX), true) then
         begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
