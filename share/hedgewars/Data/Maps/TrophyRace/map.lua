@@ -74,31 +74,49 @@ function onAmmoStoreInit()
     SetAmmo(amSkip, 9, 1, 0)
 end
 
+function killHog()
+        SetHealth(CurrentHedgehog, 0)
+        SetEffect(CurrentHedgehog, heInvulnerable, 0)
+        x, y = GetGearPosition(CurrentHedgehog)
+        AddGear(x, y, gtShell, 0, 0, 0, 0)
+        worsttime = 99999
+        worsthog = nil
+        lasthog = nil
+end
+
+function onHogAttack()
+    if TurnTimeLeft == 0 then
+        killHog()
+    end
+end
+
+function onNewTurn()
+    if lasthog ~= nil then 
+        SetGearPosition(lasthog, p , 0)
+        if not reached then
+        end
+    end
+    startTime = 0
+    reached = false
+    if CurrentHedgehog ~= nil then
+        SetGearVelocity(CurrentHedgehog, 1, 0)
+        SetGearPosition(CurrentHedgehog, start_area[1] + start_area[3] / 2, start_area[2] + start_area[4] / 2)
+        ParseCommand("setweap " .. string.char(amRope))
+        lasthog = CurrentHedgehog
+    end
+end
+
 function onGameTick()
     if startTime == 0 and TurnTimeLeft < maxtime then
         startTime = GameTime
     end
     if CurrentHedgehog ~= nil and TurnTimeLeft == 1 then
-        SetHealth(CurrentHedgehog, 0)
-        x, y = GetGearPosition(CurrentHedgehog)
-        AddGear(x, y, gtShell, 0, 0, 0, 0)
-        worsttime = 99999
-        worsthog = nil
-    elseif TurnTimeLeft == maxtime-1 and CurrentHedgehog ~= nil then
-        if lasthog ~= nil then 
-            SetGearPosition(lasthog, p , 0)
-        end
-        reached = false
-        SetGearVelocity(CurrentHedgehog, 1, 0)
-        SetGearPosition(CurrentHedgehog, start_area[1] + start_area[3] / 2, start_area[2] + start_area[4] / 2)
-        ParseCommand("setweap " .. string.char(amRope))
-        lasthog = CurrentHedgehog
+        killHog()
     elseif CurrentHedgehog ~= nil then
         x, y = GetGearPosition(CurrentHedgehog)
         if not reached and x > goal_area[1] and x < goal_area[1] + goal_area[3] and y > goal_area[2] and y < goal_area[2] + goal_area[4] then -- hog is within goal rectangle
             reached = true
             local ttime = GameTime-startTime
-            startTime = 0
             --give it a sound;)
             if ttime < besttime then
                 PlaySound (sndHomerun)
@@ -135,13 +153,15 @@ function onGameTick()
             
             if clan == ClansCount -1 then
                 -- Time for elimination - worst hog is out and the worst hog vars are reset.
-                SetHealth(worsthog, 0)
-                --Place a grenade to make inactive slowest hog active
-                x, y = GetGearPosition(worsthog)
-                AddGear(x, y, gtShell, 0, 0, 0, 0)
-                worsttime = 0
-                worsthog = nil
+                if worsthog ~= nil then
+                    SetHealth(worsthog, 0)
+                    --Place a grenade to make inactive slowest hog active
+                    x, y = GetGearPosition(worsthog)
+                    AddGear(x, y, gtShell, 0, 0, 0, 0)
+                    worsttime = 0
+                    worsthog = nil
                 end
+            end
             
             for i=0, ClansCount -1 do
                 local tt = "" .. (clantimes[i] / 1000) .. " s"
@@ -175,7 +195,7 @@ end
 --end
 
 function onAchievementsDeclaration()
-    for team,time in pairs(realBestTimes) do
-      DeclareAchievement("rope race", team, "TrophyRace", time)
+    for team,time in pairs(bestTimes) do
+        DeclareAchievement("rope race", team, "TrophyRace", time)
     end
 end

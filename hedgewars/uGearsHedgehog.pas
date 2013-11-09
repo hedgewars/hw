@@ -377,7 +377,7 @@ with Gear^,
                                  PlaySound(sndHellishImpact4);
                                  cDamageModifier:= _1_5
                                  end;
-                 amInvulnerable: Invulnerable:= true;
+                 amInvulnerable: Effects[heInvulnerable]:= 1;
                     amExtraTime: begin
                                  PlaySound(sndSwitchHog);
                                  TurnTimeLeft:= TurnTimeLeft + 30000

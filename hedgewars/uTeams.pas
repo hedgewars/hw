@@ -528,7 +528,7 @@ with Team do
 
             if Gear <> nil then
                 begin
-                Gear^.Invulnerable:= false;
+                Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
                 Gear^.Damage:= Gear^.Health;
                 Gear^.State:= (Gear^.State or gstHHGone) and (not gstHHDriven)
                 end

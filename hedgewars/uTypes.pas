@@ -258,7 +258,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds.
 // Don't use these if you want to take damage normally, otherwise health/damage are commonly used for other purposes
-            Invulnerable: Boolean;
             Health, Damage, Karma: LongInt;
 // DirAngle is a "real" - if you don't need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
