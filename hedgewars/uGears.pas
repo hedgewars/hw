@@ -78,7 +78,7 @@ while Gear <> nil do
         begin
         if (not isInMultiShoot) then
             inc(Gear^.Damage, Gear^.Karma);
-        if (Gear^.Damage <> 0) and (not Gear^.Invulnerable) then
+        if (Gear^.Damage <> 0) and ((Gear^.Hedgehog^.Effects[heInvulnerable] = 0)) then
             begin
             CheckNoDamage:= false;
 
@@ -510,7 +510,7 @@ begin
                     if (Gear <> nil) then
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
-                            Gear^.Invulnerable:= false;
+                            Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
                         end;
                     end;
     t:= GearsList;
@@ -564,7 +564,7 @@ begin
 end;
 
 procedure AddMiscGears;
-var i,rx, ry: Longword;
+var p,i,j,rx, ry: Longword;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
@@ -599,11 +599,13 @@ if (GameFlags and gfVampiric) <> 0 then
 
 Gear:= GearsList;
 if (GameFlags and gfInvulnerable) <> 0 then
-    while Gear <> nil do
-        begin
-        Gear^.Invulnerable:= true;  // this is only checked on hogs right now, so no need for gear type check
-        Gear:= Gear^.NextGear
-        end;
+    for p:= 0 to Pred(ClansCount) do
+        with ClansArray[p]^ do
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            Effects[heInvulnerable]:= 1;
 
 if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;

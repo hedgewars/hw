@@ -948,7 +948,7 @@ begin
         DrawSprite(sprVampiric, sx - 24, sy - 24, 0);
         end;
 
-    if Gear^.Invulnerable then
+    if (Gear^.Hedgehog^.Effects[heInvulnerable] <> 0) then
         begin
         Tint($FF, $FF, $FF, max($40, round($FF * abs(1 - ((RealTicks div 2 + Gear^.uid * 491) mod 1500) / 750))));
         DrawSprite(sprInvulnerable, sx - 24, sy - 24, 0);
