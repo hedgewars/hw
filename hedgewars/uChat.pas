@@ -306,7 +306,9 @@ procedure CleanupInput;
 begin
     FreezeEnterKey;
     history:= 0;
-{$IFNDEF SDL2}
+{$IFDEF SDL2}
+    SDL_StopTextInput();
+{$ELSE}
     SDL_EnableKeyRepeat(0,0);
 {$ENDIF}
     GameState:= gsGame;
@@ -431,7 +433,9 @@ procedure chChat(var s: shortstring);
 begin
     s:= s; // avoid compiler hint
     GameState:= gsChat;
-{$IFNDEF SDL2}
+{$IFDEF SDL2}
+    SDL_StartTextInput();
+{$ELSE}
     SDL_EnableKeyRepeat(200,45);
 {$ENDIF}
     if length(s) = 0 then

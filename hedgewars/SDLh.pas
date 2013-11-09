@@ -139,6 +139,9 @@ const
 
 
 {$IFDEF SDL2}
+    SDL_TEXTEDITINGEVENT_TEXT_SIZE = 32;
+    SDL_TEXTINPUTEVENT_TEXT_SIZE   = 32;
+
     // SDL_Event types
     // pascal does not support unions as is, so we list here every possible event
     // and later associate a struct type each
@@ -543,21 +546,20 @@ type
         data1, data2: LongInt;
         end;
 
-    // available in sdl12 but not exposed
     TSDL_TextEditingEvent = record
-        type_: LongWord;
-        timestamp: LongWord;
-        windowID: LongWord;
-        text: array[0..31] of Byte;
-        start, lenght: LongInt;
+        type_: Longword;
+        timestamp: Longword;
+        windowID: Longword;
+        text: array [0..SDL_TEXTEDITINGEVENT_TEXT_SIZE - 1] of char;
+        start: LongInt;
+        length: LongInt;
         end;
 
-    // available in sdl12 but not exposed
     TSDL_TextInputEvent = record
-        type_: LongWord;
-        timestamp: LongWord;
-        windowID: LongWord;
-        text: array[0..31] of Byte;
+        type_: Longword;
+        timestamp: Longword;
+        windowID: Longword;
+        text: array [0..SDL_TEXTINPUTEVENT_TEXT_SIZE - 1] of char;
         end;
 
     TSDL_TouchFingerEvent = record
@@ -796,7 +798,7 @@ type
             SDL_KEYDOWN,
             SDL_KEYUP: (key: TSDL_KeyboardEvent);
             SDL_TEXTEDITING: (edit: TSDL_TextEditingEvent);
-            SDL_TEXTINPUT: (tedit: TSDL_TextInputEvent);
+            SDL_TEXTINPUT: (text: TSDL_TextInputEvent);
             SDL_MOUSEMOTION: (motion: TSDL_MouseMotionEvent);
             SDL_MOUSEBUTTONDOWN,
             SDL_MOUSEBUTTONUP: (button: TSDL_MouseButtonEvent);
@@ -1031,6 +1033,7 @@ function  SDL_PixelFormatEnumToMasks(format: TSDL_ArrayByteOrder; bpp: PLongInt;
 procedure SDL_WarpMouseInWindow(window: PSDL_Window; x, y: LongInt); cdecl; external SDLLibName;
 function  SDL_SetHint(name, value: PChar): Boolean; cdecl; external SDLLibName;
 procedure SDL_StartTextInput; cdecl; external SDLLibName;
+procedure SDL_StopTextInput; cdecl; external SDLLibName;
 
 function  SDL_PeepEvents(event: PSDL_Event; numevents: LongInt; action: TSDL_eventaction; minType, maxType: LongWord): LongInt; cdecl; external SDLLibName;
 

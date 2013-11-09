@@ -154,13 +154,8 @@ begin
             case event.type_ of
 {$IFDEF SDL2}
                 SDL_KEYDOWN:
-                    if GameState = gsChat then
-                        begin
-                    // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
-                        end
-                    else
-                        if GameState >= gsGame then ProcessKey(event.key);
+                    if (GameState <> gsChat) and (GameState >= gsGame) then
+                        ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
                         ProcessKey(event.key);
@@ -176,6 +171,9 @@ begin
 
                 SDL_MOUSEWHEEL:
                     ProcessMouseWheel(event.wheel.x, event.wheel.y);
+
+                SDL_TEXTINPUT: AddFileLog('[Text input] ' + event.text.text);
+                SDL_TEXTEDITING: AddFileLog('[Text edit] ''' + event.edit.text + ''' ' + inttostr(event.edit.start) + ' ' + inttostr(event.edit.length));
 
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then
@@ -352,7 +350,7 @@ begin
     WriteLnToConsole(msgOK);
 
 {$IFDEF SDL2}
-    SDL_StartTextInput();
+    //SDL_StartTextInput();
 {$ELSE}
     SDL_EnableUNICODE(1);
 {$ENDIF}
