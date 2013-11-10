@@ -154,7 +154,9 @@ begin
             case event.type_ of
 {$IFDEF SDL2}
                 SDL_KEYDOWN:
-                    if (GameState <> gsChat) and (GameState >= gsGame) then
+                    if (GameState = gsChat) then
+                        KeyPressChat(event.key.keysym.sym)
+                    else if (GameState >= gsGame) then
                         ProcessKey(event.key);
                 SDL_KEYUP:
                     if (GameState <> gsChat) and (GameState >= gsGame) then
@@ -172,8 +174,7 @@ begin
                 SDL_MOUSEWHEEL:
                     ProcessMouseWheel(event.wheel.x, event.wheel.y);
 
-                SDL_TEXTINPUT: AddFileLog('[Text input] ' + event.text.text);
-                SDL_TEXTEDITING: AddFileLog('[Text edit] ''' + event.edit.text + ''' ' + inttostr(event.edit.start) + ' ' + inttostr(event.edit.length));
+                SDL_TEXTINPUT: uChat.TextInput(event.text);
 
                 SDL_WINDOWEVENT:
                     if event.window.event = SDL_WINDOWEVENT_SHOWN then

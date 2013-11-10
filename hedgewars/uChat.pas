@@ -21,6 +21,7 @@
 unit uChat;
 
 interface
+uses SDLh;
 
 procedure initModule;
 procedure freeModule;
@@ -28,11 +29,17 @@ procedure ReloadLines;
 procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
-procedure KeyPressChat(Key, Sym: Longword);
 procedure SendHogSpeech(s: shortstring);
 
+{$IFDEF SDL2}
+procedure KeyPressChat(Sym: Longword);
+procedure TextInput(var event: TSDL_TextInputEvent);
+{$ELSE}
+procedure KeyPressChat(Key, Sym: Longword);
+{$ENDIF}
+
 implementation
-uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
+uses uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
 
 const MaxStrIndex = 27;
 
@@ -315,7 +322,29 @@ begin
     ResetKbd;
 end;
 
+{$IFDEF SDL2}
+procedure TextInput(var event: TSDL_TextInputEvent);
+var s: shortstring;
+    l: byte;
+begin
+    l:= 0;
+    while event.text[l] <> #0 do
+        begin
+        s[l + 1]:= event.text[l];
+        inc(l)
+        end;
+    s[0]:= char(l);
+
+    if byte(InputStr.s[0]) + l > 240 then exit;
+
+    InputStrL[byte(InputStr.s[0]) + l]:= InputStr.s[0];
+    SetLine(InputStr, InputStr.s + s, true)
+end;
+
+procedure KeyPressChat(Sym: Longword);
+{$ELSE}
 procedure KeyPressChat(Key, Sym: Longword);
+{$ENDIF}
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
@@ -364,6 +393,8 @@ begin
         else
             action:= false;
         end;
+
+{$IFNDEF SDL2}
     if not action and (Key <> 0) then
         begin
         if (Key < $80) then
@@ -391,6 +422,7 @@ begin
         InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
         SetLine(InputStr, InputStr.s + utf8, true)
         end
+{$ENDIF}
 end;
 
 procedure chChatMessage(var s: shortstring);
