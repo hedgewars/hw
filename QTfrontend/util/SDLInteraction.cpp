@@ -84,6 +84,18 @@ QStringList SDLInteraction::getResolutions() const
 {
     QStringList result;
 
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+    int modesNumber = SDL_GetNumDisplayModes(0);
+    SDL_DisplayMode mode;
+
+    for(int i = 0; i < modesNumber; ++i)
+    {
+        SDL_GetDisplayMode(0, i, &mode);
+
+        if ((mode.w >= 640) && (mode.h >= 480))
+            result << QString("%1x%2").arg(mode.w).arg(mode.h);
+    }
+#else
     SDL_Rect **modes;
 
     modes = SDL_ListModes(NULL, SDL_FULLSCREEN);
@@ -98,6 +110,7 @@ QStringList SDLInteraction::getResolutions() const
             if ((modes[i]->w >= 640) && (modes[i]->h >= 480))
                 result << QString("%1x%2").arg(modes[i]->w).arg(modes[i]->h);
     }
+#endif
 
     return result;
 }
@@ -107,6 +120,9 @@ void SDLInteraction::addGameControllerKeys() const
 {
     QStringList result;
 
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+
+#else
     int i = 0;
     while(i < 1024 && sdlkeys[i][1][0] != '\0')
         i++;
@@ -177,7 +193,8 @@ void SDLInteraction::addGameControllerKeys() const
 
     // Terminate the list
     sdlkeys[i][0][0] = '\0';
-    sdlkeys[i][1][0] = '\0';
+    sdlkeys[i][1][0] = '\0';   
+#endif
 }
 
 
@@ -239,7 +256,7 @@ void SDLInteraction::startMusic()
     if (!m_audioInitialized) return;
 
     if (m_music == NULL)
-        m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()));
+        m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()), 0);
 
     Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
     Mix_FadeInMusic(m_music, -1, 1750);
@@ -260,3 +277,17 @@ void SDLInteraction::stopMusic()
     m_isPlayingMusic = false;
 }
 
+
+QSize SDLInteraction::getCurrentResolution()
+{
+#if SDL_VERSION_ATLEAST(2, 0, 0)
+    SDL_DisplayMode mode;
+
+    SDL_GetDesktopDisplayMode(0, &mode);
+
+    return QSize(mode.w, mode.h);
+#else
+    SDL_VideoInfo * vi = SDL_GetVideoInfo();
+    return QSize(vi->current_w, vi->current_h);
+#endif
+}

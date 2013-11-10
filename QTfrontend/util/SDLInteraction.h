@@ -27,6 +27,7 @@
 
 #include <QMap>
 #include <QStringList>
+#include <QSize>
 
 #include "SDL_mixer.h"
 
@@ -103,6 +104,8 @@ class SDLInteraction
 
         /// Fades out and stops the background music (if playing).
         void stopMusic();
+
+        QSize getCurrentResolution();
 };
 
 

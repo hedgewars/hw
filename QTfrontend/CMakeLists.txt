@@ -205,9 +205,19 @@ add_executable(hedgewars ${console_access}
 list(APPEND HW_LINK_LIBS
     physfs physlayer
     ${QT_LIBRARIES}
-    ${SDL_LIBRARY}
-    ${SDLMIXER_LIBRARY}
     )
+
+if(USESDL12)
+    list(APPEND HW_LINK_LIBS
+        ${SDL_LIBRARY}
+        ${SDLMIXER_LIBRARY}
+        )
+else()
+    list(APPEND HW_LINK_LIBS
+        ${SDL2_LIBRARY}
+        ${SDL2MIXER_LIBRARY}
+        )
+endif()
 
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
