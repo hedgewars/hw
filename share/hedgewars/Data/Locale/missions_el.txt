@@ -35,7 +35,7 @@ User_Mission_-_That_Sinking_Feeling.name=Αποστολή: Αυτό το Αίσ�
 User_Mission_-_That_Sinking_Feeling.desc="Η στάθμη του νερού ανεβαίνει απότομα και ο χρόνος είναι περιορισμένος. Πολλοί προσπάθησαν και απέτυχαν. Μπορείς να τους σώσεις όλους;"
 
 User_Mission_-_Newton_and_the_Hammock.name=Αποστολή: ο Νεύτωνας και η Αιώρα
-User_Mission_-_Newton_and_the_Hammock.desc="Θυμηθείτε σκατζοχοίρια: Η ταχύτητα ενός σώματος παραμένει σταθερή εκτός εάν ασκηθεί στο σώμα κάποια εξωτερική δύναμη!"
+User_Mission_-_Newton_and_the_Hammock.desc="Θυμηθείτε σκαντζοχοίρια: Η ταχύτητα ενός σώματος παραμένει σταθερή εκτός εάν ασκηθεί στο σώμα κάποια εξωτερική δύναμη!"
 
 User_Mission_-_The_Great_Escape.name=Αποστολή: Η Μεγάλη Απόδραση
 User_Mission_-_The_Great_Escape.desc="Νομίζεις ότι μπορείς να με φυλακίσεις!;"
