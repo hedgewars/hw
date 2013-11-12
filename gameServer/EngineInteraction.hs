@@ -12,6 +12,7 @@ import qualified Data.List as L
 import Data.Word
 import Data.Bits
 import Control.Arrow
+import Data.Maybe
 -------------
 import CoreTypes
 import Utils
@@ -74,7 +75,7 @@ replayToDemo ti mParams prms msgs = concat [
         em = toEngineMsg
         eml = em . B.concat
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
-        maybeScript = let s = head $ prms Map.! "SCRIPT" in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
+        maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
