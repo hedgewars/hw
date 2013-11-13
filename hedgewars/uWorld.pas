@@ -1439,37 +1439,40 @@ RenderWorldEdge(Lag);
 SetScale(cDefaultZoomLevel);
 
 // Turn time
-{$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= cScreenHeight - 13;
-{$ELSE}
-offsetX:= 48;
-{$ENDIF}
-offsetY:= cOffsetY;
-if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
+if UIDisplay <> uiNone then
     begin
-    if ReadyTimeLeft <> 0 then
-        i:= Succ(Pred(ReadyTimeLeft) div 1000)
-    else
-        i:= Succ(Pred(TurnTimeLeft) div 1000);
-   
-    if i>99 then
-        t:= 112
-    else if i>9 then
-        t:= 96
-    else
-        t:= 80;
-    DrawSprite(sprFrame, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, 1);
-    while i > 0 do
+{$IFDEF USE_TOUCH_INTERFACE}
+    offsetX:= cScreenHeight - 13;
+{$ELSE}
+    offsetX:= 48;
+{$ENDIF}
+    offsetY:= cOffsetY;
+    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
         begin
-        dec(t, 32);
-        DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
-        i:= i div 10
+        if ReadyTimeLeft <> 0 then
+            i:= Succ(Pred(ReadyTimeLeft) div 1000)
+        else
+            i:= Succ(Pred(TurnTimeLeft) div 1000);
+       
+        if i>99 then
+            t:= 112
+        else if i>9 then
+            t:= 96
+        else
+            t:= 80;
+        DrawSprite(sprFrame, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, 1);
+        while i > 0 do
+            begin
+            dec(t, 32);
+            DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
+            i:= i div 10
+            end;
+        DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
         end;
-    DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
-    end;
 
 // Captions
-DrawCaptions;
+    DrawCaptions
+    end;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 // Draw buttons Related to the Touch interface
@@ -1485,13 +1488,16 @@ DrawScreenWidget(@pauseButton);
 DrawScreenWidget(@utilityWidget);
 {$ENDIF}
 
-RenderTeamsHealth;
+if UIDisplay = uiAll then
+    RenderTeamsHealth;
 
 // Lag alert
 if isInLag then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
+if UIDisplay <> uiNone then
+    begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
     offsetY:= (cScreenWidth shr 1) + 74;
@@ -1513,14 +1519,15 @@ if isInLag then
     else
         if WindBarWidth < 0 then
         begin
-            {$WARNINGS OFF}
-            r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
-            {$WARNINGS ON}
-            r.y:= 0;
-            r.w:= - WindBarWidth;
-            r.h:= 13;
-            DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
-        end;
+        {$WARNINGS OFF}
+        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
+        {$WARNINGS ON}
+        r.y:= 0;
+        r.w:= - WindBarWidth;
+        r.h:= 13;
+        DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
+        end
+    end;
 
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then

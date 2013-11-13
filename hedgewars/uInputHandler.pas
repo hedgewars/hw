@@ -170,6 +170,9 @@ if CurrentBinds[code][0] <> #0 then
 
     if KeyDown then
         begin
+        if CurrentBinds[code] = 'switch' then
+            LocalMessage:= LocalMessage or gmSwitch;
+            
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
@@ -181,7 +184,12 @@ if CurrentBinds[code][0] <> #0 then
         ParseCommand(s, Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
-        end;
+        end
+    else
+        begin
+        if CurrentBinds[code] = 'switch' then
+            LocalMessage:= LocalMessage and not(gmSwitch)
+        end
     end
 end;
 

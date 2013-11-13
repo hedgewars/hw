@@ -195,6 +195,9 @@ var
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
 
+    UIDisplay       : TUIDisplay;
+    LocalMessage    : LongWord;
+
     Theme           : shortstring;
     disableLandBack : boolean;
 
@@ -2553,6 +2556,9 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
+
+    UIDisplay:= uiAll;
+    LocalMessage:= 0;
 end;
 
 procedure freeModule;

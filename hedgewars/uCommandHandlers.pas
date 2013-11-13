@@ -318,6 +318,8 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+if not isExternalSource then
+    LocalMessage:= LocalMessage or gmPrecise;
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not isExternalSource then
@@ -331,6 +333,8 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
+if not isExternalSource then
+    LocalMessage:= LocalMessage and not(gmPrecise);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
@@ -657,10 +661,26 @@ end;
 procedure chRotateMask(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if ((GameFlags and gfInvulnerable) = 0) then
-    cTagsMask:= cTagsMasks[cTagsMask]
+// this is just for me, 'cause I thought it'd be fun.  using the old precise + switch to keep it out of people's way
+if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
+    begin
+    if UIDisplay <> uiNone then
+         UIDisplay:= uiNone
+    else UIDisplay:= uiAll
+    end
+else if LocalMessage and gmPrecise = gmPrecise then
+    begin
+    if ((GameFlags and gfInvulnerable) = 0) then
+        cTagsMask:= cTagsMasks[cTagsMask]
+    else
+        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
+    end
 else
-    cTagsMask:= cTagsMasksNoHealth[cTagsMask];
+    begin
+    if UIDisplay <> uiNoTeams then
+         UIDisplay:= uiNoTeams
+    else UIDisplay:= uiAll
+    end
 end;
 
 procedure chSpeedup_p(var s: shortstring);
