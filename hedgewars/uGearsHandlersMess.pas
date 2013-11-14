@@ -3555,7 +3555,13 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if HHGear = nil then
         begin
-        DeleteGear(Gear);
+        Gear^.Timer := 0;
+        Gear^.State := Gear^.State or gstAnimation or gstTmpFlag;
+        Gear^.Timer := 0;
+        Gear^.doStep := @doStepBirdyDisappear;
+        CurAmmoGear := nil;
+        isCursorVisible := false;
+        AfterAttack;
         exit
         end;
 
@@ -3657,14 +3663,21 @@ var
     HHGear: PGear;
 begin
     if Gear^.Timer > 0 then
-        dec(Gear^.Timer, 1)
-    else if Gear^.Hedgehog^.Gear = nil then
+        dec(Gear^.Timer, 1);
+
+    HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
         begin
-        DeleteGear(Gear);
+        Gear^.Timer := 0;
+        Gear^.State := Gear^.State or gstAnimation or gstTmpFlag;
+        Gear^.Timer := 0;
+        Gear^.doStep := @doStepBirdyDisappear;
+        CurAmmoGear := nil;
+        isCursorVisible := false;
         AfterAttack;
         exit
         end;
-    HHGear := Gear^.Hedgehog^.Gear;
+
     HHGear^.Message := HHGear^.Message and (not (gmUp or gmPrecise or gmLeft or gmRight));
     if abs(hwRound(HHGear^.Y - Gear^.Y)) > 32 then
         begin
