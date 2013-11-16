@@ -11,6 +11,12 @@ set(PHYSFS_VERSION 2.1.0)
 # Increment this if/when we break backwards compatibility.
 set(PHYSFS_SOVERSION 1)
 
+# 32bit platforms won't link unless this is set
+if(CMAKE_SIZEOF_VOID_P LESS 8)
+    set(PHYSFS_NO_64BIT_SUPPORT TRUE)
+    add_definitions(-DPHYSFS_NO_64BIT_SUPPORT=1)
+endif(CMAKE_SIZEOF_VOID_P LESS 8)
+
 # I hate that they define "WIN32" ... we're about to move to Win64...I hope!
 if(WIN32 AND NOT WINDOWS)
     set(WINDOWS TRUE)
