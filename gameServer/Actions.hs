@@ -242,7 +242,7 @@ processAction (ChangeMaster delegateId)= do
 
     newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom')
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo proto(nick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -265,7 +265,7 @@ processAction (AddRoom roomName roomPassword) = do
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
 
     mapM_ processAction [
-      AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm{playersIn = 1})
+      AnswerClients chans ("ROOM" : "ADD" : roomInfo proto n rm{playersIn = 1})
         ]
 
 
@@ -294,7 +294,7 @@ processAction SendUpdateOnThisRoom = do
     rm <- io $ room'sM rnc id ri
     n <- io $ client'sM rnc nick (masterID rm)
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo n rm)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo proto n rm)
 
 
 processAction UnreadyRoomClients = do

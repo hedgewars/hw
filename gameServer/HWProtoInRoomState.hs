@@ -294,7 +294,7 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
             [Warning $ loc "Room with such name already exists"]
         else
             [ModifyRoom roomUpdate,
-            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (nick cl) (roomUpdate rm))]
+            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm))]
     where
         roomUpdate r = r{name = newName}
 
