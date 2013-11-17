@@ -21,7 +21,7 @@ handleCmd_lobby ["LIST"] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     rooms <- allRoomInfos
-    let roomsInfoList = concatMap (\r -> roomInfo (nick $ irnc `client` masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
+    let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (nick $ irnc `client` masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
 
 

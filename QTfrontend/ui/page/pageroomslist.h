@@ -57,8 +57,6 @@ class PageRoomsList : public AbstractPage
         QPushButton * BtnAdmin;
         QPushButton * BtnClear;
         QComboBox * CBState;
-        QComboBox * CBRules;
-        QComboBox * CBWeapons;
         HWChatWidget * chatWidget;
         QLabel * lblCount;
 
@@ -98,8 +96,6 @@ class PageRoomsList : public AbstractPage
         QSettings * m_gameSettings;
         QSortFilterProxyModel * roomsModel;
         QSortFilterProxyModel * stateFilteredModel;
-        QSortFilterProxyModel * schemeFilteredModel;
-        QSortFilterProxyModel * weaponsFilteredModel;
         QAction * showGamesInLobby;
         QAction * showGamesInProgress;
         QSplitter * m_splitter;
