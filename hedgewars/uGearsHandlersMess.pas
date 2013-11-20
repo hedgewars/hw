@@ -286,7 +286,7 @@ var
 begin
     tX:= Gear^.X;
     if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
-      (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
+      ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
         Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
@@ -357,14 +357,14 @@ begin
         end;
 
 
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
         begin
         collH := hwSign(Gear^.dX);
         Gear^.dX := - Gear^.dX * Gear^.Elasticity;
         Gear^.dY :=   Gear^.dY * Gear^.Elasticity;
         Gear^.State := Gear^.State or gstCollision
         end
-    else if (Gear^.AdvBounce=1) and TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) then
+    else if (Gear^.AdvBounce =1) and (TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) <> 0) then
         collH := -hwSign(Gear^.dX);
     //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
     if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((collV=-1)
@@ -871,11 +871,11 @@ begin
     AllInactive := false;
 
     if Gear^.dY.isNegative then
-        if TestCollisionY(Gear, -1) then
+        if TestCollisionY(Gear, -1) <> 0 then
             Gear^.dY := _0;
 
     if not Gear^.dY.isNegative then
-        if TestCollisionY(Gear, 1) then
+        if TestCollisionY(Gear, 1) <> 0 then
         begin
             Gear^.dY := - Gear^.dY * Gear^.Elasticity;
             if Gear^.dY > - _1div1024 then
@@ -1658,9 +1658,9 @@ end;
 procedure doStepSMine(Gear: PGear);
 begin
     // TODO: do real calculation?
-    if TestCollisionXwithGear(Gear, 2)
-    or (TestCollisionYwithGear(Gear, -2) <> 0)
-    or TestCollisionXwithGear(Gear, -2)
+    if (TestCollisionXwithGear(Gear, 2) <> 0)
+    or (TestCollisionYwithGear(Gear,-2) <> 0)
+    or (TestCollisionXwithGear(Gear,-2) <> 0)
     or (TestCollisionYwithGear(Gear, 2) <> 0) then
         begin
         if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
@@ -2297,7 +2297,7 @@ begin
         HHGear^.Y := HHGear^.Y + cGravity * 40;
 
     // don't drift into obstacles
-    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
         HHGear^.X := HHGear^.X - int2hwFloat(hwSign(HHGear^.dX));
     HHGear^.Y := HHGear^.Y + cGravity * 100;
     Gear^.X := HHGear^.X;
@@ -3077,14 +3077,14 @@ begin
 
     tempColl:= Gear^.CollisionMask;
     Gear^.CollisionMask:= $007F;
-    if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) or (GameTicks > Gear^.FlightTime) then
+    if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) <> 0) or (TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) <> 0) or (GameTicks > Gear^.FlightTime) then
         t := CheckGearsCollision(Gear)
     else t := nil;
     Gear^.CollisionMask:= tempColl;
     //fixes drill not exploding when touching HH bug
 
     if (Gear^.Timer = 0) or ((t <> nil) and (t^.Count <> 0))
-    or ( ((Gear^.State and gsttmpFlag) = 0) and (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0) and (not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))))
+    or ( ((Gear^.State and gsttmpFlag) = 0) and (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0) and (TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) = 0))
 // CheckLandValue returns true if the type isn't matched
     or (not CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y), lfIndestructible)) then
         begin
@@ -3098,7 +3098,7 @@ begin
         exit
         end
 
-    else if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0) and (not TestCollisionXWithGear(Gear, hwSign(Gear^.dX))) then
+    else if (TestCollisionYWithGear(Gear, hwSign(Gear^.dY)) = 0) and (TestCollisionXWithGear(Gear, hwSign(Gear^.dX)) = 0) then
         begin
         StopSoundChan(Gear^.SoundChannel);
         Gear^.Tag := 1;
@@ -4043,8 +4043,7 @@ begin
                 iterator^.Radius := iterator^.Radius - 1;
 
             // check front
-            isCollision := TestCollisionY(iterator, sy)
-                        or TestCollisionX(iterator, sx);
+            isCollision := (TestCollisionY(iterator, sy) <> 0) or (TestCollisionX(iterator, sx) <> 0);
 
             if not isCollision then
                 begin
@@ -4052,8 +4051,8 @@ begin
                 // the square check won't check more pixels than we want to)
                 iterator^.Radius := 1 + resetr div 2;
                 rh := resetr div 4;
-                isCollision := TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy, false)
-                            or TestCollisionXwithXYShift(iterator, ox * rh,        0, sx, false);
+                isCollision := (TestCollisionYwithXYShift(iterator,       0, -sy * rh, sy, false) <> 0)
+                            or (TestCollisionXwithXYShift(iterator, ox * rh,        0, sx, false) <> 0);
                 end;
 
             iterator^.Radius := resetr;
@@ -5642,9 +5641,9 @@ if HHGear <> nil then
         begin
         tdX:= HHGear^.X-Gear^.X;
         dir:= hwSign(tdX);
-        if not TestCollisionX(Gear, dir) then
+        if TestCollisionX(Gear, dir) = 0 then
             Gear^.X:= Gear^.X + signAs(_1,tdX);
-        if TestCollisionXwithXYShift(Gear, signAs(_10,tdX), 0, dir) then
+        if TestCollisionXwithXYShift(Gear, signAs(_10,tdX), 0, dir) <> 0 then
             begin
             Gear^.dX:= SignAs(_0_15, tdX);
             Gear^.dY:= -_0_3;
@@ -5683,9 +5682,9 @@ begin
         begin
         (*ox:= 0; oy:= 0;
         if TestCollisionYwithGear(Gear, -1) <> 0 then oy:= -1;
-        if TestCollisionXwithGear(Gear, 1)       then ox:=  1;
-        if TestCollisionXwithGear(Gear, -1)      then ox:= -1;
-        if TestCollisionYwithGear(Gear, 1) <> 0  then oy:=  1;
+        if TestCollisionXwithGear(Gear, 1)  <> 0 then ox:=  1;
+        if TestCollisionXwithGear(Gear, -1) <> 0 then ox:= -1;
+        if TestCollisionYwithGear(Gear, 1)  <> 0 then oy:=  1;
         if Gear^.Health > 0 then
             PlaySound(sndRopeAttach);
 
@@ -5714,9 +5713,9 @@ begin
         end
     else if GameTicks and $3F = 0 then
         begin
-        if  (TestCollisionYwithGear(Gear, -1) = 0)
-        and (not TestCollisionXwithGear(Gear, 1))
-        and (not TestCollisionXwithGear(Gear, -1))
+        if  (TestCollisionYwithGear(Gear,-1) = 0)
+        and (TestCollisionXwithGear(Gear, 1) = 0)
+        and (TestCollisionXwithGear(Gear,-1) = 0)
         and (TestCollisionYwithGear(Gear, 1) = 0) then Gear^.State:= Gear^.State and (not gstCollision) or gstMoving;
         end
 end;

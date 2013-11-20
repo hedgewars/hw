@@ -704,7 +704,7 @@ end;
 
 procedure CheckCollision(Gear: PGear); inline;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
+    if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0)
     or (TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) <> 0) then
         Gear^.State := Gear^.State or gstCollision
     else
@@ -713,8 +713,8 @@ end;
 
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 begin
-    if TestCollisionX(Gear, hwSign(Gear^.dX))
-    or TestCollisionY(Gear, hwSign(Gear^.dY)) then
+    if (TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0)
+    or (TestCollisionY(Gear, hwSign(Gear^.dY)) <> 0) then
         Gear^.State := Gear^.State or gstCollision
     else 
         Gear^.State := Gear^.State and (not gstCollision)
@@ -722,25 +722,25 @@ end;
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
             Gear^.Y:= Gear^.Y + _6
         end else Gear^.Y:= Gear^.Y + _5 else
         end else Gear^.Y:= Gear^.Y + _4 else
@@ -749,7 +749,7 @@ begin
         end else Gear^.Y:= Gear^.Y + _1
         end;
 
-    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0 then
         begin
         Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
         MakeHedgehogsStep:= true
@@ -968,16 +968,16 @@ while i > 0 do
                 Gear^.State:= Gear^.State or gstMoving;
                 if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
                 // move the gear upwards a bit to throw it over tiny obstacles at start
-                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
                     begin
-                    if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
                     end
                 end;
