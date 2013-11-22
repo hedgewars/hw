@@ -95,7 +95,7 @@ if (Count > (MAXRECTSINDEX-20)) then
     while (t <> nil) and (t^.Kind <> gtMine) do 
         t:= t^.NextGear;
     if (t <> nil) then
-        DeleteGear(t)
+        t^.State:= t^.State or gmDelete
     end;
 end;
 
