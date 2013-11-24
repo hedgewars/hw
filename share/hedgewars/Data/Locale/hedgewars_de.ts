@@ -481,7 +481,7 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translationnfinished>Mission:</translation>
+        <translation type="unfinished">Mission:</translation>
     </message>
     <message>
         <source>Map:</source>
