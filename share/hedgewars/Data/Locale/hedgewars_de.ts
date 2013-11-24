@@ -477,7 +477,7 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation="unfinished">Labyrinth-Art:</translation>
+        <translation type="unfinished">Labyrinth-Art:</translation>
     </message>
     <message>
         <source>Mission:</source>
@@ -794,7 +794,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation="unfinished">Wählt eine Aktion, um eine benutzerdefinierte Taste für dieses Team auszuwählenn</translation>
+        <translation type="unfinished">Wählt eine Aktion, um eine benutzerdefinierte Taste für dieses Team auszuwählenn</translation>
     </message>
     <message>
         <source>Use my default</source>
