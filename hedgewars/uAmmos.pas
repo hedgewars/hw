@@ -322,18 +322,21 @@ begin
 if Hedgehog.Gear <> nil then
     with Hedgehog do
         begin
-        CurMinAngle:= Ammoz[AmmoType].minAngle;
-        if Ammoz[AmmoType].maxAngle <> 0 then
-            CurMaxAngle:= Ammoz[AmmoType].maxAngle
-        else
-            CurMaxAngle:= cMaxAngle;
-
-        with Hedgehog.Gear^ do
+        if (AmmoType <> amNothing) then
             begin
-            if Angle < CurMinAngle then
-                Angle:= CurMinAngle;
-            if Angle > CurMaxAngle then
-                Angle:= CurMaxAngle;
+            CurMinAngle:= Ammoz[AmmoType].minAngle;
+            if Ammoz[AmmoType].maxAngle <> 0 then
+                CurMaxAngle:= Ammoz[AmmoType].maxAngle
+            else
+                CurMaxAngle:= cMaxAngle;
+
+            with Hedgehog.Gear^ do
+                begin
+                if Angle < CurMinAngle then
+                    Angle:= CurMinAngle;
+                if Angle > CurMaxAngle then
+                    Angle:= CurMaxAngle;
+                end
             end
         end
 end;
@@ -509,6 +512,8 @@ begin
     RegisterVariable('ammreinf', @SetAmmoReinforcement, false);
     RegisterVariable('ammstore', @chAddAmmoStore , false);
 
+    CurMinAngle:= 0;
+    CurMaxAngle:= cMaxAngle;
     StoreCnt:= 0;
     ammoLoadout:= '';
     ammoProbability:= '';
