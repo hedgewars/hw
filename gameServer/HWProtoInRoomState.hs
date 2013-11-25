@@ -323,6 +323,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     maybeClientId <- clientByNick newAdmin
     master <- liftM isMaster thisClient
     serverAdmin <- liftM isAdministrator thisClient
+    thisRoomMasterId <- liftM masterID thisRoom
     let newAdminId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
     return
@@ -330,6 +331,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
             (master || serverAdmin)
                 && isJust maybeClientId
                 && ((newAdminId /= thisClientId) || (serverAdmin && not master))
+                && (newAdminId /= thisRoomMasterId)
                 && sameRoom]
 
 
