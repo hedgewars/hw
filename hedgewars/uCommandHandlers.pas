@@ -318,8 +318,6 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not isExternalSource then
-    LocalMessage:= LocalMessage or gmPrecise;
 if CheckNoTeamOrHH or isPaused then
     exit;
 if not isExternalSource then
@@ -333,8 +331,6 @@ end;
 procedure chPrecise_m(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if not isExternalSource then
-    LocalMessage:= LocalMessage and not(gmPrecise);
 if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
