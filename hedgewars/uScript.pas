@@ -1791,7 +1791,7 @@ begin
     if (lua_gettop(L) <> 1) then
         LuaError('Lua: Wrong number of parameters passed to GetCampaignVar!')
     else
-        SendIPCAndWaitReply('V?' + lua_tostring(L, 1));
+        SendIPCAndWaitReply('V?' + lua_tostring(L, 1) + #0);
     lua_pushstring(L, str2pchar(CampaignVariable));
     lc_getcampaignvar := 1;
 end;

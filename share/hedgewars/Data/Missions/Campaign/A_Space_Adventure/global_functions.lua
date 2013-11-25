@@ -5,9 +5,10 @@ function saveCompletedStatus(planetNum)
 	if tonumber(GetCampaignVar("MainMissionsStatus")) then
 		status = GetCampaignVar("MainMissionsStatus")
 	end
-	if i == 1 then
-		status = "1"..status:sub(planetNum+1)
-	elseif i == status:len() then
+
+	if planetNum == 1 then
+		status = "1"..status:sub(2)
+	elseif planetNum == status:len() then
 		status = status:sub(1,planetNum-1).."1"
 	else
 		status = status:sub(1,planetNum-1).."1"..status:sub(planetNum+1)
@@ -79,9 +80,9 @@ function saveBonus(index, times)
 	if tonumber(GetCampaignVar("SideMissionsBonuses")) then
 		bonus = GetCampaignVar("SideMissionsBonuses")
 	end
-	if i == 1 then
-		bonus = times..bonus:sub(index+1)
-	elseif i == bonus:len() then
+	if index == 1 then
+		bonus = times..bonus:sub(2)
+	elseif index == bonus:len() then
 		bonus = bonus:sub(1,index-1)..times
 	else
 		bonus = bonus:sub(1,index-1)..times..bonus:sub(index+1)
