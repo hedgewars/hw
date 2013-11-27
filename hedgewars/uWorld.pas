@@ -60,9 +60,10 @@ uses
     , uCaptions
     , uCursor
     , uCommands
-{$IFDEF USE_VIDEO_RECORDING}    
+    , uTeams
+{$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
-{$ENDIF}    
+{$ENDIF}
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -1231,7 +1232,7 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i, h, smallScreenOffset : LongInt;
+var t, i, h, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
     htex: PTexture;
@@ -1248,7 +1249,6 @@ for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
       if TeamHealth > 0 then
         begin
-        h:= 0;
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
@@ -1265,6 +1265,8 @@ for t:= 0 to Pred(TeamsCount) do
         // draw flag
         DrawTexture(-14, cScreenHeight + DrawHealthY + smallScreenOffset, FlagTex);
 
+        TeamHealthBarWidth:= cTeamHealthWidth * TeamHealthBarHealth div MaxTeamHealth;
+
         // draw health bar
         r.x:= 0;
         r.y:= 0;
@@ -1277,13 +1279,14 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
+        h:= 0;
         if not hasGone then
             for i:= 0 to cMaxHHIndex do
-                if Hedgehogs[i].Gear <> nil then
-                    begin
-                    inc(h,Hedgehogs[i].Gear^.Health);
-                    if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
-                    end;
+                begin
+                inc(h, Hedgehogs[i].HealthBarHealth);
+                if (h < TeamHealthBarHealth) and (Hedgehogs[i].HealthBarHealth > 0) then 
+                    DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                end;
 
         // draw ai kill counter for gfAISurvival
         if (GameFlags and gfAISurvival) <> 0 then
