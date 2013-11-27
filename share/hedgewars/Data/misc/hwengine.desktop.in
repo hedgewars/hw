@@ -22,5 +22,5 @@ Path=/tmp
 Terminal=false
 StartupNotify=false
 NoDisplay=true
-Categories=Application;Game;StrategyGame;
+Categories=Game;StrategyGame;
 MimeType=application/x-hedgewars-demo;application/x-hedgewars-save;
