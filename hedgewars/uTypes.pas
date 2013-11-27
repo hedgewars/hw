@@ -369,6 +369,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
+            HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
             end;
 
@@ -387,8 +388,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             GraveName: shortstring;
             FortName: shortstring;
             TeamHealth: LongInt;
-            TeamHealthBarWidth,
-            NewTeamHealthBarWidth: LongInt;
+            TeamHealthBarHealth: LongInt;
             DrawHealthY: LongInt;
             AttackBar: LongWord;
             HedgehogsNumber: Longword;

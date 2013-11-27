@@ -41,13 +41,14 @@ function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
+var MaxTeamHealth: LongInt;
+
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
     uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
-var MaxTeamHealth: LongInt;
-    GameOver: boolean;
+var GameOver: boolean;
     NextClan: boolean;
 
 function CheckForWin: boolean;
@@ -480,17 +481,11 @@ with team^ do
         else if Hedgehogs[i].GearHidden <> nil then
             inc(TeamHealth, Hedgehogs[i].GearHidden^.Health);
 
-    if not hasGone then
-        NewTeamHealthBarWidth:= TeamHealth
-        else
-        NewTeamHealthBarWidth:= 0;
-
-    if NewTeamHealthBarWidth > MaxTeamHealth then
+    if TeamHealth > MaxTeamHealth then
         begin
-        MaxTeamHealth:= NewTeamHealthBarWidth;
+        MaxTeamHealth:= TeamHealth;
         RecountAllTeamsHealth;
-        end else if NewTeamHealthBarWidth > 0 then
-            NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end
     end;
 
 RecountClanHealth(team^.Clan);
