@@ -128,10 +128,7 @@ for y:= 0 to Pred(Image^.h) do
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
             if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
-                begin
-                Land[cpY + y, cpX + x]:= lfObject;
-                Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
-                end;
+                Land[cpY + y, cpX + x]:= lfObject or extraFlags
             end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -280,7 +277,7 @@ begin
     rr.x:= x1;
     while rr.x < x2 do
         begin
-        // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
+        // I should theme flag this. also snow...
         if (Theme = 'Snow') or (Theme = 'Christmas') then 
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
         else

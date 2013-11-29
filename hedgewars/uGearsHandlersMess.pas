@@ -282,7 +282,7 @@ var
     //tmp: QWord;
     tX, tdX, tdY: hwFloat;
     collV, collH: LongInt;
-    land: word;
+    land, xland: word;
 begin
     tX:= Gear^.X;
     if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
@@ -323,15 +323,20 @@ begin
             begin
             collV := -1;
             if land and lfIce <> 0 then
-                Gear^.dX := Gear^.dX * (_0_9 + Gear^.Friction * _0_1)
-            else
-                Gear^.dX := Gear^.dX * Gear^.Friction;
-
-            Gear^.dY := - Gear^.dY * Gear^.Elasticity;
-            Gear^.State := Gear^.State or gstCollision
+                 Gear^.dX := Gear^.dX * (_0_9 + Gear^.Friction * _0_1)
+            else Gear^.dX := Gear^.dX * Gear^.Friction;
+            if land and lfBouncy = 0 then
+                 begin
+                 Gear^.dY := - Gear^.dY * Gear^.Elasticity;
+                 Gear^.State := Gear^.State or gstCollision
+                 end
+            else Gear^.dY := - Gear^.dY * cElastic
             end
-        else if (Gear^.AdvBounce=1) and (TestCollisionYwithGear(Gear, 1) <> 0) then
-            collV := 1;
+        else if Gear^.AdvBounce = 1 then
+            begin
+            land:= TestCollisionYwithGear(Gear, 1);
+            if land <> 0 then collV := 1
+            end
         end
     else
         begin // Gear^.dY.isNegative is false
@@ -345,34 +350,62 @@ begin
             else
                 Gear^.dX := Gear^.dX * Gear^.Friction;
 
-            Gear^.dY := - Gear^.dY * Gear^.Elasticity;
-            Gear^.State := Gear^.State or gstCollision
+            if land and lfBouncy = 0 then
+                 begin
+                 Gear^.dY := - Gear^.dY * Gear^.Elasticity;
+                 Gear^.State := Gear^.State or gstCollision
+                 end
+            else Gear^.dY := - Gear^.dY * cElastic
             end
         else
             begin
             isFalling := true;
-            if (Gear^.AdvBounce=1) and (TestCollisionYwithGear(Gear, -1) <> 0) then
-                collV := -1
+            if Gear^.AdvBounce = 1 then
+                begin
+                land:= TestCollisionYwithGear(Gear, -1);
+                if land <> 0 then collV := -1
+                end
             end
         end;
 
 
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
+    xland:= TestCollisionXwithGear(Gear, hwSign(Gear^.dX));
+    if xland <> 0 then
         begin
         collH := hwSign(Gear^.dX);
-        Gear^.dX := - Gear^.dX * Gear^.Elasticity;
-        Gear^.dY :=   Gear^.dY * Gear^.Elasticity;
-        Gear^.State := Gear^.State or gstCollision
+        if xland and lfBouncy = 0 then
+            begin
+            Gear^.dX := - Gear^.dX * Gear^.Elasticity;
+            Gear^.dY :=   Gear^.dY * Gear^.Elasticity;
+            Gear^.State := Gear^.State or gstCollision
+            end
+        else
+            begin
+            Gear^.dX := - Gear^.dX * cElastic;
+            Gear^.dY :=   Gear^.dY * cElastic
+            end
         end
-    else if (Gear^.AdvBounce =1) and (TestCollisionXwithGear(Gear, -hwSign(Gear^.dX)) <> 0) then
-        collH := -hwSign(Gear^.dX);
-    //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
-    if (Gear^.AdvBounce=1) and (collV <>0) and (collH <> 0) and ((collV=-1)
-    or ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue)) then
+    else if Gear^.AdvBounce = 1 then
         begin
-        Gear^.dX := tdY*Gear^.Elasticity*Gear^.Friction;
-        Gear^.dY := tdX*Gear^.Elasticity;
-        //*Gear^.Friction;
+        xland:= TestCollisionXwithGear(Gear, -hwSign(Gear^.dX));
+        if xland <> 0 then collH := -hwSign(Gear^.dX)
+        end;
+    //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
+    if (collV <> 0) and (collH <> 0) and 
+       (((Gear^.AdvBounce=1) and ((collV=-1) or ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue))) or
+        ((xland or land) and lfBouncy <> 0)) then
+        begin
+        if (xland or land) and lfBouncy = 0 then
+            begin
+            Gear^.dX := tdY*Gear^.Elasticity*Gear^.Friction;
+            Gear^.dY := tdX*Gear^.Elasticity
+            end
+        else
+            begin
+            Gear^.dX := tdY*cElastic*Gear^.Friction;
+            Gear^.dY := tdX*cElastic
+            end;
+
         Gear^.dY.isNegative := not tdY.isNegative;
         isFalling := false;
         Gear^.AdvBounce := 10;
@@ -397,7 +430,15 @@ begin
     else
         Gear^.State := Gear^.State or gstMoving;
 
-    if (Gear^.nImpactSounds > 0) and
+    if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_1.QWordValue) and (Gear^.dY.QWordValue < _0_1.QWordValue) then
+        Gear^.State := Gear^.State or gstCollision;
+    
+    if ((xland or land) and lfBouncy <> 0) and
+        (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
+            ((Gear^.Radius >= 3) and
+                ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
+        PlaySound(sndMelonImpact, true)
+    else if (Gear^.nImpactSounds > 0) and
         (Gear^.State and gstCollision <> 0) and
         (((Gear^.Kind <> gtMine) and (Gear^.Damage <> 0)) or (Gear^.State and gstMoving <> 0)) and
         (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or

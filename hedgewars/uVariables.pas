@@ -161,6 +161,7 @@ var
     cMaxWindSpeed   : hwFloat;
     cWindSpeed      : hwFloat;
     cWindSpeedf     : real;
+    cElastic        : hwFloat;
     cGravity        : hwFloat;
     cGravityf       : real;
     cDamageModifier : hwFloat;
@@ -2434,6 +2435,7 @@ begin
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
     cWindSpeed.QWordValue   := 0;           // 0.0
     cWindSpeedf             := 0.0;
+    cElastic                := _0_9;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
