@@ -3,6 +3,7 @@
 
 0.9.19 -> ???:
  * increase precision in damage calcs; extra damage affects fire properly now
+ * visual enhancements for whip
 
 0.9.18 -> 0.9.19:
  + New Freezer weapon - freezes terrain, water, hedgehogs, mines, cases, explosives
