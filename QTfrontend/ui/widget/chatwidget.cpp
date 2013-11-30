@@ -871,8 +871,9 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
         return;
 
     bool isSelf = (nick == m_userNick);
+    bool isInRoom = players->isFlagSet(nick, PlayersListModel::InRoom);
 
-    acFollow->setVisible(!isSelf);
+    acFollow->setVisible(!isSelf && isInRoom);
 
     // update context menu labels according to possible action
     if(players->isFlagSet(nick, PlayersListModel::Ignore))
