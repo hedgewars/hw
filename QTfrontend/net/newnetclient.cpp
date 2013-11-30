@@ -627,7 +627,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if(lst[0] == "JOINING")
     {
-        if(lst.size() < 2)
+        if(lst.size() != 2)
         {
             qWarning("Net: Bad JOINING message");
             return;
@@ -635,6 +635,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         myroom = lst[1];
         emit roomNameUpdated(myroom);
+        return;
     }
 
     if(netClientState == InLobby && lst[0] == "JOINED")
