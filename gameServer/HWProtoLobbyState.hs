@@ -64,8 +64,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     return $
-        if isNothing maybeRI || not sameProto then
+        if isNothing maybeRI then
             [Warning $ loc "No such room"]
+            else if not sameProto then
+            [Warning $ loc "Room version incompatible to your hedgewars version"]
             else if isRestrictedJoins jRoom then
             [Warning $ loc "Joining restricted"]
             else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) then
