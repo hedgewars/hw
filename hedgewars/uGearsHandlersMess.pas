@@ -2010,7 +2010,11 @@ end;
 procedure doStepTarget(Gear: PGear);
 begin
     if (Gear^.Timer = 0) and (Gear^.Tag = 0) then
+        begin
         PlaySound(sndWarp);
+        // workaround: save spawn Y for doStepCase (which is a mess atm)
+        Gear^.Angle:= hwRound(Gear^.Y);
+        end;
 
     if (Gear^.Tag = 0) and (Gear^.Timer < 1000) then
         inc(Gear^.Timer)
