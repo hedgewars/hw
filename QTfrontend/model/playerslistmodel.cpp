@@ -146,6 +146,25 @@ void PlayersListModel::playerLeftRoom(const QString & nickname)
 
 void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool isSet)
 {
+    if(flagType == Friend)
+    {
+        if(isSet)
+            m_friendsSet.insert(nickname.toLower());
+        else
+            m_friendsSet.remove(nickname.toLower());
+
+        saveSet(m_friendsSet, "friends");
+    }
+    else if(flagType == Ignore)
+    {
+        if(isSet)
+            m_ignoredSet.insert(nickname.toLower());
+        else
+            m_ignoredSet.remove(nickname.toLower());
+
+        saveSet(m_ignoredSet, "ignore");
+    }
+
     QModelIndexList mil = match(index(0), Qt::DisplayRole, nickname, 1, Qt::MatchExactly);
 
     if(mil.size())
@@ -155,26 +174,6 @@ void PlayersListModel::setFlag(const QString &nickname, StateFlag flagType, bool
         if(flagType == Friend || flagType == ServerAdmin
                 || flagType == Ignore || flagType == RoomAdmin)
             updateSortData(mil[0]);
-
-        if(flagType == Friend)
-        {
-            if(isSet)
-                m_friendsSet.insert(nickname.toLower());
-            else
-                m_friendsSet.remove(nickname.toLower());
-
-            saveSet(m_friendsSet, "friends");
-        }
-
-        if(flagType == Ignore)
-        {
-            if(isSet)
-                m_ignoredSet.insert(nickname.toLower());
-            else
-                m_ignoredSet.remove(nickname.toLower());
-
-            saveSet(m_ignoredSet, "ignore");
-        }
 
         updateIcon(mil[0]);
     }
@@ -187,6 +186,10 @@ bool PlayersListModel::isFlagSet(const QString & nickname, StateFlag flagType)
 
     if(mil.size())
         return mil[0].data(flagType).toBool();
+    else if(flagType == Friend)
+        return isFriend(nickname);
+    else if(flagType == Ignore)
+        return isIgnored(nickname);
     else
         return false;
 }
@@ -344,11 +347,20 @@ void PlayersListModel::setNickname(const QString &nickname)
         checkFriendIgnore(index(i));
 }
 
+bool PlayersListModel::isFriend(const QString & nickname)
+{
+    return m_friendsSet.contains(nickname.toLower());
+}
+
+bool PlayersListModel::isIgnored(const QString & nickname)
+{
+    return m_ignoredSet.contains(nickname.toLower());
+}
 
 void PlayersListModel::checkFriendIgnore(const QModelIndex &mi)
 {
-    setData(mi, m_friendsSet.contains(mi.data().toString().toLower()), Friend);
-    setData(mi, m_ignoredSet.contains(mi.data().toString().toLower()), Ignore);
+    setData(mi, isFriend(mi.data().toString()), Friend);
+    setData(mi, isIgnored(mi.data().toString()), Ignore);
 
     updateIcon(mi);
     updateSortData(mi);

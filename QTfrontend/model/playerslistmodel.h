@@ -71,6 +71,8 @@ private:
     void loadSet(QSet<QString> & set, const QString & suffix);
     void saveSet(const QSet<QString> & set, const QString & suffix);
     void checkFriendIgnore(const QModelIndex & mi);
+    bool isFriend(const QString & nickname);
+    bool isIgnored(const QString & nickname);
 };
 
 #endif // PLAYERSLISTMODEL_H
