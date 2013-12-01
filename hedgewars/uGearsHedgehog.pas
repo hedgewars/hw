@@ -65,7 +65,7 @@ with HHGear^.Hedgehog^ do
     HHGear^.Message:= HHGear^.Message and (not gmSlot);
     prevAmmo:= CurAmmoType;
     ammoidx:= 0;
-    if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0)
+    if (((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) and (GameFlags and gfInfAttack = 0))
     or ((HHGear^.State and gstHHDriven) = 0) then
         exit;
     ChangeAmmo:= true;
@@ -140,6 +140,7 @@ var t: LongInt;
     weap: TAmmoType;
     Hedgehog: PHedgehog;
     s: boolean;
+    prevState, newState: LongWord;
 begin
 s:= false;
 
@@ -155,12 +156,18 @@ t:= cMaxSlotAmmoIndex;
 
 HHGear^.Message:= HHGear^.Message and (not gmWeapon);
 
+prevState:= HHGear^.State;
+newState:= prevState;
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
         s:= ChangeAmmo(HHGear);
+        if HHGear^.State <> prevState then // so we can keep gstAttacked out of consideration when looping
+            newState:= HHGear^.State;
+        HHGear^.State:= prevState;
         dec(t)
         end;
+HHGear^.State:= newState;
 
 if s then
     ApplyAmmoChanges(HHGear^.Hedgehog^)
