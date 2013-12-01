@@ -20,7 +20,7 @@
 
 unit uGearsHedgehog;
 interface
-uses uTypes;
+uses uTypes, uGearsHandlersMess; 
 
 procedure doStepHedgehog(Gear: PGear);
 procedure AfterAttack;
@@ -857,8 +857,17 @@ if Gear^.Hedgehog^.Unplaced then
 isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
 if isFalling then
     begin
-    if (Gear^.dY.isNegative) and (TestCollisionYKick(Gear, -1) <> 0) then
-        Gear^.dY:= _0;
+    land:= TestCollisionYKick(Gear, -1);
+    if (Gear^.dY.isNegative) and (land <> 0) then
+        begin
+        if land and lfBouncy <> 0 then
+            begin
+            doStepFallingGear(Gear);
+            Gear^.dX:= Gear^.dX * _0_8
+            end;
+        if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
+            Gear^.dY:= _0
+        end;
     Gear^.State:= Gear^.State or gstMoving;
     if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
@@ -883,19 +892,35 @@ if isFalling then
 else
     begin
     land:= TestCollisionYwithGear(Gear, 1);
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
+    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0) 
+    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) 
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
     if not Gear^.dY.isNegative then
         begin
+        if land and lfBouncy <> 0 then
+            begin
+            doStepFallingGear(Gear);
+            // hogs for some reason have very low friction. slippery little buggers
+            Gear^.dX:= Gear^.dX * _0_8
+            end;
+
         CheckHHDamage(Gear);
 
-        if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery)
-        and (Gear^.dX.QWordValue < _0_02.QWordValue) then
-            Gear^.dX.isNegative:= not Gear^.dX.isNegative; // landing after high jump
-        Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
-        Gear^.dY:= _0;
+        if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
+            begin
+            if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery)
+            and (Gear^.dX.QWordValue < _0_02.QWordValue) then
+                begin
+                if land and lfBouncy <> 0 then
+                    Gear^.dY:= _0;
+                Gear^.dX.isNegative:= not Gear^.dX.isNegative // landing after high jump
+                end;
+            Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
+            if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
+                Gear^.dY:= _0
+            end
         end
     else
         Gear^.dY:= Gear^.dY + cGravity;
@@ -1008,12 +1033,18 @@ if (Gear^.State and gstMoving) <> 0 then
 // ARTILLERY but not being moved by explosions
     Gear^.X:= Gear^.X + Gear^.dX;
     Gear^.Y:= Gear^.Y + Gear^.dY;
-    if (not Gear^.dY.isNegative) and (TestCollisionYKick(Gear, 1) = 0)
-    and (TestCollisionYwithXYShift(Gear, 0, 1, 1) <> 0) then
+    if (not Gear^.dY.isNegative) and (TestCollisionYKick(Gear, 1) = 0) then
         begin
-        CheckHHDamage(Gear);
-        Gear^.dY:= _0;
-        Gear^.Y:= Gear^.Y + _1
+        land:= TestCollisionYwithXYShift(Gear, 0, 1, 1);
+        if land and lfBouncy <> 0 then
+            doStepFallingGear(Gear);
+
+        if (land <> 0) and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) then
+            begin
+            CheckHHDamage(Gear);
+            Gear^.dY:= _0;
+            Gear^.Y:= Gear^.Y + _1
+            end
         end;
 
     CheckGearDrowning(Gear);

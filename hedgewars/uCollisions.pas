@@ -157,7 +157,7 @@ if (x and LAND_WIDTH_MASK) = 0 then
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
             if Land[y, x] and Gear^.CollisionMask <> 0 then
-                exit(Land[y, x]);
+                exit(Land[y, x] and Gear^.CollisionMask);
         inc(y)
     until (y > i);
     end;
@@ -187,8 +187,7 @@ if (y and LAND_HEIGHT_MASK) = 0 then
         if (x and LAND_WIDTH_MASK) = 0 then
             if Land[y, x] and Gear^.CollisionMask <> 0 then
                 begin
-                TestCollisionYwithGear:= Land[y, x];
-                exit(Land[y, x]);
+                exit(Land[y, x] and Gear^.CollisionMask)
                 end;
         inc(x)
     until (x > i);
@@ -213,10 +212,10 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] > 255 then
-                exit(Land[y, x])
-            else if Land[y, x] <> 0 then
-                pixel:= Land[y, x];
+            if Land[y, x] and Gear^.CollisionMask > 255 then
+                exit(Land[y, x] and Gear^.CollisionMask)
+            else if Land[y, x] and Gear^.CollisionMask <> 0 then
+                pixel:= Land[y, x] and Gear^.CollisionMask;
     inc(y)
     until (y > i);
     end;
@@ -276,10 +275,10 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     repeat
     if (x and LAND_WIDTH_MASK) = 0 then
         if Land[y, x] > 0 then
-            if Land[y, x] > 255 then
-                exit(Land[y, x])
+            if Land[y, x] and Gear^.CollisionMask > 255 then
+                exit(Land[y, x] and Gear^.CollisionMask)
             else if Land[y, x] <> 0 then
-                pixel:= Land[y, x];
+                pixel:= Land[y, x] and Gear^.CollisionMask;
     inc(x)
     until (x > i);
     end;
@@ -350,8 +349,8 @@ if (x and LAND_WIDTH_MASK) = 0 then
     i:= y + Gear^.Radius * 2 - 2;
     repeat
         if (y and LAND_HEIGHT_MASK) = 0 then
-            if Land[y, x] > 255 then
-                exit(Land[y, x]);
+            if Land[y, x] and Gear^.CollisionMask > 255 then
+                exit(Land[y, x] and Gear^.CollisionMask);
     inc(y)
     until (y > i);
     end;
@@ -373,8 +372,8 @@ if (y and LAND_HEIGHT_MASK) = 0 then
     i:= x + Gear^.Radius * 2 - 2;
     repeat
         if (x and LAND_WIDTH_MASK) = 0 then
-            if Land[y, x] > 255 then
-                exit(Land[y, x]);
+            if Land[y, x] and Gear^.CollisionMask > 255 then
+                exit(Land[y, x] and Gear^.CollisionMask);
     inc(x)
     until (x > i);
     end;

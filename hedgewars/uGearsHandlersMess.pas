@@ -325,7 +325,7 @@ begin
             if land and lfIce <> 0 then
                  Gear^.dX := Gear^.dX * (_0_9 + Gear^.Friction * _0_1)
             else Gear^.dX := Gear^.dX * Gear^.Friction;
-            if land and lfBouncy = 0 then
+            if (Gear^.AdvBounce = 0) or (land and lfBouncy = 0) then
                  begin
                  Gear^.dY := - Gear^.dY * Gear^.Elasticity;
                  Gear^.State := Gear^.State or gstCollision
@@ -350,7 +350,7 @@ begin
             else
                 Gear^.dX := Gear^.dX * Gear^.Friction;
 
-            if land and lfBouncy = 0 then
+            if (Gear^.AdvBounce = 0) or (land and lfBouncy = 0) then
                  begin
                  Gear^.dY := - Gear^.dY * Gear^.Elasticity;
                  Gear^.State := Gear^.State or gstCollision
@@ -373,7 +373,7 @@ begin
     if xland <> 0 then
         begin
         collH := hwSign(Gear^.dX);
-        if xland and lfBouncy = 0 then
+        if (Gear^.AdvBounce = 0) or (xland and lfBouncy = 0) then
             begin
             Gear^.dX := - Gear^.dX * Gear^.Elasticity;
             Gear^.dY :=   Gear^.dY * Gear^.Elasticity;
@@ -392,8 +392,8 @@ begin
         end;
     //if Gear^.AdvBounce and (collV <>0) and (collH <> 0) and (hwSqr(tdX) + hwSqr(tdY) > _0_08) then
     if (collV <> 0) and (collH <> 0) and 
-       (((Gear^.AdvBounce=1) and ((collV=-1) or ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue))) or
-        ((xland or land) and lfBouncy <> 0)) then
+       (((Gear^.AdvBounce=1) and ((collV=-1) or ((tdX.QWordValue + tdY.QWordValue) > _0_2.QWordValue)))) then
+ //or ((xland or land) and lfBouncy <> 0)) then
         begin
         if (xland or land) and lfBouncy = 0 then
             begin
@@ -430,7 +430,7 @@ begin
     else
         Gear^.State := Gear^.State or gstMoving;
 
-    if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_1.QWordValue) and (Gear^.dY.QWordValue < _0_1.QWordValue) then
+    if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
         Gear^.State := Gear^.State or gstCollision;
     
     if ((xland or land) and lfBouncy <> 0) and
@@ -1697,12 +1697,14 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSMine(Gear: PGear);
+    var land: Word;
 begin
     // TODO: do real calculation?
-    if (TestCollisionXwithGear(Gear, 2) <> 0)
-    or (TestCollisionYwithGear(Gear,-2) <> 0)
-    or (TestCollisionXwithGear(Gear,-2) <> 0)
-    or (TestCollisionYwithGear(Gear, 2) <> 0) then
+    land:= TestCollisionXwithGear(Gear, 2);
+    if land = 0 then land:= TestCollisionYwithGear(Gear,-2);
+    if land = 0 then land:= TestCollisionXwithGear(Gear,-2);
+    if land = 0 then land:= TestCollisionYwithGear(Gear, 2);
+    if (land <> 0) and (land and lfBouncy = 0) then
         begin
         if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
