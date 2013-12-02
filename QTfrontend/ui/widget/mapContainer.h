@@ -111,6 +111,7 @@ class HWMapContainer : public QWidget
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );
+        virtual void paintEvent ( QPaintEvent * event );
 
     private:
         QVBoxLayout mainLayout;
@@ -149,6 +150,7 @@ class HWMapContainer : public QWidget
         QPushButton * btnSeed;
         bool m_master;
         QList<QWidget *> m_childWidgets;
+        bool m_previewDirty;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
