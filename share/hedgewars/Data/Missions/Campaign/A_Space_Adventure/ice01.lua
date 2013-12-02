@@ -193,6 +193,7 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
+	AddEvent(onAntiFlyAreaVelocity, {hero.gear}, antiFlyAreaVelocity, {hero.gear}, 1)
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
 	AddEvent(onThantaDeath, {bandit1.gear}, thantaDeath, {bandit1.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
@@ -341,6 +342,13 @@ function onAntiFlyArea(gear)
 	return false
 end
 
+function onAntiFlyAreaVelocity(gear)
+	if not hero.dead and GetY(gear) < 1300 then
+		return true
+	end
+	return false
+end
+
 function onNonAntiFlyArea(gear)
 	if not hero.dead and (GetX(gear) < 860 and GetY(gear) > 1400) and heroAtAntiFlyArea then
 		return true
@@ -395,17 +403,19 @@ end
 
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
-	if TurnTimeLeft < -1 then
-		heroVisitedAntiFlyArea = true
-		TurnTimeLeft = 0	
+	if not heroVisitedAntiFlyArea then
+		TurnTimeLeft = 0        
 		FollowGear(hero.gear)
-		AddAmmo(hero.gear, amJetpack, 0)
-		AnimSwitchHog(bandit1.gear)	
+		AnimSwitchHog(bandit1.gear)     
 		FollowGear(hero.gear)
 		TurnTimeLeft = 0
-	else
-		AddAmmo(hero.gear, amJetpack, 0)	
-	end
+	end	
+	AddAmmo(hero.gear, amJetpack, 0)
+	heroVisitedAntiFlyArea = true
+end
+
+function antiFlyAreaVelocity(gear)
+	SetGearVelocity(hero.gear, 0, 0)
 end
 
 function nonAntiFlyArea(gear)
@@ -468,6 +478,8 @@ function Skipanim(anim)
     end
     if anim == dialog02 then
 		actionsOnWin()
+	else
+		AnimSwitchHog(hero.gear)
 	end
 end
 
