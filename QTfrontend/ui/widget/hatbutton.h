@@ -35,6 +35,7 @@ class HatButton : public QPushButton
         HatButton(QWidget* parent);
         int currentIndex();
         QString currentHat() const;
+        void setModel(HatModel * model);
 
     private:
         QModelIndex m_hat;

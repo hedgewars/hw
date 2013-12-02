@@ -169,11 +169,6 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     stateMenu->addAction(showGamesInProgress);
     btnState->setMenu(stateMenu);
 
-    // Clear filters button
-
-    BtnClear = addButton(tr("Clear filters"), filterLayout, 0);
-    BtnClear->setStyleSheet("padding: 4px;");
-
     // Lobby chat
 
     chatWidget = new HWChatWidget(this, false);
@@ -199,7 +194,6 @@ void PageRoomsList::connectSignals()
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
-    connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(searchText, SIGNAL(moveUp()), this, SLOT(moveSelectionUp()));
     connect(searchText, SIGNAL(moveDown()), this, SLOT(moveSelectionDown()));
     connect(searchText, SIGNAL(returnPressed()), this, SLOT(onJoinClick()));
@@ -529,14 +523,6 @@ void PageRoomsList::onJoinClick()
 void PageRoomsList::onRefreshClick()
 {
     emit askForRoomList();
-}
-
-void PageRoomsList::onClearClick()
-{
-    showGamesInLobby->setChecked(true);
-    showGamesInProgress->setChecked(true);
-    searchText->clear();
-    searchText->setFocus();
 }
 
 void PageRoomsList::onJoinConfirmation(const QString & room)
