@@ -18,6 +18,7 @@ local missionName = loc("The first stop")
 local weaponsAcquired = false
 local battleZoneReached = false
 local checkPointReached = 1 -- 1 is start of the game
+local afterDialog02 = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -202,6 +203,7 @@ function onGameStart()
 		SetWind(60)		
 		GameFlags = bor(GameFlags,gfDisableWind)
 		weaponsAcquired = true
+		afterDialog02 = true
 		TurnTimeLeft = 0
 		AddAnim(dialog02)
 	end
@@ -234,9 +236,8 @@ function onNewTurn()
 	-- rounds start if hero got his weapons or got near the enemies
 	if not weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
 		TurnTimeLeft = 0
-	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear then
-		battleZoneReached = true
-		AddAnim(dialog04)
+	elseif weaponsAcquired and not battleZoneReached and CurrentHedgehog ~= hero.gear and afterDialog02 then
+		battleZone(hero.gear)
 	elseif not weaponsAcquired and not battleZoneReached and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
 	elseif CurrentHedgehog == paoth1.gear or CurrentHedgehog == paoth2.gear
@@ -318,7 +319,7 @@ function weaponsPlatform(gear)
 	saveCheckpoint("2")
 	SaveCampaignVar("HeroHealth",GetHealth(hero.gear))
 	TurnTimeLeft = 0
-	weaponsAqcuired = true
+	weaponsAcquired = true
 	SetWind(60)		
 	GameFlags = bor(GameFlags,gfDisableWind)
 	AddAmmo(hero.gear, amRope, 0)
@@ -338,7 +339,7 @@ end
 function battleZone(gear)
 	TurnTimeLeft = 0
 	battleZoneReached = true
-	if weaponsAqcuired then
+	if weaponsAcquired then
 		AddAnim(dialog04)
 	else
 		AddAnim(dialog03)
@@ -396,7 +397,9 @@ function Skipanim(anim)
 	if goals[anim] ~= nil then
 		ShowMission(unpack(goals[anim]))
     end
-    if anim == dialog03 then
+    if anim == dialog02 then
+		setAfterDialog02()
+    elseif anim == dialog03 then
 		startCombat()
 	else
 		AnimSwitchHog(hero.gear)
@@ -412,9 +415,9 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("It seems that Professor Hogevil learned for your arrival!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Now he have captured the rest of the PAotH team and awaits to capture you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("We have to hurry! Are you armed?"), SAY_SAY, 4300}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 450}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("No, I am afraid I had to travel light"), SAY_SAY, 2500}})
-	table.insert(dialog01, {func = AnimWait, args = {paoth1.gear, 500}})
+	table.insert(dialog01, {func = AnimWait, args = {paoth1.gear, 3200}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("Ok, then you have to go and take some of the waepons we have hidden in case of an emergency!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {paoth1.gear, loc("They are up there! Take that rope and hurry!"), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Ehm... ok..."), SAY_SAY, 2500}})
@@ -424,6 +427,7 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Checkpoint reached!"),  4000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I've made it! YEAAAAAH!"), SAY_SHOUT, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {paoth1.gear, loc("Nice! Now hurry up and get down! You have to rescue my friends!"), SAY_SHOUT, 7000}})
+	table.insert(dialog02, {func = setAfterDialog02, args = {}})
 	table.insert(dialog02, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG 03 - Hero spotted and has no weapons
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
@@ -444,7 +448,11 @@ end
 ------------------- custom "animation" functions --------------------------
 
 function startCombat()
-	-- use this so guard2 will gain control
+	-- use this so minion3 will gain control
 	AnimSwitchHog(minion3.gear)
 	TurnTimeLeft = 0
+end
+
+function setAfterDialog02()
+	afterDialog02 = true
 end
