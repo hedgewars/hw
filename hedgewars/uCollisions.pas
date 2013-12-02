@@ -60,7 +60,7 @@ function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
 
 implementation
-uses uConsts, uLandGraphics, uVariables, uDebug, uGearsList;
+uses uConsts, uLandGraphics, uVariables, uDebug;
 
 type TCollisionEntry = record
     X, Y, Radius: LongInt;
