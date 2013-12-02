@@ -55,7 +55,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapgen(MAPGEN_REGULAR),
     m_previewSize(256, 128)
 {
-    m_previewDirty = true;
+    // don't show preview anything until first show event
+    m_previewEnabled = false;
+
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
     templateFilter = 0;
@@ -609,24 +611,20 @@ void HWMapContainer::mapDrawingFinished()
     updatePreview();
 }
 
-void HWMapContainer::paintEvent(QPaintEvent * event)
+void HWMapContainer::showEvent(QShowEvent * event)
 {
-    if (m_previewDirty)
+    if (!m_previewEnabled) {
+        m_previewEnabled = true;
         updatePreview();
-    QWidget::paintEvent(event);
+    }
+    QWidget::showEvent(event);
 }
 
 void HWMapContainer::updatePreview()
 {
-    // don't update preview if e.g. widget not being displayed
-    if (this->visibleRegion().isEmpty())
-    {
-        // but remember to update it later
-        m_previewDirty = true;
+    // abort if the widget isn't supposed to show anything yet
+    if (!m_previewEnabled)
         return;
-    }
-
-    m_previewDirty = false;
 
     if (pMap)
     {
