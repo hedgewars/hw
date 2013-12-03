@@ -67,12 +67,14 @@ class MapModel : public QStandardItemModel
             bool dlc; ///< True if this map was not packaged with the game
         };
 
+        MapModel(MapType maptype, QObject *parent = 0);
+
         /**
          * @brief Searches maps in model to find out if one exists
          * @param map map of which to check existence
          * @return true if it exists
          */
-        bool mapExists(const QString & map) const;
+        bool mapExists(const QString & map);
 
         /**
          * @brief Finds a map index (column, row) for a map name
@@ -86,7 +88,7 @@ class MapModel : public QStandardItemModel
          * @param map map of which to find index
          * @return int of index, or -1 if map not found
          */
-        int findMap(const QString & map) const;
+        int findMap(const QString & map);
 
         /**
          * @brief Finds and returns a map item for a map name
@@ -98,16 +100,16 @@ class MapModel : public QStandardItemModel
         // Static MapInfos for drawn and generated maps
         static MapInfo MapInfoRandom, MapInfoMaze, MapInfoDrawn;
 
-    public slots:
-        /// Reloads the maps using the DataManager.
-        /// Accepts two map types: StaticMap or MissionMap.
-        void loadMaps(MapType maptype);
+        /// Loads the maps
+        bool loadMaps();
 
 
     private:
         /// map index lookup table. QPair<int, int> contains: <column, index>
         //QHash<QString, QPair<int, int> > m_mapIndexes;
         QHash<QString, int> m_mapIndexes;
+        MapType m_maptype;
+        bool m_loaded;
 
         /**
          * @brief Creates a QStandardItem, that holds the map info and item appearance.
