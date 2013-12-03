@@ -159,13 +159,6 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSelect, {hero.gear}, heroSelect, {hero.gear}, 0)
 	
-	-- Hog Solo weapons
-	AddAmmo(hero.gear, amRope, 2)
-	AddAmmo(hero.gear, amBazooka, 3)
-	AddAmmo(hero.gear, amParachute, 1)
-	AddAmmo(hero.gear, amGrenade, 6)
-	AddAmmo(hero.gear, amDEagle, 4)
-	AddAmmo(hero.gear, amSkip, 100)
 	-- Green team weapons
 	local greenArmy = { green1, green2 }
 	for i=1,2 do
@@ -208,6 +201,8 @@ function onNewTurn()
 		TurnTimeLeft = 0
 	elseif not heroPlayedFirstTurn and CurrentHedgehog == hero.gear and startBattleCalled then
 		heroPlayedFirstTurn = true
+	elseif not heroPlayedFirstTurn and CurrentHedgehog == green1.gear then
+		TurnTimeLeft = 0
 	else
 		if chooseToBattle then
 			if CurrentHedgehog == green1.gear then
@@ -412,10 +407,11 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets"), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As more experienced I want you to lead them to the battle"), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I of cource will observe the battle and intervene if necessary"), SAY_SAY, 5000}})
-	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem Captain! The enemies aren't many anyway, it is going to be easy!"), SAY_SAY, 5000}})
-	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be fool son, they'll be more"), SAY_SAY, 3000}})
+	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 4500}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem Captain! "), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("The enemies aren't many anyway, it is going to be easy!"), SAY_SAY, 1}})
+	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 9000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be fool son, they'll be more"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare the rest!"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
@@ -434,6 +430,13 @@ end
 ------------- OTHER FUNCTIONS ---------------
 
 function startBattle()
+	-- Hog Solo weapons
+	AddAmmo(hero.gear, amRope, 2)
+	AddAmmo(hero.gear, amBazooka, 3)
+	AddAmmo(hero.gear, amParachute, 1)
+	AddAmmo(hero.gear, amGrenade, 6)
+	AddAmmo(hero.gear, amDEagle, 4)
+	AddAmmo(hero.gear, amSkip, 100)
 	RestoreHog(green1.bot)
 	DeleteGear(green1.human)
 	green1.gear = green1.bot
