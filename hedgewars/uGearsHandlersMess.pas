@@ -1731,24 +1731,23 @@ begin
                     Gear^.State := Gear^.State or gstAttacking
             end
         else // gstAttacking <> 0
-        begin
+            begin
             AllInactive := false;
             if Gear^.Timer = 0 then
                 begin
                 doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
                 DeleteGear(Gear);
                 exit
-            end else
+                end
+            else
                 if (Gear^.Timer and $FF) = 0 then
                     PlaySound(sndMineTick);
-
-            dec(Gear^.Timer);
+                dec(Gear^.Timer);
                 end
-        end
+            end
     else // gsttmpFlag = 0
-        if (TurnTimeLeft = 0)
-        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
-        or (Gear^.Hedgehog^.Gear = nil) then
+        if ((GameFlags and gfInfAttack = 0) and ((TurnTimeLeft = 0) or (Gear^.Hedgehog^.Gear = nil))) 
+        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime)) then
             Gear^.State := Gear^.State or gsttmpFlag;
 end;
 
