@@ -166,6 +166,16 @@ endif()
 #needs to be last
 add_definitions(-dDEBUGFILE)
 
+
+# make source files objects depend on their predecessors in list
+foreach(loop_var ${engine_sources})
+    if (sourcefiles_sofar)
+        SET_SOURCE_FILES_PROPERTIES(${loop_var} PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
+    endif()
+    list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
+endforeach(loop_var)
+
+
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
     message("***Engine will be built as library (experimental)***")
