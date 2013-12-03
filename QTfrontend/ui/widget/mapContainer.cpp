@@ -252,7 +252,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     staticMapChanged(m_staticMapModel->index(0, 0));
     missionMapChanged(m_missionMapModel->index(0, 0));
     changeMapType(MapModel::GeneratedMap);
-    setRandomTheme();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -603,6 +602,7 @@ void HWMapContainer::showEvent(QShowEvent * event)
 {
     if (!m_previewEnabled) {
         m_previewEnabled = true;
+        setRandomTheme();
         updatePreview();
     }
     QWidget::showEvent(event);

@@ -115,7 +115,6 @@ ThemeModel * DataManager::themeModel()
 {
     if (m_themeModel == NULL) {
         m_themeModel = new ThemeModel();
-        m_themeModel->loadThemes();
     }
     return m_themeModel;
 }
