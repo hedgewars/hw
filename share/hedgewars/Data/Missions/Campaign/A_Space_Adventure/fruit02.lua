@@ -14,6 +14,7 @@ local inBattle = false
 local tookPartInBattle = false
 local previousHog = -1
 local checkPointReached = 1 -- 1 is normal spawn
+local permitCaptainLimeDeath = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -266,11 +267,27 @@ function onGameTick()
 	CheckEvents()
 end
 
+function onGameTick20()
+	if not permitCaptainLimeDeath and not GetHealth(green1.gear) then
+		-- game ends with the according stat messages
+		heroDeath()
+		permitCaptainLimeDeath = true
+	end
+end
+
 function onGearDelete(gear)
 	if gear == hero.gear then
 		hero.dead = true
 	elseif gear == green1.bot then
 		green1.dead = true
+	end
+end
+
+function onGearDamage(gear, damage)
+	if GetGearType(gear) == gtCase then
+		-- in this mode every crate is essential in order to complete the mission
+		-- destroying a crate ends the game
+		heroDeath()
 	end
 end
 
@@ -378,10 +395,12 @@ function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("To win the game Hog Solo has to get the bottom crates and come back to the surface"))
 	SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
+	SendStat(siCustomAchievement, loc("Do not destroy the crates"))
 	if tookPartInBattle then
 		SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assasins at the end"))
 	else
-		SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))	
+		SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))
+	SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))		
 	end
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -397,6 +416,8 @@ function deviceCrates(gear)
 		end
 		AddAnim(dialog04)
 	end
+	-- needs to be set to true for both plots
+	permitCaptainLimeDeath = true
 	AddAmmo(hero.gear, amSwitch, 0)
 	AddEvent(onSurface, {hero.gear}, surface, {hero.gear}, 0)
 end
@@ -533,9 +554,13 @@ function saveHogsPositions()
 	positions = GetX(hero.gear)..","..GetY(hero.gear)
 	if GetHealth(green2.gear) then
 		positions = positions..","..GetX(green2.gear)..","..GetY(green2.gear)
+	else
+		positions = positions..",1,1"
 	end
 	if GetHealth(green3.gear) then
 		positions = positions..","..GetX(green3.gear)..","..GetY(green3.gear)
+	else
+		positions = positions..",1,1"
 	end
 	SaveCampaignVar("HogsPosition", positions)
 end
