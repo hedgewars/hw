@@ -168,10 +168,9 @@ add_definitions(-dDEBUGFILE)
 
 
 # make source files objects depend on their predecessors in list
+set(sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/options.inc" "${CMAKE_CURRENT_BINARY_DIR}/config.inc")
 foreach(loop_var ${engine_sources})
-    if (sourcefiles_sofar)
-        SET_SOURCE_FILES_PROPERTIES(${loop_var} PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
-    endif()
+    SET_SOURCE_FILES_PROPERTIES(${loop_var} PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
     list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
 endforeach(loop_var)
 
