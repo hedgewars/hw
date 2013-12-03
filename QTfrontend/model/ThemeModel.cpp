@@ -29,6 +29,8 @@ ThemeModel::ThemeModel(QObject *parent) :
     QAbstractListModel(parent)
 {
     m_data = QList<QMap<int, QVariant> >();
+
+    m_themesLoaded = false;
 }
 
 int ThemeModel::rowCount(const QModelIndex &parent) const
@@ -36,7 +38,11 @@ int ThemeModel::rowCount(const QModelIndex &parent) const
     if(parent.isValid())
         return 0;
     else
+    {
+        if(!m_themesLoaded)
+            loadThemes();
         return m_data.size();
+    }
 }
 
 
@@ -45,13 +51,21 @@ QVariant ThemeModel::data(const QModelIndex &index, int role) const
     if(index.column() > 0 || index.row() >= m_data.size())
         return QVariant();
     else
+    {
+        if(!m_themesLoaded)
+            loadThemes();
+
         return m_data.at(index.row()).value(role);
+    }
 }
 
 
-void ThemeModel::loadThemes()
+void ThemeModel::loadThemes() const
 {
-    beginResetModel();
+    qDebug("[LAZINESS ThemeModel::loadThemes()]");
+
+    m_themesLoaded = true;
+
 
     DataManager & datamgr = DataManager::instance();
 
@@ -94,7 +108,4 @@ void ThemeModel::loadThemes()
 
         m_data.append(dataset);
     }
-
-
-    endResetModel();
 }

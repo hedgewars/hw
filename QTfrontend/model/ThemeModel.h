@@ -45,14 +45,11 @@ class ThemeModel : public QAbstractListModel
         int rowCount(const QModelIndex &parent = QModelIndex()) const;
         QVariant data(const QModelIndex &index, int role) const;
 
-
-    public slots:
-        /// reloads the themes from the DataManager
-        void loadThemes();
-
-
     private:
-        QList<QMap<int, QVariant> > m_data;
+        mutable QList<QMap<int, QVariant> > m_data;
+        mutable bool m_themesLoaded;
+
+        void loadThemes() const;
 };
 
 #endif // HEDGEWARS_THEMEMODEL_H
