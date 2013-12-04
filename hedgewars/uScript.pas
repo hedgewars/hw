@@ -98,7 +98,7 @@ var luaState : Plua_State;
 
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte); forward;
+procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
 
 procedure LuaError(s: shortstring);
 begin
@@ -2231,13 +2231,13 @@ for i:=1 to ord(High(TAmmoType)) do
     end;
 end;
 
-procedure ScriptSetAmmo(ammo : TAmmoType; count, propability, delay, reinforcement: Byte);
+procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte);
 begin
-//if (ord(ammo) < 1) or (count > 9) or (count < 0) or (propability < 0) or (propability > 8) or (delay < 0) or (delay > 9) or (reinforcement < 0) or (reinforcement > 8) then
-if (ord(ammo) < 1) or (count > 9) or (propability > 8) or (delay > 9) or (reinforcement > 8) then
+//if (ord(ammo) < 1) or (count > 9) or (count < 0) or (probability < 0) or (probability > 8) or (delay < 0) or (delay > 9) or (reinforcement < 0) or (reinforcement > 8) then
+if (ord(ammo) < 1) or (count > 9) or (probability > 8) or (delay > 9) or (reinforcement > 8) then
     exit;
 ScriptAmmoLoadout[ord(ammo)]:= inttostr(count)[1];
-ScriptAmmoProbability[ord(ammo)]:= inttostr(propability)[1];
+ScriptAmmoProbability[ord(ammo)]:= inttostr(probability)[1];
 ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
 ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
 end;
