@@ -273,6 +273,9 @@ function onGameTick20()
 		heroDeath()
 		permitCaptainLimeDeath = true
 	end
+	if CurrentHedgehog and GetY(CurrentHedgehog) > 1350 then
+		SetWind(-40)
+	end
 end
 
 function onGearDelete(gear)
@@ -542,11 +545,7 @@ function goToThesurface()
 end
 
 function wind()
-	if GetY(CurrentHedgehog) > 1350 then
-		SetWind(-40)
-	else
-		SetWind(math.random(-100,100))
-	end
+	SetWind(math.random(-100,100))
 end
 
 function saveHogsPositions()
