@@ -855,7 +855,6 @@ end;
 
 function lc_sethogname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
-  hogName: ShortString;
 begin
     if lua_gettop(L) <> 2 then
         begin
@@ -866,13 +865,12 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
+            gear^.Hedgehog^.Name:= lua_tostring(L, 2);
 
-        hogName:= lua_tostring(L, 2);
-            gear^.Hedgehog^.Name:= hogName;
-
-        FreeTexture(gear^.Hedgehog^.NameTagTex);
-        gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
-
+            FreeTexture(gear^.Hedgehog^.NameTagTex);
+            gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
+            end
         end;
     lc_sethogname:= 0;
 end;
@@ -1744,13 +1742,15 @@ begin
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            begin
             hat:= lua_tostring(L, 2);
             gear^.Hedgehog^.Hat:= hat;
-AddFileLog('Changed hat to: '+hat);
+            AddFileLog('Changed hat to: '+hat);
             if (Length(hat) > 39) and (Copy(hat,1,8) = 'Reserved') and (Copy(hat,9,32) = gear^.Hedgehog^.Team^.PlayerHash) then
                 LoadHedgehogHat(gear^.Hedgehog^, 'Reserved/' + Copy(hat,9,Length(hat)-8))
             else
-                LoadHedgehogHat(gear^.Hedgehog^, hat);
+                LoadHedgehogHat(gear^.Hedgehog^, hat)
+            end
         end;
     lc_sethoghat:= 0;
 end;
