@@ -542,11 +542,11 @@ with CurrentTeam^ do
     SplitBySpace(id, s);
     SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
     CurrentHedgehog^.BotLevel:= StrToInt(id);
+    CurrentHedgehog^.Team:= CurrentTeam;
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-    Gear^.Hedgehog^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then
