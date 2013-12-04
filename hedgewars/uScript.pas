@@ -99,6 +99,7 @@ var luaState : Plua_State;
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
+procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
 procedure LuaError(s: shortstring);
 begin
@@ -1606,6 +1607,17 @@ begin
     lc_setammo:= 0
 end;
 
+function lc_setammodelay(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
+begin
+    np:= lua_gettop(L);
+    if (np <> 2) then
+        LuaError('Lua: Wrong number of parameters passed to SetAmmoDelay!')
+    else
+        ScriptSetAmmoDelay(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2));
+    lc_setammodelay:= 0
+end;
+
 function lc_setammostore(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
 begin
@@ -2238,8 +2250,21 @@ if (ord(ammo) < 1) or (count > 9) or (probability > 8) or (delay > 9) or (reinfo
     exit;
 ScriptAmmoLoadout[ord(ammo)]:= inttostr(count)[1];
 ScriptAmmoProbability[ord(ammo)]:= inttostr(probability)[1];
-ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
+ScriptSetAmmoDelay(ammo, delay);
 ScriptAmmoReinforcement[ord(ammo)]:= inttostr(reinforcement)[1];
+end;
+
+procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte);
+begin
+// change loadout string if ammo store hasn't been initialized yet
+if (StoreCnt = 0) then
+begin
+    if (delay <= 9) then
+        ScriptAmmoDelay[ord(ammo)]:= inttostr(delay)[1];
+end
+// change "live" delay values
+else if (CurrentTeam <> nil) then
+        ammoz[ammo].SkipTurns:= CurrentTeam^.Clan^.TurnNumber + delay;
 end;
 
 procedure ScriptApplyAmmoStore;
@@ -2461,6 +2486,7 @@ lua_register(luaState, _P'ShowMission', @lc_showmission);
 lua_register(luaState, _P'HideMission', @lc_hidemission);
 lua_register(luaState, _P'AddCaption', @lc_addcaption);
 lua_register(luaState, _P'SetAmmo', @lc_setammo);
+lua_register(luaState, _P'SetAmmoDelay', @lc_setammodelay);
 lua_register(luaState, _P'SetAmmoStore', @lc_setammostore);
 lua_register(luaState, _P'PlaySound', @lc_playsound);
 lua_register(luaState, _P'AddTeam', @lc_addteam);
