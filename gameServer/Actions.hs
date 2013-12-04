@@ -21,6 +21,7 @@ import Control.Exception as E
 import System.Process
 import Network.Socket
 import System.Random
+import qualified Data.Traversable as DT
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -187,13 +188,14 @@ processAction (MoveToLobby msg) = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     playersNum <- io $ room'sM rnc playersIn ri
+    specialRoom <- io $ room'sM rnc isSpecial ri
     master <- client's isMaster
 --    client <- client's id
     clNick <- client's nick
     chans <- othersChans
 
     if master then
-        if playersNum > 1 then
+        if (playersNum > 1) || specialRoom then
             mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
@@ -205,7 +207,7 @@ processAction (MoveToLobby msg) = do
 
     -- when not removing room
     ready <- client's isReady
-    when (not master || playersNum > 1) . io $ do
+    when (not master || playersNum > 1 || specialRoom) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,
                 readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
@@ -218,31 +220,40 @@ processAction (ChangeMaster delegateId)= do
     proto <- client's clientProto
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM (\ids -> fromMaybe (last . filter (/= ci) $ ids) delegateId) . io $ roomClientsIndicesM rnc ri
-    newMaster <- io $ client'sM rnc id newMasterId
+    specialRoom <- io $ room'sM rnc isSpecial ri
+    newMasterId <- liftM (\ids -> fromMaybe (listToMaybe . reverse . filter (/= ci) $ ids) $ liftM Just delegateId) . io $ roomClientsIndicesM rnc ri
+    newMaster <- io $ client'sM rnc id `DT.mapM` newMasterId
     oldMasterId <- io $ room'sM rnc masterID ri
-    oldMaster <- io $ client'sM rnc id oldMasterId
     oldRoomName <- io $ room'sM rnc name ri
     kicked <- client's isKickedFromServer
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    let newRoomName = if (proto < 42) || kicked then nick newMaster else oldRoomName
-    mapM_ processAction [
+    let newRoomName = if ((proto < 42) || kicked) && (not specialRoom) then maybeNick newMaster else oldRoomName
+
+    when (isJust oldMasterId) $ do
+        oldMasterNick <- io $ client'sM rnc nick (fromJust oldMasterId)
+        mapM_ processAction [
+            ModifyClient2 (fromJust oldMasterId) (\c -> c{isMaster = False})
+            , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMasterNick]
+            ]
+
+    when (isJust newMasterId) $
+        mapM_ processAction [
+          ModifyClient2 (fromJust newMasterId) (\c -> c{isMaster = True})
+        , AnswerClients [sendChan $ fromJust newMaster] ["ROOM_CONTROL_ACCESS", "1"]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick $ fromJust newMaster]
+        ]
+
+    processAction $
         ModifyRoom (\r -> r{masterID = newMasterId
                 , name = newRoomName
                 , isRestrictedJoins = False
                 , isRestrictedTeams = False
-                , isRegisteredOnly = False}
+                , isRegisteredOnly = isSpecial r}
                 )
-        , ModifyClient2 newMasterId (\c -> c{isMaster = True})
-        , ModifyClient2 oldMasterId (\c -> c{isMaster = False})
-        , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", nick oldMaster]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
-        ]
 
     newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo proto(nick newMaster) newRoom')
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo proto (maybeNick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -252,7 +263,7 @@ processAction (AddRoom roomName roomPassword) = do
     n <- client's nick
 
     let rm = newRoom{
-            masterID = clId,
+            masterID = Just clId,
             name = roomName,
             password = roomPassword,
             roomProto = proto
@@ -292,9 +303,9 @@ processAction SendUpdateOnThisRoom = do
     rnc <- gets roomsClients
     ri <- io $ clientRoomM rnc clId
     rm <- io $ room'sM rnc id ri
-    n <- io $ client'sM rnc nick (masterID rm)
+    masterCl <- io $ client'sM rnc id `DT.mapM` (masterID rm)
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo proto n rm)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo proto (maybeNick masterCl) rm)
 
 
 processAction UnreadyRoomClients = do
