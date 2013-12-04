@@ -43,6 +43,7 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
                 else
                 r{params = Map.insert paramName paramStrs (params r)}
 
+
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info"]
     | otherwise = do
@@ -290,6 +291,9 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if illegalName newName then 
             [Warning $ loc "Illegal room name"]
         else
+        if isSpecial rm then 
+            [Warning $ loc "Restricted"]
+        else
         if isJust $ find (\r -> newName == name r) rs then
             [Warning $ loc "Room with such name already exists"]
         else
@@ -331,7 +335,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
             (master || serverAdmin)
                 && isJust maybeClientId
                 && ((newAdminId /= thisClientId) || (serverAdmin && not master))
-                && (newAdminId /= thisRoomMasterId)
+                && (Just newAdminId /= thisRoomMasterId)
                 && sameRoom]
 
 
@@ -361,6 +365,11 @@ handleCmd_inRoom ("RND":rs) = do
     n <- clientNick
     s <- roomClientsChans
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
+
+handleCmd_inRoom ["FIX"] = do
+    cl <- thisClient
+    return [ModifyRoom (\r -> r{isSpecial = True}) | isAdministrator cl]
+
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 

@@ -180,3 +180,6 @@ answerAllTeams cl = concatMap toAnswer
 
 loc :: B.ByteString -> B.ByteString
 loc = id
+
+maybeNick :: Maybe ClientInfo -> B.ByteString
+maybeNick = fromMaybe "[empty]" . liftM nick
