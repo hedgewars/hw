@@ -36,6 +36,12 @@ if(APPLE)
         message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
     endif()
 
+    #gcc is EOL on these systems
+    if (current_macosx_version VERSION_GREATER "10.8")
+        set(CMAKE_C_COMPILER clang)
+        set(CMAKE_CXX_COMPILER clang++)
+    endif()
+
     #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
     if(current_macosx_version VERSION_EQUAL "10.4")
         find_package(SDL_mixer REQUIRED)
