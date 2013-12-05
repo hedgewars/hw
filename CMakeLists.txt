@@ -50,11 +50,12 @@ include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
 message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWARS_HASH})")
 
+#io library paths
+include(${CMAKE_MODULE_PATH}/paths.cmake)
 #general utilities
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
-include(${CMAKE_MODULE_PATH}/paths.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information

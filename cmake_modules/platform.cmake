@@ -97,6 +97,9 @@ if(APPLE)
 
     #add user framework directory
     add_flag_append(CMAKE_Pascal_FLAGS "-Ff~/Library/Frameworks")
+
+    #workaround most of the -Fl settings getting lost
+    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${LIBRARY_OUTPUT_PATH}")
 endif(APPLE)
 
 if(MINGW)
