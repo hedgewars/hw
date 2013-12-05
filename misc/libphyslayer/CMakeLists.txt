@@ -1,12 +1,12 @@
 
-if(${USESDL12})
+if(${NOSDL2})
     find_package(SDL REQUIRED)
     include_directories(${SDL_INCLUDE_DIR})
-else(${USESDL12})
+else(${NOSDL2})
     find_package(SDL2 REQUIRED)
     include_directories(${SDL2_INCLUDE_DIR})
     set(SDL_LIBRARY ${SDL2_LIBRARY})
-endif(${USESDL12})
+endif(${NOSDL2})
 
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${LUA_INCLUDE_DIR})

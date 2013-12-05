@@ -1,19 +1,19 @@
 enable_language(Pascal)
 
-if(${USESDL12})
+if(${NOSDL2})
     find_package(SDL REQUIRED)
     find_package(SDL_image REQUIRED)
     find_package(SDL_net REQUIRED)
     find_package(SDL_ttf REQUIRED)
     find_package(SDL_mixer REQUIRED)
-else(${USESDL12})
+else(${NOSDL2})
     find_package(SDL2 REQUIRED)
     find_package(SDL2_image REQUIRED)
     find_package(SDL2_net REQUIRED)
     find_package(SDL2_ttf REQUIRED)
     find_package(SDL2_mixer REQUIRED)
     add_definitions(-dSDL2)
-endif(${USESDL12})
+endif(${NOSDL2})
 
 include (CheckLibraryExists)
 
@@ -108,7 +108,7 @@ endif()
 
 
 #DEPENDECIES AND EXECUTABLES SECTION
-if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE AND ${USESDL12})
+if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE AND ${NOSDL2})
     #on OSX we need to provide the SDL_main() function when building as executable
     add_subdirectory(sdlmain)
     list(APPEND HW_LINK_LIBS SDLmain)
@@ -121,10 +121,10 @@ if(FFMPEG_FOUND)
     add_definitions(-dUSE_VIDEO_RECORDING)
     add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     
-    if(${USESDL12})
+    if(${NOSDL2})
         #only for SDL < 2, linking carried out by fpc
         find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
-    endif(${USESDL12})
+    endif(${NOSDL2})
 endif()
 
 find_package_or_disable_msg(PNG NOPNG "Screenshots will be saved in BMP")
@@ -160,7 +160,7 @@ endif()
 list(APPEND HW_LINK_LIBS physlayer)
 
 #Mix_Init/Mix_Quit from SDL_mixer 1.2.10
-if(${USESDL12})
+if(${NOSDL2})
     check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
     if(HAVE_MIXINIT)
         add_definitions(-dSDL_MIXER_NEWER)
@@ -171,7 +171,7 @@ if(${USESDL12})
     if(HAVE_IMGINIT)
         add_definitions(-dSDL_IMAGE_NEWER)
     endif(HAVE_IMGINIT)
-endif(${USESDL12})
+endif(${NOSDL2})
 
 #needs to be last
 add_definitions(-dDEBUGFILE)

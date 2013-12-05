@@ -19,17 +19,17 @@ if(APPLE AND
     message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
 endif()
 
-if(${USESDL12})
+if(${NOSDL2})
     find_package(SDL REQUIRED)            #video in SDLInteraction
     find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
     include_directories(${SDL_INCLUDE_DIR})
     include_directories(${SDLMIXER_INCLUDE_DIR})
-else(${USESDL12})
+else(${NOSDL2})
     find_package(SDL2 REQUIRED)
     find_package(SDL2_mixer REQUIRED) #audio in SDLInteraction
     include_directories(${SDL2_INCLUDE_DIR})
     include_directories(${SDL2MIXER_INCLUDE_DIR})
-endif(${USESDL12})
+endif(${NOSDL2})
 
 if(${FFMPEG_FOUND})
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
@@ -207,7 +207,7 @@ list(APPEND HW_LINK_LIBS
     ${QT_LIBRARIES}
     )
 
-if(USESDL12)
+if(NOSDL2)
     list(APPEND HW_LINK_LIBS
         ${SDL_LIBRARY}
         ${SDLMIXER_LIBRARY}
