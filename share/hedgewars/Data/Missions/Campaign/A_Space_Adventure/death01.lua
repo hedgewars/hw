@@ -248,7 +248,7 @@ end
 
 function onEnemiesDeath(gear)
 	local allDead = true
-	if professor.dead then
+	if GetHealth(hero.gear) and professor.dead then
 		for i=1,table.getn(thugs) do
 			if GetHealth(thugs[i]) then
 				allDead = false
