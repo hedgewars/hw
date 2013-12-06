@@ -169,6 +169,13 @@
     </message>
 </context>
 <context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
@@ -397,6 +404,19 @@ Per favore aspetta qualche secondo e prova di nuovo.</translation>
     <message>
         <source>This page requires an internet connection.</source>
         <translation>Questa pagina richiede una connessione a Internet.</translation>
+    </message>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -669,7 +689,7 @@ inserisci solo il tuo soprannome.</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug della libreria freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
+        <translation type="obsolete">SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug della libreria freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
     </message>
 </context>
 <context>
@@ -684,15 +704,15 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Durata: %1m %2s</translation>
+        <translation type="obsolete">Durata: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Video: %1x%2, </translation>
+        <translation type="obsolete">Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="obsolete">%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -701,6 +721,18 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>unknown</source>
         <translation>sconosciuto</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -829,6 +861,18 @@ inserisci solo il tuo soprannome.</translation>
         <source>Eraser</source>
         <translation>Gomma</translation>
     </message>
+    <message>
+        <source>Polyline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageEditTeam</name>
@@ -940,6 +984,13 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Save</source>
         <translation>Salva</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1262,11 +1313,11 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Regole:</translation>
+        <translation type="obsolete">Regole:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Armi:</translation>
+        <translation type="obsolete">Armi:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1301,7 +1352,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Rimuovi filtri</translation>
+        <translation type="obsolete">Rimuovi filtri</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1430,6 +1481,22 @@ inserisci solo il tuo soprannome.</translation>
         <source>Add an indestructible border along the bottom</source>
         <translation>Aggiungi un bordo indistruttibile lungo la parte inferiore della mappa</translation>
     </message>
+    <message>
+        <source>None (Default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1528,14 +1595,24 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Date: %1
 </source>
-        <translation>Data: %1
+        <translation type="obsolete">Data: %1
 </translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation>Dimensione: %1
+        <translation type="obsolete">Dimensione: %1
 </translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation type="unfinished">Data: %1
+ {1?}</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
+        <translation type="unfinished">Dimensione: %1
+ {1?}</translation>
     </message>
 </context>
 <context>
@@ -1671,6 +1748,38 @@ inserisci solo il tuo soprannome.</translation>
         <source>Frontend music</source>
         <translation>Musica in presentazione</translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1692,7 +1801,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation>Qualsiasi</translation>
+        <translation type="obsolete">Qualsiasi</translation>
     </message>
     <message>
         <source>In lobby</source>
@@ -1906,7 +2015,7 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Suggerimento: </translation>
+        <translation type="obsolete">Suggerimento: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2056,6 +2165,18 @@ Vuoi veramente uscire?</translation>
         <source>This setting will be effective at next restart.</source>
         <translation>Questa impostazione avrà effetto al prossimo riavvio.</translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2080,7 +2201,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>-r%1 (%2)</source>
-        <translation>-r%1 (%2)</translation>
+        <translation type="obsolete">-r%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2338,6 +2459,13 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished">Nessuna descrizione disponibile</translation>
+    </message>
+</context>
+<context>
     <name>QPushButton</name>
     <message>
         <source>Go!</source>
@@ -2474,6 +2602,10 @@ Non tutti i giocatori sono pronti.</translation>
         <source>Create room</source>
         <translation>Crea stanza</translation>
     </message>
+    <message>
+        <source>set password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomsListModel</name>
@@ -2520,6 +2652,10 @@ Non tutti i giocatori sono pronti.</translation>
     <message>
         <source>Hand-drawn</source>
         <translation>Disegnata a mano</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2592,7 +2728,7 @@ Codice di errore: %2</translation>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>Squadra di %1</translation>
+        <translation type="obsolete">Squadra di %1</translation>
     </message>
 </context>
 <context>

@@ -126,7 +126,7 @@ function onGearDelete(gear)
 	if (gear == enemy) and (failed == false) then
 		ShowMission(loc("Newton's Hammock"), loc("MISSION SUCCESSFUL"), loc("Congratulations!"), 0, 0)
 	elseif gear == player then
-		ShowMission(loc("Newton's Hammock"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)		
+		ShowMission(loc("Newton's Hammock"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
 	end
 
 end

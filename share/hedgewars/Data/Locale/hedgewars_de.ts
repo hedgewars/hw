@@ -81,14 +81,14 @@
     <name>DataManager</name>
     <message>
         <source>Use Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende Standard</translation>
     </message>
 </context>
 <context>
     <name>FeedbackDialog</name>
     <message>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Ansehen</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -96,11 +96,11 @@
     </message>
     <message>
         <source>Send Feedback</source>
-        <translation type="unfinished">Feedback senden</translation>
+        <translation>Feedback senden</translation>
     </message>
     <message>
         <source>Please give us feedback!</source>
-        <translation type="unfinished">Bitte gib uns Feedback!</translation>
+        <translation type="obsolete">Bitte gib uns Feedback!</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
@@ -108,11 +108,23 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt is (auf Englisch):</translation>
+        <translation type="obsolete">Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt is (auf Englisch):</translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
-        <translation>Deine E-Mail-Adresse ist optional, aber wir könnten sie brauchen, um dich zu kontaktieren.</translation>
+        <translation type="obsolete">Deine E-Mail-Adresse ist optional, aber wir könnten sie brauchen, um dich zu kontaktieren.</translation>
+    </message>
+    <message>
+        <source>Send us feedback!</source>
+        <translation>Schicke uns dein Feedback!</translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation>Falls du einen Fehler gefunden hast, kannst du hier sehen, ob er bereits bekannt is (auf Englisch):</translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
+        <translation>Deine E-Mail-Adresse ist optional, es sei denn du möchtest, dass wir dich zurückkontaktieren.</translation>
     </message>
 </context>
 <context>
@@ -157,49 +169,56 @@
     </message>
 </context>
 <context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation>Gast</translation>
+    </message>
+</context>
+<context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Minute</numerusform>
+            <numerusform>%1 Minuten</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hour</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Stunde</numerusform>
+            <numerusform>%1 Stunden</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 hours</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Stunde</numerusform>
+            <numerusform>%1 Stunden</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 day</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Tag</numerusform>
+            <numerusform>%1 Tage</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 days</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 Tag</numerusform>
+            <numerusform>%1 Tage</numerusform>
         </translation>
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>Das Schema »%1« wird nicht unterstützt.</translation>
+        <translation>Das Schema »%1« wird nicht unterstützt</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
-        <translation>Das Verzeichnis %1 konnte nicht angelegt werden.</translation>
+        <translation>Das Verzeichnis %1 konnte nicht angelegt werden</translation>
     </message>
     <message>
         <source>Failed to open data directory:
@@ -260,6 +279,18 @@ Bitte überprüfe deine Installation!</translation>
     <message>
         <source>Failed to save StyleSheet to %1</source>
         <translation>Stylesheet konnte nicht nach %1 gesichert werden</translation>
+    </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation>%1 ist beigetreten</translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation>%1 ist gegangen</translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation>%1 ist gegangen</translation>
     </message>
 </context>
 <context>
@@ -369,6 +400,24 @@ Please wait a few seconds and try again.</source>
         <translation>Du hast dich zu früh erneut verbunden.
 Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
+    <message>
+        <source>Guest</source>
+        <translation>Gast</translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation>Raumkennwort</translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation>Der Raum wird durch ein Kennwort geschützt.
+Bitte Kennwort eingeben:</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation>Diese Seite benötigt eine Internetverbindung.</translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -425,11 +474,11 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation type="unfinished"></translation>
+        <translation>Bild-Karte</translation>
     </message>
     <message>
         <source>Mission map</source>
-        <translation type="unfinished"></translation>
+        <translation>Missions-Karte</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
@@ -453,11 +502,11 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Lade gezeichnete Karte</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeite gezeichnete Karte</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -477,11 +526,11 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Maze style:</source>
-        <translation type="unfinished">Labyrinth-Art:</translation>
+        <translation>Labyrinth-Art:</translation>
     </message>
     <message>
         <source>Mission:</source>
-        <translation type="unfinished">Mission:</translation>
+        <translation>Mission:</translation>
     </message>
     <message>
         <source>Map:</source>
@@ -489,7 +538,7 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Thema:</translation>
+        <translation type="obsolete">Thema:</translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -506,6 +555,10 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     <message>
         <source>Large tunnels</source>
         <translation>Große Tunnel</translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation>Thema: %1</translation>
     </message>
 </context>
 <context>
@@ -551,7 +604,7 @@ Bitte warte ein paar Sekunden und versuch es noch einmal.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 ist beigetreten</translation>
+        <translation type="obsolete">%1 *** %2 ist beigetreten</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -636,7 +689,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf meldete einen Fehler beim Rendern des Textes, dies liegt vermutlich an einem Fehler in freetype2. Es wird empfohlen, die freetype-Bibliothek auf dem neuesten Stand zu bringen.</translation>
+        <translation type="obsolete">SDL_ttf meldete einen Fehler beim Rendern des Textes, dies liegt vermutlich an einem Fehler in freetype2. Es wird empfohlen, die freetype-Bibliothek auf dem neuesten Stand zu bringen.</translation>
     </message>
 </context>
 <context>
@@ -651,15 +704,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Dauer: %1m %2s</translation>
+        <translation type="obsolete">Dauer: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Video: %1x%2, </translation>
+        <translation type="obsolete">Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 Bilder pro Sekunde, </translation>
+        <translation type="obsolete">%1 Bilder pro Sekunde, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -667,14 +720,26 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>unknown</source>
-        <translation type="unfinished">unbekannt</translation>
+        <translation>unbekannt</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation>Dauer: %1m %2s</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation>Video: %1x%2</translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation>%1 Bilder pro Sekunde, </translation>
     </message>
 </context>
 <context>
     <name>MapModel</name>
     <message>
         <source>No description available.</source>
-        <translation>Keine Beschreibung verfügbar</translation>
+        <translation>Keine Beschreibung verfügbar.</translation>
     </message>
 </context>
 <context>
@@ -697,7 +762,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Latest version protocol number:</source>
-        <translation>Letzte Protokoll-Version</translation>
+        <translation>Protokollnummer der neuesten Version:</translation>
     </message>
     <message>
         <source>MOTD preview:</source>
@@ -709,7 +774,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>General</source>
-        <translation type="unfinished">Allgemein</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <source>Bans</source>
@@ -745,6 +810,17 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Connecting...</source>
         <translation>Verbinde ...</translation>
+    </message>
+</context>
+<context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation>Ladevorgang. Bitte warten.</translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation>Diese Seite benötigt eine Internetverbindung.</translation>
     </message>
 </context>
 <context>
@@ -785,6 +861,18 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Eraser</source>
         <translation>Radierer</translation>
     </message>
+    <message>
+        <source>Polyline</source>
+        <translation>Linienzug</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>Rechteck</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>Ellipse</translation>
+    </message>
 </context>
 <context>
     <name>PageEditTeam</name>
@@ -794,11 +882,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Select an action to choose a custom key bind for this team</source>
-        <translation type="unfinished">Wählt eine Aktion, um eine benutzerdefinierte Taste für dieses Team auszuwählenn</translation>
+        <translation>Wählt eine Aktion, um eine benutzerdefinierte Taste für dieses Team auszuwählen</translation>
     </message>
     <message>
         <source>Use my default</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwende meine Vorgabe</translation>
     </message>
     <message>
         <source>Reset all binds</source>
@@ -889,6 +977,21 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; hatte Angst und übersprang &lt;b&gt;%2&lt;/b&gt; Runden.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>Play again</source>
+        <translation>Nochmal spielen</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Sichern</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>PageInGame</name>
@@ -952,7 +1055,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Feedback</source>
-        <translation type="unfinished">Feedback</translation>
+        <translation>Feedback</translation>
     </message>
     <message>
         <source>Play local network game</source>
@@ -990,11 +1093,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation type="unfinished">Aktualisieren</translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <source>Room controls</source>
-        <translation type="unfinished">Raumsteuerung</translation>
+        <translation>Raumeinstellungen</translation>
     </message>
 </context>
 <context>
@@ -1092,7 +1195,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation type="unfinished">Wählt eine Aktion, um zu ändern, welche Taste es kontrolliert</translation>
+        <translation>Wähle eine Aktion, um zu ändern, durch welche Taste sie kontrolliert wird</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -1210,11 +1313,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Regeln:</translation>
+        <translation type="obsolete">Regeln:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Waffen:</translation>
+        <translation type="obsolete">Waffen:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1245,11 +1348,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation type="unfinished">Raum-Zustand</translation>
+        <translation>Raum-Status</translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Filter leeren</translation>
+        <translation type="obsolete">Filter leeren</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1372,11 +1475,27 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation>Fügt eine unzerstörbare Randbegrenzung um das Spielfeld herum hinzu.</translation>
+        <translation>Füge dem Spielfeld eine unzerstörbare Randbegrenzung hinzu</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation>Fügt eine unzerstörbare Randbegrenzung am unteren Kartenrand hinzu.</translation>
+        <translation>Füge dem unteren Kartenrand eine unzerstörbare Randbegrenzung an</translation>
+    </message>
+    <message>
+        <source>None (Default)</source>
+        <translation>Nichts (Standard)</translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation>Umbrechen (Welt wiederholt sich)</translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation>Abprallen (Grenzen reflektieren)</translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation>Ozean (Grenzen sind mit dem Wasser verbunden)</translation>
     </message>
 </context>
 <context>
@@ -1406,7 +1525,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation>Spiele gegen deine Freunde oder Computer-Teams.</translation>
+        <translation>Spiele gegen deine Freunde oder Computer-Teams</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
@@ -1476,11 +1595,19 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Date: %1
 </source>
-        <translation>Datum: %1</translation>
+        <translation type="obsolete">Datum: %1</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
+        <translation type="obsolete">Größe: %1</translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation>Datum: %1</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
         <translation>Größe: %1</translation>
     </message>
 </context>
@@ -1532,7 +1659,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation type="unfinished">verhindere das Beitreten unregistrierter Spieler</translation>
+        <translation>Verhindere das Beitreten unregistrierter Spieler</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -1617,6 +1744,38 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Frontend music</source>
         <translation>Musik in der Benutzeroberfläche</translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation>Team</translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation>Aktiviere Team-Kennzeichnung bei Spielstart</translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation>Igel</translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation>Aktiviere Igel-Kennzeichnung bei Spielstart</translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation>Lebenspunkte</translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation>Aktiviere Lebenspunkte-Kennzeichnung bei Spielstart</translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation>Durchsichtig</translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
+        <translation>Aktiviere durchsichtige bei Spielstart</translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1638,7 +1797,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation>Alle</translation>
+        <translation type="obsolete">Alle</translation>
     </message>
     <message>
         <source>In lobby</source>
@@ -1852,7 +2011,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Tipp:</translation>
+        <translation type="obsolete">Tipp:</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1998,6 +2157,22 @@ Willst du wirklich verlassen?</translation>
         <source>This program is distributed under the %1</source>
         <translation>Dieses Programm wird unter der %1 veröffentlicht</translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation>Tipp: %1</translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation>Angezeigte Infos über Igel und Info-Durchsichtigkeit</translation>
+    </message>
+    <message>
+        <source>This setting will be effective at next restart.</source>
+        <translation>Diese Einstellung tritt ab nächstem Neustart in Kraft.</translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation>Spielfeldgrenze</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2019,10 +2194,6 @@ Willst du wirklich verlassen?</translation>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
-    </message>
-    <message>
-        <source>-r%1 (%2)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2200,7 +2371,7 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Do you really want to cancel uploading %1?</source>
-        <translation>Willst du das Hochladen von %1 wirklich abbrechen_</translation>
+        <translation>Willst du das Hochladen von %1 wirklich abbrechen?</translation>
     </message>
     <message>
         <source>File error</source>
@@ -2275,6 +2446,13 @@ Willst du trotzdem den Raum betreten?</translation>
 Not all players are ready.</source>
         <translation>Bist du sicher, dass du diesees Spiel staren willst?
 Es sind nicht alle Spieler bereit.</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation>Keine Beschreibung verfügbar</translation>
     </message>
 </context>
 <context>
@@ -2361,7 +2539,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard-Kodierungs-Einstellungen wiederherstellen</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
@@ -2393,18 +2571,22 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL in your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>Klick, um deine einzigartige URL in die Zwischenablage zu kopieren. Versende diesen Link an deine Freunde, damit sie dich auf deinem Server besuchen können.</translation>
+        <translation type="obsolete">Klick, um deine einzigartige URL in die Zwischenablage zu kopieren. Versende diesen Link an deine Freunde, damit sie dich auf deinem Server besuchen können.</translation>
     </message>
     <message>
         <source>Start private server</source>
         <translation>privaten Server starten</translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
+        <translation>Klicke um deine Server-Adresse in die Zwischenablage zu kopieren. Sende diese als Link zu deinen Freunden damit sie dir beitreten können.</translation>
     </message>
 </context>
 <context>
     <name>RoomNamePrompt</name>
     <message>
         <source>Enter a name for your room.</source>
-        <translation>Gib einen Namen für deinen Raum ein!</translation>
+        <translation>Gib einen Namen für deinen Raum ein.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2413,6 +2595,10 @@ Es sind nicht alle Spieler bereit.</translation>
     <message>
         <source>Create room</source>
         <translation>Raum erstellen</translation>
+    </message>
+    <message>
+        <source>set password</source>
+        <translation>Kennwort setzen</translation>
     </message>
 </context>
 <context>
@@ -2460,6 +2646,10 @@ Es sind nicht alle Spieler bereit.</translation>
     <message>
         <source>Hand-drawn</source>
         <translation>Handgemalt</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation>Skript</translation>
     </message>
 </context>
 <context>
@@ -2532,7 +2722,7 @@ Fehlercode: %2</translation>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>Team von %1</translation>
+        <translation type="obsolete">Team von %1</translation>
     </message>
 </context>
 <context>
@@ -3133,10 +3323,6 @@ Fehlercode: %2</translation>
 <context>
     <name>server</name>
     <message>
-        <source>No checker rights</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Authentication failed</source>
         <translation>Authentifizierung fehlgeschlagen</translation>
     </message>
@@ -3161,10 +3347,6 @@ Fehlercode: %2</translation>
         <translation>Leerer Konfigurations-Eintrag</translation>
     </message>
     <message>
-        <source>Not room master</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Corrupted hedgehogs info</source>
         <translation>Kaputte Igel-Info</translation>
     </message>
@@ -3186,7 +3368,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="unfinished">eingeschränkt</translation>
+        <translation>eingeschränkt</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
@@ -3198,7 +3380,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="unfinished">Weniger als zwei Clans!</translation>
+        <translation>Weniger als zwei Clans!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>

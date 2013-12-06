@@ -158,6 +158,13 @@
     </message>
 </context>
 <context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
@@ -382,6 +389,19 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -648,7 +668,7 @@ just enter your nickname.</source>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
+        <translation type="obsolete">SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
     </message>
 </context>
 <context>
@@ -663,15 +683,15 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Длительность: %1мин %2сек</translation>
+        <translation type="obsolete">Длительность: %1мин %2сек</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Видео: %1x%2, </translation>
+        <translation type="obsolete">Видео: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 кадров/сек,</translation>
+        <translation type="obsolete">%1 кадров/сек,</translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -680,6 +700,18 @@ just enter your nickname.</source>
     <message>
         <source>unknown</source>
         <translation>неизвестно</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -808,6 +840,18 @@ just enter your nickname.</source>
         <source>Eraser</source>
         <translation>Стирательная резинка</translation>
     </message>
+    <message>
+        <source>Polyline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageEditTeam</name>
@@ -925,6 +969,14 @@ just enter your nickname.</source>
     <message>
         <source>Save</source>
         <translation type="unfinished">Сохранить</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1247,11 +1299,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Правила:</translation>
+        <translation type="obsolete">Правила:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Оружие:</translation>
+        <translation type="obsolete">Оружие:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1287,7 +1339,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Очистить фильтры</translation>
+        <translation type="obsolete">Очистить фильтры</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1416,6 +1468,22 @@ just enter your nickname.</source>
         <source>Add an indestructible border along the bottom</source>
         <translation>Добавить неразрушимую границу внизу карты</translation>
     </message>
+    <message>
+        <source>None (Default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1515,12 +1583,20 @@ just enter your nickname.</source>
     <message>
         <source>Date: %1
 </source>
-        <translation>Дата: %1</translation>
+        <translation type="obsolete">Дата: %1</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation>Размер: %1</translation>
+        <translation type="obsolete">Размер: %1</translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation type="unfinished">Дата: %1 {1?}</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
+        <translation type="unfinished">Размер: %1 {1?}</translation>
     </message>
 </context>
 <context>
@@ -1656,6 +1732,38 @@ just enter your nickname.</source>
         <source>Frontend music</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1677,7 +1785,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Any</source>
-        <translation>Любой</translation>
+        <translation type="obsolete">Любой</translation>
     </message>
     <message>
         <source>In lobby</source>
@@ -1891,7 +1999,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Подсказка:</translation>
+        <translation type="obsolete">Подсказка:</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2041,6 +2149,18 @@ Do you really want to quit?</source>
         <source>This setting will be effective at next restart.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2062,10 +2182,6 @@ Do you really want to quit?</source>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
-    </message>
-    <message>
-        <source>-r%1 (%2)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2210,6 +2326,8 @@ Do you still want to join the room?</source>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -2289,6 +2407,13 @@ Do you still want to join the room?</source>
 Not all players are ready.</source>
         <translation>Вы действительно хотите запустить игру?
 Не все игроки готовы.</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished">Описание отсутствует</translation>
     </message>
 </context>
 <context>
@@ -2428,6 +2553,10 @@ Not all players are ready.</source>
         <source>Create room</source>
         <translation>Создать комнату</translation>
     </message>
+    <message>
+        <source>set password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomsListModel</name>
@@ -2474,6 +2603,10 @@ Not all players are ready.</source>
     <message>
         <source>Hand-drawn</source>
         <translation>Рисованная карта</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2545,7 +2678,7 @@ Error code: %2</source>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>Команда %1</translation>
+        <translation type="obsolete">Команда %1</translation>
     </message>
 </context>
 <context>
