@@ -24,7 +24,7 @@ local checkPointReached = 1 -- 1 is normal spawn
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("The part is hidden in one of the crates! Go and get it!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!"), 1, 4500},
 }
 -- crates
 local btorch1Y = 60
@@ -90,7 +90,7 @@ function onGameInit()
 	HealthCaseAmount = 30
 	Map = "desert01_map"
 	Theme = "Desert"
-	
+
 	-- get the check point
 	checkPointReached = initCheckpoint("desert01")
 	-- get hero health
@@ -98,7 +98,7 @@ function onGameInit()
 	if checkPointReached > 1 and tonumber(GetCampaignVar("HeroHealth")) then
 		heroHealth = tonumber(GetCampaignVar("HeroHealth"))
 	end
-	
+
 	-- Hog Solo
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
@@ -113,10 +113,10 @@ function onGameInit()
 	smuggler1.gear = AddHog(smuggler1.name, 1, 100, "hair_orange")
 	AnimSetGearPosition(smuggler1.gear, smuggler1.x, smuggler1.y)
 	smuggler2.gear = AddHog(smuggler2.name, 1, 100, "lambda")
-	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)	
+	AnimSetGearPosition(smuggler2.gear, smuggler2.x, smuggler2.y)
 	smuggler3.gear = AddHog(smuggler3.name, 1, 100, "beefeater")
-	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)	
-	
+	AnimSetGearPosition(smuggler3.gear, smuggler3.x, smuggler3.y)
+
 	if checkPointReached == 1 then
 		-- Start of the game
 	elseif checkPointReached == 2 then
@@ -130,15 +130,15 @@ function onGameInit()
 	elseif checkPointReached == 5 then
 		AnimSetGearPosition(hero.gear, girderX+40, girderY-30)
 	end
-	
+
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
@@ -146,24 +146,24 @@ function onGameStart()
 	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
 	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
 	AddEvent(onCheckForWin2, {hero.gear}, checkForWin2, {hero.gear}, 0)
-	
+
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
 	AddAmmo(smuggler1.gear, amGrenade, 2)
-	AddAmmo(smuggler1.gear, amDEagle, 2)	
+	AddAmmo(smuggler1.gear, amDEagle, 2)
 	AddAmmo(smuggler3.gear, amRope, 2)
-	
+
 	-- spawn crates
 	SpawnAmmoCrate(btorch2X, btorch2Y, amBlowTorch)
 	SpawnAmmoCrate(btorch3X, btorch3Y, amBlowTorch)
 	SpawnAmmoCrate(rope1X, rope1Y, amRope)
 	SpawnAmmoCrate(rope2X, rope2Y, amRope)
 	SpawnAmmoCrate(rope3X, rope3Y, amRope)
-	SpawnAmmoCrate(portalX, portalY, amPortalGun)	
+	SpawnAmmoCrate(portalX, portalY, amPortalGun)
 	SpawnAmmoCrate(girderX, girderY, amGirder)
-	
+
 	SpawnHealthCrate(3300, 970)
-	
+
 	-- adding mines - BOOM!
 	AddGear(1280, 460, gtMine, 0, 0, 0, 0)
 	AddGear(270, 460, gtMine, 0, 0, 0, 0)
@@ -171,7 +171,7 @@ function onGameStart()
 	AddGear(3500, 240, gtMine, 0, 0, 0, 0)
 	AddGear(3410, 670, gtMine, 0, 0, 0, 0)
 	AddGear(3450, 720, gtMine, 0, 0, 0, 0)
-	
+
 	local x = 800
 	while x < 1630 do
 		AddGear(x, 900, gtMine, 0, 0, 0, 0)
@@ -192,8 +192,8 @@ function onGameStart()
 		AddGear(x, 470, gtMine, 0, 0, 0, 0)
 		x = x + math.random(8,20)
 	end
-	
-	if checkPointReached == 1 then	
+
+	if checkPointReached == 1 then
 		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
 		-- crates
@@ -206,18 +206,18 @@ function onGameStart()
 		AddAmmo(hero.gear, amGrenade, 6)
 		AddAmmo(hero.gear, amDEagle, 4)
 		AddAmmo(hero.gear, amRCPlane, tonumber(getBonus(1)))
-	
+
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 or checkPointReached == 3 then
-		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
+		ShowMission(campaignName, missionName, loc("The device part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
 		loadHeroAmmo()
-		
+
 		secondBattle()
 	elseif checkPointReached == 4 or checkPointReached == 5 then
-		ShowMission(campaignName, missionName, loc("The part is hidden in one of the crates! Go and get it!"), -amSkip, 0)
+		ShowMission(campaignName, missionName, loc("The part device is hidden in one of the crates! Go and get it!"), -amSkip, 0)
 		loadHeroAmmo()
 	end
-	
+
 	SendHealthStatsOff()
 end
 
@@ -252,7 +252,7 @@ end
 function onAmmoStoreInit()
 	SetAmmo(amBlowTorch, 0, 0, 0, 1)
 	SetAmmo(amRope, 0, 0, 0, 1)
-	SetAmmo(amPortalGun, 0, 0, 0, 1)	
+	SetAmmo(amPortalGun, 0, 0, 0, 1)
 	SetAmmo(amGirder, 0, 0, 0, 3)
 end
 
@@ -267,7 +267,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -281,7 +281,7 @@ function onHeroDeath(gear)
 end
 
 function onHeroAtFirstBattle(gear)
-	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 
+	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450
 			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-5 then
 		return true
 	end
@@ -289,7 +289,7 @@ function onHeroAtFirstBattle(gear)
 end
 
 function onHeroFleeFirstBattle(gear)
-	if not hero.dead and GetHealth(smuggler1.gear) and heroIsInBattle and ongoingBattle == 1 and (GetX(hero.gear) > 1450 
+	if not hero.dead and GetHealth(smuggler1.gear) and heroIsInBattle and ongoingBattle == 1 and (GetX(hero.gear) > 1450
 			or (GetY(hero.gear) < GetY(smuggler1.gear)-80 or GetY(hero.gear) > smuggler1.y+300)) then
 		return true
 	end
@@ -361,7 +361,7 @@ function heroAtFirstBattle(gear)
 	AnimCaption(hero.gear, loc("A smuggler! Prepare for battle"), 5000)
 	TurnTimeLeft = 0
 	heroIsInBattle = true
-	ongoingBattle = 1	
+	ongoingBattle = 1
 	AnimSwitchHog(smuggler1.gear)
 	TurnTimeLeft = 0
 end
@@ -394,7 +394,7 @@ end
 function heroAtThirdBattle(gear)
 	heroIsInBattle = true
 	ongoingBattle = 3
-	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you..."), SAY_SHOUT, 5000)	
+	AnimSay(smuggler3.gear, loc("Who's there?! I'll get you..."), SAY_SHOUT, 5000)
 	AnimSwitchHog(smuggler3.gear)
 	TurnTimeLeft = 0
 end
@@ -409,8 +409,8 @@ function checkForWin2(gear)
 	if cratesFound ==  0 then
 		saveCheckPointLocal("5")
 	end
-	
-	checkForWin()	
+
+	checkForWin()
 end
 
 -------------- ANIMATIONS ------------------
@@ -430,14 +430,14 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Planet of Sand, you have to double check your moves..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finaly you are here..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here..."), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you for meeting me in such a short notice!"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Thank you for meeting me on such a short notice!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("No problem, I would do anything for H!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Now listen carefully! Below us there are tunnels that have been created naturally over the years"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heared the local tribes saying that many years ago some PAotH scientists were dumping their waste here"), SAY_SAY, 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("H confimed that there isn't such a PAotH activity logged"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("I have heard that the local tribes say that many years ago some PAotH scientists were dumping their waste here"), SAY_SAY, 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("H confirmed that there isn't such a PAotH activity logged"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("So, I believe that it's a good place to start"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Beware though! Many smugglers come often to explore these tunnels and scavage whatever valuable items they can find"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("They won't hesitate to attack you in order to rob you!"), SAY_SAY, 4000}})
@@ -447,7 +447,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("There is the tunnel entrance"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Good luck!"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startMission, args = {hero.gear}})	
+	table.insert(dialog01, {func = startMission, args = {hero.gear}})
 end
 
 --------------- OTHER FUNCTIONS ------------------
@@ -461,14 +461,14 @@ function secondBattle()
 	-- second battle
 	heroIsInBattle = true
 	ongoingBattle = 2
-	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)	
+	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)
 	AnimSwitchHog(smuggler2.gear)
 	TurnTimeLeft = 0
 end
 
 function saveCheckPointLocal(cpoint)
 	-- save checkpoint
-	saveCheckpoint(cpoint)	
+	saveCheckpoint(cpoint)
 	SaveCampaignVar("HeroHealth", GetHealth(hero.gear))
 	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal - rcplane
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
@@ -497,7 +497,7 @@ end
 
 function checkForWin()
 	if cratesFound ==  0 then
-		-- have to look more		
+		-- have to look more
 		AnimSay(hero.gear, loc("Haven't found it yet..."), SAY_THINK, 5000)
 		cratesFound = cratesFound + 1
 	elseif cratesFound == 1 then

@@ -15,7 +15,7 @@ local startChallenge = false
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope and get asap to the surface!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("Use the rope to quickly get to the surface!"), 1, 4500},
 }
 -- health crates
 healthX = 565
@@ -34,7 +34,7 @@ teamA.name = loc("Hog Solo")
 teamA.color = tonumber("38D61C",16) -- green
 -- way points
 local current waypoint = 1
-local waypoints = { 
+local waypoints = {
 	[1] = {x=1450, y=140},
 	[2] = {x=990, y=580},
 	[3] = {x=1650, y=950},
@@ -70,15 +70,15 @@ function onGameInit()
 	HealthDecrease = 0
 	Map = "desert02_map"
 	Theme = "Desert"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	
+
 	initCheckpoint("desert02")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -86,15 +86,15 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSafe, {hero.gear}, heroSafe, {hero.gear}, 0)
-	
+
 	SpawnHealthCrate(healthX, health1Y)
 	SpawnHealthCrate(healthX, health2Y)
-	
+
 	AddAmmo(hero.gear, amRope, 99)
-	
+
 	SendHealthStatsOff()
 	AddAnim(dialog01)
 end
@@ -120,7 +120,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -174,7 +174,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Many meters below the surface..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("The tunnel is about to get flooded..."), SAY_THINK, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface asap..."), SAY_THINK, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I have to reach the surface as quickly as I can..."), SAY_THINK, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = challengeStart, args = {hero.gear}})
 end
