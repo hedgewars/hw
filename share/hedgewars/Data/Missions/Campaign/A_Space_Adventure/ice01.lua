@@ -24,7 +24,7 @@ local dialog02 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Collect the icegun and get the device part from Thanta"), 1, 4500},
-	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you got the part!"), 1, 3500},
+	[dialog02] = {missionName, loc("Win"), loc("Congratulations, you collected the device part!"), 1, 3500},
 }
 -- crates
 local icegunY = 1950
@@ -487,12 +487,12 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, welcome to moon
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Ice Planet, where ice rules..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finaly you are here..."), SAY_SAY, 2000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Ice Planet, where ice rules..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Finally you are here..."), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 2000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Hi! Nice to meet you"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {ally.gear, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefuly! The bandit leader, Thanta, has recently found a very strange device"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("Listen carefully! The bandit leader, Thanta, has recently found a very strange device"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {ally.gear, loc("He doesn't know it but this device is a part of the anti-gravity device"), SAY_SAY, 2500}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 8000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("Nice, then I should get the part as soon as possible!"), SAY_SAY, 4000}})
@@ -504,7 +504,7 @@ function AnimationSetup()
 	-- DIALOG 02 - Hero got to Thant2
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's part..."), 5000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Congratulations, now you can take Thanta's device part..."), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Oh! Please spare me. You can take all my treasures!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I just want the strange device you found!"), SAY_SAY, 3000}})
@@ -517,7 +517,7 @@ end
 
 function actionsOnWin()
 	saveCompletedStatus(4)	
-	SendStat(siGameResult, loc("Congratulations, you got the part!"))
+	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
 	SendStat(siCustomAchievement, loc("At the end of the game your health was ")..GetHealth(hero.gear))
 	-- maybe add number of tries for each part?
 	SendStat(siPlayerKills,'1',teamC.name)

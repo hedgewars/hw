@@ -10,11 +10,11 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("Chasing the blue hog")
-local challengeObjectives = loc("Use your available weapons in order to catch the other hog").."|"..
+local challengeObjectives = loc("Use the rope in order to catch the blue hedgehog").."|"..
 	loc("You have to stand very close to him")
 local currentPosition = 1
 local previousTimeLeft = 0
-local startChallenge = false
+local startChallenge = falses
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -157,8 +157,8 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3200}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the other side of the moon..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("So you are interested in Pr. Hogevil"), SAY_SAY, 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the other side of the moon..."), 5000}})
+	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("So you are interested in Professor Hogevil"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("We'll play a game first"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("I'll let you know whatever I know about him if you manage to catch me 3 times"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})	
@@ -166,16 +166,16 @@ function AnimationSetup()
 	-- DIALOG 02 - Hog Solo story    
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3200}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("The truth about Pr. Hogevil"), 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Amazing! I was never beaten in running before!"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("So, let me tell you what I know about Pr. Hogevil..."), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Pr. Hogevil, then known as James Hogus, worked for PAotH back in my time"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("The truth about Professor Hogevil"), 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Amazing! I was never beaten in a race before!"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("So, let me tell you what I know about Professor Hogevil..."), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("Professor Hogevil, then known as James Hogus, worked for PAotH back in my time"), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("He was the lab assistant of Dr. Goodhogan, the inventor of the anti-gravity device"), SAY_SAY, 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("In one of the last tests during the construction of the device an accident happpened"), SAY_SAY, 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("In this accident Pr. Hogevil lost all his nails from his head!"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("During the final testing of the device an accident happened"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("In this accident Professor Hogevil lost all his spines on his head!"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("That's why he always wears a hat since then"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("After that incident he got underground and start working his plan to steal the device"), SAY_SAY, 5000}})
-	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("He is a very taugh and very determined hedgehog. I would be extremely careful if I were you"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("After that incident he went underground and started working on his plan to steal the device"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("He is a very tough and very determined hedgehog. I would be extremely careful if I were you"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {runner.gear, loc("I should go now, goodbye!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = win, args = {}})
 end
@@ -218,8 +218,8 @@ end
 
 function lose()
 	SendStat(siGameResult, loc("Too slow! Try again..."))
-	SendStat(siCustomAchievement, loc("You have to caught the other hog 3 times"))
-	SendStat(siCustomAchievement, loc("The time that you'll have left when you reach the hog will be added to the next turn"))
+	SendStat(siCustomAchievement, loc("You have to catch the other hog 3 times"))
+	SendStat(siCustomAchievement, loc("The time that you have left when you reach the blue hedgehog will be added to the next turn"))
 	SendStat(siCustomAchievement, loc("Each turn you'll have only one rope to use"))
 	SendStat(siCustomAchievement, loc("You'll lose if you die or if your time is up"))
 	SendStat(siPlayerKills,'0',teamA.name)
@@ -228,7 +228,7 @@ end
 
 function win()
 	SendStat(siGameResult, loc("Congratulations, you are the fastest!"))
-	SendStat(siCustomAchievement, loc("You have managed to caught the other hog in time"))
+	SendStat(siCustomAchievement, loc("You have managed to catch the blue hedgehog in time"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
