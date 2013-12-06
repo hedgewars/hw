@@ -206,6 +206,8 @@ function onGameStart()
 	AddAmmo(bandit4.gear, amBazooka, 5)
 	AddAmmo(bandit5.gear, amBazooka, 5)
 
+	goToThantaString = loc("Go to Thanta and get the device part!")
+
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amBazooka, 1)
 		SpawnAmmoCrate(icegunX, icegunY, amIceGun)
@@ -214,10 +216,10 @@ function onGameStart()
 		AddAnim(dialog01)
 	elseif checkPointReached == 2 then
 		AddAmmo(hero.gear, amIceGun, 8)
-		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
+		AnimCaption(hero.gear, goToThantaString, 5000)
 	elseif checkPointReached == 3 then
 		AddAmmo(hero.gear, amIceGun, 6)
-		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
+		AnimCaption(hero.gear, goToThantaString, 5000)
 	end
 
 	SendHealthStatsOff()
@@ -343,7 +345,7 @@ function onAntiFlyArea(gear)
 end
 
 function onAntiFlyAreaVelocity(gear)
-	if not hero.dead and GetY(gear) < 1300 then
+	if not hero.dead and GetY(gear) < 1300 and GetX(gear) < 1190 then
 		return true
 	end
 	return false
@@ -415,7 +417,8 @@ function antiFlyArea(gear)
 end
 
 function antiFlyAreaVelocity(gear)
-	SetGearVelocity(hero.gear, 0, 0)
+	dx, dy = GetGearVelocity(hero.gear)
+	SetGearVelocity(hero.gear, dx, math.max(dy, 0))
 end
 
 function nonAntiFlyArea(gear)
