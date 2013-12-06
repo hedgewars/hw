@@ -393,20 +393,24 @@ function onCheckPoint4(gear)
 end
 
 -------------- ACTIONS ------------------
+ended = false
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game, Hog Solo has to get the bottom crates and come back to the surface"))
-	SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
-	SendStat(siCustomAchievement, loc("Do not destroy the crates"))
-	if tookPartInBattle then
-		SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end"))
-	else
-		SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))
-	SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+	if not ended then
+		SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+		SendStat(siCustomAchievement, loc("To win the game, Hog Solo has to get the bottom crates and come back to the surface"))
+		SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
+		SendStat(siCustomAchievement, loc("Do not destroy the crates"))
+		if tookPartInBattle then
+			SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end"))
+		else
+			SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))
+		SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
+		end
+		SendStat(siPlayerKills,'0',teamA.name)
+		EndGame()
+		ended = true
 	end
-	SendStat(siPlayerKills,'0',teamA.name)
-	EndGame()
 end
 
 function deviceCrates(gear)
