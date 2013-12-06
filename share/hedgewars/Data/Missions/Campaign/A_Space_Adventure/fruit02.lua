@@ -22,10 +22,10 @@ local dialog03 = {}
 local dialog04 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("With the help of the other hogs search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
-	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
+	[dialog01] = {missionName, loc("Exploring the tunnel"), loc("Search for the device with the help of the other hedgehogs ").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
+	[dialog02] = {missionName, loc("Exploring the tunnel"), loc("Explore the tunnel with the other hedgehogs and search for the device").."|"..loc("Hog Solo has to reach the last crates"), 1, 4000},
 	[dialog03] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack Captain Lime before he attacks back"), 1, 4000},
-	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assasins before they attack back"), 1, 4000},
+	[dialog04] = {missionName, loc("Return to the Surface"), loc("Go to the surface!").."|"..loc("Attack the assassins before they attack back"), 1, 4000},
 }
 -- crates
 local eagleCrate = {name = amDEagle, x = 1680, y = 1650}
@@ -81,7 +81,7 @@ function onGameInit()
 	SuddenDeathTurns = 200
 	Map = "fruit02_map"
 	Theme = "Fruit"
-	
+
 	-- load checkpoints, problem getting the campaign variable
 	local health = 100
 	checkPointReached = initCheckpoint("fruit02")
@@ -89,12 +89,12 @@ function onGameInit()
 		loadHogsPositions()
 		health = tonumber(GetCampaignVar("HeroHealth"))
 	end
-	
+
 	-- Hog Solo and Green Bananas
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, health, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	HogTurnLeft(hero.gear, true)	
+	HogTurnLeft(hero.gear, true)
 	green2.gear = AddHog(green2.name, 0, 100, "war_britmedic")
 	AnimSetGearPosition(green2.gear, green2.x, green2.y)
 	HogTurnLeft(green2.gear, true)
@@ -117,20 +117,20 @@ function onGameInit()
 	end
 
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	if GetCampaignVar("Fruit01JoinedBattle") and GetCampaignVar("Fruit01JoinedBattle") == "true" then
 		tookPartInBattle = true
 	end
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onDeviceCrates, {hero.gear}, deviceCrates, {hero.gear}, 0)
-	
+
 	-- Hog Solo and GB weapons
 	AddAmmo(hero.gear, amSwitch, 100)
 	-- Captain Lime weapons
@@ -145,7 +145,7 @@ function onGameStart()
 	for i=1,table.getn(redHedgehogs) do
 		HideHog(redHedgehogs[i].gear)
 	end
-	
+
 	-- explosives
 	-- I wanted to use FindPlace but doesn't accept height values...
 	local x1 = 950
@@ -166,7 +166,7 @@ function onGameStart()
 		x2 = x2 - 25
 	end
 	AddGear(3128, 1680, gtExplosives, 0, 0, 0, 0)
-	
+
 	--mines
 	AddGear(3135, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3145, 1680, gtMine, 0, 0, 0, 0)
@@ -177,7 +177,7 @@ function onGameStart()
 	AddGear(3105, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3095, 1680, gtMine, 0, 0, 0, 0)
 	AddGear(3085, 1680, gtMine, 0, 0, 0, 0)
-	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)	
+	AddGear(3075, 1680, gtMine, 0, 0, 0, 0)
 
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amFirePunch, 3)
@@ -199,20 +199,20 @@ function onGameStart()
 		AddEvent(onCheckPoint3, {hero.gear}, checkPoint3, {hero.gear}, 0)
 		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
 	elseif checkPointReached == 4 then
-		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)		
+		AddEvent(onCheckPoint4, {hero.gear}, checkPoint4, {hero.gear}, 0)
 	elseif checkPointReached == 5 then
 		-- EMPTY
 	end
 	if checkPointReached ~= 1 then
 		loadWeapons()
 	end
-	
+
 	-- girders
 	if checkPointReached > 1 then
 		PlaceGirder(1580, 875, 4)
 		PlaceGirder(1800, 875, 4)
 	end
-	
+
 	-- place crates
 	if checkPointReached < 2 then
 		SpawnAmmoCrate(girderCrate.x, girderCrate.y, girderCrate.name)
@@ -225,9 +225,9 @@ function onGameStart()
 	if tookPartInBattle then
 		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amWatermelon)
 	else
-		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)		
+		SpawnAmmoCrate(weaponCrate.x, weaponCrate.y, amSniperRifle)
 	end
-	
+
 	SendHealthStatsOff()
 end
 
@@ -309,7 +309,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -356,7 +356,7 @@ end
 
 function onCheckPoint1(gear)
 	-- before barrel jump
-	if not hero.dead and GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945 
+	if not hero.dead and GetX(hero.gear) > 2850 and GetX(hero.gear) < 2945
 			and GetY(hero.gear) > 808 and GetY(hero.gear) < 852 and	not isHeroAtWrongPlace() then
 		return true
 	end
@@ -375,7 +375,7 @@ end
 
 function onCheckPoint3(gear)
 	-- after barrel jump
-	if ((GetHealth(green2.gear) and GetY(green2.gear) > 1550 and GetX(green2.gear) < 3000 and StoppedGear(green2.gear)) 
+	if ((GetHealth(green2.gear) and GetY(green2.gear) > 1550 and GetX(green2.gear) < 3000 and StoppedGear(green2.gear))
 			or (GetHealth(green3.gear) and GetY(green3.gear) > 1550 and GetX(green3.gear) < 3000 and StoppedGear(green2.gear)))
 			and not isHeroAtWrongPlace() then
 		return true
@@ -385,7 +385,7 @@ end
 
 function onCheckPoint4(gear)
 	-- hero at crates
-	if not hero.dead and GetX(hero.gear) > 1288 and GetX(hero.gear) < 1420 
+	if not hero.dead and GetX(hero.gear) > 1288 and GetX(hero.gear) < 1420
 			and GetY(hero.gear) > 1840 and	not isHeroAtWrongPlace() then
 		return true
 	end
@@ -396,14 +396,14 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game Hog Solo has to get the bottom crates and come back to the surface"))
+	SendStat(siCustomAchievement, loc("To win the game, Hog Solo has to get the bottom crates and come back to the surface"))
 	SendStat(siCustomAchievement, loc("You can use the other 2 hogs to assist you"))
 	SendStat(siCustomAchievement, loc("Do not destroy the crates"))
 	if tookPartInBattle then
-		SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assasins at the end"))
+		SendStat(siCustomAchievement, loc("You'll have to eliminate the Strawberry Assassins at the end"))
 	else
 		SendStat(siCustomAchievement, loc("You'll have to eliminate Captain Lime at the end"))
-	SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))		
+	SendStat(siCustomAchievement, loc("Don't eliminate Captain Lime before collecting the last crate!"))
 	end
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -498,17 +498,17 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, Captain Lime helps Hog Solo because he took part in the battle
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else in the planet of fruits Captain Lime helps Hog Solo..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits Captain Lime helps Hog Solo..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("You fought bravely and you helped us win this battle!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("So, as promised I have brought you where I think that the device you are looking for is hidden."), SAY_SAY, 7000}})
-	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send with you two of my best hogs to assist you."), SAY_SAY, 7000}})
+	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("I know that your resources are low due to the battle but I'll send two of my best hogs to assist you."), SAY_SAY, 7000}})
 	table.insert(dialog01, {func = AnimSay, args = {green1.gear, loc("Good luck!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
 	-- DIALOG02 - Start, Hog Solo escaped from the previous battle
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Somewhere else in the planet of fruits Hog Solo gets closer to the device..."), 5000}})
+	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("Somewhere else on the planet of fruits Hog Solo gets closer to the device..."), 5000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You are the one who fled! So, you are alive..."), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I'm still low on hogs. If you are not afraid I could use a set of extra hands"), SAY_SAY, 4000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 8000}})
@@ -524,15 +524,15 @@ function AnimationSetup()
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 4000}})
 	table.insert(dialog03, {func = FollowGear, args = {hero.gear}})
-	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hoo Ray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {hero.gear, loc("Hoorah! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 4000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! I am gonna shoot him when he returns and keep his device for me!"), SAY_THINK, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("This Hog Solo is so naive! When he returns I'll shoot him and keep that device for myself!"), SAY_THINK, 4000}})
 	table.insert(dialog03, {func = goToThesurface, args = {hero.gear}})
 	-- DIALOG04 - At crates, hero learns about the assasins ambush
 	AddSkipFunction(dialog04, Skipanim, {dialog04})
 	table.insert(dialog04, {func = AnimWait, args = {hero.gear, 4000}})
 	table.insert(dialog04, {func = FollowGear, args = {hero.gear}})
-	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hoo Ray! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
+	table.insert(dialog04, {func = AnimSay, args = {hero.gear, loc("Hoorah! I've found it, now I have to get back to Captain Lime!"), SAY_SAY, 4000}})
 	table.insert(dialog04, {func = AnimWait, args = {redHedgehogs[1].gear, 4000}})
 	table.insert(dialog04, {func = AnimSay, args = {redHedgehogs[1].gear, loc("We have spotted the enemy! We'll attack when the enemies start gathering!"), SAY_THINK, 4000}})
 	table.insert(dialog04, {func = goToThesurface, args = {hero.gear}})

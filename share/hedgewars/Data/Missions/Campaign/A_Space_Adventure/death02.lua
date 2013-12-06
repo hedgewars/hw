@@ -12,12 +12,12 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 local missionName = loc("Killing the specialists")
 local challengeObjectives = loc("Use your available weapons in order to eliminate the enemies").."|"..
 	loc("Each time you play this missions enemy hogs will play in a random order").."|"..
-	loc("At the start of the game each enemy hog has only the weapon that he is named of").."|"..
-	loc("A random hog will inherit the weapons of the deceased hogs").."|"..
-	loc("If you kill a hog with the weapon your hp will be 100").."|"..
-	loc("If you injure a hog you'll get 35% of the damage dealt").."|"..
-	loc("Every time you kill an enemy hog your ammo will get reseted").."|"..
-	loc("Rope won't get reseted")
+	loc("At the start of the game each enemy hog has only the weapon that he is named after").."|"..
+	loc("A random hedgehog will inherit the weapons of his deceased team-mates").."|"..
+	loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100").."|"..
+	loc("If you injure a hedgehog you'll get 35% of the damage dealt").."|"..
+	loc("Every time you kill an enemy hog your ammo will get reset").."|"..
+	loc("Rope won't get reset")
 -- dialogs
 local dialog01 = {}
 -- mission objectives
@@ -63,7 +63,7 @@ function onGameInit()
 	Explosives = 0
 	Map = "death02_map"
 	Theme = "Hell"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -75,9 +75,9 @@ function onGameInit()
 		enemies[i].gear = AddHog(enemies[i].name, 1, 100, "war_desertgrenadier1")
 		AnimSetGearPosition(enemies[i].gear, enemies[i].x, enemies[i].y)
 	end
-	
+
 	initCheckpoint("death02")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -86,7 +86,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
 
@@ -119,7 +119,7 @@ function onGearDelete(gear)
 			hero.bazookaAmmo = 0
 		elseif deadHog.weapon == amGrenade then
 			hero.grenadeAmmo = 0
-		end		
+		end
 		local randomHog = math.random(1,table.getn(enemies))
 		while not GetHealth(enemies[randomHog].gear) do
 			randomHog = math.random(1,table.getn(enemies))
@@ -149,7 +149,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -177,8 +177,8 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))			
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))		
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))
+	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -187,8 +187,8 @@ end
 function heroWin(gear)
 	saveBonus(3, 4)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))			
-	SendStat(siCustomAchievement, loc("The next 4 times you'll play the \"The last encounter\" mission you'll get 20 more hit points and a Laser Sight"))		
+	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))
+	SendStat(siCustomAchievement, loc("The next 4 times you play the \"The last encounter\" mission you'll get 20 more hit points and a Laser Sight"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
@@ -209,14 +209,14 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Planet of Death..."), 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("...Hog Solo fights for his life"), 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named of"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hog will inherit the weapons of the deceased hogs"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hog with the weapon your hp will be 100"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hog you'll get 35% of the damage dealt"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reseted"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reseted"), 2000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})	
+	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
 end
 
 ------------ Other Functions -------------------

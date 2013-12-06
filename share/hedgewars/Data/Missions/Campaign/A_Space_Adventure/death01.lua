@@ -99,7 +99,7 @@ function onGameInit()
 	SuddenDeathTurns = 100
 	Map = "death01_map"
 	Theme = "Hell"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -112,7 +112,7 @@ function onGameInit()
 	paoth2.gear = AddHog(paoth2.name, 0, 100, "Glasses")
 	AnimSetGearPosition(paoth2.gear, paoth2.x, paoth2.y)
 	HogTurnLeft(paoth2.gear, true)
-	-- Professor and Thugs	
+	-- Professor and Thugs
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	professor.human = AddHog(professor.name, 0, 300, "tophats")
 	AnimSetGearPosition(professor.human, hero.x + 70, hero.y)
@@ -127,9 +127,9 @@ function onGameInit()
 		AnimSetGearPosition(thugs[i].gear, thugs[i].x, thugs[i].y)
 		HogTurnLeft(thugs[i].gear, not thugs[i].turnLeft)
 	end
-	
+
 	initCheckpoint("death01")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -137,10 +137,10 @@ end
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onEnemiesDeath, {hero.gear}, enemiesDeath, {hero.gear}, 0)
-	
+
 	-- add crates
 	SpawnAmmoCrate(teleportCrate.x, teleportCrate.y, amTeleport)
 	SpawnAmmoCrate(drillCrate.x, drillCrate.y, amTeleport)
@@ -169,7 +169,7 @@ function onGameStart()
 	PlaceGirder(3770, 1370, 4)
 	PlaceGirder(3700, 1460, 6)
 	PlaceGirder(3840, 1460, 6)
-	
+
 	-- add ammo
 	-- hero ammo
 	AddAmmo(hero.gear, amRope, 2)
@@ -190,10 +190,10 @@ function onGameStart()
 	AddAmmo(professor.gear, amSwitch, 100)
 	AddAmmo(professor.gear, amGrenade, 8)
 	AddAmmo(professor.gear, amDEagle, 8)
-	
+
 	HideHog(professor.bot)
 	AddAnim(dialog01)
-	
+
 	SendHealthStatsOff()
 end
 
@@ -233,7 +233,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -274,9 +274,9 @@ end
 function enemiesDeath(gear)
 	saveCompletedStatus(6)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You have successfuly eliminated Professor Hogevil"))
+	SendStat(siCustomAchievement, loc("You have successfully eliminated Professor Hogevil"))
 	SendStat(siCustomAchievement, loc("You have rescued H and Dr.Cornelius"))
-	SendStat(siCustomAchievement, loc("You have acquired the last part"))
+	SendStat(siCustomAchievement, loc("You have acquired the last device part"))
 	SendStat(siCustomAchievement, loc("Now go and play the menu mission to complete the campaign"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	SendStat(siPlayerKills,'0',teamC.name)
@@ -297,16 +297,16 @@ function AnimationSetup()
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the uninhabitable Death Planet..."), 5000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surpised to see me?"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})	
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Welcome Hog Solo, surprised to see me?"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("As you can see I have survived our last encounter and I had time to plot my master plan!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("I've thought that the best way to get the device is to let you collect most of the parts for me!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("So, now I got the last part and I have your friends captured..."), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Will you give me the other parts?"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})	
+	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I will never hand you the parts!"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimWait, args = {professor.human, 3000}})
-	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})	
-	table.insert(dialog01, {func = startBattle, args = {}})	
+	table.insert(dialog01, {func = AnimSay, args = {professor.human, loc("Then prepare for battle!"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = startBattle, args = {}})
 end
 
 -------------- OTHER FUNCTIONS -----------------

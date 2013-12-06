@@ -41,14 +41,14 @@ function onGameInit()
 	HealthCaseAmount = 50
 	Map = "final_map"
 	Theme = "EarthRise"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	
+
 	initCheckpoint("final")
-	
+
 	AnimInit()
 end
 
@@ -56,7 +56,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
-	
+
 	-- explosives
 	x = 400
 	while x < 815 do
@@ -70,20 +70,20 @@ function onGameStart()
 		AddGear(x, 480, gtMine, 0, 0, 0, 0)
 		x = x + math.random(5,20)
 	end
-	-- health crate	
+	-- health crate
 	SpawnHealthCrate(900, 5)
 	-- ammo crates
 	SpawnAmmoCrate(930, 1000,amRCPlane)
 	SpawnAmmoCrate(1220, 672,amPickHammer)
 	SpawnAmmoCrate(1220, 672,amGirder)
-	
+
 	-- ammo
-	AddAmmo(hero.gear, amPortalGun, 1)	
+	AddAmmo(hero.gear, amPortalGun, 1)
 	AddAmmo(hero.gear, amFirePunch, 1)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
-	
+
 	SendHealthStatsOff()
 end
 

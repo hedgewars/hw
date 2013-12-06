@@ -33,8 +33,8 @@ local dialog03 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 4000},
-	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have choose to fight! Lead the Green Bananas to battle and eliminate all the enemies"), 1, 4000},
-	[dialog03] = {missionName, loc("Time to run!"), loc("You have choose to flee... Unfortunately the only place where you can launch your saucer is in the most left side of the map"), 1, 4000},
+	[dialog02] = {missionName, loc("Battle Starts Now!"), loc("You have chosen to fight! Lead the Green Bananas to battle and eliminate all the enemies"), 1, 4000},
+	[dialog03] = {missionName, loc("Time to run!"), loc("You have chosen to flee... Unfortunately the only place where you can launch your saucer is the left-most place on the map"), 1, 4000},
 }
 -- crates
 local crateWMX = 2170
@@ -88,7 +88,7 @@ local yellowArmy = {
 	{name = loc("Naranja Jed"), x = 960 , y = 516, health = 40},
 }
 teamA.name = loc("Hog Solo")
-teamA.color = tonumber("38D61C",16) -- green  
+teamA.color = tonumber("38D61C",16) -- green
 teamB.name = loc("Green Bananas")
 teamB.color = tonumber("38D61C",16) -- green
 teamC.name = loc("Yellow Watermelons")
@@ -108,7 +108,7 @@ function onGameInit()
 	HealthCaseAmount = 50
 	Map = "fruit01_map"
 	Theme = "Fruit"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -145,20 +145,20 @@ function onGameInit()
 		yellowArmy[i].gear = AddHog(yellowArmy[i].name, 1, yellowArmy[i].health, yellowHats[math.random(1,4)])
 		AnimSetGearPosition(yellowArmy[i].gear, yellowArmy[i].x, yellowArmy[i].y)
 	end
-	
+
 	initCheckpoint("fruit01")
 
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroSelect, {hero.gear}, heroSelect, {hero.gear}, 0)
-	
+
 	-- Green team weapons
 	local greenArmy = { green1, green2 }
 	for i=1,2 do
@@ -167,8 +167,8 @@ function onGameStart()
 		AddAmmo(greenArmy[i].gear, amBazooka, 10)
 		AddAmmo(greenArmy[i].gear, amGrenade, 7)
 		AddAmmo(greenArmy[i].gear, amFirePunch, 2)
-		AddAmmo(greenArmy[i].gear, amDrill, 3)	
-		AddAmmo(greenArmy[i].gear, amSwitch, 2)	
+		AddAmmo(greenArmy[i].gear, amDrill, 3)
+		AddAmmo(greenArmy[i].gear, amSwitch, 2)
 		AddAmmo(greenArmy[i].gear, amSkip, 100)
 	end
 	-- Yellow team weapons
@@ -177,21 +177,21 @@ function onGameStart()
 	AddAmmo(yellow1.gear, amBazooka, 10)
 	AddAmmo(yellow1.gear, amGrenade, 10)
 	AddAmmo(yellow1.gear, amFirePunch, 5)
-	AddAmmo(yellow1.gear, amDrill, 3)	
-	AddAmmo(yellow1.gear, amBee, 1)	
+	AddAmmo(yellow1.gear, amDrill, 3)
+	AddAmmo(yellow1.gear, amBee, 1)
 	AddAmmo(yellow1.gear, amMortar, 3)
 	AddAmmo(yellow1.gear, amDEagle, 4)
-	AddAmmo(yellow1.gear, amDynamite, 1)	
+	AddAmmo(yellow1.gear, amDynamite, 1)
 	AddAmmo(yellow1.gear, amSwitch, 100)
 	for i=3,7 do
 		HideHog(yellowArmy[i].gear)
 	end
 	HideHog(green1.bot)
-	
+
 	-- crates
 	SpawnHealthCrate(health1X, health1Y)
 	SpawnAmmoCrate(crateWMX, crateWMY, amWatermelon)
-	
+
 	AddAnim(dialog01)
 	SendHealthStatsOff()
 end
@@ -239,7 +239,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -332,7 +332,7 @@ function battleWin(gear)
 	-- add stats
 	saveVariables()
 	SendStat(siGameResult, loc("Green Bananas won!"))
-	SendStat(siCustomAchievement, loc("You have eliminated all the visible enemy hogs!"))
+	SendStat(siCustomAchievement, loc("You have eliminated all visible enemy hedgehogs!"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamC.name)
@@ -343,7 +343,7 @@ function escapeWin(gear)
 	-- add stats
 	saveVariables()
 	SendStat(siGameResult, loc("Hog Solo escaped successfully!"))
-	SendStat(siCustomAchievement, loc("You have reached the flying area successfully!"))
+	SendStat(siCustomAchievement, loc("You have reached the take-off area successfully!"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	SendStat(siPlayerKills,'0',teamB.name)
 	SendStat(siPlayerKills,'0',teamC.name)
@@ -354,7 +354,7 @@ function heroSelect(gear)
 	TurnTimeLeft = 0
 	FollowGear(hero.gear)
 	if GetX(hero.gear) < hero.x then
-		chooseToBattle = true		
+		chooseToBattle = true
 		AddEvent(onGreen1Death, {green1.gear}, green1Death, {green1.gear}, 0)
 		AddEvent(onBattleWin, {hero.gear}, battleWin, {hero.gear}, 0)
 		AddAnim(dialog02)
@@ -387,7 +387,7 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, Captain Lime talks explains to Hog Solo
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere in the Planet of Fruits a terrible war is about to begin..."), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Somewhere on the Planet of Fruits a terrible war is about to begin..."), 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("I was told that as the leader of the king's guard, no one knows this world better than you!"), SAY_SAY, 5000}})
 	table.insert(dialog01, {func = AnimSay, args = {hero.gear, loc("So, I kindly ask for your help"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimWait, args = {green1.gear, 2000}})
@@ -400,19 +400,19 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 	table.insert(dialog01, {func = ShowMission, args = {missionName, loc("Ready for Battle?"), loc("Walk left if you want to join Captain Lime or right if you want to decline his offer"), 1, 7000}})
 	table.insert(dialog01, {func = AnimSwitchHog, args = {hero.gear}})
-	-- DIALOG 02 - Hero selects to fight	
+	-- DIALOG 02 - Hero selects to fight
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("You choose well Hog Solo!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I have only 3 hogs available and they are all cadets"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As more experienced I want you to lead them to the battle"), SAY_SAY, 4000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I of cource will observe the battle and intervene if necessary"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("As you are more experienced, I want you to lead them to the battle"), SAY_SAY, 4000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("I of course will observe the battle and intervene if necessary"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 4500}})
-	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem Captain! "), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("No problem Captain!"), SAY_SAY, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("The enemies aren't many anyway, it is going to be easy!"), SAY_SAY, 1}})
 	table.insert(dialog02, {func = AnimWait, args = {green1.gear, 9000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be fool son, they'll be more"), SAY_SAY, 2000}})
-	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare the rest!"), SAY_SAY, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Don't be foolish son, there will be more"), SAY_SAY, 2000}})
+	table.insert(dialog02, {func = AnimSay, args = {green1.gear, loc("Try to be smart and eliminate them quickly. This way you might scare off the rest!"), SAY_SAY, 5000}})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog02, {func = startBattle, args = {hero.gear}})
 	-- DIALOG 03 - Hero selects to flee
@@ -420,8 +420,8 @@ function AnimationSetup()
 	table.insert(dialog03, {func = AnimWait, args = {green1.gear, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Too bad... Then you should really leave!"), SAY_SAY, 3000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Things are going to get messy around here"), SAY_SAY, 3000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place that you can fly would be the most left part of the map"), SAY_SAY, 5000}})
-	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our anti flying weapons"), SAY_SAY, 4000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Also, you should know that the only place where you can fly is the left-most part of this area"), SAY_SAY, 5000}})
+	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("All the other places are protected by our flight-inhibiting weapons"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {green1.gear, loc("Now go and don't waste more of my time you coward..."), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = AnimWait, args = {hero.gear, 5000}})
 	table.insert(dialog03, {func = startBattle, args = {hero.gear}})
@@ -446,18 +446,18 @@ end
 
 function gameLost()
 	if chooseToBattle then
-		SendStat(siGameResult, loc("Green Bananas lost, try again!"))
+		SendStat(siGameResult, loc("The Green Bananas lost, try again!"))
 		SendStat(siCustomAchievement, loc("You have to eliminate all the visible enemies"))
 		SendStat(siCustomAchievement, loc("5 additional enemies will be spawned during the game"))
-		SendStat(siCustomAchievement, loc("You are controlling all the active ally units"))
+		SendStat(siCustomAchievement, loc("You are in control of all the active ally units"))
 		SendStat(siCustomAchievement, loc("The ally units share their ammo"))
 		SendStat(siCustomAchievement, loc("Try to keep as many allies alive as possible"))
 	else
 		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
-		SendStat(siCustomAchievement, loc("You have to get to the most left land and remove any enemy hog from there"))
+		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there"))
 		SendStat(siCustomAchievement, loc("You will play every 3 turns"))
 		SendStat(siCustomAchievement, loc("Green hogs won't intenionally hurt you"))
-	end	
+	end
 	SendStat(siPlayerKills,'1',teamC.name)
 	SendStat(siPlayerKills,'0',teamA.name)
 	SendStat(siPlayerKills,'0',teamB.name)
@@ -467,7 +467,7 @@ end
 function getNextWave()
 	if TotalRounds == 4 then
 		RestoreHog(yellowArmy[3].gear)
-		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)		
+		AnimCaption(hero.gear, loc("Next wave in 3 turns"), 5000)
 		if not chooseToBattle and not GetHealth(yellow1.gear) then
 			SetGearPosition(yellowArmy[3].gear, yellow1.x, yellow1.y)
 		end
@@ -481,7 +481,7 @@ function getNextWave()
 	elseif TotalRounds == 10 then
 		RestoreHog(yellowArmy[6].gear)
 		RestoreHog(yellowArmy[7].gear)
-		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear) 
+		if not chooseToBattle and not GetHealth(yellow1.gear) and not GetHealth(yellowArmy[3].gear)
 				and not GetHealth(yellowArmy[4].gear) then
 			SetGearPosition(yellowArmy[6].gear, yellow1.x, yellow1.y)
 		end

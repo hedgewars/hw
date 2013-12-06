@@ -90,7 +90,7 @@ function onGameInit()
 	Delay = 3
 	Map = "ice01_map"
 	Theme = "Snow"
-	
+
 	-- get the check point
 	checkPointReached = initCheckpoint("ice01")
 	-- get hero health
@@ -98,15 +98,15 @@ function onGameInit()
 	if tonumber(GetCampaignVar("HeroHealth")) then
 		heroHealth = tonumber(GetCampaignVar("HeroHealth"))
 	end
-	
+
 	if heroHealth ~= 100 then
 		heroHealth = heroHealth + 5
 		if heroHealth > 100 then
 			heroHealth = 100
 		end
-		SaveCampaignVar("HeroHealth", heroHealth)	
+		SaveCampaignVar("HeroHealth", heroHealth)
 	end
-	
+
 	-- Hog Solo
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, heroHealth, "war_desertgrenadier1")
@@ -119,7 +119,7 @@ function onGameInit()
 	-- Frozen Bandits
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	bandit1.gear = AddHog(bandit1.name, 1, 120, "Santa")
-	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)	
+	AnimSetGearPosition(bandit1.gear, bandit1.x, bandit1.y)
 	HogTurnLeft(bandit1.gear, true)
 	bandit2.gear = AddHog(bandit2.name, 1, 100, "ushanka")
 	AnimSetGearPosition(bandit2.gear, bandit2.x, bandit2.y)
@@ -131,52 +131,52 @@ function onGameInit()
 	bandit5.gear = AddHog(bandit5.name, 1, 40, "Sniper")
 	AnimSetGearPosition(bandit5.gear, bandit5.x, bandit5.y)
 	HogTurnLeft(bandit5.gear, true)
-	
+
 	if checkPointReached == 1 then
 		-- Start of the game
 	elseif checkPointReached == 2 then
 		iceGunTaken = true
 		AnimSetGearPosition(hero.gear, 840, 1650)
-	elseif checkPointReached == 3 then		
+	elseif checkPointReached == 3 then
 		iceGunTaken = true
 		heroAtFinalStep = true
 		heroVisitedAntiFlyArea = true
 		AnimSetGearPosition(hero.gear, 1450, 910)
 	end
-	
+
 	AnimInit()
-	AnimationSetup()	
+	AnimationSetup()
 end
 
 function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
-	
+
 	-- Add mines
 	AddGear(1612, 940, gtMine, 0, 0, 0, 0)
 	AddGear(1622, 945, gtMine, 0, 0, 0, 0)
 	AddGear(1645, 950, gtMine, 0, 0, 0, 0)
 	AddGear(1655, 960, gtMine, 0, 0, 0, 0)
 	AddGear(1665, 965, gtMine, 0, 0, 0, 0)
-	
+
 	AddGear(1800, 1000, gtMine, 0, 0, 0, 0)
 	AddGear(1810, 1005, gtMine, 0, 0, 0, 0)
 	AddGear(1820, 1010, gtMine, 0, 0, 0, 0)
 	AddGear(1830, 1015, gtMine, 0, 0, 0, 0)
 	AddGear(1840, 1020, gtMine, 0, 0, 0, 0)
-	
+
 	AddGear(1900, 1020, gtMine, 0, 0, 0, 0)
 	AddGear(1910, 1020, gtMine, 0, 0, 0, 0)
 	AddGear(1920, 1020, gtMine, 0, 0, 0, 0)
 	AddGear(1930, 1030, gtMine, 0, 0, 0, 0)
 	AddGear(1940, 1040, gtMine, 0, 0, 0, 0)
-	
+
 	AddGear(2130, 1110, gtMine, 0, 0, 0, 0)
 	AddGear(2140, 1120, gtMine, 0, 0, 0, 0)
 	AddGear(2180, 1120, gtMine, 0, 0, 0, 0)
 	AddGear(2200, 1130, gtMine, 0, 0, 0, 0)
 	AddGear(2210, 1130, gtMine, 0, 0, 0, 0)
-	
+
 	local x=2300
 	local step=0
 	while x<3100 do
@@ -189,7 +189,7 @@ function onGameStart()
 			x = x + math.random(10,30)
 		end
 	end
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroFinalStep, {hero.gear}, heroFinalStep, {hero.gear}, 0)
 	AddEvent(onAntiFlyArea, {hero.gear}, antiFlyArea, {hero.gear}, 1)
@@ -197,7 +197,7 @@ function onGameStart()
 	AddEvent(onNonAntiFlyArea, {hero.gear}, nonAntiFlyArea, {hero.gear}, 1)
 	AddEvent(onThantaDeath, {bandit1.gear}, thantaDeath, {bandit1.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
-	
+
 	AddAmmo(hero.gear, amJetpack, 99)
 	AddAmmo(bandit1.gear, amBazooka, 5)
 	AddAmmo(bandit2.gear, amBazooka, 4)
@@ -205,7 +205,7 @@ function onGameStart()
 	AddAmmo(bandit3.gear, amGrenade, 3)
 	AddAmmo(bandit4.gear, amBazooka, 5)
 	AddAmmo(bandit5.gear, amBazooka, 5)
-	
+
 	if checkPointReached == 1 then
 		AddAmmo(hero.gear, amBazooka, 1)
 		SpawnAmmoCrate(icegunX, icegunY, amIceGun)
@@ -219,7 +219,7 @@ function onGameStart()
 		AddAmmo(hero.gear, amIceGun, 6)
 		AnimCaption(hero.gear, loc("Go to Thanta and get the device part!"), 5000)
 	end
-	
+
 	SendHealthStatsOff()
 end
 
@@ -230,7 +230,7 @@ function onNewTurn()
 		TurnTimeLeft = 0
 	elseif not heroVisitedAntiFlyArea and CurrentHedgehog == hero.gear then
 		TurnTimeLeft = -1
-	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then		
+	elseif not heroAtFinalStep and (CurrentHedgehog == bandit1.gear or CurrentHedgehog == bandit4.gear or CurrentHedgehog == bandit5.gear) then
 		AnimSwitchHog(hero.gear)
 		TurnTimeLeft = 0
 	elseif heroAtFinalStep and (CurrentHedgehog == bandit2.gear or CurrentHedgehog == bandit3.gear) then
@@ -291,7 +291,7 @@ function onGameTick()
 	end
 	ExecuteAfterAnimations()
 	CheckEvents()
-	
+
 	if GetEffect(bandit1.gear, heFrozen) > 256 and not bandit1.frozen then
 		bandit1.frozen = true
 		SetEffect(bandit1.gear, heFrozen, 9999999999)
@@ -323,7 +323,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -404,12 +404,12 @@ end
 function antiFlyArea(gear)
 	heroAtAntiFlyArea = true
 	if not heroVisitedAntiFlyArea then
-		TurnTimeLeft = 0        
+		TurnTimeLeft = 0
 		FollowGear(hero.gear)
-		AnimSwitchHog(bandit1.gear)     
+		AnimSwitchHog(bandit1.gear)
 		FollowGear(hero.gear)
 		TurnTimeLeft = 0
-	end	
+	end
 	AddAmmo(hero.gear, amJetpack, 0)
 	heroVisitedAntiFlyArea = true
 end
@@ -510,13 +510,13 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("I just want the strange device you found!"), SAY_SAY, 3000}})
 	table.insert(dialog02, {func = AnimWait, args = {bandit1.gear, 4000}})
 	table.insert(dialog02, {func = AnimSay, args = {bandit1.gear, loc("Here! Take it..."), SAY_SAY, 3000}})
-	table.insert(dialog02, {func = actionsOnWin, args = {}})	
+	table.insert(dialog02, {func = actionsOnWin, args = {}})
 end
 
 -------------- Other Functions -------------------
 
 function actionsOnWin()
-	saveCompletedStatus(4)	
+	saveCompletedStatus(4)
 	SendStat(siGameResult, loc("Congratulations, you acquired the device part!"))
 	SendStat(siCustomAchievement, loc("At the end of the game your health was ")..GetHealth(hero.gear))
 	-- maybe add number of tries for each part?

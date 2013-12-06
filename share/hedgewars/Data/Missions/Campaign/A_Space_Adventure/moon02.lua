@@ -59,7 +59,7 @@ function onGameInit()
 	Explosives = 0
 	Map = "moon02_map"
 	Theme = "Cheese"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
@@ -69,9 +69,9 @@ function onGameInit()
 	runner.gear = AddHog(runner.name, 0, 100, "sth_Sonic")
 	AnimSetGearPosition(runner.gear, runner.places[1].x, runner.places[1].y)
 	HogTurnLeft(runner.gear, true)
-	
+
 	initCheckpoint("moon02")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -80,12 +80,12 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
-	
+
 	AddAmmo(hero.gear, amRope, 1)
 	AddAmmo(hero.gear, amSkip, 1)
-	
+
 	SendHealthStatsOff()
 	hogTurn = runner.gear
 	AddAnim(dialog01)
@@ -123,7 +123,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -161,9 +161,9 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("So you are interested in Professor Hogevil"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("We'll play a game first"), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("I'll let you know whatever I know about him if you manage to catch me 3 times"), SAY_SAY, 4000}})
-	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})	
+	table.insert(dialog01, {func = AnimSay, args = {runner.gear, loc("Let's go!"), SAY_SAY, 2000}})
 	table.insert(dialog01, {func = moveRunner, args = {}})
-	-- DIALOG 02 - Hog Solo story    
+	-- DIALOG 02 - Hog Solo story
 	AddSkipFunction(dialog02, Skipanim, {dialog02})
 	table.insert(dialog02, {func = AnimWait, args = {hero.gear, 3200}})
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("The truth about Professor Hogevil"), 5000}})

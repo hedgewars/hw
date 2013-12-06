@@ -9,10 +9,10 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 -- globals
 local missionName = loc("Precise flying")
-local challengeObjectives = loc("Use the rc plane and destroy the all the targets").."|"..
-	loc("Each time you destroy your level targets you'll get teleported to the next level").."|"..
-	loc("You'll have only one rc plane at the start of the mission").."|"..
-	loc("During the game you can get new planes by getting the weapon crates")
+local challengeObjectives = loc("Use the RC plane and destroy the all the targets").."|"..
+	loc("Each time you destroy all the targets on your current level you'll get teleported to the next level").."|"..
+	loc("You'll have only one RC plane at the start of the mission").."|"..
+	loc("During the game you can get new RC planes by collecting the weapon crates")
 local currentTarget = 1
 -- dialogs
 local dialog01 = {}
@@ -66,14 +66,14 @@ function onGameInit()
 	Explosives = 0
 	Map = "desert03_map"
 	Theme = "Desert"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	
+
 	initCheckpoint("desert03")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -89,7 +89,7 @@ function onGameStart()
 	-- original crates and targets
 	SpawnAmmoCrate(rcCrates[1].x, rcCrates[1].y, amRCPlane)
 	targets[1].gear = AddGear(targets[1].x, targets[1].y, gtTarget, 0, 0, 0, 0)
-	
+
 	-- hero ammo
 	AddAmmo(hero.gear, amRCPlane, 1)
 
@@ -117,7 +117,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -159,11 +159,11 @@ function AnimationSetup()
 	-- DIALOG 01 - Start, game instructions
 	AddSkipFunction(dialog01, Skipanim, {dialog01})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("In the Desert Planet, Hog Solo found some time to play with his RC plane..."), 3000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy your level targets you'll get teleported to the next level"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one rc plane at the start of the mission"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new planes by getting the weapon crates"), 5000}})
-	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})	
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("On the Desert Planet, Hog Solo found some time to play with his RC plane..."), 3000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you destroy all the targets on your current level you'll get teleported to the next level"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("You'll have only one RC plane at the start of the mission"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("During the game you can get new RC planes by collecting the weapon crates"), 5000}})
+	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
 end
 
 ----------------- Other Functions -----------------
@@ -184,7 +184,7 @@ function checkTargetsDestroyed()
 			setTargets(currentTarget)
 		end
 	elseif currentTarget == 3 then
-		
+
 	else
 		win()
 	end
@@ -209,18 +209,18 @@ end
 function win()
 	saveBonus(1, 1)
 	SendStat(siGameResult, loc("Congratulations, you are the best!"))
-	SendStat(siCustomAchievement, loc("You have destroyed all the targets"))	
+	SendStat(siCustomAchievement, loc("You have destroyed all the targets"))
 	SendStat(siCustomAchievement, loc("You are indeed the best PAotH pilot"))
-	SendStat(siCustomAchievement, loc("Next you play \"Searching in the dust\" you'll have an RC plane available"))
+	SendStat(siCustomAchievement, loc("Next time you play \"Searching in the dust\" you'll have an RC plane available"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
 
 function gameOver()
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to destroy all the targets"))		
-	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available"))		
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))		
+	SendStat(siCustomAchievement, loc("You have to destroy all the targets"))
+	SendStat(siCustomAchievement, loc("You will fail if you run out of ammo and there are still targets available"))
+	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end
