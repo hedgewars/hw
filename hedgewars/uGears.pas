@@ -884,9 +884,9 @@ begin
                 Gear^.Hedgehog:= hh;
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
-                end
+                end;
+            ParseCommand('/say [' + hh^.Name + '] '+text, true)
             end
-        //else ParseCommand('say ' + text, true)
         end
     else if (x >= 4) then
         begin
