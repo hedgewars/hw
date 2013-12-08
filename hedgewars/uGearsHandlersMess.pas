@@ -398,7 +398,8 @@ begin
         if (xland or land) and lfBouncy = 0 then
             begin
             Gear^.dX := tdY*Gear^.Elasticity*Gear^.Friction;
-            Gear^.dY := tdX*Gear^.Elasticity
+            Gear^.dY := tdX*Gear^.Elasticity;
+            Gear^.State := Gear^.State or gstCollision
             end
         else
             begin
