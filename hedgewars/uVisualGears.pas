@@ -247,14 +247,16 @@ case Layer of
                              else
                                  DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);*)
                vgtSpeechBubble: begin
-                                if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
+                                if (Gear^.Tex <> nil) and (Gear^.State <= 2) then
                                     begin
-                                    tinted:= true;
-                                    Tint($FF, $FF, $FF,  $66);
-                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
-                                    end
-                                else if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog^.Team = CurrentTeam)) or (Gear^.State = 2)) then
-                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
+                                    // make speech bubbles of inactive teams' hogs transparent
+                                    if ((Gear^.State = 0) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1) then
+                                        begin
+                                        tinted:= true;
+                                        Tint($FF, $FF, $FF,  $66);
+                                        end;
+                                    DrawTextureCentered(round(Gear^.X), round(Gear^.Y), Gear^.Tex);
+                                    end;
                                 end;
                vgtSmallDamageTag: DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                vgtHealthTag: if Gear^.Tex <> nil then 

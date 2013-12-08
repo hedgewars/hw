@@ -590,6 +590,8 @@ if (Gear^.Hedgehog^.Gear <> nil) then
     begin
     Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
     Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
+    Gear^.X:= max(((-cScreenWidth + 16) / zoom) + Gear^.Tex^.w div 2, min(((cScreenWidth - 16) / zoom) - Gear^.Tex^.w div 2, Gear^.X + WorldDx));
+    Gear^.Y:= max(cScreenHeight div 2 - ((cScreenHeight - 16) / (zoom)), min(cScreenHeight div 2 - ((-cScreenHeight + Gear^.Tex^.h) / (zoom)) - 64, Gear^.Y + WorldDy));
     end;
 
 if Gear^.Timer = 0 then
