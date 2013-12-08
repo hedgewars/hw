@@ -1483,7 +1483,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>None (Default)</source>
-        <translation>Nichts (Standard)</translation>
+        <translation>Keine (Standard)</translation>
     </message>
     <message>
         <source>Wrap (World wraps)</source>
