@@ -58,6 +58,7 @@
 00:54=Land Spray
 00:55=Freezer
 00:56=Cleaver
+00:57=Rubber
 
 01:00=Let's fight!
 01:01=Round draw

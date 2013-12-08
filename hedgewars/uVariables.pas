@@ -46,6 +46,9 @@ var
     cShowFPS           : boolean;
     cFlattenFlakes     : boolean;
     cFlattenClouds     : boolean;
+    cIce               : boolean;
+    cSnow              : boolean;
+
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
     UserNick           : shortstring;
@@ -679,7 +682,9 @@ var
             (FileName:  'amIceGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprIceGun
             (FileName:  'amFrozenHog'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprFrozenHog
+            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprFrozenHog
+            (FileName:   'amRubber'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width: 160; Height:160; imageWidth: 0; imageHeight: 0; saveSurf:  true; priority: tpMedium; getDimensions: false; getImageDimensions: true) // sprAmRubber
             );
 
 const
@@ -1872,7 +1877,7 @@ var
                 AmmoType: amPortalGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 6;
+            Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2137,7 +2142,7 @@ var
                 AmmoType: amTardis;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 7;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2249,6 +2254,33 @@ var
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
+            ejectX: 0;
+            ejectY: 0),
+// Rubber
+            (NameId: sidRubber;
+            NameTex: nil;
+            Probability: 150;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NoCrosshair or
+                          ammoprop_NeedTarget or
+                          ammoprop_Utility or
+                          ammoprop_AttackingPut;
+                    Count: 1;
+                    NumPerTurn: 0;
+                    Timer: 0;
+                    Pos: 0;
+                    AmmoType: amRubber;
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 6;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: false;
+            SkipTurns: 0;
+            PosCount: 4;
+            PosSprite: sprAmRubber;
             ejectX: 0;
             ejectY: 0)
         );
@@ -2388,6 +2420,8 @@ begin
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
+    cIce                := false;
+    cSnow               := false;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;

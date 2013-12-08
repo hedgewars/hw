@@ -26,7 +26,7 @@ procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
@@ -95,7 +95,7 @@ begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
 end;
     
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;
@@ -128,7 +128,7 @@ for y:= 0 to Pred(Image^.h) do
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
             if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
-                Land[cpY + y, cpX + x]:= lfObject or extraFlags
+                Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -277,8 +277,7 @@ begin
     rr.x:= x1;
     while rr.x < x2 do
         begin
-        // I should theme flag this. also snow...
-        if (Theme = 'Snow') or (Theme = 'Christmas') then 
+        if cIce then 
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
         else
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
@@ -706,6 +705,10 @@ while not pfsEOF(f) do
         cFlattenFlakes:= true
     else if key = 'flatten-clouds' then
         cFlattenClouds:= true
+    else if key = 'ice' then
+        cIce:= true
+    else if key = 'snow' then
+        cSnow:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

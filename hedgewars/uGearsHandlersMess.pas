@@ -437,7 +437,7 @@ begin
     if ((xland or land) and lfBouncy <> 0) and
         (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
             ((Gear^.Radius >= 3) and
-                ((Gear^.dX.QWordValue > _0_1.QWordValue) or (Gear^.dY.QWordValue > _0_1.QWordValue)))) then
+                ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)))) then
         PlaySound(sndMelonImpact, true)
     else if (Gear^.nImpactSounds > 0) and
         (Gear^.State and gstCollision <> 0) and
@@ -2470,6 +2470,7 @@ var
     HHGear: PGear;
     x, y, tx, ty: hwFloat;
     rx: LongInt;
+    LandFlags: Word;
 begin
     AllInactive := false;
 
@@ -2480,12 +2481,16 @@ begin
     y := HHGear^.Y;
     rx:= hwRound(x);
 
+    LandFlags:= 0;
+    if cIce then LandFlags:= lfIce
+    else if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy;
+
     if ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or 
             (
             (Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y) > _256) and
             (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
             )))
-    or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprAmGirder].Width div 2, Gear^.Target.Y - SpritesData[sprAmGirder].Height div 2, sprAmGirder, Gear^.State, true, false)) then
+    or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, false, LandFlags)) then
         begin
         PlaySound(sndDenied);
         HHGear^.Message := HHGear^.Message and (not gmAttack);

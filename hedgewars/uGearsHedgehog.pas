@@ -353,6 +353,10 @@ with Gear^,
                        amNapalm: newGear:= AddGear(CurWeapon^.Pos, 0, gtAirAttack, 2, _0, _0, 0);
                     amBlowTorch: newGear:= AddGear(hwRound(lx), hwRound(ly), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: newGear:= AddGear(0, 0, gtGirder, CurWeapon^.Pos, _0, _0, 0);
+                       amRubber: begin
+                                 newGear:= AddGear(0, 0, gtGirder, CurWeapon^.Pos, _0, _0, 0);
+                                 newGear^.AmmoType:= amRubber
+                                 end;
                      amTeleport: newGear:= AddGear(CurWeapon^.Pos, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSwitcher, 0, _0, _0, 0);
                        amMortar: begin

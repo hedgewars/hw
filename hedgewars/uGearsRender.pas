@@ -673,6 +673,7 @@ begin
                     DrawSpriteRotated(sprHandPlane, hx, hy, sign, 0);
                     defaultPos:= false
                     end;
+                amRubber,
                 amGirder: begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
                     if WorldEdge = weWrap then
