@@ -365,7 +365,7 @@ function professorDeath(gear)
 	AnimWait(hero.gear,5000)
 
 	saveCompletedStatus(1)
-	SendStat(siGameResult, loc("Hog Solo wins, conrgatulations!"))
+	SendStat(siGameResult, loc("Hog Solo wins, congratulations!"))
 	SendStat(siCustomAchievement, loc("Eliminated the Professor Hogevil"))
 	SendStat(siCustomAchievement, loc("Drove the minions away"))
 	SendStat(siPlayerKills,'1',teamD.name)
