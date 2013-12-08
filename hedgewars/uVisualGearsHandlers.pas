@@ -614,10 +614,11 @@ Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
 
 Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
 
+// FrameTicks cannot hold negative values
 case Gear^.FrameTicks of
-    1: Gear^.FrameTicks:= SpritesData[sprSpeechTail].Width-28;
-    2: Gear^.FrameTicks:= SpritesData[sprThoughtTail].Width-20;
-    3: Gear^.FrameTicks:= SpritesData[sprShoutTail].Width-10;
+    1: Gear^.FrameTicks:= max(0,SpritesData[sprSpeechTail].Width-28);
+    2: Gear^.FrameTicks:= max(0,SpritesData[sprThoughtTail].Width-20);
+    3: Gear^.FrameTicks:= max(0,SpritesData[sprShoutTail].Width-10);
     end;
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
