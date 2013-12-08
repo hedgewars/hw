@@ -588,7 +588,7 @@ if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
 if (Gear^.Hedgehog^.Gear <> nil) then
     begin
-    Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+    Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
     Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
     Gear^.X:= max(((-cScreenWidth + 16) / zoom) + Gear^.Tex^.w div 2, min(((cScreenWidth - 16) / zoom) - Gear^.Tex^.w div 2, Gear^.X + WorldDx));
     Gear^.Y:= max(cScreenHeight div 2 - ((cScreenHeight - 16) / (zoom)), min(cScreenHeight div 2 - ((-cScreenHeight + Gear^.Tex^.h) / (zoom)) - 64, Gear^.Y + WorldDy));
@@ -618,9 +618,9 @@ Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
 
 // FrameTicks cannot hold negative values
 case Gear^.FrameTicks of
-    1: Gear^.FrameTicks:= max(0,SpritesData[sprSpeechTail].Width-28);
-    2: Gear^.FrameTicks:= max(0,SpritesData[sprThoughtTail].Width-20);
-    3: Gear^.FrameTicks:= max(0,SpritesData[sprShoutTail].Width-10);
+    1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-28;
+    2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-20;
+    3: Gear^.Tag:= SpritesData[sprShoutTail].Width-10;
     end;
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
