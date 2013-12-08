@@ -972,13 +972,24 @@ begin
 
 
     if Gear^.Timer = 0 then
-        Gear^.RenderTimer:= false
+        begin
+        // no "fuel"? just fall
+        doStepFallingGear(Gear);
+        // if drowning, stop bee sound
+        if (Gear^.State and gstDrowning) <> 0 then
+            StopSoundChan(Gear^.SoundChannel);
+        end
     else
         begin
         if (GameTicks and $F) = 0 then
             begin
             if (GameTicks and $30) = 0 then
-                AddVisualGear(gX, gY, vgtBeeTrace);
+                begin
+                if nuw then
+                    AddVisualGear(gX, gY, vgtBubble)
+                else
+                    AddVisualGear(gX, gY, vgtBeeTrace);
+                end;
             Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
             Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
             // make sure new speed isn't higher than original one (which we stored in Friction variable)
@@ -1019,17 +1030,15 @@ begin
     end;
 
     if (Gear^.Timer > 0) then
-        dec(Gear^.Timer)
-    else
         begin
-        Gear^.State:= Gear^.State and not gstSubmersible;
-        if nuw then
-           begin
-            StopSoundChan(Gear^.SoundChannel);
-            CheckGearDrowning(Gear);
-            end
-        else
-            doStepFallingGear(Gear);
+        dec(Gear^.Timer);
+        if Gear^.Timer = 0 then
+            begin
+            // no need to display remaining time anymore
+            Gear^.RenderTimer:= false;
+            // bee can drown when timer reached 0
+            Gear^.State:= Gear^.State and not gstSubmersible;
+            end;
         end;
 end;
 
