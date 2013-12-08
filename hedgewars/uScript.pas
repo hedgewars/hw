@@ -1016,7 +1016,8 @@ begin
                vgear^.FrameTicks:= lua_tointeger(L, 3);
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then
                    vgear^.FrameTicks:= 1;
-               lua_pushinteger(L, vgear^.Uid)
+               lua_pushinteger(L, vgear^.Uid);
+               AddChatString(#1+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text)
                end
             end
             else
