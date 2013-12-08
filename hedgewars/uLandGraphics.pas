@@ -47,7 +47,8 @@ procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
 procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
 
 implementation
 uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
@@ -585,7 +586,12 @@ ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 UpdateLandTexture(tx, ddx, ty, ddy, false)
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+begin
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, indestructible, 0);
+end;
+
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
@@ -650,15 +656,12 @@ case bpp of
                      gY:= (cpY + y) div 2;
                     end;
                 if indestructible then
-                    Land[cpY + y, cpX + x]:= lfIndestructible
+                    Land[cpY + y, cpX + x]:= lfIndestructible or LandFlags
                 else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
-                    Land[cpY + y, cpX + x]:= lfBasic
+                    Land[cpY + y, cpX + x]:= lfBasic or LandFlags
                 else
-                    Land[cpY + y, cpX + x]:= lfObject;
-                // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
-                if (Theme = 'Snow') or (Theme = 'Christmas') then
-                    Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce;
-                    LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+                    Land[cpY + y, cpX + x]:= lfObject or LandFlags;
+                LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
                 end;
         p:= @(p^[Image^.pitch]);
         end;
