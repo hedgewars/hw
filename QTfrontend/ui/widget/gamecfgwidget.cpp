@@ -390,7 +390,10 @@ void GameCFGWidget::fullNetConfig()
 
     seedChanged(pMapContainer->getCurrentSeed());
     templateFilterChanged(pMapContainer->getTemplateFilter());
-    themeChanged(pMapContainer->getCurrentTheme());
+
+    QString t = pMapContainer->getCurrentTheme();
+    if(!t.isEmpty())
+        themeChanged(t);
 
     schemeChanged(GameSchemes->currentIndex());
     scriptChanged(Scripts->currentIndex());
