@@ -281,15 +281,18 @@ var
     isFalling: boolean;
     //tmp: QWord;
     tX, tdX, tdY: hwFloat;
-    collV, collH: LongInt;
+    collV, collH, gX, gY: LongInt;
     land, xland: word;
+    boing: PVisualGear;
 begin
     tX:= Gear^.X;
+    gX:= hwRound(Gear^.X);
+    gY:= hwRound(Gear^.Y);
     if (Gear^.Kind <> gtGenericFaller) and WorldWrap(Gear) and (WorldEdge = weWrap) and (Gear^.AdvBounce <> 0) and
       ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
-        Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
+        Gear^.dX.isNegative:= (gX > leftX+Gear^.Radius*2)
         end;
 
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
@@ -298,7 +301,7 @@ begin
     if Gear^.dY.Round > 2 then
         Gear^.dY.QWordValue:= 8589934592;
 
-    if (Gear^.State and gstSubmersible <> 0) and (hwRound(Gear^.Y) > cWaterLine) then
+    if (Gear^.State and gstSubmersible <> 0) and (gY > cWaterLine) then
         begin
         Gear^.dX:= Gear^.dX * _0_999;
         Gear^.dY:= Gear^.dY * _0_999
@@ -311,8 +314,8 @@ begin
     tdY := Gear^.dY;
 
 // might need some testing/adjustments - just to avoid projectiles to fly forever (accelerated by wind/skips)
-    if (hwRound(Gear^.X) < min(LAND_WIDTH div -2, -2048))
-    or (hwRound(Gear^.X) > max(LAND_WIDTH * 3 div 2, 6144)) then
+    if (gX < min(LAND_WIDTH div -2, -2048))
+    or (gX > max(LAND_WIDTH * 3 div 2, 6144)) then
         Gear^.State := Gear^.State or gstCollision;
 
     if Gear^.dY.isNegative then
@@ -434,11 +437,24 @@ begin
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
         Gear^.State := Gear^.State or gstCollision;
     
-    if ((xland or land) and lfBouncy <> 0) and
-        (((Gear^.Radius < 3) and (Gear^.dY < -_0_1)) or
-            ((Gear^.Radius >= 3) and
-                ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)))) then
+    if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
+       ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
+        begin
+        boing:= AddVisualGear(gX, gY, vgtStraightShot, 0, false, 1);
+        if boing <> nil then
+            with boing^ do
+                begin
+                Angle:= random(360);
+                dx:= 0;
+                dy:= 0;
+                FrameTicks:= 200;
+                tX:= _0;
+                tX.QWordValue:= Gear^.dY.QWordValue + Gear^.dX.QWordValue;
+                Scale:= hwFloat2Float(Gear^.Density * tX) / 1.5;
+                State:= ord(sprBoing)
+                end;
         PlaySound(sndMelonImpact, true)
+        end
     else if (Gear^.nImpactSounds > 0) and
         (Gear^.State and gstCollision <> 0) and
         (((Gear^.Kind <> gtMine) and (Gear^.Damage <> 0)) or (Gear^.State and gstMoving <> 0)) and

@@ -86,7 +86,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog, sprAmRubber
+            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog, sprAmRubber, sprBoing
             );
 
     // Gears that interact with other Gears and/or Land
