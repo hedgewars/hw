@@ -52,6 +52,7 @@ handleCmd ["CMD", parameters] = do
             return [AnswerClients chans ["CHAT", "[global notice]", p] | isAdministrator cl]
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
+        h "UNFIX" _ = handleCmd ["UNFIX"]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
 
 handleCmd cmd = do

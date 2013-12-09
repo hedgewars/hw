@@ -31,7 +31,11 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
     | otherwise = do
         chans <- roomOthersChans
         cl <- thisClient
-        if isMaster cl then
+        rm <- thisRoom
+
+        if isSpecial rm then
+            return [Warning $ loc "Restricted"]
+        else if isMaster cl then
            return [
                 ModifyRoom f,
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
@@ -291,7 +295,7 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if illegalName newName then 
             [Warning $ loc "Illegal room name"]
         else
-        if isSpecial rm then 
+        if isSpecial rm then
             [Warning $ loc "Restricted"]
         else
         if isJust $ find (\r -> newName == name r) rs then
@@ -369,6 +373,10 @@ handleCmd_inRoom ("RND":rs) = do
 handleCmd_inRoom ["FIX"] = do
     cl <- thisClient
     return [ModifyRoom (\r -> r{isSpecial = True}) | isAdministrator cl]
+
+handleCmd_inRoom ["UNFIX"] = do
+    cl <- thisClient
+    return [ModifyRoom (\r -> r{isSpecial = False}) | isAdministrator cl]
 
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
