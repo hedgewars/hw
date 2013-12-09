@@ -24,7 +24,8 @@ uses uTypes;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
-function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; inline;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean; Layer: LongInt): PVisualGear;
 procedure DeleteVisualGear(Gear: PVisualGear);
 function  VisualGearByUID(uid : Longword) : PVisualGear;
 
@@ -39,15 +40,20 @@ uses uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
-    AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false);
+    AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false, -1);
 end;
 
 function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord): PVisualGear; inline;
 begin
-    AddVisualGear:= AddVisualGear(X, Y, Kind, State, false);
+    AddVisualGear:= AddVisualGear(X, Y, Kind, State, false, -1);
 end;
 
-function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear;
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean): PVisualGear; inline;
+begin
+    AddVisualGear:= AddVisualGear(X, Y, Kind, State, Critical, -1);
+end;
+
+function  AddVisualGear(X, Y: LongInt; Kind: TVisualGearType; State: LongWord; Critical: Boolean; Layer: LongInt): PVisualGear;
 var gear: PVisualGear;
     t: Longword;
     sp: real;
@@ -400,6 +406,8 @@ case Gear^.Kind of
     vgtBulletHit,
     vgtCircle: gear^.Layer:= 2
 end;
+
+if Layer <> -1 then gear^.Layer:= Layer;
 
 if VisualGearLayers[gear^.Layer] <> nil then
     begin
