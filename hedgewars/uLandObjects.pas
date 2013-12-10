@@ -495,7 +495,7 @@ if GrayScale then
 s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 f:= pfsOpenRead(s);
-TryDo(f <> nil, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
+TryDo(f <> nil, 'Bad data or cannot access file ' + s, true);
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
