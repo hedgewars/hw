@@ -14,7 +14,7 @@ local challengeObjectives = loc("Use the rope in order to catch the blue hedgeho
 	loc("You have to stand very close to him")
 local currentPosition = 1
 local previousTimeLeft = 0
-local startChallenge = falses
+local startChallenge = false
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -84,7 +84,6 @@ function onGameStart()
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 
 	AddAmmo(hero.gear, amRope, 1)
-	AddAmmo(hero.gear, amSkip, 1)
 
 	SendHealthStatsOff()
 	hogTurn = runner.gear
@@ -92,7 +91,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	if startChallenge then
+	if startChallenge and currentPosition < 5 then
 		if CurrentHedgehog ~= hero.gear then
 			TurnTimeLeft = 0
 		else
@@ -116,7 +115,7 @@ function onGameTick()
 end
 
 function onGameTick20()
-	if isHeroNextToRunner() then
+	if GetHealth(hero.gear) and startChallenge and isHeroNextToRunner() and currentPosition < 5 then
 		moveRunner()
 	end
 end
@@ -150,6 +149,8 @@ function Skipanim(anim)
     end
     if anim == dialog01 then
 		moveRunner()
+	elseif anim == dialog02 then
+		win()
     end
 end
 
@@ -191,13 +192,14 @@ function isHeroNextToRunner()
 end
 
 function moveRunner()
-	if currentPosition > 3 then
+	if currentPosition == 4 then
+		currentPosition = currentPosition + 1
 		if GetX(hero.gear) > GetX(runner.gear) then
 			HogTurnLeft(runner.gear, false)
 		end
-		TurnTimeLeft = 0
 		AddAnim(dialog02)
-	else
+		TurnTimeLeft = 0
+	elseif currentPosition < 4 then
 		if not startChallenge then
 			startChallenge = true
 		end
@@ -211,6 +213,7 @@ function moveRunner()
 			previousTimeLeft = TurnTimeLeft
 		end
 		currentPosition = currentPosition + 1
+		AddVisualGear(GetX(runner.gear), GetY(runner.gear), vgtExplosion, 0, false) 
 		SetGearPosition(runner.gear, runner.places[currentPosition].x, runner.places[currentPosition].y)
 		TurnTimeLeft = 0
 	end
