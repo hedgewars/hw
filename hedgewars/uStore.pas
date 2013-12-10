@@ -153,11 +153,13 @@ var t: LongInt;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
+    year, month, md : word;
 begin
     if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
+DecodeDate(Date, year, month, md);
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
@@ -236,6 +238,16 @@ for t:= 0 to Pred(TeamsCount) do
                 if Gear <> nil then
                     begin
                     NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
+                    if Hat = 'NoHat' then
+                        begin
+                        if ((month = 4) and (md = 20)) then
+                            Hat := 'eastertop'; // Easter
+                        if ((month = 12) and (md = 25)) then
+                            Hat := 'Santa'; // Christmas
+                        if ((month = 10) and (md = 31)) then
+                            Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
+                        end;
+                    
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
