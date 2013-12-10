@@ -642,14 +642,18 @@ end;
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
+    // free the mem of any previously assigned texture.  This was previously only if the new one could be loaded, but, NoHat is usually a better choice
+    if HH.HatTex <> nil then
+        begin
+        FreeTexture(HH.HatTex);
+        HH.HatTex:= nil
+        end;
     texsurf:= LoadDataImage(ptHats, newHat, ifNone);
 AddFileLog('Hat => '+newHat);
     // only do something if the hat could be loaded
     if texsurf <> nil then
         begin
 AddFileLog('Got Hat');
-        // free the mem of any previously assigned texture
-        FreeTexture(HH.HatTex);
 
         // assign new hat to hedgehog
         HH.HatTex:= Surface2Tex(texsurf, true);
