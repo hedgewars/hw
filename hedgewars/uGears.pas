@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes;
+uses uConsts, uFloat, uTypes, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -885,7 +885,8 @@ begin
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
                 end;
-            ParseCommand('/say [' + hh^.Name + '] '+text, true)
+            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
+            //AddChatString(#1+'[' + HH^.Name + '] '+text);
             end
         end
     else if (x >= 4) then
