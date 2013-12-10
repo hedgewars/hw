@@ -448,7 +448,7 @@ with Gear^,
                 amFlamethrower, amLandGun,
                  amResurrector, //amStructure,
                       amTardis, amPiano,
-                      amIceGun: CurAmmoGear:= newGear;
+                      amIceGun, amRubber: CurAmmoGear:= newGear;
             end;
 
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
