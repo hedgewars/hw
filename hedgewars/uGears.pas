@@ -886,7 +886,7 @@ begin
                 Gear^.FrameTicks:= x
                 end;
             //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            //AddChatString(#1+'[' + HH^.Name + '] '+text);
+            AddChatString(#1+'[' + HH^.Name + '] '+text);
             end
         end
     else if (x >= 4) then
