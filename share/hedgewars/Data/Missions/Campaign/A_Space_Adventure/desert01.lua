@@ -43,6 +43,9 @@ local portalY = 480
 local portalX = 1465
 local girderY = 1630
 local girderX = 3350
+-- win crates
+local btorch2 = {}
+local girder = {}
 -- hogs
 local hero = {}
 local ally = {}
@@ -128,7 +131,19 @@ function onGameInit()
 	elseif checkPointReached == 4 then
 		AnimSetGearPosition(hero.gear, 1160, 1180)
 	elseif checkPointReached == 5 then
-		AnimSetGearPosition(hero.gear, girderX+40, girderY-30)
+		local positions = GetCampaignVar("HogsPosition")
+		positions = split(positions,",")
+		local x
+		local y
+		if positions[1] then
+			x = positions[1]
+			y = positions[2]
+		else
+			-- this should *NEVER* happen, remove?
+			x = girderX+40
+			y = girderY-30
+		end
+		AnimSetGearPosition(hero.gear, x, y)
 	end
 
 	AnimInit()
@@ -146,6 +161,7 @@ function onGameStart()
 	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
 	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
 	AddEvent(onCheckForWin2, {hero.gear}, checkForWin2, {hero.gear}, 0)
+	AddEvent(onCrateDestroyed, {hero.gear}, crateDestroyed, {hero.gear}, 0)
 
 	-- smugglers ammo
 	AddAmmo(smuggler1.gear, amBazooka, 2)
@@ -256,7 +272,34 @@ function onAmmoStoreInit()
 	SetAmmo(amGirder, 0, 0, 0, 3)
 end
 
+function onGearAdd(gear)
+	if GetGearType(gear) == gtCase then
+		if GetX(gear) == btorch2X and GetY(gear) == btorch2Y then
+			btorch2.gear = gear
+			btorch2.destroyed = false
+			btorch2.deleted = false
+		elseif GetX(gear) == girderX and GetY(gear) == girderY then
+			girder.gear = gear
+			girder.destroyed = false
+			girder.deleted = false
+		end
+	end
+end
+
+function onGearDamage(gear, damage)
+	if gear == girder.gear then
+		girder.destroyed = true
+	elseif gear == btorch2.gear then
+		btorch2.destroyed = true
+	end
+end
+
 function onGearDelete(gear)
+	if gear == girder.gear then
+		girder.deleted = true
+	elseif gear == btorch2.gear then
+		btorch2.deleted = true
+	end
 	if gear == hero.gear then
 		hero.dead = true
 	elseif (gear == smuggler1.gear or gear == smuggler2.gear or gear == smuggler3.gear) and heroIsInBattle then
@@ -330,16 +373,21 @@ function onHeroAtThirdBattle(gear)
 end
 
 function onCheckForWin1(gear)
-	if not hero.dead and GetX(hero.gear) > btorch2X-30 and GetX(hero.gear) < btorch2X+30
-			and GetY(hero.gear) > btorch2Y-30 and GetY(hero.gear) < btorch2Y+30 then
+	if not hero.dead and not btorch2.destroyed and btorch2.deleted then
 		return true
 	end
 	return false
 end
 
 function onCheckForWin2(gear)
-	if not hero.dead and GetX(hero.gear) > girderX-30 and GetX(hero.gear) < girderX+30
-			and GetY(hero.gear) > girderY-30 and GetY(hero.gear) < girderY+30 then
+	if not hero.dead and not girder.destroyed and girder.deleted then
+		return true
+	end
+	return false
+end
+
+function onCrateDestroyed(gear)
+	if not hero.dead and girder.destroyed or btorch2.destroyed then
 		return true
 	end
 	return false
@@ -348,13 +396,7 @@ end
 -------------- ACTIONS ------------------
 
 function heroDeath(gear)
-	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate"))
-	SendStat(siCustomAchievement, loc("You can avoid some battles"))
-	SendStat(siCustomAchievement, loc("Use your ammo wisely"))
-	SendStat(siPlayerKills,'1',teamB.name)
-	SendStat(siPlayerKills,'0',teamC.name)
-	EndGame()
+	lose()
 end
 
 function heroAtFirstBattle(gear)
@@ -399,6 +441,10 @@ function heroAtThirdBattle(gear)
 	TurnTimeLeft = 0
 end
 
+function crateDestroyed(gear)
+	lose()
+end
+
 -- for some weird reson I couldn't call the same action for both events
 function checkForWin1(gear)
 	checkForWin()
@@ -408,6 +454,7 @@ function checkForWin2(gear)
 	-- ok lets place one more checkpoint as next part seems challenging without rope
 	if cratesFound ==  0 then
 		saveCheckPointLocal("5")
+		SaveCampaignVar("HogsPosition", GetX(hero.gear)..","..GetY(hero.gear))
 	end
 
 	checkForWin()
@@ -510,4 +557,15 @@ function checkForWin()
 		SendStat(siPlayerKills,'0',teamB.name)
 		EndGame()
 	end
+end
+
+function lose()
+	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
+	SendStat(siCustomAchievement, loc("To win the game you have to find the right crate"))
+	SendStat(siCustomAchievement, loc("You can avoid some battles"))
+	SendStat(siCustomAchievement, loc("Use your ammo wisely"))
+	SendStat(siCustomAchievement, loc("Don't destroy the device crate!"))
+	SendStat(siPlayerKills,'1',teamB.name)
+	SendStat(siPlayerKills,'0',teamC.name)
+	EndGame()
 end

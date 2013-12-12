@@ -61,6 +61,7 @@ function initCheckpoint(mission)
 	if GetCampaignVar("CurrentMission") ~= mission then
 		SaveCampaignVar("CurrentMission", mission)
 		SaveCampaignVar("CurrentMissionCheckpoint", 1)
+		SaveCampaignVar("HogsPosition", "")
 	else
 		checkPoint = tonumber(GetCampaignVar("currentMissionCheckpoint"))
 	end
@@ -97,4 +98,23 @@ function getBonus(index)
 		bonus = bonusString:sub(index,index)
 	end
 	return bonus
+end
+
+-- splits number by delimiter
+function split(s, delimiter)
+	local res = {}
+	local first = ""
+	for i=1,s:len() do
+		if s:sub(1,1) == delimiter then
+			table.insert(res, tonumber(first))
+			first = ""
+		else
+			first = first..s:sub(1,1)
+		end
+		s = s:sub(2)
+	end
+	if first:len() > 0 then
+		table.insert(res, tonumber(first))
+	end
+	return res
 end
