@@ -612,25 +612,6 @@ function isHeroAtWrongPlace()
 	return false
 end
 
--- splits number by delimiter
-function split(s, delimiter)
-	local res = {}
-	local first = ""
-	for i=1,s:len() do
-		if s:sub(1,1) == delimiter then
-			table.insert(res, tonumber(first))
-			first = ""
-		else
-			first = first..s:sub(1,1)
-		end
-		s = s:sub(2)
-	end
-	if first:len() > 0 then
-		table.insert(res, tonumber(first))
-	end
-	return res
-end
-
 function saveCheckPointLocal(cpoint)
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 3000)
 	saveCheckpoint(cpoint)
