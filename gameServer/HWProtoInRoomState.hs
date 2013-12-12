@@ -378,6 +378,10 @@ handleCmd_inRoom ["UNFIX"] = do
     cl <- thisClient
     return [ModifyRoom (\r -> r{isSpecial = False}) | isAdministrator cl]
 
+handleCmd_inRoom ["GREETING", msg] = do
+    cl <- thisClient
+    rm <- thisRoom
+    return [ModifyRoom (\r -> r{greeting = msg}) | isAdministrator cl || (isMaster cl && (not $ isSpecial rm))]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
