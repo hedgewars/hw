@@ -444,10 +444,8 @@ processAction (ProcessAccountInfo info) = do
                     checkerLogin "" False False
                     else
                     processAction JoinLobby
-        Admin -> do
+        Admin ->
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
-            chan <- client's sendChan
-            processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
         ReplayName fn -> processAction $ ShowReplay fn
     where
     isBanned = do
@@ -725,11 +723,11 @@ processAction (CheckSuccess info) = do
     where
         toPair t = (teamname t, teamowner t)
 
-processAction (QueryReplay name) = do
+processAction (QueryReplay rname) = do
     (Just ci) <- gets clientIndex
     si <- gets serverInfo
     uid <- client's clUID
-    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) name
+    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) rname
 
 #else
 processAction SaveReplay = return ()
@@ -739,25 +737,25 @@ processAction (CheckSuccess _) = return ()
 processAction (QueryReplay _) = return ()
 #endif
 
-processAction (ShowReplay name) = do
+processAction (ShowReplay rname) = do
     c <- client's sendChan
     cl <- client's id
 
-    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" name then B.drop 8 name else name]
+    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" rname then B.drop 8 rname else rname]
 
-    checkInfo <- liftIO $ E.handle (\(e :: SomeException) ->
+    cInfo <- liftIO $ E.handle (\(e :: SomeException) ->
                     warningM "REPLAYS" (B.unpack $ B.concat ["Problems reading ", fileName, ": ", B.pack $ show e]) >> return Nothing) $ do
             (t, p1, p2, msgs) <- liftM read $ readFile (B.unpack fileName)
             return $ Just (t, Map.fromList p1, Map.fromList p2, reverse msgs)
 
-    let (teams, params1, params2, roundMsgs) = fromJust checkInfo
+    let (teams', params1, params2, roundMsgs') = fromJust cInfo
 
-    when (isJust checkInfo) $ do
+    when (isJust cInfo) $ do
         mapM_ processAction $ concat [
             [AnswerClients [c] ["JOINED", nick cl]]
             , answerFullConfigParams cl params1 params2
-            , answerAllTeams cl teams
+            , answerAllTeams cl teams'
             , [AnswerClients [c]  ["RUN_GAME"]]
-            , [AnswerClients [c] $ "EM" : roundMsgs]
+            , [AnswerClients [c] $ "EM" : roundMsgs']
             , [AnswerClients [c] ["KICKED"]]
             ]
