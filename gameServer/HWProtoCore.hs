@@ -53,6 +53,7 @@ handleCmd ["CMD", parameters] = do
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
+        h "GREETING" msg = handleCmd ["GREETING", msg]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
 
 handleCmd cmd = do

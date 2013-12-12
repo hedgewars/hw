@@ -182,6 +182,7 @@ data RoomInfo =
         isRestrictedTeams :: Bool,
         isRegisteredOnly :: Bool,
         isSpecial :: Bool,
+        greeting :: B.ByteString,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -202,6 +203,7 @@ newRoom =
         False
         False
         False
+        ""
         []
         (
             Map.fromList $ Prelude.zip

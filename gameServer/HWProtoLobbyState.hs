@@ -79,18 +79,17 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             (
                 MoveToRoom jRI
                 : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom})
-                : (AnswerClients [sendChan cl] $ "JOINED" : nicks)
                 : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
-                : [AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
+                : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
             )
-            ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
+            ++ [AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
+            ++ [sendStateFlags cl jRoomClients | not $ null jRoomClients]
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
-            ++ []
+            ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
         sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
                 [f "+r" ready, f "-r" unready, f "+g" ingame, f "-g" inroomlobby]
             where
