@@ -3292,111 +3292,123 @@ zoom</translation>
     <name>server</name>
     <message>
         <source>Authentication failed</source>
-        <translation type="obsolete">Echec d&apos;authentification</translation>
+        <translation type="unfinished">Echec d&apos;authentification</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="obsolete">Bannis pour 60 sec après un kick</translation>
+        <translation type="unfinished">Bannis pour 60 sec après un kick</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="obsolete">Exclus (kick)</translation>
+        <translation type="unfinished">Exclus (kick)</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="obsolete">Met trop de temps à répondre</translation>
+        <translation type="unfinished">Met trop de temps à répondre</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation type="obsolete">Aurevoir</translation>
+        <translation type="unfinished">Aurevoir</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="obsolete">Configuration vide</translation>
+        <translation type="unfinished">Configuration vide</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de la room</translation>
+        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de la room</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="obsolete">Info hérisson corrompus</translation>
+        <translation type="unfinished">Info hérisson corrompus</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation type="obsolete">trop d&apos;équipes</translation>
+        <translation type="unfinished">trop d&apos;équipes</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation type="obsolete">trop de hérissons</translation>
+        <translation type="unfinished">trop de hérissons</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="obsolete">Il y a déja une équipe avec le même nom dans la liste</translation>
+        <translation type="unfinished">Il y a déja une équipe avec le même nom dans la liste</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="obsolete">La partie est en cour</translation>
+        <translation type="unfinished">La partie est en cour</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="obsolete">Ajout interdis</translation>
+        <translation type="unfinished">Ajout interdis</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation type="obsolete">REMOVE_TEAM: aucune équipe de ce nom</translation>
+        <translation type="unfinished">REMOVE_TEAM: aucune équipe de ce nom</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
+        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="obsolete">Il faut 2 clans minimum!</translation>
+        <translation type="unfinished">Il faut 2 clans minimum!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="obsolete">Ce nom de room existe déjà</translation>
+        <translation type="unfinished">Ce nom de room existe déjà</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation type="obsolete">Nom de room invalide</translation>
+        <translation type="unfinished">Nom de room invalide</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation type="obsolete">Cette room n&apos;existe pas</translation>
+        <translation type="unfinished">Cette room n&apos;existe pas</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="obsolete">Accès interdis</translation>
+        <translation type="unfinished">Accès interdis</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="obsolete">Accès réservé aux utilisateurs enregistré</translation>
+        <translation type="unfinished">Accès réservé aux utilisateurs enregistré</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="obsolete">Vous avez été bannis de cette room</translation>
+        <translation type="unfinished">Vous avez été bannis de cette room</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="obsolete">Pseudo déjà choisis</translation>
+        <translation type="unfinished">Pseudo déjà choisis</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation type="obsolete">Pseudo invalide</translation>
+        <translation type="unfinished">Pseudo invalide</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="obsolete">Protocole déjà connu</translation>
+        <translation type="unfinished">Protocole déjà connu</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation type="obsolete">Mauvais numéro</translation>
+        <translation type="unfinished">Mauvais numéro</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="obsolete">Ce pseudo est actuellement utilisé sur le serveur</translation>
+        <translation type="unfinished">Ce pseudo est actuellement utilisé sur le serveur</translation>
+    </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
