@@ -1259,7 +1259,11 @@ for t:= 0 to Pred(TeamsCount) do
         else
             htex:= Clan^.HealthTex;
 
-         // draw name
+        // draw owner
+        if OwnerTex <> nil then
+            DrawTexture(-OwnerTex^.w - NameTagTex^.w - 18, cScreenHeight + DrawHealthY + smallScreenOffset, OwnerTex);
+
+        // draw name
         DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
 
         // draw flag
