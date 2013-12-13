@@ -156,7 +156,6 @@ function onGameStart()
 
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroAtFirstBattle, {hero.gear}, heroAtFirstBattle, {hero.gear}, 1)
-	AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
 	AddEvent(onHeroAtCheckpoint4, {hero.gear}, heroAtCheckpoint4, {hero.gear}, 0)
 	AddEvent(onHeroAtThirdBattle, {hero.gear}, heroAtThirdBattle, {hero.gear}, 0)
 	AddEvent(onCheckForWin1, {hero.gear}, checkForWin1, {hero.gear}, 0)
@@ -210,6 +209,7 @@ function onGameStart()
 	end
 
 	if checkPointReached == 1 then
+		AddEvent(onHeroFleeFirstBattle, {hero.gear}, heroFleeFirstBattle, {hero.gear}, 1)
 		AddEvent(onHeroAtCheckpoint2, {hero.gear}, heroAtCheckpoint2, {hero.gear}, 0)
 		AddEvent(onHeroAtCheckpoint3, {hero.gear}, heroAtCheckpoint3, {hero.gear}, 0)
 		-- crates
@@ -324,16 +324,16 @@ function onHeroDeath(gear)
 end
 
 function onHeroAtFirstBattle(gear)
-	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450
-			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-5 then
+	if not hero.dead and not heroIsInBattle and GetHealth(smuggler1.gear) and GetX(hero.gear) <= 1450 and GetX(hero.gear) > 80
+			and GetY(hero.gear) <= GetY(smuggler1.gear)+5 and GetY(hero.gear) >= GetY(smuggler1.gear)-40 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
 end
 
 function onHeroFleeFirstBattle(gear)
-	if not hero.dead and GetHealth(smuggler1.gear) and heroIsInBattle and ongoingBattle == 1 and (GetX(hero.gear) > 1450
-			or (GetY(hero.gear) < GetY(smuggler1.gear)-80 or GetY(hero.gear) > smuggler1.y+300)) then
+	if GetHealth(hero.gear) and GetHealth(smuggler1.gear) and heroIsInBattle
+			and distance(hero.gear, smuggler1.gear) > 1400 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -342,7 +342,7 @@ end
 -- saves the location of the hero and prompts him for the second battle
 function onHeroAtCheckpoint2(gear)
 	if not hero.dead and GetX(hero.gear) > 1000 and GetX(hero.gear) < 1100
-			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 then
+			and GetY(hero.gear) > 590 and GetY(hero.gear) < 700 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -350,7 +350,7 @@ end
 
 function onHeroAtCheckpoint3(gear)
 	if not hero.dead and GetX(hero.gear) > 1610 and GetX(hero.gear) < 1680
-			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000 then
+			and GetY(hero.gear) > 850 and GetY(hero.gear) < 1000 and StoppedGear(hero.gear) then
 		return true
 	end
 	return false
@@ -506,6 +506,9 @@ end
 
 function secondBattle()
 	-- second battle
+	if heroIsInBattle and ongoingBattle == 1 then
+		AnimSay(smuggler1.gear, loc("Get him Spike!"), SAY_SHOUT, 4000)
+	end
 	heroIsInBattle = true
 	ongoingBattle = 2
 	AnimSay(smuggler2.gear, loc("This is seems like a wealthy hedgehog, nice..."), SAY_THINK, 5000)
