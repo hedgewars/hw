@@ -276,6 +276,9 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     sl.push_back(QString("evoicepack " + m_voicepack));
     sl.push_back(QString("eflag " + m_flag));
 
+    if(!m_owner.isEmpty())
+        sl.push_back(QString("eowner " + m_owner));
+
     for (int t = 0; t < m_numHedgehogs; t++)
     {
         sl.push_back(QString("eaddhh %1 %2 %3")

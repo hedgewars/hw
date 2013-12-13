@@ -1229,6 +1229,8 @@ var valueResult: LongInt;
     x, y, dx, dy: real;
     EX, EY, t: LongInt;
 begin
+Targ:= Targ; // avoid compiler hint
+
 x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
 y:= hwFloat2Float(Me^.Y);
 dx:= hwSign(Me^.dX) * 0.03;

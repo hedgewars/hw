@@ -109,39 +109,6 @@ if CurrentTeam = nil then
 CurrentTeam^.ExtDriven:= true
 end;
 
-procedure chGrave(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/grave"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.GraveName:= s
-end;
-
-procedure chFort(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/fort"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.FortName:= s
-end;
-
-procedure chFlag(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/flag"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.flag:= s
-end;
-
 procedure chScript(var s: shortstring);
 begin
 if s[1]='"' then
@@ -150,21 +117,6 @@ if s[byte(s[0])]='"' then
     Delete(s, byte(s[0]), 1);
 cScriptName:= s;
 ScriptLoad(s)
-end;
-
-procedure chSetHat(var s: shortstring);
-begin
-if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
-with CurrentTeam^ do
-    begin
-    if not CurrentHedgehog^.King then
-    if (s = '')
-    or (((GameFlags and gfKing) <> 0) and (s = 'crown'))
-    or ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
-        CurrentHedgehog^.Hat:= 'NoHat'
-    else
-        CurrentHedgehog^.Hat:= s
-    end;
 end;
 
 procedure chCurU_p(var s: shortstring);
@@ -843,7 +795,6 @@ begin
     RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis
     RegisterVariable('gencmd'  , @chGenCmd       , false);
-    RegisterVariable('flag'    , @chFlag         , false);
     RegisterVariable('script'  , @chScript       , false);
     RegisterVariable('proto'   , @chCheckProto   , true );
     RegisterVariable('spectate', @chFastUntilLag   , false);
@@ -873,9 +824,6 @@ begin
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);
     RegisterVariable('minestime',@chMinesTime     , false);
-    RegisterVariable('fort'    , @chFort         , false);
-    RegisterVariable('grave'   , @chGrave        , false);
-    RegisterVariable('hat'     , @chSetHat       , false);
     RegisterVariable('quit'    , @chQuit         , true );
     RegisterVariable('forcequit', @chForceQuit   , true );
     RegisterVariable('confirm' , @chConfirm      , true );
