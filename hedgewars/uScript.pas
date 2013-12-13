@@ -839,6 +839,30 @@ begin
     lc_gethogteamname:= 1
 end;
 
+function lc_sethogteamname(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if lua_gettop(L) <> 2 then
+        begin
+        LuaParameterCountError('SetHogTeamName', 'gearUid, name', lua_gettop(L));
+        lua_pushnil(L); // return value on stack (nil)
+        end
+    else
+        begin
+        gear := GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
+            begin
+            gear^.Hedgehog^.Team^.TeamName := lua_tostring(L, 2);
+
+            FreeTexture(gear^.Hedgehog^.Team^.NameTagTex);
+            gear^.Hedgehog^.Team^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Team^.TeamName, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
+            end
+        else
+            lua_pushnil(L);
+        end;
+    lc_sethogteamname:= 1
+end;
+
 function lc_gethogname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -2509,6 +2533,7 @@ lua_register(luaState, _P'GetHogClan', @lc_gethogclan);
 lua_register(luaState, _P'GetClanColor', @lc_getclancolor);
 lua_register(luaState, _P'SetClanColor', @lc_setclancolor);
 lua_register(luaState, _P'GetHogTeamName', @lc_gethogteamname);
+lua_register(luaState, _P'SetHogTeamName', @lc_sethogteamname);
 lua_register(luaState, _P'GetHogName', @lc_gethogname);
 lua_register(luaState, _P'SetHogName', @lc_sethogname);
 lua_register(luaState, _P'GetHogLevel', @lc_gethoglevel);
