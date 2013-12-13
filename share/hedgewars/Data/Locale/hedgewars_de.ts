@@ -3426,5 +3426,21 @@ Fehlercode: %2</translation>
         <source>Nickname is already in use</source>
         <translation>Spitzname bereits in Benutzung</translation>
     </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not room master</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 </TS>
