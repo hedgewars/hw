@@ -118,3 +118,9 @@ function split(s, delimiter)
 	end
 	return res
 end
+
+-- returns the distance of 2 gears
+function distance(gear1, gear2)
+	local dist = math.sqrt(math.pow((GetX(gear1) - GetX(gear2)),2) + math.pow((GetY(gear1) - GetY(gear2)),2))
+	return dist
+end
