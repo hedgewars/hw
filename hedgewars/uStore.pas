@@ -164,6 +164,8 @@ for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
         NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
+        if length(Owner) > 0 then
+            OwnerTex:= RenderStringTexLim(Owner, Clan^.Color, Font, cTeamHealthWidth);
 
         r.x:= 0;
         r.y:= 0;
