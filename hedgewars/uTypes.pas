@@ -380,13 +380,15 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Binds: TBinds;
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
             CurrHedgehog: LongWord;
-            NameTagTex: PTexture;
+            NameTagTex,
+            OwnerTex: PTexture;
             GraveTex,
             AIKillsTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
             FortName: shortstring;
+            Owner: shortstring;
             TeamHealth: LongInt;
             TeamHealthBarHealth: LongInt;
             DrawHealthY: LongInt;
