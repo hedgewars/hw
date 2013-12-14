@@ -877,7 +877,8 @@ if isFalling then
             Gear^.dX:= Gear^.dX * _0_8
             end;
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
-            Gear^.dY:= _0
+            Gear^.dY:= _0;
+        Gear^.State:= Gear^.State and not gstCollision 
         end;
     Gear^.State:= Gear^.State or gstMoving;
     if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
@@ -931,7 +932,8 @@ else
             Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
             if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
                 Gear^.dY:= _0
-            end
+            end;
+        Gear^.State:= Gear^.State and not gstCollision 
         end
     else
         Gear^.dY:= Gear^.dY + cGravity;
@@ -1055,7 +1057,8 @@ if (Gear^.State and gstMoving) <> 0 then
             CheckHHDamage(Gear);
             Gear^.dY:= _0;
             Gear^.Y:= Gear^.Y + _1
-            end
+            end;
+        Gear^.State:= Gear^.State and not gstCollision 
         end;
 
     CheckGearDrowning(Gear);
