@@ -311,14 +311,12 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ROOMS")
     {
-        if(lst.size() % 8 != 1)
+        if(lst.size() % 9 != 1)
         {
             qWarning("Net: Malformed ROOMS message");
             return;
         }
-        QStringList tmp = lst;
-        tmp.removeFirst();
-        m_roomsListModel->setRoomsList(tmp);
+        m_roomsListModel->setRoomsList(lst.mid(1));
         if (m_private_game == false && m_nick_registered == false)
         {
             emit NickNotRegistered(mynick);
@@ -406,7 +404,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "CLIENT_FLAGS")
+    if (lst[0] == "CLIENT_FLAGS" || lst[0] == "CF")
     {
         if(lst.size() < 3 || lst[1].size() < 2)
         {
@@ -527,7 +525,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(lst[0] == "ROOM" && lst.size() == 10 && lst[1] == "ADD")
+    if(lst[0] == "ROOM" && lst.size() == 11 && lst[1] == "ADD")
     {
         QStringList tmp = lst;
         tmp.removeFirst();
@@ -537,7 +535,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if(lst[0] == "ROOM" && lst.size() == 11 && lst[1] == "UPD")
+    if(lst[0] == "ROOM" && lst.size() == 12 && lst[1] == "UPD")
     {
         QStringList tmp = lst;
         tmp.removeFirst();
@@ -627,15 +625,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         return;
     }
 
-    if (lst[0] == "ADMIN_ACCESS")
-    {
-        // obsolete, see +a client flag
-        return;
-    }
-
     if(lst[0] == "JOINING")
     {
-        if(lst.size() < 2)
+        if(lst.size() != 2)
         {
             qWarning("Net: Bad JOINING message");
             return;
@@ -643,6 +635,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
         myroom = lst[1];
         emit roomNameUpdated(myroom);
+        return;
     }
 
     if(netClientState == InLobby && lst[0] == "JOINED")
@@ -816,17 +809,6 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             else
                 emit chatStringFromNet(tr("%1 *** %2 has left (%3)").arg('\x03').arg(lst[1], lst[2]));
             m_playersModel->playerLeftRoom(lst[1]);
-            return;
-        }
-
-        // obsolete
-        if (lst[0] == "ROOM_CONTROL_ACCESS")
-        {
-            if (lst.size() < 2)
-            {
-                qWarning("Net: Bad ROOM_CONTROL_ACCESS message");
-                return;
-            }
             return;
         }
     }

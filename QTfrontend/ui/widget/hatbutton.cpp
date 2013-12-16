@@ -19,7 +19,6 @@
 #include <QDebug>
 
 #include "hatprompt.h"
-#include "DataManager.h"
 #include "HatModel.h"
 #include "hatbutton.h"
 
@@ -28,8 +27,13 @@ HatButton::HatButton(QWidget* parent) : QPushButton(parent)
     setIconSize(QSize(32, 37));
     setFixedSize(44, 44);
 
-    m_hatModel = DataManager::instance().hatModel();
+    m_hatModel = 0;
     connect(this, SIGNAL(clicked()), this, SLOT(showPrompt()));
+}
+
+void HatButton::setModel(HatModel *model)
+{
+    m_hatModel = model;
 
     setCurrentIndex(0);
 }

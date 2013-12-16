@@ -54,6 +54,7 @@ function TestAirAttack(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttack
 function TestTeleport(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestHammer(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 function TestCake(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 
 type TAmmoTestProc = function (Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
     TAmmoTest = record
@@ -74,7 +75,7 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amRope
             (proc: nil;              flags: 0), // amMine
             (proc: @TestDesertEagle; flags: amtest_MultipleAttacks), // amDEagle
-            (proc: nil;              flags: 0), // amDynamite
+            (proc: @TestDynamite;    flags: amtest_NoTarget), // amDynamite
             (proc: @TestFirePunch;   flags: amtest_NoTarget), // amFirePunch
             (proc: @TestWhip;        flags: amtest_NoTarget), // amWhip
             (proc: @TestBaseballBat; flags: amtest_NoTarget), // amBaseballBat
@@ -120,7 +121,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             //(proc: nil;              flags: 0), // amStructure
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
-            (proc: nil;              flags: 0)  // amKnife
+            (proc: nil;              flags: 0), // amKnife
+            (proc: nil;              flags: 0)  // amGirder
             );
 
 implementation
@@ -1220,6 +1222,50 @@ begin
         valueResult:= BadTurn;
 
     TestCake:= valueResult;
+end;
+
+function TestDynamite(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
+var valueResult: LongInt;
+    x, y, dx, dy: real;
+    EX, EY, t: LongInt;
+begin
+Targ:= Targ; // avoid compiler hint
+
+x:= hwFloat2Float(Me^.X) + hwSign(Me^.dX) * 7;
+y:= hwFloat2Float(Me^.Y);
+dx:= hwSign(Me^.dX) * 0.03;
+dy:= 0;
+t:= 5000;
+repeat
+    dec(t);
+    x:= x + dx;
+    dy:= dy + cGravityf;
+    y:= y + dy;
+    
+    if TestColl(trunc(x), trunc(y), 3) then
+        t:= 0;
+until t = 0;
+
+EX:= trunc(x);
+EY:= trunc(y);
+
+if Level = 1 then
+    valueResult:= RateExplosion(Me, EX, EY, 76, afTrackFall or afErasesLand)
+else 
+    valueResult:= RateExplosion(Me, EX, EY, 76);
+
+if (valueResult > 0) then
+    begin
+    ap.Angle:= 0;
+    ap.Power:= 1;
+    ap.Time:= 0;
+    ap.ExplR:= 150;
+    ap.ExplX:= EX;
+    ap.ExplY:= EY
+    end else
+    valueResult:= BadTurn;
+
+TestDynamite:= valueResult
 end;
 
 end.

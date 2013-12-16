@@ -114,7 +114,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/feedbackdialog.h \
     ../QTfrontend/ui/widget/lineeditcursor.h \
     ../QTfrontend/servermessages.h \
-    ../QTfrontend/ui/widget/roomnameprompt.h
+    ../QTfrontend/ui/widget/roomnameprompt.h \
+    ../QTfrontend/weapons.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \

@@ -111,6 +111,7 @@ class HWMapContainer : public QWidget
 
     protected:
         virtual void resizeEvent ( QResizeEvent * event );
+        virtual void showEvent ( QShowEvent * event );
 
     private:
         QVBoxLayout mainLayout;
@@ -149,6 +150,9 @@ class HWMapContainer : public QWidget
         QPushButton * btnSeed;
         bool m_master;
         QList<QWidget *> m_childWidgets;
+        bool m_previewEnabled;
+        bool m_missionsViewSetup;
+        bool m_staticViewSetup;
 
         void intSetSeed(const QString & seed);
         void intSetMap(const QString & map);
@@ -161,6 +165,8 @@ class HWMapContainer : public QWidget
         void changeMapType(MapModel::MapType type, const QModelIndex & newMap = QModelIndex());
         void updatePreview();
         void updateThemeButtonSize();
+        void setupMissionMapsView();
+        void setupStaticMapsView();
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;

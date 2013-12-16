@@ -60,9 +60,10 @@ uses
     , uCaptions
     , uCursor
     , uCommands
-{$IFDEF USE_VIDEO_RECORDING}    
+    , uTeams
+{$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
-{$ENDIF}    
+{$ENDIF}
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
@@ -1231,7 +1232,7 @@ end;
 
 
 procedure RenderTeamsHealth;
-var t, i, h, smallScreenOffset : LongInt;
+var t, i, h, smallScreenOffset, TeamHealthBarWidth : LongInt;
     r: TSDL_Rect;
     highlight: boolean;
     htex: PTexture;
@@ -1248,7 +1249,6 @@ for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
       if TeamHealth > 0 then
         begin
-        h:= 0;
         highlight:= bShowFinger and (CurrentTeam = TeamsArray[t]) and ((RealTicks mod 1000) < 500);
 
         if highlight then
@@ -1259,11 +1259,17 @@ for t:= 0 to Pred(TeamsCount) do
         else
             htex:= Clan^.HealthTex;
 
-         // draw name
+        // draw owner
+        if OwnerTex <> nil then
+            DrawTexture(-OwnerTex^.w - NameTagTex^.w - 18, cScreenHeight + DrawHealthY + smallScreenOffset, OwnerTex);
+
+        // draw name
         DrawTexture(-NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset, NameTagTex);
 
         // draw flag
         DrawTexture(-14, cScreenHeight + DrawHealthY + smallScreenOffset, FlagTex);
+
+        TeamHealthBarWidth:= cTeamHealthWidth * TeamHealthBarHealth div MaxTeamHealth;
 
         // draw health bar
         r.x:= 0;
@@ -1277,13 +1283,14 @@ for t:= 0 to Pred(TeamsCount) do
         r.w:= 3;
         DrawTextureFromRect(TeamHealthBarWidth + 15, cScreenHeight + DrawHealthY + smallScreenOffset, @r, htex);
 
+        h:= 0;
         if not hasGone then
             for i:= 0 to cMaxHHIndex do
-                if Hedgehogs[i].Gear <> nil then
-                    begin
-                    inc(h,Hedgehogs[i].Gear^.Health);
-                    if h < TeamHealth then DrawTexture(15 + h*TeamHealthBarWidth div TeamHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
-                    end;
+                begin
+                inc(h, Hedgehogs[i].HealthBarHealth);
+                if (h < TeamHealthBarHealth) and (Hedgehogs[i].HealthBarHealth > 0) then 
+                    DrawTexture(15 + h * TeamHealthBarWidth div TeamHealthBarHealth, cScreenHeight + DrawHealthY + smallScreenOffset + 1, SpritesData[sprSlider].Texture);
+                end;
 
         // draw ai kill counter for gfAISurvival
         if (GameFlags and gfAISurvival) <> 0 then
@@ -1439,37 +1446,40 @@ RenderWorldEdge(Lag);
 SetScale(cDefaultZoomLevel);
 
 // Turn time
-{$IFDEF USE_TOUCH_INTERFACE}
-offsetX:= cScreenHeight - 13;
-{$ELSE}
-offsetX:= 48;
-{$ENDIF}
-offsetY:= cOffsetY;
-if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
+if UIDisplay <> uiNone then
     begin
-    if ReadyTimeLeft <> 0 then
-        i:= Succ(Pred(ReadyTimeLeft) div 1000)
-    else
-        i:= Succ(Pred(TurnTimeLeft) div 1000);
-   
-    if i>99 then
-        t:= 112
-    else if i>9 then
-        t:= 96
-    else
-        t:= 80;
-    DrawSprite(sprFrame, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, 1);
-    while i > 0 do
+{$IFDEF USE_TOUCH_INTERFACE}
+    offsetX:= cScreenHeight - 13;
+{$ELSE}
+    offsetX:= 48;
+{$ENDIF}
+    offsetY:= cOffsetY;
+    if ((TurnTimeLeft <> 0) and (TurnTimeLeft < 1000000)) or (ReadyTimeLeft <> 0) then
         begin
-        dec(t, 32);
-        DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
-        i:= i div 10
+        if ReadyTimeLeft <> 0 then
+            i:= Succ(Pred(ReadyTimeLeft) div 1000)
+        else
+            i:= Succ(Pred(TurnTimeLeft) div 1000);
+       
+        if i>99 then
+            t:= 112
+        else if i>9 then
+            t:= 96
+        else
+            t:= 80;
+        DrawSprite(sprFrame, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, 1);
+        while i > 0 do
+            begin
+            dec(t, 32);
+            DrawSprite(sprBigDigit, -(cScreenWidth shr 1) + t + offsetY, cScreenHeight - offsetX, i mod 10);
+            i:= i div 10
+            end;
+        DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
         end;
-    DrawSprite(sprFrame, -(cScreenWidth shr 1) + t - 4 + offsetY, cScreenHeight - offsetX, 0);
-    end;
 
 // Captions
-DrawCaptions;
+    DrawCaptions
+    end;
 
 {$IFDEF USE_TOUCH_INTERFACE}
 // Draw buttons Related to the Touch interface
@@ -1485,13 +1495,16 @@ DrawScreenWidget(@pauseButton);
 DrawScreenWidget(@utilityWidget);
 {$ENDIF}
 
-RenderTeamsHealth;
+if UIDisplay = uiAll then
+    RenderTeamsHealth;
 
 // Lag alert
 if isInLag then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
+if UIDisplay <> uiNone then
+    begin
 {$IFDEF USE_TOUCH_INTERFACE}
     offsetX:= cScreenHeight - 13;
     offsetY:= (cScreenWidth shr 1) + 74;
@@ -1513,14 +1526,15 @@ if isInLag then
     else
         if WindBarWidth < 0 then
         begin
-            {$WARNINGS OFF}
-            r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
-            {$WARNINGS ON}
-            r.y:= 0;
-            r.w:= - WindBarWidth;
-            r.h:= 13;
-            DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
-        end;
+        {$WARNINGS OFF}
+        r.x:= (Longword(WindBarWidth) + RealTicks shr 6) mod 8;
+        {$WARNINGS ON}
+        r.y:= 0;
+        r.w:= - WindBarWidth;
+        r.h:= 13;
+        DrawSpriteFromRect(sprWindL, r, (cScreenWidth shr 1) - offsetY + 74 + WindBarWidth, cScreenHeight - offsetX + 2, 13, 0);
+        end
+    end;
 
 // AmmoMenu
 if bShowAmmoMenu and ((AMState = AMHidden) or (AMState = AMHiding)) then
@@ -1747,13 +1761,15 @@ var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
 var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
+    inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
 if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and autoCameraOn)) and cHasFocus and (GameState <> gsConfirm) then
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-if not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and autoCameraOn then
+inbtwnTrgtAttks := (CurrentHedgehog <> nil) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0) and ((GameFlags and gfInfAttack) <> 0);
+if autoCameraOn and not PlacingHogs and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and not inbtwnTrgtAttks then
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
         FollowGear:= nil;

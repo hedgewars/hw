@@ -170,7 +170,7 @@ newGameInfo =
 data RoomInfo =
     RoomInfo
     {
-        masterID :: ClientIndex,
+        masterID :: Maybe ClientIndex,
         name :: B.ByteString,
         password :: B.ByteString,
         roomProto :: Word16,
@@ -181,6 +181,8 @@ data RoomInfo =
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
         isRegisteredOnly :: Bool,
+        isSpecial :: Bool,
+        greeting :: B.ByteString,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -189,7 +191,7 @@ data RoomInfo =
 newRoom :: RoomInfo
 newRoom =
     RoomInfo
-        (error "No room master defined")
+        Nothing
         ""
         ""
         0
@@ -200,13 +202,20 @@ newRoom =
         False
         False
         False
+        False
+        ""
         []
         (
-            Map.fromList $ Prelude.zipWith (,)
+            Map.fromList $ Prelude.zip
                 ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
                 ["+rnd+", "0", "0", "seed", "0"]
         )
-        (Map.singleton "SCHEME" ["Default"])
+        (
+            Map.fromList $ Prelude.zip
+                ["SCHEME", "SCRIPT"]
+                [["Default"], ["Normal"]]
+        )
+
 
 data StatisticsInfo =
     StatisticsInfo

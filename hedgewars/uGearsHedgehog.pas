@@ -20,7 +20,7 @@
 
 unit uGearsHedgehog;
 interface
-uses uTypes;
+uses uTypes, uGearsHandlersMess; 
 
 procedure doStepHedgehog(Gear: PGear);
 procedure AfterAttack;
@@ -65,7 +65,7 @@ with HHGear^.Hedgehog^ do
     HHGear^.Message:= HHGear^.Message and (not gmSlot);
     prevAmmo:= CurAmmoType;
     ammoidx:= 0;
-    if ((HHGear^.State and (gstAttacking or gstAttacked)) <> 0)
+    if (((HHGear^.State and (gstAttacking or gstAttacked)) <> 0) and (GameFlags and gfInfAttack = 0))
     or ((HHGear^.State and gstHHDriven) = 0) then
         exit;
     ChangeAmmo:= true;
@@ -140,6 +140,7 @@ var t: LongInt;
     weap: TAmmoType;
     Hedgehog: PHedgehog;
     s: boolean;
+    prevState, newState: LongWord;
 begin
 s:= false;
 
@@ -155,12 +156,18 @@ t:= cMaxSlotAmmoIndex;
 
 HHGear^.Message:= HHGear^.Message and (not gmWeapon);
 
+prevState:= HHGear^.State;
+newState:= prevState;
 with Hedgehog^ do
     while (CurAmmoType <> weap) and (t >= 0) do
         begin
         s:= ChangeAmmo(HHGear);
+        if HHGear^.State <> prevState then // so we can keep gstAttacked out of consideration when looping
+            newState:= HHGear^.State;
+        HHGear^.State:= prevState;
         dec(t)
         end;
+HHGear^.State:= newState;
 
 if s then
     ApplyAmmoChanges(HHGear^.Hedgehog^)
@@ -346,6 +353,10 @@ with Gear^,
                        amNapalm: newGear:= AddGear(CurWeapon^.Pos, 0, gtAirAttack, 2, _0, _0, 0);
                     amBlowTorch: newGear:= AddGear(hwRound(lx), hwRound(ly), gtBlowTorch, 0, SignAs(_0_5, dX), _0, 0);
                        amGirder: newGear:= AddGear(0, 0, gtGirder, CurWeapon^.Pos, _0, _0, 0);
+                       amRubber: begin
+                                 newGear:= AddGear(0, 0, gtGirder, CurWeapon^.Pos, _0, _0, 0);
+                                 newGear^.AmmoType:= amRubber
+                                 end;
                      amTeleport: newGear:= AddGear(CurWeapon^.Pos, 0, gtTeleport, 0, _0, _0, 0);
                        amSwitch: newGear:= AddGear(hwRound(lx), hwRound(ly), gtSwitcher, 0, _0, _0, 0);
                        amMortar: begin
@@ -377,7 +388,7 @@ with Gear^,
                                  PlaySound(sndHellishImpact4);
                                  cDamageModifier:= _1_5
                                  end;
-                 amInvulnerable: Invulnerable:= true;
+                 amInvulnerable: Effects[heInvulnerable]:= 1;
                     amExtraTime: begin
                                  PlaySound(sndSwitchHog);
                                  TurnTimeLeft:= TurnTimeLeft + 30000
@@ -437,7 +448,7 @@ with Gear^,
                 amFlamethrower, amLandGun,
                  amResurrector, //amStructure,
                       amTardis, amPiano,
-                      amIceGun: CurAmmoGear:= newGear;
+                      amIceGun, amRubber: CurAmmoGear:= newGear;
             end;
 
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
@@ -760,13 +771,13 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         Gear^.Message:= Gear^.Message and (not gmLJump);
         DeleteCI(Gear);
         if TestCollisionYwithGear(Gear, -1) = 0 then
-            if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then
+            if TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0 then
                 Gear^.Y:= Gear^.Y - _2
             else
-                if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then
+                if TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0 then
                     Gear^.Y:= Gear^.Y - _1;
-            if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
-            or   (TestCollisionYwithGear(Gear, -1) <> 0)) then
+            if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0) and
+               (TestCollisionYwithGear(Gear, -1) = 0) then
                 begin
                 Gear^.dY:= -_0_15;
                 if not cArtillery then
@@ -854,11 +865,21 @@ if Gear^.Hedgehog^.Unplaced then
     Gear^.State:= Gear^.State and (not gstMoving);
     exit
     end;
-isFalling:= (Gear^.dY.isNegative) or (not TestCollisionYKick(Gear, 1));
+isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
 if isFalling then
     begin
-    if (Gear^.dY.isNegative) and TestCollisionYKick(Gear, -1) then
-        Gear^.dY:= _0;
+    land:= TestCollisionYKick(Gear, -1);
+    if (Gear^.dY.isNegative) and (land <> 0) then
+        begin
+        if land and lfBouncy <> 0 then
+            begin
+            doStepFallingGear(Gear);
+            Gear^.dX:= Gear^.dX * _0_8
+            end;
+        if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
+            Gear^.dY:= _0;
+        Gear^.State:= Gear^.State and not gstCollision 
+        end;
     Gear^.State:= Gear^.State or gstMoving;
     if (CurrentHedgehog^.Gear = Gear) and (CurrentHedgehog^.Gear^.State and gstHHDriven <> 0) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
@@ -883,19 +904,36 @@ if isFalling then
 else
     begin
     land:= TestCollisionYwithGear(Gear, 1);
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
+    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0) 
+    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) 
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
     if not Gear^.dY.isNegative then
         begin
+        if land and lfBouncy <> 0 then
+            begin
+            doStepFallingGear(Gear);
+            // hogs for some reason have very low friction. slippery little buggers
+            Gear^.dX:= Gear^.dX * _0_8
+            end;
+
         CheckHHDamage(Gear);
 
-        if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery)
-        and (Gear^.dX.QWordValue < _0_02.QWordValue) then
-            Gear^.dX.isNegative:= not Gear^.dX.isNegative; // landing after high jump
-        Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
-        Gear^.dY:= _0;
+        if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
+            begin
+            if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery)
+            and (Gear^.dX.QWordValue < _0_02.QWordValue) then
+                begin
+                if land and lfBouncy <> 0 then
+                    Gear^.dY:= _0;
+                Gear^.dX.isNegative:= not Gear^.dX.isNegative // landing after high jump
+                end;
+            Gear^.State:= Gear^.State and (not (gstHHJumping or gstHHHJump));
+            if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
+                Gear^.dY:= _0
+            end;
+        Gear^.State:= Gear^.State and not gstCollision 
         end
     else
         Gear^.dY:= Gear^.dY + cGravity;
@@ -921,43 +959,43 @@ if isUnderwater then
    end;
 
 if (Gear^.State and gstMoving) <> 0 then
-    if TestCollisionXKick(Gear, hwSign(Gear^.dX)) then
+    if TestCollisionXKick(Gear, hwSign(Gear^.dX)) <> 0 then
         if not isFalling then
             if hwAbs(Gear^.dX) > _0_01 then
-                if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) or
-                (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
+                if  (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -1, hwSign(Gear^.dX)) = 0) and
+                    (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1) = 0) then
                     begin
                     Gear^.X:= Gear^.X + Gear^.dX;
                     Gear^.dX:= Gear^.dX * _0_96;
                     Gear^.Y:= Gear^.Y - _1
                     end
                 else
-                    if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) or
-                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
+                    if  (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -2, hwSign(Gear^.dX)) = 0) and
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1) = 0) then
                         begin
                         Gear^.X:= Gear^.X + Gear^.dX;
                         Gear^.dX:= Gear^.dX * _0_93;
                         Gear^.Y:= Gear^.Y - _2
                         end
                     else
-                    if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) or
-                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
+                    if  (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -3, hwSign(Gear^.dX)) = 0) and
+                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1) = 0) then
                         begin
                         Gear^.X:= Gear^.X + Gear^.dX;
                         Gear^.dX:= Gear^.dX * _0_9 ;
                         Gear^.Y:= Gear^.Y - _3
                         end
                     else
-                        if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) or
-                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
+                        if (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -4, hwSign(Gear^.dX)) = 0) and
+                           (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1) = 0) then
                             begin
                             Gear^.X:= Gear^.X + Gear^.dX;
                             Gear^.dX:= Gear^.dX * _0_87;
                             Gear^.Y:= Gear^.Y - _4
                             end
                     else
-                        if not (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) or
-                        (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1))) then
+                        if (TestCollisionXwithXYShift(Gear, int2hwFloat(hwSign(Gear^.dX)) - Gear^.dX, -5, hwSign(Gear^.dX)) = 0) and
+                           (TestCollisionYwithXYShift(Gear, hwSign(Gear^.dX) - hwRound(Gear^.dX), -1, -1) = 0) then
                             begin
                             Gear^.X:= Gear^.X + Gear^.dX;
                             Gear^.dX:= Gear^.dX * _0_84;
@@ -1008,12 +1046,19 @@ if (Gear^.State and gstMoving) <> 0 then
 // ARTILLERY but not being moved by explosions
     Gear^.X:= Gear^.X + Gear^.dX;
     Gear^.Y:= Gear^.Y + Gear^.dY;
-    if (not Gear^.dY.isNegative) and (not TestCollisionYKick(Gear, 1))
-    and TestCollisionYwithXYShift(Gear, 0, 1, 1) then
+    if (not Gear^.dY.isNegative) and (TestCollisionYKick(Gear, 1) = 0) then
         begin
-        CheckHHDamage(Gear);
-        Gear^.dY:= _0;
-        Gear^.Y:= Gear^.Y + _1
+        land:= TestCollisionYwithXYShift(Gear, 0, 1, 1);
+        if land and lfBouncy <> 0 then
+            doStepFallingGear(Gear);
+
+        if (land <> 0) and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) then
+            begin
+            CheckHHDamage(Gear);
+            Gear^.dY:= _0;
+            Gear^.Y:= Gear^.Y + _1
+            end;
+        Gear^.State:= Gear^.State and not gstCollision 
         end;
 
     CheckGearDrowning(Gear);
@@ -1157,7 +1202,7 @@ if (HHGear^.State and gstMoving) <> 0 then
 
     HHGear^.Message:= HHGear^.Message and (not (gmLJump or gmHJump));
 
-    if (not cArtillery) and wasJumping and TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+    if (not cArtillery) and wasJumping and (TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0) then
         SetLittle(HHGear^.dX);
 
     if Hedgehog^.Gear <> nil then
@@ -1301,7 +1346,7 @@ if WorldWrap(Gear) then
     if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and 
        (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) and (CurAmmoGear^.Elasticity <> _0) then
        CurAmmoGear^.PortalCounter:= 1;
-    if (WorldEdge = weWrap) and (TestCollisionXwithGear(Gear, 1) or TestCollisionXwithGear(Gear, -1))  then
+    if (WorldEdge = weWrap) and ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
         Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)

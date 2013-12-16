@@ -153,15 +153,19 @@ var t: LongInt;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
+    year, month, md : word;
 begin
     if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
+DecodeDate(Date, year, month, md);
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
         NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
+        if length(Owner) > 0 then
+            OwnerTex:= RenderStringTexLim(Owner, Clan^.Color, Font, cTeamHealthWidth);
 
         r.x:= 0;
         r.y:= 0;
@@ -236,6 +240,16 @@ for t:= 0 to Pred(TeamsCount) do
                 if Gear <> nil then
                     begin
                     NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
+                    if Hat = 'NoHat' then
+                        begin
+                        if ((month = 4) and (md = 20)) then
+                            Hat := 'eastertop'; // Easter
+                        if ((month = 12) and (md = 25)) then
+                            Hat := 'Santa'; // Christmas
+                        if ((month = 10) and (md = 31)) then
+                            Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
+                        end;
+                    
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
@@ -330,7 +344,7 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
                 (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]))) and
            (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) and
-           (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) and
+           (((cReducedQuality and rqKillFlakes) = 0) or cSnow or ((not (ii in [sprFlake, sprSDFlake])))) and
            ((cCloudsNumber > 0) or (ii <> sprCloud)) and
            ((vobCount > 0) or (ii <> sprFlake)) then
             begin
@@ -630,14 +644,18 @@ end;
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
+    // free the mem of any previously assigned texture.  This was previously only if the new one could be loaded, but, NoHat is usually a better choice
+    if HH.HatTex <> nil then
+        begin
+        FreeTexture(HH.HatTex);
+        HH.HatTex:= nil
+        end;
     texsurf:= LoadDataImage(ptHats, newHat, ifNone);
 AddFileLog('Hat => '+newHat);
     // only do something if the hat could be loaded
     if texsurf <> nil then
         begin
 AddFileLog('Got Hat');
-        // free the mem of any previously assigned texture
-        FreeTexture(HH.HatTex);
 
         // assign new hat to hedgehog
         HH.HatTex:= Surface2Tex(texsurf, true);

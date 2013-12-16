@@ -335,6 +335,9 @@ if (Y + SpritesData[Sprite].Height > BottomY) then
 if (X + SpritesData[Sprite].Width > RightX) then
     r.w:= RightX - X + 1;
 
+if (r.h < r.y) or (r.w < r.x) then 
+    exit;
+
 dec(r.h, r.y);
 dec(r.w, r.x);
 

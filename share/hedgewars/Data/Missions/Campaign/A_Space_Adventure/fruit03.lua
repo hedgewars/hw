@@ -19,7 +19,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("You'll get an extra Sniper Rifle every time you kill an enemy hog with a limit of max 4 rifles").."|"..
 	loc("You'll get an extra Teleport every time you kill an enemy hog with a limit of max 2 teleports").."|"..
 	loc("The first turn will last 25 sec and every other turn 15 sec").."|"..
-	loc("If you skip the game your time left will be added to your next turn").."|"..
+	loc("If you skip a turn then the turn time left will be added to your next turn").."|"..
 	loc("Some parts of the land are indestructible")
 -- dialogs
 local dialog01 = {}
@@ -79,7 +79,7 @@ function onGameInit()
 	Explosives = 0
 	Map = "fruit03_map"
 	Theme = "Fruit"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
@@ -91,15 +91,15 @@ function onGameInit()
 	for i=1,table.getn(enemiesEven) do
 		enemiesEven[i].gear = AddHog(enemiesEven[i].name, 1, 100, hats[math.random(1,table.getn(hats))])
 		AnimSetGearPosition(enemiesEven[i].gear, enemiesEven[i].x, enemiesEven[i].y)
-	end	
+	end
 	AddTeam(teamB.name, teamB.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(enemiesOdd) do
 		enemiesOdd[i].gear = AddHog(enemiesOdd[i].name, 1, 100, hats[math.random(1,table.getn(hats))])
 		AnimSetGearPosition(enemiesOdd[i].gear, enemiesOdd[i].x, enemiesOdd[i].y)
 	end
-	
+
 	initCheckpoint("fruit03")
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -108,10 +108,10 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
-	
+
 	--hero ammo
 	AddAmmo(hero.gear, amTeleport, 2)
 	AddAmmo(hero.gear, amSniperRifle, 2)
@@ -125,7 +125,7 @@ function onGameStart()
 	AddAmmo(enemiesEven[1].gear, amSniperRifle, 100)
 	AddAmmo(enemiesEven[1].gear, amWatermelon, 1)
 	AddAmmo(enemiesEven[1].gear, amGrenade, 5)
-	
+
 	SendHealthStatsOff()
 	AddAnim(dialog01)
 end
@@ -171,7 +171,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -203,8 +203,8 @@ end
 
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
-	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))			
-	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))		
+	SendStat(siCustomAchievement, loc("You have to eliminate all the enemies"))
+	SendStat(siCustomAchievement, loc("Read the Challenge Objectives from within the mission for more details"))
 	SendStat(siPlayerKills,'1',teamB.name)
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
@@ -213,8 +213,8 @@ end
 function heroWin(gear)
 	saveBonus(2, 1)
 	SendStat(siGameResult, loc("Congratulations, you won!"))
-	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))			
-	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission"))		
+	SendStat(siCustomAchievement, loc("You complete the mission in "..TotalRounds.." rounds"))
+	SendStat(siCustomAchievement, loc("You will gain some extra ammo from the crates the next time you play the \"Getting to the device\" mission"))
 	SendStat(siPlayerKills,'1',teamA.name)
 	EndGame()
 end
@@ -243,7 +243,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you skip the game your time left will be added to your next turn"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Some parts of the land are indestructible"), 5000}})
 	table.insert(dialog01, {func = AnimWait, args = {hero.gear, 500}})
-	table.insert(dialog01, {func = startBattle, args = {hero.gear}})	
+	table.insert(dialog01, {func = startBattle, args = {hero.gear}})
 end
 
 ------------------ Other Functions -------------------

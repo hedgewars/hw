@@ -43,6 +43,8 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
+    QModelIndex nicknameIndex(const QString & nickname);
+
 public slots:
     void addPlayer(const QString & nickname, bool notify);
     void removePlayer(const QString & nickname, const QString & msg = QString());
@@ -71,6 +73,8 @@ private:
     void loadSet(QSet<QString> & set, const QString & suffix);
     void saveSet(const QSet<QString> & set, const QString & suffix);
     void checkFriendIgnore(const QModelIndex & mi);
+    bool isFriend(const QString & nickname);
+    bool isIgnored(const QString & nickname);
 };
 
 #endif // PLAYERSLISTMODEL_H

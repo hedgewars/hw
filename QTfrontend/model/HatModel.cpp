@@ -37,6 +37,8 @@ HatModel::HatModel(QObject* parent) :
 
 void HatModel::loadHats()
 {
+    qDebug("HatModel::loadHats()");
+
     // this method resets the contents of this model (important to know for views).
     QStandardItemModel::beginResetModel();
     QStandardItemModel::clear();

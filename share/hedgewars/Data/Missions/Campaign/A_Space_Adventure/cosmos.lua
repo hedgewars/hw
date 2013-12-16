@@ -17,10 +17,10 @@ local timeForGuard1ToTurnLeft = timeForGuard1ToTurn
 local saucerAcquired = false
 local status
 local checkPointReached = 1 -- 1 is start of the game
-local objectives = loc("Go to moon by the flying saucer and complete the main mission").."|"..
+local objectives = loc("Go to the moon by using the flying saucer and complete the main mission").."|"..
 loc("Come back to this mission and visit the other planets to collect the crates").."|"..
 loc("Visit the Death Planet after completing all the other planets' main missions").."|"..
-loc("Come back to this mission after collecting all the parts")
+loc("Come back to this mission after collecting all the device parts")
 -- dialogs
 local dialog01 = {}
 local dialog02 = {}
@@ -33,12 +33,12 @@ local dialog08 = {}
 -- mission objectives
 local goals = {
 	[dialog01] = {missionName, loc("Getting ready"), loc("Go and collect the crate").."|"..loc("Try not to get spotted by the guards!"), 1, 4500},
-	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuels are limited"), 1, 4500},
+	[dialog02] = {missionName, loc("The adventure begins!"), loc("Use the saucer and fly to the moon").."|"..loc("Travel carefully as your fuel is limited"), 1, 4500},
 	[dialog03] = {missionName, loc("An unexpected event!"), loc("Use the saucer and fly away").."|"..loc("Beware, any damage taken will stay until you complete the moon's main mission"), 1, 7000},
 	[dialog04] = {missionName, loc("Objectives"), objectives, 1, 7000},
 	[dialog05] = {missionName, loc("Objectives"), objectives, 1, 7000},
 	[dialog06] = {missionName, loc("Objectives"), objectives, 1, 7000},
-	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit first the planets of Ice, Desert and Fruit"), 1, 6000},
+	[dialog07] = {missionName, loc("Searching the stars!"), loc("Use the saucer and fly away").."|"..loc("Visit the planets of Ice, Desert and Fruit before you proceed to the Death Planet"), 1, 6000},
 	[dialog08] = {missionName, loc("Saving Hogera"), loc("Fly to the meteorite and detonate the explosives"), 1, 7000}
 }
 -- crates
@@ -98,11 +98,11 @@ function onGameInit()
 	Theme = "Nature"
 	-- I had originally hero in PAoTH team and changed it, may reconsider though
 	-- PAoTH
-	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")	
+	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
-	AnimSetGearPosition(hero.gear, hero.x, hero.y)	
+	AnimSetGearPosition(hero.gear, hero.x, hero.y)
 	HogTurnLeft(hero.gear, true)
-	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")	
+	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	director.gear = AddHog(director.name, 0, 100, "hair_yellow")
 	AnimSetGearPosition(director.gear, director.x, director.y)
 	doctor.gear = AddHog(doctor.name, 0, 100, "Glasses")
@@ -144,7 +144,7 @@ function onGameInit()
 			AnimSetGearPosition(hero.gear, 3080, 850)
 		end
 	end
-	
+
 	AnimInit()
 	AnimationSetup()
 end
@@ -156,14 +156,14 @@ function onGameStart()
 	FollowGear(hero.gear)
 	ShowMission(loc("Spacetrip"), loc("Getting ready"), loc("Help Hog Solo to find all the parts of the anti-gravity device.")..
 	"|"..loc("Travel to all the neighbor planets and collect all the pieces"), -amSkip, 0)
-	
+
 	-- do checkpoint stuff needed after game starts
-	if checkPointReached == 1 then	
+	if checkPointReached == 1 then
 		AddAnim(dialog01)
 		AddAmmo(hero.gear, amRope, 1)
 		AddAmmo(guard1.gear, amDEagle, 2)
 		AddAmmo(guard2.gear, amDEagle, 2)
-		SpawnAmmoCrate(saucerX, saucerY, amJetpack)	
+		SpawnAmmoCrate(saucerX, saucerY, amJetpack)
 		-- EVENT HANDLERS
 		AddEvent(onHeroBeforeTreePosition, {hero.gear}, heroBeforeTreePosition, {hero.gear}, 0)
 		AddEvent(onHeroAtSaucerPosition, {hero.gear}, heroAtSaucerPosition, {hero.gear}, 0)
@@ -180,7 +180,7 @@ function onGameStart()
 		-- Hero has visited a planet, he has plenty of fuels and can change planet
 		AddAmmo(hero.gear, amJetpack, 99)
 	end
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onNoFuelAtLand, {hero.gear}, noFuelAtLand, {hero.gear}, 0)
 	-- always check for landings
@@ -189,7 +189,7 @@ function onGameStart()
 	end
 	if GetCampaignVar("Planet") ~= "desertPlanet" then
 		AddEvent(onDesertPlanetLanding, {hero.gear}, desertPlanetLanding, {hero.gear}, 0)
-	end	
+	end
 	if GetCampaignVar("Planet") ~= "fruitPlanet" then
 		AddEvent(onFruitPlanetLanding, {hero.gear}, fruitPlanetLanding, {hero.gear}, 0)
 	end
@@ -199,14 +199,14 @@ function onGameStart()
 	if GetCampaignVar("Planet") ~= "deathPlanet" then
 		AddEvent(onDeathPlanetLanding, {hero.gear}, deathPlanetLanding, {hero.gear}, 0)
 	end
-	
+
 	if status.death01 and not status.final then
 		AddAnim(dialog08)
 		if GetCampaignVar("Planet") ~= "meteorite" then
 			AddEvent(onMeteoriteLanding, {hero.gear}, meteoriteLanding, {hero.gear}, 0)
 		end
 	end
-	
+
 	SendHealthStatsOff()
 end
 
@@ -228,7 +228,7 @@ end
 
 function onPrecise()
 	if GameTime > 3000 then
-		SetAnimSkip(true)   
+		SetAnimSkip(true)
 	end
 end
 
@@ -315,7 +315,7 @@ function onMeteoriteLanding(gear)
 end
 
 function onNoFuelAtLand(gear)
-	if checkPointReached > 1 and GetHealth(hero.gear) and GetY(gear) > 1400 and 
+	if checkPointReached > 1 and GetHealth(hero.gear) and GetY(gear) > 1400 and
 			GetAmmoCount(gear, amJetpack) == 0 and StoppedGear(gear) then
 		return true
 	end
@@ -338,7 +338,7 @@ end
 
 function heroAtSaucerPosition(gear)
 	TurnTimeLeft = 0
-	-- save check point	
+	-- save check point
 	SaveCampaignVar("CosmosCheckPoint", "2")
 	checkPointReached = 2
 	AddAnim(dialog02)
@@ -346,7 +346,7 @@ function heroAtSaucerPosition(gear)
 	if guard1.turn and GetX(hero.gear) > saucerX-150 then
 		guard1.keepTurning = false
 		AddAnim(dialog03)
-	end	
+	end
 end
 
 function heroOutOfGuardSight(gear)
@@ -383,7 +383,7 @@ end
 function fruitPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
-	else		
+	else
 		AnimCaption(hero.gear,loc("Welcome to the Fruit Planet!"))
 		SaveCampaignVar("Planet", "fruitPlanet")
 		if status.fruit02 then
@@ -405,7 +405,7 @@ end
 function desertPlanetLanding(gear)
 	if checkPointReached < 5 then
 		AddAnim(dialog06)
-	else		
+	else
 		AnimCaption(hero.gear,loc("Welcome to the Desert Planet!"))
 		SaveCampaignVar("Planet", "desertPlanet")
 		SaveCampaignVar("UnlockedMissions", "4")
@@ -492,7 +492,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimWait, args = {doctor.gear, 3000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Near secret base 17 of PAotH in the rural Hogland..."),  4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("So Hog Solo, here we are..."), SAY_SAY, 2000}})
-	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the East there is secret base 17"), SAY_SAY, 4000}})
+	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Behind these trees on the east side there is secret base 17"), SAY_SAY, 4000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("You have to continue alone from now on."), SAY_SAY, 3000}})
 	table.insert(dialog01, {func = AnimSay, args = {director.gear, loc("Be careful, the future of Hogera is in your hands!"), SAY_SAY, 7200}})
 	table.insert(dialog01, {func = AnimSay, args = {doctor.gear, loc("We'll use our communicators to contact you"), SAY_SAY, 2600}})
@@ -509,12 +509,12 @@ function AnimationSetup()
 	table.insert(dialog02, {func = AnimCaption, args = {hero.gear, loc("CheckPoint reached!"),  4000}})
 	table.insert(dialog02, {func = AnimSay, args = {hero.gear, loc("Got the saucer!"), SAY_SHOUT, 2000}})
 	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Nice!"), SAY_SHOUT, 1000}})
-	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Now use it and go to the moon PAotH station to get more fuels!"), SAY_SHOUT, 5000}})
+	table.insert(dialog02, {func = AnimSay, args = {director.gear, loc("Now use it and go to the moon PAotH station to get more fuel!"), SAY_SHOUT, 5000}})
     table.insert(dialog02, {func = AnimGearWait, args = {hero.gear, 500}})
     -- DIALOG 03 - Hero got spotted by guard
 	AddSkipFunction(dialog03, Skipanim, {dialog03})
 	table.insert(dialog03, {func = AnimWait, args = {guard1.gear, 4000}})
-	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"),  4000}})	
+	table.insert(dialog03, {func = AnimCaption, args = {guard1.gear, loc("Prepare to flee!"),  4000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard1.gear, loc("Hey").." "..guard2.name.."! "..loc("Look, someone is stealing the saucer!"), SAY_SHOUT, 4000}})
 	table.insert(dialog03, {func = AnimSay, args = {guard2.gear, loc("I'll get him!"), SAY_SAY, 4000}})
 	table.insert(dialog03, {func = startCombat, args = {guard1.gear}})
@@ -532,17 +532,17 @@ function AnimationSetup()
 	-- DIALOG 06 - Landing on wrong planet or on earth if not enough fuels
 	AddSkipFunction(dialog06, Skipanim, {dialog06})
 	table.insert(dialog06, {func = AnimCaption, args = {hero.gear, loc("You have to try again!"),  5000}})
-	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I run out of fuels..."), SAY_THINK, 3000}})
+	table.insert(dialog06, {func = AnimSay, args = {hero.gear, loc("Hm... Now I ran out of fuel..."), SAY_THINK, 3000}})
 	table.insert(dialog06, {func = sendStatsOnRetry, args = {hero.gear}})
 	-- DIALOG 07 - Hero lands on Death Planet but isn't allowed yet to play this map
 	AddSkipFunction(dialog07, Skipanim, {dialog07})
 	table.insert(dialog07, {func = AnimCaption, args = {hero.gear, loc("This planet seems dangerous!"),  5000}})
-	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other parts"), SAY_THINK, 4000}})
+	table.insert(dialog07, {func = AnimSay, args = {hero.gear, loc("I am not ready for this planet yet. I should visit it when I have found all the other device parts"), SAY_THINK, 4000}})
 	-- DIALOG 08 - Hero wins death01
 	AddSkipFunction(dialog08, Skipanim, {dialog08})
 	table.insert(dialog08, {func = AnimCaption, args = {hero.gear, loc("Under the meteorite shadow..."),  4000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("You did great Hog Solo! However we aren't out of danger yet!"), SAY_SHOUT, 4500}})
-	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to get it out of order"), SAY_SHOUT, 5000}})
+	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("The meteorite has come too close and the anti-gravity device isn't powerful enough to stop it now"), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need it to get split into at least two parts"), SAY_SHOUT, 3000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("PAotH has sent explosives but unfortunately the trigger mechanism seems to be faulty!"), SAY_SHOUT, 5000}})
 	table.insert(dialog08, {func = AnimSay, args = {doctor.gear, loc("We need you to go there and detonate them yourself! Good luck!"), SAY_SHOUT, 500}})
@@ -559,17 +559,17 @@ function startCombat()
 end
 
 function sendStats(planet)
-	SendStat(siGameResult, loc("Hog Solo arrived to "..planet))
+	SendStat(siGameResult, loc("Hog Solo arrived at "..planet))
 	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button"))
-	SendStat(siCustomAchievement, loc("Choose another planet by replaying the mission"))
+	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission"))
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end
 
 function sendStatsOnRetry()
 	SendStat(siGameResult, loc("You have to travel again"))
-	SendStat(siCustomAchievement, loc("Your first destination is moon in order to get more fuels"))
-	SendStat(siCustomAchievement, loc("You have to complete the moon main mission in order to travel to other planets"))
+	SendStat(siCustomAchievement, loc("Your first destination is the moon in order to get more fuel"))
+	SendStat(siCustomAchievement, loc("You have to complete the main mission on moon in order to travel to other planets"))
 	SendStat(siCustomAchievement, loc("You have to be careful and not die!"))
 	SendStat(siPlayerKills,'0',teamC.name)
 	EndGame()

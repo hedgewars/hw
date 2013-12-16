@@ -5,9 +5,10 @@ function saveCompletedStatus(planetNum)
 	if tonumber(GetCampaignVar("MainMissionsStatus")) then
 		status = GetCampaignVar("MainMissionsStatus")
 	end
-	if i == 1 then
-		status = "1"..status:sub(planetNum+1)
-	elseif i == status:len() then
+
+	if planetNum == 1 then
+		status = "1"..status:sub(2)
+	elseif planetNum == status:len() then
 		status = status:sub(1,planetNum-1).."1"
 	else
 		status = status:sub(1,planetNum-1).."1"..status:sub(planetNum+1)
@@ -60,6 +61,7 @@ function initCheckpoint(mission)
 	if GetCampaignVar("CurrentMission") ~= mission then
 		SaveCampaignVar("CurrentMission", mission)
 		SaveCampaignVar("CurrentMissionCheckpoint", 1)
+		SaveCampaignVar("HogsPosition", "")
 	else
 		checkPoint = tonumber(GetCampaignVar("currentMissionCheckpoint"))
 	end
@@ -79,9 +81,9 @@ function saveBonus(index, times)
 	if tonumber(GetCampaignVar("SideMissionsBonuses")) then
 		bonus = GetCampaignVar("SideMissionsBonuses")
 	end
-	if i == 1 then
-		bonus = times..bonus:sub(index+1)
-	elseif i == bonus:len() then
+	if index == 1 then
+		bonus = times..bonus:sub(2)
+	elseif index == bonus:len() then
 		bonus = bonus:sub(1,index-1)..times
 	else
 		bonus = bonus:sub(1,index-1)..times..bonus:sub(index+1)
@@ -96,4 +98,29 @@ function getBonus(index)
 		bonus = bonusString:sub(index,index)
 	end
 	return bonus
+end
+
+-- splits number by delimiter
+function split(s, delimiter)
+	local res = {}
+	local first = ""
+	for i=1,s:len() do
+		if s:sub(1,1) == delimiter then
+			table.insert(res, tonumber(first))
+			first = ""
+		else
+			first = first..s:sub(1,1)
+		end
+		s = s:sub(2)
+	end
+	if first:len() > 0 then
+		table.insert(res, tonumber(first))
+	end
+	return res
+end
+
+-- returns the distance of 2 gears
+function distance(gear1, gear2)
+	local dist = math.sqrt(math.pow((GetX(gear1) - GetX(gear2)),2) + math.pow((GetY(gear1) - GetY(gear2)),2))
+	return dist
 end

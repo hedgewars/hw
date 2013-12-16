@@ -28,12 +28,26 @@
 #include "HWApplication.h"
 #include "hwconsts.h"
 
-MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", ""};
-MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", ""};
-MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", ""};
+MapModel::MapInfo MapModel::MapInfoRandom = {MapModel::GeneratedMap, "+rnd+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoMaze = {MapModel::GeneratedMaze, "+maze+", "", 0, "", "", "", false};
+MapModel::MapInfo MapModel::MapInfoDrawn = {MapModel::HandDrawnMap, "+drawn+", "", 0, "", "", "", false};
 
-void MapModel::loadMaps(MapType maptype)
+
+MapModel::MapModel(MapType maptype, QObject *parent) : QStandardItemModel(parent)
 {
+    m_maptype = maptype;
+    m_loaded = false;
+}
+
+bool MapModel::loadMaps()
+{
+    if(m_loaded)
+        return false;
+
+    m_loaded = true;
+
+    qDebug("[LAZINESS] MapModel::loadMaps()");
+
     // this method resets the contents of this model (important to know for views).
     beginResetModel();
 
@@ -75,7 +89,7 @@ void MapModel::loadMaps(MapType maptype)
             MapType type = isMission ? MissionMap : StaticMap;
 
             // if we're supposed to ignore this type, continue
-            if (type != maptype) continue;
+            if (type != m_maptype) continue;
 
             // load map info from file
             QTextStream input(&mapCfgFile);
@@ -149,15 +163,19 @@ void MapModel::loadMaps(MapType maptype)
     QStandardItemModel::appendColumn(mapList);
 
     endResetModel();
+
+    return true;
 }
 
-bool MapModel::mapExists(const QString & map) const
+bool MapModel::mapExists(const QString & map)
 {
     return findMap(map) >= 0;
 }
 
-int MapModel::findMap(const QString & map) const
+int MapModel::findMap(const QString & map)
 {
+    loadMaps();
+
     return m_mapIndexes.value(map, -1);
 }
 

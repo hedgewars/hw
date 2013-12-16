@@ -12,7 +12,9 @@ HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 ----------------- VARIABLES --------------------
 -- globals
 local missionName = loc("The big bang")
-local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!")
+local challengeObjectives = loc("Find a way to detonate all the explosives and stay alive!").."|"..
+							loc("Red areas are indestructible").."|"..
+							loc("Green areas aren't portal enabled")
 local explosives = {}
 local currentHealth = 1
 local currentDamage = 0
@@ -38,17 +40,17 @@ function onGameInit()
 	MinesNum = 0
 	MinesTime = 1
 	Explosives = 0
-	HealthCaseAmount = 50
+	HealthCaseAmount = 35
 	Map = "final_map"
 	Theme = "EarthRise"
-	
+
 	-- Hog Solo
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 1, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	
+
 	initCheckpoint("final")
-	
+
 	AnimInit()
 end
 
@@ -56,7 +58,7 @@ function onGameStart()
 	AnimWait(hero.gear, 3000)
 	FollowGear(hero.gear)
 	ShowMission(missionName, loc("Challenge Objectives"), challengeObjectives, -amSkip, 0)
-	
+
 	-- explosives
 	x = 400
 	while x < 815 do
@@ -70,20 +72,20 @@ function onGameStart()
 		AddGear(x, 480, gtMine, 0, 0, 0, 0)
 		x = x + math.random(5,20)
 	end
-	-- health crate	
-	SpawnHealthCrate(900, 5)
+	-- health crate
+	SpawnHealthCrate(910, 5)
 	-- ammo crates
 	SpawnAmmoCrate(930, 1000,amRCPlane)
 	SpawnAmmoCrate(1220, 672,amPickHammer)
 	SpawnAmmoCrate(1220, 672,amGirder)
-	
+
 	-- ammo
-	AddAmmo(hero.gear, amPortalGun, 1)	
+	AddAmmo(hero.gear, amPortalGun, 1)
 	AddAmmo(hero.gear, amFirePunch, 1)
-	
+
 	AddEvent(onHeroDeath, {hero.gear}, heroDeath, {hero.gear}, 0)
 	AddEvent(onHeroWin, {hero.gear}, heroWin, {hero.gear}, 0)
-	
+
 	SendHealthStatsOff()
 end
 
@@ -141,6 +143,8 @@ end
 function heroDeath(gear)
 	SendStat(siGameResult, loc("Hog Solo lost, try again!"))
 	SendStat(siCustomAchievement, loc("You have to destroy all the explosives without dying!"))
+	SendStat(siCustomAchievement, loc("Red areas are indestructible"))
+	SendStat(siCustomAchievement, loc("Green areas aren't portal enabled"))
 	SendStat(siPlayerKills,'0',teamA.name)
 	EndGame()
 end

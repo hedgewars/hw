@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes;
+uses uConsts, uFloat, uTypes, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -78,7 +78,7 @@ while Gear <> nil do
         begin
         if (not isInMultiShoot) then
             inc(Gear^.Damage, Gear^.Karma);
-        if (Gear^.Damage <> 0) and (not Gear^.Invulnerable) then
+        if (Gear^.Damage <> 0) and ((Gear^.Hedgehog^.Effects[heInvulnerable] = 0)) then
             begin
             CheckNoDamage:= false;
 
@@ -510,7 +510,7 @@ begin
                     if (Gear <> nil) then
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
-                            Gear^.Invulnerable:= false;
+                            Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
                         end;
                     end;
     t:= GearsList;
@@ -564,7 +564,7 @@ begin
 end;
 
 procedure AddMiscGears;
-var i,rx, ry: Longword;
+var p,i,j,rx, ry: Longword;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
@@ -599,11 +599,13 @@ if (GameFlags and gfVampiric) <> 0 then
 
 Gear:= GearsList;
 if (GameFlags and gfInvulnerable) <> 0 then
-    while Gear <> nil do
-        begin
-        Gear^.Invulnerable:= true;  // this is only checked on hogs right now, so no need for gear type check
-        Gear:= Gear^.NextGear
-        end;
+    for p:= 0 to Pred(ClansCount) do
+        with ClansArray[p]^ do
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            Effects[heInvulnerable]:= 1;
 
 if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
@@ -622,7 +624,7 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
 snowRight:= max(LAND_WIDTH,4096)+512;
 snowLeft:= -(snowRight-LAND_WIDTH);
 
-if (not hasBorder) and ((Theme = 'Snow') or (Theme = 'Christmas')) then
+if (not hasBorder) and cSnow then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
         AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LAND_HEIGHT + LongInt(GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
 end;
@@ -882,9 +884,10 @@ begin
                 Gear^.Hedgehog:= hh;
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
-                end
+                end;
+            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
+            AddChatString(#1+'[' + HH^.Name + '] '+text);
             end
-        //else ParseCommand('say ' + text, true)
         end
     else if (x >= 4) then
         begin

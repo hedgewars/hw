@@ -55,6 +55,11 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapgen(MAPGEN_REGULAR),
     m_previewSize(256, 128)
 {
+    // don't show preview anything until first show event
+    m_previewEnabled = false;
+    m_missionsViewSetup = false;
+    m_staticViewSetup = false;
+
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
     templateFilter = 0;
@@ -158,28 +163,14 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     /* Static maps list */
 
     staticMapList = new QListView;
-    staticMapList->setModel(m_staticMapModel);
     rightLayout->addWidget(staticMapList, 1);
-    staticMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_childWidgets << staticMapList;
-    QItemSelectionModel * staticSelectionModel = staticMapList->selectionModel();
-    connect(staticSelectionModel,
-            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
-            this,
-            SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
 
     /* Mission maps list */
 
-    missionMapList = new QListView;
-    missionMapList->setModel(m_missionMapModel);
-    missionMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    missionMapList = new QListView(this);
     rightLayout->addWidget(missionMapList, 1);
     m_childWidgets << missionMapList;
-    QItemSelectionModel * missionSelectionModel = missionMapList->selectionModel();
-    connect(missionSelectionModel,
-            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
-            this,
-            SLOT(missionMapChanged(const QModelIndex &, const QModelIndex &)));
 
     /* Map load and edit buttons */
 
@@ -261,7 +252,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     staticMapChanged(m_staticMapModel->index(0, 0));
     missionMapChanged(m_missionMapModel->index(0, 0));
     changeMapType(MapModel::GeneratedMap);
-    setRandomTheme();
 }
 
 void HWMapContainer::setImage(const QImage newImage)
@@ -608,8 +598,22 @@ void HWMapContainer::mapDrawingFinished()
     updatePreview();
 }
 
+void HWMapContainer::showEvent(QShowEvent * event)
+{
+    if (!m_previewEnabled) {
+        m_previewEnabled = true;
+        setRandomTheme();
+        updatePreview();
+    }
+    QWidget::showEvent(event);
+}
+
 void HWMapContainer::updatePreview()
 {
+    // abort if the widget isn't supposed to show anything yet
+    if (!m_previewEnabled)
+        return;
+
     if (pMap)
     {
         disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
@@ -726,6 +730,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             btnEditMap->show();
             break;
         case MapModel::MissionMap:
+            setupMissionMapsView();
             mapgen = MAPGEN_MAP;
             missionMapChanged(newMap.isValid() ? newMap : missionMapList->currentIndex());
             lblMapList->setText(tr("Mission:"));
@@ -736,6 +741,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             emit mapChanged(m_curMap);
             break;
         case MapModel::StaticMap:
+            setupStaticMapsView();
             mapgen = MAPGEN_MAP;
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
@@ -934,4 +940,36 @@ void HWMapContainer::intSetIconlessTheme(const QString & name)
     m_theme = name;
     btnTheme->setIcon(QIcon());
     btnTheme->setText(tr("Theme: %1").arg(name));
+}
+
+void HWMapContainer::setupMissionMapsView()
+{
+    if(m_missionsViewSetup) return;
+    m_missionsViewSetup = true;
+
+    m_missionMapModel->loadMaps();
+    missionMapList->setModel(m_missionMapModel);
+    missionMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QItemSelectionModel * missionSelectionModel = missionMapList->selectionModel();
+    connect(missionSelectionModel,
+            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
+            this,
+            SLOT(missionMapChanged(const QModelIndex &, const QModelIndex &)));
+    missionSelectionModel->setCurrentIndex(m_missionMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
+}
+
+void HWMapContainer::setupStaticMapsView()
+{
+    if(m_staticViewSetup) return;
+    m_staticViewSetup = true;
+
+    m_staticMapModel->loadMaps();
+    staticMapList->setModel(m_staticMapModel);
+    staticMapList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    QItemSelectionModel * staticSelectionModel = staticMapList->selectionModel();
+    connect(staticSelectionModel,
+            SIGNAL(currentRowChanged(const QModelIndex &, const QModelIndex &)),
+            this,
+            SLOT(staticMapChanged(const QModelIndex &, const QModelIndex &)));
+    staticSelectionModel->setCurrentIndex(m_staticMapModel->index(0, 0), QItemSelectionModel::Clear | QItemSelectionModel::SelectCurrent);
 }

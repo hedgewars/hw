@@ -21,6 +21,7 @@ import Control.Exception as E
 import System.Process
 import Network.Socket
 import System.Random
+import qualified Data.Traversable as DT
 -----------------------------
 #if defined(OFFICIAL_SERVER)
 import OfficialServer.GameReplayStore
@@ -187,13 +188,14 @@ processAction (MoveToLobby msg) = do
     ri <- clientRoomA
     rnc <- gets roomsClients
     playersNum <- io $ room'sM rnc playersIn ri
+    specialRoom <- io $ room'sM rnc isSpecial ri
     master <- client's isMaster
 --    client <- client's id
     clNick <- client's nick
     chans <- othersChans
 
     if master then
-        if playersNum > 1 then
+        if (playersNum > 1) || specialRoom then
             mapM_ processAction [ChangeMaster Nothing, NoticeMessage AdminLeft, RemoveClientTeams, AnswerClients chans ["LEFT", clNick, msg]]
             else
             processAction RemoveRoom
@@ -205,7 +207,7 @@ processAction (MoveToLobby msg) = do
 
     -- when not removing room
     ready <- client's isReady
-    when (not master || playersNum > 1) . io $ do
+    when (not master || playersNum > 1 || specialRoom) . io $ do
         modifyRoom rnc (\r -> r{
                 playersIn = playersIn r - 1,
                 readyPlayers = if ready then readyPlayers r - 1 else readyPlayers r
@@ -218,31 +220,40 @@ processAction (ChangeMaster delegateId)= do
     proto <- client's clientProto
     ri <- clientRoomA
     rnc <- gets roomsClients
-    newMasterId <- liftM (\ids -> fromMaybe (last . filter (/= ci) $ ids) delegateId) . io $ roomClientsIndicesM rnc ri
-    newMaster <- io $ client'sM rnc id newMasterId
+    specialRoom <- io $ room'sM rnc isSpecial ri
+    newMasterId <- liftM (\ids -> fromMaybe (listToMaybe . reverse . filter (/= ci) $ ids) $ liftM Just delegateId) . io $ roomClientsIndicesM rnc ri
+    newMaster <- io $ client'sM rnc id `DT.mapM` newMasterId
     oldMasterId <- io $ room'sM rnc masterID ri
-    oldMaster <- io $ client'sM rnc id oldMasterId
     oldRoomName <- io $ room'sM rnc name ri
     kicked <- client's isKickedFromServer
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
-    let newRoomName = if (proto < 42) || kicked then nick newMaster else oldRoomName
-    mapM_ processAction [
+    let newRoomName = if ((proto < 42) || kicked) && (not specialRoom) then maybeNick newMaster else oldRoomName
+
+    when (isJust oldMasterId) $ do
+        oldMasterNick <- io $ client'sM rnc nick (fromJust oldMasterId)
+        mapM_ processAction [
+            ModifyClient2 (fromJust oldMasterId) (\c -> c{isMaster = False})
+            , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", oldMasterNick]
+            ]
+
+    when (isJust newMasterId) $
+        mapM_ processAction [
+          ModifyClient2 (fromJust newMasterId) (\c -> c{isMaster = True})
+        , AnswerClients [sendChan $ fromJust newMaster] ["ROOM_CONTROL_ACCESS", "1"]
+        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick $ fromJust newMaster]
+        ]
+
+    processAction $
         ModifyRoom (\r -> r{masterID = newMasterId
                 , name = newRoomName
                 , isRestrictedJoins = False
                 , isRestrictedTeams = False
-                , isRegisteredOnly = False}
+                , isRegisteredOnly = isSpecial r}
                 )
-        , ModifyClient2 newMasterId (\c -> c{isMaster = True})
-        , ModifyClient2 oldMasterId (\c -> c{isMaster = False})
-        , AnswerClients [sendChan newMaster] ["ROOM_CONTROL_ACCESS", "1"]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "-h", nick oldMaster]
-        , AnswerClients thisRoomChans ["CLIENT_FLAGS", "+h", nick newMaster]
-        ]
 
     newRoom' <- io $ room'sM rnc id ri
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo (nick newMaster) newRoom')
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : oldRoomName : roomInfo proto (maybeNick newMaster) newRoom')
 
 
 processAction (AddRoom roomName roomPassword) = do
@@ -252,7 +263,7 @@ processAction (AddRoom roomName roomPassword) = do
     n <- client's nick
 
     let rm = newRoom{
-            masterID = clId,
+            masterID = Just clId,
             name = roomName,
             password = roomPassword,
             roomProto = proto
@@ -265,7 +276,7 @@ processAction (AddRoom roomName roomPassword) = do
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
 
     mapM_ processAction [
-      AnswerClients chans ("ROOM" : "ADD" : roomInfo n rm{playersIn = 1})
+      AnswerClients chans ("ROOM" : "ADD" : roomInfo proto n rm{playersIn = 1})
         ]
 
 
@@ -292,9 +303,9 @@ processAction SendUpdateOnThisRoom = do
     rnc <- gets roomsClients
     ri <- io $ clientRoomM rnc clId
     rm <- io $ room'sM rnc id ri
-    n <- io $ client'sM rnc nick (masterID rm)
+    masterCl <- io $ client'sM rnc id `DT.mapM` (masterID rm)
     chans <- liftM (map sendChan) $! sameProtoClientsS proto
-    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo n rm)
+    processAction $ AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo proto (maybeNick masterCl) rm)
 
 
 processAction UnreadyRoomClients = do
@@ -433,10 +444,8 @@ processAction (ProcessAccountInfo info) = do
                     checkerLogin "" False False
                     else
                     processAction JoinLobby
-        Admin -> do
+        Admin ->
             mapM_ processAction [ModifyClient (\cl -> cl{isAdministrator = True}), JoinLobby]
-            chan <- client's sendChan
-            processAction $ AnswerClients [chan] ["ADMIN_ACCESS"]
         ReplayName fn -> processAction $ ShowReplay fn
     where
     isBanned = do
@@ -714,11 +723,11 @@ processAction (CheckSuccess info) = do
     where
         toPair t = (teamname t, teamowner t)
 
-processAction (QueryReplay name) = do
+processAction (QueryReplay rname) = do
     (Just ci) <- gets clientIndex
     si <- gets serverInfo
     uid <- client's clUID
-    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) name
+    io $ writeChan (dbQueries si) $ GetReplayName ci (hashUnique uid) rname
 
 #else
 processAction SaveReplay = return ()
@@ -728,25 +737,25 @@ processAction (CheckSuccess _) = return ()
 processAction (QueryReplay _) = return ()
 #endif
 
-processAction (ShowReplay name) = do
+processAction (ShowReplay rname) = do
     c <- client's sendChan
     cl <- client's id
 
-    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" name then B.drop 8 name else name]
+    let fileName = B.concat ["checked/", if B.isPrefixOf "replays/" rname then B.drop 8 rname else rname]
 
-    checkInfo <- liftIO $ E.handle (\(e :: SomeException) ->
+    cInfo <- liftIO $ E.handle (\(e :: SomeException) ->
                     warningM "REPLAYS" (B.unpack $ B.concat ["Problems reading ", fileName, ": ", B.pack $ show e]) >> return Nothing) $ do
             (t, p1, p2, msgs) <- liftM read $ readFile (B.unpack fileName)
             return $ Just (t, Map.fromList p1, Map.fromList p2, reverse msgs)
 
-    let (teams, params1, params2, roundMsgs) = fromJust checkInfo
+    let (teams', params1, params2, roundMsgs') = fromJust cInfo
 
-    when (isJust checkInfo) $ do
+    when (isJust cInfo) $ do
         mapM_ processAction $ concat [
             [AnswerClients [c] ["JOINED", nick cl]]
             , answerFullConfigParams cl params1 params2
-            , answerAllTeams cl teams
+            , answerAllTeams cl teams'
             , [AnswerClients [c]  ["RUN_GAME"]]
-            , [AnswerClients [c] $ "EM" : roundMsgs]
+            , [AnswerClients [c] $ "EM" : roundMsgs']
             , [AnswerClients [c] ["KICKED"]]
             ]

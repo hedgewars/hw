@@ -86,7 +86,7 @@ type
             sprHandResurrector, sprCross, sprAirDrill, sprNapalmBomb,
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
-            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog
+            sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun, sprFrozenHog, sprAmRubber, sprBoing
             );
 
     // Gears that interact with other Gears and/or Land
@@ -152,7 +152,7 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife); // 54
+            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife, amRubber); // 56
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -172,8 +172,8 @@ type
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
     TStereoMode = (smNone, smRedCyan, smCyanRed, smRedBlue, smBlueRed, smRedGreen, smGreenRed, smHorizontal, smVertical);
-
     TWorldEdge = (weNone, weWrap, weBounce, weSea, weSky);
+    TUIDisplay = (uiAll, uiNoTeams, uiNone);
 
     THHFont = record
             Handle: PTTF_Font;
@@ -258,7 +258,6 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             ImpactSound: TSound; // first sound, others have to be after it in the sounds def.
             nImpactSounds: Word; // count of ImpactSounds.
 // Don't use these if you want to take damage normally, otherwise health/damage are commonly used for other purposes
-            Invulnerable: Boolean;
             Health, Damage, Karma: LongInt;
 // DirAngle is a "real" - if you don't need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
@@ -370,6 +369,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             King: boolean;  // Flag for a bunch of hedgehog attributes
             Unplaced: boolean;  // Flag for hog placing mode
             Timer: Longword;
+            HealthBarHealth: LongInt;
             Effects: array[THogEffect] of LongInt;
             end;
 
@@ -380,16 +380,17 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Binds: TBinds;
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
             CurrHedgehog: LongWord;
-            NameTagTex: PTexture;
+            NameTagTex,
+            OwnerTex: PTexture;
             GraveTex,
             AIKillsTex,
             FlagTex: PTexture;
             Flag: shortstring;
             GraveName: shortstring;
             FortName: shortstring;
+            Owner: shortstring;
             TeamHealth: LongInt;
-            TeamHealthBarWidth,
-            NewTeamHealthBarWidth: LongInt;
+            TeamHealthBarHealth: LongInt;
             DrawHealthY: LongInt;
             AttackBar: LongWord;
             HedgehogsNumber: Longword;
@@ -434,7 +435,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
