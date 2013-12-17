@@ -143,3 +143,8 @@ QStringList HWRecorder::getArguments()
 
     return arguments;
 }
+
+bool HWRecorder::simultaneousRun()
+{
+    return true;
+}

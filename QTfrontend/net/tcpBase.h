@@ -42,6 +42,9 @@ class TCPBase : public QObject
         virtual ~TCPBase();
 
         virtual bool couldBeRemoved();
+        virtual bool simultaneousRun();
+        bool isConnected();
+        bool hasStarted();
 
     signals:
         void isReadyNow();
@@ -69,6 +72,7 @@ class TCPBase : public QObject
         static QPointer<QTcpServer> IPCServer;
 
         bool m_isDemoMode;
+        bool m_connected;
         void RealStart();
         QPointer<QTcpSocket> IPCSocket;
 
