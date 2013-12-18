@@ -226,6 +226,10 @@ function onGameTick()
 	CheckEvents()
 end
 
+function onGameTick20()
+	setFoundDeviceVisual()
+end
+
 function onPrecise()
 	if GameTime > 3000 then
 		SetAnimSkip(true)
@@ -471,6 +475,34 @@ function heroDeath(gear)
 	sendStatsOnRetry()
 end
 
+function setFoundDeviceVisual()
+	--WriteLnToConsole("status: "..status.fruit01.." - "..status.fruit02)
+	if status.moon01 then
+		vgear = AddVisualGear(1116, 848, vgtBeeTrace, 0, false)
+
+	end
+	if status.ice01 then
+		vgear = AddVisualGear(1512, 120, vgtBeeTrace, 0, false)
+
+	end
+	if status.desert01 then
+		vgear = AddVisualGear(4015, 316, vgtBeeTrace, 0, false)
+
+	end
+	if status.fruit01 and status.fruit02 then
+		vgear = AddVisualGear(2390, 384, vgtBeeTrace, 0, false)
+
+	end
+	if status.death01 then
+		vgear = AddVisualGear(444, 400, vgtBeeTrace, 0, false)
+
+	end
+	if status.final then
+		vgear = AddVisualGear(3070, 810, vgtBeeTrace, 0, false)
+
+	end
+end
+
 -------------- ANIMATIONS ------------------
 
 function Skipanim(anim)
@@ -562,6 +594,7 @@ function sendStats(planet)
 	SendStat(siGameResult, loc("Hog Solo arrived at "..planet))
 	SendStat(siCustomAchievement, loc("Return to the mission menu by pressing the \"Go back\" button"))
 	SendStat(siCustomAchievement, loc("You can choose another planet by replaying this mission"))
+	SendStat(siCustomAchievement, loc("Planets with completed main missions will be marked with a flower"))
 	SendStat(siPlayerKills,'1',teamC.name)
 	EndGame()
 end

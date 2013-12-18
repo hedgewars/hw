@@ -150,6 +150,7 @@ function heroDeath(gear)
 end
 
 function heroWin(gear)
+	saveCompletedStatus(7)
 	SendStat(siGameResult, loc("Congratulations, you have saved Hogera!"))
 	SendStat(siCustomAchievement, loc("Hogera is safe!"))
 	SendStat(siPlayerKills,'1',teamA.name)
