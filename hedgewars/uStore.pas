@@ -242,11 +242,11 @@ for t:= 0 to Pred(TeamsCount) do
                     NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
                     if Hat = 'NoHat' then
                         begin
-                        if ((month = 4) and (md = 20)) then
-                            Hat := 'eastertop'; // Easter
-                        if ((month = 12) and (md = 25)) then
-                            Hat := 'Santa'; // Christmas
-                        if ((month = 10) and (md = 31)) then
+                        if (month = 4) and (md = 20) then
+                            Hat := 'eastertop'   // Easter
+                        else if (month = 12) and ((md = 25) or (md = 24)) then
+                            Hat := 'Santa'       // Christmas/Christmas Eve
+                        else if (month = 10) and (md = 31) then
                             Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
                         end;
                     
