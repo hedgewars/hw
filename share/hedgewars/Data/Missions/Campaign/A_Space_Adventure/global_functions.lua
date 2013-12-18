@@ -35,7 +35,7 @@ function getCompletedStatus()
 			status.moon01 = true
 		end
 		if allStatus:sub(2,2) == "1" then
-			status.fuit01 = true
+			status.fruit01 = true
 		end
 		if allStatus:sub(3,3) == "1" then
 			status.fruit02 = true

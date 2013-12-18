@@ -24,7 +24,8 @@ local checkPointReached = 1 -- 1 is normal spawn
 local dialog01 = {}
 -- mission objectives
 local goals = {
-	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!"), 1, 4500},
+	[dialog01] = {missionName, loc("Getting ready"), loc("The device part is hidden in one of the crates! Go and get it!").."|"..
+			loc("Most of the destructible terrain in marked with blue color"), 1, 4500},
 }
 -- crates
 local btorch1Y = 60
