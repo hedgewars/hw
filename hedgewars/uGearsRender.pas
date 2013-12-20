@@ -678,7 +678,7 @@ begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
                     if WorldEdge = weWrap then
                         begin
-                        if hwRound(Gear^.X) < leftX+256 then
+                        if hwRound(Gear^.X) < LongInt(leftX) + 256 then
                             DrawSpriteClipped(sprGirder,
                                             rightX+(ox-leftX)-256,
                                             oy-256,

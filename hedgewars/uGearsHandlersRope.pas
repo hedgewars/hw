@@ -39,7 +39,7 @@ begin
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2)
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2
         end;
 
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
@@ -132,7 +132,7 @@ begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
         HHGear^.X:= tX;
-        HHGear^.dX.isNegative:= (hwRound(tX) > leftX+HHGear^.Radius*2);
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2;
         exit
         end;
 
