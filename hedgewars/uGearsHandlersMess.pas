@@ -292,7 +292,7 @@ begin
       ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
-        Gear^.dX.isNegative:= (gX > leftX+Gear^.Radius*2)
+        Gear^.dX.isNegative:= (gX > LongInt(leftX) + Gear^.Radius*2)
         end;
 
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
@@ -758,9 +758,9 @@ if gun then
         draw:= true;
     xx:= hwRound(Gear^.X);
     yy:= hwRound(Gear^.Y);
-    if draw and (WorldEdge = weWrap) and ((xx < leftX+3) or (xx > rightX-3)) then
+    if draw and (WorldEdge = weWrap) and ((xx < LongInt(leftX) + 3) or (xx > LongInt(rightX) - 3)) then
         begin
-        if xx < leftX+3 then 
+        if xx < LongInt(leftX) + 3 then 
              xx:= rightX-3
         else xx:= leftX+3;
         Gear^.X:= int2hwFloat(xx)
@@ -2230,7 +2230,7 @@ begin
 
                 if Gear^.Health > 0 then
                     dec(Gear^.Health);
-                Gear^.Timer := 450 - Gear^.Tag * 8 + GetRandom(2)
+                Gear^.Timer := 450 - Gear^.Tag * 8 + LongInt(GetRandom(2))
                 end
             else
                 begin
@@ -2244,7 +2244,7 @@ begin
                     end;
 
 // This one is interesting.  I think I understand the purpose, but I wonder if a bit more fuzzy of kicking could be done with getrandom.
-                Gear^.Timer := 100 - Gear^.Tag * 3 + GetRandom(2);
+                Gear^.Timer := 100 - Gear^.Tag * 3 + LongInt(GetRandom(2));
                 if (Gear^.Damage > 3000+Gear^.Tag*1500) then
                     Gear^.Health := 0
                 end

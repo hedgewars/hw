@@ -301,7 +301,7 @@ end;
 
 procedure CheckHHDamage(Gear: PGear);
 var 
-    dmg: Longword;
+    dmg: LongInt;
     i: LongWord;
     particle: PVisualGear;
 begin
@@ -314,7 +314,7 @@ if _0_4 < Gear^.dY then
     if dmg < 1 then
         exit;
 
-    for i:= min(12, (3 + dmg div 10)) downto 0 do
+    for i:= min(12, 3 + dmg div 10) downto 0 do
         begin
         particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
         if particle <> nil then
@@ -594,7 +594,7 @@ ignoreOverlap:= false; // this not only skips proximity, but allows overlapping 
 tryAgain:= true;
 if WorldEdge <> weNone then 
     begin
-    Left:= max(Left,leftX+Gear^.Radius);
+    Left:= max(Left, LongInt(leftX) + Gear^.Radius);
     Right:= min(Right,rightX-Gear^.Radius)
     end;
 while tryAgain do
@@ -606,7 +606,7 @@ while tryAgain do
         repeat
             inc(x, Delta);
             cnt:= 0;
-            y:= min(1024, topY) - 2 * Gear^.Radius;
+            y:= min(1024, topY) - Gear^.Radius shl 1;
             while y < cWaterLine do
                 begin
                 repeat
@@ -1220,24 +1220,24 @@ var tdx: hwFloat;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
-   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
+if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) or
+   (hwRound(Gear^.X) + LongInt(Gear^.Radius) > LongInt(rightX)) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
-             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius);
+        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
+             Gear^.X:= int2hwfloat(rightX - Gear^.Radius)
+        else Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius);
         LeftImpactTimer:= 150;
         RightImpactTimer:= 150
         end
     else if WorldEdge = weBounce then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
             begin
             LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+            Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius)
             end
         else 
             begin

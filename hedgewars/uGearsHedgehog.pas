@@ -1349,7 +1349,7 @@ if WorldWrap(Gear) then
     if (WorldEdge = weWrap) and ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then
         begin
         Gear^.X:= tX;
-        Gear^.dX.isNegative:= (hwRound(tX) > leftX+Gear^.Radius*2)
+        Gear^.dX.isNegative:= (hwRound(tX) > LongInt(leftX) + Gear^.Radius * 2)
         end
     end;
 
