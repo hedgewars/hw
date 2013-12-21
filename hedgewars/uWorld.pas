@@ -1306,6 +1306,14 @@ for t:= 0 to Pred(TeamsCount) do
                 Tint($FF,$FF,$FF,$80)
             else untint;
 
+            if OwnerTex <> nil then
+                begin
+                r.x:= 2;
+                r.y:= 2;
+                r.w:= OwnerTex^.w - 4;
+                r.h:= OwnerTex^.h - 4;
+                DrawTextureFromRect(-OwnerTex^.w - NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, OwnerTex)
+                end;
             // draw name
             r.x:= 2;
             r.y:= 2;
