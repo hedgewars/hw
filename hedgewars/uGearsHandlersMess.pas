@@ -2498,8 +2498,8 @@ begin
     rx:= hwRound(x);
 
     LandFlags:= 0;
-    if cIce then LandFlags:= lfIce
-    else if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy;
+    if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy
+    else if cIce then LandFlags:= lfIce;
 
     if ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or 
             (
