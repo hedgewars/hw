@@ -10,6 +10,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -191,22 +192,22 @@ function onGameStart()
 	local x = 800
 	while x < 1630 do
 		AddGear(x, 900, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 1890
 	while x < 2988 do
 		AddGear(x, 760, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 2500
 	while x < 3300 do
 		AddGear(x, 1450, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 	x = 1570
 	while x < 2900 do
 		AddGear(x, 470, gtMine, 0, 0, 0, 0)
-		x = x + math.random(8,20)
+		x = x + GetRandom(13)+8
 	end
 
 	if checkPointReached == 1 then
@@ -334,7 +335,8 @@ end
 
 function onHeroFleeFirstBattle(gear)
 	if GetHealth(hero.gear) and GetHealth(smuggler1.gear) and heroIsInBattle
-			and distance(hero.gear, smuggler1.gear) > 1400 and StoppedGear(hero.gear) then
+			and not gearIsInCircle(smuggler1.gear, GetX(hero.gear), GetY(hero.gear), 1400, false)
+			and StoppedGear(hero.gear) then
 		return true
 	end
 	return false

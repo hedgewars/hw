@@ -112,7 +112,7 @@ function onGameInit()
 	local assasinsHats = { "NinjaFull", "NinjaStraight", "NinjaTriangle" }
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	for i=1,table.getn(redHedgehogs) do
-		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[math.random(1,3)])
+		redHedgehogs[i].gear =  AddHog(redHedgehogs[i].name, 1, 100, assasinsHats[GetRandom(3)+1])
 		AnimSetGearPosition(redHedgehogs[i].gear, 2010 + 50*i, 630)
 	end
 
@@ -549,7 +549,7 @@ function goToThesurface()
 end
 
 function wind()
-	SetWind(math.random(-100,100))
+	SetWind(GetRandom(201)-100)
 end
 
 function saveHogsPositions()

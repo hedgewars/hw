@@ -184,9 +184,9 @@ function onGameStart()
 		step = step + 1
 		if step == 5 then
 			step = 0
-			x = x + math.random(100,300)
+			x = x + GetRandom(201)+100
 		else
-			x = x + math.random(10,30)
+			x = x + GetRandom(21)+10
 		end
 	end
 
