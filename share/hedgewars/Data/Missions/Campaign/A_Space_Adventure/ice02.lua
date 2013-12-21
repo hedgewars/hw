@@ -5,6 +5,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Animate.lua")
+HedgewarsScriptLoad("/Scripts/Utils.lua")
 HedgewarsScriptLoad("/Missions/Campaign/A_Space_Adventure/global_functions.lua")
 
 ----------------- VARIABLES --------------------
@@ -249,9 +250,8 @@ end
 function checkIfHeroInWaypoint()
 	if not hero.dead then
 		local wp = waypoints[currentWaypoint-1]
-		local distance = math.sqrt((GetX(hero.gear)-wp.x)^2 + (GetY(hero.gear)-wp.y)^2)
-		if distance <= radius+4 then
-			SetWind(math.random(-100,100))
+		if gearIsInCircle(hero.gear, wp.x, wp.y, radius+4, false) then
+			SetWind(GetRandom(201)-100)
 			return true
 		end
 	end

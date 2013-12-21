@@ -120,9 +120,9 @@ function onGearDelete(gear)
 		elseif deadHog.weapon == amGrenade then
 			hero.grenadeAmmo = 0
 		end
-		local randomHog = math.random(1,table.getn(enemies))
+		local randomHog = GetRandom(table.getn(enemies))+1
 		while not GetHealth(enemies[randomHog].gear) do
-			randomHog = math.random(1,table.getn(enemies))
+			randomHog = GetRandom(table.getn(enemies))+1
 		end
 		table.insert(enemies[randomHog].additionalWeapons, deadHog.weapon)
 		for i=1,table.getn(deadHog.additionalWeapons) do
@@ -229,7 +229,7 @@ end
 function shuffleHogs(hogs)
     local hogsNumber = table.getn(hogs)
     for i=1,hogsNumber do
-		local randomHog = math.random(hogsNumber)
+		local randomHog = GetRandom(hogsNumber) + 1
 		hogs[i], hogs[randomHog] = hogs[randomHog], hogs[i]
     end
 end
