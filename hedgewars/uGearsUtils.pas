@@ -158,19 +158,20 @@ while Gear <> nil do
                             end;
 
                         end;
-                gtGrave: begin
+                gtGrave: if Mask and EXPLDoNotTouchAny = 0 then
 // Run the calcs only once we know we have a type that will need damage
-                        tdX:= Gear^.X-fX;
-                        tdY:= Gear^.Y-fY;
-                        if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(tdX, tdY));
-                        if dmg > 1 then
                             begin
-                            dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
-                            Gear^.dY:= - _0_004 * dmg;
-                            Gear^.Active:= true
-                            end
-                        end;
+                            tdX:= Gear^.X-fX;
+                            tdY:= Gear^.Y-fY;
+                            if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
+                                dmg:= dmgBase - hwRound(Distance(tdX, tdY));
+                            if dmg > 1 then
+                                begin
+                                dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
+                                Gear^.dY:= - _0_004 * dmg;
+                                Gear^.Active:= true
+                                end
+                            end;
             end;
         end;
     Gear:= Gear^.NextGear
