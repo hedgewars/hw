@@ -4797,7 +4797,8 @@ begin
     Gear^.dY := Gear^.dY + cGravity / 100;
     if (GameTicks and $FF) = 0 then
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 20, Gear^.Hedgehog, EXPLDontDraw or EXPLNoGfx or EXPLNoDamage or EXPLDoNotTouchAny or EXPLPoisoned);
-    AllInactive:= false;
+    if Gear^.State and gstTmpFlag = 0 then
+        AllInactive:= false;
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
