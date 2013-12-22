@@ -847,6 +847,8 @@ begin
         text:= copy(s, 3, Length(s) - 1)
     else text:= copy(s, 2, Length(s) - 1);
 
+    if text = '' then text:= '...';
+
     (*
     if CheckNoTeamOrHH then
         begin
