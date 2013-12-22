@@ -320,8 +320,8 @@ begin
 
     if Gear^.dY.isNegative then
         begin
-        isFalling := true;
         land:= TestCollisionYwithGear(Gear, -1);
+        isFalling := land = 0;
         if land <> 0 then
             begin
             collV := -1;
@@ -423,7 +423,7 @@ begin
         Gear^.dY := Gear^.dY + cGravity;
         if (GameFlags and gfMoreWind) <> 0 then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
-            end;
+        end;
 
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
@@ -934,16 +934,16 @@ begin
 
     if not Gear^.dY.isNegative then
         if TestCollisionY(Gear, 1) <> 0 then
-        begin
+            begin
             Gear^.dY := - Gear^.dY * Gear^.Elasticity;
             if Gear^.dY > - _1div1024 then
-            begin
+                begin
                 Gear^.Active := false;
                 exit
-            end
+                end
             else if Gear^.dY < - _0_03 then
                 PlaySound(Gear^.ImpactSound)
-        end;
+            end;
 
     Gear^.Y := Gear^.Y + Gear^.dY;
     CheckGearDrowning(Gear);
@@ -1999,10 +1999,10 @@ begin
 
         Gear^.dY := Gear^.dY + cGravity;
 
-        if (Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, -1) <> 0) then
-            Gear^.dY := _0;
-
-        Gear^.Y := Gear^.Y + Gear^.dY;
+        if ((not Gear^.dY.isNegative) and (TestCollisionYwithGear(Gear, 1) <> 0)) or
+           (Gear^.dY.isNegative and (TestCollisionYwithGear(Gear, -1) <> 0)) then
+             Gear^.dY := _0
+        else Gear^.Y := Gear^.Y + Gear^.dY;
 
         if (not Gear^.dY.isNegative) and (Gear^.dY > _0_001) then
             SetAllHHToActive(false);
