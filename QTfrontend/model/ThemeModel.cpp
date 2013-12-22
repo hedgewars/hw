@@ -62,7 +62,7 @@ QVariant ThemeModel::data(const QModelIndex &index, int role) const
 
 void ThemeModel::loadThemes() const
 {
-    qDebug("[LAZINESS ThemeModel::loadThemes()]");
+    qDebug("[LAZINESS] ThemeModel::loadThemes()");
 
     m_themesLoaded = true;
 

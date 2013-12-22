@@ -1898,6 +1898,28 @@ begin
 end;
 
 
+function lc_getgravity(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 0 then
+        LuaParameterCountError('GetGravity', '', lua_gettop(L))
+    else
+        lua_pushinteger(L, hwRound(cGravity * 50 / cWindSpeed));
+    lc_getgravity:= 1
+end;
+
+function lc_setgravity(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        LuaParameterCountError('SetGravity', 'gravity', lua_gettop(L))
+    else
+        begin
+        cGravity:= cMaxWindSpeed * lua_tointeger(L, 1) * _0_02;
+        cGravityf:= 0.00025 * lua_tointeger(L, 1) * 0.02
+        end;
+    lc_setgravity:= 0
+end;
+
+
 function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
@@ -2574,6 +2596,8 @@ lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
 lua_register(luaState, _P'PlaceGirder', @lc_placegirder);
 lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
+lua_register(luaState, _P'GetGravity', @lc_getgravity);
+lua_register(luaState, _P'SetGravity', @lc_setgravity);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
