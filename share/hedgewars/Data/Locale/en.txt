@@ -455,6 +455,7 @@
 03:54=Utility
 03:55=It doesn't get cooler than this!
 03:56=Please use or misuse
+03:57=Utility
 
 ; Weapon Descriptions (use | as line breaks)
 04:00=Attack your enemies using a simple grenade.|It will explode once its timer reaches zero.|1-5: Set grenade's timer|Attack: Hold to throw with more power
@@ -514,6 +515,7 @@
 04:54=Spray a stream of sticky flakes.|Build bridges, bury enemies, seal off tunnels.|Be careful you don't get any on you!|Attack: Activate|Up/Down: Continue aiming|Left/Right: Modify spitting power
 04:55=Bring back the ice-age!|Freeze hedgehogs, make the floor slippery or|save yourself from drowning by freezing the water.|Attack: Shoot
 04:56=You can throw two cleavers at your enemy,|block passages and tunnels and even use them for climbing!|Be careful! Playing with knifes is dangerous.|Attack: Hold to shoot with more power (twice)
+04:57=Build an elastic bar made of rubber,|from which hedgehogs and other|things bounce off without taking fall damage.|Left/Right: Change rubber bar orientation|Cursor: Place rubber bar in a valid position
 
 ; Game goal strings
 05:00=Game Modes
