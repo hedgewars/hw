@@ -33,8 +33,8 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
     // if then is found rename it to use _
     QString spaceCampName = campaignName;
     spaceCampName = spaceCampName.replace(QString("_"),QString(" "));
-    if (teamfile.childGroups().contains("Campaign " + campaignName) == false and 
-			teamfile.childGroups().contains("Campaign " + spaceCampName) == true){
+    if (!teamfile.childGroups().contains("Campaign " + campaignName) and 
+			teamfile.childGroups().contains("Campaign " + spaceCampName)){
 		teamfile.beginGroup("Campaign " + spaceCampName);
 		QStringList keys = teamfile.childKeys();
 		teamfile.endGroup();
