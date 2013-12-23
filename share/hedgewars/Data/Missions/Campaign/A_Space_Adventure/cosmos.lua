@@ -72,7 +72,7 @@ guard1.keepTurning = true
 guard2.name = loc("Sam")
 guard2.x = 3400
 guard2.y = 1800
-teamA.name = loc("PAoTH")
+teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Guards")
 teamB.color = tonumber("0033FF",16) -- blue
@@ -96,8 +96,8 @@ function onGameInit()
 		Map = "cosmos_map" -- custom map included in file
 	end
 	Theme = "Nature"
-	-- I had originally hero in PAoTH team and changed it, may reconsider though
-	-- PAoTH
+	-- I had originally hero in PAotH team and changed it, may reconsider though
+	-- PAotH
 	AddTeam(teamC.name, teamC.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)

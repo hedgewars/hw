@@ -2,7 +2,7 @@
 --
 -- This is the first stop of hero's journey.
 -- Here he'll get fuels to continue traveling.
--- However, the PAoTH allies of the hero have
+-- However, the PAotH allies of the hero have
 -- been taken hostages by professor Hogevil.
 -- So hero has to get whatever available equipement
 -- there is and rescue them.
@@ -84,7 +84,7 @@ minion2.y = 1900
 minion3.name = loc("Minion")
 minion3.x = 3500
 minion3.y = 1750
-teamA.name = loc("PAoTH")
+teamA.name = loc("PAotH")
 teamA.color = tonumber("FF0000",16) -- red
 teamB.name = loc("Minions")
 teamB.color = tonumber("0033FF",16) -- blue
@@ -114,7 +114,7 @@ function onGameInit()
 		hero.gear = AddHog(hero.name, 0, 100, "war_desertgrenadier1")
 	end
 	AnimSetGearPosition(hero.gear, hero.x, hero.y)
-	-- PAoTH
+	-- PAotH
 	AddTeam(teamA.name, teamA.color, "Bone", "Island", "HillBilly", "cm_birdy")
 	paoth1.gear = AddHog(paoth1.name, 0, 100, "scif_2001O")
 	AnimSetGearPosition(paoth1.gear, paoth1.x, paoth1.y)
