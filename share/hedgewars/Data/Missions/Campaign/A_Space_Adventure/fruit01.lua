@@ -456,7 +456,7 @@ function gameLost()
 		SendStat(siGameResult, loc("Hog Solo couldn't escape, try again!"))
 		SendStat(siCustomAchievement, loc("You have to get to the left-most land and remove any enemy hog from there"))
 		SendStat(siCustomAchievement, loc("You will play every 3 turns"))
-		SendStat(siCustomAchievement, loc("Green hogs won't intenionally hurt you"))
+		SendStat(siCustomAchievement, loc("Green hogs won't intentionally hurt you"))
 	end
 	SendStat(siPlayerKills,'1',teamC.name)
 	SendStat(siPlayerKills,'0',teamA.name)

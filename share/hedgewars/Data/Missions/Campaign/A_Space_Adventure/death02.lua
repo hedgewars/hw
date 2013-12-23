@@ -14,7 +14,7 @@ local challengeObjectives = loc("Use your available weapons in order to eliminat
 	loc("Each time you play this missions enemy hogs will play in a random order").."|"..
 	loc("At the start of the game each enemy hog has only the weapon that he is named after").."|"..
 	loc("A random hedgehog will inherit the weapons of his deceased team-mates").."|"..
-	loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100").."|"..
+	loc("If you kill a hedgehog with the respective weapon your health points will be set to 100").."|"..
 	loc("If you injure a hedgehog you'll get 35% of the damage dealt").."|"..
 	loc("Every time you kill an enemy hog your ammo will get reset").."|"..
 	loc("Rope won't get reset")
@@ -211,7 +211,7 @@ function AnimationSetup()
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Each time you play this missions enemy hogs will play in a random order"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("At the start of the game each enemy hog has only the weapon that he is named after"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("A random hedgehog will inherit the weapons of his deceased team-mates"), 5000}})
-	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your healh points will be set to 100"), 5000}})
+	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you kill a hedgehog with the respective weapon your health points will be set to 100"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("If you injure a hedgehog you'll get 35% of the damage dealt"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Every time you kill an enemy hog your ammo will get reset"), 5000}})
 	table.insert(dialog01, {func = AnimCaption, args = {hero.gear, loc("Rope won't get reset"), 2000}})
