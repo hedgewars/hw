@@ -395,6 +395,7 @@ case Kind of
                     end
                 end;
    gtFirePunch: begin
+                if gear^.Timer = 0 then gear^.Timer:= 3000;
                 gear^.Radius:= 15;
                 gear^.Tag:= Y
                 end;

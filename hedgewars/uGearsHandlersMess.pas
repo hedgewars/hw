@@ -2293,7 +2293,8 @@ begin
         end;
 
     HHGear^.dY := HHGear^.dY + cGravity;
-    if not (HHGear^.dY.isNegative) then
+    if Gear^.Timer > 0 then dec(Gear^.Timer);
+    if not (HHGear^.dY.isNegative) or (Gear^.Timer = 0) then
         begin
         HHGear^.State := HHGear^.State or gstMoving;
         DeleteGear(Gear);
