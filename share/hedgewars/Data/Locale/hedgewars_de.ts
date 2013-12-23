@@ -19,7 +19,7 @@
     <name>AmmoSchemeModel</name>
     <message>
         <source>new</source>
-        <translation>neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>copy of</source>
@@ -124,7 +124,7 @@
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
-        <translation>Deine E-Mail-Adresse ist optional, es sei denn du möchtest, dass wir dich zurückkontaktieren.</translation>
+        <translation>Deine E-Mail-Adresse ist optional, es sei denn du möchtest, dass wir dir antworten.</translation>
     </message>
 </context>
 <context>
@@ -145,11 +145,11 @@
     <name>GameCFGWidget</name>
     <message>
         <source>Edit weapons</source>
-        <translation>Waffenzusammenstellung bearbeiten</translation>
+        <translation>Arsenal bearbeiten</translation>
     </message>
     <message>
         <source>Edit schemes</source>
-        <translation>Spielprofile bearbeiten</translation>
+        <translation>Spielprofil bearbeiten</translation>
     </message>
     <message>
         <source>Game Options</source>
@@ -157,7 +157,7 @@
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
-        <translation>Spielschema wird eine Waffe automatisch aussuchen</translation>
+        <translation>Das Auswählen eines Spielprofils wird automatisch ein Arsenal auswählen</translation>
     </message>
     <message>
         <source>Map</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Scheme &apos;%1&apos; not supported</source>
-        <translation>Das Schema »%1« wird nicht unterstützt</translation>
+        <translation>Das Spielprofil »%1« wird nicht unterstützt</translation>
     </message>
     <message>
         <source>Cannot create directory %1</source>
@@ -290,7 +290,7 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>%1 has left (%2)</source>
-        <translation>%1 ist gegangen</translation>
+        <translation>%1 ist gegangen (%2)</translation>
     </message>
 </context>
 <context>
@@ -301,25 +301,25 @@ Bitte überprüfe deine Installation!</translation>
     </message>
     <message>
         <source>DefaultTeam</source>
-        <translation></translation>
+        <translation>Standard-Team</translation>
     </message>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation>Hedgewars Demo Datei</translation>
+        <translation>Hedgewars-Wiederholungsdatei</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation>Hedgewars gespeichertes Spiel</translation>
+        <translation>Hedgewars-Spielstandsdatei</translation>
     </message>
     <message>
         <source>Demo name</source>
-        <translation>Demo-Name</translation>
+        <translation>Wiederholungsname</translation>
     </message>
     <message>
         <source>Demo name:</source>
-        <translation>Demo-Name:</translation>
+        <translation>Wiederholungsname:</translation>
     </message>
     <message>
         <source>Game aborted</source>
@@ -336,7 +336,7 @@ Bitte überprüfe deine Installation!</translation>
     <message>
         <source>Someone already uses your nickname %1 on the server.
 Please pick another nickname:</source>
-        <translation>Dein Spitzname &apos;%1&apos; ist bereits in Verwendung. Bitte wähle einen anderen Spitznamen:</translation>
+        <translation>Dein Spitzname »%1« ist bereits in Verwendung. Bitte wähle einen anderen Spitznamen:</translation>
     </message>
     <message>
         <source>%1&apos;s Team</source>
@@ -427,7 +427,7 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Cannot open demofile %1</source>
-        <translation>Demodatei %1 konnte nicht geöffnet werden</translation>
+        <translation>Wiederholungsdatei »%1« konnte nicht geöffnet werden</translation>
     </message>
 </context>
 <context>
@@ -462,7 +462,7 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Medium tunnels</source>
-        <translation>Mittlere Tunnel</translation>
+        <translation>Mittelgroße Tunnel</translation>
     </message>
     <message>
         <source>Seed</source>
@@ -474,11 +474,11 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Image map</source>
-        <translation>Bild-Karte</translation>
+        <translation>Bild</translation>
     </message>
     <message>
         <source>Mission map</source>
-        <translation>Missions-Karte</translation>
+        <translation>Missionskarte</translation>
     </message>
     <message>
         <source>Hand-drawn</source>
@@ -490,7 +490,7 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Random maze</source>
-        <translation>Zufälliges Labyrinth</translation>
+        <translation>Zufallslabyrinth</translation>
     </message>
     <message>
         <source>Random</source>
@@ -502,11 +502,13 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Lade gezeichnete Karte</translation>
+        <translation>Gezeichnete
+Karte laden</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Bearbeite gezeichnete Karte</translation>
+        <translation>Gezeichnete
+Karte bearbeiten</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -558,7 +560,7 @@ Bitte Kennwort eingeben:</translation>
     </message>
     <message>
         <source>Theme: %1</source>
-        <translation>Thema: %1</translation>
+        <translation>Szenerie: %1</translation>
     </message>
 </context>
 <context>
@@ -732,7 +734,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>%1 fps</source>
-        <translation>%1 Bilder pro Sekunde, </translation>
+        <translation>%1 Hz</translation>
     </message>
 </context>
 <context>
@@ -809,7 +811,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>PageConnecting</name>
     <message>
         <source>Connecting...</source>
-        <translation>Verbinde ...</translation>
+        <translation>Verbinden …</translation>
     </message>
 </context>
 <context>
@@ -831,7 +833,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation>Löschen</translation>
+        <translation>Leeren</translation>
     </message>
     <message>
         <source>Load</source>
@@ -839,7 +841,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Sichern</translation>
+        <translation>Wiederholung speichern</translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -929,7 +931,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation>Ranking</translation>
+        <translation>Platzierung</translation>
     </message>
     <message>
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
@@ -959,7 +961,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot his own hedgehogs with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkt zu verletzen.</numerusform>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; dachte, es sei gut, die eigenen Igel mit &lt;b&gt;%2&lt;/b&gt; Punkten zu verletzen.</numerusform>
         </translation>
     </message>
@@ -967,7 +969,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of his own hedgehogs.</source>
         <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
-            <numerusform></numerusform>
+            <numerusform>&lt;b&gt;%1&lt;/b&gt; erledigte &lt;b&gt;%2&lt;/b&gt; seiner eigenen Igel.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -983,7 +985,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Sichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
@@ -997,14 +999,14 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>PageInGame</name>
     <message>
         <source>In game...</source>
-        <translation>Im Spiel...</translation>
+        <translation>Im Spiel …</translation>
     </message>
 </context>
 <context>
     <name>PageInfo</name>
     <message>
         <source>Open the snapshot folder</source>
-        <translation>Schnappschuss-Ordner öffnen</translation>
+        <translation>Screenshot-Verzeichnis öffnen</translation>
     </message>
 </context>
 <context>
@@ -1015,11 +1017,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
-        <translation>Spiele auf einem einzelnen PC</translation>
+        <translation>Auf einen einzelnen Computer spielen</translation>
     </message>
     <message>
         <source>Play a game across a network</source>
-        <translation>Spiele über ein Netzwerk</translation>
+        <translation>Über ein Netzwerk spielen</translation>
     </message>
     <message>
         <source>Read about who is behind the Hedgewars Project</source>
@@ -1027,11 +1029,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation></translation>
+        <translation>Hier kannst du uns Feedback geben, indem du uns Probleme meldest, neue Funktionen vorschlägst oder einfach nur sagst, wie dir Hedgewars gefällt</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation>Greife auf von Benutzern ergestellte Inhalte zu, herunterladbar von unserer Webseite</translation>
+        <translation>Auf von Benutzern erstellte Inhalte, die man von unserer Webseite herunterladen kann, zugreifen</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -1039,11 +1041,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Manage videos recorded from game</source>
-        <translation>Verwalte vom Spiel aufgenommene Videos</translation>
+        <translation>Vom Spiel aufgezeichnete Videos verwalten</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Bearbeite Spieleinstellungen</translation>
+        <translation>Spieleinstellungen bearbeiten</translation>
     </message>
     <message>
         <source>Play a game across a local area network</source>
@@ -1059,22 +1061,22 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Play local network game</source>
-        <translation>Spiel im lokalen Netzwerk</translation>
+        <translation>Im lokalen Netzwerk spielen</translation>
     </message>
     <message>
         <source>Play official network game</source>
-        <translation>Spiel im offiziellem Netzwerk</translation>
+        <translation>Im offiziellem Netzwerk spielen</translation>
     </message>
 </context>
 <context>
     <name>PageMultiplayer</name>
     <message>
         <source>Start</source>
-        <translation>Start</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Bearbeite Spieleinstellungen</translation>
+        <translation>Spieleinstellungen bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -1085,11 +1087,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Edit game preferences</source>
-        <translation>Bearbeite Spieleinstellungen</translation>
+        <translation>Spieleinstellungen bearbeiten</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Start</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <source>Update</source>
@@ -1143,15 +1145,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>New weapon set</source>
-        <translation>Neues Waffenprofil</translation>
+        <translation>Neues Arsenal</translation>
     </message>
     <message>
         <source>Edit weapon set</source>
-        <translation>Waffenprofil bearbeiten</translation>
+        <translation>Arsenal bearbeiten</translation>
     </message>
     <message>
         <source>Delete weapon set</source>
-        <translation>Waffenprofil löschen</translation>
+        <translation>Arsenal löschen</translation>
     </message>
     <message>
         <source>Advanced</source>
@@ -1171,7 +1173,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Proxy login</source>
-        <translation>Login</translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <source>Proxy password</source>
@@ -1191,11 +1193,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>System proxy settings</source>
-        <translation>Betriebsystem Proxy-Einstellungen</translation>
+        <translation>System-Proxy-Einstellungen</translation>
     </message>
     <message>
         <source>Select an action to change what key controls it</source>
-        <translation>Wähle eine Aktion, um zu ändern, durch welche Taste sie kontrolliert wird</translation>
+        <translation>Wähle eine Aktion, um ihre Tastenbelegung zu ändern</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -1235,11 +1237,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Schemes</source>
-        <translation>Schemata</translation>
+        <translation>Spielprofile</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Waffen</translation>
+        <translation>Arsenale</translation>
     </message>
     <message>
         <source>Frontend</source>
@@ -1279,7 +1281,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Video recording options</source>
-        <translation>Videoaufnahmeoptionen</translation>
+        <translation>Videoaufzeichnungseinstellungen</translation>
     </message>
 </context>
 <context>
@@ -1348,7 +1350,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Room state</source>
-        <translation>Raum-Status</translation>
+        <translation>Raumfilter</translation>
     </message>
     <message>
         <source>Clear filters</source>
@@ -1371,11 +1373,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Gain 80% of the damage you do back in health</source>
-        <translation>80% des ausgeteilten Schadens werden in Lebenspunkte gewandelt</translation>
+        <translation>80% des ausgeteilten Schadens werden dir als Gesundheitspunkte gutgeschrieben</translation>
     </message>
     <message>
         <source>Share your opponents pain, share their damage</source>
-        <translation>Teile den Schmerz Deines Gegners, teile dessen verursachten Schaden</translation>
+        <translation>Teile den Schmerz deines Gegners, teile seinen verursachten Schaden</translation>
     </message>
     <message>
         <source>Your hogs are unable to move, put your artillery skills to the test</source>
@@ -1391,7 +1393,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Defend your fort and destroy the opponents, two team colours max!</source>
-        <translation>Verteidige Dein Fort und zerstöre das des Gegners, maximal zwei Teamfarben!</translation>
+        <translation>Verteidige deine Festung und zerstöre die des Gegners, maximal zwei Teamfarben!</translation>
     </message>
     <message>
         <source>Teams will start on opposite sides of the terrain, two team colours max!</source>
@@ -1431,11 +1433,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Disable girders when generating random maps.</source>
-        <translation>Platziere keine Bauträger auf Zufallskarten.</translation>
+        <translation>Keine Bauträger auf Zufallskarten platzieren.</translation>
     </message>
     <message>
         <source>Disable land objects when generating random maps.</source>
-        <translation>Deaktiviere Landschaftsobjekte beim Generieren von Zufallskarten.</translation>
+        <translation>Keine Landschaftsobjekte beim Generieren von Zufallskarten platzieren. </translation>
     </message>
     <message>
         <source>AI respawns on death.</source>
@@ -1451,11 +1453,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Weapons are reset to starting values each turn.</source>
-        <translation>Waffenarsenal wird jede Runde zurückgesetzt.</translation>
+        <translation>Arsenal wird jede Runde zurückgesetzt.</translation>
     </message>
     <message>
         <source>Each hedgehog has its own ammo. It does not share with the team.</source>
-        <translation>Jeder igel hat sein eigenes Waffenarsenal. Es wird nicht mit dem Team geteilt.</translation>
+        <translation>Jeder Igel hat sein eigenes Arsenal. Es wird nicht mit dem Team geteilt.</translation>
     </message>
     <message>
         <source>You will not have to worry about wind anymore.</source>
@@ -1475,11 +1477,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Add an indestructible border around the terrain</source>
-        <translation>Füge dem Spielfeld eine unzerstörbare Randbegrenzung hinzu</translation>
+        <translation>Dem Spielfeld eine unzerstörbare Randbegrenzung hinzufügen</translation>
     </message>
     <message>
         <source>Add an indestructible border along the bottom</source>
-        <translation>Füge dem unteren Kartenrand eine unzerstörbare Randbegrenzung an</translation>
+        <translation>Dem unteren Kartenrand eine unzerstörbare Randbegrenzung anfügen</translation>
     </message>
     <message>
         <source>None (Default)</source>
@@ -1521,11 +1523,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>PageSinglePlayer</name>
     <message>
         <source>Play a quick game against the computer with random settings</source>
-        <translation>Spiele ein schnelles Spiel gegen den Computer - mit Zufallseinstellungen</translation>
+        <translation>Ein Schnellspiel gegen den Computer mit Zufallseinstellungen spielen</translation>
     </message>
     <message>
         <source>Play a hotseat game against your friends, or AI teams</source>
-        <translation>Spiele gegen deine Freunde oder Computer-Teams</translation>
+        <translation>Gegen deine Freunde oder KI-Teams spielen</translation>
     </message>
     <message>
         <source>Campaign Mode</source>
@@ -1533,15 +1535,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Practice your skills in a range of training missions</source>
-        <translation>Verbessere deine Fähigkeiten in verschiedenen Trainingsmissionen</translation>
+        <translation>Deine Fähigkeiten in verschiedenen Trainingsmissionen verbessern</translation>
     </message>
     <message>
         <source>Watch recorded demos</source>
-        <translation>Sehe aufgenommene Demos an</translation>
+        <translation>Aufgezeichnete Widerholungen ansehen</translation>
     </message>
     <message>
         <source>Load a previously saved game</source>
-        <translation>Lade ein vormals gespeichtes Spiel</translation>
+        <translation>Ein vormals gespeichertes Spiel ansehen</translation>
     </message>
 </context>
 <context>
@@ -1582,7 +1584,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>(in progress...)</source>
-        <translation>(in Bearbeitung...)</translation>
+        <translation>(in Bearbeitung …)</translation>
     </message>
     <message>
         <source>encoding</source>
@@ -1619,11 +1621,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Restrict Joins</source>
-        <translation>Zugang beschränken</translation>
+        <translation>Beitreten unterbinden</translation>
     </message>
     <message>
         <source>Restrict Team Additions</source>
-        <translation>Teamzugang beschränken</translation>
+        <translation>Hinzufügen weiterer Teams unterbinden</translation>
     </message>
     <message>
         <source>Info</source>
@@ -1659,15 +1661,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation>Verhindere das Beitreten unregistrierter Spieler</translation>
+        <translation>Beitreten unregistrierter Spieler unterbinden</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
-        <translation>Zeige Spiele in Vorbereitung</translation>
+        <translation>Spiele in Vorbereitung zeigen</translation>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation>Zeige zur Zeit laufende Spiele</translation>
+        <translation>Zur Zeit laufende Spiele zeigen</translation>
     </message>
 </context>
 <context>
@@ -1678,7 +1680,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Show FPS</source>
-        <translation>FPS anzeigen</translation>
+        <translation>Bildwiederholrate anzeigen</translation>
     </message>
     <message>
         <source>Alternative damage show</source>
@@ -1686,11 +1688,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Append date and time to record file name</source>
-        <translation>Datum und Uhrzeit an Aufnahmedatei anhängen</translation>
+        <translation>Datum und Uhrzeit an Wiederholungsdateinamen anhängen</translation>
     </message>
     <message>
         <source>Check for updates at startup</source>
-        <translation>Beim Start nach neuen Versionen suchen</translation>
+        <translation>Beim Spielstart nach neuen Versionen suchen</translation>
     </message>
     <message>
         <source>Show ammo menu tooltips</source>
@@ -1710,7 +1712,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Record audio</source>
-        <translation>Audio aufnehmen</translation>
+        <translation>Audio aufzeichnen</translation>
     </message>
     <message>
         <source>Use game resolution</source>
@@ -1750,7 +1752,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Enable team tags by default</source>
-        <translation>Aktiviere Team-Kennzeichnung bei Spielstart</translation>
+        <translation>Teambeschriftungsschilder standardmäßig aktivieren</translation>
     </message>
     <message>
         <source>Hog</source>
@@ -1758,7 +1760,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation>Aktiviere Igel-Kennzeichnung bei Spielstart</translation>
+        <translation>Namensschilder standardmäßig aktivieren</translation>
     </message>
     <message>
         <source>Health</source>
@@ -1766,15 +1768,15 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation>Aktiviere Lebenspunkte-Kennzeichnung bei Spielstart</translation>
+        <translation>Lebenspunktebeschriftungsschilder standardmäßig aktivieren</translation>
     </message>
     <message>
         <source>Translucent</source>
-        <translation>Durchsichtig</translation>
+        <translation>Transluzent</translation>
     </message>
     <message>
         <source>Enable translucent tags by default</source>
-        <translation>Aktiviere durchsichtige bei Spielstart</translation>
+        <translation>Transluzente Beschriftungsschilder standardmäßig aktivieren</translation>
     </message>
 </context>
 <context>
@@ -1911,7 +1913,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <name>QLabel</name>
     <message>
         <source>Weapons</source>
-        <translation>Waffen</translation>
+        <translation>Arsenal</translation>
     </message>
     <message>
         <source>Host:</source>
@@ -1927,7 +1929,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>FPS limit</source>
-        <translation>FPS-Limit</translation>
+        <translation>Bildwiederholratenbegrenzung (Hz)</translation>
     </message>
     <message>
         <source>Server name:</source>
@@ -2019,11 +2021,11 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>% Health Crates</source>
-        <translation>% Medipacks</translation>
+        <translation>% Erste-Hilfe-Koffer</translation>
     </message>
     <message>
         <source>Health in Crates</source>
-        <translation>Lebenspunkte pro Medipack</translation>
+        <translation>Lebenspunkte in Erste-Hilfe-Koffern</translation>
     </message>
     <message>
         <source>Sudden Death Water Rise</source>
@@ -2115,7 +2117,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Bitrate (Kbps)</source>
-        <translation>Bitrate (Kbps)</translation>
+        <translation>Bitrate (kB/s)</translation>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
@@ -2163,7 +2165,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation>Angezeigte Infos über Igel und Info-Durchsichtigkeit</translation>
+        <translation>Angezeigte/transluzente Beschriftungsschilder über Igel</translation>
     </message>
     <message>
         <source>This setting will be effective at next restart.</source>
@@ -2232,11 +2234,11 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Do you really want to delete the team &apos;%1&apos;?</source>
-        <translation>Willst du das Team &apos;%1&apos; wirklich löschen?</translation>
+        <translation>Willst du das Team »%1« wirklich löschen?</translation>
     </message>
     <message>
         <source>Cannot delete default scheme &apos;%1&apos;!</source>
-        <translation>Standard-Profil &apos;%1&apos; kann nicht gelöscht werden!</translation>
+        <translation>Standard-Profil »%1« kann nicht gelöscht werden!</translation>
     </message>
     <message>
         <source>Please select a record from the list</source>
@@ -2244,15 +2246,15 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Unable to start server</source>
-        <translation>Konnte Server nicht starten</translation>
+        <translation>Server konnte nicht gestartet werden</translation>
     </message>
     <message>
         <source>Hedgewars - Error</source>
-        <translation>Hedgewars - Fehler</translation>
+        <translation>Hedgewars – Fehler</translation>
     </message>
     <message>
         <source>Hedgewars - Success</source>
-        <translation>Hedgewars - Erfolg</translation>
+        <translation>Hedgewars – Erfolg</translation>
     </message>
     <message>
         <source>All file associations have been set</source>
@@ -2344,23 +2346,23 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Schemes - Warning</source>
-        <translation>Spielprofil - Warnung</translation>
+        <translation>Spielprofile – Warnung</translation>
     </message>
     <message>
         <source>Schemes - Are you sure?</source>
-        <translation>Spielprofil - Bist du dir sicher?</translation>
+        <translation>Spielprofile – Bist du dir sicher?</translation>
     </message>
     <message>
         <source>Do you really want to delete the game scheme &apos;%1&apos;?</source>
-        <translation>Willst du das Profil &apos;%1&apos; wirklich löschen?</translation>
+        <translation>Willst du das Spielprofil »%1« wirklich löschen?</translation>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation>Videos - Bist du dir sicher?</translation>
+        <translation>Videos – Bist du dir sicher?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
-        <translation>Willst du das Video &apos;%1&apos; wirklich löschen?</translation>
+        <translation>Willst du das Video »%1« wirklich löschen?</translation>
     </message>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
@@ -2379,35 +2381,35 @@ Willst du trotzdem den Raum betreten?</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for writing</source>
-        <translation>&apos;%1&apos; konnte nicht geschrieben werden</translation>
+        <translation>»%1« konnte zum Schreiben nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Cannot open &apos;%1&apos; for reading</source>
-        <translation>&apos;%1&apos; konnte nicht gelesen werden</translation>
+        <translation>»%1« konnte zum Lesen nicht geöffnet werden</translation>
     </message>
     <message>
         <source>Cannot use the ammo &apos;%1&apos;!</source>
-        <translation>Munition &apos;%1&apos; kann nicht benutzt werden!</translation>
+        <translation>Munition »%1« kann nicht benutzt werden!</translation>
     </message>
     <message>
         <source>Weapons - Warning</source>
-        <translation>Waffenprofil - Warnung</translation>
+        <translation>Arsenal – Warnung</translation>
     </message>
     <message>
         <source>Cannot overwrite default weapon set &apos;%1&apos;!</source>
-        <translation>Standard-Waffenprofil &apos;%1&apos; kann nicht überschrieben werden!</translation>
+        <translation>Standard-Arsenal »%1« kann nicht überschrieben werden!</translation>
     </message>
     <message>
         <source>Cannot delete default weapon set &apos;%1&apos;!</source>
-        <translation>Standard-Waffenprofil &apos;%1&apos; kann nicht gelöscht werden!</translation>
+        <translation>Standard-Arsenal »%1« kann nicht gelöscht werden!</translation>
     </message>
     <message>
         <source>Weapons - Are you sure?</source>
-        <translation>Waffenprofil - Bist du dir sicher?</translation>
+        <translation>Arsenal – Bist du dir sicher?</translation>
     </message>
     <message>
         <source>Do you really want to delete the weapon set &apos;%1&apos;?</source>
-        <translation>Willst du das Waffenprofil &apos;%1&apos; wirklich löschen?</translation>
+        <translation>Willst du das Arsenal »%1« wirklich löschen?</translation>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
@@ -2444,7 +2446,7 @@ Willst du trotzdem den Raum betreten?</translation>
     <message>
         <source>Are you sure you want to start this game?
 Not all players are ready.</source>
-        <translation>Bist du sicher, dass du diesees Spiel staren willst?
+        <translation>Bist du sicher, dass du diesees Spiel starten willst?
 Es sind nicht alle Spieler bereit.</translation>
     </message>
 </context>
@@ -2487,15 +2489,15 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Specify</source>
-        <translation>Verbinden zu ...</translation>
+        <translation>Verbinden zu …</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Start</translation>
+        <translation>Starten</translation>
     </message>
     <message>
         <source>Play demo</source>
-        <translation>Demo abspielen</translation>
+        <translation>Wiederholung abspielen</translation>
     </message>
     <message>
         <source>Rename</source>
@@ -2511,7 +2513,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Associate file extensions</source>
-        <translation>Ordne Dateitypen zu</translation>
+        <translation>Dateitypen zuordnen</translation>
     </message>
     <message>
         <source>More info</source>
@@ -2519,7 +2521,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Set default options</source>
-        <translation>Setzen</translation>
+        <translation>Auf Standardeinstellungen zurücksetzen</translation>
     </message>
     <message>
         <source>Open videos directory</source>
@@ -2527,7 +2529,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Spielen</translation>
+        <translation>Abspielen</translation>
     </message>
     <message>
         <source>Upload to YouTube</source>
@@ -2543,19 +2545,19 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
-        <translation>das Videoverzeichnis deines Systems öffnen</translation>
+        <translation>Das Videoverzeichnis deines Systems öffnen</translation>
     </message>
     <message>
         <source>Play this video</source>
-        <translation>dieses Video abspielen</translation>
+        <translation>Dieses Video abspielen</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation>dieses Video löschen</translation>
+        <translation>Dieses Video löschen</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation>dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
+        <translation>Dieses Video zu deinem YouTube-Benutzerkonto hochladen</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2563,7 +2565,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
-        <translation>den Standard-Server-Port für Hedgewars setzen</translation>
+        <translation>Den Standard-Server-Port für Hedgewars setzen</translation>
     </message>
     <message>
         <source>Invite your friends to your server in just 1 click!</source>
@@ -2575,11 +2577,11 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Start private server</source>
-        <translation>privaten Server starten</translation>
+        <translation>Privaten Server starten</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>Klicke um deine Server-Adresse in die Zwischenablage zu kopieren. Sende diese als Link zu deinen Freunden damit sie dir beitreten können.</translation>
+        <translation>Klicke um deine Server-Adresse in die Zwischenablage zu kopieren. Sende diese als Link zu deinen Freunden, damit sie dir beitreten können.</translation>
     </message>
 </context>
 <context>
@@ -2629,11 +2631,11 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Rules</source>
-        <translation>Regeln</translation>
+        <translation>Spielprofil</translation>
     </message>
     <message>
         <source>Weapons</source>
-        <translation>Waffen</translation>
+        <translation>Arsenal</translation>
     </message>
     <message>
         <source>Random Map</source>
@@ -2649,7 +2651,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Script</source>
-        <translation>Skript</translation>
+        <translation>Stil</translation>
     </message>
 </context>
 <context>
@@ -2675,15 +2677,15 @@ Es sind nicht alle Spieler bereit.</translation>
     <name>SelWeaponWidget</name>
     <message>
         <source>Weapon set</source>
-        <translation>Bewaffnung</translation>
+        <translation>Anfangsbewaffnung</translation>
     </message>
     <message>
         <source>Probabilities</source>
-        <translation>Nachschub</translation>
+        <translation>Wahrscheinlichkeiten</translation>
     </message>
     <message>
         <source>Ammo in boxes</source>
-        <translation>Kisteninhalt</translation>
+        <translation>Kisteninhalte</translation>
     </message>
     <message>
         <source>Delays</source>
@@ -2691,7 +2693,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>new</source>
-        <translation>neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <source>copy of</source>
@@ -2733,11 +2735,11 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Search for a theme:</source>
-        <translation>Nach einem Thema suchen:</translation>
+        <translation>Nach einer Szenerie suchen:</translation>
     </message>
     <message>
         <source>Use selected theme</source>
-        <translation>Ausgewähltes Thema benutzen</translation>
+        <translation>Ausgewählte Szenerie benutzen</translation>
     </message>
 </context>
 <context>
@@ -2888,11 +2890,11 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>long jump</source>
-        <translation>Weiter Sprung</translation>
+        <translation>Weitsprung</translation>
     </message>
     <message>
         <source>high jump</source>
-        <translation>Hoher Sprung</translation>
+        <translation>Hochsprung</translation>
     </message>
     <message>
         <source>slot 10</source>
@@ -2904,7 +2906,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>record</source>
-        <translation>aufnehmen</translation>
+        <translation>aufzeichnen</translation>
     </message>
     <message>
         <source>hedgehog info</source>
@@ -2934,67 +2936,67 @@ Fehlercode: %2</translation>
     <name>binds (descriptions)</name>
     <message>
         <source>Traverse gaps and obstacles by jumping:</source>
-        <translation>Überwinde Abgründe und Hindernisse mit Sprüngen:</translation>
+        <translation>Abgründe und Hindernisse mit Sprüngen überwinden:</translation>
     </message>
     <message>
         <source>Fire your selected weapon or trigger an utility item:</source>
-        <translation>Benutze deine gewählte Waffe oder Werkzeug:</translation>
+        <translation>Deine gewählte Waffe feuern oder dein Werkzeug benutzen: </translation>
     </message>
     <message>
         <source>Pick a weapon or a target location under the cursor:</source>
-        <translation>Wähle eine Waffe oder einen Zielpunkt mit dem Cursor:</translation>
+        <translation>Eine Waffe oder einen Zielpunkt mit dem Cursor wählen:</translation>
     </message>
     <message>
         <source>Switch your currently active hog (if possible):</source>
-        <translation>Wähle den zu steuernden Igel (falls möglich):</translation>
+        <translation>Den zu steuernden Igel wählen (falls möglich):</translation>
     </message>
     <message>
         <source>Pick a weapon or utility item:</source>
-        <translation>Wähle eine Waffe oder Werkzeug aus:</translation>
+        <translation>Eine Waffe oder Werkzeug auswählen:</translation>
     </message>
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
-        <translation>Setze den Zeitzünder von verschiedenen Waffen:</translation>
+        <translation>Den Zeitzünder von verschiedenen Waffen setzen:</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation> Bewege die Kamera zum aktiven Igel:</translation>
+        <translation>Die Kamera zum aktiven Igel bewegen:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
-        <translation>Bewege den Zeiger oder die Kamera ohne die Maus:</translation>
+        <translation>Den Zeiger oder die Kamera ohne die Maus bewegen:</translation>
     </message>
     <message>
         <source>Modify the camera&apos;s zoom level:</source>
-        <translation>Verändere den Bildausschnitt:</translation>
+        <translation>Den Zoom verändern:</translation>
     </message>
     <message>
         <source>Talk to your team or all participants:</source>
-        <translation>Spreche mit anderen Spielern:</translation>
+        <translation>Mit anderen Spielern sprechen:</translation>
     </message>
     <message>
         <source>Pause, continue or leave your game:</source>
-        <translation>Pausiere oder verlasse das Spiel:</translation>
+        <translation>Spiel pausieren, fortsetzen oder verlassen:</translation>
     </message>
     <message>
         <source>Modify the game&apos;s volume while playing:</source>
-        <translation>Ändere die Lautstärke im Spiel:</translation>
+        <translation>Lautstärke im Spiel ändern:</translation>
     </message>
     <message>
         <source>Toggle fullscreen mode:</source>
-        <translation>Schalte den Vollbildmodus um:</translation>
+        <translation>Vollbildmodus umschalten:</translation>
     </message>
     <message>
         <source>Take a screenshot:</source>
-        <translation>Erstelle ein Bildschirmfoto:</translation>
+        <translation>Screenshot machen:</translation>
     </message>
     <message>
         <source>Toggle labels above hedgehogs:</source>
-        <translation>Einblendungen über Igeln ein/ausschalten:</translation>
+        <translation>Beschriftungsschilder über Igel durchschalten:</translation>
     </message>
     <message>
         <source>Record video:</source>
-        <translation>Video aufnehmen:</translation>
+        <translation>Video aufzeichnen:</translation>
     </message>
     <message>
         <source>Hedgehog movement</source>
@@ -3185,11 +3187,11 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Page up</source>
-        <translation>Bild hoch</translation>
+        <translation>Bild auf</translation>
     </message>
     <message>
         <source>Page down</source>
-        <translation>Bild runter</translation>
+        <translation>Bild ab</translation>
     </message>
     <message>
         <source>Num lock</source>
@@ -3380,7 +3382,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation>Weniger als zwei Clans!</translation>
+        <translation>Weniger als zwei Klans!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
@@ -3388,23 +3390,23 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation>verbotener Raumname</translation>
+        <translation>Verbotener Raumname</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation>kein solcher Raum</translation>
+        <translation>Ein solcher Raum existiert nicht</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation>eingeschränkter Zugang</translation>
+        <translation>Zutritt verboten</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation>nur für registrierte Benutzer</translation>
+        <translation>Nur für registrierte Benutzer</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation>Du wurdest von diesem Raum verbannt</translation>
+        <translation>Du wurdest aus diesem Raum verbannt</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
@@ -3428,19 +3430,19 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingeschränkt</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht Gastgeber</translation>
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Rechte zum Benutzen des Inspektionshilfsprogramms</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Raumversion ist inkompatibel zu deiner Hedgewars-Version</translation>
     </message>
 </context>
 </TS>
