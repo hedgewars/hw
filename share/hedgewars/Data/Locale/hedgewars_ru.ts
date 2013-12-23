@@ -984,6 +984,8 @@ just enter your nickname.</source>
         <source>(%1 %2)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -2334,6 +2336,8 @@ Do you still want to join the room?</source>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -3394,6 +3398,14 @@ Error code: %2</source>
     </message>
     <message>
         <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
