@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QProgressBar>
 #include <QBuffer>
+#include <QDesktopServices>
 
 #include "pagedata.h"
 #include "databrowser.h"
@@ -48,10 +49,23 @@ QLayout * PageDataDownload::bodyLayoutDefinition()
     return pageLayout;
 }
 
+QLayout * PageDataDownload::footerLayoutDefinition()
+{
+    QHBoxLayout * bottomLayout = new QHBoxLayout();
+    bottomLayout->setStretch(0, 1);
+
+    pbOpenDir = addButton(tr("Open packages directory"), bottomLayout, 1, false);
+
+    bottomLayout->setStretch(2, 1);
+
+    return bottomLayout;
+}
+
 void PageDataDownload::connectSignals()
 {
     connect(web, SIGNAL(anchorClicked(QUrl)), this, SLOT(request(const QUrl&)));
     connect(this, SIGNAL(goBack()), this, SLOT(onPageLeave()));
+    connect(pbOpenDir, SIGNAL(clicked()), this, SLOT(openPackagesDir()));
 }
 
 PageDataDownload::PageDataDownload(QWidget* parent) : AbstractPage(parent)
@@ -192,4 +206,10 @@ void PageDataDownload::onPageLeave()
         m_contentDownloaded = false;
         //DataManager::instance().reload();
     }
+}
+
+void PageDataDownload::openPackagesDir()
+{
+    QString path = QDir::toNativeSeparators(cfgdir->absolutePath() + "/Data");
+    QDesktopServices::openUrl(QUrl("file:///" + path));
 }
