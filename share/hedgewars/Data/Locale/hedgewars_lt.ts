@@ -2845,8 +2845,8 @@ Do you still want to join the room?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../../../QTfrontend/campaign.cpp" line="65"/>
-        <location filename="../../../../QTfrontend/campaign.cpp" line="84"/>
+        <location filename="../../../../QTfrontend/campaign.cpp" line="82"/>
+        <location filename="../../../../QTfrontend/campaign.cpp" line="101"/>
         <source>No description available</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3158,12 +3158,12 @@ Do you still want to join the room?</source>
 <context>
     <name>TCPBase</name>
     <message>
-        <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="91"/>
+        <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="92"/>
         <source>Unable to start server at %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="168"/>
+        <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="181"/>
         <source>Unable to run engine at %1
 Error code: %2</source>
         <translation type="unfinished"></translation>
