@@ -221,7 +221,8 @@ case Kind of
                     gear^.Timer:= 3000
                 end;
   gtMelonPiece: begin
-                gear^.Density:= _2;
+                gear^.AdvBounce:= 1;
+                gear^.Density:= _2
                 end;
     gtHedgehog: begin
                 gear^.AdvBounce:= 1;
@@ -492,13 +493,14 @@ case Kind of
                 gear^.State:= Gear^.State or gstSubmersible
                 end;
      gtMolotov: begin
+                gear^.AdvBounce:= 1;
                 gear^.Radius:= 6;
-                gear^.Density:= _2;
+                gear^.Density:= _2
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Health := 2000;
-                gear^.FlightTime := 2;
+                gear^.FlightTime := 2
                 end;
          gtEgg: begin
                 gear^.AdvBounce:= 1;
@@ -512,7 +514,6 @@ case Kind of
       gtPortal: begin
                 gear^.ImpactSound:= sndMelonImpact;
                 gear^.nImpactSounds:= 1;
-                gear^.AdvBounce:= 0;
                 gear^.Radius:= 17;
                 // set color
                 gear^.Tag:= 2 * gear^.Timer;
@@ -552,7 +553,6 @@ gtFlamethrower: begin
                 gear^.Tag := 47;
                 end;
   gtNapalmBomb: begin
-                gear^.AdvBounce:= 1;
                 gear^.Elasticity:= _0_8;
                 gear^.Friction:= _0_8;
                 if gear^.Timer = 0 then gear^.Timer:= 1000;
