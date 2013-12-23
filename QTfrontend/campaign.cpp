@@ -28,6 +28,24 @@ QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName
     QList<MissionInfo> missionInfoList;
 	QSettings teamfile(cfgdir->absolutePath() + "/Teams/" + teamName + ".hwt", QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
+    
+    // if entry not found check if there is written without _
+    // if then is found rename it to use _
+    QString spaceCampName = campaignName;
+    spaceCampName = spaceCampName.replace(QString("_"),QString(" "));
+    if (teamfile.childGroups().contains("Campaign " + campaignName) == false and 
+			teamfile.childGroups().contains("Campaign " + spaceCampName) == true){
+		qDebug("CAMP NAME FOUND");
+		teamfile.beginGroup("Campaign " + spaceCampName);
+		QStringList keys = teamfile.childKeys();
+		teamfile.endGroup();
+		for (int i=0;i<keys.size();i++) {			
+			QVariant value = teamfile.value("Campaign " + spaceCampName + "/" + keys[i]);
+			teamfile.setValue("Campaign " + campaignName + "/" + keys[i], value);
+		}
+		teamfile.remove("Campaign " + spaceCampName);
+	}
+	
     int progress = teamfile.value("Campaign " + campaignName + "/Progress", 0).toInt();
     int unlockedMissions = teamfile.value("Campaign " + campaignName + "/UnlockedMissions", 0).toInt();
     
