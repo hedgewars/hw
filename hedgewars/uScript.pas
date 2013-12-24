@@ -2040,6 +2040,7 @@ ScriptSetInteger('Ready', cReadyDelay);
 ScriptSetInteger('SuddenDeathTurns', cSuddenDTurns);
 ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
+ScriptSetInteger('GetAwayTime', cGetAwayTime);
 ScriptSetString('Map', cMapName);
 
 ScriptSetString('Theme', '');
@@ -2068,6 +2069,7 @@ cReadyDelay      := ScriptGetInteger('Ready');
 cSuddenDTurns    := ScriptGetInteger('SuddenDeathTurns');
 cWaterRise       := ScriptGetInteger('WaterRise');
 cHealthDecrease  := ScriptGetInteger('HealthDecrease');
+cGetAwayTime     := ScriptGetInteger('GetAwayTime');
 
 if cMapName <> ScriptGetString('Map') then
     ParseCommand('map ' + ScriptGetString('Map'), true, true);
