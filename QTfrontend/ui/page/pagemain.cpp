@@ -21,10 +21,12 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QTime>
+#include <QSettings>
 
 #include "pagemain.h"
 #include "hwconsts.h"
 #include "hwform.h"
+#include "DataManager.h"
 
 QLayout * PageMain::bodyLayoutDefinition()
 {
@@ -150,8 +152,28 @@ QString PageMain::randomTip() const
 #else
     int platform = 3;
 #endif
+    DataManager & dataMgr = DataManager::instance();
+
+    // get locale
+    QSettings settings(dataMgr.settingsFileName(),
+                       QSettings::IniFormat);
+
+    QString loc = settings.value("misc/locale", "").toString();
+    if (loc.isEmpty())
+        loc = QLocale::system().name();
+
+    QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
+
+    // if file is non-existant try with language only
+    if (!QFile::exists(tipFile))
+        tipFile = QString("physfs://Locale/tips_" + loc.remove(QRegExp("_.*$")) + ".xml");
+
+    // fallback if file for current locale is non-existant
+    if (!QFile::exists(tipFile))
+        tipFile = QString("physfs://Locale/tips_en.xml");
+
     QStringList Tips;
-    QFile file(":/res/xml/tips.xml");
+    QFile file(tipFile);
     file.open(QIODevice::ReadOnly);
     QTextStream in(&file);
     QString line = in.readLine();
