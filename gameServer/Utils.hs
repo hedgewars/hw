@@ -92,6 +92,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (44, "0.9.19-dev")
             , (45, "0.9.19")
             , (46, "0.9.20-dev")
+            , (47, "0.9.20")
+            , (48, "0.9.21-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
