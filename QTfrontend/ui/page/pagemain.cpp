@@ -199,7 +199,7 @@ QString PageMain::randomTip()
             }
             QStringList split_string = line.split(QRegExp("</?tip>"));
             if((tip_platform == platform || tip_platform == 0) && split_string.size() != 1)
-                Tips << tr(split_string[1].toLatin1().data(), "Tips");
+                Tips << split_string[1];
             line = in.readLine();
         }
         // The following tip will require links to app store entries first.
