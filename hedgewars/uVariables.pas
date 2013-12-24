@@ -912,7 +912,8 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or 
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_AttackInMove or
                           ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
