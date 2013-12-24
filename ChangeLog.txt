@@ -8,6 +8,7 @@
  + New rubber utility, lfBouncy mask (green) for maps.  lfBouncy is also anti-portal.
  + Lazy loading of many aspects of frontend to improve startup time under Windows
  + Set hog/team/health label defaults in config, toggle team health display using delete (left shift + delete for labels now)
+ + Usernames next to teams when playing online.
  + Can now filter rooms by game style (such as Highlander). Filtering simplified since it is mostly unused.
  + AFK mode.  Press p when not your turn online to trigger autoskip of your turn.
  + Russian localisation of Default voice.
