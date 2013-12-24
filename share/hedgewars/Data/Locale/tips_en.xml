@@ -56,7 +56,6 @@
         <tip>You can find your Hedgewars configuration files under "Library/Application Support/Hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</tip>
     </mac-only>
     <linux-only>
-        <tip>lintip</tip>
         <tip>You can find your Hedgewars configuration files under ".hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</tip>
     </linux-only>
 </tips>
