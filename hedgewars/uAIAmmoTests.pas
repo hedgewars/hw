@@ -1047,7 +1047,7 @@ var bombsSpeed, X, Y, dY: real;
 begin
 ap.ExplR:= 0;
 ap.Time:= 0;
-if (Level > 3) then
+if (Level > 3) or (cGravityf = 0) then
     exit(BadTurn);
 
 ap.Angle:= 0;
