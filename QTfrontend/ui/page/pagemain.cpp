@@ -183,6 +183,7 @@ QString PageMain::randomTip()
         QFile file(tipFile);
         file.open(QIODevice::ReadOnly);
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         QString line = in.readLine();
         int tip_platform = 0;
         while (!line.isNull()) {
