@@ -121,6 +121,9 @@ QLayout * PageMain::footerLayoutDefinition()
 
 void PageMain::connectSignals()
 {
+#ifndef QT_DEBUG
+    connect(this, SIGNAL(pageEnter()), this, SLOT(updateTip()));
+#endif
     connect(BtnNet, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     //connect(BtnNetLocal, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
     //connect(BtnNetOfficial, SIGNAL(clicked()), this, SLOT(toggleNetworkChoice()));
@@ -134,16 +137,19 @@ PageMain::PageMain(QWidget* parent) : AbstractPage(parent)
     if(frontendEffects)
         setAttribute(Qt::WA_NoSystemBackground, true);
     mainNote->setOpenExternalLinks(true);
-
 #ifdef QT_DEBUG
     setDefaultDescription(QLabel::tr("This development build is 'work in progress' and may not be compatible with other versions of the game, while some features might be broken or incomplete!"));
 #else
     setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
 #endif
-
 }
 
-QString PageMain::randomTip() const
+void PageMain::updateTip()
+{
+    setDefaultDescription(QLabel::tr("Tip: %1").arg(randomTip()));
+}
+
+QString PageMain::randomTip()
 {
 #ifdef _WIN32
     int platform = 1;
@@ -152,54 +158,56 @@ QString PageMain::randomTip() const
 #else
     int platform = 3;
 #endif
-    DataManager & dataMgr = DataManager::instance();
+    if(Tips.length() == 0)
+    {
+        DataManager & dataMgr = DataManager::instance();
 
-    // get locale
-    QSettings settings(dataMgr.settingsFileName(),
-                       QSettings::IniFormat);
+        // get locale
+        QSettings settings(dataMgr.settingsFileName(),
+                           QSettings::IniFormat);
 
-    QString loc = settings.value("misc/locale", "").toString();
-    if (loc.isEmpty())
-        loc = QLocale::system().name();
+        QString loc = settings.value("misc/locale", "").toString();
+        if (loc.isEmpty())
+            loc = QLocale::system().name();
 
-    QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
+        QString tipFile = QString("physfs://Locale/tips_" + loc + ".xml");
 
-    // if file is non-existant try with language only
-    if (!QFile::exists(tipFile))
-        tipFile = QString("physfs://Locale/tips_" + loc.remove(QRegExp("_.*$")) + ".xml");
+        // if file is non-existant try with language only
+        if (!QFile::exists(tipFile))
+            tipFile = QString("physfs://Locale/tips_" + loc.remove(QRegExp("_.*$")) + ".xml");
 
-    // fallback if file for current locale is non-existant
-    if (!QFile::exists(tipFile))
-        tipFile = QString("physfs://Locale/tips_en.xml");
+        // fallback if file for current locale is non-existant
+        if (!QFile::exists(tipFile))
+            tipFile = QString("physfs://Locale/tips_en.xml");
 
-    QStringList Tips;
-    QFile file(tipFile);
-    file.open(QIODevice::ReadOnly);
-    QTextStream in(&file);
-    QString line = in.readLine();
-    int tip_platform = 0;
-    while (!line.isNull()) {
-        if(line.contains("<windows-only>", Qt::CaseSensitive))
-            tip_platform = 1;
-        if(line.contains("<mac-only>", Qt::CaseSensitive))
-            tip_platform = 2;
-        if(line.contains("<linux-only>", Qt::CaseSensitive))
-            tip_platform = 3;
-        if(line.contains("</windows-only>", Qt::CaseSensitive) ||
-                line.contains("</mac-only>", Qt::CaseSensitive) ||
-                line.contains("</linux-only>", Qt::CaseSensitive)) {
-            tip_platform = 0;
+        QFile file(tipFile);
+        file.open(QIODevice::ReadOnly);
+        QTextStream in(&file);
+        QString line = in.readLine();
+        int tip_platform = 0;
+        while (!line.isNull()) {
+            if(line.contains("<windows-only>", Qt::CaseSensitive))
+                tip_platform = 1;
+            if(line.contains("<mac-only>", Qt::CaseSensitive))
+                tip_platform = 2;
+            if(line.contains("<linux-only>", Qt::CaseSensitive))
+                tip_platform = 3;
+            if(line.contains("</windows-only>", Qt::CaseSensitive) ||
+                    line.contains("</mac-only>", Qt::CaseSensitive) ||
+                    line.contains("</linux-only>", Qt::CaseSensitive)) {
+                tip_platform = 0;
+            }
+            QStringList split_string = line.split(QRegExp("</?tip>"));
+            if((tip_platform == platform || tip_platform == 0) && split_string.size() != 1)
+                Tips << tr(split_string[1].toLatin1().data(), "Tips");
+            line = in.readLine();
         }
-        QStringList split_string = line.split(QRegExp("</?tip>"));
-        if((tip_platform == platform || tip_platform == 0) && split_string.size() != 1)
-            Tips << tr(split_string[1].toLatin1().data(), "Tips");
-        line = in.readLine();
-    }
-    // The following tip will require links to app store entries first.
-    //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
-    // the ios version is located here: http://itunes.apple.com/us/app/hedgewars/id391234866
+        // The following tip will require links to app store entries first.
+        //Tips << tr("Want to play Hedgewars any time? Grab the Mobile version for %1 and %2.", "Tips").arg("").arg("");
+        // the ios version is located here: http://itunes.apple.com/us/app/hedgewars/id391234866
 
-    file.close();
+        file.close();
+    }
     return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
 }
 

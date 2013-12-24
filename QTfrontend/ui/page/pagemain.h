@@ -48,10 +48,12 @@ class PageMain : public AbstractPage
         void connectSignals();
         QIcon originalNetworkIcon, disabledNetworkIcon;
 
-        QString randomTip() const;
+        QString randomTip();
+        QStringList Tips;
 
     private slots:
         void toggleNetworkChoice();
+        void updateTip();
 };
 
 #endif
