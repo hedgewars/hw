@@ -158,7 +158,7 @@ QString PageMain::randomTip()
 #else
     int platform = 3;
 #endif
-    if(Tips.length() == 0)
+    if(!Tips.length())
     {
         DataManager & dataMgr = DataManager::instance();
 
@@ -209,7 +209,11 @@ QString PageMain::randomTip()
 
         file.close();
     }
-    return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
+    
+    if(Tips.length())
+        return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
+    else
+        return QString();
 }
 
 void PageMain::toggleNetworkChoice()
