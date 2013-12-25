@@ -3008,6 +3008,8 @@ begin
 
     FollowGear := Gear;
 
+    Gear^.dY:= cMaxWindSpeed * 100;
+
     Gear^.doStep := @doStepCakeFall
 end;
 
