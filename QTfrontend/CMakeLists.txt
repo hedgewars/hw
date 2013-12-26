@@ -61,8 +61,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
-include_directories(${PHYSFS_INCLUDE_DIR})
-include_directories(${PHYSLAYER_INCLUDE_DIR})
+include_directories(BEFORE ${PHYSFS_INCLUDE_DIR})
+include_directories(BEFORE ${PHYSLAYER_INCLUDE_DIR})
 
 
 if(UNIX)
