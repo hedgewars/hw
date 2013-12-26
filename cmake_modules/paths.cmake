@@ -14,8 +14,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 #resource paths
 if(UNIX AND NOT APPLE)
-    set(target_binary_install_dir "bin")
-    set(target_library_install_dir "lib")
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
 
     string(SUBSTRING "${DATA_INSTALL_DIR}" 0 1 sharepath_start)
     if (NOT (${sharepath_start} MATCHES "/"))
