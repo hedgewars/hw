@@ -123,7 +123,7 @@ begin
     
     for x:= 0 to LAND_WIDTH - 1 do
         for y:= 0 to LAND_HEIGHT - 1 do
-            if LandPixels[y, x] = 0 then
+            if Land[y, x] = 0 then
                 if s < y then
                     begin
                     for i:= max(s, y - 8) to y - 1 do
@@ -157,7 +157,7 @@ begin
     
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            if LandPixels[y, x] = 0 then
+            if Land[y, x] = 0 then
                 if s < x then
                     begin
                     for i:= max(s, x - 8) to x - 1 do
