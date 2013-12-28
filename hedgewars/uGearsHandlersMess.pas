@@ -3245,6 +3245,8 @@ begin
             exit;
             end;
 
+        Gear^.X:= Gear^.X+Gear^.dX*4;
+        Gear^.Y:= Gear^.Y+Gear^.dY*4;
         Gear^.SoundChannel := LoopSound(sndDrillRocket);
         Gear^.doStep := @doStepDrillDrilling;
 
