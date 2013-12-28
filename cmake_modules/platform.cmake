@@ -31,24 +31,15 @@ if(APPLE)
         set(minimum_macosx_version ${current_macosx_version})
     endif()
 
-    #lower systems don't have enough processing power anyway
-    if (minimum_macosx_version VERSION_LESS "10.4")
-        message(FATAL_ERROR "Hedgewars is not supported on Mac OS X pre-10.4")
-    endif()
-
-    #workaround for http://playcontrol.net/ewing/jibberjabber/big_behind-the-scenes_chang.html#SDL_mixer (Update 2)
-    if(current_macosx_version VERSION_EQUAL "10.4")
-        find_package(SDL_mixer REQUIRED)
-        set(DYLIB_SMPEG "-dylib_file @loader_path/Frameworks/smpeg.framework/Versions/A/smpeg:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/smpeg.framework/Versions/A/smpeg")
-        set(DYLIB_MIKMOD "-dylib_file @loader_path/Frameworks/mikmod.framework/Versions/A/mikmod:${SDLMIXER_LIBRARY}/Versions/A/Frameworks/mikmod.framework/Versions/A/mikmod")
-        add_flag_append(CMAKE_C_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        add_flag_append(CMAKE_CXX_FLAGS "${DYLIB_SMPEG} ${DYLIB_MIKMOD}")
-        add_flag_append(CMAKE_Pascal_FLAGS "-k${DYLIB_SMPEG} -k${DYLIB_MIKMOD}")
+    #10.3 systems don't have enough processing power anyway
+    #10.4 does not have @rpath support (which SDL uses)
+    if(minimum_macosx_version VERSION_LESS "10.5")
+        message(FATAL_ERROR "Hedgewars is not supported on your version of Mac OS X")
     endif()
 
     if(NOT CMAKE_OSX_ARCHITECTURES)
         if(current_macosx_version VERSION_LESS "10.6")
-            #SDL is only 32 bit on lower OS
+            #SDL is only 32 bit on older OS version
             if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "powerpc*")
                 set(CMAKE_OSX_ARCHITECTURES "ppc7400")
             else()
@@ -83,14 +74,8 @@ if(APPLE)
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
     if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
-        if(minimum_macosx_version VERSION_EQUAL "10.4")
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX10.4u.sdk/")
-            set(CMAKE_C_COMPILER "/Developer/usr/bin/gcc-4.0")
-            set(CMAKE_CXX_COMPILER "/Developer/usr/bin/g++-4.0")
-        else()
-            string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-            set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
-        endif()
+        string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
+        set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
         add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
         add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
     endif()
