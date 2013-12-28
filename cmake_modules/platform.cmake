@@ -82,6 +82,13 @@ if(APPLE)
 
     #add user framework directory
     add_flag_append(CMAKE_Pascal_FLAGS "-Ff~/Library/Frameworks")
+
+    #workaround older cmake versions
+    if(${CMAKE_VERSION} VERSION_LESS "2.8.12")
+        add_flag_append(CMAKE_C_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
+        add_flag_append(CMAKE_CXX_LINK_FLAGS "-Wl,-rpath -Wl,${CMAKE_INSTALL_RPATH}")
+        add_flag_append(CMAKE_Pascal_LINK_FLAGS "-k-rpath -k${CMAKE_INSTALL_RPATH}")
+    endif()
 endif(APPLE)
 
 if(MINGW)
