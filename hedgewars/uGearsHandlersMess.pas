@@ -3192,7 +3192,7 @@ end;
 procedure doStepDrill(Gear: PGear);
 var
     t: PGearArray;
-    oldDx, oldDy: hwFloat;
+    oldX, oldY, oldDx, oldDy: hwFloat;
     t2: hwFloat;
 begin
     AllInactive := false;
@@ -3202,6 +3202,8 @@ begin
 
     oldDx := Gear^.dX;
     oldDy := Gear^.dY;
+    oldX := Gear^.X;
+    oldY := Gear^.Y;
 
     doStepFallingGear(Gear);
 
@@ -3217,6 +3219,8 @@ begin
         //hit
         Gear^.dX := oldDx;
         Gear^.dY := oldDy;
+        Gear^.X := oldX;
+        Gear^.Y := oldY;
 
         if GameTicks > Gear^.FlightTime then
             t := CheckGearsCollision(Gear)
