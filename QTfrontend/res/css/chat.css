@@ -9,7 +9,7 @@
  *
  * In the QTfrontend of hedgewars also display:none; will work for class names
  * that start with msg_ and .timestamp -  as long as they are referenced
- * directly and not within any class hierachy.
+ * directly and not within any class hierarchy.
  * Note: Will only effect new lines!
  *
  ******************************************************************************
