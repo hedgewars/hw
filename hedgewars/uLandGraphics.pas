@@ -40,7 +40,7 @@ function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
-function FillRoundInLand(X, Y, Radius: LongInt; fill: fillType): LongWord;
+function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
@@ -171,19 +171,19 @@ if Land[landY, landX] > 255 then Land[landY, landX] := Land[landY, landX] or lfI
 end;
 
 
-function FillLandCircleLine(y, fromPix, toPix: LongInt; fill : fillType): Longword;
+function FillLandCircleLineFT(y, fromPix, toPix: LongInt; fill : fillType): Longword;
 var px, py, i: LongInt;
 begin
 //get rid of compiler warning
     px := 0;
     py := 0;
-    FillLandCircleLine := 0;
+    FillLandCircleLineFT := 0;
     case fill of
     backgroundPixel:
     for i:= fromPix to toPix do
         begin
         calculatePixelsCoordinates(i, y, px, py);
-        inc(FillLandCircleLine, drawPixelBG(i, y, px, py));
+        inc(FillLandCircleLineFT, drawPixelBG(i, y, px, py));
         end;
     ebcPixel:
     for i:= fromPix to toPix do
@@ -229,29 +229,29 @@ begin
     end;
 end;
 
-function FillLandCircleSegment(x, y, dx, dy: LongInt; fill : fillType): Longword; inline;
+function FillLandCircleSegmentFT(x, y, dx, dy: LongInt; fill : fillType): Longword; inline;
 begin
-    FillLandCircleSegment := 0;
+    FillLandCircleSegmentFT := 0;
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y + dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y + dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y - dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y - dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y + dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y + dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y - dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y - dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
 end;
 
-function FillRoundInLand(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
+function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
 var dx, dy, d: LongInt;
 begin
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
-FillRoundInLand := 0;
+FillRoundInLandFT := 0;
 while (dx < dy) do
     begin
-    inc(FillRoundInLand, FillLandCircleSegment(x, y, dx, dy, fill));
+    inc(FillRoundInLandFT, FillLandCircleSegmentFT(x, y, dx, dy, fill));
     if (d < 0) then
         d:= d + 4 * dx + 6
     else
@@ -262,7 +262,7 @@ while (dx < dy) do
     inc(dx)
     end;
 if (dx = dy) then
-    inc (FillRoundInLand, FillLandCircleSegment(x, y, dx, dy, fill));
+    inc (FillRoundInLandFT, FillLandCircleSegmentFT(x, y, dx, dy, fill));
 end;
 
 
@@ -343,13 +343,13 @@ end;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 begin
 if not doSet and isCurrent then
-    FillRoundInLand(X, Y, Radius, setNotCurrentMask)
+    FillRoundInLandFT(X, Y, Radius, setNotCurrentMask)
 else if not doSet and not IsCurrent then
-    FillRoundInLand(X, Y, Radius, changePixelSetNotCurrent)
+    FillRoundInLandFT(X, Y, Radius, changePixelSetNotCurrent)
 else if doSet and IsCurrent then
-    FillRoundInLand(X, Y, Radius, setCurrentHog)
+    FillRoundInLandFT(X, Y, Radius, setCurrentHog)
 else if doSet and not IsCurrent then
-    FillRoundInLand(X, Y, Radius, changePixelNotSetNotCurrent);
+    FillRoundInLandFT(X, Y, Radius, changePixelNotSetNotCurrent);
 end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
@@ -379,11 +379,11 @@ function DrawExplosion(X, Y, Radius: LongInt): Longword;
 var
     tx, ty, dx, dy: Longint;
 begin
-    DrawExplosion := FillRoundInLand(x, y, Radius, backgroundPixel);
+    DrawExplosion := FillRoundInLandFT(x, y, Radius, backgroundPixel);
     if Radius > 20 then
-        FillRoundInLand(x, y, Radius - 15, nullPixel);
+        FillRoundInLandFT(x, y, Radius - 15, nullPixel);
     FillRoundInLand(X, Y, Radius, 0);
-    FillRoundInLand(x, y, Radius + 4, ebcPixel);
+    FillRoundInLandFT(x, y, Radius + 4, ebcPixel);
     tx:= Max(X - Radius - 5, 0);
     dx:= Min(X + Radius + 5, LAND_WIDTH) - tx;
     ty:= Max(Y - Radius - 5, 0);
