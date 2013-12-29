@@ -210,22 +210,22 @@ begin
         Land[y, i]:= Land[y, i] and lfNotCurrentMask;
         end;
     changePixelSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask > 0 then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) - 1);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask > 0 then
+                Land[y, i]:= Land[y, i] - 1;
+            end;
     setCurrentHog:
     for i:= fromPix to toPix do
         begin
         Land[y, i]:= Land[y, i] or lfCurrentHog
         end;
     changePixelNotSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask < lfObjMask then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) + 1)
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask < lfObjMask then
+                Land[y, i]:= Land[y, i] + 1
+            end;
     end;
 end;
 
