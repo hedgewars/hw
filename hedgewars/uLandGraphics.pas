@@ -180,52 +180,52 @@ begin
     FillLandCircleLineFT := 0;
     case fill of
     backgroundPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        inc(FillLandCircleLineFT, drawPixelBG(i, y, px, py));
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            inc(FillLandCircleLineFT, drawPixelBG(i, y, px, py));
+            end;
     ebcPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        drawPixelEBC(i, y, px, py);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            drawPixelEBC(i, y, px, py);
+            end;
     nullPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
-            LandPixels[py, px]:= 0
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
+                LandPixels[py, px]:= 0
+            end;
     icePixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        DrawPixelIce(i, y, px, py);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            DrawPixelIce(i, y, px, py);
+            end;
     setNotCurrentMask:
-    for i:= fromPix to toPix do
-        begin
-        Land[y, i]:= Land[y, i] and lfNotCurrentMask;
-        end;
+        for i:= fromPix to toPix do
+            begin
+            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            end;
     changePixelSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask > 0 then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) - 1);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask > 0 then
+                Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) - 1);
+            end;
     setCurrentHog:
-    for i:= fromPix to toPix do
-        begin
-        Land[y, i]:= Land[y, i] or lfCurrentHog
-        end;
+        for i:= fromPix to toPix do
+            begin
+            Land[y, i]:= Land[y, i] or lfCurrentHog
+            end;
     changePixelNotSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask < lfObjMask then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) + 1)
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask < lfObjMask then
+                Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) + 1)
+            end;
     end;
 end;
 
