@@ -5489,7 +5489,7 @@ begin
 
                 if (Timer = iceCollideWithGround) and ((GameTicks - Power) > groundFreezingTime) then
                     begin
-                    FillRoundInLand(target.x, target.y, iceRadius, icePixel);
+                    FillRoundInLandFT(target.x, target.y, iceRadius, icePixel);
                     landRect.x := min(max(target.x - iceRadius, 0), LAND_WIDTH - 1);
                     landRect.y := min(max(target.y - iceRadius, 0), LAND_HEIGHT - 1);
                     landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
