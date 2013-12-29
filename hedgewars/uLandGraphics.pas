@@ -213,7 +213,7 @@ begin
         for i:= fromPix to toPix do
             begin
             if Land[y, i] and lfObjMask > 0 then
-                Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) - 1);
+                Land[y, i]:= Land[y, i] - 1;
             end;
     setCurrentHog:
         for i:= fromPix to toPix do
@@ -224,7 +224,7 @@ begin
         for i:= fromPix to toPix do
             begin
             if Land[y, i] and lfObjMask < lfObjMask then
-                Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) + 1)
+                Land[y, i]:= Land[y, i] + 1
             end;
     end;
 end;
