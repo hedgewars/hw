@@ -55,14 +55,16 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 #which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
-#paths where to find libraries (final slash not optional):
-# - the first is relative to the executable
-# - the second is the same directory of the executable (so it runs in bin/)
-# - the third one is the full path of the system dir
-#source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
-set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
-
-
-#install_name_tool magic for OS X
-set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
-
+if(APPLE)
+    #@rpath mangling
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+    #install_name_tool for libraries
+    set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
+else(APPLE)
+    #paths where to find libraries (final slash not optional):
+    # - the first is relative to the executable
+    # - the second is the same directory of the executable (so it runs in bin/)
+    # - the third one is the full path of the system dir
+    #source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
+endif(APPLE)

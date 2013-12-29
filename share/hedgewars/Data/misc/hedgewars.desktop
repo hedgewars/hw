@@ -20,5 +20,5 @@ Icon=hedgewars
 Exec=hedgewars %U
 Terminal=false
 StartupNotify=false
-Categories=Application;Game;StrategyGame;
+Categories=Game;StrategyGame;
 MimeType=x-scheme-handler/hwplay;
