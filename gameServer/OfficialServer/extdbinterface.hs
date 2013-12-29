@@ -26,9 +26,9 @@ dbQueryStats =
     "INSERT INTO gameserver_stats (players, rooms, last_update) VALUES (?, ?, UNIX_TIMESTAMP())"
 
 dbQueryAchievement =
-    "INSERT INTO achievements (time, typeid, userid, value, filename, location) \
+    "INSERT INTO achievements (time, typeid, userid, value, filename, location, protocol) \
     \ VALUES (?, (SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
-    \ ?, ?, ?)"
+    \ ?, ?, ?, ?)"
 
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
@@ -70,15 +70,15 @@ dbInteractionLoop dbConn = forever $ do
         SendStats clients rooms ->
                 run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
 --StoreAchievements (B.pack fileName) (map toPair teams) info
-        StoreAchievements fileName teams info -> 
-            mapM_ (run dbConn dbQueryAchievement) $ (parseStats fileName teams) info
+        StoreAchievements p fileName teams info -> 
+            mapM_ (run dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
 
 
 readTime = read . B.unpack . B.take 19 . B.drop 8
 
 
-parseStats :: B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
-parseStats fileName teams = ps
+parseStats :: Word16 -> B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
+parseStats p fileName teams = ps
     where
     time = readTime fileName
     ps [] = []
@@ -91,6 +91,7 @@ parseStats fileName teams = ps
         , SqlInt32 (readInt_ value)
         , SqlByteString fileName
         , SqlByteString location
+        , SqlInt32 p
         ] : ps bs
     ps (b:bs) = ps bs
 
