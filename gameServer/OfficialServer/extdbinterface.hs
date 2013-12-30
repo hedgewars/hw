@@ -11,6 +11,7 @@ import Database.HDBC
 import Database.HDBC.MySQL
 import Data.List (lookup)
 import qualified Data.ByteString.Char8 as B
+import Data.Word
 --------------------------
 import CoreTypes
 import Utils
@@ -91,7 +92,7 @@ parseStats p fileName teams = ps
         , SqlInt32 (readInt_ value)
         , SqlByteString fileName
         , SqlByteString location
-        , SqlInt32 p
+        , SqlInt32 $ fromIntegral p
         ] : ps bs
     ps (b:bs) = ps bs
 

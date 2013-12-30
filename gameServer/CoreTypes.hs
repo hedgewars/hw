@@ -253,7 +253,7 @@ newServerInfo =
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
         "<font color=yellow><h3 align=center>Hedgewars 0.9.19 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        45 -- latestReleaseVersion
+        47 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""
