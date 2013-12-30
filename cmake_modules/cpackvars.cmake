@@ -89,6 +89,8 @@ set(CPACK_SOURCE_IGNORE_FILES
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/misc/winutils/bin"
     "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/promotional_art"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/AudioMono"
+    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/HedgewarsMobile"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/templates"
     "^${CMAKE_CURRENT_SOURCE_DIR}/tools/drawMapTest"
     "^${CMAKE_CURRENT_SOURCE_DIR}/doc"
