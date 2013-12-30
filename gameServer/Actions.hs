@@ -717,8 +717,9 @@ processAction (CheckFailed msg) = do
 
 processAction (CheckSuccess info) = do
     Just (CheckInfo fileName teams) <- client's checkInfo
+    p <- client's clientProto
     si <- gets serverInfo
-    io $ writeChan (dbQueries si) $ StoreAchievements (B.pack fileName) (map toPair teams) info
+    io $ writeChan (dbQueries si) $ StoreAchievements p (B.pack fileName) (map toPair teams) info
     io $ moveCheckedRecord fileName
     where
         toPair t = (teamname t, teamowner t)
