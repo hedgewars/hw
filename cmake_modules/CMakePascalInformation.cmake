@@ -11,7 +11,7 @@ include(Platform/${CMAKE_SYSTEM_NAME}-${CMAKE_BASE_NAME} OPTIONAL)
 # This section should actually be in Platform/${CMAKE_SYSTME_NAME}-fpc.cmake
 set(CMAKE_Pascal_FLAGS_DEBUG_INIT "-g -gl -gp -gh")
 set(CMAKE_Pascal_FLAGS_MINSIZEREL_INIT "-Os -dNDEBUG")
-set(CMAKE_Pascal_FLAGS_RELEASE_INIT "-O3 -dNDEBUG")
+set(CMAKE_Pascal_FLAGS_RELEASE_INIT "-O2 -dNDEBUG")
 set(CMAKE_Pascal_FLAGS_RELWITHDEBINFO_INIT "-O2 -g -gl -gp")
 
 # This should be included before the _INIT variables are
