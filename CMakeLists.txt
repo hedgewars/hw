@@ -79,9 +79,6 @@ add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
 add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
 add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-Os")
 add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
-add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #CMake adds a lot of additional configuration flags, so let's clear them up
 if(${MINIMAL_FLAGS})
