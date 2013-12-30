@@ -9,8 +9,8 @@ include (CheckLibraryExists)
 
 enable_language(Pascal)
 add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
-add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

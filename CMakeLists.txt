@@ -74,10 +74,10 @@ include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
 
 #set default compiler flags
 add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
-add_flag_append(CMAKE_C_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_C_FLAGS_RELEASE "-O2")
 add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
 add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
-add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-O2")
 add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
 
 #CMake adds a lot of additional configuration flags, so let's clear them up
