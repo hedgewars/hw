@@ -190,19 +190,22 @@ end;
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
+    y: LongWord; // stupid SDL 1.2 uses stupid SmallInt for y which limits us to 32767.  But is even worse if LandTex is large, can overflow on 32767 map.
 begin
     tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
     r.y:= 0;
-    while r.y < LAND_HEIGHT do
-    begin
+    y:= 0;
+    while y < LAND_HEIGHT do
+        begin
         r.x:= 0;
         while r.x < LAND_WIDTH do
-        begin
+            begin
             SDL_UpperBlit(tmpsurf, nil, Surface, @r);
             inc(r.x, tmpsurf^.w)
+            end;
+        inc(y, tmpsurf^.h);
+        r.y:= y
         end;
-        inc(r.y, tmpsurf^.h)
-    end;
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
