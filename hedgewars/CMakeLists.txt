@@ -4,7 +4,8 @@ find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include (CheckLibraryExists)
+include(CheckLibraryExists)
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 
 enable_language(Pascal)
@@ -83,15 +84,8 @@ set(engine_sources
 
     #these interact with everything, so compile last
     uScript.pas
-    hwengine.pas
-
-    #we also have uTouch.pas
-    options.inc
-    ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
-
-include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 if (${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.2 OR # older versions are just ancient
     (${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.6 AND APPLE)) # because of 64bit and opengl bindings
@@ -171,10 +165,9 @@ endif()
 add_definitions(-dDEBUGFILE)
 
 
-# make source files objects depend on their predecessors in list
+# source files are with full path after this
 set(sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/options.inc" "${CMAKE_CURRENT_BINARY_DIR}/config.inc")
 foreach(loop_var ${engine_sources})
-    SET_SOURCE_FILES_PROPERTIES(${loop_var} PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
     list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
 endforeach(loop_var)
 
@@ -193,12 +186,14 @@ if(BUILD_ENGINE_LIBRARY)
     add_flag_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
 
     add_definitions(-dHWLIBRARY)
-    add_library(hwengine SHARED ${engine_sources} hwLibrary.pas)
+    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
+    add_library(hwengine SHARED hwLibrary.pas)
 else()
     # no need to change name here because target has same name
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     set(destination_dir ${target_binary_install_dir})
-    add_executable(hwengine ${engine_sources})
+    set_source_files_properties(hwengine.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
+    add_executable(hwengine hwengine.pas)
 endif()
 
 #even though not actually used, this will trigger relink if any lib changes
