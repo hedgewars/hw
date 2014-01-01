@@ -545,7 +545,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         m_roomsListModel->updateRoom(roomName, tmp);
 
         // keep track of room name so correct name is displayed
-        if(myroom == roomName)
+        if(myroom == roomName && myroom != tmp[1])
         {
             myroom = tmp[1];
             emit roomNameUpdated(myroom);
