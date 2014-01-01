@@ -805,6 +805,8 @@ void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
         return;
     }
 
+    cfg[42] = cfg[42].mid(1);
+
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);
 
