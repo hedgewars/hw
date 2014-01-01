@@ -10,7 +10,7 @@ function onNewTurn()
 end
 
 function onGameTick20()
-    if (TurnTimeLeft < 20) or (TurnTimeLeft > 0 and wdGameTicks + 15000 < GameTime) then
+    if wdGameTicks + 15000 < GameTime then
         SetGravity(100)
     elseif wdTTL ~= TurnTimeLeft then
         wdGameTicks = GameTime
