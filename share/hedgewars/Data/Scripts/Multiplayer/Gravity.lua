@@ -1,4 +1,5 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 local gravity = 100
 local wdGameTicks = 0
@@ -21,6 +22,7 @@ function onGameTick20()
 end
 
 function onGameInit()
+    parseParams()
     gravity = ScriptParam
 end
 
