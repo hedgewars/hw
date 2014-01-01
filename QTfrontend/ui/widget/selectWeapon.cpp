@@ -93,7 +93,7 @@ SelWeaponWidget::SelWeaponWidget(int numItems, QWidget* parent) :
     for(int i = 0; i < keys.size(); i++)
     {
         if (wconf->value(keys[i]).toString().size() != cDefaultAmmoStore->size())
-            wconf->remove(keys[i]);
+            wconf->setValue(keys[i], fixWeaponSet(wconf->value(keys[i]).toString()));
     }
 
     QString currentState = *cDefaultAmmoStore;
@@ -332,4 +332,23 @@ void SelWeaponWidget::copy()
         setWeaponsName(newName);
         setWeapons(ammo);
     }
+}
+
+QString SelWeaponWidget::fixWeaponSet(const QString &s)
+{
+    int neededLength = cDefaultAmmoStore->size() / 4;
+    int thisSetLength = s.size() / 4;
+
+    QStringList sl;
+    sl
+            << s.left(thisSetLength)
+            << s.mid(thisSetLength, thisSetLength)
+            << s.mid(thisSetLength * 2, thisSetLength)
+            << s.right(thisSetLength)
+               ;
+
+    for(int i = sl.length() - 1; i >= 0; --i)
+        sl[i] = sl[i].leftJustified(neededLength, '0', true);
+
+    return sl.join(QString());
 }
