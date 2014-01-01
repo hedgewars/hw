@@ -21,8 +21,7 @@ function onGameTick20()
 end
 
 function onGameInit()
-    gravity = GetAwayTime
-    GetAwayTime = 100
+    gravity = ScriptParam
 end
 
 function onGameStart()

@@ -147,6 +147,7 @@ var
     cExplosives     : Longword;
 
     cScriptName     : shortstring;
+    cScriptParam    : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
@@ -2551,6 +2552,7 @@ begin
     fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
+    cScriptParam    := '';
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;

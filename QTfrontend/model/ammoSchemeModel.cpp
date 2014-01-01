@@ -65,6 +65,7 @@ QList<QVariant> defaultScheme = QList<QVariant>()
                                 << QVariant(100)           // rope modfier   39
                                 << QVariant(100)           // get away time  40
                                 << QVariant(0)             // world edge     41
+                                << QVariant()              // scriptparam    42
                                 ;
 
 AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
@@ -130,6 +131,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
               << "ropepct"             // 39
               << "getawaytime"         // 40
               << "worldedge"           // 41
+              << "scriptparam"         // scriptparam    42
               ;
 
     QList<QVariant> proMode;
@@ -176,6 +178,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> shoppa;
@@ -222,6 +225,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> cleanslate;
@@ -268,6 +272,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> minefield;
@@ -314,6 +319,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> barrelmayhem;
@@ -360,6 +366,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> tunnelhogs;
@@ -406,6 +413,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> forts;
@@ -452,6 +460,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> timeless;
@@ -498,6 +507,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> thinkingportals;
@@ -544,6 +554,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
     QList<QVariant> kingmode;
@@ -590,6 +601,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // rope modfier   39
             << QVariant(100)           // get away time  40
             << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
             ;
 
 

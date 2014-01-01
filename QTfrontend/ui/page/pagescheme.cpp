@@ -390,6 +390,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconEarth.png"));
     glBSLayout->addWidget(l,15,1,1,1);
+
     CB_WorldEdge = new QComboBox(gbBasicSettings);
     CB_WorldEdge->insertItem(0, tr("None (Default)"));
     CB_WorldEdge->insertItem(1, tr("Wrap (World wraps)"));
@@ -397,6 +398,20 @@ QLayout * PageScheme::bodyLayoutDefinition()
     CB_WorldEdge->insertItem(3, tr("Sea (Edges connect to sea)"));
     /* CB_WorldEdge->insertItem(4, tr("Skybox")); */
     glBSLayout->addWidget(CB_WorldEdge,15,2,1,1);
+
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("Script parameter"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,16,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconBox.png"));
+    glBSLayout->addWidget(l,16,1,1,1);
+
+    LE_ScriptParam = new QLineEdit(gbBasicSettings);
+    LE_ScriptParam->setMaxLength(240);
+    glBSLayout->addWidget(LE_ScriptParam,16,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
@@ -489,6 +504,7 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_RopeModifier, 39);
     mapper->addMapping(SB_GetAwayTime, 40);
     mapper->addMapping(CB_WorldEdge, 41, "currentIndex");
+    mapper->addMapping(LE_ScriptParam, 42);
 
     mapper->toFirst();
 }

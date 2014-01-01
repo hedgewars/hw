@@ -119,6 +119,11 @@ cScriptName:= s;
 ScriptLoad(s)
 end;
 
+procedure chScriptParam(var s: shortstring);
+begin
+    cScriptParam:= s;
+end;
+
 procedure chCurU_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -796,6 +801,7 @@ begin
 //////// End top by freq analysis
     RegisterVariable('gencmd'  , @chGenCmd       , false);
     RegisterVariable('script'  , @chScript       , false);
+    RegisterVariable('scriptparam', @chScriptParam, false);
     RegisterVariable('proto'   , @chCheckProto   , true );
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
