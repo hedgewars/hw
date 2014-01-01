@@ -2042,9 +2042,9 @@ ScriptSetInteger('WaterRise', cWaterRise);
 ScriptSetInteger('HealthDecrease', cHealthDecrease);
 ScriptSetInteger('GetAwayTime', cGetAwayTime);
 ScriptSetString('Map', cMapName);
-
 ScriptSetString('Theme', '');
 ScriptSetString('Goals', '');
+ScriptSetString('ScriptParam', cScriptParam);
 
 ScriptCall('onGameInit');
 
@@ -2443,7 +2443,6 @@ ScriptSetInteger('gmTimer', gmTimer);
 ScriptSetInteger('gmAnimate', gmAnimate);
 ScriptSetInteger('gmPrecise', gmPrecise);
 ScriptSetInteger('gmAllStoppable', gmAllStoppable);
-
 
 // speech bubbles
 ScriptSetInteger('SAY_SAY', 1);
