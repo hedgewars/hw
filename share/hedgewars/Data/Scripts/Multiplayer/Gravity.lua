@@ -94,7 +94,7 @@ function onGameStart()
     elseif period ~= nil then
         v = string.format(loc("changing range from %i%% to %i%% with period of %i msec"), div(mingravity, mln), div(maxgravity, mln), period * 40)
     else
-        v = div(gravity, mln) .. "%"
+        v = gravity .. "%"
     end
 
     ShowMission(loc("Gravity"),
