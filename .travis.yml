@@ -27,5 +27,7 @@ notifications:
   irc:
     channels:
       - "chat.freenode.net#hedgewars"
-    on_success: change
-    on_failure: always
+    template:
+      - "hw-build #%{build_number} (%{commit} by %{author}): %{message}"
+      - "See details at %{build_url}"
+  email: false
