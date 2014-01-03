@@ -10,8 +10,6 @@ env:
   - BUILD_ARGS=""
   # Debug build
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
-  # Everything that's optional
-  - BUILD_ARGS="-DNOSERVER=0"
 matrix:
   allow_failures:
     # Failures we expect here
