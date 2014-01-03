@@ -64,7 +64,7 @@ if(APPLE)
         endif()
         list(LENGTH CMAKE_OSX_ARCHITECTURES num_of_archs)
         if(num_of_archs GREATER 1)
-            message(${WARNING} "Only one architecture in CMAKE_OSX_ARCHITECTURES is currently supported, picking the first one")
+            message("*** Only one architecture in CMAKE_OSX_ARCHITECTURES is supported, picking the first one ***")
         endif()
     elseif(CMAKE_SIZEOF_VOID_P MATCHES "8")
         #if that variable is not set check if we are on x86_64 and if so force it, else use default
@@ -74,10 +74,21 @@ if(APPLE)
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
     if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
-        string(REGEX REPLACE "([0-9]+.[0-9]+).[0-9]+" "\\1" sdk_version ${minimum_macosx_version})
-        set(CMAKE_OSX_SYSROOT "/Developer/SDKs/MacOSX${sdk_version}.sdk/")
-        add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
+        find_program(xcrun xcrun)
+        if(xcrun)
+            execute_process(COMMAND ${xcrun} "--show-sdk-path"
+                            OUTPUT_VARIABLE current_sdk_path
+                            OUTPUT_STRIP_TRAILING_WHITESPACE)
+            string(REPLACE "${current_macosx_version}"
+                           "${minimum_macosx_version}"
+                           CMAKE_OSX_SYSROOT
+                           "${current_sdk_path}")
+
+            add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
+            add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
+        else()
+            message("*** xcrun not found! Build will work on ${current_macosx_version} only ***")
+        endif()
     endif()
 
     #add user framework directory
