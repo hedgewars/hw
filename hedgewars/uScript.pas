@@ -1933,7 +1933,7 @@ begin
         iterator:= GearsList;
         while iterator <> nil do
             begin
-            if not (iterator^.Kind in [gtPortal, gtAirAttack]) and (iterator^.Message and gmAllStoppable = 0) then
+            if not (iterator^.Kind in [gtPortal, gtAirAttack]) and (iterator^.Message and (gmAllStoppable or gmLJump or gmHJump) = 0) then
                 begin
                 iterator^.Active:= true;
                 if iterator^.dY.QWordValue = 0 then iterator^.dY.isNegative:= false;

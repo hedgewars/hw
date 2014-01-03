@@ -1061,7 +1061,6 @@ if (Gear^.State and gstMoving) <> 0 then
         Gear^.State:= Gear^.State and not gstCollision 
         end;
 
-    CheckGearDrowning(Gear);
     // could become nil if ai's hog fails to respawn in ai survival
     if Gear = nil then exit;
     // hide target cursor if current hog is drowning
@@ -1340,6 +1339,8 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 var tX: hwFloat;
 begin
+CheckGearDrowning(Gear);
+if Gear = nil then exit;
 tX:= Gear^.X;
 if WorldWrap(Gear) then
     begin
