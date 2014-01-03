@@ -1029,7 +1029,7 @@ if (not isFalling)
     begin
     Gear^.State:= Gear^.State and (not gstWinner);
     Gear^.State:= Gear^.State and (not gstMoving);
-    while (TestCollisionYWithGear(Gear,1) = 0) and (not CheckGearDrowning(Gear)) and (Gear <> nil) do
+    while (not CheckGearDrowning(Gear)) and (Gear <> nil) and (TestCollisionYWithGear(Gear,1) = 0) do
         Gear^.Y:= Gear^.Y + _1;
 
     // could become nil in CheckGearDrowning if ai's hog fails to respawn in ai survival
