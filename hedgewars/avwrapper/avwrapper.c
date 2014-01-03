@@ -65,7 +65,7 @@ static uint8_t g_OutBuffer[OUTBUFFER_SIZE];
 // pointer to function from hwengine (uUtils.pas)
 static void (*AddFileLogRaw)(const char* pString);
 
-static void FatalError(const char* pFmt, ...)
+static int FatalError(const char* pFmt, ...)
 {
     char Buffer[1024];
     va_list VaArgs;
@@ -77,7 +77,7 @@ static void FatalError(const char* pFmt, ...)
     AddFileLogRaw("Error in av-wrapper: ");
     AddFileLogRaw(Buffer);
     AddFileLogRaw("\n");
-    exit(1);
+    return(-1);
 }
 
 // Function to be called from libav for logging.
@@ -166,7 +166,7 @@ static void AddAudioStream()
     }
 }
 
-// returns non-zero if there is more sound
+// returns non-zero if there is more sound, -1 in case of error
 static int WriteAudioFrame()
 {
     if (!g_pAStream)
@@ -189,7 +189,7 @@ static int WriteAudioFrame()
     // when NumSamples == 0 we still need to call encode_audio2 to flush
     int got_packet;
     if (avcodec_encode_audio2(g_pAudio, &Packet, pFrame, &got_packet) != 0)
-        FatalError("avcodec_encode_audio2 failed");
+        return FatalError("avcodec_encode_audio2 failed");
     if (!got_packet)
         return 0;
 #else
@@ -210,12 +210,12 @@ static int WriteAudioFrame()
     // Write the compressed frame to the media file.
     Packet.stream_index = g_pAStream->index;
     if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
-        FatalError("Error while writing audio frame");
+        return FatalError("Error while writing audio frame");
     return 1;
 }
 
 // add a video output stream
-static void AddVideoStream()
+static int AddVideoStream()
 {
 #if LIBAVFORMAT_VERSION_MAJOR >= 53
     g_pVStream = avformat_new_stream(g_pContainer, g_pVCodec);
@@ -223,7 +223,7 @@ static void AddVideoStream()
     g_pVStream = av_new_stream(g_pContainer, 0);
 #endif
     if (!g_pVStream)
-        FatalError("Could not allocate video stream");
+        return FatalError("Could not allocate video stream");
 
     g_pVideo = g_pVStream->codec;
 
@@ -297,29 +297,35 @@ static void AddVideoStream()
 #else
     if (avcodec_open(g_pVideo, g_pVCodec) < 0)
 #endif
-        FatalError("Could not open video codec %s", g_pVCodec->long_name);
+        return FatalError("Could not open video codec %s", g_pVCodec->long_name);
 
     g_pVFrame = avcodec_alloc_frame();
     if (!g_pVFrame)
-        FatalError("Could not allocate frame");
+        return FatalError("Could not allocate frame");
 
     g_pVFrame->linesize[0] = g_Width;
     g_pVFrame->linesize[1] = g_Width/2;
     g_pVFrame->linesize[2] = g_Width/2;
     g_pVFrame->linesize[3] = 0;
+    return 0;
 }
 
 static int WriteFrame(AVFrame* pFrame)
 {
     double AudioTime, VideoTime;
-
+    int ret;
     // write interleaved audio frame
     if (g_pAStream)
     {
         VideoTime = (double)g_pVStream->pts.val*g_pVStream->time_base.num/g_pVStream->time_base.den;
         do
+        {
             AudioTime = (double)g_pAStream->pts.val*g_pAStream->time_base.num/g_pAStream->time_base.den;
-        while (AudioTime < VideoTime && WriteAudioFrame());
+            ret = WriteAudioFrame();
+        }
+        while (AudioTime < VideoTime && ret);
+        if (ret < 0)
+            return ret;
     }
 
     if (!g_pVStream)
@@ -341,7 +347,7 @@ static int WriteFrame(AVFrame* pFrame)
         Packet.size = sizeof(AVPicture);
 
         if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
-            FatalError("Error while writing video frame");
+            return FatalError("Error while writing video frame");
         return 0;
     }
     else
@@ -349,7 +355,7 @@ static int WriteFrame(AVFrame* pFrame)
 #if LIBAVCODEC_VERSION_MAJOR >= 54
         int got_packet;
         if (avcodec_encode_video2(g_pVideo, &Packet, pFrame, &got_packet) < 0)
-            FatalError("avcodec_encode_video2 failed");
+            return FatalError("avcodec_encode_video2 failed");
         if (!got_packet)
             return 0;
 
@@ -360,7 +366,7 @@ static int WriteFrame(AVFrame* pFrame)
 #else
         Packet.size = avcodec_encode_video(g_pVideo, g_OutBuffer, OUTBUFFER_SIZE, pFrame);
         if (Packet.size < 0)
-            FatalError("avcodec_encode_video failed");
+            return FatalError("avcodec_encode_video failed");
         if (Packet.size == 0)
             return 0;
 
@@ -373,21 +379,21 @@ static int WriteFrame(AVFrame* pFrame)
         // write the compressed frame in the media file
         Packet.stream_index = g_pVStream->index;
         if (av_interleaved_write_frame(g_pContainer, &Packet) != 0)
-            FatalError("Error while writing video frame");
+            return FatalError("Error while writing video frame");
 
         return 1;
     }
 }
 
-AVWRAP_DECL void AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
+AVWRAP_DECL int AVWrapper_WriteFrame(uint8_t* pY, uint8_t* pCb, uint8_t* pCr)
 {
     g_pVFrame->data[0] = pY;
     g_pVFrame->data[1] = pCb;
     g_pVFrame->data[2] = pCr;
-    WriteFrame(g_pVFrame);
+    return WriteFrame(g_pVFrame);
 }
 
-AVWRAP_DECL void AVWrapper_Init(
+AVWRAP_DECL int AVWrapper_Init(
          void (*pAddFileLogRaw)(const char*),
          const char* pFilename,
          const char* pDesc,
@@ -399,6 +405,7 @@ AVWRAP_DECL void AVWrapper_Init(
          int FramerateNum, int FramerateDen,
          int VQuality)
 {
+    int ret;
     AddFileLogRaw = pAddFileLogRaw;
     av_log_set_callback( &LogCallback );
 
@@ -414,12 +421,12 @@ AVWRAP_DECL void AVWrapper_Init(
     // find format
     g_pFormat = av_guess_format(pFormatName, NULL, NULL);
     if (!g_pFormat)
-        FatalError("Format \"%s\" was not found", pFormatName);
+        return FatalError("Format \"%s\" was not found", pFormatName);
 
     // allocate the output media context
     g_pContainer = avformat_alloc_context();
     if (!g_pContainer)
-        FatalError("Could not allocate output context");
+        return FatalError("Could not allocate output context");
 
     g_pContainer->oformat = g_pFormat;
 
@@ -442,7 +449,11 @@ AVWRAP_DECL void AVWrapper_Init(
     g_pAStream = NULL;
 
     if (g_pVCodec)
-        AddVideoStream();
+    {
+        ret = AddVideoStream();
+        if (ret < 0)
+            return ret;
+    }
     else
         Log("Video codec \"%s\" was not found; video will be ignored.\n", pVCodecName);
 
@@ -462,7 +473,7 @@ AVWRAP_DECL void AVWrapper_Init(
         Log("Audio codec \"%s\" was not found; audio will be ignored.\n", pACodecName);
 
     if (!g_pAStream && !g_pVStream)
-        FatalError("No video, no audio, aborting...");
+        return FatalError("No video, no audio, aborting...");
 
     // write format info to log
     av_dump_format(g_pContainer, 0, g_pContainer->filename, 1);
@@ -471,22 +482,36 @@ AVWRAP_DECL void AVWrapper_Init(
     if (!(g_pFormat->flags & AVFMT_NOFILE))
     {
         if (avio_open(&g_pContainer->pb, g_pContainer->filename, AVIO_FLAG_WRITE) < 0)
-            FatalError("Could not open output file (%s)", g_pContainer->filename);
+            return FatalError("Could not open output file (%s)", g_pContainer->filename);
     }
 
     // write the stream header, if any
     avformat_write_header(g_pContainer, NULL);
 
     g_pVFrame->pts = -1;
+    return 0;
 }
 
-AVWRAP_DECL void AVWrapper_Close()
+AVWRAP_DECL int AVWrapper_Close()
 {
+    int ret;
     // output buffered frames
     if (g_pVCodec->capabilities & CODEC_CAP_DELAY)
-        while( WriteFrame(NULL) );
+    {
+        do
+            ret = WriteFrame(NULL);
+        while (ret);
+        if (ret < 0)
+            return ret;
+    }
     // output any remaining audio
-    while( WriteAudioFrame() );
+    do
+    {
+        ret = WriteAudioFrame();
+    }
+    while(ret);
+    if (ret < 0)
+        return ret;
 
     // write the trailer, if any.
     av_write_trailer(g_pContainer);
@@ -514,4 +539,5 @@ AVWRAP_DECL void AVWrapper_Close()
     }
 
     av_free(g_pContainer);
+    return 0;
 }
