@@ -53,12 +53,12 @@ uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes;
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
 
-procedure AVWrapper_Init(
+function AVWrapper_Init(
               AddLog: TAddFileLogRaw;
               filename, desc, soundFile, format, vcodec, acodec: PChar;
-              width, height, framerateNum, framerateDen, vquality: LongInt); cdecl; external AvwrapperLibName;
-procedure AVWrapper_Close; cdecl; external AvwrapperLibName;
-procedure AVWrapper_WriteFrame( pY, pCb, pCr: PByte ); cdecl; external AvwrapperLibName;
+              width, height, framerateNum, framerateDen, vquality: LongInt): LongInt; cdecl; external AvwrapperLibName;
+function AVWrapper_Close: LongInt; cdecl; external AvwrapperLibName;
+function AVWrapper_WriteFrame( pY, pCb, pCr: PByte ): LongInt; cdecl; external AvwrapperLibName;
 
 type TFrame = record
                   realTicks: LongWord;
@@ -109,14 +109,15 @@ begin
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
     soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
 
-    AVWrapper_Init(@AddFileLogRaw
+    if AVWrapper_Init(@AddFileLogRaw
         , PChar(ansistring(filename))
         , PChar(ansistring(desc))
         , PChar(ansistring(soundFilePath))
         , PChar(ansistring(cAVFormat))
         , PChar(ansistring(cVideoCodec))
         , PChar(ansistring(cAudioCodec))
-        , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality);
+        , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) < 0 then
+        halt(-1);
 
     numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);
@@ -150,7 +151,8 @@ begin
     FreeMem(YCbCr_Planes[2], numPixels div 4);
     FreeMem(RGB_Buffer, 4*numPixels);
     Close(cameraFile);
-    AVWrapper_Close();
+    if AVWrapper_Close() < 0 then
+        halt(-1);
     Erase(cameraFile);
     DeleteFile(soundFilePath);
     SendIPC(_S'v'); // inform frontend that we finished
@@ -185,7 +187,8 @@ begin
             YCbCr_Planes[2][y*(cScreenWidth div 2) + x]:= Byte(128 + (( 7196*r - 6026*g - 1170*b) shr 16));
         end;
 
-    AVWrapper_WriteFrame(YCbCr_Planes[0], YCbCr_Planes[1], YCbCr_Planes[2]);
+    if AVWrapper_WriteFrame(YCbCr_Planes[0], YCbCr_Planes[1], YCbCr_Planes[2]) < 0 then
+        halt(-1);
 
     // inform frontend that we have encoded new frame
     s[0]:= #3;
