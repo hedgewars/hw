@@ -1163,13 +1163,15 @@ begin
             begin
             gear^.Health:= lua_tointeger(L, 2);
 
-        if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            begin
-            RenderHealth(gear^.Hedgehog^);
-            RecountTeamHealth(gear^.Hedgehog^.Team)
-            end;
-
-            SetAllToActive;
+            if (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+                begin
+                RenderHealth(gear^.Hedgehog^);
+                RecountTeamHealth(gear^.Hedgehog^.Team)
+                end;
+            // Why did this do a "setalltoactive" ?
+            //SetAllToActive;  
+            Gear^.Active:= true;
+            AllInactive:= false
             end
         end;
     lc_sethealth:= 0
@@ -1919,6 +1921,30 @@ begin
     lc_setgravity:= 0
 end;
 
+function lc_setwaterline(L : Plua_State) : LongInt; Cdecl;
+var iterator: PGear;
+begin
+    if lua_gettop(L) <> 1 then
+         LuaParameterCountError('SetWaterLine', 'waterline', lua_gettop(L))
+    else
+        begin
+        cWaterLine:= lua_tointeger(L,1);
+        AllInactive:= false;
+        iterator:= GearsList;
+        while iterator <> nil do
+            begin
+            if not (iterator^.Kind in [gtPortal, gtAirAttack]) and (iterator^.Message and gmAllStoppable = 0) then
+                begin
+                iterator^.Active:= true;
+                if iterator^.dY.QWordValue = 0 then iterator^.dY.isNegative:= false;
+                iterator^.State:= iterator^.State or gstMoving;
+                DeleteCI(iterator)
+                end;
+            iterator:= iterator^.NextGear
+            end
+        end;
+    lc_setwaterline:= 0
+end;
 
 function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
@@ -2599,6 +2625,7 @@ lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 lua_register(luaState, _P'GetGravity', @lc_getgravity);
 lua_register(luaState, _P'SetGravity', @lc_setgravity);
+lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
