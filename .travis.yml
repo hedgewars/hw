@@ -7,11 +7,14 @@ compiler:
   - clang
 env:
   # Default build. Release.
-  - BUILD_ARGS=""
+  - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Release"
   # Debug build
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
   # Everything that's optional
-  - BUILD_ARGS="-DNOSERVER=0"
+  - BUILD_ARGS="-NOPNG=1"
+  - BUILD_ARGS="-NOVIDEOREC=1"
+  - BUILD_ARGS="-NOSERVER=1"
+  - BUILD_ARGS="-LUA_SYSTEM=0"
 matrix:
   allow_failures:
     # Failures we expect here
