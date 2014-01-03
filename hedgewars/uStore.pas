@@ -244,8 +244,8 @@ for t:= 0 to Pred(TeamsCount) do
                         begin
                         if (month = 4) and (md = 20) then
                             Hat := 'eastertop'   // Easter
-                        else if (month = 12) and ((md = 25) or (md = 24)) then
-                            Hat := 'Santa'       // Christmas/Christmas Eve
+                        else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
+                            Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
                         else if (month = 10) and (md = 31) then
                             Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
                         end;
