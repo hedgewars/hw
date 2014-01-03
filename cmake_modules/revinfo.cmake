@@ -5,7 +5,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.hg AND HGCOMMAND)
     execute_process(COMMAND ${HGCOMMAND} identify -in
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     OUTPUT_VARIABLE internal_version
-                    ERROR_QUIET
+                    ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE
                     )
     #check local repo status
     string(REGEX REPLACE "[^+]" "" HGCHANGED ${internal_version})
@@ -25,9 +25,9 @@ elseif(EXISTS ${CMAKE_SOURCE_DIR}/.git AND GITCOMMAND)
     execute_process(COMMAND ${GITCOMMAND} rev-parse --short HEAD
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     OUTPUT_VARIABLE HEDGEWARS_HASH
-                    ERROR_QUIET
+                    ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE
                     )
-    set(HEDGEWARS_REVISION "git")
+    set(HEDGEWARS_REVISION "GIT")
 
     #let's assume that if you have git you might be interested in debugging
     set(default_build_type "DEBUG")
@@ -40,7 +40,7 @@ else()
     find_file(version_info version_info.txt PATH ${CMAKE_SOURCE_DIR}/share)
     if(version_info)
         file(STRINGS ${version_info} internal_version REGEX "rev")
-        string(REGEX REPLACE "rev ([git0-9]*)" "\\1" HEDGEWARS_REVISION ${internal_version})
+        string(REGEX REPLACE "rev ([GIT0-9]*)" "\\1" HEDGEWARS_REVISION ${internal_version})
         file(STRINGS ${version_info} internal_version REGEX "hash")
         string(REGEX REPLACE "hash ([a-zA-Z0-9]*)" "\\1" HEDGEWARS_HASH ${internal_version})
     else()
