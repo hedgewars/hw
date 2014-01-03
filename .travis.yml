@@ -26,6 +26,6 @@ script:
 notifications:
   irc:
     channels:
-      - "irc.freenode.net#hedgewars"
-    use_notice: false
-    skip_join: true
+      - "chat.freenode.net#hedgewars"
+    on_success: change
+    on_failure: always
