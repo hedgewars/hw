@@ -102,20 +102,20 @@ elseif(CMAKE_Pascal_COMPILER_VERSION VERSION_GREATER 2.4)
     add_flag_prepend(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
 
+#generic folder where our libraries reside
+add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH}")
 
 #DEPENDECIES AND EXECUTABLES SECTION
 if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
     #on OSX we need to provide the SDL_main() function when building as executable
     add_subdirectory(sdlmain)
     list(APPEND HW_LINK_LIBS SDLmain)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
 endif()
 
 if(FFMPEG_FOUND)
     add_subdirectory(avwrapper)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     #only for SDL < 2, linking carried out by fpc
     find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
 endif()
@@ -125,7 +125,7 @@ if(PNG_FOUND)
     list(INSERT engine_sources 0 PNGh.pas)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
+    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
     add_definitions(-dPNG_SCREENSHOTS)
 endif()
 
@@ -141,16 +141,19 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-
-if(NOT PHYSFS_FOUND)
+if(PHYSFS_FOUND)
+    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+else()
     add_definitions(-dPHYSFS_INTERNAL)
     list(APPEND HW_LINK_LIBS physfs)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
     #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH} -XLAphysfs=${physfs_output_name}")
+    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
 endif()
 list(APPEND HW_LINK_LIBS physlayer)
+
 
 #Mix_Init/Mix_Quit from SDL_mixer 1.2.10
 check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
