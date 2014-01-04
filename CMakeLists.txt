@@ -47,7 +47,7 @@ endif()
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
 set(CPACK_PACKAGE_VERSION_PATCH 20)
-set(HEDGEWARS_PROTO_VER 46)
+set(HEDGEWARS_PROTO_VER 48)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
@@ -55,9 +55,10 @@ message(STATUS "Building ${HEDGEWARS_VERSION}-r${HEDGEWARS_REVISION} (${HEDGEWAR
 
 #general utilities
 include(${CMAKE_MODULE_PATH}/utils.cmake)
+#paths initialization
+include(${CMAKE_MODULE_PATH}/paths.cmake)
 #platform specific init code
 include(${CMAKE_MODULE_PATH}/platform.cmake)
-include(${CMAKE_MODULE_PATH}/paths.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
@@ -76,15 +77,12 @@ endif (CMAKE_BUILD_TYPE)
 include(${CMAKE_MODULE_PATH}/compilerchecks.cmake)
 
 #set default compiler flags
-add_flag_append(CMAKE_C_FLAGS "-Wall -pipe -fPIC")
-add_flag_append(CMAKE_C_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_C_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_C_FLAGS_RELEASE "-O2")
 add_flag_append(CMAKE_C_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe -fPIC")
-add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-Os")
+add_flag_append(CMAKE_CXX_FLAGS "-Wall -pipe")
+add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-O2")
 add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
-add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000 -fPIC")
-add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-O- -gv")
-add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Os -Xs")
 
 #CMake adds a lot of additional configuration flags, so let's clear them up
 if(${MINIMAL_FLAGS})

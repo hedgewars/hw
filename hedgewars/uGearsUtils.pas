@@ -61,7 +61,6 @@ function MakeHedgehogsStep(Gear: PGear) : boolean;
 
 var doStepHandlers: array[TGearType] of TGearStepProcedure;
 
-
 implementation
 uses uSound, uCollisions, uUtils, uConsts, uVisualGears, uAIMisc,
     uVariables, uLandGraphics, uScript, uStats, uCaptions, uTeams, uStore,
@@ -136,7 +135,7 @@ while Gear <> nil do
                             //AddFileLog('Damage: ' + inttostr(dmg));
                             if (Mask and EXPLNoDamage) = 0 then
                                 begin
-                                if not Gear^.Invulnerable then
+                                if Gear^.Hedgehog^.Effects[heInvulnerable] = 0 then
                                     ApplyDamage(Gear, AttackingHog, dmg, dsExplosion)
                                 else
                                     Gear^.State:= Gear^.State or gstWinner;
@@ -149,29 +148,30 @@ while Gear <> nil do
 
                                 Gear^.State:= (Gear^.State or gstMoving) and (not gstLoser);
                                 if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
-                                if not Gear^.Invulnerable then
+                                if Gear^.Hedgehog^.Effects[heInvulnerable] = 0 then
                                     Gear^.State:= (Gear^.State or gstMoving) and (not gstWinner);
                                 Gear^.Active:= true;
                                 if Gear^.Kind <> gtFlame then FollowGear:= Gear
                                 end;
-                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (not Gear^.Invulnerable) and ((Gear^.State and gstHHDeath) = 0) then
+                            if ((Mask and EXPLPoisoned) <> 0) and (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog^.Effects[heInvulnerable] = 0) and (Gear^.State and gstHHDeath = 0) then
                                 Gear^.Hedgehog^.Effects[hePoisoned] := 1;
                             end;
 
                         end;
-                gtGrave: begin
+                gtGrave: if Mask and EXPLDoNotTouchAny = 0 then
 // Run the calcs only once we know we have a type that will need damage
-                        tdX:= Gear^.X-fX;
-                        tdY:= Gear^.Y-fY;
-                        if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
-                            dmg:= dmgBase - hwRound(Distance(tdX, tdY));
-                        if dmg > 1 then
                             begin
-                            dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
-                            Gear^.dY:= - _0_004 * dmg;
-                            Gear^.Active:= true
-                            end
-                        end;
+                            tdX:= Gear^.X-fX;
+                            tdY:= Gear^.Y-fY;
+                            if LongInt(tdX.Round + tdY.Round + 2) < dmgBase then
+                                dmg:= dmgBase - hwRound(Distance(tdX, tdY));
+                            if dmg > 1 then
+                                begin
+                                dmg:= ModifyDamage(min(dmg div 2, Radius), Gear);
+                                Gear^.dY:= - _0_004 * dmg;
+                                Gear^.Active:= true
+                                end
+                            end;
             end;
         end;
     Gear:= Gear^.NextGear
@@ -250,9 +250,8 @@ begin
                         end;
                     end
                 end;
-        if ((GameFlags and gfKarma) <> 0) and
-        ((GameFlags and gfInvulnerable) = 0)
-        and (not CurrentHedgehog^.Gear^.Invulnerable) then
+        if (GameFlags and gfKarma <> 0) and (GameFlags and gfInvulnerable = 0) and 
+           (CurrentHedgehog^.Effects[heInvulnerable] = 0) then
             begin // this cannot just use Damage or it interrupts shotgun and gets you called stupid
             inc(CurrentHedgehog^.Gear^.Karma, tmpDmg);
             CurrentHedgehog^.Gear^.LastDamage := CurrentHedgehog;
@@ -302,8 +301,8 @@ else
 end;
 
 procedure CheckHHDamage(Gear: PGear);
-var
-    dmg: Longword;
+var 
+    dmg: LongInt;
     i: LongWord;
     particle: PVisualGear;
 begin
@@ -316,14 +315,14 @@ if _0_4 < Gear^.dY then
     if dmg < 1 then
         exit;
 
-    for i:= min(12, (3 + dmg div 10)) downto 0 do
+    for i:= min(12, 3 + dmg div 10) downto 0 do
         begin
         particle := AddVisualGear(hwRound(Gear^.X) - 5 + Random(10), hwRound(Gear^.Y) + 12, vgtDust);
         if particle <> nil then
             particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480);
         end;
 
-    if (Gear^.Invulnerable) then
+    if ((Gear^.Hedgehog^.Effects[heInvulnerable] <> 0)) then
         exit;
 
     //if _0_6 < Gear^.dY then
@@ -598,7 +597,7 @@ ignoreOverlap:= false; // this not only skips proximity, but allows overlapping 
 tryAgain:= true;
 if WorldEdge <> weNone then 
     begin
-    Left:= max(Left,leftX+Gear^.Radius);
+    Left:= max(Left, LongInt(leftX) + Gear^.Radius);
     Right:= min(Right,rightX-Gear^.Radius)
     end;
 while tryAgain do
@@ -610,7 +609,7 @@ while tryAgain do
         repeat
             inc(x, Delta);
             cnt:= 0;
-            y:= min(1024, topY) - 2 * Gear^.Radius;
+            y:= min(1024, topY) - Gear^.Radius shl 1;
             while y < cWaterLine do
                 begin
                 repeat
@@ -714,7 +713,7 @@ end;
 
 procedure CheckCollision(Gear: PGear); inline;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX))
+    if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0)
     or (TestCollisionYwithGear(Gear, hwSign(Gear^.dY)) <> 0) then
         Gear^.State := Gear^.State or gstCollision
     else
@@ -723,8 +722,8 @@ end;
 
 procedure CheckCollisionWithLand(Gear: PGear); inline;
 begin
-    if TestCollisionX(Gear, hwSign(Gear^.dX))
-    or TestCollisionY(Gear, hwSign(Gear^.dY)) then
+    if (TestCollisionX(Gear, hwSign(Gear^.dX)) <> 0)
+    or (TestCollisionY(Gear, hwSign(Gear^.dY)) <> 0) then
         Gear^.State := Gear^.State or gstCollision
     else
         Gear^.State := Gear^.State and (not gstCollision)
@@ -732,25 +731,25 @@ end;
 
 function MakeHedgehogsStep(Gear: PGear) : boolean;
 begin
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then if (TestCollisionYwithGear(Gear, -1) = 0) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then if (TestCollisionYwithGear(Gear, -1) = 0) then
         begin
         Gear^.Y:= Gear^.Y - _1;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
             Gear^.Y:= Gear^.Y + _6
         end else Gear^.Y:= Gear^.Y + _5 else
         end else Gear^.Y:= Gear^.Y + _4 else
@@ -759,7 +758,7 @@ begin
         end else Gear^.Y:= Gear^.Y + _1
         end;
 
-    if not TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+    if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0 then
         begin
         Gear^.X:= Gear^.X + SignAs(_1, Gear^.dX);
         MakeHedgehogsStep:= true
@@ -832,7 +831,7 @@ while t <> nil do
                         end;
                     if dmg > 0 then
                         begin
-                        if (not t^.Invulnerable) then
+                        if t^.Hedgehog^.Effects[heInvulnerable] = 0 then
                             ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
                         else
                             Gear^.State:= Gear^.State or gstWinner;
@@ -928,7 +927,7 @@ while i > 0 do
                 Ammo^.Timer:= 0;
                 exit;
                 end;
-            if (not Gear^.Invulnerable) then
+            if Gear^.Hedgehog^.Effects[heInvulnerable] = 0 then
                 begin
                 if (Ammo^.Kind = gtKnife) and (tmpDmg > 0) then
                     for j:= 1 to max(1,min(3,tmpDmg div 5)) do
@@ -978,16 +977,16 @@ while i > 0 do
                 Gear^.State:= Gear^.State or gstMoving;
                 if Gear^.Kind = gtKnife then Gear^.State:= Gear^.State and (not gstCollision);
                 // move the gear upwards a bit to throw it over tiny obstacles at start
-                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then
+                if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then
                     begin
-                    if not (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -3, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
-                    if not (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX))
-                    or (TestCollisionYwithGear(Gear, -1) <> 0)) then
+                    if (TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0) and
+                       (TestCollisionYwithGear(Gear, -1) = 0) then
                         Gear^.Y:= Gear^.Y - _1;
                     end
                 end;
@@ -1230,27 +1229,33 @@ var tdx: hwFloat;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
-   (hwRound(Gear^.X)+Gear^.Radius > rightX) then
+if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) or
+   (hwRound(Gear^.X) + LongInt(Gear^.Radius) > LongInt(rightX)) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
-             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-        else Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
+             Gear^.X:= int2hwfloat(rightX - Gear^.Radius)
+        else Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius);
+        LeftImpactTimer:= 150;
+        RightImpactTimer:= 150
         end
     else if WorldEdge = weBounce then
         begin
-        if (hwRound(Gear^.X)-Gear^.Radius < leftX) then
+        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
             begin
+            LeftImpactTimer:= 333;
             Gear^.dX.isNegative:= false;
-            Gear^.X:= int2hwfloat(leftX+Gear^.Radius)
+            Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius)
             end
         else 
             begin
+            RightImpactTimer:= 333;
             Gear^.dX.isNegative:= true;
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
-            end
+            end;
+        if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
+            PlaySound(sndMelonImpact)
         end
     else if WorldEdge = weSea then
         begin
@@ -1262,7 +1267,7 @@ if (hwRound(Gear^.X)-Gear^.Radius < leftX) or
             Gear^.X:= int2hwFloat(PlayWidth)*int2hwFloat(min(max(0,hwRound(Gear^.Y)),PlayHeight))/PlayHeight;
             Gear^.Y:= int2hwFloat(cWaterLine+cVisibleWater+Gear^.Radius*2);
             tdx:= Gear^.dX;
-            Gear^.dX:= Gear^.dY;
+            Gear^.dX:= -Gear^.dY;
             Gear^.dY:= tdx;
             Gear^.dY.isNegative:= true
             end

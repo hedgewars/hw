@@ -20,6 +20,8 @@
 #include <QGraphicsPathItem>
 #include <QtEndian>
 #include <QDebug>
+#include <QTransform>
+#include <math.h>
 
 #include "drawmapscene.h"
 
@@ -44,6 +46,8 @@ DrawMapScene::DrawMapScene(QObject *parent) :
     setBackgroundBrush(m_eraser);
     m_isErasing = false;
 
+    m_pathType = Polyline;
+
     m_pen.setWidth(76);
     m_pen.setJoinStyle(Qt::RoundJoin);
     m_pen.setCapStyle(Qt::RoundCap);
@@ -60,19 +64,45 @@ void DrawMapScene::mouseMoveEvent(QGraphicsSceneMouseEvent * mouseEvent)
     if(m_currPath && (mouseEvent->buttons() & Qt::LeftButton))
     {
         QPainterPath path = m_currPath->path();
+        QPointF currentPos = mouseEvent->scenePos();
 
         if(mouseEvent->modifiers() & Qt::ControlModifier)
-        {
-            int c = path.elementCount();
-            QPointF pos = mouseEvent->scenePos();
-            path.setElementPositionAt(c - 1, pos.x(), pos.y());
+            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
 
-        }
-        else
+        switch (m_pathType)
         {
-            path.lineTo(mouseEvent->scenePos());
-            paths.first().points.append(mouseEvent->scenePos().toPoint());
+        case Polyline:
+            if(mouseEvent->modifiers() & Qt::ControlModifier)
+            {
+                int c = path.elementCount();
+                path.setElementPositionAt(c - 1, currentPos.x(), currentPos.y());
+
+            }
+            else
+            {
+                path.lineTo(currentPos);
+                paths.first().points.append(mouseEvent->scenePos().toPoint());
+            }
+            break;
+        case Rectangle: {
+            path = QPainterPath();
+            QPointF p1 = paths.first().initialPoint;
+            QPointF p2 = currentPos;
+            path.moveTo(p1);
+            path.lineTo(p1.x(), p2.y());
+            path.lineTo(p2);
+            path.lineTo(p2.x(), p1.y());
+            path.lineTo(p1);
+            break;
+            }
+        case Ellipse: {
+            path = QPainterPath();
+            QList<QPointF> points = makeEllipse(paths.first().initialPoint, currentPos);
+            path.addPolygon(QPolygonF(QVector<QPointF>::fromList(points)));
+            break;
         }
+        }
+
         m_currPath->setPath(path);
 
         emit pathChanged();
@@ -96,7 +126,8 @@ void DrawMapScene::mousePressEvent(QGraphicsSceneMouseEvent * mouseEvent)
     PathParams params;
     params.width = serializePenWidth(m_pen.width());
     params.erasing = m_isErasing;
-    params.points = QList<QPoint>() << mouseEvent->scenePos().toPoint();
+    params.initialPoint = mouseEvent->scenePos().toPoint();
+    params.points = QList<QPoint>() << params.initialPoint;
     paths.prepend(params);
     m_currPath->setPath(path);
 
@@ -107,14 +138,43 @@ void DrawMapScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent)
 {
     if (m_currPath)
     {
-        QPainterPath path = m_currPath->path();
-        path.lineTo(mouseEvent->scenePos());
-        paths.first().points.append(mouseEvent->scenePos().toPoint());
-        m_currPath->setPath(path);
+        QPointF currentPos = mouseEvent->scenePos();
 
-        simplifyLast();
+        if(mouseEvent->modifiers() & Qt::ControlModifier)
+            currentPos = putSomeConstraints(paths.first().initialPoint, currentPos);
+
+        switch (m_pathType)
+        {
+        case Polyline: {
+            QPainterPath path = m_currPath->path();
+            path.lineTo(mouseEvent->scenePos());
+            paths.first().points.append(currentPos.toPoint());
+            m_currPath->setPath(path);
+            simplifyLast();
+            break;
+        }
+        case Rectangle: {
+            QPoint p1 = paths.first().initialPoint;
+            QPoint p2 = currentPos.toPoint();
+            QList<QPoint> rpoints;
+            rpoints << p1 << QPoint(p1.x(), p2.y()) << p2 << QPoint(p2.x(), p1.y()) << p1;
+            paths.first().points = rpoints;
+            break;
+        }
+        case Ellipse:
+            QPoint p1 = paths.first().initialPoint;
+            QPoint p2 = currentPos.toPoint();
+            QList<QPointF> points = makeEllipse(p1, p2);
+            QList<QPoint> epoints;
+            foreach(const QPointF & p, points)
+                epoints.append(p.toPoint());
+            paths.first().points = epoints;
+            break;
+        }
 
         m_currPath = 0;
+
+        emit pathChanged();
     }
 }
 
@@ -345,8 +405,6 @@ void DrawMapScene::simplifyLast()
         QGraphicsPathItem * pathItem = static_cast<QGraphicsPathItem *>(items()[m_isCursorShown ? 1 : 0]);
         pathItem->setPath(pointsToPath(paths[0].points));
     }
-
-    emit pathChanged();
 }
 
 int DrawMapScene::pointsCount()
@@ -382,4 +440,48 @@ quint8 DrawMapScene::serializePenWidth(int width)
 int DrawMapScene::deserializePenWidth(quint8 width)
 {
     return width * 10 + 6;
+}
+
+void DrawMapScene::setPathType(PathType pathType)
+{
+    m_pathType = pathType;
+}
+
+QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &corner)
+{
+    QList<QPointF> l;
+    qreal rx = qAbs(center.x() - corner.x());
+    qreal ry = qAbs(center.y() - corner.y());
+    qreal r = qMax(rx, ry);
+
+    if(r < 4)
+    {
+        l.append(center);
+    } else
+    {
+        qreal angleDelta = qMax(0.1, qMin(0.7, 120 / r));
+        for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
+            l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
+        l.append(l.first());
+    }
+
+    return l;
+}
+
+QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPointF &point)
+{
+    QPointF vector = point - initialPoint;
+
+    for(int angle = 0; angle < 180; angle += 15)
+    {
+        QTransform transform;
+        transform.rotate(angle);
+
+        QPointF rotated = transform.map(vector);
+
+        if(rotated.x() == 0) return point;
+        if(qAbs(rotated.y() / rotated.x()) < 0.05) return initialPoint + transform.inverted().map(QPointF(rotated.x(), 0));
+    }
+
+    return point;
 }

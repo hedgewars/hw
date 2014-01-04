@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes;
+uses uConsts, uFloat, uTypes, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -47,7 +47,8 @@ procedure AddMiscGears;
 procedure AssignHHCoords;
 function  GearByUID(uid : Longword) : PGear;
 implementation
-uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics, {$IFDEF SDL2}uTouch,{$ENDIF}
+uses uStore, uSound, uTeams, uRandom, uIO, uLandGraphics,
+    {$IFDEF USE_TOUCH_INTERFACE}uTouch,{$ENDIF}
     uLocale, uAmmos, uStats, uVisualGears, uScript, uVariables,
     uCommands, uUtils, uTextures, uRenderUtils, uGearsRender, uCaptions, uDebug, uLandTexture,
     uGearsHedgehog, uGearsUtils, uGearsList, uGearsHandlersRope
@@ -76,7 +77,7 @@ while Gear <> nil do
         begin
         if (not isInMultiShoot) then
             inc(Gear^.Damage, Gear^.Karma);
-        if ((Gear^.Damage <> 0) and (not Gear^.Invulnerable)) then
+        if (Gear^.Damage <> 0) and ((Gear^.Hedgehog^.Effects[heInvulnerable] = 0)) then
             begin
             CheckNoDamage:= false;
 
@@ -165,13 +166,15 @@ procedure ProcessGears;
 var t: PGear;
     i, AliveCount: LongInt;
     s: shortstring;
+    prevtime: LongWord;
 begin
+prevtime:= TurnTimeLeft;
 ScriptCall('onGameTick');
 if GameTicks mod 20 = 0 then ScriptCall('onGameTick20');
 if GameTicks = NewTurnTick then
     begin
     ScriptCall('onNewTurn');
-{$IFDEF SDL2}
+{$IFDEF USE_TOUCH_INTERFACE}
     uTouch.NewTurnBeginning();
 {$ENDIF}
     end;
@@ -419,8 +422,10 @@ else if ((GameFlags and gfInfAttack) <> 0) then
 
 if TurnTimeLeft > 0 then
     if CurrentHedgehog^.Gear <> nil then
-        if ((CurrentHedgehog^.Gear^.State and gstAttacking) = 0) and
-            (not (isInMultiShoot and (CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle]))) then
+        if (((CurrentHedgehog^.Gear^.State and gstAttacking) = 0)
+            or (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerWhileAttacking <> 0))
+            and not(isInMultiShoot and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_DoesntStopTimerInMultiShoot) <> 0)) then
+            //(CurrentHedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle])
                 begin
                 if (TurnTimeLeft = 5000)
                 and (cHedgehogTurnTime >= 10000)
@@ -459,7 +464,7 @@ if ((GameTicks and $FFFF) = $FFFF) then
         inc(hiTicks) // we do not recieve a message for this
     end;
 AddRandomness(CheckSum);
-
+TurnClockActive:= prevtime <> TurnTimeLeft;
 inc(GameTicks)
 end;
 
@@ -504,7 +509,7 @@ begin
                     if (Gear <> nil) then
                         begin
                         if (GameFlags and gfInvulnerable) = 0 then
-                            Gear^.Invulnerable:= false;
+                            Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
                         end;
                     end;
     t:= GearsList;
@@ -558,7 +563,7 @@ begin
 end;
 
 procedure AddMiscGears;
-var i,rx, ry: Longword;
+var p,i,j,rx, ry: Longword;
     rdx, rdy: hwFloat;
     Gear: PGear;
     temp: Longword;
@@ -594,11 +599,13 @@ if (GameFlags and gfVampiric) <> 0 then
 
 Gear:= GearsList;
 if (GameFlags and gfInvulnerable) <> 0 then
-    while Gear <> nil do
-        begin
-        Gear^.Invulnerable:= true;  // this is only checked on hogs right now, so no need for gear type check
-        Gear:= Gear^.NextGear
-        end;
+    for p:= 0 to Pred(ClansCount) do
+        with ClansArray[p]^ do
+            for j:= 0 to Pred(TeamsNumber) do
+                with Teams[j]^ do
+                    for i:= 0 to cMaxHHIndex do
+                        with Hedgehogs[i] do
+                            Effects[heInvulnerable]:= 1;
 
 if (GameFlags and gfLaserSight) <> 0 then
     cLaserSighting:= true;
@@ -617,7 +624,7 @@ for i:= (LAND_WIDTH*LAND_HEIGHT) div 524288+2 downto 0 do
 snowRight:= max(LAND_WIDTH,4096)+512;
 snowLeft:= -(snowRight-LAND_WIDTH);
 
-if (not hasBorder) and ((Theme = 'Snow') or (Theme = 'Christmas')) then
+if (not hasBorder) and cSnow then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
         AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LAND_HEIGHT + LongInt(GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
 end;
@@ -840,6 +847,8 @@ begin
         text:= copy(s, 3, Length(s) - 1)
     else text:= copy(s, 2, Length(s) - 1);
 
+    if text = '' then text:= '...';
+
     (*
     if CheckNoTeamOrHH then
         begin
@@ -877,9 +886,10 @@ begin
                 Gear^.Hedgehog:= hh;
                 Gear^.Text:= text;
                 Gear^.FrameTicks:= x
-                end
+                end;
+            //ParseCommand('/say [' + hh^.Name + '] '+text, true)
+            AddChatString(#1+'[' + HH^.Name + '] '+text);
             end
-        //else ParseCommand('say ' + text, true)
         end
     else if (x >= 4) then
         begin

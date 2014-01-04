@@ -223,7 +223,8 @@ case Kind of
                     gear^.Timer:= 3000
                 end;
   gtMelonPiece: begin
-                gear^.Density:= _2;
+                gear^.AdvBounce:= 1;
+                gear^.Density:= _2
                 end;
     gtHedgehog: begin
                 gear^.AdvBounce:= 1;
@@ -238,16 +239,20 @@ case Kind of
                         gear^.Hedgehog^.Effects[heResurrectable] := 1;
                 end;
        gtShell: begin
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.Radius:= 4;
                 gear^.Density:= _1;
+                gear^.AdvBounce:= 1;
                 end;
        gtSnowball: begin
                 gear^.ImpactSound:= sndMudballImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 4;
-                gear^.Elasticity:= _1;
-                gear^.Friction:= _1;
                 gear^.Density:= _0_5;
+                gear^.AdvBounce:= 1;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 end;
 
      gtFlake: begin
@@ -259,9 +264,9 @@ case Kind of
                     if State and gstTmpFlag = 0 then
                         begin
                         dx.isNegative:= GetRandom(2) = 0;
-                        dx.QWordValue:= $40DA * GetRandom(10000) * 8;
+                        dx.QWordValue:= QWord($40DA) * GetRandom(10000) * 8;
                         dy.isNegative:= false;
-                        dy.QWordValue:= $3AD3 * GetRandom(7000) * 8;
+                        dy.QWordValue:= QWord($3AD3) * GetRandom(7000) * 8;
                         if GetRandom(2) = 0 then
                             dx := -dx
                         end;
@@ -329,9 +334,13 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1_6;
+                gear^.AdvBounce:= 1;
                 if gear^.Timer = 0 then gear^.Timer:= 500;
                 end;
        gtKnife: begin
+                gear^.AdvBounce:= 1;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.Density:= _4;
                 gear^.Radius:= 7
                 end;
@@ -343,6 +352,7 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 500
                 end;
   gtExplosives: begin
+                gear^.AdvBounce:= 1;
                 gear^.ImpactSound:= sndGrenadeImpact;
                 gear^.nImpactSounds:= 1;
                 gear^.Radius:= 16;
@@ -368,6 +378,9 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 5000;
                 end;
      gtCluster: begin
+                gear^.AdvBounce:= 1;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 gear^.Radius:= 2;
                 gear^.Density:= _1_5;
                 gear^.RenderTimer:= true
@@ -385,6 +398,7 @@ case Kind of
                     end
                 end;
    gtFirePunch: begin
+                if gear^.Timer = 0 then gear^.Timer:= 3000;
                 gear^.Radius:= 15;
                 gear^.Tag:= Y
                 end;
@@ -411,6 +425,7 @@ case Kind of
                 gear^.Z:= cCurrHHZ+1;
                 end;
       gtMortar: begin
+                gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_2;
                 gear^.Friction:= _0_08;
@@ -445,6 +460,9 @@ case Kind of
                 if gear^.Timer = 0 then gear^.Timer:= 5000
                 end;
        gtDrill: begin
+                gear^.AdvBounce:= 1;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 if gear^.Timer = 0 then
                     gear^.Timer:= 5000;
                 // Tag for drill strike. if 1 then first impact occured already
@@ -477,15 +495,17 @@ case Kind of
                 gear^.State:= Gear^.State or gstSubmersible
                 end;
      gtMolotov: begin
+                gear^.AdvBounce:= 1;
                 gear^.Radius:= 6;
-                gear^.Density:= _2;
+                gear^.Density:= _2
                 end;
        gtBirdy: begin
                 gear^.Radius:= 16; // todo: check
                 gear^.Health := 2000;
-                gear^.FlightTime := 2;
+                gear^.FlightTime := 2
                 end;
          gtEgg: begin
+                gear^.AdvBounce:= 1;
                 gear^.Radius:= 4;
                 gear^.Elasticity:= _0_6;
                 gear^.Friction:= _0_96;
@@ -496,7 +516,6 @@ case Kind of
       gtPortal: begin
                 gear^.ImpactSound:= sndMelonImpact;
                 gear^.nImpactSounds:= 1;
-                gear^.AdvBounce:= 0;
                 gear^.Radius:= 17;
                 // set color
                 gear^.Tag:= 2 * gear^.Timer;
@@ -536,6 +555,8 @@ gtFlamethrower: begin
                 gear^.Tag := 47;
                 end;
   gtNapalmBomb: begin
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_8;
                 if gear^.Timer = 0 then gear^.Timer:= 1000;
                 gear^.Radius:= 5;
                 gear^.Density:= _1_5;

@@ -34,6 +34,7 @@
 #include "ui_hwform.h"
 #include "SDLInteraction.h"
 #include "bgwidget.h"
+#include "campaign.h"
 
 #ifdef __APPLE__
 #include "InstallController.h"
@@ -111,6 +112,7 @@ class HWForm : public QMainWindow
         void NetNickNotRegistered(const QString & nick);
         void NetNickTaken(const QString & nick);
         void NetAuthFailed();
+        void askRoomPassword();
         bool RetryDialog(const QString & title, const QString & label);
         void NetTeamAccepted(const QString& team);
         void AddNetTeam(const HWTeam& team);
@@ -194,8 +196,8 @@ class HWForm : public QMainWindow
         AmmoSchemeModel * ammoSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
-        QString previousTeamName;
-        QStringList campaignMissionDescriptions;
+        QString previousTeamName;     
+        QList<MissionInfo> campaignMissionInfo;
         QTime eggTimer;
         BGWidget * wBackground;
         QSignalMapper * pageSwitchMapper;

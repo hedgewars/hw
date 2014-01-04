@@ -87,6 +87,8 @@ class SelWeaponWidget : public QFrame
         QGridLayout* p2Layout;
         QGridLayout* p3Layout;
         QGridLayout* p4Layout;
+
+        QString fixWeaponSet(const QString & s);
 };
 
 #endif // _SELECT_WEAPON_INCLUDED

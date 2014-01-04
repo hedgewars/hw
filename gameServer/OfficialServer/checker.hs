@@ -36,7 +36,7 @@ data Message = Packet [B.ByteString]
     deriving Show
 
 serverAddress = "netserver.hedgewars.org"
-protocolNumber = "45"
+protocolNumber = "47"
 
 getLines :: Handle -> IO [B.ByteString]
 getLines h = g
@@ -77,10 +77,10 @@ checkReplay coreChan msgs = do
     hFlush h
     hClose h
 
-    (_, _, Just hOut, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/bin/hwengine"
+    (_, _, Just hOut, _) <- createProcess (proc "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.20/bin/hwengine"
                 [fileName
                 , "--user-prefix", "/usr/home/unC0Rr/.hedgewars"
-                , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.19/share/hedgewars/Data"
+                , "--prefix", "/usr/home/unC0Rr/Sources/Hedgewars/Releases/0.9.20/share/hedgewars/Data"
                 , "--nomusic"
                 , "--nosound"
                 , "--stats-only"
@@ -171,7 +171,7 @@ main = withSocketsDo $ do
 
     Right (login, password) <- runErrorT $ do
         d <- liftIO $ getHomeDirectory
-        conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/hedgewars.ini"
+        conf <- join . liftIO . CF.readfile CF.emptyCP $ d ++ "/.hedgewars/settings.ini"
         l <- CF.get conf "net" "nick"
         p <- CF.get conf "net" "passwordhash"
         return (B.pack l, B.pack p)

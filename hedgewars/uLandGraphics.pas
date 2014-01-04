@@ -40,14 +40,15 @@ function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
 procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
-function FillRoundInLand2(X, Y, Radius: LongInt; fill: fillType): LongWord;
+function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
 procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
 
 implementation
 uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
@@ -170,87 +171,87 @@ if Land[landY, landX] > 255 then Land[landY, landX] := Land[landY, landX] or lfI
 end;
 
 
-function FillLandCircleLine(y, fromPix, toPix: LongInt; fill : fillType): Longword;
+function FillLandCircleLineFT(y, fromPix, toPix: LongInt; fill : fillType): Longword;
 var px, py, i: LongInt;
 begin
 //get rid of compiler warning
     px := 0;
     py := 0;
-    FillLandCircleLine := 0;
+    FillLandCircleLineFT := 0;
     case fill of
     backgroundPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        inc(FillLandCircleLine, drawPixelBG(i, y, px, py));
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            inc(FillLandCircleLineFT, drawPixelBG(i, y, px, py));
+            end;
     ebcPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        drawPixelEBC(i, y, px, py);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            drawPixelEBC(i, y, px, py);
+            end;
     nullPixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
-            LandPixels[py, px]:= 0
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
+                LandPixels[py, px]:= 0
+            end;
     icePixel:
-    for i:= fromPix to toPix do
-        begin
-        calculatePixelsCoordinates(i, y, px, py);
-        DrawPixelIce(i, y, px, py);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            calculatePixelsCoordinates(i, y, px, py);
+            DrawPixelIce(i, y, px, py);
+            end;
     setNotCurrentMask:
-    for i:= fromPix to toPix do
-        begin
-        Land[y, i]:= Land[y, i] and lfNotCurrentMask;
-        end;
+        for i:= fromPix to toPix do
+            begin
+            Land[y, i]:= Land[y, i] and lfNotCurrentMask;
+            end;
     changePixelSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask > 0 then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) - 1);
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask > 0 then
+                Land[y, i]:= Land[y, i] - 1;
+            end;
     setCurrentHog:
-    for i:= fromPix to toPix do
-        begin
-        Land[y, i]:= Land[y, i] or lfCurrentHog
-        end;
+        for i:= fromPix to toPix do
+            begin
+            Land[y, i]:= Land[y, i] or lfCurrentHog
+            end;
     changePixelNotSetNotCurrent:
-    for i:= fromPix to toPix do
-        begin
-        if Land[y, i] and lfObjMask < lfObjMask then
-            Land[y, i]:= (Land[y, i] and lfNotObjMask) or ((Land[y, i] and lfObjMask) + 1)
-        end;
+        for i:= fromPix to toPix do
+            begin
+            if Land[y, i] and lfObjMask < lfObjMask then
+                Land[y, i]:= Land[y, i] + 1
+            end;
     end;
 end;
 
-function FillLandCircleSegment(x, y, dx, dy: LongInt; fill : fillType): Longword; inline;
+function FillLandCircleSegmentFT(x, y, dx, dy: LongInt; fill : fillType): Longword; inline;
 begin
-    FillLandCircleSegment := 0;
+    FillLandCircleSegmentFT := 0;
 if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y + dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y + dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
 if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y - dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y - dy, Max(x - dx, 0), Min(x + dx, LAND_WIDTH - 1), fill));
 if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y + dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y + dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
 if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    inc(FillLandCircleSegment, FillLandCircleLine(y - dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
+    inc(FillLandCircleSegmentFT, FillLandCircleLineFT(y - dx, Max(x - dy, 0), Min(x + dy, LAND_WIDTH - 1), fill));
 end;
 
-function FillRoundInLand2(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
-var dx, dy, d, r: LongInt;
+function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword; inline;
+var dx, dy, d: LongInt;
 begin
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
-r := 0;
+FillRoundInLandFT := 0;
 while (dx < dy) do
     begin
-    inc(r, FillLandCircleSegment(x, y, dx, dy, fill));
+    inc(FillRoundInLandFT, FillLandCircleSegmentFT(x, y, dx, dy, fill));
     if (d < 0) then
         d:= d + 4 * dx + 6
     else
@@ -261,9 +262,7 @@ while (dx < dy) do
     inc(dx)
     end;
 if (dx = dy) then
-    inc(r, FillLandCircleSegment(x, y, dx, dy, fill));
-
-FillRoundInLand2:= r
+    inc (FillRoundInLandFT, FillLandCircleSegmentFT(x, y, dx, dy, fill));
 end;
 
 
@@ -344,13 +343,13 @@ end;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 begin
 if not doSet and isCurrent then
-    FillRoundInLand2(X, Y, Radius, setNotCurrentMask)
-else if not doSet and (not IsCurrent) then
-    FillRoundInLand2(X, Y, Radius, changePixelSetNotCurrent)
+    FillRoundInLandFT(X, Y, Radius, setNotCurrentMask)
+else if not doSet and not IsCurrent then
+    FillRoundInLandFT(X, Y, Radius, changePixelSetNotCurrent)
 else if doSet and IsCurrent then
-    FillRoundInLand2(X, Y, Radius, setCurrentHog)
-else if doSet and (not IsCurrent) then
-    FillRoundInLand2(X, Y, Radius, changePixelNotSetNotCurrent);
+    FillRoundInLandFT(X, Y, Radius, setCurrentHog)
+else if doSet and not IsCurrent then
+    FillRoundInLandFT(X, Y, Radius, changePixelNotSetNotCurrent);
 end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
@@ -380,11 +379,11 @@ function DrawExplosion(X, Y, Radius: LongInt): Longword;
 var
     tx, ty, dx, dy: Longint;
 begin
-    DrawExplosion := FillRoundInLand2(x, y, Radius, backgroundPixel);
+    DrawExplosion := FillRoundInLandFT(x, y, Radius, backgroundPixel);
     if Radius > 20 then
-        FillRoundInLand2(x, y, Radius - 15, nullPixel);
+        FillRoundInLandFT(x, y, Radius - 15, nullPixel);
     FillRoundInLand(X, Y, Radius, 0);
-    FillRoundInLand2(x, y, Radius + 4, ebcPixel);
+    FillRoundInLandFT(x, y, Radius + 4, ebcPixel);
     tx:= Max(X - Radius - 5, 0);
     dx:= Min(X + Radius + 5, LAND_WIDTH) - tx;
     ty:= Max(Y - Radius - 5, 0);
@@ -587,7 +586,12 @@ ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 UpdateLandTexture(tx, ddx, ty, ddy, false)
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; indestructible: boolean): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+begin
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, indestructible, 0);
+end;
+
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
@@ -652,15 +656,12 @@ case bpp of
                      gY:= (cpY + y) div 2;
                     end;
                 if indestructible then
-                    Land[cpY + y, cpX + x]:= lfIndestructible
+                    Land[cpY + y, cpX + x]:= lfIndestructible or LandFlags
                 else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
-                    Land[cpY + y, cpX + x]:= lfBasic
+                    Land[cpY + y, cpX + x]:= lfBasic or LandFlags
                 else
-                    Land[cpY + y, cpX + x]:= lfObject;
-                // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
-                if (Theme = 'Snow') or (Theme = 'Christmas') then
-                    Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or lfIce;
-                    LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+                    Land[cpY + y, cpX + x]:= lfObject or LandFlags;
+                LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
                 end;
         p:= @(p^[Image^.pitch]);
         end;

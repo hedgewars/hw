@@ -506,7 +506,7 @@ void HWGame::abort()
 
 void HWGame::sendCampaignVar(const QByteArray &varToSend)
 {
-    QString varToFind(varToSend);
+    QString varToFind = QString::fromUtf8(varToSend);
     QSettings teamfile(QString("physfs://Teams/%1.hwt").arg(campaignTeam), QSettings::IniFormat, 0);
     teamfile.setIniCodec("UTF-8");
     QString varValue = teamfile.value("Campaign " + campaign + "/" + varToFind, "").toString();

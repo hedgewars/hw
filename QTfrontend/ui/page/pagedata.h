@@ -27,6 +27,7 @@ class QProgressBar;
 class QNetworkReply;
 class QVBoxLayout;
 
+
 class PageDataDownload : public AbstractPage
 {
         Q_OBJECT
@@ -39,12 +40,14 @@ class PageDataDownload : public AbstractPage
 
     protected:
         QLayout * bodyLayoutDefinition();
+        QLayout * footerLayoutDefinition();
         void connectSignals();
 
     private:
         DataBrowser *web;
         QHash<QNetworkReply*, QProgressBar *> progressBars;
         QVBoxLayout *progressBarsLayout;
+        QPushButtonWithSound * pbOpenDir;
 
         bool m_contentDownloaded; ///< true if something was downloaded since last page leave
 
@@ -54,6 +57,7 @@ class PageDataDownload : public AbstractPage
         void pageDownloaded();
         void fileDownloaded();
         void downloadProgress(qint64, qint64);
+        void openPackagesDir();
 
         void onPageLeave();
 };

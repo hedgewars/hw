@@ -34,6 +34,7 @@ function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
 function  EnumToStr(const en : TSound) : shortstring; overload;
 function  EnumToStr(const en : TAmmoType) : shortstring; overload;
+function  EnumToStr(const en : TStatInfoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 
@@ -158,6 +159,11 @@ end;
 function EnumToStr(const en : TAmmoType) : shortstring; overload;
 begin
 EnumToStr:= GetEnumName(TypeInfo(TAmmoType), ord(en))
+end;
+
+function EnumToStr(const en : TStatInfoType) : shortstring; overload;
+begin
+EnumToStr:= GetEnumName(TypeInfo(TStatInfoType), ord(en))
 end;
 
 function EnumToStr(const en: THogEffect) : shortstring; overload;

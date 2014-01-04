@@ -100,6 +100,7 @@ class DrawMapWidget : public QWidget
         void setErasing(bool erasing);
         void save(const QString & fileName);
         void load(const QString & fileName);
+        void setPathType(DrawMapScene::PathType pathType);
 
     protected:
         void changeEvent(QEvent *e);

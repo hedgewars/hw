@@ -49,8 +49,6 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         {
             SDLInteraction::instance().playSoundFile("/Sounds/steps.ogg");
         }
-
-        return true;
     }
     else if (event->type() == QEvent::Leave)
     {
@@ -63,7 +61,6 @@ bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
         else
             abstractpage->setButtonDescription("");
     }
-
     return false;
 }
 

@@ -45,6 +45,7 @@ procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLf
 procedure DrawCircle            (X, Y, Radius, Width: LongInt);
 procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 
+procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
@@ -52,6 +53,8 @@ procedure DrawScreenWidget      (widget: POnScreenWidget);
 
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
+procedure untint(); inline;
+procedure setTintAdd            (f: boolean); inline;
 
 implementation
 uses uVariables;
@@ -412,6 +415,9 @@ if (Y + SpritesData[Sprite].Height > BottomY) then
 if (X + SpritesData[Sprite].Width > RightX) then
     r.w:= RightX - X + 1;
 
+if (r.h < r.y) or (r.w < r.x) then 
+    exit;
+
 dec(r.h, r.y);
 dec(r.w, r.x);
 
@@ -426,6 +432,11 @@ begin
     else
         scale:= 1.0;
     DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
+end;
+
+procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
+begin
+DrawLine(X0, Y0, X1, Y1, Width, (color shr 24) and $FF, (color shr 16) and $FF, (color shr 8) and $FF, color and $FF)
 end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
@@ -447,8 +458,8 @@ begin
 
     SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-    Tint($FF, $FF, $FF, $FF);
-
+    untint;
+    
     glPopMatrix;
 
     glEnable(GL_TEXTURE_2D);
@@ -509,8 +520,7 @@ VertexBuffer[3].Y:= r.y + r.h;
 SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-Tint($FF, $FF, $FF, $FF);
-
+untint;
 {$IFDEF GL2}
 EnableTexture(True);
 {$ELSE}
@@ -522,8 +532,8 @@ end;
 procedure DrawCircle(X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
 begin
     Tint(r, g, b, a);
-    DrawCircle(X, Y, Radius, Width);
-    Tint($FF, $FF, $FF, $FF);
+    DrawCircle(X, Y, Radius, Width); 
+    untint;
 end;
 
 procedure DrawCircle(X, Y, Radius, Width: LongInt);
@@ -666,7 +676,7 @@ with widget^ do
         begin
         Tint($FF, $FF, $FF, alpha);
         DrawTexture(frame.x, frame.y, spritesData[sprite].Texture, buttonScale);
-        Tint($FF, $FF, $FF, $FF);
+        untint;
         end;
     end;
 {$ELSE}
@@ -680,7 +690,7 @@ var
     nc, tw: Longword;
     scale:Real = 1.0/255.0;
 begin
-    nc:= (a shl 24) or (b shl 16) or (g shl 8) or r;
+    nc:= (r shl 24) or (g shl 16) or (b shl 8) or a;
 
     if nc = lastTint then
         exit;
@@ -706,8 +716,21 @@ end;
 
 procedure Tint(c: Longword); inline;
 begin
+    if c = lastTint then exit;
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
+procedure untint(); inline;
+begin
+    Tint($FF, $FF, $FF, $FF)
+end;
+
+procedure setTintAdd(f: boolean); inline;
+begin
+    if f then
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD)
+    else
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+end;
 
 end.

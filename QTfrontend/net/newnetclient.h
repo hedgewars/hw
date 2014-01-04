@@ -76,6 +76,7 @@ class HWNewNet : public QObject
         PlayersListModel * m_playersModel;
         QSortFilterProxyModel * m_lobbyPlayersModel;
         QSortFilterProxyModel * m_roomPlayersModel;
+        QString m_lastRoom;
 
         QStringList cmdbuf;
 
@@ -103,6 +104,7 @@ class HWNewNet : public QObject
         void adminAccess(bool);
         void roomMaster(bool);
         void roomNameUpdated(const QString & name);
+        void askForRoomPassword();
 
         void netSchemeConfig(QStringList &);
         void paramChanged(const QString & param, const QStringList & value);
@@ -153,8 +155,8 @@ class HWNewNet : public QObject
         void setLatestProtocolVar(int proto);
         void askServerVars();
 
-        void JoinRoom(const QString & room);
-        void CreateRoom(const QString & room);
+        void JoinRoom(const QString & room, const QString & password);
+        void CreateRoom(const QString & room, const QString &password);
         void updateRoomName(const QString &);
         void askRoomsList();
         void gameFinished(bool correcly);
@@ -173,6 +175,7 @@ class HWNewNet : public QObject
         void removeBan(const QString &);
         void banIP(const QString & ip, const QString & reason, int seconds);
         void banNick(const QString & nick, const QString & reason, int seconds);
+        void roomPasswordEntered(const QString & password);
 
     private slots:
         void ClientRead();

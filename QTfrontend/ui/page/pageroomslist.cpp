@@ -169,46 +169,10 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     stateMenu->addAction(showGamesInProgress);
     btnState->setMenu(stateMenu);
 
-    // Rules dropdown
-
-    CBRules = new QComboBox(this);
-    CBRules->setStyleSheet("QComboBox { border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-left-width: 2px; }");
-
-    QLabel * ruleLabel = new QLabel(tr("Rules:"), this);
-    ruleLabel->setFixedHeight(CBRules->height());
-    ruleLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    ruleLabel->setStyleSheet("border: solid; border-width: 3px; border-right-width: 0px; border-color: #ffcc00; border-top-left-radius: 10px; border-bottom-left-radius: 10px; background-color: rgba(13, 5, 68, 70%);");
-
-    filterLayout->addWidget(ruleLabel);
-    filterLayout->addWidget(CBRules);
-    filterLayout->addSpacing(filterSpacing);
-
-    // Weapons dropdown
-
-    CBWeapons = new QComboBox(this);
-    CBWeapons->setStyleSheet("QComboBox { border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-left-width: 2px; }");
-
-    QLabel * weaponLabel = new QLabel(tr("Weapons:"), this);
-    weaponLabel->setFixedHeight(CBWeapons->height());
-    weaponLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    weaponLabel->setStyleSheet("border: solid; border-width: 3px; border-right-width: 0px; border-color: #ffcc00; border-top-left-radius: 10px; border-bottom-left-radius: 10px; background-color: rgba(13, 5, 68, 70%);");
-
-    filterLayout->addWidget(weaponLabel);
-    filterLayout->addWidget(CBWeapons);
-    filterLayout->addSpacing(filterSpacing);
-
-    // Clear filters button
-
-    BtnClear = addButton(tr("Clear filters"), filterLayout, 0);
-    weaponLabel->setFixedHeight(CBWeapons->height());
-    BtnClear->setStyleSheet("padding: 4px;");
-
     // Lobby chat
 
     chatWidget = new HWChatWidget(this, false);
     m_splitter->addWidget(chatWidget);
-
-    CBRules->addItem(QComboBox::tr("Any"));
 
     return pageLayout;
 }
@@ -230,7 +194,6 @@ void PageRoomsList::connectSignals()
 
     connect(BtnCreate, SIGNAL(clicked()), this, SLOT(onCreateClick()));
     connect(BtnJoin, SIGNAL(clicked()), this, SLOT(onJoinClick()));
-    connect(BtnClear, SIGNAL(clicked()), this, SLOT(onClearClick()));
     connect(searchText, SIGNAL(moveUp()), this, SLOT(moveSelectionUp()));
     connect(searchText, SIGNAL(moveDown()), this, SLOT(moveSelectionDown()));
     connect(searchText, SIGNAL(returnPressed()), this, SLOT(onJoinClick()));
@@ -238,8 +201,6 @@ void PageRoomsList::connectSignals()
     connect(roomsList, SIGNAL(clicked (const QModelIndex &)), searchText, SLOT(setFocus()));
     connect(showGamesInLobby, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(showGamesInProgress, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
-    connect(CBRules, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
-    connect(CBWeapons, SIGNAL(currentIndexChanged (int)), this, SLOT(onFilterChanged()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
@@ -273,22 +234,8 @@ PageRoomsList::PageRoomsList(QWidget* parent) :
 {
     roomsModel = NULL;
     stateFilteredModel = NULL;
-    schemeFilteredModel = NULL;
-    weaponsFilteredModel = NULL;
 
     initPage();
-
-    // not the most elegant solution but it works
-    ammoSchemeModel = new AmmoSchemeModel(this, NULL);
-    for (int i = 0; i < ammoSchemeModel->predefSchemesNames.count(); i++)
-        CBRules->addItem(ammoSchemeModel->predefSchemesNames.at(i).toAscii().constData());
-
-    CBWeapons->addItem(QComboBox::tr("Any"));
-    for (int i = 0; i < cDefaultAmmos.count(); i++)
-    {
-        QPair<QString,QString> ammo = cDefaultAmmos.at(i);
-        CBWeapons->addItem(ammo.first.toAscii().constData());
-    }
 }
 
 
@@ -531,17 +478,17 @@ void PageRoomsList::setRoomsList(const QStringList & list)
 
 void PageRoomsList::onCreateClick()
 {
-    RoomNamePrompt prompt(parentWidget()->parentWidget(), m_gameSettings->value("frontend/lastroomname", QString()).toString());
-    connect(&prompt, SIGNAL(roomNameChosen(const QString &)), this, SLOT(onRoomNameChosen(const QString &)));
-    prompt.exec();
+    RoomNamePrompt prompt(this, m_gameSettings->value("frontend/lastroomname", QString()).toString());
+    if(prompt.exec())
+        onRoomNameChosen(prompt.getRoomName(), prompt.getPassword());
 }
 
-void PageRoomsList::onRoomNameChosen(const QString & roomName)
+void PageRoomsList::onRoomNameChosen(const QString & roomName, const QString & password)
 {
     if (!roomName.trimmed().isEmpty())
     {
         m_gameSettings->setValue("frontend/lastroomname", roomName);
-        emit askForCreateRoom(roomName);
+        emit askForCreateRoom(roomName, password);
     }
     else
     {
@@ -570,22 +517,12 @@ void PageRoomsList::onJoinClick()
     if (!gameInLobby)
         emit askJoinConfirmation(roomName);
     else
-        emit askForJoinRoom(roomName);
+        emit askForJoinRoom(roomName, QString());
 }
 
 void PageRoomsList::onRefreshClick()
 {
     emit askForRoomList();
-}
-
-void PageRoomsList::onClearClick()
-{
-    showGamesInLobby->setChecked(true);
-    showGamesInProgress->setChecked(true);
-    CBRules->setCurrentIndex(0);
-    CBWeapons->setCurrentIndex(0);
-    searchText->clear();
-    searchText->setFocus();
 }
 
 void PageRoomsList::onJoinConfirmation(const QString & room)
@@ -600,7 +537,7 @@ void PageRoomsList::onJoinConfirmation(const QString & room)
 
     if (reallyJoinMsg.exec() == QMessageBox::Ok)
     {
-        emit askForJoinRoom(room);
+        emit askForJoinRoom(room, QString());
     }
 }
 
@@ -628,25 +565,15 @@ void PageRoomsList::setModel(RoomsListModel * model)
         roomsModel->sort(RoomsListModel::StateColumn, Qt::AscendingOrder);
 
         stateFilteredModel = new QSortFilterProxyModel(this);
-        schemeFilteredModel = new QSortFilterProxyModel(this);
-        weaponsFilteredModel = new QSortFilterProxyModel(this);
 
         stateFilteredModel->setDynamicSortFilter(true);
-        schemeFilteredModel->setDynamicSortFilter(true);
-        weaponsFilteredModel->setDynamicSortFilter(true);
 
         roomsModel->setFilterKeyColumn(-1); // search in all columns
         stateFilteredModel->setFilterKeyColumn(RoomsListModel::StateColumn);
-        schemeFilteredModel->setFilterKeyColumn(RoomsListModel::SchemeColumn);
-        weaponsFilteredModel->setFilterKeyColumn(RoomsListModel::WeaponsColumn);
 
         roomsModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        schemeFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        weaponsFilteredModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
 
-        schemeFilteredModel->setSourceModel(stateFilteredModel);
-        weaponsFilteredModel->setSourceModel(schemeFilteredModel);
-        roomsModel->setSourceModel(weaponsFilteredModel);
+        roomsModel->setSourceModel(stateFilteredModel);
 
         // let the table view display the last model in the filter chain
         roomsList->setModel(roomsModel);
@@ -659,8 +586,6 @@ void PageRoomsList::setModel(RoomsListModel * model)
     }
 
     stateFilteredModel->setSourceModel(model);
-
-    roomsList->hideColumn(RoomsListModel::StateColumn);
 
     QHeaderView * h = roomsList->horizontalHeader();
 
@@ -678,6 +603,8 @@ void PageRoomsList::setModel(RoomsListModel * model)
         h->resizeSection(RoomsListModel::WeaponsColumn, 100);
     }
 
+    // hide column used for filtering
+    roomsList->hideColumn(RoomsListModel::StateColumn);
 
     // save header state on change
     connect(roomsList->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
@@ -714,29 +641,17 @@ void PageRoomsList::onFilterChanged()
     if (roomsModel == NULL)
         return;
 
-    roomsModel->setFilterWildcard(QString("*%1*").arg(searchText->text()));
+    roomsModel->setFilterFixedString(searchText->text());
 
     bool stateLobby = showGamesInLobby->isChecked();
     bool stateProgress = showGamesInProgress->isChecked();
 
     if (stateLobby && stateProgress)
-        stateFilteredModel->setFilterWildcard("*"); // "any"
+        stateFilteredModel->setFilterFixedString(QString()); // "any"
     else if (stateLobby != stateProgress)
         stateFilteredModel->setFilterFixedString(QString(stateProgress));
     else
         stateFilteredModel->setFilterFixedString(QString("none")); // Basically, none.
-
-    if (CBRules->currentIndex() == 0)
-        schemeFilteredModel->setFilterWildcard("*"); // "any"
-    else
-        schemeFilteredModel->setFilterWildcard(
-            QString("*%1*").arg(CBRules->currentText()));
-
-    if (CBWeapons->currentIndex() == 0)
-        weaponsFilteredModel->setFilterWildcard("*"); // "any"
-    else
-        weaponsFilteredModel->setFilterWildcard(
-            QString("*%1*").arg(CBWeapons->currentText()));
 }
 
 void PageRoomsList::setSettings(QSettings *settings)

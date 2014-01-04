@@ -167,7 +167,7 @@ case Layer of
                              end;
                end;
            if Gear^.Tint <> $FFFFFFFF then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -219,10 +219,17 @@ case Layer of
                               else
                                   DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                   vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
+               vgtStraightShot: begin 
+                                if Gear^.dX < 0 then
+                                    i:= -1
+                                else
+                                    i:= 1;
+                                DrawTextureRotatedF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height, Gear^.Angle);
+                                end;
               end;
-          //if (Gear^.Tint <> $FFFFFFFF) or tinted then Tint($FF,$FF,$FF,$FF);
+          //if (Gear^.Tint <> $FFFFFFFF) or tinted then untint;
           if (Gear^.Tint <> $FFFFFFFF) then
-              Tint($FF,$FF,$FF,$FF);
+              untint;
           Gear:= Gear^.NextGear
           end
        end;
@@ -284,7 +291,7 @@ case Layer of
                    vgtChunk: DrawSpriteRotatedF(sprChunk, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                end;
            if (Gear^.Tint <> $FFFFFFFF) or tinted then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -368,7 +375,7 @@ case Layer of
                               DrawCircle(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State, Gear^.Timer);
            end;
            if (Gear^.Tint <> $FFFFFFFF) or tinted then
-               Tint($FF,$FF,$FF,$FF);
+               untint;
            Gear:= Gear^.NextGear
            end
        end;
@@ -396,7 +403,7 @@ case Layer of
                                 DrawTextureRotatedF(SpritesData[sprFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
             end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;
@@ -424,7 +431,7 @@ case Layer of
                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;
@@ -448,7 +455,7 @@ case Layer of
                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
-                Tint($FF,$FF,$FF,$FF);
+                untint;
             Gear:= Gear^.NextGear
             end
         end;
@@ -487,7 +494,7 @@ begin
 if (cReducedQuality and rqKillFlakes) <> 0 then
     exit;
 
-if hasBorder or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
+if hasBorder or (not cSnow) then
     for i:= 0 to Pred(vobCount * cScreenSpace div 4096) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else
@@ -515,7 +522,7 @@ for i:= 0 to 6 do
         end
         else vg:= vg^.NextGear;
     end;
-if ((GameFlags and gfBorder) <> 0) or ((Theme <> 'Snow') and (Theme <> 'Christmas')) then
+if hasBorder or (not cSnow) then
     for i:= 0 to Pred(vobSDCount * cScreenSpace div 4096) do
         AddVisualGear(cLeftScreenBorder + random(cScreenSpace), random(1024+200) - 100 + LAND_HEIGHT, vgtFlake)
 else

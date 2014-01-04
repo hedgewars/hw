@@ -35,6 +35,7 @@ class HWRecorder : public TCPBase
         virtual ~HWRecorder();
 
         void EncodeVideo(const QByteArray & record);
+        bool simultaneousRun();
 
         VideoItem * item; // used by pagevideos
         QString name;

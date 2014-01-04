@@ -67,7 +67,7 @@ void AbstractPage::initPage()
     descLabel->setAlignment(Qt::AlignCenter);
     descLabel->setWordWrap(true);
     descLabel->setOpenExternalLinks(true);
-    descLabel->setFixedHeight(50);
+    descLabel->setFixedHeight(60);
     descLabel->setStyleSheet("font-size: 16px");
     bottomLeftLayout->addWidget(descLabel);
     pageLayout->addWidget(descLabel, 1, 1);

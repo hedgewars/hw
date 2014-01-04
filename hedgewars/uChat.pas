@@ -29,6 +29,7 @@ procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key, Sym: Longword);
+procedure SendHogSpeech(s: shortstring);
 
 implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
@@ -41,7 +42,7 @@ type TChatLine = record
     Width: LongInt;
     s: shortstring;
     end;
-    TChatCmd = (quitCmd, pauseCmd, finishCmd, fullscreenCmd);
+    TChatCmd = (quit, pause, finish, showhistory, fullscreen);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -73,6 +74,7 @@ const
             (ChatCmd: '/quit'; ProcedureCallChatCmd: 'halt'),
             (ChatCmd: '/pause'; ProcedureCallChatCmd: 'pause'),
             (ChatCmd: '/finish'; ProcedureCallChatCmd: 'finish'),
+            (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
 
@@ -174,7 +176,7 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
     DrawFillRect(r);
     Tint($00, $00, $00, $80);
     DrawTexture(9 - cScreenWidth div 2, visibleCount * 16 + 11, InputStr.Tex);
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
     end;
 
@@ -187,7 +189,7 @@ and (Strs[i].Tex <> nil) do
     DrawFillRect(r);
     Tint($00, $00, $00, $80);
     DrawTexture(9 - cScreenWidth div 2, (visibleCount - t) * 16 - 5, Strs[i].Tex);
-    Tint($FF, $FF, $FF, $FF);
+    untint;
     DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
     dec(r.y, 16);
 
@@ -240,55 +242,64 @@ if x <> 0 then
     exit
     end;
 
-// These 3 are same as above, only are to make the hedgehog say it on next attack
-if (s[1] = '/') and (copy(s, 1, 5) = '/hsa ') then
+if (s[1] = '/') then
     begin
-    if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
-    else
-        SendHogSpeech(#4 + copy(s, 6, Length(s)-5));
-    exit
-    end;
-if (s[1] = '/') and (copy(s, 1, 5) = '/hta ') then
-    begin
-    if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
-    else
-        SendHogSpeech(#5 + copy(s, 6, Length(s)-5));
-    exit
-    end;
-if (s[1] = '/') and (copy(s, 1, 5) = '/hya ') then
-    begin
-    if CurrentTeam^.ExtDriven then
-        ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
-    else
-        SendHogSpeech(#6 + copy(s, 6, Length(s)-5));
-    exit
-    end;
+    // These 3 are same as above, only are to make the hedgehog say it on next attack
+    if (copy(s, 1, 5) = '/hsa ') then
+        begin
+        if CurrentTeam^.ExtDriven then
+            ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
+        else
+            SendHogSpeech(#4 + copy(s, 6, Length(s)-5));
+        exit
+        end;
 
-if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
-    begin
-    ParseCommand(s, true);
-    exit
-    end;
-if (s[1] = '/') and (copy(s, 1, 4) <> '/me ') then
-    begin
-    if CurrentTeam^.ExtDriven or (CurrentTeam^.Hedgehogs[0].BotLevel <> 0) then
-        exit;
+    if (copy(s, 1, 5) = '/hta ') then
+        begin
+        if CurrentTeam^.ExtDriven then
+            ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
+        else
+            SendHogSpeech(#5 + copy(s, 6, Length(s)-5));
+        exit
+        end;
 
-    for i:= Low(TWave) to High(TWave) do
-        if (s = Wavez[i].cmd) then
-            begin
-            ParseCommand('/taunt ' + char(i), true);
-            exit
-            end;
+    if (copy(s, 1, 5) = '/hya ') then
+        begin
+        if CurrentTeam^.ExtDriven then
+            ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
+        else
+            SendHogSpeech(#6 + copy(s, 6, Length(s)-5));
+        exit
+        end;
 
-    for j:= Low(TChatCmd) to High(TChatCmd) do
-        if (s = ChatCommandz[j].ChatCmd) then
-            begin
-            ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
-            exit
-            end;
+    if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
+        begin
+        ParseCommand(s, true);
+        exit
+        end;
+
+    if (copy(s, 1, 4) = '/me ') then
+        begin
+        ParseCommand('/say ' + s, true);
+        exit
+        end;
+
+    if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
+        begin
+        for i:= Low(TWave) to High(TWave) do
+            if (s = Wavez[i].cmd) then
+                begin
+                ParseCommand('/taunt ' + char(i), true);
+                exit
+                end;
+
+        for j:= Low(TChatCmd) to High(TChatCmd) do
+            if (s = ChatCommandz[j].ChatCmd) then
+                begin
+                ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
+                exit
+                end;
+        end
     end
     else
         ParseCommand('/say ' + s, true);

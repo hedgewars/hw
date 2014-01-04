@@ -109,39 +109,6 @@ if CurrentTeam = nil then
 CurrentTeam^.ExtDriven:= true
 end;
 
-procedure chGrave(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/grave"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.GraveName:= s
-end;
-
-procedure chFort(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/fort"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.FortName:= s
-end;
-
-procedure chFlag(var s: shortstring);
-begin
-if CurrentTeam = nil then
-    OutError(errmsgIncorrectUse + ' "/flag"', true);
-if s[1]='"' then
-    Delete(s, 1, 1);
-if s[byte(s[0])]='"' then
-    Delete(s, byte(s[0]), 1);
-CurrentTeam^.flag:= s
-end;
-
 procedure chScript(var s: shortstring);
 begin
 if s[1]='"' then
@@ -152,19 +119,9 @@ cScriptName:= s;
 ScriptLoad(s)
 end;
 
-procedure chSetHat(var s: shortstring);
+procedure chScriptParam(var s: shortstring);
 begin
-if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
-with CurrentTeam^ do
-    begin
-    if not CurrentHedgehog^.King then
-    if (s = '')
-    or (((GameFlags and gfKing) <> 0) and (s = 'crown'))
-    or ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
-        CurrentHedgehog^.Hat:= 'NoHat'
-    else
-        CurrentHedgehog^.Hat:= s
-    end;
+    cScriptParam:= s;
 end;
 
 procedure chCurU_p(var s: shortstring);
@@ -642,9 +599,14 @@ procedure chPause(var s: shortstring);
 begin
 s:=s; // avoid compiler hint
 if gameType <> gmtNet then
-    isPaused:= not isPaused;
+    isPaused:= not isPaused
+    else
+    if (CurrentTeam^.ExtDriven) or (CurrentHedgehog^.BotLevel > 0) then
+        isAFK:= not isAFK
+    else
+        isAFK:= false; // for real ninjas
 
-if isPaused then
+if isPaused or isAFK then
     SDL_ShowCursor(1)
     else
     SDL_ShowCursor(ord(GameState = gsConfirm))
@@ -652,11 +614,27 @@ end;
 
 procedure chRotateMask(var s: shortstring);
 begin
-s:=s; // avoid compiler hint
-if ((GameFlags and gfInvulnerable) = 0) then
-    cTagsMask:= cTagsMasks[cTagsMask]
+s:= s; // avoid compiler hint
+// this is just for me, 'cause I thought it'd be fun.  using the old precise + switch to keep it out of people's way
+if LocalMessage and (gmPrecise or gmSwitch) = (gmPrecise or gmSwitch) then
+    begin
+    if UIDisplay <> uiNone then
+         UIDisplay:= uiNone
+    else UIDisplay:= uiAll
+    end
+else if LocalMessage and gmPrecise = gmPrecise then
+    begin
+    if ((GameFlags and gfInvulnerable) = 0) then
+        cTagsMask:= cTagsMasks[cTagsMask]
+    else
+        cTagsMask:= cTagsMasksNoHealth[cTagsMask]
+    end
 else
-    cTagsMask:= cTagsMasksNoHealth[cTagsMask];
+    begin
+    if UIDisplay <> uiNoTeams then
+         UIDisplay:= uiNoTeams
+    else UIDisplay:= uiAll
+    end
 end;
 
 procedure chSpeedup_p(var s: shortstring);
@@ -823,8 +801,8 @@ begin
     RegisterVariable('setweap' , @chSetWeapon    , false, true);
 //////// End top by freq analysis
     RegisterVariable('gencmd'  , @chGenCmd       , false);
-    RegisterVariable('flag'    , @chFlag         , false);
     RegisterVariable('script'  , @chScript       , false);
+    RegisterVariable('scriptparam', @chScriptParam, false);
     RegisterVariable('proto'   , @chCheckProto   , true );
     RegisterVariable('spectate', @chFastUntilLag   , false);
     RegisterVariable('capture' , @chCapture      , true );
@@ -853,9 +831,6 @@ begin
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);
     RegisterVariable('minestime',@chMinesTime     , false);
-    RegisterVariable('fort'    , @chFort         , false);
-    RegisterVariable('grave'   , @chGrave        , false);
-    RegisterVariable('hat'     , @chSetHat       , false);
     RegisterVariable('quit'    , @chQuit         , true );
     RegisterVariable('forcequit', @chForceQuit   , true );
     RegisterVariable('confirm' , @chConfirm      , true );

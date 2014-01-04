@@ -92,6 +92,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (44, "0.9.19-dev")
             , (45, "0.9.19")
             , (46, "0.9.20-dev")
+            , (47, "0.9.20")
+            , (48, "0.9.21-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -125,8 +127,9 @@ caseInsensitiveCompare a b = upperCase a == upperCase b
 upperCase :: B.ByteString -> B.ByteString
 upperCase = UTF8.fromString . map Char.toUpper . UTF8.toString
 
-roomInfo :: B.ByteString -> RoomInfo -> [B.ByteString]
-roomInfo n r = [
+roomInfo :: Word16 -> B.ByteString -> RoomInfo -> [B.ByteString]
+roomInfo p n r 
+    | p < 46 = [
         showB $ isJust $ gameInfo r,
         name r,
         showB $ playersIn r,
@@ -136,7 +139,17 @@ roomInfo n r = [
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
-
+    | otherwise = [
+        showB $ isJust $ gameInfo r,
+        name r,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Normal"] "SCRIPT" (params r)),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]
 
 answerFullConfigParams ::
             ClientInfo
@@ -169,3 +182,6 @@ answerAllTeams cl = concatMap toAnswer
 
 loc :: B.ByteString -> B.ByteString
 loc = id
+
+maybeNick :: Maybe ClientInfo -> B.ByteString
+maybeNick = fromMaybe "[empty]" . liftM nick

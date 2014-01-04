@@ -23,6 +23,7 @@
 
 class QLineEdit;
 class QLabel;
+class QCheckBox;
 
 class RoomNamePrompt : public QDialog
 {
@@ -30,16 +31,17 @@ class RoomNamePrompt : public QDialog
 
     public:
         RoomNamePrompt(QWidget* parent, const QString & roomName);
-
-    signals:
-        void roomNameChosen(const QString & roomName);
-
-    private slots:
-        void setRoomName();
+        QString getRoomName();
+        QString getPassword();
 
     private:
-        QLineEdit * editBox;
+        QLineEdit * leRoomName;
         QLabel * label;
+        QCheckBox * cbSetPassword;
+        QLineEdit * lePassword;
+
+    private slots:
+        void checkBoxToggled();
 };
 
 #endif // ROOMNAMEPROMPT_H

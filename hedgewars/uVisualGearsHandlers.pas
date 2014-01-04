@@ -71,6 +71,7 @@ procedure doStepCircle(Gear: PVisualGear; Steps: Longword);
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 procedure doStepStraightShot(Gear: PVisualGear; Steps: Longword);
 
+function isSorterActive: boolean; inline;
 procedure initModule;
 
 implementation
@@ -483,11 +484,17 @@ var thexchar: array[0..cMaxTeams] of
             dy, ny, dw: LongInt;
             team: PTeam;
             SortFactor: QWord;
+            hdw: array[0..cMaxHHIndex] of LongInt;
             end;
     currsorter: PVisualGear = nil;
 
+function isSorterActive: boolean; inline;
+begin
+    isSorterActive:= currsorter <> nil
+end;
+
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
-var i, t: LongInt;
+var i, t, h: LongInt;
 begin
 for t:= 1 to min(Steps, Gear^.Timer) do
     begin
@@ -498,7 +505,13 @@ for t:= 1 to min(Steps, Gear^.Timer) do
                 begin
                 {$WARNINGS OFF}
                 team^.DrawHealthY:= ny + dy * LongInt(Gear^.Timer) div cSorterWorkTime;
-                team^.TeamHealthBarWidth:= team^.NewTeamHealthBarWidth + dw * LongInt(Gear^.Timer) div cSorterWorkTime;
+                team^.TeamHealthBarHealth:= team^.TeamHealth + dw * LongInt(Gear^.Timer) div cSorterWorkTime;
+
+                for h:= 0 to cMaxHHIndex do
+                    if (team^.Hedgehogs[h].Gear <> nil) then
+                        team^.Hedgehogs[h].HealthBarHealth:= team^.Hedgehogs[h].Gear^.Health + hdw[h] * LongInt(Gear^.Timer) div cSorterWorkTime
+                    else
+                        team^.Hedgehogs[h].HealthBarHealth:= hdw[h] * LongInt(Gear^.Timer) div cSorterWorkTime;
                 {$WARNINGS ON}
                 end;
     end;
@@ -515,7 +528,7 @@ end;
 procedure doStepTeamHealthSorter(Gear: PVisualGear; Steps: Longword);
 var i: Longword;
     b: boolean;
-    t: LongInt;
+    t, h: LongInt;
 begin
 {$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
@@ -526,7 +539,7 @@ for t:= 0 to Pred(TeamsCount) do
         begin
         team:= TeamsArray[t];
         dy:= team^.DrawHealthY;
-        dw:= team^.TeamHealthBarWidth - team^.NewTeamHealthBarWidth;
+        dw:= team^.TeamHealthBarHealth - team^.TeamHealth;
         if team^.TeamHealth > 0 then
             begin
             SortFactor:= team^.Clan^.ClanHealth;
@@ -535,6 +548,12 @@ for t:= 0 to Pred(TeamsCount) do
             end
         else
             SortFactor:= 0;
+
+        for h:= 0 to cMaxHHIndex do
+            if (team^.Hedgehogs[h].Gear <> nil) then
+                hdw[h]:= team^.Hedgehogs[h].HealthBarHealth - team^.Hedgehogs[h].Gear^.Health
+            else
+                hdw[h]:= team^.Hedgehogs[h].HealthBarHealth;
         end;
 
 if TeamsCount > 1 then
@@ -555,7 +574,7 @@ for i:= 0 to Pred(TeamsCount) do
         with thexchar[i] do
           if team^.TeamHealth > 0 then
             begin
-            dec(t, team^.HealthTex^.h + 2);
+            dec(t, team^.Clan^.HealthTex^.h + 2);
             ny:= t;
             dy:= dy - ny
             end;
@@ -573,7 +592,7 @@ if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
 
 if (Gear^.Hedgehog^.Gear <> nil) then
     begin
-    Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.FrameTicks);
+    Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
     Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
     end;
 
@@ -602,10 +621,11 @@ Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
 
 Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
 
+// FrameTicks cannot hold negative values
 case Gear^.FrameTicks of
-    1: Gear^.FrameTicks:= SpritesData[sprSpeechTail].Width-28;
-    2: Gear^.FrameTicks:= SpritesData[sprThoughtTail].Width-20;
-    3: Gear^.FrameTicks:= SpritesData[sprShoutTail].Width-10;
+    1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-28;
+    2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-20;
+    3: Gear^.Tag:= SpritesData[sprShoutTail].Width-10;
     end;
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
