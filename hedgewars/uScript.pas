@@ -84,11 +84,11 @@ uses LuaPas,
     uIO,
     uVisualGearsList,
     uGearsHandlersMess,
-    uPhysFSLayer,
+    uPhysFSLayer
 {$IFDEF PAS2C}
-    hwpacksmounter
-{$ELSE},
-    typinfo
+    , hwpacksmounter
+{$ELSE}
+    , typinfo
 {$ENDIF}
     ;
 

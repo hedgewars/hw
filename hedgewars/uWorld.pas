@@ -1377,7 +1377,6 @@ if smallScreenOffset <> 0 then
 end;
 
 
->>>>>>> other
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
     r: TSDL_Rect;
