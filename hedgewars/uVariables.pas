@@ -46,6 +46,9 @@ var
     cShowFPS           : boolean;
     cFlattenFlakes     : boolean;
     cFlattenClouds     : boolean;
+    cIce               : boolean;
+    cSnow              : boolean;
+
     cAltDamage         : boolean;
     cReducedQuality    : LongWord;
     UserNick           : shortstring;
@@ -69,6 +72,7 @@ var
     isPaused        : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
+    isAFK           : boolean;
     SpeedStart      : LongWord;
 
     fastUntilLag    : boolean;
@@ -83,7 +87,10 @@ var
     InputMask       : LongWord;
     GameFlags       : Longword;
     WorldEdge       : TWorldEdge;
+    LeftImpactTimer : LongWord;
+    RightImpactTimer: LongWord;
     TurnTimeLeft    : Longword;
+    TurnClockActive : boolean;
     TagTurnTimeLeft : Longword;
     ReadyTimeLeft   : Longword;
     cSuddenDTurns   : LongInt;
@@ -128,6 +135,9 @@ var
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
+    CrosshairTexture : PTexture;
+    GenericHealthTexture : PTexture;
+
     cLeftScreenBorder     : LongInt;
     cRightScreenBorder    : LongInt;
     cScreenSpace          : Longword;
@@ -137,6 +147,7 @@ var
     cExplosives     : Longword;
 
     cScriptName     : shortstring;
+    cScriptParam    : shortstring;
     cSeed           : shortstring;
     cVolumeDelta    : LongInt;
     cHasFocus       : boolean;
@@ -154,6 +165,7 @@ var
     cMaxWindSpeed   : hwFloat;
     cWindSpeed      : hwFloat;
     cWindSpeedf     : real;
+    cElastic        : hwFloat;
     cGravity        : hwFloat;
     cGravityf       : real;
     cDamageModifier : hwFloat;
@@ -187,6 +199,9 @@ var
     ScreenFade      : TScreenFade;
     ScreenFadeValue : LongInt;
     ScreenFadeSpeed : LongInt;
+
+    UIDisplay       : TUIDisplay;
+    LocalMessage    : LongWord;
 
     Theme           : shortstring;
     disableLandBack : boolean;
@@ -441,7 +456,7 @@ var
             (FileName: 'amKamikaze'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprKamikaze
             (FileName:     'amWhip'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 128; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWhip
+            Width: 128; Height: 64; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprWhip
             (FileName:     'Kowtow'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLowest; getDimensions: false; getImageDimensions: true),// sprKowtow
             (FileName:        'Sad'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -670,7 +685,11 @@ var
             (FileName:  'amIceGun'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 32; Height: 32; imageWidth: 32; imageHeight: 32; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprIceGun
             (FileName:  'amFrozenHog'; Path: ptHedgehog; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprFrozenHog
+            Width: 64; Height: 64; imageWidth: 64; imageHeight: 64; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprFrozenHog
+            (FileName:   'amRubber'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width: 160; Height:160; imageWidth: 0; imageHeight: 0; saveSurf:  true; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprAmRubber
+            (FileName:  'boing'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width: 101; Height: 97; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprBoing
             );
 
 const
@@ -844,7 +863,8 @@ var
             Probability: 0;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_ForwMsgs or
-                          ammoprop_NeedUpDown;
+                          ammoprop_NeedUpDown or
+                          ammoprop_DoesntStopTimerInMultiShoot;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -896,6 +916,7 @@ var
             Probability: 0;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_AttackInMove or
                           ammoprop_DontHold;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
@@ -925,7 +946,8 @@ var
                           ammoprop_AttackInMove or
                           ammoprop_Utility or
                           ammoprop_AltAttack or
-                          ammoprop_NeedUpDown;
+                          ammoprop_NeedUpDown or
+                          ammoprop_DoesntStopTimerWhileAttacking;
                     Count: 5;
                     NumPerTurn: 0;
                     Timer: 0;
@@ -977,7 +999,7 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 2;
-            Ammo: (Propz: ammoprop_NeedUpDown;
+            Ammo: (Propz: ammoprop_NeedUpDown or ammoprop_DoesntStopTimerInMultiShoot;
                 Count: 3;
                 NumPerTurn: 3;
                 Timer: 0;
@@ -1741,7 +1763,8 @@ var
             NumberInCase: 2;
             Ammo: (Propz: ammoprop_NeedUpDown or
                     ammoprop_OscAim or
-                    ammoprop_NoMoveAfter;
+                    ammoprop_NoMoveAfter or
+                    ammoprop_DoesntStopTimerInMultiShoot;
                 Count: 2;
                 NumPerTurn: 1;
                 Timer: 0;
@@ -1860,7 +1883,7 @@ var
                 AmmoType: amPortalGun;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 6;
+            Slot: 7;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2125,7 +2148,7 @@ var
                 AmmoType: amTardis;
                 AttackVoice: sndNone;
                 Bounciness: 1000);
-            Slot: 7;
+            Slot: 8;
             TimeAfterTurn: 0;
             minAngle: 0;
             maxAngle: 0;
@@ -2238,6 +2261,33 @@ var
             PosCount: 1;
             PosSprite: sprWater;
             ejectX: 0;
+            ejectY: 0),
+// Rubber
+            (NameId: sidRubber;
+            NameTex: nil;
+            Probability: 150;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NoCrosshair or
+                          ammoprop_NeedTarget or
+                          ammoprop_Utility or
+                          ammoprop_AttackingPut;
+                    Count: 1;
+                    NumPerTurn: 0;
+                    Timer: 0;
+                    Pos: 0;
+                    AmmoType: amRubber;
+                    AttackVoice: sndNone;
+                Bounciness: 1000);
+            Slot: 6;
+            TimeAfterTurn: 3000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: false;
+            SkipTurns: 0;
+            PosCount: 4;
+            PosSprite: sprAmRubber;
+            ejectX: 0;
             ejectY: 0)
         );
 
@@ -2290,6 +2340,7 @@ var
 
 
     PauseTexture,
+    AFKTexture,
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
@@ -2397,6 +2448,8 @@ begin
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
+    cIce                := false;
+    cSnow               := false;
     lastVisualGearByUID := nil;
     lastGearByUID       := nil;
     cReadyDelay         := 5000;
@@ -2444,6 +2497,7 @@ begin
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
     cWindSpeed.QWordValue   := 0;           // 0.0
     cWindSpeedf             := 0.0;
+    cElastic                := _0_9;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
     cDamageModifier         := _1;
@@ -2472,7 +2526,10 @@ begin
     InputMask           := $FFFFFFFF;
     GameFlags           := 0;
     WorldEdge           := weNone;
+    LeftImpactTimer     := 0;
+    RightImpactTimer    := 0;
     TurnTimeLeft        := 0;
+    TurnClockActive     := true;
     TagTurnTimeLeft     := 0;
     cSuddenDTurns       := 15;
     cDamagePercent      := 100;
@@ -2513,11 +2570,13 @@ begin
     isPaused        := false;
     isInMultiShoot  := false;
     isSpeed         := false;
+    isAFK           := false;
     SpeedStart      := 0;
     fastUntilLag    := false;
     fastScrolling   := false;
     autoCameraOn    := true;
     cScriptName     := '';
+    cScriptParam    := '';
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;
@@ -2562,13 +2621,9 @@ begin
     cMapName:= '';
 
     LuaTemplateNumber:= 0;
-    cStereoDepth := 0;
 
-//    MatrixLoadIdentity(mModelview);
-//    MatrixLoadIdentity(mProjection);
-    aVertex:= 0;
-    aTexCoord:= 1;
-    aColor:= 2;
+    UIDisplay:= uiAll;
+    LocalMessage:= 0;
 end;
 
 procedure freeModule;

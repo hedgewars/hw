@@ -41,13 +41,14 @@ function  CheckForWin: boolean;
 procedure TeamGoneEffect(var Team: TTeam);
 procedure SwitchCurrentHedgehog(newHog: PHedgehog);
 
+var MaxTeamHealth: LongInt;
+
 implementation
 uses uLocale, uAmmos, uChat, uVariables, uUtils, uIO, uCaptions, uCommands, uDebug,
     uGearsUtils, uGearsList, uVisualGearsList, uTextures
     {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
-var MaxTeamHealth: LongInt;
-    GameOver: boolean;
+var GameOver: boolean;
     NextClan: boolean;
 
 function CheckForWin: boolean;
@@ -480,17 +481,11 @@ with team^ do
         else if Hedgehogs[i].GearHidden <> nil then
             inc(TeamHealth, Hedgehogs[i].GearHidden^.Health);
 
-    if not hasGone then
-        NewTeamHealthBarWidth:= TeamHealth
-        else
-        NewTeamHealthBarWidth:= 0;
-
-    if NewTeamHealthBarWidth > MaxTeamHealth then
+    if TeamHealth > MaxTeamHealth then
         begin
-        MaxTeamHealth:= NewTeamHealthBarWidth;
+        MaxTeamHealth:= TeamHealth;
         RecountAllTeamsHealth;
-        end else if NewTeamHealthBarWidth > 0 then
-            NewTeamHealthBarWidth:= (NewTeamHealthBarWidth * cTeamHealthWidth) div MaxTeamHealth
+        end
     end;
 
 RecountClanHealth(team^.Clan);
@@ -528,7 +523,7 @@ with Team do
 
             if Gear <> nil then
                 begin
-                Gear^.Invulnerable:= false;
+                Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
                 Gear^.Damage:= Gear^.Health;
                 Gear^.State:= (Gear^.State or gstHHGone) and (not gstHHDriven)
                 end
@@ -547,11 +542,11 @@ with CurrentTeam^ do
     SplitBySpace(id, s);
     SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
     CurrentHedgehog^.BotLevel:= StrToInt(id);
+    CurrentHedgehog^.Team:= CurrentTeam;
     Gear:= AddGear(0, 0, gtHedgehog, 0, _0, _0, 0);
     SplitBySpace(s, id);
     Gear^.Health:= StrToInt(s);
     TryDo(Gear^.Health > 0, 'Invalid hedgehog health', true);
-    Gear^.Hedgehog^.Team:= CurrentTeam;
     if (GameFlags and gfSharedAmmo) <> 0 then
         CurrentHedgehog^.AmmoStore:= Clan^.ClanIndex
     else if (GameFlags and gfPerHogAmmo) <> 0 then
@@ -688,6 +683,62 @@ begin
 end;
 
 
+procedure chSetHat(var s: shortstring);
+begin
+if (not isDeveloperMode) or (CurrentTeam = nil) then exit;
+with CurrentTeam^ do
+    begin
+    if not CurrentHedgehog^.King then
+    if (s = '')
+    or (((GameFlags and gfKing) <> 0) and (s = 'crown'))
+    or ((Length(s) > 39) and (Copy(s,1,8) = 'Reserved') and (Copy(s,9,32) <> PlayerHash)) then
+        CurrentHedgehog^.Hat:= 'NoHat'
+    else
+        CurrentHedgehog^.Hat:= s
+    end;
+end;
+
+procedure chGrave(var s: shortstring);
+begin
+    if CurrentTeam = nil then
+        OutError(errmsgIncorrectUse + ' "/grave"', true);
+    if s[1]='"' then
+        Delete(s, 1, 1);
+    if s[byte(s[0])]='"' then
+        Delete(s, byte(s[0]), 1);
+    CurrentTeam^.GraveName:= s
+end;
+
+procedure chFort(var s: shortstring);
+begin
+    if CurrentTeam = nil then
+        OutError(errmsgIncorrectUse + ' "/fort"', true);
+    if s[1]='"' then
+        Delete(s, 1, 1);
+    if s[byte(s[0])]='"' then
+        Delete(s, byte(s[0]), 1);
+    CurrentTeam^.FortName:= s
+end;
+
+procedure chFlag(var s: shortstring);
+begin
+    if CurrentTeam = nil then
+        OutError(errmsgIncorrectUse + ' "/flag"', true);
+    if s[1]='"' then
+        Delete(s, 1, 1);
+    if s[byte(s[0])]='"' then
+        Delete(s, byte(s[0]), 1);
+    CurrentTeam^.flag:= s
+end;
+
+procedure chOwner(var s: shortstring);
+begin
+    if CurrentTeam = nil then
+        OutError(errmsgIncorrectUse + ' "/owner"', true);
+
+    CurrentTeam^.Owner:= s
+end;
+
 procedure initModule;
 begin
 RegisterVariable('addhh', @chAddHH, false);
@@ -696,6 +747,11 @@ RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );
 RegisterVariable('finish', @chFinish, true ); // all teams gone
+RegisterVariable('fort'    , @chFort         , false);
+RegisterVariable('grave'   , @chGrave        , false);
+RegisterVariable('hat'     , @chSetHat       , false);
+RegisterVariable('flag'    , @chFlag         , false);
+RegisterVariable('owner'   , @chOwner        , false);
 
 CurrentTeam:= nil;
 PreviousTeam:= nil;
@@ -722,26 +778,27 @@ if TeamsCount > 0 then
                 begin
                 if GearHidden <> nil then
                     Dispose(GearHidden);
-                    
+
                 FreeTexture(NameTagTex);
                 FreeTexture(HealthTagTex);
                 FreeTexture(HatTex);
                 end;
-                
+
         with TeamsArray[i]^ do
             begin
             FreeTexture(NameTagTex);
-            FreeTexture(CrosshairTex);
             FreeTexture(GraveTex);
-            FreeTexture(HealthTex);
             FreeTexture(AIKillsTex);
             FreeTexture(FlagTex);
             end;
-        
+
         Dispose(TeamsArray[i]);
     end;
-for i:= 0 to Pred(ClansCount) do
-    Dispose(ClansArray[i]);
+    for i:= 0 to Pred(ClansCount) do
+        begin
+        FreeTexture(ClansArray[i]^.HealthTex);
+        Dispose(ClansArray[i]);
+        end
     end;
 TeamsCount:= 0;
 ClansCount:= 0;

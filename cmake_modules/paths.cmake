@@ -14,8 +14,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${LIBRARY_OUTPUT_PATH})
 
 #resource paths
 if(UNIX AND NOT APPLE)
-    set(target_binary_install_dir "bin")
-    set(target_library_install_dir "lib")
+    set(target_binary_install_dir "bin" CACHE PATH "install dest for binaries")
+    set(target_library_install_dir "lib" CACHE PATH "install dest for libs")
 
     string(SUBSTRING "${DATA_INSTALL_DIR}" 0 1 sharepath_start)
     if (NOT (${sharepath_start} MATCHES "/"))
@@ -55,31 +55,16 @@ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 #which point to directories outside the build tree to the install RPATH
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
-#paths where to find libraries (final slash not optional):
-# - the first is relative to the executable
-# - the second is the same directory of the executable (so it runs in bin/)
-# - the third one is the full path of the system dir
-#source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
-set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
-#\\\\ is just \\ which escapes '\' in the final script; same for $$ which escapes '$' in cmake
-set(CMAKE_INSTALL_RPATH_ESCAPED "\\\\$$ORIGIN/../${target_library_install_dir}/:\\\\$$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
-
-if(UNIX AND NOT APPLE)
-    if(CMAKE_COMPILER_IS_GNUCC)
-       #make sure $ORIGIN is respected
-        add_linker_flag("-zorigin")
-    endif()
-    #apply RPATH settings to pascal executables
-    add_flag_append(CMAKE_Pascal_FLAGS "-k-rpath -k'${CMAKE_INSTALL_RPATH_ESCAPED}'")
-    #until we link with external things there is no need to set rpath on haskell
-    #list(APPEND haskell_flags "-optl" "-Wl,-rpath,'${CMAKE_INSTALL_RPATH_ESCAPED}'")
-endif()
-
-#add the automatically determined parts of the RPATH
-#which point to directories outside the build tree to the install RPATH
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
-
-
-#install_name_tool magic for OS X
-set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
-
+if(APPLE)
+    #@rpath mangling
+    set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
+    #install_name_tool for libraries
+    set(CMAKE_INSTALL_NAME_DIR "@executable_path/../Frameworks")
+else(APPLE)
+    #paths where to find libraries (final slash not optional):
+    # - the first is relative to the executable
+    # - the second is the same directory of the executable (so it runs in bin/)
+    # - the third one is the full path of the system dir
+    #source http://www.cmake.org/pipermail/cmake/2008-January/019290.html
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${target_library_install_dir}/:$ORIGIN/:${CMAKE_INSTALL_PREFIX}/${target_library_install_dir}/")
+endif(APPLE)

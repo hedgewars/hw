@@ -198,6 +198,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     UpdateTeamsLists();
     InitCampaignPage();
     UpdateCampaignPage(0);
+    UpdateCampaignPageMission(0);
     UpdateWeapons();
 
     // connect all goBack signals
@@ -305,6 +306,7 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     connect(ui.pageTraining, SIGNAL(startMission(const QString&)), this, SLOT(startTraining(const QString&)));
 
     connect(ui.pageCampaign->BtnStartCampaign, SIGNAL(clicked()), this, SLOT(StartCampaign()));
+    connect(ui.pageCampaign->btnPreview, SIGNAL(clicked()), this, SLOT(StartCampaign()));
     connect(ui.pageCampaign->CBTeam, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBCampaign, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPage(int)));
     connect(ui.pageCampaign->CBMission, SIGNAL(currentIndexChanged(int)), this, SLOT(UpdateCampaignPageMission(int)));
@@ -1128,7 +1130,7 @@ void HWForm::NetNickTaken(const QString & nick)
         //ForcedDisconnect(tr("No nickname supplied."));
         bool retry = RetryDialog(tr("Hedgewars - Empty nickname"), tr("No nickname supplied."));
         GoBack();
-        if (retry) {
+        if (retry && hwnet) {
             if (hwnet->m_private_game) {
                 QStringList list = hwnet->getHost().split(":");
                 NetConnectServer(list.at(0), list.at(1).toShort());
@@ -1138,7 +1140,8 @@ void HWForm::NetNickTaken(const QString & nick)
         return;
     }
 
-    hwnet->NewNick(newNick);
+    if(hwnet)
+        hwnet->NewNick(newNick);
     config->setValue("net/nick", newNick);
     config->updNetNick();
 
@@ -1160,6 +1163,13 @@ void HWForm::NetAuthFailed()
     if (retry) {
        NetConnectOfficialServer();
     }
+}
+
+void HWForm::askRoomPassword()
+{
+    QString password = QInputDialog::getText(this, tr("Room password"), tr("The room is protected with password.\nPlease, enter the password:"));
+    if(hwnet && !password.isEmpty())
+        hwnet->roomPasswordEntered(password);
 }
 
 bool HWForm::RetryDialog(const QString & title, const QString & label)
@@ -1241,6 +1251,7 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(NickTaken(const QString&)), this, SLOT(NetNickTaken(const QString&)), Qt::QueuedConnection);
     connect(hwnet, SIGNAL(AuthFailed()), this, SLOT(NetAuthFailed()), Qt::QueuedConnection);
     //connect(ui.pageNetGame->BtnBack, SIGNAL(clicked()), hwnet, SLOT(partRoom()));
+    connect(hwnet, SIGNAL(askForRoomPassword()), this, SLOT(askRoomPassword()), Qt::QueuedConnection);
 
     ui.pageRoomsList->chatWidget->setUsersModel(hwnet->lobbyPlayersModel());
     ui.pageNetGame->chatWidget->setUsersModel(hwnet->roomPlayersModel());
@@ -1255,10 +1266,10 @@ void HWForm::_NetConnect(const QString & hostName, quint16 port, QString nick)
     connect(hwnet, SIGNAL(serverMessage(const QString&)),
             ui.pageRoomsList->chatWidget, SLOT(onServerMessage(const QString&)), Qt::QueuedConnection);
 
-    connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
-            hwnet, SLOT(CreateRoom(const QString&)));
-    connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
-            hwnet, SLOT(JoinRoom(const QString&)));
+    connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &, const QString &)),
+            hwnet, SLOT(CreateRoom(const QString&, const QString &)));
+    connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &, const QString &)),
+            hwnet, SLOT(JoinRoom(const QString&, const QString &)));
 //  connect(ui.pageRoomsList, SIGNAL(askForCreateRoom(const QString &)),
 //      this, SLOT(NetGameMaster()));
 //  connect(ui.pageRoomsList, SIGNAL(askForJoinRoom(const QString &)),
@@ -1720,13 +1731,9 @@ void HWForm::startTraining(const QString & scriptName)
 void HWForm::StartCampaign()
 {
     CreateGame(0, 0, 0);
-
-    QComboBox *combo = ui.pageCampaign->CBMission;
     QString camp = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
-    unsigned int mNum = combo->count() - combo->currentIndex();
-    QString miss = getCampaignScript(camp, mNum);
+    QString miss = campaignMissionInfo[ui.pageCampaign->CBMission->currentIndex()].script;
     QString campTeam = ui.pageCampaign->CBTeam->currentText();
-
     game->StartCampaign(camp, miss, campTeam);
 }
 
@@ -1891,85 +1898,32 @@ void HWForm::InitCampaignPage()
     }
 }
 
-
 void HWForm::UpdateCampaignPage(int index)
 {
     Q_UNUSED(index);
-
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
-    ui.pageCampaign->CBMission->clear();
-
     QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
-    QStringList missionEntries = getCampMissionList(campaignName);
-    QString tName = team.name();
-    unsigned int n = missionEntries.count();
-    unsigned int m = getCampProgress(tName, campaignName);
-
-    // if the campaign name changes update the campaignMissionDescriptions list
-    // this will be used later in UpdateCampaignPageMission() to update
-    // the mission description in the campaign page
-    bool updateMissionList = false;
-    QSettings * m_info;
-    if(previousCampaignName.compare(campaignName)!=0 ||
-            previousTeamName.compare(tName) != 0)
+    QString tName = team.name();    
+    
+    campaignMissionInfo = getCampMissionList(campaignName,tName);    
+	ui.pageCampaign->CBMission->clear();
+	
+    for(int i=0;i<campaignMissionInfo.size();i++)
     {
-        if (previousTeamName.compare(tName) != 0 &&
-                previousTeamName.compare("") != 0)
-            index = qMin(m + 1, n);
-        previousCampaignName = campaignName;
-        previousTeamName = tName;
-        updateMissionList = true;
-        // the following code was based on pagetraining.cpp
-        DataManager & dataMgr = DataManager::instance();
-        // get locale
-        QSettings settings(dataMgr.settingsFileName(),
-                           QSettings::IniFormat);
-        QString loc = settings.value("misc/locale", "").toString();
-        if (loc.isEmpty())
-            loc = QLocale::system().name();
-        QString campaignDescFile = QString("physfs://Locale/campaigns_" + loc + ".txt");
-        // if file is non-existant try with language only
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_" + loc.remove(QRegExp("_.*$")) + ".txt");
-
-        // fallback if file for current locale is non-existant
-        if (!QFile::exists(campaignDescFile))
-            campaignDescFile = QString("physfs://Locale/campaigns_en.txt");
-
-        m_info = new QSettings(campaignDescFile, QSettings::IniFormat, this);
-        m_info->setIniCodec("UTF-8");
-        campaignMissionDescriptions.clear();
-        ui.pageCampaign->CBMission->clear();
-    }
-
-    for (unsigned int i = qMin(m + 1, n); i > 0; i--)
-    {
-        if(updateMissionList)
-        {
-            campaignMissionDescriptions += m_info->value(campaignName+"-"+ getCampaignMissionName(campaignName,i) + ".desc",
-                                            tr("No description available")).toString();
-        }
-        ui.pageCampaign->CBMission->addItem(QString("Mission %1: ").arg(i) + QString(missionEntries[i-1]), QString(missionEntries[i-1]));
-    }
-    if(updateMissionList)
-        delete m_info;
-
-    UpdateCampaignPageMission(index);
+        ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
+	}
 }
 
 void HWForm::UpdateCampaignPageMission(int index)
 {
-    // update thumbnail
+    // update thumbnail and description
     QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
-    unsigned int mNum = ui.pageCampaign->CBMission->count() - ui.pageCampaign->CBMission->currentIndex();
-    QString image = getCampaignImage(campaignName,mNum);
-    ui.pageCampaign->btnPreview->setIcon(QIcon((":/res/campaign/"+campaignName+"/"+image)));
-    // update description
     // when campaign changes the UpdateCampaignPageMission is triggered with wrong values
     // this will cause segfault. This check prevents illegal memory reads
-    if(index > -1 && index < campaignMissionDescriptions.count()) {
+    if(index > -1 && index < campaignMissionInfo.count()) {
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
-        ui.pageCampaign->lbldescription->setText(campaignMissionDescriptions[index]);
+        ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
+		ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
     }
 }
 
@@ -1977,9 +1931,16 @@ void HWForm::UpdateCampaignPageProgress(int index)
 {
     Q_UNUSED(index);
 
-    int missionIndex = ui.pageCampaign->CBMission->currentIndex();
+    QString missionTitle = ui.pageCampaign->CBMission->currentText();
     UpdateCampaignPage(0);
-    ui.pageCampaign->CBMission->setCurrentIndex(missionIndex);
+    for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
+    {
+		if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
+		{
+			ui.pageCampaign->CBMission->setCurrentIndex(i);
+			break;
+		}
+	}
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]

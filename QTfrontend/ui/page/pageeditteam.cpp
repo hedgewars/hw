@@ -211,7 +211,12 @@ void PageEditTeam::lazyLoad()
 {
     if(m_loaded) return;
     m_loaded = true;
-    qDebug("[LAZYNESS] PageEditTeam::lazyLoad()");
+    qDebug("[LAZINESS] PageEditTeam::lazyLoad()");
+
+    HatModel * hatsModel = DataManager::instance().hatModel();
+    for(int i = 0; i < HEDGEHOGS_PER_TEAM; i++)
+        HHHats[i]->setModel(hatsModel);
+
 
     QRegExp pngSuffix("\\.png$");
     DataManager & dataMgr = DataManager::instance();

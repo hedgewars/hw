@@ -861,6 +861,8 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
     else
         nick = m_clickedNick;
 
+    bool isOnline = (mil.size() > 0);
+
     QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
     if(!playersSortFilterModel)
         return;
@@ -871,8 +873,11 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
         return;
 
     bool isSelf = (nick == m_userNick);
+    bool isInRoom = players->isFlagSet(nick, PlayersListModel::InRoom);
 
-    acFollow->setVisible(!isSelf);
+    acFollow->setVisible(!isSelf && isInRoom);
+
+    acInfo->setVisible(isOnline);
 
     // update context menu labels according to possible action
     if(players->isFlagSet(nick, PlayersListModel::Ignore))
@@ -901,7 +906,7 @@ void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
 
     if (m_isAdmin)
     {
-        acKick->setVisible(!isSelf);
+        acKick->setVisible(!isSelf && isOnline);
         acBan->setVisible(!isSelf);
     }
 

@@ -816,13 +816,13 @@ case JumpType of
     jmpLJump:
         begin
             if TestCollisionYwithGear(Gear, -1) <> 0 then
-                if not TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) then
+                if TestCollisionXwithXYShift(Gear, _0, -2, hwSign(Gear^.dX)) = 0 then
                     Gear^.Y:= Gear^.Y - int2hwFloat(2)
                 else
-                    if not TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) then
+                    if TestCollisionXwithXYShift(Gear, _0, -1, hwSign(Gear^.dX)) = 0 then
                         Gear^.Y:= Gear^.Y - _1;
-            if not (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) or
-               (TestCollisionYwithGear(Gear, -1) <> 0)) then
+            if (TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) = 0) and
+               (TestCollisionYwithGear(Gear, -1) = 0) then
             begin
                 Gear^.dY:= -_0_15;
                 Gear^.dX:= SignAs(_0_15, Gear^.dX);
@@ -850,7 +850,7 @@ repeat
                 Gear^.dY:= -_0_25;
                 Gear^.dX:= SignAs(_0_02, Gear^.dX)
             end;
-        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) then SetLittle(Gear^.dX);
+        if TestCollisionXwithGear(Gear, hwSign(Gear^.dX)) <> 0 then SetLittle(Gear^.dX);
             Gear^.X:= Gear^.X + Gear^.dX;
         inc(GoInfo.Ticks);
         Gear^.dY:= Gear^.dY + cGravity;

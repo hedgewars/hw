@@ -158,6 +158,13 @@
     </message>
 </context>
 <context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation>Гость</translation>
+    </message>
+</context>
+<context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
@@ -332,7 +339,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Имя пользователя зарегистрировано</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -340,39 +347,45 @@ Please pick another nickname:</source>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанное имя пользователя зарегистрирована, и вы не указали пароль
+
+Если это имя пользователя не принадлежит вам, пожалуйста, зарегистрируйте другое имя на www.hedgewars.org
+
+Пароль:</translation>
     </message>
     <message>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваше имя пользователя не зарегистрировано.
+Чтобы никто другой не воспользовался им,
+зарегистрируйте его на www.hedgewars.org</translation>
     </message>
     <message>
         <source>
 
 Your password wasn&apos;t saved either.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш пароль не был сохранён.</translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Пустое имя пользователя</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Неверный пароль</translation>
     </message>
     <message>
         <source>You entered a wrong password.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы ввели неверный пароль.</translation>
     </message>
     <message>
         <source>Try Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Попробуйте снова</translation>
     </message>
     <message>
         <source>Hedgewars - Connection error</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars - Ошибка соединения</translation>
     </message>
     <message>
         <source>You reconnected too fast.
@@ -382,7 +395,21 @@ Please wait a few seconds and try again.</source>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для этой страницы нужно соединение с интернетом.</translation>
+    </message>
+    <message>
+        <source>Guest</source>
+        <translation>Гость</translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation>Пароль комнаты</translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation>Эта комната защищена паролем.
+Пожалуйста, введите пароль:</translation>
     </message>
 </context>
 <context>
@@ -593,14 +620,17 @@ Please wait a few seconds and try again.</source>
     <name>HWPasswordDialog</name>
     <message>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя пользователя</translation>
     </message>
     <message>
         <source>To connect to the server, please log in.
 
 If you don&apos;t have an account on www.hedgewars.org,
 just enter your nickname.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для входа на сервер укажите имя пользователя.
+
+Если у вас нет учётной записи на www.hedgewars.org,
+введите своё имя пользователя.</translation>
     </message>
     <message>
         <source>Nickname:</source>
@@ -648,7 +678,7 @@ just enter your nickname.</source>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
+        <translation type="obsolete">SDL_ttf возвратил ошибку при выводе текста, наиболее вероятно это вызвано багом в библиотеке freetype2. Рекомендуется обновить библиотеку.</translation>
     </message>
 </context>
 <context>
@@ -663,15 +693,15 @@ just enter your nickname.</source>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Длительность: %1мин %2сек</translation>
+        <translation type="obsolete">Длительность: %1мин %2сек</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Видео: %1x%2, </translation>
+        <translation type="obsolete">Видео: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 кадров/сек,</translation>
+        <translation type="obsolete">%1 кадров/сек,</translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -680,6 +710,18 @@ just enter your nickname.</source>
     <message>
         <source>unknown</source>
         <translation>неизвестно</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation>Длительность: %1мин %2сек</translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation>Видео: %1x%2</translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation>%1 кадров/сек</translation>
     </message>
 </context>
 <context>
@@ -767,7 +809,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>This page requires an internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для этой страницы нужно соединение с интернетом.</translation>
     </message>
 </context>
 <context>
@@ -807,6 +849,18 @@ just enter your nickname.</source>
     <message>
         <source>Eraser</source>
         <translation>Стирательная резинка</translation>
+    </message>
+    <message>
+        <source>Polyline</source>
+        <translation>Ломаная</translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation>Прямоугольник</translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation>Эллипс</translation>
     </message>
 </context>
 <context>
@@ -920,11 +974,19 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Play again</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть заново</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation type="unfinished">Сохранить</translation>
+        <translation>Сохранить</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -961,7 +1023,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Leave a feedback here reporting issues, suggesting features or just saying how you like Hedgewars</source>
-        <translation type="unfinished"></translation>
+        <translation>Оставьте отзыв, упомянув проблемы, предложив новые возможности или просто рассказав, что вам нравится Hedgewars</translation>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
@@ -1185,7 +1247,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Game audio</source>
-        <translation type="unfinished"></translation>
+        <translation>Звук в игре</translation>
     </message>
     <message>
         <source>Frontend audio</source>
@@ -1193,7 +1255,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Учётная запись</translation>
     </message>
     <message>
         <source>Proxy settings</source>
@@ -1247,11 +1309,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Правила:</translation>
+        <translation type="obsolete">Правила:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Оружие:</translation>
+        <translation type="obsolete">Оружие:</translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1287,7 +1349,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Очистить фильтры</translation>
+        <translation type="obsolete">Очистить фильтры</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1416,6 +1478,22 @@ just enter your nickname.</source>
         <source>Add an indestructible border along the bottom</source>
         <translation>Добавить неразрушимую границу внизу карты</translation>
     </message>
+    <message>
+        <source>None (Default)</source>
+        <translation>Отсутствует (по умолчанию)</translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation>Замыкание</translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation>Отражение</translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation>Море (края соединены с морем)</translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1515,11 +1593,19 @@ just enter your nickname.</source>
     <message>
         <source>Date: %1
 </source>
-        <translation>Дата: %1</translation>
+        <translation type="obsolete">Дата: %1</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
+        <translation type="obsolete">Размер: %1</translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation>Дата: %1</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
         <translation>Размер: %1</translation>
     </message>
 </context>
@@ -1575,11 +1661,11 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Show games in lobby</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать неначавшиеся игры</translation>
     </message>
     <message>
         <source>Show games in-progress</source>
-        <translation>Показать текущие игры</translation>
+        <translation>Показывать текущие игры</translation>
     </message>
 </context>
 <context>
@@ -1638,7 +1724,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>In-game sound effects</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутриигровые звуковые эффекты</translation>
     </message>
     <message>
         <source>Music</source>
@@ -1646,7 +1732,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>In-game music</source>
-        <translation type="unfinished"></translation>
+        <translation>Внутриигровая музыка</translation>
     </message>
     <message>
         <source>Frontend sound effects</source>
@@ -1654,6 +1740,38 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Frontend music</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Team</source>
+        <translation>Команда</translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation>Ёж</translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation>Здоровье</translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation>Прозрачность</translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1677,7 +1795,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Any</source>
-        <translation>Любой</translation>
+        <translation type="obsolete">Любой</translation>
     </message>
     <message>
         <source>In lobby</source>
@@ -1891,7 +2009,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Подсказка:</translation>
+        <translation type="obsolete">Подсказка:</translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2041,6 +2159,18 @@ Do you really want to quit?</source>
         <source>This setting will be effective at next restart.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation>Край мира</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2062,10 +2192,6 @@ Do you really want to quit?</source>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
-    </message>
-    <message>
-        <source>-r%1 (%2)</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2294,6 +2420,13 @@ Not all players are ready.</source>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation>Описание отсутствует</translation>
+    </message>
+</context>
+<context>
     <name>QPushButton</name>
     <message>
         <source>Play demo</source>
@@ -2377,7 +2510,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Restore default coding parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить параметры кодирования</translation>
     </message>
     <message>
         <source>Open the video directory in your system</source>
@@ -2385,15 +2518,15 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Play this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Играть видео</translation>
     </message>
     <message>
         <source>Delete this video</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить видео</translation>
     </message>
     <message>
         <source>Upload this video to your Youtube account</source>
-        <translation type="unfinished"></translation>
+        <translation>Отправить на YouTube</translation>
     </message>
     <message>
         <source>Reset</source>
@@ -2429,6 +2562,10 @@ Not all players are ready.</source>
     <message>
         <source>Create room</source>
         <translation>Создать комнату</translation>
+    </message>
+    <message>
+        <source>set password</source>
+        <translation>указать пароль</translation>
     </message>
 </context>
 <context>
@@ -2477,12 +2614,16 @@ Not all players are ready.</source>
         <source>Hand-drawn</source>
         <translation>Рисованная карта</translation>
     </message>
+    <message>
+        <source>Script</source>
+        <translation>Скрипт</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
     <message>
         <source>The map seed is the basis for all random values generated by the game.</source>
-        <translation>Зерно карты - это основа для всех псведослучайных значений, используемых в игре.</translation>
+        <translation>Зерно карты - это основа для всех псевдослучайных значений, используемых в игре.</translation>
     </message>
     <message>
         <source>Cancel</source>
@@ -2547,7 +2688,7 @@ Error code: %2</source>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>Команда %1</translation>
+        <translation type="obsolete">Команда %1</translation>
     </message>
 </context>
 <context>
@@ -3142,6 +3283,129 @@ Error code: %2</source>
     </message>
     <message>
         <source>DPad</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>server</name>
+    <message>
+        <source>Not room master</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Corrupted hedgehogs info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>too many teams</source>
+        <translation>слишком много команд</translation>
+    </message>
+    <message>
+        <source>too many hedgehogs</source>
+        <translation>слишком много ежей</translation>
+    </message>
+    <message>
+        <source>There&apos;s already a team with same name in the list</source>
+        <translation>В списке уже есть команда с таким названием</translation>
+    </message>
+    <message>
+        <source>round in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>REMOVE_TEAM: no such team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not team owner!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Less than two clans!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal room name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room with such name already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname already chosen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Illegal nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protocol already known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nickname is already in use</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Authentication failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>60 seconds cooldown after kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kicked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ping timeout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>bye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such room</source>
+        <translation>Нет такой комнаты</translation>
+    </message>
+    <message>
+        <source>Joining restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Registered users only</source>
+        <translation>Только для зарегистрированных игроков</translation>
+    </message>
+    <message>
+        <source>You are banned in this room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Empty config entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

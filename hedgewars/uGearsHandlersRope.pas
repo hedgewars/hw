@@ -31,9 +31,17 @@ uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
 procedure doStepRopeAfterAttack(Gear: PGear);
 var 
     HHGear: PGear;
+    tX:     hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    WorldWrap(HHGear);
+    tX:= HHGear^.X;
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+       ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
+        begin
+        HHGear^.X:= tX;
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2
+        end;
+
     if (HHGear^.Hedgehog^.CurAmmoType = amParachute) and (HHGear^.dY > _0_39) then
         begin
         DeleteGear(Gear);
@@ -54,7 +62,7 @@ begin
 
     HedgehogChAngle(HHGear);
 
-    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
         SetLittle(HHGear^.dX);
 
     if HHGear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
@@ -117,8 +125,20 @@ begin
 
     HHGear := Gear^.Hedgehog^.Gear;
 
-    if ((HHGear^.State and gstHHDriven) = 0) or WorldWrap(HHGear)
-       or (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
+    tX:= HHGear^.X;
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+       ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
+        begin
+        PlaySound(sndRopeRelease);
+        RopeDeleteMe(Gear, HHGear);
+        HHGear^.X:= tX;
+        HHGear^.dX.isNegative:= hwRound(tX) > LongInt(leftX) + HHGear^.Radius * 2;
+        exit
+        end;
+
+    tX:= HHGear^.X;
+    if ((HHGear^.State and gstHHDriven) = 0) or
+        (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
         begin
         PlaySound(sndRopeRelease);
         RopeDeleteMe(Gear, HHGear);
@@ -127,17 +147,17 @@ begin
 
     HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 2;
     HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 2;
-    if (Gear^.Message and gmLeft  <> 0) and (not TestCollisionXwithGear(HHGear, -1)) then
+    if (Gear^.Message and gmLeft  <> 0) and (TestCollisionXwithGear(HHGear, -1) = 0) then
         HHGear^.dX := HHGear^.dX - _0_0032;
 
-    if (Gear^.Message and gmRight <> 0) and (not TestCollisionXwithGear(HHGear,  1)) then
+    if (Gear^.Message and gmRight <> 0) and (TestCollisionXwithGear(HHGear,  1) = 0) then
         HHGear^.dX := HHGear^.dX + _0_0032;
 
     // vector between hedgehog and rope attaching point
     ropeDx := HHGear^.X - Gear^.X;
     ropeDy := HHGear^.Y - Gear^.Y;
 
-    if TestCollisionYwithGear(HHGear, 1) = 0 then
+    if TestCollisionYwithXYShift(HHGear, 0, 1, 1) = 0 then
         begin
 
         // depending on the rope vector we know which X-side to check for collision
@@ -148,12 +168,12 @@ begin
             cd:= 1;
 
         // apply gravity if there is no obstacle
-        if not TestCollisionXwithGear(HHGear, cd) then
+        if TestCollisionXwithXYShift(HHGear, _2*cd, 0, cd, true) = 0 then
             HHGear^.dY := HHGear^.dY + cGravity * 16;
 
         if (GameFlags and gfMoreWind) <> 0 then
             // apply wind if there's no obstacle
-            if not TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) then
+            if TestCollisionXwithGear(HHGear, hwSign(cWindSpeed)) = 0 then
                 HHGear^.dX := HHGear^.dX + cWindSpeed * 16 / HHGear^.Density;
         end;
 
@@ -173,13 +193,13 @@ begin
     ty := HHGear^.Y;
 
     if ((Gear^.Message and gmDown) <> 0) and (Gear^.Elasticity < Gear^.Friction) then
-        if not (TestCollisionXwithGear(HHGear, hwSign(ropeDx))
-        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(ropeDy)))) then
+        if not ((TestCollisionXwithXYShift(HHGear, _2*hwSign(ropeDx), 0, hwSign(ropeDx), true) <> 0)
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(ropeDy), hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity + _1_2;
 
     if ((Gear^.Message and gmUp) <> 0) and (Gear^.Elasticity > _30) then
-        if not (TestCollisionXwithGear(HHGear, -hwSign(ropeDx))
-        or ((ropeDy.QWordValue <> 0) and TestCollisionYwithXYShift(HHGear, 0, 1, -hwSign(ropeDy)))) then
+        if not ((TestCollisionXwithXYShift(HHGear, -_2*hwSign(ropeDx), 0, -hwSign(ropeDx), true) <> 0)
+        or ((ropeDy.QWordValue <> 0) and (TestCollisionYwithXYShift(HHGear, 0, 1*-hwSign(ropeDy), -hwSign(ropeDy)) <> 0))) then
             Gear^.Elasticity := Gear^.Elasticity - _1_2;
 
     HHGear^.X := Gear^.X + mdX * Gear^.Elasticity;
@@ -295,12 +315,12 @@ begin
             end;
 
     haveCollision := false;
-    if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+    if TestCollisionXwithXYShift(HHGear, _2*hwSign(HHGear^.dX), 0, hwSign(HHGear^.dX), true) <> 0 then
         begin
         HHGear^.dX := -_0_6 * HHGear^.dX;
         haveCollision := true
         end;
-    if TestCollisionYwithXYShift(HHGear, 0, 1, hwSign(HHGear^.dY)) then
+    if TestCollisionYwithXYShift(HHGear, 0, 1*hwSign(HHGear^.dY), hwSign(HHGear^.dY)) <> 0 then
         begin
         HHGear^.dY := -_0_6 * HHGear^.dY;
         haveCollision := true
@@ -398,7 +418,7 @@ begin
 
     if (HHGear^.State and gstMoving) <> 0 then
         begin
-        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) then
+        if TestCollisionXwithGear(HHGear, hwSign(HHGear^.dX)) <> 0 then
             SetLittle(HHGear^.dX);
         if HHGear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
             HHGear^.dY := _0;

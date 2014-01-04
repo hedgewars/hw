@@ -21,9 +21,8 @@ handleCmd_lobby ["LIST"] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
     rooms <- allRoomInfos
-    let roomsInfoList = concatMap (\r -> roomInfo (nick $ irnc `client` masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
+    let roomsInfoList = concatMap (\r -> roomInfo (clientProto cl) (maybeNick . liftM (client irnc) $ masterID r) r) . filter (\r -> (roomProto r == clientProto cl))
     return [AnswerClients [sendChan cl] ("ROOMS" : roomsInfoList rooms)]
-
 
 handleCmd_lobby ["CHAT", msg] = do
     n <- clientNick
@@ -60,35 +59,37 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let sameProto = clientProto cl == roomProto jRoom
     let jRoomClients = map (client irnc) $ roomClients irnc jRI
     let nicks = map nick jRoomClients
-    let ownerNick = nick . fromJust $ find isMaster jRoomClients
+    let owner = find isMaster jRoomClients
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     return $
-        if isNothing maybeRI || not sameProto then
+        if isNothing maybeRI then
             [Warning $ loc "No such room"]
+            else if not sameProto then
+            [Warning $ loc "Room version incompatible to your hedgewars version"]
             else if isRestrictedJoins jRoom then
             [Warning $ loc "Joining restricted"]
-            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) then
+            else if isRegisteredOnly jRoom && (B.null . webPassword $ cl) && not (isAdministrator cl) then
             [Warning $ loc "Registered users only"]
             else if isBanned then
             [Warning $ loc "You are banned in this room"]
             else if roomPassword /= password jRoom then
             [NoticeMessage WrongPassword]
             else
-            [
+            (
                 MoveToRoom jRI
-                , ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom})
-                , AnswerClients [sendChan cl] $ "JOINED" : nicks
-                , AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
-                , AnswerClients [sendChan cl] $ ["CLIENT_FLAGS", "+h", ownerNick]
-            ]
-            ++ (if clientProto cl < 38 then map (readynessMessage cl) jRoomClients else [sendStateFlags cl jRoomClients])
+                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom})
+                : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
+                : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
+            )
+            ++ [AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
+            ++ [sendStateFlags cl jRoomClients | not $ null jRoomClients]
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
+            ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
 
         where
-        readynessMessage cl c = AnswerClients [sendChan cl] [if isReady c then "READY" else "NOT_READY", nick c]
         sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
                 [f "+r" ready, f "-r" unready, f "+g" ingame, f "-g" inroomlobby]
             where

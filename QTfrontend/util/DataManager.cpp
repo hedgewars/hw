@@ -98,8 +98,7 @@ HatModel * DataManager::hatModel()
 MapModel * DataManager::staticMapModel()
 {
     if (m_staticMapModel == NULL) {
-        m_staticMapModel = new MapModel();
-        m_staticMapModel->loadMaps(MapModel::StaticMap);
+        m_staticMapModel = new MapModel(MapModel::StaticMap, this);
     }
     return m_staticMapModel;
 }
@@ -107,8 +106,7 @@ MapModel * DataManager::staticMapModel()
 MapModel * DataManager::missionMapModel()
 {
     if (m_missionMapModel == NULL) {
-        m_missionMapModel = new MapModel();
-        m_missionMapModel->loadMaps(MapModel::MissionMap);
+        m_missionMapModel = new MapModel(MapModel::MissionMap, this);
     }
     return m_missionMapModel;
 }
@@ -117,7 +115,6 @@ ThemeModel * DataManager::themeModel()
 {
     if (m_themeModel == NULL) {
         m_themeModel = new ThemeModel();
-        m_themeModel->loadThemes();
     }
     return m_themeModel;
 }

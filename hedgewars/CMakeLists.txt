@@ -1,13 +1,25 @@
-find_package(SDL)
+find_package(SDL1or2)
 find_package(SDL_image)
 find_package(SDL_net)
 find_package(SDL_ttf)
 find_package(SDL_mixer)
 
-include (CheckLibraryExists)
+include(CheckLibraryExists)
+include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 
 enable_language(Pascal)
+add_flag_append(CMAKE_Pascal_FLAGS "-Cs2000000")
+add_flag_append(CMAKE_Pascal_FLAGS_DEBUG "-gv")
+add_flag_append(CMAKE_Pascal_FLAGS_RELEASE "-Xs")
+if(UNIX)
+    include(TargetArch)
+    target_architecture(CMAKE_TARGET_ARCHITECTURES)
+    if(${CMAKE_Pascal_COMPILER_VERSION} VERSION_GREATER 2.7 OR ${CMAKE_TARGET_ARCHITECTURES} MATCHES "x86_64" OR ${CMAKE_TARGET_ARCHITECTURES} MATCHES "i386")
+        add_flag_append(CMAKE_Pascal_FLAGS "-fPIC")
+    endif()
+endif(UNIX)
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -79,11 +91,6 @@ set(engine_sources
 
     #these interact with everything, so compile last
     uScript.pas
-    hwengine.pas
-
-    #we also have uTouch.pas
-    options.inc
-    ${CMAKE_CURRENT_BINARY_DIR}/config.inc
     )
 
 
@@ -102,20 +109,20 @@ elseif(CMAKE_Pascal_COMPILER_VERSION VERSION_GREATER 2.4)
     add_flag_prepend(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
 
+#generic folder where our libraries reside
+add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH}")
 
 #DEPENDECIES AND EXECUTABLES SECTION
 if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
     #on OSX we need to provide the SDL_main() function when building as executable
     add_subdirectory(sdlmain)
     list(APPEND HW_LINK_LIBS SDLmain)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
 endif()
 
 if(FFMPEG_FOUND)
     add_subdirectory(avwrapper)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${LIBRARY_OUTPUT_PATH})
     #only for SDL < 2, linking carried out by fpc
     find_package_or_disable_msg(GLUT NOVIDEOREC "Video recording will not be built")
 endif()
@@ -125,7 +132,8 @@ if(PNG_FOUND)
     list(INSERT engine_sources 0 PNGh.pas)
     list(REMOVE_AT PNG_LIBRARIES 1) #removing the zlib library path
     get_filename_component(PNG_LIBRARY_DIR ${PNG_LIBRARIES} PATH)
-    add_flag_append(CMAKE_Pascal_FLAGS -Fl${PNG_LIBRARY_DIR})
+    add_flag_append(CMAKE_Pascal_FLAGS "-k-L${PNG_LIBRARY_DIR} -Fl${PNG_LIBRARY_DIR}")
+    add_definitions(-dPNG_SCREENSHOTS)
 endif()
 
 if(LUA_FOUND AND LUA_SYSTEM)
@@ -140,16 +148,19 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-
-if(NOT PHYSFS_FOUND)
+if(PHYSFS_FOUND)
+    get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
+    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
+else()
     add_definitions(-dPHYSFS_INTERNAL)
     list(APPEND HW_LINK_LIBS physfs)
     #-XLA is a beta fpc flag that renames libraries before passing them to the linker
     #we also have to pass PHYSFS_INTERNAL to satisfy windows runtime requirements
     #(should be harmless on other platforms)
-    add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH} -XLAphysfs=${physfs_output_name}")
+    add_flag_append(CMAKE_Pascal_FLAGS "-XLAphysfs=${physfs_output_name}")
 endif()
 list(APPEND HW_LINK_LIBS physlayer)
+
 
 #Mix_Init/Mix_Quit from SDL_mixer 1.2.10
 check_library_exists(${SDLMIXER_LIBRARY} Mix_Init "" HAVE_MIXINIT)
@@ -163,8 +174,20 @@ if(HAVE_IMGINIT)
     add_definitions(-dSDL_IMAGE_NEWER)
 endif(HAVE_IMGINIT)
 
+if(NOT (SDL_VERSION VERSION_LESS 2.0))
+    add_definitions(-dSDL2)
+endif()
+
 #needs to be last
 add_definitions(-dDEBUGFILE)
+
+
+# source files are with full path after this
+set(sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/options.inc" "${CMAKE_CURRENT_BINARY_DIR}/config.inc")
+foreach(loop_var ${engine_sources})
+    list(APPEND sourcefiles_sofar "${CMAKE_CURRENT_SOURCE_DIR}/${loop_var}")
+endforeach(loop_var)
+
 
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
@@ -180,12 +203,15 @@ if(BUILD_ENGINE_LIBRARY)
     add_flag_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
 
     add_definitions(-dHWLIBRARY)
-    add_library(hwengine SHARED ${engine_sources} hwLibrary.pas)
+    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
+    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS hwengine.pas)
+    add_library(hwengine SHARED hwLibrary.pas)
 else()
     # no need to change name here because target has same name
     set(engine_output_name "hwengine${CMAKE_EXECUTABLE_SUFFIX}")
     set(destination_dir ${target_binary_install_dir})
-    add_executable(hwengine ${engine_sources})
+    set_source_files_properties(hwengine.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
+    add_executable(hwengine hwengine.pas)
 endif()
 
 #even though not actually used, this will trigger relink if any lib changes

@@ -19,7 +19,7 @@ if(APPLE AND
     message(FATAL_ERROR "This version of QT is known *not* to work, please update or use a lower version")
 endif()
 
-find_package(SDL REQUIRED)       #video in SDLInteraction
+find_package(SDL1or2)            #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
 
 if(${FFMPEG_FOUND})
@@ -61,9 +61,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/util/platform)
 include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
-include_directories(${PHYSFS_INCLUDE_DIR})
-include_directories(${PHYSLAYER_INCLUDE_DIR})
-include_directories(${LUA_INCLUDE_DIR}) #brought by physlayer hwpacksmounter.h
+include_directories(BEFORE ${PHYSFS_INCLUDE_DIR})
+include_directories(BEFORE ${PHYSLAYER_INCLUDE_DIR})
 
 
 if(UNIX)

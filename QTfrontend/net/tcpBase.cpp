@@ -80,6 +80,7 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
     QObject(parent),
     m_hasStarted(false),
     m_isDemoMode(demoMode),
+    m_connected(false),
     IPCSocket(0)
 {
     if(!IPCServer)
@@ -103,12 +104,23 @@ void TCPBase::NewConnection()
         // connection should be already finished
         return;
     }
+
     disconnect(IPCServer, SIGNAL(newConnection()), this, SLOT(NewConnection()));
     IPCSocket = IPCServer->nextPendingConnection();
+
     if(!IPCSocket) return;
+
+    m_connected = true;
+
     connect(IPCSocket, SIGNAL(disconnected()), this, SLOT(ClientDisconnect()));
     connect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     SendToClientFirst();
+
+    if(simultaneousRun())
+    {
+        srvsList.removeOne(this);
+        emit isReadyNow();
+    }
 }
 
 void TCPBase::RealStart()
@@ -149,7 +161,8 @@ void TCPBase::ClientDisconnect()
     disconnect(IPCSocket, SIGNAL(readyRead()), this, SLOT(ClientRead()));
     onClientDisconnect();
 
-    emit isReadyNow();
+    if(!simultaneousRun())
+        emit isReadyNow();
     IPCSocket->deleteLater();
 
     deleteLater();
@@ -188,6 +201,7 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
         TCPBase * last = srvsList.last();
         if(couldCancelPreviousRequest
             && last->couldBeRemoved()
+            && (last->isConnected() || !last->hasStarted())
             && (last->parent() == parent()))
         {
             srvsList.removeLast();
@@ -195,7 +209,7 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
             Start(couldCancelPreviousRequest);
         } else
         {
-            connect(srvsList.last(), SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
+            connect(last, SIGNAL(isReadyNow()), this, SLOT(tcpServerReady()));
             srvsList.push_back(this);
         }
     }
@@ -245,4 +259,19 @@ void TCPBase::RawSendIPC(const QByteArray & buf)
 bool TCPBase::couldBeRemoved()
 {
     return false;
+}
+
+bool TCPBase::isConnected()
+{
+    return m_connected;
+}
+
+bool TCPBase::simultaneousRun()
+{
+    return false;
+}
+
+bool TCPBase::hasStarted()
+{
+    return m_hasStarted;
 }

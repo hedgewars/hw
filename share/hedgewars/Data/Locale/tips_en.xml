@@ -1,7 +1,7 @@
-# This is not xml actually, but it looks and behaves like it.
-# Including an xml library would need too much resources.
-# Tips between the platform specific tags are shown only on those platforms.
-# Do not escape characters or use the CDATA tag.
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
 <tips>
     <tip>Simply pick the same color as a friend to play together as a team. Each of you will still control his or her own hedgehogs but they'll win or lose together.</tip>
     <tip>Some weapons might do only low damage but they can be a lot more devastating in the right situation. Try to use the Desert Eagle to knock multiple hedgehogs into the water.</tip>
@@ -56,7 +56,6 @@
         <tip>You can find your Hedgewars configuration files under "Library/Application Support/Hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</tip>
     </mac-only>
     <linux-only>
-        <tip>lintip</tip>
         <tip>You can find your Hedgewars configuration files under ".hedgewars" in your home directory. Create backups or take the files with you, but don't edit them by hand.</tip>
     </linux-only>
 </tips>

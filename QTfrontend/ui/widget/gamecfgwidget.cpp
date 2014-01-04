@@ -324,7 +324,8 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$worldedge %1").arg(schemeData(41).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
-
+    if(!schemeData(42).isNull())
+        bcfg << QString("e$scriptparam %1").arg(schemeData(42).toString()).toUtf8();
 
 
     switch (mapgen)
@@ -390,7 +391,10 @@ void GameCFGWidget::fullNetConfig()
 
     seedChanged(pMapContainer->getCurrentSeed());
     templateFilterChanged(pMapContainer->getTemplateFilter());
-    themeChanged(pMapContainer->getCurrentTheme());
+
+    QString t = pMapContainer->getCurrentTheme();
+    if(!t.isEmpty())
+        themeChanged(t);
 
     schemeChanged(GameSchemes->currentIndex());
     scriptChanged(Scripts->currentIndex());
@@ -566,7 +570,11 @@ void GameCFGWidget::schemeChanged(int index)
     for(int i = 0; i < size; ++i)
         sl << schemeData(i).toString();
 
-    if (sl.size()!=1) emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
+    if (sl.size() >= 42)
+    {
+        sl[42].prepend('!');
+        emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
+    }
 
     if (isEnabled() && bindEntries->isEnabled() && bindEntries->isChecked())
     {

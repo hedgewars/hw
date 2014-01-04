@@ -101,7 +101,6 @@ data ClientInfo =
         logonPassed :: Bool,
         isVisible :: Bool,
         clientProto :: !Word16,
-        roomID :: RoomIndex,
         pingsQueue :: !Word,
         isMaster :: Bool,
         isReady :: !Bool,
@@ -171,7 +170,7 @@ newGameInfo =
 data RoomInfo =
     RoomInfo
     {
-        masterID :: ClientIndex,
+        masterID :: Maybe ClientIndex,
         name :: B.ByteString,
         password :: B.ByteString,
         roomProto :: Word16,
@@ -182,6 +181,8 @@ data RoomInfo =
         isRestrictedJoins :: Bool,
         isRestrictedTeams :: Bool,
         isRegisteredOnly :: Bool,
+        isSpecial :: Bool,
+        greeting :: B.ByteString,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -190,7 +191,7 @@ data RoomInfo =
 newRoom :: RoomInfo
 newRoom =
     RoomInfo
-        (error "No room master defined")
+        Nothing
         ""
         ""
         0
@@ -201,13 +202,20 @@ newRoom =
         False
         False
         False
+        False
+        ""
         []
         (
-            Map.fromList $ Prelude.zipWith (,)
+            Map.fromList $ Prelude.zip
                 ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
                 ["+rnd+", "0", "0", "seed", "0"]
         )
-        (Map.singleton "SCHEME" ["Default"])
+        (
+            Map.fromList $ Prelude.zip
+                ["SCHEME", "SCRIPT"]
+                [["Default"], ["Normal"]]
+        )
+
 
 data StatisticsInfo =
     StatisticsInfo
@@ -245,7 +253,7 @@ newServerInfo =
         True
         "<h2><p align=center><a href=\"http://www.hedgewars.org/\">http://www.hedgewars.org/</a></p></h2>"
         "<font color=yellow><h3 align=center>Hedgewars 0.9.19 is out! Please update.</h3><p align=center><a href=http://hedgewars.org/download.html>Download page here</a></font>"
-        45 -- latestReleaseVersion
+        47 -- latestReleaseVersion
         41 -- earliestCompatibleVersion
         46631
         ""
@@ -267,7 +275,7 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
-    | StoreAchievements B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
     | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
 

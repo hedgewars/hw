@@ -64,7 +64,7 @@ begin
         begin
         Gear^.Tag := 0;
         Gear^.Y := Gear^.Y + int2hwFloat(yy);
-        if not TestCollisionXwithGear(Gear, xxn) then
+        if TestCollisionXwithGear(Gear, xxn) = 0 then
             begin
             Gear^.X := Gear^.X + int2hwFloat(xxn);
             NextAngle(Gear, dA)
@@ -72,7 +72,7 @@ begin
         end;
 
     if (yy = 0) then
-        if TestCollisionXwithGear(Gear, xx) then
+        if TestCollisionXwithGear(Gear, xx) <> 0 then
             PrevAngle(Gear, dA)
     else
         begin

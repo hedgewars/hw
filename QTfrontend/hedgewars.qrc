@@ -38,12 +38,27 @@
         <file>res/campaign/A_Classic_Fairytale/queen.png</file>
         <file>res/campaign/A_Classic_Fairytale/enemy.png</file>
         <file>res/campaign/A_Classic_Fairytale/epil.png</file>
+        <file>res/campaign/A_Space_Adventure/cosmos.png</file>
+        <file>res/campaign/A_Space_Adventure/moon01.png</file>
+        <file>res/campaign/A_Space_Adventure/moon02.png</file>
+        <file>res/campaign/A_Space_Adventure/ice01.png</file>
+        <file>res/campaign/A_Space_Adventure/ice02.png</file>
+        <file>res/campaign/A_Space_Adventure/desert01.png</file>
+        <file>res/campaign/A_Space_Adventure/desert02.png</file>
+        <file>res/campaign/A_Space_Adventure/desert03.png</file>
+        <file>res/campaign/A_Space_Adventure/fruit01.png</file>
+        <file>res/campaign/A_Space_Adventure/fruit02.png</file>
+        <file>res/campaign/A_Space_Adventure/fruit03.png</file>
+        <file>res/campaign/A_Space_Adventure/death01.png</file>
+        <file>res/campaign/A_Space_Adventure/death02.png</file>
+        <file>res/campaign/A_Space_Adventure/final.png</file>
         <file>res/bonus.png</file>
         <file>res/Hedgehog.png</file>
         <file>res/net.png</file>
         <file>res/About.png</file>
         <file>res/SimpleGame.png</file>
         <file>res/Campaign.png</file>
+        <file>res/CampaignDefault.png</file>
         <file>res/Multiplayer.png</file>
         <file>res/Trainings.png</file>
         <file>res/Background.png</file>
@@ -164,7 +179,6 @@
         <file>res/chat/ingame.png</file>
         <file>res/splash.png</file>
         <file>res/html/about.html</file>
-        <file>res/xml/tips.xml</file>
         <file>res/chat/hedgehogcontributor.png</file>
         <file>res/chat/hedgehogcontributor_gray.png</file>
         <file>res/chat/roomadmincontributor.png</file>

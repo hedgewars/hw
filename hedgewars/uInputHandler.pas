@@ -136,7 +136,9 @@ tkbd[code]:= KeyDown;
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
           and (CurrentHedgehog^.BotLevel = 0);
-
+// REVIEW OR FIXME
+// ctrl/cmd + q to close engine and frontend - this seems like a bad idea, since we let people set arbitrary binds, and don't warn them of this.
+// There's no confirmation at all
 // ctrl/cmd + q to close engine and frontend
 if(KeyDown and (code = SDLK_q)) then
     begin
@@ -167,21 +169,32 @@ if(KeyDown and (code = SDLK_w)) then
 if CurrentBinds[code][0] <> #0 then
     begin
     if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
-
     if KeyDown then
         begin
+        if CurrentBinds[code] = 'switch' then
+            LocalMessage:= LocalMessage or gmSwitch
+        else if CurrentBinds[code] = '+precise' then
+            LocalMessage:= LocalMessage or gmPrecise;
+            
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
         end
     else if (CurrentBinds[code][1] = '+') then
         begin
+        if CurrentBinds[code] = '+precise' then
+            LocalMessage:= LocalMessage and not(gmPrecise);
         s:= CurrentBinds[code];
         s[1]:= '-';
         ParseCommand(s, Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
-        end;
+        end
+    else
+        begin
+        if CurrentBinds[code] = 'switch' then
+            LocalMessage:= LocalMessage and not(gmSwitch)
+        end
     end
 end;
 
@@ -313,7 +326,7 @@ DefaultBinds[KeyNameToCode('j0a0u')]:= '+left';
 DefaultBinds[KeyNameToCode('j0a0d')]:= '+right';
 DefaultBinds[KeyNameToCode('j0a1u')]:= '+up';
 DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
-for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+IntToStr(i);
+for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(i+48);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
 loadBinds('dbind', cPathz[ptData] + '/settings.ini');

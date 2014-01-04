@@ -30,7 +30,7 @@
 
 RoomsListModel::RoomsListModel(QObject *parent) :
     QAbstractTableModel(parent),
-    c_nColumns(8)
+    c_nColumns(9)
 {
     m_headerData =
     QStringList()
@@ -40,6 +40,7 @@ RoomsListModel::RoomsListModel(QObject *parent) :
      << tr("T")
      << tr("Owner")
      << tr("Map")
+     << tr("Script")
      << tr("Rules")
      << tr("Weapons");
 

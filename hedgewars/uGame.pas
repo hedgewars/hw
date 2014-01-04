@@ -90,7 +90,7 @@ while (GameState <> gsExit) and (i <= Lag) do
         if CurrentHedgehog^.BotLevel <> 0 then
             ProcessBot;
         ProcessGears;
-        {$IFDEF SDL2}ProcessTouch;{$ENDIF}
+        {$IFDEF USE_TOUCH_INTERFACE}ProcessTouch;{$ENDIF}
         end
     else
         begin

@@ -123,7 +123,7 @@ begin
     
     for x:= 0 to LAND_WIDTH - 1 do
         for y:= 0 to LAND_HEIGHT - 1 do
-            if LandPixels[y, x] = 0 then
+            if Land[y, x] = 0 then
                 if s < y then
                     begin
                     for i:= max(s, y - 8) to y - 1 do
@@ -157,7 +157,7 @@ begin
     
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
-            if LandPixels[y, x] = 0 then
+            if Land[y, x] = 0 then
                 if s < x then
                     begin
                     for i:= max(s, x - 8) to x - 1 do
@@ -190,19 +190,22 @@ end;
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
+    y: LongWord; // stupid SDL 1.2 uses stupid SmallInt for y which limits us to 32767.  But is even worse if LandTex is large, can overflow on 32767 map.
 begin
     tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
     r.y:= 0;
-    while r.y < LAND_HEIGHT do
-    begin
+    y:= 0;
+    while y < LAND_HEIGHT do
+        begin
         r.x:= 0;
         while r.x < LAND_WIDTH do
-        begin
+            begin
             SDL_UpperBlit(tmpsurf, nil, Surface, @r);
             inc(r.x, tmpsurf^.w)
+            end;
+        inc(y, tmpsurf^.h);
+        r.y:= y
         end;
-        inc(r.y, tmpsurf^.h)
-    end;
     SDL_FreeSurface(tmpsurf);
 
     // freed in freeModule() below
@@ -731,26 +734,27 @@ if hasBorder then
     // also try basing cave dimensions on map/template dimensions, if they exist
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
         begin
-        for y:= topY to LAND_HEIGHT - 1 do
-                begin
-                Land[y, leftX + w]:= lfIndestructible;
-                Land[y, rightX - w]:= lfIndestructible;
-                if (y + w) mod 32 < 16 then
-                    c:= AMask
-                else
-                    c:= AMask or RMask or GMask; // FF00FFFF
+        if (WorldEdge <> weBounce) and (WorldEdge <> weWrap) then
+            for y:= topY to LAND_HEIGHT - 1 do
+                    begin
+                    Land[y, leftX + w]:= lfIndestructible;
+                    Land[y, rightX - w]:= lfIndestructible;
+                    if (y + w) mod 32 < 16 then
+                        c:= AMask
+                    else
+                        c:= AMask or RMask or GMask; // FF00FFFF
 
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    begin
-                    LandPixels[y, leftX + w]:= c;
-                    LandPixels[y, rightX - w]:= c;
-                    end
-                else
-                    begin
-                    LandPixels[y div 2, (leftX + w) div 2]:= c;
-                    LandPixels[y div 2, (rightX - w) div 2]:= c;
+                    if (cReducedQuality and rqBlurryLand) = 0 then
+                        begin
+                        LandPixels[y, leftX + w]:= c;
+                        LandPixels[y, rightX - w]:= c;
+                        end
+                    else
+                        begin
+                        LandPixels[y div 2, (leftX + w) div 2]:= c;
+                        LandPixels[y div 2, (rightX - w) div 2]:= c;
+                        end;
                     end;
-                end;
 
         for x:= leftX to rightX do
             begin

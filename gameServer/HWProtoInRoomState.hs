@@ -31,7 +31,11 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
     | otherwise = do
         chans <- roomOthersChans
         cl <- thisClient
-        if isMaster cl then
+        rm <- thisRoom
+
+        if isSpecial rm then
+            return [Warning $ loc "Restricted"]
+        else if isMaster cl then
            return [
                 ModifyRoom f,
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
@@ -42,6 +46,7 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
                 r{mapParams = Map.insert paramName (head paramStrs) (mapParams r)}
                 else
                 r{params = Map.insert paramName paramStrs (params r)}
+
 
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info"]
@@ -290,11 +295,14 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if illegalName newName then 
             [Warning $ loc "Illegal room name"]
         else
+        if isSpecial rm then
+            [Warning $ loc "Restricted"]
+        else
         if isJust $ find (\r -> newName == name r) rs then
             [Warning $ loc "Room with such name already exists"]
         else
             [ModifyRoom roomUpdate,
-            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (nick cl) (roomUpdate rm))]
+            AnswerClients chans ("ROOM" : "UPD" : name rm : roomInfo (clientProto cl) (nick cl) (roomUpdate rm))]
     where
         roomUpdate r = r{name = newName}
 
@@ -323,6 +331,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
     maybeClientId <- clientByNick newAdmin
     master <- liftM isMaster thisClient
     serverAdmin <- liftM isAdministrator thisClient
+    thisRoomMasterId <- liftM masterID thisRoom
     let newAdminId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc newAdminId
     return
@@ -330,6 +339,7 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
             (master || serverAdmin)
                 && isJust maybeClientId
                 && ((newAdminId /= thisClientId) || (serverAdmin && not master))
+                && (Just newAdminId /= thisRoomMasterId)
                 && sameRoom]
 
 
@@ -359,6 +369,19 @@ handleCmd_inRoom ("RND":rs) = do
     n <- clientNick
     s <- roomClientsChans
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
+
+handleCmd_inRoom ["FIX"] = do
+    cl <- thisClient
+    return [ModifyRoom (\r -> r{isSpecial = True}) | isAdministrator cl]
+
+handleCmd_inRoom ["UNFIX"] = do
+    cl <- thisClient
+    return [ModifyRoom (\r -> r{isSpecial = False}) | isAdministrator cl]
+
+handleCmd_inRoom ["GREETING", msg] = do
+    cl <- thisClient
+    rm <- thisRoom
+    return [ModifyRoom (\r -> r{greeting = msg}) | isAdministrator cl || (isMaster cl && (not $ isSpecial rm))]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 

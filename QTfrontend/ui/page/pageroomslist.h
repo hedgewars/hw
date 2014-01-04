@@ -55,10 +55,7 @@ class PageRoomsList : public AbstractPage
         QPushButton * BtnCreate;
         QPushButton * BtnJoin;
         QPushButton * BtnAdmin;
-        QPushButton * BtnClear;
         QComboBox * CBState;
-        QComboBox * CBRules;
-        QComboBox * CBWeapons;
         HWChatWidget * chatWidget;
         QLabel * lblCount;
 
@@ -70,8 +67,8 @@ class PageRoomsList : public AbstractPage
         void updateNickCounter(int cnt);
 
     signals:
-        void askForCreateRoom(const QString &);
-        void askForJoinRoom(const QString &);
+        void askForCreateRoom(const QString &, const QString &);
+        void askForJoinRoom(const QString &, const QString &);
         void askForRoomList();
         void askJoinConfirmation(const QString &);
 
@@ -84,12 +81,11 @@ class PageRoomsList : public AbstractPage
         void onCreateClick();
         void onJoinClick();
         void onRefreshClick();
-        void onClearClick();
         void onJoinConfirmation(const QString &);
         void onSortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
         void onFilterChanged();
         void saveHeaderState();
-        void onRoomNameChosen(const QString &);
+        void onRoomNameChosen(const QString &, const QString &password);
         void roomSelectionChanged(const QModelIndex &, const QModelIndex &);
         void moveSelectionUp();
         void moveSelectionDown();
@@ -98,8 +94,6 @@ class PageRoomsList : public AbstractPage
         QSettings * m_gameSettings;
         QSortFilterProxyModel * roomsModel;
         QSortFilterProxyModel * stateFilteredModel;
-        QSortFilterProxyModel * schemeFilteredModel;
-        QSortFilterProxyModel * weaponsFilteredModel;
         QAction * showGamesInLobby;
         QAction * showGamesInProgress;
         QSplitter * m_splitter;

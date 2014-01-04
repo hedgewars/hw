@@ -252,6 +252,8 @@ const
     ammoprop_NeedTarget   = $00000004;
     ammoprop_ForwMsgs     = $00000008;
     ammoprop_AttackInMove = $00000010;
+    ammoprop_DoesntStopTimerWhileAttacking
+                          = $00000020;
     ammoprop_NoCrosshair  = $00000040;
     ammoprop_AttackingPut = $00000080;
     ammoprop_DontHold     = $00000100;
@@ -265,6 +267,8 @@ const
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
     ammoprop_Track        = $00040000;
+    ammoprop_DoesntStopTimerInMultiShoot
+                          = $00080000;
     ammoprop_NoRoundEnd   = $10000000;
 
     AMMO_INFINITE = 100;

@@ -159,6 +159,8 @@ void GameUIConfig::reloadValues(void)
     Form->ui.pageOptions->leProxyLogin->setText(value("proxy/login", "").toString());
     Form->ui.pageOptions->leProxyPassword->setText(value("proxy/password", "").toString());
 
+    applyProxySettings();
+
     { // load colors
         QStandardItemModel * model = DataManager::instance().colorsModel();
         for(int i = model->rowCount() - 1; i >= 0; --i)
@@ -310,22 +312,7 @@ void GameUIConfig::SaveOptions()
             setValue("proxy/password", Form->ui.pageOptions->leProxyPassword->text());
         }
 
-        QNetworkProxy proxy;
-
-        if(proxyType == PageOptions::SystemProxy)
-        {
-            // use system proxy settings
-            proxy = QNetworkProxyFactory::systemProxyForQuery().at(0);
-        } else
-        {
-            proxy.setType(proxyTypesMap[proxyType]);
-            proxy.setHostName(Form->ui.pageOptions->leProxy->text());
-            proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
-            proxy.setUser(Form->ui.pageOptions->leProxyLogin->text());
-            proxy.setPassword(Form->ui.pageOptions->leProxyPassword->text());
-        }
-
-        QNetworkProxy::setApplicationProxy(proxy);
+        applyProxySettings();
     }
 
     { // save colors
@@ -664,4 +651,26 @@ void GameUIConfig::setBind(int bindID, QString & strbind)
 {
     m_binds[bindID].strbind = strbind;
     setValue(QString("Binds/%1").arg(m_binds[bindID].action), strbind);
+}
+
+void GameUIConfig::applyProxySettings()
+{
+    QNetworkProxy proxy;
+
+    int proxyType = Form->ui.pageOptions->cbProxyType->currentIndex();
+
+    if(proxyType == PageOptions::SystemProxy)
+    {
+        // use system proxy settings
+        proxy = QNetworkProxyFactory::systemProxyForQuery().at(0);
+    } else
+    {
+        proxy.setType(proxyTypesMap[proxyType]);
+        proxy.setHostName(Form->ui.pageOptions->leProxy->text());
+        proxy.setPort(Form->ui.pageOptions->sbProxyPort->value());
+        proxy.setUser(Form->ui.pageOptions->leProxyLogin->text());
+        proxy.setPassword(Form->ui.pageOptions->leProxyPassword->text());
+    }
+
+    QNetworkProxy::setApplicationProxy(proxy);
 }

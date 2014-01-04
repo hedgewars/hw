@@ -165,6 +165,13 @@
     </message>
 </context>
 <context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>HWApplication</name>
     <message numerus="yes">
         <source>%1 minutes</source>
@@ -393,6 +400,19 @@ Attendez quelques secondes et réessayez.</translation>
     <message>
         <source>This page requires an internet connection.</source>
         <translation>Cette page nécessite une connexion internet.</translation>
+    </message>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -665,7 +685,7 @@ entrez seulement votre pseudo.</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf a renvoyé une erreur pendant l&apos;affichage du texte, cela est sûrement causé par le bug de freetype2. Il est recommandé de mettre à jour la librairie freetype.</translation>
+        <translation type="obsolete">SDL_ttf a renvoyé une erreur pendant l&apos;affichage du texte, cela est sûrement causé par le bug de freetype2. Il est recommandé de mettre à jour la librairie freetype.</translation>
     </message>
 </context>
 <context>
@@ -680,15 +700,15 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Durée: %1m %2s</translation>
+        <translation type="obsolete">Durée: %1m %2s</translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Vidéo: %1x%2</translation>
+        <translation type="obsolete">Vidéo: %1x%2</translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="obsolete">%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -697,6 +717,18 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>unknown</source>
         <translation>inconnu</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -825,6 +857,18 @@ entrez seulement votre pseudo.</translation>
         <source>Eraser</source>
         <translation>Gomme</translation>
     </message>
+    <message>
+        <source>Polyline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageEditTeam</name>
@@ -936,6 +980,13 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>Save</source>
         <translation type="unfinished">Enregistrer</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -1258,11 +1309,11 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Règles : </translation>
+        <translation type="obsolete">Règles : </translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Armes : </translation>
+        <translation type="obsolete">Armes : </translation>
     </message>
     <message>
         <source>Search:</source>
@@ -1297,7 +1348,7 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Enlever les filtres</translation>
+        <translation type="obsolete">Enlever les filtres</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1427,6 +1478,22 @@ entrez seulement votre pseudo.</translation>
         <source>Add an indestructible border along the bottom</source>
         <translation>Ajouter une bordure indestructible en bas</translation>
     </message>
+    <message>
+        <source>None (Default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1525,12 +1592,20 @@ entrez seulement votre pseudo.</translation>
     <message>
         <source>Date: %1
 </source>
-        <translation>Date: %1</translation>
+        <translation type="obsolete">Date: %1</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation>Taille: %1</translation>
+        <translation type="obsolete">Taille: %1</translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation type="unfinished">Date: %1 {1?}</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
+        <translation type="unfinished">Taille: %1 {1?}</translation>
     </message>
 </context>
 <context>
@@ -1666,6 +1741,38 @@ entrez seulement votre pseudo.</translation>
         <source>Frontend music</source>
         <translation>Musique de l&apos;interface</translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1687,7 +1794,7 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation>Tout</translation>
+        <translation type="obsolete">Tout</translation>
     </message>
     <message>
         <source>In lobby</source>
@@ -1901,7 +2008,7 @@ entrez seulement votre pseudo.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>Conseil: </translation>
+        <translation type="obsolete">Conseil: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -2047,6 +2154,18 @@ Voulez-vous vraiment quitter?</translation>
         <source>This setting will be effective at next restart.</source>
         <translation>Le changement sera opérationnel au prochain redémarrage.</translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2071,7 +2190,7 @@ Voulez-vous vraiment quitter?</translation>
     </message>
     <message>
         <source>-r%1 (%2)</source>
-        <translation>-r%1 (%2)</translation>
+        <translation type="obsolete">-r%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2301,6 +2420,13 @@ Les joueurs ne sont pas tous prêts.</translation>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished">Aucune description disponible</translation>
+    </message>
+</context>
+<context>
     <name>QPushButton</name>
     <message>
         <source>Play demo</source>
@@ -2437,6 +2563,10 @@ Les joueurs ne sont pas tous prêts.</translation>
         <source>Create room</source>
         <translation>Créer une salle</translation>
     </message>
+    <message>
+        <source>set password</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>RoomsListModel</name>
@@ -2483,6 +2613,10 @@ Les joueurs ne sont pas tous prêts.</translation>
     <message>
         <source>Hand-drawn</source>
         <translation>Dessinée</translation>
+    </message>
+    <message>
+        <source>Script</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2555,7 +2689,7 @@ Erreur du code : %2</translation>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>Equipe de %1</translation>
+        <translation type="obsolete">Equipe de %1</translation>
     </message>
 </context>
 <context>
@@ -3158,111 +3292,123 @@ zoom</translation>
     <name>server</name>
     <message>
         <source>Authentication failed</source>
-        <translation type="obsolete">Echec d&apos;authentification</translation>
+        <translation type="unfinished">Echec d&apos;authentification</translation>
     </message>
     <message>
         <source>60 seconds cooldown after kick</source>
-        <translation type="obsolete">Bannis pour 60 sec après un kick</translation>
+        <translation type="unfinished">Bannis pour 60 sec après un kick</translation>
     </message>
     <message>
         <source>kicked</source>
-        <translation type="obsolete">Exclus (kick)</translation>
+        <translation type="unfinished">Exclus (kick)</translation>
     </message>
     <message>
         <source>Ping timeout</source>
-        <translation type="obsolete">Met trop de temps à répondre</translation>
+        <translation type="unfinished">Met trop de temps à répondre</translation>
     </message>
     <message>
         <source>bye</source>
-        <translation type="obsolete">Aurevoir</translation>
+        <translation type="unfinished">Aurevoir</translation>
     </message>
     <message>
         <source>Empty config entry</source>
-        <translation type="obsolete">Configuration vide</translation>
+        <translation type="unfinished">Configuration vide</translation>
     </message>
     <message>
         <source>Not room master</source>
-        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de la room</translation>
+        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de la room</translation>
     </message>
     <message>
         <source>Corrupted hedgehogs info</source>
-        <translation type="obsolete">Info hérisson corrompus</translation>
+        <translation type="unfinished">Info hérisson corrompus</translation>
     </message>
     <message>
         <source>too many teams</source>
-        <translation type="obsolete">trop d&apos;équipes</translation>
+        <translation type="unfinished">trop d&apos;équipes</translation>
     </message>
     <message>
         <source>too many hedgehogs</source>
-        <translation type="obsolete">trop de hérissons</translation>
+        <translation type="unfinished">trop de hérissons</translation>
     </message>
     <message>
         <source>There&apos;s already a team with same name in the list</source>
-        <translation type="obsolete">Il y a déja une équipe avec le même nom dans la liste</translation>
+        <translation type="unfinished">Il y a déja une équipe avec le même nom dans la liste</translation>
     </message>
     <message>
         <source>round in progress</source>
-        <translation type="obsolete">La partie est en cour</translation>
+        <translation type="unfinished">La partie est en cour</translation>
     </message>
     <message>
         <source>restricted</source>
-        <translation type="obsolete">Ajout interdis</translation>
+        <translation type="unfinished">Ajout interdis</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
-        <translation type="obsolete">REMOVE_TEAM: aucune équipe de ce nom</translation>
+        <translation type="unfinished">REMOVE_TEAM: aucune équipe de ce nom</translation>
     </message>
     <message>
         <source>Not team owner!</source>
-        <translation type="obsolete">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
+        <translation type="unfinished">Vous n&apos;êtes pas le propriétaire de cette équipe!</translation>
     </message>
     <message>
         <source>Less than two clans!</source>
-        <translation type="obsolete">Il faut 2 clans minimum!</translation>
+        <translation type="unfinished">Il faut 2 clans minimum!</translation>
     </message>
     <message>
         <source>Room with such name already exists</source>
-        <translation type="obsolete">Ce nom de room existe déjà</translation>
+        <translation type="unfinished">Ce nom de room existe déjà</translation>
     </message>
     <message>
         <source>Illegal room name</source>
-        <translation type="obsolete">Nom de room invalide</translation>
+        <translation type="unfinished">Nom de room invalide</translation>
     </message>
     <message>
         <source>No such room</source>
-        <translation type="obsolete">Cette room n&apos;existe pas</translation>
+        <translation type="unfinished">Cette room n&apos;existe pas</translation>
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="obsolete">Accès interdis</translation>
+        <translation type="unfinished">Accès interdis</translation>
     </message>
     <message>
         <source>Registered users only</source>
-        <translation type="obsolete">Accès réservé aux utilisateurs enregistré</translation>
+        <translation type="unfinished">Accès réservé aux utilisateurs enregistré</translation>
     </message>
     <message>
         <source>You are banned in this room</source>
-        <translation type="obsolete">Vous avez été bannis de cette room</translation>
+        <translation type="unfinished">Vous avez été bannis de cette room</translation>
     </message>
     <message>
         <source>Nickname already chosen</source>
-        <translation type="obsolete">Pseudo déjà choisis</translation>
+        <translation type="unfinished">Pseudo déjà choisis</translation>
     </message>
     <message>
         <source>Illegal nickname</source>
-        <translation type="obsolete">Pseudo invalide</translation>
+        <translation type="unfinished">Pseudo invalide</translation>
     </message>
     <message>
         <source>Protocol already known</source>
-        <translation type="obsolete">Protocole déjà connu</translation>
+        <translation type="unfinished">Protocole déjà connu</translation>
     </message>
     <message>
         <source>Bad number</source>
-        <translation type="obsolete">Mauvais numéro</translation>
+        <translation type="unfinished">Mauvais numéro</translation>
     </message>
     <message>
         <source>Nickname is already in use</source>
-        <translation type="obsolete">Ce pseudo est actuellement utilisé sur le serveur</translation>
+        <translation type="unfinished">Ce pseudo est actuellement utilisé sur le serveur</translation>
+    </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No checker rights</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

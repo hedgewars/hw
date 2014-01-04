@@ -26,7 +26,7 @@ procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
@@ -94,8 +94,8 @@ procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PS
 begin
     BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
 end;
-
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; extraFlags: Word);
+    
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
 var p: PLongwordArray;
     x, y: Longword;
     bpp: LongInt;
@@ -128,10 +128,7 @@ for y:= 0 to Pred(Image^.h) do
                     LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
 
             if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
-                begin
-                Land[cpY + y, cpX + x]:= lfObject;
-                Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] or extraFlags
-                end;
+                Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
     p:= @(p^[Image^.pitch shr 2])
     end;
@@ -280,8 +277,7 @@ begin
     rr.x:= x1;
     while rr.x < x2 do
         begin
-        // For testing only. Intent is to flag this on objects with masks, or use it for an ice ray gun
-        if (Theme = 'Snow') or (Theme = 'Christmas') then
+        if cIce then 
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
         else
             BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
@@ -499,7 +495,7 @@ if GrayScale then
 s:= cPathz[ptCurrTheme] + '/' + cThemeCFGFilename;
 WriteLnToConsole('Reading objects info...');
 f:= pfsOpenRead(s);
-TryDo(f <> nil, 'Bad data or cannot access file ' + cThemeCFGFilename, true);
+TryDo(f <> nil, 'Bad data or cannot access file ' + s, true);
 
 ThemeObjects.Count:= 0;
 SprayObjects.Count:= 0;
@@ -709,6 +705,10 @@ while not pfsEOF(f) do
         cFlattenFlakes:= true
     else if key = 'flatten-clouds' then
         cFlattenClouds:= true
+    else if key = 'ice' then
+        cIce:= true
+    else if key = 'snow' then
+        cSnow:= true
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);

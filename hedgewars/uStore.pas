@@ -29,6 +29,7 @@ procedure freeModule;
 procedure StoreLoad(reload: boolean);
 procedure StoreRelease(reload: boolean);
 procedure RenderHealth(var Hedgehog: THedgehog);
+function makeHealthBarTexture(w, h, Color: Longword): PTexture;
 procedure AddProgress;
 procedure FinishProgress;
 function  LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -132,76 +133,61 @@ WriteInRect:= finalRect
 end;
 
 procedure MakeCrossHairs;
-var t: LongInt;
-    tmpsurf, texsurf: PSDL_Surface;
-    Color, i: Longword;
+var tmpsurf: PSDL_Surface;
 begin
-tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
+    tmpsurf:= LoadDataImage(ptGraphics, cCHFileName, ifAlpha or ifCritical);
 
-for t:= 0 to Pred(TeamsCount) do
-    with TeamsArray[t]^ do
-    begin
-    texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, tmpsurf^.w, tmpsurf^.h, 32, RMask, GMask, BMask, AMask);
-    TryDo(texsurf <> nil, errmsgCreateSurface, true);
+    CrosshairTexture:= Surface2Tex(tmpsurf, false);
 
-    Color:= Clan^.Color;
-    Color:= SDL_MapRGB(texsurf^.format, Color shr 16, Color shr 8, Color and $FF);
-    SDL_FillRect(texsurf, nil, Color);
-
-    SDL_UpperBlit(tmpsurf, nil, texsurf, nil);
-
-    TryDo(tmpsurf^.format^.BytesPerPixel = 4, 'Ooops', true);
-
-    if SDL_MustLock(texsurf) then
-        SDLTry(SDL_LockSurface(texsurf) >= 0, true);
-
-    // make black pixel be alpha-transparent
-    for i:= 0 to texsurf^.w * texsurf^.h - 1 do
-        if PLongwordArray(texsurf^.pixels)^[i] = AMask then
-            PLongwordArray(texsurf^.pixels)^[i]:= (RMask or GMask or BMask) and Color;
-
-    if SDL_MustLock(texsurf) then
-        SDL_UnlockSurface(texsurf);
-
-    FreeTexture(CrosshairTex);
-    CrosshairTex:= Surface2Tex(texsurf, false);
-    SDL_FreeSurface(texsurf)
-    end;
-
-SDL_FreeSurface(tmpsurf)
+    SDL_FreeSurface(tmpsurf)
 end;
 
+function makeHealthBarTexture(w, h, Color: Longword): PTexture;
+var
+    rr: TSDL_Rect;
+    texsurf: PSDL_Surface;
+begin
+    rr.x:= 0;
+    rr.y:= 0;
+    rr.w:= w;
+    rr.h:= h;
+
+    texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
+    TryDo(texsurf <> nil, errmsgCreateSurface, true);
+    TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+
+    DrawRoundRect(@rr, cWhiteColor, cNearBlackColor, texsurf, true);
+
+    rr.x:= 2;
+    rr.y:= 2;
+    rr.w:= w - 4;
+    rr.h:= h - 4;
+
+    DrawRoundRect(@rr, Color, Color, texsurf, false);
+    makeHealthBarTexture:= Surface2Tex(texsurf, false);
+    SDL_FreeSurface(texsurf);
+end;
 
 procedure WriteNames(Font: THWFont);
 var t: LongInt;
     i, maxLevel: LongInt;
-    r, rr: TSDL_Rect;
+    r: TSDL_Rect;
     drY: LongInt;
     texsurf, flagsurf, iconsurf: PSDL_Surface;
     foundBot: boolean;
+    year, month, md : word;
 begin
     if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
+DecodeDate(Date, year, month, md);
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
         NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
-
-        r.w:= cTeamHealthWidth + 5;
-        r.h:= NameTagTex^.h;
-
-        texsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, r.w, r.h, 32, RMask, GMask, BMask, AMask);
-        TryDo(texsurf <> nil, errmsgCreateSurface, true);
-        TryDo(SDL_SetColorKey(texsurf, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
-
-        DrawRoundRect(@r, cWhiteColor, cNearBlackColor, texsurf, true);
-        rr:= r;
-        inc(rr.x, 2); dec(rr.w, 4); inc(rr.y, 2); dec(rr.h, 4);
-        DrawRoundRect(@rr, Clan^.Color, Clan^.Color, texsurf, false);
-        HealthTex:= Surface2Tex(texsurf, false);
-        SDL_FreeSurface(texsurf);
+        if length(Owner) > 0 then
+            OwnerTex:= RenderStringTexLim(Owner, Clan^.Color, Font, cTeamHealthWidth);
 
         r.x:= 0;
         r.y:= 0;
@@ -276,6 +262,16 @@ for t:= 0 to Pred(TeamsCount) do
                 if Gear <> nil then
                     begin
                     NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
+                    if Hat = 'NoHat' then
+                        begin
+                        if (month = 4) and (md = 20) then
+                            Hat := 'eastertop'   // Easter
+                        else if (month = 12) and ((md = 24) or (md = 25) or (md = 26)) then
+                            Hat := 'Santa'       // Christmas Eve/Christmas/Boxing Day
+                        else if (month = 10) and (md = 31) then
+                            Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
+                        end;
+                    
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
@@ -298,7 +294,15 @@ for t:= 0 to Pred(TeamsCount) do
         SDL_FreeSurface(iconsurf);
         iconsurf:= nil;
         end;
+
+
+for t:= 0 to Pred(ClansCount) do
+    with ClansArray[t]^ do
+        HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, Teams[0]^.NameTagTex^.h, Color);
+
+GenericHealthTexture:= makeHealthBarTexture(cTeamHealthWidth + 5, TeamsArray[0]^.NameTagTex^.h, cWhiteColor)
 end;
+
 
 procedure InitHealth;
 var i, t: LongInt;
@@ -362,7 +366,7 @@ for ii:= Low(TSprite) to High(TSprite) do
         if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
                 (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]))) and
            (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) and
-           (((cReducedQuality and rqKillFlakes) = 0) or (Theme = 'Snow') or (Theme = 'Christmas') or ((not (ii in [sprFlake, sprSDFlake])))) and
+           (((cReducedQuality and rqKillFlakes) = 0) or cSnow or ((not (ii in [sprFlake, sprSDFlake])))) and
            ((cCloudsNumber > 0) or (ii <> sprCloud)) and
            ((vobCount > 0) or (ii <> sprFlake)) then
             begin
@@ -435,6 +439,7 @@ SDL_FreeSurface(tmpsurf);
 InitHealth;
 
 PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
+AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
 ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
 SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
@@ -505,8 +510,8 @@ var ii: TSprite;
 begin
 for ii:= Low(TSprite) to High(TSprite) do
     begin
-    FreeTexture(SpritesData[ii].Texture);
-    SpritesData[ii].Texture:= nil;
+    FreeAndNilTexture(SpritesData[ii].Texture);
+
     if (SpritesData[ii].Surface <> nil) and (not reload) then
         begin
         SDL_FreeSurface(SpritesData[ii].Surface);
@@ -516,58 +521,47 @@ for ii:= Low(TSprite) to High(TSprite) do
 SDL_FreeSurface(MissionIcons);
 
 // free the textures declared in uVariables
-FreeTexture(WeaponTooltipTex);
-WeaponTooltipTex:= nil;
-FreeTexture(PauseTexture);
-PauseTexture:= nil;
-FreeTexture(SyncTexture);
-SyncTexture:= nil;
-FreeTexture(ConfirmTexture);
-ConfirmTexture:= nil;
-FreeTexture(ropeIconTex);
-ropeIconTex:= nil;
-FreeTexture(HHTexture);
-HHTexture:= nil;
-
+FreeAndNilTexture(CrosshairTexture);
+FreeAndNilTexture(WeaponTooltipTex);
+FreeAndNilTexture(PauseTexture);
+FreeAndNilTexture(AFKTexture);
+FreeAndNilTexture(SyncTexture);
+FreeAndNilTexture(ConfirmTexture);
+FreeAndNilTexture(ropeIconTex);
+FreeAndNilTexture(HHTexture);
+FreeAndNilTexture(GenericHealthTexture);
 // free all ammo name textures
 for ai:= Low(TAmmoType) to High(TAmmoType) do
-    begin
-    FreeTexture(Ammoz[ai].NameTex);
-    Ammoz[ai].NameTex:= nil
-    end;
+    FreeAndNilTexture(Ammoz[ai].NameTex);
 
 // free all count textures
 for i:= Low(CountTexz) to High(CountTexz) do
     begin
-    FreeTexture(CountTexz[i]);
+    FreeAndNilTexture(CountTexz[i]);
     CountTexz[i]:= nil
     end;
+
+    for t:= 0 to Pred(ClansCount) do
+        begin
+        if ClansArray[t] <> nil then
+            FreeAndNilTexture(ClansArray[t]^.HealthTex);
+        end;
 
     // free all team and hedgehog textures
     for t:= 0 to Pred(TeamsCount) do
         begin
         if TeamsArray[t] <> nil then
             begin
-            FreeTexture(TeamsArray[t]^.NameTagTex);
-            TeamsArray[t]^.NameTagTex:= nil;
-            FreeTexture(TeamsArray[t]^.CrosshairTex);
-            TeamsArray[t]^.CrosshairTex:= nil;
-            FreeTexture(TeamsArray[t]^.GraveTex);
-            TeamsArray[t]^.GraveTex:= nil;
-            FreeTexture(TeamsArray[t]^.HealthTex);
-            TeamsArray[t]^.HealthTex:= nil;
-            FreeTexture(TeamsArray[t]^.AIKillsTex);
-            TeamsArray[t]^.AIKillsTex:= nil;
-            FreeTexture(TeamsArray[t]^.FlagTex);
-            TeamsArray[t]^.FlagTex:= nil;
+            FreeAndNilTexture(TeamsArray[t]^.NameTagTex);
+            FreeAndNilTexture(TeamsArray[t]^.GraveTex);
+            FreeAndNilTexture(TeamsArray[t]^.AIKillsTex);
+            FreeAndNilTexture(TeamsArray[t]^.FlagTex);
+
             for i:= 0 to cMaxHHIndex do
                 begin
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
-                TeamsArray[t]^.Hedgehogs[i].NameTagTex:= nil;
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
-                TeamsArray[t]^.Hedgehogs[i].HealthTagTex:= nil;
-                FreeTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
-                TeamsArray[t]^.Hedgehogs[i].HatTex:= nil;
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].NameTagTex);
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].HealthTagTex);
+                FreeAndNilTexture(TeamsArray[t]^.Hedgehogs[i].HatTex);
                 end;
             end;
         end;
@@ -678,14 +672,18 @@ end;
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 var texsurf: PSDL_Surface;
 begin
+    // free the mem of any previously assigned texture.  This was previously only if the new one could be loaded, but, NoHat is usually a better choice
+    if HH.HatTex <> nil then
+        begin
+        FreeTexture(HH.HatTex);
+        HH.HatTex:= nil
+        end;
     texsurf:= LoadDataImage(ptHats, newHat, ifNone);
 AddFileLog('Hat => '+newHat);
     // only do something if the hat could be loaded
     if texsurf <> nil then
         begin
 AddFileLog('Got Hat');
-        // free the mem of any previously assigned texture
-        FreeTexture(HH.HatTex);
 
         // assign new hat to hedgehog
         HH.HatTex:= Surface2Tex(texsurf, true);
@@ -841,7 +839,7 @@ end;
 {$ENDIF}
 
 procedure SetupOpenGL;
-var name: array[byte] of char;
+var buf: array[byte] of char;
     AuxBufNum: LongInt = 0;
     tmpstr: AnsiString;
     tmpint: LongInt;
@@ -849,13 +847,13 @@ var name: array[byte] of char;
 begin
 
 {$IFDEF SDL2}
-    name:= SDL_GetCurrentVideoDriver();
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_GetCurrentVideoDriver()) + ')');
 {$ELSE}
-    name:= SDL_VideoDriverName(name, sizeof(name));
+    buf[0]:= char(0); // avoid compiler hint
+    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
 {$ENDIF}
 
     AuxBufNum:= AuxBufNum;
-    AddFileLog('Setting up OpenGL (using driver: ' + shortstring(name) + ')');
 
 {$IFDEF MOBILE}
     // TODO: this function creates an opengles1.1 context
