@@ -73,7 +73,8 @@ if(APPLE)
 
     #CMAKE_OSX_SYSROOT is set at the system version we are supposed to build on
     #we need to provide the correct one when host and target differ
-    if(NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
+    if(NOT CMAKE_OSX_SYSROOT AND
+       NOT ${minimum_macosx_version} VERSION_EQUAL ${current_macosx_version})
         find_program(xcrun xcrun)
         if(xcrun)
             execute_process(COMMAND ${xcrun} "--show-sdk-path"
@@ -83,12 +84,13 @@ if(APPLE)
                            "${minimum_macosx_version}"
                            CMAKE_OSX_SYSROOT
                            "${current_sdk_path}")
-
-            add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
-            add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
         else()
             message("*** xcrun not found! Build will work on ${current_macosx_version} only ***")
         endif()
+    endif()
+    if(CMAKE_OSX_SYSROOT)
+        add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
     endif()
 
     #add user framework directory
