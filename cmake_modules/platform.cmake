@@ -91,6 +91,7 @@ if(APPLE)
     if(CMAKE_OSX_SYSROOT)
         add_flag_append(CMAKE_Pascal_FLAGS "-XR${CMAKE_OSX_SYSROOT}")
         add_flag_append(CMAKE_Pascal_FLAGS "-k-macosx_version_min -k${minimum_macosx_version}")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-L${LIBRARY_OUTPUT_PATH} -Fl${LIBRARY_OUTPUT_PATH}")
     endif()
 
     #add user framework directory
