@@ -425,6 +425,8 @@ type
         clip_rect: TSDL_Rect;
         map: Pointer;
         refcount: LongInt;
+{$ELSE}
+        offset: LongInt;
 {$ENDIF}
 {$ENDIF}
         end;
