@@ -51,7 +51,7 @@ endif()
 
 if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
 #-Wl,-rpath,
-    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG "-k-rpath -k")
+    set(CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG "-k-rpath")
 endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG)
 
 if(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
@@ -60,7 +60,7 @@ endif(NOT CMAKE_SHARED_LIBRARY_RUNTIME_Pascal_FLAG_SEP)
 
 if(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 #-Wl,-rpath-link,
-    set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG "-k-rpath-link -k")
+    set(CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG "-k-rpath-link")
 endif(NOT CMAKE_SHARED_LIBRARY_RPATH_LINK_Pascal_FLAG)
 
 # for most systems a module is the same as a shared library
