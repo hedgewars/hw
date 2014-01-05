@@ -301,7 +301,6 @@ begin
     GetTeamStatString:= s;
 end;
 
-procedure initModule;
 {$IFDEF SDL2}
 const SDL_PIXELFORMAT_ABGR8888 = (1 shl 28) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4;
 {$ELSE}
@@ -312,6 +311,8 @@ const format: TSDL_PixelFormat = (
         RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
         colorkey: 0; alpha: 255);
 {$ENDIF}
+
+procedure initModule;
 begin
 {$IFDEF SDL2}
     conversionFormat:= SDL_AllocFormat(SDL_PIXELFORMAT_ABGR8888);
