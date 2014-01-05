@@ -344,11 +344,11 @@ procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 begin
 if not doSet and isCurrent then
     FillRoundInLandFT(X, Y, Radius, setNotCurrentMask)
-else if not doSet and not IsCurrent then
+else if not doSet and (not IsCurrent) then
     FillRoundInLandFT(X, Y, Radius, changePixelSetNotCurrent)
 else if doSet and IsCurrent then
     FillRoundInLandFT(X, Y, Radius, setCurrentHog)
-else if doSet and not IsCurrent then
+else if doSet and (not IsCurrent) then
     FillRoundInLandFT(X, Y, Radius, changePixelNotSetNotCurrent);
 end;
 

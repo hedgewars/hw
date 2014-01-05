@@ -1054,7 +1054,7 @@ begin
             // no need to display remaining time anymore
             Gear^.RenderTimer:= false;
             // bee can drown when timer reached 0
-            Gear^.State:= Gear^.State and not gstSubmersible;
+            Gear^.State:= Gear^.State and (not gstSubmersible);
             end;
         end;
 end;
@@ -1235,7 +1235,7 @@ begin
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] <> 0) then
             inc(Gear^.Damage);
         // let's interrupt before a collision to give portals a chance to catch the bullet
-        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and not(CheckLandValue(x, y, lfLandMask)) then
+        if (Gear^.Damage = 1) and (Gear^.Tag = 0) and (not CheckLandValue(x, y, lfLandMask)) then
             begin
             Gear^.Tag := 1;
             Gear^.Damage := 0;
@@ -1806,7 +1806,7 @@ begin
     if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
         SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
-    if Gear^.Health < cBarrelHealth then Gear^.State:= Gear^.State and not gstFrozen;
+    if Gear^.Health < cBarrelHealth then Gear^.State:= Gear^.State and (not gstFrozen);
 
     if ((Gear^.dX.QWordValue <> 0)
     or (Gear^.dY.QWordValue <> 0))  then
@@ -1892,7 +1892,7 @@ begin
                 Gear^.Message := Gear^.Message and (not (gmLJump or gmHJump));
         exit
         end;
-    if (k = gtExplosives) and (Gear^.Health < cBarrelHealth) then Gear^.State:= Gear^.State and not gstFrozen;
+    if (k = gtExplosives) and (Gear^.Health < cBarrelHealth) then Gear^.State:= Gear^.State and (not gstFrozen);
 
     if ((k <> gtExplosives) and (Gear^.Damage > 0)) or ((k = gtExplosives) and (Gear^.Health<=0)) then
         begin
@@ -2471,9 +2471,11 @@ begin
         begin
         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), 30, Gear^.Hedgehog, EXPLAutoSound);
         DeleteGear(Gear);
+        {$IFNDEF PAS2C}
         with mobileRecord do
             if (performRumble <> nil) and (not fastUntilLag) then
                 performRumble(kSystemSoundID_Vibrate);
+        {$ENDIF}
         exit
         end;
     if (GameTicks and $3F) = 0 then
@@ -4615,9 +4617,11 @@ begin
     Gear^.dY.isNegative := not Gear^.dY.isNegative;
 
     Gear^.doStep := @doStepSineGunShotWork;
+    {$IFNDEF PAS2C}
     with mobileRecord do
         if (performRumble <> nil) and (not fastUntilLag) then
             performRumble(kSystemSoundID_Vibrate);
+    {$ENDIF}
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -5494,7 +5498,8 @@ begin
                         begin
                         if (iter^.State and gstFrozen = 0) and
                            ((iter^.Kind = gtExplosives) or (iter^.Kind = gtCase) or (iter^.Kind = gtMine)) and 
-                           (abs(iter^.X.Round-target.x)+abs(iter^.Y.Round-target.y)+2<2*iceRadius) and (Distance(iter^.X-int2hwFloat(target.x),iter^.Y-int2hwFloat(target.y))<int2hwFloat(iceRadius*2)) then
+                           (abs(LongInt(iter^.X.Round) - target.x) + abs(LongInt(iter^.Y.Round) - target.y) + 2 < 2 * iceRadius) 
+                           and (Distance(iter^.X - int2hwFloat(target.x), iter^.Y - int2hwFloat(target.y)) < int2hwFloat(iceRadius * 2)) then
                             begin
                             for t:= 0 to 5 do
                                 begin
@@ -5621,7 +5626,7 @@ else
         begin
         with gi^ do CheckSum:= CheckSum xor X.round xor X.frac xor dX.round xor dX.frac xor Y.round xor Y.frac xor dY.round xor dY.frac;
         AddRandomness(CheckSum);
-        if gi^.Kind = gtGenericFaller then gi^.State:= gi^.State and not gstTmpFlag;
+        if gi^.Kind = gtGenericFaller then gi^.State:= gi^.State and (not gstTmpFlag);
         gi := gi^.NextGear
         end;
     AddPickup(Gear^.Hedgehog^, a, Gear^.Power, hwRound(Gear^.X), hwRound(Gear^.Y));

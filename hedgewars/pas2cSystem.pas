@@ -93,7 +93,7 @@ var
     glUniform1i, glGetUniformLocation, glEnableVertexAttribArray,
     glGetError, glDeleteProgram, glDeleteBuffers,
     glGenBuffers, glBufferData, glBindBuffer, glewInit,
-    glUniform4f, glDisableVertexAttribArray : procedure;
+    glUniform4f, glDisableVertexAttribArray, glTexEnvi : procedure;
 
     GL_BGRA, GL_BLEND, GL_CLAMP_TO_EDGE, GL_COLOR_ARRAY,
     GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GL_DEPTH_COMPONENT,
@@ -110,7 +110,7 @@ var
     GL_COLOR_ATTACHMENT0_EXT, GL_FLOAT, GL_UNSIGNED_BYTE, GL_COMPILE_STATUS,
     GL_INFO_LOG_LENGTH, GL_LINK_STATUS, GL_VERTEX_SHADER, GL_FRAGMENT_SHADER,
     GL_NO_ERROR, GL_ARRAY_BUFFER, GL_STATIC_DRAW, GLEW_OK,
-    GL_AUX_BUFFERS: integer;
+    GL_AUX_BUFFERS, GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE, GL_ADD: integer;
 
     TThreadId : function : integer;
     
