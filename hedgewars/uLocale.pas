@@ -63,10 +63,10 @@ if f <> nil then
             continue;
         TryDo(Length(s) > 6, 'Load locale: empty string', true);
         val(s[1]+s[2], a{$IFNDEF PAS2C}, c{$ENDIF});
-        TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
+        {$IFNDEF PAS2C}TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);{$ENDIF}
         TryDo(s[3] = ':', 'Load locale: ":" expected', true);
         val(s[4]+s[5], b{$IFNDEF PAS2C}, c{$ENDIF});
-        TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
+        {$IFNDEF PAS2C}TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);{$ENDIF}
         TryDo(s[6] = '=', 'Load locale: "=" expected', true);
         Delete(s, 1, 6);
         case a of
