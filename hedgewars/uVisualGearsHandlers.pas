@@ -32,7 +32,7 @@ unit uVisualGearsHandlers;
 interface
 uses uTypes;
 
-var doStepHandlers: array[TVisualGearType] of TVGearStepProcedure;
+var doStepVGHandlers: array[TVisualGearType] of TVGearStepProcedure;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 procedure doStepBeeTrace(Gear: PVisualGear; Steps: Longword);
@@ -921,7 +921,7 @@ const handlers: array[TVisualGearType] of TVGearStepProcedure =
 
 procedure initModule;
 begin
-    doStepHandlers:= handlers
+    doStepVGHandlers:= handlers
 end;
 
 end.
