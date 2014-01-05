@@ -181,7 +181,13 @@ begin
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
+{$IFNDEF PAS2C}
 DecodeDate(Date, year, month, md);
+{$ELSE}
+year:= 0;
+month:= 0;
+md:= 0;
+{$ENDIF}
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin

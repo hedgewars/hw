@@ -174,23 +174,23 @@ begin
     getLongIntParameter:= tmpInt;
 end;
 
-function getStringParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): shortstring;
+function getstringParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): shortstring;
 begin
     inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
     if wrongParameter then
          WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
-    getStringParameter:= str;
+    getstringParameter:= str;
 end;
 
-procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt); forward;
+procedure parseClassicParameter(cmdArray: array of string; size:LongInt; var paramIndex:LongInt); forward;
 
-function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: array [0..4] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
-      audioArray: array [0..2] of String = ('--volume','--nomusic','--nosound');
-      otherArray: array [0..2] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: array [0..9] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray:   array [0..17] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+function parseParameter(cmd:string; arg:string; var paramIndex:LongInt): Boolean;
+const videoArray: array [0..4] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
+      audioArray: array [0..2] of string = ('--volume','--nomusic','--nosound');
+      otherArray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
+      mediaArray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allArray:   array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
       reallyAll:  array [0..34] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
@@ -208,9 +208,9 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
-        {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
+        {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
+        {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
         {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
@@ -225,7 +225,7 @@ begin
         {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
         {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
         {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
+        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
         {--depth}               18 : setDepth(paramIndex);
         {--set-video}           19 : parseClassicParameter(videoArray,5,paramIndex);
@@ -260,10 +260,10 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdArray: array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdArray: array of string; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
-    cmd, arg, newSyntax: String;
+    cmd, arg, newSyntax: string;
 begin
     WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');

@@ -579,7 +579,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
     term = comments >> choice [
         liftM (uncurry BuiltInFunction) $ builtInFunction initExpression
         , try $ brackets pas (commaSep pas $ initExpression) >>= return . InitSet
-        , try $ parens pas (commaSep pas $ initExpression) >>= \ia -> when (null $ tail ia) mzero >> return (InitArray ia)
+        , try $ parens pas (commaSep pas $ initExpression) >>= \ia -> when ((notRecord $ head ia) && (null $ tail ia)) mzero >> return (InitArray ia)
         , try $ parens pas (sepEndBy recField (char ';' >> comments)) >>= return . InitRecord
         , parens pas initExpression
         , try $ integer pas >>= \i -> notFollowedBy (char '.') >> (return . InitNumber . show) i
@@ -593,6 +593,9 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         , itypeCast
         , iD >>= return . InitReference
         ]
+
+    notRecord (InitRecord _) = False
+    notRecord _ = True
 
     recField = do
         i <- iD

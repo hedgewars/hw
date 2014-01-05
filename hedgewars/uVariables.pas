@@ -2396,7 +2396,9 @@ procedure initModule;
 procedure freeModule;
 
 implementation
+{$IFNDEF PAS2C}
 uses strutils;
+{$ENDIF}
 
 procedure preInitModule;
 begin

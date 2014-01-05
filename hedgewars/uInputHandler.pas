@@ -183,7 +183,7 @@ if CurrentBinds[code][0] <> #0 then
     else if (CurrentBinds[code][1] = '+') then
         begin
         if CurrentBinds[code] = '+precise' then
-            LocalMessage:= LocalMessage and not(gmPrecise);
+            LocalMessage:= LocalMessage and (not gmPrecise);
         s:= CurrentBinds[code];
         s[1]:= '-';
         ParseCommand(s, Trusted);
@@ -193,7 +193,7 @@ if CurrentBinds[code][0] <> #0 then
     else
         begin
         if CurrentBinds[code] = 'switch' then
-            LocalMessage:= LocalMessage and not(gmSwitch)
+            LocalMessage:= LocalMessage and (not gmSwitch)
         end
     end
 end;

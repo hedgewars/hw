@@ -47,8 +47,8 @@ procedure SpawnBoxOfSmth;
 procedure ShotgunShot(Gear: PGear);
 
 procedure SetAllToActive;
-procedure SetAllHHToActive; inline;
 procedure SetAllHHToActive(Ice: boolean);
+procedure SetAllHHToActive(); inline;
 
 function  GetAmmo(Hedgehog: PHedgehog): TAmmoType;
 function  GetUtility(Hedgehog: PHedgehog): TAmmoType;
