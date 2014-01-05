@@ -84,7 +84,7 @@ FillChar(gear^, sizeof(TVisualGear), 0);
 gear^.X:= real(X);
 gear^.Y:= real(Y);
 gear^.Kind := Kind;
-gear^.doStep:= doStepHandlers[Kind];
+gear^.doStep:= doStepVGHandlers[Kind];
 gear^.State:= 0;
 gear^.Tint:= $FFFFFFFF;
 gear^.uid:= VGCounter;
