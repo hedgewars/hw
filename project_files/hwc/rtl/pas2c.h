@@ -11,24 +11,24 @@
 typedef union string255_
     {
         struct {
-            char s[257];
+            unsigned char s[257];
         };
         struct {
             unsigned char len;
-            char str[256];
+            unsigned char str[256];
         };
     } string255;
 typedef struct string192_
     {
-        char s[193];
+        unsigned char s[193];
     } string192;
 typedef struct string31_
     {
-        char s[32];
+        unsigned char s[32];
     } string31;
 typedef struct string15_
     {
-        char s[16];
+        unsigned char s[16];
     } string15;
 
 typedef string255 shortstring;
@@ -67,11 +67,11 @@ typedef char ** PPChar;
 typedef Word* PWord;
 
 string255 _strconcat(string255 a, string255 b);
-string255 _strappend(string255 s, char c);
-string255 _strprepend(char c, string255 s);
-string255 _chrconcat(char a, char b);
+string255 _strappend(string255 s, unsigned char c);
+string255 _strprepend(unsigned char c, string255 s);
+string255 _chrconcat(unsigned char a, unsigned char b);
 bool _strcompare(string255 a, string255 b);
-bool _strcomparec(string255 a, char b);
+bool _strcomparec(string255 a, unsigned char b);
 bool _strncompare(string255 a, string255 b);
 
 
