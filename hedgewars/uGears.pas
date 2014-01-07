@@ -626,7 +626,11 @@ snowLeft:= -(snowRight-LAND_WIDTH);
 
 if (not hasBorder) and cSnow then
     for i:= vobCount * Longword(max(LAND_WIDTH,4096)) div 2048 downto 1 do
-        AddGear(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft, LAND_HEIGHT + LongInt(GetRandom(750)) - 1300, gtFlake, 0, _0, _0, 0);
+        begin
+        rx:=GetRandom(snowRight - snowLeft);
+        ry:=GetRandom(750);
+        AddGear(rx + snowLeft, LAND_HEIGHT + ry - 1300, gtFlake, 0, _0, _0, 0)
+        end
 end;
 
 procedure AssignHHCoords;
