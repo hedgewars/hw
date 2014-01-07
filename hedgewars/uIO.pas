@@ -51,8 +51,7 @@ type PCmd = ^TCmd;
             loTime: Word;
             case byte of
             1: (len: byte;
-                cmd: Char;
-                X, Y: LongInt);
+                cmd: Char);
             2: (str: shortstring);
             end;
 
@@ -372,8 +371,8 @@ while (headcmd <> nil)
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin
-            x32:= SDLNet_Read32(@(headcmd^.X));
-            y32:= SDLNet_Read32(@(headcmd^.Y));
+            x32:= SDLNet_Read32(@(headcmd^.str[2]));
+            y32:= SDLNet_Read32(@(headcmd^.str[4]));
             doPut(x32, y32, false)
              end;
         'P': begin
@@ -382,8 +381,8 @@ while (headcmd <> nil)
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
             if CurrentTeam^.ExtDriven then
                begin
-               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
-               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy;
+               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.str[2]))) + WorldDx;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.str[4]))) - WorldDy;
                if not bShowAmmoMenu and autoCameraOn then
                     CursorPoint:= TargetCursorPoint
                end
@@ -393,7 +392,7 @@ while (headcmd <> nil)
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
         else
-            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
+            if (byte(headcmd^.cmd) >= 128) and (byte(headcmd^.cmd) <= 128 + cMaxSlotIndex) then
                 ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
                 else
                 OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
