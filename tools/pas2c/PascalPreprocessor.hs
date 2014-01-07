@@ -21,6 +21,7 @@ comment = choice [
 initDefines = Map.fromList [
     ("FPC", "")
     , ("PAS2C", "")
+    , ("DEBUGFILE", "")
 --    , ("WEBGL", "")
 --    , ("AI_MAINTHREAD", "")
     , ("ENDIAN_LITTLE", "")

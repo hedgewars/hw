@@ -216,8 +216,7 @@ bool fpcrtl_fileExists(string255 filename) {
 }
 
 void __attribute__((overloadable)) fpcrtl_flush(Text f) {
-    printf("flush not implemented\n");
-    assert(0);
+    fflush(f->fp);
 }
 
 void __attribute__((overloadable)) fpcrtl_flush(FILE *f) {

@@ -48,7 +48,7 @@ type
     Handle = integer;
 
 var
-    write, writeLn, read, readLn, flush: procedure;
+    write, writeLn, read, readLn, flush, CreateDir: procedure;
 
     halt:procedure;
 
