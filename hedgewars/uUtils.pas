@@ -351,6 +351,7 @@ end;
 procedure AddFileLogRaw(s: pchar); cdecl;
 begin
 s:= s;
+{$IFNDEF PAS2C}
 {$IFDEF DEBUGFILE}
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
@@ -359,6 +360,7 @@ write(f, s);
 flush(f);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 end;
@@ -507,13 +509,16 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
+{$IFNDEF PAS2C}
     f:= stderr; // if everything fails, write to stderr
+{$ENDIF}
     if (UserPathPrefix <> '') then
         begin
+        {$IFNDEF PAS2C}
         // create directory if it doesn't exist
         if not FileExists(UserPathPrefix + '/Logs/') then
             CreateDir(UserPathPrefix + '/Logs/');
-
+        {$ENDIF}
         // if log is locked, write to the next one
         i:= 0;
         while(i < 7) do
