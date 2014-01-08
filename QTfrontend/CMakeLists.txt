@@ -152,7 +152,7 @@ set(hwfr_hdrs
 
 set(hwfr_rez hedgewars.qrc)
 
-if(${BUILD_ENGINE_LIBRARY})
+if(BUILD_ENGINE_LIBRARY)
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     list(APPEND HW_LINK_LIBS ${hwlibname})

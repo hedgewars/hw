@@ -17,7 +17,7 @@ if (APPLE)
     if(NOT NOAUTOUPDATE)
         find_package(Sparkle) #needed for SPARKLE_FOUND variable
         #needed because the 'if' clause in the script prints silly policy warnings
-        if(${SPARKLE_FOUND})
+        if(SPARKLE_FOUND)
             set(SPARKLE_FOUND 1)
         else()
             set(SPARKLE_FOUND 0)

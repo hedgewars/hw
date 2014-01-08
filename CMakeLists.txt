@@ -114,7 +114,7 @@ endif()
 
 
 #lua discovery
-if (${LUA_SYSTEM})
+if (LUA_SYSTEM)
     if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
         find_package(Lua)
     endif()
@@ -137,7 +137,7 @@ endif()
 
 
 #physfs discovery
-if (${PHYSFS_SYSTEM})
+if (PHYSFS_SYSTEM)
     if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         find_package(PhysFS)
     endif()
