@@ -8,7 +8,7 @@ if(APPLE)
     #CFBundleShortVersionString is HEDGEWARS_VERSION
 
     #libav/ffmpeg always brings in VideoDecoderAcceleration, avaible only from 10.6.3
-    if(${FFMPEG_FOUND} AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
+    if(LIBAV_FOUND AND ${minimum_macosx_version} VERSION_EQUAL "10.6")
         set(minimum_macosx_version "10.6.3")
     endif()
 

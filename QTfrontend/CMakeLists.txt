@@ -22,10 +22,10 @@ endif()
 find_package(SDL1or2)            #video in SDLInteraction
 find_package(SDL_mixer REQUIRED) #audio in SDLInteraction
 
-if(${FFMPEG_FOUND})
+if(LIBAV_FOUND)
     add_definitions(-DVIDEOREC -D__STDC_CONSTANT_MACROS)
-    include_directories(${FFMPEG_INCLUDE_DIR})
-    list(APPEND HW_LINK_LIBS ${FFMPEG_LIBRARIES})
+    include_directories(${LIBAV_INCLUDE_DIR})
+    list(APPEND HW_LINK_LIBS ${LIBAV_LIBRARIES})
 endif()
 
 # server messages localization

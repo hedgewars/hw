@@ -173,7 +173,7 @@ else()
     add_subdirectory(misc/libphysfs)
 endif()
 
-find_package_or_disable_msg(FFMPEG NOVIDEOREC "Video recording will not be built")
+find_package_or_disable_msg(LIBAV NOVIDEOREC "Video recording will not be built")
 
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
