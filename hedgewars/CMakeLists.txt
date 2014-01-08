@@ -112,7 +112,7 @@ if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
     list(APPEND HW_LINK_LIBS SDLmain)
 endif()
 
-if(FFMPEG_FOUND)
+if(LIBAV_FOUND)
     add_subdirectory(avwrapper)
     list(APPEND HW_LINK_LIBS avwrapper)
     add_definitions(-dUSE_VIDEO_RECORDING)
