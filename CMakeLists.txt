@@ -33,8 +33,8 @@ option(ANDROID "Enable Android build (off)" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 
-option(WEBGL "Enable WebGL build (implies NOPASCAL) [default: off]" OFF)
-option(NOPASCAL "Compile hwengine as native C [default: off]" ${WEBGL})
+option(WEBGL "Enable WebGL build (implies BUILD_ENGINE_C) [default: off]" OFF)
+option(BUILD_ENGINE_C "Compile hwengine as native C [default: off]" ${WEBGL})
 option(GL2 "Enable OpenGL 2 rendering [default: off]" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
@@ -119,7 +119,7 @@ endif()
 
 
 #build engine without freepascal
-if(${NOPASCAL})
+if(BUILD_ENGINE_C)
     find_package(Clang REQUIRED)
 
     if(CLANG_VERSION VERSION_LESS "3.0")
@@ -128,7 +128,7 @@ if(${NOPASCAL})
 
     set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
     set(CMAKE_CXX_COMPILER ${CLANG_EXECUTABLE})
-endif(${NOPASCAL})
+endif()
 
 
 #server
@@ -207,7 +207,7 @@ if(NOT BUILD_ENGINE_LIBRARY AND APPLE)
 endif()
 
 #TODO: nowadays this could be merged inside hedgewars/CMakeLists.txt
-if(NOPASCAL)
+if(BUILD_ENGINE_C)
     #pascal to c converter
     add_subdirectory(tools/pas2c)
     add_subdirectory(project_files/hwc)
