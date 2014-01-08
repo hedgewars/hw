@@ -9,6 +9,8 @@ foreach(hwpolicy CMP0003 CMP0012 CMP0017 CMP0018)
 endforeach()
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
+include(MacroEnsureOutOfSourceBuild)
+macro_ensure_out_of_source_build("${PROJECT_NAME} requires an out of source build. Please create a separate build directory and run 'cmake /path/to/${PROJECT_NAME} [options]' there.")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
