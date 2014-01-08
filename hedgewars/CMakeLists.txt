@@ -97,7 +97,7 @@ set(engine_sources
 if(${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.2 OR # older versions are just ancient
    (${CMAKE_Pascal_COMPILER_VERSION} VERSION_LESS 2.6 AND APPLE)) # because of 64bit and opengl bindings
     message(FATAL_ERROR "Your FreePascal installation is too old (fpc ${CMAKE_Pascal_COMPILER_VERSION})!")
-elseif(CMAKE_Pascal_COMPILER_VERSION VERSION_GREATER 2.4)
+elseif(${CMAKE_Pascal_COMPILER_VERSION} VERSION_GREATER 2.4)
     #enable INLINE only with a recent version of fpc
     add_flag_prepend(CMAKE_Pascal_FLAGS_RELEASE -Si)
 endif()
@@ -167,7 +167,7 @@ if(HAVE_IMGINIT)
     add_definitions(-dSDL_IMAGE_NEWER)
 endif(HAVE_IMGINIT)
 
-if(NOT (SDL_VERSION VERSION_LESS 2.0))
+if(${SDL_VERSION} VERSION_GREATER 1.3)
     add_definitions(-dSDL2)
 endif()
 
@@ -185,7 +185,7 @@ endforeach(loop_var)
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
     message("***Engine will be built as library (experimental)***")
-    if(APPLE AND current_macosx_version VERSION_GREATER "10.5")
+    if(APPLE AND ${current_macosx_version} VERSION_GREATER "10.5")
         # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
         add_flag_prepend(CMAKE_Pascal_FLAGS "-k-no_order_inits")
     endif()
