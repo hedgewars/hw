@@ -106,7 +106,7 @@ endif()
 add_flag_append(CMAKE_Pascal_FLAGS "-Fl${LIBRARY_OUTPUT_PATH}")
 
 #DEPENDECIES AND EXECUTABLES SECTION
-if(NOT ${BUILD_ENGINE_LIBRARY} AND APPLE)
+if(APPLE AND (NOT BUILD_ENGINE_LIBRARY))
     #on OSX we need to provide the SDL_main() function when building as executable
     add_subdirectory(sdlmain)
     list(APPEND HW_LINK_LIBS SDLmain)
