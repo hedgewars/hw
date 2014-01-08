@@ -58,15 +58,16 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 
 
 #when build type is not specified, assume Debug/Release according to build version information
-if (CMAKE_BUILD_TYPE)
-    string (TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
-    if ( NOT( (CMAKE_BUILD_TYPE MATCHES "RELEASE") OR (CMAKE_BUILD_TYPE MATCHES "DEBUG") ) )
-        set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
-        message (STATUS "Unknown build type, using default (${default_build_type})")
-    endif ()
-else (CMAKE_BUILD_TYPE)
-    set (CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
-endif (CMAKE_BUILD_TYPE)
+if(CMAKE_BUILD_TYPE)
+    string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
+    if(NOT((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR
+           (CMAKE_BUILD_TYPE MATCHES "DEBUG")))
+        set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
+        message(STATUS "Unknown build type, using default (${default_build_type})")
+    endif()
+else(CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
+endif(CMAKE_BUILD_TYPE)
 
 
 #perform safe check that enable/disable compilation features
@@ -81,7 +82,7 @@ add_flag_append(CMAKE_CXX_FLAGS_RELEASE "-O2")
 add_flag_append(CMAKE_CXX_FLAGS_DEBUG "-Wextra -O0")
 
 #CMake adds a lot of additional configuration flags, so let's clear them up
-if(${MINIMAL_FLAGS})
+if(MINIMAL_FLAGS)
     unset(CMAKE_C_FLAGS_RELEASE)
     unset(CMAKE_C_FLAGS_DEBUG)
     unset(CMAKE_CXX_FLAGS_RELEASE)
@@ -94,7 +95,7 @@ if(GHFLAGS)
     if(${CMAKE_VERSION} VERSION_GREATER 2.6)
         separate_arguments(ghflags_parsed UNIX_COMMAND ${GHFLAGS})
     else()
-        message(${WARNING} "GHFLAGS are available only when using CMake >= 2.8")
+        message("*** GHFLAGS are available only when using CMake >= 2.8 ***")
     endif()
 endif()
 
@@ -114,12 +115,12 @@ endif()
 
 
 #lua discovery
-if (LUA_SYSTEM)
-    if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
+if(LUA_SYSTEM)
+    if(NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
         find_package(Lua)
     endif()
 
-    if (LUA_LIBRARY AND LUA_INCLUDE_DIR)
+    if(LUA_LIBRARY AND LUA_INCLUDE_DIR)
         set(LUA_FOUND TRUE)
         #use an IMPORTED tharget so that we can just use 'lua' to link
         add_library(lua UNKNOWN IMPORTED)
@@ -128,7 +129,7 @@ if (LUA_SYSTEM)
         message(FATAL_ERROR "Missing Lua! Rerun cmake with -DLUA_SYSTEM=off to build the internal version")
     endif()
 else()
-    if (NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
+    if(NOT LUA_LIBRARY OR NOT LUA_INCLUDE_DIR)
         message(STATUS "LUA will be provided by the bundled sources")
     endif()
     set(lua_output_name "hwlua")
@@ -137,8 +138,8 @@ endif()
 
 
 #physfs discovery
-if (PHYSFS_SYSTEM)
-    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+if(PHYSFS_SYSTEM)
+    if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         find_package(PhysFS)
     endif()
 
@@ -152,13 +153,13 @@ if (PHYSFS_SYSTEM)
         string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
         set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
 
-        if (physfs_detected_ver VERSION_LESS "2.1.0")
+        if(physfs_detected_ver VERSION_LESS "2.1.0")
             message(FATAL_ERROR "PhysFS version is too old (dected ${physfs_detected_ver}, required 2.1.0)")
             set(physfs_too_old true)
         endif()
     endif()
 
-    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+    if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         message(FATAL_ERROR "Missing PhysFS! Rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
     else()
         #use an IMPORTED tharget so that we can just use 'physfs' to link
@@ -166,7 +167,7 @@ if (PHYSFS_SYSTEM)
         set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
     endif()
 else()
-    if (NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
+    if(NOT PHYSFS_LIBRARY OR NOT PHYSFS_INCLUDE_DIR)
         message(STATUS "PhysFS will be provided by the bundled sources")
     endif()
     set(physfs_output_name "hwphysfs")
