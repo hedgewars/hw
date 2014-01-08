@@ -35,22 +35,23 @@ list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/hwengine.pas)
 foreach(sourcefile ${engine_sources_pas})
     get_filename_component(sourcename ${sourcefile} NAME_WE) #drops .pas
     list(APPEND engine_sources "${CMAKE_CURRENT_BINARY_DIR}/${sourcename}.c")
-
 endforeach()
 
+#add again files for external functions and for fpcrtl_ functions
+list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas)
+list(APPEND engine_sources_pas ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas)
 
-    #invoke pas2c on each pas files
-    add_custom_command(OUTPUT ${engine_sources}
-                       COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
-                       ARGS -n "hwengine"
-                            -i "${CMAKE_SOURCE_DIR}/hedgewars"
-                            -o "${CMAKE_CURRENT_BINARY_DIR}"
-                            -a "${CMAKE_CURRENT_BINARY_DIR}"
-                       DEPENDS pas2c                                            #converter tool
-                               ${engine_sources_pas}                                    #original pascal file
-                               ${CMAKE_SOURCE_DIR}/hedgewars/pas2cSystem.pas    #special, external functions
-                               ${CMAKE_SOURCE_DIR}/hedgewars/pas2cRedo.pas      #special, fpcrtl_ functions
-                      )
+
+#invoke pas2c on main module, it will call all the others
+add_custom_command(OUTPUT ${engine_sources}
+                   COMMAND "${EXECUTABLE_OUTPUT_PATH}/pas2c${CMAKE_EXECUTABLE_SUFFIX}"
+                   ARGS -n "hwengine"
+                        -i "${CMAKE_SOURCE_DIR}/hedgewars"
+                        -o "${CMAKE_CURRENT_BINARY_DIR}"
+                        -a "${CMAKE_CURRENT_BINARY_DIR}"
+                   DEPENDS pas2c                     #converter tool
+                           ${engine_sources_pas}     #original pascal file
+                  )
 
 #wrap conversion for all source in this command
 add_custom_target(engine_c DEPENDS ${engine_sources})
