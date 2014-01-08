@@ -372,7 +372,7 @@ while (headcmd <> nil)
              end;
         'p': begin
             x32:= SDLNet_Read32(@(headcmd^.str[2]));
-            y32:= SDLNet_Read32(@(headcmd^.str[4]));
+            y32:= SDLNet_Read32(@(headcmd^.str[6]));
             doPut(x32, y32, false)
              end;
         'P': begin
@@ -382,7 +382,7 @@ while (headcmd <> nil)
             if CurrentTeam^.ExtDriven then
                begin
                TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.str[2]))) + WorldDx;
-               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.str[4]))) - WorldDy;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.str[6]))) - WorldDy;
                if not bShowAmmoMenu and autoCameraOn then
                     CursorPoint:= TargetCursorPoint
                end
