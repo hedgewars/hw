@@ -73,6 +73,7 @@ target_link_libraries(hwengine  fpcrtl
                                 ${GLEW_LIBRARY}
                                 physfs
                                 physlayer
+                                m
                                 #TODO: add other libraries
                             )
 if(APPLE)
