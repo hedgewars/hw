@@ -96,8 +96,8 @@ renderStringConsts = liftM (vcat . map (\(a, b) -> text "static const string255"
 docToLower :: Doc -> Doc
 docToLower = text . map toLower . render
 
-pas2C :: String -> String -> String -> String -> IO ()
-pas2C fn inputPath outputPath alternateInputPath = do
+pas2C :: String -> String -> String -> String -> [String] -> IO ()
+pas2C fn inputPath outputPath alternateInputPath symbols = do
     s <- flip execStateT initState $ f fn
     renderCFiles s outputPath
     where
@@ -111,7 +111,7 @@ pas2C fn inputPath outputPath alternateInputPath = do
             print ("Preprocessing '" ++ fileName ++ ".pas'... ")
             fc' <- liftIO
                 $ tryJust (guard . isDoesNotExistError)
-                $ preprocess inputPath alternateInputPath (fileName ++ ".pas")
+                $ preprocess inputPath alternateInputPath (fileName ++ ".pas") symbols
             case fc' of
                 (Left a) -> do
                     modify (Map.insert fileName (System []))

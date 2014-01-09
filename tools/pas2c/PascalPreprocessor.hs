@@ -17,19 +17,9 @@ comment = choice [
         , (try $ string "//") >> manyTill anyChar (try newline) >> return "\n"
         ]
 
-
-initDefines = Map.fromList [
-    ("FPC", "")
-    , ("PAS2C", "")
-    , ("DEBUGFILE", "")
---    , ("WEBGL", "")
---    , ("AI_MAINTHREAD", "")
-    , ("ENDIAN_LITTLE", "")
-    ]
-
-preprocess :: String -> String -> String -> IO String
-preprocess inputPath alternateInputPath fn = do
-    r <- runParserT (preprocessFile (inputPath ++ fn)) (initDefines, [True]) "" ""
+preprocess :: String -> String -> String -> [String] -> IO String
+preprocess inputPath alternateInputPath fn symbols = do
+    r <- runParserT (preprocessFile (inputPath ++ fn)) (Map.fromList $ map (\s -> (s, "")) symbols, [True]) "" ""
     case r of
          (Left a) -> do
              hPutStrLn stderr (show a)
