@@ -49,6 +49,8 @@ add_custom_command(OUTPUT ${engine_sources}
                         -i "${CMAKE_SOURCE_DIR}/hedgewars"
                         -o "${CMAKE_CURRENT_BINARY_DIR}"
                         -a "${CMAKE_CURRENT_BINARY_DIR}"
+                        -d "ENDIAN_LITTLE"
+                        -d "DEBUGFILE"
                    DEPENDS pas2c                     #converter tool
                            ${engine_sources_pas}     #original pascal file
                   )
