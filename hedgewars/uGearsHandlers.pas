@@ -23,7 +23,7 @@ interface
 
 uses uTypes;
 
-procedure cakeStep(Gear: PGear);
+function cakeStep(Gear: PGear): boolean;
 
 implementation
 
@@ -35,15 +35,17 @@ const dirs: array[0..3] of TPoint =   ((X: 0; Y: -1), (X: 1; Y: 0),(X: 0; Y: 1),
 
 procedure PrevAngle(Gear: PGear; dA: LongInt); inline;
 begin
+    inc(Gear^.WDTimer);
     Gear^.Angle := (LongInt(Gear^.Angle) - dA) and 3
 end;
 
 procedure NextAngle(Gear: PGear; dA: LongInt); inline;
 begin
+    inc(Gear^.WDTimer);
     Gear^.Angle := (LongInt(Gear^.Angle) + dA) and 3
 end;
 
-procedure cakeStep(Gear: PGear);
+function cakeStep(Gear: PGear): boolean;
 var
     xx, yy, xxn, yyn: LongInt;
     dA: LongInt;
@@ -57,30 +59,40 @@ begin
     if (xx = 0) then
         if TestCollisionYwithGear(Gear, yy) <> 0 then
             PrevAngle(Gear, dA)
-    else
-        begin
-        Gear^.Tag := 0;
-        Gear^.Y := Gear^.Y + int2hwFloat(yy);
-        if TestCollisionXwithGear(Gear, xxn) = 0 then
+        else
             begin
-            Gear^.X := Gear^.X + int2hwFloat(xxn);
-            NextAngle(Gear, dA)
+            Gear^.Tag := 0;
+
+            if TestCollisionXwithGear(Gear, xxn) <> 0 then
+                Gear^.WDTimer:= 0;
+
+            Gear^.Y := Gear^.Y + int2hwFloat(yy);
+            if TestCollisionXwithGear(Gear, xxn) = 0 then
+                begin
+                Gear^.X := Gear^.X + int2hwFloat(xxn);
+                NextAngle(Gear, dA)
+                end
             end;
-        end;
 
     if (yy = 0) then
         if TestCollisionXwithGear(Gear, xx) <> 0 then
             PrevAngle(Gear, dA)
-    else
-        begin
-        Gear^.Tag := 0;
-        Gear^.X := Gear^.X + int2hwFloat(xx);
-        if TestCollisionYwithGear(Gear, yyn) = 0 then
+        else
             begin
-            Gear^.Y := Gear^.Y + int2hwFloat(yyn);
-            NextAngle(Gear, dA)
+            Gear^.Tag := 0;
+
+            if TestCollisionYwithGear(Gear, yyn) <> 0 then
+                Gear^.WDTimer:= 0;
+
+            Gear^.X := Gear^.X + int2hwFloat(xx);
+            if TestCollisionYwithGear(Gear, yyn) = 0 then
+                begin
+                Gear^.Y := Gear^.Y + int2hwFloat(yyn);
+                NextAngle(Gear, dA)
+                end
             end;
-        end;
+
+    cakeStep:= Gear^.WDTimer < 4
 end;
 
 end.

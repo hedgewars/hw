@@ -264,7 +264,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 // These are frequently overridden to serve some other purpose
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
             Angle, Power : Longword; // Used for hog aiming/firing.  Angle is rarely used as an Angle otherwise.
-            Timer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
+            Timer, WDTimer : LongWord;        // Typically used for some sort of gear timer. Time to explosion, remaining fuel...
             Tag: LongInt;            // Quite generic. Variety of uses.
             FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
             MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden

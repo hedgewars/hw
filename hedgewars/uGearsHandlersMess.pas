@@ -2943,7 +2943,7 @@ begin
         exit
         end;
 
-    cakeStep(Gear);
+    if not cakeStep(Gear) then Gear^.doStep:= @doStepCakeFall;
 
     if Gear^.Tag = 0 then
         begin
