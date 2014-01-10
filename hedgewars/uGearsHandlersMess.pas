@@ -296,9 +296,9 @@ begin
         end;
 
     // clip velocity at 2 - over 1 per pixel, but really shouldn't cause many actual problems.
-    if Gear^.dX.Round > 2 then
+    if Gear^.dX.Round > 1 then
         Gear^.dX.QWordValue:= 8589934592;
-    if Gear^.dY.Round > 2 then
+    if Gear^.dY.Round > 1 then
         Gear^.dY.QWordValue:= 8589934592;
 
     if (Gear^.State and gstSubmersible <> 0) and (gY > cWaterLine) then
