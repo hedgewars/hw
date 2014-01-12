@@ -569,13 +569,18 @@ processAction (AddClient cl) = do
         return ci
 
     modify (\s -> s{clientIndex = Just newClId})
-    mapM_ processAction
-        [
-            AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
-            , CheckBanned True
-            , AddIP2Bans (host cl) "Reconnected too fast" (addUTCTime 10 $ connectTime cl)
-        ]
 
+    jm <- gets joinsMonitor
+    pass <- io $ joinsSentry jm (host cl) (connectTime cl)
+
+    if pass then
+        mapM_ processAction
+            [
+                CheckBanned True
+                , AnswerClients [sendChan cl] ["CONNECTED", "Hedgewars server http://www.hedgewars.org/", serverVersion]
+            ]
+        else
+        processAction $ ByeClient $ loc "Reconnected too fast"
 
 processAction (AddNick2Bans n reason expiring) = do
     processAction $ ModifyServerInfo (\s -> s{bans = BanByNick n reason expiring : bans s})
@@ -760,3 +765,11 @@ processAction (ShowReplay rname) = do
             , [AnswerClients [c] $ "EM" : roundMsgs']
             , [AnswerClients [c] ["KICKED"]]
             ]
+
+
+processAction Cleanup = do
+    jm <- gets joinsMonitor
+    
+    io $ do
+        t <- getCurrentTime
+        cleanup jm t

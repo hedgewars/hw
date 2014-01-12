@@ -62,7 +62,9 @@ mainLoop = forever $ do
 
         TimerAction tick ->
                 mapM_ processAction $
-                    PingAll : [StatsAction | even tick]
+                    PingAll 
+                    : [StatsAction | even tick] 
+                    ++ [Cleanup | tick `mod` 100 == 0]
 
 
 startServer :: ServerInfo -> IO ()
@@ -79,5 +81,6 @@ startServer si = do
     startDBConnection si
 
     rnc <- newRoomsAndClients newRoom
+    jm <- newJoinMonitor
 
-    evalStateT mainLoop (ServerState Nothing si Set.empty rnc)
+    evalStateT mainLoop (ServerState Nothing si Set.empty rnc jm)
