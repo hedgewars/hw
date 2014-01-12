@@ -1,6 +1,7 @@
 module ServerState
     (
     module RoomsAndClients,
+    module JoinsMonitor,
     clientRoomA,
     ServerState(..),
     client's,
@@ -17,12 +18,14 @@ import Data.Word
 ----------------------
 import RoomsAndClients
 import CoreTypes
+import JoinsMonitor
 
 data ServerState = ServerState {
         clientIndex :: !(Maybe ClientIndex),
         serverInfo :: !ServerInfo,
         removedClients :: !(Set.Set ClientIndex),
-        roomsClients :: !MRnC
+        roomsClients :: !MRnC,
+        joinsMonitor :: !JoinsMonitor
     }
 
 

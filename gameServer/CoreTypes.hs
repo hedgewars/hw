@@ -16,7 +16,6 @@ import Control.DeepSeq
 -----------------------
 import RoomsAndClients
 
-
 #if __GLASGOW_HASKELL__ < 706
 instance NFData B.ByteString
 #endif
@@ -78,6 +77,7 @@ data Action =
     | Random [ClientChan] [B.ByteString]
     | QueryReplay B.ByteString
     | ShowReplay B.ByteString
+    | Cleanup
 
 type ClientChan = Chan [B.ByteString]
 
