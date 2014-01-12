@@ -16,6 +16,7 @@ set(hwserver_sources
     HWProtoLobbyState.hs
     HWProtoNEState.hs
     HandlerUtils.hs
+    JoinsMonitor.hs
     NetRoutines.hs
     Opts.hs
     RoomsAndClients.hs
