@@ -409,6 +409,9 @@ begin
     missionTex:= nil;
     FreeTexture(recTexture);
     recTexture:= nil;
+    FreeTexture(AmmoMenuTex);
+    AmmoMenuInvalidated:= true;
+    AmmoMenuTex:= nil;
 end;
 
 function GetAmmoMenuTexture(Ammo: PHHAmmo): PTexture;
@@ -2042,6 +2045,8 @@ begin
     WorldEnd[2].a:= 255;
     WorldEnd[3].a:= 255;
 
+    AmmoMenuTex:= nil;
+    AmmoMenuInvalidated:= true
 end;
 
 procedure freeModule;
