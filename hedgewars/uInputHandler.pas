@@ -486,16 +486,17 @@ begin
             i:= 1;
             while (i <= length(l)) and (l[i] <> '=') do
                 begin
-                if l[i] <> '%' then
-                    begin
-                    p:= p + l[i];
-                    inc(i)
-                    end else
+                if l[i] = '%' then
                     begin
                     l[i]:= '$';
                     val(copy(l, i, 3), b);
                     p:= p + char(b);
                     inc(i, 3)
+                    end 
+                else
+                    begin
+                    p:= p + l[i];
+                    inc(i)
                     end;
                 end;
 
@@ -504,6 +505,11 @@ begin
                 l:= copy(l, i + 1, length(l) - i);
                 if l <> 'default' then
                     begin
+                    if (length(l) = 2) and (l[1] = '\') then 
+                        l:= l[1]
+                    else if (l[1] = '"') and (l[length(l)] = '"') then
+                        l:= copy(l, 2, length(l) - 2);
+
                     p:= cmd + ' ' + l + ' ' + p;
                     ParseCommand(p, true)
                     end
