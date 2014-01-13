@@ -544,7 +544,8 @@ void HWChatWidget::clear()
     QString hlRegExp("^(.* )?%1[^-a-z0-9_]*( .*)?$");
     QRegExp whitespace("\\s");
 
-    m_highlights.append(QRegExp(hlRegExp.arg(m_userNick.toLower())));
+    if (!m_userNick.isEmpty())
+        m_highlights.append(QRegExp(hlRegExp.arg(QRegExp::escape(m_userNick.toLower()))));
 
     QFile file(cfgdir->absolutePath() + "/" + m_userNick.toLower() + "_highlight.txt");
 
