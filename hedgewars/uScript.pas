@@ -106,6 +106,8 @@ procedure LuaError(s: shortstring);
 begin
     WriteLnToConsole(s);
     AddChatString(#5 + s);
+    if cTestLua then
+        halt(rtnTestLuaErr);
 end;
 
 procedure LuaParameterCountError(call, paramsyntax: shortstring; wrongcount: LongInt);
@@ -1983,6 +1985,21 @@ begin
         declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
     lc_declareachievement:= 0
 end;
+
+// stuff for testing the lua API
+function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaParameterCountError('EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED', lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
+        begin
+        halt(lua_tointeger(L, 1));
+        lc_endluatest:= 0;
+        end;
+end;
 ///////////////////
 
 procedure ScriptPrintStack;
@@ -2631,6 +2648,12 @@ lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
+if cTestLua then
+    begin
+    ScriptSetInteger('TEST_SUCCESSFUL'  ,rtnTestSuccess);
+    ScriptSetInteger('TEST_FAILED'      ,rtnTestFailed);
+    lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
+    end;
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;

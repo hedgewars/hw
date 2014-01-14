@@ -2365,6 +2365,8 @@ var
 
     lastTurnChecksum : Longword;
 
+    cTestLua : Boolean;
+
 var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
     trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
     trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
@@ -2405,6 +2407,9 @@ begin
     PathPrefix      := './';
     GameType        := gmtLocal;
     cOnlyStats      := False;
+    cScriptName     := '';
+    cScriptParam    := '';
+    cTestLua        := False;
 
 {$IFDEF USE_VIDEO_RECORDING}
     RecPrefix          := '';
@@ -2551,8 +2556,6 @@ begin
     fastUntilLag    := false;
     fastScrolling   := false;
     autoCameraOn    := true;
-    cScriptName     := '';
-    cScriptParam    := '';
     cSeed           := '';
     cVolumeDelta    := 0;
     cHasFocus       := true;

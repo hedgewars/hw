@@ -204,3 +204,10 @@ endif()
 
 include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
+enable_testing()
+
+set(LUATESTS "${CMAKE_SOURCE_DIR}/tests/lua")
+set(LUAAPITESTS "${LUATESTS}/luaAPI")
+set(TESTSDATADIR "${CMAKE_SOURCE_DIR}/share/hedgewars/Data")
+
+add_test("LuaAPI:GetZoom/SetZoom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--lua-test" "${LUATESTS}/luaAPI/zoom_get_set.lua")
