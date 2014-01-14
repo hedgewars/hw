@@ -1197,7 +1197,7 @@ function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
     if lua_gettop(L) <> 3 then
-        LuaParameterCountError('SetEffect', 'gearUid, effect, enabled', lua_gettop(L))
+        LuaParameterCountError('SetEffect', 'gearUid, effect, effectState', lua_gettop(L))
     else begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
