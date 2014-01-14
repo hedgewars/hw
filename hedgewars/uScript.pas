@@ -38,6 +38,7 @@ procedure ScriptLoad(name : shortstring);
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
+procedure ScriptSetString(name : shortstring; value : shortstring);
 
 procedure ScriptCall(fname : shortstring);
 function ScriptCall(fname : shortstring; par1: LongInt) : LongInt;
@@ -2070,7 +2071,6 @@ ScriptSetInteger('GetAwayTime', cGetAwayTime);
 ScriptSetString('Map', cMapName);
 ScriptSetString('Theme', '');
 ScriptSetString('Goals', '');
-ScriptSetString('ScriptParam', cScriptParam);
 
 ScriptCall('onGameInit');
 

@@ -121,7 +121,8 @@ end;
 
 procedure chScriptParam(var s: shortstring);
 begin
-    cScriptParam:= s;
+    ScriptSetString('ScriptParam', s);
+    ScriptCall('onParameters');
 end;
 
 procedure chCurU_p(var s: shortstring);

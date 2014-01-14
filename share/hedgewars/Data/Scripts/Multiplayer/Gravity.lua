@@ -11,12 +11,21 @@ local wdGameTicks = 0
 local wdTTL = 0
 local mln = 1000000
 
-function onNewTurn()
+local script2_onNewTurn
+local script2_onGameTick20
+local script2_onGameStart
+
+
+function grav_onNewTurn()
     SetGravity(gravity)
     wdGameTicks = GameTime
+    
+    if script2_onNewTurn ~= nil then
+        script2_onNewTurn()
+    end    
 end
 
-function onGameTick20()
+function grav_onGameTick20()
     if wdGameTicks + 15000 < GameTime then
         SetGravity(100)
     else
@@ -49,9 +58,13 @@ function onGameTick20()
     end
 
     wdTTL = TurnTimeLeft
+    
+    if script2_onGameTick20 ~= nil then
+        script2_onGameTick20()
+    end    
 end
 
-function onGameInit()
+function onParameters()
     parseParams()
 
     gravity = params["g"]
@@ -86,9 +99,28 @@ function onGameInit()
     if gravity == nil then
         gravity = 100
     end
+    
+    secondScript = params["script2"]
+    
+    if secondScript ~= nil then
+        onParameters = nil
+        HedgewarsScriptLoad("/Scripts/Multiplayer/" .. secondScript .. ".lua")
+        
+        script2_onNewTurn = onNewTurn
+        script2_onGameTick20 = onGameTick20
+        script2_onGameStart = onGameStart
+                
+        if onParameters ~= nil then
+            onParameters()
+        end
+    end
+    
+    onNewTurn = grav_onNewTurn
+    onGameTick20 = grav_onGameTick20
+    onGameStart = grav_onGameStart
 end
 
-function onGameStart()
+function grav_onGameStart()
     if delta == nil then
         v = string.format(loc("random in range from %i%% to %i%% with period of %i msec"), div(mingravity, mln), div(maxgravity, mln), period * 40)
     elseif period ~= nil then
@@ -103,4 +135,10 @@ function onGameStart()
                 .. loc("or 'g=50, g2=150, period=4000' for gravity changing|from 50 to 150 and back with period of 4000 msec")
                 .. "||" .. loc("Set period to negative value for random gravity"),
                 0, 5000)
+                
+    if script2_onGameStart ~= nil then
+        script2_onGameStart()
+    end
 end
+
+
