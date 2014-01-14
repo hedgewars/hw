@@ -45,7 +45,6 @@ begin
     WriteLn(stdout, '          \/////////////          \/////////  \///////////      ');
     WriteLn(stdout, '                                                                ');
     WriteLn(stdout, ' Command Line Parser Implementation by a Google Code-In Student ');
-    WriteLn(stdout, '             ASCII Art easter egg idea by @sheepluva            ');
     WriteLn(stdout, '                                                                ');
 end;
 
@@ -188,13 +187,13 @@ const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-h
       otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
       mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allArray: Array [1..18] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..34] of shortstring = (
+      reallyAll: array[0..35] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
   {internal}    '--internal', '--port', '--recorder', '--landpreview',
-  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+  {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
 var cmdIndex: byte;
 begin
     parseParameter:= false;
@@ -242,10 +241,11 @@ begin
         {--no-teamtag}          31 : cTagsMask := cTagsMask and not htTeamName;
         {--no-hogtag}           32 : cTagsMask := cTagsMask and not htName;
         {--no-healthtag}        33 : cTagsMask := cTagsMask and not htHealth;
-        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent 
+        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            35 : begin cTestLua := true; cScriptName := getStringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
-        //Asusme the first "non parameter" is the replay file, anything else is invalid
+        //Assume the first "non parameter" is the replay file, anything else is invalid
         if (recordFileName = '') and (Copy(cmd,1,2) <> '--') then
             recordFileName := cmd
         else
@@ -351,7 +351,7 @@ begin
         GameType := gmtSyntax;
         end;
 
-    if (not isInternal) and (recordFileName = '') then
+    if (not cTestLua) and (not isInternal) and (recordFileName = '') then
         begin
         WriteLn(stderr, 'You must specify a replay file');
         GameType := gmtSyntax;

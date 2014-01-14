@@ -300,6 +300,10 @@ const
 
     kSystemSoundID_Vibrate = $00000FFF;
 
+    rtnTestSuccess = $00000000;
+    rtnTestFailed  = $00000001;
+    rtnTestLuaErr  = $00000002;
+
 implementation
 
 end.

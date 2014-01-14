@@ -150,7 +150,14 @@ begin
 
     i:= PHYSFS_mount(Str2PChar(UserPathPrefix), nil, false);
     // need access to teams and frontend configs (for bindings)
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + ': ' + inttostr(i)); 
+    AddFileLog('[PhysFS] mount ' + UserPathPrefix + ': ' + inttostr(i));
+
+    if cTestLua then
+        begin
+            i:= PHYSFS_mount(Str2PChar(ExtractFileDir(cScriptName)), nil, false);
+            AddFileLog('[PhysFS] mount ' + ExtractFileDir(cScriptName) + ': ' + inttostr(i));
+            cScriptName := ExtractFileName(cScriptName);
+        end;
 end;
 
 procedure freeModule;

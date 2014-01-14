@@ -381,13 +381,20 @@ begin
 
     WriteLnToConsole(msgGettingConfig);
 
-    if recordFileName = '' then
+    if cTestLua then
         begin
-        InitIPC;
-        SendIPCAndWaitReply(_S'C');        // ask for game config
+        ParseCommand('script ' + cScriptName, true);
         end
     else
-        LoadRecordFromFile(recordFileName);
+        begin
+        if recordFileName = '' then
+            begin
+            InitIPC;
+            SendIPCAndWaitReply(_S'C');        // ask for game config
+            end
+        else
+            LoadRecordFromFile(recordFileName);
+        end;
 
     ScriptOnGameInit;
     s:= 'eproto ' + inttostr(cNetProtoVersion);
