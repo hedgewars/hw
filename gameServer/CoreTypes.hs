@@ -212,8 +212,8 @@ newRoom =
         )
         (
             Map.fromList $ Prelude.zip
-                ["SCHEME", "SCRIPT"]
-                [["Default"], ["Normal"]]
+                ["SCHEME", "SCRIPT", "Theme"]
+                [["Default"], ["Normal"], "Theme"]
         )
 
 
