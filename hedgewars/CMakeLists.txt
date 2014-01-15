@@ -141,7 +141,7 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-if(PHYSFS_FOUND)
+if(PHYSFS_SYSTEM)
     get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
     add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
 else()

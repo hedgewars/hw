@@ -3,6 +3,8 @@
 
 #include "physfs.h"
 
+#include "physfscompat.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

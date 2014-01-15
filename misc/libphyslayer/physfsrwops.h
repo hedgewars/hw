@@ -26,6 +26,8 @@
 #include "physfs.h"
 #include "SDL.h"
 
+#include "physfscompat.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
