@@ -60,6 +60,25 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     topLayout->setSpacing(0);
     pageLayout->addLayout(topLayout, 0);
 
+    // State button
+
+    QPushButton * btnState = new QPushButton(tr("Room state"));
+    btnState->setStyleSheet("QPushButton { padding: 2px; margin: 0px; margin-right: 10px; border-bottom: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
+    btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+
+    // State menu
+
+    QMenu * stateMenu = new QMenu(btnState);
+    showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
+    showGamesInLobby->setCheckable(true);
+    showGamesInLobby->setChecked(true);
+    showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
+    showGamesInProgress->setCheckable(true);
+    showGamesInProgress->setChecked(true);
+    stateMenu->addAction(showGamesInLobby);
+    stateMenu->addAction(showGamesInProgress);
+    btnState->setMenu(stateMenu);
+
     // Help/prompt message at top
     QLabel * lblDesc = new QLabel(tr("Search for a room:"));
     lblDesc->setObjectName("lblDesc");
@@ -97,16 +116,17 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     BtnJoin->setEnabled(false);
 
     // Add widgets to top layout
-    topLayout->addWidget(lblDesc, 1, 0);
-    topLayout->addWidget(searchContainer, 1, 1);
-    topLayout->addWidget(corner, 1, 2, Qt::AlignBottom);
-    topLayout->addWidget(BtnCreate, 0, 4, 2, 1);
-    topLayout->addWidget(BtnJoin, 0, 5, 2, 1);
+    topLayout->addWidget(btnState, 1, 0);
+    topLayout->addWidget(lblDesc, 1, 1);
+    topLayout->addWidget(searchContainer, 1, 2);
+    topLayout->addWidget(corner, 1, 3, Qt::AlignBottom);
+    topLayout->addWidget(BtnCreate, 0, 5, 2, 1);
+    topLayout->addWidget(BtnJoin, 0, 6, 2, 1);
 
     // Top layout stretch
     topLayout->setRowStretch(0, 1);
     topLayout->setRowStretch(1, 0);
-    topLayout->setColumnStretch(3, 1);
+    topLayout->setColumnStretch(4, 1);
 
     // Rooms list and chat with splitter
     m_splitter = new QSplitter();
@@ -131,43 +151,6 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     roomsList->setStyleSheet("QTableView { border-top-left-radius: 0px; }");
     roomsList->setFocusPolicy(Qt::NoFocus);
     roomsLayout->addWidget(roomsList, 200);
-
-    // Room filters container
-
-    QWidget * filtersContainer = new QWidget();
-    filtersContainer->setMaximumWidth(800);
-    filtersContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
-    roomsLayout->addSpacing(7);
-    roomsLayout->addWidget(filtersContainer, 0, Qt::AlignHCenter);
-    roomsLayout->addSpacing(7);
-    
-    QHBoxLayout * filterLayout = new QHBoxLayout(filtersContainer);
-    filterLayout->setSpacing(0);
-    filterLayout->setMargin(0);
-
-    const int filterSpacing = 20;
-
-    // State button
-
-    QPushButton * btnState = new QPushButton(tr("Room state"));
-    btnState->setStyleSheet("QPushButton { padding: 2px 4px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
-    btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-    filterLayout->addWidget(btnState);
-    filterLayout->addSpacing(filterSpacing);
-
-    // State menu
-
-    QMenu * stateMenu = new QMenu(btnState);
-    showGamesInLobby = new QAction(QAction::tr("Show games in lobby"), stateMenu);
-    showGamesInLobby->setCheckable(true);
-    showGamesInLobby->setChecked(true);
-    showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
-    showGamesInProgress->setCheckable(true);
-    showGamesInProgress->setChecked(true);
-    stateMenu->addAction(showGamesInLobby);
-    stateMenu->addAction(showGamesInProgress);
-    btnState->setMenu(stateMenu);
 
     // Lobby chat
 
