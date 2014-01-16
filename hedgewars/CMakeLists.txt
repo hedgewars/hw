@@ -20,6 +20,14 @@ if(UNIX)
     endif()
 endif(UNIX)
 
+# convert list into pascal array
+list(LENGTH FONTS_DIRS ndirs)
+set(FONTS_DIRS_ARRAY "array [0..${ndirs}] of PChar = (")
+foreach(fontdir ${FONTS_DIRS})
+    set(FONTS_DIRS_ARRAY "${FONTS_DIRS_ARRAY}\n'${fontdir}',")
+endforeach(fontdir)
+set(FONTS_DIRS_ARRAY "${FONTS_DIRS_ARRAY}\nnil);\n")
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
