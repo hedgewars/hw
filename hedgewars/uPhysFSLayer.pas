@@ -146,7 +146,7 @@ end;
 procedure initModule;
 var i: LongInt;
     cPhysfsId: shortstring;
-    fp: AnsiString;
+    fp: PChar;
 begin
 {$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
@@ -159,22 +159,11 @@ begin
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
     // mount system fonts paths first
-    fp := cFontsPaths;
-
-    // let's remove paths from fp and mount them until nothing is left
-    while length(fp) > 0 do
+    for i:= low(cFontsPaths) to high(cFontsPaths) do
         begin
-        AddFileLog('lol');
-        // search for ;
-        i := pos(';', fp);
-        // if there is no ; left, read to end
-        if i < 1 then
-            i := length(fp) + 1;
-        // don't mount empty path
-        if i > 2 then
-            pfsMount(copy(fp, 1, i-1), '/Fonts');
-        // remove mounted path from fp
-        fp := copy(fp, i+1, length(fp)-i);
+            fp := cFontsPaths[i];
+            if fp <> nil then
+                pfsMount(fp, '/Fonts');
         end;
 
     pfsMountAtRoot(PathPrefix);
