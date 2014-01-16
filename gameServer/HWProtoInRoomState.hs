@@ -15,6 +15,39 @@ import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
 
+
+startGame :: Reader (ClientIndex, IRnC) [Action]
+startGame = do
+    (ci, rnc) <- ask
+    cl <- thisClient
+    rm <- thisRoom
+    chans <- roomClientsChans
+
+    let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
+    let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
+
+    if (playersIn rm == readyPlayers rm || clientProto cl > 43) && not (isJust $ gameInfo rm) then
+        if enoughClans rm then
+            return [
+                ModifyRoom
+                    (\r -> r{
+                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
+                        }
+                    )
+                , AnswerClients chans ["RUN_GAME"]
+                , SendUpdateOnThisRoom
+                , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
+                , ModifyRoomClients (\c -> c{isInGame = True})
+                ]
+            else
+            return [Warning $ loc "Less than two clans!"]
+        else
+        return []
+    where
+        enoughClans = not . null . drop 1 . group . map teamcolor . teams
+
+
+
 handleCmd_inRoom :: CmdHandler
 
 handleCmd_inRoom ["CHAT", msg] = do
@@ -173,47 +206,28 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 
 handleCmd_inRoom ["TOGGLE_READY"] = do
     cl <- thisClient
-    chans <- roomClientsChans
-
-    return [
-        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)}),
-        ModifyClient (\c -> c{isReady = not $ isReady cl}),
-        AnswerClients chans $ if clientProto cl < 38 then
-                [if isReady cl then "NOT_READY" else "READY", nick cl]
-                else
-                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl]
-        ]
-
-
-handleCmd_inRoom ["START_GAME"] = do
-    (ci, rnc) <- ask
-    cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
 
-    let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
-    let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
+    (ci, rnc) <- ask
+    let ri = clientRoom rnc ci
+    let unreadyClients = filter (not . isReady) . map (client rnc) $ roomClients rnc ri
 
-    if isMaster cl && (playersIn rm == readyPlayers rm || clientProto cl > 43) && not (isJust $ gameInfo rm) then
-        if enoughClans rm then
-            return [
-                ModifyRoom
-                    (\r -> r{
-                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
-                        }
-                    )
-                , AnswerClients chans ["RUN_GAME"]
-                , SendUpdateOnThisRoom
-                , AnswerClients chans $ "CLIENT_FLAGS" : "+g" : nicks
-                , ModifyRoomClients (\c -> c{isInGame = True})
-                ]
-            else
-            return [Warning $ loc "Less than two clans!"]
-        else
-        return []
-    where
-        enoughClans = not . null . drop 1 . group . map teamcolor . teams
+    gs <- if (not $ isReady cl) && (isSpecial rm) && (unreadyClients == [cl]) then startGame else return []
 
+    return $ 
+        ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)})
+        : ModifyClient (\c -> c{isReady = not $ isReady cl})
+        : (AnswerClients chans $ if clientProto cl < 38 then
+                [if isReady cl then "NOT_READY" else "READY", nick cl]
+                else
+                ["CLIENT_FLAGS", if isReady cl then "-r" else "+r", nick cl])
+        : gs
+
+
+handleCmd_inRoom ["START_GAME"] = do
+    cl <- thisClient
+    if isMaster cl then startGame else return []
 
 handleCmd_inRoom ["EM", msg] = do
     cl <- thisClient
