@@ -322,6 +322,8 @@ begin
 AddFileLog('StoreLoad()');
 
 if not reload then
+    begin
+    pfsPermitSymbolicLinks(true);
     for fi:= Low(THWFont) to High(THWFont) do
         with Fontz[fi] do
             begin
@@ -332,6 +334,8 @@ if not reload then
             TTF_SetFontStyle(Handle, style);
             WriteLnToConsole(msgOK)
             end;
+    pfsPermitSymbolicLinks(false);
+    end;
 
 MakeCrossHairs;
 LoadGraves;

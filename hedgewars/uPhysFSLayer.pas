@@ -31,6 +31,7 @@ function pfsExists(fname: shortstring): boolean;
 
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
+procedure pfsPermitSymbolicLinks(allow: boolean);
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
@@ -41,12 +42,15 @@ function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 
-function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongInt; cdecl; external PhysfsLibName;
+procedure PHYSFS_permitSymbolicLinks(allow: boolean); cdecl; external PhysfsLibName;
+
+function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
 function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external PhysfsLibName;
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
+function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
 
 procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
 
@@ -127,6 +131,24 @@ begin
         pfsBlockRead:= r
 end;
 
+procedure pfsPermitSymbolicLinks(allow: boolean);
+begin
+    PHYSFS_permitSymbolicLinks(allow);
+end;
+
+procedure pfsMount(path: AnsiString; mountpoint: PChar);
+begin
+    if PHYSFS_mount(Str2PChar(path), mountpoint, false) then
+        AddFileLog('[PhysFS] mount ' + path + ': ok')
+    else
+        AddFileLog('[PhysFS] mount ' + path + ': FAILED ("' + PHYSFS_getLastError() + '")');
+end;
+
+procedure pfsMountAtRoot(path: AnsiString);
+begin
+    pfsMount(path, nil);
+end;
+
 procedure initModule;
 var i: LongInt;
     cPhysfsId: shortstring;
@@ -141,23 +163,22 @@ begin
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
-    i:= PHYSFS_mount(Str2PChar(PathPrefix), nil, false);
-    AddFileLog('[PhysFS] mount ' + PathPrefix + ': ' + inttostr(i));
-    i:= PHYSFS_mount(Str2PChar(UserPathPrefix + '/Data'), nil, false);
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + '/Data: ' + inttostr(i));
+    pfsMountAtRoot(PathPrefix);
+    pfsMountAtRoot(UserPathPrefix + '/Data');
 
     hedgewarsMountPackages;
 
-    i:= PHYSFS_mount(Str2PChar(UserPathPrefix), nil, false);
     // need access to teams and frontend configs (for bindings)
-    AddFileLog('[PhysFS] mount ' + UserPathPrefix + ': ' + inttostr(i));
+    pfsMountAtRoot(UserPathPrefix);
 
     if cTestLua then
         begin
-            i:= PHYSFS_mount(Str2PChar(ExtractFileDir(cScriptName)), nil, false);
-            AddFileLog('[PhysFS] mount ' + ExtractFileDir(cScriptName) + ': ' + inttostr(i));
+            pfsMountAtRoot(ExtractFileDir(cScriptName));
             cScriptName := ExtractFileName(cScriptName);
         end;
+
+    // mounts fonts last - don't allow overwriting them as we allow symlinks there
+    pfsMount(PathPrefix + '/Fonts', '/Fonts');
 end;
 
 procedure freeModule;
