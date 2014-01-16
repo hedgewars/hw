@@ -3,6 +3,8 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
+{$INCLUDE "config.inc"}
+
 const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhwphysfs'{$ELSE}'libphysfs'{$ENDIF};
 const PhyslayerLibName = 'libphyslayer';
 
@@ -31,7 +33,6 @@ function pfsExists(fname: shortstring): boolean;
 
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
-procedure pfsPermitSymbolicLinks(allow: boolean);
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
 
 implementation
@@ -41,8 +42,6 @@ function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl ; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
-
-procedure PHYSFS_permitSymbolicLinks(allow: boolean); cdecl; external PhysfsLibName;
 
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
@@ -131,27 +130,23 @@ begin
         pfsBlockRead:= r
 end;
 
-procedure pfsPermitSymbolicLinks(allow: boolean);
-begin
-    PHYSFS_permitSymbolicLinks(allow);
-end;
-
 procedure pfsMount(path: AnsiString; mountpoint: PChar);
 begin
     if PHYSFS_mount(Str2PChar(path), mountpoint, false) then
-        AddFileLog('[PhysFS] mount ' + path + ': ok')
+        AddFileLog('[PhysFS] mount ' + path + ' at ' + mountpoint + ' : ok')
     else
-        AddFileLog('[PhysFS] mount ' + path + ': FAILED ("' + PHYSFS_getLastError() + '")');
+        AddFileLog('[PhysFS] mount ' + path + ' at ' + mountpoint + ' : FAILED ("' + PHYSFS_getLastError() + '")');
 end;
 
 procedure pfsMountAtRoot(path: AnsiString);
 begin
-    pfsMount(path, nil);
+    pfsMount(path, '/');
 end;
 
 procedure initModule;
 var i: LongInt;
     cPhysfsId: shortstring;
+    fp: AnsiString;
 begin
 {$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
@@ -162,6 +157,25 @@ begin
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
+
+    // mount system fonts paths first
+    fp := cFontsPaths;
+
+    // let's remove paths from fp and mount them until nothing is left
+    while length(fp) > 0 do
+        begin
+        AddFileLog('lol');
+        // search for ;
+        i := pos(';', fp);
+        // if there is no ; left, read to end
+        if i < 1 then
+            i := length(fp) + 1;
+        // don't mount empty path
+        if i > 2 then
+            pfsMount(copy(fp, 1, i-1), '/Fonts');
+        // remove mounted path from fp
+        fp := copy(fp, i+1, length(fp)-i);
+        end;
 
     pfsMountAtRoot(PathPrefix);
     pfsMountAtRoot(UserPathPrefix + '/Data');
@@ -176,9 +190,6 @@ begin
             pfsMountAtRoot(ExtractFileDir(cScriptName));
             cScriptName := ExtractFileName(cScriptName);
         end;
-
-    // mounts fonts last - don't allow overwriting them as we allow symlinks there
-    pfsMount(PathPrefix + '/Fonts', '/Fonts');
 end;
 
 procedure freeModule;

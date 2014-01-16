@@ -21,6 +21,13 @@ option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 #set this to ON when 2.1.0 becomes more widespread (and only for linux)
 option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
 
+#system paths for finding required fonts (see share/hedgewars/Data/fonts)
+#subdirectories will NOT be searched.
+#all founds that can't be found will be bundled with hedgewars
+option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
+
+option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
+
 if(WIN32 OR APPLE)
     option(LUA_SYSTEM "Use system lua (off)" OFF)
 else()
@@ -38,6 +45,7 @@ if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
 endif()
 
+set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts can be found ( ; is separator)")
 
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
