@@ -354,7 +354,7 @@ If this nick isn&apos;t yours, please register your own nick at www.hedgewars.or
 Password:</source>
         <translation>Dieser Spitzname ist registriert und du hast kein Passwort angegeben.
 
-Falls dieser Spitzname nicht deiner ist, dann registirier bitte deinen eigenen Spitznamen an www.hedgewars.org.
+Falls dieser Spitzname nicht deiner ist, dann registriere bitte deinen eigenen Spitznamen an www.hedgewars.org.
 
 Passwort:</translation>
     </message>
