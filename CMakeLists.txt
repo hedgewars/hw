@@ -125,7 +125,6 @@ if(LUA_SYSTEM)
     endif()
 
     if(LUA_LIBRARY AND LUA_INCLUDE_DIR)
-        set(LUA_FOUND TRUE)
         #use an IMPORTED tharget so that we can just use 'lua' to link
         add_library(lua UNKNOWN IMPORTED)
         set_target_properties(lua PROPERTIES IMPORTED_LOCATION ${LUA_LIBRARY})
@@ -164,7 +163,6 @@ if(PHYSFS_SYSTEM)
     endif()
 
     if(PHYSFS_LIBRARY AND PHYSFS_INCLUDE_DIR)
-        set(PHYSFS_FOUND TRUE)
         #use an IMPORTED tharget so that we can just use 'physfs' to link
         add_library(physfs UNKNOWN IMPORTED)
         set_target_properties(physfs PROPERTIES IMPORTED_LOCATION ${PHYSFS_LIBRARY})
