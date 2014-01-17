@@ -25,7 +25,7 @@ function pfsOpenRead(fname: shortstring): PFSFile;
 function pfsClose(f: PFSFile): boolean;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
-procedure pfsReadLnA(f: PFSFile; var s: ansistring);
+procedure pfsReadLnA(f: PFSFile; var s: PChar);
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;
 function pfsEOF(f: PFSFile): boolean;
 
@@ -97,26 +97,34 @@ while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
         end
 end;
 
-procedure pfsReadLnA(f: PFSFile; var s: ansistring);
-var c: char;
-    b: shortstring;
+procedure pfsReadLnA(f: PFSFile; var s: PChar);
+var l, bufsize: Longword;
+    r: Int64;
+    b: PChar;
 begin
-s:= '';
-b[0]:= #0;
+bufsize:= 256;
+s:= StrAlloc(bufsize);
+l:= 0;
 
-while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
-    if (c <> #13) then
+repeat
+    r:= PHYSFS_readBytes(f, @s[l], 1);
+
+    if (r = 1) and (s[l] <> #13) then
         begin
-        inc(b[0]);
-        b[byte(b[0])]:= c;
-        if b[0] = #255 then
+        inc(l);
+        if l = bufsize then
             begin
-            s:= s + b;
-            b[0]:= #0
+            b:= s;
+            inc(bufsize, 256);
+            s:= StrAlloc(bufsize);
+            StrCopy(s, b);
+            StrDispose(b)
             end
         end;
-        
-s:= s + b
+
+until (r = 0) or (s[l - 1] = #10);
+
+if (r = 0) then s[l]:= #0 else s[l - 1]:= #0
 end;
 
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;

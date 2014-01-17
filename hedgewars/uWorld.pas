@@ -31,7 +31,7 @@ procedure ResetWorldTex;
 
 procedure DrawWorld(Lag: LongInt);
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
-procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+procedure ShowMission(caption, subcaption, mtext: PChar; icon, time : LongInt);
 procedure HideMission;
 procedure ShakeCamera(amount: LongInt);
 procedure InitCameraBorders;
@@ -213,7 +213,7 @@ if cMinesTime <> 3000 then
 
 // if the string has been set, show it for (default timeframe) seconds
 if g <> '' then
-    ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
+    ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], PChar(g), 1, 0);
 
 cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
@@ -1897,7 +1897,7 @@ if WorldDx > 1024 then
     WorldDx:= 1024;
 end;
 
-procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
+procedure ShowMission(caption, subcaption, mtext: PChar; icon, time : LongInt);
 var r: TSDL_Rect;
 begin
 r.w:= 32;
@@ -1912,13 +1912,13 @@ if icon > -1 then
     begin
     r.x:= 0;
     r.y:= icon * 32;
-    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, MissionIcons, @r)
+    missionTex:= RenderHelpWindow(caption, subcaption, mtext, '', 0, MissionIcons, @r)
     end
 else
     begin
     r.x:= ((-icon - 1) shr 4) * 32;
     r.y:= ((-icon - 1) mod 16) * 32;
-    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, SpritesData[sprAMAmmos].Surface, @r)
+    missionTex:= RenderHelpWindow(caption, subcaption, mtext, '', 0, SpritesData[sprAMAmmos].Surface, @r)
     end;
 end;
 
