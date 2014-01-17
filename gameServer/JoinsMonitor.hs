@@ -24,7 +24,7 @@ newJoinMonitor = do
 
 
 cleanup :: JoinsMonitor -> UTCTime -> IO ()
-cleanup (JoinsMonitor ref) time = modifyIORef' ref f
+cleanup (JoinsMonitor ref) time = modifyIORef ref f
     where
         f = Map.mapMaybe (\v -> let v' = takeWhile (\t -> diffUTCTime time t < 60*60) v in if null v' then Nothing else Just v')
 
