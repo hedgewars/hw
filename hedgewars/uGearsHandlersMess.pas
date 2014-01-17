@@ -208,7 +208,7 @@ begin
         if (gi^.Kind = gtHedgehog) then
             begin
             d := r - hwRound(Distance(gi^.X - x, gi^.Y - y));
-            if (d > 1) and ((gi^.Hedgehog^.Effects[heInvulnerable] = 0)) and (GetRandom(2) = 0) then
+            if (d > 1) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) and (GetRandom(2) = 0) then
                 begin
                 if (CurrentHedgehog^.Gear = gi) then
                     PlaySoundV(sndOops, gi^.Hedgehog^.Team^.voicepack)
@@ -2905,7 +2905,7 @@ begin
                     dmg:= dmgBase - max(hwRound(Distance(tdX, tdY)),gi^.Radius);
                 if (dmg > 1) then dmg:= ModifyDamage(min(dmg div 2, cakeDmg), gi);
                 if (dmg > 1) then
-                    if (CurrentHedgehog^.Gear = gi) and ((gi^.Hedgehog^.Effects[heInvulnerable] = 0)) then
+                    if (CurrentHedgehog^.Gear = gi) and (gi^.Hedgehog^.Effects[heInvulnerable] = 0) then
                         gi^.State := gi^.State or gstLoser
                     else
                         gi^.State := gi^.State or gstWinner;
@@ -4826,7 +4826,7 @@ while i > 0 do
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
-            if (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
+            if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
                 ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
