@@ -18,19 +18,12 @@ option(NOVIDEOREC "Disable video recording (off)" OFF)
 
 #libraries are built shared unless explicitly added as a static
 option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
-#set this to ON when 2.1.0 becomes more widespread (and only for linux)
-option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
-
-#system paths for finding required fonts (see share/hedgewars/Data/fonts)
-#subdirectories will NOT be searched.
-#all founds that can't be found will be bundled with hedgewars
-option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
-
-option(BUILD_SHARED_LIBS "Build libraries as shared modules (on)" ON)
 
 if(WIN32 OR APPLE)
+    option(PHYSFS_SYSTEM "Use system physfs (off)" OFF)
     option(LUA_SYSTEM "Use system lua (off)" OFF)
 else()
+    option(PHYSFS_SYSTEM "Use system physfs (on)" ON)
     option(LUA_SYSTEM "Use system lua (on)" ON)
 endif()
 
@@ -45,6 +38,9 @@ if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
 endif()
 
+#system paths for finding required fonts (see share/hedgewars/Data/fonts)
+#subdirectories will NOT be searched.
+#all fonts that can't be found will be bundled with hedgewars
 set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts can be found ( ; is separator)")
 
 #versioning
@@ -161,9 +157,9 @@ if(PHYSFS_SYSTEM)
         string(REGEX MATCH "([0-9]+)" physfs_patchversion "${physfs_patchversion}")
         set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
 
-        if (physfs_detected_ver VERSION_LESS "2.0.0")
-            message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 2.0.0)")
-            set(physfs_too_old true)
+        if(${physfs_detected_ver} VERSION_LESS 2.0.0)
+            message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 2.0.0)"
+                                "Perform an update or rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
         endif()
     endif()
 
