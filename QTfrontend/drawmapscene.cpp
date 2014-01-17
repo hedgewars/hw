@@ -459,7 +459,7 @@ QList<QPointF> DrawMapScene::makeEllipse(const QPointF &center, const QPointF &c
         l.append(center);
     } else
     {
-        qreal angleDelta = qMax(0.1, qMin(0.7, 120 / r));
+        qreal angleDelta = qMax(static_cast<qreal> (0.1), qMin(static_cast<qreal> (0.7), 120 / r));
         for(qreal angle = 0.0; angle < 2*M_PI; angle += angleDelta)
             l.append(center + QPointF(rx * cos(angle), ry * sin(angle)));
         l.append(l.first());
