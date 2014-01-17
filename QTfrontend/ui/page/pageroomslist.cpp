@@ -53,6 +53,8 @@ void RoomTableView::moveUp()
 
 QLayout * PageRoomsList::bodyLayoutDefinition()
 {
+    // TODO move stylesheet stuff into css/qt.css
+
     QVBoxLayout * pageLayout = new QVBoxLayout();
     pageLayout->setSpacing(0);
 
@@ -63,7 +65,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     // State button
 
     QPushButton * btnState = new QPushButton(tr("Room state"));
-    btnState->setStyleSheet("QPushButton { padding: 2px; margin: 0px; margin-right: 10px; border-bottom: none; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; } QPushButton:pressed { background-color: #ffcc00; border-color: #ffcc00; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; color: #11084A; }");
+    btnState->setStyleSheet("QPushButton { background-color: #F6CB1C; border-color: #F6CB1C; color: #130F2A; padding: 1px 3px 3px 3px; margin: 0px; border-bottom: none; border-radius: 0px; border-top-left-radius: 10px; } QPushButton:hover { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000 } QPushButton:pressed { background-color: #FFEB3C; border-color: #F6CB1C; color: #000000; }");
     btnState->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     // State menu
@@ -82,7 +84,7 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     // Help/prompt message at top
     QLabel * lblDesc = new QLabel(tr("Search for a room:"));
     lblDesc->setObjectName("lblDesc");
-    lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; border-top-left-radius: 10px; padding: 4px 10px;}");
+    lblDesc->setStyleSheet("#lblDesc { color: #130F2A; background: #F6CB1C; border: solid 4px #F6CB1C; padding: 5px 10px 3px 6px;}");
     lblDesc->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     lblDesc->setFixedHeight(24);
     lblDesc->setMinimumWidth(0);
