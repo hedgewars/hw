@@ -930,7 +930,7 @@ begin
 
             if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
                 begin
-                ty := oy - 56;
+                ty := oy - 32;
                 // move finger higher up if tags are above hog
                 if (cTagsMask and htTeamName) <> 0 then
                     ty := ty - Team^.NameTagTex^.h - 2;
@@ -938,9 +938,19 @@ begin
                     ty := ty - NameTagTex^.h - 2;
                 if (cTagsMask and htHealth) <> 0 then
                     ty := ty - HealthTagTex^.h - 2;
-                DrawSprite(sprFinger, ox - 16, ty,
-                            GameTicks div 32 mod 16);
+                tx := ox;
+                tx := round(max(((-cScreenWidth + 16) / zoom) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / zoom) - SpritesData[sprFinger].Width div 2, tx)));
+                ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / (zoom)) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (zoom)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
+                t := tx-ox;
+                if t <> 0 then
+                    dAngle := radtodeg(-arctan2(-(ty-oy),t)) + 90
+                else if ty > oy then
+                    dAngle := 180
+                else
+                    dAngle := 0;
+                DrawSpriteRotatedF(sprFinger, tx, ty, GameTicks div 32 mod 16, 1, dAngle);
                 end;
+
 
             if (Gear^.State and gstDrowning) = 0 then
                 if (Gear^.State and gstHHThinking) <> 0 then
