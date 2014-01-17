@@ -137,7 +137,7 @@ if(PNG_FOUND)
     add_definitions(-dPNG_SCREENSHOTS)
 endif()
 
-if(LUA_FOUND AND LUA_SYSTEM)
+if(LUA_SYSTEM)
     get_filename_component(LUA_LIBRARY_DIR ${LUA_LIBRARY} PATH)
     get_filename_component(LUA_LIBRARY_NAME ${LUA_LIBRARY} NAME)
     #NAME_WE would strip the .1 (or .2) next to the ".so"
@@ -149,7 +149,7 @@ else()
     add_flag_append(CMAKE_Pascal_FLAGS "-XLAlua=${lua_output_name}")
 endif()
 
-if(PHYSFS_FOUND AND PHYSFS_SYSTEM)
+if(PHYSFS_SYSTEM)
     get_filename_component(PHYSFS_LIBRARY_DIR ${PHYSFS_LIBRARY} PATH)
     add_flag_append(CMAKE_Pascal_FLAGS "-Fl${PHYSFS_LIBRARY}")
 else()
