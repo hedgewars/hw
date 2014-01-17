@@ -929,8 +929,18 @@ begin
                 DrawTextureCentered(ox, sy - cHHRadius - 7 - HealthTagTex^.h, HealthTagTex);
 
             if bShowFinger and ((Gear^.State and gstHHDriven) <> 0) then
-                DrawSprite(sprFinger, ox - 16, oy - 64,
+                begin
+                ty := oy - 56;
+                // move finger higher up if tags are above hog
+                if (cTagsMask and htTeamName) <> 0 then
+                    ty := ty - Team^.NameTagTex^.h - 2;
+                if (cTagsMask and htName) <> 0 then
+                    ty := ty - NameTagTex^.h - 2;
+                if (cTagsMask and htHealth) <> 0 then
+                    ty := ty - HealthTagTex^.h - 2;
+                DrawSprite(sprFinger, ox - 16, ty,
                             GameTicks div 32 mod 16);
+                end;
 
             if (Gear^.State and gstDrowning) = 0 then
                 if (Gear^.State and gstHHThinking) <> 0 then
