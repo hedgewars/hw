@@ -199,7 +199,8 @@ begin
 i:= _1;
 if (CurrentHedgehog <> nil) and CurrentHedgehog^.King then
     i:= _1_5;
-if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
+if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog <> nil) and 
+   (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
     ModifyDamage:= hwRound(cDamageModifier * dmg * i * cDamagePercent * _0_5 * _0_01)
 else
     ModifyDamage:= hwRound(cDamageModifier * dmg * i * cDamagePercent * _0_01)
