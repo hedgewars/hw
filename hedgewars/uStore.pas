@@ -44,7 +44,7 @@ function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: s
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
-function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function  RenderHelpWindow(caption, subcaption, description, extra: PChar; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
@@ -905,7 +905,7 @@ begin
     Step:= 0
 end;
 
-function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function RenderHelpWindow(caption, subcaption, description, extra: PChar; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 var tmpsurf: PSDL_SURFACE;
     w, h, i, j: LongInt;
     font: THWFont;
@@ -1025,7 +1025,7 @@ end;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 var r: TSDL_Rect;
     i: LongInt;
-    extra: ansistring;
+    extra: PChar;
     extracolor: LongInt;
 begin
 // don't do anything if the window shouldn't be shown
