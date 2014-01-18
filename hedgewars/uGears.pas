@@ -127,7 +127,7 @@ begin
             tmp:= 0;
             if Gear^.Hedgehog^.Effects[hePoisoned] <> 0 then
                 begin
-                inc(tmp, ModifyDamage(5, Gear));
+                inc(tmp, ModifyDamage(Gear^.Hedgehog^.Effects[hePoisoned], Gear));
                 if (GameFlags and gfResetHealth) <> 0 then
                     dec(Gear^.Hedgehog^.InitialHealth)  // does not need a minimum check since <= 1 basically disables it
                 end;
