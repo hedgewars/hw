@@ -157,7 +157,7 @@ if(PHYSFS_SYSTEM)
         set(physfs_detected_ver "${physfs_majorversion}.${physfs_minorversion}.${physfs_patchversion}")
 
         if(${physfs_detected_ver} VERSION_LESS 2.0.0)
-            message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 2.0.0)"
+            message(FATAL_ERROR "PhysFS version is too old (detected ${physfs_detected_ver}, required 2.0.0)\n"
                                 "Perform an update or rerun cmake with -DPHYSFS_SYSTEM=off to build the internal version")
         endif()
     endif()
