@@ -148,8 +148,8 @@ session l p s = do
     onPacket :: Chan Message -> [B.ByteString] -> IO ()
     onPacket _ ("CONNECTED":_) = do
         answer ["CHECKER", protocolNumber, l, p]
-        answer ["READY"]
     onPacket _ ["PING"] = answer ["PONG"]
+    onPacket _ ["LOGONPASSED"] = answer ["READY"]
     onPacket chan ("REPLAY":msgs) = do
         checkReplay chan msgs
         warningM "Check" "Started check"
