@@ -480,7 +480,7 @@ end;
 procedure freeEverything (complete:boolean);
 begin
     if complete then
-    begin
+        begin
         WriteLnToConsole('Freeing resources...');
         uAI.freeModule;             // AI things need to be freed first
         uAIMisc.freeModule;         //stub
@@ -506,7 +506,7 @@ begin
         uTextures.freeModule;
         uPhysFSLayer.freeModule;
         uLocale.freeModule;
-    end;
+        end;
 
     uIO.freeModule;
     uLand.freeModule;
