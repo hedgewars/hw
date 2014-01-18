@@ -454,8 +454,14 @@ processAction (ProcessAccountInfo info) = do
     checkerLogin _ False _ = processAction $ ByeClient $ loc "No checker rights"
     checkerLogin p True _ = do
         wp <- client's webPassword
-        processAction $
-            if wp == p then ModifyClient $ \c -> c{logonPassed = True} else ByeClient $ loc "Authentication failed"
+        chan <- client's sendChan
+        mapM_ processAction $
+            if wp == p then 
+                [ModifyClient $ \c -> c{logonPassed = True}
+                , AnswerClients [chan] ["LOGONPASSED"]
+                ]
+                else 
+                [ByeClient $ loc "Authentication failed"]
     playerLogin p a contr = do
         chan <- client's sendChan
         mapM_ processAction [
