@@ -60,61 +60,13 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     end;
 end;
 
-{ this will make invisible pixels that have a visible neighbor have the
-  same color as their visible neighbor, so that bilinear filtering won't
-  display a "wrongly" colored border when zoomed in }
 procedure PrettifyLandAlpha();
-var
-    x, y, lastx, lasty: Longword;
-    lpi, cpi, bpi: boolean; // was last/current/bottom neighbor pixel invisible?
 begin
-    lasty:= LAND_HEIGHT - 1;
-    lastx:= LAND_WIDTH - 1;
     if (cReducedQuality and rqBlurryLand) <> 0 then
-        begin
-        lasty:= lasty div 2;
-        lastx:= lastx div 2;
-        end;
-    for y:= 0 to lasty do
-        for x:= 0 to lastx do
-            begin
-            // use first pixel in row as starting point
-            //LandPixels[y, x]:= (LandPixels[y, x] and (BMask or GMask or AMask));
-            if x = 0 then
-                lpi:= ((LandPixels[y, x] and AMask) = 0)
-            else
-                begin
-                cpi:= ((LandPixels[y, x] and AMask) = 0);
-                if lpi <> cpi then
-                    begin
-                    // invisible pixels get colors from visible neighbors
-                    if cpi then
-                        begin
-                        LandPixels[y, x]:= LandPixels[y, x-1] and not AMask;
-                        // as this pixel is invisible and already colored correctly now, no point in further comparing it
-                        lpi:= cpi;
-                        continue;
-                        end
-                    else
-                        LandPixels[y, x-1]:= LandPixels[y, x] and not AMask;
-                    lpi:= cpi;
-                    end;
-                end;
-            // also check bottom neighbor, lpi is now current pixel info
-            if y < lasty - 1 then
-                begin
-                bpi:= ((LandPixels[y+1, x] and AMask) = 0);
-                if cpi <> bpi then
-                    begin
-                    if cpi then
-                        LandPixels[y, x]:= LandPixels[y+1, x] and not AMask
-                    else
-                        LandPixels[y+1, x]:= LandPixels[y, x] and not AMask;
-                    end;
-                end
-            end;
+        PrettifyAlpha2D(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2)
+    else
+        PrettifyAlpha2D(LandPixels, LAND_HEIGHT, LAND_WIDTH);
 end;
-
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
