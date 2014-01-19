@@ -72,6 +72,7 @@
 -----------------------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 
 ------------------
 -- Got Variables?
@@ -717,4 +718,15 @@ function onGearDelete(gear)
                 cGear = nil
         end
 
+end
+
+
+function onAchievementsDeclaration()
+    map = detectMap()
+    
+    for i = 0, (numTeams-1) do
+        if teamScore[i] < 100000 then
+            DeclareAchievement("rope race", teamNameArr[i], map, teamScore[i])
+        end
+    end
 end
