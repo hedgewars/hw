@@ -33,6 +33,7 @@ procedure DrawSpriteRotatedF    (Sprite: TSprite; X, Y, Frame, Dir: LongInt; Ang
 
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture); inline;
 procedure DrawTexture           (X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
+procedure DrawTexture2          (X, Y: LongInt; Texture: PTexture; Scale, Overlap: GLfloat);
 procedure DrawTextureFromRect   (X, Y: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
 procedure DrawTextureFromRect   (X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture); inline;
 procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
@@ -165,6 +166,33 @@ glTexCoordPointer(2, GL_FLOAT, 0, @Texture^.tb);
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
 
 glPopMatrix
+end;
+
+{ this contains tweaks in order to avoid land tile borders in blurry land mode }
+procedure DrawTexture2(X, Y: LongInt; Texture: PTexture; Scale, Overlap: GLfloat);
+var
+    TextureBuffer: array [0..3] of TVertex2f;
+begin
+glPushMatrix();
+glTranslatef(X, Y, 0);
+glScalef(Scale, Scale, 1);
+
+glBindTexture(GL_TEXTURE_2D, Texture^.id);
+
+TextureBuffer[0].X:= Texture^.tb[0].X + Overlap;
+TextureBuffer[0].Y:= Texture^.tb[0].Y + Overlap;
+TextureBuffer[1].X:= Texture^.tb[1].X - Overlap;
+TextureBuffer[1].Y:= Texture^.tb[1].Y + Overlap;
+TextureBuffer[2].X:= Texture^.tb[2].X - Overlap;
+TextureBuffer[2].Y:= Texture^.tb[2].Y - Overlap;
+TextureBuffer[3].X:= Texture^.tb[3].X + Overlap;
+TextureBuffer[3].Y:= Texture^.tb[3].Y - Overlap;
+
+glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
+glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer);
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+
+glPopMatrix();
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
