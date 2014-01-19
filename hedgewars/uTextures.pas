@@ -126,23 +126,25 @@ end;
 { this will make invisible pixels that have a visible neighbor have the
   same color as their visible neighbor, so that bilinear filtering won't
   display a "wrongly" colored border when zoomed in }
-procedure PrettifyAlpha(row1, row2: PLongwordArray; firsti, lasti: LongWord);
+procedure PrettifyAlpha(row1, row2: PLongwordArray; firsti, lasti, ioffset: LongWord);
 var
     i: Longword;
     lpi, cpi, bpi: boolean; // was last/current/bottom neighbor pixel invisible?
 begin
+    // suppress incorrect warning
+    lpi:= true;
     for i:=firsti to lasti do
         begin
         // use first pixel in row1 as starting point
         if i = firsti then
-            lpi:= ((row1^[i] and AMask) = 0)
+            cpi:= ((row1^[i] and AMask) = 0)
         else
             begin
             cpi:= ((row1^[i] and AMask) = 0);
             if cpi <> lpi then
                 begin
                 // invisible pixels get colors from visible neighbors
-                if (row1^[i] and AMask) = 0 then
+                if cpi then
                     begin
                     row1^[i]:= row1^[i-1] and not AMask;
                     // as this pixel is invisible and already colored correctly now, no point in further comparing it
@@ -151,19 +153,19 @@ begin
                     end
                 else
                     row1^[i-1]:= row1^[i] and not AMask;
-                lpi:= cpi;
                 end;
             end;
-        // also check bottom neighbor, lpi is now current pixel info
+        lpi:= cpi;
+        // also check bottom neighbor
         if row2 <> nil then
             begin
-            bpi:= ((row2^[i] and AMask) = 0);
+            bpi:= ((row2^[i+ioffset] and AMask) = 0);
             if cpi <> bpi then
                 begin
                 if cpi then
-                    row1^[i]:= row2^[i] and not AMask
+                    row1^[i]:= row2^[i+ioffset] and not AMask
                 else
-                    row2^[i]:= row1^[i] and not AMask;
+                    row2^[i+ioffset]:= row1^[i] and not AMask;
                 end;
             end;
         end;
@@ -180,13 +182,13 @@ begin
     li:= w - 1;
     for r:= 0 to slr do
         begin
-        PrettifyAlpha(pixels, pixels, si, li);
+        PrettifyAlpha(pixels, pixels, si, li, w);
         // move indices to next row
         si:= si + w;
         li:= li + w;
         end;
     // don't forget last row
-    PrettifyAlpha(pixels, nil, si, li);
+    PrettifyAlpha(pixels, nil, si, li, w);
 end;
 
 procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
@@ -198,10 +200,10 @@ begin
     lx:= width - 1;
     for y:= 0 to sly do
         begin
-        PrettifyAlpha(PLongWordArray(pixels[y]), PLongWordArray(pixels[y+1]), 0, lx);
+        PrettifyAlpha(PLongWordArray(pixels[y]), PLongWordArray(pixels[y+1]), 0, lx, 0);
         end;
     // don't forget last row
-    PrettifyAlpha(PLongWordArray(pixels[sly+1]), nil, 0, lx);
+    PrettifyAlpha(PLongWordArray(pixels[sly+1]), nil, 0, lx, 0);
 end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
