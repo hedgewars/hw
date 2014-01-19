@@ -25,6 +25,7 @@ uses SDLh, uTypes;
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; p: PLongwordArray);
 procedure FreeTexture(tex: PTexture);
 procedure FreeAndNilTexture(var tex: PTexture);
 
@@ -121,6 +122,53 @@ for y:= 0 to Pred(Surf^.h) do
     end;
 end;
 
+{ this will make invisible pixels that have a visible neighbor have the
+  same color as their visible neighbor, so that bilinear filtering won't
+  display a "wrongly" colored border when zoomed in }
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; p: PLongwordArray);
+var
+    i, lasti: Longword;
+    lpi, cpi, bpi: boolean; // was last/current/bottom neighbor pixel invisible?
+begin
+    lasti:= surf^.w * surf^.h - 1;
+    for i:=0 to lasti do
+        begin
+        // use first pixel in row as starting point
+        //p^[i]:= p^[i] and (BMask or GMask);
+        if (i mod surf^.w) = 0 then
+            lpi:= ((p^[i] and AMask) = 0)
+        else
+            begin
+            cpi:= ((p^[i] and AMask) = 0);
+            if cpi <> lpi then
+                begin
+                // invisible pixels get colors from visible neighbors
+                if (p^[i] and AMask) = 0 then
+                    begin
+                    p^[i]:= p^[i-1] and not AMask;
+                    // as this pixel is invisible and already colored correctly now, no point in further comparing it
+                    lpi:= cpi;
+                    continue;
+                    end
+                else
+                    p^[i-1]:= p^[i] and not AMask;
+                lpi:= cpi;
+                end;
+            end;
+        // also check bottom neighbor, lpi is now current pixel info
+        if i < lasti - surf^.w then
+            begin
+            bpi:= ((p^[i + surf^.w] and AMask) = 0);
+            if cpi <> bpi then
+                begin
+                if cpi then
+                    p^[i]:= p^[i + surf^.w] and not AMask
+                else
+                    p^[i + surf^.w]:= p^[i] and not AMask;
+                end;
+            end;
+        end;
+end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
@@ -148,7 +196,6 @@ if (surf^.format^.BytesPerPixel <> 4) then
     exit
     end;
 
-
 glGenTextures(1, @Surface2Tex^.id);
 
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
@@ -160,6 +207,8 @@ fromP4:= Surf^.pixels;
 
 if GrayScale then
     Surface2GrayScale(Surf);
+
+PrettifySurfaceAlpha(surf, fromP4);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
     begin
