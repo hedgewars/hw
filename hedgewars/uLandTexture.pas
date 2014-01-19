@@ -33,6 +33,8 @@ implementation
 uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
 
 const TEXSIZE = 128;
+      // in avoid tile borders stretch the blurry texture by 1 pixel more
+      BLURRYLANDOVERLAP = 1 / TEXSIZE / 2.0; // 1 pixel divided by texsize and blurry land scale factor
 
 type TLandRecord = record
             shouldUpdate, landAdded: boolean;
@@ -181,9 +183,10 @@ for x:= 0 to LANDTEXARW -1 do
             if tex <> nil then
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
-                else
+                else if (cReducedQuality and rqClampLess) = 0 then
                     DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
-
+                else
+                    DrawTexture2(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0, BLURRYLANDOVERLAP);
 end;
 
 procedure SetLandTexture;
