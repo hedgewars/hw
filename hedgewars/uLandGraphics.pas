@@ -679,6 +679,7 @@ end;
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c, xx, yy: LongInt;
     pixelsweep: boolean;
+
 begin
     Despeckle:= true;
 
@@ -709,11 +710,14 @@ begin
                         begin
                             if ((cReducedQuality and rqBlurryLand) <> 0) then
                             begin
-                                nx:= nx div 2;
-                                ny:= ny div 2
-                            end;
-                            if LandPixels[ny, nx] <> 0 then
-                                inc(c);
+                                ny:= Y div 2 + i;
+                                nx:= X div 2 + j;
+                                if ((ny and (LAND_HEIGHT_MASK div 2)) = 0) and ((nx and (LAND_WIDTH_MASK div 2)) = 0) then
+                                    if LandPixels[ny, nx] <> 0 then
+                                        inc(c);
+                            end
+                            else if LandPixels[ny, nx] <> 0 then
+                                    inc(c);
                         end
                     else if Land[ny, nx] > 255 then
                         inc(c);
