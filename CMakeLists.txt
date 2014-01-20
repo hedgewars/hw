@@ -38,6 +38,8 @@ if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
 endif()
 
+option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if source is in a git/repo that is NOT the hedgewars repo" OFF)
+
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
 #subdirectories will NOT be searched.
 #all fonts that can't be found will be bundled with hedgewars
