@@ -19,7 +19,7 @@
 {$INCLUDE "options.inc"}
 
 {$IFDEF WIN32}
-{$R hwengine.rc}
+{$R res/hwengine.rc}
 {$ENDIF}
 
 {$IFDEF HWLIBRARY}
@@ -92,7 +92,9 @@ begin
             end;
         gsConfirm, gsGame, gsChat:
             begin
-            if not cOnlyStats then DrawWorld(Lag);
+            if not cOnlyStats then
+                // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
+                DrawWorld(Lag);
             DoGameTick(Lag);
             if not cOnlyStats then ProcessVisualGears(Lag);
             end;
@@ -114,7 +116,11 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
+        {$IFDEF PAS2C}
+        s:= '/Screenshots/hw';
+        {$ELSE}
         s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        {$ENDIF}
 
         // flash
         playSound(sndShutter);
@@ -135,7 +141,7 @@ end;
 ///////////////////////////////////////////////////////////////////////////////
 procedure MainLoop;
 var event: TSDL_Event;
-    PrevTime, CurrTime: Longword;
+    PrevTime, CurrTime: LongWord;
     isTerminated: boolean;
 {$IFDEF SDL2}
     previousGameState: TGameState;
@@ -275,11 +281,12 @@ begin
         CurrTime:= SDL_GetTicks();
         if PrevTime + longword(cTimerInterval) <= CurrTime then
         begin
-            isTerminated := isTerminated or DoTimer(CurrTime - PrevTime);
-            PrevTime:= CurrTime
+            isTerminated:= isTerminated or DoTimer(CurrTime - PrevTime);
+            PrevTime:= CurrTime;
         end
         else SDL_Delay(1);
         IPCCheckSock();
+
     end;
 end;
 
@@ -414,11 +421,14 @@ begin
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
-        RecorderMainLoop()
-    else
+    begin
+        RecorderMainLoop();
+        freeEverything(true);
+        exit;
+    end;
 {$ENDIF}
-        MainLoop();
 
+    MainLoop;
     // clean up all the memory allocated
     freeEverything(true);
 end;
@@ -546,6 +556,10 @@ end;
 /////////////////////////////////// m a i n ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 begin
+{$IFDEF PAS2C}
+    // workaround for pascal's ParamStr and ParamCount
+    init(argc, argv);
+{$ENDIF}
     preInitEverything();
     cTagsMask:= htTeamName or htName or htHealth; // this one doesn't fit nicely w/ reset of other variables. suggestions welcome
     GetParams();
@@ -556,6 +570,11 @@ begin
         Game();
 
     // return 1 when engine is not called correctly
+    {$IFDEF PAS2C}
+    exit(LongInt(GameType = gmtSyntax));
+    {$ELSE}
     halt(LongInt(GameType = gmtSyntax));
+    {$ENDIF}
+
 {$ENDIF}
 end.

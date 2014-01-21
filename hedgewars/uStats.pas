@@ -25,7 +25,7 @@ uses uConsts, uTypes;
 var TotalRounds: LongInt;
     FinishedTurnsTotal: LongInt;
     SendHealthStatsOn : boolean = true;
-    
+
 procedure initModule;
 procedure freeModule;
 
@@ -111,7 +111,7 @@ if FinishedTurnsTotal <> 0 then
     else if CurrentHedgehog^.stats.StepDamageRecv > 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
-        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then 
+        if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
             AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
 
@@ -164,7 +164,7 @@ for t:= 0 to Pred(TeamsCount) do // send even on zero turn
                 StepDamageRecv:= 0;
                 StepDamageGiven:= 0
                 end;
-                
+
 if SendHealthStatsOn then
     for t:= 0 to Pred(ClansCount) do
         with ClansArray[t]^ do
@@ -298,7 +298,7 @@ if SendHealthStatsOn then
         SendStat(siKilledHHs, IntToStr(KilledHHs));
 
     // now to console
-    if winnersClan <> nil then 
+    if winnersClan <> nil then
         begin
         WriteLnToConsole('WINNERS');
         WriteLnToConsole(inttostr(winnersClan^.TeamsNumber));
@@ -307,12 +307,12 @@ if SendHealthStatsOn then
         end
     else
         WriteLnToConsole('DRAW');
-        
+
     ScriptCall('onAchievementsDeclaration');
 end;
 
 procedure declareAchievement(id, teamname, location: shortstring; value: LongInt);
-begin 
+begin
 if (length(id) = 0) or (length(teamname) = 0) or (length(location) = 0) then exit;
     WriteLnToConsole('ACHIEVEMENT');
     WriteLnToConsole(id);

@@ -49,7 +49,7 @@ procedure ControllerHatEvent(joy, hat, value: Byte);
 procedure ControllerButtonEvent(joy, button: Byte; pressed: Boolean);
 
 implementation
-uses uConsole, uCommands, uMisc, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer;
+uses uConsole, uCommands, uVariables, uConsts, uUtils, uDebug, uPhysFSLayer;
 
 const
     LSHIFT = $0200;
@@ -57,7 +57,7 @@ const
     LALT   = $0800;
     RALT   = $1000;
     LCTRL  = $2000;
-    RCTRL  = $4000; 
+    RCTRL  = $4000;
 
 var tkbd: array[0..cKbdMaxIndex] of boolean;
     KeyNames: array [0..cKeyMaxIndex] of string[15];
@@ -91,16 +91,16 @@ end;
 (*
 procedure MaskModifier(var code: LongInt; Modifier: LongWord);
 begin
-    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT; 
-    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT; 
-    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT; 
-    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT; 
-    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL; 
-    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL; 
+    if(Modifier and KMOD_LSHIFT) <> 0 then code:= code or LSHIFT;
+    if(Modifier and KMOD_RSHIFT) <> 0 then code:= code or LSHIFT;
+    if(Modifier and KMOD_LALT) <> 0 then code:= code or LALT;
+    if(Modifier and KMOD_RALT) <> 0 then code:= code or LALT;
+    if(Modifier and KMOD_LCTRL) <> 0 then code:= code or LCTRL;
+    if(Modifier and KMOD_RCTRL) <> 0 then code:= code or LCTRL;
 end;
 *)
 procedure MaskModifier(Modifier: shortstring; var code: LongInt);
-var mod_ : shortstring;
+var mod_ : shortstring = '';
     ModifierCount, i: LongInt;
 begin
 if Modifier = '' then exit;
@@ -112,7 +112,7 @@ for i:= 1 to Length(Modifier) do
 SplitByChar(Modifier, mod_, ':');//remove the first mod: part
 Modifier:= mod_;
 for i:= 0 to ModifierCount do
-    begin 
+    begin
     mod_:= '';
     SplitByChar(Modifier, mod_, ':');
     if (Modifier = 'lshift')                    then code:= code or LSHIFT;
@@ -175,7 +175,7 @@ if CurrentBinds[code][0] <> #0 then
             LocalMessage:= LocalMessage or gmSwitch
         else if CurrentBinds[code] = '+precise' then
             LocalMessage:= LocalMessage or gmPrecise;
-            
+
         ParseCommand(CurrentBinds[code], Trusted);
         if (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) and (ReadyTimeLeft > 1) then
             ParseCommand('gencmd R', true)
@@ -183,7 +183,7 @@ if CurrentBinds[code][0] <> #0 then
     else if (CurrentBinds[code][1] = '+') then
         begin
         if CurrentBinds[code] = '+precise' then
-            LocalMessage:= LocalMessage and not(gmPrecise);
+            LocalMessage:= LocalMessage and (not gmPrecise);
         s:= CurrentBinds[code];
         s[1]:= '-';
         ParseCommand(s, Trusted);
@@ -193,7 +193,7 @@ if CurrentBinds[code][0] <> #0 then
     else
         begin
         if CurrentBinds[code] = 'switch' then
-            LocalMessage:= LocalMessage and not(gmSwitch)
+            LocalMessage:= LocalMessage and (not gmSwitch)
         end
     end
 end;
@@ -246,7 +246,7 @@ for i:= 6 to cKeyMaxIndex do
     s:= shortstring(sdl_getkeyname(i));
     //WriteLnToConsole('uInputHandler - ' + IntToStr(i) + ': ' + s + ' ' + IntToStr(cKeyMaxIndex));
     if s = 'unknown key' then KeyNames[i]:= ''
-    else 
+    else
         begin
         for t:= 1 to Length(s) do
             if s[t] = ' ' then
@@ -404,10 +404,10 @@ if ControllerNumControllers > 0 then
             if ControllerNumAxes[j] > 20 then
                 ControllerNumAxes[j]:= 20;
             //if ControllerNumBalls[j] > 20 then ControllerNumBalls[j]:= 20;
-            
+
             if ControllerNumHats[j] > 20 then
                 ControllerNumHats[j]:= 20;
-                
+
             if ControllerNumButtons[j] > 20 then
                 ControllerNumButtons[j]:= 20;
 
@@ -492,7 +492,7 @@ begin
                     val(copy(l, i, 3), b);
                     p:= p + char(b);
                     inc(i, 3)
-                    end 
+                    end
                 else
                     begin
                     p:= p + l[i];
@@ -505,7 +505,7 @@ begin
                 l:= copy(l, i + 1, length(l) - i);
                 if l <> 'default' then
                     begin
-                    if (length(l) = 2) and (l[1] = '\') then 
+                    if (length(l) = 2) and (l[1] = '\') then
                         l:= l[1]
                     else if (l[1] = '"') and (l[length(l)] = '"') then
                         l:= copy(l, 2, length(l) - 2);
@@ -517,7 +517,7 @@ begin
             end;
 
         pfsClose(f)
-        end 
+        end
         else
             AddFileLog('[BINDS] file not found');
 end;
@@ -547,7 +547,7 @@ b:= KeyNameToCode(id, Modifier);
 if b = 0 then
     OutError(errmsgUnknownVariable + ' "' + id + '"', false)
 else
-    begin 
+    begin
     // add bind: first check if this cmd is already bound, and remove old bind
     i:= cKbdMaxIndex;
     repeat

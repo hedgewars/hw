@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils, uMatrix;
 
 var
 /////// init flags ///////
@@ -174,7 +174,7 @@ var
     cArtillery      : boolean;
     WeaponTooltipTex: PTexture;
     AmmoMenuInvalidated: boolean;
-    AmmoRect		: TSDL_Rect;
+    AmmoRect        : TSDL_Rect;
     HHTexture       : PTexture;
     cMaxZoomLevel   : real;
     cMinZoomLevel   : real;
@@ -234,7 +234,7 @@ var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
-        '/',                             // ptData
+        '//',                            // ptData
         '/Graphics',                     // ptGraphics
         '/Themes',                       // ptThemes
         '/Themes/Bamboo',                // ptCurrTheme
@@ -254,9 +254,11 @@ var
         '/Graphics/Flags',               // ptFlags
         '/Missions/Maps',                // ptMissionMaps
         '/Graphics/SuddenDeath',         // ptSuddenDeath
-        '/Graphics/Buttons'              // ptButton
+        '/Graphics/Buttons',             // ptButton
+        '/Shaders'                       // ptShaders
     );
 
+var
     Fontz: array[THWFont] of THHFont = (
             (Handle: nil;
             Height: 12;
@@ -718,7 +720,7 @@ var
             TimeAfterTurn: Longword;
             minAngle, maxAngle: Longword;
             isDamaging: boolean;
-            SkipTurns: Longword;
+            SkipTurns: LongWord;
             PosCount: Longword;
             PosSprite: TSprite;
             ejectX, ejectY: Longint;
@@ -751,9 +753,9 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or 
-                          ammoprop_Power or 
-                          ammoprop_AltUse or 
+            Ammo: (Propz: ammoprop_Timerable or
+                          ammoprop_Power or
+                          ammoprop_AltUse or
                           ammoprop_SetBounce or
                           ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
@@ -779,9 +781,9 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 3;
-            Ammo: (Propz: ammoprop_Timerable or 
-                          ammoprop_Power or 
-                          ammoprop_AltUse or 
+            Ammo: (Propz: ammoprop_Timerable or
+                          ammoprop_Power or
+                          ammoprop_AltUse or
                           ammoprop_SetBounce or
                           ammoprop_NeedUpDown;
                 Count: 5;
@@ -807,7 +809,7 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Power or
                           ammoprop_AltUse or
                           ammoprop_NeedUpDown;
                 Count: AMMO_INFINITE;
@@ -833,8 +835,8 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
-                          ammoprop_NeedTarget or 
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_NeedTarget or
                           ammoprop_DontHold or
                           ammoprop_NeedUpDown;
                 Count: 2;
@@ -886,9 +888,9 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
-                          ammoprop_AttackInMove or 
-                          ammoprop_NoCrosshair or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_AttackInMove or
+                          ammoprop_NoCrosshair or
                           ammoprop_DontHold;
                 Count: 2;
                 NumPerTurn: 0;
@@ -969,10 +971,10 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or 
-                          ammoprop_AttackInMove or 
-                          ammoprop_DontHold or 
-                          ammoprop_AltUse or 
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_AttackInMove or
+                          ammoprop_DontHold or
+                          ammoprop_AltUse or
                           ammoprop_SetBounce;
                 Count: 2;
                 NumPerTurn: 0;
@@ -1021,9 +1023,9 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or 
-                          ammoprop_AttackInMove or 
-                          ammoprop_DontHold or 
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_AttackInMove or
+                          ammoprop_DontHold or
                           ammoprop_AltUse;
                 Count: 1;
                 NumPerTurn: 0;
@@ -1048,8 +1050,8 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_NoCrosshair or 
-                          ammoprop_ForwMsgs or 
+            Ammo: (Propz: ammoprop_NoCrosshair or
+                          ammoprop_ForwMsgs or
                           ammoprop_AttackInMove;
                 Count: AMMO_INFINITE;
                 NumPerTurn: 0;
@@ -1344,8 +1346,8 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
-                          ammoprop_DontHold or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_DontHold or
                           ammoprop_NeedUpDown or
                           ammoprop_AttackInMove;
                 Count: 1;
@@ -1371,8 +1373,8 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
-                          ammoprop_NoCrosshair or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
+                          ammoprop_NoCrosshair or
                           ammoprop_DontHold or
                           ammoprop_Track;
                 Count: 1;
@@ -1398,7 +1400,7 @@ var
             NameTex: nil;
             Probability: 100;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_DontHold or
                           ammoprop_NoCrosshair;
                 Count: 1;
@@ -1424,8 +1426,8 @@ var
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or 
-                          ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Timerable or
+                          ammoprop_Power or
                           ammoprop_NeedUpDown or
                           ammoprop_AltUse;
                 Count: 0;
@@ -1451,7 +1453,7 @@ var
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedUpDown or
                           ammoprop_AltUse;
                 Count: 0;
@@ -1505,7 +1507,7 @@ var
             NameTex: nil;
             Probability: 300;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedUpDown or
                           ammoprop_AltUse;
                 Count: AMMO_INFINITE;
@@ -1531,7 +1533,7 @@ var
             NameTex: nil;
             Probability: 400;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: AMMO_INFINITE;
@@ -1816,7 +1818,7 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Power or
                           ammoprop_NeedUpDown or
                           ammoprop_AltUse;
                 Count: AMMO_INFINITE;
@@ -1925,9 +1927,9 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Timerable or 
-                          ammoprop_Power or 
-                          ammoprop_AltUse or 
+            Ammo: (Propz: ammoprop_Timerable or
+                          ammoprop_Power or
+                          ammoprop_AltUse or
                           ammoprop_NeedUpDown or
                           ammoprop_SetBounce;
                 Count: AMMO_INFINITE;
@@ -1978,7 +1980,7 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: 1;
@@ -2109,7 +2111,7 @@ var
             NameTex: nil;
             Probability: 0;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_Power or 
+            Ammo: (Propz: ammoprop_Power or
                           ammoprop_AltUse or
                           ammoprop_NoRoundEnd;
                 Count: 2;
@@ -2127,7 +2129,7 @@ var
             SkipTurns: 0;
             PosCount: 1;
             PosSprite: sprWater;
-            ejectX: 0; 
+            ejectX: 0;
             ejectY: 0),
 
 // Tardis
@@ -2157,7 +2159,7 @@ var
             ejectX: 0;
             ejectY: 0),
 
-// Structure      
+// Structure
 {
             (NameId: sidStructure;
             NameTex: nil;
@@ -2185,7 +2187,7 @@ var
             ejectX: 0;
             ejectY: 0),
 }
-            
+
 // Land Gun
             (NameId: sidLandGun;
             NameTex: nil;
@@ -2215,7 +2217,7 @@ var
             NameTex: nil;
             Probability: 20;
             NumberInCase: 1;
-            Ammo: (Propz: ammoprop_ForwMsgs or 
+            Ammo: (Propz: ammoprop_ForwMsgs or
                           ammoprop_NeedUpDown or
                           ammoprop_DontHold;
                 Count: 1;
@@ -2342,6 +2344,7 @@ var
     SyncTexture,
     ConfirmTexture: PTexture;
     cScaleFactor: GLfloat;
+    cStereoDepth: GLfloat;
     SupportNPOTT: Boolean;
     Step: LongInt;
     MissionIcons: PSDL_Surface;
@@ -2365,13 +2368,29 @@ var
 
     lastTurnChecksum : Longword;
 
-    cTestLua : Boolean;
+    mModelview: TMatrix4x4f;
+    mProjection: TMatrix4x4f;
+    vBuffer: GLuint; // vertex buffer
+    tBuffer: GLuint; // texture coords buffer
+    cBuffer: GLuint; // color buffer
+
+    uCurrentMVPLocation: GLint;
+
+    uMainMVPLocation: GLint;
+    uMainTintLocation: GLint;
+
+    uWaterMVPLocation: GLint;
+
+    aVertex: GLint;
+    aTexCoord: GLint;
+    aColor: GLint;
 
 var trammo:  array[TAmmoStrId] of PChar;   // name of the weapon
     trammoc: array[TAmmoStrId] of PChar;   // caption of the weapon
     trammod: array[TAmmoStrId] of PChar;   // description of the weapon
     trmsg:   array[TMsgStrId]  of PChar;   // message of the event
     trgoal:  array[TGoalStrId] of PChar;   // message of the goal
+    cTestLua : Boolean;
 
 procedure preInitModule;
 procedure initModule;
@@ -2437,9 +2456,14 @@ begin
         trmsg[msid]:= nil;
     for gsid:= Low(TGoalStrId) to High(TGoalStrId) do
         trgoal[gsid]:= nil;
-        
+
+// TODO: fixme
+{$IFDEF PAS2C}
+    cLocale:= 'en';
+{$ELSE}
     // TODO: we could just have one cLocale variables and drop strutils
     cLocale:= ExtractDelimited(1, cLocaleFName, StdWordDelims);
+{$ENDIF}
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
@@ -2575,7 +2599,7 @@ begin
     cHasFocus       := true;
     cInactDelay     := 100;
     ReadyTimeLeft   := 0;
-    
+
     disableLandBack := false;
     ScreenFade      := sfNone;
 

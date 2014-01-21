@@ -63,7 +63,7 @@ include_directories(${SDL_INCLUDE_DIR})
 include_directories(${SDLMIXER_INCLUDE_DIR})
 include_directories(BEFORE ${PHYSFS_INCLUDE_DIR})
 include_directories(BEFORE ${PHYSLAYER_INCLUDE_DIR})
-
+include_directories(${LUA_INCLUDE_DIR}) #brought by physlayer hwpacksmounter.h
 
 if(UNIX)
     # HACK: in freebsd cannot find iconv.h included via SDL.h
@@ -213,6 +213,10 @@ if(WIN32 AND NOT UNIX)
         winspool
         uuid
         )
+endif()
+
+if(CMAKE_CXX_COMPILER MATCHES "clang*")
+    list(APPEND HW_LINK_LIBS stdc++ m)
 endif()
 
 target_link_libraries(hedgewars ${HW_LINK_LIBS})

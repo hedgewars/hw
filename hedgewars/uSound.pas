@@ -315,7 +315,7 @@ begin
     WriteLnToConsole(msgOK);
 
     Mix_AllocateChannels(Succ(chanTPU));
-    ChangeVolume(cInitVolume);	
+    ChangeVolume(cInitVolume);
 end;
 
 procedure ResetSound;
@@ -452,7 +452,7 @@ begin
     i:= 0;
     while (i<High(VoiceList)) and (VoiceList[i].snd = sndNone) do
         inc(i);
-    
+
     if (VoiceList[i].snd <> sndNone) then
         begin
         LastVoice.snd:= VoiceList[i].snd;

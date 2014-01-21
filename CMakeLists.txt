@@ -33,6 +33,9 @@ option(ANDROID "Enable Android build (off)" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 
+option(BUILD_ENGINE_C "Compile hwengine as native C [default: off]" OFF)
+option(GL2 "Enable OpenGL 2 rendering [default: off]" OFF)
+
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
@@ -111,10 +114,30 @@ if(CMAKE_BUILD_TYPE MATCHES "DEBUG")
     list(APPEND haskell_flags "-Wall"       # all warnings
                               "-debug"      # debug mode
                               "-dcore-lint" # internal sanity check
+                              "-fno-warn-unused-do-bind"
                               )
 else()
     list(APPEND haskell_flags "-w" # no warnings
                               )
+endif()
+
+
+#build engine without freepascal
+if(BUILD_ENGINE_C)
+    find_package(Clang REQUIRED)
+
+    if(${CLANG_VERSION} VERSION_LESS "3.0")
+        message(FATAL_ERROR "LLVM/Clang compiler required version is 3.0 but version ${CLANG_VERSION} was found!")
+    endif()
+
+    set(CMAKE_C_COMPILER ${CLANG_EXECUTABLE})
+    set(CMAKE_CXX_COMPILER ${CLANG_EXECUTABLE})
+endif()
+
+
+#server
+if(NOT NOSERVER)
+    add_subdirectory(gameServer)
 endif()
 
 
@@ -182,28 +205,26 @@ find_package_or_disable_msg(LIBAV NOVIDEOREC "Video recording will not be built"
 #physfs helper library
 add_subdirectory(misc/libphyslayer)
 
-#server
-if(NOT NOSERVER)
-    add_subdirectory(gameServer)
+#maybe this could be merged inside hedgewars/CMakeLists.txt
+if(BUILD_ENGINE_C)
+    #pascal to c converter
+    add_subdirectory(tools/pas2c)
+    add_subdirectory(project_files/hwc)
+else()
+    #main pascal engine
+    add_subdirectory(hedgewars)
 endif()
-
-#main engine
-add_subdirectory(hedgewars)
 
 #Android related build scripts
-if(ANDROID)
-    #run cmake -DANDROID=1 to enable this
-    add_subdirectory(project_files/Android-build)
-endif()
-
 #TODO: when ANDROID, BUILD_ENGINE_LIBRARY should be set
-if(NOT ANDROID)
+if(ANDROID)
+    add_subdirectory(project_files/Android-build)
+else(ANDROID)
     add_subdirectory(bin)
     add_subdirectory(QTfrontend)
     add_subdirectory(share)
     add_subdirectory(tools)
-endif()
-
+endif(ANDROID)
 
 include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 

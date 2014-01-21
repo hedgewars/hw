@@ -50,7 +50,7 @@ function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 var StoreCnt: Longword;
 
 implementation
-uses uLocale, uVariables, uCommands, uUtils, uCaptions, uDebug;
+uses uVariables, uCommands, uUtils, uCaptions, uDebug;
 
 type TAmmoCounts = array[TAmmoType] of Longword;
      TAmmoArray = array[TAmmoType] of TAmmo;
@@ -132,22 +132,22 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
             inc(Ammoz[a].SkipTurns,10000);
     if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
         ammos[a]:= AMMO_INFINITE
-        end 
-        
+        end
+
     else
         ammos[a]:= AMMO_INFINITE;
-    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then 
+    if ((GameFlags and gfPlaceHog) <> 0) and (a = amTeleport) then
         InitialCounts[Pred(StoreCnt)][a]:= cnt
     else
         InitialCounts[Pred(StoreCnt)][a]:= ammos[a];
     end;
-    
+
     for a:= Low(TAmmoType) to High(TAmmoType) do
         begin
         newAmmos[a]:= Ammoz[a].Ammo;
         newAmmos[a].Count:= ammos[a]
         end;
-        
+
 FillAmmoStore(StoresList[Pred(StoreCnt)], newAmmos)
 end;
 
@@ -272,7 +272,7 @@ begin
             Ammo^[Slot, ami]:= Ammo^[Slot, ami + 1];
             Ammo^[Slot, ami + 1].Count:= 0
             end;
-    until not b;
+    until (not b);
 AmmoMenuInvalidated:= true;
 end;
 
@@ -311,7 +311,7 @@ begin
             if (AmmoType = Ammo) then
                 if Hedgehog.Team^.Clan^.TurnNumber > Ammoz[AmmoType].SkipTurns then
                     exit(Count)
-                else 
+                else
                     exit(0);
         inc(ami)
     end;
@@ -482,7 +482,7 @@ for t:= 0 to Pred(TeamsCount) do
 
 for a:= Low(TAmmoType) to High(TAmmoType) do
     newAmmos[a]:= Ammoz[a].Ammo;
-    
+
 for i:= 0 to Pred(StoreCnt) do
     begin
     for a:= Low(TAmmoType) to High(TAmmoType) do
@@ -499,8 +499,8 @@ end;
 
 procedure chAddAmmoStore(var descr: shortstring);
 begin
-descr:= ''; // avoid compiler hint
-AddAmmoStore
+    descr:= ''; // avoid compiler hint
+    AddAmmoStore
 end;
 
 procedure initModule;

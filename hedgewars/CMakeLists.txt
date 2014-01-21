@@ -179,6 +179,11 @@ if(${SDL_VERSION} VERSION_GREATER 1.3)
     add_definitions(-dSDL2)
 endif()
 
+#opengl 2
+IF(GL2)
+    add_definitions(-dGL2)
+ENDIF(GL2)
+
 #needs to be last
 add_definitions(-dDEBUGFILE)
 

@@ -16,7 +16,6 @@ const DIR_N: direction = (x: 0; y: -1);
     DIR_S: direction = (x: 0; y: 1);
     DIR_W: direction = (x: -1; y: 0);
 
-
 operator = (const a, b: direction) c: Boolean;
 begin
     c := (a.x = b.x) and (a.y = b.y);
@@ -27,28 +26,43 @@ const small_cell_size = 128;
     large_cell_size = 256;
     braidness = 10;
 
-var x, y: LongInt;
-    cellsize: LongInt; //selected by the user in the gui
-    seen_cells_x, seen_cells_y: LongInt; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
-    num_edges_x, num_edges_y: LongInt; //number of resulting edges that need to be vertexificated
-    num_cells_x, num_cells_y: LongInt; //actual number of cells, depending on cell size
-    seen_list: array of array of LongInt;
-    xwalls: array of array of Boolean;
-    ywalls: array of array of Boolean;
-    x_edge_list: array of array of Boolean;
-    y_edge_list: array of array of Boolean;
-    maze: array of array of Boolean;
-    pa: TPixAr;
-    num_vertices: LongInt;
-    off_y: LongInt;
-    num_steps: LongInt;
-    current_step: LongInt;
-    step_done: array of Boolean;
-    done: Boolean;
-    last_cell: array of record x, y: LongInt; end;
-    came_from: array of array of record x, y: LongInt; end;
+type
+   cell_t = record x,y         : LongInt
+        end;
+
+var x, y               : LongInt;
+    cellsize               : LongInt; //selected by the user in the gui
+    seen_cells_x, seen_cells_y : LongInt; //number of cells that can be visited by the generator, that is every second cell in x and y direction. the cells between there are walls that will be removed when we move from one cell to another
+    num_edges_x, num_edges_y   : LongInt; //number of resulting edges that need to be vertexificated
+    num_cells_x, num_cells_y   : LongInt; //actual number of cells, depending on cell size
+
+
+    seen_list              : array of array of LongInt;
+    xwalls             : array of array of Boolean;
+    ywalls             : array of array of Boolean;
+    x_edge_list            : array of array of Boolean;
+    y_edge_list            : array of array of Boolean;
+    maze               : array of array of Boolean;
+
+    pa                 : TPixAr;
+    num_vertices           : LongInt;
+    off_y              : LongInt;
+    num_steps              : LongInt;
+    current_step           : LongInt;
+
+    step_done              : array of Boolean;
+
+    done               : Boolean;
+
+{   last_cell              : array 0..3 of record x, y :LongInt ; end;
+    came_from              : array of array of record x, y: LongInt; end;
+    came_from_pos          : array of LongInt;
+}
+    last_cell : array of cell_t;
+    came_from : array of array of cell_t;
     came_from_pos: array of LongInt;
-    maze_inverted: Boolean;
+
+    maze_inverted                      : Boolean;
 
 function when_seen(x: LongInt; y: LongInt): LongInt;
 begin
@@ -104,11 +118,11 @@ begin
     begin
         //we have already seen the target cell, decide if we should remove the wall anyway
         //(or put a wall there if maze_inverted, but we are not doing that right now)
-        if not maze_inverted and (GetRandom(braidness) = 0) then
+        if (not maze_inverted) and (GetRandom(braidness) = 0) then
         //or just warn that inverted+braid+indestructible terrain != good idea
         begin
             case dir.x of
-            
+
                 -1:
                 if x > 0 then
                     ywalls[x-1, y] := false;
@@ -178,10 +192,10 @@ if not found_cell then
     last_cell[current_step].x := came_from[current_step, came_from_pos[current_step]].x;
     last_cell[current_step].y := came_from[current_step, came_from_pos[current_step]].y;
     came_from_pos[current_step] := came_from_pos[current_step] - 1;
-    
+
     if came_from_pos[current_step] >= 0 then
-        see_cell
-        
+        see_cell()
+
     else
         step_done[current_step] := true;
     end;
@@ -208,7 +222,7 @@ begin
         tmp_x := cellsize
     else
         tmp_x := cellsize * 2 div 3;
-        
+
     if maze_inverted or (y mod 2 = 0) then
         tmp_y := cellsize
     else
@@ -318,11 +332,11 @@ end;
 num_cells_x := LAND_WIDTH div cellsize;
 if not odd(num_cells_x) then
     num_cells_x := num_cells_x - 1; //needs to be odd
-    
+
 num_cells_y := LAND_HEIGHT div cellsize;
 if not odd(num_cells_y) then
     num_cells_y := num_cells_y - 1;
-    
+
 num_edges_x := num_cells_x - 1;
 num_edges_y := num_cells_y - 1;
 
@@ -333,18 +347,22 @@ if maze_inverted then
     num_steps := 3 //TODO randomize, between 3 and 5?
 else
     num_steps := 1;
-    
+
 SetLength(step_done, num_steps);
 SetLength(last_cell, num_steps);
 SetLength(came_from_pos, num_steps);
 SetLength(came_from, num_steps, num_cells_x*num_cells_y);
+
 done := false;
 
 for current_step := 0 to num_steps - 1 do
+begin
     step_done[current_step] := false;
     came_from_pos[current_step] := 0;
-    
+end;
+
 current_step := 0;
+
 
 SetLength(seen_list, seen_cells_x, seen_cells_y);
 SetLength(xwalls, seen_cells_x, seen_cells_y - 1);
@@ -352,6 +370,7 @@ SetLength(ywalls, seen_cells_x - 1, seen_cells_y);
 SetLength(x_edge_list, num_edges_x, num_cells_y);
 SetLength(y_edge_list, num_cells_x, num_edges_y);
 SetLength(maze, num_cells_x, num_cells_y);
+
 
 num_vertices := 0;
 

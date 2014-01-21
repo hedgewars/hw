@@ -360,8 +360,9 @@ begin
     //Check array sizes
     if length(fingers) < pointerCount then
     begin
-        setLength(fingers, pointerCount * 2);
-        WriteLnToConsole('allocated ' + inttostr(length(fingers)) + ' finger elements');
+        setLength(fingers, length(fingers)*2);
+        for index := length(fingers) div 2 to length(fingers) do
+            fingers[index].id := nilFingerId;
     end;
 
     xCursor := convertToCursorX(x);

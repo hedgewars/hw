@@ -64,11 +64,8 @@
     {$DEFINE SDL2}
 {$ENDIF}
 
-
-//TODO: cruft to be removed
 {$DEFINE _S:=}
 {$DEFINE _P:=}
-
 
 //{$DEFINE TRACEAIACTIONS}
 //{$DEFINE COUNTTICKS}

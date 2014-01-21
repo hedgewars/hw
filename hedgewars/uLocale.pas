@@ -36,13 +36,14 @@ procedure LoadLocaleWrapper(str: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
-uses uRandom, uUtils, uVariables, uDebug, uPhysFSLayer, sysutils;
+uses uRandom, uVariables, uDebug, uPhysFSLayer, sysutils;
 
 var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of PChar;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s, sc: PChar;
+var s: PChar = nil;
+    sc: PChar;
     f: pfsFile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;

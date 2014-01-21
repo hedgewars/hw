@@ -20,7 +20,7 @@
 
 unit uGearsHedgehog;
 interface
-uses uTypes, uGearsHandlersMess; 
+uses uTypes, uGearsHandlersMess;
 
 procedure doStepHedgehog(Gear: PGear);
 procedure AfterAttack;
@@ -126,7 +126,7 @@ with HHGear^.Hedgehog^ do
             LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
         end;
     // Try again in the next slot
-    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then 
+    if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then
         begin
         inc(slot);
         HHGear^.MsgParam:= slot;
@@ -416,7 +416,7 @@ with Gear^,
                        amTardis: newGear:= AddGear(hwRound(X), hwRound(Y), gtTardis, 0, _0, _0, 0);
                        amIceGun: newGear:= AddGear(hwRound(X), hwRound(Y), gtIceGun, 0, _0, _0, 0);
             end;
-            if altUse and (newGear <> nil) and 
+            if altUse and (newGear <> nil) and
                ((CurAmmoGear = nil) or (CurAmmoGear^.AmmoType <> amJetpack) or (Gear^.Message and gmPrecise = 0)) then
                begin
                newGear^.dX:= newDx / newGear^.Density;
@@ -470,15 +470,15 @@ with Gear^,
                 begin
                 elastic:=  int2hwfloat(CurWeapon^.Bounciness) / _1000;
 
-                if elastic < _1 then
-                    newGear^.Elasticity:= newGear^.Elasticity * elastic
-                else if elastic > _1 then
-                    newGear^.Elasticity:= _1 - ((_1-newGear^.Elasticity) / elastic);
-    (* Experimented with friction modifier. Didn't seem helpful
-                fric:= int2hwfloat(CurWeapon^.Bounciness) / _250;
-                if fric < _1 then newGear^.Friction:= newGear^.Friction * fric
-                else if fric > _1 then newGear^.Friction:= _1 - ((_1-newGear^.Friction) / fric)*)
-                end;
+            if elastic < _1 then
+                newGear^.Elasticity:= newGear^.Elasticity * elastic
+            else if elastic > _1 then
+                newGear^.Elasticity:= _1 - ((_1-newGear^.Elasticity) / elastic);
+(* Experimented with friction modifier. Didn't seem helpful
+            fric:= int2hwfloat(CurWeapon^.Bounciness) / _250;
+            if fric < _1 then newGear^.Friction:= newGear^.Friction * fric
+            else if fric > _1 then newGear^.Friction:= _1 - ((_1-newGear^.Friction) / fric)*)
+            end;
 
 
             uStats.AmmoUsed(CurAmmoType);
@@ -496,16 +496,15 @@ with Gear^,
                 end;
 
             Power:= 0;
-            if (CurAmmoGear <> nil)
-                and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
+            if (CurAmmoGear <> nil) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AltUse) = 0){check for dropping ammo from rope} then
                 begin
-                if CurAmmoType in [amRope,amResurrector] then Message:= Message or gmAttack;
+                if CurAmmoType in [amRope,amResurrector] then
+                    Message:= Message or gmAttack;
                 CurAmmoGear^.Message:= Message
                 end
             else
                 begin
-                if not CurrentTeam^.ExtDriven
-                and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
+                if (not CurrentTeam^.ExtDriven) and ((Ammoz[CurAmmoType].Ammo.Propz and ammoprop_Power) <> 0) then
                     SendIPC(_S'a');
                 AfterAttack;
                 end
@@ -831,7 +830,7 @@ procedure HedgehogChAngle(HHGear: PGear);
 var da: LongWord;
 begin
 with HHGear^.Hedgehog^ do
-    if (((CurAmmoType = amRope) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope))) and 
+    if (((CurAmmoType = amRope) or ((CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amRope))) and
             ((HHGear^.State and (gstMoving or gstHHJumping)) = gstMoving))
     or ((CurAmmoType = amPortalGun) and ((HHGear^.State and gstMoving) <> 0)) then
         da:= 2
@@ -878,7 +877,7 @@ if isFalling then
             end;
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
             Gear^.dY:= _0;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end;
     Gear^.State:= Gear^.State or gstMoving;
     if (Gear^.State and gstHHDriven <> 0) and
@@ -904,8 +903,8 @@ if isFalling then
 else
     begin
     land:= TestCollisionYwithGear(Gear, 1);
-    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0) 
-    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) 
+    if ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) < _0_55.QWordValue) and ((land and lfIce) = 0)
+    and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0))
     and ((Gear^.State and gstHHJumping) <> 0) then
         SetLittle(Gear^.dX);
 
@@ -933,7 +932,7 @@ else
             if (land and lfBouncy = 0) or (Gear^.dX.QWordValue < _0_02.QWordValue) then
                 Gear^.dY:= _0
             end;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end
     else
         Gear^.dY:= Gear^.dY + cGravity;
@@ -1058,7 +1057,7 @@ if (Gear^.State and gstMoving) <> 0 then
             Gear^.dY:= _0;
             Gear^.Y:= Gear^.Y + _1
             end;
-        Gear^.State:= Gear^.State and not gstCollision 
+        Gear^.State:= Gear^.State and (not gstCollision)
         end;
 
     // could become nil if ai's hog fails to respawn in ai survival
@@ -1096,6 +1095,11 @@ if not isInMultiShoot then
     AllInactive:= false
 else if Hedgehog^.CurAmmoType in [amShotgun, amDEagle, amSniperRifle] then
     HHGear^.Message:= 0;
+
+if ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_Utility) <> 0) and isInMultiShoot then
+    AllInactive:= true
+else if not isInMultiShoot then
+    AllInactive:= false;
 
 if (TurnTimeLeft = 0) or (HHGear^.Damage > 0) then
     begin
@@ -1344,7 +1348,7 @@ if Gear = nil then exit;
 tX:= Gear^.X;
 if WorldWrap(Gear) then
     begin
-    if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and 
+    if (WorldEdge <> weBounce) and (Gear = CurrentHedgehog^.Gear) and
        (CurAmmoGear <> nil) and (CurAmmoGear^.Kind =gtRope) and (CurAmmoGear^.Elasticity <> _0) then
        CurAmmoGear^.PortalCounter:= 1;
     if (WorldEdge = weWrap) and ((TestCollisionXwithGear(Gear, 1) <> 0) or (TestCollisionXwithGear(Gear, -1) <> 0))  then

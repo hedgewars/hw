@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
- 
+
 {$INCLUDE "options.inc"}
 
 unit ArgParsers;
@@ -111,7 +111,7 @@ begin
         end
 end;
 
-function parseNick(nick: String): String;
+function parseNick(nick: shortstring): shortstring;
 begin
     if isInternal then
         parseNick:= DecodeBase64(nick)
@@ -158,35 +158,38 @@ begin
 {$ENDIF}
 end;
 
-function getLongIntParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
+function getLongIntParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
 var tmpInt, c: LongInt;
 begin
     inc(paramIndex);
+{$IFDEF PAS2C}
+    val(str, tmpInt);
+{$ELSE}
     val(str, tmpInt, c);
     wrongParameter:= c <> 0;
     if wrongParameter then
         WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a number, you passed "'+str+'"');
+{$ENDIF}
     getLongIntParameter:= tmpInt;
 end;
 
-function getStringParameter(str:String; var paramIndex:LongInt; var wrongParameter:Boolean): String;
+function getstringParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): shortstring;
 begin
     inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
     if wrongParameter then
          WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
-    getStringParameter:= str;
+    getstringParameter:= str;
 end;
 
+procedure parseClassicParameter(cmdArray: array of string; size:LongInt; var paramIndex:LongInt); forward;
 
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt); Forward;
-
-function parseParameter(cmd:String; arg:String; var paramIndex:LongInt): Boolean;
-const videoArray: Array [1..5] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
-      audioArray: Array [1..3] of String = ('--volume','--nomusic','--nosound');
-      otherArray: Array [1..3] of String = ('--locale','--fullscreen','--showfps');
-      mediaArray: Array [1..10] of String = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
-      allArray: Array [1..18] of String = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
+function parseParameter(cmd:string; arg:string; var paramIndex:LongInt): Boolean;
+const videoArray: Array [1..5] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth');
+      audioArray: Array [1..3] of string = ('--volume','--nomusic','--nosound');
+      otherArray: Array [1..3] of string = ('--locale','--fullscreen','--showfps');
+      mediaArray: Array [1..10] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
+      allArray: Array [1..18] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
       reallyAll: array[0..35] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
@@ -204,9 +207,9 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--prefix}               0 : PathPrefix        := getStringParameter (arg, paramIndex, parseParameter);
-        {--user-prefix}          1 : UserPathPrefix    := getStringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getStringParameter (arg, paramIndex, parseParameter);
+        {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
+        {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
+        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
         {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
         {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
         {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
@@ -221,7 +224,7 @@ begin
         {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
         {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
         {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getStringParameter(arg, paramIndex, parseParameter) );
+        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
         {--depth}               18 : setDepth(paramIndex);
         {--set-video}           19 : parseClassicParameter(videoArray,5,paramIndex);
@@ -242,7 +245,7 @@ begin
         {--no-hogtag}           32 : cTagsMask := cTagsMask and not htName;
         {--no-healthtag}        33 : cTagsMask := cTagsMask and not htHealth;
         {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            35 : begin cTestLua := true; cScriptName := getStringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--lua-test}            35 : begin cTestLua := true; cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid
@@ -257,10 +260,10 @@ begin
     end;
 end;
 
-procedure parseClassicParameter(cmdArray: Array of String; size:LongInt; var paramIndex:LongInt);
+procedure parseClassicParameter(cmdArray: array of string; size:LongInt; var paramIndex:LongInt);
 var index, tmpInt: LongInt;
     isBool, isValid: Boolean;
-    cmd, arg, newSyntax: String;
+    cmd, arg, newSyntax: string;
 begin
     WriteLn(stdout, 'WARNING: you are using a deprecated command, which could be removed in a future version!');
     WriteLn(stdout, '         Consider updating to the latest syntax, which is much more flexible!');
@@ -287,9 +290,9 @@ begin
         if isValid then
             begin
             parseParameter(cmd, arg, tmpInt);
-            newSyntax := newSyntax + cmd + ' ';
+            newSyntax:= newSyntax + cmd + ' ';
             if not isBool then
-                newSyntax := newSyntax + arg + ' ';
+                newSyntax:= newSyntax + arg + ' ';
             end;
         inc(index);
         end;
@@ -340,7 +343,7 @@ procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
 
-    UserPathPrefix := '.';
+    UserPathPrefix := _S'.';
     PathPrefix     := cDefaultPathPrefix;
     recordFileName := '';
     parseCommandLine();

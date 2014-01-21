@@ -68,7 +68,7 @@ begin
     r.y:= rect^.y + 2;
     r.w:= rect^.w - 2;
     r.h:= rect^.h - 4;
-    SDL_FillRect(Surface, @r, FillColor)
+    SDL_FillRect(Surface, @r, FillColor);
 end;
 (*
 function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
@@ -115,6 +115,7 @@ var y, x, i, j: LongInt;
     pixels: PLongWordArray;
 begin
     TryDo(Surface^.format^.BytesPerPixel = 4, 'flipSurface failed, expecting 32 bit surface', true);
+    SDL_LockSurface(Surface);
     pixels:= Surface^.pixels;
     if Vertical then
     for y := 0 to (Surface^.h div 2) - 1 do
@@ -136,6 +137,7 @@ begin
             pixels^[i]:= pixels^[j];
             pixels^[j]:= tmpPixel;
             end;
+    SDL_UnlockSurface(Surface);
 end;
 
 procedure copyToXY(src, dest: PSDL_Surface; destX, destY: LongInt); inline;
@@ -150,6 +152,10 @@ var i, j, maxDest, maxSrc, iX, iY: LongInt;
 begin
     maxDest:= (dest^.pitch div 4) * dest^.h;
     maxSrc:= (src^.pitch div 4) * src^.h;
+
+    SDL_LockSurface(src);
+    SDL_LockSurface(dest);
+
     srcPixels:= src^.pixels;
     destPixels:= dest^.pixels;
 
@@ -169,6 +175,9 @@ begin
             destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
             end;
         end;
+
+    SDL_UnlockSurface(src);
+    SDL_UnlockSurface(dest);
 end;
 
 procedure DrawSprite2Surf(sprite: TSprite; dest: PSDL_Surface; x,y: LongInt); inline;
@@ -182,12 +191,12 @@ begin
     numFramesFirstCol:= SpritesData[sprite].imageHeight div SpritesData[sprite].Height;
     row:= Frame mod numFramesFirstCol;
     col:= Frame div numFramesFirstCol;
-    
-    copyToXYFromRect(SpritesData[sprite].Surface, dest, 
-             col*SpritesData[sprite].Width, 
-             row*SpritesData[sprite].Height, 
-             SpritesData[sprite].Width, 
-             spritesData[sprite].Height, 
+
+    copyToXYFromRect(SpritesData[sprite].Surface, dest,
+             col*SpritesData[sprite].Width,
+             row*SpritesData[sprite].Height,
+             SpritesData[sprite].Width,
+             spritesData[sprite].Height,
              x,y);
 end;
 
@@ -199,13 +208,16 @@ var
 begin
     //max:= (dest^.pitch div 4) * dest^.h;
     yMax:= dest^.pitch div 4;
+
+    SDL_LockSurface(dest);
+
     destPixels:= dest^.pixels;
 
     dx:= abs(x1-x0);
     dy:= abs(y1-y0);
     if x0 < x1 then sx:= 1 else sx:= -1;
     if y0 < y1 then sy:= 1 else sy:= -1;
-    err:= dx-dy; 
+    err:= dx-dy;
 
     while(true) do
         begin
@@ -225,7 +237,8 @@ begin
             err:= err + dx;
             y0:=y0+sy
             end;
-        end; 
+        end;
+    SDL_UnlockSurface(dest);
 end;
 
 procedure copyRotatedSurface(src, dest: PSDL_Surface); // this is necessary since width/height are read only in SDL, apparently
@@ -234,6 +247,9 @@ var y, x, i, j: LongInt;
 begin
     TryDo(src^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
     TryDo(dest^.format^.BytesPerPixel = 4, 'rotateSurface failed, expecting 32 bit surface', true);
+
+    SDL_LockSurface(src);
+    SDL_LockSurface(dest);
 
     srcPixels:= src^.pixels;
     destPixels:= dest^.pixels;
@@ -246,6 +262,10 @@ begin
             destPixels^[j]:= srcPixels^[i];
             inc(j)
             end;
+
+    SDL_UnlockSurface(src);
+    SDL_UnlockSurface(dest);
+
 end;
 
 function RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
@@ -282,11 +302,11 @@ function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFon
 var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
-    chars: set of char = [#9,' ',';',':','?','!',','];
+    //chars: set of char = [#9,' ',';',':','?','!',','];
     substr: shortstring;
     edge, corner, tail: TSPrite;
 begin
-    case SpeechType of
+      case SpeechType of
         1: begin;
         edge:= sprSpeechEdge;
         corner:= sprSpeechCorner;
@@ -463,6 +483,7 @@ begin
 
     SDL_FreeSurface(rotatedEdge);
     SDL_FreeSurface(finalSurface);
+
 end;
 
 end.

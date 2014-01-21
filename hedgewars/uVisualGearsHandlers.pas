@@ -24,15 +24,15 @@
  * => The usage of safe functions or data types (e.g. GetRandom() or hwFloat)
  * is usually not necessary and therefore undesirable.
  *)
- 
-{$INCLUDE "options.inc"} 
- 
+
+{$INCLUDE "options.inc"}
+
 unit uVisualGearsHandlers;
 
 interface
 uses uTypes;
 
-var doStepHandlers: array[TVisualGearType] of TVGearStepProcedure;
+var doStepVGHandlers: array[TVisualGearType] of TVGearStepProcedure;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 procedure doStepBeeTrace(Gear: PVisualGear; Steps: Longword);
@@ -112,8 +112,8 @@ with Gear^ do
     else
         if Angle < - 360 then
             Angle:= Angle + 360;
-    
-  
+
+
     if (round(X) >= cLeftScreenBorder)
     and (round(X) <= cRightScreenBorder)
     and (round(Y) - 75 <= LAND_HEIGHT)
@@ -249,7 +249,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepLineTrail(Gear: PVisualGear; Steps: Longword);
 begin
+{$IFNDEF PAS2C}
 Steps := Steps;
+{$ENDIF}
 if Gear^.Timer <= Steps then
     DeleteVisualGear(Gear)
 else
@@ -528,7 +530,9 @@ var i: Longword;
     b: boolean;
     t, h: LongInt;
 begin
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
 
 for t:= 0 to Pred(TeamsCount) do
     with thexchar[t] do
@@ -602,7 +606,10 @@ end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
 begin
+
+{$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
+{$ENDIF}
 
 with Gear^.Hedgehog^ do
     if SpeechGear <> nil then
@@ -708,10 +715,10 @@ var i: LongWord;
 begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
-for i:= 0 to 31 do 
+for i:= 0 to 31 do
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then 
+    if vg <> nil then
         begin
         vg^.State:= gstTmpFlag;
         inc(vg^.FrameTicks, vg^.FrameTicks)
@@ -752,10 +759,10 @@ begin
 gX:= round(Gear^.X);
 gY:= round(Gear^.Y);
 AddVisualGear(gX, gY, vgtSmokeRing);
-for i:= 0 to 46 do 
+for i:= 0 to 46 do
     begin
     vg:= AddVisualGear(gX, gY, vgtFire);
-    if vg <> nil then 
+    if vg <> nil then
         begin
         vg^.State:= gstTmpFlag;
         inc(vg^.FrameTicks, vg^.FrameTicks)
@@ -768,9 +775,12 @@ for i:= 0 to 15 do
 Gear^.doStep:= @doStepBigExplosionWork;
 if Steps > 1 then
     Gear^.doStep(Gear, Steps-1);
+
+{$IFNDEF PAS2C}
 with mobileRecord do
     if (performRumble <> nil) and (not fastUntilLag) then
         performRumble(kSystemSoundID_Vibrate);
+{$ENDIF}
 end;
 
 procedure doStepChunk(Gear: PVisualGear; Steps: Longword);
@@ -832,7 +842,7 @@ end;
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 begin
 inc(Gear^.Timer, Steps);
-    
+
 while Gear^.Timer >= 10 do
     begin
     dec(Gear^.Timer, 10);
@@ -851,8 +861,8 @@ else if cWindspeedf < Gear^.dAngle then
     cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
     if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
     end;
-        
-if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then 
+
+if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then
     DeleteVisualGear(Gear)
 end;
 ////////////////////////////////////////////////////////////////////////////////
@@ -866,7 +876,7 @@ if Gear^.FrameTicks <= Steps then
 else
     begin
     dec(Gear^.FrameTicks, Steps);
-    if (Gear^.FrameTicks < 501) and (Gear^.FrameTicks mod 5 = 0) then 
+    if (Gear^.FrameTicks < 501) and (Gear^.FrameTicks mod 5 = 0) then
         Gear^.Tint:= (Gear^.Tint and $FFFFFF00) or (((Gear^.Tint and $000000FF) * Gear^.FrameTicks) div 500)
     end
 end;
@@ -911,7 +921,7 @@ const handlers: array[TVisualGearType] of TVGearStepProcedure =
 
 procedure initModule;
 begin
-    doStepHandlers:= handlers
+    doStepVGHandlers:= handlers
 end;
 
 end.

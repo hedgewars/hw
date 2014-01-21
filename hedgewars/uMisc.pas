@@ -48,7 +48,7 @@ type PScreenshot = ^TScreenshot;
          size: QWord;
          end;
 
-var conversionFormat: PSDL_PixelFormat;
+var conversionFormat : PSDL_PixelFormat;
 
 procedure movecursor(dx, dy: LongInt);
 var x, y: LongInt;
@@ -67,7 +67,7 @@ function SaveScreenshot(screenshot: pointer): LongInt; cdecl; export;
 var i: LongInt;
     png_ptr: ^png_struct;
     info_ptr: ^png_info;
-    f: file;
+    f: File;
     image: PScreenshot;
 begin
 image:= PScreenshot(screenshot);
@@ -140,6 +140,7 @@ var f: file;
     );
     image: PScreenshot;
     size: QWord;
+    writeResult:LongInt;
 begin
 image:= PScreenshot(screenshot);
 
@@ -167,8 +168,8 @@ Assign(f, image^.filename);
 Rewrite(f, 1);
 if IOResult = 0 then
     begin
-    BlockWrite(f, head, sizeof(head));
-    BlockWrite(f, image^.buffer^, size);
+    BlockWrite(f, head, sizeof(head), writeResult);
+    BlockWrite(f, image^.buffer^, size, writeResult);
     Close(f);
     end
 else
@@ -298,7 +299,6 @@ begin
     GetTeamStatString:= s;
 end;
 
-procedure initModule;
 {$IFDEF SDL2}
 const SDL_PIXELFORMAT_ABGR8888 = (1 shl 28) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4;
 {$ELSE}
@@ -309,6 +309,8 @@ const format: TSDL_PixelFormat = (
         RMask: RMask; GMask: GMask; BMask: BMask; AMask: AMask;
         colorkey: 0; alpha: 255);
 {$ENDIF}
+
+procedure initModule;
 begin
 {$IFDEF SDL2}
     conversionFormat:= SDL_AllocFormat(SDL_PIXELFORMAT_ABGR8888);

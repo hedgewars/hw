@@ -49,11 +49,11 @@ procedure WriteLnToConsole(s: shortstring);
 begin
 {$IFNDEF NOCONSOLE}
     WriteToConsole(s);
-    lastConsoleline:= s;
 {$IFNDEF ANDROID}
     WriteLn(stderr, '');
 {$ENDIF}
 {$ENDIF}
+    lastConsoleline:= s;
 end;
 
 function ShortStringAsPChar(s: shortstring) : PChar;

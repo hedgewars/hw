@@ -27,7 +27,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uDebug, uScript;
+uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uScript;
 
 type PointRec = packed record
     X, Y: SmallInt;

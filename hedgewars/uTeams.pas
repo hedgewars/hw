@@ -20,7 +20,7 @@
 
 unit uTeams;
 interface
-uses uConsts, uInputHandler, uRandom, uFloat, uStats, 
+uses uConsts, uInputHandler, uRandom, uFloat, uStats,
      uCollisions, uSound, uStore, uTypes, uScript
      {$IFDEF USE_TOUCH_INTERFACE}, uWorld{$ENDIF};
 
@@ -567,7 +567,10 @@ procedure loadTeamBinds(s: shortstring);
 var i: LongInt;
 begin
     for i:= 1 to length(s) do
-        if s[i] in ['\', '/', ':'] then s[i]:= '_';
+        if ((s[i] = '\') or
+            (s[i] = '/') or
+            (s[i] = ':')) then
+            s[i]:= '_';
 
     s:= cPathz[ptTeams] + '/' + s + '.hwt';
 
@@ -593,7 +596,7 @@ if isDeveloperMode then
     CurrentTeam^.TeamName:= ts;
     CurrentTeam^.PlayerHash:= s;
     loadTeamBinds(ts);
-    
+
     if GameType in [gmtDemo, gmtSave, gmtRecord] then
         CurrentTeam^.ExtDriven:= true;
 
