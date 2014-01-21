@@ -220,5 +220,6 @@ add_test("LuaAPI:GetZoom/SetZoom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "-
 
 # set set this to "" if you want to see what's going on
 set(STATSONLYFLAG "--stats-only")
+add_test("LuaAPI:GetGravity/SetGravity" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUAAPITESTS}/gravity_get_set.lua")
 add_test("DrillRockets_drill" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_drill.lua")
 add_test("DrillRockets_boom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_boom.lua")
