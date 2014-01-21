@@ -270,6 +270,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden
 // These are not used generically, but should probably be used for purpose intended. Definitely shouldn't override pointer type
             Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
+            Tint: LongWord;         // Used to colour a texture
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
             Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
             SoundChannel: LongInt;  // Used to track a sound the gear started

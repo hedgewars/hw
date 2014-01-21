@@ -795,11 +795,22 @@ begin
         begin
         if defaultPos then
             begin
-            if HH^.Team^.hasGone then Tint($FF, $FF, $FF, $80);
+            if HH^.Team^.hasGone then
+                 Tint($FFFFFF80)
+            else if HH^.Effects[hePoisoned] <> 0 then
+                 Tint($B7FFBCFF)
+            else Tint(HH^.Gear^.Tint);
             DrawSpriteRotatedF(sprHHIdle,
                 sx,
                 sy,
                 (RealTicks div 128 + Gear^.Pos) mod 19,
+                sign,
+                0);
+            untint;
+            DrawSpriteRotatedF(sprHHIdle,
+                sx,
+                sy,
+                (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
                 sign,
                 0);
             HatVisible:= true;
@@ -1039,7 +1050,7 @@ begin
        gtRCPlane: begin
                   aangle:= Gear^.Angle * 360 / 4096;
                   if Gear^.Tag < 0 then aangle:= 360-aangle;
-                  Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                  Tint(Gear^.Tint);
                   DrawSpriteRotatedF(sprPlane, x, y, 0, Gear^.Tag, aangle - 90);
                   untint;
                   DrawSpriteRotatedF(sprPlane, x, y, 1, Gear^.Tag, aangle - 90)
@@ -1161,7 +1172,7 @@ begin
                     DrawAltWeapon(Gear, x + 1, y - 3)
                     end;
        gtAirAttack: begin
-                    Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF);
+                    Tint(Gear^.Tint);
                     DrawSpriteRotatedF(sprAirplane, x, y, 0, Gear^.Tag, 0);
                     untint;
                     DrawSpriteRotatedF(sprAirplane, x, y, 1, Gear^.Tag, 0);
@@ -1237,27 +1248,24 @@ begin
                     end;
      gtPoisonCloud: begin
                     if Gear^.Timer < 1020 then
-                        Tint($C0, $C0, $00, Gear^.Timer div 8)
+                        Tint(Gear^.Tint and $FFFFFF00 or Gear^.Timer div 8)
                     else if Gear^.Timer > 3980 then
-                        Tint($C0, $C0, $00, (5000 - Gear^.Timer) div 8)
+                        Tint(Gear^.Tint and $FFFFFF00 or (5000 - Gear^.Timer) div 8)
                     else
-                        Tint($C0, $C0, $00, $C0);
+                        Tint(Gear^.Tint);
                     DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
                     untint
                     end;
      gtResurrector: begin
                     DrawSpriteRotated(sprCross, x, y, 0, 0);
-                    Tint($f5, $db, $35, max($00, round($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
+                    Tint(Gear^.Tint and $FFFFFF00 or max($00, round($C0 * abs(1 - (GameTicks mod 6000) / 3000))));
                     DrawTexture(x - 108, y - 108, SpritesData[sprVampiric].Texture, 4.5);
                     untint;
                     end;
       gtNapalmBomb: DrawSpriteRotated(sprNapalmBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
            gtFlake: if Gear^.State and (gstDrowning or gstTmpFlag) <> 0  then
                         begin
-                        Tint((ExplosionBorderColor shr RShift) and $FF,
-                             (ExplosionBorderColor shr GShift) and $FF,
-                             (ExplosionBorderColor shr BShift) and $FF,
-                             $FF);
+                        Tint(Gear^.Tint);
                         // Needs a nicer white texture to tint
                         DrawTextureRotatedF(SpritesData[sprSnowDust].Texture, 1, 0, 0, x, y, 0, 1, 8, 8, Gear^.DirAngle);
                         //DrawSpriteRotated(sprSnowDust, x, y, 0, Gear^.DirAngle);
