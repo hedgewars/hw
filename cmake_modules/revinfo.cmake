@@ -1,7 +1,7 @@
 #detect Mercurial revision and init rev/hash information
 find_program(HGCOMMAND hg)
 find_program(GITCOMMAND git)
-if(EXISTS ${CMAKE_SOURCE_DIR}/.hg AND HGCOMMAND)
+if(EXISTS ${CMAKE_SOURCE_DIR}/.hg AND HGCOMMAND AND NOT NOVERSIONINFOUPDATE)
     execute_process(COMMAND ${HGCOMMAND} identify -in
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     OUTPUT_VARIABLE internal_version
@@ -21,7 +21,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.hg AND HGCOMMAND)
 
     #write down hash and rev for easy picking should hg be missing
     file(WRITE "${CMAKE_SOURCE_DIR}/share/version_info.txt" "Hedgewars versioning information, do not modify\nrev ${HEDGEWARS_REVISION}\nhash ${HEDGEWARS_HASH}\n")
-elseif(EXISTS ${CMAKE_SOURCE_DIR}/.git AND GITCOMMAND)
+elseif(EXISTS ${CMAKE_SOURCE_DIR}/.git AND GITCOMMAND AND NOT NOVERSIONINFOUPDATE)
     execute_process(COMMAND ${GITCOMMAND} rev-parse --short HEAD
                     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                     OUTPUT_VARIABLE HEDGEWARS_HASH
