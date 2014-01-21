@@ -1907,18 +1907,20 @@ function lc_getgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
         LuaParameterCountError('GetGravity', '', lua_gettop(L))
+    else if cGravity.isNegative then
+        lua_pushinteger(L, hwRound(-_0_5 + (cGravity * 50 / cMaxWindSpeed)))
     else
-        lua_pushinteger(L, hwRound(cGravity * 50 / cWindSpeed));
+        lua_pushinteger(L, hwRound( _0_5 + (cGravity * 50 / cMaxWindSpeed)));
     lc_getgravity:= 1
 end;
 
 function lc_setgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 1 then
-        LuaParameterCountError('SetGravity', 'gravity', lua_gettop(L))
+        LuaParameterCountError('SetGravity', 'percent', lua_gettop(L))
     else
         begin
-        cGravity:= cMaxWindSpeed * lua_tointeger(L, 1) * _0_02;
+        cGravity:= _0_02 * lua_tointeger(L, 1) * cMaxWindSpeed;
         cGravityf:= 0.00025 * lua_tointeger(L, 1) * 0.02
         end;
     lc_setgravity:= 0
