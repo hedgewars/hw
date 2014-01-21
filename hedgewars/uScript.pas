@@ -1998,6 +1998,7 @@ begin
         end
     else
         begin
+        WriteLnToConsole('Lua test finished');
         halt(lua_tointeger(L, 1));
         lc_endluatest:= 0;
         end;
