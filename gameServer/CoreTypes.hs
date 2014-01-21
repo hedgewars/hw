@@ -183,6 +183,7 @@ data RoomInfo =
         isRegisteredOnly :: Bool,
         isSpecial :: Bool,
         greeting :: B.ByteString,
+        voting :: Maybe Voting,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
         params :: Map.Map B.ByteString [B.ByteString]
@@ -204,6 +205,7 @@ newRoom =
         False
         False
         ""
+        Nothing
         []
         (
             Map.fromList $ Prelude.zip
@@ -263,6 +265,21 @@ newServerInfo =
         []
         False
         []
+
+data Voting = Voting {
+        voteTTL :: Int,
+        entitledToVote :: [Unique],
+        votes :: [(Unique, Bool)],
+        voteType :: VoteType
+    }
+
+
+data VoteType = VoteKick B.ByteString
+
+
+newVote :: VoteType -> Voting
+newVote = Voting 2 [] []
+
 
 data AccountInfo =
     HasAccount B.ByteString Bool Bool
