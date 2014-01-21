@@ -51,8 +51,7 @@ type PCmd = ^TCmd;
             loTime: Word;
             case byte of
             1: (len: byte;
-                cmd: Char;
-                X, Y: LongInt);
+                cmd: Char);
             2: (str: shortstring);
             end;
 
@@ -122,6 +121,7 @@ end;
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
 begin
+
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
      '?': SendIPC(_S'!');
@@ -177,10 +177,10 @@ begin
 end;
 
 procedure LoadRecordFromFile(fileName: shortstring);
-var f: file;
-    ss: shortstring = '';
-    i: LongInt;
-    s: shortstring;
+var f  : File;
+    ss : shortstring = '';
+    i  : LongInt;
+    s  : shortstring;
 begin
 
 // set RDNLY on file open
@@ -188,7 +188,6 @@ filemode:= 0;
 {$I-}
 assign(f, fileName);
 reset(f, 1);
-
 tryDo(IOResult = 0, 'Error opening file ' + fileName, true);
 
 i:= 0; // avoid compiler hints
@@ -196,13 +195,13 @@ s[0]:= #0;
 repeat
     BlockRead(f, s[1], 255 - Length(ss), i);
     if i > 0 then
-        begin
+    begin
         s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
             begin
             ParseIPCCommand(copy(ss, 2, byte(ss[1])));
-            Delete(ss, 1, Succ(byte(ss[1])))
+            Delete(ss, 1, Succ(byte(ss[1])));
             end
         end
 until i = 0;
@@ -221,7 +220,11 @@ end;
 
 function isSyncedCommand(c: char): boolean;
 begin
-    isSyncedCommand:= (c in ['+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5']) or ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+    case c of
+        '+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5': isSyncedCommand:= true;
+    else
+        isSyncedCommand:= ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+    end
 end;
 
 procedure flushBuffer();
@@ -240,20 +243,20 @@ if IPCSock <> nil then
     begin
     if s[0] > #251 then
         s[0]:= #251;
-        
+
     SDLNet_Write16(GameTicks, @s[Succ(byte(s[0]))]);
-    
+
     AddFileLog('[IPC out] '+ sanitizeCharForLog(s[1]));
     inc(s[0], 2);
-    
+
     if isSyncedCommand(s[1]) then
         begin
         if sendBuffer.count + byte(s[0]) >= cSendBufferSize then
             flushBuffer();
-            
+
         Move(s, sendBuffer.buf[sendBuffer.count], byte(s[0]) + 1);
         inc(sendBuffer.count, byte(s[0]) + 1);
-        
+
         if (s[1] = 'N') or (s[1] = '#') then
             flushBuffer();
         end else
@@ -302,8 +305,8 @@ if (flushDelayTicks >= cSendEmptyPacketTime) then
     begin
     if sendBuffer.count = 0 then
         SendIPC(_S'+');
-        
-     flushBuffer()    
+
+     flushBuffer()
     end
 end;
 
@@ -367,8 +370,8 @@ while (headcmd <> nil)
             AddFileLog('got cmd "N": time '+IntToStr(hiTicks shl 16 + headcmd^.loTime))
              end;
         'p': begin
-            x32:= SDLNet_Read32(@(headcmd^.X));
-            y32:= SDLNet_Read32(@(headcmd^.Y));
+            x32:= SDLNet_Read32(@(headcmd^.str[2]));
+            y32:= SDLNet_Read32(@(headcmd^.str[6]));
             doPut(x32, y32, false)
              end;
         'P': begin
@@ -377,8 +380,8 @@ while (headcmd <> nil)
             // SDLNet_Read16(@(headcmd^.Y)) == cScreenHeight - CursorPoint.Y - WorldDy;
             if CurrentTeam^.ExtDriven then
                begin
-               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.X))) + WorldDx;
-               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.Y))) - WorldDy;
+               TargetCursorPoint.X:= LongInt(SDLNet_Read32(@(headcmd^.str[2]))) + WorldDx;
+               TargetCursorPoint.Y:= cScreenHeight - LongInt(SDLNet_Read32(@(headcmd^.str[6]))) - WorldDy;
                if not bShowAmmoMenu and autoCameraOn then
                     CursorPoint:= TargetCursorPoint
                end
@@ -388,7 +391,7 @@ while (headcmd <> nil)
         'h': ParseCommand('hogsay ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         '1'..'5': ParseCommand('timer ' + headcmd^.cmd, true);
         else
-            if (headcmd^.cmd >= #128) and (headcmd^.cmd <= char(128 + cMaxSlotIndex)) then
+            if (byte(headcmd^.cmd) >= 128) and (byte(headcmd^.cmd) <= 128 + cMaxSlotIndex) then
                 ParseCommand('slot ' + char(byte(headcmd^.cmd) - 79), true)
                 else
                 OutError('Unexpected protocol command: ' + headcmd^.cmd, True)
@@ -421,7 +424,7 @@ begin
 if CheckNoTeamOrHH or isPaused then
     exit;
 bShowFinger:= false;
-if not CurrentTeam^.ExtDriven and bShowAmmoMenu then
+if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
     begin
     bSelected:= true;
     exit
@@ -471,7 +474,7 @@ begin
     lastcmd:= nil;
     isPonged:= false;
     SocketString:= '';
-    
+
     hiTicks:= 0;
     flushDelayTicks:= 0;
     sendBuffer.count:= 0;
@@ -483,6 +486,7 @@ begin
     SDLNet_FreeSocketSet(fds);
     SDLNet_TCP_Close(IPCSock);
     SDLNet_Quit();
+
 end;
 
 end.

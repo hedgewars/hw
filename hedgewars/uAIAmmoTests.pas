@@ -247,7 +247,7 @@ begin
                     or (y < 0)
                     or (trunc(x) > LAND_WIDTH)
                     or (trunc(y) > LAND_HEIGHT)
-                    or not TestCollExcludingObjects(trunc(x), trunc(y), 5)
+                    or (not TestCollExcludingObjects(trunc(x), trunc(y), 5))
                     or (timer = 0)
                 end;
             EX:= trunc(x);
@@ -779,7 +779,7 @@ begin
     Targ:= Targ; // avoid compiler hint
 
     if Level < 3 then trackFall:= afTrackFall
-    else trackFall:= 0;
+        else trackFall:= 0;
 
     ap.ExplR:= 0;
     ap.Time:= 0;
@@ -1241,7 +1241,7 @@ repeat
     x:= x + dx;
     dy:= dy + cGravityf;
     y:= y + dy;
-    
+
     if TestColl(trunc(x), trunc(y), 3) then
         t:= 0;
 until t = 0;
@@ -1251,7 +1251,7 @@ EY:= trunc(y);
 
 if Level = 1 then
     valueResult:= RateExplosion(Me, EX, EY, 76, afTrackFall or afErasesLand)
-else 
+else
     valueResult:= RateExplosion(Me, EX, EY, 76);
 
 if (valueResult > 0) then

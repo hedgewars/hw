@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  *)
- 
+
 {$INCLUDE "options.inc"}
 
 unit uCaptions;
@@ -45,12 +45,14 @@ var
 procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
 begin
     if cOnlyStats then exit;
+    if Length(s) = 0 then
+        exit;
     if Captions[Group].Text <> s then
         begin
         FreeTexture(Captions[Group].Tex);
         Captions[Group].Tex:= nil
         end;
-    
+
     if Captions[Group].Tex = nil then
         begin
         Captions[Group].Color:= Color;

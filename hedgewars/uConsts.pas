@@ -93,18 +93,18 @@ const
 // lfObject and lfBasic are only to be different *graphically*  in all other ways they should be treated the same
     lfBasic          = $8000;  // white
     lfIndestructible = $4000;  // red
-    lfObject         = $2000;  
+    lfObject         = $2000;
     lfDamaged        = $1000;  //
     lfIce            = $0800;  // blue
     lfBouncy         = $0400;  // green
     lfLandMask       = $FF00;  // upper byte is used for terrain, not objects.
 
-    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this doesn't impact play
+    lfCurrentHog     = $0080;  // CurrentHog.  It is also used to flag crates, for convenience of AI.  Since an active hog would instantly collect the crate, this does not impact play
     lfNotCurrentMask = $FF7F;  // inverse of above. frequently used
     lfObjMask        = $007F;  // lower 7 bits used for hogs
     lfNotObjMask     = $FF80;  // inverse of above.
-    // lower byte is for objects. 
-    // consists of 0-127 counted for object checkins and $80 as a bit flag for current hog. 
+    // lower byte is for objects.
+    // consists of 0-127 counted for object checkins and $80 as a bit flag for current hog.
     lfAllObjMask     = $00FF;  // lfCurrentHog or lfObjMask
 
 
@@ -115,11 +115,13 @@ const
     MAXNAMELEN = 192;
     MAXROPEPOINTS = 3840;
 
+    {$IFNDEF PAS2C}
     // some opengl headers do not have these macros
     GL_BGR              = $80E0;
     GL_BGRA             = $80E1;
     GL_CLAMP_TO_EDGE    = $812F;
     GL_TEXTURE_PRIORITY = $8066;
+    {$ENDIF}
 
     cVisibleWater       : LongInt = 128;
     cTeamHealthWidth    : LongInt = 128;
@@ -150,7 +152,7 @@ const
     cBlowTorchC    = 6;
     cakeDmg =   75;
 
-    cKeyMaxIndex = 1023;
+    cKeyMaxIndex = 1600;
     cKbdMaxIndex = 65536;//need more room for the modifier keys
 
     cFontBorder = 2;
@@ -239,11 +241,11 @@ const
 
     cMaxSlotIndex       = 9;
     cMaxSlotAmmoIndex   = 5;
-    
+
     // ai hints
     aihUsualProcessing    = $00000000;
     aihDoesntMatter       = $00000001;
-    
+
     // ammo properties
     ammoprop_Timerable    = $00000001;
     ammoprop_Power        = $00000002;
@@ -261,7 +263,7 @@ const
     ammoprop_Utility      = $00001000;
     ammoprop_Effect       = $00002000;
     ammoprop_SetBounce    = $00004000;
-    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets 
+    ammoprop_NeedUpDown   = $00008000;//Used by TouchInterface to show or hide up/down widgets
     ammoprop_OscAim       = $00010000;
     ammoprop_NoMoveAfter  = $00020000;
     ammoprop_Track        = $00040000;
@@ -296,7 +298,7 @@ const
     htTransparent = $08;
 
     NoPointX = Low(LongInt);
-    cTargetPointRef : TPoint = (X: NoPointX; Y: 0);
+    cTargetPointRef : TPoint = (x: NoPointX; y: 0);
 
     kSystemSoundID_Vibrate = $00000FFF;
 

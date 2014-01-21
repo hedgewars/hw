@@ -116,9 +116,11 @@ while (GameState <> gsExit) and (i <= Lag) do
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
                         AddVisualGear(0, 0, vgtSmoothWindBar);
                         {$IFDEF IPHONEOS}InitIPC;{$ENDIF}
+                        {$IFNDEF PAS2C}
                         with mobileRecord do
                             if SaveLoadingEnded <> nil then
                                 SaveLoadingEnded();
+                        {$ENDIF}
                         end;
                 end
         else ProcessGears

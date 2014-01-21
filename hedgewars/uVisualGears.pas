@@ -219,7 +219,7 @@ case Layer of
                               else
                                   DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
                   vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
-               vgtStraightShot: begin 
+               vgtStraightShot: begin
                                 if Gear^.dX < 0 then
                                     i:= -1
                                 else
@@ -264,9 +264,9 @@ case Layer of
                                     DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
                                 end;
                vgtSmallDamageTag: DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex);
-               vgtHealthTag: if Gear^.Tex <> nil then 
+               vgtHealthTag: if Gear^.Tex <> nil then
                                begin
-                               if Gear^.Frame = 0 then 
+                               if Gear^.Frame = 0 then
                                    DrawTextureCentered(round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Tex)
                                else
                                    begin
@@ -274,11 +274,11 @@ case Layer of
                                    if Gear^.Angle = 0 then
                                        DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex)
                                    else
-                                       DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex, Gear^.Angle); 
+                                       DrawTexture(round(Gear^.X), round(Gear^.Y), Gear^.Tex, Gear^.Angle);
                                    SetScale(zoom)
                                    end
                                end;
-               vgtStraightShot: begin 
+               vgtStraightShot: begin
                                 if Gear^.dX < 0 then
                                     i:= -1
                                 else

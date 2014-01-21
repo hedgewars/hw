@@ -43,8 +43,9 @@ type
 
     // Different files are stored in different folders, this enumeration is used to tell which folder to use
     TPathType = (ptNone, ptData, ptGraphics, ptThemes, ptCurrTheme, ptTeams, ptMaps,
-            ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts,
-            ptLocale, ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps, ptSuddenDeath, ptButtons);
+            ptMapCurrent, ptDemos, ptSounds, ptGraves, ptFonts, ptForts, ptLocale,
+            ptAmmoMenu, ptHedgehog, ptVoices, ptHats, ptFlags, ptMissionMaps,
+            ptSuddenDeath, ptButtons, ptShaders);
 
     // Available sprites for displaying stuff
     TSprite = (sprWater, sprCloud, sprBomb, sprBigDigit, sprFrame,
@@ -90,7 +91,7 @@ type
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = ({-->}gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // <-- these are gears which should be avoided when searching a spawn place
+    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // these gears should be avoided when searching a spawn place
             gtGrenade, gtShell, gtGrave, gtBee, // 8
             gtShotgunShot, gtPickHammer, gtRope,  // 11
             gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 16
@@ -138,9 +139,10 @@ type
             sndHellishImpact1, sndHellishImpact2, sndHellishImpact3, sndHellishImpact4,
             sndMelonImpact, sndDroplet1, sndDroplet2, sndDroplet3, sndEggBreak, sndDrillRocket,
             sndPoisonCough, sndPoisonMoan, sndBirdyLay, sndWhistle, sndBeeWater,
-            sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7, sndPiano8,
-            sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
-            sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact, sndIceBeam, sndHogFreeze
+            sndPiano0, sndPiano1, sndPiano2, sndPiano3, sndPiano4, sndPiano5, sndPiano6, sndPiano7,
+            sndPiano8, sndSkip, sndSineGun, sndOoff1, sndOoff2, sndOoff3, sndWhack,
+            sndComeonthen, sndParachute, sndBump, sndResurrector, sndPlane, sndTardis, sndFrozenHogImpact,
+            sndIceBeam, sndHogFreeze
             );
 
     // Available ammo types to be used by hedgehogs
@@ -167,7 +169,7 @@ type
             siMaxTeamKills, siMaxTurnSkips, siCustomAchievement, siGraphTitle,
             siPointType);
 
-    // Various "emote" animations a hedgehog can do
+    // Various 'emote' animations a hedgehog can do
     TWave = (waveRollup, waveSad, waveWave, waveHurrah, waveLemonade, waveShrug, waveJuggle);
 
     TRenderMode = (rmDefault, rmLeftEye, rmRightEye);
@@ -186,8 +188,8 @@ type
     TAmmo = record
             Propz: LongWord;
             Count: LongWord;
-(* Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
-For example, say, a mode where the weaponset is reset each turn, or on sudden death *)
+// Using for place hedgehogs mode, but for any other situation where the initial count would be needed I guess.
+// For example, say, a mode where the weaponset is reset each turn, or on sudden death
             NumPerTurn: LongWord;
             Timer: LongWord;
             Pos: LongWord;
@@ -203,6 +205,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     TVertex2i = record
             X, Y: GLint;
             end;
+
+    TMatrix4x4f = array[0..3, 0..3] of GLfloat;
 
     PTexture = ^TTexture;
     TTexture = record
@@ -224,10 +228,10 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
     PClan     = ^TClan;
 
     TGearStepProcedure = procedure (Gear: PGear);
-// So, you're here looking for variables you can (ab)use to store some gear state?
+// So, you are here looking for variables you can (ab)use to store some gear state?
 // Not all members of this structure are created equal. Comments below are my take on what can be used for what in the gear structure.
     TGear = record
-// Don't ever override these.
+// Do *not* ever override these.
             NextGear, PrevGear: PGear;  // Linked list
             Z: Longword;                // Z index. For rendering. Sets order in list
             Active: Boolean;            // Is gear Active (running step code)
@@ -251,7 +255,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 // Don't use these if you're using generic movement like doStepFallingGear and explosion shoves. Generally recommended not to use.
             Radius: LongInt;     // Radius. If not using uCollisions, is usually used to indicate area of effect
             CollisionMask: Word; // Masking off Land impact  FF7F for example ignores current hog and crates
-            AdvBounce: Longword; // Triggers 45° bounces. Is a counter to avoid edge cases
+            AdvBounce: Longword; // Triggers 45 bounces. Is a counter to avoid edge cases
             Elasticity: hwFloat;
             Friction  : hwFloat;
             Density   : hwFloat; // Density is kind of a mix of size and density. Impacts distance thrown, wind.
@@ -259,7 +263,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             nImpactSounds: Word; // count of ImpactSounds.
 // Don't use these if you want to take damage normally, otherwise health/damage are commonly used for other purposes
             Health, Damage, Karma: LongInt;
-// DirAngle is a "real" - if you don't need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
+// DirAngle is a 'real' - if you do not need it for rotation of sprite in uGearsRender, you can use it for any visual-only value
             DirAngle: real;
 // These are frequently overridden to serve some other purpose
             Pos: Longword;           // Commonly overridden.  Example use is posCase values in uConsts.
@@ -268,8 +272,8 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             Tag: LongInt;            // Quite generic. Variety of uses.
             FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
             MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden
-// These are not used generically, but should probably be used for purpose intended. Definitely shouldn't override pointer type
-            Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
+// These are not used generically, but should probably be used for purpose intended. Definitely should not override pointer type
+            Tex: PTexture;          // A texture created by the gear. Should not use for anything but textures
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
             Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
             SoundChannel: LongInt;  // Used to track a sound the gear started
@@ -415,6 +419,7 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
 
      cdeclPtr = procedure; cdecl;
      cdeclIntPtr = procedure(num: LongInt); cdecl;
+     funcDoublePtr = function: Double;
 
      TMobileRecord = record
                      PerformRumble: cdeclIntPtr;
@@ -454,10 +459,12 @@ For example, say, a mode where the weaponset is reset each turn, or on sudden de
             gidRandomMineTimer, gidDamageModifier, gidResetHealth, gidAISurvival,
             gidInfAttack, gidResetWeps, gidPerHogAmmo, gidTagTeam);
 
+
     TLandArray = packed array of array of LongWord;
     TCollisionArray = packed array of array of Word;
-    TPreview  = packed array[0..127, 0..31] of byte;
     TDirtyTag = packed array of array of byte;
+
+    TPreview  = packed array[0..127, 0..31] of byte;
 
     PWidgetMovement = ^TWidgetMovement;
     TWidgetMovement = record

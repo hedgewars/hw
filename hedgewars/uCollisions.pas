@@ -54,7 +54,7 @@ function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: L
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
-// returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45° = _0_5)
+// returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45 = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
 function  CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;
@@ -92,7 +92,7 @@ inc(Count);
 if (Count > (MAXRECTSINDEX-20)) then
     begin
     t:= GearsList;
-    while (t <> nil) and (t^.Kind <> gtMine) do 
+    while (t <> nil) and (t^.Kind <> gtMine) do
         t:= t^.NextGear;
     if (t <> nil) then
         t^.State:= t^.State or gmDelete
@@ -234,7 +234,7 @@ if pixel <> 0 then
 
     for i:= 0 to Pred(Count) do
         with cinfos[i] do
-            if  (Gear <> cGear) and 
+            if  (Gear <> cGear) and
                 ((mx > x) xor (Dir > 0)) and
                 (
                   ((cGear^.Kind in [gtHedgehog, gtMine, gtKnife]) and ((Gear^.State and gstNotKickable) = 0)) or
@@ -300,7 +300,7 @@ if pixel <> 0 then
             if (Gear <> cGear) and
                ((myr > y) xor (Dir > 0)) and
                (Gear^.State and gstNotKickable = 0) and
-               (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and 
+               (cGear^.Kind in [gtHedgehog, gtMine, gtKnife, gtExplosives]) and
                (sqr(mx - x) + sqr(my - y) <= sqr(Radius + Gear^.Radius + 2)) then
                     begin
                     with cGear^ do
@@ -327,7 +327,7 @@ function TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongInt
 begin
 Gear^.X:= Gear^.X + ShiftX;
 Gear^.Y:= Gear^.Y + int2hwFloat(ShiftY);
-if withGear then 
+if withGear then
     TestCollisionXwithXYShift:= TestCollisionXwithGear(Gear, Dir)
 else TestCollisionXwithXYShift:= TestCollisionX(Gear, Dir);
 Gear^.X:= Gear^.X - ShiftX;
@@ -394,7 +394,7 @@ if withGear then
   TestCollisionYwithXYShift:= TestCollisionYwithGear(Gear, Dir)
 else
   TestCollisionYwithXYShift:= TestCollisionY(Gear, Dir);
-  
+
 Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
@@ -583,7 +583,7 @@ var dx, dy: hwFloat;
     isColl, bSucc: Boolean;
 begin
 
-if dirY <> 0 then 
+if dirY <> 0 then
     begin
     y:= hwRound(Gear^.Y) + Gear^.Radius * dirY;
     gx:= hwRound(Gear^.X);

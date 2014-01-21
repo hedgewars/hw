@@ -25,7 +25,10 @@ uses uTypes, uFloat;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
+
+{$IFNDEF PAS2C}
 procedure SplitByChar(var a, b: ansistring; c: char);
+{$ENDIF}
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
@@ -67,8 +70,10 @@ function  CheckNoTeamOrHH: boolean; inline;
 function  GetLaunchX(at: TAmmoType; dir: LongInt; angle: LongInt): LongInt;
 function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 
+{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
+{$ENDIF}
 
 function  isPhone: Boolean; inline;
 
@@ -88,7 +93,7 @@ procedure freeModule;
 
 
 implementation
-uses typinfo, Math, uConsts, uVariables, SysUtils;
+uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
 var f: textfile;
@@ -96,7 +101,7 @@ var f: textfile;
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
 {$ENDIF}
-var CharArray: array[byte] of Char;
+var CharArray: array[0..255] of Char;
 
 procedure SplitBySpace(var a,b: shortstring);
 begin
@@ -115,11 +120,15 @@ if i > 0 then
             Inc(a[t], 32);
     b:= copy(a, i + 1, Length(a) - i);
     a[0]:= char(Pred(i))
+    {$IFDEF PAS2C}
+       a[i] := 0;
+    {$ENDIF}
     end
 else
     b:= '';
 end;
 
+{$IFNDEF PAS2C}
 procedure SplitByChar(var a, b: ansistring; c: char);
 var i: LongInt;
 begin
@@ -129,7 +138,8 @@ if i > 0 then
     b:= copy(a, i + 1, Length(a) - i);
     setlength(a, Pred(i));
     end else b:= '';
-end;
+end; { SplitByChar }
+{$ENDIF}
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
@@ -189,13 +199,17 @@ begin
 str(n, IntToStr)
 end;
 
-function  StrToInt(s: shortstring): LongInt;
+function StrToInt(s: shortstring): LongInt;
 var c: LongInt;
 begin
+{$IFDEF PAS2C}
+val(s, StrToInt);
+{$ELSE}
 val(s, StrToInt, c);
 {$IFDEF DEBUGFILE}
 if c <> 0 then
     writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+{$ENDIF}
 {$ENDIF}
 end;
 
@@ -290,10 +304,14 @@ end;
 
 
 function Str2PChar(const s: shortstring): PChar;
+var i :Integer ;
 begin
-CharArray:= s;
+   for i:= 1 to Length(s) do
+      begin
+      CharArray[i - 1] := s[i];
+      end;
 CharArray[Length(s)]:= #0;
-Str2PChar:= @CharArray
+   Str2PChar:= @(CharArray[0]);
 end;
 
 
@@ -312,22 +330,26 @@ end;
 
 procedure AddFileLog(s: shortstring);
 begin
-s:= s;
+// s:= s;
 {$IFDEF DEBUGFILE}
+
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
 writeln(f, inttostr(GameTicks)  + ': ' + s);
 flush(f);
+
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
 {$ENDIF}
+
 {$ENDIF}
 end;
 
 procedure AddFileLogRaw(s: pchar); cdecl;
 begin
 s:= s;
+{$IFNDEF PAS2C}
 {$IFDEF DEBUGFILE}
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
@@ -336,6 +358,7 @@ write(f, s);
 flush(f);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
+{$ENDIF}
 {$ENDIF}
 {$ENDIF}
 end;
@@ -370,7 +393,7 @@ while i < l do
        ((#$F900  <= u) and (u <= #$FAFF))  or // CJK Compatibility Ideographs
        ((#$FE30  <= u) and (u <= #$FE4F))  or // CJK Compatibility Forms
        ((#$FF66  <= u) and (u <= #$FF9D)))    // halfwidth katakana
-       then 
+       then
         begin
             CheckCJKFont:=  THWFont( ord(font) + ((ord(High(THWFont))+1) div 2) );
             exit;
@@ -408,6 +431,7 @@ begin
 CheckNoTeamOrHH:= (CurrentTeam = nil) or (CurrentHedgehog^.Gear = nil);
 end;
 
+{$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 begin
 system.write(f, s)
@@ -417,7 +441,7 @@ procedure WriteLn(var f: textfile; s: shortstring);
 begin
 system.writeln(f, s)
 end;
-
+{$ENDIF}
 
 // this function is just to determine whether we are running on a limited screen device
 function isPhone: Boolean; inline;
@@ -444,7 +468,7 @@ begin
             r[i]:= '?'
             else
             r[i]:= s[i];
-            
+
     sanitizeForLog:= r
 end;
 
@@ -454,8 +478,12 @@ begin
     if (c < #32) or (c > #127) then
         r:= '#' + inttostr(byte(c))
         else
-        r:= c;
-            
+        begin
+        // some magic for pas2c
+        r[0]:= #1;
+        r[1]:= c;
+        end;
+
     sanitizeCharForLog:= r
 end;
 
@@ -479,13 +507,16 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
+{$IFNDEF PAS2C}
     f:= stderr; // if everything fails, write to stderr
+{$ENDIF}
     if (UserPathPrefix <> '') then
         begin
+        {$IFNDEF PAS2C}
         // create directory if it doesn't exist
         if not FileExists(UserPathPrefix + '/Logs/') then
             CreateDir(UserPathPrefix + '/Logs/');
-
+        {$ENDIF}
         // if log is locked, write to the next one
         i:= 0;
         while(i < 7) do

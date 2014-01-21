@@ -404,15 +404,26 @@ type
         w, h  : LongInt;
         pitch : {$IFDEF SDL2}LongInt{$ELSE}Word{$ENDIF};
         pixels: Pointer;
-{$IFDEF SDL2}
-        userdata: Pointer;
-        locked: LongInt;
-        lock_data: Pointer;
+{$IFDEF PAS2C}
+        hwdata   : Pointer;
         clip_rect: TSDL_Rect;
-        map: Pointer;
-        refcount: LongInt;
+        unsed1   : LongWord;
+        locked   : LongWord;
+        map      : Pointer;
+        format_version: Longword;
+        refcount : LongInt;
+        offset   : LongInt;
 {$ELSE}
-        offset: LongInt;
+{$IFDEF SDL2}
+        userdata  : Pointer;
+        locked    : LongInt;
+        lock_data : Pointer;
+        clip_rect : TSDL_Rect;
+        map       : Pointer;
+        refcount  : LongInt;
+{$ELSE}
+        offset : LongInt;
+{$ENDIF}
 {$ENDIF}
         end;
 
@@ -825,6 +836,7 @@ type
 
     TByteArray = array[0..65535] of Byte;
     PByteArray = ^TByteArray;
+
     TLongWordArray = array[0..16383] of LongWord;
     PLongWordArray = ^TLongWordArray;
 

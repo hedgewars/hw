@@ -27,8 +27,6 @@ var Stack: record
                                      end
            end;
 
-const
-    cMaxEdgePoints = 16384;
 
 procedure Push(_xl, _xr, _y, _dir: LongInt);
 begin
@@ -99,9 +97,9 @@ begin
     i:= 0;
     with pa do
         while i < LongInt(Count) - 1 do
-            if (ar[i + 1].X = NTPX) then 
+            if (ar[i + 1].X = NTPX) then
                 inc(i, 2)
-            else 
+            else
                 begin
                 DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, Color);
                 inc(i)
@@ -130,7 +128,7 @@ begin
         begin
         Vx:= _0;
         Vy:= _0
-        end 
+        end
     else
         begin
         d2:= _1 / d2;
@@ -237,7 +235,7 @@ begin
             CheckIntersect:= false
         else if (c2 < 0) or (c2 > dm) then
             CheckIntersect:= false;
-    end 
+    end
     else
     begin
         if (c1 > 0) or (c1 < dm) then
