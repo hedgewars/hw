@@ -14,7 +14,7 @@ import Utils
 import HandlerUtils
 import RoomsAndClients
 import EngineInteraction
-
+import Votes
 
 startGame :: Reader (ClientIndex, IRnC) [Action]
 startGame = do
@@ -396,6 +396,35 @@ handleCmd_inRoom ["GREETING", msg] = do
     cl <- thisClient
     rm <- thisRoom
     return [ModifyRoom (\r -> r{greeting = msg}) | isAdministrator cl || (isMaster cl && (not $ isSpecial rm))]
+
+
+handleCmd_inRoom ["CALLVOTE"] = do
+    cl <- thisClient
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>"]]
+
+handleCmd_inRoom ["CALLVOTE", "KICK"] = do
+    cl <- thisClient
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: specify nickname"]]
+
+handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
+    (thisClientId, rnc) <- ask
+    cl <- thisClient
+    maybeClientId <- clientByNick nickname
+    let kickId = fromJust maybeClientId
+    let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
+
+    if isJust maybeClientId && sameRoom then
+        startVote $ VoteKick nickname
+        else
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
+
+handleCmd_inRoom ["VOTE", m] = do
+    cl <- thisClient
+    let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
+    if isJust b then
+        voted (clUID cl) (fromJust b)
+        else
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
