@@ -33,10 +33,7 @@ handleCmd ["PONG"] = do
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
-handleCmd ["CMD", parameters] = do
-        let (cmd, plist) = B.break (== ' ') parameters
-        let param = B.dropWhile (== ' ') plist
-        h (upperCase cmd) param
+handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
         h "STATS" _ = handleCmd ["STATS"]
@@ -54,7 +51,14 @@ handleCmd ["CMD", parameters] = do
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
         h "GREETING" msg = handleCmd ["GREETING", msg]
+        h "CALLVOTE" msg | B.null msg = handleCmd ["CALLVOTE"]
+                         | otherwise = let (c, p) = extractParameters msg in
+                                           if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
+        h "VOTE" msg = handleCmd ["VOTE", upperCase msg]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
+
+        extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
+
 
 handleCmd cmd = do
     (ci, irnc) <- ask
