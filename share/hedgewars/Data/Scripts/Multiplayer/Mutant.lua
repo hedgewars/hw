@@ -96,7 +96,7 @@ end
 function onGameInit()
     TurnTime = 20000
     WaterRise = 0
-    GameFlags = GameFlags + gfResetWeps + gfPerHogAmmo
+    EnableGameFlags(gfResetWeps, gfPerHogAmmo)
     HealthCaseProb=0
     HealthCaseAmount=0
     MinesTime=1000

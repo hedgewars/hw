@@ -521,7 +521,8 @@ end
 
 function onGameInit()
 
-	GameFlags = gfRandomOrder + gfBorder + gfSolidLand --+ gfInfAttack
+	ClearGameFlags()
+	EnableGameFlags(gfRandomOrder, gfBorder, gfSolidLand) --, gfInfAttack
 	HealthCaseProb = 0
 	CaseFreq = 0
 

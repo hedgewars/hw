@@ -481,7 +481,7 @@ end
 ----------------------------------
 
 function onGameInit()
-        GameFlags = bor(GameFlags,gfInfAttack + gfInvulnerable)
+        EnableGameFlags(gfInfAttack, gfInvulnerable)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
