@@ -25,6 +25,8 @@ uses SDLh, uTypes;
 function  NewTexture(width, height: Longword; buf: Pointer): PTexture;
 procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
+procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
 procedure FreeTexture(tex: PTexture);
 procedure FreeAndNilTexture(var tex: PTexture);
 
@@ -121,6 +123,88 @@ for y:= 0 to Pred(Surf^.h) do
     end;
 end;
 
+{ this will make invisible pixels that have a visible neighbor have the
+  same color as their visible neighbor, so that bilinear filtering won't
+  display a "wrongly" colored border when zoomed in }
+procedure PrettifyAlpha(row1, row2: PLongwordArray; firsti, lasti, ioffset: LongWord);
+var
+    i: Longword;
+    lpi, cpi, bpi: boolean; // was last/current/bottom neighbor pixel invisible?
+begin
+    // suppress incorrect warning
+    lpi:= true;
+    for i:=firsti to lasti do
+        begin
+        // use first pixel in row1 as starting point
+        if i = firsti then
+            cpi:= ((row1^[i] and AMask) = 0)
+        else
+            begin
+            cpi:= ((row1^[i] and AMask) = 0);
+            if cpi <> lpi then
+                begin
+                // invisible pixels get colors from visible neighbors
+                if cpi then
+                    begin
+                    row1^[i]:= row1^[i-1] and not AMask;
+                    // as this pixel is invisible and already colored correctly now, no point in further comparing it
+                    lpi:= cpi;
+                    continue;
+                    end
+                else
+                    row1^[i-1]:= row1^[i] and not AMask;
+                end;
+            end;
+        lpi:= cpi;
+        // also check bottom neighbor
+        if row2 <> nil then
+            begin
+            bpi:= ((row2^[i+ioffset] and AMask) = 0);
+            if cpi <> bpi then
+                begin
+                if cpi then
+                    row1^[i]:= row2^[i+ioffset] and not AMask
+                else
+                    row2^[i+ioffset]:= row1^[i] and not AMask;
+                end;
+            end;
+        end;
+end;
+
+procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
+var
+    // current row index, second last row index of array, width and first/last i of row
+    r, slr, w, si, li: LongWord;
+begin
+    w:= surf^.w;
+    slr:= surf^.h - 2;
+    si:= 0;
+    li:= w - 1;
+    for r:= 0 to slr do
+        begin
+        PrettifyAlpha(pixels, pixels, si, li, w);
+        // move indices to next row
+        si:= si + w;
+        li:= li + w;
+        end;
+    // don't forget last row
+    PrettifyAlpha(pixels, nil, si, li, w);
+end;
+
+procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
+var
+    // current y; last x, second last y of array;
+    y, lx, sly: LongWord;
+begin
+    sly:= height - 2;
+    lx:= width - 1;
+    for y:= 0 to sly do
+        begin
+        PrettifyAlpha(PLongWordArray(pixels[y]), PLongWordArray(pixels[y+1]), 0, lx, 0);
+        end;
+    // don't forget last row
+    PrettifyAlpha(PLongWordArray(pixels[sly+1]), nil, 0, lx, 0);
+end;
 
 function Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 var tw, th, x, y: Longword;
@@ -148,7 +232,6 @@ if (surf^.format^.BytesPerPixel <> 4) then
     exit
     end;
 
-
 glGenTextures(1, @Surface2Tex^.id);
 
 glBindTexture(GL_TEXTURE_2D, Surface2Tex^.id);
@@ -160,6 +243,8 @@ fromP4:= Surf^.pixels;
 
 if GrayScale then
     Surface2GrayScale(Surf);
+
+PrettifySurfaceAlpha(surf, fromP4);
 
 if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) then
     begin

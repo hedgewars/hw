@@ -245,28 +245,64 @@ end;
 function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
-    for i:= 1 to lua_gettop(L) do
-        GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
-    ScriptSetInteger('GameFlags', GameFlags);
+    if lua_gettop(L) = 0 then
+        begin
+        LuaParameterCountError('EnableGameFlags', '', lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
+        begin
+            for i:= 1 to lua_gettop(L) do
+                GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
+            ScriptSetInteger('GameFlags', GameFlags);
+        end;
     lc_enablegameflags:= 0;
 end;
 
 function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i : integer;
 begin
-    for i:= 1 to lua_gettop(L) do
-        GameFlags := (GameFlags and (not (LongWord(lua_tointeger(L, i)))));
-    ScriptSetInteger('GameFlags', GameFlags);
+    if lua_gettop(L) = 0 then
+        begin
+        LuaParameterCountError('DisableGameFlags', '', lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
+        begin
+        for i:= 1 to lua_gettop(L) do
+            GameFlags := GameFlags and not(LongWord(lua_tointeger(L, i)));
+        ScriptSetInteger('GameFlags', GameFlags);
+        end;
     lc_disablegameflags:= 0;
 end;
 
 function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
 begin
-    // Silence hint
-    L:= L;
-    GameFlags:= 0;
-    ScriptSetInteger('GameFlags', GameFlags);
+    if lua_gettop(L) <> 0 then
+        begin
+        LuaParameterCountError('ClearGameFlags', '', lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
+        begin
+        GameFlags:= 0;
+        ScriptSetInteger('GameFlags', GameFlags);
+        end;
     lc_cleargameflags:= 0;
+end;
+
+function lc_getgameflag(L : Plua_State) : LongInt; Cdecl;
+begin
+    if lua_gettop(L) <> 1 then
+        begin
+        LuaParameterCountError('GetGameFlag', 'gameflag', lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
+        begin
+        lua_pushboolean(L, (GameFlags and LongWord(lua_tointeger(L, 1)) <> 0));
+        end;
+    lc_getgameflag:= 1;
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
@@ -1911,18 +1947,20 @@ function lc_getgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 0 then
         LuaParameterCountError('GetGravity', '', lua_gettop(L))
+    else if cGravity.isNegative then
+        lua_pushinteger(L, hwRound(-_0_5 + (cGravity * 50 / cMaxWindSpeed)))
     else
-        lua_pushinteger(L, hwRound(cGravity * 50 / cWindSpeed));
+        lua_pushinteger(L, hwRound( _0_5 + (cGravity * 50 / cMaxWindSpeed)));
     lc_getgravity:= 1
 end;
 
 function lc_setgravity(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 1 then
-        LuaParameterCountError('SetGravity', 'gravity', lua_gettop(L))
+        LuaParameterCountError('SetGravity', 'percent', lua_gettop(L))
     else
         begin
-        cGravity:= cMaxWindSpeed * lua_tointeger(L, 1) * _0_02;
+        cGravity:= _0_02 * lua_tointeger(L, 1) * cMaxWindSpeed;
         cGravityf:= 0.00025 * lua_tointeger(L, 1) * 0.02
         end;
     lc_setgravity:= 0
@@ -2000,6 +2038,7 @@ begin
         end
     else
         begin
+        WriteLnToConsole('Lua test finished');
         halt(lua_tointeger(L, 1));
         lc_endluatest:= 0;
         end;
@@ -2560,6 +2599,7 @@ lua_register(luaState, _P'AddGear', @lc_addgear);
 lua_register(luaState, _P'EnableGameFlags', @lc_enablegameflags);
 lua_register(luaState, _P'DisableGameFlags', @lc_disablegameflags);
 lua_register(luaState, _P'ClearGameFlags', @lc_cleargameflags);
+lua_register(luaState, _P'GetGameFlag', @lc_getgameflag);
 lua_register(luaState, _P'DeleteGear', @lc_deletegear);
 lua_register(luaState, _P'AddVisualGear', @lc_addvisualgear);
 lua_register(luaState, _P'DeleteVisualGear', @lc_deletevisualgear);
