@@ -20,7 +20,7 @@
 unit uGearsList;
 
 interface
-uses uFloat, uTypes;
+uses uFloat, uTypes, SDLh;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 procedure DeleteGear(Gear: PGear);
@@ -156,6 +156,7 @@ end;
 
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
+    c: byte;
 begin
 inc(GCounter);
 AddFileLog('AddGear: #' + inttostr(GCounter) + ' (' + inttostr(x) + ',' + inttostr(y) + '), d(' + floattostr(dX) + ',' + floattostr(dY) + ') type = ' + EnumToStr(Kind));
@@ -180,6 +181,7 @@ gear^.Density:= _1;
 // Define ammo association, if any.
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
+gear^.Tint:= $FFFFFFFF;
 
 if CurrentHedgehog <> nil then
     begin
@@ -235,6 +237,18 @@ case Kind of
                 if (GameFlags and gfAISurvival) <> 0 then
                     if gear^.Hedgehog^.BotLevel > 0 then
                         gear^.Hedgehog^.Effects[heResurrectable] := 1;
+                // this would presumably be set in the frontend
+                // if we weren't going to do that yet, would need to reinit GetRandom
+                // oh, and, randomising slightly R and B might be nice too. 
+                //gear^.Tint:= $fa00efff or ((random(80)+128) shl 16)
+                //gear^.Tint:= $faa4efff
+                //gear^.Tint:= (($e0+random(32)) shl 24) or 
+                //             ((random(80)+128) shl 16) or
+                //             (($d5+random(32)) shl 8) or $ff
+                c:= random(32);
+                gear^.Tint:= (($e0+c) shl 24) or 
+                             ((random(90)+128) shl 16) or
+                             (($d5+c) shl 8) or $ff
                 end;
        gtShell: begin
                 gear^.Elasticity:= _0_8;
@@ -272,6 +286,9 @@ case Kind of
                     Health:= random(vobFrameTicks);
                     if gear^.Timer = 0 then Timer:= random(vobFramesCount);
                     Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
+                    Tint:= (ExplosionBorderColor and RMask shl RShift) or 
+                           (ExplosionBorderColor and GMask shl GShift) or 
+                           (ExplosionBorderColor and BMask shl BShift) or $FF;
                     end
                 end;
        gtGrave: begin
@@ -400,7 +417,10 @@ case Kind of
                 gear^.Radius:= 15;
                 gear^.Tag:= Y
                 end;
-   gtAirAttack: gear^.Z:= cHHZ+2;
+   gtAirAttack: begin
+                gear^.Z:= cHHZ+2;
+                gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
+                end;
      gtAirBomb: begin
                 gear^.Radius:= 5;
                 gear^.Density:= _2;
@@ -485,7 +505,8 @@ case Kind of
      gtRCPlane: begin
                 if gear^.Timer = 0 then gear^.Timer:= 15000;
                 gear^.Health:= 3;
-                gear^.Radius:= 8
+                gear^.Radius:= 8;
+                gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;
      gtJetpack: begin
                 gear^.Health:= 2000;
@@ -544,10 +565,12 @@ gtFlamethrower: begin
  gtPoisonCloud: begin
                 if gear^.Timer = 0 then gear^.Timer:= 5000;
                 gear^.dY:= int2hwfloat(-4 + longint(getRandom(8))) / 1000;
+                gear^.Tint:= $C0C000C0
                 end;
  gtResurrector: begin
                 gear^.Radius := 100;
-                gear^.Tag := 0
+                gear^.Tag := 0;
+                gear^.Tint:= $F5DB35FF
                 end;
      gtWaterUp: begin
                 gear^.Tag := 47;
