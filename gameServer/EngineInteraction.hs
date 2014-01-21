@@ -1,18 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module EngineInteraction where
+module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
 
 import qualified Data.Set as Set
 import Control.Monad
 import qualified Codec.Binary.Base64 as Base64
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
+import qualified Data.ByteString.Lazy as BL
 import qualified Data.Map as Map
 import qualified Data.List as L
 import Data.Word
 import Data.Bits
 import Control.Arrow
 import Data.Maybe
+import Codec.Compression.Zlib as Z
 -------------
 import CoreTypes
 import Utils
@@ -28,6 +30,11 @@ fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength
         removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
         removeLength _ = Nothing
 
+em :: B.ByteString -> B.ByteString
+em = toEngineMsg
+
+eml :: [B.ByteString] -> B.ByteString
+eml = em . B.concat
 
 splitMessages :: B.ByteString -> [B.ByteString]
 splitMessages = L.unfoldr (\b -> if B.null b then Nothing else Just $ B.splitAt (1 + fromIntegral (BW.head b)) b)
@@ -72,8 +79,6 @@ replayToDemo ti mParams prms msgs = concat [
         , [em "!"]
         ]
     where
-        em = toEngineMsg
-        eml = em . B.concat
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
         maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
@@ -108,7 +113,20 @@ replayToDemo ti mParams prms msgs = concat [
                         )
 
 drawnMapData :: B.ByteString -> [B.ByteString]
-drawnMapData = error "drawnMapData"
+drawnMapData = 
+          L.map (\m -> eml ["edraw ", BW.pack m])
+        . L.unfoldr by200
+        . BL.unpack
+        . Z.decompress
+        . BL.pack
+        . L.drop 4
+        . fromMaybe []
+        . Base64.decode
+        . B.unpack
+    where
+        by200 :: [a] -> Maybe ([a], [a])
+        by200 [] = Nothing
+        by200 m = Just $ L.splitAt 200 m
 
 schemeParams :: [(B.ByteString, Int)]
 schemeParams = [
