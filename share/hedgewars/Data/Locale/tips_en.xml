@@ -49,7 +49,7 @@
     <tip>Heads or tails? Type '/rnd' in lobby and you'll find out. Also '/rnd rock paper scissors' works!</tip>
     <tip>You're able to associate Hedgewars related files (savegames and demo recordings) with the game to launch them right from your favorite file or internet browser.</tip>
     <windows-only>
-	    <tip>The version of Hedgewars supports <a href="http://www.xfire.com">Xfire</a>. Make sure to add Hedgewars to its game list so your friends can see you playing.</tip>
+        <tip>The version of Hedgewars supports <a href="http://www.xfire.com">Xfire</a>. Make sure to add Hedgewars to its game list so your friends can see you playing.</tip>
         <tip>You can find your Hedgewars configuration files under "My Documents\Hedgewars". Create backups or take the files with you, but don't edit them by hand.</tip>
     </windows-only>
     <mac-only>

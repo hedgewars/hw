@@ -1903,15 +1903,15 @@ void HWForm::UpdateCampaignPage(int index)
     Q_UNUSED(index);
     HWTeam team(ui.pageCampaign->CBTeam->currentText());
     QString campaignName = ui.pageCampaign->CBCampaign->currentText().replace(QString(" "),QString("_"));
-    QString tName = team.name();    
-    
-    campaignMissionInfo = getCampMissionList(campaignName,tName);    
-	ui.pageCampaign->CBMission->clear();
-	
+    QString tName = team.name();
+
+    campaignMissionInfo = getCampMissionList(campaignName,tName);
+    ui.pageCampaign->CBMission->clear();
+
     for(int i=0;i<campaignMissionInfo.size();i++)
     {
         ui.pageCampaign->CBMission->addItem(QString(campaignMissionInfo[i].name), QString(campaignMissionInfo[i].name));
-	}
+    }
 }
 
 void HWForm::UpdateCampaignPageMission(int index)
@@ -1923,7 +1923,7 @@ void HWForm::UpdateCampaignPageMission(int index)
     if(index > -1 && index < campaignMissionInfo.count()) {
         ui.pageCampaign->lbltitle->setText("<h2>"+ui.pageCampaign->CBMission->currentText()+"</h2>");
         ui.pageCampaign->lbldescription->setText(campaignMissionInfo[index].description);
-		ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
+        ui.pageCampaign->btnPreview->setIcon(QIcon(campaignMissionInfo[index].image));
     }
 }
 
@@ -1935,12 +1935,12 @@ void HWForm::UpdateCampaignPageProgress(int index)
     UpdateCampaignPage(0);
     for(int i=0;i<ui.pageCampaign->CBMission->count();i++)
     {
-		if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
-		{
-			ui.pageCampaign->CBMission->setCurrentIndex(i);
-			break;
-		}
-	}
+        if (ui.pageCampaign->CBMission->itemText(i)==missionTitle)
+        {
+            ui.pageCampaign->CBMission->setCurrentIndex(i);
+            break;
+        }
+    }
 }
 
 // used for --set-everything [screen width] [screen height] [color dept] [volume] [enable music] [enable sounds] [language file] [full screen] [show FPS] [alternate damage] [timer value] [reduced quality]

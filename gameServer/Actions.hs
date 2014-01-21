@@ -327,11 +327,11 @@ processAction FinishGame = do
     thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
     joinedMidGame <- liftM (filter isJoinedMidGame) $ roomClientsS ri
     answerRemovedTeams <- io $
-         room'sM rnc (\r -> let gi = fromJust $ gameInfo r in 
-                        concatMap (\c -> 
+         room'sM rnc (\r -> let gi = fromJust $ gameInfo r in
+                        concatMap (\c ->
                             (answerFullConfigParams c (mapParams r) (params r))
                             ++
-                            (map (\t -> AnswerClients [sendChan c] ["REMOVE_TEAM", t]) $ leftTeams gi) 
+                            (map (\t -> AnswerClients [sendChan c] ["REMOVE_TEAM", t]) $ leftTeams gi)
                         ) joinedMidGame
                      ) ri
 
@@ -357,7 +357,7 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then (:) (fromJust $ lastFilteredTimedMsg g) else id) 
+                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then (:) (fromJust $ lastFilteredTimedMsg g) else id)
                       $ rmTeamMsg : roundMsgs g
                 }) $ gameInfo r
             })
@@ -456,11 +456,11 @@ processAction (ProcessAccountInfo info) = do
         wp <- client's webPassword
         chan <- client's sendChan
         mapM_ processAction $
-            if wp == p then 
+            if wp == p then
                 [ModifyClient $ \c -> c{logonPassed = True}
                 , AnswerClients [chan] ["LOGONPASSED"]
                 ]
-                else 
+                else
                 [ByeClient $ loc "Authentication failed"]
     playerLogin p a contr = do
         chan <- client's sendChan
@@ -530,7 +530,7 @@ processAction (BanIP ip seconds reason) = do
 
 processAction (BanNick n seconds reason) = do
     currentTime <- io getCurrentTime
-    let msg = 
+    let msg =
             if seconds > 60 * 60 * 24 * 365 then
                 B.concat ["Permanent ban (", reason, ")"]
                 else
@@ -775,7 +775,7 @@ processAction (ShowReplay rname) = do
 
 processAction Cleanup = do
     jm <- gets joinsMonitor
-    
+
     io $ do
         t <- getCurrentTime
         cleanup jm t

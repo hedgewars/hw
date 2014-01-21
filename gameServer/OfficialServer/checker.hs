@@ -28,7 +28,7 @@ readInt_ :: (Num a) => B.ByteString -> a
 readInt_ str =
   case B.readInt str of
        Just (i, t) | B.null t -> fromIntegral i
-       _                      -> 0 
+       _                      -> 0
 
 data Message = Packet [B.ByteString]
              | CheckFailed B.ByteString

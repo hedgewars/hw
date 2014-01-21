@@ -106,12 +106,12 @@ end;
 
 procedure JNI_HW_GenLandPreview(env: PJNIEnv; c: JClass; port: JInt); cdecl;
 begin
-	GenLandPreview(port);
+    GenLandPreview(port);
 end;
 
 exports
-    JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto', 
-    JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion', 
+    JNI_HW_versionInfoNet name Java_Prefix+'HWversionInfoNetProto',
+    JNI_HW_versionInfoVersion name Java_Prefix+'HWversionInfoVersion',
     JNI_HW_GenLandPreview name Java_Prefix + 'HWGenLandPreview',
     HW_getNumberOfweapons name Java_Prefix + 'HWgetNumberOfWeapons',
     HW_getMaxNumberOfHogs name Java_Prefix + 'HWgetMaxNumberOfHogs',

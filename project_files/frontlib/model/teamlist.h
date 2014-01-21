@@ -23,8 +23,8 @@
 #include "team.h"
 
 typedef struct {
-	int teamCount;
-	flib_team **teams;
+    int teamCount;
+    flib_team **teams;
 } flib_teamlist;
 
 flib_teamlist *flib_teamlist_create();

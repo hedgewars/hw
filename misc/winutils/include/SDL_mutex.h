@@ -41,10 +41,10 @@ extern "C" {
 /** Synchronization functions which can time out return this value
  *  if they time out.
  */
-#define SDL_MUTEX_TIMEDOUT	1
+#define SDL_MUTEX_TIMEDOUT  1
 
 /** This is the timeout value which corresponds to never time out */
-#define SDL_MUTEX_MAXWAIT	(~(Uint32)0)
+#define SDL_MUTEX_MAXWAIT   (~(Uint32)0)
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -58,13 +58,13 @@ typedef struct SDL_mutex SDL_mutex;
 /** Create a mutex, initialized unlocked */
 extern DECLSPEC SDL_mutex * SDLCALL SDL_CreateMutex(void);
 
-#define SDL_LockMutex(m)	SDL_mutexP(m)
+#define SDL_LockMutex(m)    SDL_mutexP(m)
 /** Lock the mutex
  *  @return 0, or -1 on error
  */
 extern DECLSPEC int SDLCALL SDL_mutexP(SDL_mutex *mutex);
 
-#define SDL_UnlockMutex(m)	SDL_mutexV(m)
+#define SDL_UnlockMutex(m)  SDL_mutexV(m)
 /** Unlock the mutex
  *  @return 0, or -1 on error
  *
@@ -93,7 +93,7 @@ extern DECLSPEC SDL_sem * SDLCALL SDL_CreateSemaphore(Uint32 initial_value);
 extern DECLSPEC void SDLCALL SDL_DestroySemaphore(SDL_sem *sem);
 
 /**
- * This function suspends the calling thread until the semaphore pointed 
+ * This function suspends the calling thread until the semaphore pointed
  * to by sem has a positive count. It then atomically decreases the semaphore
  * count.
  */

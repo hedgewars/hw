@@ -45,7 +45,7 @@ const MAXACTIONS     = 96;
     aia_Put        = $800A;
     aia_waitAngle  = $800B;
     aia_waitAmmoXY = $800C;
-    
+
     aim_push       = $8000;
     aim_release    = $8001;
     ai_specmask    = $8000;
@@ -55,7 +55,7 @@ type TAction = record
         X, Y, Param: LongInt;
         Time: Longword;
         end;
-        
+
     TActions = record
         Count, Pos: Longword;
         actions: array[0..Pred(MAXACTIONS)] of TAction;
@@ -109,7 +109,7 @@ else
     WriteLnToConsole('AI action: '+SpecActionIdToStr[Action.Action]);
     if (Action.Action = aia_WaitXL) or (Action.Action = aia_WaitXR) then
         WriteLnToConsole('AI action Wait X = '+IntToStr(Action.Param)+', current X = '+IntToStr(hwRound(Me^.X)))
-        
+
     else if (Action.Action = aia_AwareExpl) then
         WriteLnToConsole('Aware X = ' + IntToStr(Action.X) + ', Y = ' + IntToStr(Action.Y));
     end
@@ -165,10 +165,10 @@ with Actions.actions[Actions.Pos] do
     {$ENDIF}
     if (Action and ai_specmask) <> 0 then
         case Action of
-            aia_Weapon: 
+            aia_Weapon:
                 SetWeapon(TAmmoType(Param));
-            
-            aia_WaitXL: 
+
+            aia_WaitXL:
                 if hwRound(Me^.X) = Param then
                     begin
                     Action:= aia_LookLeft;
@@ -182,12 +182,12 @@ with Actions.actions[Actions.Pos] do
                         exit
                         end
                     else
-                        begin 
+                        begin
                         CheckHang(Me);
                         exit
                         end;
-                            
-            aia_WaitXR: 
+
+            aia_WaitXR:
                 if hwRound(Me^.X) = Param then
                     begin
                     Action:= aia_LookRight;
@@ -201,7 +201,7 @@ with Actions.actions[Actions.Pos] do
                         exit
                         end
                     else
-                        begin 
+                        begin
                         CheckHang(Me);
                         exit
                         end;
@@ -222,24 +222,24 @@ with Actions.actions[Actions.Pos] do
                 else ParseCommand('-right', true);
             aia_AwareExpl:
                 AwareOfExplosion(X, Y, Param);
-            
+
             aia_HJump:
                 ParseCommand('hjump', true);
-            
+
             aia_LJump:
                 ParseCommand('ljump', true);
-            
+
             aia_Skip:
                 ParseCommand('skip', true);
-            
+
             aia_Put:
                 doPut(X, Y, true);
-                
+
             aia_waitAngle:
                 if LongInt(Me^.Angle) <> Abs(Param) then exit;
 
             aia_waitAmmoXY:
-                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then 
+                if (CurAmmoGear <> nil) and ((hwRound(CurAmmoGear^.X) <> X) or (hwRound(CurAmmoGear^.Y) <> Y)) then
                     exit;
             end
         else
@@ -249,7 +249,7 @@ with Actions.actions[Actions.Pos] do
                 case Param of
                 aim_push:
                 s:= '+' + s;
-                
+
                 aim_release:
                 s:= '-' + s;
             end

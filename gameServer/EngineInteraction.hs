@@ -42,7 +42,7 @@ checkNetCmd msg = check decoded
         encode = B.pack . Base64.encode . BW.unpack . B.concat
         isLegal m = (B.length m > 1) && (flip Set.member legalMessages . B.head . B.tail $ m)
         lft = foldr l Nothing
-        l m n = let m' = B.head $ B.tail m; tst = flip Set.member in 
+        l m n = let m' = B.head $ B.tail m; tst = flip Set.member in
                       if not $ tst timedMessages m' then n
                         else if '+' /= m' then Just Nothing else Just . Just . B.pack . Base64.encode . BW.unpack $ m
         isNonEmpty = (/=) '+' . B.head . B.tail

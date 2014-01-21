@@ -37,7 +37,7 @@ var digest: shortstring;
 
 procedure ResizeLand(width, height: LongWord);
 var potW, potH: LongInt;
-begin 
+begin
 potW:= toPowerOf2(width);
 potH:= toPowerOf2(height);
 if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
@@ -120,7 +120,7 @@ begin
 
     // vertical
     s:= LAND_HEIGHT;
-    
+
     for x:= 0 to LAND_WIDTH - 1 do
         for y:= 0 to LAND_HEIGHT - 1 do
             if Land[y, x] = 0 then
@@ -129,7 +129,7 @@ begin
                     for i:= max(s, y - 8) to y - 1 do
                         begin
                         if ((x + i) and 16) = 0 then c:= c1 else c:= c2;
-                        
+
                         if (cReducedQuality and rqBlurryLand) = 0 then
                             LandPixels[i, x]:= c
                         else
@@ -144,17 +144,17 @@ begin
                 if s + 8 > y then
                     begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
-                    
+
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         LandPixels[y, x]:= c
                     else
                         LandPixels[y div 2, x div 2]:= c
-                    end;            
+                    end;
                 end;
-                
+
     // horizontal
     s:= LAND_WIDTH;
-    
+
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             if Land[y, x] = 0 then
@@ -163,7 +163,7 @@ begin
                     for i:= max(s, x - 8) to x - 1 do
                         begin
                         if ((y + i) and 16) = 0 then c:= c1 else c:= c2;
-                        
+
                         if (cReducedQuality and rqBlurryLand) = 0 then
                             LandPixels[y, i]:= c
                         else
@@ -178,12 +178,12 @@ begin
                 if s + 8 > x then
                     begin
                     if ((x + y) and 16) = 0 then c:= c1 else c:= c2;
-                    
+
                     if (cReducedQuality and rqBlurryLand) = 0 then
                         LandPixels[y, x]:= c
                     else
                         LandPixels[y div 2, x div 2]:= c
-                    end;            
+                    end;
                 end
 end;
 
@@ -375,7 +375,7 @@ begin
                 dec(l, TemplateCounts[cTemplateFilter]);
             until l < 0;
             end else getRandom(1);
-        
+
         case cTemplateFilter of
         0: OutError('Ask unC0Rr about what you did wrong', true);
         1: SelectTemplate:= SmallTemplates[getrandom(TemplateCounts[cTemplateFilter])];
@@ -436,12 +436,12 @@ begin
 
     LandSurface2LandPixels(tmpsurf);
     SDL_FreeSurface(tmpsurf);
-    
+
     if gameFlags and gfShoppaBorder <> 0 then DrawShoppaBorder;
-    
+
     for x:= leftX+2 to rightX-2 do
         for y:= topY+2 to LAND_HEIGHT-3 do
-            if (Land[y, x] = 0) and 
+            if (Land[y, x] = 0) and
                (((Land[y, x-1] = lfBasic) and ((Land[y+1,x] = lfBasic)) or (Land[y-1,x] = lfBasic)) or
                ((Land[y, x+1] = lfBasic) and ((Land[y-1,x] = lfBasic) or (Land[y+1,x] = lfBasic)))) then
             begin
@@ -449,16 +449,16 @@ begin
                     begin
                     if (Land[y, x-1] = lfBasic) and (LandPixels[y, x-1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x-1]
-                        
+
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y, x+1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x+1]
-                        
+
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1, x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y-1, x]
-                        
+
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1, x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y+1, x];
-                        
+
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
                         LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (128 shl AShift)
                     end;
@@ -473,25 +473,25 @@ begin
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x+1] = lfBasic) and (Land[y,x+2] = lfBasic)) or
                     ((Land[y+1, x] = lfBasic) and (Land[y+1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic)) or
                     ((Land[y-1, x] = lfBasic) and (Land[y-1,x-1] = lfBasic) and (Land[y,x-2] = lfBasic))) then
-                    
+
                 begin
-                
+
                 if (cReducedQuality and rqBlurryLand) = 0 then
-                
+
                     begin
-                    
+
                     if (Land[y, x-1] = lfBasic) and (LandPixels[y,x-1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x-1]
-                        
+
                     else if (Land[y, x+1] = lfBasic) and (LandPixels[y,x+1] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y, x+1]
-                        
+
                     else if (Land[y+1, x] = lfBasic) and (LandPixels[y+1,x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y+1, x]
-                        
+
                     else if (Land[y-1, x] = lfBasic) and (LandPixels[y-1,x] and AMask <> 0) then
                         LandPixels[y, x]:= LandPixels[y-1, x];
-                        
+
                     if (((LandPixels[y,x] and AMask) shr AShift) > 10) then
                         LandPixels[y,x]:= (LandPixels[y,x] and (not AMask)) or (64 shl AShift)
                     end;
@@ -778,7 +778,7 @@ if (GameFlags and gfDisableGirders) <> 0 then
 
 if (GameFlags and gfForts = 0) and (maskOnly or (cPathz[ptMapCurrent] = '')) then
     AddObjects
-    
+
 else
     AddProgress();
 
@@ -834,7 +834,7 @@ begin
         rw:= rh*2;
         end;
     if rh < rw div 2 then rh:= rw * 2;
-    
+
     ox:= (rw-LAND_WIDTH) div 2;
     oy:= rh-LAND_HEIGHT;
 
@@ -850,7 +850,7 @@ begin
                 cbit:= bit * 8;
                 for yy:= y * lh to y * lh + 7 do
                     for xx:= x * lw + cbit to x * lw + cbit + 7 do
-                        if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0) 
+                        if ((yy-oy) and LAND_HEIGHT_MASK = 0) and ((xx-ox) and LAND_WIDTH_MASK = 0)
                            and (Land[yy-oy, xx-ox] <> 0) then
                             inc(t);
                 if t > 8 then

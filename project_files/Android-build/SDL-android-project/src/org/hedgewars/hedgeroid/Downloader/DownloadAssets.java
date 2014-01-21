@@ -36,48 +36,48 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class DownloadAssets extends AsyncTask<Object, Long, Boolean> {
-	private static final String VERSION_FILENAME = "assetsversion.txt";
-	private final MainActivity act;
-	
-	public DownloadAssets(MainActivity act){
-		this.act = act;
-	}
-	
-	private void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
-		try {
-			FileUtils.writeStreamToFile(assetManager.open(assetPath), target);
-		} catch(FileNotFoundException e) {
-			/*
-			 * I can't find a better way to figure out whether an asset entry is
-			 * a file or a directory. Checking if assetManager.list(assetPath)
-			 * is empty is a bit cleaner, but SLOW.
-			 */
-			if (!target.isDirectory() && !target.mkdir()) {
-				throw new IOException("Unable to create directory "+target);
-			}
-			for (String asset : assetManager.list(assetPath)) {
-				copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
-			}
-		}
-	}
-	
-	@Override
-	protected Boolean doInBackground(Object... params) {
-		try {
-			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
-			FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
-			FileUtils.resRawToFilesDir(act, R.array.teams, R.array.teamFilenames, Team.DIRECTORY_TEAMS);
-			copyFileOrDir(act.getAssets(), FileUtils.getDataPathFile(act), "Data");
-			copyFileOrDir(act.getAssets(), new File(FileUtils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
-			return Boolean.TRUE;
-		} catch(IOException e) {
-			Log.e("DownloadAssets", e.getMessage(), e);
-			return Boolean.FALSE;
-		}
-	}
-	
-	@Override
-	protected void onPostExecute(Boolean result){
-		act.onAssetsDownloaded(result);
-	}
+    private static final String VERSION_FILENAME = "assetsversion.txt";
+    private final MainActivity act;
+
+    public DownloadAssets(MainActivity act){
+        this.act = act;
+    }
+
+    private void copyFileOrDir(AssetManager assetManager, File target, String assetPath) throws IOException {
+        try {
+            FileUtils.writeStreamToFile(assetManager.open(assetPath), target);
+        } catch(FileNotFoundException e) {
+            /*
+             * I can't find a better way to figure out whether an asset entry is
+             * a file or a directory. Checking if assetManager.list(assetPath)
+             * is empty is a bit cleaner, but SLOW.
+             */
+            if (!target.isDirectory() && !target.mkdir()) {
+                throw new IOException("Unable to create directory "+target);
+            }
+            for (String asset : assetManager.list(assetPath)) {
+                copyFileOrDir(assetManager, new File(target, asset), assetPath + "/" + asset);
+            }
+        }
+    }
+
+    @Override
+    protected Boolean doInBackground(Object... params) {
+        try {
+            FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.schemes_builtin), Schemes.getBuiltinSchemesFile(act));
+            FileUtils.writeStreamToFile(act.getResources().openRawResource(R.raw.weapons_builtin), Weaponsets.getBuiltinWeaponsetsFile(act));
+            FileUtils.resRawToFilesDir(act, R.array.teams, R.array.teamFilenames, Team.DIRECTORY_TEAMS);
+            copyFileOrDir(act.getAssets(), FileUtils.getDataPathFile(act), "Data");
+            copyFileOrDir(act.getAssets(), new File(FileUtils.getCachePath(act), VERSION_FILENAME), VERSION_FILENAME);
+            return Boolean.TRUE;
+        } catch(IOException e) {
+            Log.e("DownloadAssets", e.getMessage(), e);
+            return Boolean.FALSE;
+        }
+    }
+
+    @Override
+    protected void onPostExecute(Boolean result){
+        act.onAssetsDownloaded(result);
+    }
 }

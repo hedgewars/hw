@@ -29,25 +29,25 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 public final class UiUtils {
-	private UiUtils() {
-		throw new AssertionError("This class is not meant to be instantiated");
-	}
+    private UiUtils() {
+        throw new AssertionError("This class is not meant to be instantiated");
+    }
 
-	public static View createVerticalTabIndicator(TabHost tabHost, int label, int icon) {
-		LayoutInflater inflater = (LayoutInflater) tabHost.getContext()
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public static View createVerticalTabIndicator(TabHost tabHost, int label, int icon) {
+        LayoutInflater inflater = (LayoutInflater) tabHost.getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View view = inflater.inflate(R.layout.tab_indicator_vertical,
-				tabHost.getTabWidget(), false);
+        View view = inflater.inflate(R.layout.tab_indicator_vertical,
+                tabHost.getTabWidget(), false);
 
-		final TextView tv = (TextView) view.findViewById(R.id.title);
-		tv.setText(label);
+        final TextView tv = (TextView) view.findViewById(R.id.title);
+        tv.setText(label);
 
-		if (icon != 0) {
-			ImageView iconView = (ImageView) view.findViewById(R.id.icon);
-			iconView.setImageResource(icon);
-		}
+        if (icon != 0) {
+            ImageView iconView = (ImageView) view.findViewById(R.id.icon);
+            iconView.setImageResource(icon);
+        }
 
-		return view;
-	}
+        return view;
+    }
 }

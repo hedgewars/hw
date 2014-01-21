@@ -29,8 +29,8 @@
 #include "scheme.h"
 
 typedef struct {
-	int schemeCount;
-	flib_scheme **schemes;
+    int schemeCount;
+    flib_scheme **schemes;
 } flib_schemelist;
 
 /**

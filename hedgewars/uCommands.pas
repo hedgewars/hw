@@ -106,7 +106,7 @@ while t <> nil do
         begin
         if TrustedSource or t^.Trusted then
             begin
-            if t^.Rand and (not CheckNoTeamOrHH) then 
+            if t^.Rand and (not CheckNoTeamOrHH) then
                 CheckSum:= CheckSum xor LongWord(SDLNet_Read32(@CmdStr)) xor LongWord(s[0]) xor GameTicks;
             t^.Handler(s);
             end;
@@ -139,7 +139,7 @@ begin
 if (Message and gmLeft) <> 0 then
     ParseCommand('/-left', true)
 else if (Message and gmRight) <> 0 then
-    ParseCommand('/-right', true) 
+    ParseCommand('/-right', true)
 else if (Message and gmUp) <> 0 then
     ParseCommand('/-up', true)
 else if (Message and gmDown) <> 0 then

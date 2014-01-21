@@ -32,42 +32,42 @@ import android.os.Message;
  * an immediate execution of the runnable again.
  */
 public class TickHandler extends Handler {
-	private final Runnable callback;
-	private int messageId;
-	private long interval;
-	private boolean running;
-	
-	public TickHandler(Looper looper, long interval, Runnable callback) {
-		super(looper);
-		this.callback = callback;
-		this.interval = interval;
-	}
-	
-	public synchronized void stop() {
-		messageId++;
-		running = false;
-	}
-	
-	public synchronized void start() {
-		messageId++;
-		sendMessage(obtainMessage(messageId));
-		running = true;
-	}
-	
-	public synchronized void setInterval(long interval) {
-		this.interval = interval;
-		if(running) {
-			start();
-		}
-	}
-	
-	@Override
-	public synchronized void handleMessage(Message msg) {
-		if(msg.what == messageId) {
-			callback.run();
-		}
-		if(msg.what == messageId) {
-			sendMessageDelayed(obtainMessage(messageId), interval);
-		}
-	}
+    private final Runnable callback;
+    private int messageId;
+    private long interval;
+    private boolean running;
+
+    public TickHandler(Looper looper, long interval, Runnable callback) {
+        super(looper);
+        this.callback = callback;
+        this.interval = interval;
+    }
+
+    public synchronized void stop() {
+        messageId++;
+        running = false;
+    }
+
+    public synchronized void start() {
+        messageId++;
+        sendMessage(obtainMessage(messageId));
+        running = true;
+    }
+
+    public synchronized void setInterval(long interval) {
+        this.interval = interval;
+        if(running) {
+            start();
+        }
+    }
+
+    @Override
+    public synchronized void handleMessage(Message msg) {
+        if(msg.what == messageId) {
+            callback.run();
+        }
+        if(msg.what == messageId) {
+            sendMessageDelayed(obtainMessage(messageId), interval);
+        }
+    }
 }

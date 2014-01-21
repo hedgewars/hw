@@ -23,11 +23,11 @@
 
 class MissionInfo
 {
-	public:
-		QString name;
-		QString description;
-		QString script;
-		QString image;
+    public:
+        QString name;
+        QString description;
+        QString script;
+        QString image;
 };
 
 QList<MissionInfo> getCampMissionList(QString & campaignName, QString & teamName);

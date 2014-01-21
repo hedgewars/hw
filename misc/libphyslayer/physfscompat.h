@@ -34,20 +34,20 @@ extern "C" {
 
 typedef enum PHYSFS_FileType
 {
-	PHYSFS_FILETYPE_REGULAR,
-	PHYSFS_FILETYPE_DIRECTORY,
-	PHYSFS_FILETYPE_SYMLINK,
-	PHYSFS_FILETYPE_OTHER
+    PHYSFS_FILETYPE_REGULAR,
+    PHYSFS_FILETYPE_DIRECTORY,
+    PHYSFS_FILETYPE_SYMLINK,
+    PHYSFS_FILETYPE_OTHER
 } PHYSFS_FileType;
 
 typedef struct PHYSFS_Stat
 {
-	PHYSFS_sint64 filesize;
-	PHYSFS_sint64 modtime;
-	PHYSFS_sint64 createtime;
-	PHYSFS_sint64 accesstime;
-	PHYSFS_FileType filetype;
-	int readonly;
+    PHYSFS_sint64 filesize;
+    PHYSFS_sint64 modtime;
+    PHYSFS_sint64 createtime;
+    PHYSFS_sint64 accesstime;
+    PHYSFS_FileType filetype;
+    int readonly;
 } PHYSFS_Stat;
 
 PHYSFS_DECL int PHYSFS_stat(const char *fname, PHYSFS_Stat *stat);

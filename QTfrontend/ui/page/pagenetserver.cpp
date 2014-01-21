@@ -124,7 +124,7 @@ void PageNetServer::setDefaultPort()
 
 // This function assumes that the user wants to share his server while connected to
 // the Internet and that he/she is using direct access (eg no NATs). To determine the
-// IP we briefly connect to Hedgewars website and fallback to user intervention 
+// IP we briefly connect to Hedgewars website and fallback to user intervention
 // after 4 seconds of timeout.
 void PageNetServer::copyUrl()
 {

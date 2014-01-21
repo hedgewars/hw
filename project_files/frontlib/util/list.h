@@ -38,20 +38,20 @@
  * The function returns 0 on success and leaves the array unchanged on error.
  */
 #define GENERATE_STATIC_LIST_INSERT(fname, type) \
-	static int fname(type **listptr, int *listSizePtr, type element, int pos) { \
-		int result = -1; \
-		if(!log_badargs_if4(listptr==NULL, listSizePtr==NULL, pos < 0, pos > *listSizePtr)) { \
-			type *newList = flib_realloc(*listptr, ((*listSizePtr)+1)*sizeof(type)); \
-			if(newList) { \
-				memmove(newList + (pos+1), newList + pos, ((*listSizePtr)-pos)*sizeof(type)); \
-				newList[pos] = element; \
-				(*listSizePtr)++; \
-				*listptr = newList; \
-				result = 0; \
-			} \
-		} \
-		return result; \
-	}
+    static int fname(type **listptr, int *listSizePtr, type element, int pos) { \
+        int result = -1; \
+        if(!log_badargs_if4(listptr==NULL, listSizePtr==NULL, pos < 0, pos > *listSizePtr)) { \
+            type *newList = flib_realloc(*listptr, ((*listSizePtr)+1)*sizeof(type)); \
+            if(newList) { \
+                memmove(newList + (pos+1), newList + pos, ((*listSizePtr)-pos)*sizeof(type)); \
+                newList[pos] = element; \
+                (*listSizePtr)++; \
+                *listptr = newList; \
+                result = 0; \
+            } \
+        } \
+        return result; \
+    }
 
 /**
  * Generate a static function that deletes a value from a heap array of the given type,
@@ -61,20 +61,20 @@
  * The function returns 0 on success and leaves the array unchanged on error.
  */
 #define GENERATE_STATIC_LIST_DELETE(fname, type) \
-	static int fname(type **listPtr, int *listSizePtr, int pos) { \
-		int result = -1; \
-		if(!log_badargs_if4(listPtr==NULL, listSizePtr==NULL, pos < 0, pos >= *listSizePtr)) { \
-			memmove((*listPtr) + pos, (*listPtr) + (pos+1), ((*listSizePtr)-(pos+1))*sizeof(type)); \
-			(*listSizePtr)--; \
-			\
-			size_t newCharSize = (*listSizePtr)*sizeof(type); \
-			type *newList = flib_realloc((*listPtr), newCharSize); \
-			if(newList || newCharSize==0) { \
-				(*listPtr) = newList; \
-			} /* If the realloc fails, just keep using the old buffer...*/ \
-			result = 0; \
-		} \
-		return result; \
-	}
+    static int fname(type **listPtr, int *listSizePtr, int pos) { \
+        int result = -1; \
+        if(!log_badargs_if4(listPtr==NULL, listSizePtr==NULL, pos < 0, pos >= *listSizePtr)) { \
+            memmove((*listPtr) + pos, (*listPtr) + (pos+1), ((*listSizePtr)-(pos+1))*sizeof(type)); \
+            (*listSizePtr)--; \
+            \
+            size_t newCharSize = (*listSizePtr)*sizeof(type); \
+            type *newList = flib_realloc((*listPtr), newCharSize); \
+            if(newList || newCharSize==0) { \
+                (*listPtr) = newList; \
+            } /* If the realloc fails, just keep using the old buffer...*/ \
+            result = 0; \
+        } \
+        return result; \
+    }
 
 #endif /* LIST_H_ */

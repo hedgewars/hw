@@ -215,7 +215,7 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
 
     gs <- if (not $ isReady cl) && (isSpecial rm) && (unreadyClients == [cl]) then startGame else return []
 
-    return $ 
+    return $
         ModifyRoom (\r -> r{readyPlayers = readyPlayers r + (if isReady cl then -1 else 1)})
         : ModifyClient (\c -> c{isReady = not $ isReady cl})
         : (AnswerClients chans $ if clientProto cl < 38 then
@@ -236,7 +236,7 @@ handleCmd_inRoom ["EM", msg] = do
 
     if teamsInGame cl > 0 && (isJust $ gameInfo rm) && (not $ B.null legalMsgs) then
         return $ AnswerClients chans ["EM", legalMsgs]
-            : [ModifyRoom (\r -> r{gameInfo = liftM 
+            : [ModifyRoom (\r -> r{gameInfo = liftM
                 (\g -> g{
                     roundMsgs = if B.null nonEmptyMsgs then roundMsgs g else nonEmptyMsgs : roundMsgs g
                     , lastFilteredTimedMsg = fromMaybe (lastFilteredTimedMsg g) lastFTMsg})
@@ -306,7 +306,7 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
         else
-        if illegalName newName then 
+        if illegalName newName then
             [Warning $ loc "Illegal room name"]
         else
         if isSpecial rm then

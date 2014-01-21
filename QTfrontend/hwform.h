@@ -196,7 +196,7 @@ class HWForm : public QMainWindow
         AmmoSchemeModel * ammoSchemeModel;
         QStack<int> PagesStack;
         QString previousCampaignName;
-        QString previousTeamName;     
+        QString previousTeamName;
         QList<MissionInfo> campaignMissionInfo;
         QTime eggTimer;
         BGWidget * wBackground;

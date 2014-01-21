@@ -27,69 +27,69 @@
 #include <ctype.h>
 
 static void defaultCallback_onMessage(void *context, int msgtype, const char *msg) {
-	flib_log_i("Net: [%i] %s", msgtype, msg);
+    flib_log_i("Net: [%i] %s", msgtype, msg);
 }
 
 static void defaultCallback_onChat(void *context, const char *nick, const char *msg) {
-	flib_log_i("%s: %s", nick, msg);
+    flib_log_i("%s: %s", nick, msg);
 }
 
 // Change the name by suffixing it with a number. If it already ends in a number, increase that number by 1.
 static void defaultCallback_onNickTaken(void *context, const char *requestedNick) {
-	flib_netconn *conn = context;
-	size_t namelen = strlen(requestedNick);
-	int digits = 0;
-	while(digits<namelen && isdigit(requestedNick[namelen-1-digits])) {
-		digits++;
-	}
-	long suffix = 0;
-	if(digits>0) {
-		suffix = atol(requestedNick+namelen-digits)+1;
-	}
-	char *newPlayerName = flib_asprintf("%.*s%li", namelen-digits, requestedNick, suffix);
-	if(newPlayerName) {
-		flib_netconn_send_nick(conn, newPlayerName);
-	} else {
-		flib_netconn_send_quit(conn, "Nick already taken.");
-	}
-	free(newPlayerName);
+    flib_netconn *conn = context;
+    size_t namelen = strlen(requestedNick);
+    int digits = 0;
+    while(digits<namelen && isdigit(requestedNick[namelen-1-digits])) {
+        digits++;
+    }
+    long suffix = 0;
+    if(digits>0) {
+        suffix = atol(requestedNick+namelen-digits)+1;
+    }
+    char *newPlayerName = flib_asprintf("%.*s%li", namelen-digits, requestedNick, suffix);
+    if(newPlayerName) {
+        flib_netconn_send_nick(conn, newPlayerName);
+    } else {
+        flib_netconn_send_quit(conn, "Nick already taken.");
+    }
+    free(newPlayerName);
 }
 
 // Default behavior: Quit
 static void defaultCallback_onPasswordRequest(void *context, const char *requestedNick) {
-	flib_netconn_send_quit((flib_netconn*)context, "Authentication failed");
+    flib_netconn_send_quit((flib_netconn*)context, "Authentication failed");
 }
 
 void netconn_clearCallbacks(flib_netconn *conn) {
-	flib_netconn_onMessage(conn, NULL, NULL);
-	flib_netconn_onConnected(conn, NULL, NULL);
-	flib_netconn_onDisconnected(conn, NULL, NULL);
-	flib_netconn_onRoomlist(conn, NULL, NULL);
-	flib_netconn_onRoomAdd(conn, NULL, NULL);
-	flib_netconn_onRoomDelete(conn, NULL, NULL);
-	flib_netconn_onRoomUpdate(conn, NULL, NULL);
-	flib_netconn_onClientFlags(conn, NULL, NULL);
-	flib_netconn_onChat(conn, NULL, NULL);
-	flib_netconn_onLobbyJoin(conn, NULL, NULL);
-	flib_netconn_onLobbyLeave(conn, NULL, NULL);
-	flib_netconn_onRoomJoin(conn, NULL, NULL);
-	flib_netconn_onRoomLeave(conn, NULL, NULL);
-	flib_netconn_onNickTaken(conn, NULL, NULL);
-	flib_netconn_onPasswordRequest(conn, NULL, NULL);
-	flib_netconn_onEnterRoom(conn, NULL, NULL);
-	flib_netconn_onLeaveRoom(conn, NULL, NULL);
-	flib_netconn_onTeamAdd(conn, NULL, NULL);
-	flib_netconn_onTeamDelete(conn, NULL, NULL);
-	flib_netconn_onRunGame(conn, NULL, NULL);
-	flib_netconn_onTeamAccepted(conn, NULL, NULL);
-	flib_netconn_onHogCountChanged(conn, NULL, NULL);
-	flib_netconn_onTeamColorChanged(conn, NULL, NULL);
-	flib_netconn_onEngineMessage(conn, NULL, NULL);
-	flib_netconn_onSchemeChanged(conn, NULL, NULL);
-	flib_netconn_onMapChanged(conn, NULL, NULL);
-	flib_netconn_onScriptChanged(conn, NULL, NULL);
-	flib_netconn_onWeaponsetChanged(conn, NULL, NULL);
-	flib_netconn_onServerVar(conn, NULL, NULL);
+    flib_netconn_onMessage(conn, NULL, NULL);
+    flib_netconn_onConnected(conn, NULL, NULL);
+    flib_netconn_onDisconnected(conn, NULL, NULL);
+    flib_netconn_onRoomlist(conn, NULL, NULL);
+    flib_netconn_onRoomAdd(conn, NULL, NULL);
+    flib_netconn_onRoomDelete(conn, NULL, NULL);
+    flib_netconn_onRoomUpdate(conn, NULL, NULL);
+    flib_netconn_onClientFlags(conn, NULL, NULL);
+    flib_netconn_onChat(conn, NULL, NULL);
+    flib_netconn_onLobbyJoin(conn, NULL, NULL);
+    flib_netconn_onLobbyLeave(conn, NULL, NULL);
+    flib_netconn_onRoomJoin(conn, NULL, NULL);
+    flib_netconn_onRoomLeave(conn, NULL, NULL);
+    flib_netconn_onNickTaken(conn, NULL, NULL);
+    flib_netconn_onPasswordRequest(conn, NULL, NULL);
+    flib_netconn_onEnterRoom(conn, NULL, NULL);
+    flib_netconn_onLeaveRoom(conn, NULL, NULL);
+    flib_netconn_onTeamAdd(conn, NULL, NULL);
+    flib_netconn_onTeamDelete(conn, NULL, NULL);
+    flib_netconn_onRunGame(conn, NULL, NULL);
+    flib_netconn_onTeamAccepted(conn, NULL, NULL);
+    flib_netconn_onHogCountChanged(conn, NULL, NULL);
+    flib_netconn_onTeamColorChanged(conn, NULL, NULL);
+    flib_netconn_onEngineMessage(conn, NULL, NULL);
+    flib_netconn_onSchemeChanged(conn, NULL, NULL);
+    flib_netconn_onMapChanged(conn, NULL, NULL);
+    flib_netconn_onScriptChanged(conn, NULL, NULL);
+    flib_netconn_onWeaponsetChanged(conn, NULL, NULL);
+    flib_netconn_onServerVar(conn, NULL, NULL);
 }
 
 /**
@@ -100,20 +100,20 @@ void netconn_clearCallbacks(flib_netconn *conn) {
  * as the context).
  */
 #define GENERATE_CB_SETTER(cbName, cbParameterTypes, defaultCb) \
-	void flib_netconn_##cbName(flib_netconn *conn, void (*callback)cbParameterTypes, void *context) { \
-		if(!log_badargs_if(conn==NULL)) { \
-			conn->cbName##Cb = callback ? callback : &defaultCb; \
-			conn->cbName##Ctx = callback ? context : conn; \
-		} \
-	}
+    void flib_netconn_##cbName(flib_netconn *conn, void (*callback)cbParameterTypes, void *context) { \
+        if(!log_badargs_if(conn==NULL)) { \
+            conn->cbName##Cb = callback ? callback : &defaultCb; \
+            conn->cbName##Ctx = callback ? context : conn; \
+        } \
+    }
 
 /**
  * Generate a callback setter function like GENERATE_CB_SETTER, and automatically generate a
  * no-op callback function as well that is used as default.
  */
 #define GENERATE_CB_SETTER_AND_DEFAULT(cbName, cbParameterTypes) \
-	static void _noop_callback_##cbName cbParameterTypes {} \
-	GENERATE_CB_SETTER(cbName, cbParameterTypes, _noop_callback_##cbName)
+    static void _noop_callback_##cbName cbParameterTypes {} \
+    GENERATE_CB_SETTER(cbName, cbParameterTypes, _noop_callback_##cbName)
 
 GENERATE_CB_SETTER(onMessage, (void *context, int msgtype, const char *msg), defaultCallback_onMessage);
 GENERATE_CB_SETTER_AND_DEFAULT(onConnected, (void *context));
