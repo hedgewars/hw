@@ -397,7 +397,7 @@ QLayout * PageOptions::bodyLayoutDefinition()
             tagsLayout->addWidget(CBHogTag, 0);
             tagsLayout->addWidget(CBHealthTag, 0);
             tagsLayout->addWidget(CBTagOpacity, 0);
-            tagsLayout->addStretch(1); 
+            tagsLayout->addStretch(1);
         }
 
         { // group: frontend

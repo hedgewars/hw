@@ -30,16 +30,16 @@
  * Convention: Size is zero iff data is a NULL pointer.
  */
 typedef struct {
-	void *data;
-	size_t size;
+    void *data;
+    size_t size;
 } flib_buffer;
 
 /**
  * Just like flib_buffer, but the contents are not supposed to be modified.
  */
 typedef struct {
-	const void *data;
-	size_t size;
+    const void *data;
+    size_t size;
 } flib_constbuffer;
 
 /**

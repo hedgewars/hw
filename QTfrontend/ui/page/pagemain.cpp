@@ -209,7 +209,7 @@ QString PageMain::randomTip()
 
         file.close();
     }
-    
+
     if(Tips.length())
         return Tips[QTime(0, 0, 0).secsTo(QTime::currentTime()) % Tips.length()];
     else

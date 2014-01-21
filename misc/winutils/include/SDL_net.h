@@ -38,18 +38,18 @@ extern "C" {
 
 /* Printable format: "%d.%d.%d", MAJOR, MINOR, PATCHLEVEL
 */
-#define SDL_NET_MAJOR_VERSION	1
-#define SDL_NET_MINOR_VERSION	2
-#define SDL_NET_PATCHLEVEL	8
+#define SDL_NET_MAJOR_VERSION   1
+#define SDL_NET_MINOR_VERSION   2
+#define SDL_NET_PATCHLEVEL  8
 
 /* This macro can be used to fill a version structure with the compile-time
  * version of the SDL_net library.
  */
-#define SDL_NET_VERSION(X)						\
-{									\
-	(X)->major = SDL_NET_MAJOR_VERSION;				\
-	(X)->minor = SDL_NET_MINOR_VERSION;				\
-	(X)->patch = SDL_NET_PATCHLEVEL;				\
+#define SDL_NET_VERSION(X)                      \
+{                                   \
+    (X)->major = SDL_NET_MAJOR_VERSION;             \
+    (X)->minor = SDL_NET_MINOR_VERSION;             \
+    (X)->patch = SDL_NET_PATCHLEVEL;                \
 }
 
 /* This function gets the version of the dynamically linked SDL_net library.
@@ -70,8 +70,8 @@ extern DECLSPEC void SDLCALL SDLNet_Quit(void);
 /***********************************************************************/
 
 typedef struct {
-	Uint32 host;			/* 32-bit IPv4 host address */
-	Uint16 port;			/* 16-bit protocol port */
+    Uint32 host;            /* 32-bit IPv4 host address */
+    Uint16 port;            /* 16-bit protocol port */
 } IPaddress;
 
 /* Resolve a host name and port to an IP address in network form.
@@ -81,13 +81,13 @@ typedef struct {
    If 'host' is NULL, the resolved host will be set to INADDR_ANY.
  */
 #ifndef INADDR_ANY
-#define INADDR_ANY		0x00000000
+#define INADDR_ANY      0x00000000
 #endif
 #ifndef INADDR_NONE
-#define INADDR_NONE		0xFFFFFFFF
+#define INADDR_NONE     0xFFFFFFFF
 #endif
 #ifndef INADDR_BROADCAST
-#define INADDR_BROADCAST	0xFFFFFFFF
+#define INADDR_BROADCAST    0xFFFFFFFF
 #endif
 extern DECLSPEC int SDLCALL SDLNet_ResolveHost(IPaddress *address, const char *host, Uint16 port);
 
@@ -113,7 +113,7 @@ typedef struct _TCPsocket *TCPsocket;
    If ip.host is INADDR_NONE or INADDR_ANY, this creates a local server
    socket on the given port, otherwise a TCP connection to the remote
    host and port is attempted. The address passed in should already be
-   swapped to network byte order (addresses returned from 
+   swapped to network byte order (addresses returned from
    SDLNet_ResolveHost() are already in the correct form).
    The newly created socket is returned, or NULL if there was an error.
 */
@@ -135,7 +135,7 @@ extern DECLSPEC IPaddress * SDLCALL SDLNet_TCP_GetPeerAddress(TCPsocket sock);
    closed, or an unknown socket error occurred.
 */
 extern DECLSPEC int SDLCALL SDLNet_TCP_Send(TCPsocket sock, const void *data,
-		int len);
+        int len);
 
 /* Receive up to 'maxlen' bytes of data over the non-server socket 'sock',
    and store them in the buffer pointed to by 'data'.
@@ -154,18 +154,18 @@ extern DECLSPEC void SDLCALL SDLNet_TCP_Close(TCPsocket sock);
 /***********************************************************************/
 
 /* The maximum channels on a a UDP socket */
-#define SDLNET_MAX_UDPCHANNELS	32
+#define SDLNET_MAX_UDPCHANNELS  32
 /* The maximum addresses bound to a single UDP socket channel */
-#define SDLNET_MAX_UDPADDRESSES	4
+#define SDLNET_MAX_UDPADDRESSES 4
 
 typedef struct _UDPsocket *UDPsocket;
 typedef struct {
-	int channel;		/* The src/dst channel of the packet */
-	Uint8 *data;		/* The packet data */
-	int len;		/* The length of the packet data */
-	int maxlen;		/* The size of the data buffer */
-	int status;		/* packet status after sending */
-	IPaddress address;		/* The source/dest address of an incoming/outgoing packet */
+    int channel;        /* The src/dst channel of the packet */
+    Uint8 *data;        /* The packet data */
+    int len;        /* The length of the packet data */
+    int maxlen;     /* The size of the data buffer */
+    int status;     /* packet status after sending */
+    IPaddress address;      /* The source/dest address of an incoming/outgoing packet */
 } UDPpacket;
 
 /* Allocate/resize/free a single UDP packet 'size' bytes long.
@@ -210,7 +210,7 @@ extern DECLSPEC int SDLCALL SDLNet_UDP_Bind(UDPsocket sock, int channel, const I
 /* Unbind all addresses from the given channel */
 extern DECLSPEC void SDLCALL SDLNet_UDP_Unbind(UDPsocket sock, int channel);
 
-/* Get the primary IP address of the remote system associated with the 
+/* Get the primary IP address of the remote system associated with the
    socket and channel.  If the channel is -1, then the primary IP port
    of the UDP socket is returned -- this is only meaningful for sockets
    opened with a specific port.
@@ -221,7 +221,7 @@ extern DECLSPEC IPaddress * SDLCALL SDLNet_UDP_GetPeerAddress(UDPsocket sock, in
 /* Send a vector of packets to the the channels specified within the packet.
    If the channel specified in the packet is -1, the packet will be sent to
    the address in the 'src' member of the packet.
-   Each packet will be updated with the status of the packet after it has 
+   Each packet will be updated with the status of the packet after it has
    been sent, -1 if the packet send failed.
    This function returns the number of packets sent.
 */
@@ -277,7 +277,7 @@ typedef struct _SDLNet_SocketSet *SDLNet_SocketSet;
 
 /* Any network socket can be safely cast to this socket type */
 typedef struct _SDLNet_GenericSocket {
-	int ready;
+    int ready;
 } *SDLNet_GenericSocket;
 
 /* Allocate a socket set for use with SDLNet_CheckSockets()
@@ -288,23 +288,23 @@ extern DECLSPEC SDLNet_SocketSet SDLCALL SDLNet_AllocSocketSet(int maxsockets);
 
 /* Add a socket to a set of sockets to be checked for available data */
 #define SDLNet_TCP_AddSocket(set, sock) \
-			SDLNet_AddSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
+            SDLNet_AddSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
 #define SDLNet_UDP_AddSocket(set, sock) \
-			SDLNet_AddSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
+            SDLNet_AddSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
 extern DECLSPEC int SDLCALL SDLNet_AddSocket(SDLNet_SocketSet set, SDLNet_GenericSocket sock);
 
 /* Remove a socket from a set of sockets to be checked for available data */
 #define SDLNet_TCP_DelSocket(set, sock) \
-			SDLNet_DelSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
+            SDLNet_DelSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
 #define SDLNet_UDP_DelSocket(set, sock) \
-			SDLNet_DelSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
+            SDLNet_DelSocket(set, SDL_reinterpret_cast(SDLNet_GenericSocket, sock))
 extern DECLSPEC int SDLCALL SDLNet_DelSocket(SDLNet_SocketSet set, SDLNet_GenericSocket sock);
 
 /* This function checks to see if data is available for reading on the
    given set of sockets.  If 'timeout' is 0, it performs a quick poll,
    otherwise the function returns when either data is available for
    reading, or the timeout in milliseconds has elapsed, which ever occurs
-   first.  This function returns the number of sockets ready for reading, 
+   first.  This function returns the number of sockets ready for reading,
    or -1 if there was an error with the select() system call.
 */
 extern DECLSPEC int SDLCALL SDLNet_CheckSockets(SDLNet_SocketSet set, Uint32 timeout);
@@ -314,7 +314,7 @@ extern DECLSPEC int SDLCALL SDLNet_CheckSockets(SDLNet_SocketSet set, Uint32 tim
    for reading.
 */
 #define SDLNet_SocketReady(sock) \
-		((sock != NULL) && SDL_reinterpret_cast(SDLNet_GenericSocket, sock)->ready)
+        ((sock != NULL) && SDL_reinterpret_cast(SDLNet_GenericSocket, sock)->ready)
 
 /* Free a set of sockets allocated by SDL_NetAllocSocketSet() */
 extern DECLSPEC void SDLCALL SDLNet_FreeSocketSet(SDLNet_SocketSet set);
@@ -337,8 +337,8 @@ extern DECLSPEC Uint32 SDLCALL SDLNet_Read32(void *area);
 /***********************************************************************/
 
 /* We'll use SDL's functions for error reporting */
-#define SDLNet_SetError	SDL_SetError
-#define SDLNet_GetError	SDL_GetError
+#define SDLNet_SetError SDL_SetError
+#define SDLNet_GetError SDL_GetError
 
 /* I'm eventually going to try to disentangle SDL_net from SDL, thus making
    SDL_net an independent X-platform networking toolkit.  Not today though....
@@ -352,91 +352,91 @@ extern no_parse_DECLSPEC char * SDLCALL SDLNet_GetError(void);
 
 /* Warning, some systems have data access alignment restrictions */
 #if defined(sparc) || defined(mips)
-#define SDL_DATA_ALIGNED	1
+#define SDL_DATA_ALIGNED    1
 #endif
 #ifndef SDL_DATA_ALIGNED
-#define SDL_DATA_ALIGNED	0
+#define SDL_DATA_ALIGNED    0
 #endif
 
 /* Write a 16 bit value to network packet buffer */
 #if !SDL_DATA_ALIGNED
-#define SDLNet_Write16(value, areap)	\
-	(*SDL_reinterpret_cast(Uint16 *, areap) = SDL_SwapBE16(value))
+#define SDLNet_Write16(value, areap)    \
+    (*SDL_reinterpret_cast(Uint16 *, areap) = SDL_SwapBE16(value))
 #else
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-#define SDLNet_Write16(value, areap)	\
-do 					\
-{					\
-	Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap);	\
-	area[0] = (value >>  8) & 0xFF;	\
-	area[1] =  value        & 0xFF;	\
+#define SDLNet_Write16(value, areap)    \
+do                  \
+{                   \
+    Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap); \
+    area[0] = (value >>  8) & 0xFF; \
+    area[1] =  value        & 0xFF; \
 } while ( 0 )
 #else
-#define SDLNet_Write16(value, areap)	\
-do 					\
-{					\
-	Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap);	\
-	area[1] = (value >>  8) & 0xFF;	\
-	area[0] =  value        & 0xFF;	\
+#define SDLNet_Write16(value, areap)    \
+do                  \
+{                   \
+    Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap); \
+    area[1] = (value >>  8) & 0xFF; \
+    area[0] =  value        & 0xFF; \
 } while ( 0 )
 #endif
 #endif /* !SDL_DATA_ALIGNED */
 
 /* Write a 32 bit value to network packet buffer */
 #if !SDL_DATA_ALIGNED
-#define SDLNet_Write32(value, areap) 	\
-	*SDL_reinterpret_cast(Uint32 *, areap) = SDL_SwapBE32(value);
+#define SDLNet_Write32(value, areap)    \
+    *SDL_reinterpret_cast(Uint32 *, areap) = SDL_SwapBE32(value);
 #else
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-#define SDLNet_Write32(value, areap) 	\
-do					\
-{					\
-	Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap);	\
-	area[0] = (value >> 24) & 0xFF;	\
-	area[1] = (value >> 16) & 0xFF;	\
-	area[2] = (value >>  8) & 0xFF;	\
-	area[3] =  value       & 0xFF;	\
+#define SDLNet_Write32(value, areap)    \
+do                  \
+{                   \
+    Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap); \
+    area[0] = (value >> 24) & 0xFF; \
+    area[1] = (value >> 16) & 0xFF; \
+    area[2] = (value >>  8) & 0xFF; \
+    area[3] =  value       & 0xFF;  \
 } while ( 0 )
 #else
-#define SDLNet_Write32(value, areap) 	\
-do					\
-{					\
-	Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap);	\
-	area[3] = (value >> 24) & 0xFF;	\
-	area[2] = (value >> 16) & 0xFF;	\
-	area[1] = (value >>  8) & 0xFF;	\
-	area[0] =  value       & 0xFF;	\
+#define SDLNet_Write32(value, areap)    \
+do                  \
+{                   \
+    Uint8 *area = SDL_reinterpret_cast(Uint8 *, areap); \
+    area[3] = (value >> 24) & 0xFF; \
+    area[2] = (value >> 16) & 0xFF; \
+    area[1] = (value >>  8) & 0xFF; \
+    area[0] =  value       & 0xFF;  \
 } while ( 0 )
 #endif
 #endif /* !SDL_DATA_ALIGNED */
 
 /* Read a 16 bit value from network packet buffer */
 #if !SDL_DATA_ALIGNED
-#define SDLNet_Read16(areap) 		\
-	(SDL_SwapBE16(*SDL_reinterpret_cast(Uint16 *, areap)))
+#define SDLNet_Read16(areap)        \
+    (SDL_SwapBE16(*SDL_reinterpret_cast(Uint16 *, areap)))
 #else
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-#define SDLNet_Read16(areap) 		\
-	(((SDL_reinterpret_cast(Uint8 *, areap))[0] <<  8) | (SDL_reinterpret_cast(Uint8 *, areap))[1] <<  0)
+#define SDLNet_Read16(areap)        \
+    (((SDL_reinterpret_cast(Uint8 *, areap))[0] <<  8) | (SDL_reinterpret_cast(Uint8 *, areap))[1] <<  0)
 #else
-#define SDLNet_Read16(areap) 		\
-	(((SDL_reinterpret_cast(Uint8 *, areap))[1] <<  8) | (SDL_reinterpret_cast(Uint8 *, areap))[0] <<  0)
+#define SDLNet_Read16(areap)        \
+    (((SDL_reinterpret_cast(Uint8 *, areap))[1] <<  8) | (SDL_reinterpret_cast(Uint8 *, areap))[0] <<  0)
 #endif
 #endif /* !SDL_DATA_ALIGNED */
 
 /* Read a 32 bit value from network packet buffer */
 #if !SDL_DATA_ALIGNED
-#define SDLNet_Read32(areap) 		\
-	(SDL_SwapBE32(*SDL_reinterpret_cast(Uint32 *, areap)))
+#define SDLNet_Read32(areap)        \
+    (SDL_SwapBE32(*SDL_reinterpret_cast(Uint32 *, areap)))
 #else
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-#define SDLNet_Read32(areap) 		\
-	(((SDL_reinterpret_cast(Uint8 *, areap))[0] << 24) | ((SDL_reinterpret_cast(Uint8 *, areap))[1] << 16) | \
-	 ((SDL_reinterpret_cast(Uint8 *, areap))[2] <<  8) |  (SDL_reinterpret_cast(Uint8 *, areap))[3] <<  0)
+#define SDLNet_Read32(areap)        \
+    (((SDL_reinterpret_cast(Uint8 *, areap))[0] << 24) | ((SDL_reinterpret_cast(Uint8 *, areap))[1] << 16) | \
+     ((SDL_reinterpret_cast(Uint8 *, areap))[2] <<  8) |  (SDL_reinterpret_cast(Uint8 *, areap))[3] <<  0)
 #else
-#define SDLNet_Read32(areap) 		\
-	(((SDL_reinterpret_cast(Uint8 *, areap))[3] << 24) | ((SDL_reinterpret_cast(Uint8 *, areap))[2] << 16) | \
-	 ((SDL_reinterpret_cast(Uint8 *, areap))[1] <<  8) |  (SDL_reinterpret_cast(Uint8 *, areap))[0] <<  0)
+#define SDLNet_Read32(areap)        \
+    (((SDL_reinterpret_cast(Uint8 *, areap))[3] << 24) | ((SDL_reinterpret_cast(Uint8 *, areap))[2] << 16) | \
+     ((SDL_reinterpret_cast(Uint8 *, areap))[1] <<  8) |  (SDL_reinterpret_cast(Uint8 *, areap))[0] <<  0)
 #endif
 #endif /* !SDL_DATA_ALIGNED */
 

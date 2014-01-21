@@ -1,7 +1,7 @@
 Basic_Training_-_Bazooka.name=Βασική Εκπαίδευση Μπαζούκα
 Basic_Training_-_Bazooka.desc="Το κλειδί είναι να χρησιμοποιήσεις τον άνεμο προς όφελός σου!"
 
-Basic_Training_-_Grenade.name=Βασική Εκπαίδευση Χειροβομβίδας	
+Basic_Training_-_Grenade.name=Βασική Εκπαίδευση Χειροβομβίδας
 Basic_Training_-_Grenade.desc="Θυμίσου, τραβάς την περόνη ΚΑΙ πετάς!"
 
 Basic_Training_-_Cluster_Bomb.name=Βασική Εκπαίδευση Βόμβας Θραυσμάτων

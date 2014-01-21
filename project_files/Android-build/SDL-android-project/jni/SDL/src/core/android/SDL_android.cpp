@@ -102,7 +102,7 @@ extern "C" void SDL_Android_Init(JNIEnv* env, jclass cls)
                                 "createGLContext","(II)Z");
     midFlipBuffers = mEnv->GetStaticMethodID(mActivityClass,
                                 "flipBuffers","()V");
-    midAudioInit = mEnv->GetStaticMethodID(mActivityClass, 
+    midAudioInit = mEnv->GetStaticMethodID(mActivityClass,
                                 "audioInit", "(IZZI)Ljava/lang/Object;");
     midAudioWriteShortBuffer = mEnv->GetStaticMethodID(mActivityClass,
                                 "audioWriteShortBuffer", "([S)V");
@@ -165,7 +165,7 @@ extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_onNativeAccel(
 // Quit
 extern "C" void Java_org_hedgewars_hedgeroid_SDLActivity_nativeQuit(
                                     JNIEnv* env, jclass cls)
-{    
+{
     // Inject a SDL_QUIT event
     SDL_SendQuit();
 }
@@ -214,7 +214,7 @@ extern "C" SDL_bool Android_JNI_CreateContext(int majorVersion, int minorVersion
 
 extern "C" void Android_JNI_SwapWindow()
 {
-    mEnv->CallStaticVoidMethod(mActivityClass, midFlipBuffers); 
+    mEnv->CallStaticVoidMethod(mActivityClass, midFlipBuffers);
 }
 
 extern "C" void Android_JNI_SetActivityTitle(const char *title)
@@ -257,7 +257,7 @@ extern "C" int Android_JNI_OpenAudioDevice(int sampleRate, int is16Bit, int chan
 
     int status;
     JNIEnv *env;
-    static bool isAttached = false;    
+    static bool isAttached = false;
     status = mJavaVM->GetEnv((void **) &env, JNI_VERSION_1_4);
     if(status < 0) {
         LOGE("callback_handler: failed to get JNI environment, assuming native thread");
@@ -269,7 +269,7 @@ extern "C" int Android_JNI_OpenAudioDevice(int sampleRate, int is16Bit, int chan
         isAttached = true;
     }
 
-    
+
     __android_log_print(ANDROID_LOG_VERBOSE, "SDL", "SDL audio: opening device");
     audioBuffer16Bit = is16Bit;
     audioBufferStereo = channelCount > 1;
@@ -293,7 +293,7 @@ extern "C" int Android_JNI_OpenAudioDevice(int sampleRate, int is16Bit, int chan
     if (audioBufferStereo) {
         audioBufferFrames /= 2;
     }
- 
+
     if (isAttached) {
         mJavaVM->DetachCurrentThread();
     }
@@ -323,7 +323,7 @@ extern "C" void Android_JNI_CloseAudioDevice()
 {
     int status;
     JNIEnv *env;
-    static bool isAttached = false;    
+    static bool isAttached = false;
     status = mJavaVM->GetEnv((void **) &env, JNI_VERSION_1_4);
     if(status < 0) {
         LOGE("callback_handler: failed to get JNI environment, assuming native thread");
@@ -335,7 +335,7 @@ extern "C" void Android_JNI_CloseAudioDevice()
         isAttached = true;
     }
 
-    env->CallStaticVoidMethod(mActivityClass, midAudioQuit); 
+    env->CallStaticVoidMethod(mActivityClass, midAudioQuit);
 
     if (audioBuffer) {
         env->DeleteGlobalRef(audioBuffer);

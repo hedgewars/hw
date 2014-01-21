@@ -107,11 +107,11 @@ begin
 fromP4:= Surf^.pixels;
 for y:= 0 to Pred(Surf^.h) do
     begin
-    for x:= 0 to Pred(Surf^.w) do 
+    for x:= 0 to Pred(Surf^.w) do
         begin
         tw:= fromP4^[x];
-        tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +  
-              (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN + 
+        tw:= round((tw shr RShift and $FF) * RGB_LUMINANCE_RED +
+              (tw shr GShift and $FF) * RGB_LUMINANCE_GREEN +
               (tw shr BShift and $FF) * RGB_LUMINANCE_BLUE);
         if tw > 255 then tw:= 255;
         tw:= (tw and $FF shl RShift) or (tw and $FF shl BShift) or (tw and $FF shl GShift) or (fromP4^[x] and AMask);
@@ -242,7 +242,7 @@ procedure freeModule;
 begin
 if TextureList <> nil then
     WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
-    while TextureList <> nil do 
+    while TextureList <> nil do
         begin
         AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
         FreeTexture(TextureList);

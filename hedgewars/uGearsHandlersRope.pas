@@ -29,13 +29,13 @@ uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
     uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
 
 procedure doStepRopeAfterAttack(Gear: PGear);
-var 
+var
     HHGear: PGear;
     tX:     hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
     tX:= HHGear^.X;
-    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         HHGear^.X:= tX;
@@ -70,7 +70,7 @@ begin
     HHGear^.X := HHGear^.X + HHGear^.dX;
     HHGear^.Y := HHGear^.Y + HHGear^.dY;
     HHGear^.dY := HHGear^.dY + cGravity;
-    
+
     if (GameFlags and gfMoreWind) <> 0 then
         HHGear^.dX := HHGear^.dX + cWindSpeed / HHGear^.Density;
 
@@ -113,7 +113,7 @@ begin
 end;
 
 procedure doStepRopeWork(Gear: PGear);
-var 
+var
     HHGear: PGear;
     len, tx, ty, nx, ny, ropeDx, ropeDy, mdX, mdY: hwFloat;
     lx, ly, cd: LongInt;
@@ -126,7 +126,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
 
     tX:= HHGear^.X;
-    if WorldWrap(HHGear) and (WorldEdge = weWrap) and 
+    if WorldWrap(HHGear) and (WorldEdge = weWrap) and
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
         begin
         PlaySound(sndRopeRelease);
@@ -405,7 +405,7 @@ begin
 end;
 
 procedure doStepRopeAttach(Gear: PGear);
-var 
+var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin

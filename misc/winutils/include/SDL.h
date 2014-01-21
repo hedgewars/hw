@@ -58,17 +58,17 @@ extern "C" {
  *  specify the subsystems which you will be using in your application.
  */
 /*@{*/
-#define	SDL_INIT_TIMER		0x00000001
-#define SDL_INIT_AUDIO		0x00000010
-#define SDL_INIT_VIDEO		0x00000020
-#define SDL_INIT_CDROM		0x00000100
-#define SDL_INIT_JOYSTICK	0x00000200
-#define SDL_INIT_NOPARACHUTE	0x00100000	/**< Don't catch fatal signals */
-#define SDL_INIT_EVENTTHREAD	0x01000000	/**< Not supported on all OS's */
-#define SDL_INIT_EVERYTHING	0x0000FFFF
+#define SDL_INIT_TIMER      0x00000001
+#define SDL_INIT_AUDIO      0x00000010
+#define SDL_INIT_VIDEO      0x00000020
+#define SDL_INIT_CDROM      0x00000100
+#define SDL_INIT_JOYSTICK   0x00000200
+#define SDL_INIT_NOPARACHUTE    0x00100000  /**< Don't catch fatal signals */
+#define SDL_INIT_EVENTTHREAD    0x01000000  /**< Not supported on all OS's */
+#define SDL_INIT_EVERYTHING 0x0000FFFF
 /*@}*/
 
-/** This function loads the SDL dynamically linked library and initializes 
+/** This function loads the SDL dynamically linked library and initializes
  *  the subsystems specified by 'flags' (and those satisfying dependencies)
  *  Unless the SDL_INIT_NOPARACHUTE flag is set, it will install cleanup
  *  signal handlers for some commonly ignored fatal signals (like SIGSEGV)

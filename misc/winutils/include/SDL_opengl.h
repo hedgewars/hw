@@ -29,7 +29,7 @@
 #ifdef __WIN32__
 #define WIN32_LEAN_AND_MEAN
 #ifndef NOMINMAX
-#define NOMINMAX	/* Don't defined min() and max() */
+#define NOMINMAX    /* Don't defined min() and max() */
 #endif
 #include <windows.h>
 #endif
@@ -37,14 +37,14 @@
 #define __glext_h_  /* Don't let gl.h include glext.h */
 #endif
 #if defined(__MACOSX__)
-#include <OpenGL/gl.h>	/* Header File For The OpenGL Library */
-#include <OpenGL/glu.h>	/* Header File For The GLU Library */
+#include <OpenGL/gl.h>  /* Header File For The OpenGL Library */
+#include <OpenGL/glu.h> /* Header File For The GLU Library */
 #elif defined(__MACOS__)
-#include <gl.h>		/* Header File For The OpenGL Library */
-#include <glu.h>	/* Header File For The GLU Library */
+#include <gl.h>     /* Header File For The OpenGL Library */
+#include <glu.h>    /* Header File For The GLU Library */
 #else
-#include <GL/gl.h>	/* Header File For The OpenGL Library */
-#include <GL/glu.h>	/* Header File For The GLU Library */
+#include <GL/gl.h>  /* Header File For The OpenGL Library */
+#include <GL/glu.h> /* Header File For The GLU Library */
 #endif
 #ifndef NO_SDL_GLEXT
 #undef __glext_h_
@@ -72,21 +72,21 @@ extern "C" {
 ** this file except in compliance with the License. You may obtain a copy
 ** of the License at Silicon Graphics, Inc., attn: Legal Services, 1600
 ** Amphitheatre Parkway, Mountain View, CA 94043-1351, or at:
-** 
+**
 ** http://oss.sgi.com/projects/FreeB
-** 
+**
 ** Note that, as provided in the License, the Software is distributed on an
 ** "AS IS" basis, with ALL EXPRESS AND IMPLIED WARRANTIES AND CONDITIONS
 ** DISCLAIMED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES AND
 ** CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A
 ** PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
-** 
+**
 ** Original Code. The Original Code is: OpenGL Sample Implementation,
 ** Version 1.2.1, released January 26, 2000, developed by Silicon Graphics,
 ** Inc. The Original Code is Copyright (c) 1991-2004 Silicon Graphics, Inc.
 ** Copyright in any portions created by third parties is as indicated
 ** elsewhere herein. All Rights Reserved.
-** 
+**
 ** Additional Notice Provisions: This software was created using the
 ** OpenGL(R) version 1.2.1 Sample Implementation published by SGI, but has
 ** not been independently verified as being compliant with the OpenGL(R)
@@ -3103,7 +3103,7 @@ extern "C" {
 #include <stddef.h>
 #ifndef GL_VERSION_2_0
 /* GL type for program/shader text */
-typedef char GLchar;			/* native character */
+typedef char GLchar;            /* native character */
 #endif
 
 #ifndef GL_VERSION_1_5
@@ -3130,11 +3130,11 @@ typedef ptrdiff_t GLsizeiptrARB;
 
 #ifndef GL_ARB_shader_objects
 /* GL types for handling shader object handles and program/shader text */
-typedef char GLcharARB;		/* native character */
+typedef char GLcharARB;     /* native character */
 #if defined(__APPLE__)
-typedef void *GLhandleARB;	/* shader object handle */
+typedef void *GLhandleARB;  /* shader object handle */
 #else
-typedef unsigned int GLhandleARB;	/* shader object handle */
+typedef unsigned int GLhandleARB;   /* shader object handle */
 #endif
 #endif
 

@@ -32,8 +32,8 @@ struct _flib_netbase;
 typedef struct _flib_netbase flib_netbase;
 
 typedef struct {
-	int partCount;
-	char **parts;
+    int partCount;
+    char **parts;
 } flib_netmsg;
 
 /**

@@ -116,7 +116,7 @@ readInt_ :: (Num a) => B.ByteString -> a
 readInt_ str =
   case B.readInt str of
        Just (i, t) | B.null t -> fromIntegral i
-       _                      -> 0 
+       _                      -> 0
 
 cutHost :: B.ByteString -> B.ByteString
 cutHost = B.intercalate "." .  flip (++) ["*","*"] . List.take 2 . B.split '.'
@@ -128,7 +128,7 @@ upperCase :: B.ByteString -> B.ByteString
 upperCase = UTF8.fromString . map Char.toUpper . UTF8.toString
 
 roomInfo :: Word16 -> B.ByteString -> RoomInfo -> [B.ByteString]
-roomInfo p n r 
+roomInfo p n r
     | p < 46 = [
         showB $ isJust $ gameInfo r,
         name r,

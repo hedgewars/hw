@@ -18,7 +18,7 @@ import Utils
 
 
 dbQueryAccount =
-    "SELECT users.pass, \ 
+    "SELECT users.pass, \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3), \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 13) \
     \ FROM users WHERE users.name = ?"
@@ -71,7 +71,7 @@ dbInteractionLoop dbConn = forever $ do
         SendStats clients rooms ->
                 run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
 --StoreAchievements (B.pack fileName) (map toPair teams) info
-        StoreAchievements p fileName teams info -> 
+        StoreAchievements p fileName teams info ->
             mapM_ (run dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
 
 

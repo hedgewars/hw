@@ -171,7 +171,7 @@ static DWORD pollDiscDrives(void)
         stem(SEM_FAILCRITICALERRORS, &oldErrorMode);
     else
         oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-    
+
     /* Do detection. This may block if a disc is spinning up. */
     for (i = 'A'; i <= 'Z'; i++)
     {
@@ -443,7 +443,7 @@ char *__PHYSFS_platformCalcUserDir(void)
          *  psize. Also note that the second parameter can't be
          *  NULL or the function fails.
          */
-    	rc = pGetDir(accessToken, &dummy, &psize);
+        rc = pGetDir(accessToken, &dummy, &psize);
         assert(!rc);  /* !!! FIXME: handle this gracefully. */
         (void) rc;
 
@@ -481,7 +481,7 @@ void *__PHYSFS_platformGetThreadID(void)
 
 static int isSymlinkAttrs(const DWORD attr, const DWORD tag)
 {
-    return ( (attr & FILE_ATTRIBUTE_REPARSE_POINT) && 
+    return ( (attr & FILE_ATTRIBUTE_REPARSE_POINT) &&
              (tag == PHYSFS_IO_REPARSE_TAG_SYMLINK) );
 } /* isSymlinkAttrs */
 
@@ -720,7 +720,7 @@ int __PHYSFS_platformSeek(void *opaque, PHYSFS_uint64 pos)
     {
         BAIL_MACRO(errcodeFromWinApi(), 0);
     } /* if */
-    
+
     return 1;  /* No error occured */
 } /* __PHYSFS_platformSeek */
 

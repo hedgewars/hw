@@ -37,58 +37,58 @@ import android.widget.Toast;
  * Indeterminate progress dialog that is shown in the MainActivity while trying
  * to connect to the server. If the connection fails (disconnect before we reach
  * lobby state), an error toast with the disconnect message is shown.
- * 
+ *
  */
 public class ConnectingDialog extends ConnectionDependendDialogFragment {
-	@Override
-	public void onStart() {
-		super.onStart();
-		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(connectedReceiver, new IntentFilter(Netplay.ACTION_CONNECTED));
-		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(disconnectedReceiver, new IntentFilter(Netplay.ACTION_DISCONNECTED));
-		
-		if(Netplay.getAppInstance(getActivity().getApplicationContext()).getState() != State.CONNECTING) {
-			dismiss();
-		}
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(connectedReceiver);
-		LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(disconnectedReceiver);
-	}
-	
-	@Override
-	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		ProgressDialog dialog = new ProgressDialog(getActivity());
-		dialog.setIndeterminate(true);
-		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setTitle(R.string.dialog_connecting_title);
-		dialog.setMessage(getString(R.string.dialog_connecting_message));
-		return dialog;
-	}
-	
-	private BroadcastReceiver connectedReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Dialog dialog = getDialog();
-			if(dialog != null) {
-				dialog.dismiss();
-			} else {
-				dismiss();
-			}
-		}
-	};
-	
-	private BroadcastReceiver disconnectedReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Toast.makeText(getActivity(), intent.getExtras().getString(Netplay.EXTRA_MESSAGE), Toast.LENGTH_LONG).show();
-		}
-	};
-	
-	public void onCancel(DialogInterface dialog) {
-		super.onCancel(dialog);
-		Netplay.getAppInstance(getActivity().getApplicationContext()).disconnect();
-	};
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(connectedReceiver, new IntentFilter(Netplay.ACTION_CONNECTED));
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).registerReceiver(disconnectedReceiver, new IntentFilter(Netplay.ACTION_DISCONNECTED));
+
+        if(Netplay.getAppInstance(getActivity().getApplicationContext()).getState() != State.CONNECTING) {
+            dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(connectedReceiver);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext()).unregisterReceiver(disconnectedReceiver);
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle(R.string.dialog_connecting_title);
+        dialog.setMessage(getString(R.string.dialog_connecting_message));
+        return dialog;
+    }
+
+    private BroadcastReceiver connectedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Dialog dialog = getDialog();
+            if(dialog != null) {
+                dialog.dismiss();
+            } else {
+                dismiss();
+            }
+        }
+    };
+
+    private BroadcastReceiver disconnectedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(getActivity(), intent.getExtras().getString(Netplay.EXTRA_MESSAGE), Toast.LENGTH_LONG).show();
+        }
+    };
+
+    public void onCancel(DialogInterface dialog) {
+        super.onCancel(dialog);
+        Netplay.getAppInstance(getActivity().getApplicationContext()).disconnect();
+    };
 }

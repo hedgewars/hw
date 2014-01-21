@@ -27,12 +27,12 @@
 #include <stdbool.h>
 
 typedef struct {
-    bool inProgress;	//!< true if the game is running
+    bool inProgress;    //!< true if the game is running
     char *name;
     int playerCount;
     int teamCount;
     char *owner;
-    char *map;			//!< This is either a map name, or one of +rnd+, +maze+ or +drawn+.
+    char *map;          //!< This is either a map name, or one of +rnd+, +maze+ or +drawn+.
     char *scheme;
     char *weapons;
 } flib_room;

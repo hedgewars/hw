@@ -24,7 +24,7 @@
 #define _SDL_thread_h
 
 /** @file SDL_thread.h
- *  Header for the SDL thread management routines 
+ *  Header for the SDL thread management routines
  *
  *  @note These are independent of the other SDL routines.
  */
@@ -66,11 +66,11 @@ typedef struct SDL_Thread SDL_Thread;
 #endif
 
 #ifdef __OS2__
-typedef int (*pfnSDL_CurrentBeginThread)(void (*func)(void *), void *, unsigned, void *arg); 
+typedef int (*pfnSDL_CurrentBeginThread)(void (*func)(void *), void *, unsigned, void *arg);
 typedef void (*pfnSDL_CurrentEndThread)(void);
 #else
 typedef uintptr_t (__cdecl *pfnSDL_CurrentBeginThread) (void *, unsigned,
-        unsigned (__stdcall *func)(void *), void *arg, 
+        unsigned (__stdcall *func)(void *), void *arg,
         unsigned, unsigned *threadID);
 typedef void (__cdecl *pfnSDL_CurrentEndThread)(unsigned code);
 #endif

@@ -200,7 +200,7 @@ static PHYSFS_sint32 findStartOfDir(UNPKinfo *info, const char *path,
                 rc = -1;
             else if (ch > '/')
                 rc = 1;
-            else 
+            else
             {
                 if (stop_on_first_find) /* Just checking dir's existance? */
                     return middle;
@@ -293,7 +293,7 @@ void UNPK_enumerateFiles(PHYSFS_Dir *opaque, const char *dname,
 
 /*
  * This will find the UNPKentry associated with a path in platform-independent
- *  notation. Directories don't have UNPKentries associated with them, but 
+ *  notation. Directories don't have UNPKentries associated with them, but
  *  (*isDir) will be set to non-zero if a dir was hit.
  */
 static UNPKentry *findEntry(const UNPKinfo *info, const char *path, int *isDir)
