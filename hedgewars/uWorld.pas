@@ -658,7 +658,7 @@ if AMState = AMHiding then // hide ammo menu
 DrawTexture(AmmoRect.x + AMShiftX, AmmoRect.y + AMShiftY, AmmoMenuTex);
 
 if ((AMState = AMHiding) or (AMState = AMShowingUp)) and ((AMAnimType and AMTypeMaskAlpha) <> 0 )then
-    Tint($FF, $ff, $ff, $ff);
+    untint;
 
 Pos:= -1;
 Slot:= -1;
@@ -1374,7 +1374,7 @@ if smallScreenOffset <> 0 then
     begin
     SetScale(cDefaultZoomLevel);
     if TeamsCount * 20 > Longword(cScreenHeight) div 5 then
-        Tint($FF,$FF,$FF,$FF);
+        untint;
     end;
 end;
 

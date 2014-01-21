@@ -41,6 +41,8 @@ if(UNIX AND NOT APPLE)
     set(DATA_INSTALL_DIR "share/hedgewars" CACHE STRING "Resource folder path")
 endif()
 
+option(NOVERSIONINFOUPDATE "Disable update of version_info.txt. To be used if source is in a git/repo that is NOT the hedgewars repo" OFF)
+
 #system paths for finding required fonts (see share/hedgewars/Data/fonts)
 #subdirectories will NOT be searched.
 #all fonts that can't be found will be bundled with hedgewars
@@ -234,4 +236,11 @@ set(LUATESTS "${CMAKE_SOURCE_DIR}/tests/lua")
 set(LUAAPITESTS "${LUATESTS}/luaAPI")
 set(TESTSDATADIR "${CMAKE_SOURCE_DIR}/share/hedgewars/Data")
 
-add_test("LuaAPI:GetZoom/SetZoom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--lua-test" "${LUATESTS}/luaAPI/zoom_get_set.lua")
+
+add_test("LuaAPI:GetZoom/SetZoom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" "--lua-test" "${LUAAPITESTS}/zoom_get_set.lua")
+
+# set set this to "" if you want to see what's going on
+set(STATSONLYFLAG "--stats-only")
+add_test("LuaAPI:GetGravity/SetGravity" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUAAPITESTS}/gravity_get_set.lua")
+add_test("DrillRockets_drill" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_drill.lua")
+add_test("DrillRockets_boom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_boom.lua")

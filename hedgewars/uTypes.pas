@@ -272,8 +272,9 @@ type
             Tag: LongInt;            // Quite generic. Variety of uses.
             FlightTime: Longword;    // Initially added for batting of hogs to determine homerun. Used for some firing delays
             MsgParam: LongWord;      // Initially stored a set of messages. So usually gm values like Message. Frequently overriden
-// These are not used generically, but should probably be used for purpose intended. Definitely should not override pointer type
-            Tex: PTexture;          // A texture created by the gear. Should not use for anything but textures
+// These are not used generically, but should probably be used for purpose intended. Definitely shouldn't override pointer type
+            Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
+            Tint: LongWord;         // Used to colour a texture
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
             Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
             SoundChannel: LongInt;  // Used to track a sound the gear started

@@ -31,7 +31,7 @@ procedure GenPreview(out Preview: TPreview);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uLandOutline, uPhysFSLayer;
+     uLandGenMaze, uLandOutline, uPhysFSLayer, uScript;
 
 var digest: shortstring;
 
@@ -60,6 +60,13 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     end;
 end;
 
+procedure PrettifyLandAlpha();
+begin
+    if (cReducedQuality and rqBlurryLand) <> 0 then
+        PrettifyAlpha2D(LandPixels, LAND_HEIGHT div 2, LAND_WIDTH div 2)
+    else
+        PrettifyAlpha2D(LandPixels, LAND_HEIGHT, LAND_WIDTH);
+end;
 
 procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
@@ -811,6 +818,8 @@ if GrayScale then
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end
     end;
+
+PrettifyLandAlpha();
 end;
 
 procedure GenPreview(out Preview: TPreview);
@@ -876,6 +885,8 @@ begin
     for i:= 0 to LAND_HEIGHT-1 do
         adler:= Adler32Update(adler, @Land[i,0], LAND_WIDTH);
     s:= 'M' + IntToStr(adler) + cScriptName;
+
+    ScriptSetString('LandDigest', s);
 
     chLandCheck(s);
     SendIPCRaw(@s[0], Length(s) + 1)
