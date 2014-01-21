@@ -1001,7 +1001,8 @@ end
 --------------------------
 
 function onGameInit()
-	GameFlags = 0 + gfRandomOrder
+	ClearGameFlags()
+	EnableGameFlags(gfRandomOrder)
 	Theme = "EarthRise"
 	CaseFreq = 0
 	HealthCaseProb = 0

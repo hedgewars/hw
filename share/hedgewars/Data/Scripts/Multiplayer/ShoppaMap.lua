@@ -363,8 +363,8 @@ function onGameInit()
     local y = 0
     local w = 0
     local h = 0 
-    GameFlags = bor(GameFlags, gfShoppaBorder)
-    if band(GameFlags,gfBottomBorder) == 0 and GetRandom(2) == 0 then
+    EnableGameFlags(gfShoppaBorder)
+    if not GetGameFlag(gfBottomBorder) and GetRandom(2) == 0 then
         AddPoint(-50,2010,7)
         AddPoint(4150,2010)
         for i = 0,GetRandom(3) do
