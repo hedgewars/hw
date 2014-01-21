@@ -28,15 +28,21 @@
 local ta_pointsize = 63
 local ta_radius = (ta_pointsize * 10 + 6) / 2
 
+local sqrttwo = math.sqrt(2)
+
 -- creates round test area
 function AddTestArea(testarea)
-	step = 200
+	step = 100
 	xstep = step * testarea["xdir"]
 	ystep = step * testarea["ydir"]
 	x = testarea["x"]
 	y = testarea["y"]
+	if xstep * ystep ~= 0 then
+		xstep = math.floor(xstep / sqrttwo)
+		ystep = math.floor(ystep / sqrttwo)
+	end
 	AddPoint(x, y, ta_pointsize);
-	AddPoint(x + xstep, y + ystep);
+	AddPoint(x + xstep, y + ystep, ta_pointsize, true);
 end
 
 -- vertical test areas
@@ -108,11 +114,9 @@ function SpawnDrillRocketArray(testarea)
 	distance = 23
 	d = distance
 	radius = ta_radius
-	local xmin, xmax, ymin, ymax
 	speed = 900000;
 	local xmin, xmax, ymin, ymax
 	if (xdir ~= 0) and (ydir ~= 0) then
-		sqrttwo = math.sqrt(2)
 		d = d / sqrttwo
 		radius = radius / sqrttwo
 		speed = math.floor(speed / sqrttwo)
@@ -136,7 +140,7 @@ function SpawnDrillRocketArray(testarea)
 	if (yd < 0) and (starty < endy) then y = endy end
 	nsteps = math.floor(math.max(math.abs(startx - endx),math.abs(starty - endy)) / d)
 	for i = 1, nsteps, 1 do
-		AddGear(math.floor(x), math.floor(y), gtDrill, 0, speed * xdir, speed * ydir, 0)
+		AddGear(math.floor(x), math.floor(y), gtDrill, gsttmpFlag * (i % 2), speed * xdir, speed * ydir, 0)
 		nspawned = nspawned + 1
 		x = x + xd
 		y = y + yd
@@ -145,12 +149,21 @@ end
 
 function onGearDelete(gear)
 	if GetGearType(gear) == gtDrill then
-		if GetTimer(gear) > 0 then
-			nfailed = nfailed + 1
+		-- the way to check state will change in API at some point
+		if band(GetState(gear), gsttmpFlag) == 0 then
+			-- regular drill rocket
+			if (GetTimer(gear) < 2000) or (GetTimer(gear) > 3000) then
+				nfailed = nfailed + 1
+			end
+		else
+			-- airstrike drill rocket
+			if GetTimer(gear) > 0 then
+				nfailed = nfailed + 1
+			end
 		end
 		ndied = ndied + 1
 		if ndied == nspawned then
-			WriteLnToConsole('TESTRESULT: ' .. nfailed .. ' of ' .. nspawned .. ' drill rockets exploded prematurely')
+			WriteLnToConsole('TESTRESULT: ' .. nfailed .. ' of ' .. nspawned .. ' drill rockets did not explode as expected')
 			if (nfailed > 0) then
 				EndLuaTest(TEST_FAILED)
 			else
