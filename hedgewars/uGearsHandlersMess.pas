@@ -3008,6 +3008,8 @@ begin
 
     FollowGear := Gear;
 
+    Gear^.dY:= cMaxWindSpeed * 100;
+
     Gear^.doStep := @doStepCakeFall
 end;
 
@@ -3190,7 +3192,7 @@ end;
 procedure doStepDrill(Gear: PGear);
 var
     t: PGearArray;
-    oldDx, oldDy: hwFloat;
+    oldX, oldY, oldDx, oldDy: hwFloat;
     t2: hwFloat;
 begin
     AllInactive := false;
@@ -3200,6 +3202,8 @@ begin
 
     oldDx := Gear^.dX;
     oldDy := Gear^.dY;
+    oldX := Gear^.X;
+    oldY := Gear^.Y;
 
     doStepFallingGear(Gear);
 
@@ -3215,6 +3219,8 @@ begin
         //hit
         Gear^.dX := oldDx;
         Gear^.dY := oldDy;
+        Gear^.X := oldX;
+        Gear^.Y := oldY;
 
         if GameTicks > Gear^.FlightTime then
             t := CheckGearsCollision(Gear)
@@ -3239,6 +3245,8 @@ begin
             exit;
             end;
 
+        Gear^.X:= Gear^.X+Gear^.dX*4;
+        Gear^.Y:= Gear^.Y+Gear^.dY*4;
         Gear^.SoundChannel := LoopSound(sndDrillRocket);
         Gear^.doStep := @doStepDrillDrilling;
 
