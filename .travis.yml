@@ -16,6 +16,8 @@ env:
   - BUILD_ARGS="-DNOSERVER=1"
   - BUILD_ARGS="-DLUA_SYSTEM=0"
   - BUILD_ARGS="-DPHYSFS_SYSTEM=0"
+  - BUILD_ARGS="-DGL2=1"
+  - BUILD_ARGS="-DBUILD_ENGINE_C=1"
 matrix:
   allow_failures:
     # Failures we expect here
