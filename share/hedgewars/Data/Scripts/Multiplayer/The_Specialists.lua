@@ -181,7 +181,8 @@ function CreateTeam()
 end
 
 function onGameInit()
-	GameFlags = gfRandomOrder + gfResetWeps + gfInfAttack + gfPlaceHog +gfPerHogAmmo
+	ClearGameFlags()
+	EnableGameFlags(gfRandomOrder, gfResetWeps, gfInfAttack, gfPlaceHog, gfPerHogAmmo)
 	Delay = 10
 	HealthCaseProb = 100
 end

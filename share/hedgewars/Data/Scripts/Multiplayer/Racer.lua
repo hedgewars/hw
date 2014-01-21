@@ -72,6 +72,7 @@
 -----------------------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
+HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 
 ------------------
 -- Got Variables?
@@ -480,7 +481,7 @@ end
 ----------------------------------
 
 function onGameInit()
-        GameFlags = bor(GameFlags,gfInfAttack + gfInvulnerable)
+        EnableGameFlags(gfInfAttack, gfInvulnerable)
         CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
@@ -717,4 +718,15 @@ function onGearDelete(gear)
                 cGear = nil
         end
 
+end
+
+
+function onAchievementsDeclaration()
+    map = detectMap()
+    
+    for i = 0, (numTeams-1) do
+        if teamScore[i] < 100000 then
+            DeclareAchievement("rope race", teamNameArr[i], map, teamScore[i])
+        end
+    end
 end

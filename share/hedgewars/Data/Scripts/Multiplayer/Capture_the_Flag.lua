@@ -444,7 +444,9 @@ end
 
 function onGameInit()
 
-	GameFlags = band(bor(GameFlags, gfDivideTeams), bnot(gfKing + gfForts))
+	DisableGameFlags(gfKing, gfForts)
+	EnableGameFlags(gfDivideTeams)
+
 	--SuddenDeathTurns = 999 -- suddendeath is off, effectively
 	WaterRise = 0
 	Delay = 10

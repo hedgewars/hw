@@ -203,7 +203,7 @@ function TransferWeps(gear)
 end
 
 function onGameInit()
-	GameFlags = bor(GameFlags,gfInfAttack + gfRandomOrder + gfPerHogAmmo)
+	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
 	HealthCaseProb = 100
 end
 

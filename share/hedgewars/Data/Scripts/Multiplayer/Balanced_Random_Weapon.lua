@@ -93,7 +93,8 @@ function reset(hog)
 end
 
 function onGameInit()
-    GameFlags = band(bor(GameFlags, gfResetWeps), bnot(gfPerHogAmmo))
+    DisableGameFlags(gfPerHogAmmo)
+    EnableGameFlags(gfResetWeps)
     Goals = loc("Each turn you get 1-3 random weapons")
 end
 
