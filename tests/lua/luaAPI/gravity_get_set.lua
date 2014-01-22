@@ -102,6 +102,8 @@ function onGameStart()
 
 	SpawnGrenade()
 
-	testGs = {150, 200, 300, 10, 1, 13, 15, 0, 27, -600, -10, nil}
+	-- for current testing method don't use values over 400
+	-- (values > 400 will cause speed cap in under 1 sec)
+	testGs = {150, 200, 300, 10, 1, 13, 15, 0, 27, -350, -10, nil}
 end
 
