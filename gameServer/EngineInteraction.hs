@@ -24,13 +24,12 @@ import Utils
     because standard 'catch' doesn't seem to catch decompression errors for some reason
 -}
 import qualified Codec.Compression.Zlib.Internal as Z
-import Control.Arrow (right)
 
 decompressWithoutExceptions :: BL.ByteString -> Either Z.DecompressError BL.ByteString
 decompressWithoutExceptions = finalise
                             . Z.foldDecompressStream cons nil err
                             . Z.decompressWithErrors Z.gzipFormat Z.defaultDecompressParams
-  where err errorCode errorString = Left errorCode
+  where err errorCode _ = Left errorCode
         nil = Right []
         cons chunk = right (chunk :)
         finalise = right BL.fromChunks
@@ -40,11 +39,11 @@ toEngineMsg :: B.ByteString -> B.ByteString
 toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
 
 
-fromEngineMsg :: B.ByteString -> Maybe B.ByteString
+{-fromEngineMsg :: B.ByteString -> Maybe B.ByteString
 fromEngineMsg msg = liftM BW.pack (Base64.decode (B.unpack msg) >>= removeLength)
     where
         removeLength (x:xs) = if length xs == fromIntegral x then Just xs else Nothing
-        removeLength _ = Nothing
+        removeLength _ = Nothing-}
 
 em :: B.ByteString -> B.ByteString
 em = toEngineMsg

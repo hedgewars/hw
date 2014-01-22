@@ -408,14 +408,18 @@ handleCmd_inRoom ["CALLVOTE", "KICK"] = do
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
     cl <- thisClient
+    rm <- thisRoom
     maybeClientId <- clientByNick nickname
     let kickId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
 
-    if isJust maybeClientId && sameRoom then
-        startVote $ VoteKick nickname
+    if isNothing $ masterID rm then
+        return []
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
+        if isJust maybeClientId && sameRoom then
+            startVote $ VoteKick nickname
+            else
+            return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
 
 handleCmd_inRoom ["VOTE", m] = do
     cl <- thisClient
