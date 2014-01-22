@@ -277,8 +277,8 @@ data Voting = Voting {
 data VoteType = VoteKick B.ByteString
 
 
-newVote :: VoteType -> Voting
-newVote = Voting 2 [] []
+newVoting :: VoteType -> Voting
+newVoting = Voting 2 [] []
 
 
 data AccountInfo =
