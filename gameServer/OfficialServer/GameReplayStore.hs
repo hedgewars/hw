@@ -12,6 +12,7 @@ import Control.Monad
 import Data.List
 import qualified Data.ByteString as B
 import System.Directory
+import Control.DeepSeq
 ---------------
 import CoreTypes
 import EngineInteraction
@@ -55,7 +56,7 @@ loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
             return $ (
                 Just (CheckInfo fileName teams)
-                , replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
+                , let d = replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs) in d `deepseq` d
                 )
 
 moveFailedRecord :: String -> IO ()
