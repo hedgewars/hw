@@ -19,6 +19,22 @@ import Codec.Compression.Zlib as Z
 import CoreTypes
 import Utils
 
+{-
+    this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
+    because standard 'catch' doesn't seem to catch decompression errors for some reason
+-}
+import qualified Codec.Compression.Zlib.Internal as Z
+import Control.Arrow (right)
+
+decompressWithoutExceptions :: BL.ByteString -> Either Z.DecompressError BL.ByteString
+decompressWithoutExceptions = finalise
+                            . Z.foldDecompressStream cons nil err
+                            . Z.decompressWithErrors Z.gzipFormat Z.defaultDecompressParams
+  where err errorCode errorString = Left errorCode
+        nil = Right []
+        cons chunk = right (chunk :)
+        finalise = right BL.fromChunks
+{- end snippet  -}
 
 toEngineMsg :: B.ByteString -> B.ByteString
 toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
@@ -56,7 +72,6 @@ checkNetCmd msg = check decoded
         legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
         timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgc12345" ++ slotMessages
-
 
 replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
@@ -117,7 +132,8 @@ drawnMapData =
           L.map (\m -> eml ["edraw ", BW.pack m])
         . L.unfoldr by200
         . BL.unpack
-        . Z.decompress
+        . either (const BL.empty) id
+        . decompressWithoutExceptions
         . BL.pack
         . L.drop 4
         . fromMaybe []
