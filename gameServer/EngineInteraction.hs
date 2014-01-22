@@ -86,7 +86,7 @@ replayToDemo ti mParams prms msgs = concat [
         mapgen = mParams Map.! "MAPGEN"
         mapgenSpecific = case mapgen of
             "1" -> [eml ["e$maze_size ", head $ prms Map.! "MAZE_SIZE"]]
-            "2" -> let d = head $ prms Map.! "DRAWNMAP" in if BW.null d then [] else drawnMapData d
+            "2" -> let d = head $ prms Map.! "DRAWNMAP" in if BW.length d <= 1 then [] else drawnMapData d
             _ -> []
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
