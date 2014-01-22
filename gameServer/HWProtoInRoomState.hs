@@ -352,7 +352,6 @@ handleCmd_inRoom ["DELEGATE", newAdmin] = do
         [ChangeMaster (Just newAdminId) |
             (master || serverAdmin)
                 && isJust maybeClientId
-                && ((newAdminId /= thisClientId) || (serverAdmin && not master))
                 && (Just newAdminId /= thisRoomMasterId)
                 && sameRoom]
 
