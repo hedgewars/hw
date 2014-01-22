@@ -24,6 +24,7 @@ set(hwserver_sources
     ServerState.hs
     Store.hs
     Utils.hs
+    Votes.hs
     hedgewars-server.hs
     )
 

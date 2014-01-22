@@ -221,7 +221,10 @@ processAction (ChangeMaster delegateId)= do
     ri <- clientRoomA
     rnc <- gets roomsClients
     specialRoom <- io $ room'sM rnc isSpecial ri
-    newMasterId <- liftM (\ids -> fromMaybe (listToMaybe . reverse . filter (/= ci) $ ids) $ liftM Just delegateId) . io $ roomClientsIndicesM rnc ri
+    newMasterId <- if specialRoom then 
+        return Nothing
+        else
+        liftM (\ids -> fromMaybe (listToMaybe . reverse . filter (/= ci) $ ids) $ liftM Just delegateId) . io $ roomClientsIndicesM rnc ri
     newMaster <- io $ client'sM rnc id `DT.mapM` newMasterId
     oldMasterId <- io $ room'sM rnc masterID ri
     oldRoomName <- io $ room'sM rnc name ri
