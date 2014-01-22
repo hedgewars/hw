@@ -24,6 +24,7 @@ setupLoggers :: IO ()
 setupLoggers = do
     updateGlobalLogger "Clients" (setLevel NOTICE)
     updateGlobalLogger "Core" (setLevel NOTICE)
+    updateGlobalLogger "REPLAYS" (setLevel NOTICE)
 
 
 server :: ServerInfo -> IO ()
