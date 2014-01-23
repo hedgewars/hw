@@ -88,7 +88,7 @@ handleCmd_loggedin ["INFO", asknick] = do
             if teamsInGame cl > 0 then "(playing)" else "(spectating)"
             else
             ""
-    let hostStr = if isAdminAsking then host cl else cutHost $ host cl
+    let hostStr = if isAdminAsking then host cl else B.empty
     if noSuchClient then
         return []
         else
