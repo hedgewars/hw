@@ -56,8 +56,9 @@ modifyTeam team room = room{teams = replaceTeam team $ teams room}
             t : replaceTeam tm ts
 
 illegalName :: B.ByteString -> Bool
-illegalName s = B.null s || B.length s > 40 || B.all isSpace s || isSpace (B.head s) || isSpace (B.last s) || B.any isIllegalChar s
+illegalName b = B.null b || length s > 40 || all isSpace s || isSpace (head s) || isSpace (last s) || any isIllegalChar s
     where
+        s = UTF8.toString b
         isIllegalChar c = c `List.elem` ("$()*+?[]^{|}\x7F" ++ ['\x00'..'\x1F'])
 
 protoNumber2ver :: Word16 -> B.ByteString
