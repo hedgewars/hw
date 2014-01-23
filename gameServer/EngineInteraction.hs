@@ -14,7 +14,6 @@ import Data.Word
 import Data.Bits
 import Control.Arrow
 import Data.Maybe
-import Codec.Compression.Zlib as Z
 -------------
 import CoreTypes
 import Utils
@@ -25,11 +24,11 @@ import Utils
 -}
 import qualified Codec.Compression.Zlib.Internal as Z
 
-decompressWithoutExceptions :: BL.ByteString -> Either Z.DecompressError BL.ByteString
+decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
 decompressWithoutExceptions = finalise
                             . Z.foldDecompressStream cons nil err
-                            . Z.decompressWithErrors Z.gzipFormat Z.defaultDecompressParams
-  where err errorCode _ = Left errorCode
+                            . Z.decompressWithErrors Z.zlibFormat Z.defaultDecompressParams
+  where err errorCode msg = Left msg
         nil = Right []
         cons chunk = right (chunk :)
         finalise = right BL.fromChunks
