@@ -28,7 +28,7 @@ decompressWithoutExceptions :: BL.ByteString -> Either String BL.ByteString
 decompressWithoutExceptions = finalise
                             . Z.foldDecompressStream cons nil err
                             . Z.decompressWithErrors Z.zlibFormat Z.defaultDecompressParams
-  where err errorCode msg = Left msg
+  where err _ msg = Left msg
         nil = Right []
         cons chunk = right (chunk :)
         finalise = right BL.fromChunks
@@ -76,7 +76,7 @@ replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString [B.ByteString]
         -> [B.ByteString]
         -> [B.ByteString]
-replayToDemo ti mParams prms msgs = concat [
+replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         [em "TD"]
         , maybeScript
         , maybeMap
@@ -92,6 +92,13 @@ replayToDemo ti mParams prms msgs = concat [
         , [em "!"]
         ]
     where
+        keys1, keys2 :: Set.Set B.ByteString
+        keys1 = Set.fromList ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
+        keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME", "MAZE_SIZE", "DRAWNMAP"]
+        sane = Set.null (Map.keysSet mParams Set.\\ keys1)
+            && Set.null (Map.keysSet prms Set.\\ keys2)
+            && (not . null . drop 27 $ scheme)
+            && (not . null . tail $ prms Map.! "AMMO")
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
         maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
