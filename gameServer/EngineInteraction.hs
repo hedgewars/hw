@@ -95,8 +95,8 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         keys1, keys2 :: Set.Set B.ByteString
         keys1 = Set.fromList ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
         keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME"]
-        sane = Set.null (Map.keysSet mParams Set.\\ keys1)
-            && Set.null (Map.keysSet prms Set.\\ keys2)
+        sane = Set.null (keys1 Set.\\ Map.keysSet mParams)
+            && Set.null (keys2 Set.\\ Map.keysSet prms)
             && (not . null . drop 27 $ scheme)
             && (not . null . tail $ prms Map.! "AMMO")
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
