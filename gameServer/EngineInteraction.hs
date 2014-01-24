@@ -94,7 +94,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
     where
         keys1, keys2 :: Set.Set B.ByteString
         keys1 = Set.fromList ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
-        keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME", "MAZE_SIZE", "DRAWNMAP"]
+        keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME"]
         sane = Set.null (Map.keysSet mParams Set.\\ keys1)
             && Set.null (Map.keysSet prms Set.\\ keys2)
             && (not . null . drop 27 $ scheme)
@@ -105,8 +105,8 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
         mapgenSpecific = case mapgen of
-            "1" -> [eml ["e$maze_size ", head $ prms Map.! "MAZE_SIZE"]]
-            "2" -> let d = head $ prms Map.! "DRAWNMAP" in if BW.length d <= 1 then [] else drawnMapData d
+            "1" -> [eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]]
+            "2" -> let d = head . fromMaybe [""] $ Map.lookup "DRAWNMAP" prms in if BW.length d <= 4 then [] else drawnMapData d
             _ -> []
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
