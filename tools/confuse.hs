@@ -6,6 +6,7 @@ import Data.Char
 import Control.Monad
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as UTF8
+import qualified Data.Map as Map
 
 hx :: [Char] -> String
 hx cs = let ch = (chr . fst . last . readHex $ cs) in
@@ -22,6 +23,15 @@ conv s = B.concat ["('", UTF8.fromString i, "', '", UTF8.fromString r, "')"]
         r :: String
         r = concatMap hx . words . takeWhile ((/=) ';') . tail $ dropWhile ((/=) '\t') s
 
+convRules :: (B.ByteString, [B.ByteString]) -> B.ByteString
+convRules (a, b) = B.concat ["<reset>", u a, "</reset>\n<s>", B.concat $ map u b, "</s>"]
+    where
+        u a = B.concat ["\\","u",a]
+
+toPair :: String -> (B.ByteString, [B.ByteString])
+toPair s = (UTF8.fromString $ takeWhile isHexDigit s, map UTF8.fromString . words . takeWhile ((/=) ';') . tail $ dropWhile ((/=) '\t') s)
+
+
 main = do
     ll <- liftM (filter (isHexDigit . head) . filter (not . null) . lines) $ readFile "confusables.txt"
-    B.writeFile "insert.sql" . B.intercalate ",\n" . map conv $ ll
+    B.writeFile "rules.txt" . B.intercalate "\n" . map convRules . Map.toList . Map.fromList . filter (\(_, b) -> length b < 6). map toPair $ ll
