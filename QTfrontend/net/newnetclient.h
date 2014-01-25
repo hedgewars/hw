@@ -77,6 +77,10 @@ class HWNewNet : public QObject
         QSortFilterProxyModel * m_lobbyPlayersModel;
         QSortFilterProxyModel * m_roomPlayersModel;
         QString m_lastRoom;
+        QString m_passwordHash;
+        QString m_serverSalt;
+        QString m_clientSalt;
+        QString m_serverHash;
 
         QStringList cmdbuf;
 
@@ -85,7 +89,8 @@ class HWNewNet : public QObject
         void ParseCmd(const QStringList & lst);
         void handleNotice(int n);
 
-        int loginStep;
+        void maybeSendPassword();
+
         ClientState netClientState;
 
     signals:

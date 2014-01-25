@@ -21,6 +21,7 @@
 #include <QInputDialog>
 #include <QCryptographicHash>
 #include <QSortFilterProxyModel>
+#include <QUuid>
 
 #include "hwconsts.h"
 #include "newnetclient.h"
@@ -36,7 +37,6 @@ char delimeter='\n';
 HWNewNet::HWNewNet() :
     isChief(false),
     m_game_connected(false),
-    loginStep(0),
     netClientState(Disconnected)
 {
     m_roomsListModel = new RoomsListModel(this);
@@ -238,7 +238,10 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 
 void HWNewNet::SendPasswordHash(const QString & hash)
 {
-    RawSendNet(QString("PASSWORD%1%2").arg(delimeter).arg(hash));
+    // don't send it immediately, only store and check if server asked us for a password
+    m_passwordHash = hash;
+
+    maybeSendPassword();
 }
 
 void HWNewNet::ParseCmd(const QStringList & lst)
@@ -297,6 +300,28 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         netClientState = Connected;
         m_game_connected = true;
         emit adminAccess(false);
+        return;
+    }
+
+    if (lst[0] == "SERVER_AUTH")
+    {
+        if(lst.size() < 2)
+        {
+            qWarning("Net: Malformed SERVER_AUTH message");
+            return;
+        }
+
+        if(lst[2] != m_serverHash)
+        {
+            Error("Server authentication error");
+            Disconnect();
+        } else
+        {
+            // empty m_serverHash variable means no authentication was performed
+            // or server passed authentication
+            m_serverHash.clear();
+        }
+
         return;
     }
 
@@ -515,6 +540,14 @@ void HWNewNet::ParseCmd(const QStringList & lst)
         {
             if (lst[i] == mynick)
             {
+                // check if server is authenticated or no authentication was performed at all
+                if(!m_serverHash.isEmpty())
+                {
+                    Error(tr("Server authentication error"));
+
+                    Disconnect();
+                }
+
                 netClientState = InLobby;
                 RawSendNet(QString("LIST"));
                 emit connected();
@@ -578,8 +611,24 @@ void HWNewNet::ParseCmd(const QStringList & lst)
 
     if (lst[0] == "ASKPASSWORD")
     {
+        // server should send us salt of at least 16 characters
+
+        if(lst.size() < 2 || lst[1].size() < 16)
+        {
+            qWarning("Net: Bad ASKPASSWORD message");
+            return;
+        }
+
         emit NickRegistered(mynick);
         m_nick_registered = true;
+
+        // store server salt
+        // when this variable is set, it is assumed that server asked us for a password
+        m_serverSalt = lst[1];
+        m_clientSalt = QUuid::createUuid().toString();
+
+        maybeSendPassword();
+
         return;
     }
 
@@ -1082,4 +1131,37 @@ void HWNewNet::roomPasswordEntered(const QString &password)
 {
     if(!myroom.isEmpty())
         JoinRoom(myroom, password);
+}
+
+void HWNewNet::maybeSendPassword()
+{
+/* When we got password hash, and server asked us for a password, perform mutual authentication:
+ * at this point we have salt chosen by server
+ * client sends client salt and hash of secret (password hash) salted with client salt, server salt,
+ * and static salt (predefined string + protocol number)
+ * server should respond with hash of the same set in different order.
+ */
+
+    if(m_passwordHash.isEmpty() || m_serverSalt.isEmpty())
+        return;
+
+    QString hash;
+
+    hash = QCryptographicHash::hash(
+                m_clientSalt.toAscii()
+                .append(m_serverSalt.toAscii())
+                .append(m_passwordHash)
+                .append(cProtoVer->toAscii())
+                .append("!hedgewars")
+                , QCryptographicHash::Sha1);
+
+    m_serverHash = QCryptographicHash::hash(
+                m_serverSalt.toAscii()
+                .append(m_clientSalt.toAscii())
+                .append(m_passwordHash)
+                .append(cProtoVer->toAscii())
+                .append("!hedgewars")
+                , QCryptographicHash::Sha1);
+
+    RawSendNet(QString("PASSWORD%1%2%1%3").arg(delimeter).arg(hash).arg(m_clientSalt));
 }
