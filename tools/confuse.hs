@@ -34,4 +34,8 @@ toPair s = (UTF8.fromString $ takeWhile isHexDigit s, map UTF8.fromString . word
 
 main = do
     ll <- liftM (filter (isHexDigit . head) . filter (not . null) . lines) $ readFile "confusables.txt"
-    B.writeFile "rules.txt" . B.intercalate "\n" . map convRules . Map.toList . Map.fromList . filter (\(_, b) -> length b < 6). map toPair $ ll
+    B.writeFile "rules.txt" . B.intercalate "\n" . map convRules . Map.toList . Map.fromList . filter notTooLong . filter fits16bit . map toPair $ ll
+    where
+        notTooLong = (>) 6 . length . snd
+        fits16bit (a, b) = let f = (>) 5 . B.length in all f $ a:b
+        
