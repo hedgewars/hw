@@ -6,13 +6,20 @@ import Control.Concurrent.Chan
 import Data.Time
 import Control.Monad
 import Data.Unique
+import qualified Codec.Binary.Base64 as Base64
+import qualified Data.ByteString as BW
+import qualified Data.ByteString.Char8 as B
+import qualified Control.Exception as E
+import System.Entropy
 -----------------------------
 import CoreTypes
 import Utils
-import RoomsAndClients
+
 
 acceptLoop :: Socket -> Chan CoreMessage -> IO ()
-acceptLoop servSock chan = forever $
+acceptLoop servSock chan = E.bracket openHandle closeHandle f
+    where
+    f ch = forever $
         do
         (sock, sockAddr) <- Network.Socket.accept servSock
 
@@ -23,6 +30,7 @@ acceptLoop servSock chan = forever $
         sendChan' <- newChan
 
         uid <- newUnique
+        salt <- liftM (B.pack . Base64.encode . BW.unpack) $ hGetEntropy ch 16
 
         let newClient =
                 (ClientInfo
@@ -33,6 +41,7 @@ acceptLoop servSock chan = forever $
                     currentTime
                     ""
                     ""
+                    salt
                     False
                     False
                     0

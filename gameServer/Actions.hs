@@ -466,9 +466,9 @@ processAction (ProcessAccountInfo info) = do
                 else
                 [ByeClient $ loc "Authentication failed"]
     playerLogin p a contr = do
-        chan <- client's sendChan
+        cl <- client's id
         mapM_ processAction [
-            AnswerClients [chan] ["ASKPASSWORD"]
+            AnswerClients [sendChan cl] $ ("ASKPASSWORD") : if clientProto cl < 48 then [] else [serverSalt cl]
             , ModifyClient (\c -> c{webPassword = p, isAdministrator = a, isContributor = contr})
             ]
 

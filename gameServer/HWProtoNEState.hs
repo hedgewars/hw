@@ -2,7 +2,9 @@
 module HWProtoNEState where
 
 import Control.Monad.Reader
+import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Char8 as B
+import Data.Digest.Pure.SHA
 --------------------------------------
 import CoreTypes
 import Actions
@@ -42,11 +44,28 @@ handleCmd_NotEntered ["PASSWORD", passwd] = do
     (ci, irnc) <- ask
     let cl = irnc `client` ci
 
-    if passwd == webPassword cl then
+    if clientProto cl < 48 && passwd == webPassword cl then
         return $ JoinLobby : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
         else
         return [ByeClient "Authentication failed"]
 
+
+handleCmd_NotEntered ["PASSWORD", passwd, clientSalt] = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+
+    let clientHash = h [clientSalt, serverSalt cl, webPassword cl, showB $ clientProto cl, "!hedgewars"]
+    let serverHash = h [serverSalt cl, clientSalt, webPassword cl, showB $ clientProto cl, "!hedgewars"]
+
+    if passwd == clientHash then
+        return $
+            AnswerClients [sendChan cl] ["SERVER_AUTH", serverHash] 
+            : JoinLobby
+            : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
+        else
+        return [ByeClient "Authentication failed"]
+    where
+        h = B.pack . showDigest . sha1 . BL.fromChunks
 
 #if defined(OFFICIAL_SERVER)
 handleCmd_NotEntered ["CHECKER", protoNum, newNick, password] = do

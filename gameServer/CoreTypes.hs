@@ -98,6 +98,7 @@ data ClientInfo =
         connectTime :: UTCTime,
         nick :: B.ByteString,
         webPassword :: B.ByteString,
+        serverSalt :: B.ByteString,
         logonPassed :: Bool,
         isVisible :: Bool,
         clientProto :: !Word16,

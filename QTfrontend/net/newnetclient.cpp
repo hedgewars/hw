@@ -239,7 +239,7 @@ void HWNewNet::displayError(QAbstractSocket::SocketError socketError)
 void HWNewNet::SendPasswordHash(const QString & hash)
 {
     // don't send it immediately, only store and check if server asked us for a password
-    m_passwordHash = hash;
+    m_passwordHash = hash.toAscii();
 
     maybeSendPassword();
 }
@@ -311,7 +311,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             return;
         }
 
-        if(lst[2] != m_serverHash)
+        if(lst[1] != m_serverHash)
         {
             Error("Server authentication error");
             Disconnect();
@@ -1145,15 +1145,13 @@ void HWNewNet::maybeSendPassword()
     if(m_passwordHash.isEmpty() || m_serverSalt.isEmpty())
         return;
 
-    QString hash;
-
-    hash = QCryptographicHash::hash(
+    QString hash = QCryptographicHash::hash(
                 m_clientSalt.toAscii()
                 .append(m_serverSalt.toAscii())
                 .append(m_passwordHash)
                 .append(cProtoVer->toAscii())
                 .append("!hedgewars")
-                , QCryptographicHash::Sha1);
+                , QCryptographicHash::Sha1).toHex();
 
     m_serverHash = QCryptographicHash::hash(
                 m_serverSalt.toAscii()
@@ -1161,7 +1159,7 @@ void HWNewNet::maybeSendPassword()
                 .append(m_passwordHash)
                 .append(cProtoVer->toAscii())
                 .append("!hedgewars")
-                , QCryptographicHash::Sha1);
+                , QCryptographicHash::Sha1).toHex();
 
     RawSendNet(QString("PASSWORD%1%2%1%3").arg(delimeter).arg(hash).arg(m_clientSalt));
 }
