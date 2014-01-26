@@ -31,13 +31,16 @@ function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
+{$IFNDEF PAS2C}
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
+{$ENDIF}
 
 implementation
 uses uUtils, uVariables, sysutils;
 
+{$IFNDEF PAS2C}
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
@@ -52,6 +55,7 @@ function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
 
 procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
+{$ENDIF}
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
 begin
