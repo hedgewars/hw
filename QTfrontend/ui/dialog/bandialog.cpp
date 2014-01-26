@@ -22,16 +22,19 @@ BanDialog::BanDialog(QWidget *parent) :
     leReason = new QLineEdit(this);
     cbTime = new QComboBox(this);
 
-    cbTime->addItem(HWApplication::tr("%1 minutes", 0, 10).arg("10"), 5 * 60);
-    cbTime->addItem(HWApplication::tr("%1 minutes", 0, 30).arg("30"), 10 * 60);
-    cbTime->addItem(HWApplication::tr("%1 hour", 0, 10).arg("10"), 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 hours", 0, 3).arg("3"), 3 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 hours", 0, 5).arg("5"), 5 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 hours", 0, 12).arg("12"), 12 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 day", 0, 1).arg("1"), 24 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 days", 0, 3).arg("3"), 72 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 days", 0, 7).arg("7"), 168 * 60 * 60);
-    cbTime->addItem(HWApplication::tr("%1 days", 0, 14).arg("14"), 336 * 60 * 60);
+    const int min = 60;
+    const int hour = 60 * min;
+    const int day = 24 * hour;
+    cbTime->addItem(HWApplication::tr("%1 minutes", 0, 10).arg(10), 10 * min);
+    cbTime->addItem(HWApplication::tr("%1 minutes", 0, 30).arg(30), 30 * min);
+    cbTime->addItem(HWApplication::tr("%1 hour", 0, 1).arg(1), 1 * hour);
+    cbTime->addItem(HWApplication::tr("%1 hours", 0, 3).arg(3), 3 * hour);
+    cbTime->addItem(HWApplication::tr("%1 hours", 0, 5).arg(5), 5 * hour);
+    cbTime->addItem(HWApplication::tr("%1 hours", 0, 12).arg(12), 12 * hour);
+    cbTime->addItem(HWApplication::tr("%1 day", 0, 1).arg(1), 1 * day);
+    cbTime->addItem(HWApplication::tr("%1 days", 0, 3).arg(3), 3 * day);
+    cbTime->addItem(HWApplication::tr("%1 days", 0, 7).arg(7), 7 * day);
+    cbTime->addItem(HWApplication::tr("%1 days", 0, 14).arg(14), 14 * day);
     cbTime->addItem(tr("permanent"), 3650 * 24 * 60 * 60);
     cbTime->setCurrentIndex(0);
 
