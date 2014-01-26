@@ -58,10 +58,10 @@ handleCmd_NotEntered ["PASSWORD", passwd, clientSalt] = do
     let serverHash = h [serverSalt cl, clientSalt, webPassword cl, showB $ clientProto cl, "!hedgewars"]
 
     if passwd == clientHash then
-        return $
+        return [
             AnswerClients [sendChan cl] ["SERVER_AUTH", serverHash] 
-            : JoinLobby
-            : [AnswerClients [sendChan cl] ["ADMIN_ACCESS"] | isAdministrator cl]
+            , JoinLobby
+            ]
         else
         return [ByeClient "Authentication failed"]
     where
