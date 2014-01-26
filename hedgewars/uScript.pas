@@ -270,7 +270,7 @@ begin
     else
         begin
         for i:= 1 to lua_gettop(L) do
-            GameFlags := GameFlags and not(LongWord(lua_tointeger(L, i)));
+            GameFlags := GameFlags and (not LongWord(lua_tointeger(L, i)));
         ScriptSetInteger('GameFlags', GameFlags);
         end;
     lc_disablegameflags:= 0;

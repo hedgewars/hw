@@ -30,7 +30,7 @@ acceptLoop servSock chan = E.bracket openHandle closeHandle f
         sendChan' <- newChan
 
         uid <- newUnique
-        salt <- liftM (B.pack . Base64.encode . BW.unpack) $ hGetEntropy ch 16
+        salt <- liftM (B.pack . Base64.encode . BW.unpack) $ hGetEntropy ch 18
 
         let newClient =
                 (ClientInfo

@@ -146,13 +146,13 @@ begin
                 // invisible pixels get colors from visible neighbors
                 if cpi then
                     begin
-                    row1^[i]:= row1^[i-1] and not AMask;
+                    row1^[i]:= row1^[i-1] and (not AMask);
                     // as this pixel is invisible and already colored correctly now, no point in further comparing it
                     lpi:= cpi;
                     continue;
                     end
                 else
-                    row1^[i-1]:= row1^[i] and not AMask;
+                    row1^[i-1]:= row1^[i] and (not AMask);
                 end;
             end;
         lpi:= cpi;
@@ -163,9 +163,9 @@ begin
             if cpi <> bpi then
                 begin
                 if cpi then
-                    row1^[i]:= row2^[i+ioffset] and not AMask
+                    row1^[i]:= row2^[i+ioffset] and (not AMask)
                 else
-                    row2^[i+ioffset]:= row1^[i] and not AMask;
+                    row2^[i+ioffset]:= row1^[i] and (not AMask);
                 end;
             end;
         end;
