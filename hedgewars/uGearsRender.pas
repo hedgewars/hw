@@ -965,13 +965,9 @@ begin
                 tx := ox;
                 tx := round(max(((-cScreenWidth + 16) / zoom) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / zoom) - SpritesData[sprFinger].Width div 2, tx)));
                 ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / (zoom)) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (zoom)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
-                t := tx-ox;
-                if t <> 0 then
-                    dAngle := radtodeg(-arctan2(-(ty-oy),t)) + 90
-                else if ty > oy then
-                    dAngle := 180
-                else
-                    dAngle := 0;
+
+                dAngle := DxDy2Angle(ty - oy, tx - ox) + 90;
+
                 DrawSpriteRotatedF(sprFinger, tx, ty, GameTicks div 32 mod 16, 1, dAngle);
                 end;
 

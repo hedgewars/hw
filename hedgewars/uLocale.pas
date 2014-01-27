@@ -60,16 +60,16 @@ if f <> nil then
     while not pfsEof(f) do
         begin
         pfsReadLnA(f, s);
-        if (Length(s) > 0) and (s[0] >= '0') and (s[0] <= '9') then
+        if (StrLength(s) > 0) and (s[0] >= '0') and (s[0] <= '9') then
             begin
-            TryDo(Length(s) > 6, 'Load locale: empty string', true);
+            TryDo(StrLength(s) > 6, 'Load locale: empty string', true);
             val(s[0]+s[1], a, c);
             TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
             TryDo(s[2] = ':', 'Load locale: ":" expected', true);
             val(s[3]+s[4], b, c);
             TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
             TryDo(s[5] = '=', 'Load locale: "=" expected', true);
-            sc:= StrAlloc(length(s) - 5);
+            sc:= StrAlloc(StrLength(s) - 5);
             StrCopy(sc, @s[6]);
             case a of
                 0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then

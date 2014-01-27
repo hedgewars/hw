@@ -73,6 +73,7 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 {$IFNDEF PAS2C}
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
+function StrLength(s: PChar): Longword;
 {$ENDIF}
 
 function  isPhone: Boolean; inline;
@@ -440,6 +441,11 @@ end;
 procedure WriteLn(var f: textfile; s: shortstring);
 begin
 system.writeln(f, s)
+end;
+
+function StrLength(s: PChar): Longword;
+begin
+    StrLength:= length(s)
 end;
 {$ENDIF}
 
