@@ -425,7 +425,7 @@ handleCmd_inRoom ["VOTE", m] = do
     cl <- thisClient
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
     if isJust b then
-        voted (clUID cl) (fromJust b)
+        voted (fromJust b)
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 
