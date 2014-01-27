@@ -186,11 +186,13 @@ begin
     // need access to teams and frontend configs (for bindings)
     pfsMountAtRoot(UserPathPrefix);
 
+    {$IFNDEF PAS2C}
     if cTestLua then
         begin
             pfsMountAtRoot(ExtractFileDir(cScriptName));
             cScriptName := ExtractFileName(cScriptName);
         end;
+    {$ENDIF}
 end;
 
 procedure freeModule;

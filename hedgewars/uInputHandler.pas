@@ -506,7 +506,7 @@ begin
                 if l <> 'default' then
                     begin
                     if (length(l) = 2) and (l[1] = '\') then
-                        l:= l[1]
+                        l:= l[1] + ''
                     else if (l[1] = '"') and (l[length(l)] = '"') then
                         l:= copy(l, 2, length(l) - 2);
 
