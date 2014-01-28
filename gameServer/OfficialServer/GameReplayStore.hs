@@ -52,7 +52,7 @@ loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "
     where
         loadFile :: String -> IO (Maybe CheckInfo, [B.ByteString])
         loadFile fileName = E.handle (\(e :: SomeException) ->
-                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Nothing, [])) $ do
+                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [], [])) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
             return $ (
                 Just (CheckInfo fileName teams)
