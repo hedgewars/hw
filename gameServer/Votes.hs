@@ -11,6 +11,7 @@ import Data.Maybe
 import Utils
 import CoreTypes
 import HandlerUtils
+import Actions
 
 
 voted :: Bool -> Reader (ClientIndex, IRnC) [Action]
@@ -26,7 +27,41 @@ voted vote = do
     else if uid `L.elem` map fst (votes . fromJust $ voting rm) then
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
     else
-        return [ModifyRoom $ \r -> r{voting = liftM (\v -> v{votes = (uid, vote):votes v}) $ voting rm}]
+        actOnVoting . fromJust . liftM (\v -> v{votes = (uid, vote):votes v}) $ voting rm
+    where
+    actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
+    actOnVoting vt = do
+        let (contra, pro) = L.partition snd $ votes vt
+        let v = (length $ entitledToVote vt) `div` 2 + 1
+
+        if length contra >= v then
+            closeVoting
+        else if length pro >= v then do
+            act $ voteType vt
+            closeVoting
+        else
+            return [ModifyRoom $ \r -> r{voting = Just vt}]
+
+    closeVoting = do
+        chans <- roomClientsChans
+        return [
+            AnswerClients chans ["CHAT", "[server]", loc "Voting closed"]
+            , ModifyRoom (\r -> r{voting = Nothing})
+            ]
+
+    act (VoteKick nickname) = do
+        (thisClientId, rnc) <- ask
+        maybeClientId <- clientByNick nickname
+        rm <- thisRoom
+        let kickId = fromJust maybeClientId
+        let kickCl = rnc `client` kickId
+        let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
+        return
+            [KickRoomClient kickId |
+                isJust maybeClientId
+                && sameRoom
+                && ((isNothing $ gameInfo rm) || teamsInGame kickCl == 0)
+            ]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
