@@ -67,6 +67,9 @@ QList< QPair<QString, QString> > cDefaultAmmos =
         << qMakePair(QString("One of Everything"), QString(
             AMMOLINE_ONEEVERY_QT AMMOLINE_ONEEVERY_PROB
             AMMOLINE_ONEEVERY_DELAY AMMOLINE_ONEEVERY_CRATE ))
+        << qMakePair(QString("Highlander"), QString(
+            AMMOLINE_HIGHLANDER_QT AMMOLINE_HIGHLANDER_PROB
+            AMMOLINE_HIGHLANDER_DELAY AMMOLINE_HIGHLANDER_CRATE ))
         ;
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
