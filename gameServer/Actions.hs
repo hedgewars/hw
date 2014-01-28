@@ -717,7 +717,7 @@ processAction CheckRecord = do
         filterM (client'sM rnc (isJust . checkInfo)) allci
 
     (cinfo, l) <- io $ loadReplay (fromIntegral p) blackList
-    when (not . null $ l) $
+    when (isJust cinfo) $
         mapM_ processAction [
             AnswerClients [c] ("REPLAY" : l)
             , ModifyClient $ \c -> c{checkInfo = cinfo, isReady = False}
