@@ -11,6 +11,7 @@ set(hwserver_sources
     Consts.hs
     CoreTypes.hs
     EngineInteraction.hs
+    FloodDetection.hs
     HWProtoCore.hs
     HWProtoInRoomState.hs
     HWProtoLobbyState.hs

@@ -11,7 +11,6 @@ import Data.Maybe
 import Utils
 import CoreTypes
 import HandlerUtils
-import Actions
 
 
 voted :: Bool -> Reader (ClientIndex, IRnC) [Action]
@@ -67,7 +66,7 @@ voted vote = do
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
 startVote vt = do
     (ci, rnc) <- ask
-    cl <- thisClient
+    --cl <- thisClient
     rm <- thisRoom
     chans <- roomClientsChans
 
