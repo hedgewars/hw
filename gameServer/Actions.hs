@@ -782,3 +782,8 @@ processAction Cleanup = do
     io $ do
         t <- getCurrentTime
         cleanup jm t
+
+
+processAction (RegisterEvent e) = do
+    actions <- registerEvent e
+    mapM_ processAction actions

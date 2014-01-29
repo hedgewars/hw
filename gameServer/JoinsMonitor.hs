@@ -36,7 +36,7 @@ joinsSentry (JoinsMonitor ref) host time = do
     let last30sec = length $ takeWhile (< 30) lastJoins
     let last2min = length $ takeWhile (< 120) lastJoins
     let last10min = length $ takeWhile (< 600) lastJoins
-    let pass = last30sec < 2 && last2min < 4 && last10min < 6
+    let pass = last30sec < 2 && last2min < 3 && last10min < 5
 
     when pass $ writeIORef ref $ Map.alter (Just . (:) time . fromMaybe []) host m
 

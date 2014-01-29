@@ -78,6 +78,12 @@ data Action =
     | QueryReplay B.ByteString
     | ShowReplay B.ByteString
     | Cleanup
+    | RegisterEvent Event
+
+
+data Event = LobbyChatMessage
+           | EngineMessage
+           | RoomJoin
 
 type ClientChan = Chan [B.ByteString]
 
