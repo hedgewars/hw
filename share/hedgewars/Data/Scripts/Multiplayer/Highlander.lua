@@ -112,7 +112,7 @@ local utilWeps =  {
 					[amLandGun]=true, [amSwitch]=true, [amRubber]=true, [amIceGun]=true,
 					}
 
-local wepArray = 	{}
+local wepArray = {}
 
 local atkChoices = {}
 local utilChoices = {}
@@ -125,7 +125,7 @@ local switchStage = 0
 local lastWep = amNothing
 local shotsFired = 0
 
-local probability = {1,20,30,60,100,200,400,600,1000000};
+local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
 local maxWep = 56 -- game crashes if you exceed supported #
@@ -158,7 +158,7 @@ function StartingSetUp(gear)
     end
     for w,c in pairs(wepArray) do
         if c == 9 then
-            setGearValue(gear,w,100)
+            setGearValue(gear,w,1)
         end
 	end
 
@@ -168,7 +168,7 @@ function StartingSetUp(gear)
     if atktot > 0 then
         r = GetRandom(atktot)+1
         for w,c in pairs(atkChoices) do
-            WriteLnToConsole(' c: '..c..' w:'..w..' r:'..r)
+            --WriteLnToConsole('     c: '..c..' w:'..w..' r:'..r)
             if c >= r then
                 setGearValue(gear,w,1)
                 break
@@ -178,6 +178,7 @@ function StartingSetUp(gear)
     if utiltot > 0 then
         r = GetRandom(utiltot)+1
         for w,c in pairs(utilChoices) do
+            --WriteLnToConsole('util c: '..c..' w:'..w..' r:'..r)
             if c >= r then
                 setGearValue(gear,w,1)
                 break
@@ -236,6 +237,8 @@ function onGameStart()
     utilChoices[amSkip] = 0
     local c = 0
     for i = 1,maxWep do
+        atkChoices[i] = 0
+        utilChoices[i] = 0
         if i ~= 7 then
             wepArray[i] = 0
             c = GetAmmoCount(someHog, i)
@@ -243,9 +246,11 @@ function onGameStart()
             wepArray[i] = c
             if c < 9 and c > 0 then
                 if atkWeps[i] then
+                    --WriteLnToConsole('a    c: '..c..' w:'..i)
                     atktot = atktot + probability[c]
                     atkChoices[i] = atktot
                 elseif utilWeps[i] then
+                    --WriteLnToConsole('u    c: '..c..' w:'..i)
                     utiltot = utiltot + probability[c]
                     utilChoices[i] = utiltot
                 end
@@ -253,7 +258,7 @@ function onGameStart()
         end
     end
 
-    WriteLnToConsole('utiltot:'..utiltot..' atktot:'..atktot)
+    --WriteLnToConsole('utiltot:'..utiltot..' atktot:'..atktot)
         
 	ShowMission	(
 				loc("HIGHLANDER"),
