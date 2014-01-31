@@ -84,8 +84,8 @@ data Action =
 data Event = LobbyChatMessage
            | EngineMessage
            | RoomJoin
-           
-type EventsInfo = [(Int, Maybe UTCTime)]
+
+type EventsInfo = [(Int, UTCTime)]
 
 newEventsInfo :: EventsInfo
 newEventsInfo = []   
