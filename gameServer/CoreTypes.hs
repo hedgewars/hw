@@ -84,7 +84,12 @@ data Action =
 data Event = LobbyChatMessage
            | EngineMessage
            | RoomJoin
+           
+type EventsInfo = [(Int, Maybe UTCTime)]
 
+newEventsInfo :: EventsInfo
+newEventsInfo = []   
+    
 type ClientChan = Chan [B.ByteString]
 
 data CheckInfo =
@@ -119,6 +124,9 @@ data ClientInfo =
         isJoinedMidGame :: Bool,
         clientClan :: !(Maybe B.ByteString),
         checkInfo :: Maybe CheckInfo,
+        eiLobbyChat,
+        eiEM,
+        eiJoin :: EventsInfo,
         teamsInGame :: Word
     }
 

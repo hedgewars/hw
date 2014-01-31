@@ -56,6 +56,9 @@ acceptLoop servSock chan = E.bracket openHandle closeHandle f
                     False
                     Nothing
                     Nothing
+                    newEventsInfo
+                    newEventsInfo
+                    newEventsInfo
                     0
                     )
 
