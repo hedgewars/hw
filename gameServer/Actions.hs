@@ -33,6 +33,7 @@ import ServerState
 import Consts
 import ConfigFile
 import EngineInteraction
+import FloodDetection
 
 
 type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]

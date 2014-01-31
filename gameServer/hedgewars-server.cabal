@@ -30,6 +30,7 @@ Executable hedgewars-server
     deepseq,
     utf8-string,
     SHA,
-    entropy
+    entropy,
+    zlib
 
   ghc-options: -O2

@@ -27,7 +27,7 @@ handleCmd_lobby ["LIST"] = do
 handleCmd_lobby ["CHAT", msg] = do
     n <- clientNick
     s <- roomOthersChans
-    return [AnswerClients s ["CHAT", n, msg]]
+    return [AnswerClients s ["CHAT", n, msg], RegisterEvent LobbyChatMessage]
 
 handleCmd_lobby ["CREATE_ROOM", rName, roomPassword]
     | illegalName rName = return [Warning $ loc "Illegal room name"]
