@@ -55,8 +55,8 @@ handleCmd_inRoom ["CHAT", msg] = do
     s <- roomOthersChans
     return [AnswerClients s ["CHAT", n, msg]]
 
-handleCmd_inRoom ["PART"] = return [MoveToLobby "part", RegisterEvent RoomJoin]
-handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg, RegisterEvent RoomJoin]
+handleCmd_inRoom ["PART"] = return [MoveToLobby "part"]
+handleCmd_inRoom ["PART", msg] = return [MoveToLobby $ "part: " `B.append` msg]
 
 
 handleCmd_inRoom ("CFG" : paramName : paramStrs)

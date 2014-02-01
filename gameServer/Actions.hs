@@ -181,6 +181,7 @@ processAction (MoveToRoom ri) = do
     mapM_ processAction [
         AnswerClients chans ["JOINED", clNick]
         , AnswerClients allClientsChans ["CLIENT_FLAGS", "+i", clNick]
+        , RegisterEvent RoomJoin
         ]
 
 
