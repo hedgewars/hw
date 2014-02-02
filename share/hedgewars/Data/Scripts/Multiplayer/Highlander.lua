@@ -157,7 +157,7 @@ function StartingSetUp(gear)
         setGearValue(gear,i,0)
     end
     for w,c in pairs(wepArray) do
-        if c == 9 then
+        if c == 9 and (atkWeps[w] or utilWeps[w])  then
             setGearValue(gear,w,1)
         end
 	end
@@ -167,20 +167,22 @@ function StartingSetUp(gear)
     local r = 0
     if atktot > 0 then
         r = GetRandom(atktot)+1
-        for w,c in pairs(atkChoices) do
+        for i = 1,maxWep do
+        --for w,c in pairs(atkChoices) do
             --WriteLnToConsole('     c: '..c..' w:'..w..' r:'..r)
-            if c >= r then
-                setGearValue(gear,w,1)
+            if atkChoices[i] >= r then
+                setGearValue(gear,i,1)
                 break
             end
         end
     end
     if utiltot > 0 then
         r = GetRandom(utiltot)+1
-        for w,c in pairs(utilChoices) do
+        for i = 1,maxWep do
+       -- for w,c in pairs(utilChoices) do
             --WriteLnToConsole('util c: '..c..' w:'..w..' r:'..r)
-            if c >= r then
-                setGearValue(gear,w,1)
+            if utilChoices[i] >= r then
+                setGearValue(gear,i,1)
                 break
             end
         end
@@ -210,7 +212,7 @@ function TransferWeps(gear)
 
         for w,c in pairs(wepArray) do
 			val = getGearValue(gear,w)
-			if val ~= 0 then
+			if val ~= 0 and wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0  then
 				setGearValue(CurrentHedgehog, w, val)
 
 				-- if you are using multi-shot weapon, gimme one more
