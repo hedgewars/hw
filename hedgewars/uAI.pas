@@ -108,9 +108,11 @@ var BotLevel: Byte;
     ap: TAttackParams;
     Score, i, t, n, dAngle: LongInt;
     a, aa: TAmmoType;
+    useThisActions: boolean;
 begin
 BotLevel:= Me^.Hedgehog^.BotLevel;
 windSpeed:= hwFloat2Float(cWindSpeed);
+useThisActions:= false;
 
 for i:= 0 to Pred(Targets.Count) do
     if (Targets.ar[i].Score >= 0) and (not StopThinking) then
@@ -128,12 +130,21 @@ for i:= 0 to Pred(Targets.Count) do
 {$HINTS OFF}
             Score:= AmmoTests[a].proc(Me, Targets.ar[i], BotLevel, ap);
 {$HINTS ON}
-            if Actions.Score + Score > BestActions.Score then
+            if (Score > BadTurn) and (Actions.Score + Score > BestActions.Score) then
                 if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel - 1) * 2048) then
                     begin
-                    BestActions:= Actions;
-                    inc(BestActions.Score, Score);
-                    BestActions.isWalkingToABetterPlace:= false;
+                    if useThisActions then 
+                        begin
+                        BestActions.Count:= Actions.Count
+                        end
+                    else
+                        begin
+                        BestActions:= Actions;
+                        BestActions.isWalkingToABetterPlace:= false;
+                        useThisActions:= true
+                        end;
+
+                    BestActions.Score:= Actions.Score + Score;
 
                     if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
                         begin
