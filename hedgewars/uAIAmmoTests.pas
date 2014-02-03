@@ -684,7 +684,7 @@ end;
 function TestDesertEagle(Me: PGear; Targ: TTarget; Level: LongInt; var ap: TAttackParams): LongInt;
 var Vx, Vy, x, y, t: real;
     d: Longword;
-    {fallDmg, }valueResult: LongInt;
+    ix, iy, valueResult: LongInt;
 begin
 if (Level > 4) or (Targ.Score < 0) or (Targ.Kind <> gtHedgehog) then exit(BadTurn);
 Level:= Level; // avoid compiler hint
@@ -704,20 +704,25 @@ Vy:= (Targ.Point.Y - y) * t;
 ap.Angle:= DxDy2AttackAnglef(Vx, -Vy);
 d:= 0;
 
-repeat
-    x:= x + vX;
-    y:= y + vY;
-    if ((trunc(x) and LAND_WIDTH_MASK) = 0)and((trunc(y) and LAND_HEIGHT_MASK) = 0)
-    and (Land[trunc(y), trunc(x)] <> 0) then
-        inc(d);
-until (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5)
-    or (x < 0)
-    or (y < 0)
-    or (trunc(x) > LAND_WIDTH)
-    or (trunc(y) > LAND_HEIGHT)
-    or (d > 48);
+ix:= trunc(x);
+iy:= trunc(y);
 
-if Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) < 5 then
+if ((ix and LAND_WIDTH_MASK) = 0) and ((iy and LAND_HEIGHT_MASK) = 0) then
+    repeat
+        if Land[iy, ix] <> 0 then
+            inc(d);
+        x:= x + vX;
+        y:= y + vY;
+        ix:= trunc(x);
+        iy:= trunc(y);
+    until (Abs(Targ.Point.X - ix) + Abs(Targ.Point.Y - iy) < 5)
+        or (x < 0)
+        or (y < 0)
+        or (ix >= LAND_WIDTH)
+        or (iy >= LAND_HEIGHT)
+        or (d > 48);
+
+if Abs(Targ.Point.X - ix) + Abs(Targ.Point.Y - iy) < 5 then
     begin
     ap.AttacksNum:= 1 + (d + 8) div 12;
     valueResult:= RateShove(Me, Targ.Point.X, Targ.Point.Y, 1, 7, 20, vX*0.125, vY*0.125, afTrackFall) - ap.AttacksNum
