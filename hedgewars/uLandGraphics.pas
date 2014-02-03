@@ -364,7 +364,10 @@ for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0)
         if Land[j, i] = 0 then
             begin
             Land[j, i] := lfIce;
-            fillPixelFromIceSprite(i, j);
+            if (cReducedQuality and rqBlurryLand) = 0 then
+                fillPixelFromIceSprite(i, j)
+            else
+                fillPixelFromIceSprite(i div 2, j div 2);
             end;
         end;
     end;
