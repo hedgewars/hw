@@ -3,8 +3,6 @@ unit uPhysFSLayer;
 interface
 uses SDLh, LuaPas;
 
-{$INCLUDE "config.inc"}
-
 const PhysfsLibName = {$IFDEF PHYSFS_INTERNAL}'libhwphysfs'{$ELSE}'libphysfs'{$ENDIF};
 const PhyslayerLibName = 'libphyslayer';
 
@@ -38,7 +36,7 @@ procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibNa
 {$ENDIF}
 
 implementation
-uses uUtils, uVariables, sysutils;
+uses uConsts, uUtils, uVariables, sysutils;
 
 {$IFNDEF PAS2C}
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
