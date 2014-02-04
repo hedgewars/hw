@@ -60,7 +60,7 @@ function  toPowerOf2(i: Longword): Longword; inline;
 
 function  endian(independent: LongWord): LongWord; inline;
 
-function  CheckCJKFont(s: ansistring; font: THWFont): THWFont;
+function  CheckCJKFont(s: PChar; font: THWFont): THWFont;
 
 procedure AddFileLog(s: shortstring);
 procedure AddFileLogRaw(s: pchar); cdecl;
@@ -364,7 +364,7 @@ LeaveCriticalSection(logMutex);
 {$ENDIF}
 end;
 
-function CheckCJKFont(s: ansistring; font: THWFont): THWFont;
+function CheckCJKFont(s: PChar; font: THWFont): THWFont;
 var l, i : LongInt;
     u: WideChar;
     tmpstr: array[0..256] of WideChar;
@@ -373,11 +373,11 @@ CheckCJKFont:= font;
 
 {$IFNDEF MOBILE}
 // remove chinese fonts for now
-if (font >= CJKfnt16) or (length(s) = 0) then
+if (font >= CJKfnt16) or (StrLength(s) = 0) then
 {$ENDIF}
     exit;
 
-l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
+l:= Utf8ToUnicode(@tmpstr, s, StrLength(s))-1;
 i:= 0;
 
 while i < l do

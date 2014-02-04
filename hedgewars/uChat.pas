@@ -100,7 +100,7 @@ else
     delete(str, 1, 1)
     end;
 
-font:= CheckCJKFont(str, fnt16);
+font:= CheckCJKFont(Str2PChar(str), fnt16);
 w:= 0; h:= 0; // avoid compiler hints
 TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @w, @h);
 
