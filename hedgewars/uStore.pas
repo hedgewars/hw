@@ -1258,13 +1258,13 @@ i:= 0; j:= 0; // avoid compiler hints
 // TODO: Recheck height/position calculation
 
 // get caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(caption), @i, @j);
+TTF_SizeUTF8(Fontz[font].Handle, caption, @i, @j);
 // width adds 36 px (image + space)
 w:= i + 36 + wa;
 h:= j + ha;
 
 // get sub caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(subcaption), @i, @j);
+TTF_SizeUTF8(Fontz[font].Handle, subcaption, @i, @j);
 // width adds 36 px (image + space)
 if w < (i + 36 + wa) then
     w:= i + 36 + wa;
@@ -1288,7 +1288,7 @@ while tmpdesc <> '' do
 if extra <> '' then
     begin
     // get extra label's dimensions
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(extra), @i, @j);
+    TTF_SizeUTF8(Fontz[font].Handle, extra, @i, @j);
     if w < (i + wa) then
         w:= i + wa;
     inc(h, j + ha);
