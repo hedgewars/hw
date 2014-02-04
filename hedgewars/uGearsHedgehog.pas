@@ -185,23 +185,23 @@ with Gear^.Hedgehog^ do
         color:= Gear^.Hedgehog^.Team^.Clan^.Color;
         case Gear^.MsgParam of
             1: begin
-               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
+               AddCaption(FormatPChar(trmsg[sidBounce], trmsg[sidBounce1]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 350;
                end;
             2: begin
-               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
+               AddCaption(FormatPChar(trmsg[sidBounce], trmsg[sidBounce2]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 700;
                end;
             3: begin
-               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
+               AddCaption(FormatPChar(trmsg[sidBounce], trmsg[sidBounce3]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 1000;
                end;
             4: begin
-               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
+               AddCaption(FormatPChar(trmsg[sidBounce], trmsg[sidBounce4]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 2000;
                end;
             5: begin
-               AddCaption(FormatA(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
+               AddCaption(FormatPChar(trmsg[sidBounce], trmsg[sidBounce5]), color, capgrpAmmostate);
                CurWeapon^.Bounciness:= 4000;
                end
             end
@@ -533,7 +533,7 @@ with CurrentHedgehog^ do
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) then
             begin
             s:= inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1);
-            AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+            AddCaption(formatPChar(trmsg[sidRemaining], Str2Pchar(s)), cWhiteColor, capgrpAmmostate);
             end;
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks)
@@ -651,7 +651,7 @@ begin
             s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(cnt) + ')'
         else
             s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')';
-        AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
+        AddCaption(Str2PChar(s), HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
         // show ammo icon
         vga:= AddVisualGear(X, Y, vgtAmmo);
@@ -714,7 +714,7 @@ case Gear^.Pos of
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    AddCaption(Str2PChar(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
@@ -1268,7 +1268,7 @@ if (Gear^.Health = 0) then
                 Gear^.State:= (Gear^.State or gstHHDeath) and (not gstAnimation);
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
-                AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+                AddCaption(FormatPChar(GetEventString(eidDied), Str2PChar(Gear^.Hedgehog^.Name)), cWhiteColor, capgrpMessage);
                 end;
             end
         else
@@ -1277,7 +1277,7 @@ if (Gear^.Health = 0) then
             Gear^.doStep:= @doStepHedgehogGone;
 
             // Gone message
-            AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+            AddCaption(FormatPChar(GetEventString(eidGone), Str2PChar(Gear^.Hedgehog^.Name)), cWhiteColor, capgrpMessage);
             end
         end;
     exit

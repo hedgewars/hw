@@ -77,13 +77,13 @@ begin
     WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
 end;*)
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar; maxLength: LongWord): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     finalRect, textRect: TSDL_Rect;
 begin
-    TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
+    TTF_SizeUTF8(Fontz[Font].Handle, s, @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
@@ -97,7 +97,7 @@ begin
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
-    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
     finalRect.x:= X + cFontBorder + 2;
     finalRect.y:= Y + cFontBorder;
     SDLTry(tmpsurf <> nil, true);
