@@ -99,14 +99,14 @@ const
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
 
-function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring): TSDL_Rect;
+function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     finalRect: TSDL_Rect;
 begin
 w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
+TTF_SizeUTF8(Fontz[Font].Handle, s, @w, @h);
 finalRect.x:= X + cFontBorder + 2;
 finalRect.y:= Y + cFontBorder;
 finalRect.w:= w + cFontBorder * 2 + 4;
@@ -114,7 +114,7 @@ finalRect.h:= h + cFontBorder * 2;
 clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
-tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
+tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
 tmpsurf:= doSurfaceConversion(tmpsurf);
 SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
@@ -1322,13 +1322,13 @@ while tmpdesc <> '' do
     r2:= r;
     if tmpline <> '' then
         begin
-        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, tmpline);
+        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, Str2PChar(tmpline));
 
         // render highlighted caption (if there is a ':')
         tmpline2:= _S'';
         SplitByChar(tmpline, tmpline2, ':');
         if tmpline2 <> _S'' then
-            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, tmpline + ':');
+            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, Str2PChar(tmpline + ':'));
         end
     end;
 
