@@ -3,6 +3,30 @@ include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 find_package_or_disable(GHC NOSERVER)
 
+include(${CMAKE_MODULE_PATH}/CheckHaskellModuleExists.cmake)
+
+check_haskell_module_exists("Control.Exception" mask 1 base)
+check_haskell_module_exists("Data.Map" size 1 containers)
+check_haskell_module_exists("Data.Vector" length 1 vector)
+check_haskell_module_exists("Data.ByteString" pack 1 bytestring)
+check_haskell_module_exists("Text.Show.ByteString" putDigit 1 bytestring-show)
+check_haskell_module_exists("Network.BSD" getHostName 0 network)
+check_haskell_module_exists("Data.Time" getCurrentTime 0 time)
+check_haskell_module_exists("Control.Monad.State" fix 1 mtl)
+check_haskell_module_exists("Codec.Binary.Base64" encode 1 dataenc)
+check_haskell_module_exists("System.Log.Logger" warningM 1 hslogger)
+check_haskell_module_exists("System.Process" createProcess 3 process)
+check_haskell_module_exists("Data.ByteString.Lazy.UTF8" decode 1 utf8-string)
+check_haskell_module_exists("Data.Digest.Pure.SHA" sha1 1 SHA)
+check_haskell_module_exists("System.Entropy" openHandle 0 entropy)
+check_haskell_module_exists("Codec.Compression.Zlib" decompress 1 zlib)
+check_haskell_module_exists("System.Random" getStdGen 0 random)
+
+# this one needs type signatures to work
+# check_haskell_module_exists("Control.DeepSeq" deepseq 2 deepseq)
+
+
+
 set(hwserver_sources
     OfficialServer/DBInteraction.hs
     Actions.hs

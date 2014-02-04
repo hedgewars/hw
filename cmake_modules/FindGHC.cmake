@@ -17,7 +17,7 @@ find_program(GHC_EXECUTABLE
     )
 
 if (GHC_EXECUTABLE)
-    # check Freepascal version
+    # check ghc version
     execute_process(COMMAND ${GHC_EXECUTABLE} -V
                     OUTPUT_VARIABLE GHC_VERSION_OUTPUT
                     ERROR_VARIABLE GHC_VERSION_ERROR
