@@ -23,7 +23,7 @@ unit uCaptions;
 interface
 uses uTypes;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(caption: PChar; Color: Longword; Group: TCapGroup);
 procedure DrawCaptions;
 procedure ReloadCaptions(unload: boolean);
 
@@ -42,8 +42,11 @@ type TCaptionStr = record
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(caption: PChar; Color: Longword; Group: TCapGroup);
+var
+    s: shortstring;
 begin
+    s:= caption;
     if cOnlyStats then exit;
     if Length(s) = 0 then
         exit;

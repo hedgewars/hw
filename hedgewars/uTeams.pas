@@ -103,7 +103,7 @@ if not GameOver then
             else
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
-            AddCaption(s, cWhiteColor, capgrpGameState);
+            AddCaption(Str2PChar(s), cWhiteColor, capgrpGameState);
             SendStat(siGameResult, s);
             AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
@@ -334,7 +334,7 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         end;
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
-    AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
+    AddCaption(FormatPChar(trmsg[sidReady], Str2PChar(CurrentTeam^.TeamName)), cWhiteColor, capgrpGameState)
     end
 else
     begin

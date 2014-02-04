@@ -26,7 +26,7 @@ procedure DoGameTick(Lag: LongInt);
 ////////////////////
     implementation
 ////////////////////
-uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
+uses uUtils, uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
      uTypes, uVariables, uCommands, uConsts, uVisualGearsList
      {$IFDEF USE_TOUCH_INTERFACE}, uTouch{$ENDIF};
 
@@ -77,7 +77,7 @@ if SoundTimerTicks >= 50 then
         else if not isAudioMuted then
             begin
             str(i, s);
-            AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
+            AddCaption(FormatPChar(trmsg[sidVolume], Str2PChar(s)), cWhiteColor, capgrpVolume)
             end
         end;
     end;
