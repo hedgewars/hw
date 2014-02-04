@@ -283,7 +283,7 @@ function RenderStringTexLim(s: PChar; Color: Longword; font: THWFont; maxLength:
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
-    if StrLength(s) = 0 then s:= Str2PChar(''); // conversion because pas2c ain't smart enough yet;
+    if s[0] = #0 then s:= Str2PChar(''); // conversion because pas2c ain't smart enough yet;
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
     TTF_SizeUTF8(Fontz[font].Handle, s, @w, @h);
