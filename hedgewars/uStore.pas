@@ -185,9 +185,9 @@ md:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTexLim(Str2PChar(TeamName), Clan^.Color, Font, cTeamHealthWidth);
+        NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
         if length(Owner) > 0 then
-            OwnerTex:= RenderStringTexLim(Str2PChar(Owner), Clan^.Color, Font, cTeamHealthWidth);
+            OwnerTex:= RenderStringTexLim(Owner, Clan^.Color, Font, cTeamHealthWidth);
 
         r.x:= 0;
         r.y:= 0;
@@ -261,7 +261,7 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTexLim(Str2PChar(Name), Clan^.Color, fnt16, cTeamHealthWidth);
+                    NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
                     if Hat = 'NoHat' then
                         begin
                         if (month = 4) and (md = 20) then
@@ -438,10 +438,10 @@ SDL_FreeSurface(tmpsurf);
 
 InitHealth;
 
-PauseTexture:= RenderStringTexPChar(trmsg[sidPaused], cYellowColor, fntBig);
-AFKTexture:= RenderStringTexPChar(trmsg[sidAFK], cYellowColor, fntBig);
-ConfirmTexture:= RenderStringTexPChar(trmsg[sidConfirm], cYellowColor, fntBig);
-SyncTexture:= RenderStringTexPChar(trmsg[sidSync], cYellowColor, fntBig);
+PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
+AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
+ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
+SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
 if not reload then
     AddProgress;
@@ -450,8 +450,8 @@ if not reload then
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
         begin
-        TryDo(trAmmo[NameId][0] <> #0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, trAmmo[NameId], cWhiteColorChannels);
+        TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeTexture(NameTex);
@@ -1238,10 +1238,10 @@ var tmpsurf: PSDL_SURFACE;
     tmpline, tmpline2, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
-if caption[0] = #0 then
-    caption:= Str2PChar(_S'???');
-if subcaption[0] = #0 then
-    subcaption:= Str2PChar(_S' ');
+if caption = '' then
+    caption:= '???';
+if subcaption = '' then
+    subcaption:= _S' ';
 
 font:= CheckCJKFont(caption,fnt16);
 font:= CheckCJKFont(subcaption,font);
@@ -1285,7 +1285,7 @@ while tmpdesc <> '' do
         end
     end;
 
-if extra[0] <> #0 then
+if extra <> '' then
     begin
     // get extra label's dimensions
     TTF_SizeUTF8(Fontz[font].Handle, extra, @i, @j);
@@ -1332,7 +1332,7 @@ while tmpdesc <> '' do
         end
     end;
 
-if extra[0] <> #0 then
+if extra <> '' then
     r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, extra);
 
 r.x:= cFontBorder + 6;
@@ -1370,7 +1370,7 @@ r.w:= 32;
 r.h:= 32;
 
 // default (no extra text)
-extra:= Str2PChar(''); // conversion because pas2c ain't smart enough yet
+extra:= _S'';
 extracolor:= 0;
 
 if (CurrentTeam <> nil) and (Ammoz[atype].SkipTurns >= CurrentTeam^.Clan^.TurnNumber) then // weapon or utility is not yet available
@@ -1385,7 +1385,7 @@ else if (Ammoz[atype].Ammo.Propz and ammoprop_NoRoundEnd) <> 0 then // weapon or
     end
 else
     begin
-    extra:= Str2PChar(''); // conversion because pas2c ain't smart enough yet
+    extra:= _S'';
     extracolor:= 0;
     end;
 

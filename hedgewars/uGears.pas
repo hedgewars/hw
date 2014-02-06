@@ -331,7 +331,7 @@ case step of
                     if i = 1 then
                         AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
                     else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                        AddCaption(FormatPChar(trmsg[sidRoundsSD], Str2PChar(s)), cWhiteColor, capgrpGameState);
+                        AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                     end;
                 end;
             if bBetweenTurns
