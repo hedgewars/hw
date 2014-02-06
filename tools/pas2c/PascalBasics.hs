@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleContexts, NoMonomorphismRestriction #-}
 module PascalBasics where
 
 import Text.Parsec.Combinator
@@ -7,9 +7,19 @@ import Text.Parsec.Prim
 import Text.Parsec.Token
 import Text.Parsec.Language
 import Data.Char
+import Control.Monad
+import Data.Functor.Identity
 
+char' :: Char -> Parsec String u ()
+char' = void . char
+
+string' :: String -> Parsec String u ()
+string' = void . string
+
+builtin :: [String]
 builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit", "break", "continue", "length"]
 
+pascalLanguageDef :: GenLanguageDef String u Identity
 pascalLanguageDef
     = emptyDef
     { commentStart   = "(*"
@@ -31,40 +41,45 @@ pascalLanguageDef
     , caseSensitive  = False
     }
 
-preprocessorSwitch :: Stream s m Char => ParsecT s u m String
+preprocessorSwitch :: Stream String Identity Char => Parsec String u String
 preprocessorSwitch = do
-    try $ string "{$"
+    try $ string' "{$"
     s <- manyTill (noneOf "\n") $ char '}'
     return s
 
+caseInsensitiveString :: Stream String Identity Char => String -> Parsec String u String
 caseInsensitiveString s = do
     mapM_ (\a -> satisfy (\b -> toUpper a == toUpper b)) s <?> s
     return s
 
+pas :: GenTokenParser String u Identity
 pas = patch $ makeTokenParser pascalLanguageDef
     where
     patch tp = tp {stringLiteral = stringL}
 
+comment :: Stream String Identity Char => Parsec String u String
 comment = choice [
         char '{' >> notFollowedBy (char '$') >> manyTill anyChar (try $ char '}')
         , (try $ string "(*") >> manyTill anyChar (try $ string "*)")
         , (try $ string "//") >> manyTill anyChar (try newline)
         ]
 
+comments :: Parsec String u ()
 comments = do
     spaces
     skipMany $ do
-        preprocessorSwitch <|> comment
+        void $ preprocessorSwitch <|> comment
         spaces
 
+stringL :: Parsec String u String
 stringL = do
-    (char '\'')
+    char' '\''
     s <- (many $ noneOf "'")
-    (char '\'')
+    char' '\''
     ss <- many $ do
-        (char '\'')
+        char' '\''
         s' <- (many $ noneOf "'")
-        (char '\'')
+        char' '\''
         return $ '\'' : s'
     comments
     return $ concat (s:ss)
