@@ -398,7 +398,7 @@ with Hedgehog do
             s:= s + ' (' + IntToStr(Count) + ')';
         if (Propz and ammoprop_Timerable) <> 0 then
             s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
-        AddCaption(Str2PChar(s), Team^.Clan^.Color, capgrpAmmoinfo);
+        AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
             if Gear <> nil then Gear^.State:= Gear^.State or      gstHHChooseTarget;

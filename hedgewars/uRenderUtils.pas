@@ -35,8 +35,7 @@ procedure DrawLine2Surf(dest: PSDL_Surface; x0,y0,x1,y1:LongInt; r,g,b: byte);
 procedure DrawRoundRect(rect: PSDL_Rect; BorderColor, FillColor: Longword; Surface: PSDL_Surface; Clear: boolean);
 
 function  RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
-function  RenderStringTexPChar(s: PChar; Color: Longword; font: THWFont): PTexture;
-function  RenderStringTexLim(s: PChar; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
+function  RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
 function  RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
 
 implementation
@@ -77,13 +76,13 @@ begin
     WriteInRoundRect:= WriteInRoundRect(Surface, X, Y, Color, Font, s, 0);
 end;*)
 
-function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar; maxLength: LongWord): TSDL_Rect;
+function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord): TSDL_Rect;
 var w, h: LongInt;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     finalRect, textRect: TSDL_Rect;
 begin
-    TTF_SizeUTF8(Fontz[Font].Handle, s, @w, @h);
+    TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
@@ -97,7 +96,7 @@ begin
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
-    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
     finalRect.x:= X + cFontBorder + 2;
     finalRect.y:= Y + cFontBorder;
     SDLTry(tmpsurf <> nil, true);
@@ -271,22 +270,17 @@ end;
 
 function RenderStringTex(s: ansistring; Color: Longword; font: THWFont): PTexture;
 begin
-    RenderStringTex:= RenderStringTexLim(Str2PChar(s), Color, font, 0);
+    RenderStringTex:= RenderStringTexLim(s, Color, font, 0);
 end;
 
-function RenderStringTexPChar(s: PChar; Color: Longword; font: THWFont): PTexture;
-begin
-    RenderStringTexPChar:= RenderStringTexLim(s, Color, font, 0);
-end;
-
-function RenderStringTexLim(s: PChar; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
+function RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
-    if s[0] = #0 then s:= Str2PChar(' '); // conversion because pas2c ain't smart enough yet;
+    if length(s) = 0 then s:= _S' ';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, s, @w, @h);
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
 
     finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
@@ -342,7 +336,7 @@ begin
 
     if length(s) = 0 then
         s:= '...';
-    font:= CheckCJKFont(Str2PChar(s), font);
+    font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
     if w<8 then

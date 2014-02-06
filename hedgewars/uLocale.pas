@@ -25,7 +25,6 @@ uses uTypes;
 const MAX_EVENT_STRINGS = 100;
 
 procedure LoadLocale(FileName: shortstring);
-function  FormatPChar(fmt: PChar; arg: PChar): PChar;
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
 function  FormatA(fmt: PChar; arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): PChar;
@@ -108,14 +107,6 @@ begin
         GetEventString:= '*missing translation*'
     else
         GetEventString:= trevt[e][GetRandom(trevt_n[e])]; // Pick a random message and return it
-end;
-
-function FormatPChar(fmt: PChar; arg: PChar): PChar;
-var
-    s: shortstring;
-begin
-    s:= arg;
-    FormatPChar:= Str2PChar(FormatA(fmt, s));
 end;
 
 function Format(fmt: shortstring; var arg: shortstring): shortstring;

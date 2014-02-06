@@ -234,7 +234,7 @@ begin
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
                     str(vampDmg, s);
                     s:= '+' + s;
-                    AddCaption(Str2PChar(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     i:= 0;
@@ -419,7 +419,7 @@ begin
                             begin
                             Gear^.doStep := @doStepDrowningGear;
                             Gear^.State := Gear^.State and (not gstHHDriven);
-                            AddCaption(FormatPChar(GetEventString(eidDrowned), Str2PChar(Gear^.Hedgehog^.Name)), cWhiteColor, capgrpMessage);
+                            AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
                             end
                         end
                     else

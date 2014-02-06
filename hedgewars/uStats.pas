@@ -112,7 +112,7 @@ if FinishedTurnsTotal <> 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
-            AddCaption(FormatPChar(GetEventString(eidHurtSelf), Str2PChar(CurrentHedgehog^.Name)), cWhiteColor, capgrpMessage);
+            AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
 
     else if DamageClan <> 0 then
@@ -140,7 +140,7 @@ if FinishedTurnsTotal <> 0 then
     else if isTurnSkipped then
         begin
         AddVoice(sndBoring, PreviousTeam^.voicepack);
-        AddCaption(FormatPChar(GetEventString(eidTurnSkipped), Str2PChar(CurrentHedgehog^.Name)), cWhiteColor, capgrpMessage);
+        AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
         end
     else if not PlacingHogs then
         AddVoice(sndCoward, PreviousTeam^.voicepack);
