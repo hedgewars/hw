@@ -3323,15 +3323,15 @@ var
 begin
     if WorldWrap(Gear) then
         begin
-            if (WorldEdge = weBounce) then // mirror
-                Gear^.Angle:= 4096 - Gear^.Angle
-            else if (WorldEdge = weSea) then // rotate 90 degree
-                begin
-                // sea-wrapped gears move upwards, so let's mirror angle if needed
-                if Gear^.Angle < 2048 then
-                    Gear^.Angle:= 4096 - Gear^.Angle;
-                Gear^.Angle:= (Gear^.Angle + 1024) mod 4096;
-                end;
+        if (WorldEdge = weBounce) then // mirror
+            Gear^.Angle:= 4096 - Gear^.Angle
+        else if (WorldEdge = weSea) then // rotate 90 degree
+            begin
+            // sea-wrapped gears move upwards, so let's mirror angle if needed
+            if Gear^.Angle < 2048 then
+                Gear^.Angle:= 4096 - Gear^.Angle;
+            Gear^.Angle:= (Gear^.Angle + 1024) mod 4096;
+            end;
         end;
     AllInactive := false;
 
@@ -4171,21 +4171,7 @@ begin
         // is it worth adding an arcsin table?  Just how often would we end up doing something like this?
         // SYNCED ANGLE UPDATE
         if iterator^.Kind = gtRCPlane then
-            begin
-            // recycling as temp vars
-            resety.isNegative:= false;
-            resety.QWordValue:= 4294967296 * 112;
-            resetx.isNegative:= false;
-            resetx.QWordValue:= 4294967296 * 35;
-            resetdx.isNegative:= false;
-            resetdx.QWordValue:= 4294967296 * 1152;
-
-            resetdy:=hwAbs(iterator^.dX*4);
-            resetdy:= resetdy + hwPow(resetdy,3)/_6 + _3 * hwPow(resetdy,5) / _40 + _5 * hwPow(resetdy,7) / resety + resetx * hwPow(resetdy,9) / resetdx;
-            iterator^.Angle:= hwRound(resetdy*_2048 / _PI);
-            if not iterator^.dY.isNegative then iterator^.Angle:= 2048-iterator^.Angle;
-            if iterator^.dX.isNegative then iterator^.Angle:= 4096-iterator^.Angle;
-            end
+            iterator^.Angle:= (1024 + vector2Angle(iterator^.dX, iterator^.dY) mod 4096)
         // VISUAL USE OF ANGLE ONLY
         else if (CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtKamikaze) and (CurAmmoGear^.Hedgehog = iterator^.Hedgehog) then
             begin
