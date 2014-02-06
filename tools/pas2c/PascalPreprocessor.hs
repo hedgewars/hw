@@ -7,10 +7,16 @@ import Control.Monad
 import System.IO
 import qualified Data.Map as Map
 import Control.Exception(catch, IOException)
-import Data.Char
-import Prelude hiding (catch)
+import Prelude
+
+char' :: Char -> ParsecT String u IO ()
+char' = void . char
+
+string' :: String -> ParsecT String u IO ()
+string' = void . string
 
 -- comments are removed
+comment :: ParsecT String u IO String
 comment = choice [
         char '{' >> notFollowedBy (char '$') >> manyTill anyChar (try $ char '}') >> return ""
         , (try $ string "(*") >> manyTill anyChar (try $ string "*)") >> return ""
@@ -27,8 +33,8 @@ preprocess inputPath alternateInputPath fn symbols = do
          (Right a) -> return a
 
     where
-    preprocessFile fn = do
-        f <- liftIO (readFile fn)
+    preprocessFile fn' = do
+        f <- liftIO (readFile fn')
         setInput f
         preprocessor
 
@@ -54,7 +60,7 @@ preprocess inputPath alternateInputPath fn symbols = do
         return $ c:s
 
     switch = do
-        try $ string "{$"
+        try $ string' "{$"
         s <- choice [
             include
             , ifdef
@@ -67,14 +73,14 @@ preprocess inputPath alternateInputPath fn symbols = do
         return s
 
     include = do
-        try $ string "INCLUDE"
+        try $ string' "INCLUDE"
         spaces
-        (char '"')
-        fn <- many1 $ noneOf "\"\n"
-        char '"'
+        (char' '"')
+        ifn <- many1 $ noneOf "\"\n"
+        char' '"'
         spaces
-        char '}'
-        f <- liftIO (readFile (inputPath ++ fn) `catch` (\(exc :: IOException) -> readFile (alternateInputPath ++ fn) `catch` (\(_ :: IOException) -> error ("File not found: " ++ fn))))
+        char' '}'
+        f <- liftIO (readFile (inputPath ++ ifn) `catch` (\(_ :: IOException) -> readFile (alternateInputPath ++ ifn) `catch` (\(_ :: IOException) -> error ("File not found: " ++ fn))))
         c <- getInput
         setInput $ f ++ c
         return ""
@@ -86,7 +92,7 @@ preprocess inputPath alternateInputPath fn symbols = do
         spaces
         d <- identifier
         spaces
-        char '}'
+        char' '}'
 
         updateState $ \(m, b) ->
             (m, (f $ d `Map.member` m) : b)
@@ -94,9 +100,9 @@ preprocess inputPath alternateInputPath fn symbols = do
         return ""
 
     if' = do
-        s <- try (string "IF" >> notFollowedBy alphaNum)
+        try (string' "IF" >> notFollowedBy alphaNum)
 
-        manyTill anyChar (char '}')
+        void $ manyTill anyChar (char' '}')
         --char '}'
 
         updateState $ \(m, b) ->
@@ -105,19 +111,19 @@ preprocess inputPath alternateInputPath fn symbols = do
         return ""
 
     elseSwitch = do
-        try $ string "ELSE}"
+        try $ string' "ELSE}"
         updateState $ \(m, b:bs) -> (m, (not b):bs)
         return ""
     endIf = do
-        try $ string "ENDIF}"
-        updateState $ \(m, b:bs) -> (m, bs)
+        try $ string' "ENDIF}"
+        updateState $ \(m, _:bs) -> (m, bs)
         return ""
     define = do
-        try $ string "DEFINE"
+        try $ string' "DEFINE"
         spaces
         i <- identifier
         d <- ((string ":=" >> return ()) <|> spaces) >> many (noneOf "}")
-        char '}'
+        char' '}'
         updateState $ \(m, b) -> (if (and b) && (head i /= '_') then Map.insert i d m else m, b)
         return ""
     replace s = do
@@ -125,6 +131,6 @@ preprocess inputPath alternateInputPath fn symbols = do
         return $ Map.findWithDefault s s m
 
     unknown = do
-        fn <- many1 $ noneOf "}\n"
-        char '}'
-        return $ "{$" ++ fn ++ "}"
+        un <- many1 $ noneOf "}\n"
+        char' '}'
+        return $ "{$" ++ un ++ "}"

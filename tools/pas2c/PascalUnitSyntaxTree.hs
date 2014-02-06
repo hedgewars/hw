@@ -1,8 +1,5 @@
 module PascalUnitSyntaxTree where
 
-import Data.Maybe
-import Data.Char
-
 data PascalUnit =
     Program Identifier Implementation Phrase
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
