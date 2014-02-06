@@ -377,7 +377,7 @@ if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
     exit;
 
-l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), length(s))-1;
+l:= Utf8ToUnicode(@tmpstr, Str2PChar(s), min(length(tmpstr), length(s)))-1;
 i:= 0;
 
 while i < l do
