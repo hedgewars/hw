@@ -121,9 +121,9 @@ constsDecl = do
 
 typeDecl = choice [
     char '^' >> typeDecl >>= return . PointerTo
-    , try (string "shortstring") >> return (String 255)
-    , try (string "string") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
-    , try (string "ansistring") >> optionMaybe (brackets pas $ integer pas) >>= return . String . fromMaybe 255
+    , try (string "shortstring") >> return String
+    , try (string "string") >> optionMaybe (brackets pas $ integer pas) >> return String
+    , try (string "ansistring") >> optionMaybe (brackets pas $ integer pas) >> return String
     , arrayDecl
     , recordDecl
     , setDecl

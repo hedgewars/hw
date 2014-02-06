@@ -28,7 +28,7 @@ data TypeDecl = SimpleType Identifier
     | ArrayDecl (Maybe Range) TypeDecl
     | RecordType [TypeVarDeclaration] (Maybe [[TypeVarDeclaration]])
     | PointerTo TypeDecl
-    | String Integer
+    | String
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
     | DeriveType InitExpression
