@@ -421,7 +421,7 @@ resolveType (DeriveType (InitPrefixOp _ e)) = initExpr2C e >> gets lastType
 resolveType (DeriveType (BuiltInFunction{})) = return (BTInt True)
 resolveType (DeriveType (InitReference (Identifier{}))) = return BTBool -- TODO: derive from actual type
 resolveType (DeriveType _) = return BTUnknown
-resolveType (String _) = return BTString
+resolveType String = return BTString
 resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
 resolveType (RangeType _) = return $ BTVoid
@@ -713,7 +713,7 @@ type2C t = do
     return r
     where
     type2C' VoidType = return (text "void" <+>)
-    type2C' (String l) = return (text "string255" <+>)--return (text ("string" ++ show l) <+>)
+    type2C' String = return (text "string255" <+>)--return (text ("string" ++ show l) <+>)
     type2C' (PointerTo (SimpleType i)) = do
         i' <- id2C IODeferred i
         lt <- gets lastType
