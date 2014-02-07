@@ -6,8 +6,7 @@ import Control.Monad.IO.Class
 import Control.Monad
 import System.IO
 import qualified Data.Map as Map
-import Control.Exception(catch, IOException)
-import Prelude
+import qualified Control.Exception as E
 
 char' :: Char -> ParsecT String u IO ()
 char' = void . char
@@ -80,7 +79,9 @@ preprocess inputPath alternateInputPath fn symbols = do
         char' '"'
         spaces
         char' '}'
-        f <- liftIO (readFile (inputPath ++ ifn) `catch` (\(_ :: IOException) -> readFile (alternateInputPath ++ ifn) `catch` (\(_ :: IOException) -> error ("File not found: " ++ fn))))
+        f <- liftIO (readFile (inputPath ++ ifn) 
+            `E.catch` (\(_ :: E.IOException) -> readFile (alternateInputPath ++ ifn) 
+            `E.catch` (\(_ :: E.IOException) -> error ("File not found: " ++ fn))))
         c <- getInput
         setInput $ f ++ c
         return ""
