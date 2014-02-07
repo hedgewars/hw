@@ -228,7 +228,7 @@ function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 5 then
         begin
-        ShowMission(lua_tolstring(L, 1, nil), lua_tolstring(L, 2, nil), lua_tolstring(L, 3, nil), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
         end
     else
         LuaParameterCountError('ShowMission', 'caption, subcaption, text, icon, time', lua_gettop(L));
@@ -308,10 +308,10 @@ end;
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
-        AddCaption(lua_tolstring(L, 1, nil), cWhiteColor, capgrpMessage)
+        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage)
     else if lua_gettop(L) = 3 then
         begin
-        AddCaption(lua_tolstring(L, 1, nil), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
+        AddCaption(lua_tostring(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
         end
     else
         LuaParameterCountError('AddCaption', 'text[, color, captiongroup]', lua_gettop(L));
