@@ -1200,6 +1200,7 @@ ref2C (TypeCast t'@(Identifier i _) expr) = do
         ("pchar", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
         ("pchar", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pcharA" $ BTPointerTo BTChar))
         ("shortstring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2str" $ BTString))
+        ("ansistring", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "str2astr" $ BTAString))
         (a, _) -> do
             e <- expr2C expr
             t <- id2C IOLookup t'
