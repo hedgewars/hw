@@ -458,7 +458,6 @@ begin
 
     if complete then
     begin
-        uLocale.initModule;
         uPhysFSLayer.initModule;
         uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
@@ -515,7 +514,6 @@ begin
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
         uPhysFSLayer.freeModule;
-        uLocale.freeModule;
         end;
 
     uIO.freeModule;

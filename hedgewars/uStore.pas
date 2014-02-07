@@ -44,7 +44,7 @@ function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: s
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
-function  RenderHelpWindow(caption, subcaption, description, extra: PChar; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
 procedure FreeWeaponTooltip;
@@ -1229,7 +1229,7 @@ begin
     Step:= 0
 end;
 
-function RenderHelpWindow(caption, subcaption, description, extra: PChar; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
+function RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 var tmpsurf: PSDL_SURFACE;
     w, h, i, j: LongInt;
     font: THWFont;
@@ -1258,13 +1258,13 @@ i:= 0; j:= 0; // avoid compiler hints
 // TODO: Recheck height/position calculation
 
 // get caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, caption, @i, @j);
+TTF_SizeUTF8(Fontz[font].Handle, PChar(caption), @i, @j);
 // width adds 36 px (image + space)
 w:= i + 36 + wa;
 h:= j + ha;
 
 // get sub caption's dimensions
-TTF_SizeUTF8(Fontz[font].Handle, subcaption, @i, @j);
+TTF_SizeUTF8(Fontz[font].Handle, PChar(subcaption), @i, @j);
 // width adds 36 px (image + space)
 if w < (i + 36 + wa) then
     w:= i + 36 + wa;
@@ -1288,7 +1288,7 @@ while length(tmpdesc) > 0 do
 if extra <> '' then
     begin
     // get extra label's dimensions
-    TTF_SizeUTF8(Fontz[font].Handle, extra, @i, @j);
+    TTF_SizeUTF8(Fontz[font].Handle, PChar(extra), @i, @j);
     if w < (i + wa) then
         w:= i + wa;
     inc(h, j + ha);
@@ -1309,9 +1309,9 @@ r.h:= h;
 DrawRoundRect(@r, cWhiteColor, cNearBlackColor, tmpsurf, true);
 
 // render caption
-r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, ha, $ffffffff, font, caption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, ha, $ffffffff, font, PChar(caption));
 // render sub caption
-r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, r.y + r.h, $ffc7c7c7, font, subcaption);
+r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, r.y + r.h, $ffc7c7c7, font, PChar(subcaption));
 
 // render all description lines
 tmpdesc:= description;
@@ -1333,7 +1333,7 @@ while length(tmpdesc) > 0 do
     end;
 
 if extra <> '' then
-    r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, extra);
+    r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, PChar(extra));
 
 r.x:= cFontBorder + 6;
 r.y:= cFontBorder + 4;
@@ -1349,7 +1349,7 @@ end;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 var r: TSDL_Rect;
     i: LongInt;
-    extra: PChar;
+    extra: ansistring;
     extracolor: LongInt;
 begin
 // don't do anything if the window shouldn't be shown

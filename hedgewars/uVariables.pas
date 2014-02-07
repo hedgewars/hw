@@ -2385,11 +2385,11 @@ var
     aTexCoord: GLint;
     aColor: GLint;
 
-var trammo:  array[TAmmoStrId] of PChar;   // name of the weapon
-    trammoc: array[TAmmoStrId] of PChar;   // caption of the weapon
-    trammod: array[TAmmoStrId] of PChar;   // description of the weapon
-    trmsg:   array[TMsgStrId]  of PChar;   // message of the event
-    trgoal:  array[TGoalStrId] of PChar;   // message of the goal
+var trammo:  array[TAmmoStrId] of ansistring;   // name of the weapon
+    trammoc: array[TAmmoStrId] of ansistring;   // caption of the weapon
+    trammod: array[TAmmoStrId] of ansistring;   // description of the weapon
+    trmsg:   array[TMsgStrId]  of ansistring;   // message of the event
+    trgoal:  array[TGoalStrId] of ansistring;   // message of the goal
     cTestLua : Boolean;
 
 procedure preInitModule;
@@ -2397,7 +2397,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses strutils, sysutils;
+uses strutils;
 
 procedure preInitModule;
 begin
@@ -2442,21 +2442,7 @@ begin
 end;
 
 procedure initModule;
-var asid: TAmmoStrId;
-    msid: TMsgStrId;
-    gsid: TGoalStrId;
 begin
-    for asid:= Low(TAmmoStrId) to High(TAmmoStrId) do
-        begin
-        trammo[asid]:= nil;
-        trammoc[asid]:= nil;
-        trammod[asid]:= nil;
-        end;
-    for msid:= Low(TMsgStrId) to High(TMsgStrId) do
-        trmsg[msid]:= nil;
-    for gsid:= Low(TGoalStrId) to High(TGoalStrId) do
-        trgoal[gsid]:= nil;
-
 // TODO: fixme
 {$IFDEF PAS2C}
     cLocale:= 'en';
@@ -2644,20 +2630,7 @@ begin
 end;
 
 procedure freeModule;
-var asid: TAmmoStrId;
-    msid: TMsgStrId;
-    gsid: TGoalStrId;
 begin
-    for asid:= Low(TAmmoStrId) to High(TAmmoStrId) do
-        begin
-        if trammo[asid] <> nil then StrDispose(trammo[asid]);
-        if trammoc[asid] <> nil then StrDispose(trammoc[asid]);
-        if trammod[asid] <> nil then StrDispose(trammod[asid]);
-        end;
-    for msid:= Low(TMsgStrId) to High(TMsgStrId) do
-        if trmsg[msid] <> nil then StrDispose(trmsg[msid]);
-    for gsid:= Low(TGoalStrId) to High(TGoalStrId) do
-        if trgoal[gsid] <> nil then StrDispose(trgoal[gsid]);
 end;
 
 end.

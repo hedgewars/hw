@@ -26,24 +26,21 @@ const MAX_EVENT_STRINGS = 100;
 
 procedure LoadLocale(FileName: shortstring);
 function  Format(fmt: shortstring; var arg: shortstring): shortstring;
-function  FormatA(fmt: PChar; arg: ansistring): ansistring;
-function  GetEventString(e: TEventId): PChar;
-procedure initModule;
-procedure freeModule;
+function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
+function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
 procedure LoadLocaleWrapper(str: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
-uses uRandom, uVariables, uDebug, uPhysFSLayer, sysutils, uUtils;
+uses uRandom, uUtils, uVariables, uDebug, uPhysFSLayer;
 
-var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of PChar;
+var trevt: array[TEventId] of array [0..Pred(MAX_EVENT_STRINGS)] of ansistring;
     trevt_n: array[TEventId] of integer;
 
 procedure LoadLocale(FileName: shortstring);
-var s: PChar = nil;
-    sc: PChar;
+var s: ansistring = '';
     f: pfsFile;
     a, b, c: LongInt;
     first: array[TEventId] of boolean;
@@ -60,48 +57,47 @@ if f <> nil then
     while not pfsEof(f) do
         begin
         pfsReadLnA(f, s);
-        if (StrLength(s) > 0) and (s[0] >= '0') and (s[0] <= '9') then
-            begin
-            TryDo(StrLength(s) > 6, 'Load locale: empty string', true);
-            val(s[0]+s[1], a, c);
-            TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
-            TryDo(s[2] = ':', 'Load locale: ":" expected', true);
-            val(s[3]+s[4], b, c);
-            TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
-            TryDo(s[5] = '=', 'Load locale: "=" expected', true);
-            sc:= StrAlloc(StrLength(s) - 5);
-            StrCopy(sc, @s[6]);
-            case a of
-                0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
-                    trammo[TAmmoStrId(b)]:= sc;
-                1: if (b >=0) and (b <= ord(High(TMsgStrId))) then
-                    trmsg[TMsgStrId(b)]:= sc;
-                2: if (b >=0) and (b <= ord(High(TEventId))) then
+        if Length(s) = 0 then
+            continue;
+        if (s[1] < '0') or (s[1] > '9') then
+            continue;
+        TryDo(Length(s) > 6, 'Load locale: empty string', true);
+        val(s[1]+s[2], a, c);
+        TryDo(c = 0, 'Load locale: numbers should be two-digit: ' + s, true);
+        TryDo(s[3] = ':', 'Load locale: ":" expected', true);
+        val(s[4]+s[5], b, c);
+        TryDo(c = 0, 'Load locale: numbers should be two-digit' + s, true);
+        TryDo(s[6] = '=', 'Load locale: "=" expected', true);
+        Delete(s, 1, 6);
+        case a of
+            0: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammo[TAmmoStrId(b)]:= s;
+            1: if (b >=0) and (b <= ord(High(TMsgStrId))) then
+                trmsg[TMsgStrId(b)]:= s;
+            2: if (b >=0) and (b <= ord(High(TEventId))) then
+                begin
+                TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
+                if first[TEventId(b)] then
                     begin
-                    TryDo(trevt_n[TEventId(b)] < MAX_EVENT_STRINGS, 'Too many event strings in ' + IntToStr(a) + ':' + IntToStr(b), false);
-                    if first[TEventId(b)] then
-                        begin
-                        trevt_n[TEventId(b)]:= 0;
-                        first[TEventId(b)]:= false;
-                        end;
-                    trevt[TEventId(b)][trevt_n[TEventId(b)]]:= sc;
-                    inc(trevt_n[TEventId(b)]);
+                    trevt_n[TEventId(b)]:= 0;
+                    first[TEventId(b)]:= false;
                     end;
-                3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
-                    trammoc[TAmmoStrId(b)]:= sc;
-                4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
-                    trammod[TAmmoStrId(b)]:= sc;
-                5: if (b >=0) and (b <= ord(High(TGoalStrId))) then
-                    trgoal[TGoalStrId(b)]:= sc;
-            end;
-            end;
-        StrDispose(s);
-        end;
+                trevt[TEventId(b)][trevt_n[TEventId(b)]]:= s;
+                inc(trevt_n[TEventId(b)]);
+                end;
+            3: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammoc[TAmmoStrId(b)]:= s;
+            4: if (b >=0) and (b <= ord(High(TAmmoStrId))) then
+                trammod[TAmmoStrId(b)]:= s;
+            5: if (b >=0) and (b <= ord(High(TGoalStrId))) then
+                trgoal[TGoalStrId(b)]:= s;
+           end;
+       end;
    pfsClose(f);
    end;
 end;
 
-function GetEventString(e: TEventId): PChar;
+function GetEventString(e: TEventId): ansistring;
 begin
     if trevt_n[e] = 0 then // no messages for this event type?
         GetEventString:= '*missing translation*'
@@ -119,17 +115,14 @@ else
     Format:= copy(fmt, 1, i - 1) + arg + Format(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
-function FormatA(fmt: PChar; arg: ansistring): ansistring;
+function FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 var i: LongInt;
-    s: ansistring;
 begin
-s:= fmt;
-
-i:= Pos('%1', s);
+i:= Pos('%1', fmt);
 if i = 0 then
-    FormatA:= s
+    FormatA:= fmt
 else
-    FormatA:= copy(s, 1, i - 1) + arg + FormatA(PChar(copy(s, i + 2, Length(s) - i - 1)), arg)
+    FormatA:= copy(fmt, 1, i - 1) + arg + FormatA(copy(fmt, i + 2, Length(fmt) - i - 1), arg)
 end;
 
 {$IFDEF HWLIBRARY}
@@ -138,23 +131,5 @@ begin
     LoadLocale(Strpas(str));
 end;
 {$ENDIF}
-
-procedure initModule;
-var e: TEventId;
-    i: LongInt;
-begin
-    for e:= Low(TEventId) to High(TEventId) do
-        for i:= 0 to Pred(MAX_EVENT_STRINGS) do
-            trevt[e][i]:= nil;
-end;
-
-procedure freeModule;
-var e: TEventId;
-    i: LongInt;
-begin
-    for e:= Low(TEventId) to High(TEventId) do
-        for i:= 0 to Pred(trevt_n[e]) do
-            StrDispose(trevt[e][i]);
-end;
 
 end.
