@@ -51,18 +51,14 @@ uses uVariables, uRender, Math, uRenderUtils, uStore, uUtils
     , uVisualGearsList;
 
 procedure AddDamageTag(X, Y, Damage, Color: LongWord);
-var s: shortstring;
-    Gear: PVisualGear;
+var Gear: PVisualGear;
 begin
 if cAltDamage then
     begin
     Gear:= AddVisualGear(X, Y, vgtSmallDamageTag);
     if Gear <> nil then
         with Gear^ do
-            begin
-            str(Damage, s);
-            Tex:= RenderStringTex(s, Color, fntSmall);
-            end
+            Tex:= RenderStringTex(ansistring(inttostr(Damage)), Color, fntSmall);
     end
 end;
 

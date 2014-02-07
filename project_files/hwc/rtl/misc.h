@@ -45,9 +45,9 @@ bool        fpcrtl_strcompare(string255 str1, string255 str2);
 bool        fpcrtl_strcomparec(string255 a, char b);
 bool        fpcrtl_strncompare(string255 a, string255 b);
 
-#define     fpcrtl__pchar(s)                        ((s).str)
+char*       fpcrtl__pchar(string255 s);
 string255   fpcrtl_pchar2str(char *s);
-
+astring     fpcrtl_str2astr(string255 s);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
 
 #ifdef EMSCRIPTEN

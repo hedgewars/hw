@@ -7,32 +7,35 @@
 #include <math.h>
 
 #define MAX_PARAMS 64
+#define MAX_ANSISTRING_LENGTH 16384
 
 typedef union string255_
     {
         struct {
-            unsigned char s[257];
+            unsigned char s[256];
         };
         struct {
             unsigned char len;
-            unsigned char str[256];
+            unsigned char str[255];
         };
     } string255;
-typedef struct string192_
+
+typedef union astring_
     {
-        unsigned char s[193];
-    } string192;
-typedef struct string31_
-    {
-        unsigned char s[32];
-    } string31;
-typedef struct string15_
-    {
-        unsigned char s[16];
-    } string15;
+        struct {
+            unsigned char _dummy1;
+            string255 str255;
+        };
+        struct {
+            unsigned char _dummy2;
+            unsigned char str[MAX_ANSISTRING_LENGTH];
+        };
+        struct {
+            uint16_t len;
+        };
+    } astring;
 
 typedef string255 shortstring;
-typedef string255 ansistring;
 
 typedef uint8_t Byte;
 typedef int8_t ShortInt;
