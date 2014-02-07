@@ -17,7 +17,7 @@ string' :: String -> Parsec String u ()
 string' = void . string
 
 builtin :: [String]
-builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit", "break", "continue", "length"]
+builtin = ["succ", "pred", "low", "high", "ord", "inc", "dec", "exit", "break", "continue", "length", "copy"]
 
 pascalLanguageDef :: GenLanguageDef String u Identity
 pascalLanguageDef

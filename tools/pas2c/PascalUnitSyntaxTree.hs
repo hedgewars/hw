@@ -26,6 +26,7 @@ data TypeDecl = SimpleType Identifier
     | RecordType [TypeVarDeclaration] (Maybe [[TypeVarDeclaration]])
     | PointerTo TypeDecl
     | String
+    | AString
     | Set TypeDecl
     | FunctionType TypeDecl [TypeVarDeclaration]
     | DeriveType InitExpression
@@ -100,6 +101,7 @@ data InitExpression = InitBinOp String InitExpression InitExpression
 data BaseType = BTUnknown
     | BTChar
     | BTString
+    | BTAString
     | BTInt Bool -- second param indicates whether signed or not
     | BTBool
     | BTFloat

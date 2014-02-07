@@ -400,6 +400,7 @@ resolveType st@(SimpleType (Identifier i _)) = do
     f "float" = BTFloat
     f "char" = BTChar
     f "string" = BTString
+    f "ansistring" = BTAString
     f _ = error $ "Unknown system type: " ++ show st
 resolveType (PointerTo (SimpleType (Identifier i _))) = return . BTPointerTo $ BTUnresolved (map toLower i)
 resolveType (PointerTo t) = liftM BTPointerTo $ resolveType t
@@ -427,6 +428,7 @@ resolveType (DeriveType (BuiltInFunction{})) = return (BTInt True)
 resolveType (DeriveType (InitReference (Identifier{}))) = return BTBool -- TODO: derive from actual type
 resolveType (DeriveType _) = return BTUnknown
 resolveType String = return BTString
+resolveType AString = return BTAString
 resolveType VoidType = return BTVoid
 resolveType (Sequence ids) = return $ BTEnum $ map (\(Identifier i _) -> map toLower i) ids
 resolveType (RangeType _) = return $ BTVoid
@@ -710,6 +712,7 @@ baseType2C :: String -> BaseType -> Doc
 baseType2C _ BTFloat = text "float"
 baseType2C _ BTBool = text "bool"
 baseType2C _ BTString = text "string255"
+baseType2C _ BTAString = text "astring"
 baseType2C s a = error $ "baseType2C: " ++ show a ++ "\n" ++ s
 
 type2C :: TypeDecl -> State RenderState (Doc -> Doc)
@@ -722,6 +725,7 @@ type2C t = do
     where
     type2C' VoidType = return (text "void" <+>)
     type2C' String = return (text "string255" <+>)--return (text ("string" ++ show l) <+>)
+    type2C' AString = return (text "astring" <+>)
     type2C' (PointerTo (SimpleType i)) = do
         i' <- id2C IODeferred i
         lt <- gets lastType
@@ -812,10 +816,28 @@ phrase2C asgn@(Assignment ref expr) = do
                 BTPointerTo _ -> do
                     e <- expr2C $ Reference $ FunCall [Reference $ RefExpression expr] (SimpleReference (Identifier "pchar2str" BTUnknown))
                     return $ r <+> text "=" <+> e <> semi
+                BTAString -> do
+                    e <- expr2C $ Reference $ FunCall [Reference $ RefExpression expr] (SimpleReference (Identifier "astr2str" BTUnknown))
+                    return $ r <+> text "=" <+> e <> semi
                 BTString -> do
                     e <- expr2C expr
                     return $ r <+> text "=" <+> e <> semi
-                _ -> error $ "Assignment to string from " ++ show asgn
+                _ -> error $ "Assignment to string from " ++ show lt ++ "\n" ++ show asgn
+        (BTAString, _) -> do
+            void $ expr2C expr
+            lt <- gets lastType
+            case lt of
+                -- assume pointer to char for simplicity
+                BTPointerTo _ -> do
+                    e <- expr2C $ Reference $ FunCall [Reference $ RefExpression expr] (SimpleReference (Identifier "pchar2astr" BTUnknown))
+                    return $ r <+> text "=" <+> e <> semi
+                BTString -> do
+                    e <- expr2C $ Reference $ FunCall [Reference $ RefExpression expr] (SimpleReference (Identifier "str2astr" BTUnknown))
+                    return $ r <+> text "=" <+> e <> semi
+                BTAString -> do
+                    e <- expr2C expr
+                    return $ r <+> text "=" <+> e <> semi
+                _ -> error $ "Assignment to ansistring from " ++ show lt ++ "\n" ++ show asgn
         (BTArray _ _ _, _) -> do
             case expr of
                 Reference er -> do
@@ -913,12 +935,16 @@ wrapPhrase p = Phrases [p]
 
 expr2C :: Expression -> State RenderState Doc
 expr2C (Expression s) = return $ text s
-expr2C (BinOp op expr1 expr2) = do
+expr2C bop@(BinOp op expr1 expr2) = do
     e1 <- expr2C expr1
     t1 <- gets lastType
     e2 <- expr2C expr2
     t2 <- gets lastType
     case (op2C op, t1, t2) of
+        ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (BTFunction False [(False, t1), (False, t2)] BTString))
+        ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (BTFunction False [(False, t1), (False, t2)] BTAString))
+        (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
+        (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
         ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction False [(False, t1), (False, t2)] BTString))
         ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction False [(False, t1), (False, t2)] BTString))
         ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction False [(False, t1), (False, t2)] BTString))
@@ -1041,9 +1067,21 @@ expr2C (BuiltInFunCall [e] (SimpleReference (Identifier "length" _))) = do
     modify (\s -> s{lastType = BTInt True})
     case lt of
          BTString -> return $ text "fpcrtl_Length" <> parens e'
+         BTAString -> return $ text "fpcrtl_LengthA" <> parens e'
          BTArray RangeInfinite _ _ -> error $ "length() called on variable size array " ++ show e'
          BTArray (RangeFromTo _ n) _ _ -> initExpr2C (BuiltInFunction "succ" [n])
          _ -> error $ "length() called on " ++ show lt
+expr2C (BuiltInFunCall [e, e1, e2] (SimpleReference (Identifier "copy" _))) = do
+    e1' <- expr2C e1
+    e2' <- expr2C e2
+    e' <- expr2C e
+    lt <- gets lastType
+    let f name = return $ text name <> parens (hsep $ punctuate (char ',') [e', e1', e2'])
+    case lt of
+         BTString -> f "fpcrtl_copy"
+         BTAString -> f "fpcrtl_copyA"
+         _ -> error $ "copy() called on " ++ show lt
+     
 expr2C (BuiltInFunCall params ref) = do
     r <- ref2C ref
     t <- gets lastType
@@ -1091,7 +1129,8 @@ ref2C ae@(ArrayElement [expr] ref) = do
          (BTArray _ _ t') -> modify (\st -> st{lastType = t'})
 --         (BTFunctionReturn _ (BTArray _ _ t')) -> modify (\st -> st{lastType = t'})
 --         (BTFunctionReturn _ (BTString)) -> modify (\st -> st{lastType = BTChar})
-         (BTString) -> modify (\st -> st{lastType = BTChar})
+         BTString -> modify (\st -> st{lastType = BTChar})
+         BTAString -> modify (\st -> st{lastType = BTChar})
          (BTPointerTo t) -> do
                 t'' <- fromPointer (show t) =<< gets lastType
                 case t'' of
@@ -1159,6 +1198,7 @@ ref2C (TypeCast t'@(Identifier i _) expr) = do
     lt <- expr2C expr >> gets lastType
     case (map toLower i, lt) of
         ("pchar", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
+        ("pchar", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pcharA" $ BTPointerTo BTChar))
         ("shortstring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2str" $ BTString))
         (a, _) -> do
             e <- expr2C expr

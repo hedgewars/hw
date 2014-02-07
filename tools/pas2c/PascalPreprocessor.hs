@@ -81,7 +81,9 @@ preprocess inputPath alternateInputPath fn symbols = do
         char' '}'
         f <- liftIO (readFile (inputPath ++ ifn) 
             `E.catch` (\(_ :: E.IOException) -> readFile (alternateInputPath ++ ifn) 
-            `E.catch` (\(_ :: E.IOException) -> error ("File not found: " ++ fn))))
+                `E.catch` (\(_ :: E.IOException) -> error $ "File not found: " ++ ifn)
+                )
+            )
         c <- getInput
         setInput $ f ++ c
         return ""

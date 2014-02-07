@@ -219,7 +219,7 @@ if cMinesTime <> 3000 then
     end;
 
 // if the string has been set, show it for (default timeframe) seconds
-if g <> '' then
+if length(g) > 0 then
     ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], PChar(g), 1, 0);
 
 cWaveWidth:= SpritesData[sprWater].Width;

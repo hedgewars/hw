@@ -75,8 +75,9 @@ var
     pos : function : integer;
     StrToInt : function : integer;
     SetLength, val, StrDispose, StrCopy : procedure;
-    _pchar, StrAlloc : function : PChar;
-    pchar2str : function : string;
+    _pchar, _pcharA, StrAlloc : function : PChar;
+    pchar2str, astr2str : function : string;
+    pchar2astr, str2astr : function : ansistring;
     memcpy : procedure;
     StrLength : function : integer;
 
