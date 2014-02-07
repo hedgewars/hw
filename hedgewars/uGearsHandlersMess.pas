@@ -4522,16 +4522,17 @@ begin
                 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
                     and (Land[y, x] <> 0) then
                         begin
-                            if justCollided then
-                                begin
-                                Gear^.Damage := 0;
-                                Gear^.Health := 0;
-                                end
-                            else
-                                begin
-                                inc(Gear^.Damage,3);
-                                justCollided := true;
-                                end;
+                        if ((GameFlags and gfSolidLand) <> 0) and (Land[y, x] > 255) then
+                            Gear^.Damage := initHealth
+                        else if justCollided then
+                            begin
+                            Gear^.Damage := initHealth;
+                            end
+                        else
+                            begin
+                            inc(Gear^.Damage,3);
+                            justCollided := true;
+                            end;
                         end
                 else
                     justCollided := false;
@@ -4540,26 +4541,46 @@ begin
                 // if at least 5 collisions occured
                 if Gear^.Damage > 0 then
                     begin
-                    DrawExplosion(rX,rY,Gear^.Radius);
+                    if ((GameFlags and gfSolidLand) = 0) then
+                        begin
+                        DrawExplosion(rX,rY,Gear^.Radius);
+                        end;
 
                     // kick nearby hogs
                     AmmoShove(Gear, 35, 50);
 
                     dec(Gear^.Health, Gear^.Damage);
-                    Gear^.Damage := 0;
 
+                    // explode when impacting on solid land/borders
+                    if Gear^.Damage >= initHealth then
+                        begin
+                        // add some random offset to angles
+                        tmp := getRandom(256);
+                        // spawn some flames
+                        for t:= 0 to 3 do
+                            begin
+                            if not isZero(Gear^.dX) then rX := rx - hwSign(Gear^.dX);
+                            if not isZero(Gear^.dY) then rY := ry - hwSign(Gear^.dY);
+                            lX := AngleCos(tmp + t * 512) * _0_25 * (GetRandomf + _1);
+                            lY := AngleSin(tmp + t * 512) * _0_25 * (GetRandomf + _1);
+                            AddGear(rX, rY, gtFlame, 0, lX,  lY, 0);
+                            AddGear(rX, rY, gtFlame, 0, lX, -lY, 0);
+                            end;
+                        end
                     // add some fire to the tunnel
-                    if getRandom(6) = 0 then
+                    else if getRandom(6) = 0 then
                         begin
                         tmp:= GetRandom(2 * Gear^.Radius);
                         AddGear(x - Gear^.Radius + tmp, y - GetRandom(Gear^.Radius + 1), gtFlame, gsttmpFlag, _0, _0, 0)
-                        end
+                        end;
                     end;
+
+                Gear^.Damage := 0;
 
                 if random(100) = 0 then
                     AddVisualGear(x, y, vgtSmokeTrace);
                 end
-                else dec(Gear^.Health, 5); // if underwater get additional damage
+                else dec(Gear^.Health, 5);
             end;
 
         dec(Gear^.Health);
