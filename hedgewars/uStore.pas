@@ -1272,13 +1272,13 @@ inc(h, j + ha);
 
 // get description's dimensions
 tmpdesc:= description;
-while tmpdesc <> '' do
+while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
     SplitByChar(tmpline, tmpdesc, '|');
-    if tmpline <> '' then
+    if length(tmpline) > 0 then
         begin
-        TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(tmpline), @i, @j);
+        TTF_SizeUTF8(Fontz[font].Handle, PChar(tmpline), @i, @j);
         if w < (i + wa) then
             w:= i + wa;
         inc(h, j + ha)
@@ -1315,20 +1315,20 @@ r:= WriteInRect(tmpsurf, 36 + cFontBorder + 2, r.y + r.h, $ffc7c7c7, font, subca
 
 // render all description lines
 tmpdesc:= description;
-while tmpdesc <> '' do
+while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
     SplitByChar(tmpline, tmpdesc, '|');
     r2:= r;
-    if tmpline <> '' then
+    if length(tmpline) > 0 then
         begin
-        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, Str2PChar(tmpline));
+        r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, $ff707070, font, PChar(tmpline));
 
         // render highlighted caption (if there is a ':')
         tmpline2:= _S'';
         SplitByChar(tmpline, tmpline2, ':');
-        if tmpline2 <> _S'' then
-            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, Str2PChar(tmpline + ':'));
+        if length(tmpline2) > 0 then
+            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline + ':'));
         end
     end;
 

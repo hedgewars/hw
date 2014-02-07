@@ -138,7 +138,7 @@ typeDecl = choice [
     char' '^' >> typeDecl >>= return . PointerTo
     , try (string' "shortstring") >> return String
     , try (string' "string") >> optionMaybe (brackets pas $ integer pas) >> return String
-    , try (string' "ansistring") >> optionMaybe (brackets pas $ integer pas) >> return String
+    , try (string' "ansistring") >> optionMaybe (brackets pas $ integer pas) >> return AString
     , arrayDecl
     , recordDecl
     , setDecl
