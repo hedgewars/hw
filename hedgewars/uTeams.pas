@@ -53,7 +53,7 @@ var GameOver: boolean;
 
 function CheckForWin: boolean;
 var AliveClan: PClan;
-    s: shortstring;
+    s, ts: ansistring;
     t, AliveCount, i, j: LongInt;
 begin
 CheckForWin:= false;
@@ -81,16 +81,17 @@ if not GameOver then
     if AliveCount = 0 then
         begin // draw
         AddCaption(trmsg[sidDraw], cWhiteColor, capgrpGameState);
-        SendStat(siGameResult, trmsg[sidDraw]);
+        SendStat(siGameResult, shortstring(trmsg[sidDraw]));
         AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
         end
     else // win
         with AliveClan^ do
             begin
+            ts:= ansistring(Teams[0]^.TeamName);
             if TeamsNumber = 1 then
-                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName)  // team wins
+                s:= FormatA(trmsg[sidWinner], ts)  // team wins
             else
-                s:= Format(shortstring(trmsg[sidWinner]), Teams[0]^.TeamName); // clan wins
+                s:= FormatA(trmsg[sidWinner], ts); // clan wins
 
             for j:= 0 to Pred(TeamsNumber) do
                 with Teams[j]^ do
@@ -104,7 +105,7 @@ if not GameOver then
                 AddVoice(sndVictory, Teams[0]^.voicepack);
 
             AddCaption(s, cWhiteColor, capgrpGameState);
-            SendStat(siGameResult, s);
+            SendStat(siGameResult, shortstring(s));
             AddGear(0, 0, gtATFinishGame, 0, _0, _0, 3000)
             end;
     SendStats;
@@ -237,7 +238,7 @@ var i, t: LongInt;
     CurWeapon: PAmmo;
     w: real;
     vg: PVisualGear;
-
+    s: ansistring;
 begin
 if PlacingHogs then
     begin
@@ -334,7 +335,8 @@ if (TurnTimeLeft > 0) and (CurrentHedgehog^.BotLevel = 0) then
         end;
     if cHedgehogTurnTime < 1000000 then
         ReadyTimeLeft:= cReadyDelay;
-    AddCaption(Format(shortstring(trmsg[sidReady]), CurrentTeam^.TeamName), cWhiteColor, capgrpGameState)
+    s:= ansistring(CurrentTeam^.TeamName);
+    AddCaption(FormatA(trmsg[sidReady], s), cWhiteColor, capgrpGameState)
     end
 else
     begin

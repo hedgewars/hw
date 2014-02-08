@@ -293,7 +293,7 @@ begin
 end;
 
 function GetTeamStatString(p: PTeam): shortstring;
-var s: ansistring;
+var s: shortstring;
 begin
     s:= p^.TeamName + ':' + IntToStr(p^.TeamHealth) + ':';
     GetTeamStatString:= s;

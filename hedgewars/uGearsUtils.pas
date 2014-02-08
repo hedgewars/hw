@@ -234,7 +234,7 @@ begin
                     inc(CurrentHedgehog^.Gear^.Health,vampDmg);
                     str(vampDmg, s);
                     s:= '+' + s;
-                    AddCaption(s, CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    AddCaption(ansistring(s), CurrentHedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(CurrentHedgehog^);
                     RecountTeamHealth(CurrentHedgehog^.Team);
                     i:= 0;
@@ -364,6 +364,7 @@ var
     vdX, vdY: real;
     particle, splash: PVisualGear;
     isSubmersible: boolean;
+    s: ansistring;
 begin
     // probably needs tweaking. might need to be in a case statement based upon gear type
     Y:= hwRound(Gear^.Y);
@@ -419,7 +420,8 @@ begin
                             begin
                             Gear^.doStep := @doStepDrowningGear;
                             Gear^.State := Gear^.State and (not gstHHDriven);
-                            AddCaption(Format(GetEventString(eidDrowned), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+                            s:= ansistring(Gear^.Hedgehog^.Name);
+                            AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
                             end
                         end
                     else
@@ -517,7 +519,7 @@ begin
             begin
             inc(Team^.stats.AIKills);
             FreeTexture(Team^.AIKillsTex);
-            Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
+            Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
             end;
     tempTeam := gear^.Hedgehog^.Team;
     DeleteCI(gear);

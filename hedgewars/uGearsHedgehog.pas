@@ -517,7 +517,7 @@ with Gear^,
 end;
 
 procedure AfterAttack;
-var s: shortstring;
+var s: ansistring;
     a: TAmmoType;
     HHGear: PGear;
 begin
@@ -532,8 +532,8 @@ with CurrentHedgehog^ do
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks) then
             begin
-            s:= inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1);
-            AddCaption(format(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
+            s:= ansistring(inttostr(Ammoz[a].Ammo.NumPerTurn - MultiShootAttacks + 1));
+            AddCaption(formatA(trmsg[sidRemaining], s), cWhiteColor, capgrpAmmostate);
             end;
 
         if (Ammoz[a].Ammo.NumPerTurn >= MultiShootAttacks)
@@ -636,7 +636,7 @@ else // Gear^.Timer = 0
 end;
 
 procedure AddPickup(HH: THedgehog; ammo: TAmmoType; cnt, X, Y: LongWord);
-var s: shortstring;
+var s: ansistring;
     vga: PVisualGear;
 begin
     if cnt <> 0 then AddAmmo(HH, ammo, cnt)
@@ -714,7 +714,7 @@ case Gear^.Pos of
                     HH^.Hedgehog^.Effects[hePoisoned] := 0;
                     str(Gear^.Health, s);
                     s:= '+' + s;
-                    AddCaption(s, HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
+                    AddCaption(ansistring(s), HH^.Hedgehog^.Team^.Clan^.Color, capgrpAmmoinfo);
                     RenderHealth(HH^.Hedgehog^);
                     RecountTeamHealth(HH^.Hedgehog^.Team);
 
@@ -1234,6 +1234,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepHedgehogFree(Gear: PGear);
 var prevState: Longword;
+    s: ansistring;
 begin
 prevState:= Gear^.State;
 
@@ -1268,7 +1269,8 @@ if (Gear^.Health = 0) then
                 Gear^.State:= (Gear^.State or gstHHDeath) and (not gstAnimation);
                 Gear^.doStep:= @doStepHedgehogDead;
                 // Death message
-                AddCaption(Format(GetEventString(eidDied), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+                s:= ansistring(Gear^.Hedgehog^.Name);
+                AddCaption(FormatA(GetEventString(eidDied), s), cWhiteColor, capgrpMessage);
                 end;
             end
         else
@@ -1277,7 +1279,8 @@ if (Gear^.Health = 0) then
             Gear^.doStep:= @doStepHedgehogGone;
 
             // Gone message
-            AddCaption(Format(GetEventString(eidGone), Gear^.Hedgehog^.Name), cWhiteColor, capgrpMessage);
+            s:= ansistring(Gear^.Hedgehog^.Name);
+            AddCaption(FormatA(GetEventString(eidGone), s), cWhiteColor, capgrpMessage);
             end
         end;
     exit
