@@ -648,9 +648,9 @@ begin
     or (GameType = gmtDemo)  then
         begin
         if cnt <> 0 then
-            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(cnt) + ')'
+            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(cnt) + ')')
         else
-            s:= trammo[Ammoz[ammo].NameId] + ' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')';
+            s:= trammo[Ammoz[ammo].NameId] + ansistring(' (+' + IntToStr(Ammoz[ammo].NumberInCase) + ')');
         AddCaption(s, HH.Team^.Clan^.Color, capgrpAmmoinfo);
 
         // show ammo icon

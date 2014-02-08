@@ -113,12 +113,12 @@ while (PHYSFS_readBytes(f, @c, 1) = 1) and (c <> #10) do
         b[byte(b[0])]:= c;
         if b[0] = #255 then
             begin
-            s:= s + b;
+            s:= s + ansistring(b);
             b[0]:= #0
             end
         end;
-        
-s:= s + b
+
+s:= s + ansistring(b)
 end;
 
 function pfsBlockRead(f: PFSFile; buf: pointer; size: Int64): Int64;

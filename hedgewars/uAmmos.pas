@@ -371,7 +371,7 @@ with Hedgehog do
 end;
 
 procedure ApplyAmmoChanges(var Hedgehog: THedgehog);
-var s: shortstring;
+var s: ansistring;
     CurWeapon: PAmmo;
 begin
 TargetPoint.X:= NoPointX;
@@ -395,9 +395,9 @@ with Hedgehog do
         begin
         s:= trammo[Ammoz[AmmoType].NameId];
         if (Count <> AMMO_INFINITE) and (not (Hedgehog.Team^.ExtDriven or (Hedgehog.BotLevel > 0))) then
-            s:= s + ' (' + IntToStr(Count) + ')';
+            s:= s + ansistring(' (' + IntToStr(Count) + ')');
         if (Propz and ammoprop_Timerable) <> 0 then
-            s:= s + ', ' + IntToStr(Timer div 1000) + ' ' + trammo[sidSeconds];
+            s:= s + ansistring(', ' + IntToStr(Timer div 1000) + ' ') + trammo[sidSeconds];
         AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
