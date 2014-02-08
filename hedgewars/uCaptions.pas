@@ -23,7 +23,7 @@ unit uCaptions;
 interface
 uses uTypes;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: ansistring; Color: Longword; Group: TCapGroup);
 procedure DrawCaptions;
 procedure ReloadCaptions(unload: boolean);
 
@@ -36,13 +36,13 @@ uses uTextures, uRenderUtils, uVariables, uRender;
 type TCaptionStr = record
     Tex: PTexture;
     EndTime: LongWord;
-    Text: shortstring;
+    Text: ansistring;
     Color: Longword
     end;
 var
     Captions: array[TCapGroup] of TCaptionStr;
 
-procedure AddCaption(s: shortstring; Color: Longword; Group: TCapGroup);
+procedure AddCaption(s: ansistring; Color: Longword; Group: TCapGroup);
 begin
     if cOnlyStats then exit;
     if Length(s) = 0 then
@@ -74,7 +74,7 @@ begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
     if unload then
         FreeTexture(Captions[Group].Tex)
-    else if Captions[Group].Text <> '' then
+    else if length(Captions[Group].Text) > 0 then
         Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
 end;
 
@@ -99,7 +99,7 @@ begin
                     begin
                     FreeTexture(Tex);
                     Tex:= nil;
-                    Text:= '';
+                    Text:= ansistring('');
                     EndTime:= 0
                     end;
                 end;

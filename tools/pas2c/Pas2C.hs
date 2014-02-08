@@ -943,6 +943,7 @@ expr2C bop@(BinOp op expr1 expr2) = do
     case (op2C op, t1, t2) of
         ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (BTFunction False [(False, t1), (False, t2)] BTString))
         ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (BTFunction False [(False, t1), (False, t2)] BTAString))
+        ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (BTFunction False [(False, t1), (False, t2)] BTBool))
         (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
         (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
         ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction False [(False, t1), (False, t2)] BTString))
@@ -1199,6 +1200,7 @@ ref2C (TypeCast t'@(Identifier i _) expr) = do
     case (map toLower i, lt) of
         ("pchar", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pchar" $ BTPointerTo BTChar))
         ("pchar", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pcharA" $ BTPointerTo BTChar))
+        ("shortstring", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "astr2str" $ BTString))
         ("shortstring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2str" $ BTString))
         ("ansistring", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "str2astr" $ BTAString))
         (a, _) -> do

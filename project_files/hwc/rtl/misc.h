@@ -40,6 +40,8 @@ string255   fpcrtl_strappend(string255 s, char c);
 string255   fpcrtl_strprepend(char c, string255 s);
 string255   fpcrtl_chrconcat(char a, char b);
 
+astring     fpcrtl_strconcatA(astring str1, astring str2);
+
 // return true if str1 == str2
 bool        fpcrtl_strcompare(string255 str1, string255 str2);
 bool        fpcrtl_strcomparec(string255 a, char b);
@@ -48,6 +50,8 @@ bool        fpcrtl_strncompare(string255 a, string255 b);
 char*       fpcrtl__pchar(string255 s);
 string255   fpcrtl_pchar2str(char *s);
 astring     fpcrtl_str2astr(string255 s);
+string255   fpcrtl_astr2str(astring s);
+string255   fpcrtl_astr2str(astring a);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
 
 #ifdef EMSCRIPTEN

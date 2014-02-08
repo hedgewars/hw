@@ -45,6 +45,8 @@ Integer     __attribute__((overloadable))                   fpcrtl_pos(string255
 
 Integer     fpcrtl_length(string255 s);
 #define     fpcrtl_Length                                   fpcrtl_length
+Integer     fpcrtl_lengthA(astring s);
+#define     fpcrtl_LengthA                                  fpcrtl_lengthA
 
 #define     fpcrtl_sqr(x)                                   ((x) * (x))
 

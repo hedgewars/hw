@@ -1983,13 +1983,13 @@ if icon > -1 then
     begin
     r.x:= 0;
     r.y:= icon * 32;
-    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, MissionIcons, @r)
+    missionTex:= RenderHelpWindow(caption, subcaption, text, ansistring(''), 0, MissionIcons, @r)
     end
 else
     begin
     r.x:= ((-icon - 1) shr 4) * 32;
     r.y:= ((-icon - 1) mod 16) * 32;
-    missionTex:= RenderHelpWindow(caption, subcaption, text, '', 0, SpritesData[sprAMAmmos].Surface, @r)
+    missionTex:= RenderHelpWindow(caption, subcaption, text, ansistring(''), 0, SpritesData[sprAMAmmos].Surface, @r)
     end;
 end;
 

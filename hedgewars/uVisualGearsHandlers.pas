@@ -619,7 +619,7 @@ Gear^.Hedgehog^.SpeechGear:= Gear;
 
 Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
 
-Gear^.Tex:= RenderSpeechBubbleTex(Gear^.Text, Gear^.FrameTicks, fnt16);
+Gear^.Tex:= RenderSpeechBubbleTex(ansistring(Gear^.Text), Gear^.FrameTicks, fnt16);
 
 // FrameTicks cannot hold negative values
 case Gear^.FrameTicks of
@@ -662,9 +662,9 @@ s:= '';
 
 str(Gear^.State, s);
 if Gear^.Hedgehog <> nil then
-    Gear^.Tex:= RenderStringTex(s, Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
+    Gear^.Tex:= RenderStringTex(ansistring(s), Gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
 else
-    Gear^.Tex:= RenderStringTex(s, cWhiteColor, fnt16);
+    Gear^.Tex:= RenderStringTex(ansistring(s), cWhiteColor, fnt16);
 
 Gear^.doStep:= @doStepHealthTagWork;
 

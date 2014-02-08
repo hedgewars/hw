@@ -166,7 +166,7 @@ end;
 procedure ProcessGears;
 var t: PGear;
     i, AliveCount: LongInt;
-    s: shortstring;
+    s: ansistring;
     prevtime: LongWord;
 begin
 prevtime:= TurnTimeLeft;
@@ -216,7 +216,7 @@ while t <> nil do
             if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
                 begin
                 FreeTexture(curHandledGear^.Tex);
-                curHandledGear^.Tex:= RenderStringTex(inttostr(curHandledGear^.Timer div 1000), cWhiteColor, fntSmall);
+                curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
                 end;
             curHandledGear^.doStep(curHandledGear);
             // might be useful later
@@ -327,11 +327,11 @@ case step of
                 else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
                     begin
                     i:= cSuddenDTurns - TotalRounds;
-                    s:= inttostr(i);
+                    s:= ansistring(inttostr(i));
                     if i = 1 then
                         AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
                     else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                        AddCaption(Format(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
+                        AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                     end;
                 end;
             if bBetweenTurns

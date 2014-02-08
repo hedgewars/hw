@@ -65,7 +65,7 @@ const Template0Points: array[0..18] of TSDL_Rect =
       );
       Template0FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template1Points: array[0..15] of TSDL_Rect =
@@ -89,7 +89,7 @@ const Template1Points: array[0..15] of TSDL_Rect =
       );
       Template1FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template2Points: array[0..21] of TSDL_Rect =
@@ -119,7 +119,7 @@ const Template2Points: array[0..21] of TSDL_Rect =
       );
       Template2FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template3Points: array[0..16] of TSDL_Rect =
@@ -144,7 +144,7 @@ const Template3Points: array[0..16] of TSDL_Rect =
       );
       Template3FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template4Points: array[0..22] of TSDL_Rect =
@@ -175,7 +175,7 @@ const Template4Points: array[0..22] of TSDL_Rect =
       );
       Template4FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template5Points: array[0..15] of TSDL_Rect =
@@ -199,7 +199,7 @@ const Template5Points: array[0..15] of TSDL_Rect =
        );
       Template5FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template6Points: array[0..13] of TSDL_Rect =
@@ -221,7 +221,7 @@ const Template6Points: array[0..13] of TSDL_Rect =
        );
       Template6FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template7Points: array[0..5] of TSDL_Rect =
@@ -235,7 +235,7 @@ const Template7Points: array[0..5] of TSDL_Rect =
       );
       Template7FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 
@@ -264,7 +264,7 @@ const Template8Points: array[0..19] of TSDL_Rect =
       );
       Template8FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template9Points: array[0..31] of TSDL_Rect =
@@ -304,7 +304,7 @@ const Template9Points: array[0..31] of TSDL_Rect =
       );
       Template9FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template10Points: array[0..13] of TSDL_Rect =
@@ -326,7 +326,7 @@ const Template10Points: array[0..13] of TSDL_Rect =
       );
       Template10FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template11Points: array[0..9] of TSDL_Rect =
@@ -344,7 +344,7 @@ const Template11Points: array[0..9] of TSDL_Rect =
       );
       Template11FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template12Points: array[0..13] of TSDL_Rect =
@@ -366,7 +366,7 @@ const Template12Points: array[0..13] of TSDL_Rect =
       );
       Template12FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template13Points: array[0..15] of TSDL_Rect =
@@ -390,7 +390,7 @@ const Template13Points: array[0..15] of TSDL_Rect =
       );
       Template13FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template14Points: array[0..13] of TSDL_Rect =
@@ -412,7 +412,7 @@ const Template14Points: array[0..13] of TSDL_Rect =
       );
       Template14FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template15Points: array[0..23] of TSDL_Rect =
@@ -444,7 +444,7 @@ const Template15Points: array[0..23] of TSDL_Rect =
       );
       Template15FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template16Points: array[0..28] of TSDL_Rect =
@@ -481,7 +481,7 @@ const Template16Points: array[0..28] of TSDL_Rect =
       );
       Template16FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 
 const Template17Points: array[0..13] of TSDL_Rect =
@@ -503,7 +503,7 @@ const Template17Points: array[0..13] of TSDL_Rect =
       );
       Template17FPoints: array[0..0] of TPoint =
       (
-       (X: 1023; Y:    0)
+       (x: 1023; y:    0)
       );
 //////////////////// MIXING AND MATCHING ORIGINAL //////////////////////////////////////
 const Template18Points: array[0..32] of TSDL_Rect =
@@ -544,7 +544,7 @@ const Template18Points: array[0..32] of TSDL_Rect =
       );
       Template18FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template19Points: array[0..44] of TSDL_Rect =
@@ -597,7 +597,7 @@ const Template19Points: array[0..44] of TSDL_Rect =
       );
       Template19FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template20Points: array[0..45] of TSDL_Rect =
@@ -651,7 +651,7 @@ const Template20Points: array[0..45] of TSDL_Rect =
       );
       Template20FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template21Points: array[0..30] of TSDL_Rect =
@@ -690,7 +690,7 @@ const Template21Points: array[0..30] of TSDL_Rect =
       );
       Template21FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template22Points: array[0..38] of TSDL_Rect =
@@ -737,7 +737,7 @@ const Template22Points: array[0..38] of TSDL_Rect =
       );
       Template22FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template23Points: array[0..29] of TSDL_Rect =
@@ -775,7 +775,7 @@ const Template23Points: array[0..29] of TSDL_Rect =
        );
       Template23FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template24Points: array[0..23] of TSDL_Rect =
@@ -807,7 +807,7 @@ const Template24Points: array[0..23] of TSDL_Rect =
        );
       Template24FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template25Points: array[0..19] of TSDL_Rect =
@@ -835,7 +835,7 @@ const Template25Points: array[0..19] of TSDL_Rect =
       );
       Template25FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 
@@ -896,7 +896,7 @@ const Template26Points: array[0..51] of TSDL_Rect =
       );
       Template26FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template27Points: array[0..42] of TSDL_Rect =
@@ -947,7 +947,7 @@ const Template27Points: array[0..42] of TSDL_Rect =
       );
       Template27FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template28Points: array[0..29] of TSDL_Rect =
@@ -985,7 +985,7 @@ const Template28Points: array[0..29] of TSDL_Rect =
       );
       Template28FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template29Points: array[0..37] of TSDL_Rect =
@@ -1031,7 +1031,7 @@ const Template29Points: array[0..37] of TSDL_Rect =
       );
       Template29FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template30Points: array[0..30] of TSDL_Rect =
@@ -1070,7 +1070,7 @@ const Template30Points: array[0..30] of TSDL_Rect =
       );
       Template30FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template31Points: array[0..32] of TSDL_Rect =
@@ -1111,7 +1111,7 @@ const Template31Points: array[0..32] of TSDL_Rect =
       );
       Template31FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template32Points: array[0..29] of TSDL_Rect =
@@ -1149,7 +1149,7 @@ const Template32Points: array[0..29] of TSDL_Rect =
       );
       Template32FPoints: array[0..0] of TPoint =
       (
-         (X: 2047; Y:    0)
+         (x: 2047; y:    0)
       );
 
 const Template33Points: array[0..45] of TSDL_Rect =
@@ -1203,7 +1203,7 @@ const Template33Points: array[0..45] of TSDL_Rect =
       );
       Template33FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template34Points: array[0..25] of TSDL_Rect =
@@ -1237,7 +1237,7 @@ const Template34Points: array[0..25] of TSDL_Rect =
       );
       Template34FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 const Template35Points: array[0..48] of TSDL_Rect =
@@ -1294,7 +1294,7 @@ const Template35Points: array[0..48] of TSDL_Rect =
       );
       Template35FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 ///////////////////////// CAVERNS ///////////////////////////////////
@@ -1322,7 +1322,7 @@ const Template36Points: array[0..18] of TSDL_Rect =
       );
       Template36FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 ////////////////////////////// ... Silly ...  ////////////////////////////////
 /// Ok. Tiy does not care for these.  Perhaps they could be saved.
@@ -1363,7 +1363,7 @@ const Template37Points: array[0..27] of TSDL_Rect =
       );
       Template37FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 // attempt to make a series of moderate hills/valleys - was before I really figured out the whole probabilities thing
 const Template38Points: array[0..16] of TSDL_Rect =
@@ -1388,7 +1388,7 @@ const Template38Points: array[0..16] of TSDL_Rect =
       );
       Template38FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 
 // 8 tiny islands
@@ -1437,7 +1437,7 @@ const Template39Points: array[0..39] of TSDL_Rect =
       );
       Template39FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 const Template40Points: array[0..7] of TSDL_Rect =
       (
@@ -1452,7 +1452,7 @@ const Template40Points: array[0..7] of TSDL_Rect =
       );
       Template40FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 // Many islands
 const Template41Points: array[0..86] of TSDL_Rect =
@@ -1547,7 +1547,7 @@ const Template41Points: array[0..86] of TSDL_Rect =
       );
       Template41FPoints: array[0..0] of TPoint =
       (
-       (X: 2047; Y:    0)
+       (x: 2047; y:    0)
       );
 // 2 tiny islands
 const Template42Points: array[0..13] of TSDL_Rect =
@@ -1569,7 +1569,7 @@ const Template42Points: array[0..13] of TSDL_Rect =
       );
       Template42FPoints: array[0..0] of TPoint =
       (
-       (X: 512; Y:    0)
+       (x: 512; y:    0)
       );
 // Many islands
 const Template43Points: array[0..173] of TSDL_Rect =
@@ -1751,7 +1751,7 @@ const Template43Points: array[0..173] of TSDL_Rect =
       );
       Template43FPoints: array[0..0] of TPoint =
       (
-       (X: 4095; Y:    0)
+       (x: 4095; y:    0)
       );
 
 // 3 large caverns
@@ -1775,12 +1775,12 @@ const Template44Points: array[0..14] of TSDL_Rect =
       );
       Template44FPoints: array[0..5] of TSDL_Rect =
       (
-       (X:   1; Y:  90; w:   0; h:   0),
-       (X:   1; Y: 500; w:   0; h:   0),
-       (X:4095; Y: 500; w:   0; h:   0),
-       (X:   1; Y:1200; w:   0; h:   0),
-       (X:4095; Y:1200; w:   0; h:   0),
-       (X:   1; Y:2010; w:   0; h:   0)
+       (x:   1; y:  90; w:   0; h:   0),
+       (x:   1; y: 500; w:   0; h:   0),
+       (x:4095; y: 500; w:   0; h:   0),
+       (x:   1; y:1200; w:   0; h:   0),
+       (x:4095; y:1200; w:   0; h:   0),
+       (x:   1; y:2010; w:   0; h:   0)
       );
 
 // large caverns with an island
@@ -1801,9 +1801,9 @@ const Template45Points: array[0..11] of TSDL_Rect =
       );
       Template45FPoints: array[0..2] of TSDL_Rect =
       (
-       (X:   1; Y:   1; w:   0; h:   0),
-       (X:   1; Y:2047; w:   0; h:   0),
-       (X:1005; Y: 805; w:   0; h:   0)
+       (x:   1; y:   1; w:   0; h:   0),
+       (x:   1; y:2047; w:   0; h:   0),
+       (x:1005; y: 805; w:   0; h:   0)
       );
 
 ////////////////////////////////////////////////////////////////////////

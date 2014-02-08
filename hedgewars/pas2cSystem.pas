@@ -115,7 +115,7 @@ var
     TThreadId : function : integer;
 
     _strconcat, _strappend, _strprepend, _chrconcat : function : string;
-    _strcompare, _strncompare, _strcomparec : function : boolean;
+    _strcompare, _strncompare, _strcomparec, _strncompareA : function : boolean;
     _strconcatA, _strappendA : function : ansistring;
 
     png_structp, png_set_write_fn, png_get_io_ptr,
