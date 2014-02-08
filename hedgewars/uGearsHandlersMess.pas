@@ -3548,7 +3548,7 @@ begin
         Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
         FreeTexture(Gear^.Tex);
-        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) + '%', cWhiteColor, fntSmall)
+        Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
         end;
 
     if (HHGear^.Message and (gmAttack or gmUp or gmLeft or gmRight) <> 0) and
@@ -4705,8 +4705,8 @@ begin
             begin
             Gear^.Damage:= i;
             FreeTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
-                         '%', cWhiteColor, fntSmall)
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
+                         '%'), cWhiteColor, fntSmall)
             end
         end
 end;
@@ -4782,8 +4782,8 @@ begin
             begin
             Gear^.Damage:= i;
             FreeTexture(Gear^.Tex);
-            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(i) +
-                         '%', cWhiteColor, fntSmall)
+            Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
+                         '%'), cWhiteColor, fntSmall)
             end
         end
 end;
@@ -5387,8 +5387,8 @@ begin
     begin
     Gear^.Damage:= t;
     FreeTexture(Gear^.Tex);
-    Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ': ' + inttostr(t) +
-              '%', cWhiteColor, fntSmall)
+    Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(t) +
+              '%'), cWhiteColor, fntSmall)
     end;
     if Gear^.Message and (gmUp or gmDown) <> 0 then
         begin

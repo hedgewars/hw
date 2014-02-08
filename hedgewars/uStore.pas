@@ -450,7 +450,7 @@ if not reload then
 for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
         begin
-        TryDo(trAmmo[NameId] <> '','No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
+        TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
@@ -1238,10 +1238,10 @@ var tmpsurf: PSDL_SURFACE;
     tmpline, tmpline2, tmpdesc: ansistring;
 begin
 // make sure there is a caption as well as a sub caption - description is optional
-if caption = '' then
-    caption:= '???';
-if subcaption = '' then
-    subcaption:= _S' ';
+if length(caption) = 0 then
+    caption:= ansistring('???');
+if length(caption) = 0 then
+    subcaption:= ansistring(_S' ');
 
 font:= CheckCJKFont(caption,fnt16);
 font:= CheckCJKFont(subcaption,font);
@@ -1285,7 +1285,7 @@ while length(tmpdesc) > 0 do
         end
     end;
 
-if extra <> '' then
+if length(extra) > 0 then
     begin
     // get extra label's dimensions
     TTF_SizeUTF8(Fontz[font].Handle, PChar(extra), @i, @j);
@@ -1332,7 +1332,7 @@ while length(tmpdesc) > 0 do
         end
     end;
 
-if extra <> '' then
+if length(extra) > 0 then
     r:= WriteInRect(tmpsurf, cFontBorder + 2, r.y + r.h, extracolor, font, PChar(extra));
 
 r.x:= cFontBorder + 6;
