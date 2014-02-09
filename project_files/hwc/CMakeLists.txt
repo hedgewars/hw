@@ -12,6 +12,7 @@ include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rtl)
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(${PHYSLAYER_INCLUDE_DIR})
+include_directories(${LUA_INCLUDE_DIR})
 add_subdirectory(rtl)
 
 configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
@@ -60,6 +61,8 @@ add_custom_target(engine_c DEPENDS ${engine_sources})
 
 
 #compile the c files
+add_definitions(-DPAS2C)
+
 add_executable(hwengine WIN32 ${engine_sources})
 
 target_link_libraries(hwengine  fpcrtl

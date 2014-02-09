@@ -700,7 +700,7 @@ else if Gear^.Kind = gtHedgehog then
                 begin
                 inc(Team^.stats.AIKills);
                 FreeTexture(Team^.AIKillsTex);
-                Team^.AIKillsTex := RenderStringTex(inttostr(Team^.stats.AIKills), Team^.Clan^.Color, fnt16);
+                Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
                 end
         end;
 with Gear^ do

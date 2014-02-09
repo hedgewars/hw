@@ -28,7 +28,7 @@ typedef union astring_
         };
         struct {
             unsigned char _dummy2;
-            unsigned char str[MAX_ANSISTRING_LENGTH];
+            unsigned char s[MAX_ANSISTRING_LENGTH];
         };
         struct {
             uint16_t len;
@@ -76,6 +76,7 @@ string255 _chrconcat(unsigned char a, unsigned char b);
 bool _strcompare(string255 a, string255 b);
 bool _strcomparec(string255 a, unsigned char b);
 bool _strncompare(string255 a, string255 b);
+bool _strncompareA(astring a, astring b);
 
 
 #define STRINIT(a) {.len = sizeof(a) - 1, .str = a}

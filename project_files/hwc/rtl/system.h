@@ -22,6 +22,7 @@ typedef struct {
  * Index is 1-based.
  */
 string255   fpcrtl_copy(string255 s, Integer Index, Integer Count);
+astring     fpcrtl_copyA(astring s, Integer Index, Integer Count);
 
 /*
  * Delete removes Count characters from string S, starting at position Index.
@@ -42,6 +43,7 @@ void        fpcrtl_move__vars(void *src, void *dst, SizeInt count);
 
 Integer     __attribute__((overloadable))                   fpcrtl_pos(Char c, string255 str);
 Integer     __attribute__((overloadable))                   fpcrtl_pos(string255 substr, string255 str);
+Integer     __attribute__((overloadable))                   fpcrtl_pos(string255 substr, astring str);
 
 Integer     fpcrtl_length(string255 s);
 #define     fpcrtl_Length                                   fpcrtl_length

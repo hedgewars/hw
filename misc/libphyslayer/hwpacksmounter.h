@@ -3,7 +3,10 @@
 
 #include "physfs.h"
 #include "physfscompat.h"
+
+#ifndef PAS2C
 #include "lua.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {

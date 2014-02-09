@@ -97,12 +97,14 @@ end;
 
 procedure TurnReaction;
 var i, t: LongInt;
+    s: ansistring;
 begin
 TryDo(not bBetweenTurns, 'Engine bug: TurnReaction between turns', true);
 
 inc(FinishedTurnsTotal);
 if FinishedTurnsTotal <> 0 then
     begin
+    s:= ansistring(CurrentHedgehog^.Name);
     inc(CurrentHedgehog^.stats.FinishedTurns);
 
     if (CurrentHedgehog^.stats.DamageGiven = DamageTotal) and (DamageTotal > 0) then
@@ -112,7 +114,7 @@ if FinishedTurnsTotal <> 0 then
         begin
         AddVoice(sndStupid, PreviousTeam^.voicepack);
         if CurrentHedgehog^.stats.DamageGiven = CurrentHedgehog^.stats.StepDamageRecv then
-            AddCaption(Format(GetEventString(eidHurtSelf), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+            AddCaption(FormatA(GetEventString(eidHurtSelf), s), cWhiteColor, capgrpMessage);
         end
 
     else if DamageClan <> 0 then
@@ -140,7 +142,7 @@ if FinishedTurnsTotal <> 0 then
     else if isTurnSkipped then
         begin
         AddVoice(sndBoring, PreviousTeam^.voicepack);
-        AddCaption(Format(GetEventString(eidTurnSkipped), CurrentHedgehog^.Name), cWhiteColor, capgrpMessage);
+        AddCaption(FormatA(GetEventString(eidTurnSkipped), s), cWhiteColor, capgrpMessage);
         end
     else if not PlacingHogs then
         AddVoice(sndCoward, PreviousTeam^.voicepack);

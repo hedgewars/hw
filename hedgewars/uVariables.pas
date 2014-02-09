@@ -41,8 +41,8 @@ var
     cLocaleFName       : shortstring;
     cLocale            : shortstring;
     cTimerInterval     : LongInt;
-    PathPrefix         : shortstring;
-    UserPathPrefix     : shortstring;
+    PathPrefix         : ansistring;
+    UserPathPrefix     : ansistring;
     cShowFPS           : boolean;
     cFlattenFlakes     : boolean;
     cFlattenClouds     : boolean;

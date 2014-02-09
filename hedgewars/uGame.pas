@@ -32,7 +32,7 @@ uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
 
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
-    s: shortstring;
+    s: ansistring;
 begin
 if isPaused then
     exit;
@@ -76,8 +76,8 @@ if SoundTimerTicks >= 50 then
             AddCaption(trmsg[sidMute], cWhiteColor, capgrpVolume)
         else if not isAudioMuted then
             begin
-            str(i, s);
-            AddCaption(Format(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
+            s:= ansistring(inttostr(i));
+            AddCaption(FormatA(trmsg[sidVolume], s), cWhiteColor, capgrpVolume)
             end
         end;
     end;

@@ -228,7 +228,7 @@ function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 5 then
         begin
-        ShowMission(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
         end
     else
         LuaParameterCountError('ShowMission', 'caption, subcaption, text, icon, time', lua_gettop(L));
@@ -308,10 +308,10 @@ end;
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) = 1 then
-        AddCaption(lua_tostring(L, 1), cWhiteColor, capgrpMessage)
+        AddCaption(lua_tostringA(L, 1), cWhiteColor, capgrpMessage)
     else if lua_gettop(L) = 3 then
         begin
-        AddCaption(lua_tostring(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
+        AddCaption(lua_tostringA(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
         end
     else
         LuaParameterCountError('AddCaption', 'text[, color, captiongroup]', lua_gettop(L));
@@ -847,12 +847,12 @@ begin
                 if (hh.Gear <> nil) or (hh.GearHidden <> nil) then
                     begin
                     FreeTexture(hh.NameTagTex);
-                    hh.NameTagTex:= RenderStringTex(hh.Name, clan^.Color, fnt16);
+                    hh.NameTagTex:= RenderStringTex(ansistring(hh.Name), clan^.Color, fnt16);
                     RenderHealth(hh);
                     end;
                 end;
             FreeTexture(team^.NameTagTex);
-            team^.NameTagTex:= RenderStringTex(clan^.Teams[i]^.TeamName, clan^.Color, fnt16);
+            team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
@@ -898,7 +898,7 @@ begin
             gear^.Hedgehog^.Team^.TeamName := lua_tostring(L, 2);
 
             FreeTexture(gear^.Hedgehog^.Team^.NameTagTex);
-            gear^.Hedgehog^.Team^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Team^.TeamName, gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
+            gear^.Hedgehog^.Team^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Team^.TeamName), gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
             end
         else
             lua_pushnil(L);
@@ -943,7 +943,7 @@ begin
             gear^.Hedgehog^.Name:= lua_tostring(L, 2);
 
             FreeTexture(gear^.Hedgehog^.NameTagTex);
-            gear^.Hedgehog^.NameTagTex:= RenderStringTex(gear^.Hedgehog^.Name, gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
+            gear^.Hedgehog^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Name), gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
             end
         end;
     lc_sethogname:= 0;

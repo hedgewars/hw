@@ -1140,6 +1140,7 @@ ref2C ae@(ArrayElement [expr] ref) = do
          a -> error $ "Getting element of " ++ show a ++ "\nReference: " ++ show ae
     case t of
          BTString ->  return $ r <> text ".s" <> brackets e
+         BTAString ->  return $ r <> text ".s" <> brackets e
          _ -> return $ r <> brackets e
 ref2C (SimpleReference name) = id2C IOLookup name
 ref2C rf@(RecordField (Dereference ref1) ref2) = do
@@ -1202,6 +1203,7 @@ ref2C (TypeCast t'@(Identifier i _) expr) = do
         ("pchar", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "_pcharA" $ BTPointerTo BTChar))
         ("shortstring", BTAString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "astr2str" $ BTString))
         ("shortstring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2str" $ BTString))
+        ("ansistring", BTPointerTo _) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "pchar2astr" $ BTAString))
         ("ansistring", BTString) -> ref2C $ FunCall [expr] (SimpleReference (Identifier "str2astr" $ BTAString))
         (a, _) -> do
             e <- expr2C expr
