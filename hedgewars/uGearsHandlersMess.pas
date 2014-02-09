@@ -1248,10 +1248,12 @@ begin
             Gear^.Tag := 0;
 
         if Gear^.Damage > 5 then
+            begin
             if Gear^.AmmoType = amDEagle then
                 AmmoShove(Gear, 7, 20)
-        else
-            AmmoShove(Gear, Gear^.Timer, 20);
+            else
+                AmmoShove(Gear, Gear^.Timer, 20);
+            end;
         CheckGearDrowning(Gear);
         dec(i)
     until (i = 0) or (Gear^.Damage > Gear^.Health) or ((Gear^.State and gstDrowning) <> 0);
