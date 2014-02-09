@@ -71,7 +71,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glTranslatef(WorldDx, WorldDy, 0);
 
-    glLineWidth(4.0);
+    glLineWidth(2.0 * zoom);
 
     Tint($C0, $C0, $C0, $FF);
 
