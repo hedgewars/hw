@@ -46,12 +46,13 @@ astring     fpcrtl_strconcatA(astring str1, astring str2);
 bool        fpcrtl_strcompare(string255 str1, string255 str2);
 bool        fpcrtl_strcomparec(string255 a, char b);
 bool        fpcrtl_strncompare(string255 a, string255 b);
+bool        fpcrtl_strncompareA(astring a, astring b);
 
 char*       fpcrtl__pchar(string255 s);
 string255   fpcrtl_pchar2str(char *s);
+astring     fpcrtl_pchar2astr(char *s);
 astring     fpcrtl_str2astr(string255 s);
 string255   fpcrtl_astr2str(astring s);
-string255   fpcrtl_astr2str(astring a);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
 
 #ifdef EMSCRIPTEN

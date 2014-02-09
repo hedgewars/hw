@@ -336,8 +336,8 @@ begin
     initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
-    AddFileLog('Prefix: "' + PathPrefix +'"');
-    AddFileLog('UserPrefix: "' + UserPathPrefix +'"');
+    AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
+    AddFileLog('UserPrefix: "' + shortstring(UserPathPrefix) +'"');
 
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));

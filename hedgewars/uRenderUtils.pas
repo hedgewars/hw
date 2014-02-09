@@ -82,7 +82,7 @@ var w, h: LongInt;
     clr: TSDL_Color;
     finalRect, textRect: TSDL_Rect;
 begin
-    TTF_SizeUTF8(Fontz[Font].Handle, Str2PChar(s), @w, @h);
+    TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
@@ -96,7 +96,7 @@ begin
     clr.r:= (Color shr 16) and $FF;
     clr.g:= (Color shr 8) and $FF;
     clr.b:= Color and $FF;
-    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(s), clr);
+    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(s), clr);
     finalRect.x:= X + cFontBorder + 2;
     finalRect.y:= Y + cFontBorder;
     SDLTry(tmpsurf <> nil, true);
@@ -280,7 +280,7 @@ begin
     if length(s) = 0 then s:= _S' ';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
+    TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
     if (maxLength <> 0) and (w > maxLength) then w := maxLength;
 
     finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
@@ -302,7 +302,9 @@ function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFon
 var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
+    {$IFNDEF PAS2C}
     chars: set of char = [#9,' ',';',':','?','!',','];
+    {$ENDIF}
     substr: shortstring;
     edge, corner, tail: TSPrite;
 begin
@@ -338,7 +340,7 @@ begin
         s:= '...';
     font:= CheckCJKFont(s, font);
     w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(s), @w, @h);
+    TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
     if w<8 then
         w:= 8;
     j:= 0;
@@ -346,7 +348,9 @@ begin
         begin
         w:= 0;
         i:= round(Sqrt(length(s)) * 2);
+        {$IFNDEF PAS2C}
         s:= WrapText(s, #1, chars, i);
+        {$ENDIF}
         pos:= 1; prevpos:= 0; line:= 0;
     // Find the longest line for the purposes of centring the text.  Font dependant.
         while pos <= length(s) do

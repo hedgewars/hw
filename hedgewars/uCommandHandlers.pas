@@ -582,12 +582,12 @@ if CheckNoTeamOrHH or isPaused then
 if autoCameraOn then
     begin
     FollowGear:= nil;
-    AddCaption('Auto Camera Off', $CCCCCC, capgrpVolume);
+    AddCaption(ansistring('Auto Camera Off'), $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
 else
     begin
-    AddCaption('Auto Camera On', $CCCCCC, capgrpVolume);
+    AddCaption(ansistring('Auto Camera On'), $CCCCCC, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
         FollowGear:= CurrentHedgehog^.Gear;

@@ -928,8 +928,10 @@ begin
 end;
 
 function lua_tostringA(L : Plua_State; idx : LongInt) : ansistring;
+var p: PChar;
 begin
-    lua_tostringA := ansistring(lua_tolstring(L, idx, nil));
+    p:= lua_tolstring(L, idx, nil);
+    lua_tostringA := ansistring(p);
 end;
 
 function lua_open : Plua_State;

@@ -27,7 +27,7 @@ const cNetProtoVersion = ${HEDGEWARS_PROTO_VER};
       cHashString = '${HEDGEWARS_HASH}';
       cDefaultPathPrefix = '${HEDGEWARS_FULL_DATADIR}/Data';
 {$IFDEF PAS2C}
-      cFontsPaths: array[0..0] of PChar = (nil);
+      cFontsPaths: array[0..1] of PChar = (nil, nil);
 {$ELSE}
       cFontsPaths: ${FONTS_DIRS_ARRAY}
 {$ENDIF}

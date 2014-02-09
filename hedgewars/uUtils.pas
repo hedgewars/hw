@@ -516,7 +516,7 @@ begin
 {$IFNDEF PAS2C}
     f:= stderr; // if everything fails, write to stderr
 {$ENDIF}
-    if (UserPathPrefix <> '') then
+    if (length(UserPathPrefix) > 0) then
         begin
         {$IFNDEF PAS2C}
         // create directory if it doesn't exist
@@ -527,7 +527,7 @@ begin
         i:= 0;
         while(i < 7) do
             begin
-            assign(f, UserPathPrefix + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            assign(f, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
             if IOResult = 0 then
                 break;
             inc(i)

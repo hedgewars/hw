@@ -36,7 +36,7 @@ procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibNa
 {$ENDIF}
 
 implementation
-uses uConsts, uUtils, uVariables, sysutils;
+uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}, sysutils{$ENDIF};
 
 {$IFNDEF PAS2C}
 function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
@@ -132,17 +132,17 @@ begin
         pfsBlockRead:= r
 end;
 
-procedure pfsMount(path: AnsiString; mountpoint: PChar);
+procedure pfsMount(path: ansistring; mountpoint: PChar);
 begin
-    if PHYSFS_mount(Str2PChar(path), mountpoint, false) then
-        AddFileLog('[PhysFS] mount ' + path + ' at ' + mountpoint + ' : ok')
+    if PHYSFS_mount(PChar(path), mountpoint, false) then
+        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
     else
-        AddFileLog('[PhysFS] mount ' + path + ' at ' + mountpoint + ' : FAILED ("' + PHYSFS_getLastError() + '")');
+        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
 end;
 
-procedure pfsMountAtRoot(path: AnsiString);
+procedure pfsMountAtRoot(path: ansistring);
 begin
-    pfsMount(path, '/');
+    pfsMount(path, PChar('/'));
 end;
 
 procedure initModule;
@@ -165,11 +165,11 @@ begin
         begin
             fp := cFontsPaths[i];
             if fp <> nil then
-                pfsMount(fp, '/Fonts');
+                pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
 
     pfsMountAtRoot(PathPrefix);
-    pfsMountAtRoot(UserPathPrefix + '/Data');
+    pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));
 
     hedgewarsMountPackages;
 

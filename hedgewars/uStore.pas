@@ -185,9 +185,9 @@ md:= 0;
 for t:= 0 to Pred(TeamsCount) do
     with TeamsArray[t]^ do
         begin
-        NameTagTex:= RenderStringTexLim(TeamName, Clan^.Color, Font, cTeamHealthWidth);
+        NameTagTex:= RenderStringTexLim(ansistring(TeamName), Clan^.Color, Font, cTeamHealthWidth);
         if length(Owner) > 0 then
-            OwnerTex:= RenderStringTexLim(Owner, Clan^.Color, Font, cTeamHealthWidth);
+            OwnerTex:= RenderStringTexLim(ansistring(Owner), Clan^.Color, Font, cTeamHealthWidth);
 
         r.x:= 0;
         r.y:= 0;
@@ -253,7 +253,7 @@ for t:= 0 to Pred(TeamsCount) do
         SDL_FreeSurface(texsurf);
         texsurf:= nil;
 
-        AIKillsTex := RenderStringTex(inttostr(stats.AIKills), Clan^.Color, fnt16);
+        AIKillsTex := RenderStringTex(ansistring(inttostr(stats.AIKills)), Clan^.Color, fnt16);
 
         dec(drY, r.h + 2);
         DrawHealthY:= drY;
@@ -261,7 +261,7 @@ for t:= 0 to Pred(TeamsCount) do
             with Hedgehogs[i] do
                 if Gear <> nil then
                     begin
-                    NameTagTex:= RenderStringTexLim(Name, Clan^.Color, fnt16, cTeamHealthWidth);
+                    NameTagTex:= RenderStringTexLim(ansistring(Name), Clan^.Color, fnt16, cTeamHealthWidth);
                     if Hat = 'NoHat' then
                         begin
                         if (month = 4) and (md = 20) then
@@ -451,7 +451,7 @@ for ai:= Low(TAmmoType) to High(TAmmoType) do
     with Ammoz[ai] do
         begin
         TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, Str2PChar(trAmmo[NameId]), cWhiteColorChannels);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
         TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
         tmpsurf:= doSurfaceConversion(tmpsurf);
         FreeTexture(NameTex);
@@ -585,7 +585,7 @@ var s: shortstring;
 begin
 str(Hedgehog.Gear^.Health, s);
 FreeTexture(Hedgehog.HealthTagTex);
-Hedgehog.HealthTagTex:= RenderStringTex(s, Hedgehog.Team^.Clan^.Color, fnt16)
+Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
 function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
@@ -840,7 +840,7 @@ end;
 procedure SetupOpenGL;
 var buf: array[byte] of char;
     AuxBufNum: LongInt = 0;
-    tmpstr: AnsiString;
+    tmpstr: ansistring;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
