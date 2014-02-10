@@ -127,7 +127,7 @@ var
     clear_filelist_hook, add_file_hook, idb_loader_hook, mainloop_hook, drawworld_hook : procedure;
     SDL_InitPatch : procedure;
 
-    PHYSFS_init, PHYSFS_deinit, PHYSFS_mount, PHYSFS_readBytes : function : LongInt;
+    PHYSFS_init, PHYSFS_deinit, PHYSFS_mount, PHYSFS_readBytes, PHYSFS_read : function : LongInt;
     PHYSFSRWOPS_openRead, PHYSFSRWOPS_openWrite, PHYSFS_openRead : function : pointer;
     PHYSFS_eof, PHYSFS_close, PHYSFS_exists : function : boolean;
     PHYSFS_getLastError : function : PChar;

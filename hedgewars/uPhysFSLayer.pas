@@ -1,3 +1,5 @@
+{$INCLUDE "options.inc"}
+
 unit uPhysFSLayer;
 
 interface
@@ -29,21 +31,19 @@ function pfsEOF(f: PFSFile): boolean;
 
 function pfsExists(fname: shortstring): boolean;
 
-{$IFNDEF PAS2C}
 function  physfsReader(L: Plua_State; f: PFSFile; sz: Psize_t) : PChar; cdecl; external PhyslayerLibName;
 procedure physfsReaderSetBuffer(buf: pointer); cdecl; external PhyslayerLibName;
 procedure hedgewarsMountPackage(filename: PChar); cdecl; external PhyslayerLibName;
-{$ENDIF}
 
 implementation
-uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}, sysutils{$ENDIF};
+uses uConsts, uUtils, uVariables{$IFNDEF PAS2C}, sysutils{$ELSE}, physfs{$ENDIF};
 
-{$IFNDEF PAS2C}
-function PHYSFS_init(argv0: PChar) : LongInt; cdecl; external PhysfsLibName;
-function PHYSFS_deinit() : LongInt; cdecl; external PhysfsLibName;
 function PHYSFSRWOPS_openRead(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
 function PHYSFSRWOPS_openWrite(fname: PChar): PSDL_RWops; cdecl; external PhyslayerLibName;
-
+procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
+{$IFNDEF PAS2C}
+function PHYSFS_init(argv0: PChar): LongInt; cdecl; external PhysfsLibName;
+function PHYSFS_deinit(): LongInt; cdecl; external PhysfsLibName;
 function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
 function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
@@ -51,8 +51,11 @@ function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
-
-procedure hedgewarsMountPackages(); cdecl; external PhyslayerLibName;
+{$ELSE}
+function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64;
+begin
+    PHYSFS_readBytes:= PHYSFS_read(f, buffer, 1, len);
+end;
 {$ENDIF}
 
 function rwopsOpenRead(fname: shortstring): PSDL_RWops;
@@ -142,7 +145,7 @@ end;
 
 procedure pfsMountAtRoot(path: ansistring);
 begin
-    pfsMount(path, PChar('/'));
+    pfsMount(path, PChar(_S'/'));
 end;
 
 procedure initModule;

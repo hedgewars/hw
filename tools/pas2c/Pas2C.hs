@@ -237,7 +237,7 @@ pascal2C (Unit _ interface implementation _ _) =
 
 pascal2C (Program _ implementation mainFunction) = do
     impl <- implementation2C implementation
-    [main] <- tvar2C True False True True (FunctionDeclaration (Identifier "main" (BTInt True)) False False (SimpleType $ Identifier "int" (BTInt True)) [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing, VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] (Just (TypesAndVars [], mainFunction)))
+    [main] <- tvar2C True False True True (FunctionDeclaration (Identifier "main" (BTInt True)) False False False (SimpleType $ Identifier "int" (BTInt True)) [VarDeclaration False False ([Identifier "argc" (BTInt True)], SimpleType (Identifier "Integer" (BTInt True))) Nothing, VarDeclaration False False ([Identifier "argv" BTUnknown], SimpleType (Identifier "PPChar" BTUnknown)) Nothing] (Just (TypesAndVars [], mainFunction)))
 
     return $ impl $+$ main
 
@@ -271,7 +271,7 @@ checkDuplicateFunDecls tvs =
         initMap :: Map.Map String Int
         initMap = Map.empty
         --initMap = Map.fromList [("reset", 2)]
-        ins (FunctionDeclaration (Identifier i _) _ _ _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
+        ins (FunctionDeclaration (Identifier i _) _ _ _ _ _ _) m = Map.insertWith (+) (map toLower i) 1 m
         ins _ m = m
 
 -- the second bool indicates whether declare variable as extern or not
@@ -310,8 +310,8 @@ id2C (IOInsertWithType d) (Identifier i t) = do
     tom <- gets (Set.member n . toMangle)
     cu <- gets currentUnit
     let (i', t') = case (t, tom) of
-            (BTFunction _ p _, True) -> (cu ++ i ++ ('_' : show (length p)), t)
-            (BTFunction _ _ _, _) -> (cu ++ i, t)
+            (BTFunction _ e p _, True) -> ((if e then id else (++) cu) $ i ++ ('_' : show (length p)), t)
+            (BTFunction _ e _ _, _) -> ((if e then id else (++) cu) i, t)
             (BTVarParam t'', _) -> ('(' : '*' : i ++ ")" , t'')
             _ -> (i, t)
     modify (\s -> s{currentScope = Map.insertWith (++) n [Record i' t' d] (currentScope s), lastIdentifier = n})
@@ -331,7 +331,7 @@ id2C (IOLookupFunction params) (Identifier i _) = do
         let vv = fromMaybe (head $ fromJust v) . find checkParam $ fromJust v in
             modify (setLastIdValues vv) >> (return . text . lcaseId $ vv)
     where
-        checkParam (Record _ (BTFunction _ p _) _) = (length p) == params
+        checkParam (Record _ (BTFunction _ _ p _) _) = (length p) == params
         checkParam _ = False
 id2C IODeferred (Identifier i _) = do
     let i' = map toLower i
@@ -417,7 +417,7 @@ resolveType (ArrayDecl (Just i) t) = do
 resolveType (ArrayDecl Nothing t) = liftM (BTArray RangeInfinite (BTInt True)) $ resolveType t
 resolveType (FunctionType t a) = do
     bts <- typeVarDecl2BaseType a
-    liftM (BTFunction False bts) $ resolveType t
+    liftM (BTFunction False False bts) $ resolveType t
 resolveType (DeriveType (InitHexNumber _)) = return (BTInt True)
 resolveType (DeriveType (InitNumber _)) = return (BTInt True)
 resolveType (DeriveType (InitFloat _)) = return BTFloat
@@ -481,16 +481,16 @@ funWithVarsToDefine n params = text "#define" <+> text n <> parens abc <+> text 
         ps = zip ['a'..] (toIsVarList params)
 
 fun2C :: Bool -> String -> TypeVarDeclaration -> State RenderState [Doc]
-fun2C _ _ (FunctionDeclaration name _ overload returnType params Nothing) = do
+fun2C _ _ (FunctionDeclaration name _ overload external returnType params Nothing) = do
     t <- type2C returnType
     t'<- gets lastType
     bts <- typeVarDecl2BaseType params
     p <- withState' id $ functionParams2C params
-    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction False bts t') name
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction False external bts t') name
     let decor = if overload then text "__attribute__((overloadable))" else empty
     return [t empty <+> decor <+> text n <> parens p]
 
-fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload returnType params (Just (tvars, phrase))) = do
+fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload external returnType params (Just (tvars, phrase))) = do
     let isVoid = case returnType of
             VoidType -> True
             _ -> False
@@ -503,12 +503,12 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload returnT
     --cu <- gets currentUnit
     notDeclared <- liftM isNothing . gets $ Map.lookup (map toLower i) . currentScope
 
-    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars bts t') name
+    n <- liftM render . id2C IOInsert $ setBaseType (BTFunction hasVars external bts t') name
     let resultId = if isVoid
                     then n -- void type doesn't have result, solving recursive procedure calls
                     else (render res)
 
-    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [Record resultId (if isVoid then (BTFunction hasVars bts t') else t') empty] $ currentScope st
+    (p, ph) <- withState' (\st -> st{currentScope = Map.insertWith un (map toLower rv) [Record resultId (if isVoid then (BTFunction hasVars False bts t') else t') empty] $ currentScope st
             , currentFunctionResult = if isVoid then [] else render res}) $ do
         p <- functionParams2C params
         ph <- liftM2 ($+$) (typesAndVars2C False False True tvars) (phrase2C' phrase)
@@ -539,14 +539,14 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload returnT
     un _ _ = error "fun2C u: pattern not matched"
     hasVars = hasPassByReference params
 
-fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _ _ _) = error $ "nested functions not allowed: " ++ name
+fun2C False _ (FunctionDeclaration (Identifier name _) _ _ _ _ _ _) = error $ "nested functions not allowed: " ++ name
 fun2C _ tv _ = error $ "fun2C: I don't render " ++ show tv
 
 -- the second bool indicates whether declare variable as extern or not
 -- the third bool indicates whether include types or not
 -- the fourth bool indicates whether ignore initialization or not (basically for dynamic arrays since we cannot do initialization in function params)
 tvar2C :: Bool -> Bool -> Bool -> Bool -> TypeVarDeclaration -> State RenderState [Doc]
-tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _ _ _) = do
+tvar2C b _ includeType _ f@(FunctionDeclaration (Identifier name _) _ _ _ _ _ _) = do
     t <- fun2C b name f
     if includeType then return t else return []
 tvar2C _ _ includeType _ (TypeDeclaration i' t) = do
@@ -612,7 +612,7 @@ tvar2C _ externVar includeType ignoreInit (VarDeclaration _ isConst (ids, t) mIn
 
 tvar2C f _ _ _ (OperatorDeclaration op (Identifier i _) inline ret params body) = do
     r <- op2CTyped op (extractTypes params)
-    fun2C f i (FunctionDeclaration r inline False ret params body)
+    fun2C f i (FunctionDeclaration r inline False False ret params body)
 
 
 op2CTyped :: String -> [TypeDecl] -> State RenderState Identifier
@@ -647,7 +647,7 @@ initExpr2C' (InitAddress expr) = do
     ie <- initExpr2C' expr
     lt <- gets lastType
     case lt of
-        BTFunction True _ _ -> return $ text "&" <> ie -- <> text "__vars"
+        BTFunction True _ _ _ -> return $ text "&" <> ie -- <> text "__vars"
         _ -> return $ text "&" <> ie
 initExpr2C' (InitPrefixOp op expr) = liftM (text (op2C op) <>) (initExpr2C' expr)
 initExpr2C' (InitBinOp op expr1 expr2) = do
@@ -941,26 +941,26 @@ expr2C bop@(BinOp op expr1 expr2) = do
     e2 <- expr2C expr2
     t2 <- gets lastType
     case (op2C op, t1, t2) of
-        ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (BTFunction False [(False, t1), (False, t2)] BTString))
-        ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (BTFunction False [(False, t1), (False, t2)] BTAString))
-        ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (BTFunction False [(False, t1), (False, t2)] BTBool))
+        ("+", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcatA" (fff t1 t2 BTString))
+        ("+", BTAString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappendA" (fff t1 t2  BTAString))
+        ("!=", BTAString, BTAString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompareA" (fff t1 t2  BTBool))
         (_, BTAString, _) -> error $ "unhandled bin op with ansistring on the left side: " ++ show bop
         (_, _, BTAString) -> error $ "unhandled bin op with ansistring on the right side: " ++ show bop
-        ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (BTFunction False [(False, t1), (False, t2)] BTString))
-        ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (BTFunction False [(False, t1), (False, t2)] BTString))
-        ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (BTFunction False [(False, t1), (False, t2)] BTString))
-        ("+", BTChar, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_chrconcat" (BTFunction False [(False, t1), (False, t2)] BTString))
-        ("==", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcomparec" (BTFunction False [(False, t1), (False, t2)] BTBool))
+        ("+", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strconcat" (fff t1 t2  BTString))
+        ("+", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strappend" (fff t1 t2  BTString))
+        ("+", BTChar, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strprepend" (fff t1 t2  BTString))
+        ("+", BTChar, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_chrconcat" (fff t1 t2  BTString))
+        ("==", BTString, BTChar) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcomparec" (fff t1 t2  BTBool))
 
         -- for function/procedure comparision
         ("==", BTVoid, _) -> procCompare expr1 expr2 "=="
-        ("==", BTFunction _ _ _, _) -> procCompare expr1 expr2 "=="
+        ("==", BTFunction _ _ _ _, _) -> procCompare expr1 expr2 "=="
 
         ("!=", BTVoid, _) -> procCompare expr1 expr2 "!="
-        ("!=", BTFunction _ _ _, _) -> procCompare expr1 expr2 "!="
+        ("!=", BTFunction _ _ _ _, _) -> procCompare expr1 expr2 "!="
 
-        ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (BTFunction False [(False, t1), (False, t2)] BTBool))
-        ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (BTFunction False [(False, t1), (False, t2)] BTBool))
+        ("==", BTString, BTString) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strcompare" (fff t1 t2  BTBool))
+        ("!=", BTString, _) -> expr2C $ BuiltInFunCall [expr1, expr2] (SimpleReference $ Identifier "_strncompare" (fff t1 t2  BTBool))
         ("&", BTBool, _) -> return $ parens e1 <+> text "&&" <+> parens e2
         ("|", BTBool, _) -> return $ parens e1 <+> text "||" <+> parens e2
         (_, BTRecord t1 _, BTRecord t2 _) -> do
@@ -992,6 +992,7 @@ expr2C bop@(BinOp op expr1 expr2) = do
                                 _ -> parens e2
                         return $ e1' <+> o' <+> e2'
     where
+        fff t1 t2 = BTFunction False False [(False, t1), (False, t2)]
         boolOps = ["==", "!=", "<", ">", "<=", ">="]
         procCompare expr1 expr2 op =
             case (expr1, expr2) of
@@ -1088,7 +1089,7 @@ expr2C (BuiltInFunCall params ref) = do
     t <- gets lastType
     ps <- mapM expr2C params
     case t of
-        BTFunction _ _ t' -> do
+        BTFunction _ _ _ t' -> do
             modify (\s -> s{lastType = t'})
         _ -> error $ "BuiltInFunCall lastType: " ++ show t
     return $
@@ -1100,7 +1101,7 @@ ref2CF (SimpleReference name) addParens = do
     i <- id2C IOLookup name
     t <- gets lastType
     case t of
-         BTFunction _ _ rt -> do
+         BTFunction _ _ _ rt -> do
              modify(\s -> s{lastType = rt})
              return $ if addParens then i <> parens empty else i --xymeng: removed parens
          _ -> return $ i
@@ -1108,7 +1109,7 @@ ref2CF r@(RecordField (SimpleReference _) (SimpleReference _)) addParens = do
     i <- ref2C r
     t <- gets lastType
     case t of
-         BTFunction _ _ rt -> do
+         BTFunction _ _ _ rt -> do
              modify(\s -> s{lastType = rt})
              return $ if addParens then i <> parens empty else i
          _ -> return $ i
@@ -1170,7 +1171,7 @@ ref2C f@(FunCall params ref) = do
     r <- fref2C ref
     t <- gets lastType
     case t of
-        BTFunction _ bts t' -> do
+        BTFunction _ _ bts t' -> do
             ps <- liftM (parens . hsep . punctuate (char ',')) $
                     if (length params) == (length bts) -- hot fix for pas2cSystem and pas2cRedo functions since they don't have params
                     then
@@ -1185,7 +1186,7 @@ ref2C f@(FunCall params ref) = do
     fref2C (SimpleReference name) = id2C (IOLookupFunction $ length params) name
     fref2C a = ref2C a
     expr2CHelper :: (Expression, (Bool, BaseType)) -> State RenderState Doc
-    expr2CHelper (e, (_, BTFunction _ _ _)) = do
+    expr2CHelper (e, (_, BTFunction _ _ _ _)) = do
         modify (\s -> s{isFunctionType = True})
         expr2C e
     expr2CHelper (e, (isVar, _)) = if isVar then liftM (((<>) $ text "&") . parens) $ (expr2C e) else expr2C e
@@ -1194,7 +1195,7 @@ ref2C (Address ref) = do
     r <- ref2C ref
     lt <- gets lastType
     case lt of
-        BTFunction True _ _ -> return $ text "&" <> parens r
+        BTFunction True _ _ _ -> return $ text "&" <> parens r
         _ -> return $ text "&" <> parens r
 ref2C (TypeCast t'@(Identifier i _) expr) = do
     lt <- expr2C expr >> gets lastType
