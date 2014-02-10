@@ -1328,7 +1328,10 @@ while length(tmpdesc) > 0 do
         tmpline2:= _S'';
         SplitByChar(tmpline, tmpline2, ':');
         if length(tmpline2) > 0 then
-            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline + ':'));
+            begin
+            tmpline:= tmpline + ':';
+            WriteInRect(tmpsurf, cFontBorder + 2, r2.y + r2.h, $ffc7c7c7, font, PChar(tmpline));
+            end;
         end
     end;
 
