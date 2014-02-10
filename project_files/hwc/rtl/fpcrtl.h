@@ -148,8 +148,8 @@
 #define sdlh_SDL_WaitThread                 SDL_WaitThread
 #define sdlh_SDL_CreateMutex                SDL_CreateMutex
 #define sdlh_SDL_DestroyMutex               SDL_DestroyMutex
-#define sdlh_SDL_LockMutex                  SDL_mutexP
-#define sdlh_SDL_UnlockMutex                SDL_mutexV
+#define SDL_LockMutex                       SDL_mutexP
+#define SDL_UnlockMutex                     SDL_mutexV
 #ifndef EMSCRIPTEN
 #define sdlh_SDL_ShowCursor                 SDL_ShowCursor
 #else
@@ -180,6 +180,14 @@
 #define sdlh_TTF_RenderUTF8_Solid           TTF_RenderUTF8_Solid
 #define sdlh_TTF_SetFontStyle               TTF_SetFontStyle
 #define sdlh_TTF_SizeUTF8                   TTF_SizeUTF8
+
+#define uphysfslayer_physfsReaderSetBuffer  physfsReaderSetBuffer
+#define uphysfslayer_physfsReader           physfsReader
+#define uphysfslayer_hedgewarsMountPackage  hedgewarsMountPackage
+#define uphysfslayer_hedgewarsMountPackages hedgewarsMountPackages
+
+#define uphysfslayer_PHYSFSRWOPS_openRead   PHYSFSRWOPS_openRead
+#define uphysfslayer_PHYSFSRWOPS_openWrite  PHYSFSRWOPS_openWrite
 
 #define _strconcat                          fpcrtl_strconcat
 #define _strappend                          fpcrtl_strappend

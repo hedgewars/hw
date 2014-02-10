@@ -57,7 +57,7 @@ astring fpcrtl_strconcatA(astring str1, astring str2)
     int newlen = str1.len + str2.len;
     if(newlen > MAX_ANSISTRING_LENGTH) newlen = MAX_ANSISTRING_LENGTH;
 
-    memcpy(&(str1.s[str1.len + 1]), str2.s[1], newlen - str1.len);
+    memcpy(&(str1.s[str1.len + 1]), &str2.s[1], newlen - str1.len);
     str1.len = newlen;
 
     return str1;
@@ -67,8 +67,8 @@ string255 fpcrtl_strappend(string255 s, char c)
 {
     if(s.len < 255)
     {
-        s.s[s.len] = c;
         ++s.len;
+        s.s[s.len] = c;
     }
 
     return s;
@@ -195,16 +195,9 @@ char __pcharBuf[256];
 
 char* fpcrtl__pchar__vars(string255 * s)
 {
-    if(s->len < 255)
-    {
-        s->s[s->len] = 0;
-        return &s->s[1];
-    } else
-    {
-        memcpy(__pcharBuf, s->s[1], 255);
-        __pcharBuf[255] = 0;
-        return &__pcharBuf;
-    }
+    memcpy(__pcharBuf, &s->s[1], s->len);
+    __pcharBuf[s->len] = 0;
+    return __pcharBuf;
 }
 
 char* fpcrtl__pcharA__vars(astring * s)

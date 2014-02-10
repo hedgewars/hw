@@ -86,9 +86,7 @@ uses LuaPas,
     uVisualGearsList,
     uGearsHandlersMess,
     uPhysFSLayer
-{$IFDEF PAS2C}
-    , hwpacksmounter
-{$ELSE}
+{$IFNDEF PAS2C}
     , typinfo
 {$ENDIF}
     ;

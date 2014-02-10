@@ -600,7 +600,8 @@ begin
 
     if tmpsurf = nil then
         begin
-        OutError(msgFailed, (imageFlags and ifCritical) <> 0);
+        OutError(msgFailed, false);
+        SDLTry(false, (imageFlags and ifCritical) <> 0);
         exit;
         end;
 

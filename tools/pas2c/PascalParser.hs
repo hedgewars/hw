@@ -329,11 +329,13 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
         decorators <- many functionDecorator
         let inline = any (== "inline;") decorators
             overload = any (== "overload;") decorators
-        b <- if isImpl && (not forward) then
+            external = any (== "external;") decorators
+        -- TODO: don't mangle external functions names (and remove fpcrtl.h defines hacks)
+        b <- if isImpl && (not forward) && (not external) then
                 liftM Just functionBody
                 else
                 return Nothing
-        return $ [FunctionDeclaration i inline overload ret vs b]
+        return $ [FunctionDeclaration i inline overload external ret vs b]
 
     functionDecorator = do
         d <- choice [
@@ -342,7 +344,8 @@ typeVarDeclaration isImpl = (liftM concat . many . choice) [
             , try $ string "overload;"
             , try $ string "export;"
             , try $ string "varargs;"
-            , try (string' "external") >> comments >> iD >> optional (string' "name" >> comments >> stringLiteral pas) >> string' ";" >> return "external"
+            , try (string' "external") >> comments >> iD >> comments >>
+                optional (string' "name" >> comments >> stringLiteral pas) >> string' ";" >> return "external;"
             ]
         comments
         return d
