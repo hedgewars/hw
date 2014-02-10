@@ -40,7 +40,34 @@ string255 fpcrtl_copy(string255 s, Integer index, Integer count) {
 
     memcpy(result.str, s.str + index - 1, count);
 
-    result.str[count] = 0;
+    result.len = count;
+
+    return result;
+}
+
+astring fpcrtl_copyA(astring s, Integer index, Integer count) {
+    astring result;
+
+    result.len = 0;
+
+    if (count < 1) {
+        return result;
+    }
+
+    if (index < 1) {
+        index = 1;
+    }
+
+    if (index > s.len) {
+        return result;
+    }
+
+    if (index + count > s.len + 1) {
+        count = s.len + 1 - index;
+    }
+
+    memcpy(result.s + 1, s.s + index - 1, count);
+
     result.len = count;
 
     return result;
@@ -102,9 +129,6 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str
 
     char* p;
 
-    FIX_STRING(substr);
-    FIX_STRING(str);
-
     if (str.len == 0) {
         return 0;
     }
@@ -113,8 +137,8 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str
         return 0;
     }
 
-    str.str[str.len] = 0;
-    substr.str[substr.len] = 0;
+    FIX_STRING(substr);
+    FIX_STRING(str);
 
     p = strstr(str.str, substr.str);
 
@@ -125,9 +149,39 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str
     return strlen(str.str) - strlen(p) + 1;
 }
 
+Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) {
+
+    char* p;
+
+    if (str.len == 0) {
+        return 0;
+    }
+
+    if (substr.len == 0) {
+        return 0;
+    }
+
+    FIX_STRING(substr);
+    str.s[str.len] = 0;
+
+    p = strstr(str.s + 1, substr.str);
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    return str.len - strlen(p) + 1;
+}
+
 Integer fpcrtl_length(string255 s) {
     return s.len;
 }
+
+Integer fpcrtl_lengthA(astring s)
+{
+    return s.len;
+}
+
 
 string255 fpcrtl_lowerCase(string255 s) {
     int i;

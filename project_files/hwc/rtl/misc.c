@@ -43,48 +43,54 @@ void fpcrtl_printf(const char* format, ...)
 
 string255 fpcrtl_strconcat(string255 str1, string255 str2)
 {
-    //printf("str1 = %d, %d\n", str1.len, strlen(str1.str));
-    //printf("str2 = %d, %d\n", str2.len, strlen(str2.str));
+    int newlen = str1.len + str2.len;
+    if(newlen > 255) newlen = 255;
 
-#ifdef FPCRTL_DEBUG
-    if(str1.len + (int)(str2.len) > 255){
-        printf("String overflow\n");
-        printf("str1(%d): %s\nstr2(%d): %s\n", str1.len, str1.str, str2.len, str2.str);
-        printf("String will be truncated.\n");
+    memcpy(&(str1.str[str1.len]), str2.str, newlen - str1.len);
+    str1.len = newlen;
 
-        strbuf[0] = 0;
-        strcpy(strbuf, str1.str);
-        strcat(strbuf, str2.str);
-        memcpy(str1.str, strbuf, 255);
-        str1.str[254] = 0;
+    return str1;
+}
 
-        return str1;
-    }
-#endif
+astring fpcrtl_strconcatA(astring str1, astring str2)
+{
+    int newlen = str1.len + str2.len;
+    if(newlen > MAX_ANSISTRING_LENGTH) newlen = MAX_ANSISTRING_LENGTH;
 
-    memcpy(&(str1.str[str1.len]), str2.str, str2.len);
-    str1.str[str1.len + str2.len] = 0;
-    str1.len += str2.len;
+    memcpy(&(str1.s[str1.len + 1]), str2.s[1], newlen - str1.len);
+    str1.len = newlen;
 
     return str1;
 }
 
 string255 fpcrtl_strappend(string255 s, char c)
 {
-    s.str[s.len] = c;
-    s.str[s.len + 1] = 0;
-    s.len ++;
+    if(s.len < 255)
+    {
+        s.s[s.len] = c;
+        ++s.len;
+    }
+
+    return s;
+}
+
+astring fpcrtl_strappendA(astring s, char c)
+{
+    if(s.len < MAX_ANSISTRING_LENGTH)
+    {
+        s.s[s.len] = c;
+        ++s.len;
+    }
 
     return s;
 }
 
 string255 fpcrtl_strprepend(char c, string255 s)
 {
-    FIX_STRING(s);
-
-    memmove(s.str + 1, s.str, s.len + 1); // also move '/0'
+    uint8_t newlen = s.len < 255 ? s.len + 1 : 255;
+    memmove(s.str + 1, s.str, newlen); // also move '/0'
     s.str[0] = c;
-    s.len++;
+    s.len = newlen;
 
     return s;
 }
@@ -96,19 +102,13 @@ string255 fpcrtl_chrconcat(char a, char b)
     result.len = 2;
     result.str[0] = a;
     result.str[1] = b;
-    result.str[2] = 0;
 
     return result;
 }
 
 bool fpcrtl_strcompare(string255 str1, string255 str2)
 {
-    //printf("str1 = %d, %d\n", str1.len, strlen(str1.str));
-    //printf("str2 = %d, %d\n", str2.len, strlen(str2.str));
-    FIX_STRING(str1);
-    FIX_STRING(str2);
-
-    if(strcmp(str1.str, str2.str) == 0){
+    if(strncmp(str1.str, str2.str, 256) == 0){
         return true;
     }
 
@@ -117,8 +117,6 @@ bool fpcrtl_strcompare(string255 str1, string255 str2)
 
 bool fpcrtl_strcomparec(string255 a, char b)
 {
-    FIX_STRING(a);
-
     if(a.len == 1 && a.str[0] == b){
         return true;
     }
@@ -131,33 +129,91 @@ bool fpcrtl_strncompare(string255 a, string255 b)
     return !fpcrtl_strcompare(a, b);
 }
 
-//char* fpcrtl_pchar(string255 s)
-//{
-//    return s.str;
-//}
+bool fpcrtl_strncompareA(astring a, astring b)
+{
+    return (a.len == b.len) && (strncmp(a.s, b.s, MAX_ANSISTRING_LENGTH) == 0);
+}
 
-string255 fpcrtl_pchar2str(char *s)
+
+string255 fpcrtl_pchar2str(const char *s)
 {
     string255 result;
-    int t = strlen(s);
+    int rlen = strlen(s);
 
-    if(t > 255){
-        printf("pchar2str, length > 255\n");
-        assert(0);
+    if(rlen > 255){
+        rlen = 255;
     }
 
-    result.len = t;
-    memcpy(result.str, s, t);
-    result.str[t] = 0;
+    result.len = rlen;
+    memcpy(result.str, s, rlen);
 
     return result;
 }
 
+
 string255 fpcrtl_make_string(const char* s) {
-    string255 result;
-    strcpy(result.str, s);
-    result.len = strlen(s);
+    return fpcrtl_pchar2str(s);
+}
+
+
+astring fpcrtl_pchar2astr(const char *s)
+{
+    astring result;
+    int rlen = strlen(s);
+
+    if(rlen > MAX_ANSISTRING_LENGTH){
+        rlen = MAX_ANSISTRING_LENGTH;
+    }
+
+    result.len = rlen;
+    memcpy(result.s + 1, s, rlen);
+
     return result;
+}
+
+astring fpcrtl_str2astr(string255 s)
+{
+    astring result;
+
+    result.str255 = s;
+    result.len = s.len;
+
+    return result;
+}
+
+string255 fpcrtl_astr2str(astring s)
+{
+    string255 result;
+
+    result = s.str255;
+    result.len = s.len > 255 ? 255 : s.len;
+
+    return result;
+}
+
+char __pcharBuf[256];
+
+char* fpcrtl__pchar__vars(string255 * s)
+{
+    if(s->len < 255)
+    {
+        s->s[s->len] = 0;
+        return &s->s[1];
+    } else
+    {
+        memcpy(__pcharBuf, s->s[1], 255);
+        __pcharBuf[255] = 0;
+        return &__pcharBuf;
+    }
+}
+
+char* fpcrtl__pcharA__vars(astring * s)
+{
+    if(s->len == MAX_ANSISTRING_LENGTH)
+        --s->len;
+
+    s->s[s->len] = 0;
+    return &s->s[1];
 }
 
 #ifdef EMSCRIPTEN

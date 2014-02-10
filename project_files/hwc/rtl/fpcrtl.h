@@ -191,6 +191,7 @@
 #define _pchar                              fpcrtl_pchar
 #define _strconcatA                         fpcrtl_strconcatA
 #define _strncompareA                       fpcrtl_strncompareA
+#define _strappendA                         fpcrtl_strappendA
 
 // hooks are implemented in javascript
 void start_hook(void);
