@@ -205,7 +205,7 @@ char* fpcrtl__pcharA__vars(astring * s)
     if(s->len == MAX_ANSISTRING_LENGTH)
         --s->len;
 
-    s->s[s->len] = 0;
+    s->s[s->len + 1] = 0;
     return &s->s[1];
 }
 
