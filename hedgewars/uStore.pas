@@ -709,6 +709,9 @@ begin
     else
         AddFileLog('OpenGL - "' + extension + '" failed to load');
 {$ENDIF}
+
+{$ELSE} // pas2c part
+    glLoadExtension:= false;
 {$ENDIF}
 end;
 
