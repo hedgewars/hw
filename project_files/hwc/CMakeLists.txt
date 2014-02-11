@@ -63,6 +63,7 @@ add_custom_target(engine_c DEPENDS ${engine_sources})
 
 #compile the c files
 add_definitions(-DPAS2C)
+add_definitions(-Werror=incompatible-pointer-types)
 
 add_executable(hwengine WIN32 ${engine_sources})
 

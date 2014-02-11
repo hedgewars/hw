@@ -629,7 +629,7 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         , char' '$' >> many hexDigit >>= \h -> comments >> return (InitHexNumber h)
         , char' '@' >> initExpression >>= \c -> comments >> return (InitAddress c)
         , try $ string' "nil" >> return InitNull
-        , itypeCast
+        , try itypeCast
         , iD >>= return . InitReference
         ]
 
@@ -681,10 +681,11 @@ initExpression = buildExpressionParser table term <?> "initialization expression
         ]
 
     itypeCast = do
-        t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
+        --t <- choice $ map (\s -> try $ caseInsensitiveString s >>= \i -> notFollowedBy alphaNum >> return i) knownTypes
+        t <- iD
         i <- parens pas initExpression
         comments
-        return $ InitTypeCast (Identifier t BTUnknown) i
+        return $ InitTypeCast t i
 
 builtInFunction :: Parsec String u a -> Parsec String u (String, [a])
 builtInFunction e = do

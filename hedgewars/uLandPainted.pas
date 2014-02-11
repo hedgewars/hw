@@ -33,6 +33,7 @@ type PointRec = packed record
     X, Y: SmallInt;
     flags: byte;
     end;
+    PPointRec = ^PointRec;
 
 type
     PPointEntry = ^PointEntry;
@@ -45,7 +46,7 @@ var pointsListHead, pointsListLast: PPointEntry;
 
 procedure chDraw(var s: shortstring);
 var rec: PointRec;
-    prec: ^PointRec;
+    prec: PPointRec;
     pe: PPointEntry;
     i, l: byte;
 begin
@@ -53,7 +54,7 @@ begin
     l:= length(s);
     while i < l do
         begin
-        prec:= @s[i];
+        prec:= PPointRec(@s[i]);
         rec:= prec^;
         rec.X:= SDLNet_Read16(@rec.X);
         rec.Y:= SDLNet_Read16(@rec.Y);

@@ -420,7 +420,7 @@ for y:= 0 to LAND_HEIGHT - 1 do
         else
             LandPixels[y div 2, x div 2]:= p^[x] or AMask;
 
-    p:= @(p^[Surface^.pitch div 4]);
+    p:= PLongwordArray(@(p^[Surface^.pitch div 4]));
     end;
 
 if SDL_MustLock(Surface) then
@@ -595,7 +595,7 @@ if (tmpsurf <> nil) and (tmpsurf^.format^.BytesPerPixel = 4) then
             begin
             for x:= 0 to Pred(tmpsurf^.w) do
                 SetLand(Land[cpY + y, cpX + x], p^[x]);
-            p:= @(p^[tmpsurf^.pitch div 4]);
+            p:= PLongwordArray(@(p^[tmpsurf^.pitch div 4]));
             end;
 
     if SDL_MustLock(tmpsurf) then

@@ -699,6 +699,10 @@ initExpr2C' (BuiltInFunction "pred" [BuiltInFunction "succ" [e]]) = initExpr2C' 
 initExpr2C' (BuiltInFunction "succ" [e]) = liftM (<> text " + 1") $ initExpr2C' e
 initExpr2C' (BuiltInFunction "pred" [e]) = liftM (<> text " - 1") $ initExpr2C' e
 initExpr2C' b@(BuiltInFunction _ _) = error $ show b
+initExpr2C' (InitTypeCast t' i) = do
+    e <- initExpr2C i
+    t <- id2C IOLookup t'
+    return . parens $ parens t <> e
 initExpr2C' a = error $ "initExpr2C: don't know how to render " ++ show a
 
 

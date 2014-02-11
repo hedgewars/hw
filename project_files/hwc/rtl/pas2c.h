@@ -23,15 +23,15 @@ typedef union string255_
 typedef union astring_
     {
         struct {
-            unsigned char _dummy1;
-            string255 str255;
+            uint16_t len;
         };
         struct {
             unsigned char _dummy2;
             unsigned char s[MAX_ANSISTRING_LENGTH + 1];
         };
         struct {
-            uint16_t len;
+            unsigned char _dummy1;
+            string255 str255;
         };
     } astring;
 
