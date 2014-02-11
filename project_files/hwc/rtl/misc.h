@@ -50,12 +50,12 @@ bool        fpcrtl_strncompareA(astring a, astring b);
 
 #define     fpcrtl__pchar(s)                    fpcrtl__pchar__vars(&(s))
 #define     fpcrtl__pcharA(s)                   fpcrtl__pcharA__vars(&(s))
-char*       fpcrtl__pchar__vars(string255 * s);
+char*       fpcrtl__pchar__vars(const string255 * s);
 char*       fpcrtl__pcharA__vars(astring * s);
 string255   fpcrtl_pchar2str(const char *s);
 astring     fpcrtl_pchar2astr(const char *s);
-astring     fpcrtl_str2astr(string255 s);
-string255   fpcrtl_astr2str(astring s);
+astring     fpcrtl_str2astr(const string255 s);
+string255   fpcrtl_astr2str(const astring s);
 #define     fpcrtl_TypeInfo                         sizeof // dummy
 
 #ifdef EMSCRIPTEN

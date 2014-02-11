@@ -40,6 +40,7 @@ type
     char = char;
     PChar = ^char;
     PPChar = ^Pchar;
+    PWideChar = ^WideChar;
 
     PByte = ^Byte;
     PWord = ^Word;

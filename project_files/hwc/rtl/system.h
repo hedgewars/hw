@@ -30,7 +30,8 @@ astring     fpcrtl_copyA(astring s, Integer Index, Integer Count);
  * and the length of the string is adjusted.
  */
 #define     fpcrtl_delete(s, index, count)                  fpcrtl_delete__vars(&(s), index, count)
-void        fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count);
+void        __attribute__((overloadable))                   fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count);
+void        __attribute__((overloadable))                   fpcrtl_delete__vars(astring *s, SizeInt index, SizeInt count);
 
 string255   fpcrtl_floatToStr(double n);
 
@@ -44,11 +45,14 @@ void        fpcrtl_move__vars(void *src, void *dst, SizeInt count);
 Integer     __attribute__((overloadable))                   fpcrtl_pos(Char c, string255 str);
 Integer     __attribute__((overloadable))                   fpcrtl_pos(string255 substr, string255 str);
 Integer     __attribute__((overloadable))                   fpcrtl_pos(string255 substr, astring str);
+Integer     __attribute__((overloadable))                   fpcrtl_pos(Char c, astring str);
 
 Integer     fpcrtl_length(string255 s);
 #define     fpcrtl_Length                                   fpcrtl_length
 Integer     fpcrtl_lengthA(astring s);
 #define     fpcrtl_LengthA                                  fpcrtl_lengthA
+
+#define     fpcrtl_SetLengthA(s, l)                         do{(s).len = (l);}while(0)
 
 #define     fpcrtl_sqr(x)                                   ((x) * (x))
 

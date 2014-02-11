@@ -882,7 +882,7 @@ if draw then
                         end
                     else allpx:= false
                     end;
-                p:= @(p^[s^.pitch shr 2])
+                p:= PLongWordArray(@(p^[s^.pitch shr 2]))
                 end;
 
             // Why is this here.  For one thing, there's no test on +1 being safe.

@@ -209,7 +209,7 @@ var t: PChar;
 begin
     if lua_gettop(L) = 1 then
         begin
-        t:= lua_tolstring(L,1,@c);
+        t:= lua_tolstring(L, 1, Psize_t(@c));
 
         for i:= 1 to c do s[i]:= t[i-1];
         s[0]:= char(c);

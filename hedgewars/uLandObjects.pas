@@ -130,7 +130,7 @@ for y:= 0 to Pred(Image^.h) do
             if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
                 Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
-    p:= @(p^[Image^.pitch shr 2])
+    p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
     end;
 
 if SDL_MustLock(Image) then
@@ -170,8 +170,8 @@ for y:= 0 to Pred(Image^.h) do
         if (Land[cpY + y, cpX + x] <= lfAllObjMask) or (Land[cpY + y, cpX + x] and lfObject <> 0)  then
             SetLand(Land[cpY + y, cpX + x], mp^[x]);
         end;
-    p:= @(p^[Image^.pitch shr 2]);
-    mp:= @(mp^[Mask^.pitch shr 2])
+    p:= PLongwordArray(@(p^[Image^.pitch shr 2]));
+    mp:= PLongwordArray(@(mp^[Mask^.pitch shr 2]))
     end;
 
 if SDL_MustLock(Image) then

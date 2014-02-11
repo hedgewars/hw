@@ -119,7 +119,7 @@ for y:= 0 to Pred(Surf^.h) do
         tw:= (tw and $FF shl RShift) or (tw and $FF shl BShift) or (tw and $FF shl GShift) or (fromP4^[x] and AMask);
         fromP4^[x]:= tw;
         end;
-    fromP4:= @(fromP4^[Surf^.pitch div 4])
+    fromP4:= PLongWordArray(@(fromP4^[Surf^.pitch div 4]))
     end;
 end;
 
@@ -265,15 +265,15 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
             toP4^[x]:= fromP4^[x];
         for x:= Surf^.w to Pred(tw) do
             toP4^[x]:= 0;
-        toP4:= @(toP4^[tw]);
-        fromP4:= @(fromP4^[Surf^.pitch div 4])
+        toP4:= PLongWordArray(@(toP4^[tw]));
+        fromP4:= PLongWordArray(@(fromP4^[Surf^.pitch div 4]))
         end;
 
     for y:= Surf^.h to Pred(th) do
         begin
         for x:= 0 to Pred(tw) do
             toP4^[x]:= 0;
-        toP4:= @(toP4^[tw])
+        toP4:= PLongWordArray(@(toP4^[tw]))
         end;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmpp);

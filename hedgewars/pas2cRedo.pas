@@ -74,7 +74,7 @@ var
     StrPas, FormatDateTime, copy, delete, str, PosS, trim, LowerCase : function : shortstring;
     pos : function : integer;
     StrToInt : function : integer;
-    SetLength, val, StrDispose, StrCopy : procedure;
+    SetLength, SetLengthA, val, StrDispose, StrCopy : procedure;
     _pchar, _pcharA, StrAlloc : function : PChar;
     pchar2str, astr2str : function : string;
     pchar2astr, str2astr : function : ansistring;

@@ -1809,9 +1809,9 @@ const Template45Points: array[0..11] of TSDL_Rect =
 ////////////////////////////////////////////////////////////////////////
 var EdgeTemplates: array[0..45] of TEdgeTemplate =
       (
-       (BasePoints: @Template0Points;
+       (BasePoints: PPointArray(@Template0Points);
         BasePointsCount: Succ(High(Template0Points));
-        FillPoints: @Template0FPoints;
+        FillPoints: PPointArray(@Template0FPoints);
         FillPointsCount: Succ(High(Template0FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -1820,9 +1820,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template1Points;
+       (BasePoints: PPointArray(@Template1Points);
         BasePointsCount: Succ(High(Template1Points));
-        FillPoints: @Template1FPoints;
+        FillPoints: PPointArray(@Template1FPoints);
         FillPointsCount: Succ(High(Template1FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -1831,9 +1831,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template2Points;
+       (BasePoints: PPointArray(@Template2Points);
         BasePointsCount: Succ(High(Template2Points));
-        FillPoints: @Template2FPoints;
+        FillPoints: PPointArray(@Template2FPoints);
         FillPointsCount: Succ(High(Template2FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1842,9 +1842,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template3Points;
+       (BasePoints: PPointArray(@Template3Points);
         BasePointsCount: Succ(High(Template3Points));
-        FillPoints: @Template3FPoints;
+        FillPoints: PPointArray(@Template3FPoints);
         FillPointsCount: Succ(High(Template3FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -1853,9 +1853,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template4Points;
+       (BasePoints: PPointArray(@Template4Points);
         BasePointsCount: Succ(High(Template4Points));
-        FillPoints: @Template4FPoints;
+        FillPoints: PPointArray(@Template4FPoints);
         FillPointsCount: Succ(High(Template4FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -1864,9 +1864,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template5Points;
+       (BasePoints: PPointArray(@Template5Points);
         BasePointsCount: Succ(High(Template5Points));
-        FillPoints: @Template5FPoints;
+        FillPoints: PPointArray(@Template5FPoints);
         FillPointsCount: Succ(High(Template5FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
@@ -1875,9 +1875,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template6Points;
+       (BasePoints: PPointArray(@Template6Points);
         BasePointsCount: Succ(High(Template6Points));
-        FillPoints: @Template6FPoints;
+        FillPoints: PPointArray(@Template6FPoints);
         FillPointsCount: Succ(High(Template6FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
@@ -1886,9 +1886,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template7Points;
+       (BasePoints: PPointArray(@Template7Points);
         BasePointsCount: Succ(High(Template7Points));
-        FillPoints: @Template7FPoints;
+        FillPoints: PPointArray(@Template7FPoints);
         FillPointsCount: Succ(High(Template7FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -1897,9 +1897,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template8Points;
+       (BasePoints: PPointArray(@Template8Points);
         BasePointsCount: Succ(High(Template8Points));
-        FillPoints: @Template8FPoints;
+        FillPoints: PPointArray(@Template8FPoints);
         FillPointsCount: Succ(High(Template8FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
@@ -1908,9 +1908,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template9Points;
+       (BasePoints: PPointArray(@Template9Points);
         BasePointsCount: Succ(High(Template9Points));
-        FillPoints: @Template9FPoints;
+        FillPoints: PPointArray(@Template9FPoints);
         FillPointsCount: Succ(High(Template9FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
@@ -1919,9 +1919,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template10Points;
+       (BasePoints: PPointArray(@Template10Points);
         BasePointsCount: Succ(High(Template10Points));
-        FillPoints: @Template10FPoints;
+        FillPoints: PPointArray(@Template10FPoints);
         FillPointsCount: Succ(High(Template10FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1930,9 +1930,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template11Points;
+       (BasePoints: PPointArray(@Template11Points);
         BasePointsCount: Succ(High(Template11Points));
-        FillPoints: @Template11FPoints;
+        FillPoints: PPointArray(@Template11FPoints);
         FillPointsCount: Succ(High(Template11FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
@@ -1941,9 +1941,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template12Points;
+       (BasePoints: PPointArray(@Template12Points);
         BasePointsCount: Succ(High(Template12Points));
-        FillPoints: @Template12FPoints;
+        FillPoints: PPointArray(@Template12FPoints);
         FillPointsCount: Succ(High(Template12FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -1952,9 +1952,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template13Points;
+       (BasePoints: PPointArray(@Template13Points);
         BasePointsCount: Succ(High(Template13Points));
-        FillPoints: @Template13FPoints;
+        FillPoints: PPointArray(@Template13FPoints);
         FillPointsCount: Succ(High(Template13FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
@@ -1963,9 +1963,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template14Points;
+       (BasePoints: PPointArray(@Template14Points);
         BasePointsCount: Succ(High(Template14Points));
-        FillPoints: @Template14FPoints;
+        FillPoints: PPointArray(@Template14FPoints);
         FillPointsCount: Succ(High(Template14FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -1974,9 +1974,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template15Points;
+       (BasePoints: PPointArray(@Template15Points);
         BasePointsCount: Succ(High(Template15Points));
-        FillPoints: @Template15FPoints;
+        FillPoints: PPointArray(@Template15FPoints);
         FillPointsCount: Succ(High(Template15FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1985,9 +1985,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template16Points;
+       (BasePoints: PPointArray(@Template16Points);
         BasePointsCount: Succ(High(Template16Points));
-        FillPoints: @Template16FPoints;
+        FillPoints: PPointArray(@Template16FPoints);
         FillPointsCount: Succ(High(Template16FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -1996,9 +1996,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template17Points;
+       (BasePoints: PPointArray(@Template17Points);
         BasePointsCount: Succ(High(Template17Points));
-        FillPoints: @Template17FPoints;
+        FillPoints: PPointArray(@Template17FPoints);
         FillPointsCount: Succ(High(Template17FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2007,9 +2007,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 18;
        ),
-       (BasePoints: @Template18Points;
+       (BasePoints: PPointArray(@Template18Points);
         BasePointsCount: Succ(High(Template18Points));
-        FillPoints: @Template18FPoints;
+        FillPoints: PPointArray(@Template18FPoints);
         FillPointsCount: Succ(High(Template18FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -2018,9 +2018,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template19Points;
+       (BasePoints: PPointArray(@Template19Points);
         BasePointsCount: Succ(High(Template19Points));
-        FillPoints: @Template19FPoints;
+        FillPoints: PPointArray(@Template19FPoints);
         FillPointsCount: Succ(High(Template19FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2029,9 +2029,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template20Points;
+       (BasePoints: PPointArray(@Template20Points);
         BasePointsCount: Succ(High(Template20Points));
-        FillPoints: @Template20FPoints;
+        FillPoints: PPointArray(@Template20FPoints);
         FillPointsCount: Succ(High(Template20FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2040,9 +2040,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template21Points;
+       (BasePoints: PPointArray(@Template21Points);
         BasePointsCount: Succ(High(Template21Points));
-        FillPoints: @Template21FPoints;
+        FillPoints: PPointArray(@Template21FPoints);
         FillPointsCount: Succ(High(Template21FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -2051,9 +2051,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template22Points;
+       (BasePoints: PPointArray(@Template22Points);
         BasePointsCount: Succ(High(Template22Points));
-        FillPoints: @Template22FPoints;
+        FillPoints: PPointArray(@Template22FPoints);
         FillPointsCount: Succ(High(Template22FPoints));
         BezierizeCount: 3;
         RandPassesCount: 4;
@@ -2062,9 +2062,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template23Points;
+       (BasePoints: PPointArray(@Template23Points);
         BasePointsCount: Succ(High(Template23Points));
-        FillPoints: @Template23FPoints;
+        FillPoints: PPointArray(@Template23FPoints);
         FillPointsCount: Succ(High(Template23FPoints));
         BezierizeCount: 2;
         RandPassesCount: 8;
@@ -2073,9 +2073,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template24Points;
+       (BasePoints: PPointArray(@Template24Points);
         BasePointsCount: Succ(High(Template24Points));
-        FillPoints: @Template24FPoints;
+        FillPoints: PPointArray(@Template24FPoints);
         FillPointsCount: Succ(High(Template24FPoints));
         BezierizeCount: 2;
         RandPassesCount: 5;
@@ -2084,9 +2084,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template25Points;
+       (BasePoints: PPointArray(@Template25Points);
         BasePointsCount: Succ(High(Template25Points));
-        FillPoints: @Template25FPoints;
+        FillPoints: PPointArray(@Template25FPoints);
         FillPointsCount: Succ(High(Template25FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -2095,9 +2095,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template26Points;
+       (BasePoints: PPointArray(@Template26Points);
         BasePointsCount: Succ(High(Template26Points));
-        FillPoints: @Template26FPoints;
+        FillPoints: PPointArray(@Template26FPoints);
         FillPointsCount: Succ(High(Template26FPoints));
         BezierizeCount: 2;
         RandPassesCount: 7;
@@ -2106,9 +2106,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template27Points;
+       (BasePoints: PPointArray(@Template27Points);
         BasePointsCount: Succ(High(Template27Points));
-        FillPoints: @Template27FPoints;
+        FillPoints: PPointArray(@Template27FPoints);
         FillPointsCount: Succ(High(Template27FPoints));
         BezierizeCount: 1;
         RandPassesCount: 5;
@@ -2117,9 +2117,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template28Points;
+       (BasePoints: PPointArray(@Template28Points);
         BasePointsCount: Succ(High(Template28Points));
-        FillPoints: @Template28FPoints;
+        FillPoints: PPointArray(@Template28FPoints);
         FillPointsCount: Succ(High(Template28FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2128,9 +2128,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template29Points;
+       (BasePoints: PPointArray(@Template29Points);
         BasePointsCount: Succ(High(Template29Points));
-        FillPoints: @Template29FPoints;
+        FillPoints: PPointArray(@Template29FPoints);
         FillPointsCount: Succ(High(Template29FPoints));
         BezierizeCount: 1;
         RandPassesCount: 8;
@@ -2139,9 +2139,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template30Points;
+       (BasePoints: PPointArray(@Template30Points);
         BasePointsCount: Succ(High(Template30Points));
-        FillPoints: @Template30FPoints;
+        FillPoints: PPointArray(@Template30FPoints);
         FillPointsCount: Succ(High(Template30FPoints));
         BezierizeCount: 3;
         RandPassesCount: 8;
@@ -2150,9 +2150,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template31Points;
+       (BasePoints: PPointArray(@Template31Points);
         BasePointsCount: Succ(High(Template31Points));
-        FillPoints: @Template31FPoints;
+        FillPoints: PPointArray(@Template31FPoints);
         FillPointsCount: Succ(High(Template31FPoints));
         BezierizeCount: 3;
         RandPassesCount: 5;
@@ -2161,9 +2161,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template32Points;
+       (BasePoints: PPointArray(@Template32Points);
         BasePointsCount: Succ(High(Template32Points));
-        FillPoints: @Template32FPoints;
+        FillPoints: PPointArray(@Template32FPoints);
         FillPointsCount: Succ(High(Template32FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2172,9 +2172,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template33Points;
+       (BasePoints: PPointArray(@Template33Points);
         BasePointsCount: Succ(High(Template33Points));
-        FillPoints: @Template33FPoints;
+        FillPoints: PPointArray(@Template33FPoints);
         FillPointsCount: Succ(High(Template33FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2183,9 +2183,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template34Points;
+       (BasePoints: PPointArray(@Template34Points);
         BasePointsCount: Succ(High(Template34Points));
-        FillPoints: @Template34FPoints;
+        FillPoints: PPointArray(@Template34FPoints);
         FillPointsCount: Succ(High(Template34FPoints));
         BezierizeCount: 2;
         RandPassesCount: 6;
@@ -2194,9 +2194,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template35Points;
+       (BasePoints: PPointArray(@Template35Points);
         BasePointsCount: Succ(High(Template35Points));
-        FillPoints: @Template35FPoints;
+        FillPoints: PPointArray(@Template35FPoints);
         FillPointsCount: Succ(High(Template35FPoints));
         BezierizeCount: 3;
         RandPassesCount: 7;
@@ -2205,9 +2205,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 36;
        ),
-       (BasePoints: @Template36Points;
+       (BasePoints: PPointArray(@Template36Points);
         BasePointsCount: Succ(High(Template36Points));
-        FillPoints: @Template36FPoints;
+        FillPoints: PPointArray(@Template36FPoints);
         FillPointsCount: Succ(High(Template36FPoints));
         BezierizeCount: 4;
         RandPassesCount: 12;
@@ -2216,9 +2216,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 32;
        ),
-       (BasePoints: @Template37Points;
+       (BasePoints: PPointArray(@Template37Points);
         BasePointsCount: Succ(High(Template37Points));
-        FillPoints: @Template37FPoints;
+        FillPoints: PPointArray(@Template37FPoints);
         FillPointsCount: Succ(High(Template37FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2227,9 +2227,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template38Points;
+       (BasePoints: PPointArray(@Template38Points);
         BasePointsCount: Succ(High(Template38Points));
-        FillPoints: @Template38FPoints;
+        FillPoints: PPointArray(@Template38FPoints);
         FillPointsCount: Succ(High(Template38FPoints));
         BezierizeCount: 4;
         RandPassesCount: 4;
@@ -2238,9 +2238,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template39Points;
+       (BasePoints: PPointArray(@Template39Points);
         BasePointsCount: Succ(High(Template39Points));
-        FillPoints: @Template39FPoints;
+        FillPoints: PPointArray(@Template39FPoints);
         FillPointsCount: Succ(High(Template39FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2249,9 +2249,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template40Points;
+       (BasePoints: PPointArray(@Template40Points);
         BasePointsCount: Succ(High(Template40Points));
-        FillPoints: @Template40FPoints;
+        FillPoints: PPointArray(@Template40FPoints);
         FillPointsCount: Succ(High(Template40FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2260,9 +2260,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template41Points;
+       (BasePoints: PPointArray(@Template41Points);
         BasePointsCount: Succ(High(Template41Points));
-        FillPoints: @Template41FPoints;
+        FillPoints: PPointArray(@Template41FPoints);
         FillPointsCount: Succ(High(Template41FPoints));
         BezierizeCount: 2;
         RandPassesCount: 9;
@@ -2271,9 +2271,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template42Points;
+       (BasePoints: PPointArray(@Template42Points);
         BasePointsCount: Succ(High(Template42Points));
-        FillPoints: @Template42FPoints;
+        FillPoints: PPointArray(@Template42FPoints);
         FillPointsCount: Succ(High(Template42FPoints));
         BezierizeCount: 3;
         RandPassesCount: 3;
@@ -2282,9 +2282,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 8;
        ),
-       (BasePoints: @Template43Points;
+       (BasePoints: PPointArray(@Template43Points);
         BasePointsCount: Succ(High(Template43Points));
-        FillPoints: @Template43FPoints;
+        FillPoints: PPointArray(@Template43FPoints);
         FillPointsCount: Succ(High(Template43FPoints));
         BezierizeCount: 2;
         RandPassesCount: 9;
@@ -2293,9 +2293,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: true;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template44Points;
+       (BasePoints: PPointArray(@Template44Points);
         BasePointsCount: Succ(High(Template44Points));
-        FillPoints: @Template44FPoints;
+        FillPoints: PPointArray(@Template44FPoints);
         FillPointsCount: Succ(High(Template44FPoints));
         BezierizeCount: 5;
         RandPassesCount: 3;
@@ -2304,9 +2304,9 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         hasGirders: false;
         MaxHedgeHogs: 48;
        ),
-       (BasePoints: @Template45Points;
+       (BasePoints: PPointArray(@Template45Points);
         BasePointsCount: Succ(High(Template45Points));
-        FillPoints: @Template45FPoints;
+        FillPoints: PPointArray(@Template45FPoints);
         FillPointsCount: Succ(High(Template45FPoints));
         BezierizeCount: 5;
         RandPassesCount: 7;

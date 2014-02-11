@@ -171,7 +171,7 @@ astring fpcrtl_pchar2astr(const char *s)
     return result;
 }
 
-astring fpcrtl_str2astr(string255 s)
+astring fpcrtl_str2astr(const string255 s)
 {
     astring result;
 
@@ -181,7 +181,7 @@ astring fpcrtl_str2astr(string255 s)
     return result;
 }
 
-string255 fpcrtl_astr2str(astring s)
+string255 fpcrtl_astr2str(const astring s)
 {
     string255 result;
 
@@ -193,7 +193,7 @@ string255 fpcrtl_astr2str(astring s)
 
 char __pcharBuf[256];
 
-char* fpcrtl__pchar__vars(string255 * s)
+char* fpcrtl__pchar__vars(const string255 * s)
 {
     memcpy(__pcharBuf, &s->s[1], s->len);
     __pcharBuf[s->len] = 0;

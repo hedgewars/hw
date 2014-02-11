@@ -25,10 +25,7 @@ uses uTypes, uFloat;
 
 procedure SplitBySpace(var a, b: shortstring);
 procedure SplitByChar(var a, b: shortstring; c: char);
-
-{$IFNDEF PAS2C}
-procedure SplitByChar(var a, b: ansistring; c: char);
-{$ENDIF}
+procedure SplitByCharA(var a, b: ansistring; c: char);
 
 function  EnumToStr(const en : TGearType) : shortstring; overload;
 function  EnumToStr(const en : TVisualGearType) : shortstring; overload;
@@ -130,17 +127,22 @@ else
 end;
 
 {$IFNDEF PAS2C}
-procedure SplitByChar(var a, b: ansistring; c: char);
+procedure SetLengthA(var s: ansistring; len: Longword);
+begin
+    SetLength(s, len)
+end;
+{$ENDIF}
+
+procedure SplitByCharA(var a, b: ansistring; c: char);
 var i: LongInt;
 begin
 i:= Pos(c, a);
 if i > 0 then
     begin
     b:= copy(a, i + 1, Length(a) - i);
-    setlength(a, Pred(i));
+    SetLengthA(a, Pred(i));
     end else b:= '';
-end; { SplitByChar }
-{$ENDIF}
+end; { SplitByCharA }
 
 function EnumToStr(const en : TGearType) : shortstring; overload;
 begin
@@ -311,7 +313,7 @@ begin
       begin
       CharArray[i - 1] := s[i];
       end;
-CharArray[Length(s)]:= #0;
+   CharArray[Length(s)]:= #0;
    Str2PChar:= @(CharArray[0]);
 end;
 
@@ -377,7 +379,7 @@ if (font >= CJKfnt16) or (length(s) = 0) then
 {$ENDIF}
     exit;
 
-l:= Utf8ToUnicode(@tmpstr, PChar(s), min(length(tmpstr), length(s)))-1;
+l:= Utf8ToUnicode(PWideChar(@tmpstr), PChar(s), min(length(tmpstr), length(s)))-1;
 i:= 0;
 
 while i < l do

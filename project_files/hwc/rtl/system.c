@@ -66,19 +66,17 @@ astring fpcrtl_copyA(astring s, Integer index, Integer count) {
         count = s.len + 1 - index;
     }
 
-    memcpy(result.s + 1, s.s + index - 1, count);
+    memcpy(result.s + 1, s.s + index, count);
 
     result.len = count;
 
     return result;
 }
 
-void fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count) {
+void __attribute__((overloadable)) fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count) {
     // number of chars to be move
     int num_move;
     int new_length;
-
-    string255 temp = *s;
 
     if (index < 1) {
         // in fpc, if index < 1, the string won't be modified
@@ -90,7 +88,6 @@ void fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count) {
     }
 
     if (count > s->len - index + 1) {
-        s->str[index - 1] = 0;
         s->len = index - 1;
         return;
     }
@@ -98,8 +95,36 @@ void fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count) {
     num_move = s->len - index + 1 - count;
     new_length = s->len - count;
 
-    memmove(s->str + index - 1, temp.str + index - 1 + count, num_move);
+    memmove(s->str + index - 1, s->str + index - 1 + count, num_move);
     s->str[new_length] = 0;
+
+    s->len = new_length;
+
+}
+
+void __attribute__((overloadable)) fpcrtl_delete__vars(astring *s, SizeInt index, SizeInt count) {
+    // number of chars to be move
+    int num_move;
+    int new_length;
+
+    if (index < 1) {
+        // in fpc, if index < 1, the string won't be modified
+        return;
+    }
+
+    if(index > s->len){
+        return;
+    }
+
+    if (count > s->len - index + 1) {
+        s->len = index - 1;
+        return;
+    }
+
+    num_move = s->len - index + 1 - count;
+    new_length = s->len - count;
+
+    memmove(s->s + index, s->s + index + count, num_move);
 
     s->len = new_length;
 
@@ -127,7 +152,7 @@ Integer __attribute__((overloadable)) fpcrtl_pos(Char c, string255 str) {
 
 Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str) {
 
-    char* p;
+    unsigned char* p;
 
     if (str.len == 0) {
         return 0;
@@ -146,12 +171,20 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str
         return 0;
     }
 
-    return strlen(str.str) - strlen(p) + 1;
+    return p - (unsigned char*)&str.s;
+}
+
+Integer __attribute__((overloadable)) fpcrtl_pos(Char c, astring str) {
+    string255 t;
+    t.len = 1;
+    t.str[0] = c;
+    t.str[1] = 0;
+    return fpcrtl_pos(t, str);
 }
 
 Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) {
 
-    char* p;
+    unsigned char* p;
 
     if (str.len == 0) {
         return 0;
@@ -170,7 +203,7 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) 
         return 0;
     }
 
-    return str.len - strlen(p) + 1;
+    return p - (unsigned char *)&str.s;
 }
 
 Integer fpcrtl_length(string255 s) {

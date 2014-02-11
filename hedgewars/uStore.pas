@@ -1279,7 +1279,7 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
-    SplitByChar(tmpline, tmpdesc, '|');
+    SplitByCharA(tmpline, tmpdesc, '|');
     if length(tmpline) > 0 then
         begin
         TTF_SizeUTF8(Fontz[font].Handle, PChar(tmpline), @i, @j);
@@ -1322,7 +1322,7 @@ tmpdesc:= description;
 while length(tmpdesc) > 0 do
     begin
     tmpline:= tmpdesc;
-    SplitByChar(tmpline, tmpdesc, '|');
+    SplitByCharA(tmpline, tmpdesc, '|');
     r2:= r;
     if length(tmpline) > 0 then
         begin
@@ -1330,7 +1330,7 @@ while length(tmpdesc) > 0 do
 
         // render highlighted caption (if there is a ':')
         tmpline2:= _S'';
-        SplitByChar(tmpline, tmpline2, ':');
+        SplitByCharA(tmpline, tmpline2, ':');
         if length(tmpline2) > 0 then
             begin
             tmpline:= tmpline + ':';
