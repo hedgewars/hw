@@ -475,7 +475,6 @@ IMG_Quit();
 
 end;
 
-{$IFNDEF PAS2C}
 {$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
@@ -499,7 +498,6 @@ begin
     glDeleteRenderbuffersEXT(1, @depth);
     glDeleteFramebuffersEXT(1, @frame);
 end;
-{$ENDIF}
 {$ENDIF}
 
 procedure StoreRelease(reload: boolean);
@@ -972,7 +970,6 @@ begin
     UpdateModelviewProjection;
 {$ENDIF}
 
-{$IFNDEF PAS2C}
 {$IFNDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
     begin
@@ -988,7 +985,6 @@ begin
         else
             cStereoMode:= smNone;
     end;
-{$ENDIF}
 {$ENDIF}
 
 // set view port to whole window

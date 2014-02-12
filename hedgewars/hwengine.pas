@@ -117,7 +117,7 @@ begin
         begin
         flagMakeCapture:= false;
         {$IFDEF PAS2C}
-        s:= '/Screenshots/hw';
+        s:= '/Screenshots/hw_' + inttostr(GameTicks);
         {$ELSE}
         s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         {$ENDIF}

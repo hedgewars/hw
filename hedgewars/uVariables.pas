@@ -2397,9 +2397,6 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-{$IFNDEF PAS2C}
-uses strutils;
-{$ENDIF}
 
 procedure preInitModule;
 begin
@@ -2444,14 +2441,10 @@ begin
 end;
 
 procedure initModule;
+var s: shortstring;
 begin
-// TODO: fixme
-{$IFDEF PAS2C}
-    cLocale:= 'en';
-{$ELSE}
-    // TODO: we could just have one cLocale variables and drop strutils
-    cLocale:= ExtractDelimited(1, cLocaleFName, StdWordDelims);
-{$ENDIF}
+    cLocale:= cLocaleFName;
+    SplitByChar(cLocale, s, '.');
 
     cFlattenFlakes      := false;
     cFlattenClouds      := false;
