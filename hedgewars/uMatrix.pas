@@ -228,7 +228,6 @@ begin
     Result[3,3]:=lhs[0,3]*rhs[3,0] + lhs[1,3]*rhs[3,1] + lhs[2,3]*rhs[3,2] + lhs[3,3]*rhs[3,3];
 }
 
-    {$IFNDEF PAS2C}
     glPushMatrix;
     glLoadMatrixf(@lhs[0, 0]);
     glMultMatrixf(@rhs[0, 0]);
@@ -241,6 +240,7 @@ begin
         if Abs(test[i, j] - Result[i, j]) > 0.000001 then
           error:=true;
 
+    {$IFNDEF PAS2C}
     if error then
     begin
         writeln('shall:');
