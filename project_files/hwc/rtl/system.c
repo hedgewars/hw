@@ -143,11 +143,22 @@ void fpcrtl_move__vars(void *src, void *dst, SizeInt count) {
 }
 
 Integer __attribute__((overloadable)) fpcrtl_pos(Char c, string255 str) {
-    string255 t;
-    t.len = 1;
-    t.str[0] = c;
-    t.str[1] = 0;
-    return fpcrtl_pos(t, str);
+
+    unsigned char* p;
+
+    if (str.len == 0) {
+        return 0;
+    }
+
+    FIX_STRING(str);
+
+    p = strchr(str.str, c);
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    return p - (unsigned char*)&str.s;
 }
 
 Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str) {
@@ -175,11 +186,20 @@ Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, string255 str
 }
 
 Integer __attribute__((overloadable)) fpcrtl_pos(Char c, astring str) {
-    string255 t;
-    t.len = 1;
-    t.str[0] = c;
-    t.str[1] = 0;
-    return fpcrtl_pos(t, str);
+    unsigned char* p;
+
+    if (str.len == 0) {
+        return 0;
+    }
+
+    p = strchr(str.s + 1, c);
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    return p - (unsigned char*)&str.s;
+
 }
 
 Integer __attribute__((overloadable)) fpcrtl_pos(string255 substr, astring str) {
