@@ -108,6 +108,8 @@ string255 fpcrtl_chrconcat(char a, char b)
 
 bool fpcrtl_strcompare(string255 str1, string255 str2)
 {
+    FIX_STRING(str1);
+    FIX_STRING(str2);
     if(strncmp(str1.str, str2.str, 256) == 0){
         return true;
     }
