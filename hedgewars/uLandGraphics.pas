@@ -620,7 +620,7 @@ case bpp of
     4: for y:= 0 to Pred(h) do
         begin
         for x:= 0 to Pred(w) do
-            if (PLongword(@(p^[x * 4]))^) <> 0 then
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
                 if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
                    ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
                     begin
@@ -646,7 +646,7 @@ case bpp of
     4: for y:= 0 to Pred(h) do
         begin
         for x:= 0 to Pred(w) do
-            if (PLongword(@(p^[x * 4]))^) <> 0 then
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
                    begin
                 if (cReducedQuality and rqBlurryLand) = 0 then
                     begin
