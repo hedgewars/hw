@@ -163,16 +163,5 @@ FPCRTL_EXTRACTFILENAME_END:
 
 string255 fpcrtl_strPas(PChar p)
 {
-    string255 s;
-    int l = strlen(p);
-
-    if(l > 255){
-        printf("strPas: source string length > 255\n");
-        assert(0);
-    }
-
-    s.len = l;
-    strcpy(s.str, p);
-
-    return s;
+    return fpcrtl_pchar2str(p);
 }
