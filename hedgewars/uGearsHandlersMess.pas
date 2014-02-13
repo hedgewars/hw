@@ -1044,6 +1044,7 @@ begin
                     end;
             end;
         DeleteGear(Gear);
+        exit;
     end;
 
     if (Gear^.Timer > 0) then
