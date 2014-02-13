@@ -140,14 +140,21 @@ bool fpcrtl_strncompareA(astring a, astring b)
 string255 fpcrtl_pchar2str(const char *s)
 {
     string255 result;
-    int rlen = strlen(s);
+    
+    if(!s)
+    {
+        result.len = 0;
+    } else
+    {
+        int rlen = strlen(s);
 
-    if(rlen > 255){
-        rlen = 255;
+        if(rlen > 255){
+            rlen = 255;
+        }
+
+        result.len = rlen;
+        memcpy(result.str, s, rlen);
     }
-
-    result.len = rlen;
-    memcpy(result.str, s, rlen);
 
     return result;
 }
