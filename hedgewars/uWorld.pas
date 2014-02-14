@@ -429,6 +429,8 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     AMRect: TSDL_Rect;
 {$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
 begin
+    if cOnlyStats then exit(false);
+
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
         if((i = 0) and (Ammo^[i,1].Count > 0)) or ((i <> 0) and (Ammo^[i,0].Count > 0)) then
@@ -1971,6 +1973,8 @@ end;
 procedure ShowMission(caption, subcaption, text: ansistring; icon, time : LongInt);
 var r: TSDL_Rect;
 begin
+if cOnlyStats then exit;
+
 r.w:= 32;
 r.h:= 32;
 

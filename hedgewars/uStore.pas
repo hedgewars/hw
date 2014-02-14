@@ -171,7 +171,7 @@ var t: LongInt;
     foundBot: boolean;
     year, month, md : word;
 begin
-    if cOnlyStats then exit;
+if cOnlyStats then exit;
 r.x:= 0;
 r.y:= 0;
 drY:= - 4;
@@ -343,7 +343,7 @@ var s: shortstring;
 begin
 AddFileLog('StoreLoad()');
 
-if not reload then
+if (not reload) and (not cOnlyStats) then
     for fi:= Low(THWFont) to High(THWFont) do
         with Fontz[fi] do
             begin
@@ -355,8 +355,12 @@ if not reload then
             WriteLnToConsole(msgOK)
             end;
 
-MakeCrossHairs;
-LoadGraves;
+if not cOnlyStats then 
+    begin
+    MakeCrossHairs;
+    LoadGraves;
+    end;
+    
 if not reload then
     AddProgress;
 
@@ -364,11 +368,13 @@ for ii:= Low(TSprite) to High(TSprite) do
     with SpritesData[ii] do
         // FIXME - add a sprite attribute to match on rq flags?
         if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
-                (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR]))) and
-           (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) and
-           (((cReducedQuality and rqKillFlakes) = 0) or cSnow or ((not (ii in [sprFlake, sprSDFlake])))) and
-           ((cCloudsNumber > 0) or (ii <> sprCloud)) and
-           ((vobCount > 0) or (ii <> sprFlake)) then
+                (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR])))
+           and (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) 
+           and (((cReducedQuality and rqKillFlakes) = 0) or cSnow or ((not (ii in [sprFlake, sprSDFlake]))))
+           and ((cCloudsNumber > 0) or (ii <> sprCloud))
+           and ((vobCount > 0) or (ii <> sprFlake)) 
+           and (savesurf or (not cOnlyStats)) // in stats-only only load those which are needed later
+            then
             begin
             if reload then
                 tmpsurf:= Surface
@@ -426,53 +432,56 @@ for ii:= Low(TSprite) to High(TSprite) do
                 Surface:= nil
         end;
 
-WriteNames(fnt16);
+if not cOnlyStats then
+    begin
+    WriteNames(fnt16);
 
-if not reload then
-    AddProgress;
+    if not reload then
+        AddProgress;
 
-tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
+    tmpsurf:= LoadDataImage(ptGraphics, cHHFileName, ifAlpha or ifCritical or ifTransparent);
 
-HHTexture:= Surface2Tex(tmpsurf, false);
-SDL_FreeSurface(tmpsurf);
+    HHTexture:= Surface2Tex(tmpsurf, false);
+    SDL_FreeSurface(tmpsurf);
 
-InitHealth;
+    InitHealth;
 
-PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
-AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
-ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
-SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
+    PauseTexture:= RenderStringTex(trmsg[sidPaused], cYellowColor, fntBig);
+    AFKTexture:= RenderStringTex(trmsg[sidAFK], cYellowColor, fntBig);
+    ConfirmTexture:= RenderStringTex(trmsg[sidConfirm], cYellowColor, fntBig);
+    SyncTexture:= RenderStringTex(trmsg[sidSync], cYellowColor, fntBig);
 
-if not reload then
-    AddProgress;
+    if not reload then
+        AddProgress;
 
-// name of weapons in ammo menu
-for ai:= Low(TAmmoType) to High(TAmmoType) do
-    with Ammoz[ai] do
+    // name of weapons in ammo menu
+    for ai:= Low(TAmmoType) to High(TAmmoType) do
+        with Ammoz[ai] do
+            begin
+            TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
+            tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
+            TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
+            tmpsurf:= doSurfaceConversion(tmpsurf);
+            FreeTexture(NameTex);
+            NameTex:= Surface2Tex(tmpsurf, false);
+            SDL_FreeSurface(tmpsurf)
+            end;
+
+    // number of weapons in ammo menu
+    for i:= Low(CountTexz) to High(CountTexz) do
         begin
-        TryDo(length(trAmmo[NameId]) > 0,'No default text/translation found for ammo type #' + intToStr(ord(ai)) + '!',true);
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
-        TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        FreeTexture(NameTex);
-        NameTex:= Surface2Tex(tmpsurf, false);
+        FreeTexture(CountTexz[i]);
+        CountTexz[i]:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
         end;
 
-// number of weapons in ammo menu
-for i:= Low(CountTexz) to High(CountTexz) do
-    begin
-    tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
-    tmpsurf:= doSurfaceConversion(tmpsurf);
-    FreeTexture(CountTexz[i]);
-    CountTexz[i]:= Surface2Tex(tmpsurf, false);
-    SDL_FreeSurface(tmpsurf)
+    if not reload then
+        AddProgress;
     end;
 
-if not reload then
-    AddProgress;
 IMG_Quit();
-
 end;
 
 {$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}

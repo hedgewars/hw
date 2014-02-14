@@ -469,6 +469,8 @@ var i: LongInt;
     p, l: shortstring;
     b: byte;
 begin
+    if cOnlyStats then exit;
+    
     AddFileLog('[BINDS] Loading binds from: ' + s);
 
     l:= '';
