@@ -525,7 +525,7 @@ for i:= 0 to Targets.Count do
                     dX:= (0.005 * dmg + 0.01) / Density;
                     dY:= dX;
                     if (Kind = gtExplosives) and (State and gstTmpFlag = 0) and
-                       (((abs(dY) > 0.15) and (abs(dX) < 0.02)) or
+                       (((abs(dY) >= 0.15) and (abs(dX) < 0.02)) or
                         ((abs(dY) < 0.15) and (abs(dX) < 0.15))) then
                         dX:= 0;
 
