@@ -277,24 +277,31 @@ function RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLe
 var w, h: LongInt;
     finalSurface: PSDL_Surface;
 begin
-    if length(s) = 0 then s:= _S' ';
-    font:= CheckCJKFont(s, font);
-    w:= 0; h:= 0; // avoid compiler hints
-    TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-    if (maxLength <> 0) and (w > maxLength) then w := maxLength;
+    if cOnlyStats then
+        begin
+        RenderStringTexLim:= nil;
+        end
+    else
+        begin
+        if length(s) = 0 then s:= _S' ';
+        font:= CheckCJKFont(s, font);
+        w:= 0; h:= 0; // avoid compiler hints
+        TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
+        if (maxLength <> 0) and (w > maxLength) then w := maxLength;
 
-    finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
-            32, RMask, GMask, BMask, AMask);
+        finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
+                32, RMask, GMask, BMask, AMask);
 
-    TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
+        TryDo(finalSurface <> nil, 'RenderString: fail to create surface', true);
 
-    WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
+        WriteInRoundRect(finalSurface, 0, 0, Color, font, s, maxLength);
 
-    TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
+        TryDo(SDL_SetColorKey(finalSurface, SDL_SRCCOLORKEY, 0) = 0, errmsgTransparentSet, true);
 
-    RenderStringTexLim:= Surface2Tex(finalSurface, false);
+        RenderStringTexLim:= Surface2Tex(finalSurface, false);
 
-    SDL_FreeSurface(finalSurface);
+        SDL_FreeSurface(finalSurface);
+        end;
 end;
 
 
@@ -308,22 +315,24 @@ var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeW
     substr: shortstring;
     edge, corner, tail: TSPrite;
 begin
-      case SpeechType of
+    if cOnlyStats then exit(nil);
+
+    case SpeechType of
         1: begin;
-        edge:= sprSpeechEdge;
-        corner:= sprSpeechCorner;
-        tail:= sprSpeechTail;
-        end;
+            edge:= sprSpeechEdge;
+            corner:= sprSpeechCorner;
+            tail:= sprSpeechTail;
+            end;
         2: begin;
-        edge:= sprThoughtEdge;
-        corner:= sprThoughtCorner;
-        tail:= sprThoughtTail;
-        end;
+            edge:= sprThoughtEdge;
+            corner:= sprThoughtCorner;
+            tail:= sprThoughtTail;
+            end;
         3: begin;
-        edge:= sprShoutEdge;
-        corner:= sprShoutCorner;
-        tail:= sprShoutTail;
-        end;
+            edge:= sprShoutEdge;
+            corner:= sprShoutCorner;
+            tail:= sprShoutTail;
+            end;
         end;
     edgeHeight:= SpritesData[edge].Height;
     edgeWidth:= SpritesData[edge].Width;

@@ -353,9 +353,12 @@ begin
 {$ENDIF}
     SDL_ShowCursor(0);
 
-    WriteToConsole('Init SDL_ttf... ');
-    SDLTry(TTF_Init() <> -1, true);
-    WriteLnToConsole(msgOK);
+    if not cOnlyStats then
+        begin
+        WriteToConsole('Init SDL_ttf... ');
+        SDLTry(TTF_Init() <> -1, true);
+        WriteLnToConsole(msgOK);
+        end;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
