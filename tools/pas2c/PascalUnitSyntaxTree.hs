@@ -5,20 +5,20 @@ data PascalUnit =
     | Unit Identifier Interface Implementation (Maybe Initialize) (Maybe Finalize)
     | System [TypeVarDeclaration]
     | Redo [TypeVarDeclaration]
-    deriving Show
+    deriving (Show, Eq)
 data Interface = Interface Uses TypesAndVars
-    deriving Show
+    deriving (Show, Eq)
 data Implementation = Implementation Uses TypesAndVars
-    deriving Show
+    deriving (Show, Eq)
 data Identifier = Identifier String BaseType
-    deriving Show
+    deriving (Show, Eq)
 data TypesAndVars = TypesAndVars [TypeVarDeclaration]
-    deriving Show
+    deriving (Show, Eq)
 data TypeVarDeclaration = TypeDeclaration Identifier TypeDecl
     | VarDeclaration Bool Bool ([Identifier], TypeDecl) (Maybe InitExpression)
     | FunctionDeclaration Identifier Bool Bool Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
     | OperatorDeclaration String Identifier Bool TypeDecl [TypeVarDeclaration] (Maybe (TypesAndVars, Phrase))
-    deriving Show
+    deriving (Show, Eq)
 data TypeDecl = SimpleType Identifier
     | RangeType Range
     | Sequence [Identifier]
@@ -32,17 +32,17 @@ data TypeDecl = SimpleType Identifier
     | DeriveType InitExpression
     | VoidType
     | VarParamType TypeDecl -- this is a hack
-    deriving Show
+    deriving (Show, Eq)
 data Range = Range Identifier
            | RangeFromTo InitExpression InitExpression
            | RangeInfinite
-    deriving Show
+    deriving (Show, Eq)
 data Initialize = Initialize String
-    deriving Show
+    deriving (Show, Eq)
 data Finalize = Finalize String
-    deriving Show
+    deriving (Show, Eq)
 data Uses = Uses [Identifier]
-    deriving Show
+    deriving (Show, Eq)
 data Phrase = ProcCall Reference [Expression]
         | IfThenElse Expression Phrase (Maybe Phrase)
         | WhileCycle Expression Phrase
@@ -54,7 +54,7 @@ data Phrase = ProcCall Reference [Expression]
         | Assignment Reference Expression
         | BuiltInFunctionCall [Expression] Reference
         | NOP
-    deriving Show
+    deriving (Show, Eq)
 data Expression = Expression String
     | BuiltInFunCall [Expression] Reference
     | PrefixOp String Expression
@@ -70,7 +70,7 @@ data Expression = Expression String
     | Reference Reference
     | SetExpression [Identifier]
     | Null
-    deriving Show
+    deriving (Show, Eq)
 data Reference = ArrayElement [Expression] Reference
     | FunCall [Expression] Reference
     | TypeCast Identifier Expression
@@ -79,7 +79,7 @@ data Reference = ArrayElement [Expression] Reference
     | RecordField Reference Reference
     | Address Reference
     | RefExpression Expression
-    deriving Show
+    deriving (Show, Eq)
 data InitExpression = InitBinOp String InitExpression InitExpression
     | InitPrefixOp String InitExpression
     | InitReference Identifier
@@ -96,7 +96,7 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitNull
     | InitRange Range
     | InitTypeCast Identifier InitExpression
-    deriving Show
+    deriving (Show, Eq)
 
 data BaseType = BTUnknown
     | BTChar
@@ -115,4 +115,4 @@ data BaseType = BTUnknown
     | BTVoid
     | BTUnit
     | BTVarParam BaseType
-    deriving Show
+    deriving (Show, Eq)

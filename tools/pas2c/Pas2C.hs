@@ -809,6 +809,9 @@ phrase2C asgn@(Assignment ref expr) = do
     r <- ref2C ref
     t <- gets lastType
     case (t, expr) of
+        (_, Reference r') | ref == r' -> do
+            e <- ref2C r'
+            return $ text "UNUSED" <+> parens e <> semi
         (BTFunction {}, (Reference r')) -> do
             e <- ref2C r'
             return $ r <+> text "=" <+> e <> semi
