@@ -394,7 +394,7 @@ begin
         6: begin
            SelectTemplate:= min(LuaTemplateNumber,High(EdgeTemplates));
            GetRandom(2) // burn 1
-           end;
+           end
         end
     end;
 

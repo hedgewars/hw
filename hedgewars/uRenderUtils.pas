@@ -318,21 +318,23 @@ begin
     if cOnlyStats then exit(nil);
 
     case SpeechType of
-        1: begin;
+        1: begin
             edge:= sprSpeechEdge;
             corner:= sprSpeechCorner;
             tail:= sprSpeechTail;
             end;
-        2: begin;
+        2: begin
             edge:= sprThoughtEdge;
             corner:= sprThoughtCorner;
             tail:= sprThoughtTail;
             end;
-        3: begin;
+        3: begin
             edge:= sprShoutEdge;
             corner:= sprShoutCorner;
             tail:= sprShoutTail;
-            end;
+            end
+        else
+            exit(nil)
         end;
     edgeHeight:= SpritesData[edge].Height;
     edgeWidth:= SpritesData[edge].Width;

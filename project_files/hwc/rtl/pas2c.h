@@ -80,5 +80,5 @@ bool _strncompareA(astring a, astring b);
 
 
 #define STRINIT(a) {.len = sizeof(a) - 1, .str = a}
-
+#define UNUSED(x) (void)(x)
 

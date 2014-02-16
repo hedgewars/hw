@@ -275,7 +275,7 @@ begin
     if HH^.Effects[hePoisoned] <> 0 then
         begin
         Tint($00, $FF, $40, $40);
-        DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 36) mod 360);
+        DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 2, 0, 0, sx, sy, 0, 1, 22, 22, (RealTicks shr 4) mod 360);
         untint
         end;
 
@@ -981,7 +981,7 @@ begin
     if HH^.Effects[hePoisoned] <> 0 then
         begin
         Tint($00, $FF, $40, $80);
-        DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 37) mod 360);
+        DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 1.5, 0, 0, sx, sy, 0, 1, 22, 22, 360 - (RealTicks shr 5) mod 360);
         end;
     if HH^.Effects[heResurrected] <> 0 then
         begin
@@ -1262,7 +1262,7 @@ begin
                         Tint(Gear^.Tint and $FFFFFF00 or (5000 - Gear^.Timer) div 8)
                     else
                         Tint(Gear^.Tint);
-                    DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 36 + Gear^.UID * 100) mod 360);
+                    DrawTextureRotatedF(SpritesData[sprSmokeWhite].texture, 3, 0, 0, x, y, 0, 1, 22, 22, (RealTicks shr 4 + Gear^.UID * 100) mod 360);
                     untint
                     end;
      gtResurrector: begin

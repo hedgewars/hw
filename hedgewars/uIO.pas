@@ -223,7 +223,7 @@ begin
     case c of
         '+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5': isSyncedCommand:= true;
     else
-        isSyncedCommand:= ((c >= #128) and (c <= char(128 + cMaxSlotIndex)))
+        isSyncedCommand:= ((byte(c) >= 128) and (byte(c) <= 128 + cMaxSlotIndex))
     end
 end;
 
