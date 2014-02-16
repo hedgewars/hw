@@ -429,7 +429,7 @@ var x, y, i, t, SlotsNumY, SlotsNumX, AMFrame: LongInt;
     AMRect: TSDL_Rect;
 {$IFDEF USE_AM_NUMCOLUMN}tmpsurf: PSDL_Surface;{$ENDIF}
 begin
-    if cOnlyStats then exit(false);
+    if cOnlyStats then exit(nil);
 
     SlotsNum:= 0;
     for i:= 0 to cMaxSlotIndex do
