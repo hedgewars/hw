@@ -2033,12 +2033,12 @@ begin
         begin
         LuaParameterCountError('EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED', lua_gettop(L));
         lua_pushnil(L);
+        lc_endluatest:= 0;
         end
     else
         begin
         WriteLnToConsole('Lua test finished');
         halt(lua_tointeger(L, 1));
-        lc_endluatest:= 0;
         end;
 end;
 ///////////////////
