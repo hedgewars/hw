@@ -12,6 +12,7 @@ INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../QTfrontend/util/platform
 INCLUDEPATH += ../misc/libphysfs
 INCLUDEPATH += ../misc/libphyslayer
+INCLUDEPATH += /usr/local/include/lua51/
 
 DESTDIR = ../bin
 
@@ -248,7 +249,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lhwphysfs -lphyslayer
+LIBS += -L../bin -lphysfs -lphyslayer
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6

@@ -475,7 +475,7 @@ void HWNewNet::ParseCmd(const QStringList & lst)
                 // flag indicating if a player is contributor
                 case 'c':
                         foreach(const QString & nick, nicks)
-                            m_playersModel->setFlag(nick, PlayersListModel::InRoom, setFlag);
+                            m_playersModel->setFlag(nick, PlayersListModel::Contributor, setFlag);
                         break;
                 // flag indicating if a player has engine running
                 case 'g':
