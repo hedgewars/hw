@@ -2613,10 +2613,11 @@ var
     HHGear: PGear;
     hedgehog: PHedgehog;
     State: Longword;
+    switchDir: LongInt;
 begin
     AllInactive := false;
 
-    if ((Gear^.Message and (not gmSwitch)) <> 0) or (TurnTimeLeft = 0) then
+    if ((Gear^.Message and (not (gmSwitch or gmPrecise))) <> 0) or (TurnTimeLeft = 0) then
         begin
         hedgehog := Gear^.Hedgehog;
         //Msg := Gear^.Message and (not gmSwitch);
@@ -2634,6 +2635,16 @@ begin
         HHGear := CurrentHedgehog^.Gear;
         HHGear^.Message := HHGear^.Message and (not gmSwitch);
         Gear^.Message := Gear^.Message and (not gmSwitch);
+
+        // switching in reverse direction
+        if (Gear^.Message and gmPrecise) <> 0 then
+            begin
+            HHGear^.Message := HHGear^.Message and (not gmPrecise);
+            switchDir:= CurrentTeam^.HedgehogsNumber - 1;
+            end
+        else
+            switchDir:=  1;
+
         State := HHGear^.State;
         HHGear^.State := 0;
         HHGear^.Z := cHHZ;
@@ -2643,7 +2654,7 @@ begin
         PlaySound(sndSwitchHog);
 
         repeat
-            CurrentTeam^.CurrHedgehog := Succ(CurrentTeam^.CurrHedgehog) mod (CurrentTeam^.HedgehogsNumber);
+            CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod (CurrentTeam^.HedgehogsNumber);
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
@@ -2656,6 +2667,9 @@ begin
         HHGear^.Active := true;
         FollowGear := HHGear;
         HHGear^.Z := cCurrHHZ;
+        // restore precise key
+        if (switchDir <> 1) then
+            HHGear^.Message:= HHGear^.Message or gmPrecise;
         HHGear^.Message:= HHGear^.Message or gmRemoveFromList or gmAddToList;
         Gear^.X := HHGear^.X;
         Gear^.Y := HHGear^.Y
