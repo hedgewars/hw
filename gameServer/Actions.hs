@@ -608,11 +608,11 @@ processAction (CheckBanned byIP) = do
     clNick <- client's nick
     clHost <- client's host
     si <- gets serverInfo
-    let validBans = filter (checkNotExpired clTime) $ bans si
+    let (validBans, expiredBans) = L.partition (checkNotExpired clTime) $ bans si
     let ban = L.find (checkBan byIP clHost clNick) $ validBans
     mapM_ processAction $
-        ModifyServerInfo (\s -> s{bans = validBans})
-        : [ByeClient (getBanReason $ fromJust ban) | isJust ban]
+        [ModifyServerInfo (\s -> s{bans = validBans}) | not $ null expiredBans]
+        ++ [ByeClient (getBanReason $ fromJust ban) | isJust ban]
     where
         checkNotExpired testTime (BanByIP _ _ time) = testTime `diffUTCTime` time <= 0
         checkNotExpired testTime (BanByNick _ _ time) = testTime `diffUTCTime` time <= 0
