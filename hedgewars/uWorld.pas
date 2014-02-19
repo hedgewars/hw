@@ -1356,20 +1356,27 @@ for t:= 0 to Pred(TeamsCount) do
                 Tint($FF,$FF,$FF,$80)
             else untint;
 
-            if OwnerTex <> nil then
-                begin
-                r.x:= 2;
-                r.y:= 2;
-                r.w:= OwnerTex^.w - 4;
-                r.h:= OwnerTex^.h - 4;
-                DrawTextureFromRect(-OwnerTex^.w - NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, OwnerTex)
-                end;
             // draw name
             r.x:= 2;
             r.y:= 2;
             r.w:= NameTagTex^.w - 4;
             r.h:= NameTagTex^.h - 4;
             DrawTextureFromRect(-NameTagTex^.w - 14, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, NameTagTex);
+
+            if OwnerTex <> nil then
+                begin
+                r.w:= OwnerTex^.w - 4;
+                r.h:= OwnerTex^.h - 4;
+                DrawTextureFromRect(-OwnerTex^.w - NameTagTex^.w - 16, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, OwnerTex)
+                end;
+
+            if (GameFlags and gfAISurvival) <> 0 then
+                begin
+                r.w:= AIKillsTex^.w - 4;
+                r.h:= AIKillsTex^.h - 4;
+                DrawTextureFromRect(TeamHealthBarWidth + 24, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, AIKillsTex);
+                end;
+
             // draw flag
             r.w:= 22;
             r.h:= 15;
