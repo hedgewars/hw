@@ -1346,7 +1346,6 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 var tX: hwFloat;
 begin
-AddFileLog('[HOG] -#' + inttostr(Gear^.uid) + ': ' + floattostr(Gear^.X) + ', ' + floattostr(Gear^.Y) + ' (' + floattostr(Gear^.dX) + ', ' + floattostr(Gear^.dY) + ')');
 CheckGearDrowning(Gear);
 if Gear = nil then exit;
 tX:= Gear^.X;
@@ -1390,7 +1389,6 @@ else
         else
             doStepHedgehogDriven(Gear)
     end;
-AddFileLog('[HOG] +#' + inttostr(Gear^.uid) + ': ' + floattostr(Gear^.X) + ', ' + floattostr(Gear^.Y) + ' (' + floattostr(Gear^.dX) + ', ' + floattostr(Gear^.dY) + ')');
 end;
 
 end.
