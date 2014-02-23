@@ -445,6 +445,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SCRIPT")
         {
+            pMapContainer->setScript(value);
             Scripts->setCurrentIndex(Scripts->findText(value));
             return;
         }
@@ -643,6 +644,14 @@ void GameCFGWidget::scriptChanged(int index)
         GameSchemes->setEnabled(true);
         WeaponsName->setEnabled(true);
         bindEntries->setEnabled(true);
+    }
+    if (!index)
+    {
+        pMapContainer->setScript(QString(""));
+    }
+    else
+    {
+        pMapContainer->setScript(name);
     }
     emit paramChanged("SCRIPT", QStringList(name));
 }

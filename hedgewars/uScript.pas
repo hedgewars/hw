@@ -35,6 +35,7 @@ procedure ScriptPrintStack;
 procedure ScriptClearStack;
 
 procedure ScriptLoad(name : shortstring);
+procedure ScriptOnPreviewInit;
 procedure ScriptOnGameInit;
 procedure ScriptOnScreenResize;
 procedure ScriptSetInteger(name : shortstring; value : LongInt);
@@ -2094,6 +2095,27 @@ begin
     lua_pop(luaState, 1);
 end;
 
+procedure ScriptOnPreviewInit;
+var i, j, k: LongInt;
+begin
+// not required if there is no script to run
+if not ScriptLoaded then
+    exit;
+
+ScriptSetString('Seed', cSeed);
+ScriptSetInteger('TemplateFilter', cTemplateFilter);
+ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
+ScriptSetInteger('MapGen', cMapGen);
+
+ScriptCall('onPreviewInit');
+
+// pop game variables
+ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
+cTemplateFilter  := ScriptGetInteger('TemplateFilter');
+LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
+cMapGen          := ScriptGetInteger('MapGen');
+end;
+
 procedure ScriptOnGameInit;
 var i, j, k: LongInt;
 begin
@@ -2251,7 +2273,7 @@ else
     lua_pcall(luaState, 0, 0, 0);
     ScriptLoaded:= true
     end;
-    hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
+hedgewarsMountPackage(Str2PChar(copy(s, 1, length(s)-4)+'.hwp'));
 end;
 
 procedure SetGlobals;
