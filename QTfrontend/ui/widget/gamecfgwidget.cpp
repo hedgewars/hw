@@ -445,8 +445,8 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
         if (param == "SCRIPT")
         {
-            pMapContainer->setScript(value);
             Scripts->setCurrentIndex(Scripts->findText(value));
+            pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8());
             return;
         }
         if (param == "DRAWNMAP")
@@ -652,6 +652,7 @@ void GameCFGWidget::scriptChanged(int index)
     else
     {
         pMapContainer->setScript(name);
+        pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8());
     }
     emit paramChanged("SCRIPT", QStringList(name));
 }
