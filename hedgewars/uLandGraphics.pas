@@ -79,7 +79,7 @@ if (Land[LandY, landX] and lfIndestructible) = 0 then
             inc(drawPixelBG);
         end
         else if ((Land[landY, landX] and lfObject) <> 0) or (((LandPixels[pixelY, pixelX] and AMask) shr AShift) < 255) then
-            LandPixels[pixelY, pixelX]:= 0
+            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and (not AMASK)
     end;
 end;
 
@@ -196,7 +196,7 @@ begin
             begin
             calculatePixelsCoordinates(i, y, px, py);
             if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
-                LandPixels[py, px]:= 0
+                LandPixels[py, px]:= LandPixels[py, px] and (not AMASK);
             end;
     icePixel:
         for i:= fromPix to toPix do
@@ -415,7 +415,7 @@ for i:= 0 to Pred(Count) do
                 if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                     LandPixels[by, bx]:= LandBackPixel(tx, ty)
                 else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
-                    LandPixels[by, bx]:= 0
+                    LandPixels[by, bx]:= LandPixels[by, bx] and (not AMASK)
                 end
             end;
     inc(y, dY)
@@ -546,7 +546,7 @@ for i:= -HalfWidth to HalfWidth do
             if ((Land[ty, tx] and lfBasic) <> 0) and (((LandPixels[by,bx] and AMask) shr AShift) = 255) and (not disableLandBack) then
                 LandPixels[by, bx]:= LandBackPixel(tx, ty)
             else if ((Land[ty, tx] and lfObject) <> 0) or (((LandPixels[by,bx] and AMask) shr AShift) < 255) then
-                LandPixels[by, bx]:= 0;
+                LandPixels[by, bx]:= LandPixels[by, bx] and (not AMASK);
             Land[ty, tx]:= 0;
             end
         end;
@@ -732,7 +732,7 @@ begin
             if ((Land[Y, X] and lfBasic) <> 0) and (not disableLandBack) then
                 LandPixels[yy, xx]:= LandBackPixel(X, Y)
             else
-                LandPixels[yy, xx]:= 0;
+                LandPixels[yy, xx]:= LandPixels[yy, xx] and (not AMASK);
 
             if not pixelsweep then
             begin
