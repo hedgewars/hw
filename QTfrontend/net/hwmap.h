@@ -41,7 +41,7 @@ class HWMap : public TCPBase
     public:
         HWMap(QObject *parent = 0);
         virtual ~HWMap();
-        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData);
+        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script);
         bool couldBeRemoved();
 
     protected:
@@ -55,6 +55,7 @@ class HWMap : public TCPBase
 
     private:
         QString m_seed;
+        QString m_script;
         int templateFilter;
         MapGenerator m_mapgen;
         int m_maze_size;

@@ -352,6 +352,10 @@ function dbg()
     end
 end
 
+function onPreviewInit()
+onGameInit()
+end
+
 function onGameInit()
     MapGen = 2
     TemplateFilter = 0

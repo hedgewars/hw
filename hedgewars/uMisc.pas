@@ -300,6 +300,7 @@ begin
 end;
 
 {$IFDEF SDL2}
+// FIXME - pretty sure this is not handling endianness correctly like the SDL1 is
 const SDL_PIXELFORMAT_ABGR8888 = (1 shl 28) or (6 shl 24) or (7 shl 20) or (6 shl 16) or (32 shl 8) or 4;
 {$ELSE}
 const format: TSDL_PixelFormat = (

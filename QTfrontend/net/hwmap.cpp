@@ -34,9 +34,10 @@ bool HWMap::couldBeRemoved()
     return !m_hasStarted;
 }
 
-void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData)
+void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script)
 {
     m_seed = seed;
+    m_script = script;
     templateFilter = filter;
     m_mapgen = mapgen;
     m_maze_size = maze_size;
@@ -73,6 +74,10 @@ void HWMap::SendToClientFirst()
     SendIPC(QString("eseed %1").arg(m_seed).toUtf8());
     SendIPC(QString("e$template_filter %1").arg(templateFilter).toUtf8());
     SendIPC(QString("e$mapgen %1").arg(m_mapgen).toUtf8());
+    if (m_script.length())
+    {
+        SendIPC(QString("escript Scripts/Multiplayer/%1.lua").arg(m_script).toUtf8());
+    }
 
     switch (m_mapgen)
     {

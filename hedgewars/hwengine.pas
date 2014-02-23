@@ -458,10 +458,11 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
+    uPhysFSLayer.initModule;
+    uScript.initModule;
 
     if complete then
     begin
-        uPhysFSLayer.initModule;
         uTextures.initModule;
 {$IFDEF ANDROID}GLUnit.initModule;{$ENDIF}
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.initModule;{$ENDIF}
@@ -478,7 +479,6 @@ begin
         uInputHandler.initModule;
         uMisc.initModule;
         uLandTexture.initModule;    //stub
-        uScript.initModule;
         uSound.initModule;
         uStats.initModule;
         uStore.initModule;
@@ -543,6 +543,7 @@ begin
     IPCWaitPongEvent;
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
+    ScriptOnPreviewInit;
     GenPreview(Preview);
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));

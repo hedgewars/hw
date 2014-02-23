@@ -59,6 +59,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_previewEnabled = false;
     m_missionsViewSetup = false;
     m_staticViewSetup = false;
+    m_script = QString("");
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -315,7 +316,8 @@ void HWMapContainer::askForGeneratedPreview()
                    getTemplateFilter(),
                    get_mapgen(),
                    getMazeSize(),
-                   getDrawnMapData()
+                   getDrawnMapData(),
+                   m_script
                   );
 
     setHHLimit(0);
@@ -409,6 +411,13 @@ void HWMapContainer::intSetSeed(const QString & seed)
 void HWMapContainer::setSeed(const QString & seed)
 {
     intSetSeed(seed);
+    if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze))
+        updatePreview();
+}
+
+void HWMapContainer::setScript(const QString & script)
+{
+    m_script = script;
     if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze))
         updatePreview();
 }
