@@ -22,6 +22,9 @@
      end
  end
 
+function onPreviewInit()
+onGameInit()
+end
 
 function onGameInit()
     MapGen = 2
