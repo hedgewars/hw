@@ -264,7 +264,7 @@ if (not SupportNPOTT) and (not (isPowerOf2(Surf^.w) and isPowerOf2(Surf^.h))) th
         for x:= 0 to Pred(Surf^.w) do
             toP4^[x]:= fromP4^[x];
         for x:= Surf^.w to Pred(tw) do
-            toP4^[x]:= 0;
+            toP4^[x]:= fromP4^[0];
         toP4:= PLongWordArray(@(toP4^[tw]));
         fromP4:= PLongWordArray(@(fromP4^[Surf^.pitch div 4]))
         end;
