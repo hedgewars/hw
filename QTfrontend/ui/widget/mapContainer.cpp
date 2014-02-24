@@ -59,7 +59,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_previewEnabled = false;
     m_missionsViewSetup = false;
     m_staticViewSetup = false;
-    m_script = QString("");
+    m_script = QString();
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;

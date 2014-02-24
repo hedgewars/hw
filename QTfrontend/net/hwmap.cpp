@@ -74,7 +74,7 @@ void HWMap::SendToClientFirst()
     SendIPC(QString("eseed %1").arg(m_seed).toUtf8());
     SendIPC(QString("e$template_filter %1").arg(templateFilter).toUtf8());
     SendIPC(QString("e$mapgen %1").arg(m_mapgen).toUtf8());
-    if (m_script.length())
+    if (!m_script.isEmpty())
     {
         SendIPC(QString("escript Scripts/Multiplayer/%1.lua").arg(m_script).toUtf8());
     }

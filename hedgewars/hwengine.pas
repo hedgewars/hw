@@ -504,7 +504,6 @@ begin
         uInputHandler.freeModule;
         uStats.freeModule;          //stub
         uSound.freeModule;
-        uScript.freeModule;
         uMisc.freeModule;
         uLandTexture.freeModule;
         uGears.freeModule;
@@ -516,7 +515,6 @@ begin
 {$IFDEF USE_TOUCH_INTERFACE}uTouch.freeModule;{$ENDIF}  //stub
 {$IFDEF ANDROID}GLUnit.freeModule;{$ENDIF}
         uTextures.freeModule;
-        uPhysFSLayer.freeModule;
         end;
 
     uIO.freeModule;
@@ -527,6 +525,8 @@ begin
     uCommands.freeModule;
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
+    uPhysFSLayer.freeModule;
+    uScript.freeModule;
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
