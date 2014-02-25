@@ -1232,14 +1232,14 @@ var tdx: hwFloat;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
-if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) or
-   (hwRound(Gear^.X) + LongInt(Gear^.Radius) > LongInt(rightX)) then
+if (hwRound(Gear^.X) < LongInt(leftX)) or
+   (hwRound(Gear^.X) > LongInt(rightX)) then
     begin
     if WorldEdge = weWrap then
         begin
-        if (hwRound(Gear^.X) - Gear^.Radius < LongInt(leftX)) then
-             Gear^.X:= int2hwfloat(rightX - Gear^.Radius)
-        else Gear^.X:= int2hwfloat(LongInt(leftX) + Gear^.Radius);
+        if (hwRound(Gear^.X) < LongInt(leftX)) then
+             Gear^.X:= Gear^.X + int2hwfloat(rightX - leftX)
+        else Gear^.X:= Gear^.X - int2hwfloat(rightX - leftX);
         LeftImpactTimer:= 150;
         RightImpactTimer:= 150
         end
