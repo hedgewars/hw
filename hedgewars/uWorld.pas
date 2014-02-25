@@ -1851,7 +1851,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY: LongInt;
+var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, cameraJump: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
@@ -1869,7 +1869,17 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         end
     else
         begin
+        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > rightX - leftX - 100 then
+            begin
+            if (prevPoint.X - WorldDx) * 2 < rightX + leftX then
+                cameraJump:= rightX - leftX
+                else
+                cameraJump:= leftX - rightX;
+            WorldDx:= WorldDx - cameraJump;
+            end;
+
         CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx) div 8;
+
         if isPhone() or (cScreenHeight < 600) or ((hwSign(FollowGear^.dY) * z) < 10)  then
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
         else

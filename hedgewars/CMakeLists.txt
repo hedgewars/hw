@@ -198,9 +198,11 @@ endforeach(loop_var)
 #SOURCE AND PROGRAMS SECTION
 if(BUILD_ENGINE_LIBRARY)
     message("***Engine will be built as library (experimental)***")
-    if(APPLE AND ${current_macosx_version} VERSION_GREATER "10.5")
-        # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
-        add_flag_prepend(CMAKE_Pascal_FLAGS "-k-no_order_inits")
+    if(APPLE)
+        if (${current_macosx_version} VERSION_GREATER "10.5")
+            # due to compiler/linker issues on Max OS X 10.6 -k-no_order_inits is needed to avoid linking fail
+            add_flag_prepend(CMAKE_Pascal_FLAGS "-k-no_order_inits")
+        endif()
     endif()
 
     #workaround for missing <TARGET> support during object generation
