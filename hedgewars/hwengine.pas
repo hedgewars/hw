@@ -531,7 +531,7 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
-var Preview: TPreview;
+var Preview: TPreviewAlpha;
 begin
     initEverything(false);
 {$IFDEF HWLIBRARY}
@@ -544,7 +544,7 @@ begin
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
     ScriptOnPreviewInit;
-    GenPreview(Preview);
+    GenPreviewAlpha(Preview);
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));

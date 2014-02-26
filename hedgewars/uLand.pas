@@ -27,6 +27,7 @@ procedure freeModule;
 procedure DrawBottomBorder;
 procedure GenMap;
 procedure GenPreview(out Preview: TPreview);
+procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
@@ -868,6 +869,49 @@ begin
         end;
 end;
 
+
+procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
+var rh, rw, ox, oy, x, y, xx, yy, t, lh, lw: LongInt;
+begin
+    WriteLnToConsole('Generating preview...');
+    case cMapGen of
+        0: GenBlank(EdgeTemplates[SelectTemplate]);
+        1: begin ResizeLand(4096,2048); GenMaze; end;
+        2: GenDrawnMap;
+    else
+        OutError('Unknown mapgen', true);
+    end;
+
+    // strict scaling needed here since preview assumes a rectangle
+    rh:= max(LAND_HEIGHT, 2048);
+    rw:= max(LAND_WIDTH, 4096);
+    ox:= 0;
+    if rw < rh*2 then
+        begin
+        rw:= rh*2;
+        end;
+    if rh < rw div 2 then rh:= rw * 2;
+
+    ox:= (rw-LAND_WIDTH) div 2;
+    oy:= rh-LAND_HEIGHT;
+
+    lh:= rh div 128;
+    lw:= rw div 256;
+    for y:= 0 to 127 do
+        for x:= 0 to 255 do
+            begin
+            t:= 0;
+
+            for yy:= y * lh - oy to y * lh + 7 - oy do
+                for xx:= x * lw - ox to x * lw + 7 - ox do
+                    if (yy and LAND_HEIGHT_MASK = 0) and (xx and LAND_WIDTH_MASK = 0)
+                        and (Land[yy, xx] <> 0) then
+                        inc(t);
+
+            Preview[y, x]:= t * 1023 div 256;
+            if t > 8 then Preview[y, x]:= 255 else Preview[y, x]:= 0
+            end;
+end;
 
 procedure chLandCheck(var s: shortstring);
 begin
