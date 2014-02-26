@@ -17,6 +17,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <QPainter>
+#include <QBitmap>
+#include <QLinearGradient>
+
 #include "hwconsts.h"
 #include "hwmap.h"
 
@@ -58,14 +62,30 @@ QStringList HWMap::getArguments()
 }
 
 void HWMap::onClientDisconnect()
-{
+{    
+    QLinearGradient linearGrad(QPoint(128, 0), QPoint(128, 128));
+    linearGrad.setColorAt(1, QColor(0, 0, 192));
+    linearGrad.setColorAt(0, QColor(66, 115, 225));
+
     if (readbuffer.size() == 128 * 32 + 1)
     {
         quint8 *buf = (quint8*) readbuffer.constData();
         QImage im(buf, 256, 128, QImage::Format_Mono);
         im.setNumColors(2);
+
+        QPixmap px(QSize(256, 128));
+        QPixmap pxres(px.size());
+        QPainter p(&pxres);
+
+        px.fill(Qt::yellow);
+        QBitmap bm = QBitmap::fromImage(im);
+        px.setMask(bm);
+
+        p.fillRect(pxres.rect(), linearGrad);
+        p.drawPixmap(0, 0, px);
+
         emit HHLimitReceived(buf[128 * 32]);
-        emit ImageReceived(im);
+        emit ImageReceived(px);
     }
 }
 

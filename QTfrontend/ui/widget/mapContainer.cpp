@@ -146,7 +146,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapPreview = new QPushButton(this);
     mapPreview->setObjectName("mapPreview");
     mapPreview->setFlat(true);
-    mapPreview->setFixedSize(256, 128);
+    mapPreview->setFixedSize(256 + 6, 128 + 6);
     mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
     connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
@@ -255,20 +255,9 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     changeMapType(MapModel::GeneratedMap);
 }
 
-void HWMapContainer::setImage(const QImage newImage)
+void HWMapContainer::setImage(const QPixmap &newImage)
 {
-    QPixmap px(m_previewSize);
-    QPixmap pxres(px.size());
-    QPainter p(&pxres);
-
-    px.fill(Qt::yellow);
-    QBitmap bm = QBitmap::fromImage(newImage);
-    px.setMask(bm);
-
-    p.fillRect(pxres.rect(), linearGrad);
-    p.drawPixmap(0, 0, px);
-
-    addInfoToPreview(pxres);
+    addInfoToPreview(newImage);
     pMap = 0;
 
     cType->setEnabled(isMaster());
@@ -280,36 +269,37 @@ void HWMapContainer::setHHLimit(int newHHLimit)
 }
 
 // Should this add text to identify map size?
-void HWMapContainer::addInfoToPreview(QPixmap image)
+void HWMapContainer::addInfoToPreview(const QPixmap &image)
 {
     QPixmap finalImage = QPixmap(image.size());
-    finalImage.fill(QColor(0, 0, 0, 0));
+//finalImage.fill(QColor(0, 0, 0, 0));
 
     QPainter p(&finalImage);
-    p.drawPixmap(image.rect(), image);
+    p.fillRect(finalImage.rect(), linearGrad);
+    p.drawPixmap(finalImage.rect(), image);
     //p.setPen(QColor(0xf4,0x9e,0xe9));
     p.setPen(QColor(0xff,0xcc,0x00));
     p.setBrush(QColor(0, 0, 0));
-    p.drawRect(image.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
+    p.drawRect(finalImage.rect().width() - hhSmall.rect().width() - 28, 3, 40, 20);
     p.setFont(QFont("MS Shell Dlg", 10));
     QString text = (hhLimit > 0) ? QString::number(hhLimit) : "?";
-    p.drawText(image.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
-    p.drawPixmap(image.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
+    p.drawText(finalImage.rect().width() - hhSmall.rect().width() - 14 - (hhLimit > 9 ? 10 : 0), 18, text);
+    p.drawPixmap(finalImage.rect().width() - hhSmall.rect().width() - 5, 5, hhSmall.rect().width(), hhSmall.rect().height(), hhSmall);
 
     // Shrink, crop, and center preview image
-    QPixmap centered(QSize(m_previewSize.width() - 6, m_previewSize.height() - 6));
+    /*QPixmap centered(QSize(m_previewSize.width() - 6, m_previewSize.height() - 6));
     QPainter pc(&centered);
     pc.fillRect(centered.rect(), linearGrad);
-    pc.drawPixmap(-3, -3, finalImage);
+    pc.drawPixmap(-3, -3, finalImage);*/
 
-    mapPreview->setIcon(QIcon(centered));
-    mapPreview->setIconSize(centered.size());
+    mapPreview->setIcon(QIcon(finalImage));
+    mapPreview->setIconSize(finalImage.size());
 }
 
 void HWMapContainer::askForGeneratedPreview()
 {
     pMap = new HWMap(this);
-    connect(pMap, SIGNAL(ImageReceived(const QImage)), this, SLOT(setImage(const QImage)));
+    connect(pMap, SIGNAL(ImageReceived(QPixmap)), this, SLOT(setImage(QPixmap)));
     connect(pMap, SIGNAL(HHLimitReceived(int)), this, SLOT(setHHLimit(int)));
     connect(pMap, SIGNAL(destroyed(QObject *)), this, SLOT(onPreviewMapDestroyed(QObject *)));
     pMap->getImage(m_seed,
