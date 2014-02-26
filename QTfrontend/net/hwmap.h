@@ -22,7 +22,7 @@
 
 #include <QByteArray>
 #include <QString>
-#include <QImage>
+#include <QPixmap>
 
 #include "tcpBase.h"
 
@@ -50,7 +50,7 @@ class HWMap : public TCPBase
         virtual void SendToClientFirst();
 
     signals:
-        void ImageReceived(const QImage newImage);
+        void ImageReceived(const QPixmap & newImage);
         void HHLimitReceived(int hhLimit);
 
     private:

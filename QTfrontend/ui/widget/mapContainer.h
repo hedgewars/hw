@@ -94,12 +94,12 @@ class HWMapContainer : public QWidget
         void drawnMapChanged(const QByteArray & data);
 
     private slots:
-        void setImage(const QImage newImage);
+        void setImage(const QPixmap & newImage);
         void setHHLimit(int hhLimit);
         void setRandomSeed();
         void setRandomTheme();
         void setRandomMap();
-        void addInfoToPreview(QPixmap image);
+        void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
         void showThemePrompt();
