@@ -909,7 +909,6 @@ begin
                         inc(t);
 
             Preview[y, x]:= t * 1023 div 256;
-            if t > 8 then Preview[y, x]:= 255 else Preview[y, x]:= 0
             end;
 end;
 
