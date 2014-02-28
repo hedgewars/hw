@@ -902,13 +902,13 @@ begin
             begin
             t:= 0;
 
-            for yy:= y * lh - oy to y * lh + 7 - oy do
-                for xx:= x * lw - ox to x * lw + 7 - ox do
+            for yy:= y * lh - oy to y * lh + lh - 1 - oy do
+                for xx:= x * lw - ox to x * lw + lw - 1 - ox do
                     if (yy and LAND_HEIGHT_MASK = 0) and (xx and LAND_WIDTH_MASK = 0)
                         and (Land[yy, xx] <> 0) then
                         inc(t);
 
-            Preview[y, x]:= t * 1023 div 256;
+            Preview[y, x]:= t * 255 div (lh * lw);
             end;
 end;
 
