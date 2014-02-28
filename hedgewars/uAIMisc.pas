@@ -55,7 +55,8 @@ TBonus = record
     Score: LongInt;
      end;
 
-Tbonuses = record
+TBonuses = record
+          activity: boolean;
           Count : Longword;
           ar    : array[0..Pred(MAXBONUS)] of TBonus;
        end;
@@ -92,7 +93,7 @@ function  AIrndSign(num: LongInt): LongInt;
 var ThinkingHH: PGear;
     Targets: TTargets;
 
-    bonuses: Tbonuses;
+    bonuses: TBonuses;
 
     walkbonuses: Twalkbonuses;
 
@@ -209,36 +210,70 @@ var Gear: PGear;
     i: Longint;
 begin
 bonuses.Count:= 0;
+bonuses.activity:= false;
 MyClan:= ThinkingHH^.Hedgehog^.Team^.Clan;
 Gear:= GearsList;
 while Gear <> nil do
     begin
         case Gear^.Kind of
+            gtGrenade
+            , gtClusterBomb
+            , gtGasBomb
+            , gtShell
+            , gtAirAttack
+            , gtMortar
+            , gtWatermelon
+            , gtDrill
+            , gtAirBomb
+            , gtCluster
+            , gtMelonPiece
+            , gtMolotov: bonuses.activity:= true;
             gtCase:
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y) + 3, 37, 25);
             gtFlame:
                 if (Gear^.State and gsttmpFlag) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 20, -50);
 // avoid mines unless they are very likely to be duds, or are duds. also avoid if they are about to blow
-            gtMine:
+            gtMine: begin
+                if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
+                
                 if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) and (Gear^.Health <> 0))
                 or (isAfterAttack and (Gear^.Health = 0) and (Gear^.Damage > 30))) then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
                 else if (Gear^.State and gstAttacking) <> 0 then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 100, -50); // mine is on
+                end;
 
             gtExplosives:
-            if isAfterAttack then
-                AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
+                begin
+                //if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
 
-            gtSMine:
+                if isAfterAttack then
+                    AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 75, -60 + Gear^.Health);
+                end;
+
+            gtSMine: begin
+                if (Gear^.State and (gstMoving or gstAttacking)) <> 0 then bonuses.activity:= true;
+
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -30);
+                end;
 
             gtDynamite:
+                begin
+                bonuses.activity:= true;
                 AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 150, -75);
+                end;
 
             gtHedgehog:
                 begin
+                if (ThinkingHH <> Gear) 
+                    and (((Gear^.State and (gstMoving or gstDrowning or gstHHDeath)) <> 0) 
+                        or (Gear^.Health = 0)
+                        or (Gear^.Damage >= Gear^.Health)) 
+                    then begin
+                    bonuses.activity:= true;
+                    end;
+                
                 if Gear^.Damage >= Gear^.Health then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                 else
@@ -253,6 +288,7 @@ while Gear <> nil do
             end;
     Gear:= Gear^.NextGear
     end;
+
 if isAfterAttack and (KnownExplosion.Radius > 0) then
     with KnownExplosion do
         AddBonus(X, Y, Radius + 10, -Radius);

@@ -415,7 +415,7 @@ if Me^.Hedgehog^.BotLevel <> 5 then
     switchCount:= HHHasAmmo(PGear(Me)^.Hedgehog^, amSwitch)
 else switchCount:= 0;
 
-if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
+if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
     if Targets.Count > 0 then
         begin
         // iterate over current team hedgehogs
@@ -452,19 +452,23 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot then
             or BestActions.isWalkingToABetterPlace;
 
             if (StartTicks > GameTicks - 1500) and (not StopThinking) then
-                SDL_Delay(1000);
+                SDL_Delay(700);
 
         if (BestActions.Score < -1023) and (not BestActions.isWalkingToABetterPlace) then
             begin
             BestActions.Count:= 0;
-            AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
+
+            FillBonuses(false);
+            
+            if not bonuses.activity then
+                AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;
 
         end else SDL_Delay(100)
 else
     begin
     BackMe:= Me^;
-    i:= 12;
+    i:= 4;
     while (not StopThinking) and (BestActions.Count = 0) and (i > 0) do
         begin
 
@@ -480,7 +484,7 @@ else
         Actions.Pos:= 0;
         Actions.Score:= 0;
         Walk(@WalkMe, Actions);
-        dec(i);
+        if not bonuses.activity then dec(i);
         if not StopThinking then
             SDL_Delay(100)
         end

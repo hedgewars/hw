@@ -1740,11 +1740,13 @@ begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
             Gear^.dY:= _0;
+            Gear^.State:= Gear^.State and (not gstMoving);
             AddCI(Gear);
             end;
         end
     else
         begin
+        Gear^.State:= Gear^.State or gstMoving;
         DeleteCI(Gear);
         doStepFallingGear(Gear);
         AllInactive := false;
