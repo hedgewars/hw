@@ -156,6 +156,11 @@ if(BUILD_ENGINE_LIBRARY)
     add_definitions(-DHWLIBRARY=1)
     set(hwlibname "${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}hwengine${CMAKE_SHARED_LIBRARY_SUFFIX}")
     list(APPEND HW_LINK_LIBS ${hwlibname})
+
+    if(LIBAV_FOUND)
+#        add_subdirectory(avwrapper)
+        list(APPEND HW_LINK_LIBS avwrapper)
+    endif()
 endif()
 
 qt4_add_resources(hwfr_rez_src ${hwfr_rez})
@@ -201,7 +206,7 @@ list(APPEND HW_LINK_LIBS
     ${SDL_LIBRARY}
     ${SDLMIXER_LIBRARY}
     )
-
+    
 if(WIN32 AND NOT UNIX)
     if(NOT SDL_LIBRARY)
         list(APPEND HW_LINK_LIBS SDL)
