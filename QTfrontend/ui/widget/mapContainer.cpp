@@ -408,8 +408,7 @@ void HWMapContainer::setSeed(const QString & seed)
 void HWMapContainer::setScript(const QString & script)
 {
     m_script = script;
-    if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze))
-        updatePreview();
+    askForGeneratedPreview();
 }
 
 void HWMapContainer::intSetMap(const QString & map)
