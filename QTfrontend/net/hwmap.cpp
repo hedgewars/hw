@@ -57,6 +57,8 @@ QStringList HWMap::getArguments()
     arguments << QString("%1").arg(ipc_port);
     arguments << "--user-prefix";
     arguments << cfgdir->absolutePath();
+    arguments << "--prefix";
+    arguments << datadir->absolutePath();
     arguments << "--landpreview";
     return arguments;
 }
