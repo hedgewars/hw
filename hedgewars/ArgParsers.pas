@@ -25,6 +25,10 @@ interface
 procedure GetParams;
 {$ELSE}
 procedure parseCommandLine(argc: LongInt; argv: PPChar);
+
+var operatingsystem_parameter_argc: integer = 0; export;
+    operatingsystem_parameter_argv: pointer = nil; export;
+    operatingsystem_parameter_envp: pointer = nil; export;
 {$ENDIF}
 
 implementation
@@ -146,6 +150,7 @@ begin
     // Silence the hint that appears when USE_VIDEO_RECORDING is not defined
     paramIndex:= paramIndex;
 {$IFDEF USE_VIDEO_RECORDING}
+{$IFNDEF HWLIBRARY}
     GameType:= gmtRecord;
     inc(paramIndex);
     cVideoFramerateNum:= StrToInt(ParamStr(paramIndex)); inc(paramIndex);
@@ -156,13 +161,14 @@ begin
     cVideoQuality:= StrToInt(ParamStr(paramIndex));      inc(paramIndex);
     cAudioCodec:= ParamStr(paramIndex);                  inc(paramIndex);
 {$ENDIF}
+{$ENDIF}
 end;
 
 function getLongIntParameter(str:shortstring; var paramIndex:LongInt; var wrongParameter:Boolean): LongInt;
 var tmpInt, c: LongInt;
 begin
     inc(paramIndex);
-{$IFDEF PAS2C}
+{$IFDEF PAS2C OR HWLIBRARY}
     val(str, tmpInt);
 {$ELSE}
     val(str, tmpInt, c);
@@ -177,8 +183,10 @@ function getstringParameter(str:shortstring; var paramIndex:LongInt; var wrongPa
 begin
     inc(paramIndex);
     wrongParameter:= (str='') or (Copy(str,1,2) = '--');
+    {$IFNDEF HWLIBRARY}
     if wrongParameter then
-         WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
+        WriteLn(stderr, 'ERROR: '+ParamStr(paramIndex-1)+' expects a string, you passed "'+str+'"');
+    {$ENDIF}
     getstringParameter:= str;
 end;
 
@@ -277,7 +285,7 @@ begin
         newSyntax:= '';
         inc(paramIndex);
         cmd:= cmdarray[index];
-        arg:= ParamStr(paramIndex);
+        arg:= cmdarray[paramIndex];
         isValid:= (cmd<>'--depth');
 
         // check if the parameter is a boolean one
@@ -309,6 +317,11 @@ var paramIndex: LongInt;
     wrongParameter: boolean;
 //var tmpInt: LongInt;
 begin
+    {$IFDEF HWLIBRARY}
+    operatingsystem_parameter_argc:= argc;
+    operatingsystem_parameter_argv:= argv;
+    {$ENDIF}
+
     paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
     paramTotal:= {$IFDEF HWLIBRARY}argc-1{$ELSE}ParamCount{$ENDIF}; //-1 because pascal enumeration is inclusive
     (*
