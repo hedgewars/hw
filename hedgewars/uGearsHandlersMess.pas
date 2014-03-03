@@ -1316,6 +1316,13 @@ var
 begin
     cArtillery := true;
     HHGear := Gear^.Hedgehog^.Gear;
+
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
+
     HHGear^.State := HHGear^.State or gstNotKickable;
     HedgehogChAngle(HHGear);
     if not cLaserSighting then
