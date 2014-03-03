@@ -39,11 +39,11 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
      ;
 
 {$IFDEF HWLIBRARY}
+procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-procedure Game(argc: LongInt; argv: PPChar); cdecl; export;
-procedure GenLandPreview(port: Longint); cdecl; export;
 
 implementation
 {$ELSE}
@@ -324,15 +324,11 @@ end;
 {$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure Game{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar); cdecl; export{$ENDIF};
+procedure Game;
 //var p: TPathType;
 var s: shortstring;
     i: LongInt;
 begin
-{$IFDEF HWLIBRARY}
-    preInitEverything();
-    parseCommandLine(argc, argv);
-{$ENDIF}
     initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
@@ -530,15 +526,11 @@ begin
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure GenLandPreview{$IFDEF HWLIBRARY}(port: LongInt); cdecl; export{$ENDIF};
+procedure GenLandPreview;
 var Preview: TPreviewAlpha;
 begin
     initEverything(false);
-{$IFDEF HWLIBRARY}
-    WriteLnToConsole('Preview connecting on port ' + inttostr(port));
-    ipcPort:= port;
-    InitStepsFlags:= cifRandomize;
-{$ENDIF}
+
     InitIPC;
     IPCWaitPongEvent;
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
@@ -552,18 +544,24 @@ begin
     freeEverything(false);
 end;
 
-{$IFNDEF HWLIBRARY}
+{$IFDEF HWLIBRARY}
+procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+begin
+    operatingsystem_parameter_argc:= argc;
+    operatingsystem_parameter_argv:= argv;
+{$ELSE}
+begin
+{$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// m a i n ///////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
-begin
 {$IFDEF PAS2C}
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);
 {$ENDIF}
     preInitEverything();
-    cTagsMask:= htTeamName or htName or htHealth; // this one doesn't fit nicely w/ reset of other variables. suggestions welcome
+
     GetParams();
 
     if GameType = gmtLandPreview then
@@ -572,11 +570,14 @@ begin
         Game();
 
     // return 1 when engine is not called correctly
-    {$IFDEF PAS2C}
+    {$IFDEF PAS2C OR HWLIBRARY}
     exit(LongInt(GameType = gmtSyntax));
     {$ELSE}
     halt(LongInt(GameType = gmtSyntax));
     {$ENDIF}
 
+{$IFDEF HWLIBRARY}
+end;
 {$ENDIF}
+
 end.

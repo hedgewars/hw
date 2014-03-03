@@ -2438,6 +2438,8 @@ begin
     cVideoQuality      := 0;
     cAudioCodec        := '';
 {$ENDIF}
+
+    cTagsMask:= htTeamName or htName or htHealth;
 end;
 
 procedure initModule;

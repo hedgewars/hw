@@ -119,8 +119,7 @@ exports
     Game;
 {$ELSE}
 exports
-    Game,
-    GenLandPreview,
+    RunEngine,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

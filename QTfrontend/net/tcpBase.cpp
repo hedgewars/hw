@@ -17,48 +17,54 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "tcpBase.h"
-
 #include <QList>
 #include <QImage>
 #include <QThread>
+#include <QApplication>
 
+#include "tcpBase.h"
 #include "hwconsts.h"
 #include "MessageDialog.h"
 
 #ifdef HWLIBRARY
-extern "C" void Game(char**arguments);
-extern "C" void GenLandPreview(int port);
+extern "C" {
+    void RunEngine(int argc, char ** argv);
+
+    int operatingsystem_parameter_argc;
+    char ** operatingsystem_parameter_argv;
+}
 
 
 EngineInstance::EngineInstance(QObject *parent)
     : QObject(parent)
 {
-    port = 0;
+
 }
 
 EngineInstance::~EngineInstance()
 {
 }
 
+void EngineInstance::setArguments(const QStringList & arguments)
+{
+    m_arguments.clear();
+    m_arguments << qApp->arguments().at(0).toUtf8();
+
+    m_argv.resize(arguments.size() + 1);
+    m_argv[0] = m_arguments.last().data();
+
+    int i = 1;
+    foreach(const QString & s, arguments)
+    {
+        m_arguments << s.toUtf8();
+        m_argv[i] = m_arguments.last().data();
+        ++i;
+    }
+}
+
 void EngineInstance::start()
 {
-#if 0
-    char *args[11];
-    args[0] = "65000";  //ipcPort
-    args[1] = "1024";   //cScreenWidth
-    args[2] = "768";    //cScreenHeight
-    args[3] = "0";      //cReducedQuality
-    args[4] = "en.txt"; //cLocaleFName
-    args[5] = "koda";   //UserNick
-    args[6] = "1";      //SetSound
-    args[7] = "1";      //SetMusic
-    args[8] = "0";      //cAltDamage
-    args[9]= datadir->absolutePath().toAscii().data(); //cPathPrefix
-    args[10]= NULL;     //recordFileName
-    Game(args);
-#endif
-    GenLandPreview(port);
+    RunEngine(m_argv.size(), m_argv.data());
 }
 
 #endif
@@ -129,9 +135,9 @@ void TCPBase::RealStart()
     IPCSocket = 0;
 
 #ifdef HWLIBRARY
-    QThread *thread = new QThread;
-    EngineInstance *instance = new EngineInstance;
-    instance->port = IPCServer->serverPort();
+    QThread *thread = new QThread();
+    EngineInstance *instance = new EngineInstance();
+    instance->setArguments(getArguments());
 
     instance->moveToThread(thread);
 
@@ -144,7 +150,7 @@ void TCPBase::RealStart()
     QProcess * process;
     process = new QProcess();
     connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
-    QStringList arguments=getArguments();
+    QStringList arguments = getArguments();
 
 #ifdef QT_DEBUG
     // redirect everything written on stdout/stderr

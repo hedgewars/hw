@@ -28,6 +28,8 @@
 #include <QDir>
 #include <QProcess>
 #include <QPointer>
+#include <QVector>
+#include <QList>
 
 #include <QImage>
 
@@ -93,12 +95,15 @@ public:
     EngineInstance(QObject *parent = 0);
     ~EngineInstance();
 
-    int port;
+    void setArguments(const QStringList & arguments);
+
 public slots:
     void start(void);
 signals:
     void finished(void);
 private:
+    QList<QByteArray> m_arguments;
+    QVector<char *> m_argv;
 };
 #endif
 
