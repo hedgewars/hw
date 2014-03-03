@@ -211,8 +211,7 @@ if(BUILD_ENGINE_LIBRARY)
     add_flag_prepend(CMAKE_Pascal_FLAGS "-o${LIBRARY_OUTPUT_PATH}/${engine_output_name}")
 
     add_definitions(-dHWLIBRARY)
-    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar}")
-    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas")
+    set_source_files_properties(hwLibrary.pas PROPERTIES OBJECT_DEPENDS "${sourcefiles_sofar};${CMAKE_CURRENT_SOURCE_DIR}/hwengine.pas")
     add_library(hwengine SHARED hwLibrary.pas)
 else()
     # no need to change name here because target has same name
