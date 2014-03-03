@@ -615,7 +615,7 @@ void HWMapContainer::updatePreview()
 
     if (pMap)
     {
-        disconnect(pMap, 0, this, SLOT(setImage(const QImage)));
+        disconnect(pMap, 0, this, SLOT(setImage(const QPixmap)));
         disconnect(pMap, 0, this, SLOT(setHHLimit(int)));
         pMap = 0;
     }

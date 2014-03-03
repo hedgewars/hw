@@ -21,19 +21,36 @@
 unit ArgParsers;
 interface
 
-{$IFNDEF HWLIBRARY}
 procedure GetParams;
-{$ELSE}
-procedure parseCommandLine(argc: LongInt; argv: PPChar);
-
-var operatingsystem_parameter_argc: integer = 0; export;
+{$IFDEF HWLIBRARY}
+var operatingsystem_parameter_argc: LongInt = 0; export;
     operatingsystem_parameter_argv: pointer = nil; export;
     operatingsystem_parameter_envp: pointer = nil; export;
+
+function ParamCount: LongInt;
+function ParamStr(i: LongInt): shortstring;
 {$ENDIF}
 
 implementation
 uses uVariables, uTypes, uUtils, uSound, uConsts;
-var isInternal: Boolean {$IFDEF HWLIBRARY} = true{$ENDIF};
+var isInternal: Boolean;
+
+{$IFDEF HWLIBRARY}
+
+type PCharArray = array[0..255] of PChar;
+     PPCharArray = ^PCharArray;
+
+function ParamCount: LongInt;
+begin
+    ParamCount:= operatingsystem_parameter_argc - 1
+end;
+
+function ParamStr(i: LongInt): shortstring;
+begin
+    ParamStr:= StrPas(PPCharArray(operatingsystem_parameter_argv)^[i])
+end;
+
+{$ENDIF}
 
 procedure GciEasterEgg;
 begin
@@ -310,20 +327,16 @@ begin
     WriteLn(stdout, '');
 end;
 
-procedure parseCommandLine{$IFDEF HWLIBRARY}(argc: LongInt; argv: PPChar){$ENDIF};
+procedure parseCommandLine;
 var paramIndex: LongInt;
     paramTotal: LongInt;
     index, nextIndex: LongInt;
     wrongParameter: boolean;
 //var tmpInt: LongInt;
 begin
-    {$IFDEF HWLIBRARY}
-    operatingsystem_parameter_argc:= argc;
-    operatingsystem_parameter_argv:= argv;
-    {$ENDIF}
 
-    paramIndex:= {$IFDEF HWLIBRARY}0{$ELSE}1{$ENDIF};
-    paramTotal:= {$IFDEF HWLIBRARY}argc-1{$ELSE}ParamCount{$ENDIF}; //-1 because pascal enumeration is inclusive
+    paramIndex:= 1;
+    paramTotal:= ParamCount; //-1 because pascal enumeration is inclusive
     (*
     WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
     tmpInt:= 0;
@@ -340,18 +353,13 @@ begin
         index:= paramIndex;
         if index = paramTotal then nextIndex:= index
         else nextIndex:= index+1;
-        {$IFDEF HWLIBRARY}
-        wrongParameter:= parseParameter( argv[index], argv[nextIndex], paramIndex);
-        {$ELSE}
         wrongParameter:= parseParameter( ParamStr(index), ParamStr(nextIndex), paramIndex);
-        {$ENDIF}
         inc(paramIndex);
         end;
     if wrongParameter = true then
         GameType:= gmtSyntax;
 end;
 
-{$IFNDEF HWLIBRARY}
 procedure GetParams;
 begin
     isInternal:= (ParamStr(1) = '--internal');
@@ -383,7 +391,6 @@ begin
     WriteLn(stdout,'UserPathPrefix: ' + UserPathPrefix);
     *)
 end;
-{$ENDIF}
 
 end.
 
