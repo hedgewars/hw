@@ -570,11 +570,12 @@ begin
         Game();
 
     // return 1 when engine is not called correctly
-    {$IFDEF PAS2C OR HWLIBRARY}
-    exit(LongInt(GameType = gmtSyntax));
-    {$ELSE}
-    halt(LongInt(GameType = gmtSyntax));
-    {$ENDIF}
+    if GameType = gmtSyntax then
+        {$IFDEF PAS2C}
+        exit(1);
+        {$ELSE}
+        halt(1);
+        {$ENDIF}
 
 {$IFDEF HWLIBRARY}
 end;
