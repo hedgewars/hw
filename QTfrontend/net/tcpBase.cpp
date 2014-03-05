@@ -43,6 +43,7 @@ EngineInstance::EngineInstance(QObject *parent)
 
 EngineInstance::~EngineInstance()
 {
+    qDebug() << "EngineInstance delete" << QThread::currentThreadId();
 }
 
 void EngineInstance::setArguments(const QStringList & arguments)
@@ -64,7 +65,11 @@ void EngineInstance::setArguments(const QStringList & arguments)
 
 void EngineInstance::start()
 {
+    qDebug() << "EngineInstance start" << QThread::currentThreadId();
+
     RunEngine(m_argv.size(), m_argv.data());
+
+    emit finished();
 }
 
 #endif
@@ -74,6 +79,23 @@ QPointer<QTcpServer> TCPBase::IPCServer(0);
 
 TCPBase::~TCPBase()
 {
+    if(m_hasStarted)
+    {
+        if(IPCSocket)
+            IPCSocket->close();
+
+        if(m_connected)
+        {
+#ifdef HWLIBRARY
+            if(!thread)
+                qDebug("WTF");
+            thread->quit();
+            thread->wait();
+#else
+            process->waitForFinished(1000);
+#endif
+        }
+    }
     // make sure this object is not in the server list anymore
     srvsList.removeOne(this);
 
@@ -135,7 +157,7 @@ void TCPBase::RealStart()
     IPCSocket = 0;
 
 #ifdef HWLIBRARY
-    QThread *thread = new QThread();
+    thread = new QThread(this);
     EngineInstance *instance = new EngineInstance();
     instance->setArguments(getArguments());
 
@@ -147,8 +169,7 @@ void TCPBase::RealStart()
     connect(instance, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 #else
-    QProcess * process;
-    process = new QProcess();
+    process = new QProcess(this);
     connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
     QStringList arguments = getArguments();
 
@@ -168,7 +189,13 @@ void TCPBase::ClientDisconnect()
     onClientDisconnect();
 
     if(!simultaneousRun())
+    {
+#ifdef HWLIBRARY
+        thread->quit();
+        thread->wait();
+#endif
         emit isReadyNow();
+    }
     IPCSocket->deleteLater();
 
     deleteLater();
@@ -176,9 +203,9 @@ void TCPBase::ClientDisconnect()
 
 void TCPBase::ClientRead()
 {
-    QByteArray readed=IPCSocket->readAll();
-    if(readed.isEmpty()) return;
-    readbuffer.append(readed);
+    QByteArray read = IPCSocket->readAll();
+    if(read.isEmpty()) return;
+    readbuffer.append(read);
     onClientRead();
 }
 
@@ -211,7 +238,7 @@ void TCPBase::Start(bool couldCancelPreviousRequest)
             && (last->parent() == parent()))
         {
             srvsList.removeLast();
-            last->deleteLater();
+            delete last;
             Start(couldCancelPreviousRequest);
         } else
         {

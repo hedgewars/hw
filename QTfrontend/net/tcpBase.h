@@ -27,6 +27,7 @@
 #include <QString>
 #include <QDir>
 #include <QProcess>
+#include <QThread>
 #include <QPointer>
 #include <QVector>
 #include <QList>
@@ -72,7 +73,11 @@ class TCPBase : public QObject
 
     private:
         static QPointer<QTcpServer> IPCServer;
-
+#ifdef HWLIBRARY
+        QThread * thread;
+#else
+        QProcess * process;
+#endif
         bool m_isDemoMode;
         bool m_connected;
         void RealStart();
@@ -98,9 +103,11 @@ public:
     void setArguments(const QStringList & arguments);
 
 public slots:
-    void start(void);
+    void start();
+
 signals:
-    void finished(void);
+    void finished();
+
 private:
     QList<QByteArray> m_arguments;
     QVector<char *> m_argv;
