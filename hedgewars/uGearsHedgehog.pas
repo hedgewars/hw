@@ -606,6 +606,7 @@ end;
 procedure doStepHedgehogGone(Gear: PGear);
 const frametime = 65;
       timertime = frametime * 11;
+var i: LongInt;
 begin
 if Gear^.Hedgehog^.Unplaced then
     exit;
@@ -628,8 +629,20 @@ else // Gear^.Timer = 0
     Gear^.Z:= cCurrHHZ;
     RemoveGearFromList(Gear);
     InsertGearToList(Gear);
-    PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
-    PlaySound(sndWarp);
+    // only play sound for one alive hedgehog
+    with Gear^.Hedgehog^.Team^ do
+        for i:= 0 to cMaxHHIndex do
+            begin
+            if (Hedgehogs[i].Gear <> nil) then
+                begin
+                if (Hedgehogs[i].Gear = Gear) then
+                    begin
+                    PlaySoundV(sndByeBye, Gear^.Hedgehog^.Team^.voicepack);
+                    PlaySound(sndWarp);
+                    end;
+                break;
+                end;
+            end;
     Gear^.Pos:= 0;
     Gear^.Timer:= timertime
     end
