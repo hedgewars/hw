@@ -69,6 +69,7 @@ set(engine_sources
     uLandPainted.pas
     uLandOutline.pas
     uLandGenMaze.pas
+    uLandGenPerlin.pas
 
     #this is where dependency tracking becomes hard
     uStore.pas
