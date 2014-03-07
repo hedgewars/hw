@@ -32,7 +32,7 @@ procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uLandOutline, uPhysFSLayer, uScript;
+     uLandGenMaze, uLandOutline, uPhysFSLayer, uScript, uLandGenPerlin;
 
 var digest: shortstring;
 
@@ -701,7 +701,8 @@ begin
             WriteLnToConsole('Generating land...');
             case cMapGen of
                 0: GenBlank(EdgeTemplates[SelectTemplate]);
-                1: begin ResizeLand(4096,2048); GenMaze; end;
+                //1: begin ResizeLand(4096,2048); GenMaze; end;
+                1: begin ResizeLand(4096,2048); GenPerlin; end;
                 2: GenDrawnMap;
             else
                 OutError('Unknown mapgen', true);
@@ -829,7 +830,8 @@ begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
-        1: begin ResizeLand(4096,2048); GenMaze; end;
+        //1: begin ResizeLand(4096,2048); GenMaze; end;
+        1: begin ResizeLand(4096,2048); GenPerlin; end;
         2: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
@@ -876,7 +878,8 @@ begin
     WriteLnToConsole('Generating preview...');
     case cMapGen of
         0: GenBlank(EdgeTemplates[SelectTemplate]);
-        1: begin ResizeLand(4096,2048); GenMaze; end;
+        //1: begin ResizeLand(4096,2048); GenMaze; end;
+        1: begin ResizeLand(4096,2048); GenPerlin; end;
         2: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
