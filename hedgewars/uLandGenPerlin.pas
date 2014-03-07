@@ -11,7 +11,7 @@ uses uVariables, uConsts, uRandom, math; // for min()
 var fadear: array[byte] of LongInt;
     p: array[0..511] of LongInt;
 
-function fade(t: LongInt) : LongInt;
+function fade(t: LongInt) : LongInt; inline;
 var t0, t1: LongInt;
 begin
     t0:= fadear[t shr 8];
@@ -21,7 +21,7 @@ begin
 end;
 
 
-function lerp(t, a, b: LongInt) : LongInt;
+function lerp(t, a, b: LongInt) : LongInt; inline;
 begin
     lerp:= a + (t * (b - a) shr 12)
 end;
@@ -116,11 +116,12 @@ begin
         begin
             dj:= detail * field * x div width;
             r:= (abs(inoise(di, dj, detail*field)) + y*4) mod 65536 div 256;
-            r:= r - max(0, abs(x - width div 2) - width * 45 div 100);
-            //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100);
+            r:= r - max(0, abs(x - width div 2) - width * 45 div 100); // fade on edges
+            //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
 
 
-            r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20;
+            //r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20; // ellipse
+            r:= r + (trunc(1000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 600 * 20; // manhattan length ellipse
 
             if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfBasic;
 
