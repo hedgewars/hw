@@ -96,9 +96,12 @@ const detail = 120000*3;
     field = 3;
     width = 4096;
     height = 2048;
+    bottomPlateHeight = 90;
+    bottomPlateMargin = 1200;
+    plateFactor = 1;
 
 procedure GenPerlin;
-var y, x, di, dj, r: LongInt;
+var y, x, dy, di, dj, r: LongInt;
 begin
     inoise_setup();
 
@@ -109,13 +112,24 @@ begin
         begin
             dj:= detail * field * x div width;
             r:= (abs(inoise(di, dj))) shr 8 and $ff;
-            r:= r - max(0, abs(x - width div 2) - width * 55 div 128); // fade on edges
+            //r:= r - max(0, abs(x - width div 2) - width * 55 div 128); // fade on edges
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
 
 
             //r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20; // ellipse
-            r:= r + (trunc(2000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 512 * 20; // manhattan length ellipse
+            r:= r + (trunc(2000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 26; // manhattan length ellipse
 
+            if (y > height - bottomPlateHeight) and (x > bottomPlateMargin) and (x + bottomPlateMargin < width) then
+            begin
+                dy:= (y - height + bottomPlateHeight) * plateFactor;
+                r:= r + dy;
+
+                if x < bottomPlateMargin + bottomPlateHeight then
+                    r:= r + (x - bottomPlateMargin - bottomPlateHeight) * plateFactor
+                else
+                if x + bottomPlateMargin + bottomPlateHeight > width then
+                    r:= r - (x - width + bottomPlateMargin + bottomPlateHeight) * plateFactor;
+            end;
             if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfBasic;
 
         end;
