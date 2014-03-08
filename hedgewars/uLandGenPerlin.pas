@@ -102,19 +102,19 @@ var y, x, di, dj, r: LongInt;
 begin
     inoise_setup();
 
-    for y:= 0 to pred(height) do
+    for y:= 1024 to pred(height) do
     begin
         di:= detail * field * y div height;
         for x:= 0 to pred(width) do
         begin
             dj:= detail * field * x div width;
-            r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
-            r:= r - max(0, abs(x - width div 2) - width * 45 div 100); // fade on edges
+            r:= (abs(inoise(di, dj))) shr 8 and $ff;
+            r:= r - max(0, abs(x - width div 2) - width * 55 div 128); // fade on edges
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
 
 
             //r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20; // ellipse
-            r:= r + (trunc(1000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 600 * 20; // manhattan length ellipse
+            r:= r + (trunc(2000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 512 * 20; // manhattan length ellipse
 
             if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfBasic;
 
