@@ -27,49 +27,42 @@ begin
 end;
 
 
-function grad(hash, x, y, z: LongInt) : LongInt;
+function grad(hash, x, y: LongInt) : LongInt;
 var h, v, u: LongInt;
 begin
     h:= hash and 15;
     if h < 8 then u:= x else u:= y;
     if h < 4 then v:= y else
-        if (h = 12) or (h = 14) then v:= x else v:= z;
+        if (h = 12) or (h = 14) then v:= x else v:= 0;
 
-    if odd(h) then u:= -u;
-    if odd(h shr 1) then v:= -v;
+    if (h and 1) <> 0 then u:= -u;
+    if (h and 2) <> 0 then v:= -v;
 
     grad:= u + v
 end;
 
 
-function inoise(x, y, z: LongInt) : LongInt;
+function inoise(x, y: LongInt) : LongInt;
 const N = $10000;
-var xx, yy, zz, u, v, w, A, AA, AB, B, BA, BB: LongInt;
+var xx, yy, u, v, A, AA, AB, B, BA, BB: LongInt;
 begin
     xx:= (x shr 16) and 255;
     yy:= (y shr 16) and 255;
-    zz:= (z shr 16) and 255;
 
     x:= x and $FFFF;
     y:= y and $FFFF;
-    z:= z and $FFFF;
 
     u:= fade(x);
     v:= fade(y);
-    w:= fade(z);
 
-    A:= p[xx    ] + yy; AA:= p[A] + zz; AB:= p[A + 1] + zz;
-    B:= p[xx + 1] + yy; BA:= p[B] + zz; BB:= p[B + 1] + zz;
+    A:= p[xx    ] + yy; AA:= p[A]; AB:= p[A + 1];
+    B:= p[xx + 1] + yy; BA:= p[B]; BB:= p[B + 1];
 
     inoise:=
-             lerp(w, lerp(v, lerp(u, grad(p[AA  ], x   , y   , z   ),
-                                     grad(p[BA  ], x-N , y   , z   )),
-                             lerp(u, grad(p[AB  ], x   , y-N , z   ),
-                                     grad(p[BB  ], x-N , y-N , z   ))),
-                     lerp(v, lerp(u, grad(p[AA+1], x   , y   , z-N ),
-                                     grad(p[BA+1], x-N , y   , z-N )),
-                             lerp(u, grad(p[AB+1], x   , y-N , z-N ),
-                                     grad(p[BB+1], x-N , y-N , z-N ))));
+            lerp(v, lerp(u, grad(p[AA  ], x   , y  ),
+                            grad(p[BA  ], x-N , y  )),
+                    lerp(u, grad(p[AB  ], x   , y-N),
+                            grad(p[BB  ], x-N , y-N)));
 end;
 
 function f(t: double): double;
@@ -115,7 +108,7 @@ begin
         for x:= 0 to pred(width) do
         begin
             dj:= detail * field * x div width;
-            r:= (abs(inoise(di, dj, detail*field)) + y*4) mod 65536 div 256;
+            r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
             r:= r - max(0, abs(x - width div 2) - width * 45 div 100); // fade on edges
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
 
