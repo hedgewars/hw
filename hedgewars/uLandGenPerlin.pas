@@ -62,7 +62,7 @@ begin
     B:= p[xx + 1] + yy; BA:= p[B] + zz; BB:= p[B + 1] + zz;
 
     inoise:=
- lerp(w, lerp(v, lerp(u, grad(p[AA  ], x   , y   , z   ),
+             lerp(w, lerp(v, lerp(u, grad(p[AA  ], x   , y   , z   ),
                                      grad(p[BA  ], x-N , y   , z   )),
                              lerp(u, grad(p[AB  ], x   , y-N , z   ),
                                      grad(p[BB  ], x-N , y-N , z   ))),
@@ -127,6 +127,11 @@ begin
 
         end;
     end;
+
+    leftX:= 0;
+    rightX:= 4095;
+    topY:= 0;
+    hasBorder:= false;
 end;
 
 end.
