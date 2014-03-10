@@ -481,7 +481,7 @@ BezierizeEdge(pa, _0_25);
 DrawEdge(pa, 0);
 
 if maze_inverted then
-    FillLand(1, 1+off_y)
+    FillLand(1, 1+off_y, 0, 0)
 else
     begin
     x := 0;
@@ -489,7 +489,7 @@ else
         x := x + 1;
     while Land[cellsize div 2 + cellsize + off_y, x] = 0 do
         x := x + 1;
-    FillLand(x+1, cellsize div 2 + cellsize + off_y);
+    FillLand(x+1, cellsize div 2 + cellsize + off_y, 0, 0);
     end;
 
 MaxHedgehogs:= 32;
