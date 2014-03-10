@@ -8,8 +8,31 @@ procedure GenPerlin;
 implementation
 uses uVariables, uConsts, uRandom, math; // for min()
 
-var fadear: array[byte] of LongInt;
-    p: array[0..511] of LongInt;
+var p: array[0..511] of LongInt;
+
+const fadear: array[byte] of LongInt = 
+(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 3, 4, 6, 7, 9, 10, 12,
+14, 17, 19, 22, 25, 29, 32, 36, 40, 45, 49, 54, 60, 65, 71,
+77, 84, 91, 98, 105, 113, 121, 130, 139, 148, 158, 167, 178,
+188, 199, 211, 222, 234, 247, 259, 273, 286, 300, 314, 329, 344,
+359, 374, 390, 407, 424, 441, 458, 476, 494, 512, 531, 550,
+570, 589, 609, 630, 651, 672, 693, 715, 737, 759, 782, 805, 828,
+851, 875, 899, 923, 948, 973, 998, 1023, 1049, 1074, 1100, 1127,
+1153, 1180, 1207, 1234, 1261, 1289, 1316, 1344, 1372, 1400, 1429,
+1457, 1486, 1515, 1543, 1572, 1602, 1631, 1660, 1690, 1719, 1749,
+1778, 1808, 1838, 1868, 1898, 1928, 1958, 1988, 2018, 2048, 2077,
+2107, 2137, 2167, 2197, 2227, 2257, 2287, 2317, 2346, 2376, 2405,
+2435, 2464, 2493, 2523, 2552, 2580, 2609, 2638, 2666, 2695, 2723,
+2751, 2779, 2806, 2834, 2861, 2888, 2915, 2942, 2968, 2995, 3021,
+3046, 3072, 3097, 3122, 3147, 3172, 3196, 3220, 3244, 3267, 3290,
+3313, 3336, 3358, 3380, 3402, 3423, 3444, 3465, 3486, 3506, 3525,
+3545, 3564, 3583, 3601, 3619, 3637, 3654, 3672, 3688, 3705, 3721,
+3736, 3751, 3766, 3781, 3795, 3809, 3822, 3836, 3848, 3861, 3873,
+3884, 3896, 3907, 3917, 3928, 3937, 3947, 3956, 3965, 3974, 3982,
+3990, 3997, 4004, 4011, 4018, 4024, 4030, 4035, 4041, 4046, 4050,
+4055, 4059, 4063, 4066, 4070, 4073, 4076, 4078, 4081, 4083, 4085,
+4086, 4088, 4089, 4091, 4092, 4092, 4093, 4094, 4094, 4095, 4095,
+4095, 4095, 4095, 4095, 4095);
 
 function fade(t: LongInt) : LongInt; inline;
 var t0, t1: LongInt;
@@ -27,7 +50,7 @@ begin
 end;
 
 
-function grad(hash, x, y: LongInt) : LongInt;
+function grad(hash, x, y: LongInt) : LongInt; inline;
 var h, v, u: LongInt;
 begin
     h:= hash and 15;
@@ -42,7 +65,7 @@ begin
 end;
 
 
-function inoise(x, y: LongInt) : LongInt;
+function inoise(x, y: LongInt) : LongInt; inline;
 const N = $10000;
 var xx, yy, u, v, A, AA, AB, B, BA, BB: LongInt;
 begin
@@ -65,7 +88,7 @@ begin
                             grad(p[BB  ], x-N , y-N)));
 end;
 
-function f(t: double): double;
+function f(t: double): double; inline;
 begin
     f:= t * t * t * (t * (t * 6 - 15) + 10);
 end;
@@ -87,13 +110,11 @@ begin
 
     for i:= 0 to 255 do
         p[256 + i]:= p[i];
-
-    for i:= 0 to 255 do
-        fadear[i]:= trunc($1000 * f(i / 256));
 end;
 
 const detail = 120000*3;
     field = 3;
+    df = detail * field;
     width = 4096;
     height = 2048;
     bottomPlateHeight = 90;
@@ -107,10 +128,10 @@ begin
 
     for y:= 1024 to pred(height) do
     begin
-        di:= detail * field * y div height;
+        di:= df * y div height;
         for x:= 0 to pred(width) do
         begin
-            dj:= detail * field * x div width;
+            dj:= df * x div width;
             r:= (abs(inoise(di, dj))) shr 8 and $ff;
             //r:= r - max(0, abs(x - width div 2) - width * 55 div 128); // fade on edges
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
