@@ -6,7 +6,11 @@ interface
 procedure GenPerlin;
 
 implementation
-uses uVariables, uConsts, uRandom, math; // for min()
+uses uVariables
+    , uConsts
+    , uRandom
+    , uLandOutline // FillLand
+    ;
 
 var p: array[0..511] of LongInt;
 
@@ -38,7 +42,11 @@ function fade(t: LongInt) : LongInt; inline;
 var t0, t1: LongInt;
 begin
     t0:= fadear[t shr 8];
-    t1:= fadear[min(255, t shr 8 + 1)];
+
+    if t0 = fadear[255] then 
+        t1:= t0
+    else
+        t1:= fadear[t shr 8 + 1];
 
     fade:= t0 + ((t and 255) * (t1 - t0) shr 8)
 end;
@@ -151,10 +159,15 @@ begin
                 if x + bottomPlateMargin + bottomPlateHeight > width then
                     r:= r - (x - width + bottomPlateMargin + bottomPlateHeight) * plateFactor;
             end;
-            if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfBasic;
+            if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
 
         end;
     end;
+
+    for x:= 0 to width do
+        if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
+    FillLand(0, 0, lfBasic, lfObjMask);
+    FillLand(0, 0, lfBasic, 0);
 
     leftX:= 0;
     rightX:= 4095;

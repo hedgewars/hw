@@ -9,8 +9,8 @@ type TPixAr = record
               ar: array[0..Pred(cMaxEdgePoints)] of TPoint;
               end;
 
-procedure DrawEdge(var pa: TPixAr; Color: Longword);
-procedure FillLand(x, y: LongInt);
+procedure DrawEdge(var pa: TPixAr; value: Word);
+procedure FillLand(x, y: LongInt; border, value: Word);
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
 procedure RandomizePoints(var pa: TPixAr);
 
@@ -56,7 +56,7 @@ begin
         end
 end;
 
-procedure FillLand(x, y: LongInt);
+procedure FillLand(x, y: LongInt; border, value: Word);
 var xl, xr, dir: LongInt;
 begin
     Stack.Count:= 0;
@@ -68,18 +68,18 @@ begin
     while Stack.Count > 0 do
         begin
         Pop(xl, xr, y, dir);
-        while (xl > 0) and (Land[y, xl] <> 0) do
+        while (xl > 0) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
             dec(xl);
-        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> 0) do
+        while (xr < LAND_WIDTH - 1) and (Land[y, xr] <> border) and (Land[y, xr] <> value) do
             inc(xr);
         while (xl < xr) do
             begin
-            while (xl <= xr) and (Land[y, xl] = 0) do
+            while (xl <= xr) and ((Land[y, xl] = border) or (Land[y, xl] = value)) do
                 inc(xl);
             x:= xl;
-            while (xl <= xr) and (Land[y, xl] <> 0) do
+            while (xl <= xr) and (Land[y, xl] <> border) and (Land[y, xl] <> value) do
                 begin
-                Land[y, xl]:= 0;
+                Land[y, xl]:= value;
                 inc(xl)
                 end;
             if x < xl then
@@ -91,7 +91,7 @@ begin
         end;
 end;
 
-procedure DrawEdge(var pa: TPixAr; Color: Longword);
+procedure DrawEdge(var pa: TPixAr; value: Word);
 var i: LongInt;
 begin
     i:= 0;
@@ -101,7 +101,7 @@ begin
                 inc(i, 2)
             else
                 begin
-                DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, Color);
+                DrawLine(ar[i].x, ar[i].y, ar[i + 1].x, ar[i + 1].y, value);
                 inc(i)
                 end
 end;

@@ -322,7 +322,7 @@ begin
     with Template do
         for i:= 0 to pred(FillPointsCount) do
             with fps[i] do
-                FillLand(x, y);
+                FillLand(x, y, 0, 0);
 
     DrawEdge(pa, lfBasic);
 
