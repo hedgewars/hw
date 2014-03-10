@@ -120,45 +120,50 @@ begin
         p[256 + i]:= p[i];
 end;
 
-const detail = 120000*3;
-    field = 3;
+const detail = 180000;
+    field = 5;
     df = detail * field;
     width = 4096;
     height = 2048;
+    minY = 500;
+
     bottomPlateHeight = 90;
     bottomPlateMargin = 1200;
-    plateFactor = 1;
+    margin = 200;
 
 procedure GenPerlin;
 var y, x, dy, di, dj, r: LongInt;
 begin
     inoise_setup();
 
-    for y:= 1024 to pred(height) do
+    for y:= minY to pred(height) do
     begin
         di:= df * y div height;
         for x:= 0 to pred(width) do
         begin
             dj:= df * x div width;
             r:= (abs(inoise(di, dj))) shr 8 and $ff;
-            //r:= r - max(0, abs(x - width div 2) - width * 55 div 128); // fade on edges
+            if (x < margin) or (x > width - margin) then r:= r - abs(x - width div 2) + width div 2 - margin; // fade on edges
+
+            r:= r - (height - y) div 32;
+
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
-
-
             //r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20; // ellipse
-            r:= r + (trunc(2000 - (abs(x - (width div 2)) * 2 + abs(y - height * 5 div 4) * 4))) div 26; // manhattan length ellipse
+            //r:= r + 1 - ((abs(x - (width div 2)) + abs(y - height) * 2)) div 32; // manhattan length ellipse
 
+            {
             if (y > height - bottomPlateHeight) and (x > bottomPlateMargin) and (x + bottomPlateMargin < width) then
             begin
-                dy:= (y - height + bottomPlateHeight) * plateFactor;
+                dy:= (y - height + bottomPlateHeight);
                 r:= r + dy;
 
                 if x < bottomPlateMargin + bottomPlateHeight then
-                    r:= r + (x - bottomPlateMargin - bottomPlateHeight) * plateFactor
+                    r:= r + (x - bottomPlateMargin - bottomPlateHeight)
                 else
                 if x + bottomPlateMargin + bottomPlateHeight > width then
-                    r:= r - (x - width + bottomPlateMargin + bottomPlateHeight) * plateFactor;
+                    r:= r - (x - width + bottomPlateMargin + bottomPlateHeight);
             end;
+            }
             if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
 
         end;
@@ -166,8 +171,13 @@ begin
 
     for x:= 0 to width do
         if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
-    FillLand(0, 0, lfBasic, lfObjMask);
-    FillLand(0, 0, lfBasic, 0);
+    FillLand(0, minY, lfBasic, lfObjMask);
+
+    // strip all lfObjMask pixels
+    for y:= 0 to LAND_HEIGHT - 1 do
+        for x:= 0 to LAND_WIDTH - 1 do
+            if Land[y, x] = lfObjMask then
+                Land[y, x]:= 0;
 
     leftX:= 0;
     rightX:= 4095;
