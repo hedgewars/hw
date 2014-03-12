@@ -120,8 +120,8 @@ begin
         p[256 + i]:= p[i];
 end;
 
-const detail = 180000;
-    field = 5;
+const detail = 150000;
+    field = 3;
     df = detail * field;
     width = 4096;
     height = 2048;
@@ -142,7 +142,10 @@ begin
         for x:= 0 to pred(width) do
         begin
             dj:= df * x div width;
-            r:= (abs(inoise(di, dj))) shr 8 and $ff;
+
+           r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
+
+            //r:= (abs(inoise(di, dj))) shr 8 and $ff;
             if (x < margin) or (x > width - margin) then r:= r - abs(x - width div 2) + width div 2 - margin; // fade on edges
 
             r:= r - (height - y) div 32;
@@ -164,7 +167,8 @@ begin
                     r:= r - (x - width + bottomPlateMargin + bottomPlateHeight);
             end;
             }
-            if r < 0 then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
+
+            if r < 50 then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
 
         end;
     end;
