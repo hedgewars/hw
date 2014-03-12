@@ -171,10 +171,10 @@ begin
 
     for x:= 0 to width do
         if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
-    FillLand(0, minY, lfBasic, lfObjMask);
+    //FillLand(0, minY, lfBasic, lfObjMask);
 
     // strip all lfObjMask pixels
-    for y:= 0 to LAND_HEIGHT - 1 do
+    for y:= minY to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             if Land[y, x] = lfObjMask then
                 Land[y, x]:= 0;
