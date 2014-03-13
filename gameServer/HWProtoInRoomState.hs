@@ -375,7 +375,7 @@ handleCmd_inRoom ["GREETING", msg] = do
 
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>"]]
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>, map <name>"]]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
@@ -397,6 +397,17 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
             else
             return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
 
+
+handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
+    cl <- thisClient
+    rm <- thisRoom
+
+    if Map.member roomSave $ roomSaves rm then
+        startVote $ VoteMap roomSave
+        else
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote map: no such map"]]
+
+
 handleCmd_inRoom ["VOTE", m] = do
     cl <- thisClient
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
@@ -412,7 +423,13 @@ handleCmd_inRoom ["SAVE", stateName] = serverAdminOnly $ do
 handleCmd_inRoom ["DELETE", stateName] = serverAdminOnly $ do
     return [ModifyRoom $ \r -> r{roomSaves = Map.delete stateName (roomSaves r)}]
 
+handleCmd_inRoom ["SAVEROOM", fileName] = serverAdminOnly $ do
+    return [SaveRoom fileName]
 
+handleCmd_inRoom ["LOADROOM", fileName] = serverAdminOnly $ do
+    return [LoadRoom fileName]
+
+    
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
 handleCmd_inRoom (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in room)"]

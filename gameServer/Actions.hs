@@ -777,6 +777,15 @@ processAction (ShowReplay rname) = do
             , [AnswerClients [c] ["KICKED"]]
             ]
 
+processAction (SaveRoom rname) = do
+    rnc <- gets roomsClients
+    ri <- clientRoomA
+    rm <- io $ room'sM rnc id ri
+    liftIO $ writeFile (B.unpack rname) $ show (greeting rm, roomSaves rm)
+
+processAction (LoadRoom rname) = do
+    (g, rs) <- liftIO $ liftM read $ readFile (B.unpack rname)
+    processAction $ ModifyRoom $ \r -> r{greeting = g, roomSaves = rs}
 
 processAction Cleanup = do
     jm <- gets joinsMonitor

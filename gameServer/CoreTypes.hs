@@ -79,6 +79,8 @@ data Action =
     | ShowReplay B.ByteString
     | Cleanup
     | RegisterEvent Event
+    | SaveRoom B.ByteString
+    | LoadRoom B.ByteString
 
 
 data Event = LobbyChatMessage
@@ -293,6 +295,7 @@ data Voting = Voting {
 
 
 data VoteType = VoteKick B.ByteString
+              | VoteMap B.ByteString
 
 
 newVoting :: VoteType -> Voting
