@@ -30,7 +30,7 @@
 unit uVisualGearsHandlers;
 
 interface
-uses uTypes;
+uses uTypes, uGears;
 
 var doStepVGHandlers: array[TVisualGearType] of TVGearStepProcedure;
 
@@ -587,46 +587,60 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSpeechBubbleWork(Gear: PVisualGear; Steps: Longword);
+var realgear: PGear;
 begin
 if Gear^.Timer > Steps then dec(Gear^.Timer, Steps) else Gear^.Timer:= 0;
-
-if (Gear^.Hedgehog^.Gear <> nil) then
+realgear:= nil;
+if Gear^.Frame <> 0 then  // use a non-hedgehog gear - a lua trick that hopefully won't be overused
+    begin
+    realgear:= GearByUID(Gear^.Frame);
+    if realgear <> nil then
+        begin
+        Gear^.X:= hwFloat2Float(realgear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
+        Gear^.Y:= hwFloat2Float(realgear^.Y) - (realgear^.Radius + Gear^.Tex^.h);
+        end
+    end
+else if Gear^.Hedgehog^.Gear <> nil then
     begin
     Gear^.X:= hwFloat2Float(Gear^.Hedgehog^.Gear^.X) + (Gear^.Tex^.w div 2  - Gear^.Tag);
-    Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (16 + Gear^.Tex^.h);
+    Gear^.Y:= hwFloat2Float(Gear^.Hedgehog^.Gear^.Y) - (cHHRadius + Gear^.Tex^.h);
     end;
 
-if Gear^.Timer = 0 then
+if (Gear^.Timer = 0) or ((realgear = nil) and (Gear^.Frame <> 0))  then
     begin
-    if Gear^.Hedgehog^.SpeechGear = Gear then
+    if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.SpeechGear = Gear) then
         Gear^.Hedgehog^.SpeechGear:= nil;
     DeleteVisualGear(Gear)
     end;
 end;
 
 procedure doStepSpeechBubble(Gear: PVisualGear; Steps: Longword);
+var realgear: PGear;
 begin
 
 {$IFNDEF PAS2C}
 Steps:= Steps; // avoid compiler hint
 {$ENDIF}
+if Gear^.Frame <> 0 then
+    realgear:= GearByUID(Gear^.FrameTicks)
+else
+    begin
+    with Gear^.Hedgehog^ do
+        if SpeechGear <> nil then
+            SpeechGear^.Timer:= 0;
+    realgear:= Gear^.Hedgehog^.Gear;
+    Gear^.Hedgehog^.SpeechGear:= Gear;
+    end;
 
-with Gear^.Hedgehog^ do
-    if SpeechGear <> nil then
-        SpeechGear^.Timer:= 0;
-
-Gear^.Hedgehog^.SpeechGear:= Gear;
+if realgear <> nil then
+    case Gear^.FrameTicks of
+        1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-37+realgear^.Radius;
+        2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-29+realgear^.Radius;
+        3: Gear^.Tag:= SpritesData[sprShoutTail].Width-19+realgear^.Radius;
+        end;
 
 Gear^.Timer:= max(LongInt(Length(Gear^.Text)) * 150, 3000);
-
 Gear^.Tex:= RenderSpeechBubbleTex(ansistring(Gear^.Text), Gear^.FrameTicks, fnt16);
-
-// FrameTicks cannot hold negative values
-case Gear^.FrameTicks of
-    1: Gear^.Tag:= SpritesData[sprSpeechTail].Width-28;
-    2: Gear^.Tag:= SpritesData[sprThoughtTail].Width-20;
-    3: Gear^.Tag:= SpritesData[sprShoutTail].Width-10;
-    end;
 
 Gear^.doStep:= @doStepSpeechBubbleWork;
 
