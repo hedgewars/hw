@@ -36,6 +36,8 @@ handleCmd ["PONG"] = do
 handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
+        h "SAVEROOM" n | not $ B.null n = handleCmd ["SAVEROOM", n]
+        h "LOADROOM" n | not $ B.null n = handleCmd ["LOADROOM", n]
         h "SAVE" n | not $ B.null n = handleCmd ["SAVE", n]
         h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
         h "STATS" _ = handleCmd ["STATS"]
@@ -57,7 +59,7 @@ handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
                          | otherwise = let (c, p) = extractParameters msg in
                                            if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
         h "VOTE" msg = handleCmd ["VOTE", upperCase msg]
-        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, p]]
+        h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
 

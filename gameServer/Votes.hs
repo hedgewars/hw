@@ -6,6 +6,7 @@ import Control.Monad.State
 import ServerState
 import qualified Data.ByteString.Char8 as B
 import qualified Data.List as L
+import qualified Data.Map as Map
 import Data.Maybe
 -------------------
 import Utils
@@ -61,6 +62,12 @@ voted vote = do
                 && sameRoom
                 && ((isNothing $ gameInfo rm) || teamsInGame kickCl == 0)
             ]
+    act (VoteMap roomSave) = do
+        rm <- thisRoom
+        let rs = Map.lookup roomSave (roomSaves rm)
+        case rs of
+             Nothing -> return []
+             Just (mp, p) -> return [ModifyRoom $ \r -> r{params = p, mapParams = mp}]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -86,4 +93,4 @@ checkVotes = undefined
 
 voteInfo :: VoteType -> B.ByteString
 voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
-
+voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
