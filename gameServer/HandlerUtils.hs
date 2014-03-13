@@ -66,3 +66,10 @@ clientByNick n = do
     let allClientIDs = allClients rnc
     return $ find (\clId -> let cl = client rnc clId in n == nick cl && not (isChecker cl)) allClientIDs
 
+
+roomAdminOnly :: Reader (ClientIndex, IRnC) [Action] -> Reader (ClientIndex, IRnC) [Action]
+roomAdminOnly h = thisClient >>= \cl -> if isMaster cl then h else return []
+
+
+serverAdminOnly :: Reader (ClientIndex, IRnC) [Action] -> Reader (ClientIndex, IRnC) [Action]
+serverAdminOnly h = thisClient >>= \cl -> if isAdministrator cl then h else return []

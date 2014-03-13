@@ -182,6 +182,7 @@ newGameInfo =
         Nothing
         []
 
+
 data RoomInfo =
     RoomInfo
     {
@@ -201,7 +202,8 @@ data RoomInfo =
         voting :: Maybe Voting,
         roomBansList :: ![B.ByteString],
         mapParams :: Map.Map B.ByteString B.ByteString,
-        params :: Map.Map B.ByteString [B.ByteString]
+        params :: Map.Map B.ByteString [B.ByteString],
+        roomSaves :: Map.Map B.ByteString (Map.Map B.ByteString B.ByteString, Map.Map B.ByteString [B.ByteString])
     }
 
 newRoom :: RoomInfo
@@ -232,6 +234,7 @@ newRoom =
                 ["AMMO", "SCHEME", "SCRIPT", "THEME"]
                 [["Default"], ["Default"], ["Normal"], ["avematan"]]
         )
+        Map.empty
 
 
 data StatisticsInfo =

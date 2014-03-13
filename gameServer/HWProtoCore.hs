@@ -36,6 +36,8 @@ handleCmd ["PONG"] = do
 handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
+        h "SAVE" n | not $ B.null n = handleCmd ["SAVE", n]
+        h "DELETE" n | not $ B.null n = handleCmd ["DELETE", n]
         h "STATS" _ = handleCmd ["STATS"]
         h "PART" m | not $ B.null m = handleCmd ["PART", m]
                    | otherwise = handleCmd ["PART"]
