@@ -156,7 +156,7 @@ with CurrentTeam^ do
             if c > cMaxHHIndex then
                 c:= 0
             end
-        until (c = CurrHedgehog) or (Hedgehogs[c].Gear <> nil);
+        until (c = CurrHedgehog) or (Hedgehogs[c].Gear <> nil) and (Hedgehogs[c].Effects[heFrozen] < 50255);
         LocalAmmo:= Hedgehogs[c].AmmoStore
         end;
 

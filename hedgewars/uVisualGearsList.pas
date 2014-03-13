@@ -85,10 +85,8 @@ gear^.X:= real(X);
 gear^.Y:= real(Y);
 gear^.Kind := Kind;
 gear^.doStep:= doStepVGHandlers[Kind];
-gear^.State:= 0;
 gear^.Tint:= $FFFFFFFF;
 gear^.uid:= VGCounter;
-gear^.Layer:= 0;
 
 with gear^ do
     case Kind of
