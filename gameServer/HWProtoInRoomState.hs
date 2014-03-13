@@ -225,9 +225,7 @@ handleCmd_inRoom ["TOGGLE_READY"] = do
         : gs
 
 
-handleCmd_inRoom ["START_GAME"] = do
-    cl <- thisClient
-    if isMaster cl then startGame else return []
+handleCmd_inRoom ["START_GAME"] = roomAdminOnly startGame
 
 handleCmd_inRoom ["EM", msg] = do
     cl <- thisClient
@@ -269,43 +267,25 @@ handleCmd_inRoom ["ROUNDFINISHED", _] = do
 handleCmd_inRoom ["ROUNDFINISHED"] =
     handleCmd_inRoom ["ROUNDFINISHED", "1"]
 
-handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = do
-    cl <- thisClient
-    return $
-        if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
-        else
-            [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
+handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = roomAdminOnly $
+    return [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
 
 
-handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = do
-    cl <- thisClient
-    return $
-        if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
-        else
-            [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
+handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = roomAdminOnly $
+    return [ModifyRoom (\r -> r{isRestrictedTeams = not $ isRestrictedTeams r})]
 
 
-handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = do
-    cl <- thisClient
-    return $
-        if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
-        else
-            [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = roomAdminOnly $
+    return [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
 
 
-handleCmd_inRoom ["ROOM_NAME", newName] = do
+handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do
     cl <- thisClient
     rs <- allRoomInfos
     rm <- thisRoom
     chans <- sameProtoChans
 
     return $
-        if not $ isMaster cl then
-            [ProtocolError $ loc "Not room master"]
-        else
         if illegalName newName then
             [Warning $ loc "Illegal room name"]
         else
@@ -321,10 +301,9 @@ handleCmd_inRoom ["ROOM_NAME", newName] = do
         roomUpdate r = r{name = newName}
 
 
-handleCmd_inRoom ["KICK", kickNick] = do
+handleCmd_inRoom ["KICK", kickNick] = roomAdminOnly $ do
     (thisClientId, rnc) <- ask
     maybeClientId <- clientByNick kickNick
-    master <- liftM isMaster thisClient
     rm <- thisRoom
     let kickId = fromJust maybeClientId
     let kickCl = rnc `client` kickId
@@ -332,8 +311,7 @@ handleCmd_inRoom ["KICK", kickNick] = do
     let notOnly2Players = (length . group . sort . map teamowner . teams $ rm) > 2
     return
         [KickRoomClient kickId |
-            master
-            && isJust maybeClientId
+            isJust maybeClientId
             && (kickId /= thisClientId)
             && sameRoom
             && ((isNothing $ gameInfo rm) || notOnly2Players || teamsInGame kickCl == 0)
@@ -383,13 +361,11 @@ handleCmd_inRoom ("RND":rs) = do
     s <- roomClientsChans
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
-handleCmd_inRoom ["FIX"] = do
-    cl <- thisClient
-    return [ModifyRoom (\r -> r{isSpecial = True}) | isAdministrator cl]
+handleCmd_inRoom ["FIX"] = serverAdminOnly $
+    return [ModifyRoom (\r -> r{isSpecial = True})]
 
-handleCmd_inRoom ["UNFIX"] = do
-    cl <- thisClient
-    return [ModifyRoom (\r -> r{isSpecial = False}) | isAdministrator cl]
+handleCmd_inRoom ["UNFIX"] = serverAdminOnly $
+    return [ModifyRoom (\r -> r{isSpecial = False})]
 
 handleCmd_inRoom ["GREETING", msg] = do
     cl <- thisClient
@@ -428,6 +404,14 @@ handleCmd_inRoom ["VOTE", m] = do
         voted (fromJust b)
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
+
+
+handleCmd_inRoom ["SAVE", stateName] = serverAdminOnly $ do
+    return [ModifyRoom $ \r -> r{roomSaves = Map.insert stateName (mapParams r, params r) (roomSaves r)}]
+
+handleCmd_inRoom ["DELETE", stateName] = serverAdminOnly $ do
+    return [ModifyRoom $ \r -> r{roomSaves = Map.delete stateName (roomSaves r)}]
+
 
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
