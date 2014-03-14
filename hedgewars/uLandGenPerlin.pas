@@ -54,7 +54,7 @@ end;
 
 function lerp(t, a, b: LongInt) : LongInt; inline;
 begin
-    lerp:= a + (t * (b - a) shr 12)
+    lerp:= a + (Int64(b - a) * t shr 12)
 end;
 
 
