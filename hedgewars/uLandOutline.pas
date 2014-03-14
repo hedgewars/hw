@@ -113,16 +113,7 @@ begin
     Vx:= int2hwFloat(p1.X - p3.X);
     Vy:= int2hwFloat(p1.Y - p3.Y);
 
-    d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
-    d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
     d2:= Distance(Vx, Vy);
-
-    if d1 < d then
-        d:= d1;
-    if d2 < d then
-        d:= d2;
-
-    d:= d * _1div3;
 
     if d2.QWordValue = 0 then
         begin
@@ -131,12 +122,18 @@ begin
         end
     else
         begin
-        d2:= _1 / d2;
-        Vx:= Vx * d2;
-        Vy:= Vy * d2;
+        d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
+        d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
+        
+        if d1 < d then
+            d:= d1;
+        if d2 < d then
+            d:= d2;
 
-        Vx:= Vx * d;
-        Vy:= Vy * d
+        d2:= d * _1div3 / d2;
+        
+        Vx:= Vx * d2;
+        Vy:= Vy * d2
         end
 end;
 
