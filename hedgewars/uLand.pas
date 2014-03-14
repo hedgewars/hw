@@ -198,7 +198,7 @@ end;
 procedure ColorizeLand(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r: TSDL_Rect;
-    y: LongWord; // stupid SDL 1.2 uses stupid SmallInt for y which limits us to 32767.  But is even worse if LandTex is large, can overflow on 32767 map.
+    y: LongInt; // stupid SDL 1.2 uses stupid SmallInt for y which limits us to 32767.  But is even worse if LandTex is large, can overflow on 32767 map.
 begin
     tmpsurf:= LoadDataImage(ptCurrTheme, 'LandTex', ifCritical or ifIgnoreCaps);
     r.y:= 0;
@@ -306,6 +306,7 @@ begin
     {$HINTS OFF}
     SetPoints(Template, pa, @fps);
     {$HINTS ON}
+    
     for i:= 1 to Template.BezierizeCount do
         begin
         BezierizeEdge(pa, _0_5);
