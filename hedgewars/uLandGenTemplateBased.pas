@@ -6,7 +6,7 @@ uses uLandTemplates;
 procedure GenTemplated(var Template: TEdgeTemplate);
 
 implementation
-uses uTypes, uVariables, uConsts, uFloat, uLandOutline, uLandUtils, uRandom;
+uses uVariables, uConsts, uFloat, uLandOutline, uLandUtils, uRandom, SDLh;
 
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
@@ -19,7 +19,7 @@ begin
             begin
             pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
             if pa.ar[i].x <> NTPX then
-            pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
+                pa.ar[i].x:= pa.ar[i].x + ((LAND_WIDTH - Template.TemplateWidth) div 2);
             pa.ar[i].y:= BasePoints^[i].y + LongInt(GetRandom(BasePoints^[i].h)) + LAND_HEIGHT - LongInt(Template.TemplateHeight)
             end;
 
@@ -78,7 +78,115 @@ begin
         end;
     end
 end;
-    
+
+
+procedure Distort1(var Template: TEdgeTemplate; var pa: TPixAr);
+var i: Longword;
+begin
+    for i:= 1 to Template.BezierizeCount do
+        begin
+        BezierizeEdge(pa, _0_5);
+        RandomizePoints(pa);
+        RandomizePoints(pa)
+        end;
+    for i:= 1 to Template.RandPassesCount do
+        RandomizePoints(pa);
+    BezierizeEdge(pa, _0_1);
+end;
+
+
+procedure FindLimits(si: LongInt; var pa: TPixAr);
+var p1, p2, mp, ap: TPoint;
+    i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
+begin
+    // [p1, p2] is segment we're trying to divide
+    p1:= pa.ar[si];
+    p2:= pa.ar[si + 1];
+
+    // its middle point
+    mp.x:= (p1.x + p2.x) div 2;
+    mp.y:= (p1.y + p2.y) div 2;
+    // another point on the perpendicular bisector
+    ap.x:= mp.x + p2.y - p1.y;
+    ap.y:= mp.y + p1.x - p2.x;
+
+    for i:= 0 to pa.Count - 1 do
+        if i <> si then
+        begin
+            // check if it intersects
+            t1:= (mp.x - pa.ar[i].x) * (mp.y - ap.y) - (mp.x - ap.x) * (mp.y - pa.ar[i].y);
+            t2:= (mp.x - pa.ar[i + 1].x) * (mp.y - ap.y) - (mp.x - ap.x) * (mp.y - pa.ar[i + 1].y);
+
+            if (t1 > 0) <> (t2 > 0) then // yes it does, hard arith follows
+            begin
+                a:= p2.y - p1.y;
+                b:= p1.x - p2.x;
+                p:= pa.ar[i + 1].x - pa.ar[i].x;
+                q:= pa.ar[i + 1].y - pa.ar[i].y;
+                aqpb:= a * q - p * b;
+
+                if (aqpb <> 0) then
+                begin
+                    // (ix; iy) is intersection point
+                    iy:= (((pa.ar[i].x - mp.x) * b + mp.y * a) * q - pa.ar[i].y * p * b);
+                    if b <> 0 then
+                        ix:= (iy - mp.y * aqpb) * a div b div aqpb + mp.x;
+                    else
+                        ix:= (iy - pa.ar[i].y * aqpb) * p div q div aqpb + pa.ar[i].x;
+                    iy:= iy div aqpb;
+
+                    writeln('>>>     Intersection     <<<');
+                    writeln(p1.x, '; ', p1.y, ' - ', p2.x, '; ', p2.y);
+                    writeln(pa.ar[i].x, '; ', pa.ar[i].y, ' - ', pa.ar[i + 1].x, '; ', pa.ar[i + 1].y);
+                    writeln('== ', ix, '; ', iy);
+                end;
+            end;
+        end;
+end;
+
+procedure DivideEdges(var pa: TPixAr);
+var npa: TPixAr;
+    i: LongInt;
+begin
+    i:= 0;
+    npa.Count:= 0;
+    while i < pa.Count do
+    begin
+        if i = 0 then
+        begin
+            FindLimits(0, pa);
+            npa.ar[npa.Count]:= pa.ar[i];
+            pa.ar[i].y:= 300;
+            npa.ar[npa.Count + 1]:= pa.ar[i];
+            inc(npa.Count, 2)
+        end else
+        begin
+            npa.ar[npa.Count]:= pa.ar[i];
+            inc(npa.Count)
+        end;
+
+        inc(i)
+    end;
+
+    pa:= npa;
+end;
+
+procedure Distort2(var Template: TEdgeTemplate; var pa: TPixAr);
+//var i: Longword;
+begin
+    DivideEdges(pa);
+    {for i:= 1 to Template.BezierizeCount do
+        begin
+        BezierizeEdge(pa, _0_5);
+        RandomizePoints(pa);
+        RandomizePoints(pa)
+        end;
+    for i:= 1 to Template.RandPassesCount do
+        RandomizePoints(pa);}
+    BezierizeEdge(pa, _0_9);
+end;
+
+
 procedure GenTemplated(var Template: TEdgeTemplate);
 var pa: TPixAr;
     i: Longword;
@@ -93,17 +201,8 @@ begin
     {$HINTS OFF}
     SetPoints(Template, pa, @fps);
     {$HINTS ON}
-    
-    for i:= 1 to Template.BezierizeCount do
-        begin
-        BezierizeEdge(pa, _0_5);
-        RandomizePoints(pa);
-        RandomizePoints(pa)
-        end;
-    for i:= 1 to Template.RandPassesCount do
-        RandomizePoints(pa);
-    BezierizeEdge(pa, _0_1);
 
+    Distort1(Template, pa);
 
     DrawEdge(pa, 0);
 
