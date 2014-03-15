@@ -143,7 +143,7 @@ begin
         begin
             dj:= df * x div width;
 
-           r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
+            r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
 
             //r:= (abs(inoise(di, dj))) shr 8 and $ff;
             if (x < margin) or (x > width - margin) then r:= r - abs(x - width div 2) + width div 2 - margin; // fade on edges
