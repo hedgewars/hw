@@ -6,7 +6,7 @@ uses uLandTemplates;
 procedure GenTemplated(var Template: TEdgeTemplate);
 
 implementation
-uses uVariables, uConsts, uFloat, uLandOutline, uLandUtils, uRandom, SDLh;
+uses uVariables, uConsts, uFloat, uLandOutline, uLandUtils, uRandom, SDLh, math;
 
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
@@ -95,13 +95,21 @@ begin
 end;
 
 
-procedure FindLimits(si: LongInt; var pa: TPixAr);
+procedure FindPoint(si: LongInt; var newPoint: TPoint; var pa: TPixAr);
+const mapBorderMargin = 0;
 var p1, p2, mp, ap: TPoint;
     i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
+    dab, d, distL, distR: LongInt;
 begin
     // [p1, p2] is segment we're trying to divide
     p1:= pa.ar[si];
     p2:= pa.ar[si + 1];
+
+    if (p1.x = NTPX) or (p2.x = NTPX) then
+    begin
+        newPoint:= p1;
+        exit;
+    end;
 
     // its middle point
     mp.x:= (p1.x + p2.x) div 2;
@@ -109,18 +117,60 @@ begin
     // another point on the perpendicular bisector
     ap.x:= mp.x + p2.y - p1.y;
     ap.y:= mp.y + p1.x - p2.x;
+    // vector between these points
+    a:= p2.y - p1.y;
+    b:= p1.x - p2.x;
 
-    for i:= 0 to pa.Count - 1 do
-        if i <> si then
+    // find distances to map borders
+    if a <> 0 then
+    begin
+        // left border
+        iy:= (mapBorderMargin - mp.x) * b div a + mp.y;
+        d:= DistanceI(mp.x - mapBorderMargin, mp.y - iy).Round;
+        t1:= a * (mp.x - mapBorderMargin) + b * (mp.y - iy);
+        if t1 > 0 then distL:= d else distR:= d;
+                    writeln('====== Left border: ', mapBorderMargin, '; ', mp.y - iy, ', distance = ', d);
+                    writeln(a, ' ', -b);
+                    writeln(t1);
+                    writeln(mp.x - mapBorderMargin, ' ', mp.y - iy);
+                    writeln('MP: ', mp.x, ' ', mp.y);
+                    writeln('L: ', distL, '; R: ', distR);
+
+        // right border
+        iy:= (LAND_WIDTH - mapBorderMargin - mp.x) * b div a + mp.y;
+        d:= DistanceI(mp.x - LAND_WIDTH + mapBorderMargin, mp.y - iy).Round;
+        if t1 > 0 then distR:= d else distL:= d;
+    end;
+
+    if b <> 0 then
+    begin
+        // top border
+        ix:= (mapBorderMargin - mp.y) * a div b + mp.x;
+        d:= DistanceI(mp.y - mapBorderMargin, mp.x - ix).Round;
+        t2:= b * (mp.y - mapBorderMargin) + a * (mp.x - ix);
+        if t2 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
+
+        // bottom border
+        ix:= (LAND_HEIGHT - mapBorderMargin - mp.y) * a div b + mp.x;
+        d:= DistanceI(mp.y - LAND_HEIGHT + mapBorderMargin, mp.x - ix).Round;
+        if t2 > 0 then distR:= min(d, distR) else distL:= min(d, distL);
+                    writeln('====== Bottom border: ', ix, '; ', LAND_HEIGHT - mapBorderMargin, ', distance = ', d);
+                    writeln(a, ' ', -b);
+                    writeln(t2);
+                    writeln(mp.x - ix, ' ', mp.y - LAND_HEIGHT + mapBorderMargin);
+                    writeln('L: ', distL, '; R: ', distR);
+    end;
+
+    // now go through all other segments
+    for i:= 0 to pa.Count - 2 do
+        if (i <> si) and (pa.ar[i].x <> NTPX) and (pa.ar[i + 1].x <> NTPX) then
         begin
             // check if it intersects
-            t1:= (mp.x - pa.ar[i].x) * (mp.y - ap.y) - (mp.x - ap.x) * (mp.y - pa.ar[i].y);
-            t2:= (mp.x - pa.ar[i + 1].x) * (mp.y - ap.y) - (mp.x - ap.x) * (mp.y - pa.ar[i + 1].y);
+            t1:= (mp.x - pa.ar[i].x) * b - a * (mp.y - pa.ar[i].y);
+            t2:= (mp.x - pa.ar[i + 1].x) * b - a * (mp.y - pa.ar[i + 1].y);
 
             if (t1 > 0) <> (t2 > 0) then // yes it does, hard arith follows
             begin
-                a:= p2.y - p1.y;
-                b:= p1.x - p2.x;
                 p:= pa.ar[i + 1].x - pa.ar[i].x;
                 q:= pa.ar[i + 1].y - pa.ar[i].y;
                 aqpb:= a * q - p * b;
@@ -130,39 +180,65 @@ begin
                     // (ix; iy) is intersection point
                     iy:= (((pa.ar[i].x - mp.x) * b + mp.y * a) * q - pa.ar[i].y * p * b);
                     if b <> 0 then
-                        ix:= (iy - mp.y * aqpb) * a div b div aqpb + mp.x;
+                        ix:= (iy - mp.y * aqpb) * a div b div aqpb + mp.x
                     else
                         ix:= (iy - pa.ar[i].y * aqpb) * p div q div aqpb + pa.ar[i].x;
                     iy:= iy div aqpb;
 
-                    writeln('>>>     Intersection     <<<');
-                    writeln(p1.x, '; ', p1.y, ' - ', p2.x, '; ', p2.y);
-                    writeln(pa.ar[i].x, '; ', pa.ar[i].y, ' - ', pa.ar[i + 1].x, '; ', pa.ar[i + 1].y);
-                    writeln('== ', ix, '; ', iy);
+                    d:= DistanceI(mp.y - iy, mp.x - ix).Round;
+                    writeln('====== Intersection: ', ix, '; ', iy, ', distance = ', d);
+                    t1:= b * (mp.y - iy) + a * (mp.x - ix);
+                    writeln(a, ' ', -b);
+                    writeln(t1);
+                    writeln(mp.y - iy, ' ', mp.x - ix);
+                    if t1 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
+                    writeln('L: ', distL, '; R: ', distR);
                 end;
             end;
         end;
+
+    if distR + distL < 40 then
+    begin
+        // limits are too narrow, leave point alone
+        newPoint:= p1
+    end
+    else
+    begin
+        // select distance within [-distL; distR]
+        d:= -distL;
+        //d:= distR;
+
+        // calculate new point
+        dab:= DistanceI(a, b).Round;
+
+        newPoint.x:= mp.x + a * d div dab;
+        newPoint.y:= mp.y + b * d div dab;
+
+        writeln('Middle Point ', mp.x, '; ', mp.y);
+        writeln('New Point ', newPoint.x, '; ', newPoint.y);
+    end;
 end;
 
 procedure DivideEdges(var pa: TPixAr);
 var npa: TPixAr;
     i: LongInt;
+    newPoint: TPoint;
 begin
     i:= 0;
     npa.Count:= 0;
     while i < pa.Count do
     begin
-        if i = 0 then
+        npa.ar[npa.Count]:= pa.ar[i];
+        inc(npa.Count);
+
+        if i < 1 then
         begin
-            FindLimits(0, pa);
-            npa.ar[npa.Count]:= pa.ar[i];
-            pa.ar[i].y:= 300;
-            npa.ar[npa.Count + 1]:= pa.ar[i];
-            inc(npa.Count, 2)
-        end else
-        begin
-            npa.ar[npa.Count]:= pa.ar[i];
+            FindPoint(i, newPoint, pa);
+            if (newPoint.x <> pa.ar[i].x) or (newPoint.y <> pa.ar[i].y) then
+            begin
+            npa.ar[npa.Count]:= newPoint;
             inc(npa.Count)
+            end;
         end;
 
         inc(i)
