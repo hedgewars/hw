@@ -96,16 +96,23 @@ end;
 
 
 procedure FindPoint(si: LongInt; var newPoint: TPoint; var pa: TPixAr);
-const mapBorderMargin = 0;
-var p1, p2, mp, ap: TPoint;
+const mapBorderMargin = 30;
+    minDistance = 20;
+var p1, p2, mp: TPoint;
     i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
     dab, d, distL, distR: LongInt;
 begin
     // [p1, p2] is segment we're trying to divide
     p1:= pa.ar[si];
     p2:= pa.ar[si + 1];
+    writeln('====================== ', p1.x, '; ', p1.y, ' --- ', p2.x, '; ', p2.y);
 
-    if (p1.x = NTPX) or (p2.x = NTPX) then
+    // perpendicular vector
+    a:= p2.y - p1.y;
+    b:= p1.x - p2.x;
+    dab:= DistanceI(a, b).Round;
+
+    if (p1.x = NTPX) or (p2.x = NTPX) or (dab < minDistance * 3) then
     begin
         newPoint:= p1;
         exit;
@@ -114,12 +121,6 @@ begin
     // its middle point
     mp.x:= (p1.x + p2.x) div 2;
     mp.y:= (p1.y + p2.y) div 2;
-    // another point on the perpendicular bisector
-    ap.x:= mp.x + p2.y - p1.y;
-    ap.y:= mp.y + p1.x - p2.x;
-    // vector between these points
-    a:= p2.y - p1.y;
-    b:= p1.x - p2.x;
 
     // find distances to map borders
     if a <> 0 then
@@ -129,12 +130,6 @@ begin
         d:= DistanceI(mp.x - mapBorderMargin, mp.y - iy).Round;
         t1:= a * (mp.x - mapBorderMargin) + b * (mp.y - iy);
         if t1 > 0 then distL:= d else distR:= d;
-                    writeln('====== Left border: ', mapBorderMargin, '; ', mp.y - iy, ', distance = ', d);
-                    writeln(a, ' ', -b);
-                    writeln(t1);
-                    writeln(mp.x - mapBorderMargin, ' ', mp.y - iy);
-                    writeln('MP: ', mp.x, ' ', mp.y);
-                    writeln('L: ', distL, '; R: ', distR);
 
         // right border
         iy:= (LAND_WIDTH - mapBorderMargin - mp.x) * b div a + mp.y;
@@ -154,11 +149,6 @@ begin
         ix:= (LAND_HEIGHT - mapBorderMargin - mp.y) * a div b + mp.x;
         d:= DistanceI(mp.y - LAND_HEIGHT + mapBorderMargin, mp.x - ix).Round;
         if t2 > 0 then distR:= min(d, distR) else distL:= min(d, distL);
-                    writeln('====== Bottom border: ', ix, '; ', LAND_HEIGHT - mapBorderMargin, ', distance = ', d);
-                    writeln(a, ' ', -b);
-                    writeln(t2);
-                    writeln(mp.x - ix, ' ', mp.y - LAND_HEIGHT + mapBorderMargin);
-                    writeln('L: ', distL, '; R: ', distR);
     end;
 
     // now go through all other segments
@@ -178,26 +168,26 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= (((pa.ar[i].x - mp.x) * b + mp.y * a) * q - pa.ar[i].y * p * b);
-                    if b <> 0 then
-                        ix:= (iy - mp.y * aqpb) * a div b div aqpb + mp.x
+                    iy:= (((pa.ar[i].x - mp.x) * b + mp.y * a) * q - pa.ar[i].y * p * b) div aqpb;
+                    if abs(b) > abs(q) then
+                        ix:= (iy - mp.y) * a div b + mp.x
                     else
-                        ix:= (iy - pa.ar[i].y * aqpb) * p div q div aqpb + pa.ar[i].x;
-                    iy:= iy div aqpb;
+                        ix:= (iy - pa.ar[i].y) * p div q + pa.ar[i].x;
 
                     d:= DistanceI(mp.y - iy, mp.x - ix).Round;
-                    writeln('====== Intersection: ', ix, '; ', iy, ', distance = ', d);
                     t1:= b * (mp.y - iy) + a * (mp.x - ix);
-                    writeln(a, ' ', -b);
-                    writeln(t1);
-                    writeln(mp.y - iy, ' ', mp.x - ix);
                     if t1 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
-                    writeln('L: ', distL, '; R: ', distR);
                 end;
             end;
         end;
 
-    if distR + distL < 40 then
+
+    // don't move new point for more than 3/4 length of initial segment
+    d:= dab * 3 div 4;
+    if distL > d then distL:= d;
+    if distR > d then distR:= d;
+
+    if distR + distL < minDistance * 2 then
     begin
         // limits are too narrow, leave point alone
         newPoint:= p1
@@ -205,16 +195,13 @@ begin
     else
     begin
         // select distance within [-distL; distR]
-        d:= -distL;
-        //d:= distR;
+        d:= -distL + minDistance + GetRandom(distR + distL - minDistance * 2);
+        //d:= distR - minDistance;
 
         // calculate new point
-        dab:= DistanceI(a, b).Round;
-
         newPoint.x:= mp.x + a * d div dab;
         newPoint.y:= mp.y + b * d div dab;
 
-        writeln('Middle Point ', mp.x, '; ', mp.y);
         writeln('New Point ', newPoint.x, '; ', newPoint.y);
     end;
 end;
@@ -231,7 +218,7 @@ begin
         npa.ar[npa.Count]:= pa.ar[i];
         inc(npa.Count);
 
-        if i < 1 then
+        if i < pa.Count - 1 then
         begin
             FindPoint(i, newPoint, pa);
             if (newPoint.x <> pa.ar[i].x) or (newPoint.y <> pa.ar[i].y) then
@@ -248,9 +235,11 @@ begin
 end;
 
 procedure Distort2(var Template: TEdgeTemplate; var pa: TPixAr);
-//var i: Longword;
+var i: Longword;
 begin
-    DivideEdges(pa);
+    for i:= 1 to Template.BezierizeCount do
+        DivideEdges(pa);
+
     {for i:= 1 to Template.BezierizeCount do
         begin
         BezierizeEdge(pa, _0_5);
@@ -259,7 +248,7 @@ begin
         end;
     for i:= 1 to Template.RandPassesCount do
         RandomizePoints(pa);}
-    BezierizeEdge(pa, _0_9);
+    BezierizeEdge(pa, _0_1);
 end;
 
 
