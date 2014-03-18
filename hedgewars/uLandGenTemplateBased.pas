@@ -276,8 +276,12 @@ end;
 procedure Distort2(var Template: TEdgeTemplate; var pa: TPixAr);
 var i: Longword;
 begin
-    for i:= 1 to Template.BezierizeCount do
-        DivideEdges(pa);
+    //for i:= 1 to Template.BezierizeCount do
+    //    DivideEdges(pa);
+    repeat
+        i:= pa.Count;
+        DivideEdges(pa)
+    until i = pa.Count;
 
     {for i:= 1 to Template.BezierizeCount do
         begin
