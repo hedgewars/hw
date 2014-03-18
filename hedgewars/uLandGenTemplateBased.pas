@@ -94,7 +94,6 @@ begin
     BezierizeEdge(pa, _0_1);
 end;
 
-
 procedure FindPoint(si: LongInt; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 30;
     minDistance = 20;
@@ -105,7 +104,6 @@ begin
     // [p1, p2] is segment we're trying to divide
     p1:= pa.ar[si];
     p2:= pa.ar[si + 1];
-    writeln('====================== ', p1.x, '; ', p1.y, ' --- ', p2.x, '; ', p2.y);
 
     // perpendicular vector
     a:= p2.y - p1.y;
@@ -181,9 +179,58 @@ begin
             end;
         end;
 
+    // go through all points
+    for i:= 0 to pa.Count - 2 do
+        // if this point isn't on current segment
+        if (si <> i) and (i <> si + 1) then
+        begin
+            // also check intersection with rays through pa.ar[i] if this point is good
+            t1:= (p1.x - pa.ar[i].x) * b - a * (p1.y - pa.ar[i].y);
+            t2:= (p2.x - pa.ar[i].x) * b - a * (p2.y - pa.ar[i].y);
+            if (t1 > 0) <> (t2 > 0) then
+            begin
+                // ray from p1
+                p:= pa.ar[i].x - p1.x;
+                q:= pa.ar[i].y - p1.y;
+                aqpb:= a * q - p * b;
 
-    // don't move new point for more than 3/4 length of initial segment
-    d:= dab * 3 div 4;
+                if (aqpb <> 0) then
+                begin
+                    // (ix; iy) is intersection point
+                    iy:= (((p1.x - mp.x) * b + mp.y * a) * q - p1.y * p * b) div aqpb;
+                    if abs(b) > abs(q) then
+                        ix:= (iy - mp.y) * a div b + mp.x
+                    else
+                        ix:= (iy - p1.y) * p div q + p1.x;
+
+                    d:= DistanceI(mp.y - iy, mp.x - ix).Round;
+                    t1:= b * (mp.y - iy) + a * (mp.x - ix);
+                    if t1 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
+                end;
+
+                // and ray from p2
+                p:= pa.ar[i].x - p2.x;
+                q:= pa.ar[i].y - p2.y;
+                aqpb:= a * q - p * b;
+
+                if (aqpb <> 0) then
+                begin
+                    // (ix; iy) is intersection point
+                    iy:= (((p2.x - mp.x) * b + mp.y * a) * q - p2.y * p * b) div aqpb;
+                    if abs(b) > abs(q) then
+                        ix:= (iy - mp.y) * a div b + mp.x
+                    else
+                        ix:= (iy - p2.y) * p div q + p2.x;
+
+                    d:= DistanceI(mp.y - iy, mp.x - ix).Round;
+                    t2:= b * (mp.y - iy) + a * (mp.x - ix);
+                    if t2 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
+                end;
+            end;
+        end;
+
+    // don't move new point for more than length of initial segment
+    d:= dab;
     if distL > d then distL:= d;
     if distR > d then distR:= d;
 
@@ -197,41 +244,33 @@ begin
         // select distance within [-distL; distR]
         d:= -distL + minDistance + GetRandom(distR + distL - minDistance * 2);
         //d:= distR - minDistance;
+        //d:= - distL + minDistance;
 
         // calculate new point
         newPoint.x:= mp.x + a * d div dab;
         newPoint.y:= mp.y + b * d div dab;
-
-        writeln('New Point ', newPoint.x, '; ', newPoint.y);
     end;
 end;
 
 procedure DivideEdges(var pa: TPixAr);
-var npa: TPixAr;
-    i: LongInt;
+var i, t: LongInt;
     newPoint: TPoint;
 begin
     i:= 0;
-    npa.Count:= 0;
-    while i < pa.Count do
+
+    while i < pa.Count - 1 do
     begin
-        npa.ar[npa.Count]:= pa.ar[i];
-        inc(npa.Count);
-
-        if i < pa.Count - 1 then
+        FindPoint(i, newPoint, pa);
+        if (newPoint.x <> pa.ar[i].x) or (newPoint.y <> pa.ar[i].y) then
         begin
-            FindPoint(i, newPoint, pa);
-            if (newPoint.x <> pa.ar[i].x) or (newPoint.y <> pa.ar[i].y) then
-            begin
-            npa.ar[npa.Count]:= newPoint;
-            inc(npa.Count)
-            end;
+            for t:= pa.Count downto i + 2 do
+                pa.ar[t]:= pa.ar[t - 1];
+            inc(pa.Count);
+            pa.ar[i + 1]:= newPoint;
+            inc(i)
         end;
-
         inc(i)
     end;
-
-    pa:= npa;
 end;
 
 procedure Distort2(var Template: TEdgeTemplate; var pa: TPixAr);
@@ -267,7 +306,7 @@ begin
     SetPoints(Template, pa, @fps);
     {$HINTS ON}
 
-    Distort1(Template, pa);
+    Distort2(Template, pa);
 
     DrawEdge(pa, 0);
 
