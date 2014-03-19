@@ -105,20 +105,36 @@ begin
     p1:= pa.ar[si];
     p2:= pa.ar[si + 1];
 
+    if p2.x = NTPX then
+    // it is segment from last to first point, so need to find first point
+    begin
+        i:= si - 2;
+        while (i >= 0) and (pa.ar[i].x <> NTPX) do
+            dec(i);
+        p2:= pa.ar[i + 1]
+    end;
+
     // perpendicular vector
     a:= p2.y - p1.y;
     b:= p1.x - p2.x;
     dab:= DistanceI(a, b).Round;
 
-    if (p1.x = NTPX) or (p2.x = NTPX) or (dab < minDistance * 3) then
+    // its middle point
+    mp.x:= (p1.x + p2.x) div 2;
+    mp.y:= (p1.y + p2.y) div 2;
+
+    // don't process too short segments or those which are too close to map borders
+    if (p1.x = NTPX)
+            or (dab < minDistance * 3) 
+            or (mp.x < mapBorderMargin)
+            or (mp.x > LAND_WIDTH - mapBorderMargin)
+            or (mp.y < mapBorderMargin)
+            or (mp.y > LAND_HEIGHT - mapBorderMargin)
+    then
     begin
         newPoint:= p1;
         exit;
     end;
-
-    // its middle point
-    mp.x:= (p1.x + p2.x) div 2;
-    mp.y:= (p1.y + p2.y) div 2;
 
     // find distances to map borders
     if a <> 0 then
@@ -159,7 +175,7 @@ begin
         p4:= pa.ar[i + 1];
         if p4.x = NTPX then
             p4:= fp;
-        
+
             // check if it intersects
             t1:= (mp.x - pa.ar[i].x) * b - a * (mp.y - pa.ar[i].y);
             t2:= (mp.x - p4.x) * b - a * (mp.y - p4.y);
