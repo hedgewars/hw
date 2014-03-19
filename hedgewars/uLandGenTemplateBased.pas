@@ -96,8 +96,8 @@ end;
 
 procedure FindPoint(si: LongInt; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 30;
-    minDistance = 20;
-var p1, p2, mp: TPoint;
+    minDistance = 32;
+var p1, p2, p4, fp, mp: TPoint;
     i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
     dab, d, distL, distR: LongInt;
 begin
@@ -150,17 +150,24 @@ begin
     end;
 
     // now go through all other segments
+    fp:= pa.ar[0];
     for i:= 0 to pa.Count - 2 do
-        if (i <> si) and (pa.ar[i].x <> NTPX) and (pa.ar[i + 1].x <> NTPX) then
+        if pa.ar[i].x = NTPX then
+            fp:= pa.ar[i + 1]
+        else if (i <> si) then
         begin
+        p4:= pa.ar[i + 1];
+        if p4.x = NTPX then
+            p4:= fp;
+        
             // check if it intersects
             t1:= (mp.x - pa.ar[i].x) * b - a * (mp.y - pa.ar[i].y);
-            t2:= (mp.x - pa.ar[i + 1].x) * b - a * (mp.y - pa.ar[i + 1].y);
+            t2:= (mp.x - p4.x) * b - a * (mp.y - p4.y);
 
             if (t1 > 0) <> (t2 > 0) then // yes it does, hard arith follows
             begin
-                p:= pa.ar[i + 1].x - pa.ar[i].x;
-                q:= pa.ar[i + 1].y - pa.ar[i].y;
+                p:= p4.x - pa.ar[i].x;
+                q:= p4.y - pa.ar[i].y;
                 aqpb:= a * q - p * b;
 
                 if (aqpb <> 0) then
@@ -178,11 +185,10 @@ begin
                 end;
             end;
         end;
-
     // go through all points
     for i:= 0 to pa.Count - 2 do
         // if this point isn't on current segment
-        if (si <> i) and (i <> si + 1) then
+        if (si <> i) and (i <> si + 1) and (pa.ar[i].x <> NTPX) then
         begin
             // also check intersection with rays through pa.ar[i] if this point is good
             t1:= (p1.x - pa.ar[i].x) * b - a * (p1.y - pa.ar[i].y);
