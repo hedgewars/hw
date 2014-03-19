@@ -94,14 +94,14 @@ begin
     BezierizeEdge(pa, _0_1);
 end;
 
-procedure FindPoint(si: LongInt; var newPoint: TPoint; var pa: TPixAr);
+procedure FindPoint(si, fillPointsCount: LongInt; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 30;
-    minDistance = 32;
+    minDistance = 32; // adjust/parametrize this for different details size
 var p1, p2, p4, fp, mp: TPoint;
     i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
     dab, d, distL, distR: LongInt;
 begin
-    // [p1, p2] is segment we're trying to divide
+    // [p1, p2] is the segment we're trying to divide
     p1:= pa.ar[si];
     p2:= pa.ar[si + 1];
 
@@ -201,8 +201,9 @@ begin
                 end;
             end;
         end;
-    // go through all points
-    for i:= 0 to pa.Count - 2 do
+
+    // go through all points, including fill points
+    for i:= 0 to pa.Count + fillPointsCount - 1 do
         // if this point isn't on current segment
         if (si <> i) and (i <> si + 1) and (pa.ar[i].x <> NTPX) then
         begin
@@ -252,6 +253,7 @@ begin
         end;
 
     // don't move new point for more than length of initial segment
+    // adjust/parametrize for more flat surfaces (try values 3/4, 1/2 of dab, or even 1/4)
     d:= dab;
     if distL > d then distL:= d;
     if distR > d then distR:= d;
@@ -274,7 +276,7 @@ begin
     end;
 end;
 
-procedure DivideEdges(var pa: TPixAr);
+procedure DivideEdges(fillPointsCount: LongInt; var pa: TPixAr);
 var i, t: LongInt;
     newPoint: TPoint;
 begin
@@ -282,10 +284,12 @@ begin
 
     while i < pa.Count - 1 do
     begin
-        FindPoint(i, newPoint, pa);
+        FindPoint(i, fillPointsCount, newPoint, pa);
+
         if (newPoint.x <> pa.ar[i].x) or (newPoint.y <> pa.ar[i].y) then
         begin
-            for t:= pa.Count downto i + 2 do
+            // point found, free a slot for it in array, don't forget to move appended fill points
+            for t:= pa.Count + fillPointsCount downto i + 2 do
                 pa.ar[t]:= pa.ar[t - 1];
             inc(pa.Count);
             pa.ar[i + 1]:= newPoint;
@@ -295,25 +299,24 @@ begin
     end;
 end;
 
-procedure Distort2(var Template: TEdgeTemplate; var pa: TPixAr);
+procedure Distort2(var Template: TEdgeTemplate; fps: PPointArray; var pa: TPixAr);
 var i: Longword;
 begin
-    //for i:= 1 to Template.BezierizeCount do
-    //    DivideEdges(pa);
+    // append fill points to ensure distortion won't move them to other side of segment
+    for i:= 0 to pred(Template.FillPointsCount) do
+        begin
+            pa.ar[pa.Count + i].x:= fps^[i].x;
+            pa.ar[pa.Count + i].y:= fps^[i].y;
+        end;
+
+    // divide while it divides
     repeat
         i:= pa.Count;
-        DivideEdges(pa)
+        DivideEdges(Template.FillPointsCount, pa)
     until i = pa.Count;
 
-    {for i:= 1 to Template.BezierizeCount do
-        begin
-        BezierizeEdge(pa, _0_5);
-        RandomizePoints(pa);
-        RandomizePoints(pa)
-        end;
-    for i:= 1 to Template.RandPassesCount do
-        RandomizePoints(pa);}
-    BezierizeEdge(pa, _0_1);
+    // make it smooth
+    BezierizeEdge(pa, _0_2);
 end;
 
 
@@ -332,7 +335,7 @@ begin
     SetPoints(Template, pa, @fps);
     {$HINTS ON}
 
-    Distort2(Template, pa);
+    Distort2(Template, @fps, pa);
 
     DrawEdge(pa, 0);
 
