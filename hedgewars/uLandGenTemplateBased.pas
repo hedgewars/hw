@@ -234,7 +234,7 @@ begin
     if distL > d then distL:= d;
     if distR > d then distR:= d;
 
-    if distR + distL < minDistance * 2 then
+    if distR + distL < minDistance * 2 + 10 then
     begin
         // limits are too narrow, leave point alone
         newPoint:= p1
