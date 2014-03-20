@@ -98,7 +98,7 @@ void MyWindow::Load()
     xy->rects.clear();
     for (int i = 0; i < sl.size(); ++i)
     {
-        QRegExp re("x:\\s+(\\d+);\\sy:\\s+(\\d+);\\sw:\\s+(\\d+);\\sh:\\s+(\\d+)");
+        QRegExp re("x:\\s*(\\d+);\\sy:\\s*(\\d+);\\sw:\\s*(\\d+);\\sh:\\s*(\\d+)");
         re.indexIn(sl.at(i));
         QStringList coords = re.capturedTexts();
         qDebug() << sl.at(i) << coords;
