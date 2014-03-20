@@ -94,7 +94,7 @@ begin
     BezierizeEdge(pa, _0_1);
 end;
 
-procedure FindPoint(si, fillPointsCount: LongInt; var newPoint: TPoint; var pa: TPixAr);
+procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 40;
     minDistance = 32; // adjust/parametrize this for different details size
 var p1, p2, p4, fp, mp: TPoint;
@@ -126,10 +126,10 @@ begin
     // don't process too short segments or those which are too close to map borders
     if (p1.x = NTPX)
             or (dab < minDistance * 3) 
-            or (mp.x < leftX + mapBorderMargin)
-            or (mp.x > rightX - mapBorderMargin)
-            or (mp.y < topY + mapBorderMargin)
-            or (mp.y > LAND_HEIGHT - mapBorderMargin)
+            or (mp.x < LongInt(leftX) + mapBorderMargin)
+            or (mp.x > LongInt(rightX) - mapBorderMargin)
+            or (mp.y < LongInt(topY) + mapBorderMargin)
+            or (mp.y > LongInt(LAND_HEIGHT) - mapBorderMargin)
     then
     begin
         newPoint:= p1;
@@ -140,7 +140,7 @@ begin
     if a <> 0 then
     begin
         // left border
-        iy:= (leftX + mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (LongInt(leftX) + mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - leftX - mapBorderMargin, mp.y - iy).Round;
         t1:= a * (mp.x - mapBorderMargin) + b * (mp.y - iy);
         if t1 > 0 then distL:= d else distR:= d;
@@ -154,7 +154,7 @@ begin
     if b <> 0 then
     begin
         // top border
-        ix:= (topY + mapBorderMargin - mp.y) * a div b + mp.x;
+        ix:= (LongInt(topY) + mapBorderMargin - mp.y) * a div b + mp.x;
         d:= DistanceI(mp.y - topY - mapBorderMargin, mp.x - ix).Round;
         t2:= b * (mp.y - mapBorderMargin) + a * (mp.x - ix);
         if t2 > 0 then distL:= min(d, distL) else distR:= min(d, distR);
@@ -203,7 +203,7 @@ begin
         end;
 
     // go through all points, including fill points
-    for i:= 0 to pa.Count + fillPointsCount - 1 do
+    for i:= 0 to Pred(pa.Count + fillPointsCount) do
         // if this point isn't on current segment
         if (si <> i) and (i <> si + 1) and (pa.ar[i].x <> NTPX) then
         begin
@@ -266,7 +266,7 @@ begin
     else
     begin
         // select distance within [-distL; distR]
-        d:= -distL + minDistance + GetRandom(distR + distL - minDistance * 2);
+        d:= -distL + minDistance + LongInt(GetRandom(distR + distL - minDistance * 2));
         //d:= distR - minDistance;
         //d:= - distL + minDistance;
 
@@ -276,10 +276,12 @@ begin
     end;
 end;
 
-procedure DivideEdges(fillPointsCount: LongInt; var pa: TPixAr);
+procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 var i, t: LongInt;
     newPoint: TPoint;
 begin
+    newPoint.x:= 0;
+    newPoint.y:= 0;
     i:= 0;
 
     while i < pa.Count - 1 do
@@ -337,7 +339,7 @@ begin
     playHeight:= Template.TemplateHeight;
     playWidth:= Template.TemplateWidth;
     leftX:= (LAND_WIDTH - playWidth) div 2;
-    rightX:= leftX + playWidth - 1;
+    rightX:= Pred(leftX + playWidth);
     topY:= LAND_HEIGHT - playHeight;
     
     {$HINTS OFF}
