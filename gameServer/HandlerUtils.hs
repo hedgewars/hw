@@ -8,6 +8,8 @@ import RoomsAndClients
 import CoreTypes
 
 
+type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
+
 thisClient :: Reader (ClientIndex, IRnC) ClientInfo
 thisClient = do
     (ci, rnc) <- ask

@@ -31,7 +31,7 @@ voted vote = do
     where
     actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
     actOnVoting vt = do
-        let (contra, pro) = L.partition snd $ votes vt
+        let (pro, contra) = L.partition snd $ votes vt
         let v = (length $ entitledToVote vt) `div` 2 + 1
 
         if length contra >= v then
@@ -67,7 +67,7 @@ voted vote = do
         let rs = Map.lookup roomSave (roomSaves rm)
         case rs of
              Nothing -> return []
-             Just (mp, p) -> return [ModifyRoom $ \r -> r{params = p, mapParams = mp}]
+             Just (mp, p) -> return [Warning "ye!", ModifyRoom $ \r -> r{params = p, mapParams = mp}]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -82,9 +82,11 @@ startVote vt = do
     if isJust $ voting rm then
         return []
     else
-        liftM ([ModifyRoom (\r -> r{voting = Just (newVoting vt){entitledToVote = uids}})
-        , AnswerClients chans ["CHAT", "[server]", B.concat [loc "New voting started", ": ", voteInfo vt]]
-        ] ++ ) $ voted True
+        return [
+            ModifyRoom (\r -> r{voting = Just (newVoting vt){entitledToVote = uids}})
+            , AnswerClients chans ["CHAT", "[server]", B.concat [loc "New voting started", ": ", voteInfo vt]]
+            , ReactCmd ["VOTE", "YES"]
+        ] 
 
 
 checkVotes :: StateT ServerState IO ()

@@ -81,6 +81,7 @@ data Action =
     | RegisterEvent Event
     | SaveRoom B.ByteString
     | LoadRoom B.ByteString
+    | ReactCmd [B.ByteString]
 
 
 data Event = LobbyChatMessage
@@ -91,7 +92,7 @@ type EventsInfo = [(Int, UTCTime)]
 
 newEventsInfo :: EventsInfo
 newEventsInfo = []   
-    
+
 type ClientChan = Chan [B.ByteString]
 
 data CheckInfo =

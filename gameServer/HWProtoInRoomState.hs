@@ -9,7 +9,6 @@ import Control.Monad
 import Control.Monad.Reader
 --------------------------------------
 import CoreTypes
-import Actions
 import Utils
 import HandlerUtils
 import RoomsAndClients
@@ -396,6 +395,12 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
             startVote $ VoteKick nickname
             else
             return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
+
+
+handleCmd_inRoom ["CALLVOTE", "MAP"] = do
+    cl <- thisClient
+    s <- liftM (Map.keys . roomSaves) thisRoom
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", B.concat ["callvote map: ", B.intercalate ", " s]]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do

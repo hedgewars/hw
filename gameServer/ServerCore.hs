@@ -6,14 +6,11 @@ import System.Log.Logger
 import Control.Monad.Reader
 import Control.Monad.State.Strict
 import Data.Set as Set
-import qualified Data.ByteString.Char8 as B
-import Control.DeepSeq
 import Data.Unique
 import Data.Maybe
 --------------------------------------
 import CoreTypes
 import NetRoutines
-import HWProtoCore
 import Actions
 import OfficialServer.DBInteraction
 import ServerState
@@ -22,13 +19,6 @@ import ServerState
 timerLoop :: Int -> Chan CoreMessage -> IO ()
 timerLoop tick messagesChan = threadDelay 30000000 >> writeChan messagesChan (TimerAction tick) >> timerLoop (tick + 1) messagesChan
 
-
-reactCmd :: [B.ByteString] -> StateT ServerState IO ()
-reactCmd cmd = do
-    (Just ci) <- gets clientIndex
-    rnc <- gets roomsClients
-    actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
-    forM_ (actions `deepseq` actions) processAction
 
 mainLoop :: StateT ServerState IO ()
 mainLoop = forever $ do
@@ -46,7 +36,7 @@ mainLoop = forever $ do
             removed <- gets removedClients
             unless (ci `Set.member` removed) $ do
                 modify (\s -> s{clientIndex = Just ci})
-                reactCmd cmd
+                processAction $ ReactCmd cmd
 
         Remove ci ->
             processAction (DeleteClient ci)
