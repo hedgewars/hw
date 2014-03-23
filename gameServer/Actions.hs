@@ -34,9 +34,7 @@ import Consts
 import ConfigFile
 import EngineInteraction
 import FloodDetection
-
-
-type CmdHandler = [B.ByteString] -> Reader (ClientIndex, IRnC) [Action]
+import HWProtoCore
 
 
 othersChans :: StateT ServerState IO [ClientChan]
@@ -798,3 +796,10 @@ processAction Cleanup = do
 processAction (RegisterEvent e) = do
     actions <- registerEvent e
     mapM_ processAction actions
+
+
+processAction (ReactCmd cmd) = do
+    (Just ci) <- gets clientIndex
+    rnc <- gets roomsClients
+    actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
+    forM_ (actions `deepseq` actions) processAction

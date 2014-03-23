@@ -7,7 +7,6 @@ import Control.Monad.Reader
 import qualified Data.ByteString.Char8 as B
 --------------------------------------
 import CoreTypes
-import Actions
 import Utils
 import HandlerUtils
 import RoomsAndClients
