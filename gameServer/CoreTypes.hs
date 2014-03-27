@@ -82,6 +82,7 @@ data Action =
     | SaveRoom B.ByteString
     | LoadRoom B.ByteString
     | ReactCmd [B.ByteString]
+    | CheckVotes
 
 
 data Event = LobbyChatMessage

@@ -37,8 +37,9 @@ voted vote = do
         if length contra >= v then
             closeVoting
         else if length pro >= v then do
-            act $ voteType vt
-            closeVoting
+            a <- act $ voteType vt
+            c <- closeVoting
+            return $ c ++ a
         else
             return [ModifyRoom $ \r -> r{voting = Just vt}]
 
@@ -67,7 +68,7 @@ voted vote = do
         let rs = Map.lookup roomSave (roomSaves rm)
         case rs of
              Nothing -> return []
-             Just (mp, p) -> return [Warning "ye!", ModifyRoom $ \r -> r{params = p, mapParams = mp}]
+             Just (mp, p) -> return [ModifyRoom $ \r -> r{params = p, mapParams = mp}]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -86,11 +87,28 @@ startVote vt = do
             ModifyRoom (\r -> r{voting = Just (newVoting vt){entitledToVote = uids}})
             , AnswerClients chans ["CHAT", "[server]", B.concat [loc "New voting started", ": ", voteInfo vt]]
             , ReactCmd ["VOTE", "YES"]
-        ] 
+        ]
 
 
-checkVotes :: StateT ServerState IO ()
-checkVotes = undefined
+checkVotes :: StateT ServerState IO [Action]
+checkVotes = do
+    rnc <- gets roomsClients
+    io $ do
+        ris <- allRoomsM rnc
+        actions <- mapM (check rnc) ris
+        mapM_ processAction actions
+    where
+        check rnc ri = do
+            e <- room'sM rnc voting ri
+            case e of
+                 Just rv -> do
+                     modifyRoom rnc (\r -> r{voting = if voteTTL rv == 0 then Nothing else Just rv{voteTTL = voteTTL rv - 1}}) ri
+                     if voteTTL rv == 0 then do
+                        chans <- liftM sendChan $ roomClientsM rnc ri
+                        return [AnswerClients chans ["CHAT", "[server]", loc "Voting expired"]]
+                        else
+                        return []
+                Nothing -> return []
 
 
 voteInfo :: VoteType -> B.ByteString

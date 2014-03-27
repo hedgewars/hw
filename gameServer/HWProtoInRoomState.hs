@@ -434,7 +434,6 @@ handleCmd_inRoom ["SAVEROOM", fileName] = serverAdminOnly $ do
 handleCmd_inRoom ["LOADROOM", fileName] = serverAdminOnly $ do
     return [LoadRoom fileName]
 
-    
 handleCmd_inRoom ["LIST"] = return [] -- for old clients (<= 0.9.17)
 
 handleCmd_inRoom (s:_) = return [ProtocolError $ "Incorrect command '" `B.append` s `B.append` "' (state: in room)"]

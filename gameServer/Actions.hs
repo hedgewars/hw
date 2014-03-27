@@ -803,3 +803,6 @@ processAction (ReactCmd cmd) = do
     rnc <- gets roomsClients
     actions <- liftIO $ withRoomsAndClients rnc (\irnc -> runReader (handleCmd cmd) (ci, irnc))
     forM_ (actions `deepseq` actions) processAction
+
+processAction CheckVotes =
+    checkVotes >>= mapM_ processAction
