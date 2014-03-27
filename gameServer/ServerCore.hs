@@ -53,6 +53,7 @@ mainLoop = forever $ do
         TimerAction tick ->
                 mapM_ processAction $
                     PingAll
+                    : CheckVotes
                     : [StatsAction | even tick]
                     ++ [Cleanup | tick `mod` 100 == 0]
 

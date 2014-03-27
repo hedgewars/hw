@@ -158,6 +158,9 @@ room'sM (MRoomsAndClients (rooms, _)) f (RoomIndex ri) = liftM (f . room') (room
 allClientsM :: MRoomsAndClients r c -> IO [ClientIndex]
 allClientsM (MRoomsAndClients (_, clients)) = liftM (map ClientIndex) $ indicesM clients
 
+allRoomsM :: MRoomsAndClients r c -> IO [RoomIndex]
+allRoomsM (MRoomsAndClients (rooms, _)) = liftM (map RoomIndex) $ indicesM rooms
+
 clientsM :: MRoomsAndClients r c -> IO [c]
 clientsM (MRoomsAndClients (_, clients)) = indicesM clients >>= mapM (liftM client' . readElem clients)
 
