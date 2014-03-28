@@ -2,7 +2,7 @@
 module Votes where
 
 import Control.Monad.Reader
-import Control.Monad.State
+import Control.Monad.State.Strict
 import ServerState
 import qualified Data.ByteString.Char8 as B
 import qualified Data.List as L
@@ -93,10 +93,9 @@ startVote vt = do
 checkVotes :: StateT ServerState IO [Action]
 checkVotes = do
     rnc <- gets roomsClients
-    io $ do
+    liftM concat $ io $ do
         ris <- allRoomsM rnc
-        actions <- mapM (check rnc) ris
-        mapM_ processAction actions
+        mapM (check rnc) ris
     where
         check rnc ri = do
             e <- room'sM rnc voting ri
@@ -104,11 +103,11 @@ checkVotes = do
                  Just rv -> do
                      modifyRoom rnc (\r -> r{voting = if voteTTL rv == 0 then Nothing else Just rv{voteTTL = voteTTL rv - 1}}) ri
                      if voteTTL rv == 0 then do
-                        chans <- liftM sendChan $ roomClientsM rnc ri
+                        chans <- liftM (map sendChan) $ roomClientsM rnc ri
                         return [AnswerClients chans ["CHAT", "[server]", loc "Voting expired"]]
                         else
                         return []
-                Nothing -> return []
+                 Nothing -> return []
 
 
 voteInfo :: VoteType -> B.ByteString

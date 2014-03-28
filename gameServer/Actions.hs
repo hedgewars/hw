@@ -35,7 +35,7 @@ import ConfigFile
 import EngineInteraction
 import FloodDetection
 import HWProtoCore
-
+import Votes
 
 othersChans :: StateT ServerState IO [ClientChan]
 othersChans = do

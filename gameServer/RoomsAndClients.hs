@@ -22,6 +22,7 @@ module RoomsAndClients(
     client'sM,
     room'sM,
     allClientsM,
+    allRoomsM,
     clientsM,
     roomsM,
     roomClientsM,
