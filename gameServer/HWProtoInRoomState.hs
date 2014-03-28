@@ -388,7 +388,7 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     let kickId = fromJust maybeClientId
     let sameRoom = clientRoom rnc thisClientId == clientRoom rnc kickId
 
-    if isNothing $ masterID rm then
+    if isJust $ masterID rm then
         return []
         else
         if isJust maybeClientId && sameRoom then
