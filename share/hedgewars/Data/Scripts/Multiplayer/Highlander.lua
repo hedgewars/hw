@@ -89,6 +89,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 -- These define weps allowed by the script. At present Tardis and Resurrection is banned for example
 -- These were arbitrarily defined out-of-order in initial script, so that was preserved here, resulting 
@@ -131,6 +132,13 @@ local utiltot = 0
 local maxWep = 56 -- game crashes if you exceed supported #
 
 local someHog = nil -- just for looking up the weps
+
+local mode = nil
+
+function onParameters()
+    parseParams()
+    mode = params["mode"]
+end
 
 function CheckForWeaponSwap()
 	if GetCurAmmoType() ~= lastWep then
@@ -212,7 +220,7 @@ function TransferWeps(gear)
 
         for w,c in pairs(wepArray) do
 			val = getGearValue(gear,w)
-			if val ~= 0 and wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0  then
+			if val ~= 0 and (mode == "orig" or (wepArray[w] ~= 9 and getGearValue(CurrentHedgehog, w) == 0))  then
 				setGearValue(CurrentHedgehog, w, val)
 
 				-- if you are using multi-shot weapon, gimme one more
