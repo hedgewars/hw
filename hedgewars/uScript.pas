@@ -1077,13 +1077,18 @@ begin
             vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
+               if Gear^.Kind = gtHedgehog then
+                   begin
+                   AddChatString(#1+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text);
+                   vgear^.Hedgehog:= gear^.Hedgehog
+                   end
+               else vgear^.Frame:= gear^.uid;
+
                vgear^.Text:= lua_tostring(L, 2);
-               vgear^.Hedgehog:= gear^.Hedgehog;
                vgear^.FrameTicks:= lua_tointeger(L, 3);
                if (vgear^.FrameTicks < 1) or (vgear^.FrameTicks > 3) then
                    vgear^.FrameTicks:= 1;
                lua_pushinteger(L, vgear^.Uid);
-               AddChatString(#1+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text)
                end
             end
             else
