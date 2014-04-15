@@ -260,8 +260,9 @@ begin
 
     if distR + distL < minDistance * 2 + 10 then
     begin
-        // limits are too narrow, leave point alone
-        newPoint:= p1
+        // limits are too narrow, just divide
+        newPoint.x:= mp.x;
+        newPoint.y:= mp.y;
     end
     else
     begin
