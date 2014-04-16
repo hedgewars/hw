@@ -98,7 +98,8 @@ procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint
 const mapBorderMargin = 40;
     minDistance = 32; // adjust/parametrize this for different details size
 var p1, p2, p4, fp, mp: TPoint;
-    i, t1, t2, a, b, p, q, iy, ix, aqpb: LongInt;
+    i, t1, t2, iy, ix, aqpb: LongInt;
+    a, b, p, q: LongInt;
     dab, d, distL, distR: LongInt;
 begin
     // [p1, p2] is the segment we're trying to divide
@@ -189,7 +190,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= (((pa.ar[i].x - mp.x) * b + mp.y * a) * q - pa.ar[i].y * p * b) div aqpb;
+                    iy:= ((Int64(pa.ar[i].x - mp.x) * b + Int64(mp.y) * a) * q - Int64(pa.ar[i].y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -220,7 +221,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= (((p1.x - mp.x) * b + mp.y * a) * q - p1.y * p * b) div aqpb;
+                    iy:= ((Int64(p1.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p1.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -239,7 +240,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= (((p2.x - mp.x) * b + mp.y * a) * q - p2.y * p * b) div aqpb;
+                    iy:= ((Int64(p2.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p2.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
