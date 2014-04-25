@@ -359,7 +359,7 @@ function onNewRound()
                                         loc("Best Team Times: ") .. "|" .. totalComment, 0, 4000)
 
         -- end game if its at round limit
-        if roundNumber == roundLimit then
+        if roundNumber >= roundLimit then
                 for i = 0, (numhhs-1) do
                         if GetHogClan(hhs[i]) ~= bestClan then
                                 SetEffect(hhs[i], heResurrectable, 0)
@@ -515,22 +515,21 @@ function onGameStart()
 end
 
 function PlaceWayPoint(x,y)
+    if not racerActive then
+        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
-        if (wpCount < wpLimit) then -- seems to not work with a hedgehog nil chek
+            wpX[wpCount] = x
+            wpY[wpCount] = y
+            wpCol[wpCount] = 0xffffffff
+            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
+                                                                                                                                            
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
 
-                wpX[wpCount] = x
-                wpY[wpCount] = y
-                wpCol[wpCount] = 0xffffffff
-                wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-                                                                                                                                                --100
-                SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+            wpCount = wpCount + 1
 
-                wpCount = wpCount + 1
-
-                AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
-
+            AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
         end
-
+    end
 end
 
 function onSpecialPoint(x,y,flag)
@@ -671,7 +670,6 @@ function onGameTick20()
 
                                 if (CheckWaypoints() == true) then
                                         AdjustScores()
-                                        racerActive = false
                                         DisableTumbler()
                                 end
 
