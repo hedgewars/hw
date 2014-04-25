@@ -115,6 +115,7 @@ clr.r:= Color shr 16;
 clr.g:= (Color shr 8) and $FF;
 clr.b:= Color and $FF;
 tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, s, clr);
+SDLTry(tmpsurf <> nil, true);
 tmpsurf:= doSurfaceConversion(tmpsurf);
 SDLTry(tmpsurf <> nil, true);
 SDL_UpperBlit(tmpsurf, nil, Surface, @finalRect);
@@ -1249,7 +1250,7 @@ begin
 // make sure there is a caption as well as a sub caption - description is optional
 if length(caption) = 0 then
     caption:= ansistring('???');
-if length(caption) = 0 then
+if length(subcaption) = 0 then
     subcaption:= ansistring(_S' ');
 
 font:= CheckCJKFont(caption,fnt16);
