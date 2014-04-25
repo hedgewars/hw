@@ -136,6 +136,8 @@ local wpRad = 450 --75
 local wpCount = 0
 local wpLimit = 8
 
+local usedWeapons = {}
+
 local roundN
 local lastRound
 local RoundHasChanged
@@ -718,13 +720,44 @@ function onGearDelete(gear)
 
 end
 
+function onAttack()
+    at = GetCurAmmoType()
+    
+    usedWeapons[at] = 0
+end
 
 function onAchievementsDeclaration()
+    usedWeapons[amSkip] = nil
+    
+    usedRope = usedWeapons[amRope] ~= nil
+    usedPortal = usedWeapons[amPortalGun] ~= nil
+    usedSaucer = usedWeapons[amJetpack] ~= nil
+    
+    usedWeapons[amRope] = nil
+    usedWeapons[amPortalGun] = nil
+    usedWeapons[amJetpack] = nil
+
+    usedOther = next(usedWeapons) ~= nil
+
+    if usedOther then -- smth besides skip, rope, portal or saucer used
+        raceType = "unknown race"
+    elseif usedRope and not usedPortal and not usedSaucer then
+        raceType = "rope race"
+    elseif not usedRope and usedPortal and not usedSaucer then
+        raceType = "portal race"
+    elseif not usedRope and not usedPortal and usedSaucer then
+        raceType = "saucer race"
+    elseif (usedRope or usedPortal or usedSaucer or usedOther) == false then -- no weapons used at all?
+        raceType = "no tools race"
+    else -- at least two of rope, portal and saucer used
+        raceType = "mixed race"
+    end
+
     map = detectMap()
     
     for i = 0, (numTeams-1) do
         if teamScore[i] < 100000 then
-            DeclareAchievement("rope race", teamNameArr[i], map, teamScore[i])
+            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
         end
     end
 end

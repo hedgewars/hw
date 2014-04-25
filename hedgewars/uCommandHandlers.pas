@@ -339,7 +339,7 @@ with CurrentHedgehog^.Gear^ do
         if not isExternalSource then
             SendIPC(_S'A');
         Message:= Message or (gmAttack and InputMask);
-        ScriptCall('onAttack');
+        ScriptCall('onAttack'); // so if I fire airstrike, it doesn't count as attack? fine, fine
         end
     end
 end;
