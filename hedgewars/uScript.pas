@@ -2498,14 +2498,11 @@ var at : TGearType;
     cg : TCapGroup;
 begin
 // initialize lua
-luaState:= lua_open;
-TryDo(luaState <> nil, 'lua_open failed', true);
+luaState:= luaL_newstate();
+TryDo(luaState <> nil, 'luaL_newstate() failed', true);
 
 // open internal libraries
-luaopen_base(luaState);
-luaopen_string(luaState);
-luaopen_math(luaState);
-luaopen_table(luaState);
+luaL_openlibs(luaState);
 
 // import some variables
 ScriptSetString(_S'L', cLocale);

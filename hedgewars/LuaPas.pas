@@ -8,6 +8,10 @@ unit LuaPas;
  *
  * Created by Geo Massar, 2006
  * Distributed as free/open source.
+ *
+ * Note: This file contains custom modification for Hedgewars
+ * These changes should accomplish compatibility for both lua 5.1 and 5.2
+ * Differences: In 5.1 set/getglobal ARE macros and tonumber/tointeger are NOT
  *)
 
 interface
@@ -238,6 +242,27 @@ procedure lua_xmove(src, dest : Plua_State; n : LongInt);
 (*
 ** access functions (stack -> C)
 *)
+
+{$IFNDEF LUA51}
+
+function lua_tointegerx(L : Plua_State; idx : LongInt; success : PInteger) : lua_Integer;
+    cdecl; external LuaLibName;
+function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
+
+function lua_tonumberx(L : Plua_State; idx : LongInt; success : PInteger) : lua_Number;
+    cdecl; external LuaLibName;
+function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
+
+{$ELSE}
+
+function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
+    cdecl; external LuaLibName;
+
+function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
+    cdecl; external LuaLibName;
+
+{$ENDIF}
+
 function lua_isnumber(L : Plua_State; idx : LongInt) : LongBool;
     cdecl; external LuaLibName;
 
@@ -263,12 +288,6 @@ function lua_rawequal(L : Plua_State; idx1, idx2 : LongInt) : LongBool;
     cdecl; external LuaLibName;
 
 function lua_lessthan(L : Plua_State; idx1, idx2 : LongInt) : LongBool;
-    cdecl; external LuaLibName;
-
-function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
-    cdecl; external LuaLibName;
-
-function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
     cdecl; external LuaLibName;
 
 function lua_toboolean(L : Plua_State; idx : LongInt) : LongBool;
@@ -386,8 +405,15 @@ function lua_setfenv(L : Plua_State; idx : LongInt): LongBool;
 procedure lua_call(L : Plua_State; nargs, nresults : LongInt);
     cdecl; external LuaLibName;
 
+
+{$IFNDEF LUA51}
+function  lua_pcallk(L: Plua_State; nargs, nresults, errfunc, ctx: Integer; k: lua_CFunction): Integer;
+    cdecl; external LuaLibName;
+function  lua_pcall(L : Plua_State; nargs, nresults, errfunc : LongInt) : LongInt;
+{$ELSE}
 function  lua_pcall(L : Plua_State; nargs, nresults, errfunc : LongInt) : LongInt;
     cdecl; external LuaLibName;
+{$ENDIF}
 
 function  lua_cpcall(L : Plua_State; func : lua_CFunction; ud : Pointer) : LongInt;
     cdecl; external LuaLibName;
@@ -460,8 +486,6 @@ procedure lua_register(L : Plua_State; n : PChar; f : lua_CFunction);
 
 procedure lua_pushcfunction(L : Plua_State; f : lua_CFunction);
 
-function  lua_strlen(L : Plua_State; idx : LongInt) : LongInt;
-
 function lua_isfunction(L : Plua_State; n : LongInt) : Boolean;
 function lua_istable(L : Plua_State; n : LongInt) : Boolean;
 function lua_islightuserdata(L : Plua_State; n : LongInt) : Boolean;
@@ -474,7 +498,13 @@ function lua_isnoneornil(L : Plua_State; n : LongInt) : Boolean;
 procedure lua_pushliteral(L : Plua_State; s : PChar);
 
 procedure lua_setglobal(L : Plua_State; s : PChar);
+{$IFNDEF LUA51}
+    cdecl;  external LuaLibName;
+{$ENDIF}
 procedure lua_getglobal(L : Plua_State; s : PChar);
+{$IFNDEF LUA51}
+    cdecl;  external LuaLibName;
+{$ENDIF}
 
 function lua_tostring(L : Plua_State; idx : LongInt) : shortstring;
 function lua_tostringA(L : Plua_State; idx : LongInt) : ansistring;
@@ -483,6 +513,7 @@ function lua_tostringA(L : Plua_State; idx : LongInt) : ansistring;
 (*
 ** compatibility macros and functions
 *)
+(*
 function lua_open : Plua_State;
 
 procedure lua_getregistry(L : Plua_State);
@@ -492,6 +523,7 @@ function lua_getgccount(L : Plua_State) : LongInt;
 type
     lua_Chuckreader = lua_Reader;
     lua_Chuckwriter = lua_Writer;
+*)
 
 (* ====================================================================== *)
 
@@ -636,10 +668,6 @@ procedure lua_assert(x : Boolean);    // a macro
 ** See Copyright Notice at the end of this file.
 *)
 
-// not compatibility with the behavior of setn/getn in Lua 5.0
-function  luaL_getn(L : Plua_State; idx : LongInt) : LongInt;
-procedure luaL_setn(L : Plua_State; i, j : LongInt);
-
 const
     LUA_ERRFILE = LUA_ERRERR + 1;
 
@@ -651,8 +679,8 @@ type
     PluaL_Reg = ^luaL_Reg;
 
 
-procedure luaL_openlib(L : Plua_State; const libname : PChar; const lr : PluaL_Reg; nup : LongInt);
-    cdecl; external LuaLibName;
+(*procedure luaL_openlib(L : Plua_State; const libname : PChar; const lr : PluaL_Reg; nup : LongInt);
+    cdecl; external LuaLibName;*)
 procedure luaL_register(L : Plua_State; const libname : PChar; const lr : PluaL_Reg);
     cdecl; external LuaLibName;
 function luaL_getmetafield(L : Plua_State; obj : LongInt; const e : PChar) : LongInt;
@@ -736,10 +764,6 @@ function luaL_optlong(L : Plua_State; n : LongInt; d : lua_Integer) : lua_Intege
 
 function luaL_typename(L : Plua_State; idx : LongInt) : PChar;
 
-function luaL_dofile(L : Plua_State; fn : PChar) : LongInt;
-
-function luaL_dostring(L : Plua_State; s : PChar) : LongInt;
-
 procedure luaL_getmetatable(L : Plua_State; n : PChar);
 
 (* not implemented yet
@@ -761,11 +785,7 @@ type
     end;
     PluaL_Buffer = ^luaL_Buffer;
 
-procedure luaL_addchar(B : PluaL_Buffer; c : Char);
-
 (* compatibility only *)
-procedure luaL_putchar(B : PluaL_Buffer; c : Char);
-
 procedure luaL_addsize(B : PluaL_Buffer; n : LongInt);
 
 procedure luaL_buffinit(L : Plua_State; B : PluaL_Buffer);
@@ -823,6 +843,28 @@ begin
     lua_readline := (b[0] <> #4);          // test for ctrl-D
 end;
 }
+
+{$IFNDEF LUA51}
+
+(* compatibility with 5.2 *)
+
+function lua_tointeger(L : Plua_State; idx : LongInt) : lua_Integer;
+begin
+    lua_tointeger := lua_tointegerx(L, idx, nil);
+end;
+
+function lua_tonumber(L : Plua_State; idx : LongInt) : lua_Number;
+begin
+    lua_tonumber := lua_tonumberx(L, idx, nil);
+end;
+
+function lua_pcall(L : Plua_State; nargs, nresults, errfunc : LongInt) : LongInt;
+begin
+    lua_pcall := lua_pcallk(L, nargs, nresults, errfunc, 0, nil);
+end;
+
+{$ENDIF}
+
 procedure lua_saveline(L : Plua_State; idx : LongInt);
 begin
 end;
@@ -860,11 +902,6 @@ end;
 procedure lua_pushcfunction(L : Plua_State; f : lua_CFunction);
 begin
     lua_pushcclosure(L, f, 0);
-end;
-
-function  lua_strlen(L : Plua_State; idx : LongInt) : LongInt;
-begin
-    lua_strlen := lua_objlen(L, idx);
 end;
 
 function lua_isfunction(L : Plua_State; n : LongInt) : Boolean;
@@ -912,6 +949,8 @@ begin
     lua_pushlstring(L, s, StrLen(s));
 end;
 
+
+{$IFDEF LUA51}
 procedure lua_setglobal(L : Plua_State; s : PChar);
 begin
     lua_setfield(L, LUA_GLOBALSINDEX, s);
@@ -921,6 +960,7 @@ procedure lua_getglobal(L: Plua_State; s: PChar);
 begin
     lua_getfield(L, LUA_GLOBALSINDEX, s);
 end;
+{$ENDIF}
 
 function lua_tostring(L : Plua_State; idx : LongInt) : shortstring;
 begin
@@ -933,7 +973,7 @@ begin
     p:= lua_tolstring(L, idx, nil);
     lua_tostringA := ansistring(p);
 end;
-
+(*
 function lua_open : Plua_State;
 begin
     lua_open := luaL_newstate;
@@ -948,7 +988,7 @@ function lua_getgccount(L : Plua_State) : LongInt;
 begin
     lua_getgccount := lua_gc(L, LUA_GCCOUNT, 0);
 end;
-
+*)
 
 (*****************************************************************************)
 (*                                  lualib.h                                 *)
@@ -962,11 +1002,6 @@ end;
 (*****************************************************************************)
 (*                                  lauxlib.h    n                           *)
 (*****************************************************************************)
-
-function luaL_getn(L : Plua_State; idx : LongInt) : LongInt;
-begin
-    luaL_getn := lua_objlen(L, idx);
-end;
 
 procedure luaL_setn(L : plua_State; i, j : LongInt);
 begin
@@ -1016,36 +1051,9 @@ begin
     luaL_typename := lua_typename( L, lua_type(L, idx) );
 end;
 
-function luaL_dofile(L : Plua_State; fn : PChar) : LongInt;
-begin
-    luaL_dofile := luaL_loadfile(L, fn);
-    if luaL_dofile = 0 then
-        luaL_dofile := lua_pcall(L, 0, 0, 0);
-end;
-
-function luaL_dostring(L : Plua_State; s : PChar) : LongInt;
-begin
-    luaL_dostring := luaL_loadstring(L, s);
-    if luaL_dostring = 0 then
-        luaL_dostring := lua_pcall(L, 0, 0, 0);
-end;
-
 procedure luaL_getmetatable(L : Plua_State; n : PChar);
 begin
     lua_getfield(L, LUA_REGISTRYINDEX, n);
-end;
-
-procedure luaL_addchar(B : PluaL_Buffer; c : Char);
-begin
-    if not(B^.p < B^.buffer + LUAL_BUFFERSIZE) then
-        luaL_prepbuffer(B);
-    (B^.p^) := c;
-    Inc(B^.p);
-end;
-
-procedure luaL_putchar(B : PluaL_Buffer; c : Char);
-begin
-    luaL_addchar(B, c);
 end;
 
 procedure luaL_addsize(B : PluaL_Buffer; n : LongInt);
