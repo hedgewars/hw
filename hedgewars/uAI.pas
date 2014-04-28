@@ -146,19 +146,23 @@ for i:= 0 to Pred(Targets.Count) do
 
                     BestActions.Score:= Actions.Score + Score;
 
-                    if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
+                    // if not between shots, activate invulnerability/vampirism if available
+                    if CurrentHedgehog^.MultiShootAttacks = 0 then
                         begin
-                        AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
-                        AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
-                        AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                        if HHHasAmmo(Me^.Hedgehog^, amInvulnerable) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amInvulnerable), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end;
+
+                        if HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0 then
+                            begin
+                            AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
+                            AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
+                            end; 
                         end;
-                        
-                    if HHHasAmmo(Me^.Hedgehog^, amExtraDamage) > 0 then
-                        begin
-                        AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
-                        AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
-                        AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
-                        end; 
     
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
