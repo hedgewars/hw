@@ -17,8 +17,8 @@ include(FindPackageHandleStandardArgs)
 
 find_path(LUA_INCLUDE_DIR lua.h
                           PATHS /usr/include /usr/local/include /usr/pkg/include
-                          PATH_SUFFIXES lua5.2 lua52 lua5.1 lua51)
-find_library(LUA_LIBRARY NAMES lua52 lua5.2 lua-5.2 lua51 lua5.1 lua-5.1 lua
+                          PATH_SUFFIXES lua5.2 lua52)
+find_library(LUA_LIBRARY NAMES lua52 lua5.2 lua-5.2 lua
                          PATHS /lib /usr/lib /usr/local/lib /usr/pkg/lib)
 
 find_package_handle_standard_args(Lua DEFAULT_MSG LUA_LIBRARY LUA_INCLUDE_DIR)
