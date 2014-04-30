@@ -3430,7 +3430,7 @@ begin
 
     // pickup bonuses
     t := CheckGearNear(Gear, gtCase, 36, 36);
-    if t <> nil then
+    if (t <> nil) and (HHGear <> nil) then
         PickUp(HHGear, t);
 
     CheckCollision(Gear);
@@ -3464,7 +3464,8 @@ begin
             TurnTimeLeft:= 14 * 125;
             end;
 
-        HHGear^.Message := 0;
+        if HHGear <> nil then 
+            HHGear^.Message := 0;
         ParseCommand('/taunt ' + #1, true)
         end
 end;
