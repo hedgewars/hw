@@ -118,6 +118,11 @@ void DrawMapWidget::clear()
     if(m_scene) m_scene->clearMap();
 }
 
+void DrawMapWidget::optimize()
+{
+    if(m_scene) m_scene->optimize();
+}
+
 void DrawMapWidget::setErasing(bool erasing)
 {
     if(m_scene) m_scene->setErasing(erasing);

@@ -58,6 +58,7 @@ class DrawMapScene : public QGraphicsScene
         void undo();
         void clearMap();
         void simplifyLast();
+        void optimize();
         void setErasing(bool erasing);
         void showCursor();
         void hideCursor();
