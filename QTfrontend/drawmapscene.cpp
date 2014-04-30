@@ -304,6 +304,8 @@ QByteArray DrawMapScene::encode()
 
 void DrawMapScene::decode(QByteArray data)
 {
+    hideCursor();
+
     bool erasing = m_isErasing;
 
     oldItems.clear();
@@ -324,7 +326,7 @@ void DrawMapScene::decode(QByteArray data)
         data.remove(0, 2);
         quint8 flags = *(quint8 *)data.data();
         data.remove(0, 1);
-        qDebug() << px << py;
+        //qDebug() << px << py;
         if(flags & 0x80)
         {
             isSpecial = false;
@@ -484,4 +486,52 @@ QPointF DrawMapScene::putSomeConstraints(const QPointF &initialPoint, const QPoi
     }
 
     return point;
+}
+
+void DrawMapScene::optimize()
+{
+    if(!paths.size()) return;
+
+    // break paths into segments
+    Paths pth;
+
+    foreach(const PathParams & pp, paths)
+    {
+        int l = pp.points.size();
+
+        if(l == 1)
+        {
+            pth.prepend(pp);
+        } else
+        {
+            for(int i = l - 2; i >= 0; --i)
+            {
+                PathParams p = pp;
+                p.points = QList<QPoint>() << p.points[i] << p.points[i + 1];
+                pth.prepend(pp);
+            }
+        }
+    }
+
+    // clear the scene
+    oldItems.clear();
+    oldPaths.clear();
+    clear();
+    paths.clear();
+    m_specialPoints.clear();
+
+    // render the result
+    foreach(const PathParams & p, pth)
+    {
+        if(p.erasing)
+            m_pen.setBrush(m_eraser);
+        else
+            m_pen.setBrush(m_brush);
+
+        m_pen.setWidth(deserializePenWidth(p.width));
+
+        addPath(pointsToPath(p.points), m_pen);
+    }
+
+    emit pathChanged();
 }

@@ -44,11 +44,12 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
     rbPolyline->setChecked(true);
 
     pbClear = addButton(tr("Clear"), pageLayout, 5, 0);
-    pbLoad = addButton(tr("Load"), pageLayout, 6, 0);
-    pbSave = addButton(tr("Save"), pageLayout, 7, 0);
+    pbOptimize = addButton(tr("Optimize"), pageLayout, 6, 0);
+    pbLoad = addButton(tr("Load"), pageLayout, 7, 0);
+    pbSave = addButton(tr("Save"), pageLayout, 8, 0);
 
     drawMapWidget = new DrawMapWidget(this);
-    pageLayout->addWidget(drawMapWidget, 0, 1, 9, 1);
+    pageLayout->addWidget(drawMapWidget, 0, 1, 10, 1);
 
     return pageLayout;
 }
@@ -58,6 +59,7 @@ void PageDrawMap::connectSignals()
     connect(cbEraser, SIGNAL(toggled(bool)), drawMapWidget, SLOT(setErasing(bool)));
     connect(pbUndo, SIGNAL(clicked()), drawMapWidget, SLOT(undo()));
     connect(pbClear, SIGNAL(clicked()), drawMapWidget, SLOT(clear()));
+    connect(pbOptimize, SIGNAL(clicked()), drawMapWidget, SLOT(optimize()));
     connect(pbLoad, SIGNAL(clicked()), this, SLOT(load()));
     connect(pbSave, SIGNAL(clicked()), this, SLOT(save()));
 

@@ -42,6 +42,7 @@ class PageDrawMap : public AbstractPage
         QPushButton * pbClear;
         QPushButton * pbLoad;
         QPushButton * pbSave;
+        QPushButton * pbOptimize;
         QCheckBox * cbEraser;
         QRadioButton * rbPolyline;
         QRadioButton * rbRectangle;

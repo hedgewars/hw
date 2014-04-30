@@ -12,7 +12,7 @@ INCLUDEPATH += ../QTfrontend/util
 INCLUDEPATH += ../QTfrontend/util/platform
 INCLUDEPATH += ../misc/libphysfs
 INCLUDEPATH += ../misc/libphyslayer
-INCLUDEPATH += /usr/local/include/lua51/
+INCLUDEPATH += /usr/local/include/lua52/
 
 DESTDIR = ../bin
 
@@ -221,21 +221,21 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
     ../share/hedgewars/Data/Locale/hedgewars_bg.ts \
     ../share/hedgewars/Data/Locale/hedgewars_cs.ts \
     ../share/hedgewars/Data/Locale/hedgewars_da.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_de.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_de.ts \
     ../share/hedgewars/Data/Locale/hedgewars_el.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_en.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_en.ts \
     ../share/hedgewars/Data/Locale/hedgewars_es.ts \
     ../share/hedgewars/Data/Locale/hedgewars_fi.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_fr.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_fr.ts \
     ../share/hedgewars/Data/Locale/hedgewars_gl.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_hu.ts \ 
-    ../share/hedgewars/Data/Locale/hedgewars_it.ts \ 
-    ../share/hedgewars/Data/Locale/hedgewars_ja.ts \ 
-    ../share/hedgewars/Data/Locale/hedgewars_ko.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_hu.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_it.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_ja.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_ko.ts \
     ../share/hedgewars/Data/Locale/hedgewars_lt.ts \
     ../share/hedgewars/Data/Locale/hedgewars_ms.ts \
-    ../share/hedgewars/Data/Locale/hedgewars_nl.ts \ 
-    ../share/hedgewars/Data/Locale/hedgewars_pl.ts \ 
+    ../share/hedgewars/Data/Locale/hedgewars_nl.ts \
+    ../share/hedgewars/Data/Locale/hedgewars_pl.ts \
     ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts \
     ../share/hedgewars/Data/Locale/hedgewars_pt_PT.ts \
     ../share/hedgewars/Data/Locale/hedgewars_ro.ts \
@@ -249,7 +249,7 @@ TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
 
 RESOURCES += ../QTfrontend/hedgewars.qrc
 
-LIBS += -L../bin -lphysfs -lphyslayer
+LIBS += -L../bin -lhwphysfs -lphyslayer
 
 macx {
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.6
