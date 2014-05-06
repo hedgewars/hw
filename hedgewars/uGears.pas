@@ -564,27 +564,39 @@ begin
 end;
 
 procedure AddMiscGears;
-var p,i,j,rx, ry: Longword;
+var p,i,j,rx, ry, unplaced: Longword;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
 AddGear(0, 0, gtATStartGame, 0, _0, _0, 2000);
 
 i:= 0;
-Gear:= PGear(1);
-while (i < cLandMines) {and (Gear <> nil)} do // disable this check until better solution found
+unplaced:= 0;
+while (i < cLandMines) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+
+    if Gear = nil then 
+        inc(unplaced)
+    else
+        unplaced:= 0;
+
     inc(i)
     end;
 
 i:= 0;
-Gear:= PGear(1);
-while (i < cExplosives){ and (Gear <> nil)} do
+unplaced:= 0;
+while (i < cExplosives) and (unplaced < 4) do
     begin
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
+
+    if Gear = nil then 
+        inc(unplaced)
+    else
+        unplaced:= 0;
+
     inc(i)
     end;
 

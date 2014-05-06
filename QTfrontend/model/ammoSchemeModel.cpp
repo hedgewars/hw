@@ -309,7 +309,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(15)            // sudden death   29
             << QVariant(0)             // case prob      30
             << QVariant(0)             // mines time     31
-            << QVariant(80)            // mines number   32
+            << QVariant(200)           // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
             << QVariant(35)            // health case pct 35
@@ -358,7 +358,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(0)             // mines time     31
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
-            << QVariant(80)            // explosives     34
+            << QVariant(200)           // explosives     34
             << QVariant(35)            // health case pct 35
             << QVariant(25)            // health case amt 36
             << QVariant(47)            // water rise amt 37
