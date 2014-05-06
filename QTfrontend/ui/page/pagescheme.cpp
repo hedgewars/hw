@@ -335,7 +335,7 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
     glBSLayout->addWidget(l,11,1,1,1);
     SB_Mines = new QSpinBox(gbBasicSettings);
-    SB_Mines->setRange(0, 80);
+    SB_Mines->setRange(0, 200);
     SB_Mines->setValue(0);
     SB_Mines->setSingleStep(5);
     glBSLayout->addWidget(SB_Mines,11,2,1,1);
@@ -363,9 +363,9 @@ QLayout * PageScheme::bodyLayoutDefinition()
     l->setPixmap(QPixmap(":/res/iconDamage.png"));
     glBSLayout->addWidget(l,13,1,1,1);
     SB_Explosives = new QSpinBox(gbBasicSettings);
-    SB_Explosives->setRange(0, 40);
+    SB_Explosives->setRange(0, 200);
     SB_Explosives->setValue(0);
-    SB_Explosives->setSingleStep(1);
+    SB_Explosives->setSingleStep(3);
     glBSLayout->addWidget(SB_Explosives,13,2,1,1);
 
     l = new QLabel(gbBasicSettings);
