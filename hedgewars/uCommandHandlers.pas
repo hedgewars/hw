@@ -781,6 +781,11 @@ begin
 WorldEdge:= TWorldEdge(StrToInt(s))
 end;
 
+procedure chAdvancedMapGenMode(var s:shortstring);
+begin
+  cAdvancedMapGenMode:= true;
+end;
+
 procedure initModule;
 begin
 //////// Begin top sorted by freq analysis not including chatmsg
@@ -864,6 +869,7 @@ begin
     RegisterVariable('campvar' , @chCampVar      , true );
     RegisterVariable('record'  , @chRecord       , true );
     RegisterVariable('worldedge',@chWorldEdge    , false);
+    RegisterVariable('advmapgen',@chAdvancedMapGenMode, false);
 end;
 
 procedure freeModule;
