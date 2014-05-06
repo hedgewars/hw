@@ -101,6 +101,8 @@ var
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
 
+    cAdvancedMapGenMode: boolean;
+
     cHedgehogTurnTime: Longword;
     cMinesTime       : LongInt;
     cMaxAIThinkTime  : Longword;
@@ -2549,6 +2551,7 @@ begin
     cHealthCaseAmount   := 25;
     cWaterRise          := 47;
     cHealthDecrease     := 5;
+    cAdvancedMapGenMode := false;
 
     InitStepsFlags  := 0;
     RealTicks       := 0;
