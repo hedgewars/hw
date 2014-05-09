@@ -92,13 +92,12 @@ preprocess inputPath alternateInputPath fn symbols = do
         s <- try (string "IFDEF") <|> try (string "IFNDEF")
         let f = if s == "IFNDEF" then not else id
 
-        spaces
-        d <- identifier
+        ds <- (spaces >> identifier) `sepBy` (spaces >> string "OR")
         spaces
         char' '}'
 
         updateState $ \(m, b) ->
-            (m, (f $ d `Map.member` m) : b)
+            (m, (f $ any (flip Map.member m) ds) : b)
 
         return ""
 

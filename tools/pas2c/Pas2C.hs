@@ -121,7 +121,7 @@ pas2C fn inputPath outputPath alternateInputPath symbols = do
                     let ptree = parse pascalUnit fileName fc
                     case ptree of
                          (Left a) -> do
-                            liftIO $ writeFile (outputPath ++ "preprocess.out") fc
+                            liftIO $ writeFile (outputPath ++ fileName ++ "preprocess.out") fc
                             printLn $ show a ++ "\nsee preprocess.out for preprocessed source"
                             fail "stop"
                          (Right a) -> do
