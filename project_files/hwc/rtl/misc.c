@@ -127,7 +127,7 @@ bool fpcrtl_strncompare(string255 a, string255 b)
 
 bool fpcrtl_strncompareA(astring a, astring b)
 {
-    return (a.len != b.len) || (memcmp(a.s, b.s, a.len + 1) != 0);
+    return (a.len != b.len) || (memcmp(a.s, b.s, a.len) != 0);
 }
 
 
