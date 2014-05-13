@@ -108,13 +108,7 @@ string255 fpcrtl_chrconcat(char a, char b)
 
 bool fpcrtl_strcompare(string255 str1, string255 str2)
 {
-    FIX_STRING(str1);
-    FIX_STRING(str2);
-    if(strncmp(str1.str, str2.str, 256) == 0){
-        return true;
-    }
-
-    return false;
+    return memcmp(str1.s, str2.s, str1.len + 1) == 0;
 }
 
 bool fpcrtl_strcomparec(string255 a, char b)
@@ -133,14 +127,14 @@ bool fpcrtl_strncompare(string255 a, string255 b)
 
 bool fpcrtl_strncompareA(astring a, astring b)
 {
-    return (a.len == b.len) && (strncmp(a.s, b.s, MAX_ANSISTRING_LENGTH) == 0);
+    return (a.len != b.len) || (memcmp(a.s, b.s, a.len + 1) != 0);
 }
 
 
 string255 fpcrtl_pchar2str(const char *s)
 {
     string255 result;
-    
+
     if(!s)
     {
         result.len = 0;
