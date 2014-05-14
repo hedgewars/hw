@@ -111,7 +111,6 @@ begin
             begin
             AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
             DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color);
-            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
             end;
 
         prevPoint:= pe^.point;
