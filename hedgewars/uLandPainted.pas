@@ -82,6 +82,7 @@ var pe: PPointEntry;
     prevPoint: PointRec;
     radius: LongInt;
     color: Longword;
+    linePoints: Longword;
 begin
     // shutup compiler
     prevPoint.X:= 0;
@@ -99,18 +100,16 @@ begin
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
-            if (pe^.point.flags and $40 <> 0) then
+            if (pe^.point.flags and $40 <> 0) and (not cAdvancedMapGenMode) then
                 color:= 0
                 else
                 color:= lfBasic;
             radius:= (pe^.point.flags and $3F) * 5 + 3;
-            AddFileLog('[DRAW] Move to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
-            FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
+            linePoints:= FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
             end
             else
             begin
-            AddFileLog('[DRAW] Line to: ('+inttostr(pe^.point.X)+','+inttostr(pe^.point.Y)+'), radius = '+inttostr(radius));
-            DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color);
+            inc(linePoints, DrawThickLine(prevPoint.X, prevPoint.Y, pe^.point.X, pe^.point.Y, radius, color));
             end;
 
         prevPoint:= pe^.point;

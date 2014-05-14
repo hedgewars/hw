@@ -39,12 +39,12 @@ function  CheckLandValue(X, Y: LongInt; LandFlag: Word): boolean;
 function  DrawExplosion(X, Y, Radius: LongInt): Longword;
 procedure DrawHLinesExplosions(ar: PRangeArray; Radius: LongInt; y, dY: LongInt; Count: Byte);
 procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
-procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
+function FillRoundInLand(X, Y, Radius: LongInt; Value: Longword): Longword;
 function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
-procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
+function DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
 procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
@@ -297,36 +297,51 @@ begin
     addBgColor := (nAlpha shl AShift) or (nRed shl RShift) or (nGreen shl GShift) or (nBlue shl BShift);
 end;
 
-procedure FillCircleLines(x, y, dx, dy: LongInt; Value: Longword);
+function FillCircleLines(x, y, dx, dy: LongInt; Value: Longword): Longword;
 var i: LongInt;
 begin
-if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-        if (Land[y + dy, i] and lfIndestructible) = 0 then
-            Land[y + dy, i]:= Value;
-if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
-        if (Land[y - dy, i] and lfIndestructible) = 0 then
-            Land[y - dy, i]:= Value;
-if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-        if (Land[y + dx, i] and lfIndestructible) = 0 then
-            Land[y + dx, i]:= Value;
-if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
-    for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
-        if (Land[y - dx, i] and lfIndestructible) = 0 then
-            Land[y - dx, i]:= Value;
+    FillCircleLines:= 0;
+
+    if ((y + dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y + dy, i] and lfIndestructible) = 0 then
+            begin
+                if Land[y + dy, i] <> Value then inc(FillCircleLines);
+                Land[y + dy, i]:= Value;
+            end;
+    if ((y - dy) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dx, 0) to Min(x + dx, LAND_WIDTH - 1) do
+            if (Land[y - dy, i] and lfIndestructible) = 0 then
+            begin
+                if Land[y - dy, i] <> Value then inc(FillCircleLines);
+                Land[y - dy, i]:= Value;
+            end;
+    if ((y + dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y + dx, i] and lfIndestructible) = 0 then
+            begin
+                if Land[y + dx, i] <> Value then inc(FillCircleLines);
+                Land[y + dx, i]:= Value;
+            end;
+    if ((y - dx) and LAND_HEIGHT_MASK) = 0 then
+        for i:= Max(x - dy, 0) to Min(x + dy, LAND_WIDTH - 1) do
+            if (Land[y - dx, i] and lfIndestructible) = 0 then
+            begin
+                if Land[y - dx, i] <> Value then inc(FillCircleLines);
+                Land[y - dx, i]:= Value;
+            end;
 end;
 
-procedure FillRoundInLand(X, Y, Radius: LongInt; Value: Longword);
+function FillRoundInLand(X, Y, Radius: LongInt; Value: Longword): Longword;
 var dx, dy, d: LongInt;
 begin
+FillRoundInLand:= 0;
 dx:= 0;
 dy:= Radius;
 d:= 3 - 2 * Radius;
 while (dx < dy) do
     begin
-    FillCircleLines(x, y, dx, dy, Value);
+    inc(FillRoundInLand, FillCircleLines(x, y, dx, dy, Value));
     if (d < 0) then
         d:= d + 4 * dx + 6
     else
@@ -337,7 +352,7 @@ while (dx < dy) do
     inc(dx)
     end;
 if (dx = dy) then
-    FillCircleLines(x, y, dx, dy, Value);
+    inc(FillRoundInLand, FillCircleLines(x, y, dx, dy, Value));
 end;
 
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
@@ -984,19 +999,27 @@ for i:= 0 to d do
     end
 end;
 
-procedure DrawDots(x, y, xx, yy: Longint; Color: Longword); inline;
+function DrawDots(x, y, xx, yy: Longint; Color: Longword): Longword; inline;
 begin
-    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) then Land[y + yy, x + xx]:= Color;
-    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) then Land[y - yy, x + xx]:= Color;
-    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) then Land[y + yy, x - xx]:= Color;
-    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) then Land[y - yy, x - xx]:= Color;
-    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) then Land[y + xx, x + yy]:= Color;
-    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) then Land[y - xx, x + yy]:= Color;
-    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) then Land[y + xx, x - yy]:= Color;
-    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) then Land[y - xx, x - yy]:= Color;
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x + xx] <> Color) then 
+        begin inc(DrawDots); Land[y + yy, x + xx]:= Color; end;
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x + xx] <> Color) then 
+        begin inc(DrawDots); Land[y - yy, x + xx]:= Color; end;
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x - xx] <> Color) then 
+        begin inc(DrawDots); Land[y + yy, x - xx]:= Color; end;
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x - xx] <> Color) then 
+        begin inc(DrawDots); Land[y - yy, x - xx]:= Color; end;
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x + yy] <> Color) then 
+        begin inc(DrawDots); Land[y + xx, x + yy]:= Color; end;
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x + yy] <> Color) then 
+        begin inc(DrawDots); Land[y - xx, x + yy]:= Color; end;
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x - yy] <> Color) then 
+        begin inc(DrawDots); Land[y + xx, x - yy]:= Color; end;
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x - yy] <> Color) then 
+        begin inc(DrawDots); Land[y - xx, x - yy]:= Color; end;
 end;
 
-procedure DrawLines(X1, Y1, X2, Y2, XX, YY: LongInt; color: Longword);
+function DrawLines(X1, Y1, X2, Y2, XX, YY: LongInt; color: Longword): Longword;
 var
   eX, eY, dX, dY: LongInt;
   i, sX, sY, x, y, d: LongInt;
@@ -1006,6 +1029,7 @@ begin
     eY:= 0;
     dX:= X2 - X1;
     dY:= Y2 - Y1;
+    DrawLines:= 0;
 
     if (dX > 0) then
         sX:= 1
@@ -1047,30 +1071,32 @@ begin
             begin
             dec(eX, d);
             inc(x, sX);
-            DrawDots(x, y, xx, yy, color)
+            inc(DrawLines, DrawDots(x, y, xx, yy, color))
             end;
         if (eY > d) then
             begin
             dec(eY, d);
             inc(y, sY);
             f:= true;
-            DrawDots(x, y, xx, yy, color)
+            inc(DrawLines, DrawDots(x, y, xx, yy, color))
             end;
 
         if not f then
-            DrawDots(x, y, xx, yy, color)
+            inc(DrawLines, DrawDots(x, y, xx, yy, color))
         end
 end;
 
-procedure DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword);
+function DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
 var dx, dy, d: LongInt;
 begin
+    DrawThickLine:= 0;
+
     dx:= 0;
     dy:= Radius;
     d:= 3 - 2 * Radius;
     while (dx < dy) do
         begin
-        DrawLines(x1, y1, x2, y2, dx, dy, color);
+        inc(DrawThickLine, DrawLines(x1, y1, x2, y2, dx, dy, color));
         if (d < 0) then
             d:= d + 4 * dx + 6
         else
@@ -1081,7 +1107,7 @@ begin
         inc(dx)
         end;
     if (dx = dy) then
-        DrawLines(x1, y1, x2, y2, dx, dy, color);
+        inc(DrawThickLine, DrawLines(x1, y1, x2, y2, dx, dy, color));
 end;
 
 
