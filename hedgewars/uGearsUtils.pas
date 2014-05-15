@@ -380,7 +380,7 @@ begin
                 Gear^.dY:= _90-(GetRandomf*_360)
                 end
             else DeleteGear(Gear);
-            exit
+            exit(true)
             end;
         isSubmersible:= ((Gear = CurrentHedgehog^.Gear) and (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0)) or (Gear^.State and gstSubmersible <> 0);
         skipSpeed := _0_25;
@@ -414,7 +414,7 @@ begin
                             begin
                             // Gear could become nil after this, just exit to skip splashes
                             ResurrectHedgehog(Gear);
-                            exit
+                            exit(true)
                             end
                         else
                             begin
@@ -427,7 +427,7 @@ begin
                     else
                         Gear^.doStep := @doStepDrowningGear;
                         if Gear^.Kind = gtFlake then
-                            exit // skip splashes
+                            exit(true) // skip splashes
                 end
             else if (Y > cWaterLine + cVisibleWater*4) and
                     ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.State and gstSubmersible = 0)) then
