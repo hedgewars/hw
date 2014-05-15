@@ -1,5 +1,6 @@
 module PascalParser (
-    pascalUnit
+    pascalUnit,
+    mainResultInit
     )
     where
 
@@ -12,6 +13,10 @@ import Data.Char
 
 import PascalBasics
 import PascalUnitSyntaxTree
+
+
+mainResultInit :: Phrase
+mainResultInit = (\(Right a) -> a) $ parse phrase "<built-in>" "main:= 0;"
 
 knownTypes :: [String]
 knownTypes = ["shortstring", "ansistring", "char", "byte"]
