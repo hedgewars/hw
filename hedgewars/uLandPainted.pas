@@ -27,7 +27,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uScript;
+uses uLandGraphics, uConsts, uVariables, uUtils, SDLh, uCommands, uScript, uIO;
 
 type PointRec = packed record
     X, Y: SmallInt;
@@ -82,12 +82,13 @@ var pe: PPointEntry;
     prevPoint: PointRec;
     radius: LongInt;
     color: Longword;
-    linePoints: Longword;
+    lineNumber, linePoints: Longword;
 begin
     // shutup compiler
     prevPoint.X:= 0;
     prevPoint.Y:= 0;
     radius:= 0;
+    linePoints:= 0;
 
     pe:= pointsListHead;
     while (pe <> nil) and (pe^.point.flags and $80 = 0) do
@@ -96,16 +97,23 @@ begin
         pe:= pe^.next;
         end;
 
+    lineNumber:= 0;
+
     while(pe <> nil) do
         begin
         if (pe^.point.flags and $80 <> 0) then
             begin
-            if (pe^.point.flags and $40 <> 0) and (not cAdvancedMapGenMode) then
+            if (lineNumber > 0) and (linePoints = 0) and cAdvancedMapGenMode then
+                    SendIPC('|' + inttostr(lineNumber - 1));
+
+            inc(lineNumber);
+
+            if (pe^.point.flags and $40 <> 0) then
                 color:= 0
                 else
                 color:= lfBasic;
             radius:= (pe^.point.flags and $3F) * 5 + 3;
-            linePoints:= FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color)
+            linePoints:= FillRoundInLand(pe^.point.X, pe^.point.Y, radius, color);
             end
             else
             begin

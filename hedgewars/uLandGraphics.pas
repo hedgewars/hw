@@ -44,7 +44,7 @@ function FillRoundInLandFT(X, Y, Radius: LongInt; fill: fillType): Longword;
 procedure ChangeRoundInLand(X, Y, Radius: LongInt; doSet, isCurrent: boolean);
 function  LandBackPixel(x, y: LongInt): LongWord;
 procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
-function DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
+function  DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
 procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
@@ -1001,6 +1001,8 @@ end;
 
 function DrawDots(x, y, xx, yy: Longint; Color: Longword): Longword; inline;
 begin
+    DrawDots:= 0;
+
     if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x + xx] <> Color) then 
         begin inc(DrawDots); Land[y + yy, x + xx]:= Color; end;
     if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x + xx] <> Color) then 
