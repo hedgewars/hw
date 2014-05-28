@@ -27,6 +27,9 @@
 HWMap::HWMap(QObject * parent) :
     TCPBase(false, parent)
 {
+    templateFilter = 0;
+    m_mapgen = MAPGEN_REGULAR;
+    m_maze_size = 0;
 }
 
 HWMap::~HWMap()

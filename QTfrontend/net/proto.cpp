@@ -58,5 +58,5 @@ QString HWProto::chatStringToAction(const QString & string)
     if(string.left(4) == "/me ")
         return string.mid(4);
     else
-        return NULL;
+        return QString();
 }

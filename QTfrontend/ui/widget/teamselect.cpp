@@ -121,26 +121,22 @@ void TeamSelWidget::changeTeamColor(const HWTeam& team)
 void TeamSelWidget::removeNetTeam(const HWTeam& team)
 {
     //qDebug() << QString("removeNetTeam: removing team '%1'").arg(team.TeamName);
-    for(;;)
+    QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
+    if(itPlay==curPlayingTeams.end())
     {
-        QList<HWTeam>::iterator itPlay=std::find(curPlayingTeams.begin(), curPlayingTeams.end(), team);
-        if(itPlay==curPlayingTeams.end())
-        {
-            qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
-            break;
-        }
-        if(itPlay->isNetTeam())
-        {
-            QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
-            framePlaying->removeTeam(team);
-            curPlayingTeams.erase(itPlay);
-            break;
-        }
-        else
-        {
-            qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
-            break;
-        }
+        qWarning() << QString("removeNetTeam: team '%1' not found").arg(team.name());
+        return;
+    }
+
+    if(itPlay->isNetTeam())
+    {
+        QObject::disconnect(framePlaying->getTeamWidget(*itPlay), SIGNAL(teamStatusChanged(HWTeam)));
+        framePlaying->removeTeam(team);
+        curPlayingTeams.erase(itPlay);
+    }
+    else
+    {
+        qWarning() << QString("removeNetTeam: team '%1' was actually a local team!").arg(team.name());
     }
     emit setEnabledGameStart(curPlayingTeams.size()>1);
 }

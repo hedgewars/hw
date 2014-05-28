@@ -182,6 +182,9 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     m_isAdmin = false;
     m_autoKickEnabled = false;
 
+    m_scrollToBottom = false;
+    m_scrollBarPos = 0;
+
     QStringList vpList =
          QStringList() << "Classic" << "Default" << "Mobster" << "Russian";
 

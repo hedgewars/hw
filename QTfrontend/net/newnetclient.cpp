@@ -39,6 +39,9 @@ HWNewNet::HWNewNet() :
     m_game_connected(false),
     netClientState(Disconnected)
 {
+    m_private_game = false;
+    m_nick_registered = false;
+
     m_roomsListModel = new RoomsListModel(this);
 
     m_playersModel = new PlayersListModel(this);

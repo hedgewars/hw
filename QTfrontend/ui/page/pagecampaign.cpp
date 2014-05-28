@@ -45,7 +45,7 @@ QLayout * PageCampaign::bodyLayoutDefinition()
     btnPreview = formattedButton(":/res/campaign/A_Classic_Fairytale/first_blood.png", true);
     infoLayout->setAlignment(btnPreview, Qt::AlignHCenter | Qt::AlignVCenter);
 
-    lbldescription = new QLabel();
+    lbldescription = new QLabel(this);
     lbldescription->setAlignment(Qt::AlignHCenter| Qt::AlignTop);
     lbldescription->setWordWrap(true);
 

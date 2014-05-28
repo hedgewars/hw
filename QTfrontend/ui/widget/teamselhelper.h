@@ -75,7 +75,7 @@ class TeamShowWidget : public QWidget
         FrameTeams * m_parentFrameTeams;
 
     signals:
-        void teamStatusChanged(HWTeam team);
+        void teamStatusChanged(const HWTeam &);
         void hhNmChanged(const HWTeam&);
         void teamColorChanged(const HWTeam&);
 };

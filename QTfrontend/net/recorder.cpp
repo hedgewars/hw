@@ -37,6 +37,7 @@ HWRecorder::HWRecorder(GameUIConfig * config, const QString &prefix) :
 {
     this->config = config;
     this->prefix = prefix;
+    item = 0;
     finished = false;
     name = prefix + "." + LibavInteraction::instance().getExtension(config->AVFormat());
 }

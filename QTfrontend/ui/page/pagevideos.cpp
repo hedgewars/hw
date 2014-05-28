@@ -99,6 +99,7 @@ VideoItem::VideoItem(const QString& name)
     pUploading = NULL;
     lastSizeUpdate = 0;
     progress = 0;
+    seen = false;
 }
 
 VideoItem::~VideoItem()

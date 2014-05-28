@@ -39,6 +39,8 @@ struct HWHog
     QString Name;
     QString Hat;
     int Rounds, Kills, Deaths, Suicides;
+
+    HWHog() : Rounds(0), Kills(0), Deaths(0), Suicides(0){}
 };
 
 // class representing a team
