@@ -60,6 +60,9 @@ HWGame::HWGame(GameUIConfig * config, GameCFGWidget * gamecfg, QString ammo, Tea
     lastGameCfg = gamecfg;
     lastGameAmmo = ammo;
     lastGameTeamSel = pTeamSelWidget;
+
+    gameState = gsNotStarted;
+    gameType = gtNone;
 }
 
 HWGame::~HWGame()

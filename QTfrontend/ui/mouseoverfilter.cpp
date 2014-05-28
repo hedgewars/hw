@@ -22,6 +22,8 @@ MouseOverFilter::MouseOverFilter(QObject *parent) :
 
 bool MouseOverFilter::eventFilter( QObject *dist, QEvent *event )
 {
+    AbstractPage* abstractpage;
+
     if (event->type() == QEvent::Enter)
     {
         QWidget * widget = dynamic_cast<QWidget*>(dist);

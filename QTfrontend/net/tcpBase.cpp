@@ -111,6 +111,8 @@ TCPBase::TCPBase(bool demoMode, QObject *parent) :
     m_connected(false),
     IPCSocket(0)
 {
+    process = 0;
+
     if(!IPCServer)
     {
         IPCServer = new QTcpServer(0);

@@ -47,6 +47,7 @@ DataManager::DataManager()
     m_themeModel = NULL;
     m_colorsModel = NULL;
     m_bindsModel = NULL;
+    m_gameStyleModel = NULL;
 }
 
 

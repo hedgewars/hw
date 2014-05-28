@@ -54,6 +54,7 @@ SDLInteraction::SDLInteraction()
     m_music = NULL;
     m_musicTrack = "";
     m_isPlayingMusic = false;
+    lastchannel = 0;
     if(SDL_NumJoysticks())
         addGameControllerKeys();
     SDL_QuitSubSystem(SDL_INIT_JOYSTICK);
@@ -174,6 +175,9 @@ void SDLInteraction::addGameControllerKeys() const
         // Close the game controller as we no longer need it
         SDL_JoystickClose(joy);
     }
+
+    if(i >= 1024)
+        i = 1023;
 
     // Terminate the list
     sdlkeys[i][0][0] = '\0';

@@ -48,7 +48,6 @@ class GameCFGWidget : public QGroupBox
         QComboBox * GameSchemes;
         QComboBox * WeaponsName;
         HWMapContainer* pMapContainer;
-        QTableView * tv;
         QVariant schemeData(int column) const;
         bool isMaster();
 

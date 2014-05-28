@@ -46,7 +46,6 @@ class CHedgehogerWidget : public ItemNum
 
     private:
         CHedgehogerWidget();
-        FrameTeams* pOurFrameTeams;
 };
 
 #endif // _HEDGEHOGER_WIDGET

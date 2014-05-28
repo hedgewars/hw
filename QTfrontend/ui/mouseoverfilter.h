@@ -20,7 +20,6 @@ class MouseOverFilter : public QObject
 
     private:
         Ui_HWForm *ui;
-        AbstractPage* abstractpage;
 
 };
 
