@@ -20,7 +20,7 @@
 
 unit uLand;
 interface
-uses SDLh, uLandTemplates, uFloat, uConsts, uTypes, uAILandMarks;
+uses SDLh, uLandTemplates, uConsts, uTypes, uAILandMarks;
 
 procedure initModule;
 procedure freeModule;
@@ -32,7 +32,7 @@ procedure GenPreviewAlpha(out Preview: TPreviewAlpha);
 implementation
 uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uVariables, uUtils, uCommands, adler32, uDebug, uLandPainted, uTextures,
-     uLandGenMaze, uLandOutline, uPhysFSLayer, uScript, uLandGenPerlin,
+     uLandGenMaze, uPhysFSLayer, uScript, uLandGenPerlin,
      uLandGenTemplateBased, uLandUtils;
 
 var digest: shortstring;

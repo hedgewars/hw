@@ -52,6 +52,8 @@ for e:= Low(TEventId) to High(TEventId) do
 f:= pfsOpenRead(FileName);
 TryDo(f <> nil, 'Cannot load locale "' + FileName + '"', false);
 
+s:= '';
+
 if f <> nil then
     begin
     while not pfsEof(f) do
