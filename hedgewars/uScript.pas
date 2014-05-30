@@ -2101,7 +2101,6 @@ begin
 end;
 
 procedure ScriptOnPreviewInit;
-var i, j, k: LongInt;
 begin
 // not required if there is no script to run
 if not ScriptLoaded then

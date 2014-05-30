@@ -783,6 +783,7 @@ end;
 
 procedure chAdvancedMapGenMode(var s:shortstring);
 begin
+  s:= s; // avoid compiler hint
   cAdvancedMapGenMode:= true;
 end;
 

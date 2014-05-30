@@ -127,12 +127,12 @@ const detail = 150000;
     height = 2048;
     minY = 500;
 
-    bottomPlateHeight = 90;
-    bottomPlateMargin = 1200;
+    //bottomPlateHeight = 90;
+    //bottomPlateMargin = 1200;
     margin = 200;
 
 procedure GenPerlin;
-var y, x, dy, di, dj, r: LongInt;
+var y, x, {dy, }di, dj, r: LongInt;
 begin
     inoise_setup();
 
