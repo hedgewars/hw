@@ -240,6 +240,7 @@ end
 
 function onGameInit()
 	EnableGameFlags(gfInfAttack, gfRandomOrder, gfPerHogAmmo)
+	DisableGameFlags(gfResetWeps, gfSharedAmmo)
 	HealthCaseProb = 100
 end
 
