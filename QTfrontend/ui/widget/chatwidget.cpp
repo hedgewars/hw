@@ -593,9 +593,10 @@ void HWChatWidget::onPlayerInfo(
 {
     addLine("msg_PlayerInfo", QString(" >>> %1 - <span class=\"ipaddress\">%2</span> <span class=\"version\">%3</span> <span class=\"location\">%4</span>")
         .arg(linkedNick(nick))
-        .arg(ip == "[]"?"":ip)
-        .arg(version)
-        .arg(roomInfo));
+        .arg(Qt::escape(ip == "[]"?"":ip))
+        .arg(Qt::escape(version))
+        .arg(Qt::escape(roomInfo))
+    );
 }
 
 void HWChatWidget::onKick()
