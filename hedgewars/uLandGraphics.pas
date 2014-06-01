@@ -49,6 +49,7 @@ procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible, outOfMap: boolean; LandFlags: Word): boolean;
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -607,16 +608,23 @@ end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 begin
-TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, indestructible, 0);
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, indestructible, false, 0);
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
+begin
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, indestructible, false, LandFlags);
+end;
+
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible, outOfMap: boolean; LandFlags: Word): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
 begin
 TryPlaceOnLand:= false;
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
+
+if outOfMap then doPlace:= false; // just using for a check
 
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
 Image:= SpritesData[Obj].Surface;
@@ -637,13 +645,20 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0) then
-                    begin
-                        if SDL_MustLock(Image) then
-                            SDL_UnlockSurface(Image);
-                        exit;
-                    end;
+                if (outOfMap and 
+                   ((cpY + y) < LAND_HEIGHT) and ((cpY + y) >= 0) and 
+                   ((cpX + x) < LAND_WIDTH) and ((cpX + x) >= 0) and 
+                   (Land[cpY + y, cpX + x] <> 0)) or
+
+                   (not outOfMap and
+                       (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                       ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or 
+                       (Land[cpY + y, cpX + x] <> 0))) then
+                   begin
+                   if SDL_MustLock(Image) then
+                       SDL_UnlockSurface(Image);
+                   exit
+                   end;
         p:= PByteArray(@(p^[Image^.pitch]));
         end;
     end;
