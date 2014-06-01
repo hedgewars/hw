@@ -1839,7 +1839,13 @@ if isCursorVisible then
             i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
+                    begin
+                    if (CurAmmoType = amGirder) or (CurAmmoType = amRubber) then
+                        Tint($FF, $FF, $FF, $A0);
                     DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
+                    if (CurAmmoType = amGirder) or (CurAmmoType = amRubber) then
+                        Untint();
+                    end;
                 end;
         DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
         end
