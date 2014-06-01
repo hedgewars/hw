@@ -449,6 +449,8 @@ case Layer of
                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                             else
                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                vgtNoPlaceWarn:
+                            DrawTexture(round(Gear^.X) + WorldDx - round(Gear^.Tex^.w * Gear^.Scale) div 2, round(Gear^.Y) + WorldDy - round(Gear^.Tex^.h * Gear^.Scale) div 2, Gear^.Tex, Gear^.Scale);
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;

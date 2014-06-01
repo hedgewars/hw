@@ -895,6 +895,27 @@ else
     end
 end;
 
+////////////////////////////////////////////////////////////////////////////////
+procedure doStepNoPlaceWarn(Gear: PVisualGear; Steps: Longword);
+begin
+
+if Gear^.FrameTicks <= Steps then
+    DeleteVisualGear(Gear)
+else
+    begin
+    // age
+    dec(Gear^.FrameTicks, Steps);
+    // toggle between orange and red every few ticks
+    if (Gear^.FrameTicks div 300) mod 2 = 0 then
+        Gear^.Tint:= $FF400000
+    else
+        Gear^.Tint:= $FF000000;
+    // fade out alpha
+    Gear^.Tint:= Gear^.Tint or ((Gear^.FrameTicks * $FF) div 3000);
+    // get bigger as we fade out
+    // Gear^.Scale:= 1.1 - 0.001 * (Gear^.FrameTicks div 30);
+    end
+end;
 
 const handlers: array[TVisualGearType] of TVGearStepProcedure =
         (
@@ -930,7 +951,8 @@ const handlers: array[TVisualGearType] of TVGearStepProcedure =
             @doStepBulletHit,
             @doStepCircle,
             @doStepSmoothWindBar,
-            @doStepStraightShot
+            @doStepStraightShot,
+            @doStepNoPlaceWarn
         );
 
 procedure initModule;

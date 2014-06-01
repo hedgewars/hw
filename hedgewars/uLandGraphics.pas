@@ -49,9 +49,10 @@ procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean; LandFlags: Word): boolean;
+function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
-uses SDLh, uLandTexture, uVariables, uUtils, uDebug;
+uses SDLh, uLandTexture, uTextures, uVariables, uUtils, uDebug;
 
 
 procedure calculatePixelsCoordinates(landX, landY: Longint; var pixelX, pixelY: Longint); inline;
@@ -693,6 +694,67 @@ y:= Max(cpY, topY);
 h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
 UpdateLandTexture(x, w, y, h, true)
 end;
+
+function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
+var X, Y, bpp, h, w, row, col, numFramesFirstCol: LongInt;
+    p, pt: PByteArray;
+    Image, finalSurface: PSDL_Surface;
+begin
+GetPlaceCollisionTex:= nil;
+numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
+
+TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+Image:= SpritesData[Obj].Surface;
+w:= SpritesData[Obj].Width;
+h:= SpritesData[Obj].Height;
+row:= Frame mod numFramesFirstCol;
+col:= Frame div numFramesFirstCol;
+
+if SDL_MustLock(Image) then
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
+
+bpp:= Image^.format^.BytesPerPixel;
+TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+
+
+
+finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w, h, 32, RMask, GMask, BMask, AMask);
+
+TryDo(finalSurface <> nil, 'GetPlaceCollisionTex: fail to create surface', true);
+
+if SDL_MustLock(finalSurface) then
+    SDLTry(SDL_LockSurface(finalSurface) >= 0, true);
+
+// draw on surface based on collisions
+p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+pt:= PByteArray(@(PByteArray(finalSurface^.pixels)^));
+
+case bpp of
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if (((PLongword(@(p^[x * 4]))^) and AMask) <> 0)
+                and (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0)) then
+                    (PLongword(@(pt^[x * 4]))^):= cWhiteColor
+            else
+                (PLongword(@(pt^[x * 4]))^):= 0;
+        p:= PByteArray(@(p^[Image^.pitch]));
+        pt:= PByteArray(@(pt^[finalSurface^.pitch]));
+        end;
+    end;
+
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+
+if SDL_MustLock(finalSurface) then
+    SDL_UnlockSurface(finalSurface);
+
+GetPlaceCollisionTex:= Surface2Tex(finalSurface, true);
+
+SDL_FreeSurface(finalSurface);
+end;
+
 
 function Despeckle(X, Y: LongInt): boolean;
 var nx, ny, i, j, c, xx, yy: LongInt;

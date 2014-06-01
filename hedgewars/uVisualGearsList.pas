@@ -322,6 +322,12 @@ vgtSmoothWindBar:
                 FrameTicks:= random(750) + 1250;
                 State:= ord(sprSnowDust);
                 end;
+  vgtNoPlaceWarn:
+                begin
+                FrameTicks:= 2000;
+                Tint:= $FF0000FF;
+                Scale:= 1.0;
+                end;
         end;
 
 if State <> 0 then
@@ -363,6 +369,7 @@ case Gear^.Kind of
                   gear^.Scale:= 0.4;
                   gear^.Layer:= 4
                   end;
+    vgtNoPlaceWarn: gear^.Layer:= 6;
 
     // 0: this layer is very distant in the background when in stereo
     vgtTeamHealthSorter,

@@ -2502,6 +2502,8 @@ var
     x, y, tx, ty: hwFloat;
     rx: LongInt;
     LandFlags: Word;
+    warn: PVisualGear;
+    distFail: boolean;
 begin
     AllInactive := false;
 
@@ -2516,14 +2518,21 @@ begin
     if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy
     else if cIce then LandFlags:= lfIce;
 
-    if ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or
+    distFail:= ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or
             (
             (Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y) > _256) and
             (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
-            )))
+            )));
+    if distFail
     or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, false, LandFlags)) then
         begin
         PlaySound(sndDenied);
+        if not distFail then
+            begin
+            warn:= AddVisualGear(Gear^.Target.X, Gear^.Target.Y, vgtNoPlaceWarn, 0);
+            if warn <> nil then
+                warn^.Tex := GetPlaceCollisionTex(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State);
+            end;
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
         HHGear^.State := HHGear^.State or gstHHChooseTarget;

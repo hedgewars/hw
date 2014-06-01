@@ -113,7 +113,7 @@ type
             vgtDust, vgtSplash, vgtDroplet, vgtSmokeRing, vgtBeeTrace, vgtEgg,
             vgtFeather, vgtHealthTag, vgtSmokeTrace, vgtEvilTrace, vgtExplosion,
             vgtBigExplosion, vgtChunk, vgtNote, vgtLineTrail, vgtBulletHit, vgtCircle,
-            vgtSmoothWindBar, vgtStraightShot);
+            vgtSmoothWindBar, vgtStraightShot, vgtNoPlaceWarn);
 
     // Damage can be caused by different sources
     TDamageSource = (dsUnknown, dsFall, dsBullet, dsExplosion, dsShove, dsPoison);
