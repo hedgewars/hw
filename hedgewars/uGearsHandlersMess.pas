@@ -2594,7 +2594,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprHHTelepMask].Width div 2,
         Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2,
-        sprHHTelepMask, 0, false, false) then
+        sprHHTelepMask, 0, false, false, not hasBorder, 0) then
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
