@@ -321,19 +321,19 @@ case step of
                     end;
                 AddCaption(trmsg[sidSuddenDeath], cWhiteColor, capgrpGameState);
                 playSound(sndSuddenDeath);
-                StopMusic //No SDMusic for now
-                    //ChangeMusic(SDMusic)
-                    end
-                else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
-                    begin
-                    i:= cSuddenDTurns - TotalRounds;
-                    s:= ansistring(inttostr(i));
-                    if i = 1 then
-                        AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
-                    else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
-                        AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
-                    end;
+                StopMusic;
+                if SDMusicFN <> '' then PlayMusic
+                end
+            else if (TotalRounds < cSuddenDTurns) and (not isInMultiShoot) then
+                begin
+                i:= cSuddenDTurns - TotalRounds;
+                s:= ansistring(inttostr(i));
+                if i = 1 then
+                    AddCaption(trmsg[sidRoundSD], cWhiteColor, capgrpGameState)
+                else if (i = 2) or ((i > 0) and ((i mod 50 = 0) or ((i <= 25) and (i mod 5 = 0)))) then
+                    AddCaption(FormatA(trmsg[sidRoundsSD], s), cWhiteColor, capgrpGameState);
                 end;
+            end;
             if bBetweenTurns
             or isInMultiShoot
             or (TotalRounds = -1) then
