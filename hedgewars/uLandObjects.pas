@@ -604,7 +604,9 @@ while not pfsEOF(f) do
         SDWaterOpacity:= WaterOpacity
         end
     else if key = 'music' then
-        SetMusicName(Trim(s))
+        MusicFN:= Trim(s)
+    else if key = 'sd-music' then
+        SDMusicFN:= Trim(s)
     else if key = 'clouds' then
         begin
         cCloudsNumber:= Word(StrToInt(Trim(s))) * cScreenSpace div 4096;

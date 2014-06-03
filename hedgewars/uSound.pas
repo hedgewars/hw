@@ -104,6 +104,8 @@ function  ChangeVolume(voldelta: LongInt): LongInt;
 // Returns a pointer to the voicepack with the given name.
 function  AskForVoicepack(name: shortstring): Pointer;
 
+var MusicFN: shortstring; // music file name
+    SDMusicFN: shortstring; // SD music file name
 
 var Volume: LongInt;
     SoundTimerTicks: Longword;
@@ -117,7 +119,6 @@ var cInitVolume: LongInt;
     voicepacks: array[0..cMaxTeams] of TVoicepack;
     defVoicepack: PVoicepack;
     Mus: PMixMusic; // music pointer
-    MusicFN: shortstring; // music file name
     isMusicEnabled: boolean;
     isSoundEnabled: boolean;
     isSEBackup: boolean;
@@ -554,8 +555,9 @@ var s: shortstring;
 begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
-
-    s:= '/Music/' + MusicFN;
+    if SuddenDeath and (SDMusicFN <> '') then 
+         s:= '/Music/' + SDMusicFN
+    else s:= '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
 
     Mus:= Mix_LoadMUS_RW(rwopsOpenRead(s));
