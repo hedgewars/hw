@@ -52,6 +52,7 @@ procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
 
+procedure openglTint            (r, g, b, a: Byte); inline;
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
@@ -713,12 +714,22 @@ widget:= widget; // avoid hint
 {$ENDIF}
 end;
 
+procedure openglTint(r, g, b, a: Byte); inline;
+{$IFDEF GL2}
+const
+    scale:Real = 1.0/255.0;
+{$ENDIF}
+begin
+    {$IFDEF GL2}
+    glUniform4f(uMainTintLocation, r*scale, g*scale, b*scale, a*scale);
+    {$ELSE}
+    glColor4ub(r, g, b, a);
+    {$ENDIF}
+end;
+
 procedure Tint(r, g, b, a: Byte); inline;
 var
     nc, tw: Longword;
-    {$IFDEF GL2}
-    scale:Real = 1.0/255.0;
-    {$ENDIF}
 begin
     nc:= (r shl 24) or (g shl 16) or (b shl 8) or a;
 
@@ -735,12 +746,7 @@ begin
         b:= tw
         end;
 
-    {$IFDEF GL2}
-    glUniform4f(uMainTintLocation, r*scale, g*scale, b*scale, a*scale);
-    //glColor4ub(r, g, b, a);
-    {$ELSE}
-    glColor4ub(r, g, b, a);
-    {$ENDIF}
+    openglTint(r, g, b, a);
     lastTint:= nc;
 end;
 
@@ -752,7 +758,9 @@ end;
 
 procedure untint(); inline;
 begin
-    Tint($FF, $FF, $FF, $FF)
+    if cWhiteColor = lastTint then exit;
+    openglTint($FF, $FF, $FF, $FF);
+    lastTint:= cWhiteColor;
 end;
 
 procedure setTintAdd(f: boolean); inline;
