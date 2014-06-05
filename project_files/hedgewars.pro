@@ -116,7 +116,8 @@ HEADERS += ../QTfrontend/model/ThemeModel.h \
     ../QTfrontend/ui/widget/lineeditcursor.h \
     ../QTfrontend/servermessages.h \
     ../QTfrontend/ui/widget/roomnameprompt.h \
-    ../QTfrontend/weapons.h
+    ../QTfrontend/weapons.h \
+    ../QTfrontend/net/hwmapoptimizer.h
 
 
 SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
@@ -214,7 +215,8 @@ SOURCES += ../QTfrontend/model/ammoSchemeModel.cpp \
     ../QTfrontend/util/MessageDialog.cpp \
     ../QTfrontend/ui/widget/feedbackdialog.cpp \
     ../QTfrontend/ui/widget/lineeditcursor.cpp \
-    ../QTfrontend/ui/widget/roomnameprompt.cpp
+    ../QTfrontend/ui/widget/roomnameprompt.cpp \
+    ../QTfrontend/net/hwmapoptimizer.cpp
 
 
 TRANSLATIONS += ../share/hedgewars/Data/Locale/hedgewars_ar.ts \
