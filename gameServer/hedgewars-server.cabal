@@ -35,4 +35,7 @@ Executable hedgewars-server
     entropy,
     zlib
 
+  if !os(windows)
+    build-depends: unix
+
   ghc-options: -O2
