@@ -8,11 +8,13 @@ Author:              unC0Rr
 Maintainer:          unC0Rr@hedgewars.org
 Category:            Game
 Build-type:          Simple
-Cabal-version:       >=1.2
+Cabal-version:       >=1.10
 
 
 Executable hedgewars-server
   main-is: hedgewars-server.hs
+
+  default-language:    Haskell2010
 
   Build-depends:
     base >= 4.3,
