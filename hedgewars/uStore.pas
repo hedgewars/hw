@@ -42,6 +42,8 @@ function  LoadDataImageAltPath(const path, altPath: TPathType; const filename: s
 function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: shortstring; imageFlags: LongInt): PSDL_Surface;
 
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
+procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReuse: boolean);
+
 procedure SetupOpenGL;
 procedure SetScale(f: GLfloat);
 function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
@@ -95,9 +97,20 @@ var MaxTextureSize: LongInt;
     // attributes
 {$ENDIF}
 
+    prevHat: shortstring;
+    tmpHatSurf: PSDL_Surface;
+
 const
     cHHFileName = 'Hedgehog';
     cCHFileName = 'Crosshair';
+
+procedure freeTmpHatSurf();
+begin
+    if tmpHatSurf = nil then exit;
+    SDL_FreeSurface(tmpHatSurf);
+    tmpHatSurf:= nil;
+    prevHat:= 'NoHat';
+end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
 var w, h: LongInt;
@@ -276,12 +289,15 @@ for t:= 0 to Pred(TeamsCount) do
                     if Hat <> 'NoHat' then
                         begin
                         if (Length(Hat) > 39) and (Copy(Hat,1,8) = 'Reserved') and (Copy(Hat,9,32) = PlayerHash) then
-                            LoadHedgehogHat(Hedgehogs[i], 'Reserved/' + Copy(Hat,9,Length(Hat)-8))
+                            LoadHedgehogHat2(Hedgehogs[i], 'Reserved/' + Copy(Hat,9,Length(Hat)-8), true)
                         else
-                            LoadHedgehogHat(Hedgehogs[i], Hat);
+                            LoadHedgehogHat2(Hedgehogs[i], Hat, true);
                         end
                     end;
         end;
+
+    freeTmpHatSurf();
+
     MissionIcons:= LoadDataImage(ptGraphics, 'missions', ifCritical);
     iconsurf:= SDL_CreateRGBSurface(SDL_SWSURFACE, 28, 28, 32, RMask, GMask, BMask, AMask);
     if iconsurf <> nil then
@@ -701,7 +717,11 @@ begin
 end;
 
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
-var texsurf: PSDL_Surface;
+begin
+    LoadHedgehogHat2(HH, newHat, false);
+end;
+
+procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReuse: boolean);
 begin
     // free the mem of any previously assigned texture.  This was previously only if the new one could be loaded, but, NoHat is usually a better choice
     if HH.HatTex <> nil then
@@ -709,18 +729,29 @@ begin
         FreeTexture(HH.HatTex);
         HH.HatTex:= nil
         end;
-    texsurf:= LoadDataImage(ptHats, newHat, ifNone);
+
+    // load new hat surface if this hat is different than the one already loaded
+    if newHat <> prevHat then
+        begin
+        freeTmpHatSurf();
+        tmpHatSurf:= LoadDataImage(ptHats, newHat, ifNone);
+        end;
+
 AddFileLog('Hat => '+newHat);
     // only do something if the hat could be loaded
-    if texsurf <> nil then
+    if tmpHatSurf <> nil then
         begin
 AddFileLog('Got Hat');
 
         // assign new hat to hedgehog
-        HH.HatTex:= Surface2Tex(texsurf, true);
+        HH.HatTex:= Surface2Tex(tmpHatSurf, true);
 
+        // remember that this hat was used last
+        if allowSurfReuse then
+            prevHat:= newHat
         // cleanup: free temporary surface mem
-        SDL_FreeSurface(texsurf)
+        else
+            freeTmpHatSurf();
         end;
 end;
 
@@ -1677,6 +1708,9 @@ begin
 {$ELSE}
     SDLPrimSurface:= nil;
 {$ENDIF}
+
+    prevHat:= 'NoHat';
+    tmpHatSurf:= nil;
 end;
 
 procedure freeModule;
