@@ -599,17 +599,40 @@ end;
 function LoadImage(const filename: shortstring; imageFlags: LongInt): PSDL_Surface;
 var tmpsurf: PSDL_Surface;
     s: shortstring;
+    rwops: PSDL_RWops;
 begin
     LoadImage:= nil;
     WriteToConsole(msgLoading + filename + '.png [flags: ' + inttostr(imageFlags) + '] ');
 
     s:= filename + '.png';
-    tmpsurf:= IMG_Load_RW(rwopsOpenRead(s), true);
 
+    rwops:= nil;
+    tmpsurf:= nil;
+
+    if pfsExists(s) then
+        begin
+        // get data source
+        rwops:= rwopsOpenRead(s);
+
+        // load image with SDL (with freesrc param set to true)
+        if rwops <> nil then
+            tmpsurf:= IMG_Load_RW(rwops, true);
+        end;
+
+    // loading failed
     if tmpsurf = nil then
         begin
+
+        // anounce that loading failed
         OutError(msgFailed, false);
-        SDLTry(false, (imageFlags and ifCritical) <> 0);
+
+        // output sdl error if loading failed when data source was available
+        if rwops <> nil then
+            begin
+            SDLTry(false, (imageFlags and ifCritical) <> 0);
+            // rwops was already freed by IMG_Load_RW
+            rwops:= nil;
+            end;
         exit;
         end;
 
