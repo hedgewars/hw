@@ -230,9 +230,8 @@ begin
     CountNonZeroz:= lRes;
 end;
 
-function AddGirder(gX: LongInt): boolean;
-var tmpsurf: PSDL_Surface;
-    x1, x2, y, k, i: LongInt;
+function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
+var x1, x2, y, k, i: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
@@ -272,18 +271,18 @@ until y > (LAND_HEIGHT-125);
 if x1 > 0 then
 begin
     bRes:= true;
-    tmpsurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+    if girSurf = nil then
+        girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
     rr.x:= x1;
     while rr.x < x2 do
         begin
         if cIce then
-            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf, lfIce)
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, girSurf^.w), girSurf, lfIce)
         else
-            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, tmpsurf^.w), tmpsurf);
-        inc(rr.x, tmpsurf^.w);
+            BlitImageAndGenerateCollisionInfo(rr.x, y, min(x2 - rr.x, girSurf^.w), girSurf);
+        inc(rr.x, girSurf^.w);
         end;
-    SDL_FreeSurface(tmpsurf);
 
     AddRect(x1 - 8, y - 32, x2 - x1 + 16, 80);
 end
@@ -857,17 +856,25 @@ begin
 end;
 
 procedure AddObjects();
-var i, g: Longword;
+var girSurf: PSDL_Surface;
+    i, g: Longword;
 begin
 InitRects;
 if hasGirders then
     begin
     g:= max(playWidth div 8, 256);
     i:= leftX + g;
+    girSurf:= nil;
     repeat
-        AddGirder(i);
+        AddGirder(i, girSurf);
         i:=i + g;
     until (i > rightX - g);
+    // free girder surface
+    if girSurf <> nil then
+        begin
+        SDL_FreeSurface(girSurf);
+        girSurf:= nil;
+        end;
     end;
 if (GameFlags and gfDisableLandObjects) = 0 then
     AddThemeObjects(ThemeObjects);
