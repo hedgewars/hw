@@ -1179,7 +1179,7 @@ var
     VertexBuffer: array [0..3] of TVertex2f;
     c1, c2: LongWord; // couple of colours for edges
 begin
-if WorldEdge <> weNone then
+if (WorldEdge = weSea) or (WorldEdge = weSky) or (WorldEdge = weBounce) then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
 
@@ -1444,6 +1444,11 @@ else
     changeDepth(RM, cStereo_Land);
     DrawVisualGears(5);
     DrawLand(WorldDx, WorldDy);
+    if WorldEdge = weWrap then
+        begin
+        DrawLand(WorldDx - playWidth, WorldDy);
+        DrawLand(WorldDx + playWidth, WorldDy);
+        end;
 
     DrawWater(255, 0);
 
@@ -1471,9 +1476,27 @@ else
         end;
 *)
 
+
+if WorldEdge = weWrap then
+    begin
+    // remember original value
+    i:= WorldDx;
+    WorldDx:= i - playWidth;
+    DrawVisualGears(1);
+    DrawGears();
+    DrawVisualGears(6);
+    WorldDx:= i + playWidth;
+    DrawVisualGears(1);
+    DrawGears();
+    DrawVisualGears(6);
+    // reset to original value
+    WorldDx:= i;
+    end;
+
 DrawVisualGears(1);
 DrawGears;
 DrawVisualGears(6);
+
 
 if SuddenDeathDmg then
     DrawWater(SDWaterOpacity, 0)
@@ -1508,11 +1531,33 @@ if (cReducedQuality and rq2DWater) = 0 then
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
     ChangeDepth(RM, cStereo_Outside);
+    if WorldEdge = weWrap then
+        begin
+        // remember original value
+        i:= WorldDx;
+        WorldDx:= i - playWidth;
+        DrawVisualGears(2);
+        WorldDx:= i + playWidth;
+        DrawVisualGears(2);
+        // reset to original value
+        WorldDx:= i;
+        end;
     DrawVisualGears(2);
 
 // everything after this ResetDepth will be drawn at screen level (depth = 0)
 // note: everything that needs to be readable should be on this level
     ResetDepth(RM);
+    if WorldEdge = weWrap then
+        begin
+        // remember original value
+        i:= WorldDx;
+        WorldDx:= i - playWidth;
+        DrawVisualGears(3);
+        WorldDx:= i + playWidth;
+        DrawVisualGears(3);
+        // reset to original value
+        WorldDx:= i;
+        end;
     DrawVisualGears(3);
 
 {$WARNINGS OFF}
