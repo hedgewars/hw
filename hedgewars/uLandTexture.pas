@@ -30,7 +30,7 @@ procedure ResetLand;
 procedure SetLandTexture;
 
 implementation
-uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender;
+uses uConsts, GLunit, uTypes, uVariables, uTextures, uDebug, uRender, uUtils;
 
 const TEXSIZE = 128;
       // in avoid tile borders stretch the blurry texture by 1 pixel more
@@ -173,7 +173,7 @@ else
 end;
 
 procedure DrawLand(dX, dY: LongInt);
-var x, y, tX, ty, tSize, offscreen: LongInt;
+var x, y, tX, ty, tSize, fx, lx, fy, ly: LongInt;
     tScale: GLfloat;
     overlap: boolean;
 begin
@@ -193,46 +193,57 @@ else
     overlap:= false;
     end;
 
-tX:= dX;
+// figure out visible area
+// first column
+tx:= ViewLeftX - dx;
+fx:= tx div tSize;
+if tx < 0 then dec(fx);
+fx:= max(0, fx);
 
-// loop through all columns
-for x:= 0 to LANDTEXARW -1 do
+// last column
+tx:= ViewRightX - dx;
+lx:= tx div tSize;
+if tx < 0 then dec(lx);
+lx:= min(LANDTEXARW -1, lx);
+
+// all offscreen
+if (fx > lx) then
+    exit;
+
+// first row
+ty:= ViewTopY - dy;
+fy:= ty div tSize;
+if ty < 0 then dec(fy);
+fy:= max(0, fy);
+
+// last row
+ty:= ViewBottomY - dy;
+ly:= ty div tSize;
+if ty < 0 then dec(ly);
+ly:= min(LANDTEXARH -1, ly);
+
+// all offscreen
+if (fy > ly) then
+    exit;
+
+tX:= dX + tsize * fx;
+
+// loop through columns
+for x:= fx to lx do
     begin
+    // loop through textures in this column
+    for y:= fy to ly do
+        with LandTextures[x, y] do
+            if tex <> nil then
+                begin
+                ty:= dY + y * tSize;
+                if overlap then
+                    DrawTexture2(tX, ty, tex, tScale, BLURRYLANDOVERLAP)
+                else
+                    DrawTexture(tX, ty, tex, tScale);
+                end;
 
-    // don't draw column if offscreen
-    offscreen:= isDxAreaOffscreen(tX, tSize);
-
-    if offscreen = 0 then
-        begin
-        // loop through all textures in this column
-        for y:= 0 to LANDTEXARH - 1 do
-            with LandTextures[x, y] do
-                if tex <> nil then
-                    begin
-                    ty:= dY + y * tSize;
-
-                    // don't draw texture if offscreen
-                    offscreen:= isDyAreaOffscreen(tY, tSize);
-
-                    if offscreen = 0 then
-                        begin
-                        if overlap then
-                            DrawTexture2(tX, ty, tex, tScale, BLURRYLANDOVERLAP)
-                        else
-                            DrawTexture(tX, ty, tex, tScale);
-                        end
-
-                    // if below screen, skip remaining textures in this column
-                    else if offscreen > 1 then
-                        break;
-                    end;
-
-        end
-    // if right of screen, skip remaining columns
-    else if offscreen > 0 then
-        break;
-
-    // increment texX
+    // increment tX
     inc(tX, tSize);
     end;
 end;
