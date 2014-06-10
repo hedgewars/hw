@@ -71,7 +71,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glTranslatef(WorldDx, WorldDy, 0);
 
-    glLineWidth(2.0 * zoom);
+    glLineWidth(2.0 * cScaleFactor);
 
     Tint($C0, $C0, $C0, $FF);
 
@@ -963,8 +963,8 @@ begin
                 if (cTagsMask and htHealth) <> 0 then
                     ty := ty - HealthTagTex^.h - 2;
                 tx := ox;
-                tx := round(max(((-cScreenWidth + 16) / zoom) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / zoom) - SpritesData[sprFinger].Width div 2, tx)));
-                ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / (zoom)) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (zoom)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
+                tx := round(max(((-cScreenWidth + 16) / cScaleFactor) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / cScaleFactor) - SpritesData[sprFinger].Width div 2, tx)));
+                ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / cScaleFactor) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (cScaleFactor)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
 
                 dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
 
