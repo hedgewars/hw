@@ -549,7 +549,7 @@ var i: LongInt;
     count: LongInt = 0;
 begin
     if (y and LAND_HEIGHT_MASK) = 0 then
-        for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 4) do
+        for i:= max(x - r, 0) to min(x + r, LAND_WIDTH - 1) do
             if Land[y, i] and mask <> 0 then
             begin
                 inc(count);
@@ -560,6 +560,28 @@ begin
                 end;
             end;
     CountNonZeroz:= count;
+end;
+
+function isSteadyPosition(x, y, r, c: LongInt; mask: Longword): boolean;
+var cnt, i: LongInt;
+begin
+    cnt:= 0;
+    isSteadyPosition:= false;
+
+    if ((y and LAND_HEIGHT_MASK) = 0) and (x - r >= 0) and (x + r < LAND_WIDTH) then
+    begin
+        for i:= r - c + 2 to r do
+        begin
+            if (Land[y, x - i] and mask <> 0) then inc(cnt);
+            if (Land[y, x + i] and mask <> 0) then inc(cnt);
+
+            if cnt >= c then
+            begin
+                isSteadyPosition:= true;
+                exit
+            end;
+        end;
+    end;
 end;
 
 
@@ -629,16 +651,14 @@ while tryAgain do
                         ((not ignoreOverlap) and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, $FFFF) <> 0)) or
                         (ignoreOverlap and (CountNonZeroz(x, y, Gear^.Radius - 1, 1, lfLandMask) <> 0));
 
-                if (y - sy > Gear^.Radius * 2)
+                if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
-                    and (y < cWaterLine)
-                    and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
-                    and (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF) > Gear^.Radius))
-                or
-                    ((Gear^.Kind <> gtExplosives)
-                    and (y < cWaterLine)
-                    and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
-                    )) then
+                        and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
+                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)))
+                    or
+                        ((Gear^.Kind <> gtExplosives)
+                        and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
+                        )) then
                     begin
                     ar[cnt].X:= x;
                     if withFall then
