@@ -276,6 +276,7 @@ begin
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
+            updateViewLimits();
             SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
