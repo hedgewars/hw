@@ -214,6 +214,8 @@ var
     // for tracking the limits of the visible grid based on cScaleFactor
     ViewLeftX, ViewRightX, ViewBottomY, ViewTopY: LongInt;
 
+    dirtyLandTexCount: LongInt;
+
     hiTicks: Word;
 
     LuaGoals        : shortstring;
@@ -2596,6 +2598,8 @@ begin
     cLeftScreenBorder:= round(-cMinZoomLevel * cScreenWidth);
     cRightScreenBorder:= round(cMinZoomLevel * cScreenWidth + LAND_WIDTH);
     cScreenSpace:= cRightScreenBorder - cLeftScreenBorder;
+
+    dirtyLandTexCount:= 0;
 
     vobFrameTicks:= 99999;
     vobFramesCount:= 4;
