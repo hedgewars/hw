@@ -833,36 +833,7 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= lh;
 
-{$IFNDEF GL2}
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-        if SuddenDeathDmg then
-            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @SDWaterColorArray[0])
-        else
-            glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WaterColorArray[0]);
-
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-
-        glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
-
-        glDisableClientState(GL_COLOR_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-{$ELSE}
-        UpdateModelviewProjection;
-
-        BeginWater;
-        if SuddenDeathDmg then
-            SetColorPointer(@SDWaterColorArray[0], 4)
-        else
-            SetColorPointer(@WaterColorArray[0], 4);
-
-        SetVertexPointer(@VertexBuffer[0], 4);
-
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-
-        EndWater;
-{$ENDIF}
+        DrawWaterBody(@VertexBuffer[0], Length(VertexBuffer));
 
 {$IFNDEF GL2}
         // must not be Tint() as color array seems to stay active and color reset is required
@@ -1130,46 +1101,25 @@ end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
 begin
-{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; d:= d; // avoid hint
-    exit;
-{$ELSE}
+{$IFDEF USE_S3D_RENDERING}
     d:= d / 5;
     if rm = rmDefault then
         exit
     else if rm = rmLeftEye then
         d:= -d;
     stereoDepth:= stereoDepth + d;
-
-{$IFDEF GL2}
-    hglMatrixMode(MATRIX_PROJECTION);
-    hglTranslatef(d, 0, 0);
-    hglMatrixMode(MATRIX_MODELVIEW);
-{$ELSE}
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(d, 0, 0);
-    glMatrixMode(GL_MODELVIEW);
-{$ENDIF}
+    openglTranslProjMatrix(d, 0, 0);
 {$ENDIF}
 end;
 
 procedure ResetDepth(rm: TRenderMode);
 begin
-{$IFNDEF USE_S3D_RENDERING}
     rm:= rm; // avoid hint
-    exit;
-{$ELSE}
+{$IFDEF USE_S3D_RENDERING}
     if rm = rmDefault then
         exit;
-{$IFDEF GL2}
-    hglMatrixMode(MATRIX_PROJECTION);
-    hglTranslatef(-stereoDepth, 0, 0);
-    hglMatrixMode(MATRIX_MODELVIEW);
-{$ELSE}
-    glMatrixMode(GL_PROJECTION);
-    glTranslatef(-stereoDepth, 0, 0);
-    glMatrixMode(GL_MODELVIEW);
-{$ENDIF}
+    openglTranslProjMatrix(-stereoDepth, 0, 0);
     cStereoDepth:= 0;
 {$ENDIF}
 end;
@@ -1186,7 +1136,7 @@ if WorldEdge <> weNone then
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     if WorldEdge = weWrap then
-        glColor4ub($00, $00, $00, $20)
+        glColor4ub($00, $00, $00, $40)
     else
         begin
         glEnableClientState(GL_COLOR_ARRAY);
@@ -2182,7 +2132,6 @@ begin
     stereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
-    stereoDepth:= stereoDepth; // avoid hint
 
     FillChar(WorldFade, sizeof(WorldFade), 0);
     WorldFade[0].a:= 255;
