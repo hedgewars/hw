@@ -72,6 +72,8 @@ procedure SetColorPointer(p: Pointer;n: Integer);
 procedure BeginWater;
 procedure EndWater;
 
+procedure updateViewLimits();
+
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
      uCommands, uPhysFSLayer, uDebug
@@ -1175,6 +1177,19 @@ begin
 end;
 *)
 
+
+procedure updateViewLimits();
+var tmp: real;
+begin
+    // cScaleFactor is 2.0 on "no zoom"
+    tmp:= cScreenWidth / cScaleFactor;
+    ViewRightX:= round(tmp); // ceil could make more sense
+    ViewLeftX:= round(-tmp); // floor could make more sense
+    tmp:= cScreenHeight / cScaleFactor;
+    ViewBottomY:= round(tmp) + cScreenHeight div 2; // ceil could make more sense
+    ViewTopY:= round(-tmp) + cScreenHeight div 2; // floor could make more sense
+end;
+
 procedure SetScale(f: GLfloat);
 begin
 // leave immediately if scale factor did not change
@@ -1203,6 +1218,7 @@ begin
         end;
 
     cScaleFactor:= f;
+    updateViewLimits();
 
 {$IFDEF GL2}
     UpdateModelviewProjection;
@@ -1690,6 +1706,7 @@ begin
     RegisterVariable('fullscr', @chFullScr, true);
 
     cScaleFactor:= 2.0;
+    updateViewLimits();
     Step:= 0;
     ProgrTex:= nil;
     SupportNPOTT:= false;

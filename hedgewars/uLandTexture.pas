@@ -173,20 +173,68 @@ else
 end;
 
 procedure DrawLand(dX, dY: LongInt);
-var x, y: LongInt;
+var x, y, tX, ty, tSize, offscreen: LongInt;
+    tScale: GLfloat;
+    overlap: boolean;
 begin
 RealLandTexUpdate;
 
+// init values based on quality settings
+if (cReducedQuality and rqBlurryLand) <> 0 then
+    begin
+    tSize:= TEXSIZE * 2;
+    tScale:= 2.0;
+    overlap:= (cReducedQuality and rqClampLess) <> 0;
+    end
+else
+    begin
+    tSize:= TEXSIZE;
+    tScale:= 1.0;
+    overlap:= false;
+    end;
+
+tX:= dX;
+
+// loop through all columns
 for x:= 0 to LANDTEXARW -1 do
-    for y:= 0 to LANDTEXARH - 1 do
-        with LandTextures[x, y] do
-            if tex <> nil then
-                if (cReducedQuality and rqBlurryLand) = 0 then
-                    DrawTexture(dX + x * TEXSIZE, dY + y * TEXSIZE, tex)
-                else if (cReducedQuality and rqClampLess) = 0 then
-                    DrawTexture(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0)
-                else
-                    DrawTexture2(dX + x * TEXSIZE * 2, dY + y * TEXSIZE * 2, tex, 2.0, BLURRYLANDOVERLAP);
+    begin
+
+    // don't draw column if offscreen
+    offscreen:= isDxAreaOffscreen(tX, tSize);
+
+    if offscreen = 0 then
+        begin
+        // loop through all textures in this column
+        for y:= 0 to LANDTEXARH - 1 do
+            with LandTextures[x, y] do
+                if tex <> nil then
+                    begin
+                    ty:= dY + y * tSize;
+
+                    // don't draw texture if offscreen
+                    offscreen:= isDyAreaOffscreen(tY, tSize);
+
+                    if offscreen = 0 then
+                        begin
+                        if overlap then
+                            DrawTexture2(tX, ty, tex, tScale, BLURRYLANDOVERLAP)
+                        else
+                            DrawTexture(tX, ty, tex, tScale);
+                        end
+
+                    // if below screen, skip remaining textures in this column
+                    else if offscreen > 1 then
+                        break;
+                    end;
+
+        end
+    // if right of screen, skip remaining columns
+    else if offscreen > 0 then
+        break;
+
+    // increment texX
+    inc(tX, tSize);
+    end;
 end;
 
 procedure SetLandTexture;

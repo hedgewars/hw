@@ -211,6 +211,9 @@ var
     WorldDx: LongInt;
     WorldDy: LongInt;
 
+    // for tracking the limits of the visible grid based on cScaleFactor
+    ViewLeftX, ViewRightX, ViewBottomY, ViewTopY: LongInt;
+
     hiTicks: Word;
 
     LuaGoals        : shortstring;
