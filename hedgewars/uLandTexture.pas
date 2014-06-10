@@ -224,6 +224,7 @@ ly:= min(LANDTEXARH -1, ly);
 if (fy > ly) then
     exit;
 
+// update visible areas of landtex before drawing
 RealLandTexUpdate(fx, lx, fy, ly);
 
 tX:= dX + tsize * fx;
