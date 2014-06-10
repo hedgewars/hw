@@ -92,7 +92,7 @@ begin
                 end
 end;
 
-procedure RealLandTexUpdate;
+procedure RealLandTexUpdate(x1, x2, y1, y2: LongInt);
 var x, y, ty, tx, lx, ly : LongWord;
     isEmpty: boolean;
 begin
@@ -109,8 +109,8 @@ if LandTextures[0, 0].tex = nil then
                 end
 else
 *)
-    for x:= 0 to LANDTEXARW -1 do
-        for y:= 0 to LANDTEXARH - 1 do
+    for x:= x1 to x2 do
+        for y:= y1 to y2 do
             with LandTextures[x, y] do
                 if shouldUpdate then
                     begin
@@ -177,8 +177,6 @@ var x, y, tX, ty, tSize, fx, lx, fy, ly: LongInt;
     tScale: GLfloat;
     overlap: boolean;
 begin
-RealLandTexUpdate;
-
 // init values based on quality settings
 if (cReducedQuality and rqBlurryLand) <> 0 then
     begin
@@ -225,6 +223,8 @@ ly:= min(LANDTEXARH -1, ly);
 // all offscreen
 if (fy > ly) then
     exit;
+
+RealLandTexUpdate(fx, lx, fy, ly);
 
 tX:= dX + tsize * fx;
 
