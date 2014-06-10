@@ -654,7 +654,9 @@ while tryAgain do
                 if (y - sy > Gear^.Radius * 2) and (y < cWaterLine)
                     and (((Gear^.Kind = gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 60, 60))
-                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)))
+                        and (isSteadyPosition(x, y+1, Gear^.Radius - 1, 3, $FFFF)
+                         or (CountNonZeroz(x, y+1, Gear^.Radius - 1, Gear^.Radius+1, $FFFF) > Gear^.Radius)
+                            ))
                     or
                         ((Gear^.Kind <> gtExplosives)
                         and (ignoreNearObjects or NoGearsToAvoid(x, y - Gear^.Radius, 110, 110))
