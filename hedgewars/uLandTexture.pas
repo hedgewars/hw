@@ -67,6 +67,7 @@ end;
 
 procedure UpdateLandTexture(X, Width, Y, Height: LongInt; landAdded: boolean);
 var tx, ty: Longword;
+    tSize : LongInt;
 begin
     if cOnlyStats then exit;
     if (Width <= 0) or (Height <= 0) then
@@ -76,20 +77,22 @@ begin
     TryDo((Y >= 0) and (Y < LAND_HEIGHT), 'UpdateLandTexture: wrong Y parameter', true);
     TryDo(Y + Height <= LAND_HEIGHT, 'UpdateLandTexture: wrong Height parameter', true);
 
-    if (cReducedQuality and rqBlurryLand) = 0 then
-        for ty:= Y div TEXSIZE to (Y + Height - 1) div TEXSIZE do
-            for tx:= X div TEXSIZE to (X + Width - 1) div TEXSIZE do
+    tSize:= TEXSIZE;
+
+    // land textures have half the size/resolution in blurry mode
+    if (cReducedQuality and rqBlurryLand) <> 0 then
+        tSize:= tSize * 2;
+
+    for ty:= Y div tSize to (Y + Height - 1) div tSize do
+        for tx:= X div tSize to (X + Width - 1) div tSize do
+            begin
+            if not LandTextures[tx, ty].shouldUpdate then
                 begin
                 LandTextures[tx, ty].shouldUpdate:= true;
-                LandTextures[tx, ty].landAdded:= landAdded
-                end
-    else
-        for ty:= (Y div TEXSIZE) div 2 to ((Y + Height - 1) div TEXSIZE) div 2 do
-            for tx:= (X div TEXSIZE) div 2 to ((X + Width - 1) div TEXSIZE) div 2 do
-                begin
-                LandTextures[tx, ty].shouldUpdate:= true;
-                LandTextures[tx, ty].landAdded:= landAdded
-                end
+                inc(dirtyLandTexCount);
+                end;
+            LandTextures[tx, ty].landAdded:= landAdded
+            end;
 end;
 
 procedure RealLandTexUpdate(x1, x2, y1, y2: LongInt);
@@ -115,6 +118,7 @@ else
                 if shouldUpdate then
                     begin
                     shouldUpdate:= false;
+                    dec(dirtyLandTexCount);
                     isEmpty:= not landAdded;
                     landAdded:= false;
                     ty:= 0;
@@ -169,6 +173,10 @@ else
                         FreeTexture(tex);
                         tex:= nil
                         end;
+
+                    // nothing else to do
+                    if dirtyLandTexCount < 1 then
+                        exit;
                     end
 end;
 
@@ -225,7 +233,8 @@ if (fy > ly) then
     exit;
 
 // update visible areas of landtex before drawing
-RealLandTexUpdate(fx, lx, fy, ly);
+if dirtyLandTexCount > 0 then
+    RealLandTexUpdate(fx, lx, fy, ly);
 
 tX:= dX + tsize * fx;
 
