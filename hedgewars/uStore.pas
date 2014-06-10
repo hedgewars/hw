@@ -63,14 +63,13 @@ procedure SetSkyColor(r, g, b: real);
 
 {$IFDEF GL2}
 procedure UpdateModelviewProjection;
-procedure EnableTexture(enable:Boolean);
 {$ENDIF}
+
+procedure EnableTexture(enable:Boolean);
 
 procedure SetTexCoordPointer(p: Pointer;n: Integer);
 procedure SetVertexPointer(p: Pointer;n: Integer);
 procedure SetColorPointer(p: Pointer;n: Integer);
-procedure BeginWater;
-procedure EndWater;
 
 procedure updateViewLimits();
 
@@ -1094,15 +1093,20 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
     // disable/lower perspective correction (will not need it anyway)
 end;
 
-{$IFDEF GL2}
 procedure EnableTexture(enable:Boolean);
 begin
+    {$IFDEF GL2}
     if enable then
         glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 1)
     else
         glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 0);
+    {$ELSE}
+    if enable then
+        glEnable(GL_TEXTURE_2D)
+    else
+        glDisable(GL_TEXTURE_2D);
+    {$ENDIF}
 end;
-{$ENDIF}
 
 procedure SetTexCoordPointer(p: Pointer; n: Integer);
 begin
@@ -1222,34 +1226,6 @@ begin
 
 {$IFDEF GL2}
     UpdateModelviewProjection;
-{$ENDIF}
-end;
-
-procedure BeginWater;
-begin
-{$IFDEF GL2}
-    glUseProgram(shaderWater);
-    uCurrentMVPLocation:=uWaterMVPLocation;
-    UpdateModelviewProjection;
-    glDisableVertexAttribArray(aTexCoord);
-    glEnableVertexAttribArray(aColor);
-{$ELSE}
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-{$ENDIF}
-end;
-
-procedure EndWater;
-begin
-{$IFDEF GL2}
-    glUseProgram(shaderMain);
-    uCurrentMVPLocation:=uMainMVPLocation;
-    UpdateModelviewProjection;
-    glDisableVertexAttribArray(aColor);
-    glEnableVertexAttribArray(aTexCoord);
-{$ELSE}
-    glDisableClientState(GL_COLOR_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 {$ENDIF}
 end;
 

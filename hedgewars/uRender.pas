@@ -51,8 +51,8 @@ procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte
 procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
+procedure DrawWaterBody         (pVertexBuffer: Pointer; length: LongInt);
 
-procedure openglTint            (r, g, b, a: Byte); inline;
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
@@ -63,6 +63,16 @@ function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 // 0 => not offscreen, <0 => left/top of screen >0 => right/below of screen
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
 function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
+
+
+procedure openglTranslProjMatrix(X, Y, Z: GLFloat); inline;
+procedure openglPushMatrix      (); inline;
+procedure openglPopMatrix       (); inline;
+procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
+procedure openglScalef          (ScaleX, ScaleY, ScaleZ: GLfloat); inline;
+procedure openglRotatef         (RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
+procedure openglTint            (r, g, b, a: Byte); inline;
+
 
 implementation
 uses uVariables;
@@ -92,6 +102,68 @@ begin
     if Y > ViewBottomY then exit(1);
     if Y + Height < ViewTopY then exit(-1);
     isDyAreaOffscreen:= 0;
+end;
+
+procedure openglTranslProjMatrix(X, Y, Z: GLfloat); inline;
+begin
+{$IFDEF GL2}
+    hglMatrixMode(MATRIX_PROJECTION);
+    hglTranslatef(X, Y, Z);
+    hglMatrixMode(MATRIX_MODELVIEW);
+{$ELSE}
+    glMatrixMode(GL_PROJECTION);
+    glTranslatef(X, Y, Z);
+    glMatrixMode(GL_MODELVIEW);
+{$ENDIF}
+end;
+
+procedure openglPushMatrix(); inline;
+begin
+{$IFDEF GL2}h{$ENDIF}glPushMatrix();
+end;
+
+procedure openglPopMatrix(); inline;
+begin
+{$IFDEF GL2}h{$ENDIF}glPopMatrix();
+end;
+
+procedure openglTranslatef(X, Y, Z: GLfloat); inline;
+begin
+{$IFDEF GL2}h{$ENDIF}glTranslatef(X, Y, Z);
+end;
+
+procedure openglScalef(ScaleX, ScaleY, ScaleZ: GLfloat); inline;
+begin
+{$IFDEF GL2}h{$ENDIF}glScalef(ScaleX, ScaleY, ScaleZ);
+end;
+
+procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
+begin
+{$IFDEF GL2}h{$ENDIF}glRotatef(RotX, RotY, RotZ, dir);
+end;
+
+procedure openglUseColorOnly(b :boolean); inline;
+begin
+    if b then
+        begin
+        {$IFDEF GL2}
+        glDisableVertexAttribArray(aTexCoord);
+        glEnableVertexAttribArray(aColor);
+        {$ELSE}
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnableClientState(GL_COLOR_ARRAY);
+        {$ENDIF}
+        end
+    else
+        begin
+        {$IFDEF GL2}
+        glDisableVertexAttribArray(aColor);
+        glEnableVertexAttribArray(aTexCoord);
+        {$ELSE}
+        glDisableClientState(GL_COLOR_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        {$ENDIF}
+        end;
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
@@ -182,15 +254,9 @@ end;
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture; Scale: GLfloat);
 begin
 
-{$IFDEF GL2}
-hglPushMatrix;
-hglTranslatef(X, Y, 0);
-hglScalef(Scale, Scale, 1);
-{$ELSE}
-glPushMatrix;
-glTranslatef(X, Y, 0);
-glScalef(Scale, Scale, 1);
-{$ENDIF}
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
+openglScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -199,12 +265,10 @@ SetTexCoordPointer(@Texture^.tb, Length(Texture^.vb));
 
 {$IFDEF GL2}
 UpdateModelviewProjection;
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-hglPopMatrix;
-{$ELSE}
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-glPopMatrix;
 {$ENDIF}
+
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+openglPopMatrix;
 
 end;
 
@@ -213,15 +277,9 @@ procedure DrawTexture2(X, Y: LongInt; Texture: PTexture; Scale, Overlap: GLfloat
 var
     TextureBuffer: array [0..3] of TVertex2f;
 begin
-{$IFDEF GL2}
-hglPushMatrix;
-hglTranslatef(X, Y, 0);
-hglScalef(Scale, Scale, 1);
-{$ELSE}
-glPushMatrix;
-glTranslatef(X, Y, 0);
-glScalef(Scale, Scale, 1);
-{$ENDIF}
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
+openglScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -239,12 +297,10 @@ SetTexCoordPointer(@TextureBuffer, Length(Texture^.vb));
 
 {$IFDEF GL2}
 UpdateModelviewProjection;
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-hglPopMatrix;
-{$ELSE}
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
-glPopMatrix;
 {$ENDIF}
+
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+openglPopMatrix;
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
@@ -263,25 +319,15 @@ if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWi
 if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
-{$IFDEF GL2}
-hglPushMatrix;
-hglTranslatef(X, Y, 0);
-{$ELSE}
-glPushMatrix;
-glTranslatef(X, Y, 0);
-{$ENDIF}
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
 
 if Dir = 0 then Dir:= 1;
 
-{$IFDEF GL2}
-hglRotatef(Angle, 0, 0, Dir);
-hglTranslatef(Dir*OffsetX, OffsetY, 0);
-hglScalef(Scale, Scale, 1);
-{$ELSE}
-glRotatef(Angle, 0, 0, Dir);
-glTranslatef(Dir*OffsetX, OffsetY, 0);
-glScalef(Scale, Scale, 1);
-{$ENDIF}
+openglRotatef(Angle, 0, 0, Dir);
+
+openglTranslatef(Dir*OffsetX, OffsetY, 0);
+openglScalef(Scale, Scale, 1);
 
 // Any reason for this call? And why only in t direction, not s?
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -325,11 +371,7 @@ UpdateModelviewProjection;
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-{$IFDEF GL2}
-hglPopMatrix;
-{$ELSE}
-glPopMatrix;
-{$ENDIF}
+openglPopMatrix;
 
 end;
 
@@ -344,40 +386,20 @@ end;
 procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 
-{$IFDEF GL2}
-hglPushMatrix;
-hglTranslatef(X, Y, 0);
-{$ELSE}
-glPushMatrix;
-glTranslatef(X, Y, 0);
-{$ENDIF}
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
 
 if Dir < 0 then
-{$IFDEF GL2}
-    hglRotatef(Angle, 0, 0, -1)
-{$ELSE}
-    glRotatef(Angle, 0, 0, -1)
-{$ENDIF}
+    begin
+    openglRotatef(Angle, 0, 0, -1);
+    openglScalef(-1.0, 1.0, 1.0);
+    end
 else
-{$IFDEF GL2}
-    hglRotatef(Angle, 0, 0,  1);
-{$ELSE}
-    glRotatef(Angle, 0, 0,  1);
-{$ENDIF}
-if Dir < 0 then
-{$IFDEF GL2}
-    hglScalef(-1.0, 1.0, 1.0);
-{$ELSE}
-    glScalef(-1.0, 1.0, 1.0);
-{$ENDIF}
+    openglRotatef(Angle, 0, 0,  1);
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 
-{$IFDEF GL2}
-hglPopMatrix;
-{$ELSE}
-glPopMatrix;
-{$ENDIF}
+openglPopMatrix;
 
 end;
 
@@ -390,29 +412,16 @@ if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
 if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
     exit;
 
-{$IFDEF GL2}
-hglPushMatrix;
-hglTranslatef(X, Y, 0);
-{$ELSE}
-glPushMatrix;
-glTranslatef(X, Y, 0);
-{$ENDIF}
+openglPushMatrix;
+openglTranslatef(X, Y, 0);
 
 if Dir < 0 then
     begin
     hw:= - hw;
-{$IFDEF GL2}
-    hglRotatef(Angle, 0, 0, -1);
-{$ELSE}
-    glRotatef(Angle, 0, 0, -1);
-{$ENDIF}
+    openglRotatef(Angle, 0, 0, -1);
     end
 else
-{$IFDEF GL2}
-    hglRotatef(Angle, 0, 0,  1);
-{$ELSE}
-    glRotatef(Angle, 0, 0, 1);
-{$ENDIF}
+    openglRotatef(Angle, 0, 0, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -434,11 +443,7 @@ UpdateModelviewProjection;
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-{$IFDEF GL2}
-hglPopMatrix;
-{$ELSE}
-glPopMatrix;
-{$ENDIF}
+openglPopMatrix;
 
 end;
 
@@ -509,12 +514,16 @@ procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 var VertexBuffer: array [0..1] of TVertex2f;
 begin
     glEnable(GL_LINE_SMOOTH);
-{$IFNDEF GL2}
-    glDisable(GL_TEXTURE_2D);
 
-    glPushMatrix;
-    glTranslatef(WorldDx, WorldDy, 0);
+    EnableTexture(False);
+
+    openglPushMatrix;
+    openglTranslatef(WorldDx, WorldDy, 0);
     glLineWidth(Width);
+
+    {$IFDEF GL2}
+    UpdateModelviewProjection;
+    {$ENDIF}
 
     Tint(r, g, b, a);
     VertexBuffer[0].X:= X0;
@@ -526,33 +535,10 @@ begin
     glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
     untint;
 
-    glPopMatrix;
+    openglPopMatrix;
 
-    glEnable(GL_TEXTURE_2D);
-
-{$ELSE}
-    EnableTexture(False);
-
-    hglPushMatrix;
-    hglTranslatef(WorldDx, WorldDy, 0);
-    glLineWidth(Width);
-
-    UpdateModelviewProjection;
-
-    Tint(r, g, b, a);
-    VertexBuffer[0].X:= X0;
-    VertexBuffer[0].Y:= Y0;
-    VertexBuffer[1].X:= X1;
-    VertexBuffer[1].Y:= Y1;
-
-    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
-    Tint($FF, $FF, $FF, $FF);
-
-    hglPopMatrix;
     EnableTexture(True);
 
-{$ENDIF}
     glDisable(GL_LINE_SMOOTH);
 end;
 
@@ -566,11 +552,7 @@ if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreen
 if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
     exit;
 
-{$IFDEF GL2}
 EnableTexture(False);
-{$ELSE}
-glDisable(GL_TEXTURE_2D);
-{$ENDIF}
 
 Tint($00, $00, $00, $80);
 
@@ -587,11 +569,8 @@ SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
 untint;
-{$IFDEF GL2}
+
 EnableTexture(True);
-{$ELSE}
-glEnable(GL_TEXTURE_2D)
-{$ENDIF}
 
 end;
 
@@ -612,29 +591,15 @@ begin
         CircleVertex[i].Y := Y + Radius*sin(i*pi/30);
     end;
 
-{$IFNDEF GL2}
-
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LINE_SMOOTH);
-    glPushMatrix;
-    glLineWidth(Width);
-    glVertexPointer(2, GL_FLOAT, 0, @CircleVertex[0]);
-    glDrawArrays(GL_LINE_LOOP, 0, 60);
-    glPopMatrix;
-    glEnable(GL_TEXTURE_2D);
-    glDisable(GL_LINE_SMOOTH);
-
-{$ELSE}
     EnableTexture(False);
     glEnable(GL_LINE_SMOOTH);
-    hglPushMatrix;
+    openglPushMatrix;
     glLineWidth(Width);
     SetVertexPointer(@CircleVertex[0], 60);
     glDrawArrays(GL_LINE_LOOP, 0, 60);
-    hglPopMatrix;
+    openglPopMatrix;
     EnableTexture(True);
     glDisable(GL_LINE_SMOOTH);
-{$ENDIF}
 end;
 
 
@@ -667,15 +632,9 @@ begin
         r:= (Step + 1) * 32 / HHTexture^.w
     end;
 
-{$IFDEF GL2}
-    hglPushMatrix();
-    hglTranslatef(X, Y, 0);
-    hglRotatef(Angle, 0, 0, 1);
-{$ELSE}
-    glPushMatrix();
-    glTranslatef(X, Y, 0);
-    glRotatef(Angle, 0, 0, 1);
-{$ENDIF}
+    openglPushMatrix();
+    openglTranslatef(X, Y, 0);
+    openglRotatef(Angle, 0, 0, 1);
 
     glBindTexture(GL_TEXTURE_2D, HHTexture^.id);
 
@@ -697,11 +656,7 @@ begin
 
     glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
-{$IFDEF GL2}
-    hglPopMatrix;
-{$ELSE}
-    glPopMatrix;
-{$ENDIF}
+    openglPopMatrix;
 end;
 
 procedure DrawScreenWidget(widget: POnScreenWidget);
@@ -749,6 +704,51 @@ with widget^ do
 begin
 widget:= widget; // avoid hint
 {$ENDIF}
+end;
+
+procedure BeginWater;
+begin
+{$IFDEF GL2}
+    glUseProgram(shaderWater);
+    uCurrentMVPLocation:=uWaterMVPLocation;
+    UpdateModelviewProjection;
+    glDisableVertexAttribArray(aTexCoord);
+    glEnableVertexAttribArray(aColor);
+{$ENDIF}
+
+    openglUseColorOnly(true);
+end;
+
+procedure EndWater;
+begin
+{$IFDEF GL2}
+    glUseProgram(shaderMain);
+    uCurrentMVPLocation:=uMainMVPLocation;
+    UpdateModelviewProjection;
+    glDisableVertexAttribArray(aColor);
+    glEnableVertexAttribArray(aTexCoord);
+{$ENDIF}
+
+    openglUseColorOnly(false);
+end;
+
+procedure DrawWaterBody(pVertexBuffer: Pointer; length: LongInt);
+begin
+{$IFDEF GL2}
+        UpdateModelviewProjection;
+{$ENDIF}
+
+        BeginWater;
+        if SuddenDeathDmg then
+            SetColorPointer(@SDWaterColorArray[0], 4)
+        else
+            SetColorPointer(@WaterColorArray[0], 4);
+
+        SetVertexPointer(pVertexBuffer, 4);
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
+        EndWater;
 end;
 
 procedure openglTint(r, g, b, a: Byte); inline;
