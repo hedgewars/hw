@@ -87,6 +87,7 @@ begin
             FinishProgress;
             PlayMusic;
             SetScale(zoom);
+            updateViewLimits;
             ScriptCall('onGameStart');
             GameState:= gsGame;
             end;

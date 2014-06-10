@@ -58,6 +58,12 @@ procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
 procedure setTintAdd            (f: boolean); inline;
 
+function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
+
+// 0 => not offscreen, <0 => left/top of screen >0 => right/below of screen
+function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
+function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
+
 implementation
 uses uVariables;
 
@@ -68,6 +74,25 @@ const
 {$ENDIF}
 
 var LastTint: LongWord = 0;
+
+function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
+begin
+    isAreaOffscreen:= (isDxAreaOffscreen(X, Width) <> 0) or (isDyAreaOffscreen(Y, Height) <> 0);
+end;
+
+function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
+begin
+    if X > ViewRightX then exit(1);
+    if X + Width < ViewLeftX then exit(-1);
+    isDxAreaOffscreen:= 0;
+end;
+
+function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
+begin
+    if Y > ViewBottomY then exit(1);
+    if Y + Height < ViewTopY then exit(-1);
+    isDyAreaOffscreen:= 0;
+end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
 begin
@@ -188,9 +213,15 @@ procedure DrawTexture2(X, Y: LongInt; Texture: PTexture; Scale, Overlap: GLfloat
 var
     TextureBuffer: array [0..3] of TVertex2f;
 begin
-glPushMatrix();
+{$IFDEF GL2}
+hglPushMatrix;
+hglTranslatef(X, Y, 0);
+hglScalef(Scale, Scale, 1);
+{$ELSE}
+glPushMatrix;
 glTranslatef(X, Y, 0);
 glScalef(Scale, Scale, 1);
+{$ENDIF}
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
@@ -203,11 +234,17 @@ TextureBuffer[2].Y:= Texture^.tb[2].Y - Overlap;
 TextureBuffer[3].X:= Texture^.tb[3].X + Overlap;
 TextureBuffer[3].Y:= Texture^.tb[3].Y - Overlap;
 
-glVertexPointer(2, GL_FLOAT, 0, @Texture^.vb);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer);
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+SetVertexPointer(@Texture^.vb, Length(Texture^.vb));
+SetTexCoordPointer(@TextureBuffer, Length(Texture^.vb));
 
-glPopMatrix();
+{$IFDEF GL2}
+UpdateModelviewProjection;
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+hglPopMatrix;
+{$ELSE}
+glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+glPopMatrix;
+{$ENDIF}
 end;
 
 procedure DrawTextureF(Texture: PTexture; Scale: GLfloat; X, Y, Frame, Dir, w, h: LongInt);
