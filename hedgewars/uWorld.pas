@@ -1179,26 +1179,31 @@ var
     VertexBuffer: array [0..3] of TVertex2f;
     c1, c2: LongWord; // couple of colours for edges
 begin
-if (WorldEdge = weSea) or (WorldEdge = weSky) or (WorldEdge = weBounce) then
+if WorldEdge <> weNone then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
 
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
+    if WorldEdge = weWrap then
+        glColor4ub($00, $00, $00, $20)
+    else
+        begin
+        glEnableClientState(GL_COLOR_ARRAY);
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
+        end;
 
     glPushMatrix;
     glTranslatef(WorldDx, WorldDy, 0);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, @WorldFade[0]);
 
     VertexBuffer[0].X:= leftX-20;
-    VertexBuffer[0].Y:= -3000;
+    VertexBuffer[0].Y:= -3500;
     VertexBuffer[1].X:= leftX-20;
     VertexBuffer[1].Y:= cWaterLine+cVisibleWater;
     VertexBuffer[2].X:= leftX+30;
     VertexBuffer[2].Y:= cWaterLine+cVisibleWater;
     VertexBuffer[3].X:= leftX+30;
-    VertexBuffer[3].Y:= -3000;
+    VertexBuffer[3].Y:= -3500;
 
     glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
     glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
@@ -1265,10 +1270,10 @@ if (WorldEdge = weSea) or (WorldEdge = weSky) or (WorldEdge = weBounce) then
         end
     else if WorldEdge = weWrap then
         begin
-        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
+        {DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
         DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
         DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);}
         end
     else
         begin
