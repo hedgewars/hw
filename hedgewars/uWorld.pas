@@ -64,9 +64,6 @@ uses
 {$IFDEF USE_VIDEO_RECORDING}
     , uVideoRec
 {$ENDIF}
-{$IFDEF GL2}
-    , uMatrix
-{$ENDIF}
     ;
 
 var cWaveWidth, cWaveHeight: LongInt;
