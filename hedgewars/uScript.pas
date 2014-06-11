@@ -116,7 +116,7 @@ end;
 
 procedure LuaCallError(error ,call, paramsyntax: shortstring);
 begin
-    LuaError(error + '       function syntax: ' + call + ' ( ' + paramsyntax + ' )');
+    LuaError(call + ': ' + error + '       function syntax: ' + call + ' ( ' + paramsyntax + ' )');
 end;
 
 procedure LuaParameterCountError(call, paramsyntax: shortstring; wrongcount: LongInt);
@@ -133,6 +133,16 @@ begin
         exit(false);
         end;
     IsValidGearType:= true;
+end;
+
+function IsValidSprite(sprite: lua_Integer; call, paramsyntax: shortstring): boolean; inline;
+begin
+    if (sprite < ord(Low(TSprite))) or (sprite > ord(High(TSprite))) then
+        begin
+        LuaCallError('Invalid sprite id!', call, paramsyntax);
+        exit(false);
+        end;
+    IsValidSprite:= true;
 end;
 
 // wrapped calls //
@@ -1873,16 +1883,57 @@ begin
     lc_sethoghat:= 0;
 end;
 
-function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
+function lc_placesprite(L : Plua_State) : LongInt; Cdecl;
+var spr   : TSprite;
+    lf    : Word;
+    n : LongInt;
+    placed: boolean;
+const
+    call = 'PlaceSprite';
+    params = 'x, y, sprite, frameIdx [, landFlags]';
 begin
+    placed:= false;
+    n:= lua_gettop(L);
+    if (n < 4) or (n > 5) then
+        LuaParameterCountError(call, params, lua_gettop(L))
+    else
+        begin
+        // get landflags, if specified
+        if n = 5 then
+            lf:= lua_tointeger(L, 5)
+        else
+            lf:= 0;
+
+        n:= lua_tointeger(L, 3);
+        if IsValidSprite(n, call, params) then
+            spr:= TSprite(n);
+            if SpritesData[spr].Surface = nil then
+                LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
+            else
+                placed:= TryPlaceOnLand(
+                    lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
+                    lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
+                    spr, lua_tointeger(L, 4), true, false, lfBouncy);
+        end;
+
+    lua_pushboolean(L, placed);
+    lc_placesprite:= 1
+end;
+
+function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
+var placed: boolean;
+begin
+    placed:= false;
     if lua_gettop(L) <> 3 then
         LuaParameterCountError('PlaceGirder', 'x, y, frameIdx', lua_gettop(L))
     else
-        TryPlaceOnLand(
+        placed:= TryPlaceOnLand(
             lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
             lua_tointeger(L, 2) - SpritesData[sprAmGirder].Height div 2,
             sprAmGirder, lua_tointeger(L, 3), true, false);
-    lc_placegirder:= 0
+
+    lua_pushboolean(L, placed);
+    lc_placegirder:= 1
 end;
 
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
@@ -2520,6 +2571,7 @@ var at : TGearType;
     st : TSound;
     he : THogEffect;
     cg : TCapGroup;
+    spr: TSprite;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -2607,6 +2659,10 @@ for he:= Low(THogEffect) to High(THogEffect) do
 
 for cg:= Low(TCapGroup) to High(TCapGroup) do
     ScriptSetInteger(EnumToStr(cg), ord(cg));
+
+for spr:= Low(TSprite) to High(TSprite) do
+    ScriptSetInteger(EnumToStr(spr), ord(spr));
+
 
 ScriptSetInteger('gstDrowning'       ,$00000001);
 ScriptSetInteger('gstHHDriven'       ,$00000002);
@@ -2730,6 +2786,7 @@ lua_register(luaState, _P'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
+lua_register(luaState, _P'PlaceSprite', @lc_placesprite);
 lua_register(luaState, _P'PlaceGirder', @lc_placegirder);
 lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
 lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
