@@ -1851,7 +1851,7 @@ end;
 function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
 begin
     if lua_gettop(L) <> 3 then
-        LuaParameterCountError('PlaceGirder', 'x, y, state', lua_gettop(L))
+        LuaParameterCountError('PlaceGirder', 'x, y, frameIdx', lua_gettop(L))
     else
         TryPlaceOnLand(
             lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
