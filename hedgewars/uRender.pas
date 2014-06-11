@@ -51,7 +51,7 @@ procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte
 procedure DrawFillRect          (r: TSDL_Rect);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
-procedure DrawWaterBody         (pVertexBuffer: Pointer; length: LongInt);
+procedure DrawWaterBody         (pVertexBuffer: Pointer);
 
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
@@ -119,27 +119,47 @@ end;
 
 procedure openglPushMatrix(); inline;
 begin
-{$IFDEF GL2}h{$ENDIF}glPushMatrix();
+{$IFDEF GL2}
+    hglPushMatrix();
+{$ELSE}
+    glPushMatrix();
+{$ENDIF}
 end;
 
 procedure openglPopMatrix(); inline;
 begin
-{$IFDEF GL2}h{$ENDIF}glPopMatrix();
+{$IFDEF GL2}
+    hglPopMatrix();
+{$ELSE}
+    glPopMatrix();
+{$ENDIF}
 end;
 
 procedure openglTranslatef(X, Y, Z: GLfloat); inline;
 begin
-{$IFDEF GL2}h{$ENDIF}glTranslatef(X, Y, Z);
+{$IFDEF GL2}
+    hglTranslatef(X, Y, Z);
+{$ELSE}
+    glTranslatef(X, Y, Z);
+{$ENDIF}
 end;
 
 procedure openglScalef(ScaleX, ScaleY, ScaleZ: GLfloat); inline;
 begin
-{$IFDEF GL2}h{$ENDIF}glScalef(ScaleX, ScaleY, ScaleZ);
+{$IFDEF GL2}
+    hglScalef(ScaleX, ScaleY, ScaleZ);
+{$ELSE}
+    glScalef(ScaleX, ScaleY, ScaleZ);
+{$ENDIF}
 end;
 
 procedure openglRotatef(RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
 begin
-{$IFDEF GL2}h{$ENDIF}glRotatef(RotX, RotY, RotZ, dir);
+{$IFDEF GL2}
+    hglRotatef(RotX, RotY, RotZ, dir);
+{$ELSE}
+    glRotatef(RotX, RotY, RotZ, dir);
+{$ENDIF}
 end;
 
 procedure openglUseColorOnly(b :boolean); inline;
@@ -732,7 +752,7 @@ begin
     openglUseColorOnly(false);
 end;
 
-procedure DrawWaterBody(pVertexBuffer: Pointer; length: LongInt);
+procedure DrawWaterBody(pVertexBuffer: Pointer);
 begin
 {$IFDEF GL2}
         UpdateModelviewProjection;

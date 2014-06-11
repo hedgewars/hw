@@ -73,6 +73,12 @@ procedure SetColorPointer(p: Pointer;n: Integer);
 
 procedure updateViewLimits();
 
+{$IFDEF GL2}
+var
+    shaderMain: GLuint;
+    shaderWater: GLuint;
+{$ENDIF}
+
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
      uCommands, uPhysFSLayer, uDebug
@@ -90,13 +96,6 @@ var MaxTextureSize: LongInt;
     squaresize : LongInt;
     numsquares : LongInt;
     ProgrTex: PTexture;
-
-{$IFDEF GL2}
-    shaderMain: GLuint;
-    shaderWater: GLuint;
-
-    // attributes
-{$ENDIF}
 
     prevHat: shortstring;
     tmpHatSurf: PSDL_Surface;
