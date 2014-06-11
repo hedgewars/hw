@@ -107,16 +107,32 @@ procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
 procedure LuaError(s: shortstring);
 begin
+    s:= 'Lua-script error: ' + s;
     WriteLnToConsole(s);
     AddChatString(#5 + s);
     if cTestLua then
         halt(rtnTestLuaErr);
 end;
 
+procedure LuaCallError(error ,call, paramsyntax: shortstring);
+begin
+    LuaError(error + '       function syntax: ' + call + ' ( ' + paramsyntax + ' )');
+end;
+
 procedure LuaParameterCountError(call, paramsyntax: shortstring; wrongcount: LongInt);
 begin
     // TODO: i18n?
-    LuaError('Lua: Wrong number of parameters (' + inttostr(wrongcount) + ') passed to ' + call + '!     syntax: ' + call + ' ( ' + paramsyntax + ' )');
+    LuaCallError('Wrong number of parameters (' + inttostr(wrongcount) + ')!', call, paramsyntax);
+end;
+
+function IsValidGearType(gt: lua_Integer; call, paramsyntax: shortstring): boolean; inline;
+begin
+    if (gt < ord(Low(TGearType))) or (gt > ord(High(TGearType))) then
+        begin
+        LuaCallError('Invalid gear type!', call, paramsyntax);
+        exit(false);
+        end;
+    IsValidGearType:= true;
 end;
 
 // wrapped calls //
@@ -461,25 +477,34 @@ var gear : PGear;
     x, y, s, t: LongInt;
     dx, dy: hwFloat;
     gt: TGearType;
+const
+    call = 'AddGear';
+    params = 'x, y, gearType, state, dx, dy, timer';
 begin
     if lua_gettop(L) <> 7 then
         begin
-        LuaParameterCountError('AddGear', 'x, y, gearType, state, dx, dy, timer', lua_gettop(L));
+        LuaParameterCountError(call, params, lua_gettop(L));
         lua_pushnil(L); // return value on stack (nil)
         end
     else
         begin
-        x:= lua_tointeger(L, 1);
-        y:= lua_tointeger(L, 2);
-        gt:= TGearType(lua_tointeger(L, 3));
-        s:= lua_tointeger(L, 4);
-        dx:= int2hwFloat(lua_tointeger(L, 5)) / 1000000;
-        dy:= int2hwFloat(lua_tointeger(L, 6)) / 1000000;
-        t:= lua_tointeger(L, 7);
+        t:= lua_tointeger(L, 3);
+        if IsValidGearType(t, call, params) then
+            begin
+            x:= lua_tointeger(L, 1);
+            y:= lua_tointeger(L, 2);
+            gt:= TGearType(t);
+            s:= lua_tointeger(L, 4);
+            dx:= int2hwFloat(lua_tointeger(L, 5)) / 1000000;
+            dy:= int2hwFloat(lua_tointeger(L, 6)) / 1000000;
+            t:= lua_tointeger(L, 7);
 
-        gear:= AddGear(x, y, gt, s, dx, dy, t);
-        lastGearByUID:= gear;
-        lua_pushinteger(L, gear^.uid)
+            gear:= AddGear(x, y, gt, s, dx, dy, t);
+            lastGearByUID:= gear;
+            lua_pushinteger(L, gear^.uid)
+            end
+        else
+            lua_pushnil(L);
         end;
     lc_addgear:= 1; // 1 return value
 end;
