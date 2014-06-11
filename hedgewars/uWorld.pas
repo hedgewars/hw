@@ -833,7 +833,7 @@ if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterL
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= lh;
 
-        DrawWaterBody(@VertexBuffer[0], Length(VertexBuffer));
+        DrawWaterBody(@VertexBuffer[0]);
 
 {$IFNDEF GL2}
         // must not be Tint() as color array seems to stay active and color reset is required
