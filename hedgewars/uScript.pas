@@ -2046,7 +2046,7 @@ begin
                 placed:= TryPlaceOnLand(
                     lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
                     lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), true, false, lf);
+                    spr, lua_tointeger(L, 4), true, lf);
             end;
         end;
 

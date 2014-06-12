@@ -2524,7 +2524,7 @@ begin
             (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
             )));
     if distFail
-    or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, false, LandFlags)) then
+    or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, LandFlags)) then
         begin
         PlaySound(sndDenied);
         if not distFail then
@@ -2594,7 +2594,7 @@ begin
     HHGear := Gear^.Hedgehog^.Gear;
     if not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprHHTelepMask].Width div 2,
         Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2,
-        sprHHTelepMask, 0, false, false, not hasBorder, 0) then
+        sprHHTelepMask, 0, false, not hasBorder, 0) then
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
