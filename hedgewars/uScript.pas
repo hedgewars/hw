@@ -2850,6 +2850,11 @@ ScriptSetInteger('gstInvisible'      ,$00200000);
 ScriptSetInteger('aihUsualProcessing' ,$00000000);
 ScriptSetInteger('aihDoesntMatter'    ,$00000001);
 
+// land flags
+ScriptSetInteger('lfIndestructible', lfIndestructible);
+ScriptSetInteger('lfIce',            lfIce);
+ScriptSetInteger('lfBouncy',         lfBouncy);
+
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
 lua_register(luaState, _P'RestoreHog', @lc_restorehog);
