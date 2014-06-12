@@ -287,7 +287,7 @@ function DoPrincessFreed()
   if progress and progress<7 then
     SaveCampaignVar("Progress", "7")
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 
@@ -339,8 +339,8 @@ end
 function EndMission()
   RemoveEventFunc(CheckPrincessFreed)
   AddCaption("So the princess was never heard of again...")
-  ParseCommand("teamgone " .. loc("Natives"))
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("Natives"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 

@@ -57,9 +57,9 @@ local HogData =	{
 				}
 
 function GenericEnd()
-	ParseCommand("teamgone " .. loc("Wannabe Shoppsta"))
-	ParseCommand("teamgone " .. loc("Unsuspecting Louts"))
-	ParseCommand("teamgone " .. loc("Unlucky Sods"))
+	DismissTeam(loc("Wannabe Shoppsta"))
+	DismissTeam(loc("Unsuspecting Louts"))
+	DismissTeam(loc("Unlucky Sods"))
 end
 
 function GameOverMan()

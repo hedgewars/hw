@@ -521,9 +521,9 @@ end
 
 function KillEnemy()
   if enemyFled == "1" then
-    ParseCommand("teamgone " .. loc("Leaderbot"))
+    DismissTeam(loc("Leaderbot"))
   end
-  ParseCommand("teamgone " .. loc("011101001"))
+  DismissTeam(loc("011101001"))
   TurnTimeLeft = 0
 end
 

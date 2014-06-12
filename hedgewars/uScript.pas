@@ -1521,6 +1521,14 @@ begin
     lc_addteam:= 0;//1;
 end;
 
+function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
+begin
+    if CheckLuaParameterCount(L, 1, 'DismissTeam', 'teamname') then
+        ParseCommand('teamgone ' + lua_tostring(L, 1), true, true);
+    lc_dismissteam:= 0;;
+end;
+
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
 var temp: ShortString;
 begin
@@ -2647,6 +2655,7 @@ lua_register(luaState, _P'div', @lc_div);
 lua_register(luaState, _P'GetInputMask', @lc_getinputmask);
 lua_register(luaState, _P'SetInputMask', @lc_setinputmask);
 lua_register(luaState, _P'AddGear', @lc_addgear);
+lua_register(luaState, _P'DismissTeam', @lc_dismissteam);
 lua_register(luaState, _P'EnableGameFlags', @lc_enablegameflags);
 lua_register(luaState, _P'DisableGameFlags', @lc_disablegameflags);
 lua_register(luaState, _P'ClearGameFlags', @lc_cleargameflags);

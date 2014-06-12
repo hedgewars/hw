@@ -113,7 +113,7 @@ function onGameTick()
 			if endTimer >= 3000 then
 				--SetHealth(instructor,0)
 				TurnTimeLeft = 1
-				ParseCommand("teamgone " .. loc("Bloody Rookies"))
+				DismissTeam(loc("Bloody Rookies"))
 			end
 			ShowMission(loc("MISSION FAILED"), loc(":("), loc("You've failed. Try again."), -amRope, 5000);
 		end
@@ -136,7 +136,7 @@ function onGearDelete(gear)
 			HogSay(player, loc("See ya!"), SAY_THINK)
 			TurnTimeLeft = 3000
 			AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Naughty Ninja"),0xffba00ff,capgrpMessage2)
-			ParseCommand("teamgone " .. loc("Blue Team"))
+			DismissTeam(loc("Blue Team"))
 			gameWon = true
 		elseif gear == enemy then
 			HogSay(player, loc("Enjoy the swim..."), SAY_THINK)
