@@ -699,7 +699,7 @@ case bpp of
                      gY:= (cpY + y) div 2;
                     end;
                 if indestructible then
-                    Land[cpY + y, cpX + x]:= lfIndestructible or LandFlags
+                    Land[cpY + y, cpX + x]:= {lfIndestructible or }LandFlags
                 else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
                     Land[cpY + y, cpX + x]:= lfBasic or LandFlags
                 else
