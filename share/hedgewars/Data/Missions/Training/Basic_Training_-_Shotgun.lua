@@ -50,7 +50,7 @@ function spawnTarget()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amShotgun))
+	SetWeapon(amShotgun)
 end
 
 -- This function is called before the game loads its

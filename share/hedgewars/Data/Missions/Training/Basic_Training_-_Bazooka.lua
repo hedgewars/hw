@@ -112,7 +112,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amBazooka))
+	SetWeapon(amBazooka)
 end
 
 -- This function is called every game tick.

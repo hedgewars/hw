@@ -354,6 +354,21 @@ begin
     lc_parsecommand:= 0;
 end;
 
+function lc_setweapon(L : Plua_State) : LongInt; Cdecl;
+var at: LongInt;
+const
+    call = 'SetWeapon';
+    params = 'ammoType';
+begin
+    if CheckLuaParameterCount(L, 1, call, params) then
+        begin
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        if at >= 0 then
+            ParseCommand('setweap ' + char(at), true, true);
+        end;
+    lc_setweapon:= 0;
+end;
+
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParameterCount(L, 5, 'ShowMission', 'caption, subcaption, text, icon, time') then
@@ -1126,8 +1141,8 @@ begin
                lua_pushinteger(L, vgear^.Uid);
                end
             end
-            else
-                lua_pushnil(L)
+        else
+            lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -2590,30 +2605,30 @@ for spr:= Low(TSprite) to High(TSprite) do
     ScriptSetInteger(EnumToStr(spr), ord(spr));
 
 
-ScriptSetInteger('gstDrowning'       ,$00000001);
-ScriptSetInteger('gstHHDriven'       ,$00000002);
-ScriptSetInteger('gstMoving'         ,$00000004);
-ScriptSetInteger('gstAttacked'       ,$00000008);
-ScriptSetInteger('gstAttacking'      ,$00000010);
-ScriptSetInteger('gstCollision'      ,$00000020);
-ScriptSetInteger('gstHHChooseTarget' ,$00000040);
-ScriptSetInteger('gstHHJumping'      ,$00000100);
-ScriptSetInteger('gsttmpFlag'        ,$00000200);
-ScriptSetInteger('gstHHThinking'     ,$00000800);
-ScriptSetInteger('gstNoDamage'       ,$00001000);
-ScriptSetInteger('gstHHHJump'        ,$00002000);
-ScriptSetInteger('gstAnimation'      ,$00004000);
-ScriptSetInteger('gstHHDeath'        ,$00008000);
-ScriptSetInteger('gstWinner'         ,$00010000);
-ScriptSetInteger('gstWait'           ,$00020000);
-ScriptSetInteger('gstNotKickable'    ,$00040000);
-ScriptSetInteger('gstLoser'          ,$00080000);
-ScriptSetInteger('gstHHGone'         ,$00100000);
-ScriptSetInteger('gstInvisible'      ,$00200000);
+ScriptSetInteger('gstDrowning'      , gstDrowning);
+ScriptSetInteger('gstHHDriven'      , gstHHDriven);
+ScriptSetInteger('gstMoving'        , gstMoving);
+ScriptSetInteger('gstAttacked'      , gstAttacked);
+ScriptSetInteger('gstAttacking'     , gstAttacking);
+ScriptSetInteger('gstCollision'     , gstCollision);
+ScriptSetInteger('gstHHChooseTarget', gstHHChooseTarget);
+ScriptSetInteger('gstHHJumping'     , gstHHJumping);
+ScriptSetInteger('gsttmpFlag'       , gsttmpFlag);
+ScriptSetInteger('gstHHThinking'    , gstHHThinking);
+ScriptSetInteger('gstNoDamage'      , gstNoDamage);
+ScriptSetInteger('gstHHHJump'       , gstHHHJump);
+ScriptSetInteger('gstAnimation'     , gstAnimation);
+ScriptSetInteger('gstHHDeath'       , gstHHDeath);
+ScriptSetInteger('gstWinner'        , gstWinner);
+ScriptSetInteger('gstWait'          , gstWait);
+ScriptSetInteger('gstNotKickable'   , gstNotKickable);
+ScriptSetInteger('gstLoser'         , gstLoser);
+ScriptSetInteger('gstHHGone'        , gstHHGone);
+ScriptSetInteger('gstInvisible'     , gstInvisible);
 
 // ai hints
-ScriptSetInteger('aihUsualProcessing' ,$00000000);
-ScriptSetInteger('aihDoesntMatter'    ,$00000001);
+ScriptSetInteger('aihUsualProcessing', aihUsualProcessing);
+ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 
 // land flags
 ScriptSetInteger('lfIndestructible', lfIndestructible);
@@ -2724,6 +2739,7 @@ lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 lua_register(luaState, _P'GetGravity', @lc_getgravity);
 lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
+lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);

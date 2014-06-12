@@ -107,7 +107,7 @@ function onGameStart()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amGrenade))
+	SetWeapon(amGrenade)
 end
 
 -- This function is called every game tick.

@@ -101,7 +101,7 @@ function onNewTurn()
     if CurrentHedgehog ~= nil then
         SetGearVelocity(CurrentHedgehog, 1, 0)
         SetGearPosition(CurrentHedgehog, start_area[1] + start_area[3] / 2, start_area[2] + start_area[4] / 2)
-        ParseCommand("setweap " .. string.char(amRope))
+        SetWeapon(amRope)
         lasthog = CurrentHedgehog
     end
 end

@@ -243,7 +243,7 @@ function onGameTick20()
 					AddAmmo(CurrentHedgehog, amSwitch, 1)
 
 				elseif switchStage == 2 then
-					ParseCommand("setweap " .. string.char(amSwitch))
+					SetWeapon(amSwitch)
 				elseif switchStage == 3 then
 					SetGearMessage(CurrentHedgehog,gmAttack)
 				elseif switchStage == 4 then

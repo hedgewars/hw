@@ -574,7 +574,7 @@ function onNewTurn()
                         loc("NOT ENOUGH WAYPOINTS"),
                         loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-            ParseCommand("setweap " .. string.char(amAirAttack))
+            SetWeapon(amAirAttack)
                 end
         end
 

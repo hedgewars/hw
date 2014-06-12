@@ -90,25 +90,25 @@ end
 function ChangeWep(s)
 
 	if s == 0 then
-		ParseCommand("setweap " .. string.char(amBazooka))
+		SetWeapon(amBazooka)
 	elseif s == 1 then
-		ParseCommand("setweap " .. string.char(amGrenade))
+		SetWeapon(amGrenade)
 	elseif s == 2 then
-		ParseCommand("setweap " .. string.char(amShotgun))
+		SetWeapon(amShotgun)
 	elseif s == 3 then
-		ParseCommand("setweap " .. string.char(amFirePunch))
+		SetWeapon(amFirePunch)
 	elseif s == 4 then
-		ParseCommand("setweap " .. string.char(amMine))
+		SetWeapon(amMine)
 	elseif s == 5 then
-		ParseCommand("setweap " .. string.char(amTeleport))
+		SetWeapon(amTeleport)
 	elseif s == 6 then
-		ParseCommand("setweap " .. string.char(amBlowTorch))
+		SetWeapon(amBlowTorch)
 	elseif s == 7 then
-		ParseCommand("setweap " .. string.char(amJetpack))
+		SetWeapon(amJetpack)
 	elseif s == 8 then
-		ParseCommand("setweap " .. string.char(amMolotov))
+		SetWeapon(amMolotov)
 	elseif s == 9 then
-		ParseCommand("setweap " .. string.char(amLowGravity))
+		SetWeapon(amLowGravity)
 	end
 
 end

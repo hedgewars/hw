@@ -116,7 +116,7 @@ function onNewTurn()
 	if not hero.dead and CurrentHedgehog == ally.gear and challengeStarted then
 		heroLost()
 	elseif not hero.dead and CurrentHedgehog == hero.gear and challengeStarted then
-		ParseCommand("setweap " .. string.char(amJetpack))
+		SetWeapon(amJetpack)
 	end
 end
 
