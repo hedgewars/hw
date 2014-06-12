@@ -84,7 +84,7 @@ function onGameTick20()
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amClusterBomb))
+	SetWeapon(amClusterBomb)
 end
 
 --function onGearAdd(gear)

@@ -98,7 +98,7 @@ function onNewTurn()
 			if GetAmmoCount(hero.gear, amRope) == 0  then
 				lose()
 			end
-			ParseCommand("setweap " .. string.char(amRope))
+			SetWeapon(amRope)
 			TurnTimeLeft = runner.places[currentPosition].turnTime + previousTimeLeft
 			previousTimeLeft = 0
 		end

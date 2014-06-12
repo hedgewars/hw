@@ -51,7 +51,7 @@ function blowUp(x, y)
 end
 
 function onNewTurn()
-	ParseCommand("setweap " .. string.char(amSniperRifle))
+	SetWeapon(amSniperRifle)
 end
 
 -- This function is called before the game loads its

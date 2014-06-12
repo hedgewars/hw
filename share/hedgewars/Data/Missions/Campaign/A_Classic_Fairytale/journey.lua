@@ -268,7 +268,7 @@ function RestoreCyborgOnly(x, y)
 end
 
 function TargetPrincess()
-  ParseCommand("setweap " .. string.char(amDEagle))
+  SetWeapon(amDEagle)
   SetGearMessage(cyborg, gmUp)
   return true
 end
