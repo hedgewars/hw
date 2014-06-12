@@ -1534,7 +1534,7 @@ begin
                     // 3: team name
                     for i:= 0 to Pred(TeamsCount) do
                         begin
-                        color:= '0';
+                        color:= _S'0';
                         tn:= lua_tostring(L, 3);
                         with TeamsArray[i]^ do
                             begin
