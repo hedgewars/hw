@@ -119,10 +119,16 @@ begin
     LuaError(call + ': ' + error + '       function syntax: ' + call + ' ( ' + paramsyntax + ' )');
 end;
 
-procedure LuaParameterCountError(call, paramsyntax: shortstring; wrongcount: LongInt); inline;
+procedure LuaParameterCountError(expected, call, paramsyntax: shortstring; wrongcount: LongInt); inline;
 begin
     // TODO: i18n?
-    LuaCallError('Wrong number of parameters (' + inttostr(wrongcount) + ')!', call, paramsyntax);
+    LuaCallError('Wrong number of parameters! (is: ' + inttostr(wrongcount) + ', should be: '+ expected + ')', call, paramsyntax);
+end;
+
+// TODO remove this precedure after all references have been changed to one of the checks below
+procedure LuaParameterCountError(call, paramsyntax: shortstring; wrongcount: LongInt); inline;
+begin
+    LuaCallError('Wrong number of parameters! (actual: ' + inttostr(wrongcount) + ')', call, paramsyntax);
 end;
 
 // compare with allowed count
@@ -132,7 +138,7 @@ begin
     c:= lua_gettop(L);
     if c <> count then
         begin
-        LuaParameterCountError(call, paramsyntax, c);
+        LuaParameterCountError('exactly ' + inttostr(count), call, paramsyntax, c);
         exit(false);
         end;
 
@@ -145,7 +151,7 @@ begin
     actual:= lua_gettop(L);
     if (actual <> count1) and (actual <> count2) then
         begin
-        LuaParameterCountError(call, paramsyntax, actual);
+        LuaParameterCountError('either ' + inttostr(count1) + ' or ' + inttostr(count2), call, paramsyntax, actual);
         exit(false);
         end;
 
@@ -158,7 +164,7 @@ begin
     actual:= lua_gettop(L);
     if (actual < minCount) then
         begin
-        LuaParameterCountError(call, paramsyntax, actual);
+        LuaParameterCountError(inttostr(minCount) + ' or more', call, paramsyntax, actual);
         exit(false);
         end;
 
