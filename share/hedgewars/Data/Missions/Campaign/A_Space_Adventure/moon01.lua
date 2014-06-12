@@ -360,7 +360,7 @@ function professorDeath(gear)
 	elseif GetHealth(minion3.gear) then
 		AnimSay(minion3.gear, loc("The boss has fallen! Retreat!"), SAY_SHOUT, 6000)
 	end
-	ParseCommand("teamgone " .. teamB.name)
+	DismissTeam(teamB.name)
 	AnimCaption(hero.gear, loc("Congrats! You made them run away!"), 6000)
 	AnimWait(hero.gear,5000)
 
@@ -377,7 +377,7 @@ end
 function minionsDeath(gear)
 	-- do staffs here
 	AnimSay(professor.gear, loc("I may lost this battle, but I haven't lost the war yet!"), SAY_SHOUT, 6000)
-	ParseCommand("teamgone " .. teamC.name)
+	DismissTeam(teamC.name)
 	AnimCaption(hero.gear, loc("Congrats! You won!"), 6000)
 	AnimWait(hero.gear,5000)
 

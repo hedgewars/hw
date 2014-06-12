@@ -125,7 +125,7 @@ function onGameStart() -- Called when the game starts
 end
 
 function onNewTurn()
-	ParseCommand( "setweap " .. string.char( amRope ) ) -- Set the default weapon to Rope
+	SetWeapon(amRope) -- Set the default weapon to Rope
 end
 
 function onGameTick20()
@@ -143,7 +143,7 @@ function onGameTick20()
 	-- in either case, end the game
 	if (Objective == true) or (GameLost == true) then
 		if (WaitTime == 0) then
-			ParseCommand("teamgone " .. loc( "Rope Team" ))
+			DismissTeam(loc( "Rope Team" ))
 
 			--SetHealth( Player, 0 ) -- Kill the player so he can't keep moving!
 			--SetEffect( Player, heResurrectable, 0 )

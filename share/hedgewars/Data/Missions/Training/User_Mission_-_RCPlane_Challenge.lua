@@ -326,7 +326,8 @@ function onGearDelete(gear)
                                 )
 
 
-			ParseCommand("teamgone Wannabe Flyboys")
+
+			DismissTeam(loc("Wannabe Flyboys"))
 		end
 
 		if RCGear ~= nil then

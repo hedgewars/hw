@@ -664,7 +664,7 @@ function DoWeaklingsKilled()
   AddAnim(stronglingsAnim)
   AddFunction({func = AfterStronglingsAnim, args = {}})
   stage = interWeakStage
-  ParseCommand("teamgone " .. loc("Weaklings"))
+  DismissTeam(loc("Weaklings"))
 end
 
 function CheckRefuse()
@@ -823,7 +823,7 @@ function DoDead()
   AddCaption(loc("...and so the cyborgs took over the world..."))
   stage = loseStage
   TurnTimeLeft = 0
-  ParseCommand("teamgone " .. loc("Natives"))
+  DismissTeam(loc("Natives"))
 end
 
 function CheckDenseDead()
