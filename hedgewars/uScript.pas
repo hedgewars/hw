@@ -125,24 +125,108 @@ begin
     LuaCallError('Wrong number of parameters (' + inttostr(wrongcount) + ')!', call, paramsyntax);
 end;
 
-function IsValidGearType(gt: lua_Integer; call, paramsyntax: shortstring): boolean; inline;
+function LuaToGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
-    if (gt < ord(Low(TGearType))) or (gt > ord(High(TGearType))) then
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TGearType))) or (i > ord(High(TGearType))) then
         begin
-        LuaCallError('Invalid gear type!', call, paramsyntax);
-        exit(false);
-        end;
-    IsValidGearType:= true;
+        LuaCallError('Invalid gearType!', call, paramsyntax);
+        LuaToGearTypeOrd:= -1;
+        end
+    else
+        LuaToGearTypeOrd:= i;
 end;
 
-function IsValidSprite(sprite: lua_Integer; call, paramsyntax: shortstring): boolean; inline;
+function LuaToVisualGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
 begin
-    if (sprite < ord(Low(TSprite))) or (sprite > ord(High(TSprite))) then
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TVisualGearType))) or (i > ord(High(TVisualGearType))) then
+        begin
+        LuaCallError('Invalid visualGearType!', call, paramsyntax);
+        LuaToVisualGearTypeOrd:= -1;
+        end
+    else
+        LuaToVisualGearTypeOrd:= i;
+end;
+
+function LuaToAmmoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TAmmoType))) or (i > ord(High(TAmmoType))) then
+        begin
+        LuaCallError('Invalid ammoType!', call, paramsyntax);
+        LuaToAmmoTypeOrd:= -1;
+        end
+    else
+        LuaToAmmoTypeOrd:= i;
+end;
+
+function LuaToStatInfoTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TStatInfoType))) or (i > ord(High(TStatInfoType))) then
+        begin
+        LuaCallError('Invalid statInfoType!', call, paramsyntax);
+        LuaToStatInfoTypeOrd:= -1;
+        end
+    else
+        LuaToStatInfoTypeOrd:= i;
+end;
+
+function LuaToSoundOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TSound))) or (i > ord(High(TSound))) then
+        begin
+        LuaCallError('Invalid soundId!', call, paramsyntax);
+        LuaToSoundOrd:= -1;
+        end
+    else
+        LuaToSoundOrd:= i;
+end;
+
+function LuaToHogEffectOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(THogEffect))) or (i > ord(High(THogEffect))) then
+        begin
+        LuaCallError('Invalid gear type!', call, paramsyntax);
+        LuaToHogEffectOrd:= -1;
+        end
+    else
+        LuaToHogEffectOrd:= i;
+end;
+
+function LuaToCapGroupOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TCapGroup))) or (i > ord(High(TCapGroup))) then
+        begin
+        LuaCallError('Invalid capgroup type!', call, paramsyntax);
+        LuaToCapGroupOrd:= -1;
+        end
+    else
+        LuaToCapGroupOrd:= i;
+end;
+
+function LuaToSpriteOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TSprite))) or (i > ord(High(TSprite))) then
         begin
         LuaCallError('Invalid sprite id!', call, paramsyntax);
-        exit(false);
-        end;
-    IsValidSprite:= true;
+        LuaToSpriteOrd:= -1;
+        end
+    else
+        LuaToSpriteOrd:= i;
 end;
 
 // wrapped calls //
@@ -331,15 +415,20 @@ begin
 end;
 
 function lc_addcaption(L : Plua_State) : LongInt; Cdecl;
+var cg: LongInt;
+const
+    call = 'AddCaption';
+    params = 'text [, color, captiongroup]';
 begin
     if lua_gettop(L) = 1 then
         AddCaption(lua_tostringA(L, 1), cWhiteColor, capgrpMessage)
     else if lua_gettop(L) = 3 then
         begin
-        AddCaption(lua_tostringA(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(lua_tointeger(L, 3)));
+        cg:= LuaToCapGroupOrd(L, 3, call, params);
+        AddCaption(lua_tostringA(L, 1), lua_tointeger(L, 2) shr 8, TCapGroup(cg));
         end
     else
-        LuaParameterCountError('AddCaption', 'text[, color, captiongroup]', lua_gettop(L));
+        LuaParameterCountError(call, params, lua_gettop(L));
     lc_addcaption:= 0;
 end;
 
@@ -422,7 +511,7 @@ var health: LongInt;
 begin
     if (lua_gettop(L) < 2) or (lua_gettop(L) > 3) then
         begin
-        LuaParameterCountError('SpawnHealthCrate', 'x, y[, health]', lua_gettop(L));
+        LuaParameterCountError('SpawnHealthCrate', 'x, y [, health]', lua_gettop(L));
         lua_pushnil(L);
         end
     else
@@ -445,7 +534,7 @@ var gear: PGear;
 begin
     if (lua_gettop(L) <> 3) and (lua_gettop(L) <> 4) then
         begin
-        LuaParameterCountError('SpawnAmmoCrate', 'x, y, content[, amount]', lua_gettop(L));
+        LuaParameterCountError('SpawnAmmoCrate', 'x, y, content [, amount]', lua_gettop(L));
         lua_pushnil(L);
         end
     else
@@ -466,7 +555,7 @@ var gear: PGear;
 begin
     if (lua_gettop(L) <> 3) and (lua_gettop(L) <> 4) then
         begin
-        LuaParameterCountError('SpawnUtilityCrate', 'x, y, content[, amount]', lua_gettop(L));
+        LuaParameterCountError('SpawnUtilityCrate', 'x, y, content [, amount]', lua_gettop(L));
         lua_pushnil(L);
         end
     else
@@ -498,12 +587,12 @@ begin
         end
     else
         begin
-        t:= lua_tointeger(L, 3);
-        if IsValidGearType(t, call, params) then
+        t:= LuaToGearTypeOrd(L, 3, call, params);
+        if t >= 0 then
             begin
+            gt:= TGearType(t);
             x:= lua_tointeger(L, 1);
             y:= lua_tointeger(L, 2);
-            gt:= TGearType(t);
             s:= lua_tointeger(L, 4);
             dx:= int2hwFloat(lua_tointeger(L, 5)) / 1000000;
             dy:= int2hwFloat(lua_tointeger(L, 6)) / 1000000;
@@ -540,35 +629,44 @@ var vg : PVisualGear;
     x, y, s: LongInt;
     c: Boolean;
     vgt: TVisualGearType;
+    uid: Longword;
+const
+    call = 'AddVisualGear';
+    params = 'x, y, visualGearType, state, critical';
 begin
+    uid:= 0;
     if lua_gettop(L) <> 5 then
         begin
-        LuaParameterCountError('AddVisualGear', 'x, y, visualGearType, state, critical', lua_gettop(L));
+        LuaParameterCountError(call, params, lua_gettop(L));
         lua_pushnil(L); // return value on stack (nil)
         end
     else
         begin
-        x:= lua_tointeger(L, 1);
-        y:= lua_tointeger(L, 2);
-        vgt:= TVisualGearType(lua_tointeger(L, 3));
-        s:= lua_tointeger(L, 4);
-        c:= lua_toboolean(L, 5);
-
-        vg:= AddVisualGear(x, y, vgt, s, c);
-        if vg <> nil then
+        s:= LuaToVisualGearTypeOrd(L, 3, call, params);
+        if s >= 0 then
             begin
-            lastVisualGearByUID:= vg;
-            lua_pushinteger(L, vg^.uid)
-            end
-        else
-            lua_pushinteger(L, 0)
+            vgt:= TVisualGearType(s);
+            x:= lua_tointeger(L, 1);
+            y:= lua_tointeger(L, 2);
+            s:= lua_tointeger(L, 4);
+            c:= lua_toboolean(L, 5);
+
+            vg:= AddVisualGear(x, y, vgt, s, c);
+            if vg <> nil then
+                begin
+                lastVisualGearByUID:= vg;
+                uid:= vg^.uid;
+                end;
+            end;
         end;
+    lua_pushinteger(L, uid);
     lc_addvisualgear:= 1; // 1 return value
 end;
 
 function lc_deletevisualgear(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
 begin
+    vg:= nil;
     if lua_gettop(L) <> 1 then
         begin
         LuaParameterCountError('DeleteVisualGear', 'vgUid', lua_gettop(L));
@@ -579,7 +677,9 @@ begin
         if vg <> nil then
             DeleteVisualGear(vg);
         end;
-    lc_deletevisualgear:= 0
+    // allow caller to know whether there was something to delete
+    lua_pushboolean(L, vg <> nil);
+    lc_deletevisualgear:= 1
 end;
 
 function lc_getvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
@@ -1129,7 +1229,7 @@ begin
             else
                 lua_pushnil(L)
         end
-    else LuaParameterCountError('HogSay', 'gearUid, text, manner[, vgState]', lua_gettop(L));
+    else LuaParameterCountError('HogSay', 'gearUid, text, manner [, vgState]', lua_gettop(L));
     lc_hogsay:= 1
 end;
 
@@ -1165,69 +1265,61 @@ begin
     lc_switchhog:= 0
 end;
 
-{function lc_addammo(L : Plua_State) : LongInt; Cdecl;
-var gear : PGear;
-begin
-
-    if lua_gettop(L) = 3 then
-    begin
-    gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            AddAmmoAmount(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L,3) );
-    end else
-
-    if lua_gettop(L) = 2 then
-    begin
-    gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
-    end else
-    begin
-        LuaParameterCountError('AddAmmo', 'TODO', lua_gettop(L));
-    end;
-
-    lc_addammo:= 0;
-
-end;}
-
 function lc_addammo(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
+    at   : LongInt;
+const
+    call = 'AddAmmo';
+    params = 'gearUid, ammoType [, ammoCount]';
 begin
     if (lua_gettop(L) = 3) or (lua_gettop(L) = 2) then
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            if lua_gettop(L) = 2 then
-                AddAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)))
-            else
-                SetAmmo(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)), lua_tointeger(L, 3))
+        at:= LuaToAmmoTypeOrd(L, 2, call, params);
+        if at >= 0 then
+            begin
+            gear:= GearByUID(lua_tointeger(L, 1));
+            if (gear <> nil) and (gear^.Hedgehog <> nil) then
+                if lua_gettop(L) = 2 then
+                    AddAmmo(gear^.Hedgehog^, TAmmoType(at))
+                else
+                    SetAmmo(gear^.Hedgehog^, TAmmoType(at), lua_tointeger(L, 3))
+            end;
         end
-    else LuaParameterCountError('AddAmmo', 'gearUid, ammoType[, ammoCount]', lua_gettop(L));
+    else LuaParameterCountError(call, params, lua_gettop(L));
     lc_addammo:= 0
 end;
 
 function lc_getammocount(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     ammo : PAmmo;
+    at   : LongInt;
+const
+    call = 'GetAmmoCount';
+    params = 'gearUid, ammoType';
 begin
-    if (lua_gettop(L) = 2) then
+    if (lua_gettop(L) <> 2) then
+        begin
+        LuaParameterCountError(call, params, lua_gettop(L));
+        lua_pushnil(L);
+        end
+    else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
             begin
-            ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(lua_tointeger(L, 2)));
-            if ammo^.AmmoType = amNothing then
-                lua_pushinteger(L, 0)
-            else
-                lua_pushinteger(L, ammo^.Count)
+            at:= LuaToAmmoTypeOrd(L, 2, call, params);
+            if at >= 0 then
+                begin
+                ammo:= GetAmmoEntry(gear^.Hedgehog^, TAmmoType(at));
+                if ammo^.AmmoType = amNothing then
+                    lua_pushinteger(L, 0)
+                else
+                    lua_pushinteger(L, ammo^.Count);
+                end;
             end
-        else lua_pushinteger(L, 0)
-        end
-    else
-        begin
-        LuaParameterCountError('GetAmmoCount', 'gearUid, ammoType', lua_gettop(L));
-        lua_pushnil(L)
+        else lua_pushinteger(L, 0);
         end;
+
     lc_getammocount:= 1
 end;
 
@@ -1276,31 +1368,48 @@ end;
 
 function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
+    t   : LongInt;
+const
+    call = 'SetEffect';
+    params = 'gearUid, effect, effectState';
 begin
     if lua_gettop(L) <> 3 then
-        LuaParameterCountError('SetEffect', 'gearUid, effect, effectState', lua_gettop(L))
-    else begin
-        gear := GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))]:= lua_tointeger(L, 3);
-    end;
+        LuaParameterCountError(call, params, lua_gettop(L))
+    else
+        begin
+        t:= LuaToHogEffectOrd(L, 2, call, params);
+        if t >= 0 then
+            begin
+            gear := GearByUID(lua_tointeger(L, 1));
+            if (gear <> nil) and (gear^.Hedgehog <> nil) then
+                gear^.Hedgehog^.Effects[THogEffect(t)]:= lua_tointeger(L, 3);
+            end;
+        end;
     lc_seteffect := 0;
 end;
 
 function lc_geteffect(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
+    t    : LongInt;
+const
+    call = 'GetEffect';
+    params = 'gearUid, effect';
 begin
     if lua_gettop(L) <> 2 then
         begin
-        LuaParameterCountError('GetEffect', 'gearUid, effect', lua_gettop(L));
+        LuaParameterCountError(call, params, lua_gettop(L));
         end
     else
         begin
-        gear:= GearByUID(lua_tointeger(L, 1));
-        if (gear <> nil) and (gear^.Hedgehog <> nil) then
-            lua_pushinteger(L, gear^.Hedgehog^.Effects[THogEffect(lua_tointeger(L, 2))])
-        else
-            lua_pushinteger(L, 0)
+        t:= LuaToHogEffectOrd(L, 2, call, params);
+        if t >= 0 then
+            begin
+            gear:= GearByUID(lua_tointeger(L, 1));
+            if (gear <> nil) and (gear^.Hedgehog <> nil) then
+                lua_pushinteger(L, gear^.Hedgehog^.Effects[THogEffect(t)])
+            else
+                lua_pushinteger(L, 0)
+            end;
         end;
     lc_geteffect:= 1
 end;
@@ -1389,50 +1498,69 @@ end;
 
 function lc_sendstat(L : Plua_State) : LongInt; Cdecl;
 var statInfo : TStatInfoType;
-var i : LongInt;
-var color : shortstring;
+    i, n : LongInt;
+    color, tn : shortstring;
+const
+    call = 'SendStat';
+    params2 = 'statInfoType, color';
+    params3 = 'siClanHealth, color, teamname';
+    params = 'statInfoType, color [, teamname]';
 begin
-    statInfo := TStatInfoType(lua_tointeger(L, 1));
-    if (lua_gettop(L) <> 2) and ((statInfo <> siPlayerKills)
-            and (statInfo <> siClanHealth)) then
+    n:= lua_gettop(L);
+    if (n < 2) or (n > 3) then
         begin
-        LuaParameterCountError('SendStat', 'statInfoType, color', lua_gettop(L));
-        end
-    else if (lua_gettop(L) <> 3) and ((statInfo = siPlayerKills)
-            or (statInfo = siClanHealth)) then
-        begin
-        LuaParameterCountError('SendStat', 'siClanHealth, color, teamname', lua_gettop(L));
+        LuaParameterCountError(call, params3, n);
         end
     else
         begin
-        if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
+        i:= LuaToStatInfoTypeOrd(L, 1, call, params);
+        if i >= 0 then
             begin
-            // 3: team name
-            for i:= 0 to Pred(TeamsCount) do
+            statInfo := TStatInfoType(i);
+            if (n <> 2) and ((statInfo <> siPlayerKills)
+                    and (statInfo <> siClanHealth)) then
                 begin
-                with TeamsArray[i]^ do
+                LuaParameterCountError(call, params2, n);
+                end
+            else if (n <> 3) and ((statInfo = siPlayerKills)
+                    or (statInfo = siClanHealth)) then
+                begin
+                LuaParameterCountError(call, params3, n);
+                end
+            else
+                begin
+                if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
                     begin
-                        if TeamName = lua_tostring(L, 3) then
+                    // 3: team name
+                    for i:= 0 to Pred(TeamsCount) do
+                        begin
+                        color:= '0';
+                        tn:= lua_tostring(L, 3);
+                        with TeamsArray[i]^ do
                             begin
-                            color := uUtils.IntToStr(Clan^.Color);
-                            Break;
+                                if TeamName = tn then
+                                    begin
+                                    color := uUtils.IntToStr(Clan^.Color);
+                                    Break;
+                                    end
                             end
+                        end;
+                    if (statInfo = siPlayerKills) then
+                        begin
+                            SendStat(siPlayerKills, color + ' ' +
+                                lua_tostring(L, 2) + ' ' + tn);
+                        end
+                    else if (statInfo = siClanHealth) then
+                        begin
+                            SendStat(siClanHealth, color + ' ' +
+                                lua_tostring(L, 2));
+                        end
                     end
+                else
+                    begin
+                    SendStat(statInfo,lua_tostring(L, 2));
+                    end;
                 end;
-            if (statInfo = siPlayerKills) then
-                begin
-                    SendStat(siPlayerKills, color + ' ' +
-                        lua_tostring(L, 2) + ' ' + TeamsArray[i]^.TeamName);
-                end
-            else if (statInfo = siClanHealth) then
-                begin
-                    SendStat(siClanHealth, color + ' ' +
-                        lua_tostring(L, 2));
-                end
-            end
-        else
-            begin
-            SendStat(statInfo,lua_tostring(L, 2));
             end;
         end;
     lc_sendstat:= 0
@@ -1453,7 +1581,7 @@ var gear: PGear;
 begin
     tryhard:= false;
     if (lua_gettop(L) <> 4) and (lua_gettop(L) <> 5) then
-        LuaParameterCountError('FindPlace', 'gearUid, fall, left, right[, tryHarder]', lua_gettop(L))
+        LuaParameterCountError('FindPlace', 'gearUid, fall, left, right [, tryHarder]', lua_gettop(L))
     else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
@@ -1474,16 +1602,30 @@ end;
 
 function lc_playsound(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
+    n, s: LongInt;
+const
+    call = 'PlaySound';
+    params = 'soundId [, hhGearUid]';
 begin
-    if lua_gettop(L) = 1 then
-        PlaySound(TSound(lua_tointeger(L, 1)))
-    else if lua_gettop(L) = 2 then
+    n:= lua_gettop(L);
+    if (n < 1) or (n > 2) then
+        LuaParameterCountError(call, params, n)
+    else
         begin
-        gear:= GearByUID(lua_tointeger(L, 2));
-        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
-            AddVoice(TSound(lua_tointeger(L, 1)),gear^.Hedgehog^.Team^.Voicepack)
-        end
-    else LuaParameterCountError('PlaySound', 'soundId', lua_gettop(L));
+        s:= LuaToSoundOrd(L, 1, call, params);
+        if s >= 0 then
+            begin
+            // no gear specified
+            if n = 1 then
+                PlaySound(TSound(s))
+            else if lua_gettop(L) = 2 then
+                begin
+                gear:= GearByUID(lua_tointeger(L, 2));
+                if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+                    AddVoice(TSound(s),gear^.Hedgehog^.Team^.Voicepack)
+                end;
+            end;
+        end;
     lc_playsound:= 0;
 end;
 
@@ -1493,7 +1635,7 @@ begin
     np:= lua_gettop(L);
     if (np < 5) or (np > 6) then
         begin
-        LuaParameterCountError('AddTeam', 'teamname, color, grave, fort, voicepack[, flag]', lua_gettop(L));
+        LuaParameterCountError('AddTeam', 'teamname, color, grave, fort, voicepack [, flag]', lua_gettop(L));
         //lua_pushnil(L)
         end
     else
@@ -1711,26 +1853,43 @@ begin
 end;
 
 function lc_setammo(L : Plua_State) : LongInt; Cdecl;
-var np: LongInt;
+var np, at: LongInt;
+const
+    call = 'SetAmmo';
+    params = 'ammoType, count, probability, delay [, numberInCrate]';
 begin
     np:= lua_gettop(L);
     if (np < 4) or (np > 5) then
-        LuaParameterCountError('SetAmmo', 'ammoType, count, probability, delay[, numberInCrate]', lua_gettop(L))
-    else if np = 4 then
-        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), 1)
+        LuaParameterCountError(call, params, lua_gettop(L))
     else
-        ScriptSetAmmo(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+        begin
+        at:= LuaToAmmoTypeOrd(L, 1, call, params);
+        if at >= 0 then
+            begin
+            if np = 4 then
+                ScriptSetAmmo(TAmmoType(at), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), 1)
+            else
+                ScriptSetAmmo(TAmmoType(at), lua_tointeger(L, 2), lua_tointeger(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
+            end;
+        end;
     lc_setammo:= 0
 end;
 
 function lc_setammodelay(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
+const
+    call = 'SetAmmoDelay';
+    params = 'ammoType, delay';
 begin
     np:= lua_gettop(L);
     if (np <> 2) then
-        LuaParameterCountError('SetAmmoDelay', 'ammoType, delay', lua_gettop(L))
+        LuaParameterCountError(call, params, lua_gettop(L))
     else
-        ScriptSetAmmoDelay(TAmmoType(lua_tointeger(L, 1)), lua_tointeger(L, 2));
+        begin
+        np:= LuaToAmmoTypeOrd(L, 1, call, params);
+        if np >= 0 then
+            ScriptSetAmmoDelay(TAmmoType(np), lua_tointeger(L, 2));
+        end;
     lc_setammodelay:= 0
 end;
 
@@ -1904,8 +2063,9 @@ begin
         else
             lf:= 0;
 
-        n:= lua_tointeger(L, 3);
-        if IsValidSprite(n, call, params) then
+        n:= LuaToSpriteOrd(L, 3, call, params);
+        if n >= 0 then
+            begin
             spr:= TSprite(n);
             if SpritesData[spr].Surface = nil then
                 LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
@@ -1913,7 +2073,8 @@ begin
                 placed:= TryPlaceOnLand(
                     lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
                     lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), true, false, lfBouncy);
+                    spr, lua_tointeger(L, 4), true, false, lf);
+            end;
         end;
 
     lua_pushboolean(L, placed);
