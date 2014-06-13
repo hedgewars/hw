@@ -330,7 +330,7 @@ end;
 
 procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 var ft, fb, fl, fr: GLfloat;
-    hw, nx, ny: LongInt;
+    hw, hh, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
@@ -340,22 +340,32 @@ if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScale
     exit;
 
 openglPushMatrix;
+
 openglTranslatef(X, Y, 0);
 
 if Dir = 0 then Dir:= 1;
 
-openglRotatef(Angle, 0, 0, Dir);
+if Angle <> 0 then
+    openglRotatef(Angle, 0, 0, Dir);
 
-openglTranslatef(Dir*OffsetX, OffsetY, 0);
-openglScalef(Scale, Scale, 1);
+if (OffsetX <> 0) or (OffsetY <> 0) then
+    openglTranslatef(Dir*OffsetX, OffsetY, 0);
+
+if Scale <> 1.0 then
+    openglScalef(Scale, Scale, 1);
 
 // Any reason for this call? And why only in t direction, not s?
 //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-hw:= w div (2 div Dir);
+if Dir > 0 then
+    hw:=  w div 2
+else
+    hw:= -w div 2;
 
-nx:= round(Texture^.w / w); // number of horizontal frames
-ny:= round(Texture^.h / h); // number of vertical frames
+hh:= h div 2;
+
+nx:= Texture^.w div w; // number of horizontal frames
+ny:= Texture^.h div h; // number of vertical frames
 
 ft:= (Frame mod ny) * Texture^.ry / ny;
 fb:= ((Frame mod ny) + 1) * Texture^.ry / ny;
@@ -365,13 +375,13 @@ fr:= ((Frame div ny) + 1) * Texture^.rx / nx;
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
 VertexBuffer[0].X:= -hw;
-VertexBuffer[0].Y:= w / -2;
-VertexBuffer[1].X:= hw;
-VertexBuffer[1].Y:= w / -2;
-VertexBuffer[2].X:= hw;
-VertexBuffer[2].Y:= w / 2;
+VertexBuffer[0].Y:= -hh;
+VertexBuffer[1].X:=  hw;
+VertexBuffer[1].Y:= -hh;
+VertexBuffer[2].X:=  hw;
+VertexBuffer[2].Y:=  hh;
 VertexBuffer[3].X:= -hw;
-VertexBuffer[3].Y:= w / 2;
+VertexBuffer[3].Y:=  hh;
 
 TextureBuffer[0].X:= fl;
 TextureBuffer[0].Y:= ft;

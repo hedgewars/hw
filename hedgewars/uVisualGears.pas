@@ -132,9 +132,9 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
             case Gear^.Kind of
               vgtCloud: if SuddenDeathDmg then
-                             DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
+                             DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
                          else
-                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
+                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
                vgtFlake: if cFlattenFlakes then
                              begin
                              if SuddenDeathDmg then
@@ -384,9 +384,9 @@ case Layer of
                 Tint(Gear^.Tint);
             case Gear^.Kind of
                vgtCloud: if SuddenDeathDmg then
-                            DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
+                            DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
                         else
-                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 2, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
+                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
               vgtFlake: if SuddenDeathDmg then
                             if vobSDVelocity = 0 then
                                 DrawTextureF(SpritesData[sprSDFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
