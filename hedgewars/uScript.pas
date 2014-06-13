@@ -115,7 +115,7 @@ begin
         exit(false); // stack not deep enough
 
     // get source name and line count
-    lua_getinfo(luaState, 'Sl', @LuaDebugInfo);
+    lua_getinfo(luaState, PChar('Sl'), @LuaDebugInfo);
     exit(true);
 end;
 
@@ -152,7 +152,7 @@ begin
 end;
 
 // compare with allowed count
-function CheckLuaParameterCount(L : Plua_State; count: LongInt; call, paramsyntax: shortstring): boolean; inline;
+function CheckLuaParamCount(L : Plua_State; count: LongInt; call, paramsyntax: shortstring): boolean; inline;
 var c: LongInt;
 begin
     c:= lua_gettop(L);
@@ -162,11 +162,11 @@ begin
         exit(false);
         end;
 
-    CheckLuaParameterCount:= true;
+    CheckLuaParamCount:= true;
 end;
 
 // check if is either count1 or count2
-function CheckAndFetchLuaParameterCount(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+function CheckAndFetchParamCount(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
 begin
     actual:= lua_gettop(L);
     if (actual <> count1) and (actual <> count2) then
@@ -175,11 +175,11 @@ begin
         exit(false);
         end;
 
-    CheckAndFetchLuaParameterCount:= true;
+    CheckAndFetchParamCount:= true;
 end;
 
 // check if is same or higher as minCount
-function CheckAndFetchLuaParameterCount(L : Plua_State; minCount: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+function CheckAndFetchLuaParamMinCount(L : Plua_State; minCount: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
 begin
     actual:= lua_gettop(L);
     if (actual < minCount) then
@@ -188,7 +188,7 @@ begin
         exit(false);
         end;
 
-    CheckAndFetchLuaParameterCount:= true;
+    CheckAndFetchLuaParamMinCount:= true;
 end;
 
 function LuaToGearTypeOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
@@ -300,14 +300,14 @@ end;
 // functions called from Lua:
 // function(L : Plua_State) : LongInt; Cdecl;
 // where L contains the state, returns the number of return values on the stack
-// call CheckLuaParameterCount or CheckAndFetchLuaParameterCount
+// call CheckLuaParamCount or CheckAndFetchParamCount
 // to validate/get the number of passed arguments (see their call definitions)
 //
 // use as return value the number of variables pushed back to the lua script
 
 function lc_band(L: PLua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 2, 'band', 'value1, value2') then
+    if CheckLuaParamCount(L, 2, 'band', 'value1, value2') then
         lua_pushinteger(L, lua_tointeger(L, 2) and lua_tointeger(L, 1))
     else
         lua_pushnil(L);
@@ -316,7 +316,7 @@ end;
 
 function lc_bor(L: PLua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 2, 'bor', 'value1, value2') then
+    if CheckLuaParamCount(L, 2, 'bor', 'value1, value2') then
         lua_pushinteger(L, lua_tointeger(L, 2) or lua_tointeger(L, 1))
     else
         lua_pushnil(L);
@@ -325,7 +325,7 @@ end;
 
 function lc_bnot(L: PLua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'bnot', 'value') then
+    if CheckLuaParamCount(L, 1, 'bnot', 'value') then
         lua_pushinteger(L, (not lua_tointeger(L, 1)))
     else
         lua_pushnil(L);
@@ -334,7 +334,7 @@ end;
 
 function lc_div(L: PLua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 2, 'div', 'dividend, divisor') then
+    if CheckLuaParamCount(L, 2, 'div', 'dividend, divisor') then
         lua_pushinteger(L, lua_tointeger(L, 1) div lua_tointeger(L, 2))
     else
         lua_pushnil(L);
@@ -343,21 +343,21 @@ end;
 
 function lc_getinputmask(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetInputMask', '') then
+    if CheckLuaParamCount(L, 0, 'GetInputMask', '') then
         lua_pushinteger(L, InputMask);
     lc_getinputmask:= 1
 end;
 
 function lc_setinputmask(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'SetInputMask', 'mask') then
+    if CheckLuaParamCount(L, 1, 'SetInputMask', 'mask') then
         InputMask:= lua_tointeger(L, 1);
     lc_setinputmask:= 0
 end;
 
 function lc_writelntoconsole(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'WriteLnToConsole', 'string') then
+    if CheckLuaParamCount(L, 1, 'WriteLnToConsole', 'string') then
         WriteLnToConsole('Lua: ' + lua_tostring(L ,1));
     lc_writelntoconsole:= 0;
 end;
@@ -367,7 +367,7 @@ var t: PChar;
     i,c: LongWord;
     s: shortstring;
 begin
-    if CheckLuaParameterCount(L, 1, 'ParseCommand', 'string') then
+    if CheckLuaParamCount(L, 1, 'ParseCommand', 'string') then
         begin
         t:= lua_tolstring(L, 1, Psize_t(@c));
 
@@ -388,7 +388,7 @@ const
     params = 'ammoType';
 begin
     // no point to run this without any CurrentHedgehog
-    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 1, call, params)) then
+    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 1, call, params)) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
         if at >= 0 then
@@ -406,7 +406,7 @@ const
     call = 'SetNextWeapon';
     params = '';
 begin
-    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 0, call, params)) then
+    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, call, params)) then
         begin
         at:= -1;
         with CurrentHedgehog^ do
@@ -463,7 +463,7 @@ end;
 
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 5, 'ShowMission', 'caption, subcaption, text, icon, time') then
+    if CheckLuaParamCount(L, 5, 'ShowMission', 'caption, subcaption, text, icon, time') then
         ShowMission(lua_tostringA(L, 1), lua_tostringA(L, 2), lua_tostringA(L, 3), lua_tointeger(L, 4), lua_tointeger(L, 5));
     lc_showmission:= 0;
 end;
@@ -479,7 +479,7 @@ function lc_enablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i, n : integer;
 begin
     // can have 1 or more arguments
-    if CheckAndFetchLuaParameterCount(L, 1, 'EnableGameFlags', 'gameFlag, ... ', n) then
+    if CheckAndFetchLuaParamMinCount(L, 1, 'EnableGameFlags', 'gameFlag, ... ', n) then
         begin
         for i:= 1 to n do
             GameFlags := GameFlags or LongWord(lua_tointeger(L, i));
@@ -492,7 +492,7 @@ function lc_disablegameflags(L : Plua_State) : LongInt; Cdecl;
 var i , n: integer;
 begin
     // can have 1 or more arguments
-    if CheckAndFetchLuaParameterCount(L, 1, 'DisableGameFlags', 'gameFlag, ... ', n) then
+    if CheckAndFetchLuaParamMinCount(L, 1, 'DisableGameFlags', 'gameFlag, ... ', n) then
         begin
         for i:= 1 to n do
             GameFlags := GameFlags and (not LongWord(lua_tointeger(L, i)));
@@ -503,7 +503,7 @@ end;
 
 function lc_cleargameflags(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'ClearGameFlags', '') then
+    if CheckLuaParamCount(L, 0, 'ClearGameFlags', '') then
         begin
         GameFlags:= 0;
         ScriptSetInteger('GameFlags', GameFlags);
@@ -513,7 +513,7 @@ end;
 
 function lc_getgameflag(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGameFlag', 'gameflag') then
+    if CheckLuaParamCount(L, 1, 'GetGameFlag', 'gameflag') then
         lua_pushboolean(L, (GameFlags and LongWord(lua_tointeger(L, 1)) <> 0))
     else
         lua_pushnil(L);
@@ -526,7 +526,7 @@ const
     call = 'AddCaption';
     params = 'text [, color, captiongroup]';
 begin
-    if CheckAndFetchLuaParameterCount(L, 1, 3, call, params, cg) then
+    if CheckAndFetchParamCount(L, 1, 3, call, params, cg) then
         begin
         if cg = 1 then
             AddCaption(lua_tostringA(L, 1), cWhiteColor, capgrpMessage)
@@ -542,7 +542,7 @@ end;
 
 function lc_campaignlock(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'CampaignLock', 'TODO') then
+    if CheckLuaParamCount(L, 1, 'CampaignLock', 'TODO') then
         begin
         // TODO
         end;
@@ -551,7 +551,7 @@ end;
 
 function lc_campaignunlock(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'CampaignUnlock', 'TODO') then
+    if CheckLuaParamCount(L, 1, 'CampaignUnlock', 'TODO') then
         begin
         // TODO
         end;
@@ -561,7 +561,7 @@ end;
 function lc_spawnfakehealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 4,'SpawnFakeHealthCrate', 'x, y, explode, poison') then
+    if CheckLuaParamCount(L, 4,'SpawnFakeHealthCrate', 'x, y, explode, poison') then
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
@@ -575,7 +575,7 @@ end;
 function lc_spawnfakeammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 4,'SpawnFakeAmmoCrate', 'x, y, explode, poison') then
+    if CheckLuaParamCount(L, 4,'SpawnFakeAmmoCrate', 'x, y, explode, poison') then
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
@@ -589,7 +589,7 @@ end;
 function lc_spawnfakeutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 4,'SpawnFakeUtilityCrate', 'x, y, explode, poison') then
+    if CheckLuaParamCount(L, 4,'SpawnFakeUtilityCrate', 'x, y, explode, poison') then
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
@@ -604,7 +604,7 @@ function lc_spawnhealthcrate(L: Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 var health, n: LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 2, 3, 'SpawnHealthCrate', 'x, y [, health]', n) then
+    if CheckAndFetchParamCount(L, 2, 3, 'SpawnHealthCrate', 'x, y [, health]', n) then
         begin
         if n = 3 then
             health:= lua_tointeger(L, 3)
@@ -625,7 +625,7 @@ function lc_spawnammocrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
     n   : LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 3, 4, 'SpawnAmmoCrate', 'x, y, content [, amount]', n) then
+    if CheckAndFetchParamCount(L, 3, 4, 'SpawnAmmoCrate', 'x, y, content [, amount]', n) then
         begin
         if n = 3 then
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
@@ -644,7 +644,7 @@ function lc_spawnutilitycrate(L: PLua_State): LongInt; Cdecl;
 var gear: PGear;
     n   : LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 3, 4, 'SpawnUtilityCrate', 'x, y, content [, amount]', n) then
+    if CheckAndFetchParamCount(L, 3, 4, 'SpawnUtilityCrate', 'x, y, content [, amount]', n) then
         begin
         if n = 3 then
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
@@ -668,7 +668,7 @@ const
     call = 'AddGear';
     params = 'x, y, gearType, state, dx, dy, timer';
 begin
-    if CheckLuaParameterCount(L, 7, call, params) then
+    if CheckLuaParamCount(L, 7, call, params) then
         begin
         t:= LuaToGearTypeOrd(L, 3, call, params);
         if t >= 0 then
@@ -696,7 +696,7 @@ end;
 function lc_deletegear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'DeleteGear', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'DeleteGear', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -716,7 +716,7 @@ const
     params = 'x, y, visualGearType, state, critical';
 begin
     uid:= 0;
-    if CheckLuaParameterCount(L, 5, call, params) then
+    if CheckLuaParamCount(L, 5, call, params) then
         begin
         s:= LuaToVisualGearTypeOrd(L, 3, call, params);
         if s >= 0 then
@@ -747,7 +747,7 @@ function lc_deletevisualgear(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
 begin
     vg:= nil;
-    if CheckLuaParameterCount(L, 1, 'DeleteVisualGear', 'vgUid') then
+    if CheckLuaParamCount(L, 1, 'DeleteVisualGear', 'vgUid') then
         begin
         vg:= VisualGearByUID(lua_tointeger(L, 1));
         if vg <> nil then
@@ -761,7 +761,7 @@ end;
 function lc_getvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
 var vg: PVisualGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetVisualGearValues', 'vgUid') then
+    if CheckLuaParamCount(L, 1, 'GetVisualGearValues', 'vgUid') then
         begin
         vg:= VisualGearByUID(lua_tointeger(L, 1));
         if vg <> nil then
@@ -794,7 +794,7 @@ end;
 function lc_setvisualgearvalues(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
 begin
-    if CheckLuaParameterCount(L, 11, 'SetVisualGearValues', 'vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint') then
+    if CheckLuaParamCount(L, 11, 'SetVisualGearValues', 'vgUid, X, Y, dX, dY, Angle, Frame, FrameTicks, State, Timer, Tint') then
         begin
         vg:= VisualGearByUID(lua_tointeger(L, 1));
         if vg <> nil then
@@ -819,7 +819,7 @@ end;
 
 function lc_getfollowgear(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetFollowGear', '') then
+    if CheckLuaParamCount(L, 0, 'GetFollowGear', '') then
         begin
         if FollowGear = nil then
             lua_pushnil(L)
@@ -834,7 +834,7 @@ end;
 function lc_getgeartype(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearType', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearType', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -850,7 +850,7 @@ end;
 function lc_getgearmessage(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearMessage', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearMessage', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -866,7 +866,7 @@ end;
 function lc_getgearelasticity(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearElasticity', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearElasticity', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -882,7 +882,7 @@ end;
 function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetGearMessage', 'gearUid, message') then
+    if CheckLuaParamCount(L, 2, 'SetGearMessage', 'gearUid, message') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -894,7 +894,7 @@ end;
 function lc_getgearpos(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearPos', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearPos', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -910,7 +910,7 @@ end;
 function lc_setgearpos(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetGearPos', 'gearUid, value') then
+    if CheckLuaParamCount(L, 2, 'SetGearPos', 'gearUid, value') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -922,7 +922,7 @@ end;
 function lc_getgearcollisionmask(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearCollisionMask', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearCollisionMask', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -938,7 +938,7 @@ end;
 function lc_setgearcollisionmask(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetGearCollisionMask', 'gearUid, mask') then
+    if CheckLuaParamCount(L, 2, 'SetGearCollisionMask', 'gearUid, mask') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -950,7 +950,7 @@ end;
 function lc_gethoglevel(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHogLevel', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHogLevel', 'gearUid') then
         begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -964,7 +964,7 @@ end;
 function lc_sethoglevel(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetHogLevel', 'gearUid, level') then
+    if CheckLuaParamCount(L, 2, 'SetHogLevel', 'gearUid, level') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
@@ -976,7 +976,7 @@ end;
 function lc_gethogclan(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHogClan', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHogClan', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -993,7 +993,7 @@ end;
 
 function lc_getclancolor(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetClanColor', 'clan') then
+    if CheckLuaParamCount(L, 1, 'GetClanColor', 'clan') then
         lua_pushinteger(L, ClansArray[lua_tointeger(L, 1)]^.Color shl 8 or $FF)
     else
         lua_pushnil(L); // return value on stack (nil)
@@ -1006,7 +1006,7 @@ var clan : PClan;
     hh   : THedgehog;
     i, j : LongInt;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetClanColor', 'clan, color') then
+    if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
         clan := ClansArray[lua_tointeger(L, 1)];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
@@ -1037,7 +1037,7 @@ end;
 function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHogTeamName', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHogTeamName', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -1053,7 +1053,7 @@ end;
 function lc_sethogteamname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetHogTeamName', 'gearUid, name') then
+    if CheckLuaParamCount(L, 2, 'SetHogTeamName', 'gearUid, name') then
         begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -1074,7 +1074,7 @@ end;
 function lc_gethogname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHogName', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHogName', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -1092,7 +1092,7 @@ end;
 function lc_sethogname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetHogName', 'gearUid, name') then
+    if CheckLuaParamCount(L, 2, 'SetHogName', 'gearUid, name') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
@@ -1109,7 +1109,7 @@ end;
 function lc_gettimer(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetTimer', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetTimer', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1125,7 +1125,7 @@ end;
 function lc_gethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHealth', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHealth', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1141,7 +1141,7 @@ end;
 function lc_getx(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetX', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetX', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1157,7 +1157,7 @@ end;
 function lc_gety(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetY', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetY', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1173,7 +1173,7 @@ end;
 function lc_copypv(L : Plua_State) : LongInt; Cdecl;
 var gears, geard : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'CopyPV', 'fromGearUid, toGearUid') then
+    if CheckLuaParamCount(L, 2, 'CopyPV', 'fromGearUid, toGearUid') then
         begin
         gears:= GearByUID(lua_tointeger(L, 1));
         geard:= GearByUID(lua_tointeger(L, 2));
@@ -1191,7 +1191,7 @@ end;
 function lc_followgear(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'FollowGear', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'FollowGear', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then FollowGear:= gear
@@ -1205,7 +1205,7 @@ var gear : PGear;
        s : LongWord;
        n : LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 3, 4, 'HogSay', 'gearUid, text, manner [, vgState]', n) then
+    if CheckAndFetchParamCount(L, 3, 4, 'HogSay', 'gearUid, text, manner [, vgState]', n) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1243,7 +1243,7 @@ end;
 function lc_switchhog(L : Plua_State) : LongInt; Cdecl;
 var gear, prevgear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'SwitchHog', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'SwitchHog', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
 // should we allow this when there is no current hedgehog? might do some odd(er) things to turn sequence.
@@ -1277,7 +1277,7 @@ const
     call = 'AddAmmo';
     params = 'gearUid, ammoType [, ammoCount]';
 begin
-    if CheckAndFetchLuaParameterCount(L, 2, 3, call, params, n) then
+    if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
         begin
         at:= LuaToAmmoTypeOrd(L, 2, call, params);
         if at >= 0 then
@@ -1301,7 +1301,7 @@ const
     call = 'GetAmmoCount';
     params = 'gearUid, ammoType';
 begin
-    if CheckLuaParameterCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, call, params) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Hedgehog <> nil) then
@@ -1326,7 +1326,7 @@ end;
 function lc_sethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetHealth', 'gearUid, health') then
+    if CheckLuaParamCount(L, 2, 'SetHealth', 'gearUid, health') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1350,7 +1350,7 @@ end;
 function lc_settimer(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetTimer', 'gearUid, timer') then
+    if CheckLuaParamCount(L, 2, 'SetTimer', 'gearUid, timer') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then gear^.Timer:= lua_tointeger(L, 2)
@@ -1365,7 +1365,7 @@ const
     call = 'SetEffect';
     params = 'gearUid, effect, effectState';
 begin
-    if CheckLuaParameterCount(L, 3, call, params) then
+    if CheckLuaParamCount(L, 3, call, params) then
         begin
         t:= LuaToHogEffectOrd(L, 2, call, params);
         if t >= 0 then
@@ -1385,7 +1385,7 @@ const
     call = 'GetEffect';
     params = 'gearUid, effect';
 begin
-    if CheckLuaParameterCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, call, params) then
         begin
         t:= LuaToHogEffectOrd(L, 2, call, params);
         if t >= 0 then
@@ -1405,7 +1405,7 @@ end;
 function lc_setstate(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetState', 'gearUid, state') then
+    if CheckLuaParamCount(L, 2, 'SetState', 'gearUid, state') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1420,7 +1420,7 @@ end;
 function lc_getstate(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetState', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetState', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1436,7 +1436,7 @@ end;
 function lc_gettag(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetTag', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetTag', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1452,7 +1452,7 @@ end;
 function lc_settag(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetTag', 'gearUid, tag') then
+    if CheckLuaParamCount(L, 2, 'SetTag', 'gearUid, tag') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1480,7 +1480,7 @@ const
     call = 'SendStat';
     params = 'statInfoType, color [, teamname]';
 begin
-    if CheckAndFetchLuaParameterCount(L, 2, 3, call, params, n) then
+    if CheckAndFetchParamCount(L, 2, 3, call, params, n) then
         begin
         i:= LuaToStatInfoTypeOrd(L, 1, call, params);
         if i >= 0 then
@@ -1547,7 +1547,7 @@ var gear: PGear;
     tryhard: boolean;
     left, right, n: LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 4, 5, 'FindPlace', 'gearUid, fall, left, right [, tryHarder]', n) then
+    if CheckAndFetchParamCount(L, 4, 5, 'FindPlace', 'gearUid, fall, left, right [, tryHarder]', n) then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         fall:= lua_toboolean(L, 2);
@@ -1574,7 +1574,7 @@ const
     call = 'PlaySound';
     params = 'soundId [, hhGearUid]';
 begin
-    if CheckAndFetchLuaParameterCount(L, 1, 2, call, params, n) then
+    if CheckAndFetchParamCount(L, 1, 2, call, params, n) then
         begin
         s:= LuaToSoundOrd(L, 1, call, params);
         if s >= 0 then
@@ -1596,7 +1596,7 @@ end;
 function lc_addteam(L : Plua_State) : LongInt; Cdecl;
 var np: LongInt;
 begin
-    if CheckAndFetchLuaParameterCount(L, 5, 6, 'AddTeam', 'teamname, color, grave, fort, voicepack [, flag]', np) then
+    if CheckAndFetchParamCount(L, 5, 6, 'AddTeam', 'teamname, color, grave, fort, voicepack [, flag]', np) then
         begin
         ParseCommand('addteam x ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 1), true, true);
         ParseCommand('grave ' + lua_tostring(L, 3), true, true);
@@ -1614,7 +1614,7 @@ end;
 
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'DismissTeam', 'teamname') then
+    if CheckLuaParamCount(L, 1, 'DismissTeam', 'teamname') then
         ParseCommand('teamgone ' + lua_tostring(L, 1), true, true);
     lc_dismissteam:= 0;;
 end;
@@ -1622,7 +1622,7 @@ end;
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
 var temp: ShortString;
 begin
-    if CheckLuaParameterCount(L, 4, 'AddHog', 'hogname, botlevel, health, hat') then
+    if CheckLuaParamCount(L, 4, 'AddHog', 'hogname, botlevel, health, hat') then
         begin
         temp:= lua_tostring(L, 4);
         ParseCommand('addhh ' + lua_tostring(L, 2) + ' ' + lua_tostring(L, 3) + ' ' + lua_tostring(L, 1), true, true);
@@ -1637,7 +1637,7 @@ end;
 function lc_hogturnleft(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'HogTurnLeft', 'gearUid, boolean') then
+    if CheckLuaParamCount(L, 2, 'HogTurnLeft', 'gearUid, boolean') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1649,7 +1649,7 @@ end;
 function lc_getgearposition(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearPosition', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearPosition', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1676,7 +1676,7 @@ var gear: PGear;
     col: boolean;
     x, y: LongInt;
 begin
-    if CheckLuaParameterCount(L, 3, 'SetGearPosition', 'gearUid, x, y') then
+    if CheckLuaParamCount(L, 3, 'SetGearPosition', 'gearUid, x, y') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1699,7 +1699,7 @@ end;
 function lc_getgeartarget(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearTarget', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearTarget', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1724,7 +1724,7 @@ end;
 function lc_setgeartarget(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 3, 'SetGearTarget', 'gearUid, x, y') then
+    if CheckLuaParamCount(L, 3, 'SetGearTarget', 'gearUid, x, y') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1740,7 +1740,7 @@ function lc_getgearvelocity(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 var t: LongInt;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearVelocity', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearVelocity', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1763,7 +1763,7 @@ end;
 function lc_setgearvelocity(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 3, 'SetGearVelocity', 'gearUid, dx, dy') then
+    if CheckLuaParamCount(L, 3, 'SetGearVelocity', 'gearUid, dx, dy') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1778,7 +1778,7 @@ end;
 
 function lc_setzoom(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'SetZoom', 'zoomLevel') then
+    if CheckLuaParamCount(L, 1, 'SetZoom', 'zoomLevel') then
         begin
         ZoomValue:= lua_tonumber(L, 1);
         if ZoomValue < cMaxZoomLevel then
@@ -1791,7 +1791,7 @@ end;
 
 function lc_getzoom(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetZoom', '') then
+    if CheckLuaParamCount(L, 0, 'GetZoom', '') then
         lua_pushnumber(L, ZoomValue)
     else
         lua_pushnil(L);
@@ -1804,7 +1804,7 @@ const
     call = 'SetAmmo';
     params = 'ammoType, count, probability, delay [, numberInCrate]';
 begin
-    if CheckAndFetchLuaParameterCount(L, 4, 5, call, params, np) then
+    if CheckAndFetchParamCount(L, 4, 5, call, params, np) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
         if at >= 0 then
@@ -1824,7 +1824,7 @@ const
     call = 'SetAmmoDelay';
     params = 'ammoType, delay';
 begin
-    if CheckLuaParameterCount(L, 2, call, params) then
+    if CheckLuaParamCount(L, 2, call, params) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
         if at >= 0 then
@@ -1835,7 +1835,7 @@ end;
 
 function lc_setammostore(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 4, 'SetAmmoStore', 'loadouts, probabilities, delays, reinforments') then
+    if CheckLuaParamCount(L, 4, 'SetAmmoStore', 'loadouts, probabilities, delays, reinforments') then
         begin
         ScriptAmmoLoadout:= lua_tostring(L, 1);
         ScriptAmmoProbability:= lua_tostring(L, 2);
@@ -1848,7 +1848,7 @@ end;
 function lc_getrandom(L : Plua_State) : LongInt; Cdecl;
 var m : LongInt;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetRandom', 'number') then
+    if CheckLuaParamCount(L, 1, 'GetRandom', 'number') then
         begin
         m:= lua_tointeger(L, 1);
         if (m > 0) then
@@ -1866,7 +1866,7 @@ end;
 
 function lc_setwind(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'SetWind', 'windSpeed') then
+    if CheckLuaParamCount(L, 1, 'SetWind', 'windSpeed') then
         begin
         cWindSpeed:= int2hwfloat(lua_tointeger(L, 1)) / 100 * cMaxWindSpeed;
         cWindSpeedf:= SignAs(cWindSpeed,cWindSpeed).QWordValue / SignAs(_1,_1).QWordValue;
@@ -1879,7 +1879,7 @@ end;
 
 function lc_getdatapath(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetDataPath', '') then
+    if CheckLuaParamCount(L, 0, 'GetDataPath', '') then
         lua_pushstring(L, str2pchar(cPathz[ptData]))
     else
         lua_pushnil(L);
@@ -1888,7 +1888,7 @@ end;
 
 function lc_getuserdatapath(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetUserDataPath', '') then
+    if CheckLuaParamCount(L, 0, 'GetUserDataPath', '') then
         lua_pushstring(L, str2pchar(cPathz[ptData]))
     else
         lua_pushnil(L);
@@ -1897,7 +1897,7 @@ end;
 
 function lc_maphasborder(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'MapHasBorder', '') then
+    if CheckLuaParamCount(L, 0, 'MapHasBorder', '') then
         lua_pushboolean(L, hasBorder)
     else
         lua_pushnil(L);
@@ -1907,7 +1907,7 @@ end;
 function lc_getgearradius(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetGearRadius', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetGearRadius', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -1923,7 +1923,7 @@ end;
 function lc_gethoghat(L : Plua_State): LongInt; Cdecl;
 var gear : PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetHogHat', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'GetHogHat', 'gearUid') then
         begin
         gear := GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
@@ -1940,7 +1940,7 @@ function lc_sethoghat(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
     hat: ShortString;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetHogHat', 'gearUid, hat') then
+    if CheckLuaParamCount(L, 2, 'SetHogHat', 'gearUid, hat') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
@@ -1967,7 +1967,7 @@ const
     params = 'x, y, sprite, frameIdx [, landFlags, ... ]';
 begin
     placed:= false;
-    if CheckAndFetchLuaParameterCount(L, 4, call, params, n) then
+    if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         lf:= 0;
 
@@ -1997,7 +1997,7 @@ function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
 var placed: boolean;
 begin
     placed:= false;
-    if CheckLuaParameterCount(L, 3, 'PlaceGirder', 'x, y, frameIdx') then
+    if CheckLuaParamCount(L, 3, 'PlaceGirder', 'x, y, frameIdx') then
         placed:= TryPlaceOnLandSimple(
             lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
             lua_tointeger(L, 2) - SpritesData[sprAmGirder].Height div 2,
@@ -2009,7 +2009,7 @@ end;
 
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
 begin
-    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 0, 'GetCurAmmoType', '')) then
+    if (CurrentHedgehog <> nil) and (CheckLuaParamCount(L, 0, 'GetCurAmmoType', '')) then
         lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType))
     else
         lua_pushinteger(L, ord(amNothing));
@@ -2018,14 +2018,14 @@ end;
 
 function lc_savecampaignvar(L : Plua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 2, 'SaveCampaignVar', 'varname, value') then
+    if CheckLuaParamCount(L, 2, 'SaveCampaignVar', 'varname, value') then
         SendIPC('V!' + lua_tostring(L, 1) + ' ' + lua_tostring(L, 2) + #0);
     lc_savecampaignvar := 0;
 end;
 
 function lc_getcampaignvar(L : Plua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'GetCampaignVar', 'varname') then
+    if CheckLuaParamCount(L, 1, 'GetCampaignVar', 'varname') then
         SendIPCAndWaitReply('V?' + lua_tostring(L, 1) + #0);
     lua_pushstring(L, str2pchar(CampaignVariable));
     lc_getcampaignvar := 1;
@@ -2034,7 +2034,7 @@ end;
 function lc_hidehog(L: Plua_State): LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'HideHog', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'HideHog', 'gearUid') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         HideHog(gear^.hedgehog)
@@ -2046,7 +2046,7 @@ function lc_restorehog(L: Plua_State): LongInt; Cdecl;
 var i, h: LongInt;
     uid: LongWord;
 begin
-    if CheckLuaParameterCount(L, 1, 'RestoreHog', 'gearUid') then
+    if CheckLuaParamCount(L, 1, 'RestoreHog', 'gearUid') then
         begin
         uid:= LongWord(lua_tointeger(L, 1));
         if TeamsCount > 0 then
@@ -2065,7 +2065,7 @@ end;
 function lc_testrectforobstacle(L : Plua_State) : LongInt; Cdecl;
 var rtn: Boolean;
 begin
-    if CheckLuaParameterCount(L, 5, 'TestRectForObstacle', 'x1, y1, x2, y2, landOnly') then
+    if CheckLuaParamCount(L, 5, 'TestRectForObstacle', 'x1, y1, x2, y2, landOnly') then
         begin
         rtn:= TestRectancleForObstacle(
                     lua_tointeger(L, 1),
@@ -2084,14 +2084,14 @@ end;
 
 function lc_getgravity(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetGravity', '') then
+    if CheckLuaParamCount(L, 0, 'GetGravity', '') then
         lua_pushinteger(L, hwRound(SignAs(_0_5, cGravity) + (cGravity * 50 / cMaxWindSpeed)));
     lc_getgravity:= 1
 end;
 
 function lc_setgravity(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'SetGravity', 'percent') then
+    if CheckLuaParamCount(L, 1, 'SetGravity', 'percent') then
         begin
         cGravity:= _0_02 * lua_tointeger(L, 1) * cMaxWindSpeed;
         cGravityf:= 0.00025 * lua_tointeger(L, 1) * 0.02
@@ -2102,7 +2102,7 @@ end;
 function lc_setwaterline(L : Plua_State) : LongInt; Cdecl;
 var iterator: PGear;
 begin
-    if CheckLuaParameterCount(L, 1, 'SetWaterLine', 'waterline') then
+    if CheckLuaParamCount(L, 1, 'SetWaterLine', 'waterline') then
         begin
         cWaterLine:= lua_tointeger(L,1);
         AllInactive:= false;
@@ -2125,7 +2125,7 @@ end;
 function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
-    if CheckLuaParameterCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
+    if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
@@ -2137,7 +2137,7 @@ end;
 
 function lc_hedgewarsscriptload(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'HedgewarsScriptLoad', 'scriptPath') then
+    if CheckLuaParamCount(L, 1, 'HedgewarsScriptLoad', 'scriptPath') then
         ScriptLoad(lua_tostring(L, 1))
     else
         lua_pushnil(L);
@@ -2147,7 +2147,7 @@ end;
 
 function lc_declareachievement(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 4, 'DeclareAchievement', 'achievementId, teamname, location, value') then
+    if CheckLuaParamCount(L, 4, 'DeclareAchievement', 'achievementId, teamname, location, value') then
         declareAchievement(lua_tostring(L, 1), lua_tostring(L, 2), lua_tostring(L, 3), lua_tointeger(L, 4));
     lc_declareachievement:= 0
 end;
@@ -2155,7 +2155,7 @@ end;
 // stuff for testing the lua API
 function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 1, 'EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED') then
+    if CheckLuaParamCount(L, 1, 'EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED') then
         begin
         WriteLnToConsole('Lua test finished');
         halt(lua_tointeger(L, 1));
