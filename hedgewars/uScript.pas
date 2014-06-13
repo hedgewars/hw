@@ -105,9 +105,34 @@ procedure ScriptApplyAmmoStore; forward;
 procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforcement: Byte); forward;
 procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
-procedure LuaError(s: shortstring);
+var LuaDebugInfo: lua_Debug;
+
+function LuaUpdateDebugInfo(): Boolean;
 begin
-    s:= 'Lua-script error: ' + s;
+    FillChar(LuaDebugInfo, sizeof(LuaDebugInfo), 0);
+
+    if lua_getstack(luaState, 1, @LuaDebugInfo) = 0 then
+        exit(false); // stack not deep enough
+
+    // get source name and line count
+    lua_getinfo(luaState, 'Sl', @LuaDebugInfo);
+    exit(true);
+end;
+
+procedure LuaError(s: shortstring);
+var src: shortstring;
+const
+    maxsrclen = 20;
+begin
+    if LuaUpdateDebugInfo() then
+        begin
+        src:= StrPas(LuaDebugInfo.source);
+        s:= 'LUA ERROR [ ... '
+            + copy(src, Length(src) - maxsrclen, maxsrclen - 3) + ':'
+            + inttostr(LuaDebugInfo.currentLine) + ']: ' + s;
+        end
+    else
+        s:= 'LUA ERROR: ' + s;
     WriteLnToConsole(s);
     AddChatString(#5 + s);
     if cTestLua then
@@ -116,7 +141,8 @@ end;
 
 procedure LuaCallError(error, call, paramsyntax: shortstring);
 begin
-    LuaError(call + ': ' + error + '       function syntax: ' + call + ' ( ' + paramsyntax + ' )');
+    LuaError(call + ': ' + error);
+    LuaError('-- SYNTAX: ' + call + ' ( ' + paramsyntax + ' )');
 end;
 
 procedure LuaParameterCountError(expected, call, paramsyntax: shortstring; wrongcount: LongInt); inline;
