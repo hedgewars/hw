@@ -2529,7 +2529,7 @@ begin
         PlaySound(sndDenied);
         if not distFail then
             begin
-            warn:= AddVisualGear(Gear^.Target.X, Gear^.Target.Y, vgtNoPlaceWarn, 0);
+            warn:= AddVisualGear(Gear^.Target.X, Gear^.Target.Y, vgtNoPlaceWarn, 0, true);
             if warn <> nil then
                 warn^.Tex := GetPlaceCollisionTex(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State);
             end;
@@ -2587,20 +2587,45 @@ end;
 
 procedure doStepTeleport(Gear: PGear);
 var
-    HHGear: PGear;
+    lx, ty, y, oy: LongInt;
+    HHGear       : PGear;
+    valid        : Boolean;
+    warn         : PVisualGear;
+const
+    ytol = cHHRadius;
 begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    if not TryPlaceOnLand(Gear^.Target.X - SpritesData[sprHHTelepMask].Width div 2,
-        Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2,
-        sprHHTelepMask, 0, false, not hasBorder, 0) then
+
+    valid:= false;
+
+    lx:= Gear^.Target.X - SpritesData[sprHHTelepMask].Width  div 2; // left
+    ty:= Gear^.Target.Y - SpritesData[sprHHTelepMask].Height div 2; // top
+
+    // remember original target location
+    oy:= Gear^.Target.Y;
+
+    for y:= ty downto ty - ytol do
+        begin
+        if TryPlaceOnLand(lx, y, sprHHTelepMask, 0, false, not hasBorder, 0) then
+            begin
+            valid:= true;
+            break;
+            end;
+        dec(Gear^.Target.Y);
+        end;
+
+    if not valid then
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
         DeleteGear(Gear);
         isCursorVisible := true;
+        warn:= AddVisualGear(Gear^.Target.X, oy, vgtNoPlaceWarn, 0, true);
+        if warn <> nil then
+            warn^.Tex := GetPlaceCollisionTex(lx, ty, sprHHTelepMask, 0);
         PlaySound(sndDenied)
         end
     else

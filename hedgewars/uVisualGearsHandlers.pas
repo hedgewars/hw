@@ -906,14 +906,12 @@ else
     // age
     dec(Gear^.FrameTicks, Steps);
     // toggle between orange and red every few ticks
-    if (Gear^.FrameTicks div 300) mod 2 = 0 then
+    if (Gear^.FrameTicks div 256) mod 2 = 0 then
         Gear^.Tint:= $FF400000
     else
         Gear^.Tint:= $FF000000;
     // fade out alpha
-    Gear^.Tint:= Gear^.Tint or ((Gear^.FrameTicks * $FF) div 3000);
-    // get bigger as we fade out
-    // Gear^.Scale:= 1.1 - 0.001 * (Gear^.FrameTicks div 30);
+    Gear^.Tint:= (Gear^.Tint and not $FF) or (255 * Gear^.FrameTicks div 3000);
     end
 end;
 
