@@ -522,17 +522,17 @@ const
 
 type
     lua_Debug = packed record
-    event : LongInt;
-    name : PChar;          (* (n) *)
-    namewhat : PChar;      (* (n) `global', `local', `field', `method' *)
-    what : PChar;          (* (S) `Lua', `C', `main', `tail' *)
-    source : PChar;        (* (S) *)
-    currentline : LongInt; (* (l) *)
-    nups : LongInt;        (* (u) number of upvalues *)
-    linedefined : LongInt; (* (S) *)
+    event : LUA_INTEGER_;
+    name : PChar;               (* (n) *)
+    namewhat : PChar;           (* (n) `global', `local', `field', `method' *)
+    what : PChar;               (* (S) `Lua', `C', `main', `tail' *)
+    source : PChar;             (* (S) *)
+    currentline : LUA_INTEGER_; (* (l) *)
+    nups : LUA_INTEGER_;        (* (u) number of upvalues *)
+    linedefined : LUA_INTEGER_; (* (S) *)
     short_src : array [0..LUA_IDSIZE-1] of Char; (* (S) *)
     (* private part *)
-    i_ci : LongInt;        (* active function *)
+    i_ci : LUA_INTEGER_;        (* active function *)
     end;
     Plua_Debug = ^lua_Debug;
 
