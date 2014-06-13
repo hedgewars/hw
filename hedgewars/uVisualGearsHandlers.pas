@@ -911,7 +911,7 @@ else
     else
         Gear^.Tint:= $FF000000;
     // fade out alpha
-    Gear^.Tint:= (Gear^.Tint and not $FF) or (255 * Gear^.FrameTicks div 3000);
+    Gear^.Tint:= (Gear^.Tint and (not $FF)) or (255 * Gear^.FrameTicks div 3000);
     end
 end;
 
