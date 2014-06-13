@@ -883,7 +883,6 @@ function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
     if CheckLuaParameterCount(L, 2, 'SetGearMessage', 'gearUid, message') then
-    else
         begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
