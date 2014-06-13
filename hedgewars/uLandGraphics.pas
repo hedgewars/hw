@@ -47,9 +47,9 @@ procedure DrawLine(X1, Y1, X2, Y2: LongInt; Color: Longword);
 function  DrawThickLine(X1, Y1, X2, Y2, radius: LongInt; color: Longword): Longword;
 procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean;
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: Word): boolean;
+function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Longword): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: Longword): boolean;
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -606,22 +606,22 @@ ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 UpdateLandTexture(tx, ddx, ty, ddy, false)
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
+function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 var lf: LongWord;
 begin
 if indestructible then
     lf:= lfIndestructible
 else
     lf:= 0;
-TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, lf);
+TryPlaceOnLandSimple:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, lf);
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: LongWord): boolean; inline;
 begin
 TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, LandFlags);
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: Word): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: LongWord): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;

@@ -1998,7 +1998,7 @@ var placed: boolean;
 begin
     placed:= false;
     if CheckLuaParameterCount(L, 3, 'PlaceGirder', 'x, y, frameIdx') then
-        placed:= TryPlaceOnLand(
+        placed:= TryPlaceOnLandSimple(
             lua_tointeger(L, 1) - SpritesData[sprAmGirder].Width div 2,
             lua_tointeger(L, 2) - SpritesData[sprAmGirder].Height div 2,
             sprAmGirder, lua_tointeger(L, 3), true, false);
