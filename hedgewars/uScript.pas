@@ -354,19 +354,85 @@ begin
     lc_parsecommand:= 0;
 end;
 
+// sets weapon to the desired ammo type
 function lc_setweapon(L : Plua_State) : LongInt; Cdecl;
 var at: LongInt;
 const
     call = 'SetWeapon';
     params = 'ammoType';
 begin
-    if CheckLuaParameterCount(L, 1, call, params) then
+    // no point to run this without any CurrentHedgehog
+    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 1, call, params)) then
         begin
         at:= LuaToAmmoTypeOrd(L, 1, call, params);
         if at >= 0 then
             ParseCommand('setweap ' + char(at), true, true);
         end;
     lc_setweapon:= 0;
+end;
+
+// sets weapon to whatever weapons is next (wraps around, amSkip is skipped)
+function lc_setnextweapon(L : Plua_State) : LongInt; Cdecl;
+var at          : LongInt;
+    nextAmmo    : TAmmo;
+    s, a, cs, fa: LongInt;
+const
+    call = 'SetNextWeapon';
+    params = '';
+begin
+    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 0, call, params)) then
+        begin
+        at:= -1;
+        with CurrentHedgehog^ do
+            begin
+            cs:= 0; // current slot
+            fa:= 0; // first ammo item to check
+
+            // if something is selected, find it's successor
+            if curAmmoType <> amNothing then
+                begin
+                // get current slot index
+                cs:= Ammoz[CurAmmoType].Slot;
+                // find current ammo index
+                while (fa < cMaxSlotAmmoIndex)
+                    and (Ammo^[cs, fa].AmmoType <> CurAmmoType) do
+                        inc(fa);
+                // increase once more because we won't successor
+                inc(fa);
+                end;
+
+            // find first available ammo
+            // revisit current slot too (current item might not be first)
+            for s:= cs to cs + cMaxSlotIndex + 1 do
+                begin
+                for a:= fa to cMaxSlotAmmoIndex do
+                    begin
+                    // check if we went full circle
+                    if (a = fa) and (s = cs + cMaxSlotIndex + 1)  then
+                        exit(0);
+
+                    // get ammo
+                    nextAmmo:= Ammo^[s mod (cMaxSlotIndex + 1), a];
+                    // only switch to ammos the hog actually has
+                    if (nextAmmo.AmmoType <> amNothing)
+                        and (nextAmmo.AmmoType <> amSkip) and (nextAmmo.Count > 0) then
+                            begin
+                            at:= ord(nextAmmo.AmmoType);
+                            break;
+                            end;
+                    end;
+                // stop slot loop if something was found
+                if at >= 0 then
+                    break;
+                // check following slots starting with first item
+                fa:= 0;
+                end;
+            end;
+
+        if at >= 0 then
+            ParseCommand('setweap ' + char(at), true, true);
+        end;
+    lc_setnextweapon:= 0;
 end;
 
 function lc_showmission(L : Plua_State) : LongInt; Cdecl;
@@ -1522,7 +1588,6 @@ begin
 end;
 
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
-var np: LongInt;
 begin
     if CheckLuaParameterCount(L, 1, 'DismissTeam', 'teamname') then
         ParseCommand('teamgone ' + lua_tostring(L, 1), true, true);
@@ -1919,8 +1984,10 @@ end;
 
 function lc_getcurammotype(L : Plua_State): LongInt; Cdecl;
 begin
-    if CheckLuaParameterCount(L, 0, 'GetCurAmmoType', '') then
-        lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType));
+    if (CurrentHedgehog <> nil) and (CheckLuaParameterCount(L, 0, 'GetCurAmmoType', '')) then
+        lua_pushinteger(L, ord(CurrentHedgehog^.CurAmmoType))
+    else
+        lua_pushinteger(L, ord(amNothing));
     lc_getcurammotype := 1;
 end;
 
@@ -2748,6 +2815,7 @@ lua_register(luaState, _P'TestRectForObstacle', @lc_testrectforobstacle);
 lua_register(luaState, _P'GetGravity', @lc_getgravity);
 lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
+lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
