@@ -67,6 +67,12 @@
 
 -- remove hogs from racing area as per request
 
+-------
+-- 0.7
+-------
+
+-- switch to first available weapon if starting race with no weapon selected
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -574,7 +580,7 @@ function onNewTurn()
                         loc("NOT ENOUGH WAYPOINTS"),
                         loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-            SetWeapon(amAirAttack)
+                        SetWeapon(amAirAttack)
                 end
         end
 
@@ -596,26 +602,26 @@ function onGameTick20()
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
                 x,y = GetGearPosition(cGear)
-        if x > -9000 then
-            x,y = GetGearTarget(cGear)
+                if x > -9000 then
+                        x,y = GetGearTarget(cGear)
 
 
-            if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
-                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
-                PlaySound(sndDenied)
-            elseif (y > WaterLine-50) then
-                AddCaption(loc("Please place the way-point further from the waterline."))
-                PlaySound(sndDenied)
-            else
-                PlaceWayPoint(x, y)
-                if wpCount == wpLimit then
-                    AddCaption(loc("Race complexity limit reached."))
-                    DisableTumbler()
+                        if TestRectForObstacle(x-20, y-20, x+20, y+20, true) then
+                                AddCaption(loc("Please place the way-point in the open, within the map boundaries."))
+                                PlaySound(sndDenied)
+                        elseif (y > WaterLine-50) then
+                                AddCaption(loc("Please place the way-point further from the waterline."))
+                                PlaySound(sndDenied)
+                        else
+                                PlaceWayPoint(x, y)
+                                if wpCount == wpLimit then
+                                        AddCaption(loc("Race complexity limit reached."))
+                                        DisableTumbler()
+                                end
+                        end
+                else
+                        DeleteGear(cGear)
                 end
-            end
-        else
-            DeleteGear(cGear)
-        end
         SetGearPosition(cGear, -10000, 0)
         end
 
@@ -638,13 +644,16 @@ function onGameTick20()
 
                                 HideMission()
 
+                                -- don't start empty-handed
+                                if (GetCurAmmoType() == amNothing) then
+                                        SetNextWeapon()
+                                end
                         else
                                 -- still in placement mode
                         end
 
                 end
         end
-
 
 
         -- has the player started his tumbling spree?
