@@ -1837,16 +1837,20 @@ if isCursorVisible then
             with Ammoz[CurAmmoType] do
                 if PosCount > 1 then
                     begin
+                    if (CurAmmoType = amGirder) or (CurAmmoType = amTeleport) then
+                        begin
                     // pulsating transparency
-                    if ((GameTicks div 16) mod $80) >= $40 then
-                        Tint($FF, $FF, $FF, $C0 - (GameTicks div 16) mod $40)
-                    else
-                        Tint($FF, $FF, $FF, $80 + (GameTicks div 16) mod $40);
+                        if ((GameTicks div 16) mod $80) >= $40 then
+                            Tint($FF, $FF, $FF, $C0 - (GameTicks div 16) mod $40)
+                        else
+                            Tint($FF, $FF, $FF, $80 + (GameTicks div 16) mod $40);
+                        end;
                     DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
                     Untint();
                     end;
                 end;
-        DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
+        //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
+        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight - TargetCursorPoint.Y + round(SpritesData[sprArrow].Height / cScaleFactor), (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
         end
     end;
 
