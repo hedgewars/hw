@@ -44,8 +44,9 @@ function  LoadDataImageAltFile(const path: TPathType; const filename, altFile: s
 procedure LoadHedgehogHat(var HH: THedgehog; newHat: shortstring);
 procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReuse: boolean);
 
+procedure InitZoom(zoom: real);
+
 procedure SetupOpenGL;
-procedure SetScale(f: GLfloat);
 function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
@@ -60,18 +61,6 @@ procedure WarpMouse(x, y: Word); inline;
 {$ENDIF}
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 procedure SetSkyColor(r, g, b: real);
-
-{$IFDEF GL2}
-procedure UpdateModelviewProjection;
-{$ENDIF}
-
-procedure EnableTexture(enable:Boolean);
-
-procedure SetTexCoordPointer(p: Pointer;n: Integer);
-procedure SetVertexPointer(p: Pointer;n: Integer);
-procedure SetColorPointer(p: Pointer;n: Integer);
-
-procedure updateViewLimits();
 
 {$IFDEF GL2}
 var
@@ -110,6 +99,12 @@ begin
     SDL_FreeSurface(tmpHatSurf);
     tmpHatSurf:= nil;
     prevHat:= 'NoHat';
+end;
+
+procedure InitZoom(zoom: real);
+begin
+    SetScale(zoom);
+    UpdateViewLimits();
 end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
@@ -1092,73 +1087,6 @@ glViewport(0, 0, cScreenWidth, cScreenHeight);
     // disable/lower perspective correction (will not need it anyway)
 end;
 
-procedure EnableTexture(enable:Boolean);
-begin
-    {$IFDEF GL2}
-    if enable then
-        glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 1)
-    else
-        glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 0);
-    {$ELSE}
-    if enable then
-        glEnable(GL_TEXTURE_2D)
-    else
-        glDisable(GL_TEXTURE_2D);
-    {$ENDIF}
-end;
-
-procedure SetTexCoordPointer(p: Pointer; n: Integer);
-begin
-{$IFDEF GL2}
-    glBindBuffer(GL_ARRAY_BUFFER, tBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(aTexCoord);
-    glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
-{$ELSE}
-    n:= n;
-    glTexCoordPointer(2, GL_FLOAT, 0, p);
-{$ENDIF}
-end;
-
-procedure SetVertexPointer(p: Pointer; n: Integer);
-begin
-{$IFDEF GL2}
-    glBindBuffer(GL_ARRAY_BUFFER, vBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(aVertex);
-    glVertexAttribPointer(aVertex, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
-{$ELSE}
-    n:= n;
-    glVertexPointer(2, GL_FLOAT, 0, p);
-{$ENDIF}
-end;
-
-procedure SetColorPointer(p: Pointer; n: Integer);
-begin
-{$IFDEF GL2}
-    glBindBuffer(GL_ARRAY_BUFFER, cBuffer);
-    glBufferData(GL_ARRAY_BUFFER, n * 4, p, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(aColor);
-    glVertexAttribPointer(aColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, pointer(0));
-{$ELSE}
-    n:= n;
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, p);
-{$ENDIF}
-end;
-
-{$IFDEF GL2}
-procedure UpdateModelviewProjection;
-var
-    mvp: TMatrix4x4f;
-begin
-    //MatrixMultiply(mvp, mProjection, mModelview);
-{$HINTS OFF}
-    hglMVP(mvp);
-{$HINTS ON}
-    glUniformMatrix4fv(uCurrentMVPLocation, 1, GL_FALSE, @mvp[0, 0]);
-end;
-{$ENDIF}
-
 (*
 procedure UpdateProjection;
 var
@@ -1179,55 +1107,6 @@ begin
 {$ENDIF}
 end;
 *)
-
-
-procedure updateViewLimits();
-var tmp: real;
-begin
-    // cScaleFactor is 2.0 on "no zoom"
-    tmp:= cScreenWidth / cScaleFactor;
-    ViewRightX:= round(tmp); // ceil could make more sense
-    ViewLeftX:= round(-tmp); // floor could make more sense
-    tmp:= cScreenHeight / cScaleFactor;
-    ViewBottomY:= round(tmp) + cScreenHeight div 2; // ceil could make more sense
-    ViewTopY:= round(-tmp) + cScreenHeight div 2; // floor could make more sense
-end;
-
-procedure SetScale(f: GLfloat);
-begin
-// leave immediately if scale factor did not change
-    if f = cScaleFactor then
-        exit;
-
-    if f = cDefaultZoomLevel then
-{$IFDEF GL2}
-        hglPopMatrix         // "return" to default scaling
-{$ELSE}
-        glPopMatrix
-{$ENDIF}
-    else                    // other scaling
-        begin
-{$IFDEF GL2}
-        hglPushMatrix;       // save default scaling
-        hglLoadIdentity;
-        hglScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-        hglTranslatef(0, -cScreenHeight / 2, 0);
-{$ELSE}
-        glPushMatrix;       // save default scaling
-        glLoadIdentity;
-        glScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-        glTranslatef(0, -cScreenHeight / 2, 0);
-{$ENDIF}
-        end;
-
-    cScaleFactor:= f;
-    updateViewLimits();
-
-{$IFDEF GL2}
-    UpdateModelviewProjection;
-{$ENDIF}
-end;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure AddProgress;

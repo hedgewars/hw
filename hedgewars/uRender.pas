@@ -23,7 +23,7 @@ unit uRender;
 
 interface
 
-uses SDLh, uTypes, GLunit, uConsts, uStore{$IFDEF GL2}, uMatrix{$ENDIF};
+uses SDLh, uTypes, GLunit, uConsts{$IFDEF GL2}, uMatrix{$ENDIF};
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
@@ -64,7 +64,18 @@ function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 function isDxAreaOffscreen(X, Width: LongInt): LongInt; inline;
 function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
 
+procedure SetScale(f: GLfloat);
+procedure UpdateViewLimits();
 
+procedure EnableTexture(enable:Boolean);
+
+procedure SetTexCoordPointer(p: Pointer;n: Integer);
+procedure SetVertexPointer(p: Pointer;n: Integer);
+procedure SetColorPointer(p: Pointer;n: Integer);
+
+procedure UpdateModelviewProjection(); inline;
+
+procedure openglLoadIdentity    (); inline;
 procedure openglTranslProjMatrix(X, Y, Z: GLFloat); inline;
 procedure openglPushMatrix      (); inline;
 procedure openglPopMatrix       (); inline;
@@ -102,6 +113,15 @@ begin
     if Y > ViewBottomY then exit(1);
     if Y + Height < ViewTopY then exit(-1);
     isDyAreaOffscreen:= 0;
+end;
+
+procedure openglLoadIdentity(); inline;
+begin
+{$IFDEF GL2}
+    hglLoadIdentity();
+{$ELSE}
+    glLoadIdentity();
+{$ENDIF}
 end;
 
 procedure openglTranslProjMatrix(X, Y, Z: GLfloat); inline;
@@ -184,6 +204,112 @@ begin
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         {$ENDIF}
         end;
+end;
+
+procedure UpdateModelviewProjection(); inline;
+{$IFDEF GL2}
+var
+    mvp: TMatrix4x4f;
+{$ENDIF}
+begin
+{$IFDEF GL2}
+    //MatrixMultiply(mvp, mProjection, mModelview);
+{$HINTS OFF}
+    hglMVP(mvp);
+{$HINTS ON}
+    glUniformMatrix4fv(uCurrentMVPLocation, 1, GL_FALSE, @mvp[0, 0]);
+{$ENDIF}
+end;
+
+procedure SetTexCoordPointer(p: Pointer; n: Integer);
+begin
+{$IFDEF GL2}
+    glBindBuffer(GL_ARRAY_BUFFER, tBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(aTexCoord);
+    glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
+{$ELSE}
+    n:= n;
+    glTexCoordPointer(2, GL_FLOAT, 0, p);
+{$ENDIF}
+end;
+
+procedure SetVertexPointer(p: Pointer; n: Integer);
+begin
+{$IFDEF GL2}
+    glBindBuffer(GL_ARRAY_BUFFER, vBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(aVertex);
+    glVertexAttribPointer(aVertex, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
+{$ELSE}
+    n:= n;
+    glVertexPointer(2, GL_FLOAT, 0, p);
+{$ENDIF}
+end;
+
+procedure SetColorPointer(p: Pointer; n: Integer);
+begin
+{$IFDEF GL2}
+    glBindBuffer(GL_ARRAY_BUFFER, cBuffer);
+    glBufferData(GL_ARRAY_BUFFER, n * 4, p, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(aColor);
+    glVertexAttribPointer(aColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, pointer(0));
+{$ELSE}
+    n:= n;
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, p);
+{$ENDIF}
+end;
+
+procedure EnableTexture(enable:Boolean);
+begin
+    {$IFDEF GL2}
+    if enable then
+        glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 1)
+    else
+        glUniform1i(glGetUniformLocation(shaderMain, pchar('enableTexture')), 0);
+    {$ELSE}
+    if enable then
+        glEnable(GL_TEXTURE_2D)
+    else
+        glDisable(GL_TEXTURE_2D);
+    {$ENDIF}
+end;
+
+procedure UpdateViewLimits();
+var tmp: real;
+begin
+    // cScaleFactor is 2.0 on "no zoom"
+    tmp:= cScreenWidth / cScaleFactor;
+    ViewRightX:= round(tmp); // ceil could make more sense
+    ViewLeftX:= round(-tmp); // floor could make more sense
+    tmp:= cScreenHeight / cScaleFactor;
+    ViewBottomY:= round(tmp) + cScreenHeight div 2; // ceil could make more sense
+    ViewTopY:= round(-tmp) + cScreenHeight div 2; // floor could make more sense
+end;
+
+procedure SetScale(f: GLfloat);
+begin
+// leave immediately if scale factor did not change
+    if f = cScaleFactor then
+        exit;
+
+    // for going back to default scaling just pop matrix
+    if f = cDefaultZoomLevel then
+        begin
+        openglPopMatrix;
+        end
+    else
+        begin
+        openglPushMatrix; // save default scaling in matrix
+        openglLoadIdentity();
+        openglScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
+        openglTranslatef(0, -cScreenHeight / 2, 0);
+        end;
+
+    cScaleFactor:= f;
+    updateViewLimits();
+
+    UpdateModelviewProjection;
 end;
 
 procedure DrawSpriteFromRect(Sprite: TSprite; r: TSDL_Rect; X, Y, Height, Position: LongInt); inline;
@@ -315,9 +441,7 @@ TextureBuffer[3].Y:= Texture^.tb[3].Y - Overlap;
 SetVertexPointer(@Texture^.vb, Length(Texture^.vb));
 SetTexCoordPointer(@TextureBuffer, Length(Texture^.vb));
 
-{$IFDEF GL2}
 UpdateModelviewProjection;
-{$ENDIF}
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
 openglPopMatrix;
@@ -395,9 +519,7 @@ TextureBuffer[3].Y:= fb;
 SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
 SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
 
-{$IFDEF GL2}
 UpdateModelviewProjection;
-{$ENDIF}
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
@@ -467,9 +589,7 @@ VertexBuffer[3].Y:= hh;
 SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
 SetTexCoordPointer(@Texture^.tb, Length(VertexBuffer));
 
-{$IFDEF GL2}
 UpdateModelviewProjection;
-{$ENDIF}
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
@@ -551,9 +671,7 @@ begin
     openglTranslatef(WorldDx, WorldDy, 0);
     glLineWidth(Width);
 
-    {$IFDEF GL2}
     UpdateModelviewProjection;
-    {$ENDIF}
 
     Tint(r, g, b, a);
     VertexBuffer[0].X:= X0;
@@ -680,9 +798,7 @@ begin
     SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
     SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
 
-{$IFDEF GL2}
     UpdateModelviewProjection;
-{$ENDIF}
 
     glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
 
@@ -764,11 +880,10 @@ end;
 
 procedure DrawWaterBody(pVertexBuffer: Pointer);
 begin
-{$IFDEF GL2}
         UpdateModelviewProjection;
-{$ENDIF}
 
         BeginWater;
+
         if SuddenDeathDmg then
             SetColorPointer(@SDWaterColorArray[0], 4)
         else
