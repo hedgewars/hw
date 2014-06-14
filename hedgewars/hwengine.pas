@@ -86,8 +86,7 @@ begin
                 SetSound(false);
             FinishProgress;
             PlayMusic;
-            SetScale(zoom);
-            updateViewLimits;
+            InitZoom(zoom);
             ScriptCall('onGameStart');
             GameState:= gsGame;
             end;
@@ -276,7 +275,7 @@ begin
             ScriptOnScreenResize();
             InitCameraBorders();
             InitTouchInterface();
-            updateViewLimits();
+            InitZoom(zoomValue);
             SendIPC('W' + IntToStr(cScreenWidth) + 'x' + IntToStr(cScreenHeight));
         end;
 
