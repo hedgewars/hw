@@ -20,7 +20,6 @@
 #include <QFileOpenEvent>
 #include <QEvent>
 
-#include "hwform.h"
 #include "MessageDialog.h"
 
 #if !defined(Q_OS_WIN)

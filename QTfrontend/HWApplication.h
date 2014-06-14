@@ -20,6 +20,7 @@
 #define HWAPP_H
 
 #include <QApplication>
+#include "hwform.h"
 
 class HWForm;
 class QEvent;
