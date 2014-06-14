@@ -41,6 +41,7 @@ type TChatLine = record
     Time: Longword;
     Width: LongInt;
     s: shortstring;
+    Color: TSDL_Color;
     end;
     TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
 
@@ -78,43 +79,95 @@ const
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
 
+
+const Padding  = 2;
+      ClHeight = 2 * Padding + 16; // font height
+
+procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
+var strSurface,
+    resSurface: PSDL_Surface;
+    dstrect   : TSDL_Rect; // destination rectangle for blitting
+    font      : THWFont;
+const
+    shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$80);
+    shadowint  = $80 shl AShift;
+begin
+
+font:= CheckCJKFont(ansistring(str), fnt16);
+
+// get render size of text
+TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @cl.Width, nil);
+
+// calculate and save size
+cl.Width := cl.Width  + 2 * Padding;
+
+// create surface to draw on
+resSurface:= SDL_CreateRGBSurface(
+                0, toPowerOf2(cl.Width), toPowerOf2(ClHeight),
+                32, RMask, GMask, BMask, AMask);
+
+// define area we want to draw in
+dstrect.x:= 0;
+dstrect.y:= 0;
+dstrect.w:= cl.Width;
+dstrect.h:= ClHeight;
+
+// draw background
+SDL_FillRect(resSurface, @dstrect, shadowint);
+
+// prepare destination rectangle for text shadow
+// start position in texture should have padding; add 1 px as shadow offset
+dstrect.x:= Padding + 1;
+dstrect.y:= Padding + 1;
+// doesn't matter if .w and .h still include padding, SDL_UpperBlit will clip
+
+
+// create and blit text shadow
+strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), shadowcolor);
+SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+SDL_FreeSurface(strSurface);
+
+// non-shadow text starts at padding
+dstrect.x:= Padding;
+dstrect.y:= Padding;
+
+// create and blit text
+strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), cl.color);
+SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+SDL_FreeSurface(strSurface);
+
+cl.Tex:= Surface2Tex(resSurface, false);
+
+SDL_FreeSurface(resSurface)
+end;
+
+const ClDisplayDuration = 12500;
+
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
-var strSurface, resSurface: PSDL_Surface;
-    w, h: LongInt;
-    color: TSDL_Color;
-    font: THWFont;
+var color  : TSDL_Color;
 begin
 if cl.Tex <> nil then
     FreeTexture(cl.Tex);
 
-cl.s:= str;
-
 if isInput then
     begin
+    cl.s:= str;
     color:= colors[#6];
     str:= UserNick + '> ' + str + '_'
     end
 else
     begin
     color:= colors[str[1]];
-    delete(str, 1, 1)
+    delete(str, 1, 1);
+    cl.s:= str;
     end;
 
-font:= CheckCJKFont(ansistring(str), fnt16);
-w:= 0; h:= 0; // avoid compiler hints
-TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @w, @h);
+cl.color:= color;
 
-resSurface:= SDL_CreateRGBSurface(0, toPowerOf2(w), toPowerOf2(h), 32, RMask, GMask, BMask, AMask);
+// set texture, note: variables cl.s and str will be different here if isInput
+RenderChatLineTex(cl, str);
 
-strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), color);
-cl.Width:= w + 4;
-SDL_UpperBlit(strSurface, nil, resSurface, nil);
-SDL_FreeSurface(strSurface);
-
-cl.Time:= RealTicks + 12500;
-cl.Tex:= Surface2Tex(resSurface, false);
-
-SDL_FreeSurface(resSurface)
+cl.Time:= RealTicks + ClDisplayDuration;
 end;
 
 // For uStore texture recreation
@@ -152,8 +205,7 @@ inc(visibleCount)
 end;
 
 procedure DrawChat;
-var i, t, cnt: Longword;
-    r: TSDL_Rect;
+var i, t, left, top, cnt: Longword;
 begin
 ChatReady:= true; // maybe move to somewhere else?
 if MissedCount <> 0 then // there are chat strings we missed, so print them now
@@ -162,36 +214,27 @@ if MissedCount <> 0 then // there are chat strings we missed, so print them now
         AddChatString(MStrs[i]);
     MissedCount:= 0;
     end;
-cnt:= 0;
-t:= 0;
 i:= lastStr;
 
-r.x:= 6 - cScreenWidth div 2;
-r.y:= (visibleCount - t) * 16 + 10;
-r.h:= 16;
+left:= 4 - cScreenWidth div 2;
+top := 10;
 
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
-    r.w:= InputStr.Width;
-    DrawFillRect(r);
-    Tint($00, $00, $00, $80);
-    DrawTexture(9 - cScreenWidth div 2, visibleCount * 16 + 11, InputStr.Tex);
-    untint;
-    DrawTexture(8 - cScreenWidth div 2, visibleCount * 16 + 10, InputStr.Tex);
+    // draw under all other lines
+    DrawTexture(left, top + visibleCount * ClHeight, InputStr.Tex);
     end;
 
-dec(r.y, 16);
 
+cnt:= 0; // count of lines displayed
+t  := 1; // # of current line processed
+
+// draw lines in reverse order
 while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
 and (Strs[i].Tex <> nil) do
     begin
-    r.w:= Strs[i].Width;
-    DrawFillRect(r);
-    Tint($00, $00, $00, $80);
-    DrawTexture(9 - cScreenWidth div 2, (visibleCount - t) * 16 - 5, Strs[i].Tex);
-    untint;
-    DrawTexture(8 - cScreenWidth div 2, (visibleCount - t) * 16 - 6, Strs[i].Tex);
-    dec(r.y, 16);
+    // draw lines 4px away from left screen border and 2px away from top
+    DrawTexture(left, top + (visibleCount - t) * ClHeight, Strs[i].Tex);
 
     if i = 0 then
         i:= MaxStrIndex
