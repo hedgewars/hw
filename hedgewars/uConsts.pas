@@ -26,6 +26,17 @@ uses    SDLh, uFloat, GLunit;
 {$INCLUDE "config.inc"}
 
 const
+    HaltNoError      = 0;
+    HaltUsageError   = 1;
+    HaltFatalError   = 2;
+    HaltStartupError = 3;
+
+    // for automatic tests
+    HaltTestSuccess  =   0;
+    HaltTestFailed   =  10;
+    HaltTestLuaError =  11;
+
+
     sfMax = 1000;
 
     // message constants
@@ -301,10 +312,6 @@ const
     cTargetPointRef : TPoint = (x: NoPointX; y: 0);
 
     kSystemSoundID_Vibrate = $00000FFF;
-
-    rtnTestSuccess = $00000000;
-    rtnTestFailed  = $00000001;
-    rtnTestLuaErr  = $00000002;
 
 implementation
 

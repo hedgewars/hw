@@ -44,6 +44,8 @@ procedure freeModule();
 
 implementation
 
+uses uDebug;
+
 const
     MATRIX_STACK_SIZE = 10;
 
@@ -258,7 +260,7 @@ begin
             write(Result[i, j]);
           writeln;
         end;
-        halt(0);
+        TryDo(false, 'error in matrix multiplication?!', true);
     end;
     {$ENDIF}
 

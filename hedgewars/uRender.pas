@@ -159,7 +159,7 @@ begin
     if IOResult <> 0 then
     begin
         AddFileLog('Unable to load ' + shaderFile);
-        halt(-1);
+        halt(HaltStartupError);
     end;
 
     source:='';
@@ -195,7 +195,7 @@ begin
     if compileResult <> GL_TRUE then
     begin
         WriteLnToConsole('Shader compilation failed, halting');
-        halt(-1);
+        halt(HaltStartupError);
     end;
 
     CompileShader:= shader;
@@ -239,7 +239,7 @@ begin
     if linkResult <> GL_TRUE then
     begin
         WriteLnToConsole('Linking program failed, halting');
-        halt(-1);
+        halt(HaltStartupError);
     end;
 
     CompileProgram:= program_;
@@ -333,7 +333,7 @@ begin
     if err <> GLEW_OK then
     begin
         WriteLnToConsole('Failed to initialize GLEW.');
-        halt;
+        halt(HaltStartupError);
     end;
 {$ENDIF}
 

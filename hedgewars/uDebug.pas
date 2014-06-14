@@ -27,13 +27,18 @@ procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean); inline;
 procedure SDLTry(Assert: boolean; isFatal: boolean);
 
 implementation
-uses SDLh, uConsole, uCommands;
+uses SDLh, uConsole, uCommands, uConsts;
 
 procedure OutError(Msg: shortstring; isFatalError: boolean);
 begin
 WriteLnToConsole(Msg);
 if isFatalError then
+    begin
     ParseCommand('fatal ' + lastConsoleline, true);
+    // hint for the 'coverity' source analyzer
+    // this halt is never actually reached because ParseCommands will halt first
+    halt(HaltFatalError);
+    end;
 end;
 
 procedure TryDo(Assert: boolean; Msg: shortstring; isFatal: boolean);

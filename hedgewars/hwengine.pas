@@ -575,9 +575,9 @@ begin
     // return 1 when engine is not called correctly
     if GameType = gmtSyntax then
         {$IFDEF PAS2C}
-        exit(1);
+        exit(HaltUsageError);
         {$ELSE}
-        halt(1);
+        halt(HaltUsageError);
         {$ENDIF}
 
 {$IFDEF HWLIBRARY}
