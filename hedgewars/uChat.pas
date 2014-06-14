@@ -288,7 +288,7 @@ if x <> 0 then
 if (s[1] = '/') then
     begin
     // These 3 are same as above, only are to make the hedgehog say it on next attack
-    if (copy(s, 1, 5) = '/hsa ') then
+    if (copy(s, 2, 4) = 'hsa ') then
         begin
         if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
@@ -297,7 +297,7 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 1, 5) = '/hta ') then
+    if (copy(s, 2, 4) = 'hta ') then
         begin
         if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
@@ -306,7 +306,7 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 1, 5) = '/hya ') then
+    if (copy(s, 2, 4) = 'hya ') then
         begin
         if CurrentTeam^.ExtDriven then
             ParseCommand('/say ' + copy(s, 6, Length(s)-5), true)
@@ -315,17 +315,26 @@ if (s[1] = '/') then
         exit
         end;
 
-    if (copy(s, 1, 6) = '/team ') and (length(s) > 6) then
+    if (copy(s, 2, 5) = 'team ') and (length(s) > 6) then
         begin
         ParseCommand(s, true);
         exit
         end;
 
-    if (copy(s, 1, 4) = '/me ') then
+    if (copy(s, 2, 3) = 'me ') then
         begin
         ParseCommand('/say ' + s, true);
         exit
         end;
+
+    // debugging commands
+    if (copy(s, 2, 7) = 'debugvl') then
+        begin
+        cViewLimitsDebug:= (not cViewLimitsDebug);
+        UpdateViewLimits();
+        exit
+        end;
+    end;
 
     if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
         begin
@@ -343,7 +352,6 @@ if (s[1] = '/') then
                 exit
                 end;
         end
-    end
     else
         ParseCommand('/say ' + s, true);
 end;

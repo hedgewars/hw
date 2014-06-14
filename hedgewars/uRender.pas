@@ -23,7 +23,10 @@ unit uRender;
 
 interface
 
-uses SDLh, uTypes, GLunit, uConsts{$IFDEF GL2}, uMatrix{$ENDIF};
+uses SDLh, uTypes, GLunit;
+
+procedure initModule;
+procedure freeModule;
 
 procedure DrawSprite            (Sprite: TSprite; X, Y, Frame: LongInt);
 procedure DrawSprite            (Sprite: TSprite; X, Y, FrameX, FrameY: LongInt);
@@ -48,11 +51,13 @@ procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte)
 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-procedure DrawFillRect          (r: TSDL_Rect);
+procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
 procedure DrawWaterBody         (pVertexBuffer: Pointer);
 
+procedure RenderClear           ();
+procedure RenderSetClearColor      (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
@@ -66,6 +71,10 @@ function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
 
 procedure SetScale(f: GLfloat);
 procedure UpdateViewLimits();
+
+procedure RenderSetup();
+
+// TODO everything below this should not need a public interface
 
 procedure EnableTexture(enable:Boolean);
 
@@ -86,12 +95,19 @@ procedure openglTint            (r, g, b, a: Byte); inline;
 
 
 implementation
-uses uVariables;
+uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF};
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
     FADE_ANIM_TIME = 500;
     MOVE_ANIM_TIME = 500;
+{$ENDIF}
+
+{$IFDEF GL2}
+var
+    shaderMain: GLuint;
+    shaderWater: GLuint;
 {$ENDIF}
 
 var LastTint: LongWord = 0;
@@ -113,6 +129,292 @@ begin
     if Y > ViewBottomY then exit(1);
     if Y + Height < ViewTopY then exit(-1);
     isDyAreaOffscreen:= 0;
+end;
+
+procedure RenderClear();
+begin
+    glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
+end;
+
+procedure RenderSetClearColor(r, g, b, a: real);
+begin
+    glClearColor(r, g, b, a);
+end;
+
+{$IFDEF GL2}
+function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
+var
+    shader: GLuint;
+    f: Textfile;
+    source, line: AnsiString;
+    sourceA: Pchar;
+    lengthA: GLint;
+    compileResult: GLint;
+    logLength: GLint;
+    log: PChar;
+begin
+    Assign(f, PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
+    filemode:= 0; // readonly
+    Reset(f);
+    if IOResult <> 0 then
+    begin
+        AddFileLog('Unable to load ' + shaderFile);
+        halt(-1);
+    end;
+
+    source:='';
+    while not eof(f) do
+    begin
+        ReadLn(f, line);
+        source:= source + line + #10;
+    end;
+
+    Close(f);
+
+    WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
+
+    sourceA:=PChar(source);
+    lengthA:=Length(source);
+
+    shader:=glCreateShader(shaderType);
+    glShaderSource(shader, 1, @sourceA, @lengthA);
+    glCompileShader(shader);
+    glGetShaderiv(shader, GL_COMPILE_STATUS, @compileResult);
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, @logLength);
+
+    if logLength > 1 then
+    begin
+        log := GetMem(logLength);
+        glGetShaderInfoLog(shader, logLength, nil, log);
+        WriteLnToConsole('========== Compiler log  ==========');
+        WriteLnToConsole(shortstring(log));
+        WriteLnToConsole('===================================');
+        FreeMem(log, logLength);
+    end;
+
+    if compileResult <> GL_TRUE then
+    begin
+        WriteLnToConsole('Shader compilation failed, halting');
+        halt(-1);
+    end;
+
+    CompileShader:= shader;
+end;
+
+function CompileProgram(shaderName: string): GLuint;
+var
+    program_: GLuint;
+    vs, fs: GLuint;
+    linkResult: GLint;
+    logLength: GLint;
+    log: PChar;
+begin
+    program_:= glCreateProgram();
+    vs:= CompileShader(shaderName + '.vs', GL_VERTEX_SHADER);
+    fs:= CompileShader(shaderName + '.fs', GL_FRAGMENT_SHADER);
+    glAttachShader(program_, vs);
+    glAttachShader(program_, fs);
+
+    glBindAttribLocation(program_, aVertex, PChar('vertex'));
+    glBindAttribLocation(program_, aTexCoord, PChar('texcoord'));
+    glBindAttribLocation(program_, aColor, PChar('color'));
+
+    glLinkProgram(program_);
+    glDeleteShader(vs);
+    glDeleteShader(fs);
+
+    glGetProgramiv(program_, GL_LINK_STATUS, @linkResult);
+    glGetProgramiv(program_, GL_INFO_LOG_LENGTH, @logLength);
+
+    if logLength > 1 then
+    begin
+        log := GetMem(logLength);
+        glGetProgramInfoLog(program_, logLength, nil, log);
+        WriteLnToConsole('========== Compiler log  ==========');
+        WriteLnToConsole(shortstring(log));
+        WriteLnToConsole('===================================');
+        FreeMem(log, logLength);
+    end;
+
+    if linkResult <> GL_TRUE then
+    begin
+        WriteLnToConsole('Linking program failed, halting');
+        halt(-1);
+    end;
+
+    CompileProgram:= program_;
+end;
+{$ENDIF}
+
+procedure RenderSetup();
+var AuxBufNum: LongInt = 0;
+    tmpstr: ansistring;
+    tmpint: LongInt;
+    tmpn: LongInt;
+begin
+    // suppress hint/warning
+    AuxBufNum:= AuxBufNum;
+
+    // get the max (h and v) size for textures that the gpu can support
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
+    if MaxTextureSize <= 0 then
+        begin
+        MaxTextureSize:= 1024;
+        AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
+        end
+    else if (MaxTextureSize < 1024) and (MaxTextureSize >= 512) then
+        begin
+        cReducedQuality := cReducedQuality or rqNoBackground;
+        AddFileLog('Texture size too small for backgrounds, disabling.');
+        end;
+    // everyone loves debugging
+    // find out which gpu we are using (for extension compatibility maybe?)
+    AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
+    AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
+    AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
+    AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
+{$IFDEF USE_VIDEO_RECORDING}
+    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
+    AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
+{$ENDIF}
+{$IFNDEF PAS2C}
+    AddFileLog('  \----- Extensions: ');
+
+    // fetch extentions and store them in string
+    tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
+    tmpn := WordCount(tmpstr, [' ']);
+    tmpint := 1;
+
+    repeat
+    begin
+        // print up to 3 extentions per row
+        // ExtractWord will return empty string if index out of range
+        AddFileLog(TrimRight(
+            ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
+            ExtractWord(tmpint+2, tmpstr, [' '])
+        ));
+        tmpint := tmpint + 3;
+    end;
+    until (tmpint > tmpn);
+{$ENDIF}
+    AddFileLog('');
+
+    defaultFrame:= 0;
+
+{$IFDEF USE_VIDEO_RECORDING}
+    if GameType = gmtRecord then
+    begin
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+        begin
+            CreateFramebuffer(defaultFrame, depthv, texv);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
+            AddFileLog('Using framebuffer for video recording.');
+        end
+        else if AuxBufNum > 0 then
+        begin
+            glDrawBuffer(GL_AUX0);
+            glReadBuffer(GL_AUX0);
+            AddFileLog('Using auxiliary buffer for video recording.');
+        end
+        else
+        begin
+            glDrawBuffer(GL_BACK);
+            glReadBuffer(GL_BACK);
+            AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
+        end;
+    end;
+{$ENDIF}
+
+{$IFDEF GL2}
+
+{$IFDEF PAS2C}
+    err := glewInit();
+    if err <> GLEW_OK then
+    begin
+        WriteLnToConsole('Failed to initialize GLEW.');
+        halt;
+    end;
+{$ENDIF}
+
+{$IFNDEF PAS2C}
+    if not Load_GL_VERSION_2_0 then
+        halt;
+{$ENDIF}
+
+    shaderWater:= CompileProgram('water');
+    glUseProgram(shaderWater);
+    glUniform1i(glGetUniformLocation(shaderWater, pchar('tex0')), 0);
+    uWaterMVPLocation:= glGetUniformLocation(shaderWater, pchar('mvp'));
+
+    shaderMain:= CompileProgram('default');
+    glUseProgram(shaderMain);
+    glUniform1i(glGetUniformLocation(shaderMain, pchar('tex0')), 0);
+    uMainMVPLocation:= glGetUniformLocation(shaderMain, pchar('mvp'));
+    uMainTintLocation:= glGetUniformLocation(shaderMain, pchar('tint'));
+
+    uCurrentMVPLocation:= uMainMVPLocation;
+
+    Tint(255, 255, 255, 255);
+    UpdateModelviewProjection;
+{$ENDIF}
+
+{$IFNDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+    begin
+        // prepare left and right frame buffers and associated textures
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+            begin
+            CreateFramebuffer(framel, depthl, texl);
+            CreateFramebuffer(framer, depthr, texr);
+
+            // reset
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
+            end
+        else
+            cStereoMode:= smNone;
+    end;
+{$ENDIF}
+
+// set view port to whole window
+glViewport(0, 0, cScreenWidth, cScreenHeight);
+
+{$IFDEF GL2}
+    uMatrix.initModule;
+    hglMatrixMode(MATRIX_MODELVIEW);
+    // prepare default translation/scaling
+    hglLoadIdentity();
+    hglScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+    hglTranslatef(0, -cScreenHeight / 2, 0);
+
+    EnableTexture(True);
+
+    glEnableVertexAttribArray(aVertex);
+    glEnableVertexAttribArray(aTexCoord);
+    glGenBuffers(1, @vBuffer);
+    glGenBuffers(1, @tBuffer);
+    glGenBuffers(1, @cBuffer);
+{$ELSE}
+    glMatrixMode(GL_MODELVIEW);
+    // prepare default translation/scaling
+    glLoadIdentity();
+    glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
+    glTranslatef(0, -cScreenHeight / 2, 0);
+
+    // disable/lower perspective correction (will not need it anyway)
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    // disable dithering
+    glDisable(GL_DITHER);
+    // enable common states by default as they save a lot
+    glEnable(GL_TEXTURE_2D);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+{$ENDIF}
+
+    // enable alpha blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    // disable/lower perspective correction (will not need it anyway)
 end;
 
 procedure openglLoadIdentity(); inline;
@@ -285,11 +587,25 @@ begin
     tmp:= cScreenHeight / cScaleFactor;
     ViewBottomY:= round(tmp) + cScreenHeight div 2; // ceil could make more sense
     ViewTopY:= round(-tmp) + cScreenHeight div 2; // floor could make more sense
+
+    // visual debugging fun :D
+    if cViewLimitsDebug then
+        begin
+        // some margin on each side
+        tmp:= min(cScreenWidth, cScreenHeight) div 2 / cScaleFactor;
+        ViewLeftX  := ViewLeftX   + trunc(tmp);
+        ViewRightX := ViewRightX  - trunc(tmp);
+        ViewBottomY:= ViewBottomY - trunc(tmp);
+        ViewTopY   := ViewTopY    + trunc(tmp);
+        end;
+
+    ViewWidth := ViewRightX  - ViewLeftX + 1;
+    ViewHeight:= ViewBottomY - ViewTopY  + 1;
 end;
 
 procedure SetScale(f: GLfloat);
 begin
-// leave immediately if scale factor did not change
+    // leave immediately if scale factor did not change
     if f = cScaleFactor then
         exit;
 
@@ -303,7 +619,7 @@ begin
         openglPushMatrix; // save default scaling in matrix
         openglLoadIdentity();
         openglScalef(f / cScreenWidth, -f / cScreenHeight, 1.0);
-        openglTranslatef(0, -cScreenHeight / 2, 0);
+        openglTranslatef(0, -cScreenHeight div 2, 0);
         end;
 
     cScaleFactor:= f;
@@ -337,11 +653,16 @@ begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
     exit;
 
+{if isDxAreaOffscreen(X, W) <> 0 then
+    exit;
+if isDyAreaOffscreen(Y, H) <> 0 then
+    exit;}
+
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+{if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
     exit;
 if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
-    exit;
+    exit;}
 
 rr.x:= X;
 rr.y:= Y;
@@ -357,13 +678,13 @@ glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
 
 if Dir < 0 then
     begin
-    VertexBuffer[0].X:= X + rr.w/2;
+    VertexBuffer[0].X:= X + rr.w div 2;
     VertexBuffer[0].Y:= Y;
-    VertexBuffer[1].X:= X - rr.w/2;
+    VertexBuffer[1].X:= X - rr.w div 2;
     VertexBuffer[1].Y:= Y;
-    VertexBuffer[2].X:= X - rr.w/2;
+    VertexBuffer[2].X:= X - rr.w div 2;
     VertexBuffer[2].Y:= rr.h + Y;
-    VertexBuffer[3].X:= X + rr.w/2;
+    VertexBuffer[3].X:= X + rr.w div 2;
     VertexBuffer[3].Y:= rr.h + Y;
     end
 else
@@ -402,16 +723,16 @@ begin
 
 openglPushMatrix;
 openglTranslatef(X, Y, 0);
-openglScalef(Scale, Scale, 1);
+
+if Scale <> 1.0 then
+    openglScalef(Scale, Scale, 1);
 
 glBindTexture(GL_TEXTURE_2D, Texture^.id);
 
 SetVertexPointer(@Texture^.vb, Length(Texture^.vb));
 SetTexCoordPointer(@Texture^.tb, Length(Texture^.vb));
 
-{$IFDEF GL2}
 UpdateModelviewProjection;
-{$ENDIF}
 
 glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
 openglPopMatrix;
@@ -457,11 +778,17 @@ var ft, fb, fl, fr: GLfloat;
     hw, hh, nx, ny: LongInt;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
+
+if isDxAreaOffscreen(X, w) <> 0 then
+    exit;
+if isDyAreaOffscreen(Y, h) <> 0 then
+    exit;
+
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
+{if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
     exit;
 if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
-    exit;
+    exit;}
 
 openglPushMatrix;
 
@@ -558,11 +885,17 @@ end;
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
+
+if isDxAreaOffscreen(X, 2 * hw) <> 0 then
+    exit;
+if isDyAreaOffscreen(Y, 2 * hh) <> 0 then
+    exit;
+
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
+{if (abs(X) > 2 * hw) and ((abs(X) - hw) > cScreenWidth / cScaleFactor) then
     exit;
 if (abs(Y) > 2 * hh) and ((abs(Y - 0.5 * cScreenHeight) - hh) > cScreenHeight / cScaleFactor) then
-    exit;
+    exit;}
 
 openglPushMatrix;
 openglTranslatef(X, Y, 0);
@@ -647,12 +980,20 @@ end;
 
 procedure DrawTextureCentered(X, Top: LongInt; Source: PTexture);
 var scale: GLfloat;
+    left : LongInt;
 begin
+    // scale down if larger than screen
     if (Source^.w + 20) > cScreenWidth then
-        scale:= cScreenWidth / (Source^.w + 20)
+        begin
+        scale:= cScreenWidth / (Source^.w + 20);
+        DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale);
+        end
     else
-        scale:= 1.0;
-    DrawTexture(X - round(Source^.w * scale) div 2, Top, Source, scale)
+        begin
+        left:= X - Source^.w div 2;
+        if (not isAreaOffscreen(left, Top, Source^.w, Source^.h)) then
+            DrawTexture(left, Top, Source);
+        end;
 end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
@@ -690,31 +1031,36 @@ begin
     glDisable(GL_LINE_SMOOTH);
 end;
 
-procedure DrawFillRect(r: TSDL_Rect);
+procedure DrawRect(rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-
-if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
+{if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
     exit;
 if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
-    exit;
+    exit;}
 
 EnableTexture(False);
 
-Tint($00, $00, $00, $80);
+Tint(r, g, b, a);
 
-VertexBuffer[0].X:= r.x;
-VertexBuffer[0].Y:= r.y;
-VertexBuffer[1].X:= r.x + r.w;
-VertexBuffer[1].Y:= r.y;
-VertexBuffer[2].X:= r.x + r.w;
-VertexBuffer[2].Y:= r.y + r.h;
-VertexBuffer[3].X:= r.x;
-VertexBuffer[3].Y:= r.y + r.h;
+with rect do
+begin
+    VertexBuffer[0].X:= x;
+    VertexBuffer[0].Y:= y;
+    VertexBuffer[1].X:= x + w;
+    VertexBuffer[1].Y:= y;
+    VertexBuffer[2].X:= x + w;
+    VertexBuffer[2].Y:= y + h;
+    VertexBuffer[3].X:= x;
+    VertexBuffer[3].Y:= y + h;
+end;
 
 SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+if Fill then
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer))
+else
+    glDrawArrays(GL_LINE_LOOP, 0, Length(VertexBuffer));
 
 untint;
 
@@ -953,4 +1299,18 @@ begin
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 end;
 
+procedure initModule;
+begin
+end;
+
+procedure freeModule;
+begin
+{$IFDEF GL2}
+    glDeleteProgram(shaderMain);
+    glDeleteProgram(shaderWater);
+    glDeleteBuffers(1, @vBuffer);
+    glDeleteBuffers(1, @tBuffer);
+    glDeleteBuffers(1, @cBuffer);
+{$ENDIF}
+end;
 end.

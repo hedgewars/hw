@@ -1854,6 +1854,16 @@ if isCursorVisible then
         end
     end;
 
+// debug stuff
+if cViewLimitsDebug then
+    begin
+    r.x:= ViewLeftX;
+    r.y:= ViewTopY;
+    r.w:= ViewWidth;
+    r.h:= ViewHeight;
+    DrawRect(r, 255, 0, 0, 128, false);
+    end;
+
 isFirstFrame:= false
 end;
 
