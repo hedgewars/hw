@@ -21,7 +21,7 @@
 
 unit uStore;
 interface
-uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
+uses SysUtils, uConsts, SDLh, GLunit, uTypes, uLandTexture, uCaptions, uChat;
 
 procedure initModule;
 procedure freeModule;
@@ -62,20 +62,13 @@ procedure WarpMouse(x, y: Word); inline;
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 procedure SetSkyColor(r, g, b: real);
 
-{$IFDEF GL2}
-var
-    shaderMain: GLuint;
-    shaderWater: GLuint;
-{$ENDIF}
-
 implementation
 uses uMisc, uConsole, uVariables, uUtils, uTextures, uRender, uRenderUtils,
      uCommands, uPhysFSLayer, uDebug
-    {$IFDEF GL2}, uMatrix{$ENDIF}
     {$IFDEF USE_CONTEXT_RESTORE}, uWorld{$ENDIF}
     {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
-var MaxTextureSize: LongInt;
+var
 {$IFDEF SDL2}
     SDLwindow: PSDL_Window;
     SDLGLcontext: PSDL_GLContext;
@@ -792,118 +785,8 @@ begin
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1); // prefer hw rendering
 end;
 
-{$IFDEF GL2}
-function CompileShader(shaderFile: string; shaderType: GLenum): GLuint;
-var
-    shader: GLuint;
-    f: Textfile;
-    source, line: AnsiString;
-    sourceA: Pchar;
-    lengthA: GLint;
-    compileResult: GLint;
-    logLength: GLint;
-    log: PChar;
-begin
-    Assign(f, PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
-    filemode:= 0; // readonly
-    Reset(f);
-    if IOResult <> 0 then
-    begin
-        AddFileLog('Unable to load ' + shaderFile);
-        halt(-1);
-    end;
-
-    source:='';
-    while not eof(f) do
-    begin
-        ReadLn(f, line);
-        source:= source + line + #10;
-    end;
-
-    Close(f);
-
-    WriteLnToConsole('Compiling shader: ' + PathPrefix + cPathz[ptShaders] + '/' + shaderFile);
-
-    sourceA:=PChar(source);
-    lengthA:=Length(source);
-
-    shader:=glCreateShader(shaderType);
-    glShaderSource(shader, 1, @sourceA, @lengthA);
-    glCompileShader(shader);
-    glGetShaderiv(shader, GL_COMPILE_STATUS, @compileResult);
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, @logLength);
-
-    if logLength > 1 then
-    begin
-        log := GetMem(logLength);
-        glGetShaderInfoLog(shader, logLength, nil, log);
-        WriteLnToConsole('========== Compiler log  ==========');
-        WriteLnToConsole(shortstring(log));
-        WriteLnToConsole('===================================');
-        FreeMem(log, logLength);
-    end;
-
-    if compileResult <> GL_TRUE then
-    begin
-        WriteLnToConsole('Shader compilation failed, halting');
-        halt(-1);
-    end;
-
-    CompileShader:= shader;
-end;
-
-function CompileProgram(shaderName: string): GLuint;
-var
-    program_: GLuint;
-    vs, fs: GLuint;
-    linkResult: GLint;
-    logLength: GLint;
-    log: PChar;
-begin
-    program_:= glCreateProgram();
-    vs:= CompileShader(shaderName + '.vs', GL_VERTEX_SHADER);
-    fs:= CompileShader(shaderName + '.fs', GL_FRAGMENT_SHADER);
-    glAttachShader(program_, vs);
-    glAttachShader(program_, fs);
-
-    glBindAttribLocation(program_, aVertex, PChar('vertex'));
-    glBindAttribLocation(program_, aTexCoord, PChar('texcoord'));
-    glBindAttribLocation(program_, aColor, PChar('color'));
-
-    glLinkProgram(program_);
-    glDeleteShader(vs);
-    glDeleteShader(fs);
-
-    glGetProgramiv(program_, GL_LINK_STATUS, @linkResult);
-    glGetProgramiv(program_, GL_INFO_LOG_LENGTH, @logLength);
-
-    if logLength > 1 then
-    begin
-        log := GetMem(logLength);
-        glGetProgramInfoLog(program_, logLength, nil, log);
-        WriteLnToConsole('========== Compiler log  ==========');
-        WriteLnToConsole(shortstring(log));
-        WriteLnToConsole('===================================');
-        FreeMem(log, logLength);
-    end;
-
-    if linkResult <> GL_TRUE then
-    begin
-        WriteLnToConsole('Linking program failed, halting');
-        halt(-1);
-    end;
-
-    CompileProgram:= program_;
-end;
-
-{$ENDIF}
-
 procedure SetupOpenGL;
 var buf: array[byte] of char;
-    AuxBufNum: LongInt = 0;
-    tmpstr: ansistring;
-    tmpint: LongInt;
-    tmpn: LongInt;
 begin
 
 {$IFDEF SDL2}
@@ -912,8 +795,6 @@ begin
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
 {$ENDIF}
-
-    AuxBufNum:= AuxBufNum;
 
 {$IFDEF MOBILE}
     // TODO: this function creates an opengles1.1 context
@@ -926,165 +807,7 @@ begin
     SDL_GL_SetSwapInterval(1);
 {$ENDIF}
 
-    // get the max (h and v) size for textures that the gpu can support
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, @MaxTextureSize);
-    if MaxTextureSize <= 0 then
-        begin
-        MaxTextureSize:= 1024;
-        AddFileLog('OpenGL Warning - driver didn''t provide any valid max texture size; assuming 1024');
-        end
-    else if (MaxTextureSize < 1024) and (MaxTextureSize >= 512) then
-        begin
-        cReducedQuality := cReducedQuality or rqNoBackground;
-        AddFileLog('Texture size too small for backgrounds, disabling.');
-        end;
-    // everyone loves debugging
-    // find out which gpu we are using (for extension compatibility maybe?)
-    AddFileLog('OpenGL-- Renderer: ' + shortstring(pchar(glGetString(GL_RENDERER))));
-    AddFileLog('  |----- Vendor: ' + shortstring(pchar(glGetString(GL_VENDOR))));
-    AddFileLog('  |----- Version: ' + shortstring(pchar(glGetString(GL_VERSION))));
-    AddFileLog('  |----- Texture Size: ' + inttostr(MaxTextureSize));
-{$IFDEF USE_VIDEO_RECORDING}
-    glGetIntegerv(GL_AUX_BUFFERS, @AuxBufNum);
-    AddFileLog('  |----- Number of auxiliary buffers: ' + inttostr(AuxBufNum));
-{$ENDIF}
-{$IFNDEF PAS2C}
-    AddFileLog('  \----- Extensions: ');
-
-    // fetch extentions and store them in string
-    tmpstr := StrPas(PChar(glGetString(GL_EXTENSIONS)));
-    tmpn := WordCount(tmpstr, [' ']);
-    tmpint := 1;
-
-    repeat
-    begin
-        // print up to 3 extentions per row
-        // ExtractWord will return empty string if index out of range
-        AddFileLog(TrimRight(
-            ExtractWord(tmpint, tmpstr, [' ']) + ' ' +
-            ExtractWord(tmpint+1, tmpstr, [' ']) + ' ' +
-            ExtractWord(tmpint+2, tmpstr, [' '])
-        ));
-        tmpint := tmpint + 3;
-    end;
-    until (tmpint > tmpn);
-{$ENDIF}
-    AddFileLog('');
-
-    defaultFrame:= 0;
-{$IFDEF USE_VIDEO_RECORDING}
-    if GameType = gmtRecord then
-    begin
-        if glLoadExtension('GL_EXT_framebuffer_object') then
-        begin
-            CreateFramebuffer(defaultFrame, depthv, texv);
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
-            AddFileLog('Using framebuffer for video recording.');
-        end
-        else if AuxBufNum > 0 then
-        begin
-            glDrawBuffer(GL_AUX0);
-            glReadBuffer(GL_AUX0);
-            AddFileLog('Using auxiliary buffer for video recording.');
-        end
-        else
-        begin
-            glDrawBuffer(GL_BACK);
-            glReadBuffer(GL_BACK);
-            AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
-        end;
-    end;
-{$ENDIF}
-
-{$IFDEF GL2}
-
-{$IFDEF PAS2C}
-    err := glewInit();
-    if err <> GLEW_OK then
-    begin
-        WriteLnToConsole('Failed to initialize GLEW.');
-        halt;
-    end;
-{$ENDIF}
-
-{$IFNDEF PAS2C}
-    if not Load_GL_VERSION_2_0 then
-        halt;
-{$ENDIF}
-
-    shaderWater:= CompileProgram('water');
-    glUseProgram(shaderWater);
-    glUniform1i(glGetUniformLocation(shaderWater, pchar('tex0')), 0);
-    uWaterMVPLocation:= glGetUniformLocation(shaderWater, pchar('mvp'));
-
-    shaderMain:= CompileProgram('default');
-    glUseProgram(shaderMain);
-    glUniform1i(glGetUniformLocation(shaderMain, pchar('tex0')), 0);
-    uMainMVPLocation:= glGetUniformLocation(shaderMain, pchar('mvp'));
-    uMainTintLocation:= glGetUniformLocation(shaderMain, pchar('tint'));
-
-    uCurrentMVPLocation:= uMainMVPLocation;
-
-    Tint(255, 255, 255, 255);
-    UpdateModelviewProjection;
-{$ENDIF}
-
-{$IFNDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
-    begin
-        // prepare left and right frame buffers and associated textures
-        if glLoadExtension('GL_EXT_framebuffer_object') then
-            begin
-            CreateFramebuffer(framel, depthl, texl);
-            CreateFramebuffer(framer, depthr, texr);
-
-            // reset
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
-            end
-        else
-            cStereoMode:= smNone;
-    end;
-{$ENDIF}
-
-// set view port to whole window
-glViewport(0, 0, cScreenWidth, cScreenHeight);
-
-{$IFDEF GL2}
-    uMatrix.initModule;
-    hglMatrixMode(MATRIX_MODELVIEW);
-    // prepare default translation/scaling
-    hglLoadIdentity();
-    hglScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-    hglTranslatef(0, -cScreenHeight / 2, 0);
-
-    EnableTexture(True);
-
-    glEnableVertexAttribArray(aVertex);
-    glEnableVertexAttribArray(aTexCoord);
-    glGenBuffers(1, @vBuffer);
-    glGenBuffers(1, @tBuffer);
-    glGenBuffers(1, @cBuffer);
-{$ELSE}
-    glMatrixMode(GL_MODELVIEW);
-    // prepare default translation/scaling
-    glLoadIdentity();
-    glScalef(2.0 / cScreenWidth, -2.0 / cScreenHeight, 1.0);
-    glTranslatef(0, -cScreenHeight / 2, 0);
-
-    // disable/lower perspective correction (will not need it anyway)
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
-    // disable dithering
-    glDisable(GL_DITHER);
-    // enable common states by default as they save a lot
-    glEnable(GL_TEXTURE_2D);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-{$ENDIF}
-
-    // enable alpha blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // disable/lower perspective correction (will not need it anyway)
+    RenderSetup();
 end;
 
 (*
@@ -1133,7 +856,7 @@ begin
 
     TryDo(ProgrTex <> nil, 'Error - Progress Texure is nil!', true);
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    RenderClear();
     if Step < numsquares then
         r.x:= 0
     else
@@ -1370,7 +1093,7 @@ begin
     glutHideWindow();
     // we do not need to set this callback, but it is required for GLUT3 compat
     glutDisplayFunc(@SwapBuffers);
-    SetupOpenGL();
+    SetupRenderer();
 end;
 {$ENDIF} // SDL2
 {$ENDIF} // USE_VIDEO_RECORDING
@@ -1509,7 +1232,7 @@ begin
     if reinit then
         begin
         // clean the window from any previous content
-        glClear(GL_COLOR_BUFFER_BIT);
+        RenderClear();
         if SuddenDeathDmg then
             SetSkyColor(SDSkyColor.r * (SDTint/255) / 255, SDSkyColor.g * (SDTint/255) / 255, SDSkyColor.b * (SDTint/255) / 255)
         else if ((cReducedQuality and rqNoBackground) = 0) then
@@ -1550,7 +1273,7 @@ end;
 
 procedure SetSkyColor(r, g, b: real);
 begin
-    glClearColor(r, g, b, 0.99)
+    RenderSetClearColor(r, g, b, 0.99)
 end;
 
 procedure initModule;
@@ -1586,13 +1309,6 @@ end;
 
 procedure freeModule;
 begin
-{$IFDEF GL2}
-    glDeleteProgram(shaderMain);
-    glDeleteProgram(shaderWater);
-    glDeleteBuffers(1, @vBuffer);
-    glDeleteBuffers(1, @tBuffer);
-    glDeleteBuffers(1, @cBuffer);
-{$ENDIF}
     StoreRelease(false);
     TTF_Quit();
 {$IFDEF SDL2}

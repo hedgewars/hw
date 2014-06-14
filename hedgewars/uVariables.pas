@@ -212,7 +212,10 @@ var
     WorldDy: LongInt;
 
     // for tracking the limits of the visible grid based on cScaleFactor
-    ViewLeftX, ViewRightX, ViewBottomY, ViewTopY: LongInt;
+    ViewLeftX, ViewRightX, ViewBottomY, ViewTopY, ViewWidth, ViewHeight: LongInt;
+
+    // for debugging the view limits visually
+    cViewLimitsDebug: boolean;
 
     dirtyLandTexCount: LongInt;
 
@@ -225,6 +228,8 @@ var
     LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
 
     mobileRecord: TMobileRecord;
+
+    MaxTextureSize: LongInt;
 
 /////////////////////////////////////
 //Buttons
@@ -2634,6 +2639,8 @@ begin
 
     UIDisplay:= uiAll;
     LocalMessage:= 0;
+
+    cViewLimitsDebug:= false;
 end;
 
 procedure freeModule;
