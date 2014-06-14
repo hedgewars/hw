@@ -136,7 +136,7 @@ begin
     WriteLnToConsole(s);
     AddChatString(#5 + s);
     if cTestLua then
-        halt(rtnTestLuaErr);
+        halt(HaltTestLuaError);
 end;
 
 procedure LuaCallError(error, call, paramsyntax: shortstring);
@@ -2849,8 +2849,8 @@ lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
 if cTestLua then
     begin
-    ScriptSetInteger('TEST_SUCCESSFUL'  ,rtnTestSuccess);
-    ScriptSetInteger('TEST_FAILED'      ,rtnTestFailed);
+    ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
+    ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
     lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
     end;
 

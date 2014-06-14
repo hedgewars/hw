@@ -416,7 +416,7 @@ begin
     SendIPC('E' + s);
     // TODO: should we try to clean more stuff here?
     SDL_Quit;
-    halt(2)
+    halt(HaltFatalError);
 end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);

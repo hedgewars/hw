@@ -117,7 +117,7 @@ begin
         , PChar(ansistring(cVideoCodec))
         , PChar(ansistring(cAudioCodec))
         , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) < 0 then
-        halt(-1);
+        halt(HaltFatalError);
 
     numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);
