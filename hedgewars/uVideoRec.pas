@@ -48,7 +48,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes;
+uses uVariables, uUtils, GLunit, SDLh, SysUtils, uIO, uMisc, uTypes, uDebug;
 
 type TAddFileLogRaw = procedure (s: pchar); cdecl;
 const AvwrapperLibName = 'libavwrapper';
@@ -109,15 +109,16 @@ begin
     filename:= UserPathPrefix + '/VideoTemp/' + RecPrefix;
     soundFilePath:= UserPathPrefix + '/VideoTemp/' + RecPrefix + '.sw';
 
-    if AVWrapper_Init(@AddFileLogRaw
+    TryDo(AVWrapper_Init(@AddFileLogRaw
         , PChar(ansistring(filename))
         , PChar(ansistring(desc))
         , PChar(ansistring(soundFilePath))
         , PChar(ansistring(cAVFormat))
         , PChar(ansistring(cVideoCodec))
         , PChar(ansistring(cAudioCodec))
-        , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) < 0 then
-        halt(HaltFatalError);
+        , cScreenWidth, cScreenHeight, cVideoFramerateNum, cVideoFramerateDen, cVideoQuality) >= 0,
+        'AVWrapper_Init failed',
+        true);
 
     numPixels:= cScreenWidth*cScreenHeight;
     YCbCr_Planes[0]:= GetMem(numPixels);
