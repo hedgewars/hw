@@ -334,7 +334,6 @@ if (s[1] = '/') then
         UpdateViewLimits();
         exit
         end;
-    end;
 
     if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
         begin
@@ -352,6 +351,7 @@ if (s[1] = '/') then
                 exit
                 end;
         end
+    end
     else
         ParseCommand('/say ' + s, true);
 end;
