@@ -322,12 +322,12 @@ void SelWeaponWidget::copy()
     if(wconf->contains(curWeaponsName))
     {
         QString ammo = getWeaponsString(curWeaponsName);
-        QString newName = tr("copy of") + " " + curWeaponsName;
+        QString newName = tr("copy of %1").arg(curWeaponsName);
         if(wconf->contains(newName))
         {
             //name already used -> look for an appropriate name:
             int i=2;
-            while(wconf->contains(newName = tr("copy of") + " " + curWeaponsName+QString::number(i++))) ;
+            while(wconf->contains(newName = tr("copy of %1").arg(curWeaponsName+QString::number(i++))));
         }
         setWeaponsName(newName);
         setWeapons(ammo);

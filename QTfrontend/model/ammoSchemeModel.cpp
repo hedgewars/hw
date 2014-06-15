@@ -700,7 +700,7 @@ bool AmmoSchemeModel::insertRows(int row, int count, const QModelIndex & parent)
     else
     {
         QList<QVariant> newScheme = schemes[row];
-        newScheme[0] = QVariant(tr("copy of") + " " + newScheme[0].toString());
+        newScheme[0] = QVariant(tr("copy of %1").arg(newScheme[0].toString()));
         schemes.insert(schemes.size(), newScheme);
     }
 

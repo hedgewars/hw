@@ -234,10 +234,11 @@ void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
     {
         // inform user that something bad happened
         MessageDialog::ShowFatalMessage(
-            tr("The game engine died unexpectedly!")
-            + QString("\n(exit code %1)").arg(exitCode)
-            + "\n\n " + tr("We are very sorry for the inconvenience :(") + "\n\n" +
-            tr("If this keeps happening, please click the '%1' button in the main menu!")
+            tr("The game engine died unexpectedly!\n"
+            "(exit code %1)\n\n"
+            "We are very sorry for the inconvenience :(\n\n"
+            "If this keeps happening, please click the '%2' button in the main menu!")
+            .arg(exitCode)
             .arg("Feedback"));
 
     }
