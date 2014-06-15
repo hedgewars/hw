@@ -710,10 +710,10 @@ if isDyAreaOffscreen(Y, H) <> 0 then
     exit;}
 
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-{if (abs(X) > W) and ((abs(X + W / 2) - W / 2) > cScreenWidth / cScaleFactor) then
+if (abs(X) > W) and ((abs(X + W / 2) - W / 2) * 2 > ViewWidth) then
     exit;
-if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) > cScreenHeight / cScaleFactor) then
-    exit;}
+if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) * 2 > ViewHeight) then
+    exit;
 
 rr.x:= X;
 rr.y:= Y;
@@ -830,16 +830,17 @@ var ft, fb, fl, fr: GLfloat;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 
-if isDxAreaOffscreen(X, w) <> 0 then
-    exit;
-if isDyAreaOffscreen(Y, h) <> 0 then
+// note: not taking scale into account
+if isAreaOffscreen(X, Y, w, h) then
     exit;
 
+{
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-{if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * cScaleFactor > cScreenWidth) then
+if (abs(X) > W) and ((abs(X + dir * OffsetX) - W / 2) * 2 > ViewWidth) then
     exit;
-if (abs(Y) > H) and ((abs(Y + OffsetY - (0.5 * cScreenHeight)) - W / 2) * cScaleFactor > cScreenHeight) then
-    exit;}
+if (abs(Y) > H) and ((abs(Y + OffsetY - (cScreenHeight / 2)) - W / 2) * 2 > ViewHeight) then
+    exit;
+}
 
 openglPushMatrix;
 
@@ -867,7 +868,9 @@ else
 hh:= h div 2;
 
 nx:= Texture^.w div w; // number of horizontal frames
+if nx = 0 then nx:= 1; // one frame is minimum
 ny:= Texture^.h div h; // number of vertical frames
+if ny = 0 then ny:= 1;
 
 ft:= (Frame mod ny) * Texture^.ry / ny;
 fb:= ((Frame mod ny) + 1) * Texture^.ry / ny;
@@ -1086,10 +1089,10 @@ procedure DrawRect(rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-{if (abs(r.x) > r.w) and ((abs(r.x + r.w / 2) - r.w / 2) * cScaleFactor > cScreenWidth) then
+if (abs(rect.x) > rect.w) and ((abs(rect.x + rect.w / 2) - rect.w / 2) * 2 > ViewWidth) then
     exit;
-if (abs(r.y) > r.h) and ((abs(r.y + r.h / 2 - (0.5 * cScreenHeight)) - r.h / 2) * cScaleFactor > cScreenHeight) then
-    exit;}
+if (abs(rect.y) > rect.h) and ((abs(rect.y + rect.h / 2 - (cScreenHeight / 2)) - rect.h / 2) * 2 > ViewHeight) then
+    exit;
 
 EnableTexture(False);
 
@@ -1158,9 +1161,9 @@ var l, r, t, b: real;
     TextureBuffer: array [0..3] of TVertex2f;
 begin
     // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
-    if (abs(X) > 32) and ((abs(X) - 16) * cScaleFactor > cScreenWidth) then
+    if (abs(X) > 32) and ((abs(X) - 16) * 2 > ViewWidth) then
         exit;
-    if (abs(Y) > 32) and ((abs(Y - 0.5 * cScreenHeight) - 16) * cScaleFactor > cScreenHeight) then
+    if (abs(Y) > 32) and ((abs(Y - cScreenHeight / 2) - 16) * 2 > ViewHeight) then
         exit;
 
     t:= Pos * 32 / HHTexture^.h;
