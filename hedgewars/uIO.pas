@@ -416,7 +416,11 @@ begin
     SendIPC('E' + s);
     // TODO: should we try to clean more stuff here?
     SDL_Quit;
-    halt(HaltFatalError);
+
+    if IPCSock <> nil then
+        halt(HaltFatalError)
+    else
+        halt(HaltFatalErrorNoIPC);
 end;
 
 procedure doPut(putX, putY: LongInt; fromAI: boolean);

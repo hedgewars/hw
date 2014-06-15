@@ -47,26 +47,26 @@ int MessageDialog::ShowInfoMessage(const QString & msg, QWidget * parent)
 
 int MessageDialog::ShowMessage(const QString & title, const QString & msg, QMessageBox::Icon icon, QWidget * parent)
 {
-    QMessageBox msgMsg(parent ? parent : HWApplication::activeWindow());
-    msgMsg.setWindowTitle(title != NULL ? title : "Hedgewars");
-    msgMsg.setText(msg);
-    msgMsg.setIcon(icon);
-    msgMsg.setWindowModality(Qt::WindowModal);
+    // if no parent try to use active window
+    parent = parent ? parent : HWApplication::activeWindow();
 
+    // didn't work? make child of hwform (e.g. for style and because modal)
     if (!parent)
     {
         try
         {
-            /* workaround to make sure style is correct
-             * I'd rather assign the stylesheet to qApp directly (in main.cpp),
-             * but the current Stylesheet will ruin the look (e.g. map selection) :(
-             */
             HWApplication * app = dynamic_cast<HWApplication*>(HWApplication::instance());
             if (app->form)
-                msgMsg.setStyleSheet(app->form->styleSheet());
+                parent = app->form;
         }
         catch (...) { /* nothing */ }
     }
+
+    QMessageBox msgMsg(parent);
+    msgMsg.setWindowTitle(title != NULL ? title : "Hedgewars");
+    msgMsg.setText(msg);
+    msgMsg.setIcon(icon);
+    msgMsg.setWindowModality(Qt::WindowModal);
 
     return msgMsg.exec();
 }

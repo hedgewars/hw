@@ -120,7 +120,7 @@ class HWForm : public QMainWindow
         void StartMPGame();
         void GameStateChanged(GameState gameState);
         void ForcedDisconnect(const QString & reason);
-        void ShowErrorMessage(const QString &);
+        void ShowFatalErrorMessage(const QString &);
         void GetRecord(RecordType type, const QByteArray & record);
         void CreateNetGame();
         void UpdateWeapons();

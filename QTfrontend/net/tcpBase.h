@@ -88,6 +88,7 @@ class TCPBase : public QObject
         void ClientDisconnect();
         void ClientRead();
         void StartProcessError(QProcess::ProcessError error);
+        void onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus);
 
         void tcpServerReady();
 };
