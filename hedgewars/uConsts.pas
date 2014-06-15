@@ -26,15 +26,16 @@ uses    SDLh, uFloat, GLunit;
 {$INCLUDE "config.inc"}
 
 const
-    HaltNoError      = 0;
-    HaltUsageError   = 1;
-    HaltFatalError   = 2;
-    HaltStartupError = 3;
+    HaltNoError         =  0;
+    HaltUsageError      =  1;
+    HaltFatalError      =  2;
+    HaltStartupError    =  3;
+    HaltFatalErrorNoIPC =  4;
 
     // for automatic tests
-    HaltTestSuccess  =   0;
-    HaltTestFailed   =  10;
-    HaltTestLuaError =  11;
+    HaltTestSuccess     =  0;
+    HaltTestFailed      =  10;
+    HaltTestLuaError    =  11;
 
 
     sfMax = 1000;

@@ -248,7 +248,12 @@ void HWGame::ParseMessage(const QByteArray & msg)
         case 'E':
         {
             int size = msg.size();
-            emit ErrorMessage(QString("Last two engine messages:\n") + QString().append(msg.mid(2)).left(size - 4));
+            emit ErrorMessage(
+                QString("A Fatal ERROR occured! - The game engine had to stop.")
+                + "\n\n " + tr("We are very sorry for the inconvenience :(")
+                + "\n\n" + tr("If this keeps happening, please click the '%1' button in the main menu!")
+                .arg("Feedback") + "\n\n"
+                "Last two engine messages:\n" + QString().append(msg.mid(2)).left(size - 4));
             return;
         }
         case 'i':

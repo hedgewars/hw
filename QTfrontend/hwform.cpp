@@ -1675,7 +1675,7 @@ void HWForm::CreateGame(GameCFGWidget * gamecfg, TeamSelWidget* pTeamSelWidget, 
     connect(game, SIGNAL(CampStateChanged(int)), this, SLOT(UpdateCampaignPageProgress(int)));
     connect(game, SIGNAL(GameStateChanged(GameState)), this, SLOT(GameStateChanged(GameState)));
     connect(game, SIGNAL(GameStats(char, const QString &)), ui.pageGameStats, SLOT(GameStats(char, const QString &)));
-    connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowErrorMessage(const QString &)), Qt::QueuedConnection);
+    connect(game, SIGNAL(ErrorMessage(const QString &)), this, SLOT(ShowFatalErrorMessage(const QString &)), Qt::QueuedConnection);
     connect(game, SIGNAL(HaveRecord(RecordType, const QByteArray &)), this, SLOT(GetRecord(RecordType, const QByteArray &)));
     m_lastDemo = QByteArray();
 }
@@ -2094,9 +2094,9 @@ void HWForm::restartGame()
     }
 }
 
-void HWForm::ShowErrorMessage(const QString & msg)
+void HWForm::ShowFatalErrorMessage(const QString & msg)
 {
-    MessageDialog::ShowErrorMessage(msg, this);
+    MessageDialog::ShowFatalMessage(msg, this);
 }
 
 void HWForm::showFeedbackDialog()

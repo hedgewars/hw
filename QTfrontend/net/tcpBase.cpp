@@ -172,7 +172,10 @@ void TCPBase::RealStart()
     thread->start();
 #else
     process = new QProcess(this);
-    connect(process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(StartProcessError(QProcess::ProcessError)));
+    connect(process, SIGNAL(error(QProcess::ProcessError)),
+        this, SLOT(StartProcessError(QProcess::ProcessError)));
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),
+        this, SLOT(onEngineDeath(int, QProcess::ExitStatus)));
     QStringList arguments = getArguments();
 
 #ifdef QT_DEBUG
@@ -198,7 +201,9 @@ void TCPBase::ClientDisconnect()
 #endif
         emit isReadyNow();
     }
+
     IPCSocket->deleteLater();
+    IPCSocket = NULL;
 
     deleteLater();
 }
@@ -215,6 +220,37 @@ void TCPBase::StartProcessError(QProcess::ProcessError error)
 {
     MessageDialog::ShowFatalMessage(tr("Unable to run engine at %1\nError code: %2").arg(bindir->absolutePath() + "/hwengine").arg(error));
     ClientDisconnect();
+}
+
+void TCPBase::onEngineDeath(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    Q_UNUSED(exitStatus);
+
+    ClientDisconnect();
+
+    // show error message if there was an error that was not an engine's
+    // fatal error - because that one already sent a info via IPC
+    if ((exitCode != 0) && (exitCode != 2))
+    {
+        // inform user that something bad happened
+        MessageDialog::ShowFatalMessage(
+            tr("The game engine died unexpectedly!")
+            + QString("\n(exit code %1)").arg(exitCode)
+            + "\n\n " + tr("We are very sorry for the inconvenience :(") + "\n\n" +
+            tr("If this keeps happening, please click the '%1' button in the main menu!")
+            .arg("Feedback"));
+
+    }
+
+    // cleanup up
+    if (IPCSocket)
+    {
+        IPCSocket->close();
+        IPCSocket->deleteLater();
+    }
+
+    // plot suicide
+    deleteLater();
 }
 
 void TCPBase::tcpServerReady()
