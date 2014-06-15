@@ -76,6 +76,9 @@ procedure RenderSetup();
 
 // TODO everything below this should not need a public interface
 
+procedure CreateFramebuffer(var frame, depth, tex: GLuint);
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
+
 procedure EnableTexture(enable:Boolean);
 
 procedure SetTexCoordPointer(p: Pointer;n: Integer);
@@ -96,7 +99,8 @@ procedure openglTint            (r, g, b, a: Byte); inline;
 
 implementation
 uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF};
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}
+     {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const
@@ -246,6 +250,53 @@ begin
 end;
 {$ENDIF}
 
+function glLoadExtension(extension : shortstring) : boolean;
+begin
+//TODO: pas2c does not handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
+{$IFNDEF PAS2C}
+{$IF GLunit = gles11}
+    // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
+    extension:= extension; // avoid hint
+    glLoadExtension:= false;
+    AddFileLog('OpenGL - "' + extension + '" skipped')
+{$ELSE}
+    glLoadExtension:= glext_LoadExtension(extension);
+    if glLoadExtension then
+        AddFileLog('OpenGL - "' + extension + '" loaded')
+    else
+        AddFileLog('OpenGL - "' + extension + '" failed to load');
+{$ENDIF}
+
+{$ELSE} // pas2c part
+    glLoadExtension:= false;
+{$ENDIF}
+end;
+
+{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
+procedure CreateFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glGenFramebuffersEXT(1, @frame);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frame);
+    glGenRenderbuffersEXT(1, @depth);
+    glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, depth);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, cScreenWidth, cScreenHeight);
+    glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depth);
+    glGenTextures(1, @tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,  cScreenWidth, cScreenHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, nil);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, tex, 0);
+end;
+
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
+begin
+    glDeleteTextures(1, @tex);
+    glDeleteRenderbuffersEXT(1, @depth);
+    glDeleteFramebuffersEXT(1, @frame);
+end;
+
+{$ENDIF}
 procedure RenderSetup();
 var AuxBufNum: LongInt = 0;
     tmpstr: ansistring;
