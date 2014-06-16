@@ -270,7 +270,7 @@ begin
         {--no-hogtag}           32 : cTagsMask := cTagsMask and (not htName);
         {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
         {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            35 : begin cTestLua := true; cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid
