@@ -1337,6 +1337,14 @@ for t:= 0 to Pred(TeamsCount) do
             r.w:= 22;
             r.h:= 15;
             DrawTextureFromRect(-12, cScreenHeight + DrawHealthY + smallScreenOffset + 2, @r, FlagTex);
+            end
+        // draw an arrow next to active team
+        else if (CurrentTeam = TeamsArray[t]) and (TurnTimeLeft > 0) then
+            begin
+            h:= -NameTagTex^.w - 24;
+            if OwnerTex <> nil then
+                h:= h - OwnerTex^.w - 4;
+            DrawSpriteRotatedF(sprFinger, h, cScreenHeight + DrawHealthY + smallScreenOffset + 2 + SpritesData[sprFinger].Width div 4, 0, 1, -90);
             end;
         end;
 if smallScreenOffset <> 0 then
