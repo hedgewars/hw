@@ -64,6 +64,10 @@ if GameType <> gmtRecord then
         else if cOnlyStats then
             Lag:= High(LongInt)
     end;
+
+if cTestLua then
+    Lag:= High(LongInt);
+
 inc(SoundTimerTicks, Lag);
 if SoundTimerTicks >= 50 then
     begin
