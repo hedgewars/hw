@@ -32,7 +32,7 @@ procedure KeyPressChat(Key, Sym: Longword);
 procedure SendHogSpeech(s: shortstring);
 
 implementation
-uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uConsole;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript;
 
 const MaxStrIndex = 27;
 
