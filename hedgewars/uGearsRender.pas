@@ -963,12 +963,20 @@ begin
                 if (cTagsMask and htHealth) <> 0 then
                     ty := ty - HealthTagTex^.h - 2;
                 tx := ox;
-                tx := round(max(((-cScreenWidth + 16) / cScaleFactor) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / cScaleFactor) - SpritesData[sprFinger].Width div 2, tx)));
-                ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / cScaleFactor) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (cScaleFactor)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
+
+                // don't go offscreen
+                //tx := round(max(((-cScreenWidth + 16) / cScaleFactor) + SpritesData[sprFinger].Width div 2, min(((cScreenWidth - 16) / cScaleFactor) - SpritesData[sprFinger].Width div 2, tx)));
+                //ty := round(max(cScreenHeight div 2 - ((cScreenHeight - 16) / cScaleFactor) + SpritesData[sprFinger].Height div 2, min(cScreenHeight div 2 - ((-cScreenHeight + SpritesData[sprFinger].Height) / (cScaleFactor)) - SpritesData[sprFinger].Width div 2 - 96, ty)));
+                t:= 32;//trunc((SpritesData[sprFinger].Width + t) / cScaleFactor);
+                tx := min(max(tx, ViewLeftX + t), ViewRightX  - t);
+                t:= 32;//trunc((SpritesData[sprFinger].Height + t) / cScaleFactor);
+                ty := min(ty, ViewBottomY - 96);
+                // don't overlap with HH or HH tags
+                if ty < ViewTopY + t then ty:= max(ViewTopY + t, oy + t);
 
                 dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
 
-                DrawSpriteRotatedF(sprFinger, tx, ty, GameTicks div 32 mod 16, 1, dAngle);
+                DrawSpriteRotatedF(sprFinger, tx, ty, RealTicks div 32 mod 16, 1, dAngle);
                 end;
 
 
