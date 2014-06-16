@@ -972,7 +972,13 @@ begin
                 t:= 32;//trunc((SpritesData[sprFinger].Height + t) / cScaleFactor);
                 ty := min(ty, ViewBottomY - 96);
                 // don't overlap with HH or HH tags
-                if ty < ViewTopY + t then ty:= max(ViewTopY + t, oy + t);
+                if ty < ViewTopY + t then
+                    begin
+                    if abs(tx - ox) < abs(ty - oy)  then
+                        ty:= max(ViewTopY + t, oy + t)
+                    else
+                        ty:= max(ViewTopY + t, ty);
+                    end;
 
                 dAngle := DxDy2Angle(int2hwfloat(ty - oy), int2hwfloat(tx - ox)) + 90;
 
