@@ -792,9 +792,14 @@ end;
 
 procedure DrawWater(Alpha: byte; OffsetY: LongInt);
 var VertexBuffer : array [0..3] of TVertex2f;
-    r        : TSDL_Rect;
-    lw, lh   : GLfloat;
+    topy: LongInt;
 begin
+    // Water
+topy:= OffsetY + WorldDy + cWaterLine;
+
+if topy > ViewBottomY then
+    exit;
+
 if SuddenDeathDmg then
     begin
     SDWaterColorArray[0].a := Alpha;
@@ -810,41 +815,40 @@ else
     WaterColorArray[3].a := Alpha
     end;
 
-lw:= cScreenWidth / cScaleFactor;
-lh:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 + 16;
+if topy < 0 then
+    topy:= 0;
 
-    // Water
-r.y:= OffsetY + WorldDy + cWaterLine;
-if WorldDy < trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine then
-    begin
-        if r.y < 0 then
-            r.y:= 0;
+glDisable(GL_TEXTURE_2D);
+VertexBuffer[0].X:= -ViewWidth;
+VertexBuffer[0].Y:=  topy;
+VertexBuffer[1].X:=  ViewWidth;
+VertexBuffer[1].Y:=  topy;
+VertexBuffer[2].X:=  ViewWidth;
+VertexBuffer[2].Y:=  ViewBottomY;
+VertexBuffer[3].X:= -ViewWidth;
+VertexBuffer[3].Y:=  ViewBottomY;
 
-        glDisable(GL_TEXTURE_2D);
-        VertexBuffer[0].X:= -lw;
-        VertexBuffer[0].Y:= r.y;
-        VertexBuffer[1].X:= lw;
-        VertexBuffer[1].Y:= r.y;
-        VertexBuffer[2].X:= lw;
-        VertexBuffer[2].Y:= lh;
-        VertexBuffer[3].X:= -lw;
-        VertexBuffer[3].Y:= lh;
-
-        DrawWaterBody(@VertexBuffer[0]);
+DrawWaterBody(@VertexBuffer[0]);
 
 {$IFNDEF GL2}
-        // must not be Tint() as color array seems to stay active and color reset is required
-        glColor4ub($FF, $FF, $FF, $FF);
+// must not be Tint() as color array seems to stay active and color reset is required
+glColor4ub($FF, $FF, $FF, $FF);
 {$ENDIF}
-        glEnable(GL_TEXTURE_2D);
-    end;
+glEnable(GL_TEXTURE_2D);
 end;
 
 procedure DrawWaves(Dir, dX, dY: LongInt; tnt: Byte);
 var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     lw, waves, shift: GLfloat;
     sprite: TSprite;
+    topy: LongInt;
 begin
+
+topy:= cWaterLine + WorldDy + dY;
+
+if topY > ViewBottomY then
+    exit;
+
 if SuddenDeathDmg then
     sprite:= sprSDWater
 else
@@ -852,7 +856,7 @@ else
 
 cWaveWidth:= SpritesData[sprite].Width;
 
-lw:= cScreenWidth / cScaleFactor;
+lw:= ViewWidth;
 waves:= lw * 2 / cWaveWidth;
 
 if SuddenDeathDmg then

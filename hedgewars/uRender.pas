@@ -633,11 +633,11 @@ var tmp: real;
 begin
     // cScaleFactor is 2.0 on "no zoom"
     tmp:= cScreenWidth / cScaleFactor;
-    ViewRightX:= round(tmp); // ceil could make more sense
-    ViewLeftX:= round(-tmp); // floor could make more sense
+    ViewRightX:= 1 + round(tmp);
+    ViewLeftX:= round(-tmp);
     tmp:= cScreenHeight / cScaleFactor;
-    ViewBottomY:= round(tmp) + cScreenHeight div 2; // ceil could make more sense
-    ViewTopY:= round(-tmp) + cScreenHeight div 2; // floor could make more sense
+    ViewBottomY:= 1 + round(tmp) + cScreenHeight div 2;
+    ViewTopY:= round(-tmp) + cScreenHeight div 2;
 
     // visual debugging fun :D
     if cViewLimitsDebug then
@@ -919,16 +919,34 @@ end;
 procedure DrawSpriteRotatedF(Sprite: TSprite; X, Y, Frame, Dir: LongInt; Angle: real);
 begin
 
+if Angle <> 0  then
+    begin
+    // sized doubled because the sprite might occupy up to 1.4 * of it's
+    // original size in each dimension, because it is rotated
+    if isDxAreaOffscreen(X - SpritesData[Sprite].Width, 2 * SpritesData[Sprite].Width) <> 0 then
+        exit;
+    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height, 2 * SpritesData[Sprite].Height) <> 0 then
+        exit;
+    end
+else
+    begin
+    if isDxAreaOffscreen(X - SpritesData[Sprite].Width div 2, SpritesData[Sprite].Width) <> 0 then
+        exit;
+    if isDYAreaOffscreen(Y - SpritesData[Sprite].Height div 2 , SpritesData[Sprite].Height) <> 0 then
+        exit;
+    end;
+
+
 openglPushMatrix;
 openglTranslatef(X, Y, 0);
 
+// mirror
 if Dir < 0 then
-    begin
-    openglRotatef(Angle, 0, 0, -1);
     openglScalef(-1.0, 1.0, 1.0);
-    end
-else
-    openglRotatef(Angle, 0, 0,  1);
+
+// apply angle after (conditional) mirroring
+if Angle <> 0  then
+    openglRotatef(Angle, 0, 0, 1);
 
 DrawSprite(Sprite, -SpritesData[Sprite].Width div 2, -SpritesData[Sprite].Height div 2, Frame);
 

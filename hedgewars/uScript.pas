@@ -48,6 +48,7 @@ function ScriptCall(fname : shortstring; par1, par2, par3: LongInt) : LongInt;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 function ScriptExists(fname : shortstring) : boolean;
 
+procedure LuaParseString(s: shortString);
 
 //function ParseCommandOverride(key, value : shortstring) : shortstring;  This did not work out well
 
@@ -106,6 +107,17 @@ procedure ScriptSetAmmo(ammo : TAmmoType; count, probability, delay, reinforceme
 procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
 var LuaDebugInfo: lua_Debug;
+
+procedure LuaParseString(s: shortString);
+begin
+    AddFileLog('[Lua] input string: ' + s);
+    AddChatString(#3 + '[Lua] > ' + s);
+    if luaL_dostring(luaState, Str2PChar(s)) <> 0 then
+        begin
+        AddFileLog('[Lua] input string parsing error!');
+        AddChatString(#5 + '[Lua] Error while parsing!');
+        end;
+end;
 
 function LuaUpdateDebugInfo(): Boolean;
 begin
@@ -2384,8 +2396,8 @@ pfsClose(f);
 
 if ret <> 0 then
     begin
-    LuaError('Lua: Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
-    LuaError('Lua: ' + lua_tostring(luaState, -1));
+    LuaError('Failed to load ' + name + '(error ' + IntToStr(ret) + ')');
+    LuaError(lua_tostring(luaState, -1));
     end
 else
     begin
@@ -2431,7 +2443,7 @@ SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
 if lua_pcall(luaState, 0, 0, 0) <> 0 then
     begin
-    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
     lua_pop(luaState, 1)
     end;
 GetGlobals;
@@ -2487,7 +2499,7 @@ lua_pushinteger(luaState, par4);
 ScriptCall:= 0;
 if lua_pcall(luaState, 4, 1, 0) <> 0 then
     begin
-    LuaError('Lua: Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
+    LuaError('Error while calling ' + fname + ': ' + lua_tostring(luaState, -1));
     lua_pop(luaState, 1)
     end
 else

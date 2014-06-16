@@ -32,7 +32,7 @@ procedure KeyPressChat(Key, Sym: Longword);
 procedure SendHogSpeech(s: shortstring);
 
 implementation
-uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uConsole;
 
 const MaxStrIndex = 27;
 
@@ -57,6 +57,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
     ChatReady: boolean;
     showAll: boolean;
+    liveLua: boolean;
 
 const
     colors: array[#0..#6] of TSDL_Color = (
@@ -287,6 +288,10 @@ if x <> 0 then
 
 if (s[1] = '/') then
     begin
+    // put in input history
+    localLastStr:= (localLastStr + 1) mod MaxStrIndex;
+    LocalStrs[localLastStr]:= s;
+
     // These 3 are same as above, only are to make the hedgehog say it on next attack
     if (copy(s, 2, 4) = 'hsa ') then
         begin
@@ -335,6 +340,27 @@ if (s[1] = '/') then
         exit
         end;
 
+    if (copy(s, 2, 3) = 'lua') then
+        begin
+        AddFileLog('/lua issued');
+        if gameType <> gmtNet then
+            begin
+            liveLua:= (not liveLua);
+            if liveLua then
+                begin
+                AddFileLog('[Lua] chat input string parsing enabled');
+                AddChatString(#3 + 'Lua parsing: ON');
+                end
+            else
+                begin
+                AddFileLog('[Lua] chat input string parsing disabled');
+                AddChatString(#3 + 'Lua parsing: OFF');
+                end;
+            end;
+        exit
+        end;
+
+    // hedghog animations/taunts and engine commands
     if (not CurrentTeam^.ExtDriven) and (CurrentTeam^.Hedgehogs[0].BotLevel = 0) then
         begin
         for i:= Low(TWave) to High(TWave) do
@@ -352,8 +378,13 @@ if (s[1] = '/') then
                 end;
         end
     end
+else
+    begin
+    if liveLua then
+        LuaParseString(s)
     else
         ParseCommand('/say ' + s, true);
+    end;
 end;
 
 procedure CleanupInput;
@@ -510,6 +541,7 @@ begin
     showAll:= false;
     ChatReady:= false;
     missedCount:= 0;
+    liveLua:= false;
 
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
