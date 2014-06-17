@@ -791,9 +791,10 @@ c:= -1;
 end;
 
 procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
-var VertexBuffer : array [0..4] of TVertex2f;
+var VertexBuffer : array [0..3] of TVertex2f;
     topy, lx, rx: LongInt;
 begin
+
     // Water
 topy:= OffsetY + WorldDy + cWaterLine;
 
@@ -939,28 +940,28 @@ if WorldEdge <> weSea then
         VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprite].Height;
         VertexBuffer[3].X:= -lw;
         VertexBuffer[3].Y:= VertexBuffer[2].Y;
+
+        waves:= lw * 2 / cWaveWidth;
+        shift:= - lw / cWaveWidth;
+        TextureBuffer[0].X:= shift + (( - WorldDx + LongInt(RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
+        TextureBuffer[0].Y:= 0;
+        TextureBuffer[1].X:= TextureBuffer[0].X + waves;
+        TextureBuffer[1].Y:= TextureBuffer[0].Y;
+        TextureBuffer[2].X:= TextureBuffer[1].X;
+        TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+        TextureBuffer[3].X:= TextureBuffer[0].X;
+        TextureBuffer[3].Y:= TextureBuffer[2].Y;
+
+
+        SetVertexPointer(@VertexBuffer[0], 4);
+        SetTexCoordPointer(@TextureBuffer[0], 4);
+
+        {$IFDEF GL2}
+        UpdateModelviewProjection;
+        {$ENDIF}
+
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         end;
-
-    waves:= lw * 2 / cWaveWidth;
-    shift:= - lw / cWaveWidth;
-    TextureBuffer[0].X:= shift + (( - WorldDx + LongInt(RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
-    TextureBuffer[0].Y:= 0;
-    TextureBuffer[1].X:= TextureBuffer[0].X + waves;
-    TextureBuffer[1].Y:= TextureBuffer[0].Y;
-    TextureBuffer[2].X:= TextureBuffer[1].X;
-    TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
-    TextureBuffer[3].X:= TextureBuffer[0].X;
-    TextureBuffer[3].Y:= TextureBuffer[2].Y;
-
-
-    SetVertexPointer(@VertexBuffer[0], 4);
-    SetTexCoordPointer(@TextureBuffer[0],4);
-
-    {$IFDEF GL2}
-    UpdateModelviewProjection;
-    {$ENDIF}
-
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
     end
 else // weSea: with waterwalls
     begin
