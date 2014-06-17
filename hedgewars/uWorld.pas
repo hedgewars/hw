@@ -790,15 +790,12 @@ c:= -1;
 {$ENDIF}
 end;
 
-procedure DrawWater(Alpha: byte; OffsetY: LongInt);
-var VertexBuffer : array [0..3] of TVertex2f;
-    topy: LongInt;
+procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
+var VertexBuffer : array [0..4] of TVertex2f;
+    topy, lx, rx: LongInt;
 begin
     // Water
 topy:= OffsetY + WorldDy + cWaterLine;
-
-if topy > ViewBottomY then
-    exit;
 
 if SuddenDeathDmg then
     begin
@@ -818,35 +815,89 @@ else
 if topy < 0 then
     topy:= 0;
 
-glDisable(GL_TEXTURE_2D);
-VertexBuffer[0].X:= -ViewWidth;
-VertexBuffer[0].Y:=  topy;
-VertexBuffer[1].X:=  ViewWidth;
-VertexBuffer[1].Y:=  topy;
-VertexBuffer[2].X:=  ViewWidth;
-VertexBuffer[2].Y:=  ViewBottomY;
-VertexBuffer[3].X:= -ViewWidth;
-VertexBuffer[3].Y:=  ViewBottomY;
+// glDisable(GL_TEXTURE_2D);
 
-DrawWaterBody(@VertexBuffer[0]);
+if (topy < ViewBottomY) and (WorldEdge <> weSea) then
+    begin
+    VertexBuffer[0].X:= ViewLeftX;
+    VertexBuffer[0].Y:= topy;
+    VertexBuffer[1].X:= ViewRightX;
+    VertexBuffer[1].Y:= topy;
+    VertexBuffer[2].X:= ViewRightX;
+    VertexBuffer[2].Y:= ViewBottomY;
+    VertexBuffer[3].X:= ViewLeftX;
+    VertexBuffer[3].Y:= ViewBottomY;
+    DrawWaterBody(@VertexBuffer[0]);
+    end;
+
+// water world edges? draw water body on the sides too
+if WorldEdge = weSea then
+    begin
+
+    lx:= LeftX  + WorldDx - OffsetX;
+    rx:= RightX + WorldDx + OffsetX;
+
+    if topy < ViewBottomY then
+        begin
+        VertexBuffer[0].X:= lx;
+        VertexBuffer[0].Y:= topy;
+        VertexBuffer[1].X:= RightX;
+        VertexBuffer[1].Y:= topy;
+        VertexBuffer[2].X:= ViewRightX;
+        VertexBuffer[2].Y:= ViewBottomY;
+        VertexBuffer[3].X:= ViewLeftX;
+        VertexBuffer[3].Y:= ViewBottomY;
+        DrawWaterBody(@VertexBuffer[0]);
+        end;
+
+    if lx > ViewLeftX then
+        begin
+        VertexBuffer[0].X:= lx;
+        VertexBuffer[0].Y:= ViewTopY;
+        VertexBuffer[1].X:= lx;
+        VertexBuffer[1].Y:= topy;
+        VertexBuffer[2].X:= ViewLeftX;
+        VertexBuffer[2].Y:= ViewBottomY;
+        VertexBuffer[3].X:= ViewLeftX;
+        VertexBuffer[3].Y:= ViewTopY;
+        DrawWaterBody(@VertexBuffer[0]);
+        end;
+
+
+    if rx < ViewRightX then
+        begin
+        VertexBuffer[0].X:= rx;
+        VertexBuffer[0].Y:= topy;
+        VertexBuffer[1].X:= rx;
+        VertexBuffer[1].Y:= ViewTopY;
+        VertexBuffer[2].X:= ViewRightX;
+        VertexBuffer[2].Y:= ViewTopY;
+        VertexBuffer[3].X:= ViewRightX;
+        VertexBuffer[3].Y:= ViewBottomY;
+        DrawWaterBody(@VertexBuffer[0]);
+        end;
+    end;
 
 {$IFNDEF GL2}
 // must not be Tint() as color array seems to stay active and color reset is required
 glColor4ub($FF, $FF, $FF, $FF);
 {$ENDIF}
-glEnable(GL_TEXTURE_2D);
+//glEnable(GL_TEXTURE_2D);}
 end;
 
-procedure DrawWaves(Dir, dX, dY: LongInt; tnt: Byte);
-var VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+procedure DrawWaves(Dir, dX, dY, oX: LongInt; tnt: Byte);
+var VertexBuffer, TextureBuffer: array [0..7] of TVertex2f;
     lw, waves, shift: GLfloat;
     sprite: TSprite;
     topy: LongInt;
 begin
 
+dY:= -cWaveHeight + dy;
+ox:= -cWaveHeight + ox;
+
 topy:= cWaterLine + WorldDy + dY;
 
-if topY > ViewBottomY then
+if (WorldEdge <> weSea) and (topY > ViewBottomY) then
     exit;
 
 if SuddenDeathDmg then
@@ -856,8 +907,10 @@ else
 
 cWaveWidth:= SpritesData[sprite].Width;
 
-lw:= ViewWidth;
-waves:= lw * 2 / cWaveWidth;
+if WorldEdge = weSea then
+    lw:= playWidth div 2
+else
+    lw:= ViewWidth;
 
 if SuddenDeathDmg then
     Tint(LongInt(tnt) * SDWaterColorArray[2].r div 255 + 255 - tnt,
@@ -874,34 +927,99 @@ else
 
 glBindTexture(GL_TEXTURE_2D, SpritesData[sprite].Texture^.id);
 
-VertexBuffer[0].X:= -lw;
-VertexBuffer[0].Y:= cWaterLine + WorldDy + dY;
-VertexBuffer[1].X:= lw;
-VertexBuffer[1].Y:= VertexBuffer[0].Y;
-VertexBuffer[2].X:= lw;
-VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprite].Height;
-VertexBuffer[3].X:= -lw;
-VertexBuffer[3].Y:= VertexBuffer[2].Y;
+if WorldEdge <> weSea then
+    begin
+    if topY < ViewBottomY then
+        begin
+        VertexBuffer[0].X:= -lw;
+        VertexBuffer[0].Y:= cWaterLine + WorldDy + dY;
+        VertexBuffer[1].X:= lw;
+        VertexBuffer[1].Y:= VertexBuffer[0].Y;
+        VertexBuffer[2].X:= lw;
+        VertexBuffer[2].Y:= VertexBuffer[0].Y + SpritesData[sprite].Height;
+        VertexBuffer[3].X:= -lw;
+        VertexBuffer[3].Y:= VertexBuffer[2].Y;
+        end;
 
-shift:= - lw / cWaveWidth;
-TextureBuffer[0].X:= shift + (( - WorldDx + LongInt(RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
-TextureBuffer[0].Y:= 0;
-TextureBuffer[1].X:= TextureBuffer[0].X + waves;
-TextureBuffer[1].Y:= TextureBuffer[0].Y;
-TextureBuffer[2].X:= TextureBuffer[1].X;
-TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
-TextureBuffer[3].X:= TextureBuffer[0].X;
-TextureBuffer[3].Y:= TextureBuffer[2].Y;
+    waves:= lw * 2 / cWaveWidth;
+    shift:= - lw / cWaveWidth;
+    TextureBuffer[0].X:= shift + (( - WorldDx + LongInt(RealTicks shr 6) * Dir + dX) mod cWaveWidth) / (cWaveWidth - 1);
+    TextureBuffer[0].Y:= 0;
+    TextureBuffer[1].X:= TextureBuffer[0].X + waves;
+    TextureBuffer[1].Y:= TextureBuffer[0].Y;
+    TextureBuffer[2].X:= TextureBuffer[1].X;
+    TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[3].X:= TextureBuffer[0].X;
+    TextureBuffer[3].Y:= TextureBuffer[2].Y;
 
 
-SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+    SetVertexPointer(@VertexBuffer[0], 4);
+    SetTexCoordPointer(@TextureBuffer[0],4);
 
-{$IFDEF GL2}
-UpdateModelviewProjection;
-{$ENDIF}
+    {$IFDEF GL2}
+    UpdateModelviewProjection;
+    {$ENDIF}
 
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    end
+else // weSea: with waterwalls
+    begin
+    topy := cWaterLine + WorldDy;
+
+    // for GL_TRIANGLE_STRIP
+
+    VertexBuffer[0].X:= LeftX + WorldDx - SpritesData[sprite].Height - ox;
+    VertexBuffer[0].Y:= ViewTopY;
+    VertexBuffer[1].X:= LeftX + WorldDx - ox;
+    VertexBuffer[1].Y:= ViewTopY;
+    VertexBuffer[2].X:= VertexBuffer[0].X;
+    VertexBuffer[2].Y:= topy + SpritesData[sprite].Height + dy;
+    VertexBuffer[3].X:= VertexBuffer[1].X;
+    VertexBuffer[3].Y:= topy + dy;
+    VertexBuffer[4].X:= RightX + WorldDx + SpritesData[sprite].Height + ox;
+    VertexBuffer[4].Y:= topy + SpritesData[sprite].Height + dy;
+    VertexBuffer[5].X:= RightX + WorldDx + ox;
+    VertexBuffer[5].Y:= topy + dy;
+    VertexBuffer[6].X:= VertexBuffer[4].X;
+    VertexBuffer[6].Y:= ViewTopY;
+    VertexBuffer[7].X:= VertexBuffer[5].X;
+    VertexBuffer[7].Y:= ViewTopY;
+
+    waves:= 2 * lw / cWaveWidth;
+    shift:= - lw / cWaveWidth;
+    TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr 6) * Dir + ox) mod cWaveWidth) / (cWaveWidth - 1);
+    TextureBuffer[3].Y:= 0;
+    TextureBuffer[5].X:= TextureBuffer[3].X + waves;
+    TextureBuffer[5].Y:= 0;
+    TextureBuffer[4].X:= TextureBuffer[5].X;
+    TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry;
+    TextureBuffer[2].X:= TextureBuffer[3].X;
+    TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+
+    waves:= (topy + dy - ViewTopY) / cWaveWidth;
+
+    // left side
+    TextureBuffer[1].X:= TextureBuffer[3].X - waves;
+    TextureBuffer[1].Y:= 0;
+    TextureBuffer[0].X:= TextureBuffer[1].X;
+    TextureBuffer[0].Y:= SpritesData[sprite].Texture^.ry;
+
+    // right side
+    TextureBuffer[7].X:= TextureBuffer[5].X + waves;
+    TextureBuffer[7].Y:= 0;
+    TextureBuffer[6].X:= TextureBuffer[7].X;
+    TextureBuffer[6].Y:= SpritesData[sprite].Texture^.ry;
+
+
+    SetVertexPointer(@VertexBuffer[0], 8);
+    SetTexCoordPointer(@TextureBuffer[0], 8);
+
+    {$IFDEF GL2}
+    UpdateModelviewProjection;
+    {$ENDIF}
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 8);
+    end;
 
 untint;
 
@@ -1130,7 +1248,7 @@ var
     VertexBuffer: array [0..3] of TVertex2f;
     c1, c2: LongWord; // couple of colours for edges
 begin
-if WorldEdge <> weNone then
+if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
 
@@ -1364,11 +1482,14 @@ var i, t: LongInt;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
 begin
+ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
+
+// note: offsetY is negative!
+offsetY:= 5 * max(-145,min(0, CWaterLine + WorldDy - ViewBottomY)); //10 * Min(0, -145 - ScreenBottom);
+
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
         // Offsets relative to camera - spare them to wimpier cpus, no bg or flakes for them anyway
-        ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
-        offsetY:= 10 * Min(0, -145 - ScreenBottom);
         SkyOffset:= offsetY div 35 + cWaveHeight;
         HorizontOffset:= SkyOffset;
         if ScreenBottom > SkyOffset then
@@ -1392,18 +1513,18 @@ DrawVisualGears(4);
 if (cReducedQuality and rq2DWater) = 0 then
     begin
         // Waves
-        DrawWater(255, SkyOffset);
+        DrawWater(255, SkyOffset, 0);
         ChangeDepth(RM, -cStereo_Water_distant);
-        DrawWaves( 1,  0 - WorldDx div 32, - cWaveHeight + offsetY div 35, 64);
+        DrawWaves( 1,  0 - WorldDx div 32, offsetY div 35, -49, 64);
         ChangeDepth(RM, -cStereo_Water_distant);
-        DrawWaves( -1,  25 + WorldDx div 25, - cWaveHeight + offsetY div 38, 48);
+        DrawWaves( -1,  25 + WorldDx div 25, offsetY div 38, -37, 48);
         ChangeDepth(RM, -cStereo_Water_distant);
-        DrawWaves( 1,  75 - WorldDx div 19, - cWaveHeight + offsetY div 45, 32);
+        DrawWaves( 1,  75 - WorldDx div 19, offsetY div 45, -23, 32);
         ChangeDepth(RM, -cStereo_Water_distant);
-        DrawWaves(-1, 100 + WorldDx div 14, - cWaveHeight + offsetY div 70, 24);
+        DrawWaves(-1, 100 + WorldDx div 14, offsetY div 70, -7, 24);
     end
 else
-        DrawWaves(-1, 100, - (cWaveHeight + (cWaveHeight shr 1)), 0);
+    DrawWaves(-1, 100, - cWaveHeight div 2, - cWaveHeight div 2, 0);
 
     changeDepth(RM, cStereo_Land);
     DrawVisualGears(5);
@@ -1414,7 +1535,7 @@ else
         DrawLand(WorldDx + playWidth, WorldDy);
         end;
 
-    DrawWater(255, 0);
+    DrawWater(255, 0, 0);
 
 (*
 // Attack bar
@@ -1463,34 +1584,34 @@ DrawVisualGears(6);
 
 
 if SuddenDeathDmg then
-    DrawWater(SDWaterOpacity, 0)
+    DrawWater(SDWaterOpacity, 0, 0)
 else
-    DrawWater(WaterOpacity, 0);
+    DrawWater(WaterOpacity, 0, 0);
 
     // Waves
 ChangeDepth(RM, cStereo_Water_near);
-DrawWaves( 1, 25 - WorldDx div 9, - cWaveHeight, 12);
+DrawWaves( 1, 25 - WorldDx div 9, 0, 0, 12);
 
 if (cReducedQuality and rq2DWater) = 0 then
     begin
     //DrawWater(WaterOpacity, - offsetY div 40);
     ChangeDepth(RM, cStereo_Water_near);
-    DrawWaves(-1, 50 + WorldDx div 6, - cWaveHeight - offsetY div 40, 8);
+    DrawWaves(-1, 50 + WorldDx div 6, - offsetY div 40, 23, 8);
     if SuddenDeathDmg then
-        DrawWater(SDWaterOpacity, - offsetY div 20)
+        DrawWater(SDWaterOpacity, - offsetY div 20, 23)
     else
-        DrawWater(WaterOpacity, - offsetY div 20);
+        DrawWater(WaterOpacity, - offsetY div 20, 23);
     ChangeDepth(RM, cStereo_Water_near);
-    DrawWaves( 1, 75 - WorldDx div 4, - cWaveHeight - offsetY div 20, 2);
+    DrawWaves( 1, 75 - WorldDx div 4, - offsetY div 20, 37, 2);
         if SuddenDeathDmg then
-            DrawWater(SDWaterOpacity, - offsetY div 10)
+            DrawWater(SDWaterOpacity, - offsetY div 10, 47)
         else
-            DrawWater(WaterOpacity, - offsetY div 10);
+            DrawWater(WaterOpacity, - offsetY div 10, 47);
         ChangeDepth(RM, cStereo_Water_near);
-        DrawWaves( -1, 25 + WorldDx div 3, - cWaveHeight - offsetY div 10, 0);
+        DrawWaves( -1, 25 + WorldDx div 3, - offsetY div 10, 59, 0);
         end
     else
-        DrawWaves(-1, 50, - (cWaveHeight shr 1), 0);
+        DrawWaves(-1, 50, cWaveHeight div 2, cWaveHeight div 2, 0);
 
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
