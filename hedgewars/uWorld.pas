@@ -967,7 +967,41 @@ else // weSea: with waterwalls
     begin
     topy := cWaterLine + WorldDy;
 
-    // for GL_TRIANGLE_STRIP
+    // We will draw both bottom water and the water walls with a single call,
+    // by rendering a GL_TRIANGLE_STRIP of eight points.
+    //
+    // GL_TRIANGLE_STRIP works like this: "always create triangle between
+    // newest point and the two points that were specified before it."
+    //
+    // To get the result we want we will order the points like this:
+    //                                                                  ^ -Y
+    //                                                                  |
+    //   0-------1         7-------6  <---------------------- ViewTopY -|
+    //   |      /|         |     _/|                                    |
+    //   |     / |         |    /  |                                    |
+    //   |    /  |         |  _/   |                                    |
+    //   |   /   |         | /     |                                    |
+    //   |  /  _.3---------5{      |  <--- topy = cWaterLine + WorldDy -|
+    //   | / _/   `---.___   `--._ |                                    |
+    //   |/_/             `---.___\|                                    |
+    //   2-------------------------4  <------------ topy + wave height -|
+    //                                                                  |
+    //   ^       ^         ^       ^                                    V +Y
+    //   |       |         |       |
+    //   |       |         |     RightX + WorldDx + wave height
+    //   |       |         |       .
+    //   |       | RightX + WorldDx.
+    //   |       |         .       .
+    //   | LeftX + WorldDx .       .
+    //   |       .         .       .
+    // LeftX - wave height + WorldDx
+    //   |       .         .       .
+    // <-------------------------------->
+    // -X                              +X
+    //
+    // Note: additionally the parameters ox and dy are used to create different
+    // horizontal and vertical offsets between wave layers
+
 
     VertexBuffer[0].X:= LeftX + WorldDx - SpritesData[sprite].Height - ox;
     VertexBuffer[0].Y:= ViewTopY;
