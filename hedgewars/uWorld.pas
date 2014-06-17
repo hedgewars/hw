@@ -1485,7 +1485,7 @@ begin
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
 
 // note: offsetY is negative!
-offsetY:= 5 * max(-145,min(0, CWaterLine + WorldDy - ViewBottomY)); //10 * Min(0, -145 - ScreenBottom);
+offsetY:= 10 *  Min(0, -145 - ScreenBottom); // TODO limit this in the other direction too
 
 if (cReducedQuality and rqNoBackground) = 0 then
     begin
