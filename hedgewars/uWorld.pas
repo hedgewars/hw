@@ -842,7 +842,7 @@ if WorldEdge = weSea then
         begin
         VertexBuffer[0].X:= lx;
         VertexBuffer[0].Y:= topy;
-        VertexBuffer[1].X:= RightX;
+        VertexBuffer[1].X:= rx;
         VertexBuffer[1].Y:= topy;
         VertexBuffer[2].X:= ViewRightX;
         VertexBuffer[2].Y:= ViewBottomY;
