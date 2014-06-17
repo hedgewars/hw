@@ -1019,10 +1019,7 @@ begin
         r.y := 96 - iceOffset;
         r.w := 32;
         r.h := iceOffset;
-        if sign = -1 then
-        DrawTextureFromRectDir(sx + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign)
-        else
-        DrawTextureFromRectDir(sx-16 + sign*2, sy+16-iceoffset, r.w, r.h, @r, HHTexture, sign);
+        DrawTextureFromRectDir(sx - 16 + sign*2, sy + 16 - iceoffset, r.w, r.h, @r, HHTexture, sign);
 
 
         if HH^.Effects[heFrozen] < 150000 then
