@@ -557,6 +557,7 @@ begin
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         {$ENDIF}
         end;
+    EnableTexture(not b);
 end;
 
 procedure UpdateModelviewProjection(); inline;
@@ -629,21 +630,21 @@ begin
 end;
 
 procedure UpdateViewLimits();
-var tmp: real;
+var tmp: LongInt;
 begin
     // cScaleFactor is 2.0 on "no zoom"
-    tmp:= cScreenWidth / cScaleFactor;
-    ViewRightX:= 1 + round(tmp);
-    ViewLeftX:= round(-tmp);
-    tmp:= cScreenHeight / cScaleFactor;
-    ViewBottomY:= 1 + round(tmp) + cScreenHeight div 2;
-    ViewTopY:= round(-tmp) + cScreenHeight div 2;
+    tmp:= round(0.5 + cScreenWidth / cScaleFactor);
+    ViewRightX :=  tmp;
+    ViewLeftX  := -tmp;
+    tmp:= round(0.5 + cScreenHeight / cScaleFactor);
+    ViewBottomY:=  tmp + cScreenHeight div 2;
+    ViewTopY   := -tmp + cScreenHeight div 2;
 
     // visual debugging fun :D
     if cViewLimitsDebug then
         begin
         // some margin on each side
-        tmp:= min(cScreenWidth, cScreenHeight) div 2 / cScaleFactor;
+        tmp:= trunc(min(cScreenWidth, cScreenHeight) div 2 / cScaleFactor);
         ViewLeftX  := ViewLeftX   + trunc(tmp);
         ViewRightX := ViewRightX  - trunc(tmp);
         ViewBottomY:= ViewBottomY - trunc(tmp);
