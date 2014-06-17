@@ -698,9 +698,9 @@ DrawTextureFromRectDir(X, Y, W, H, r, SourceTexture, 1)
 end;
 
 procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
-var rr: TSDL_Rect;
-    _l, _r, _t, _b: real;
+var _l, _r, _t, _b: real;
     VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
+    xw, yh: LongInt;
 begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
     exit;
@@ -716,40 +716,33 @@ if (abs(X) > W) and ((abs(X + W / 2) - W / 2) * 2 > ViewWidth) then
 if (abs(Y) > H) and ((abs(Y + H / 2 - (0.5 * cScreenHeight)) - H / 2) * 2 > ViewHeight) then
     exit;
 
-rr.x:= X;
-rr.y:= Y;
-rr.w:= W;
-rr.h:= H;
-
 _l:= r^.x / SourceTexture^.w * SourceTexture^.rx;
 _r:= (r^.x + r^.w) / SourceTexture^.w * SourceTexture^.rx;
+
+// if direction is mirrored, switch left and right
+if Dir < 0 then
+    begin
+    _t:= _l;
+    _l:= _r;
+    _r:= _t;
+    end;
+
 _t:= r^.y / SourceTexture^.h * SourceTexture^.ry;
 _b:= (r^.y + r^.h) / SourceTexture^.h * SourceTexture^.ry;
 
 glBindTexture(GL_TEXTURE_2D, SourceTexture^.id);
 
-if Dir < 0 then
-    begin
-    VertexBuffer[0].X:= X + rr.w div 2;
-    VertexBuffer[0].Y:= Y;
-    VertexBuffer[1].X:= X - rr.w div 2;
-    VertexBuffer[1].Y:= Y;
-    VertexBuffer[2].X:= X - rr.w div 2;
-    VertexBuffer[2].Y:= rr.h + Y;
-    VertexBuffer[3].X:= X + rr.w div 2;
-    VertexBuffer[3].Y:= rr.h + Y;
-    end
-else
-    begin
-    VertexBuffer[0].X:= X;
-    VertexBuffer[0].Y:= Y;
-    VertexBuffer[1].X:= rr.w + X;
-    VertexBuffer[1].Y:= Y;
-    VertexBuffer[2].X:= rr.w + X;
-    VertexBuffer[2].Y:= rr.h + Y;
-    VertexBuffer[3].X:= X;
-    VertexBuffer[3].Y:= rr.h + Y;
-    end;
+xw:= X + W;
+yh:= Y + H;
+
+VertexBuffer[0].X:= X;
+VertexBuffer[0].Y:= Y;
+VertexBuffer[1].X:= xw;
+VertexBuffer[1].Y:= Y;
+VertexBuffer[2].X:= xw;
+VertexBuffer[2].Y:= yh;
+VertexBuffer[3].X:= X;
+VertexBuffer[3].Y:= yh;
 
 TextureBuffer[0].X:= _l;
 TextureBuffer[0].Y:= _t;
