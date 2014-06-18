@@ -66,8 +66,7 @@ uses
 {$ENDIF}
     ;
 
-var cWaveWidth: LongInt;
-    AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
+var AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
     AMAnimStartTime, AMState : LongInt;
     AMAnimState: Single;
     tmpSurface: PSDL_Surface;
@@ -219,7 +218,7 @@ if cMinesTime <> 3000 then
 if length(g) > 0 then
     ShowMission(trgoal[gidCaption], trgoal[gidSubCaption], g, 1, 0);
 
-cWaveWidth:= SpritesData[sprWater].Width;
+//cWaveWidth:= SpritesData[sprWater].Width;
 //cWaveHeight:= SpritesData[sprWater].Height;
 cWaveHeight:= 32;
 
