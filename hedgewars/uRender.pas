@@ -54,7 +54,7 @@ procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte
 procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
-procedure DrawWaterBody         (pVertexBuffer: Pointer);
+procedure DrawWater             (Alpha: byte; OffsetY, OffsetX: LongInt);
 
 procedure RenderClear           ();
 procedure RenderSetClearColor      (r, g, b, a: real);
@@ -1290,22 +1290,137 @@ begin
     openglUseColorOnly(false);
 end;
 
-procedure DrawWaterBody(pVertexBuffer: Pointer);
+procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
+var VertexBuffer : array [0..7] of TVertex2f;
+    watertop, lx, rx, firsti, afteri, n: LongInt;
 begin
-        UpdateModelviewProjection;
 
-        BeginWater;
+// those
+firsti:= -1;
+afteri:=  0;
 
-        if SuddenDeathDmg then
-            SetColorPointer(@SDWaterColorArray[0], 4)
-        else
-            SetColorPointer(@WaterColorArray[0], 4);
+watertop:= OffsetY + WorldDy + cWaterLine;
 
-        SetVertexPointer(pVertexBuffer, 4);
+if watertop < 0 then
+    watertop:= 0;
 
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+// if no walls are needed, then bottom water surface spans full view width
+if (WorldEdge <> weSea) then
+    begin
+    lx:= ViewLeftX;
+    rx:= ViewRightX;
+    end
+else
+    begin
+    lx:= LeftX  + WorldDx - OffsetX;
+    rx:= RightX + WorldDx + OffsetX;
 
-        EndWater;
+    if lx > ViewLeftX then
+        begin
+        VertexBuffer[0].X:= ViewLeftX;
+        VertexBuffer[0].Y:= ViewTopY;
+        VertexBuffer[1].X:= lx;
+        VertexBuffer[1].Y:= ViewTopY;
+        // shares vertices 2 and 3 with bottom water
+        firsti:= 0;
+        afteri:= 4;
+        end;
+
+    if rx < ViewRightX then
+        begin
+        VertexBuffer[6].X:= ViewRightX;
+        VertexBuffer[6].Y:= ViewTopY;
+        VertexBuffer[7].X:= rx;
+        VertexBuffer[7].Y:= ViewTopY;
+        // shares vertices 4 and 5 with bottom water
+        if firsti < 0 then
+            firsti:= 4;
+        afteri:= 8;
+        end;
+    end;
+
+if watertop < ViewBottomY then
+    begin
+    // shares vertices 2-5 with water walls
+
+    // starts at vertex 2
+    if (firsti < 0) or (firsti > 2) then
+        firsti:= 2;
+    // ends at vertex 5
+    if afteri < 6 then
+        afteri:= 6;
+    end;
+
+if firsti < 0 then
+    exit; // nothing to draw at all!
+
+if firsti < 4 then
+    begin
+    VertexBuffer[2].X:= ViewLeftX;
+    VertexBuffer[2].Y:= ViewBottomY;
+    VertexBuffer[3].X:= lx;
+    VertexBuffer[3].Y:= watertop;
+    end;
+
+if afteri > 4 then
+    begin
+    VertexBuffer[4].X:= ViewRightX;
+    VertexBuffer[4].Y:= ViewBottomY;
+    VertexBuffer[5].X:= rx;
+    VertexBuffer[5].Y:= watertop;
+    end;
+
+// number of points to draw
+n:= afteri - firsti;
+
+// drawing time
+
+UpdateModelviewProjection;
+
+BeginWater;
+
+if SuddenDeathDmg then
+    begin // only set alpha if it differs from what we want
+    if SDWaterColorArray[0].a <> Alpha then
+        begin
+        SDWaterColorArray[0].a := Alpha;
+        SDWaterColorArray[1].a := Alpha;
+        SDWaterColorArray[2].a := Alpha;
+        SDWaterColorArray[3].a := Alpha;
+        SDWaterColorArray[4].a := Alpha;
+        SDWaterColorArray[5].a := Alpha;
+        SDWaterColorArray[6].a := Alpha;
+        SDWaterColorArray[7].a := Alpha;
+        end;
+    SetColorPointer(@SDWaterColorArray[0], 8);
+    end
+else
+    begin
+    if WaterColorArray[0].a <> Alpha then
+        begin
+        WaterColorArray[0].a := Alpha;
+        WaterColorArray[1].a := Alpha;
+        WaterColorArray[2].a := Alpha;
+        WaterColorArray[3].a := Alpha;
+        WaterColorArray[4].a := Alpha;
+        WaterColorArray[5].a := Alpha;
+        WaterColorArray[6].a := Alpha;
+        WaterColorArray[7].a := Alpha;
+        end;
+    SetColorPointer(@WaterColorArray[0], 8);
+    end;
+
+SetVertexPointer(@VertexBuffer[0], 8);
+
+glDrawArrays(GL_TRIANGLE_STRIP, firsti, n);
+
+EndWater;
+
+
+{$IFNDEF GL2}
+// must not be Tint() as color array seems to stay active and color reset is required
+glColor4ub($FF, $FF, $FF, $FF);
+{$ENDIF}
 end;
 
 procedure openglTint(r, g, b, a: Byte); inline;

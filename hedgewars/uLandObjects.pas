@@ -471,7 +471,7 @@ AddProgress;
 // Set default water greyscale values
 if GrayScale then
     begin
-    for i:= 0 to 3 do
+    for i:= Low(SDWaterColorArray) to High(SDWaterColorArray) do
         begin
         t:= round(SDWaterColorArray[i].r * RGB_LUMINANCE_RED + SDWaterColorArray[i].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[i].b * RGB_LUMINANCE_BLUE);
         if t > 255 then
@@ -480,7 +480,7 @@ if GrayScale then
         SDWaterColorArray[i].g:= t;
         SDWaterColorArray[i].b:= t
         end;
-    for i:= 0 to 1 do
+    for i:= Low(WaterColorArray) to High(WaterColorArray) do
         begin
         t:= round(WaterColorArray[i].r * RGB_LUMINANCE_RED + WaterColorArray[i].g * RGB_LUMINANCE_GREEN + WaterColorArray[i].b * RGB_LUMINANCE_BLUE);
         if t > 255 then
@@ -558,6 +558,29 @@ while not pfsEOF(f) do
     else if key = 'water-top' then
         begin
         i:= Pos(',', s);
+        WaterColorArray[1].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        WaterColorArray[1].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        WaterColorArray[1].b:= StrToInt(Trim(s));
+        WaterColorArray[1].a := 255;
+        if GrayScale then
+            begin
+            t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            WaterColorArray[1].r:= t;
+            WaterColorArray[1].g:= t;
+            WaterColorArray[1].b:= t
+            end;
+        WaterColorArray[3]:= WaterColorArray[1];
+        WaterColorArray[5]:= WaterColorArray[1];
+        WaterColorArray[7]:= WaterColorArray[1];
+        end
+    else if key = 'water-bottom' then
+        begin
+        i:= Pos(',', s);
         WaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
@@ -567,35 +590,16 @@ while not pfsEOF(f) do
         WaterColorArray[0].a := 255;
         if GrayScale then
             begin
-            t:= round(WaterColorArray[0].r * RGB_LUMINANCE_RED + WaterColorArray[0].g * RGB_LUMINANCE_GREEN + WaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
                 t:= 255;
             WaterColorArray[0].r:= t;
             WaterColorArray[0].g:= t;
             WaterColorArray[0].b:= t
             end;
-        WaterColorArray[1]:= WaterColorArray[0];
-        end
-    else if key = 'water-bottom' then
-        begin
-        i:= Pos(',', s);
-        WaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        i:= Pos(',', s);
-        WaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        WaterColorArray[2].b:= StrToInt(Trim(s));
-        WaterColorArray[2].a := 255;
-        if GrayScale then
-            begin
-            t:= round(WaterColorArray[2].r * RGB_LUMINANCE_RED + WaterColorArray[2].g * RGB_LUMINANCE_GREEN + WaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then
-                t:= 255;
-            WaterColorArray[2].r:= t;
-            WaterColorArray[2].g:= t;
-            WaterColorArray[2].b:= t
-            end;
-        WaterColorArray[3]:= WaterColorArray[2];
+        WaterColorArray[2]:= WaterColorArray[0];
+        WaterColorArray[4]:= WaterColorArray[0];
+        WaterColorArray[6]:= WaterColorArray[0];
         end
     else if key = 'water-opacity' then
         begin
@@ -713,6 +717,29 @@ while not pfsEOF(f) do
     else if key = 'sd-water-top' then
         begin
         i:= Pos(',', s);
+        SDWaterColorArray[1].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        i:= Pos(',', s);
+        SDWaterColorArray[1].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
+        Delete(s, 1, i);
+        SDWaterColorArray[1].b:= StrToInt(Trim(s));
+        SDWaterColorArray[1].a := 255;
+        if GrayScale then
+            begin
+            t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            if t > 255 then
+                t:= 255;
+            SDWaterColorArray[1].r:= t;
+            SDWaterColorArray[1].g:= t;
+            SDWaterColorArray[1].b:= t
+            end;
+        SDWaterColorArray[3]:= SDWaterColorArray[1];
+        SDWaterColorArray[5]:= SDWaterColorArray[1];
+        SDWaterColorArray[7]:= SDWaterColorArray[1];
+        end
+    else if key = 'sd-water-bottom' then
+        begin
+        i:= Pos(',', s);
         SDWaterColorArray[0].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
         Delete(s, 1, i);
         i:= Pos(',', s);
@@ -722,35 +749,16 @@ while not pfsEOF(f) do
         SDWaterColorArray[0].a := 255;
         if GrayScale then
             begin
-            t:= round(SDWaterColorArray[0].r * RGB_LUMINANCE_RED + SDWaterColorArray[0].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[0].b * RGB_LUMINANCE_BLUE);
+            t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
             if t > 255 then
                 t:= 255;
             SDWaterColorArray[0].r:= t;
             SDWaterColorArray[0].g:= t;
             SDWaterColorArray[0].b:= t
             end;
-        SDWaterColorArray[1]:= SDWaterColorArray[0];
-        end
-    else if key = 'sd-water-bottom' then
-        begin
-        i:= Pos(',', s);
-        SDWaterColorArray[2].r:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        i:= Pos(',', s);
-        SDWaterColorArray[2].g:= StrToInt(Trim(Copy(s, 1, Pred(i))));
-        Delete(s, 1, i);
-        SDWaterColorArray[2].b:= StrToInt(Trim(s));
-        SDWaterColorArray[2].a := 255;
-        if GrayScale then
-            begin
-            t:= round(SDWaterColorArray[2].r * RGB_LUMINANCE_RED + SDWaterColorArray[2].g * RGB_LUMINANCE_GREEN + SDWaterColorArray[2].b * RGB_LUMINANCE_BLUE);
-            if t > 255 then
-                t:= 255;
-            SDWaterColorArray[2].r:= t;
-            SDWaterColorArray[2].g:= t;
-            SDWaterColorArray[2].b:= t
-            end;
-        SDWaterColorArray[3]:= SDWaterColorArray[2];
+        SDWaterColorArray[2]:= SDWaterColorArray[0];
+        SDWaterColorArray[4]:= SDWaterColorArray[0];
+        SDWaterColorArray[6]:= SDWaterColorArray[0];
         end
     else if key = 'sd-water-opacity' then
         SDWaterOpacity:= StrToInt(Trim(s))
