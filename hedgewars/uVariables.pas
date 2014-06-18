@@ -190,8 +190,8 @@ var
     RealTicks       : Longword;
     AttackBar       : LongInt;
 
-    WaterColorArray : array[0..3] of HwColor4f;
-    SDWaterColorArray : array[0..3] of HwColor4f;
+    WaterColorArray : array[0..7] of HwColor4f;
+    SDWaterColorArray : array[0..7] of HwColor4f;
     SDTint          : LongInt;
 
     TargetCursorPoint     : TPoint;
@@ -2488,17 +2488,27 @@ begin
         LAND_HEIGHT_MASK:= $FFFFF800
         end;
 
-    SDWaterColorArray[0].r := 182;
-    SDWaterColorArray[0].g := 144;
-    SDWaterColorArray[0].b := 201;
+    // default sudden death water
+
+    // deep water
+    SDWaterColorArray[0].r := 150;
+    SDWaterColorArray[0].g := 112;
+    SDWaterColorArray[0].b := 169;
     SDWaterColorArray[0].a := 255;
-    SDWaterColorArray[2].r := 150;
-    SDWaterColorArray[2].g := 112;
-    SDWaterColorArray[2].b := 169;
-    SDWaterColorArray[2].a := 255;
-    SDWaterColorArray[1]:= SDWaterColorArray[0];
-    SDWaterColorArray[3]:= SDWaterColorArray[2];
+    SDWaterColorArray[2]:= SDWaterColorArray[0];
+    SDWaterColorArray[4]:= SDWaterColorArray[0];
+    SDWaterColorArray[6]:= SDWaterColorArray[0];
+    // water surface
+    SDWaterColorArray[1].r := 182;
+    SDWaterColorArray[1].g := 144;
+    SDWaterColorArray[1].b := 201;
+    SDWaterColorArray[1].a := 255;
+    SDWaterColorArray[3]:= SDWaterColorArray[1];
+    SDWaterColorArray[5]:= SDWaterColorArray[1];
+    SDWaterColorArray[7]:= SDWaterColorArray[1];
+
     SDWaterOpacity:= $80;
+
     SDTint:= $80;
     ExplosionBorderColor:= $FF808080;
     IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
