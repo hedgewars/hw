@@ -228,7 +228,7 @@ prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 //prevTargetPoint.X:= 0;
 //prevTargetPoint.Y:= 0;
-WorldDx:=  -(LAND_WIDTH div 2) + cScreenWidth div 2;
+WorldDx:=  -(LAND_WIDTH div 2);// + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
 //aligns it to the bottom of the screen, minus the border
