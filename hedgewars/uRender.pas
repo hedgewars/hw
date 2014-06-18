@@ -115,6 +115,10 @@ var
 {$ENDIF}
 
 var LastTint: LongWord = 0;
+    LastColorPointer , LastTexCoordPointer , LastVertexPointer : Pointer;
+{$IFDEF GL2}
+    LastColorPointerN, LastTexCoordPointerN, LastVertexPointerN: Integer;
+{$ENDIF}
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin
@@ -546,6 +550,7 @@ begin
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glEnableClientState(GL_COLOR_ARRAY);
         {$ENDIF}
+        LastTexCoordPointer:= nil;
         end
     else
         begin
@@ -556,6 +561,7 @@ begin
         glDisableClientState(GL_COLOR_ARRAY);
         glEnableClientState(GL_TEXTURE_COORD_ARRAY);
         {$ENDIF}
+        LastColorPointer:= nil;
         end;
     EnableTexture(not b);
 end;
@@ -578,40 +584,58 @@ end;
 procedure SetTexCoordPointer(p: Pointer; n: Integer);
 begin
 {$IFDEF GL2}
+    if (p = LastTexCoordPointer) and (n = LastTexCoordPointerN) then
+        exit;
     glBindBuffer(GL_ARRAY_BUFFER, tBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aTexCoord);
     glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
+    LastTexCoordPointer:= n;
 {$ELSE}
+    if p = LastTexCoordPointer then
+        exit;
     n:= n;
     glTexCoordPointer(2, GL_FLOAT, 0, p);
 {$ENDIF}
+    LastTexCoordPointer:= p;
 end;
 
 procedure SetVertexPointer(p: Pointer; n: Integer);
 begin
 {$IFDEF GL2}
+    if (p = LastVertexPointer) and (n = LastVertexPointerN) then
+        exit;
     glBindBuffer(GL_ARRAY_BUFFER, vBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aVertex);
     glVertexAttribPointer(aVertex, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
+    LastVertexPointer:= n;
 {$ELSE}
+    if p = LastVertexPointer then
+        exit;
     n:= n;
     glVertexPointer(2, GL_FLOAT, 0, p);
 {$ENDIF}
+    LastVertexPointer:= p;
 end;
 
 procedure SetColorPointer(p: Pointer; n: Integer);
 begin
 {$IFDEF GL2}
+    if (p = LastColorPointer) and (n = LastColorPointerN) then
+        exit;
     glBindBuffer(GL_ARRAY_BUFFER, cBuffer);
     glBufferData(GL_ARRAY_BUFFER, n * 4, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aColor);
     glVertexAttribPointer(aColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, pointer(0));
+    LastColorPointer:= n;
 {$ELSE}
+    if p = LastColorPointer then
+        exit;
     n:= n;
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, p);
 {$ENDIF}
+    LastColorPointer:= p;
 end;
 
 procedure EnableTexture(enable:Boolean);
@@ -1442,7 +1466,7 @@ var
 begin
     nc:= (r shl 24) or (g shl 16) or (b shl 8) or a;
 
-    if nc = lastTint then
+    if nc = LastTint then
         exit;
 
     if GrayScale then
@@ -1456,20 +1480,20 @@ begin
         end;
 
     openglTint(r, g, b, a);
-    lastTint:= nc;
+    LastTint:= nc;
 end;
 
 procedure Tint(c: Longword); inline;
 begin
-    if c = lastTint then exit;
+    if c = LastTint then exit;
     Tint(((c shr 24) and $FF), ((c shr 16) and $FF), (c shr 8) and $FF, (c and $FF))
 end;
 
 procedure untint(); inline;
 begin
-    if cWhiteColor = lastTint then exit;
+    if cWhiteColor = LastTint then exit;
     openglTint($FF, $FF, $FF, $FF);
-    lastTint:= cWhiteColor;
+    LastTint:= cWhiteColor;
 end;
 
 procedure setTintAdd(f: boolean); inline;
@@ -1482,6 +1506,15 @@ end;
 
 procedure initModule;
 begin
+    LastTint:= cWhiteColor + 1;
+    LastColorPointer    := nil;
+    LastTexCoordPointer := nil;
+    LastVertexPointer   := nil;
+{$IFDEF GL2}
+    LastColorPointerN   :=   0;
+    LastTexCoordPointerN:=   0;
+    LastVertexPointerN  :=   0;
+{$ENDIF}
 end;
 
 procedure freeModule;
