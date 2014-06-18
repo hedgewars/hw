@@ -81,9 +81,9 @@ procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
 
 procedure EnableTexture(enable:Boolean);
 
-procedure SetTexCoordPointer(p: Pointer;n: Integer);
-procedure SetVertexPointer(p: Pointer;n: Integer);
-procedure SetColorPointer(p: Pointer;n: Integer);
+procedure SetTexCoordPointer(p: Pointer;n: Integer); inline;
+procedure SetVertexPointer(p: Pointer;n: Integer); inline;
+procedure SetColorPointer(p: Pointer;n: Integer); inline;
 
 procedure UpdateModelviewProjection(); inline;
 
@@ -114,7 +114,9 @@ var
     shaderWater: GLuint;
 {$ENDIF}
 
-var LastTint: LongWord = 0;
+var VertexBuffer : array [0 ..59] of TVertex2f;
+    TextureBuffer: array [0 .. 7] of TVertex2f;
+    LastTint: LongWord = 0;
     LastColorPointer , LastTexCoordPointer , LastVertexPointer : Pointer;
 {$IFDEF GL2}
     LastColorPointerN, LastTexCoordPointerN, LastVertexPointerN: Integer;
@@ -581,7 +583,7 @@ begin
 {$ENDIF}
 end;
 
-procedure SetTexCoordPointer(p: Pointer; n: Integer);
+procedure SetTexCoordPointer(p: Pointer; n: Integer); inline;
 begin
 {$IFDEF GL2}
     if (p = LastTexCoordPointer) and (n = LastTexCoordPointerN) then
@@ -590,7 +592,7 @@ begin
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aTexCoord);
     glVertexAttribPointer(aTexCoord, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
-    LastTexCoordPointer:= n;
+    LastTexCoordPointerN:= n;
 {$ELSE}
     if p = LastTexCoordPointer then
         exit;
@@ -600,7 +602,7 @@ begin
     LastTexCoordPointer:= p;
 end;
 
-procedure SetVertexPointer(p: Pointer; n: Integer);
+procedure SetVertexPointer(p: Pointer; n: Integer); inline;
 begin
 {$IFDEF GL2}
     if (p = LastVertexPointer) and (n = LastVertexPointerN) then
@@ -609,7 +611,7 @@ begin
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * n * 2, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aVertex);
     glVertexAttribPointer(aVertex, 2, GL_FLOAT, GL_FALSE, 0, pointer(0));
-    LastVertexPointer:= n;
+    LastVertexPointerN:= n;
 {$ELSE}
     if p = LastVertexPointer then
         exit;
@@ -619,7 +621,7 @@ begin
     LastVertexPointer:= p;
 end;
 
-procedure SetColorPointer(p: Pointer; n: Integer);
+procedure SetColorPointer(p: Pointer; n: Integer); inline;
 begin
 {$IFDEF GL2}
     if (p = LastColorPointer) and (n = LastColorPointerN) then
@@ -628,7 +630,7 @@ begin
     glBufferData(GL_ARRAY_BUFFER, n * 4, p, GL_STATIC_DRAW);
     glEnableVertexAttribArray(aColor);
     glVertexAttribPointer(aColor, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, pointer(0));
-    LastColorPointer:= n;
+    LastColorPointerN:= n;
 {$ELSE}
     if p = LastColorPointer then
         exit;
@@ -723,7 +725,6 @@ end;
 
 procedure DrawTextureFromRectDir(X, Y, W, H: LongInt; r: PSDL_Rect; SourceTexture: PTexture; Dir: LongInt);
 var _l, _r, _t, _b: real;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
     xw, yh: LongInt;
 begin
 if (SourceTexture^.h = 0) or (SourceTexture^.w = 0) then
@@ -777,9 +778,9 @@ TextureBuffer[2].Y:= _b;
 TextureBuffer[3].X:= _l;
 TextureBuffer[3].Y:= _b;
 
-glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
-glTexCoordPointer(2, GL_FLOAT, 0, @TextureBuffer[0]);
-glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
+SetVertexPointer(@VertexBuffer[0], 4);
+SetTexCoordPointer(@TextureBuffer[0], 4);
+glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 end;
 
 procedure DrawTexture(X, Y: LongInt; Texture: PTexture); inline;
@@ -828,12 +829,12 @@ TextureBuffer[2].Y:= Texture^.tb[2].Y - Overlap;
 TextureBuffer[3].X:= Texture^.tb[3].X + Overlap;
 TextureBuffer[3].Y:= Texture^.tb[3].Y - Overlap;
 
-SetVertexPointer(@Texture^.vb, Length(Texture^.vb));
-SetTexCoordPointer(@TextureBuffer, Length(Texture^.vb));
+SetVertexPointer(@Texture^.vb, 4);
+SetTexCoordPointer(@TextureBuffer, 4);
 
 UpdateModelviewProjection;
 
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(Texture^.vb));
+glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 openglPopMatrix;
 end;
 
@@ -915,12 +916,12 @@ TextureBuffer[2].Y:= fb;
 TextureBuffer[3].X:= fl;
 TextureBuffer[3].Y:= fb;
 
-SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+SetVertexPointer(@VertexBuffer[0], 4);
+SetTexCoordPointer(@TextureBuffer[0], 4);
 
 UpdateModelviewProjection;
 
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 openglPopMatrix;
 
@@ -973,7 +974,6 @@ openglPopMatrix;
 end;
 
 procedure DrawTextureRotated(Texture: PTexture; hw, hh, X, Y, Dir: LongInt; Angle: real);
-var VertexBuffer: array [0..3] of TVertex2f;
 begin
 
 if isDxAreaOffscreen(X, 2 * hw) <> 0 then
@@ -1009,12 +1009,12 @@ VertexBuffer[2].Y:= hh;
 VertexBuffer[3].X:= -hw;
 VertexBuffer[3].Y:= hh;
 
-SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-SetTexCoordPointer(@Texture^.tb, Length(VertexBuffer));
+SetVertexPointer(@VertexBuffer[0], 4);
+SetTexCoordPointer(@Texture^.tb, 4);
 
 UpdateModelviewProjection;
 
-glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
 openglPopMatrix;
 
@@ -1092,7 +1092,6 @@ DrawLine(X0, Y0, X1, Y1, Width, (color shr 24) and $FF, (color shr 16) and $FF, 
 end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
-var VertexBuffer: array [0..1] of TVertex2f;
 begin
     glEnable(GL_LINE_SMOOTH);
 
@@ -1110,8 +1109,8 @@ begin
     VertexBuffer[1].X:= X1;
     VertexBuffer[1].Y:= Y1;
 
-    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-    glDrawArrays(GL_LINES, 0, Length(VertexBuffer));
+    SetVertexPointer(@VertexBuffer[0], 2);
+    glDrawArrays(GL_LINES, 0, 2);
     untint;
 
     openglPopMatrix;
@@ -1122,7 +1121,6 @@ begin
 end;
 
 procedure DrawRect(rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
-var VertexBuffer: array [0..3] of TVertex2f;
 begin
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
 if (abs(rect.x) > rect.w) and ((abs(rect.x + rect.w / 2) - rect.w / 2) * 2 > ViewWidth) then
@@ -1146,11 +1144,11 @@ begin
     VertexBuffer[3].Y:= y + h;
 end;
 
-SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
+SetVertexPointer(@VertexBuffer[0], 4);
 if Fill then
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer))
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4)
 else
-    glDrawArrays(GL_LINE_LOOP, 0, Length(VertexBuffer));
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
 
 untint;
 
@@ -1177,11 +1175,11 @@ begin
 
     EnableTexture(False);
     glEnable(GL_LINE_SMOOTH);
-    openglPushMatrix;
+    //openglPushMatrix;
     glLineWidth(Width);
     SetVertexPointer(@CircleVertex[0], 60);
     glDrawArrays(GL_LINE_LOOP, 0, 60);
-    openglPopMatrix;
+    //openglPopMatrix;
     EnableTexture(True);
     glDisable(GL_LINE_SMOOTH);
 end;
@@ -1194,7 +1192,6 @@ const VertexBuffer: array [0..3] of TVertex2f = (
         (X:  16; Y:  16),
         (X: -16; Y:  16));
 var l, r, t, b: real;
-    TextureBuffer: array [0..3] of TVertex2f;
 begin
     // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
     if (abs(X) > 32) and ((abs(X) - 16) * 2 > ViewWidth) then
@@ -1231,12 +1228,12 @@ begin
     TextureBuffer[3].X:= l;
     TextureBuffer[3].Y:= b;
 
-    SetVertexPointer(@VertexBuffer[0], Length(VertexBuffer));
-    SetTexCoordPointer(@TextureBuffer[0], Length(VertexBuffer));
+    SetVertexPointer(@VertexBuffer[0], 4);
+    SetTexCoordPointer(@TextureBuffer[0], 4);
 
     UpdateModelviewProjection;
 
-    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(VertexBuffer));
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
     openglPopMatrix;
 end;
@@ -1315,8 +1312,7 @@ begin
 end;
 
 procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
-var VertexBuffer : array [0..7] of TVertex2f;
-    watertop, lx, rx, firsti, afteri, n: LongInt;
+var watertop, lx, rx, firsti, afteri, n: LongInt;
 begin
 
 // those
