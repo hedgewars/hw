@@ -1376,7 +1376,7 @@ if not WithWalls then
     end
 else
     begin
-    if InLeftX > OutLeftX then
+    if InLeftX > ViewLeftX then
         begin
         VertexBuffer[0].X:= OutLeftX - lol;
         VertexBuffer[0].Y:= OutTopY;
@@ -1387,7 +1387,7 @@ else
         afteri:= 4;
         end;
 
-    if InRightX < OutRightX then
+    if InRightX < ViewRightX then
         begin
         VertexBuffer[6].X:= OutRightX + lol;
         VertexBuffer[6].Y:= OutTopY;
@@ -1400,7 +1400,7 @@ else
         end;
     end;
 
-if InTopY < BottomY then
+if InTopY < ViewBottomY then
     begin
     // shares vertices 2-5 with water walls
 
