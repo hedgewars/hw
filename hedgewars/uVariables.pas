@@ -162,6 +162,7 @@ var
     CrosshairY      : LongInt;
     CursorMovementX : LongInt;
     CursorMovementY : LongInt;
+    cWaveHeight     : LongInt;
     cDrownSpeed     : hwFloat;
     cDrownSpeedf    : real;
     cMaxWindSpeed   : hwFloat;
@@ -2516,6 +2517,7 @@ begin
 
     WaterOpacity:= $80;
 
+    cWaveHeight             := 32;
     cDrownSpeed.QWordValue  := 257698038;   // 0.06
     cDrownSpeedf            := 0.06;
     cMaxWindSpeed.QWordValue:= 1073742;     // 0.00025
