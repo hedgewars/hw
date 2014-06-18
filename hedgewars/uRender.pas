@@ -1321,7 +1321,7 @@ procedure PrepareVbForWater(
     InTopY, OutTopY, InLeftX, OutLeftX, InRightX, OutRightX, BottomY: LongInt;
     out first, count: LongInt);
 
-var firsti, afteri: LongInt;
+var firsti, afteri, lol: LongInt;
 begin
 
     // We will draw both bottom water and the water walls with a single call,
@@ -1360,6 +1360,11 @@ begin
 firsti:= -1;
 afteri:=  0;
 
+if GameTicks < 2000 then
+    lol:= 2000 - GameTicks
+else
+    lol:= 0;
+
 if InTopY < 0 then
     InTopY:= 0;
 
@@ -1373,9 +1378,9 @@ else
     begin
     if InLeftX > OutLeftX then
         begin
-        VertexBuffer[0].X:= OutLeftX;
+        VertexBuffer[0].X:= OutLeftX - lol;
         VertexBuffer[0].Y:= OutTopY;
-        VertexBuffer[1].X:= InLeftX;
+        VertexBuffer[1].X:= InLeftX - lol;
         VertexBuffer[1].Y:= OutTopY;
         // shares vertices 2 and 3 with bottom water
         firsti:= 0;
@@ -1384,9 +1389,9 @@ else
 
     if InRightX < OutRightX then
         begin
-        VertexBuffer[6].X:= OutRightX;
+        VertexBuffer[6].X:= OutRightX + lol;
         VertexBuffer[6].Y:= OutTopY;
-        VertexBuffer[7].X:= InRightX;
+        VertexBuffer[7].X:= InRightX + lol;
         VertexBuffer[7].Y:= OutTopY;
         // shares vertices 4 and 5 with bottom water
         if firsti < 0 then
