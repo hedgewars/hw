@@ -1148,7 +1148,10 @@ SetVertexPointer(@VertexBuffer[0], 4);
 if Fill then
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4)
 else
+    begin
+    glLineWidth(1);
     glDrawArrays(GL_LINE_LOOP, 0, 4);
+    end;
 
 untint;
 
@@ -1166,18 +1169,23 @@ end;
 procedure DrawCircle(X, Y, Radius, Width: LongInt);
 var
     i: LongInt;
-    CircleVertex: array [0..59] of TVertex2f;
 begin
+    i:= Radius + Width;
+    if isDxAreaOffscreen(X - i, 2 * i) <> 0 then
+        exit;
+    if isDyAreaOffscreen(Y - i, 2 * i) <> 0 then
+        exit;
+
     for i := 0 to 59 do begin
-        CircleVertex[i].X := X + Radius*cos(i*pi/30);
-        CircleVertex[i].Y := Y + Radius*sin(i*pi/30);
+        VertexBuffer[i].X := X + Radius*cos(i*pi/30);
+        VertexBuffer[i].Y := Y + Radius*sin(i*pi/30);
     end;
 
     EnableTexture(False);
     glEnable(GL_LINE_SMOOTH);
     //openglPushMatrix;
     glLineWidth(Width);
-    SetVertexPointer(@CircleVertex[0], 60);
+    SetVertexPointer(@VertexBuffer[0], 60);
     glDrawArrays(GL_LINE_LOOP, 0, 60);
     //openglPopMatrix;
     EnableTexture(True);
