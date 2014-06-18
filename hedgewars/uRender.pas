@@ -55,6 +55,7 @@ procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolea
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
 procedure DrawWater             (Alpha: byte; OffsetY, OffsetX: LongInt);
+procedure DrawWaves             (Dir, dX, dY, oX: LongInt; tnt: Byte);
 
 procedure RenderClear           ();
 procedure RenderSetClearColor      (r, g, b, a: real);
@@ -1299,8 +1300,6 @@ begin
     glUseProgram(shaderWater);
     uCurrentMVPLocation:=uWaterMVPLocation;
     UpdateModelviewProjection;
-    glDisableVertexAttribArray(aTexCoord);
-    glEnableVertexAttribArray(aColor);
 {$ENDIF}
 
     openglUseColorOnly(true);
@@ -1312,54 +1311,83 @@ begin
     glUseProgram(shaderMain);
     uCurrentMVPLocation:=uMainMVPLocation;
     UpdateModelviewProjection;
-    glDisableVertexAttribArray(aColor);
-    glEnableVertexAttribArray(aTexCoord);
 {$ENDIF}
 
     openglUseColorOnly(false);
 end;
 
-procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
-var watertop, lx, rx, firsti, afteri, n: LongInt;
+procedure PrepareVbForWater(
+    WithWalls: Boolean;
+    InTopY, OutTopY, InLeftX, OutLeftX, InRightX, OutRightX, BottomY: LongInt;
+    out first, count: LongInt);
+
+var firsti, afteri: LongInt;
 begin
 
-// those
+    // We will draw both bottom water and the water walls with a single call,
+    // by rendering a GL_TRIANGLE_STRIP of eight points.
+    //
+    // GL_TRIANGLE_STRIP works like this: "always create triangle between
+    // newest point and the two points that were specified before it."
+    //
+    // To get the result we want we will order the points like this:
+    //                                                                     ^ -Y
+    //                                                                     |
+    //       0-------1         7-------6   <--------------------- OutTopY -|
+    //       |      /|         |     _/|                                   |
+    //       |     / |         |    /  |                                   |
+    //       |    /  |         |  _/   |                                   |
+    //       |   /   |         | /     |                                   |
+    //       |  /  _.3---------5{      |   <--------------------- InTopY --|
+    //       | / _/   `---.___   `--._ |                                   |
+    //       |/_/             `---.___\|                                   |
+    //       2-------------------------4   <--------------------- BottomY -|
+    //                                                                     |
+    //       ^       ^         ^       ^                                   V +Y
+    //       |       |         |       |
+    //       |       |         |       |
+    //       |       |         |       |
+    //       |       |         |       |
+    //       |       |         |       |
+    //       |       |         |       |
+    //       |       |         |       |
+    //  OutLeftX  InLeftX  InRightX  OutRightX
+    //       |       |         |       |
+    // <---------------------------------------->
+    //     -X                              +X
+    //
+
 firsti:= -1;
 afteri:=  0;
 
-watertop:= OffsetY + WorldDy + cWaterLine;
+if InTopY < 0 then
+    InTopY:= 0;
 
-if watertop < 0 then
-    watertop:= 0;
-
-// if no walls are needed, then bottom water surface spans full view width
-if (WorldEdge <> weSea) then
+if not WithWalls then
     begin
-    lx:= ViewLeftX;
-    rx:= ViewRightX;
+    // if no walls are needed, then bottom water surface spans full length
+    InLeftX := OutLeftX;
+    InRightX:= OutRightX;
     end
 else
     begin
-    lx:= LeftX  + WorldDx - OffsetX;
-    rx:= RightX + WorldDx + OffsetX;
-
-    if lx > ViewLeftX then
+    if InLeftX > OutLeftX then
         begin
-        VertexBuffer[0].X:= ViewLeftX;
-        VertexBuffer[0].Y:= ViewTopY;
-        VertexBuffer[1].X:= lx;
-        VertexBuffer[1].Y:= ViewTopY;
+        VertexBuffer[0].X:= OutLeftX;
+        VertexBuffer[0].Y:= OutTopY;
+        VertexBuffer[1].X:= InLeftX;
+        VertexBuffer[1].Y:= OutTopY;
         // shares vertices 2 and 3 with bottom water
         firsti:= 0;
         afteri:= 4;
         end;
 
-    if rx < ViewRightX then
+    if InRightX < OutRightX then
         begin
-        VertexBuffer[6].X:= ViewRightX;
-        VertexBuffer[6].Y:= ViewTopY;
-        VertexBuffer[7].X:= rx;
-        VertexBuffer[7].Y:= ViewTopY;
+        VertexBuffer[6].X:= OutRightX;
+        VertexBuffer[6].Y:= OutTopY;
+        VertexBuffer[7].X:= InRightX;
+        VertexBuffer[7].Y:= OutTopY;
         // shares vertices 4 and 5 with bottom water
         if firsti < 0 then
             firsti:= 4;
@@ -1367,7 +1395,7 @@ else
         end;
     end;
 
-if watertop < ViewBottomY then
+if InTopY < BottomY then
     begin
     // shares vertices 2-5 with water walls
 
@@ -1380,26 +1408,58 @@ if watertop < ViewBottomY then
     end;
 
 if firsti < 0 then
-    exit; // nothing to draw at all!
+    begin
+    // nothing to draw at all!
+    first:= -1;
+    count:= 0;
+    exit;
+    end;
 
 if firsti < 4 then
     begin
-    VertexBuffer[2].X:= ViewLeftX;
-    VertexBuffer[2].Y:= ViewBottomY;
-    VertexBuffer[3].X:= lx;
-    VertexBuffer[3].Y:= watertop;
+    VertexBuffer[2].X:= OutLeftX;
+    VertexBuffer[2].Y:= BottomY;
+    VertexBuffer[3].X:= InLeftX;
+    VertexBuffer[3].Y:= InTopY;
     end;
 
 if afteri > 4 then
     begin
-    VertexBuffer[4].X:= ViewRightX;
-    VertexBuffer[4].Y:= ViewBottomY;
-    VertexBuffer[5].X:= rx;
-    VertexBuffer[5].Y:= watertop;
+    VertexBuffer[4].X:= OutRightX;
+    VertexBuffer[4].Y:= BottomY;
+    VertexBuffer[5].X:= InRightX;
+    VertexBuffer[5].Y:= InTopY;
     end;
 
+// first index to draw in vertex buffer
+first:= firsti;
 // number of points to draw
-n:= afteri - firsti;
+count:= afteri - firsti;
+
+end;
+
+procedure DrawWater(Alpha: byte; OffsetY, OffsetX: LongInt);
+var first, count: LongInt;
+begin
+
+if (WorldEdge <> weSea) then
+    PrepareVbForWater(false,
+        OffsetY + WorldDy + cWaterLine, 0,
+        0, ViewLeftX,
+        0, ViewRightX,
+        ViewBottomY,
+        first, count)
+else
+    PrepareVbForWater(true,
+        OffsetY + WorldDy + cWaterLine, ViewTopY,
+        LeftX  + WorldDx - OffsetX, ViewLeftX,
+        RightX + WorldDx + OffsetX, ViewRightX,
+        ViewBottomY,
+        first, count);
+
+// quit if there's nothing to draw (nothing in view)
+if count < 1 then
+    exit;
 
 // drawing time
 
@@ -1440,15 +1500,128 @@ else
 
 SetVertexPointer(@VertexBuffer[0], 8);
 
-glDrawArrays(GL_TRIANGLE_STRIP, firsti, n);
+glDrawArrays(GL_TRIANGLE_STRIP, first, count);
 
 EndWater;
-
 
 {$IFNDEF GL2}
 // must not be Tint() as color array seems to stay active and color reset is required
 glColor4ub($FF, $FF, $FF, $FF);
 {$ENDIF}
+end;
+
+procedure DrawWaves(Dir, dX, dY, oX: LongInt; tnt: Byte);
+var first, count, topy, lx, rx, spriteHeight, spriteWidth: LongInt;
+    lw, nWaves, shift: GLfloat;
+    sprite: TSprite;
+begin
+
+// note: spriteHeight is the Height of the wave sprite while
+//       cWaveHeight describes how many pixels of it will be above waterline
+
+if SuddenDeathDmg then
+    sprite:= sprSDWater
+else
+    sprite:= sprWater;
+
+spriteHeight:= SpritesData[sprite].Height;
+
+// shift parameters by wave height
+// ( ox and dy are used to create different horizontal and vertical offsets
+//   between wave layers )
+dY:= -cWaveHeight + dy;
+ox:= -cWaveHeight + ox;
+
+lx:= LeftX  + WorldDx - ox;
+rx:= RightX + WorldDx + ox;
+
+topy:= cWaterLine + WorldDy + dY;
+
+
+if (WorldEdge <> weSea) then
+    PrepareVbForWater(false,
+        topy, 0,
+        0, ViewLeftX,
+        0, ViewRightX,
+        topy + spriteHeight,
+        first, count)
+else
+    PrepareVbForWater(true,
+        topy, ViewTopY,
+        lx, lx - spriteHeight,
+        rx, rx + spriteHeight,
+        topy + spriteHeight,
+        first, count);
+
+// quit if there's nothing to draw (nothing in view)
+if count < 1 then
+    exit;
+
+if SuddenDeathDmg then
+    Tint(LongInt(tnt) * SDWaterColorArray[1].r div 255 + 255 - tnt,
+         LongInt(tnt) * SDWaterColorArray[1].g div 255 + 255 - tnt,
+         LongInt(tnt) * SDWaterColorArray[1].b div 255 + 255 - tnt,
+         255
+    )
+else
+    Tint(LongInt(tnt) * WaterColorArray[1].r div 255 + 255 - tnt,
+         LongInt(tnt) * WaterColorArray[1].g div 255 + 255 - tnt,
+         LongInt(tnt) * WaterColorArray[1].b div 255 + 255 - tnt,
+         255
+    );
+
+if WorldEdge = weSea then
+    begin
+    lw:= playWidth;
+    dX:= ox;
+    end
+else
+    begin
+    lw:= ViewWidth;
+    dx:= dx - WorldDx;
+    end;
+
+spriteWidth:= SpritesData[sprite].Width;
+nWaves:= lw / spriteWidth;
+    shift:= - nWaves / 2;
+
+TextureBuffer[3].X:= shift + ((LongInt(RealTicks shr 6) * Dir + dX) mod spriteWidth) / (spriteWidth - 1);
+TextureBuffer[3].Y:= 0;
+TextureBuffer[5].X:= TextureBuffer[3].X + nWaves;
+TextureBuffer[5].Y:= 0;
+TextureBuffer[4].X:= TextureBuffer[5].X;
+TextureBuffer[4].Y:= SpritesData[sprite].Texture^.ry;
+TextureBuffer[2].X:= TextureBuffer[3].X;
+TextureBuffer[2].Y:= SpritesData[sprite].Texture^.ry;
+
+if (WorldEdge = weSea) then
+    begin
+    nWaves:= (topy - ViewTopY) / spriteWidth;
+
+    // left side
+    TextureBuffer[1].X:= TextureBuffer[3].X - nWaves;
+    TextureBuffer[1].Y:= 0;
+    TextureBuffer[0].X:= TextureBuffer[1].X;
+    TextureBuffer[0].Y:= SpritesData[sprite].Texture^.ry;
+
+    // right side
+    TextureBuffer[7].X:= TextureBuffer[5].X + nWaves;
+    TextureBuffer[7].Y:= 0;
+    TextureBuffer[6].X:= TextureBuffer[7].X;
+    TextureBuffer[6].Y:= SpritesData[sprite].Texture^.ry;
+    end;
+
+glBindTexture(GL_TEXTURE_2D, SpritesData[sprite].Texture^.id);
+
+SetVertexPointer(@VertexBuffer[0], 8);
+SetTexCoordPointer(@TextureBuffer[0], 8);
+
+UpdateModelviewProjection;
+
+glDrawArrays(GL_TRIANGLE_STRIP, first, count);
+
+untint;
+
 end;
 
 procedure openglTint(r, g, b, a: Byte); inline;
