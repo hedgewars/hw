@@ -416,15 +416,15 @@ void HWMapContainer::intSetMap(const QString & map)
 {
     if (map == "+rnd+")
     {
-        changeMapType(MapModel::GeneratedMap);
+        //changeMapType(MapModel::GeneratedMap);
     }
     else if (map == "+maze+")
     {
-        changeMapType(MapModel::GeneratedMaze);
+        //changeMapType(MapModel::GeneratedMaze);
     }
     else if (map == "+drawn+")
     {
-        changeMapType(MapModel::HandDrawnMap);
+        //changeMapType(MapModel::HandDrawnMap);
     }
     else if (m_staticMapModel->mapExists(map))
     {

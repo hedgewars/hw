@@ -402,6 +402,9 @@ void GameCFGWidget::fullNetConfig()
     mapgenChanged(pMapContainer->get_mapgen());
     maze_sizeChanged(pMapContainer->getMazeSize());
 
+    if(pMapContainer->get_mapgen() == 2)
+        onDrawnMapChanged(pMapContainer->getDrawnMapData());
+
     // map must be the last
     QString map = pMapContainer->getCurrentMap();
     if (map.size())
