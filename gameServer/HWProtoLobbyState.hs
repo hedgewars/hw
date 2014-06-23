@@ -64,7 +64,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     return $
         if isNothing maybeRI then
             [Warning $ loc "No such room"]
-            else if not sameProto then
+            else if (not sameProto) && (not $ isAdministrator cl) then
             [Warning $ loc "Room version incompatible to your hedgewars version"]
             else if isRestrictedJoins jRoom then
             [Warning $ loc "Joining restricted"]
