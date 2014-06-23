@@ -18,12 +18,14 @@
     'E' + <текст>   сообщение об ошибке
     ','             /skip
     't' + №         /taunt №
+    'g' + <nick>    teams of user 'nick' are controlled again (synced msg)
 
 фронтенд клиенту:
     'e' + <команда> выполнить "/<команда>"
     'T' + {L,N,D}   тип игры (локальная, сетевая, просмотр демо)
     'W' + <текст>   сообщение о нефатальной ошибке
     'F' + <team>    команда team вылетела в сетевой игре
+    'G' + <nick>    user 'nick' is back (unsynced msg)
     'o'             stop syncing, game over!
 
 Клиент фронтенду:
