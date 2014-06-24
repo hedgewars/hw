@@ -702,7 +702,11 @@ var
             (FileName:   'amRubber'; Path: ptCurrTheme; AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width: 160; Height:160; imageWidth: 0; imageHeight: 0; saveSurf:  true; priority: tpMedium; getDimensions: false; getImageDimensions: true), // sprAmRubber
             (FileName:  'boing'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width: 101; Height: 97; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false) // sprBoing
+            Width: 101; Height: 97; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprBoing
+            (FileName:       'custom1'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom1
+            (FileName:       'custom2'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
+            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: true; getImageDimensions: true) // sprCustom2
             );
 
 const
