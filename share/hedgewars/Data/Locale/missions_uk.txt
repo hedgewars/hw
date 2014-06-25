@@ -1,0 +1,53 @@
+Basic_Training_-_Bazooka.name=Базове тренування з Базукою
+Basic_Training_-_Bazooka.desc="Слідкування за вітром є ключем до перемоги!"
+
+Basic_Training_-_Grenade.name=Базове тренування з Гранатою
+Basic_Training_-_Grenade.desc="Пам'ятай, висмикуєш чеку І кидаєш!"
+
+Basic_Training_-_Cluster_Bomb.name=Базове тренування з Кластерною бомбою
+Basic_Training_-_Cluster_Bomb.desc="Хтось потребує гарячий душ!"
+
+Basic_Training_-_Shotgun.name=Базове тренування з Рушницею
+Basic_Training_-_Shotgun.desc="Спершу стріляй, потім питай!"
+
+Basic_Training_-_Sniper_Rifle.name=Базове тренування зі Снайперською гвинтівкою
+Basic_Training_-_Sniper_Rifle.desc="Бах, точно в голову!"
+
+Basic_Training_-_Rope.name=Базове тренування з Мотузкою
+Basic_Training_-_Rope.desc="Розхитуйтся і вилазь!"
+
+User_Mission_-_Dangerous_Ducklings.name=Місія: Небезпечні каченята
+User_Mission_-_Dangerous_Ducklings.desc="Гаразд, новачок! Час застосувати отримані в Базових тренуваннях уміння на практиці!"
+
+User_Mission_-_Diver.name=Місія: Водолаз
+User_Mission_-_Diver.desc="Ця 'десантна атака' є складнішою ніж здається..."
+
+User_Mission_-_Teamwork.name=Місія: Командна гра
+User_Mission_-_Teamwork.desc="Інколи, любов підступна."
+
+User_Mission_-_Spooky_Tree.name=Місія: Моторошне дерево
+User_Mission_-_Spooky_Tree.desc="Тут багато ящиків. Я сподіваюсь цей птах не зголодніє."
+
+User_Mission_-_Bamboo_Thicket.name=Місія: Бамбукові зарослі
+User_Mission_-_Bamboo_Thicket.desc="Смерть приходить зверху."
+
+User_Mission_-_That_Sinking_Feeling.name=Місія: Це погане відчуття
+User_Mission_-_That_Sinking_Feeling.desc="Вода піднімається і часу обмаль. Багато хто спробував і не зміг. Ти можеш їх врятувати?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Місія: Ньютон і Гамак
+User_Mission_-_Newton_and_the_Hammock.desc="Пам'ятайте: Швидкість тіла залишається постійною, якщо тіло не знаходиться під впливом зовнішньої сили!"
+
+User_Mission_-_The_Great_Escape.name=Місія: Велика втеча
+User_Mission_-_The_Great_Escape.desc="Ти думаєш що можеш ув'язнити мене!?"
+
+User_Mission_-_Rope_Knock_Challenge.name=Виклик: Стук мотузки
+User_Mission_-_Rope_Knock_Challenge.desc="Дивись позаду!"
+
+User_Mission_-_Nobody_Laugh.name=Місія: Ніхто не сміється
+User_Mission_-_Nobody_Laugh.desc="Це не жарт."
+
+User_Mission_-_RCPlane_Challenge.name=Виклик: Радіо-керований літак
+User_Mission_-_RCPlane_Challenge.desc="Почуваєшся впевнено, льотчик, га?"
+
+portal.name=Місія: Виклик Розумного порталу
+portal.desc="Скористайся порталом щоб рухатись швидко і далеко, використовуй щоб вбивати, використовуй обережно!"
