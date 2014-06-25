@@ -1,0 +1,34 @@
+A_Classic_Fairytale-first_blood.desc="Допоможіть Протікайку завершити своє навчання і стати справжнім їжако-воїном. Ви будете навчені мистецтву мотузки, парашуту, козацього удару і пустельного орла."
+
+A_Classic_Fairytale-shadow.desc="Leaks a lot and Dense Cloud are going for hunting. Be prepared for the dangers awaiting you at the forest. Remember, make your choices wisely."
+
+A_Classic_Fairytale-journey.desc="Протікайку треба перебратись на інший бік острова. Будь швидким і обережним."
+
+A_Classic_Fairytale-united.desc="Після довгої мандрівки Протікайко повернувся до села. Але немає коли відпочивати. Треба захистити село від нападу канібалів."
+
+A_Classic_Fairytale-backstab.desc="The monstrous cannibals are hunting Leaks a lot and his friends. Defeat them once again and protect your allies. Use your resources accordingly to defeat the incoming enemies!"
+
+A_Classic_Fairytale-dragon.desc="Протікайту треба перебратись на інший берег озера. Стань майстром мотузки і уникай пострілів ворога."
+
+A_Classic_Fairytale-family.desc="Leaks a lot has to save once more his allies. Eliminate the enemy hogs and free your comrades. Use your resources carefully as they are limited. Drill some holes in the right spot and go close to the princess."
+
+A_Classic_Fairytale-queen.desc="Протіайку треба йти в бій знову. Щоб перемогти треба битись зі зрадником і використати всі наявні ресурси. Подолай ворога!"
+
+A_Classic_Fairytale-enemy.desc="Який поворот! Протікайку треба битись пліч-о-пліч з… “канібалами” протиспільного ворога. Злих кіборгів!"
+
+A_Classic_Fairytale-epil.desc="Вітання! Протікайко нарешті може мирно жити і бути поцінованим новими друзями і йоо племенем. Гордись доясненнями! Ти можеш пройти попередні місії знов і глянути на інші кінцівки."
+
+A_Space_Adventure-cosmos.desc="На планету їжаків, Їжакію, незабаром має впасти гігантський метеорит. В боротьбі за виживання вам потрібно провести кращого пілота PAotH, Їжака Соло, в подорож сусідніми планетами щоб знайти всі 4 частини давно загубленого антигравітаційного пристрою!"
+A_Space_Adventure-moon01.desc="Hog Solo has landed on the moon to refuel his saucer but professor Hogevil has gone there first and set an ambush! Rescue the captured PAotH researchers and drive professor Hogevil away!"
+A_Space_Adventure-moon02.desc="Hog Solo visits an hermit, old PAotH veteran, who lives in moon in order to gather some intel about Pr. Hogevil. However, he has to beat the hermit, Soneek the Crazy Runner, in a chase game first!"
+A_Space_Adventure-ice01.desc="Welcome to the planet of ice. Here, it's so cold that most of Hog Solo's weapons won't work. You have to get the lost part from the bandit leader Thanta using the weapons that you'll find there!"
+A_Space_Adventure-ice02.desc="Hog Solo couldn't just visit the Ice Planet without visiting the Olympic stadium of saucer flying! In this mission you can prove your flying skills and claim your place between the best!"
+A_Space_Adventure-desert01.desc="You have landed to the planet of sand! Hog Solo has to find the missing part in the underground tunnels. Be careful as vicious smugglers await to attack and rob you!"
+A_Space_Adventure-desert02.desc="Hog Solo was searching for the part in this tunnel when it unexpectedly start getting flooded! Get to the surface as soon as possible and be careful not to trigger a mine."
+A_Space_Adventure-desert03.desc="Hog Solo has some time to fly his RC plane and have some fun. Fly the RC plane and hit all the targets!"
+A_Space_Adventure-fruit01.desc="In the fruit planet things aren't going so well. Hogs aren't collecting fruits but they are preparing for battle. You'll have to choose if you'll fight or if you'll flee."
+A_Space_Adventure-fruit02.desc="Hog Solo gets closer to the lost part in the Fruit Planet. Will Captain Lime help him acquire the part or not?"
+A_Space_Adventure-fruit03.desc="Hog Solo got lost and got ambushed by the Red Strawberries. Help him eliminate them and win some extra ammo for the Getting to the device mission."
+A_Space_Adventure-death01.desc="In the Death Planet, the most infertile planet around, Hog Solo is very close to get the last part of the device! However an unpleasant surprise awaits him..."
+A_Space_Adventure-death02.desc="Їжак Соло знов потрапляє в складну ситуацію. Допоможи йому подолати “5 убивчих їжаків“ в їхній власній грі!"
+A_Space_Adventure-final.desc="Їжакові Соло треба підірвати закладену на метеориті вибухівку. Допоможи йому пройти місію без поранень!"
