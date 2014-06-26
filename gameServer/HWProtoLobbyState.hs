@@ -50,6 +50,7 @@ handleCmd_lobby ["CREATE_ROOM", rName] =
 
 handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     (_, irnc) <- ask
+
     let ris = allRooms irnc
     cl <- thisClient
     let maybeRI = find (\ri -> roomName == name (irnc `room` ri)) ris
@@ -61,7 +62,11 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let owner = find isMaster jRoomClients
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
-    let hasTeamsInGame = (isJust $ gameInfo jRoom) && (or . map (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom)
+    let clTeams =
+            if (isJust $ gameInfo jRoom) then
+                map teamname . filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
+                else
+                []
     return $
         if isNothing maybeRI then
             [Warning $ loc "No such room"]
@@ -88,7 +93,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
             ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
-            ++ if hasTeamsInGame then ["EM", toEngineMsg $ 'G' `B.cons` nick cl] else []
+            ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeams
 
         where
         sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
