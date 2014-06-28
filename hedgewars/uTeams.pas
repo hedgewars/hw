@@ -630,21 +630,75 @@ end;
 
 procedure chTeamGone(var s:shortstring);
 var t: LongInt;
+    isSynced: boolean;
 begin
-t:= 0;
-while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
-    inc(t);
-if (t = cMaxTeams) or (TeamsArray[t] = nil) then
-    exit;
+    isSynced:= s[1] = 's';
 
-with TeamsArray[t]^ do
-    if not hasGone then
+    Delete(s, 1, 1);
+
+    t:= 0;
+    while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
+        inc(t);
+    if (t = cMaxTeams) or (TeamsArray[t] = nil) then
+        exit;
+
+    if isSynced then
         begin
-        AddChatString('** '+ TeamName + ' is gone');
-        hasGone:= true;
+        with TeamsArray[t]^ do
+            if not hasGone then
+                begin
+                AddChatString('** '+ TeamName + ' is gone');
+                hasGone:= true;
 
-        RecountTeamHealth(TeamsArray[t])
+                RecountTeamHealth(TeamsArray[t])
+                end;
+        end
+    else
+    begin
+        if not CurrentTeam^.ExtDriven then
+        begin
+            SendIPC(_S'f' + s);
+            ParseCommand('/teamgone s' + s, true);
         end;
+    end;
+end;
+
+procedure chTeamBack(var s:shortstring);
+var t: LongInt;
+    isSynced: boolean;
+begin
+    isSynced:= s[1] = 's';
+
+    Delete(s, 1, 1);
+
+    t:= 0;
+    while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
+        inc(t);
+    if (t = cMaxTeams) or (TeamsArray[t] = nil) then
+        exit;
+
+    if isSynced then
+        begin
+        with TeamsArray[t]^ do
+            if hasGone then
+                begin
+                AddChatString('** '+ TeamName + ' is back');
+                hasGone:= false;
+
+                RecountTeamHealth(TeamsArray[t]);
+
+                if Owner = UserNick then
+                    ExtDriven:= false
+                end;
+        end
+    else
+    begin
+        if not CurrentTeam^.ExtDriven then
+        begin
+            SendIPC(_S'g' + s);
+            ParseCommand('/teamback s' + s, true);
+        end;
+    end;
 end;
 
 
@@ -747,6 +801,7 @@ RegisterVariable('addteam', @chAddTeam, false);
 RegisterVariable('hhcoords', @chSetHHCoords, false);
 RegisterVariable('bind', @chBind, true );
 RegisterVariable('teamgone', @chTeamGone, true );
+RegisterVariable('teamback', @chTeamBack, true );
 RegisterVariable('finish', @chFinish, true ); // all teams gone
 RegisterVariable('fort'    , @chFort         , false);
 RegisterVariable('grave'   , @chGrave        , false);

@@ -221,7 +221,11 @@ end;
 function isSyncedCommand(c: char): boolean;
 begin
     case c of
-        '+', '#', 'L', 'l', 'R', 'r', 'U', 'u', 'D', 'd', 'Z', 'z', 'A', 'a', 'S', 'j', 'J', ',', 'c', 'N', 'p', 'P', 'w', 't', '1', '2', '3', '4', '5': isSyncedCommand:= true;
+    '+', '#', 'L', 'l', 'R', 'r', 'U'
+    , 'u', 'D', 'd', 'Z', 'z', 'A', 'a'
+    , 'S', 'j', 'J', ',', 'c', 'N', 'p'
+    , 'P', 'w', 't', '1', '2', '3', '4'
+    , '5', 'f', 'g': isSyncedCommand:= true;
     else
         isSyncedCommand:= ((byte(c) >= 128) and (byte(c) <= 128 + cMaxSlotIndex))
     end
@@ -324,7 +328,8 @@ while (headcmd <> nil)
         or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
         or (headcmd^.cmd = '#') // must be synced for saves to work
         or (headcmd^.cmd = 'b')
-        or (headcmd^.cmd = 'F')) do
+        or (headcmd^.cmd = 'F')
+        or (headcmd^.cmd = 'G')) do
     begin
     case headcmd^.cmd of
         '+': ; // do nothing - it is just an empty packet
@@ -362,8 +367,10 @@ while (headcmd <> nil)
             ParseCommand('chatmsg ' + #4 + s, true);
             WriteLnToConsole(s)
              end;
-// TODO: deprecate 'F'
-        'F': ParseCommand('teamgone ' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, headcmd^.len - 3), true);
+        'g': ParseCommand('teamback s' + copy(headcmd^.str, 2, headcmd^.len - 3), true);
         'N': begin
             tmpflag:= false;
             lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);
