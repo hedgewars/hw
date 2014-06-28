@@ -67,9 +67,9 @@ checkNetCmd msg = check decoded
                       if not $ tst timedMessages m' then n
                         else if '+' /= m' then Just Nothing else Just . Just . B.pack . Base64.encode . BW.unpack $ m
         isNonEmpty = (/=) '+' . B.head . B.tail
-        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtghbc12345" ++ slotMessages
+        legalMessages = Set.fromList $ "M#+LlRrUuDdZzAaSjJ,sNpPwtgfhbc12345" ++ slotMessages
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
-        timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgc12345" ++ slotMessages
+        timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgfc12345" ++ slotMessages
 
 replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
