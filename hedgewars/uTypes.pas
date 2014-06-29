@@ -403,6 +403,7 @@ type
             PlayerHash: shortstring;   // md5 hash of player name. For temporary enabling of hats as thank you. Hashed for privacy of players
             stats: TTeamStats;
             hasGone: boolean;
+            skippedTurns: Longword;
             isGoneFlagPengingToBeSet, isGoneFlagPengingToBeUnset: boolean;
             end;
 

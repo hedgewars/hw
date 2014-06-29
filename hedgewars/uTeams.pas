@@ -516,20 +516,26 @@ end;
 procedure TeamGoneEffect(var Team: TTeam);
 var i: LongInt;
 begin
-with Team do
-    for i:= 0 to cMaxHHIndex do
-        with Hedgehogs[i] do
+    with Team do
+        if skippedTurns < 3 then
             begin
-            if Hedgehogs[i].GearHidden <> nil then
-                RestoreHog(@Hedgehogs[i]);
-
-            if Gear <> nil then
-                begin
-                Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
-                Gear^.Damage:= Gear^.Health;
-                Gear^.State:= (Gear^.State or gstHHGone) and (not gstHHDriven)
-                end
+                inc(skippedTurns);
+                ParseCommand('/skip', true);
             end
+        else
+            for i:= 0 to cMaxHHIndex do
+                with Hedgehogs[i] do
+                    begin
+                    if Hedgehogs[i].GearHidden <> nil then
+                        RestoreHog(@Hedgehogs[i]);
+
+                    if Gear <> nil then
+                        begin
+                        Gear^.Hedgehog^.Effects[heInvulnerable]:= 0;
+                        Gear^.Damage:= Gear^.Health;
+                        Gear^.State:= (Gear^.State or gstHHGone) and (not gstHHDriven)
+                        end
+                    end
 end;
 
 procedure chAddHH(var id: shortstring);
@@ -654,6 +660,7 @@ begin
                 AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                 hasGone:= true;
+                skippedTurns:= 0;
                 isGoneFlagPengingToBeSet:= false;
                 RecountTeamHealth(TeamsArray[i])
                 end;
