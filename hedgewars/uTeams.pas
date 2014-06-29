@@ -629,7 +629,7 @@ begin
 end;
 
 procedure chTeamGone(var s:shortstring);
-var t: LongInt;
+var t, i: LongInt;
     isSynced: boolean;
 begin
     isSynced:= s[1] = 's';
@@ -642,24 +642,31 @@ begin
     if (t = cMaxTeams) or (TeamsArray[t] = nil) then
         exit;
 
-    if isSynced then
-        begin
-        with TeamsArray[t]^ do
-            if not hasGone then
-                begin
-                AddChatString('** '+ TeamName + ' is gone');
-                hasGone:= true;
+    TeamsArray[t]^.isGoneFlagPengingToBeSet:= true;
 
-                RecountTeamHealth(TeamsArray[t])
+    if isSynced then
+    begin
+    for i:= 0 to Pred(cMaxTeams) do
+        with TeamsArray[i]^ do
+            begin
+            if (not hasGone) and isGoneFlagPengingToBeSet then
+                begin
+                AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
+                if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
+                hasGone:= true;
+                isGoneFlagPengingToBeSet:= false;
+                RecountTeamHealth(TeamsArray[i])
                 end;
-        end
+            if hasGone and isGoneFlagPengingToBeUnset then
+                ParseCommand('/teamback s' + s, true);
+            end;
+    end
     else
     begin
-        if not CurrentTeam^.ExtDriven then
-        begin
-            SendIPC(_S'f' + s);
+        TeamsArray[t]^.isGoneFlagPengingToBeSet:= true;
+
+        if (not CurrentTeam^.ExtDriven) or (CurrentTeam^.TeamName = s) then
             ParseCommand('/teamgone s' + s, true);
-        end;
     end;
 end;
 
@@ -683,7 +690,9 @@ begin
             if hasGone then
                 begin
                 AddChatString('** '+ TeamName + ' is back');
+                if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
+                isGoneFlagPengingToBeUnset:= false;
 
                 RecountTeamHealth(TeamsArray[t]);
 
@@ -693,11 +702,10 @@ begin
         end
     else
     begin
+        TeamsArray[t]^.isGoneFlagPengingToBeUnset:= true;
+
         if not CurrentTeam^.ExtDriven then
-        begin
-            SendIPC(_S'g' + s);
             ParseCommand('/teamback s' + s, true);
-        end;
     end;
 end;
 
