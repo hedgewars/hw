@@ -719,16 +719,16 @@ end;
 
 function lc_addvisualgear(L : Plua_State) : LongInt; Cdecl;
 var vg : PVisualGear;
-    x, y, s: LongInt;
+    x, y, s, n, layer: LongInt;
     c: Boolean;
     vgt: TVisualGearType;
     uid: Longword;
 const
     call = 'AddVisualGear';
-    params = 'x, y, visualGearType, state, critical';
+    params = 'x, y, visualGearType, state, critical [, layer]';
 begin
     uid:= 0;
-    if CheckLuaParamCount(L, 5, call, params) then
+    if CheckAndFetchParamCount(L, 5, 6, call, params, n) then
         begin
         s:= LuaToVisualGearTypeOrd(L, 3, call, params);
         if s >= 0 then
@@ -739,7 +739,14 @@ begin
             s:= lua_tointeger(L, 4);
             c:= lua_toboolean(L, 5);
 
-            vg:= AddVisualGear(x, y, vgt, s, c);
+            if n = 6 then
+                begin
+                layer:= lua_tointeger(L, 6);
+                AddVisualGear(x, y, vgt, s, c, layer);
+                end
+            else
+                vg:= AddVisualGear(x, y, vgt, s, c);
+
             if vg <> nil then
                 begin
                 lastVisualGearByUID:= vg;
