@@ -742,7 +742,7 @@ begin
             if n = 6 then
                 begin
                 layer:= lua_tointeger(L, 6);
-                AddVisualGear(x, y, vgt, s, c, layer);
+                vg:= AddVisualGear(x, y, vgt, s, c, layer);
                 end
             else
                 vg:= AddVisualGear(x, y, vgt, s, c);
