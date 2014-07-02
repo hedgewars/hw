@@ -519,8 +519,13 @@ begin
     with Team do
         if skippedTurns < 3 then
             begin
-                inc(skippedTurns);
-                ParseCommand('/skip', true);
+            inc(skippedTurns);
+            for i:= 0 to cMaxHHIndex do
+                with Hedgehogs[i] do
+                    if Gear <> nil then
+                        Gear^.State:= Gear^.State and (not gstHHDriven);
+
+            ParseCommand('/skip', true);
             end
         else
             for i:= 0 to cMaxHHIndex do

@@ -76,7 +76,7 @@ new(command);
 FillChar(command^, sizeof(TCmd), 0);
 command^.loTime:= Time;
 command^.str:= str;
-if command^.cmd <> 'F' then dec(command^.len, 2); // cut timestamp
+if (command^.cmd <> 'F') and (command^.cmd <> 'G') then dec(command^.len, 2); // cut timestamp
 if headcmd = nil then
     begin
     headcmd:= command;
@@ -369,8 +369,8 @@ while (headcmd <> nil)
              end;
         'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
-        'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, headcmd^.len - 3), true);
-        'g': ParseCommand('teamback s' + copy(headcmd^.str, 2, headcmd^.len - 3), true);
+        'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
+        'g': ParseCommand('teamback s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'N': begin
             tmpflag:= false;
             lastTurnChecksum:= SDLNet_Read32(@headcmd^.str[2]);

@@ -83,7 +83,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             (
                 MoveToRoom jRI
-                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom})
+                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom, teamsInGame = fromIntegral $ length clTeams})
                 : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
                 : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
             )
