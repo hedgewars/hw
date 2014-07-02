@@ -85,7 +85,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "CMakeCache\\\\.txt$"
     "build_windows_.*\\\\.bat$"
     "arch\\\\.c$"
-    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
+#    "^${CMAKE_CURRENT_SOURCE_DIR}/misc/liblua"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/frontlib"
 #    "^${CMAKE_CURRENT_SOURCE_DIR}/project_files/cmdlineClient"
     "^${CMAKE_CURRENT_SOURCE_DIR}/misc/winutils/bin"
