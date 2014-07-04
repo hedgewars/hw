@@ -704,12 +704,13 @@ begin
                 AddChatString('** '+ TeamName + ' is back');
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
-                isGoneFlagPengingToBeUnset:= false;
 
                 RecountTeamHealth(TeamsArray[t]);
 
-                if Owner = UserNick then
-                    ExtDriven:= false
+                if isGoneFlagPengingToBeUnset and (Owner = UserNick) then
+                    ExtDriven:= false;
+
+                isGoneFlagPengingToBeUnset:= false;
                 end;
         end
     else
