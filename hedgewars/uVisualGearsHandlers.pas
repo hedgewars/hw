@@ -345,7 +345,7 @@ Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 Gear^.dX := Gear^.dX / (1.001 * Steps);
 Gear^.dY := Gear^.dY / (1.001 * Steps);
 
-if (Gear^.FrameTicks <= Steps) or not CheckCoordInWater(round(Gear^.X), round(Gear^.Y)) then
+if (Gear^.FrameTicks <= Steps) or (not CheckCoordInWater(round(Gear^.X), round(Gear^.Y))) then
     DeleteVisualGear(Gear)
 else
     dec(Gear^.FrameTicks, Steps)
