@@ -468,7 +468,7 @@ begin
                     ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.State and gstSubmersible = 0)) then
                 DrownGear(Gear);
 
-            isImpactRight:= isImpactH and (abs(X - leftX) > abs(rightX - X));
+            isImpactRight:= isImpactH and (abs(X - LongInt(leftX)) > abs(LongInt(rightX) - X));
             isLeaving:= (isSubmersible and (dist2Water = -2 * Gear^.Radius) and (Gear = CurAmmoGear) and (CurAmmoGear^.Pos = 0)
             and (((not isImpactH) and CurAmmoGear^.dY.isNegative) or (isImpactH and (isImpactRight = CurAmmoGear^.dX.isNegative))));
 
