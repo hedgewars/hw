@@ -205,11 +205,25 @@ case Layer of
                            else
                                DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
                   vgtSplash: if SuddenDeathDmg then
+                                begin
+                                if Gear^.Angle <> 0 then
+                                    begin
+                                    DrawTextureRotatedF(SpritesData[sprSDSplash].Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((SpritesData[sprSDSplash].Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSDSplash].Width, SpritesData[sprSDSplash].Height, Gear^.Angle);
+                                    end
+                                else
                                  //DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
-                                 DrawTextureF(SpritesData[sprSDSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSDSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSDSplash].Width, SpritesData[sprSDSplash].Height)
+                                    DrawTextureF(SpritesData[sprSDSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSDSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSDSplash].Width, SpritesData[sprSDSplash].Height);
+                                end
                              else
+                                begin
+                                if Gear^.Angle <> 0 then
+                                    begin
+                                    DrawTextureRotatedF(SpritesData[sprSplash].Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((SpritesData[sprSplash].Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSplash].Width, SpritesData[sprSplash].Height, Gear^.Angle);
+                                    end
+                                else
                                  //DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                                 DrawTextureF(SpritesData[sprSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSplash].Width, SpritesData[sprSplash].Height);
+                                    DrawTextureF(SpritesData[sprSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSplash].Width, SpritesData[sprSplash].Height);
+                                 end;
                   vgtDroplet: if SuddenDeathDmg then
                                   DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
                               else

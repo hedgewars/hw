@@ -445,7 +445,7 @@ begin
                     end;
             exit(0)
             end;
-        if (y > cWaterLine) or (x > rightX) or (x < leftX) then exit(-1)
+        if CheckCoordInWater(round(x), round(y)) then exit(-1)
         end
 end;
 
@@ -497,7 +497,7 @@ begin
                     end;
             exit(0)
         end;
-        if (y > cWaterLine) or (x > rightX) or (x < leftX) then
+        if CheckCoordInWater(round(x), round(y)) then
             // returning -1 for drowning so it can be considered in the Rate routine
             exit(-1)
     end;
@@ -876,7 +876,7 @@ repeat
             UpdateLandTexture(hwRound(Gear^.X), 1, hwRound(Gear^.Y), 1, true);
             end;}
 
-    if not (hwRound(Gear^.Y) + cHHRadius < cWaterLine) then
+    if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + cHHRadius) then
         exit(false);
     if (Gear^.State and gstMoving) <> 0 then
     begin
@@ -941,7 +941,7 @@ repeat
 
     pX:= hwRound(Gear^.X);
     pY:= hwRound(Gear^.Y);
-    if pY + cHHRadius >= cWaterLine then
+    if CheckCoordInWater(pX, pY + cHHRadius) then
         begin
         if AltGear^.Hedgehog^.BotLevel < 4 then
             AddWalkBonus(pX, tY, 250, -40);
