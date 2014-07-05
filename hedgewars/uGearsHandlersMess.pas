@@ -259,9 +259,33 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
     begin
-    AllInactive := false;
+    if Gear^.Timer = 0 then
+        begin
+        if (FollowGear = Gear) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
+            FollowGear:= CurrentHedgehog^.Gear;
+        end
+    else if Gear^.Timer > 0 then
+        begin
+        AllInactive := false;
+        dec(Gear^.Timer);
+        end;
+
     Gear^.Y := Gear^.Y + cDrownSpeed;
-    Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
+
+    if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
+        begin
+        if leftX > hwRound(Gear^.X) - Gear^.Radius then
+            Gear^.X := Gear^.X - cDrownSpeed
+        else
+            Gear^.X := Gear^.X + cDrownSpeed;
+        end
+    else
+        Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
+
+    if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
+    else
+        Gear^.Y := Gear^.Y + Gear^.dY * cDrownSpeed;
+
     // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
     if ((not SuddenDeathDmg and (WaterOpacity < $FF))
     or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
@@ -301,7 +325,7 @@ begin
     if Gear^.dY.Round > 1 then
         Gear^.dY.QWordValue:= 8589934592;
 
-    if (Gear^.State and gstSubmersible <> 0) and (gY > cWaterLine) then
+    if (Gear^.State and gstSubmersible <> 0) and CheckCoordInWater(gX, gY) then
         begin
         Gear^.dX:= Gear^.dX * _0_999;
         Gear^.dY:= Gear^.dY * _0_999
@@ -787,7 +811,7 @@ We aren't using frametick right now, so just a waste of cycles.
             end;
 *)
     // move back to cloud layer
-        if yy > cWaterLine then
+        if CheckCoordInWater(xx, yy) then
             move:= true
         else if (xx > snowRight) or (xx < snowLeft) then
             move:=true
@@ -956,16 +980,19 @@ begin
     gX := hwRound(Gear^.X);
     gY := hwRound(Gear^.Y);
     uw := (Gear^.Tag <> 0); // was bee underwater last tick?
-    nuw := (cWaterLine < gy + Gear^.Radius); // is bee underwater now?
+    nuw := CheckCoordInWater(gx, gy + Gear^.Radius); // is bee underwater now?
 
     // if water entered or left
     if nuw <> uw then
         begin
-        AddVisualGear(gX, cWaterLine, vgtSplash);
-        AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-        AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-        AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-        AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+        if (gX > leftX) and (gY < rightX) then
+            begin
+            AddVisualGear(gX, cWaterLine, vgtSplash);
+            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
+            end;
         StopSoundChan(Gear^.SoundChannel);
         if nuw then
             begin
@@ -1178,7 +1205,7 @@ begin
             if (hwRound(Bullet^.X) and LAND_WIDTH_MASK <> 0)
             or (hwRound(Bullet^.Y) and LAND_HEIGHT_MASK <> 0) then
                     // only extend if not under water
-                    if hwRound(Bullet^.Y) < cWaterLine then
+                    if not CheckCoordInWater(hwRound(Bullet^.X), hwRound(Bullet^.Y)) then
                         begin
                         VGear^.dX := VGear^.dX + max(LAND_WIDTH,4096) * (VGear^.dX - VGear^.X);
                         VGear^.dY := VGear^.dY + max(LAND_WIDTH,4096) * (VGear^.dY - VGear^.Y);
@@ -2153,11 +2180,13 @@ begin
         Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
         Gear^.Y := Gear^.Y + Gear^.dY;
 
-        if (hwRound(Gear^.Y) > cWaterLine) then
+        gX := hwRound(Gear^.X);
+        gY := hwRound(Gear^.Y);
+
+        if CheckCoordInWater(gX, gY) then
             begin
-            gX := hwRound(Gear^.X);
             for i:= 0 to 3 do
-                AddVisualGear(gX - 16 + Random(32), cWaterLine - 16 + Random(16), vgtSteam);
+                AddVisualGear(gX - 8 + Random(16), gY - 8 + Random(16), vgtSteam);
             PlaySound(sndVaporize);
             DeleteGear(Gear);
             exit
@@ -2170,8 +2199,7 @@ begin
             Gear^.Y:= Gear^.Y+_6;
             if (landPixel and lfIce <> 0) or (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
                 begin
-                gX := hwRound(Gear^.X);
-                gY := hwRound(Gear^.Y)-6;
+                gY := gy-6;
                 DrawExplosion(gX, gY, 4);
                 PlaySound(sndVaporize);
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSteam);
@@ -2201,8 +2229,6 @@ begin
             end
         else
             begin
-            gX := hwRound(Gear^.X);
-            gY := hwRound(Gear^.Y);
             // Standard fire
             if not sticky then
                 begin
@@ -2252,8 +2278,6 @@ begin
         end;
     if Gear^.Health = 0 then
         begin
-        gX := hwRound(Gear^.X);
-        gY := hwRound(Gear^.Y);
         if not sticky then
             begin
             if ((GameTicks and $3) = 0) and (Random(1) = 0) then
@@ -2799,6 +2823,14 @@ begin
         HHGear^.X := Gear^.X;
         HHGear^.Y := Gear^.Y;
 
+        // check for drowning
+        if CheckGearDrowning(HHGear) then
+            begin
+            AfterAttack;
+            DeleteGear(Gear);
+            exit;
+            end;
+
         inc(Gear^.Damage, 2);
 
         //  if TestCollisionXwithGear(HHGear, hwSign(Gear^.dX))
@@ -3167,6 +3199,18 @@ begin
     else
         exit;
 
+    if playWidth > cMinPlayWidth then
+        begin
+        inc(leftX);
+        dec(rightX);
+        dec(playWidth, 2);
+        for i:= 0 to LAND_HEIGHT - 1 do
+            begin
+            Land[i, leftX] := 0;
+            Land[i, rightX] := 0;
+            end;
+        end;
+
     if cWaterLine > 0 then
         begin
         dec(cWaterLine);
@@ -3508,7 +3552,7 @@ var
     isUnderwater: Boolean;
     bubble: PVisualGear;
 begin
-    isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
+    isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         dec(Gear^.Pos);
     AllInactive := false;
@@ -3614,6 +3658,7 @@ begin
     if // (Gear^.Health = 0)
         (HHGear^.Damage <> 0)
         //or CheckGearDrowning(HHGear)
+        // drown if too deep under water
         or (cWaterLine + cVisibleWater * 4 < hwRound(HHGear^.Y))
         or (TurnTimeLeft = 0)
         // allow brief ground touches - to be fair on this, might need another counter
@@ -3929,7 +3974,7 @@ begin
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
-    or (hwRound(Gear^.Y) > cWaterLine) then
+    or CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
         begin
         deleteGear(Gear);
         EXIT;
@@ -4318,7 +4363,7 @@ begin
             loadNewPortalBall(Gear, true);
     end
 
-    else if (y > cWaterLine)
+    else if CheckCoordInWater(x, y)
     or (y < -max(LAND_WIDTH,4096))
     or (x > 2*max(LAND_WIDTH,4096))
     or (x < -max(LAND_WIDTH,4096)) then
@@ -4558,7 +4603,7 @@ begin
             end
         else
             begin
-            if (rY <= cWaterLine) or (y <= cWaterLine) then
+            if CheckCoordInWater(rX, rY) or CheckCoordInWater(x, y) then
                 begin
                 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
                     and (Land[y, x] <> 0) then
@@ -4945,7 +4990,7 @@ begin
         begin
         //Gear^.dY := Gear^.dY + cGravity;
         //Gear^.Y := Gear^.Y + Gear^.dY;
-        if hwRound(Gear^.Y) > cWaterLine then
+        if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             Gear^.Timer := 1
         end;
 

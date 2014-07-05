@@ -423,7 +423,7 @@ with Gear^,
                newGear^.dY:= newDY / newGear^.Density
                end;
             if (CurAmmoGear <> nil) and (CurAmmoGear^.AmmoType = amJetpack) and
-               (Gear^.Message and gmPrecise <> 0) and (hwRound(Y) > cWaterLine) then
+               (Gear^.Message and gmPrecise <> 0) and CheckCoordInWater(hwRound(X), hwRound(Y)) then
                 newGear^.State:= newGear^.State or gstSubmersible;
 
             case CurAmmoType of
@@ -548,7 +548,7 @@ with CurrentHedgehog^ do
                 begin
                 if TagTurnTimeLeft = 0 then
                     TagTurnTimeLeft:= TurnTimeLeft;
-                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and (hwRound(CurAmmoGear^.Y) > cWaterLine) then
+                if (CurAmmoGear <> nil) and (CurAmmoGear^.State and gstSubmersible <> 0) and CheckCoordInWater(hwRound(CurAmmoGear^.X), hwRound(CurAmmoGear^.Y)) then
                      TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 25
                 else TurnTimeLeft:=(Ammoz[a].TimeAfterTurn * cGetAwayTime) div 100;
                 end;
@@ -864,7 +864,7 @@ var isFalling, isUnderwater: boolean;
     land: Word;
 begin
 land:= 0;
-isUnderwater:= cWaterLine < hwRound(Gear^.Y) + Gear^.Radius;
+isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
 if Gear^.dX.QWordValue > 8160437862 then
     Gear^.dX.QWordValue:= 8160437862;
 if Gear^.dY.QWordValue > 8160437862 then

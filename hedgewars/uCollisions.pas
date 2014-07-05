@@ -54,6 +54,8 @@ function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: L
 
 function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
+function  CheckCoordInWater(X, Y: LongInt): boolean; inline;
+
 // returns: negative sign if going downhill to left, value is steepness (noslope/error = _0, 45 = _0_5)
 function  CalcSlopeBelowGear(Gear: PGear): hwFloat;
 function  CalcSlopeNearGear(Gear: PGear; dirX, dirY: LongInt): hwFloat;
@@ -110,6 +112,12 @@ if Gear^.CollisionIndex >= 0 then
     Gear^.CollisionIndex:= -1;
     dec(Count)
     end;
+end;
+
+function CheckCoordInWater(X, Y: LongInt): boolean; inline;
+begin
+    CheckCoordInWater:= (Y > cWaterLine)
+        or ((WorldEdge = weSea) and ((X < leftX) or (X > rightX)));
 end;
 
 function CheckGearsCollision(Gear: PGear): PGearArray;
