@@ -282,10 +282,6 @@ procedure doStepDrowningGear(Gear: PGear);
     else
         Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
 
-    if cWaterLine < hwRound(Gear^.Y) + Gear^.Radius then
-    else
-        Gear^.Y := Gear^.Y + Gear^.dY * cDrownSpeed;
-
     // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
     if ((not SuddenDeathDmg and (WaterOpacity < $FF))
     or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
