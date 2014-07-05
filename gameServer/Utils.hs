@@ -185,4 +185,13 @@ loc :: B.ByteString -> B.ByteString
 loc = id
 
 maybeNick :: Maybe ClientInfo -> B.ByteString
-maybeNick = fromMaybe "[empty]" . liftM nick
+maybeNick = fromMaybe "[]" . liftM nick
+
+-- borrowed from Data.List, just more general in types
+deleteBy2                :: (a -> b -> Bool) -> a -> [b] -> [b]
+deleteBy2 _  _ []        = []
+deleteBy2 eq x (y:ys)    = if x `eq` y then ys else y : deleteBy2 eq x ys
+
+deleteFirstsBy2          :: (a -> b -> Bool) -> [a] -> [b] -> [a]
+deleteFirstsBy2 eq       =  foldl (flip (deleteBy2 (flip eq)))
+
