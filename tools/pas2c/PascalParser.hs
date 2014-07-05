@@ -92,7 +92,7 @@ varsParser m endsWithSemi = do
 
 aVarDecl :: Bool -> Parsec String u TypeVarDeclaration
 aVarDecl endsWithSemi = do
-    isVar <- liftM (== Just "var") $
+    isVar <- liftM (\i -> i == Just "var" || i == Just "out") $
         if not endsWithSemi then
             optionMaybe $ choice [
                 try $ string "var"
