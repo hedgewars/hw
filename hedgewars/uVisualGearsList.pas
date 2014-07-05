@@ -40,6 +40,10 @@ uses uFloat, uVariables, uConsts, uTextures, uVisualGearsHandlers;
 
 function AddVisualGear(X, Y: LongInt; Kind: TVisualGearType): PVisualGear; inline;
 begin
+    // adjust some visual gear types if underwater
+    if (Y > cWaterLine) and ((Kind = vgtBeeTrace) or (Kind = vgtSmokeTrace) or (Kind = vgtEvilTrace)) then
+        Kind:= vgtBubble;
+
     AddVisualGear:= AddVisualGear(X, Y, Kind, 0, false, -1);
 end;
 
