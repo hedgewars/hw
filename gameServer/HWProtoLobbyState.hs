@@ -63,7 +63,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let chans = map sendChan (cl : jRoomClients)
     let isBanned = host cl `elem` roomBansList jRoom
     let clTeams =
-            if (isJust $ gameInfo jRoom) then
+            if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) then
                 map teamname . filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
                 else
                 []
@@ -87,6 +87,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
                 : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
                 : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
             )
+                ++ [ModifyRoom (\r -> let (t', g') = moveTeams clTeams . fromJust $ gameInfo r in r{gameInfo = Just g', teams = t'}) | not $ null clTeams]
             ++ [AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
             ++ [sendStateFlags cl jRoomClients | not $ null jRoomClients]
             ++ answerFullConfig cl jRoom
@@ -96,6 +97,9 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeams
 
         where
+        moveTeams :: [B.ByteString] -> GameInfo -> ([TeamInfo], GameInfo)
+        moveTeams cts g = (deleteFirstsBy2 (\a b -> teamname a == b) (teamsAtStart g) (leftTeams g \\ cts)
+            , g{leftTeams = leftTeams g \\ cts, teamsInGameNumber = teamsInGameNumber g + length cts})
         sendStateFlags cl clients = AnswerClients [sendChan cl] . concat . intersperse [""] . filter (not . null) . concat $
                 [f "+r" ready, f "-r" unready, f "+g" ingame, f "-g" inroomlobby]
             where
