@@ -673,11 +673,7 @@ begin
     or (Gear^.Kind = gtBall) then
         CalcRotationDirAngle(Gear)
     else if (GameTicks and $1F) = 0 then
-        begin
-        if hwRound(Gear^.Y) > cWaterLine then
-             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
-        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
-        end
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -694,11 +690,7 @@ begin
         exit
         end;
     if (GameTicks and $3F) = 0 then
-        begin
-        if hwRound(Gear^.Y) > cWaterLine then
-             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
-        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
-        end
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1001,12 +993,8 @@ begin
         if (GameTicks and $F) = 0 then
             begin
             if (GameTicks and $30) = 0 then
-                begin
-                if nuw then
-                    AddVisualGear(gX, gY, vgtBubble)
-                else
-                    AddVisualGear(gX, gY, vgtBeeTrace);
-                end;
+                AddVisualGear(gX, gY, vgtBeeTrace);
+
             Gear^.dX := Gear^.Elasticity * (Gear^.dX + _0_000064 * (Gear^.Target.X - gX));
             Gear^.dY := Gear^.Elasticity * (Gear^.dY + _0_000064 * (Gear^.Target.Y - gY));
             // make sure new speed isn't higher than original one (which we stored in Friction variable)
@@ -2765,11 +2753,7 @@ begin
         end;
 
     if (GameTicks and $3F) = 0 then
-        begin
-        if hwRound(Gear^.Y) > cWaterLine then
-             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
-        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
-        end
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -3270,11 +3254,7 @@ begin
     doStepFallingGear(Gear);
 
     if (GameTicks and $3F) = 0 then
-        begin
-        if hwRound(Gear^.Y) > cWaterLine then
-             AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble)
-        else AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace)
-        end;
+        AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtSmokeTrace);
 
     if ((Gear^.State and gstCollision) <> 0) then
         begin
