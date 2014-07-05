@@ -357,19 +357,40 @@ begin
         Gear^.DirAngle := Gear^.DirAngle - 360
 end;
 
+procedure DrownGear(Gear: PGear);
+begin
+Gear^.doStep := @doStepDrowningGear;
+
+Gear^.Timer := 5000; // how long game should wait
+end;
+
 function CheckGearDrowning(var Gear: PGear): boolean;
 var
-    skipSpeed, skipAngle, skipDecay: hwFloat;
-    i, maxDrops, X, Y: LongInt;
-    vdX, vdY: real;
+    skipSpeed, skipAngle, skipDecay, hwTmp: hwFloat;
+    i, maxDrops, X, Y, dist2Water: LongInt;
+    vdX, vdY, tmp: real;
     particle, splash: PVisualGear;
-    isSubmersible: boolean;
+    isSubmersible, isImpactH, isImpactRight, isLeaving: boolean;
     s: ansistring;
 begin
     // probably needs tweaking. might need to be in a case statement based upon gear type
+    X:= hwRound(Gear^.X);
     Y:= hwRound(Gear^.Y);
-    if cWaterLine < Y + Gear^.Radius then
+
+    dist2Water:= cWaterLine - (Y + Gear^.Radius);
+    isImpactH:= false;
+
+    if WorldEdge = weSea then
         begin
+        i:= dist2Water;
+        dist2Water:= min(dist2Water, min(X - Gear^.Radius - leftX, rightX - (X + Gear^.Radius)));
+        isImpactH:= i <> dist2Water;
+        end;
+
+    if dist2Water < 0 then
+        begin
+        // invisible gears will just be deleted
+        // unless they are generic fallers, then they will be "respawned"
         if Gear^.State and gstInvisible <> 0 then
             begin
             if Gear^.Kind = gtGenericFaller then
@@ -386,20 +407,33 @@ begin
         skipSpeed := _0_25;
         skipAngle := _1_9;
         skipDecay := _0_87;
-        X:= hwRound(Gear^.X);
-        vdX:= hwFloat2Float(Gear^.dX);
-        vdY:= hwFloat2Float(Gear^.dY);
-        // this could perhaps be a tiny bit higher.
-        if  (cWaterLine + 64 + Gear^.Radius > Y) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
-        and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)) then
+        vdX:= abs(hwFloat2Float(Gear^.dX));
+        vdY:= abs(hwFloat2Float(Gear^.dY));
+
+        // skipping
+
+        // check for -1 depth because if deeper, then it already had its chance of skipping
+        if  (dist2Water = -1) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        and ( ((not isImpactH) and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)))
+          or (isImpactH and (hwAbs(Gear^.dY) > skipAngle * hwAbs(Gear^.dX))) ) then
             begin
-            Gear^.dY.isNegative := true;
+            // if skipping we move the gear out of water
+            if isImpactH then
+                begin
+                Gear^.dX.isNegative := (not Gear^.dX.isNegative);
+                Gear^.X:= Gear^.X + Gear^.dX;
+                end
+            else
+                begin
+                Gear^.dY.isNegative := (not Gear^.dY.isNegative);
+                Gear^.Y:= Gear^.Y + Gear^.dY;
+                end;
             Gear^.dY := Gear^.dY * skipDecay;
             Gear^.dX := Gear^.dX * skipDecay;
             CheckGearDrowning := false;
             PlaySound(sndSkip)
             end
-        else
+        else // not skipping
             begin
             if not isSubmersible then
                 begin
@@ -418,58 +452,110 @@ begin
                             end
                         else
                             begin
-                            Gear^.doStep := @doStepDrowningGear;
+                            DrownGear(Gear);
                             Gear^.State := Gear^.State and (not gstHHDriven);
                             s:= ansistring(Gear^.Hedgehog^.Name);
                             AddCaption(FormatA(GetEventString(eidDrowned), s), cWhiteColor, capgrpMessage);
                             end
                         end
                     else
-                        Gear^.doStep := @doStepDrowningGear;
-                        if Gear^.Kind = gtFlake then
-                            exit(true) // skip splashes
+                        DrownGear(Gear);
+                    if Gear^.Kind = gtFlake then
+                        exit(true); // skip splashes
                 end
+            // drown submersible grears if far below map
             else if (Y > cWaterLine + cVisibleWater*4) and
                     ((Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.State and gstSubmersible = 0)) then
-                Gear^.doStep:= @doStepDrowningGear;
-            if ((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-            or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
-            and (CurAmmoGear^.dY < _0_01))) then
-                if Gear^.Density * Gear^.dY > _1 then
+                DrownGear(Gear);
+
+            isImpactRight:= isImpactH and (abs(X - leftX) > abs(rightX - X));
+            isLeaving:= (isSubmersible and (dist2Water = -2 * Gear^.Radius) and (Gear = CurAmmoGear) and (CurAmmoGear^.Pos = 0)
+            and (((not isImpactH) and CurAmmoGear^.dY.isNegative) or (isImpactH and (isImpactRight = CurAmmoGear^.dX.isNegative))));
+
+            // splash sound
+
+            if ((not isSubmersible) and (dist2Water = -1))
+            or isLeaving then
+                begin
+                // adjust water impact sound on gear speed and density
+                if isImpactH then
+                    hwTmp:= hwAbs(Gear^.Density * Gear^.dX)
+                else
+                    hwTmp:= hwAbs(Gear^.Density * Gear^.dY);
+
+                if hwTmp > _1 then
                     PlaySound(sndSplash)
-                else if Gear^.Density * Gear^.dY > _0_5 then
+                else if hwTmp > _0_5 then
                     PlaySound(sndSkip)
                 else
                     PlaySound(sndDroplet2);
+                end;
             end;
 
+        // splash animation
+
         if ((cReducedQuality and rqPlainSplash) = 0)
-        and (((not isSubmersible) and (Y < cWaterLine + 64 + Gear^.Radius))
-        or (isSubmersible and (Y < cWaterLine + 2 + Gear^.Radius) and (Gear = CurAmmoGear) and ((CurAmmoGear^.Pos = 0)
-        and (CurAmmoGear^.dY < _0_01)))) then
+        and (((not isSubmersible) and (dist2Water = -1))
+        or isLeaving) then
             begin
-            splash:= AddVisualGear(X, cWaterLine, vgtSplash);
+            splash:= AddVisualGear(X, Y, vgtSplash);
             if splash <> nil then
-                with splash^ do
                 begin
-                Scale:= hwFloat2Float(Gear^.Density / _3 * Gear^.dY);
-                if Scale > 1 then Scale:= power(Scale,0.3333)
-                else Scale:= Scale + ((1-Scale) / 2);
-                if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
-                else Timer:= 1;
-                // Low Gravity
-                FrameTicks:= FrameTicks*Timer;
+                if isImpactH then
+                    begin
+                    splash^.Scale:= abs(hwFloat2Float((Gear^.Density / _3) * Gear^.dX));
+                    if isImpactRight then
+                        splash^.Angle:= -90
+                    else
+                        splash^.Angle:=  90;
+                    end
+                else
+                    splash^.Scale:= abs(hwFloat2Float(Gear^.Density / _3 * Gear^.dY));
+                with splash^ do
+                    begin
+                    if Scale > 1 then Scale:= power(Scale,0.3333)
+                    else Scale:= Scale + ((1-Scale) / 2);
+                    if Scale > 1 then Timer:= round(min(Scale*0.0005/cGravityf,4))
+                    else Timer:= 1;
+                    // Low Gravity
+                    FrameTicks:= FrameTicks*Timer;
+                    end;
                 end;
+
+            // eject water drops
 
             maxDrops := (hwRound(Gear^.Density) * 3) div 2 + round(vdX * hwRound(Gear^.Density) * 6) + round(vdY * hwRound(Gear^.Density) * 6);
             for i:= max(maxDrops div 3, min(32, Random(maxDrops))) downto 0 do
                 begin
-                particle := AddVisualGear(X - 3 + Random(7), cWaterLine, vgtDroplet);
+                if isImpactH then
+                    begin
+                    if isImpactRight then
+                        particle := AddVisualGear(RightX, Y - 3 + Random(7), vgtDroplet)
+                    else
+                        particle := AddVisualGear(LeftX, Y - 3 + Random(7), vgtDroplet)
+                    end
+                else
+                    particle := AddVisualGear(X - 3 + Random(7), cWaterLine, vgtDroplet);
+
                 if particle <> nil then
                     with particle^ do
                         begin
-                        dX := dX - vdX / 10;
-                        dY := dY - vdY / 5;
+                        // dX and dY were initialized to have a random value on creation (see uVisualGearsList)
+                        if isImpactH then
+                            begin
+                            tmp:= dX;
+                            if isImpactRight then
+                                dX:=  dY - vdX / 5
+                            else
+                                dX:= -dy + vdX / 5;
+                            dY:= tmp * (1 + vdY / 10);
+                            end
+                        else
+                            begin
+                            dX:= dX * (1 + vdX / 10);
+                            dY:= dY - vdY / 5;
+                            end;
+
                         if splash <> nil then
                             begin
                             if splash^.Scale > 1 then
@@ -482,7 +568,7 @@ begin
                                 dX:= dX * splash^.Scale;
                                 dY:= dY * splash^.Scale
                                 end
-                            end
+                            end;
                         end
                 end
             end;
@@ -1250,7 +1336,7 @@ Intended to check Gear X/Y against the map left/right edges and apply one of the
 Trying to make the checks a little broader than on first pass to catch things that don't move normally.
 *)
 function WorldWrap(var Gear: PGear): boolean;
-var tdx: hwFloat;
+//var tdx: hwFloat;
 begin
 WorldWrap:= false;
 if WorldEdge = weNone then exit(false);
@@ -1281,7 +1367,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
             end;
         if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
             PlaySound(sndMelonImpact)
-        end
+        end{
     else if WorldEdge = weSea then
         begin
         if (hwRound(Gear^.Y) > cWaterLine) and (Gear^.State and gstSubmersible <> 0) then
@@ -1296,7 +1382,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
             Gear^.dY:= tdx;
             Gear^.dY.isNegative:= true
             end
-        end;
+        end};
 (*
 * Window in the sky (Gear moved high into the sky, Y is used to determine X) [unfortunately, not a safe thing to do. shame, I thought aerial bombardment would be kinda neat
 This one would be really easy to freeze game unless it was flagged unfortunately.

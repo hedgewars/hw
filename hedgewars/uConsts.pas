@@ -314,6 +314,8 @@ const
 
     kSystemSoundID_Vibrate = $00000FFF;
 
+    cMinPlayWidth = 200;
+
 implementation
 
 end.

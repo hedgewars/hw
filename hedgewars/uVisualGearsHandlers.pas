@@ -75,7 +75,7 @@ function isSorterActive: boolean; inline;
 procedure initModule;
 
 implementation
-uses uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
+uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, uRenderUtils, uWorld;
 
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
@@ -345,7 +345,7 @@ Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 Gear^.dX := Gear^.dX / (1.001 * Steps);
 Gear^.dY := Gear^.dY / (1.001 * Steps);
 
-if (Gear^.FrameTicks <= Steps) or (round(Gear^.Y) < cWaterLine) then
+if (Gear^.FrameTicks <= Steps) or not CheckCoordInWater(round(Gear^.X), round(Gear^.Y)) then
     DeleteVisualGear(Gear)
 else
     dec(Gear^.FrameTicks, Steps)
@@ -354,7 +354,9 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepSteam(Gear: PVisualGear; Steps: Longword);
 begin
-Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
+if ((cWindSpeedf > 0) and ( leftX > Gear^.X))
+or ((cWindSpeedf < 0) and (rightX < Gear^.X)) then
+    Gear^.X:= Gear^.X + (cWindSpeedf * 100 + Gear^.dX) * Steps;
 Gear^.Y:= Gear^.Y - cDrownSpeedf * Steps;
 
 if Gear^.FrameTicks <= Steps then

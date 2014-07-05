@@ -649,12 +649,11 @@ else if Gear^.Kind = gtHedgehog then
         begin
         if (Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
             Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-        if (hwRound(Gear^.Y) >= cWaterLine) then
+        if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             begin
             t:= max(Gear^.Damage, Gear^.Health);
             Gear^.Damage:= t;
-            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (WaterOpacity < $FF)))
-            and (hwRound(Gear^.Y) < cWaterLine + 256) then
+            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
                 spawnHealthTagForHH(Gear, t);
             end;
 

@@ -847,7 +847,6 @@ end;
 procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloat; X, Y, Frame, Dir, w, h: LongInt; Angle: real);
 var ft, fb, fl, fr: GLfloat;
     hw, hh, nx, ny: LongInt;
-    VertexBuffer, TextureBuffer: array [0..3] of TVertex2f;
 begin
 
 // note: not taking scale into account
@@ -1520,7 +1519,6 @@ var first, count, topy, lx, rx, spriteHeight, spriteWidth: LongInt;
     lw, nWaves, shift: GLfloat;
     sprite: TSprite;
 begin
-
 // note: spriteHeight is the Height of the wave sprite while
 //       cWaveHeight describes how many pixels of it will be above waterline
 
