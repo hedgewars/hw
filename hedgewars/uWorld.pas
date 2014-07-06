@@ -1240,7 +1240,19 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
+    replicateToLeft, replicateToRight: boolean;
 begin
+if WorldEdge <> weWrap then
+begin
+replicateToLeft := false;
+replicateToRight:= false;
+end
+else
+begin
+replicateToLeft := (leftX  + WorldDx > ViewLeftX);
+replicateToRight:= (rightX + WorldDx < ViewRightX);
+end;
+
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
 
 // note: offsetY is negative!
@@ -1288,11 +1300,12 @@ else
     changeDepth(RM, cStereo_Land);
     DrawVisualGears(5);
     DrawLand(WorldDx, WorldDy);
-    if WorldEdge = weWrap then
-        begin
+
+    if replicateToLeft then
         DrawLand(WorldDx - playWidth, WorldDy);
+
+    if replicateToRight then
         DrawLand(WorldDx + playWidth, WorldDy);
-        end;
 
     DrawWater(255, 0, 0);
 
@@ -1320,8 +1333,7 @@ else
         end;
 *)
 
-
-if WorldEdge = weWrap then
+if replicateToLeft then
     begin
     // remember original value
     i:= WorldDx;
@@ -1329,6 +1341,14 @@ if WorldEdge = weWrap then
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
+    // reset to original value
+    WorldDx:= i;
+    end;
+
+if replicateToRight then
+    begin
+    // remember original value
+    i:= WorldDx;
     WorldDx:= i + playWidth;
     DrawVisualGears(1);
     DrawGears();
@@ -1375,33 +1395,53 @@ if (cReducedQuality and rq2DWater) = 0 then
 // everything after this ChangeDepth will be drawn outside the screen
 // note: negative parallax gears should last very little for a smooth stereo effect
     ChangeDepth(RM, cStereo_Outside);
-    if WorldEdge = weWrap then
+
+    if replicateToLeft then
         begin
         // remember original value
         i:= WorldDx;
         WorldDx:= i - playWidth;
         DrawVisualGears(2);
+        // reset to original value
+        WorldDx:= i;
+        end;
+
+    if replicateToRight then
+        begin
+        // remember original value
+        i:= WorldDx;
         WorldDx:= i + playWidth;
         DrawVisualGears(2);
         // reset to original value
         WorldDx:= i;
         end;
+
     DrawVisualGears(2);
 
 // everything after this ResetDepth will be drawn at screen level (depth = 0)
 // note: everything that needs to be readable should be on this level
     ResetDepth(RM);
-    if WorldEdge = weWrap then
+
+    if replicateToLeft then
         begin
         // remember original value
         i:= WorldDx;
         WorldDx:= i - playWidth;
         DrawVisualGears(3);
+        // reset to original value
+        WorldDx:= i;
+        end;
+
+    if replicateToRight then
+        begin
+        // remember original value
+        i:= WorldDx;
         WorldDx:= i + playWidth;
         DrawVisualGears(3);
         // reset to original value
         WorldDx:= i;
         end;
+
     DrawVisualGears(3);
 
 {$WARNINGS OFF}
