@@ -1240,7 +1240,7 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    replicateToLeft, replicateToRight: boolean;
+    replicateToLeft, replicateToRight, tmp: boolean;
 begin
 if WorldEdge <> weWrap then
 begin
@@ -1333,6 +1333,9 @@ else
         end;
 *)
 
+tmp:= bShowFinger;
+bShowFinger:= false;
+
 if replicateToLeft then
     begin
     // remember original value
@@ -1356,6 +1359,8 @@ if replicateToRight then
     // reset to original value
     WorldDx:= i;
     end;
+
+bShowFinger:= tmp;
 
 DrawVisualGears(1);
 DrawGears;
