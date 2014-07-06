@@ -1004,16 +1004,45 @@ end;
 
 procedure RenderWorldEdge(Lag: Longword);
 var
-    VertexBuffer: array [0..3] of TVertex2f;
-    c1, c2: LongWord; // couple of colours for edges
+    //VertexBuffer: array [0..3] of TVertex2f;
+    tmp, w: LongInt;
+    rect: TSDL_Rect;
+    //c1, c2: LongWord; // couple of colours for edges
 begin
 if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
     begin
 (* I think for a bounded world, will fill the left and right areas with black or something. Also will probably want various border effects/animations based on border type.  Prob also, say, trigger a border animation timer on an impact. *)
 
+    rect.y:= ViewTopY;
+    rect.h:= ViewHeight;
+    tmp:= leftX + WorldDx;
+    w:= tmp - ViewLeftX;
+
+    if w > 0 then
+        begin
+        rect.w:= w;
+        rect.x:= ViewLeftX;
+        DrawRect(rect, $30, $30, $30, $40, true);
+        if WorldEdge = weBounce then
+            DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
+        end;
+
+    tmp:= rightX + WorldDx;
+    w:= ViewRightX - tmp;
+
+    if w > 0 then
+        begin
+        rect.w:= w;
+        rect.x:= tmp;
+        DrawRect(rect, $30, $30, $30, $40, true);
+        if WorldEdge = weBounce then
+            DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
+        end;
+
+    (*
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    if WorldEdge = weWrap then
+    if (WorldEdge = weWrap) or (worldEdge = weBounce) then
         glColor4ub($00, $00, $00, $40)
     else
         begin
@@ -1098,10 +1127,10 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         end
     else if WorldEdge = weWrap then
         begin
-        {DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
+        DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-LeftImpactTimer));
         DrawLine(leftX, -3000, leftX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
         DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 5.0, $A0, $30, $60, max(50,255-RightImpactTimer));
-        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);}
+        DrawLine(rightX, -3000, rightX, cWaterLine+cVisibleWater, 2.0, $FF0000FF);
         end
     else
         begin
@@ -1110,6 +1139,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         end;
     if LeftImpactTimer > Lag then dec(LeftImpactTimer,Lag) else LeftImpactTimer:= 0;
     if RightImpactTimer > Lag then dec(RightImpactTimer,Lag) else RightImpactTimer:= 0
+    *)
     end;
 end;
 
@@ -1233,6 +1263,32 @@ if smallScreenOffset <> 0 then
 end;
 
 
+var preShiftWorldDx: LongInt;
+
+procedure ShiftWorld(Dir: LongInt; Flip: Boolean);
+begin
+    preShiftWorldDx:= WorldDx;
+
+    if Flip then
+        begin
+        WorldDx:= -WorldDx - playWidth - Dir * playWidth;
+        openglPushMatrix();
+        openglScalef(-1, 1, 1);
+        end
+    else
+        WorldDx:= WorldDx + Dir * playWidth;
+
+end;
+
+procedure UnshiftWorld(Dir: LongInt; Flip: Boolean);
+begin
+    WorldDx:= preShiftWorldDx;
+
+    if Flip then
+        openglPopMatrix();
+
+end;
+
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
 var i, t: LongInt;
     r: TSDL_Rect;
@@ -1240,18 +1296,20 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    replicateToLeft, replicateToRight, tmp: boolean;
+    replicateToLeft, replicateToRight, tmp, flip: boolean;
 begin
-if WorldEdge <> weWrap then
-begin
-replicateToLeft := false;
-replicateToRight:= false;
-end
+if (WorldEdge <> weWrap) {and (WorldEdge <> weBounce)} then
+    begin
+    replicateToLeft := false;
+    replicateToRight:= false;
+    flip:= false;
+    end
 else
-begin
-replicateToLeft := (leftX  + WorldDx > ViewLeftX);
-replicateToRight:= (rightX + WorldDx < ViewRightX);
-end;
+    begin
+    replicateToLeft := (leftX  + WorldDx > ViewLeftX);
+    replicateToRight:= (rightX + WorldDx < ViewRightX);
+    flip:= (WorldEdge = weBounce);
+    end;
 
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
 
@@ -1302,10 +1360,18 @@ else
     DrawLand(WorldDx, WorldDy);
 
     if replicateToLeft then
-        DrawLand(WorldDx - playWidth, WorldDy);
+        begin
+        ShiftWorld(-1, flip);
+        DrawLand(WorldDx, WorldDy);
+        UnshiftWorld(-1, flip);
+        end;
 
     if replicateToRight then
-        DrawLand(WorldDx + playWidth, WorldDy);
+        begin
+        ShiftWorld(1, flip);
+        DrawLand(WorldDx, WorldDy);
+        UnshiftWorld(1, flip);
+        end;
 
     DrawWater(255, 0, 0);
 
@@ -1338,26 +1404,20 @@ bShowFinger:= false;
 
 if replicateToLeft then
     begin
-    // remember original value
-    i:= WorldDx;
-    WorldDx:= i - playWidth;
+    ShiftWorld(-1, flip);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    // reset to original value
-    WorldDx:= i;
+    UnshiftWorld(-1, flip);
     end;
 
 if replicateToRight then
     begin
-    // remember original value
-    i:= WorldDx;
-    WorldDx:= i + playWidth;
+    ShiftWorld(1, flip);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    // reset to original value
-    WorldDx:= i;
+    UnshiftWorld(1, flip);
     end;
 
 bShowFinger:= tmp;
@@ -1403,22 +1463,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        // remember original value
-        i:= WorldDx;
-        WorldDx:= i - playWidth;
+        ShiftWorld(-1, flip);
         DrawVisualGears(2);
-        // reset to original value
-        WorldDx:= i;
+        UnshiftWorld(-1, flip);
         end;
 
     if replicateToRight then
         begin
-        // remember original value
-        i:= WorldDx;
-        WorldDx:= i + playWidth;
+        ShiftWorld(1, flip);
         DrawVisualGears(2);
-        // reset to original value
-        WorldDx:= i;
+        UnshiftWorld(1, flip);
         end;
 
     DrawVisualGears(2);
@@ -1429,22 +1483,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        // remember original value
-        i:= WorldDx;
-        WorldDx:= i - playWidth;
+        ShiftWorld(-1, flip);
         DrawVisualGears(3);
-        // reset to original value
-        WorldDx:= i;
+        UnshiftWorld(-1, flip);
         end;
 
     if replicateToRight then
         begin
-        // remember original value
-        i:= WorldDx;
-        WorldDx:= i + playWidth;
+        ShiftWorld(1, flip);
         DrawVisualGears(3);
-        // reset to original value
-        WorldDx:= i;
+        UnshiftWorld(1, flip);
         end;
 
     DrawVisualGears(3);

@@ -51,6 +51,7 @@ procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte)
 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+procedure DrawLineOnScreen      (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 procedure DrawRect              (rect: TSDL_Rect; r, g, b, a: Byte; Fill: boolean);
 procedure DrawHedgehog          (X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 procedure DrawScreenWidget      (widget: POnScreenWidget);
@@ -1093,15 +1094,23 @@ end;
 
 procedure DrawLine(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
 begin
+    openglPushMatrix();
+    openglTranslatef(WorldDx, WorldDy, 0);
+
+    UpdateModelviewProjection;
+
+    DrawLineOnScreen(X0, Y0, X1, Y1, Width, r, g, b, a);
+
+    openglPopMatrix();
+end;
+
+procedure DrawLineOnScreen(X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
+begin
     glEnable(GL_LINE_SMOOTH);
 
     EnableTexture(False);
 
-    openglPushMatrix;
-    openglTranslatef(WorldDx, WorldDy, 0);
     glLineWidth(Width);
-
-    UpdateModelviewProjection;
 
     Tint(r, g, b, a);
     VertexBuffer[0].X:= X0;
@@ -1111,9 +1120,7 @@ begin
 
     SetVertexPointer(@VertexBuffer[0], 2);
     glDrawArrays(GL_LINES, 0, 2);
-    untint;
-
-    openglPopMatrix;
+    untint();
 
     EnableTexture(True);
 
