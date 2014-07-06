@@ -117,11 +117,26 @@ for i:= 2 to 6 do
         end
 end;
 
+function GetSprite(sprite, SDsprite: TSprite): TSprite; inline;
+begin
+    if SuddenDeathDmg then
+        exit(SDsprite)
+    else
+        exit(sprite);
+end;
+
+function GetSpriteData(sprite, SDsprite: TSprite): PSpriteData; inline;
+begin
+    exit(@SpritesData[GetSprite(sprite, SDsprite)]);
+end;
+
 procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
     tinted: boolean;
     tmp: real;
     i: LongInt;
+    sprite: TSprite;
+    spriteData: PSpriteData;
 begin
 case Layer of
     // this layer is very distant in the background when stereo
@@ -131,36 +146,27 @@ case Layer of
             begin
             if Gear^.Tint <> $FFFFFFFF then Tint(Gear^.Tint);
             case Gear^.Kind of
-              vgtCloud: if SuddenDeathDmg then
-                             DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
-                         else
-                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
-               vgtFlake: if cFlattenFlakes then
+              vgtCloud: begin
+                        spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                        DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
+                        end;
+               vgtFlake: begin
+                         sprite:= GetSprite(sprFlake, sprSDFlake);
+                         if cFlattenFlakes then
                              begin
-                             if SuddenDeathDmg then
-                                 if vobSDVelocity = 0 then
-                                     DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                                 else
-                                     DrawSpriteRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                             if vobSDVelocity = 0 then
+                                 DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                              else
-                                 if vobVelocity = 0 then
-                                     DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                                 else
-                                     DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                                 DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                              end
                          else
                              begin
-                             if SuddenDeathDmg then
-                                 if vobSDVelocity = 0 then
-                                     DrawTextureF(SpritesData[sprSDFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                                 else
-                                     DrawTextureRotatedF(SpritesData[sprSDFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                             if vobSDVelocity = 0 then
+                                 DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                              else
-                                 if vobVelocity = 0 then
-                                     DrawTextureF(SpritesData[sprFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                                 else
-                                     DrawTextureRotatedF(SpritesData[sprFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+                                 DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
                              end;
+                         end;
                end;
            if Gear^.Tint <> $FFFFFFFF then
                untint;
@@ -176,16 +182,13 @@ case Layer of
           if Gear^.Tint <> $FFFFFFFF then
               Tint(Gear^.Tint);
           case Gear^.Kind of
-              vgtFlake: if SuddenDeathDmg then
-                             if vobSDVelocity = 0 then
-                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                             else
-                                 DrawSpriteRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+              vgtFlake: begin
+                         sprite:= GetSprite(sprFlake, sprSDFlake);
+                         if vobSDVelocity = 0 then
+                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                          else
-                             if vobVelocity = 0 then
-                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                             else
-                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                             DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                        end;
               vgtSmokeTrace: if Gear^.State < 8 then
                   DrawSprite(sprSmokeTrace, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.State);
               vgtEvilTrace: if Gear^.State < 8 then
@@ -204,30 +207,18 @@ case Layer of
                                DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
                            else
                                DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
-                  vgtSplash: if SuddenDeathDmg then
-                                begin
-                                if Gear^.Angle <> 0 then
-                                    begin
-                                    DrawTextureRotatedF(SpritesData[sprSDSplash].Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((SpritesData[sprSDSplash].Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSDSplash].Width, SpritesData[sprSDSplash].Height, Gear^.Angle);
-                                    end
-                                else
-                                 //DrawSprite(sprSDSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
-                                    DrawTextureF(SpritesData[sprSDSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSDSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSDSplash].Width, SpritesData[sprSDSplash].Height);
-                                end
+                  vgtSplash: begin
+                             spriteData:= GetSpriteData(sprSplash, sprite);
+                             if Gear^.Angle <> 0 then
+                                DrawTextureRotatedF(spriteData^.Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((spriteData^.Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height, Gear^.Angle)
                              else
-                                begin
-                                if Gear^.Angle <> 0 then
-                                    begin
-                                    DrawTextureRotatedF(SpritesData[sprSplash].Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((SpritesData[sprSplash].Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSplash].Width, SpritesData[sprSplash].Height, Gear^.Angle);
-                                    end
-                                else
-                                 //DrawSprite(sprSplash, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37));
-                                    DrawTextureF(SpritesData[sprSplash].Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((SpritesData[sprSplash].Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, SpritesData[sprSplash].Width, SpritesData[sprSplash].Height);
-                                 end;
-                  vgtDroplet: if SuddenDeathDmg then
-                                  DrawSprite(sprSDDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame)
-                              else
-                                  DrawSprite(sprDroplet, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                                //DrawSprite(sprite, round(Gear^.X) + WorldDx - 40, round(Gear^.Y) + WorldDy - 58, 19 - (Gear^.FrameTicks div 37))
+                                DrawTextureF(spriteData^.Texture, Gear^.scale, round(Gear^.X + WorldDx), round(Gear^.Y + WorldDy - ((spriteData^.Height+8)*Gear^.Scale)/2), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height);
+                             end;
+                  vgtDroplet: begin
+                              sprite:= GetSprite(sprDroplet, sprSDDroplet);
+                              DrawSprite(sprite, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);
+                              end;
                   vgtBubble: DrawSprite(sprBubbles, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy - 8, Gear^.Frame);//(RealTicks div 64 + Gear^.Frame) mod 8);
                vgtStraightShot: begin
                                 if Gear^.dX < 0 then
@@ -253,16 +244,13 @@ case Layer of
                Tint(Gear^.Tint);
            case Gear^.Kind of
 (*
-              vgtFlake: if SuddenDeathDmg then
-                             if vobSDVelocity = 0 then
-                                 DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                             else
-                                 DrawSpriteRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                         else
-                             if vobVelocity = 0 then
-                                 DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                             else
-                                 DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);*)
+              vgtFlake: begin
+                        sprite:= GetSprite(sprFlake, sprSDFlake);
+                        if vobSDVelocity = 0 then
+                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                        else
+                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                        end;*)
                vgtSpeechBubble: begin
                                 if (Gear^.Tex <> nil) and (((Gear^.State = 0) and (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Team <> CurrentTeam)) or (Gear^.State = 1)) then
                                     begin
@@ -366,16 +354,13 @@ case Layer of
                    vgtBulletHit: DrawSpriteRotatedF(sprBulletHit, round(Gear^.X) + WorldDx - 0, round(Gear^.Y) + WorldDy - 0, 7 - (Gear^.FrameTicks div 50), 1, Gear^.Angle);
                end;
            case Gear^.Kind of
-               vgtFlake: if SuddenDeathDmg then
-                             if vobSDVelocity = 0 then
-                                 DrawTextureF(SpritesData[sprSDFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                             else
-                                 DrawTextureRotatedF(SpritesData[sprSDFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
+               vgtFlake: begin
+                         spriteData:= GetSpriteData(sprFlake, sprSDFlake);
+                         if vobSDVelocity = 0 then
+                             DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                          else
-                             if vobVelocity = 0 then
-                                 DrawTextureF(SpritesData[sprFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                             else
-                                 DrawTextureRotatedF(SpritesData[sprFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                             DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                         end;
                vgtCircle: if gear^.Angle = 1 then
                               begin
                               tmp:= Gear^.State / 100;
@@ -397,20 +382,17 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
-               vgtCloud: if SuddenDeathDmg then
-                            DrawTextureF(SpritesData[sprSDCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height)
+               vgtCloud: begin
+                         spriteData:= GetSpriteData(sprCloud, sprSDCloud);
+                         DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height);
+                         end;
+              vgtFlake: begin
+                        spriteData:= GetSpriteData(sprFlake, sprSDFlake);
+                        if vobSDVelocity = 0 then
+                            DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                         else
-                            DrawTextureF(SpritesData[sprCloud].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprCloud].Width, SpritesData[sprCloud].Height);
-              vgtFlake: if SuddenDeathDmg then
-                            if vobSDVelocity = 0 then
-                                DrawTextureF(SpritesData[sprSDFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                            else
-                                DrawTextureRotatedF(SpritesData[sprSDFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle)
-                        else
-                            if vobVelocity = 0 then
-                                DrawTextureF(SpritesData[sprFlake].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
-                            else
-                                DrawTextureRotatedF(SpritesData[sprFlake].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                            DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
+                        end;
             end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -425,20 +407,17 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
-                vgtCloud: if SuddenDeathDmg then
-                            DrawSprite(sprSDCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                          else
-                            DrawSprite(sprCloud, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
-              vgtFlake: if SuddenDeathDmg then
-                            if vobSDVelocity = 0 then
-                                DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                            else
-                                DrawSpriteRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
-                          else
-                            if vobVelocity = 0 then
-                                DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                            else
-                                DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                vgtCloud: begin
+                          sprite:= GetSprite(sprCloud, sprSDCloud);
+                          DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame);
+                          end;
+              vgtFlake: begin
+                        sprite:= GetSprite(sprFlake, sprSDFlake);
+                        if vobSDVelocity = 0 then
+                            DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
+                        else
+                            DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                        end;
                 end;
             if (Gear^.Tint <> $FFFFFFFF) then
                 untint;
@@ -453,16 +432,13 @@ case Layer of
             if Gear^.Tint <> $FFFFFFFF then
                 Tint(Gear^.Tint);
             case Gear^.Kind of
-                vgtFlake: if SuddenDeathDmg then
-                            if vobSDVelocity = 0 then
-                                DrawSprite(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                            else
-                                DrawSpriteRotatedF(sprSDFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                vgtFlake: begin
+                          sprite:= GetSprite(sprFlake, sprSDFlake);
+                          if vobSDVelocity = 0 then
+                              DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                           else
-                            if vobVelocity = 0 then
-                                DrawSprite(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
-                            else
-                                DrawSpriteRotatedF(sprFlake, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
+                              DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
+                          end;
                 vgtNoPlaceWarn:
                             DrawTexture(round(Gear^.X) + WorldDx - round(Gear^.Tex^.w * Gear^.Scale) div 2, round(Gear^.Y) + WorldDy - round(Gear^.Tex^.h * Gear^.Scale) div 2, Gear^.Tex, Gear^.Scale);
                 end;

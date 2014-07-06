@@ -302,16 +302,7 @@ var
             );
 
 var
-    SpritesData: array[TSprite] of record
-            FileName: string[15];
-            Path, AltPath: TPathType;
-            Texture: PTexture;
-            Surface: PSDL_Surface;
-            Width, Height, imageWidth, imageHeight: LongInt;
-            saveSurf: boolean;
-            priority: GLfloat;
-            getDimensions, getImageDimensions: boolean;
-            end = (
+    SpritesData: array[TSprite] of TSpriteData = (
             (FileName:  'BlueWater'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprWater
             (FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;

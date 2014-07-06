@@ -499,6 +499,18 @@ type
         pressedWidget            : POnScreenWidget;
         end;
 
+    PSpriteData = ^TSpriteData;
+    TSpriteData = record
+            FileName: string[15];
+            Path, AltPath: TPathType;
+            Texture: PTexture;
+            Surface: PSDL_Surface;
+            Width, Height, imageWidth, imageHeight: LongInt;
+            saveSurf: boolean;
+            priority: GLfloat;
+            getDimensions, getImageDimensions: boolean;
+            end;
+
 implementation
 
 end.
