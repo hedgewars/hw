@@ -3195,7 +3195,7 @@ begin
     else
         exit;
 
-    if playWidth > cMinPlayWidth then
+    if (WorldEdge = weSea) and (playWidth > cMinPlayWidth) then
         begin
         inc(leftX);
         dec(rightX);
