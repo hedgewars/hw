@@ -258,42 +258,49 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepDrowningGear(Gear: PGear);
+var i, d: LongInt;
+    bubble: PVisualGear;
+begin
+if Gear^.Timer = 0 then
     begin
-    if Gear^.Timer = 0 then
+    d:= 2 * Gear^.Radius;
+    for i:= (Gear^.Radius * Gear^.Radius) div 4 downto 0 do
         begin
-        if (FollowGear = Gear) and (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear <> nil) then
-            FollowGear:= CurrentHedgehog^.Gear;
-        end
-    else if Gear^.Timer > 0 then
-        begin
-        AllInactive := false;
-        dec(Gear^.Timer);
+        bubble := AddVisualGear(hwRound(Gear^.X) - Gear^.Radius + random(d), hwRound(Gear^.Y) - Gear^.Radius + random(d), vgtBubble);
+        if bubble <> nil then
+            bubble^.dY:= 0.1 + random(20)/10;
         end;
-
-    Gear^.Y := Gear^.Y + cDrownSpeed;
-
-    if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
-        begin
-        if leftX > hwRound(Gear^.X) - Gear^.Radius then
-            Gear^.X := Gear^.X - cDrownSpeed
-        else
-            Gear^.X := Gear^.X + cDrownSpeed;
-        end
-    else
-        Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
-
-    // Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
-    if ((not SuddenDeathDmg and (WaterOpacity < $FF))
-    or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
-        if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
-            AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
-    else if Random(12) = 0 then
-             AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble);
-    if (not SuddenDeathDmg and (WaterOpacity > $FE))
-    or (SuddenDeathDmg and (SDWaterOpacity > $FE))
-    or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
-        DeleteGear(Gear);
+    DeleteGear(Gear);
+    exit;
     end;
+
+AllInactive := false;
+dec(Gear^.Timer);
+
+Gear^.Y := Gear^.Y + cDrownSpeed;
+
+if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
+    begin
+    if leftX > hwRound(Gear^.X) - Gear^.Radius then
+        Gear^.X := Gear^.X - cDrownSpeed
+    else
+        Gear^.X := Gear^.X + cDrownSpeed;
+    end
+else
+    Gear^.X := Gear^.X + Gear^.dX * cDrownSpeed;
+
+// Create some bubbles (0.5% might be better but causes too few bubbles sometimes)
+if ((not SuddenDeathDmg and (WaterOpacity < $FF))
+or (SuddenDeathDmg and (SDWaterOpacity < $FF))) and ((GameTicks and $1F) = 0) then
+    if (Gear^.Kind = gtHedgehog) and (Random(4) = 0) then
+        AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble)
+else if Random(12) = 0 then
+         AddVisualGear(hwRound(Gear^.X) - Gear^.Radius, hwRound(Gear^.Y) - Gear^.Radius, vgtBubble);
+if (not SuddenDeathDmg and (WaterOpacity > $FE))
+or (SuddenDeathDmg and (SDWaterOpacity > $FE))
+or (hwRound(Gear^.Y) > Gear^.Radius + cWaterLine + cVisibleWater) then
+    DeleteGear(Gear);
+end;
 
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepFallingGear(Gear: PGear);
