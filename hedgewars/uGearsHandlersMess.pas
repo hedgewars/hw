@@ -981,14 +981,8 @@ begin
     // if water entered or left
     if nuw <> uw then
         begin
-        if (gX > leftX) and (gY < rightX) then
-            begin
-            AddVisualGear(gX, cWaterLine, vgtSplash);
-            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-            AddVisualGear(gX - 3 + Random(6), cWaterLine, vgtDroplet);
-            end;
+        if Gear^.Timer <> 5000 then
+            AddSplashForGear(Gear, false);
         StopSoundChan(Gear^.SoundChannel);
         if nuw then
             begin
@@ -1077,6 +1071,7 @@ begin
     Gear^.X := Gear^.X + Gear^.dX;
     Gear^.Y := Gear^.Y + Gear^.dY;
     Gear^.dY := Gear^.dY + cGravity;
+    CheckGearDrowning(Gear);
     CheckCollision(Gear);
     if (Gear^.State and gstCollision) <> 0 then
         begin
