@@ -51,7 +51,7 @@ compressWithLength b = BL.drop 8 . encode . runPut $ do
     mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
 
 mapString :: B.ByteString
-mapString = B.pack . Base64.encode . BW.unpack . BL.toStrict . compressWithLength . BL.drop 8 . encode $ drawnMap01
+mapString = B.pack . Base64.encode . BW.unpack . BL.toStrict . compressWithLength . BL.drop 8 . encode $ drawnMap02
 
 main = B.writeFile "out.hwmap" mapString
 
@@ -81,4 +81,16 @@ drawnMap01 = translate (-3) (-3) $ sp ++ mirror sp ++ base ++ mirror base
         , l [(0, 8), (8, 8)]
         ]
     l = Line Solid 0
-    
+
+drawnMap02 = translate (-3) (-3) $ sp ++ mirror sp ++ base ++ mirror base
+    where
+    sp = translate 128 128 . scale 256 $ [SpecialPoints [
+        (7, 0)
+        , (7, 7)
+        ]]
+    base = scale 256 $ [
+        l [(8, 0), (8, 1), (1, 1)]
+        , l [(2, 1), (2, 2), (3, 2), (3, 3), (4, 3), (4, 4), (5, 4), (5, 5), (6, 5), (6, 6), (7, 6), (7, 7), (7, 1)]
+        , l [(0, 2), (1, 2), (1, 3), (2, 3), (2, 4), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (5, 7), (6, 7), (6, 8), (8, 8), (8, 2)]
+        ]
+    l = Line Solid 0
