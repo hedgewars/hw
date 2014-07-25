@@ -23,9 +23,10 @@ transform f = map tf
     where
     tf (SpecialPoints p) = SpecialPoints $ map f p
     tf (Line t r p) = Line t r $ map f p
-    
+
 scale f = transform (\(a, b) -> (a * f, b * f))
 mirror = transform (\(a, b) -> (4095 - a, b))
+flip' = transform (\(a, b) -> (a, 2047 - b))
 translate dx dy = transform (\(a, b) -> (a + dx, b + dy))
 
 instance Binary Chunk where
@@ -51,7 +52,7 @@ compressWithLength b = BL.drop 8 . encode . runPut $ do
     mapM_ putWord8 $ BW.unpack $ BL.toStrict $ Z.compress b
 
 mapString :: B.ByteString
-mapString = B.pack . Base64.encode . BW.unpack . BL.toStrict . compressWithLength . BL.drop 8 . encode $ drawnMap03
+mapString = B.pack . Base64.encode . BW.unpack . BL.toStrict . compressWithLength . BL.drop 8 . encode $ drawnMap04
 
 main = B.writeFile "out.hwmap" mapString
 
@@ -125,3 +126,29 @@ drawnMap03 = translate (-3) (-3) $ sp ++ mirror sp ++ base ++ mirror base
         , l [(8, 5), (8, 8)]
         ]
     l = Line Solid 0
+
+drawnMap04 = translate (-3) (-3) $ sp ++ fm sp ++ base ++ fm base
+    where
+    sp = translate 128 128 . scale 256 $ [SpecialPoints [
+        (7, 7)
+--        , (6, 6)
+        , (3, 3)
+        , (0, 6)
+        , (3, 6)
+        ]]
+    base = scale 256 $ [
+        l [(1, 2), (3, 2), (3, 1), (4, 1), (4, 2), (6, 2), (6, 4), (7, 4), (7, 5), (8, 5), (8, 8)]
+        , l [(0, 0), (16, 0)]
+        , l [(1, 5), (3, 5), (3, 7), (1, 7), (1, 5)]
+        , l [(4, 5), (6, 5), (6, 7), (4, 7), (4, 5)]
+        , l [(0, 4), (2, 4), (2, 3), (5, 3), (5, 4)]
+        , l [(6, 1), (6, 2), (7, 2)]
+        , l [(7, 1), (8, 1)]
+        , l [(7, 3), (8, 3)]
+        , l [(3, 4), (4, 4)]
+        , l [(7, 6), (7, 8)]
+        , l [(2, 0), (2, 1)]
+        , l [(5, 0), (5, 1)]
+        ]
+    l = Line Solid 0
+    fm = flip' . mirror
