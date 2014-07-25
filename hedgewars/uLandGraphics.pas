@@ -49,7 +49,8 @@ procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: Word): boolean;
+function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force: boolean; LandFlags: Word): boolean;
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -613,15 +614,20 @@ if indestructible then
     lf:= lfIndestructible
 else
     lf:= 0;
-TryPlaceOnLandSimple:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, lf);
+TryPlaceOnLandSimple:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, lf);
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 begin
-TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, LandFlags);
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, LandFlags);
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap: boolean; LandFlags: Word): boolean;
+function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word): boolean; inline;
+begin
+    ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, true, true, LandFlags)
+end;
+
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force: boolean; LandFlags: Word): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
@@ -655,14 +661,14 @@ case bpp of
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
                 if (outOfMap and 
-                   ((cpY + y) < LAND_HEIGHT) and ((cpY + y) >= 0) and 
-                   ((cpX + x) < LAND_WIDTH) and ((cpX + x) >= 0) and 
-                   (Land[cpY + y, cpX + x] <> 0)) or
+                   ((cpY + y) < LAND_HEIGHT) and ((cpY + y) >= 0) and
+                   ((cpX + x) < LAND_WIDTH) and ((cpX + x) >= 0) and
+                   ((not force) or (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
                        (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
                        ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or 
-                       (Land[cpY + y, cpX + x] <> 0))) then
+                       ((not force) or (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
                    if SDL_MustLock(Image) then
                        SDL_UnlockSurface(Image);

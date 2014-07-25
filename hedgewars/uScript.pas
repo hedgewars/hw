@@ -2001,10 +2001,10 @@ begin
             if SpritesData[spr].Surface = nil then
                 LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
             else
-                placed:= TryPlaceOnLand(
+                placed:= ForcePlaceOnLand(
                     lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
                     lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), true, lf);
+                    spr, lua_tointeger(L, 4), lf);
             end;
         end;
 
