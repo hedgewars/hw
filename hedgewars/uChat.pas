@@ -124,7 +124,7 @@ dstrect.y:= Padding + 1;
 
 
 // create and blit text shadow
-strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), shadowcolor);
+strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), shadowcolor);
 SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
 SDL_FreeSurface(strSurface);
 
@@ -133,7 +133,7 @@ dstrect.x:= Padding;
 dstrect.y:= Padding;
 
 // create and blit text
-strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), cl.color);
+strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
 SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
 SDL_FreeSurface(strSurface);
 
