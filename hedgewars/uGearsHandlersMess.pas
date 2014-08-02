@@ -4601,7 +4601,7 @@ begin
             end
         else
             begin
-            if CheckCoordInWater(rX, rY) or CheckCoordInWater(x, y) then
+            if (not CheckCoordInWater(rX, rY)) or (not CheckCoordInWater(x, y)) then
                 begin
                 if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0)
                     and (Land[y, x] <> 0) then
