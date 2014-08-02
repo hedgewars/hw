@@ -132,12 +132,17 @@ end;
 
 procedure DrawVisualGears(Layer: LongWord);
 var Gear: PVisualGear;
-    tinted: boolean;
+    tinted, speedlessFlakes: boolean;
     tmp: real;
     i: LongInt;
     sprite: TSprite;
     spriteData: PSpriteData;
 begin
+if SuddenDeathDmg then
+    speedlessFlakes:= (vobSDVelocity = 0)
+else
+    speedlessFlakes:= (vobVelocity = 0);
+
 case Layer of
     // this layer is very distant in the background when stereo
     0: begin
@@ -154,14 +159,14 @@ case Layer of
                          sprite:= GetSprite(sprFlake, sprSDFlake);
                          if cFlattenFlakes then
                              begin
-                             if vobSDVelocity = 0 then
+                             if speedlessFlakes then
                                  DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                              else
                                  DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
                              end
                          else
                              begin
-                             if vobSDVelocity = 0 then
+                             if speedlessFlakes then
                                  DrawTextureF(SpritesData[sprite].Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height)
                              else
                                  DrawTextureRotatedF(SpritesData[sprite].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, SpritesData[sprFlake].Width, SpritesData[sprFlake].Height, Gear^.Angle);
@@ -184,7 +189,7 @@ case Layer of
           case Gear^.Kind of
               vgtFlake: begin
                          sprite:= GetSprite(sprFlake, sprSDFlake);
-                         if vobSDVelocity = 0 then
+                         if speedlessFlakes then
                              DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                          else
                              DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
@@ -246,7 +251,7 @@ case Layer of
 (*
               vgtFlake: begin
                         sprite:= GetSprite(sprFlake, sprSDFlake);
-                        if vobSDVelocity = 0 then
+                        if speedlessFlakes then
                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
                             DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
@@ -356,7 +361,7 @@ case Layer of
            case Gear^.Kind of
                vgtFlake: begin
                          spriteData:= GetSpriteData(sprFlake, sprSDFlake);
-                         if vobSDVelocity = 0 then
+                         if speedlessFlakes then
                              DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                          else
                              DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
@@ -388,7 +393,7 @@ case Layer of
                          end;
               vgtFlake: begin
                         spriteData:= GetSpriteData(sprFlake, sprSDFlake);
-                        if vobSDVelocity = 0 then
+                        if speedlessFlakes then
                             DrawTextureF(spriteData^.Texture, Gear^.Scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height)
                         else
                             DrawTextureRotatedF(spriteData^.Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, spriteData^.Width, spriteData^.Height, Gear^.Angle);
@@ -413,7 +418,7 @@ case Layer of
                           end;
               vgtFlake: begin
                         sprite:= GetSprite(sprFlake, sprSDFlake);
-                        if vobSDVelocity = 0 then
+                        if speedlessFlakes then
                             DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                         else
                             DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle);
@@ -434,7 +439,7 @@ case Layer of
             case Gear^.Kind of
                 vgtFlake: begin
                           sprite:= GetSprite(sprFlake, sprSDFlake);
-                          if vobSDVelocity = 0 then
+                          if speedlessFlakes then
                               DrawSprite(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame)
                           else
                               DrawSpriteRotatedF(sprite, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy + SkyOffset, Gear^.Frame, 1, Gear^.Angle)
