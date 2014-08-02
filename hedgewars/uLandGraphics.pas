@@ -663,12 +663,12 @@ case bpp of
                 if (outOfMap and 
                    ((cpY + y) < LAND_HEIGHT) and ((cpY + y) >= 0) and
                    ((cpX + x) < LAND_WIDTH) and ((cpX + x) >= 0) and
-                   ((not force) or (Land[cpY + y, cpX + x] <> 0))) or
+                   ((not force) and (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
                        (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
                        ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or 
-                       ((not force) or (Land[cpY + y, cpX + x] <> 0)))) then
+                       ((not force) and (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
                    if SDL_MustLock(Image) then
                        SDL_UnlockSurface(Image);
