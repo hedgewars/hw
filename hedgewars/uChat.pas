@@ -209,13 +209,6 @@ procedure DrawChat;
 var i, t, left, top, cnt: Longword;
 begin
 ChatReady:= true; // maybe move to somewhere else?
-if MissedCount <> 0 then // there are chat strings we missed, so print them now
-    begin
-    for i:= 0 to MissedCount - 1 do
-        AddChatString(MStrs[i]);
-    MissedCount:= 0;
-    end;
-i:= lastStr;
 
 left:= 4 - cScreenWidth div 2;
 top := 10;
@@ -226,27 +219,37 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
     DrawTexture(left, top + visibleCount * ClHeight, InputStr.Tex);
     end;
 
-
-cnt:= 0; // count of lines displayed
-t  := 1; // # of current line processed
-
-// draw lines in reverse order
-while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
-and (Strs[i].Tex <> nil) do
+if UIDisplay <> uiNone then
     begin
-    // draw lines 4px away from left screen border and 2px away from top
-    DrawTexture(left, top + (visibleCount - t) * ClHeight, Strs[i].Tex);
+    if MissedCount <> 0 then // there are chat strings we missed, so print them now
+        begin
+        for i:= 0 to MissedCount - 1 do
+            AddChatString(MStrs[i]);
+        MissedCount:= 0;
+        end;
+    i:= lastStr;
 
-    if i = 0 then
-        i:= MaxStrIndex
-    else
-        dec(i);
+    cnt:= 0; // count of lines displayed
+    t  := 1; // # of current line processed
 
-    inc(cnt);
-    inc(t)
+    // draw lines in reverse order
+    while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
+    and (Strs[i].Tex <> nil) do
+        begin
+        // draw lines 4px away from left screen border and 2px away from top
+        DrawTexture(left, top + (visibleCount - t) * ClHeight, Strs[i].Tex);
+
+        if i = 0 then
+            i:= MaxStrIndex
+        else
+            dec(i);
+
+        inc(cnt);
+        inc(t)
+        end;
+
+    visibleCount:= cnt;
     end;
-
-visibleCount:= cnt;
 end;
 
 procedure SendHogSpeech(s: shortstring);
