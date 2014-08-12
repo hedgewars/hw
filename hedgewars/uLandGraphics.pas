@@ -624,7 +624,7 @@ end;
 
 function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word): boolean; inline;
 begin
-    ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, true, true, LandFlags)
+    ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, false, true, LandFlags)
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force: boolean; LandFlags: Word): boolean;
