@@ -2197,7 +2197,8 @@ begin
             Gear^.Y:= Gear^.Y+_6;
             if (landPixel and lfIce <> 0) or (TestCollisionYwithGear(Gear, 1) and lfIce <> 0) then
                 begin
-                gY := gy-6;
+                gX := hwRound(Gear^.X);
+                gY := hwRound(Gear^.Y) - 6;
                 DrawExplosion(gX, gY, 4);
                 PlaySound(sndVaporize);
                 AddVisualGear(gX - 3 + Random(6), gY - 2, vgtSteam);
@@ -2227,6 +2228,8 @@ begin
             end
         else
             begin
+            gX := hwRound(Gear^.X);
+            gY := hwRound(Gear^.Y);
             // Standard fire
             if not sticky then
                 begin
@@ -2276,6 +2279,8 @@ begin
         end;
     if Gear^.Health = 0 then
         begin
+        gX := hwRound(Gear^.X);
+        gY := hwRound(Gear^.Y);
         if not sticky then
             begin
             if ((GameTicks and $3) = 0) and (Random(1) = 0) then
