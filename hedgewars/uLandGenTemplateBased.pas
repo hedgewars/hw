@@ -1,12 +1,13 @@
 unit uLandGenTemplateBased;
 interface
 
-uses uLandTemplates;
+uses uLandTemplates, uLandOutline;
 
 procedure GenTemplated(var Template: TEdgeTemplate);
+procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 
 implementation
-uses uVariables, uConsts, uFloat, uLandOutline, uLandUtils, uRandom, SDLh, math;
+uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
