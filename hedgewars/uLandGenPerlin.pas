@@ -143,12 +143,10 @@ begin
         begin
             dj:= df * x div width;
 
-            r:= (abs(inoise(di, dj)) + y*4) mod 65536 div 256;
+            r:= ((abs(inoise(di, dj)) + y*4) mod 65536 - (height - y) * 8) div 256;
 
             //r:= (abs(inoise(di, dj))) shr 8 and $ff;
             if (x < margin) or (x > width - margin) then r:= r - abs(x - width div 2) + width div 2 - margin; // fade on edges
-
-            r:= r - (height - y) div 32;
 
             //r:= r - max(0, - abs(x - width div 2) + width * 2 div 100); // split vertically in the middle
             //r:= r + (trunc(1000 - sqrt(sqr(x - (width div 2)) * 4 + sqr(y - height * 5 div 4) * 22))) div 600 * 20; // ellipse
