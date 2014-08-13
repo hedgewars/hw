@@ -8,7 +8,7 @@ procedure GenMaze;
 
 implementation
 
-uses uRandom, uLandOutline, uLandTemplates, uVariables, uFloat, uConsts;
+uses uRandom, uLandOutline, uLandTemplates, uVariables, uFloat, uConsts, uLandGenTemplateBased;
 
 type direction = record x, y: LongInt; end;
 const DIR_N: direction = (x: 0; y: -1);
@@ -202,36 +202,46 @@ if not found_cell then
 end;
 
 procedure add_vertex(x, y: LongInt);
-var tmp_x, tmp_y: LongInt;
+var tmp_x, tmp_y, nx, ny: LongInt;
 begin
-if x = NTPX then
-begin
-    if pa.ar[num_vertices - 6].x = NTPX then
+    if x = NTPX then
     begin
-        num_vertices := num_vertices - 6;
+        if pa.ar[num_vertices - 6].x = NTPX then
+        begin
+            num_vertices := num_vertices - 6;
+        end
+        else
+        begin
+            pa.ar[num_vertices].x := NTPX;
+            pa.ar[num_vertices].y := 0;
+        end
     end
     else
     begin
-        pa.ar[num_vertices].x := NTPX;
-        pa.ar[num_vertices].y := 0;
-    end
-end
-else
-begin
-    if maze_inverted or (x mod 2 = 0) then
-        tmp_x := cellsize
-    else
-        tmp_x := cellsize * 2 div 3;
+        if maze_inverted or (x mod 2 = 0) then
+            tmp_x := cellsize
+        else
+            tmp_x := cellsize * 2 div 3;
 
-    if maze_inverted or (y mod 2 = 0) then
-        tmp_y := cellsize
-    else
-        tmp_y := cellsize * 2 div 3;
+        if maze_inverted or (y mod 2 = 0) then
+            tmp_y := cellsize
+        else
+            tmp_y := cellsize * 2 div 3;
 
-    pa.ar[num_vertices].x := (x-1)*cellsize + tmp_x;
-    pa.ar[num_vertices].y := (y-1)*cellsize + tmp_y + off_y;
-end;
-num_vertices := num_vertices + 1;
+        nx:= (x-1)*cellsize + tmp_x;
+        ny:= (y-1)*cellsize + tmp_y + off_y;
+
+        if num_vertices > 2 then
+            if ((pa.ar[num_vertices - 2].x = pa.ar[num_vertices - 1].x) and (pa.ar[num_vertices - 1].x = nx))
+                or ((pa.ar[num_vertices - 2].y = pa.ar[num_vertices - 1].y) and (pa.ar[num_vertices - 1].y = ny))
+                then
+                dec(num_vertices);
+
+        pa.ar[num_vertices].x := nx;
+        pa.ar[num_vertices].y := ny;
+    end;
+
+    num_vertices := num_vertices + 1;
 end;
 
 procedure add_edge(x, y: LongInt; dir: direction);
@@ -265,42 +275,43 @@ for i := 0 to 3 do
     else
         dir := DIR_N;
 
-if (dir = DIR_N) and is_x_edge(x, y) then
-    begin
-        x_edge_list[x, y] := false;
-        add_vertex(x+1, y);
-        add_edge(x, y-1, DIR_N);
-        break;
-    end;
+    if (dir = DIR_N) and is_x_edge(x, y) then
+        begin
+            x_edge_list[x, y] := false;
+            add_vertex(x+1, y);
+            add_edge(x, y-1, DIR_N);
+            break;
+        end;
 
-if (dir = DIR_E) and is_y_edge(x+1, y) then
-    begin
-        y_edge_list[x+1, y] := false;
-        add_vertex(x+2, y+1);
-        add_edge(x+1, y, DIR_E);
-        break;
-    end;
+    if (dir = DIR_E) and is_y_edge(x+1, y) then
+        begin
+            y_edge_list[x+1, y] := false;
+            add_vertex(x+2, y+1);
+            add_edge(x+1, y, DIR_E);
+            break;
+        end;
 
-if (dir = DIR_S) and is_x_edge(x, y+1) then
-    begin
-        x_edge_list[x, y+1] := false;
-        add_vertex(x+1, y+2);
-        add_edge(x, y+1, DIR_S);
-        break;
-    end;
+    if (dir = DIR_S) and is_x_edge(x, y+1) then
+        begin
+            x_edge_list[x, y+1] := false;
+            add_vertex(x+1, y+2);
+            add_edge(x, y+1, DIR_S);
+            break;
+        end;
 
-if (dir = DIR_W) and is_y_edge(x, y) then
-    begin
-        y_edge_list[x, y] := false;
-        add_vertex(x, y+1);
-        add_edge(x-1, y, DIR_W);
-        break;
+    if (dir = DIR_W) and is_y_edge(x, y) then
+        begin
+            y_edge_list[x, y] := false;
+            add_vertex(x, y+1);
+            add_edge(x-1, y, DIR_W);
+            break;
+        end;
     end;
-end;
 
 end;
 
 procedure GenMaze;
+var i: LongInt;
 begin
 case cTemplateFilter of
     0: begin
@@ -473,15 +484,32 @@ for x := 0 to num_edges_x - 1 do
 
 pa.count := num_vertices;
 
-RandomizePoints(pa);
-BezierizeEdge(pa, _0_25);
-RandomizePoints(pa);
-BezierizeEdge(pa, _0_25);
+leftX:= 0;
+rightX:= playWidth;
+topY:= off_y;
+
+// fill point
+pa.ar[pa.Count].x:= 1;
+pa.ar[pa.Count].y:= 1 + off_y;
+
+for i:= 0 to pa.Count - 1 do
+    begin
+        system.writeln(pa.ar[i].x, ', ', pa.ar[i].y);
+    end;
+
+// divide while it divides
+repeat
+    i:= pa.Count;
+    DivideEdges(1, pa)
+until i = pa.Count;
+
+// make it smooth
+BezierizeEdge(pa, _0_2);
 
 DrawEdge(pa, 0);
 
 if maze_inverted then
-    FillLand(1, 1+off_y, 0, 0)
+    FillLand(1, 1 + off_y, 0, 0)
 else
     begin
     x := 0;
@@ -497,9 +525,7 @@ if (GameFlags and gfDisableGirders) <> 0 then
     hasGirders:= false
 else
     hasGirders := true;
-leftX:= 0;
-rightX:= playWidth;
-topY:= off_y;
+
 hasBorder := false;
 end;
 
