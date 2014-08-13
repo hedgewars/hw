@@ -89,17 +89,14 @@ function onGameInit()
 	SetGearPosition(player, 10, 10)
 end
 
-
-function onGameTick20(gear)
+function onNewTurn()
 	if not TestRectForObstacle(300, 1500, 400, 1900, true) then
 		WriteLnToConsole('HOLE DETECTED')
 		EndLuaTest(TEST_SUCCESSFUL)
+	else
+		WriteLnToConsole('FIRE DID NOT BURN THROUGH!')
+		EndLuaTest(TEST_FAILED)
 	end
-end
-
-function onNewTurn()
-	WriteLnToConsole('FIRE DID NOT BURN HOLE!')
-	EndLuaTest(TEST_FAILED)
 end
 
 
