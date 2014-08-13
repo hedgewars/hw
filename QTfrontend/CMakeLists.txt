@@ -13,6 +13,7 @@ set(QT_USE_QTMAIN TRUE)
 find_package(Qt4 REQUIRED)
 include(${QT_USE_FILE})
 
+# https://bugreports.qt-project.org/browse/QTBUG-17333
 if(APPLE AND
    ${QTVERSION} VERSION_GREATER "4.7.0" AND
    ${QTVERSION} VERSION_LESS "4.7.4")
