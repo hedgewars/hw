@@ -492,10 +492,12 @@ topY:= off_y;
 pa.ar[pa.Count].x:= 1;
 pa.ar[pa.Count].y:= 1 + off_y;
 
+{
 for i:= 0 to pa.Count - 1 do
     begin
         system.writeln(pa.ar[i].x, ', ', pa.ar[i].y);
     end;
+}
 
 // divide while it divides
 repeat
