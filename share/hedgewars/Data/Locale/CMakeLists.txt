@@ -1,3 +1,6 @@
+find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
 file(GLOB txttrans2 ??.txt)
 file(GLOB txttrans5 ?????.txt)
 file(GLOB tsfiles *.ts)
