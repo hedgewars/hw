@@ -1570,7 +1570,7 @@ if UIDisplay = uiAll then
     RenderTeamsHealth;
 
 // Lag alert
-if isInLag and not isServerPaused then
+if isInLag and (not isServerPaused) then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
