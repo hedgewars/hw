@@ -36,7 +36,6 @@ procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure NetGetNextCmd;
-procedure NetCheckForServerMessages;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
@@ -308,67 +307,11 @@ begin
 inc(flushDelayTicks, Lag);
 if (flushDelayTicks >= cSendEmptyPacketTime) then
     begin
-    if sendBuffer.count = 0 and not isPaused then
+    if (sendBuffer.count = 0) and not isPaused then
         SendIPC(_S'+');
 
      flushBuffer()
     end
-end;
-
-procedure NetCheckForServerMessages;
-var cmd: PCmd;    
-    prevCmd: PCmd;
-    s: shortstring;
-    foundMessages : boolean;
-
-    procedure RemoveCurrentCmd;
-    var tempCmd: PCmd;
-    begin 
-        tempCmd := cmd^.Next;
-        if prevCmd <> nil then            
-            prevCmd^.Next := tempCmd
-        else
-            headCmd := tempCmd;
-
-        if cmd = lastcmd then lastcmd := prevCmd;
-
-        dispose(cmd);
-        cmd := tempCmd;
-
-        foundMessages := true;
-    end;
-begin
-    prevCmd := nil;
-    cmd := headcmd;
-    foundMessages := false;
-    
-    while cmd <> nil do
-    begin
-        case cmd^.cmd of         
-        'I': begin
-                ParseCommand('srv_pause', true);
-                RemoveCurrentCmd
-             end;
-        's': begin
-                s:= copy(cmd^.str, 2, Pred(cmd^.len));
-                ParseCommand('chatmsg ' + s, true);
-                WriteLnToConsole(s);
-                RemoveCurrentCmd
-             end;
-        'b': begin
-                s:= copy(cmd^.str, 2, Pred(cmd^.len));
-                ParseCommand('chatmsg ' + #4 + s, true);
-                WriteLnToConsole(s);
-                RemoveCurrentCmd
-             end;
-        else begin 
-                prevCmd := cmd;
-                cmd := cmd^.Next
-             end
-        end
-    end;
-
-    if foundMessages then isInLag:= false
 end;
 
 procedure NetGetNextCmd;
@@ -411,11 +354,7 @@ while (headcmd <> nil)
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
         ',': ParseCommand('skip', true);
-        'I': begin 
-                ParseCommand('srv_pause', true);
-                //don't read any more commands until the pause is released
-                if isPaused then tmpflag := false; 
-             end;
+        'I': ParseCommand('srv_pause', true);             
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);

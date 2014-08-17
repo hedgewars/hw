@@ -33,13 +33,12 @@ uses uInputHandler, uTeams, uIO, uAI, uGears, uSound, uLocale, uCaptions,
 procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
     s: ansistring;
-begin
-NetCheckForServerMessages; // check for pause and chat messages
-    
+begin   
 if (not CurrentTeam^.ExtDriven) then
     begin
     isInLag:= false;
     FlushMessages(Lag);
+    NetGetNextCmd; // check for pause and chat messages
     end;
 
 if isPaused then exit;
@@ -99,7 +98,6 @@ while (GameState <> gsExit) and (i <= Lag) do
     else
         begin
         NetGetNextCmd;
-        if isPaused then break;
 
         if isInLag then
             case GameType of

@@ -615,7 +615,7 @@ end;
 procedure chServerPause(var s: shortstring);
 begin   
 s:= s;
-if gameType = gmtNet then
+if (gameType = gmtNet) and not CurrentTeam^.ExtDriven then
     isPaused:= not isPaused;
 end;
 
