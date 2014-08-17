@@ -1639,7 +1639,7 @@ DrawChat;
 // various captions
 if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
-if isPaused then
+if isPaused or (isServerPaused and isInLag)  then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 if isAFK then
     DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture);
