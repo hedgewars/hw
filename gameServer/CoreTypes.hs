@@ -171,7 +171,8 @@ data GameInfo =
         teamsInGameNumber :: Int,
         allPlayersHaveRegisteredAccounts :: !Bool,
         giMapParams :: Map.Map B.ByteString B.ByteString,
-        giParams :: Map.Map B.ByteString [B.ByteString]
+        giParams :: Map.Map B.ByteString [B.ByteString],
+        isPaused :: Bool
     } deriving (Show, Read)
 
 newGameInfo :: [TeamInfo]
@@ -179,6 +180,7 @@ newGameInfo :: [TeamInfo]
                 -> Bool
                 -> Map.Map ByteString ByteString
                 -> Map.Map ByteString [ByteString]
+                -> Bool
                 -> GameInfo
 newGameInfo =
     GameInfo
@@ -298,6 +300,7 @@ data Voting = Voting {
 
 data VoteType = VoteKick B.ByteString
               | VoteMap B.ByteString
+              | VotePause
 
 
 newVoting :: VoteType -> Voting

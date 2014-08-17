@@ -135,7 +135,9 @@ tkbd[code]:= KeyDown;
 
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
-          and (CurrentHedgehog^.BotLevel = 0);
+          and (CurrentHedgehog^.BotLevel = 0) 
+          and (not isPaused); // do not use move actions to modify CheckSum
+                              // during pause
 // REVIEW OR FIXME
 // ctrl/cmd + q to close engine and frontend - this seems like a bad idea, since we let people set arbitrary binds, and don't warn them of this.
 // There's no confirmation at all

@@ -34,15 +34,15 @@ procedure DoGameTick(Lag: LongInt);
 var i,j : LongInt;
     s: ansistring;
 begin
-if isPaused then
-    exit;
-
+NetCheckForServerMessages; // check for pause and chat messages
+    
 if (not CurrentTeam^.ExtDriven) then
     begin
-    NetGetNextCmd; // its for the case of receiving "/say" message
     isInLag:= false;
-    FlushMessages(Lag)
+    if not isPaused then FlushMessages(Lag);
     end;
+
+if isPaused then exit;
 
 if GameType <> gmtRecord then
     begin
@@ -99,6 +99,8 @@ while (GameState <> gsExit) and (i <= Lag) do
     else
         begin
         NetGetNextCmd;
+        if isPaused then break;
+
         if isInLag then
             case GameType of
                 gmtNet: begin

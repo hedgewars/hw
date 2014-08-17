@@ -36,6 +36,7 @@ procedure SendStat(sit: TStatInfoType; s: shortstring);
 procedure IPCWaitPongEvent;
 procedure IPCCheckSock;
 procedure NetGetNextCmd;
+procedure NetCheckForServerMessages;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
@@ -314,6 +315,62 @@ if (flushDelayTicks >= cSendEmptyPacketTime) then
     end
 end;
 
+procedure NetCheckForServerMessages;
+var cmd: PCmd;    
+    prevCmd: PCmd;
+    s: shortstring;
+    foundMessages : boolean;
+
+    procedure RemoveCurrentCmd;
+    var tempCmd: PCmd;
+    begin 
+        tempCmd := cmd^.Next;
+        if prevCmd <> nil then            
+            prevCmd^.Next := tempCmd
+        else
+            headCmd := tempCmd;
+
+        if cmd = lastcmd then lastcmd := prevCmd;
+
+        dispose(cmd);
+        cmd := tempCmd;
+
+        foundMessages := true;
+    end;
+begin
+    prevCmd := nil;
+    cmd := headcmd;
+    foundMessages := false;
+    
+    while cmd <> nil do
+    begin
+        case cmd^.cmd of         
+        'I': begin
+                ParseCommand('srv_pause', true);
+                RemoveCurrentCmd
+             end;
+        's': begin
+                s:= copy(cmd^.str, 2, Pred(cmd^.len));
+                ParseCommand('chatmsg ' + s, true);
+                WriteLnToConsole(s);
+                RemoveCurrentCmd
+             end;
+        'b': begin
+                s:= copy(cmd^.str, 2, Pred(cmd^.len));
+                ParseCommand('chatmsg ' + #4 + s, true);
+                WriteLnToConsole(s);
+                RemoveCurrentCmd
+             end;
+        else begin 
+                prevCmd := cmd;
+                cmd := cmd^.Next
+             end
+        end
+    end;
+
+    if foundMessages then isInLag:= false
+end;
+
 procedure NetGetNextCmd;
 var tmpflag: boolean;
     s: shortstring;
@@ -329,7 +386,8 @@ while (headcmd <> nil)
         or (headcmd^.cmd = '#') // must be synced for saves to work
         or (headcmd^.cmd = 'b')
         or (headcmd^.cmd = 'F')
-        or (headcmd^.cmd = 'G')) do
+        or (headcmd^.cmd = 'G')
+        or (headcmd^.cmd = 'I')) do
     begin
     case headcmd^.cmd of
         '+': ; // do nothing - it is just an empty packet
@@ -353,6 +411,11 @@ while (headcmd <> nil)
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
         ',': ParseCommand('skip', true);
+        'I': begin 
+                ParseCommand('srv_pause', true);
+                //don't read any more commands until the pause is released
+                if isPaused then tmpflag := false; 
+             end;
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);

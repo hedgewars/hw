@@ -612,6 +612,13 @@ if isPaused or isAFK then
     SDL_ShowCursor(ord(GameState = gsConfirm))
 end;
 
+procedure chServerPause(var s: shortstring);
+begin   
+s:= s;
+if gameType = gmtNet then
+    isPaused:= not isPaused;
+end;
+
 procedure chRotateMask(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
@@ -859,6 +866,7 @@ begin
     RegisterVariable('-voldown', @chVol_p        , true );
     RegisterVariable('findhh'  , @chFindhh       , true );
     RegisterVariable('pause'   , @chPause        , true );
+    RegisterVariable('srv_pause', @chServerPause , true );    
     RegisterVariable('+cur_u'  , @chCurU_p       , true );
     RegisterVariable('-cur_u'  , @chCurU_m       , true );
     RegisterVariable('+cur_d'  , @chCurD_p       , true );

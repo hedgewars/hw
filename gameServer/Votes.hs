@@ -12,6 +12,7 @@ import Data.Maybe
 import Utils
 import CoreTypes
 import HandlerUtils
+import EngineInteraction
 
 
 voted :: Bool -> Reader (ClientIndex, IRnC) [Action]
@@ -79,6 +80,13 @@ voted vote = do
         where
             replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
             replaceChans _ a = a
+    act (VotePause) = do
+        rm <- thisRoom
+        chans <- roomClientsChans
+        let modifyGameInfo f room  = room{gameInfo = fmap f $ gameInfo room}
+        return [ModifyRoom (modifyGameInfo $ \g -> g{isPaused = not $ isPaused g}),
+                AnswerClients chans ["CHAT", "[server]", "Pause toggled"],
+                AnswerClients chans ["EM", toEngineMsg "I"]]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -123,3 +131,4 @@ checkVotes = do
 voteInfo :: VoteType -> B.ByteString
 voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
 voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
+voteInfo (VotePause) = B.concat [loc "pause"]
