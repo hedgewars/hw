@@ -618,6 +618,11 @@ s:= s;
 isServerPaused:= not isServerPaused;
 if (gameType = gmtNet) and not CurrentTeam^.ExtDriven then
     isPaused:= not isPaused;
+
+if isPaused then
+    SDL_ShowCursor(1)
+    else
+    SDL_ShowCursor(ord(GameState = gsConfirm))
 end;
 
 procedure chRotateMask(var s: shortstring);
