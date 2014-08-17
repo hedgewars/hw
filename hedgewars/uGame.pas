@@ -36,9 +36,9 @@ var i,j : LongInt;
 begin   
 if (not CurrentTeam^.ExtDriven) then
     begin
-    isInLag:= false;
-    FlushMessages(Lag);
     NetGetNextCmd; // check for pause and chat messages
+    isInLag:= false;
+    FlushMessages(Lag);    
     end;
 
 if isPaused then exit;
