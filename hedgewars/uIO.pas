@@ -308,7 +308,7 @@ begin
 inc(flushDelayTicks, Lag);
 if (flushDelayTicks >= cSendEmptyPacketTime) then
     begin
-    if sendBuffer.count = 0 then
+    if sendBuffer.count = 0 and not isPaused then
         SendIPC(_S'+');
 
      flushBuffer()

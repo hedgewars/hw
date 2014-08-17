@@ -39,7 +39,7 @@ NetCheckForServerMessages; // check for pause and chat messages
 if (not CurrentTeam^.ExtDriven) then
     begin
     isInLag:= false;
-    if not isPaused then FlushMessages(Lag);
+    FlushMessages(Lag);
     end;
 
 if isPaused then exit;

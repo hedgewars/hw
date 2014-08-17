@@ -44,7 +44,6 @@ type TChatLine = record
     Color: TSDL_Color;
     end;
     TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
-    TConsoleCmd = (cncVote, cncCallVote);
 
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
@@ -80,9 +79,6 @@ const
             (ChatCmd: '/history'; ProcedureCallChatCmd: 'history'),
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
-    ConsoleCommandz: array [TConsoleCmd] of shortstring = (
-            '/vote', '/callvote');
-
 
 const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
@@ -265,19 +261,10 @@ SendIPC('h' + s);
 ParseCommand('/hogsay '+s, true)
 end;
 
-procedure CheckForConsoleCommand(s: shortstring);
-var i: TConsoleCmd;
-    arg: shortstring;
+procedure SendConsoleCommand(s: shortstring);
 begin
-    arg:= '';
-    SplitBySpace(s, arg);
-
-    for i:= Low(TConsoleCmd) to High(TConsoleCmd) do
-        if (s = ConsoleCommandz[i]) then
-            begin
-            Delete(s, 1, 1);
-            SendIPC('~' + s + ' ' + arg)
-            end
+    Delete(s, 1, 1);
+    SendIPC('~' + s)
 end;
 
 procedure AcceptChatString(s: shortstring);
@@ -404,7 +391,7 @@ if (s[1] = '/') then
         end;
 
     if (gameType = gmtNet) then
-        CheckForConsoleCommand(s)
+        SendConsoleCommand(s)
     end
 else
     begin
