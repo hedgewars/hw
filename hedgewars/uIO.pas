@@ -69,6 +69,28 @@ var IPCSock: PTCPSocket;
                 count: Word;
                 end;
 
+function ProcessImmediateCmd(command: shortstring): boolean;
+var
+    s: shortstring;
+begin
+ProcessImmediateCmd:= true;
+
+case command[1] of
+    'I': ParseCommand('srv_pause', true);
+    's': begin
+        s:= copy(command, 2, Pred(Length(command)));
+        ParseCommand('chatmsg ' + s, true);
+        WriteLnToConsole(s)
+         end;
+    'b': begin
+        s:= copy(command, 2, Pred(Length(command)));
+        ParseCommand('chatmsg ' + #4 + s, true);
+        WriteLnToConsole(s)
+         end;
+    else ProcessImmediateCmd:= false;
+end;
+end;
+
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
@@ -142,8 +164,12 @@ case s[1] of
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
           end
      else
-     loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
-     AddCmd(loTicks, s);
+     
+     if (not ProcessImmediateCmd(s)) then     
+        begin
+            loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
+            AddCmd(loTicks, s);
+        end;
      AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
      end
 end;
@@ -323,14 +349,11 @@ tmpflag:= true;
 
 while (headcmd <> nil)
     and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
-    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
-        or (headcmd^.cmd = 's') // for these commands time is not specified
-        or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
-        or (headcmd^.cmd = '#') // must be synced for saves to work
-        or (headcmd^.cmd = 'b')
-        or (headcmd^.cmd = 'F')
-        or (headcmd^.cmd = 'G')
-        or (headcmd^.cmd = 'I')) do
+    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)                                
+        or (headcmd^.cmd = 'h') // for these commands time is not specified
+        or (headcmd^.cmd = '#') // seems the hedgewars protocol does not allow remote synced commands
+        or (headcmd^.cmd = 'F') // must be synced for saves to work        
+        or (headcmd^.cmd = 'G')) do
     begin
     case headcmd^.cmd of
         '+': ; // do nothing - it is just an empty packet
@@ -353,22 +376,11 @@ while (headcmd <> nil)
         'S': ParseCommand('switch', true);
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
-        ',': ParseCommand('skip', true);
-        'I': ParseCommand('srv_pause', true);             
+        ',': ParseCommand('skip', true);        
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
-             end;
-        's': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + s, true);
-            WriteLnToConsole(s)
-             end;
-        'b': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + #4 + s, true);
-            WriteLnToConsole(s)
-             end;
+             end;        
         'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);

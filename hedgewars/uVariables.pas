@@ -70,7 +70,6 @@ var
     isCursorVisible : boolean;
     isInLag         : boolean;
     isPaused        : boolean;
-    isServerPaused  : boolean;
     isInMultiShoot  : boolean;
     isSpeed         : boolean;
     isAFK           : boolean;
@@ -2591,7 +2590,6 @@ begin
     isCursorVisible := false;
     isInLag         := false;
     isPaused        := false;
-    isServerPaused  := false;
     isInMultiShoot  := false;
     isSpeed         := false;
     isAFK           := false;

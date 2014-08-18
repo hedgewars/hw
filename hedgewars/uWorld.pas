@@ -1570,7 +1570,7 @@ if UIDisplay = uiAll then
     RenderTeamsHealth;
 
 // Lag alert
-if isInLag and (not isServerPaused) then
+if isInLag then
     DrawSprite(sprLag, 32 - (cScreenWidth shr 1), 32, (RealTicks shr 7) mod 12);
 
 // Wind bar
@@ -1639,7 +1639,7 @@ DrawChat;
 // various captions
 if fastUntilLag then
     DrawTextureCentered(0, (cScreenHeight shr 1), SyncTexture);
-if isPaused or (isServerPaused and isInLag)  then
+if isPaused then
     DrawTextureCentered(0, (cScreenHeight shr 1), PauseTexture);
 if isAFK then
     DrawTextureCentered(0, (cScreenHeight shr 1), AFKTexture);
