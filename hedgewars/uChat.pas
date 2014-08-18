@@ -80,6 +80,7 @@ const
             (ChatCmd: '/fullscreen'; ProcedureCallChatCmd: 'fullscr')
             );
 
+
 const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
 

@@ -69,28 +69,6 @@ var IPCSock: PTCPSocket;
                 count: Word;
                 end;
 
-function ProcessImmediateCmd(command: shortstring): boolean;
-var
-    s: shortstring;
-begin
-ProcessImmediateCmd:= true;
-
-case command[1] of
-    'I': ParseCommand('srv_pause', true);
-    's': begin
-        s:= copy(command, 2, Pred(Length(command)));
-        ParseCommand('chatmsg ' + s, true);
-        WriteLnToConsole(s)
-         end;
-    'b': begin
-        s:= copy(command, 2, Pred(Length(command)));
-        ParseCommand('chatmsg ' + #4 + s, true);
-        WriteLnToConsole(s)
-         end;
-    else ProcessImmediateCmd:= false;
-end;
-end;
-
 function AddCmd(Time: Word; str: shortstring): PCmd;
 var command: PCmd;
 begin
@@ -162,14 +140,19 @@ case s[1] of
      'V': begin
               if s[2] = '.' then
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
+          end;
+     'I': ParseCommand('srv_pause', true);
+     's': begin
+             ParseCommand('chatmsg ' + copy(s, 2, Length(s) - 1), true);
+             WriteLnToConsole(s)
+          end;
+     'b': begin
+            ParseCommand('chatmsg ' + #4 + copy(s, 2, Length(s) - 1), true);
+            WriteLnToConsole(s)
           end
      else
-     
-     if (not ProcessImmediateCmd(s)) then     
-        begin
-            loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
-            AddCmd(loTicks, s);
-        end;
+     loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
+     AddCmd(loTicks, s);
      AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
      end
 end;
@@ -333,7 +316,7 @@ begin
 inc(flushDelayTicks, Lag);
 if (flushDelayTicks >= cSendEmptyPacketTime) then
     begin
-    if (sendBuffer.count = 0) and (not isPaused) then
+    if sendBuffer.count = 0 then
         SendIPC(_S'+');
 
      flushBuffer()
@@ -376,7 +359,7 @@ while (headcmd <> nil)
         'S': ParseCommand('switch', true);
         'j': ParseCommand('ljump', true);
         'J': ParseCommand('hjump', true);
-        ',': ParseCommand('skip', true);        
+        ',': ParseCommand('skip', true);
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
