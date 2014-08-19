@@ -120,7 +120,10 @@ end;
 
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
+    isProcessed: boolean;
+    text: shortstring;
 begin
+isProcessed := true;
 
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
@@ -141,20 +144,31 @@ case s[1] of
               if s[2] = '.' then
                   ParseCommand('campvar ' + copy(s, 3, length(s) - 2), true);
           end;
-     'I': ParseCommand('srv_pause', true);
-     's': begin
-             ParseCommand('chatmsg ' + copy(s, 2, Length(s) - 1), true);
-             WriteLnToConsole(s)
-          end;
-     'b': begin
-            ParseCommand('chatmsg ' + #4 + copy(s, 2, Length(s) - 1), true);
-            WriteLnToConsole(s)
+     'I': ParseCommand('pause server', true);
+     's': if gameType = gmtNet then
+          begin
+             text:= copy(s, 2, Length(s) - 1);
+             ParseCommand('chatmsg ' + text, true);
+             WriteLnToConsole(text)
+          end 
+          else isProcessed:= false;
+     'b': if gameType = gmtNet then
+          begin
+             text:= copy(s, 2, Length(s) - 1);
+             ParseCommand('chatmsg ' + #4 + text, true);
+             WriteLnToConsole(text)
           end
+          else isProcessed:= false;
      else
-     loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
-     AddCmd(loTicks, s);
-     AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
-     end
+        isProcessed:= false;
+     end;
+
+    if (not isProcessed) then
+    begin
+        loTicks:= SDLNet_Read16(@s[byte(s[0]) - 1]);
+        AddCmd(loTicks, s);
+        AddFileLog('[IPC in] ' + sanitizeCharForLog(s[1]) + ' ticks ' + IntToStr(lastcmd^.loTime));
+    end
 end;
 
 procedure IPCCheckSock;
@@ -332,10 +346,12 @@ tmpflag:= true;
 
 while (headcmd <> nil)
     and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
-    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)                                
-        or (headcmd^.cmd = 'h') // for these commands time is not specified
-        or (headcmd^.cmd = '#') // seems the hedgewars protocol does not allow remote synced commands
-        or (headcmd^.cmd = 'F') // must be synced for saves to work        
+    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
+        or (headcmd^.cmd = 's') // for these commands time is not specified
+        or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
+        or (headcmd^.cmd = '#') // must be synced for saves to work
+        or (headcmd^.cmd = 'b')
+        or (headcmd^.cmd = 'F')
         or (headcmd^.cmd = 'G')) do
     begin
     case headcmd^.cmd of
@@ -363,7 +379,17 @@ while (headcmd <> nil)
         'c': begin
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
-             end;        
+             end;
+        's': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            ParseCommand('chatmsg ' + s, true);
+            WriteLnToConsole(s)
+             end;
+        'b': begin
+            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
+            ParseCommand('chatmsg ' + #4 + s, true);
+            WriteLnToConsole(s)
+             end;
         'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
