@@ -135,9 +135,7 @@ tkbd[code]:= KeyDown;
 
 Trusted:= (CurrentTeam <> nil)
           and (not CurrentTeam^.ExtDriven)
-          and (CurrentHedgehog^.BotLevel = 0) 
-          and (not isPaused); // do not use move actions to modify CheckSum
-                              // during pause
+          and (CurrentHedgehog^.BotLevel = 0);
 // REVIEW OR FIXME
 // ctrl/cmd + q to close engine and frontend - this seems like a bad idea, since we let people set arbitrary binds, and don't warn them of this.
 // There's no confirmation at all
@@ -173,6 +171,8 @@ if CurrentBinds[code][0] <> #0 then
     if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
     if KeyDown then
         begin
+        Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
+                              
         if CurrentBinds[code] = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
         else if CurrentBinds[code] = '+precise' then
