@@ -314,6 +314,8 @@ begin
         if ((Gear^.State and (gstHHThinking or gstAnimation)) = 0) and
 /// If current ammo is active, and current ammo has alt attack and uses a crosshair  (rope, basically, right now, with no crosshair for parachute/saucer
             (((CurAmmoGear <> nil) and //((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_AltAttack) <> 0) and
+            // don't render crosshair/laser during kamikaze
+            ((CurAmmoGear^.AmmoType <> amKamikaze) or ((Gear^.State and gstAttacking) = 0)) and
              ((Ammoz[CurAmmoGear^.AmmoType].Ammo.Propz and ammoprop_NoCrossHair) = 0)) or
 /// If no current ammo is active, and the selected ammo uses a crosshair
             ((CurAmmoGear = nil) and ((Ammoz[HH^.CurAmmoType].Ammo.Propz and ammoprop_NoCrosshair) = 0) and ((Gear^.State and gstAttacked) = 0))) then
