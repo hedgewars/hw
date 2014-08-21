@@ -118,6 +118,17 @@ begin
     WriteLnToConsole(msgOK)
 end;
 
+procedure ParseChatCommand(command: shortstring; message: shortstring;
+                           messageStartIndex: Byte);
+var 
+    text: shortstring;
+begin
+    text:= copy(message, messageStartIndex, 
+                Length(message) - messageStartIndex + 1);
+    ParseCommand(command + text, true);
+    WriteLnToConsole(text)
+end;    
+
 procedure ParseIPCCommand(s: shortstring);
 var loTicks: Word;
     isProcessed: boolean;
@@ -146,19 +157,13 @@ case s[1] of
           end;
      'I': ParseCommand('pause server', true);
      's': if gameType = gmtNet then
-          begin
-             text:= copy(s, 2, Length(s) - 1);
-             ParseCommand('chatmsg ' + text, true);
-             WriteLnToConsole(text)
-          end 
-          else isProcessed:= false;
-     'b': if gameType = gmtNet then
-          begin
-             text:= copy(s, 2, Length(s) - 1);
-             ParseCommand('chatmsg ' + #4 + text, true);
-             WriteLnToConsole(text)
-          end
-          else isProcessed:= false;
+             ParseChatCommand('chatmsg ', s, 2)
+          else 
+             isProcessed:= false;
+     'b': if gameType = gmtNet then          
+             ParseChatCommand('chatmsg ' + #4, s, 2)
+          else 
+             isProcessed:= false;
      else
         isProcessed:= false;
      end;
@@ -380,16 +385,8 @@ while (headcmd <> nil)
             s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
             ParseCommand('gencmd ' + s, true);
              end;
-        's': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + s, true);
-            WriteLnToConsole(s)
-             end;
-        'b': begin
-            s:= copy(headcmd^.str, 2, Pred(headcmd^.len));
-            ParseCommand('chatmsg ' + #4 + s, true);
-            WriteLnToConsole(s)
-             end;
+        's': ParseChatCommand('chatmsg ', headcmd^.str, 2);
+        'b': ParseChatCommand('chatmsg ' + #4, headcmd^.str, 2);
         'F': ParseCommand('teamgone u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'G': ParseCommand('teamback u' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
         'f': ParseCommand('teamgone s' + copy(headcmd^.str, 2, Pred(headcmd^.len)), true);
