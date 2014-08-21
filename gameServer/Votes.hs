@@ -12,6 +12,7 @@ import Data.Maybe
 import Utils
 import CoreTypes
 import HandlerUtils
+import EngineInteraction
 
 
 voted :: Bool -> Reader (ClientIndex, IRnC) [Action]
@@ -20,23 +21,27 @@ voted vote = do
     rm <- thisRoom
     uid <- liftM clUID thisClient
 
-    if isNothing $ voting rm then
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on"]]
-    else if uid `L.notElem` entitledToVote (fromJust $ voting rm) then
-        return []
-    else if uid `L.elem` map fst (votes . fromJust $ voting rm) then
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
-    else
-        actOnVoting . fromJust . liftM (\v -> v{votes = (uid, vote):votes v}) $ voting rm
+    case voting rm of
+        Nothing -> 
+            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on"]]
+        Just voting ->
+            if uid `L.notElem` entitledToVote voting then
+                return []
+            else if uid `L.elem` map fst (votes voting) then
+                return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
+            else
+                actOnVoting $ voting{votes = (uid, vote):votes voting}
+      
     where
     actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
     actOnVoting vt = do
         let (pro, contra) = L.partition snd $ votes vt
-        let v = (length $ entitledToVote vt) `div` 2 + 1
+        let totalV = length $ entitledToVote vt 
+        let successV = totalV `div` 2 + 1
 
-        if length contra >= v then
+        if length contra > totalV - successV then
             closeVoting
-        else if length pro >= v then do
+        else if length pro >= successV then do
             a <- act $ voteType vt
             c <- closeVoting
             return $ c ++ a
@@ -79,6 +84,13 @@ voted vote = do
         where
             replaceChans chans (AnswerClients _ msg) = AnswerClients chans msg
             replaceChans _ a = a
+    act (VotePause) = do
+        rm <- thisRoom
+        chans <- roomClientsChans
+        let modifyGameInfo f room  = room{gameInfo = fmap f $ gameInfo room}
+        return [ModifyRoom (modifyGameInfo $ \g -> g{isPaused = not $ isPaused g}),
+                AnswerClients chans ["CHAT", "[server]", "Pause toggled"],
+                AnswerClients chans ["EM", toEngineMsg "I"]]
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -123,3 +135,4 @@ checkVotes = do
 voteInfo :: VoteType -> B.ByteString
 voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
 voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
+voteInfo (VotePause) = B.concat [loc "pause"]

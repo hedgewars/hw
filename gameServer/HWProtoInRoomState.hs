@@ -30,7 +30,7 @@ startGame = do
             return [
                 ModifyRoom
                     (\r -> r{
-                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm)
+                        gameInfo = Just $ newGameInfo (teams rm) (length $ teams rm) allPlayersRegistered (mapParams rm) (params rm) False
                         }
                     )
                 , AnswerClients chans ["RUN_GAME"]
@@ -374,7 +374,7 @@ handleCmd_inRoom ["GREETING", msg] = do
 
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>, map <name>"]]
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>, map <name>, pause"]]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
@@ -412,6 +412,14 @@ handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote map: no such map"]]
 
+handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
+    cl <- thisClient
+    rm <- thisRoom
+
+    if isJust $ gameInfo rm then
+        startVote VotePause    
+        else 
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote pause: no game in progress"]]
 
 handleCmd_inRoom ["VOTE", m] = do
     cl <- thisClient

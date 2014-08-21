@@ -40,6 +40,7 @@ procedure SetUtilityWidgetState(ammoType: TAmmoType);
 procedure animateWidget(widget: POnScreenWidget; fade, showWidget: boolean);
 procedure MoveCamera;
 procedure onFocusStateChanged;
+procedure updateCursorVisibility;
 
 implementation
 uses
@@ -2052,6 +2053,14 @@ if (not flagPrerecording) then
     if (not cHasFocus) then DampenAudio()
     else UndampenAudio();
     end;
+end;
+
+procedure updateCursorVisibility;
+begin       
+    if isPaused or isAFK then
+        SDL_ShowCursor(1)
+    else
+        SDL_ShowCursor(ord(GameState = gsConfirm))
 end;
 
 procedure SetUtilityWidgetState(ammoType: TAmmoType);

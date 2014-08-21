@@ -171,6 +171,8 @@ if CurrentBinds[code][0] <> #0 then
     if (code > 3) and KeyDown and (not ((CurrentBinds[code] = 'put')) or (CurrentBinds[code] = 'ammomenu') or (CurrentBinds[code] = '+cur_u') or (CurrentBinds[code] = '+cur_d') or (CurrentBinds[code] = '+cur_l') or (CurrentBinds[code] = '+cur_r')) and (CurrentTeam <> nil) and (not CurrentTeam^.ExtDriven) then bShowAmmoMenu:= false;
     if KeyDown then
         begin
+        Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
+                              
         if CurrentBinds[code] = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
         else if CurrentBinds[code] = '+precise' then

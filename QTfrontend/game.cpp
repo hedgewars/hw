@@ -312,6 +312,13 @@ void HWGame::ParseMessage(const QByteArray & msg)
             config->Form->ui.pageOptions->windowHeightEdit->setValue(wh[1].toInt());
             break;
         }
+        case '~':
+        {
+            int size = msg.size();
+            QString msgbody = QString::fromUtf8(msg.mid(2).left(size - 4));
+            emit SendConsoleCommand(msgbody);
+            break;
+        }
         default:
         {
             if (gameType == gtNet && !netSuspend)

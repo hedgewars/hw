@@ -99,6 +99,7 @@ class HWGame : public TCPBase
         void HaveRecord(RecordType type, const QByteArray & record);
         void ErrorMessage(const QString &);
         void CampStateChanged(int);
+        void SendConsoleCommand(const QString & command);
 
     public slots:
         void FromNet(const QByteArray & msg);

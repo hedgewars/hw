@@ -262,6 +262,12 @@ SendIPC('h' + s);
 ParseCommand('/hogsay '+s, true)
 end;
 
+procedure SendConsoleCommand(s: shortstring);
+begin
+    Delete(s, 1, 1);
+    SendIPC('~' + s)
+end;
+
 procedure AcceptChatString(s: shortstring);
 var i: TWave;
     j: TChatCmd;
@@ -383,7 +389,10 @@ if (s[1] = '/') then
                 ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
                 exit
                 end;
-        end
+        end;
+
+    if (gameType = gmtNet) then
+        SendConsoleCommand(s)
     end
 else
     begin
