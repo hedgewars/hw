@@ -132,6 +132,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
             {
                 if (content == "+rnd+") return tr("Random Map");
                 if (content == "+maze+") return tr("Random Maze");
+                if (content == "+perlin+") return tr("Random Perlin");
                 if (content == "+drawn+") return tr("Hand-drawn");
             }
 
@@ -149,6 +150,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     {
         if (content == "+rnd+" ||
             content == "+maze+" ||
+            content == "+perlin+" ||
             content == "+drawn+" ||
             m_staticMapModel->mapExists(content) ||
             m_missionMapModel->mapExists(content))

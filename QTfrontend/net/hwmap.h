@@ -28,10 +28,11 @@
 
 enum MapGenerator
 {
-    MAPGEN_REGULAR,
-    MAPGEN_MAZE,
-    MAPGEN_DRAWN,
-    MAPGEN_MAP
+    MAPGEN_REGULAR = 0,
+    MAPGEN_MAZE = 1,
+    MAPGEN_PERLIN = 2,
+    MAPGEN_DRAWN = 3,
+    MAPGEN_MAP = 4
 };
 
 class HWMap : public TCPBase

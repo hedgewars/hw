@@ -105,6 +105,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     cType->insertItem(2, tr("Hand-drawn"), MapModel::HandDrawnMap);
     cType->insertItem(3, tr("Randomly generated"), MapModel::GeneratedMap);
     cType->insertItem(4, tr("Random maze"), MapModel::GeneratedMaze);
+    cType->insertItem(5, tr("Random perlin"), MapModel::GeneratedPerlin);
     connect(cType, SIGNAL(currentIndexChanged(int)), this, SLOT(mapTypeChanged(int)));
     m_childWidgets << cType;
 
@@ -401,14 +402,19 @@ void HWMapContainer::intSetSeed(const QString & seed)
 void HWMapContainer::setSeed(const QString & seed)
 {
     intSetSeed(seed);
-    if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze))
+    if ((m_mapInfo.type == MapModel::GeneratedMap)
+            || (m_mapInfo.type == MapModel::GeneratedMaze)
+            || (m_mapInfo.type == MapModel::GeneratedPerlin))
         updatePreview();
 }
 
 void HWMapContainer::setScript(const QString & script)
 {
     m_script = script;
-    if ((m_mapInfo.type == MapModel::GeneratedMap) || (m_mapInfo.type == MapModel::GeneratedMaze) || (m_mapInfo.type == MapModel::HandDrawnMap))
+    if ((m_mapInfo.type == MapModel::GeneratedMap)
+            || (m_mapInfo.type == MapModel::GeneratedMaze)
+            || (m_mapInfo.type == MapModel::GeneratedPerlin)
+            || (m_mapInfo.type == MapModel::HandDrawnMap))
         updatePreview();
 }
 
@@ -421,6 +427,10 @@ void HWMapContainer::intSetMap(const QString & map)
     else if (map == "+maze+")
     {
         //changeMapType(MapModel::GeneratedMaze);
+    }
+    else if (map == "+perlin+")
+    {
+        //changeMapType(MapModel::GeneratedPerlin);
     }
     else if (map == "+drawn+")
     {
@@ -464,6 +474,7 @@ void HWMapContainer::setRandomMap()
     {
         case MapModel::GeneratedMap:
         case MapModel::GeneratedMaze:
+        case MapModel::GeneratedPerlin:
             setRandomTheme();
             break;
         case MapModel::MissionMap:
@@ -541,6 +552,9 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
             case MAPGEN_MAZE:
                 m_mapInfo.type = MapModel::GeneratedMaze;
                 break;
+            case MAPGEN_PERLIN:
+                m_mapInfo.type = MapModel::GeneratedPerlin;
+                break;
             case MAPGEN_DRAWN:
                 m_mapInfo.type = MapModel::HandDrawnMap;
                 break;
@@ -549,6 +563,7 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                 {
                     case MapModel::GeneratedMap:
                     case MapModel::GeneratedMaze:
+                    case MapModel::GeneratedPerlin:
                     case MapModel::HandDrawnMap:
                         m_mapInfo.type = MapModel::Invalid;
                     default:
@@ -630,11 +645,8 @@ void HWMapContainer::updatePreview()
             mapPreview->setIconSize(failIcon.size());
             break;
         case MapModel::GeneratedMap:
-            askForGeneratedPreview();
-            break;
         case MapModel::GeneratedMaze:
-            askForGeneratedPreview();
-            break;
+        case MapModel::GeneratedPerlin:
         case MapModel::HandDrawnMap:
             askForGeneratedPreview();
             break;
@@ -719,6 +731,13 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapgen = MAPGEN_MAZE;
             setMapInfo(MapModel::MapInfoMaze);
             lblMapList->setText(tr("Maze style:"));
+            lblMapList->show();
+            mazeStyles->show();
+            break;
+        case MapModel::GeneratedPerlin:
+            mapgen = MAPGEN_PERLIN;
+            setMapInfo(MapModel::MapInfoPerlin);
+            lblMapList->setText(tr("Style:"));
             lblMapList->show();
             mazeStyles->show();
             break;

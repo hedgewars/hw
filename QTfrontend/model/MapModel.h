@@ -49,6 +49,7 @@ class MapModel : public QStandardItemModel
             Invalid,
             GeneratedMap,
             GeneratedMaze,
+            GeneratedPerlin,
             HandDrawnMap,
             MissionMap,
             StaticMap
@@ -98,7 +99,7 @@ class MapModel : public QStandardItemModel
         QStandardItem * getMap(const QString & map);
 
         // Static MapInfos for drawn and generated maps
-        static MapInfo MapInfoRandom, MapInfoMaze, MapInfoDrawn;
+        static MapInfo MapInfoRandom, MapInfoMaze, MapInfoPerlin, MapInfoDrawn;
 
         /// Loads the maps
         bool loadMaps();

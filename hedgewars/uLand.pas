@@ -547,8 +547,8 @@ begin
             case cMapGen of
                 0: GenTemplated(EdgeTemplates[SelectTemplate]);
                 1: begin ResizeLand(4096,2048); GenMaze; end;
-                //1: begin ResizeLand(4096,2048); GenPerlin; end;
-                2: GenDrawnMap;
+                2: begin ResizeLand(4096,2048); GenPerlin; end;
+                3: GenDrawnMap;
             else
                 OutError('Unknown mapgen', true);
             end;
@@ -676,8 +676,8 @@ begin
     case cMapGen of
         0: GenTemplated(EdgeTemplates[SelectTemplate]);
         1: begin ResizeLand(4096,2048); GenMaze; end;
-        //1: begin ResizeLand(4096,2048); GenPerlin; end;
-        2: GenDrawnMap;
+        2: begin ResizeLand(4096,2048); GenPerlin; end;
+        3: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
     end;
@@ -724,8 +724,8 @@ begin
     case cMapGen of
         0: GenTemplated(EdgeTemplates[SelectTemplate]);
         1: begin ResizeLand(4096,2048); GenMaze; end;
-        //1: begin ResizeLand(4096,2048); GenPerlin; end;
-        2: GenDrawnMap;
+        2: begin ResizeLand(4096,2048); GenPerlin; end;
+        3: GenDrawnMap;
     else
         OutError('Unknown mapgen', true);
     end;

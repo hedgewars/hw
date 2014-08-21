@@ -127,6 +127,7 @@ void HWMap::SendToClientFirst()
     switch (m_mapgen)
     {
         case MAPGEN_MAZE:
+        case MAPGEN_PERLIN:
             SendIPC(QString("e$maze_size %1").arg(m_maze_size).toUtf8());
             break;
 

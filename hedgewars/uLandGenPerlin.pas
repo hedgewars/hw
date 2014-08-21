@@ -121,8 +121,6 @@ begin
 end;
 
 const detail = 150000;
-    field = 3;
-    df = detail * field;
     width = 4096;
     height = 2048;
     minY = 500;
@@ -132,8 +130,13 @@ const detail = 150000;
     margin = 200;
 
 procedure GenPerlin;
-var y, x, {dy, }di, dj, r: LongInt;
+var y, x, {dy, }di, dj, df, r, param1, param2: LongInt;
 begin
+    param1:= cTemplateFilter div 3;
+    param2:= cTemplateFilter mod 3;
+
+    df:= detail * (6 - param2 * 2);
+
     inoise_setup();
 
     for y:= minY to pred(height) do
@@ -171,15 +174,17 @@ begin
         end;
     end;
 
-    for x:= 0 to width do
-        if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
-    //FillLand(0, minY, lfBasic, lfObjMask);
+    if param1 = 0 then
+        begin
+        for x:= 0 to width do
+            if Land[height - 1, x] = lfObjMask then FillLand(x, height - 1, 0, lfBasic);
 
-    // strip all lfObjMask pixels
-    for y:= minY to LAND_HEIGHT - 1 do
-        for x:= 0 to LAND_WIDTH - 1 do
-            if Land[y, x] = lfObjMask then
-                Land[y, x]:= 0;
+        // strip all lfObjMask pixels
+        for y:= minY to LAND_HEIGHT - 1 do
+            for x:= 0 to LAND_WIDTH - 1 do
+                if Land[y, x] = lfObjMask then
+                    Land[y, x]:= 0;
+        end;
 
     leftX:= 0;
     rightX:= 4095;
