@@ -26,7 +26,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uRandom, uCaptions
+uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
@@ -52,14 +52,12 @@ begin
         begin
         prevGState:= GameState;
         GameState:= gsConfirm;
-        SDL_ShowCursor(1)
         end
     else
-        if GameState = gsConfirm then
-            begin
-            GameState:= prevGState;
-            SDL_ShowCursor(ord(isPaused))
-            end
+        if GameState = gsConfirm then            
+            GameState:= prevGState;            
+            
+    updateCursorVisibility;
 end;
 
 procedure chForceQuit(var s: shortstring);
@@ -176,7 +174,7 @@ end;
 procedure chLeft_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'L');
@@ -201,7 +199,7 @@ end;
 procedure chRight_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'R');
@@ -226,7 +224,7 @@ end;
 procedure chUp_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'U');
@@ -251,7 +249,7 @@ end;
 procedure chDown_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'D');
@@ -276,7 +274,7 @@ end;
 procedure chPrecise_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'Z');
@@ -301,7 +299,7 @@ end;
 procedure chLJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'j');
@@ -314,7 +312,7 @@ end;
 procedure chHJump(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'J');
@@ -327,7 +325,7 @@ end;
 procedure chAttack_p(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 bShowFinger:= false;
 with CurrentHedgehog^.Gear^ do
@@ -362,7 +360,7 @@ end;
 procedure chSwitch(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 if not isExternalSource then
     SendIPC(_S'S');
@@ -576,7 +574,7 @@ end;
 procedure chFindhh(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
-if CheckNoTeamOrHH or isPaused then
+if CheckNoTeamOrHH then
     exit;
 
 if autoCameraOn then
@@ -597,8 +595,7 @@ end;
 
 procedure chPause(var s: shortstring);
 begin
-s:= s; // avoid compiler hint
-if gameType <> gmtNet then
+if (gameType <> gmtNet) or (s = 'server') then
     isPaused:= not isPaused
     else
     if (CurrentTeam^.ExtDriven) or (CurrentHedgehog^.BotLevel > 0) then
@@ -606,10 +603,7 @@ if gameType <> gmtNet then
     else
         isAFK:= false; // for real ninjas
 
-if isPaused or isAFK then
-    SDL_ShowCursor(1)
-    else
-    SDL_ShowCursor(ord(GameState = gsConfirm))
+updateCursorVisibility;
 end;
 
 procedure chRotateMask(var s: shortstring);
