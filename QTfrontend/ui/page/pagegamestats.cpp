@@ -208,7 +208,8 @@ void PageGameStats::GameStats(char type, const QString & info)
         case 'D' :
         {
             int i = info.indexOf(' ');
-            QString message = "<p><img src=\":/res/StatsBestShot.png\"> " + PageGameStats::tr("The best shot award was won by <b>%1</b> with <b>%2</b> pts.").arg(info.mid(i + 1), info.left(i)) + "</p>";
+            int num = info.left(i).toInt();
+            QString message = "<p><img src=\":/res/StatsBestShot.png\"> " + PageGameStats::tr("The best shot award was won by <b>%1</b> with <b>%2</b> pts.", "", num).arg(info.mid(i + 1), info.left(i)) + "</p>";
             AddStatText(message);
             break;
         }
