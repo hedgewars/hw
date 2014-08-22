@@ -159,12 +159,12 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Map list label */
 
-    lblMapList = new QLabel();
+    lblMapList = new QLabel(this);
     rightLayout->addWidget(lblMapList, 0);
 
     /* Static maps list */
 
-    staticMapList = new QListView;
+    staticMapList = new QListView(this);
     rightLayout->addWidget(staticMapList, 1);
     m_childWidgets << staticMapList;
 
@@ -196,7 +196,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Generator style list */
 
-    generationStyles = new QListWidget();
+    generationStyles = new QListWidget(this);
     new QListWidgetItem(tr("All"), generationStyles);
     new QListWidgetItem(tr("Small"), generationStyles);
     new QListWidgetItem(tr("Medium"), generationStyles);
@@ -209,7 +209,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Maze style list */
 
-    mazeStyles = new QListWidget();
+    mazeStyles = new QListWidget(this);
     new QListWidgetItem(tr("Small tunnels"), mazeStyles);
     new QListWidgetItem(tr("Medium tunnels"), mazeStyles);
     new QListWidgetItem(tr("Large tunnels"), mazeStyles);
@@ -235,7 +235,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     /* Theme chooser */
 
-    btnTheme = new QPushButton();
+    btnTheme = new QPushButton(this);
     btnTheme->setFlat(true);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
