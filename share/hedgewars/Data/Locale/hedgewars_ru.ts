@@ -495,11 +495,11 @@ Please, enter the password:</source>
     </message>
     <message>
         <source>Load map drawing</source>
-        <translation>Загрузить рисованную карту</translation>
+        <translation>Загрузить</translation>
     </message>
     <message>
         <source>Edit map drawing</source>
-        <translation>Редактировать рисованную карту</translation>
+        <translation>Редактировать</translation>
     </message>
     <message>
         <source>Small islands</source>
@@ -983,8 +983,6 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>(%1 %2)</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2335,8 +2333,6 @@ Do you still want to join the room?</source>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
