@@ -331,6 +331,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     switch (mapgen)
     {
         case MAPGEN_MAZE:
+        case MAPGEN_PERLIN:
             bcfg << QString("e$maze_size %1").arg(pMapContainer->getMazeSize()).toUtf8();
             break;
 
