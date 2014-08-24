@@ -748,7 +748,9 @@ void HWNewNet::ParseCmd(const QStringList & lst)
             }
             QStringList tmp = lst;
             tmp.removeFirst();
-            emit AddNetTeam(tmp);
+            HWTeam team(tmp);
+            team.setNetTeam(team.owner() != mynick);
+            emit AddNetTeam(team);
             return;
         }
 
