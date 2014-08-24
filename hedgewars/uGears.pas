@@ -462,7 +462,10 @@ if ((GameTicks and $FFFF) = $FFFF) then
         end;
 
     if (not CurrentTeam^.ExtDriven) or CurrentTeam^.hasGone then
+        begin
+        AddFileLog('hiTicks increment (current team is local or gone)');
         inc(hiTicks) // we do not recieve a message for this
+        end
     end;
 AddRandomness(CheckSum);
 TurnClockActive:= prevtime <> TurnTimeLeft;
