@@ -653,29 +653,29 @@ begin
     if (t = cMaxTeams) or (TeamsArray[t] = nil) then
         exit;
 
-    TeamsArray[t]^.isGoneFlagPengingToBeSet:= true;
+    TeamsArray[t]^.isGoneFlagPendingToBeSet:= true;
 
     if isSynced then
     begin
     for i:= 0 to Pred(cMaxTeams) do
         with TeamsArray[i]^ do
             begin
-            if (not hasGone) and isGoneFlagPengingToBeSet then
+            if (not hasGone) and isGoneFlagPendingToBeSet then
                 begin
                 AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                 hasGone:= true;
                 skippedTurns:= 0;
-                isGoneFlagPengingToBeSet:= false;
+                isGoneFlagPendingToBeSet:= false;
                 RecountTeamHealth(TeamsArray[i])
                 end;
-            if hasGone and isGoneFlagPengingToBeUnset then
+            if hasGone and isGoneFlagPendingToBeUnset then
                 ParseCommand('/teamback s' + s, true);
             end;
     end
     else
     begin
-        TeamsArray[t]^.isGoneFlagPengingToBeSet:= true;
+        TeamsArray[t]^.isGoneFlagPendingToBeSet:= true;
 
         if (not CurrentTeam^.ExtDriven) or (CurrentTeam^.TeamName = s) then
             ParseCommand('/teamgone s' + s, true);
@@ -707,15 +707,15 @@ begin
 
                 RecountTeamHealth(TeamsArray[t]);
 
-                if isGoneFlagPengingToBeUnset and (Owner = UserNick) then
+                if isGoneFlagPendingToBeUnset and (Owner = UserNick) then
                     ExtDriven:= false;
 
-                isGoneFlagPengingToBeUnset:= false;
+                isGoneFlagPendingToBeUnset:= false;
                 end;
         end
     else
     begin
-        TeamsArray[t]^.isGoneFlagPengingToBeUnset:= true;
+        TeamsArray[t]^.isGoneFlagPendingToBeUnset:= true;
 
         if not CurrentTeam^.ExtDriven then
             ParseCommand('/teamback s' + s, true);

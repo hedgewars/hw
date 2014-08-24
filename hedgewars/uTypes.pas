@@ -404,7 +404,7 @@ type
             stats: TTeamStats;
             hasGone: boolean;
             skippedTurns: Longword;
-            isGoneFlagPengingToBeSet, isGoneFlagPengingToBeUnset: boolean;
+            isGoneFlagPendingToBeSet, isGoneFlagPendingToBeUnset: boolean;
             end;
 
     TClan = record
