@@ -90,7 +90,7 @@ var strSurface,
     dstrect   : TSDL_Rect; // destination rectangle for blitting
     font      : THWFont;
 const
-    //shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$FF);
+    shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$FF);
     //shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$80);
     shadowint  = $80 shl AShift;
 begin
@@ -116,21 +116,15 @@ dstrect.h:= ClHeight;
 
 // draw background
 SDL_FillRect(resSurface, @dstrect, shadowint);
-(*
-So, using Text/Blended + Shadow/Solid or shadow with shadowcolor alpha of FF seemed to make shadow disappear here.
-At least, I didn't see any difference, and no changing of the padding offset let me view it.  Just disabling it.
-// prepare destination rectangle for text shadow
-// start position in texture should have padding; add 1 px as shadow offset
 dstrect.x:= Padding + 1;
 dstrect.y:= Padding + 1;
 // doesn't matter if .w and .h still include padding, SDL_UpperBlit will clip
 
 
 // create and blit text shadow
-strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), shadowcolor);
+strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), shadowcolor);
 SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
 SDL_FreeSurface(strSurface);
-*)
 
 // non-shadow text starts at padding
 dstrect.x:= Padding;
