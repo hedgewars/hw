@@ -89,6 +89,7 @@ class HWTeam : public QObject
         void setName(const QString & name);
         void setNumHedgehogs(unsigned char num);
         void setVoicepack(const QString & voicepack);
+        void setNetTeam(bool isNetTeam);
 
         // increments for statistical info
         void incRounds();

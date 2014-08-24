@@ -291,6 +291,12 @@ QStringList HWTeam::teamGameConfig(quint32 InitHealth) const
     return sl;
 }
 
+
+void HWTeam::setNetTeam(bool isNetTeam)
+{
+    m_isNetTeam = isNetTeam;
+}
+
 bool HWTeam::isNetTeam() const
 {
     return m_isNetTeam;
@@ -444,3 +450,4 @@ void HWTeam::incWins()
 {
     m_wins++;
 }
+
