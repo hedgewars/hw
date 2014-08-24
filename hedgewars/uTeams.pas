@@ -677,7 +677,7 @@ begin
     begin
         TeamsArray[t]^.isGoneFlagPendingToBeSet:= true;
 
-        if (not CurrentTeam^.ExtDriven) or (CurrentTeam^.TeamName = s) then
+        if (not CurrentTeam^.ExtDriven) or (CurrentTeam^.TeamName = s) or (CurrentTeam^.hasGone) then
             ParseCommand('/teamgone s' + s, true);
     end;
 end;
