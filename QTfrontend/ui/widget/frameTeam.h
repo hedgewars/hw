@@ -53,8 +53,6 @@ class FrameTeams : public QFrame
         void removeTeam(HWTeam team);
 
     private:
-        const int maxHedgehogsPerGame;
-        int overallHedgehogs;
         int currentColor;
 
         void emitTeamColorChanged(const HWTeam& team);
