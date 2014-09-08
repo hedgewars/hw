@@ -126,19 +126,23 @@ void closeResources(void)
 QString getUsage()
 {
     return QString(
-"%1: hedgewars [%2...]\n"
+"%1: hedgewars [%2...] [%3]\n"
 "\n"
-"%3:\n"
-"  --help              %4\n"
-"  --config-dir=PATH   %5\n"
-"  --data-dir=PATH     %6\n"
+"%4:\n"
+"  --help              %5\n"
+"  --config-dir=PATH   %6\n"
+"  --data-dir=PATH     %7\n"
+"\n"
+"%8"
 "\n"
 ).arg(HWApplication::tr("Usage", "command-line"))
 .arg(HWApplication::tr("OPTION", "command-line"))
+.arg(HWApplication::tr("CONNECTSTRING", "command-line"))
 .arg(HWApplication::tr("Options", "command-line"))
 .arg(HWApplication::tr("Display this help", "command-line"))
 .arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
-.arg(HWApplication::tr("Custom path to the game data folder", "command-line"));
+.arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
+.arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg("CONNECTSTRING").arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
 int main(int argc, char *argv[])
