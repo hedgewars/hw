@@ -101,8 +101,7 @@ procedure openglTint            (r, g, b, a: Byte); inline;
 
 implementation
 uses {$IFNDEF PAS2C} StrUtils, {$ENDIF}SysUtils, uVariables, uUtils, uConsts
-     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF}
-     {$IF NOT DEFINED(SDL2) AND DEFINED(USE_VIDEO_RECORDING)}, glut {$ENDIF};
+     {$IFDEF GL2}, uMatrix, uConsole{$ENDIF};
 
 {$IFDEF USE_TOUCH_INTERFACE}
 const

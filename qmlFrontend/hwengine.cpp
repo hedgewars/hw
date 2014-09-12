@@ -1,5 +1,6 @@
 #include <QLibrary>
 #include <QtQml>
+#include <QDebug>
 
 #include "hwengine.h"
 
@@ -10,10 +11,10 @@ extern "C" {
 HWEngine::HWEngine(QObject *parent) :
     QObject(parent)
 {
-    QLibrary hwlib("hwengine");
+    QLibrary hwlib("./libhwengine.so");
 
     if(!hwlib.load())
-        qWarning("Engine library not found");
+        qWarning() << "Engine library not found" << hwlib.errorString();
 
     RunEngine = (void (*)(int, char **))hwlib.resolve("RunEngine");
 }
@@ -25,7 +26,8 @@ HWEngine::~HWEngine()
 
 void HWEngine::run()
 {
-    RunEngine(0, nullptr);
+    char* args[2] = {"", "--help"};
+    RunEngine(2, args);
 }
 
 static QObject *hwengine_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)

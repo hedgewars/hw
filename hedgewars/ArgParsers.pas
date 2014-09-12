@@ -332,12 +332,12 @@ var paramIndex: LongInt;
     paramTotal: LongInt;
     index, nextIndex: LongInt;
     wrongParameter: boolean;
-//var tmpInt: LongInt;
+var tmpInt: LongInt;
 begin
 
     paramIndex:= 1;
     paramTotal:= ParamCount; //-1 because pascal enumeration is inclusive
-    (*
+    
     WriteLn(stdout, 'total parameters: ' + inttostr(paramTotal));
     tmpInt:= 0;
     while (tmpInt <= paramTotal) do
@@ -345,7 +345,7 @@ begin
         WriteLn(stdout, inttostr(tmpInt) + ': ' + {$IFDEF HWLIBRARY}argv[tmpInt]{$ELSE}paramCount(tmpInt){$ENDIF});
         inc(tmpInt);
         end;
-    *)
+    
     wrongParameter:= false;
     while (paramIndex <= paramTotal) do
         begin
@@ -362,26 +362,31 @@ end;
 
 procedure GetParams;
 begin
-    isInternal:= (ParamStr(1) = '--internal');
-
-    UserPathPrefix := _S'.';
-    PathPrefix     := cDefaultPathPrefix;
-    recordFileName := '';
-    parseCommandLine();
-
-    if (isInternal) and (ParamCount<=1) then
+    if ParamCount > 0 then
         begin
-        WriteLn(stderr, '--internal should not be manually used');
-        GameType := gmtSyntax;
-        end;
+        isInternal:= (ParamStr(1) = '--internal');
 
-    if (not cTestLua) and (not isInternal) and (recordFileName = '') then
-        begin
-        WriteLn(stderr, 'You must specify a replay file');
-        GameType := gmtSyntax;
-        end
-    else if (recordFileName <> '') then
-        WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+        UserPathPrefix := _S'.';
+        PathPrefix     := cDefaultPathPrefix;
+        recordFileName := '';
+        parseCommandLine();
+
+        if (isInternal) and (ParamCount<=1) then
+            begin
+            WriteLn(stderr, '--internal should not be manually used');
+            GameType := gmtSyntax;
+            end;
+
+        if (not cTestLua) and (not isInternal) and (recordFileName = '') then
+            begin
+            WriteLn(stderr, 'You must specify a replay file');
+            GameType := gmtSyntax;
+            end
+        else if (recordFileName <> '') then
+            WriteLn(stdout, 'Attempting to play demo file "' + recordFilename + '"');
+        end 
+    else
+        GameType:= gmtSyntax;
 
     if (GameType = gmtSyntax) then
         WriteLn(stderr, 'Please use --help to see possible arguments and their usage');
