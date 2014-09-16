@@ -65,3 +65,6 @@ glob:version_info.txt
 glob:*.tar.*
 glob:*.or
 glob:*.res
+glob:build-*
+glob:hedgewars-build-*
+glob:*.pro.user
