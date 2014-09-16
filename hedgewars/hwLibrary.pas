@@ -30,7 +30,9 @@
 Library hwLibrary;
 
 uses hwengine, uTypes, uConsts, uVariables, uSound, uCommands, uUtils,
-     uLocale{$IFDEF ANDROID}, jni{$ENDIF};
+    uLocale{$IFDEF ANDROID}, jni{$ENDIF}
+    , uFLTypes
+    , uFLGameConfig;
 
 {$INCLUDE "config.inc"}
 
