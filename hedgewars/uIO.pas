@@ -39,7 +39,7 @@ procedure NetGetNextCmd;
 procedure doPut(putX, putY: LongInt; fromAI: boolean);
 
 implementation
-uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug;
+uses uConsole, uConsts, uVariables, uCommands, uUtils, uDebug, uFLIPC;
 
 const
     cSendEmptyPacketTime = 1000;
