@@ -5569,7 +5569,10 @@ begin
                         Power := GameTicks;
                         end
                     end
-                else if (target.y >= cWaterLine) then
+                else if (Target.Y >= cWaterLine) or 
+                        ((Target.X and LAND_WIDTH_MASK = 0) and 
+                         (Target.Y+iceHeight+4 >= cWaterLine) and 
+                         (Land[Target.Y, Target.X] = lfIce)) then
                     begin
                     if Timer = iceWaitCollision then
                         begin
@@ -5646,7 +5649,7 @@ begin
                     Timer := iceWaitCollision;
                     end;
 
-                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
+                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
                     begin
                     PlaySound(sndHogFreeze);
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
