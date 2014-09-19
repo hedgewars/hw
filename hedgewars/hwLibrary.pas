@@ -29,8 +29,15 @@
 
 Library hwLibrary;
 
-uses hwengine, uTypes, uConsts, uVariables, uSound, uCommands, uUtils,
-    uLocale{$IFDEF ANDROID}, jni{$ENDIF}
+uses hwengine
+    , uTypes
+    , uConsts
+    , uVariables
+    , uSound
+    , uCommands
+    , uUtils
+    , uLocale
+    {$IFDEF ANDROID}, jni{$ENDIF}
     , uFLTypes
     , uFLGameConfig;
 

@@ -22,12 +22,8 @@
 {$R res/hwengine.rc}
 {$ENDIF}
 
-{$IFDEF HWLIBRARY}
 unit hwengine;
 interface
-{$ELSE}
-program hwengine;
-{$ENDIF}
 
 uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
@@ -38,19 +34,12 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
 
-{$IFDEF HWLIBRARY}
 procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
-
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
 
 implementation
-{$ELSE}
-procedure preInitEverything(); forward;
-procedure initEverything(complete:boolean); forward;
-procedure freeEverything(complete:boolean); forward;
-{$ENDIF}
 
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
@@ -547,18 +536,11 @@ begin
     freeEverything(false);
 end;
 
-{$IFDEF HWLIBRARY}
 procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
-{$ELSE}
-begin
-{$ENDIF}
 
-///////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////// m a i n ///////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 {$IFDEF PAS2C}
     // workaround for pascal's ParamStr and ParamCount
     init(argc, argv);
@@ -573,15 +555,8 @@ begin
         Game();
 
     // return 1 when engine is not called correctly
-    if GameType = gmtSyntax then
-        {$IFDEF PAS2C}
-        exit(HaltUsageError);
-        {$ELSE}
-        halt(HaltUsageError);
-        {$ENDIF}
-
-{$IFDEF HWLIBRARY}
+    //if GameType = gmtSyntax then
+    //    exit(HaltUsageError);
 end;
-{$ENDIF}
 
 end.
