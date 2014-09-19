@@ -39,7 +39,9 @@ uses hwengine
     , uLocale
     {$IFDEF ANDROID}, jni{$ENDIF}
     , uFLTypes
-    , uFLGameConfig;
+    , uFLGameConfig
+    , uFLIPC
+    ;
 
 {$INCLUDE "config.inc"}
 
@@ -97,6 +99,11 @@ begin
     ReleaseSound(false);
 end;
 
+procedure flibInit; cdecl; export;
+begin
+    initIPC
+end;
+
 {$IFDEF ANDROID}
 function JNI_HW_versionInfoNet(env: PJNIEnv; obj: JObject):JInt;cdecl;
 begin
@@ -129,6 +136,9 @@ exports
 {$ELSE}
 exports
     RunEngine,
+    registerIPCCallback,
+    ipcToEngine,
+    flibInit,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

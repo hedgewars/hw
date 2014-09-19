@@ -121,17 +121,6 @@ begin
     SetVolume(0);
 end;
 
-procedure setIpcPort(port: LongInt; var wrongParameter:Boolean);
-begin
-    if isInternal then
-        ipcPort := port
-    else
-        begin
-        WriteLn(stderr, 'ERROR: use of --port is not allowed');
-        wrongParameter := true;
-        end
-end;
-
 function parseNick(nick: shortstring): shortstring;
 begin
     if isInternal then
@@ -215,12 +204,12 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..35] of shortstring = (
+      reallyAll: array[0..34] of shortstring = (
                 '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
-  {internal}    '--internal', '--port', '--recorder', '--landpreview',
+  {internal}    '--internal', '--recorder', '--landpreview',
   {misc}        '--stats-only', '--gci', '--help','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags','--lua-test');
 var cmdIndex: byte;
 begin
@@ -259,18 +248,17 @@ begin
         {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
         {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
-        {--port}                25 : setIpcPort( getLongIntParameter(arg, paramIndex, parseParameter), parseParameter );
-        {--recorder}            26 : startVideoRecording(paramIndex);
-        {--landpreview}         27 : GameType := gmtLandPreview;
+        {--recorder}            25 : startVideoRecording(paramIndex);
+        {--landpreview}         26 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}          28 : statsOnlyGame();
-        {--gci}                 29 : GciEasterEgg();
-        {--help}                30 : DisplayUsage();
-        {--no-teamtag}          31 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           32 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        33 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    34 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            35 : begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--stats-only}          27 : statsOnlyGame();
+        {--gci}                 28 : GciEasterEgg();
+        {--help}                29 : DisplayUsage();
+        {--no-teamtag}          30 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           31 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        32 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    33 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            34: begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid

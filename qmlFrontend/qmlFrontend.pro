@@ -24,7 +24,8 @@ qtcAddDeployment()
 
 HEADERS += \
     qtquick2applicationviewer/qtquick2applicationviewer.h \
-    hwengine.h
+    hwengine.h \
+    flib.h
 
 OTHER_FILES += \
     qtquick2applicationviewer/qtquick2applicationviewer.pri \

@@ -2,6 +2,10 @@
 #define HWENGINE_H
 
 #include <QObject>
+#include <QByteArray>
+#include <QVector>
+
+#include "flib.h"
 
 class HWEngine : public QObject
 {
@@ -16,7 +20,13 @@ public:
 signals:
     
 public slots:
-    
+
+private:
+    QList<QByteArray> m_argsList;
+    QVector<char *> m_args;
+
+    static void engineMessageCallback(void *context, string255 str);
+    void sendIPC(const QByteArray &b);
 };
 
 #endif // HWENGINE_H

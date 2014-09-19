@@ -34,7 +34,7 @@ uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears,
      {$IFDEF ANDROID}, GLUnit{$ENDIF}
      ;
 
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function  RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
@@ -536,7 +536,17 @@ begin
     freeEverything(false);
 end;
 
-procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
+function EngineThread(p: pointer): Longint; cdecl; export;
+begin
+    if GameType = gmtLandPreview then
+        GenLandPreview()
+    else Game();
+
+    EngineThread:= 0
+end;
+
+
+function RunEngine(argc: LongInt; argv: PPChar): Longint; cdecl; export;
 begin
     operatingsystem_parameter_argc:= argc;
     operatingsystem_parameter_argv:= argv;
@@ -549,14 +559,13 @@ begin
 
     GetParams();
 
-    if GameType = gmtLandPreview then
-        GenLandPreview()
-    else if GameType <> gmtSyntax then
-        Game();
-
-    // return 1 when engine is not called correctly
-    //if GameType = gmtSyntax then
-    //    exit(HaltUsageError);
+    if GameType = gmtSyntax then
+        RunEngine:= HaltUsageError
+    else
+    begin
+        SDL_CreateThread(@EngineThread{$IFDEF SDL2}, 'engine'{$ENDIF}, nil);
+        RunEngine:= 0
+    end
 end;
 
 end.

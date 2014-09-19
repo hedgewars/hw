@@ -36,7 +36,6 @@ var
     cNewScreenWidth    : LongInt;
     cNewScreenHeight   : LongInt;
     cScreenResizeDelay : LongWord;
-    ipcPort            : Word;
     cFullScreen        : boolean;
     cLocaleFName       : shortstring;
     cLocale            : shortstring;
@@ -2425,7 +2424,6 @@ begin
     cFullScreen     := false;
 
     UserPathPrefix  := '';
-    ipcPort         := 0;
     recordFileName  := '';
     UserNick        := '';
     cStereoMode     := smNone;
