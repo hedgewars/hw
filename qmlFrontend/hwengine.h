@@ -23,9 +23,9 @@ public slots:
 
 private:
     QList<QByteArray> m_argsList;
-    QVector<char *> m_args;
+    QVector<const char *> m_args;
 
-    static void engineMessageCallback(void *context, string255 str);
+    static void engineMessageCallback(void *context, quint8 len, const char * msg);
     void sendIPC(const QByteArray &b);
 };
 

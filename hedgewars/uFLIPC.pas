@@ -1,13 +1,6 @@
 unit uFLIPC;
 interface
-uses SDLh;
-
-type TIPCMessage = record
-                   str: shortstring;
-                   len: Longword;
-                   buf: Pointer
-               end;
-    TIPCCallback = procedure (p: pointer; s: shortstring);
+uses SDLh, uFLTypes;
 
 var msgFrontend, msgEngine: TIPCMessage;
     mutFrontend, mutEngine: PSDL_mutex;
@@ -16,7 +9,7 @@ var msgFrontend, msgEngine: TIPCMessage;
 procedure initIPC;
 procedure freeIPC;
 
-procedure ipcToEngine(s: shortstring); cdecl; export;
+procedure ipcToEngine(len: byte; msg: PChar); cdecl; export;
 function  ipcReadFromEngine: shortstring;
 function  ipcCheckFromEngine: boolean;
 
@@ -35,14 +28,13 @@ var callbackPointer: pointer;
 procedure ipcSend(var s: shortstring; var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond);
 begin
     SDL_LockMutex(mut);
-    writeln(stdout, 'ipc send', s);
+
     while (msg.str[0] > #0) or (msg.buf <> nil) do
         SDL_CondWait(cond, mut);
 
     msg.str:= s;
     SDL_CondSignal(cond);
     SDL_UnlockMutex(mut);
-    writeln(stdout, 'ipc sent', s[1])
 end;
 
 function ipcRead(var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond): shortstring;
@@ -52,7 +44,7 @@ begin
         SDL_CondWait(cond, mut);
 
     ipcRead:= msg.str;
-    writeln(stdout, 'engine ipc received', msg.str[1]);
+
     msg.str[0]:= #0;
     if msg.buf <> nil then
     begin
@@ -71,8 +63,12 @@ begin
     SDL_UnlockMutex(mut)
 end;
 
-procedure ipcToEngine(s: shortstring); cdecl; export;
+procedure ipcToEngine(len: byte; msg: PChar); cdecl; export;
+var s: shortstring;
 begin
+    writeln(stderr, len);
+    Move(msg^, s[1], len);
+    s[0]:= char(len);
     ipcSend(s, msgEngine, mutEngine, condEngine)
 end;
 
@@ -102,10 +98,12 @@ begin
 end;
 
 function  listener(p: pointer): Longint; cdecl; export;
+var s: shortstring;
 begin
     listener:= 0;
     repeat
-        callbackFunction(callbackPointer, ipcReadFromEngine())
+        s:= ipcReadFromEngine();
+        callbackFunction(callbackPointer, byte(s[0]), @s[1])
     until false
 end;
 

@@ -18,9 +18,9 @@ typedef union string255_
         };
     } string255;
 
-typedef void RunEngine_t(int argc, char ** argv);
-typedef void registerIPCCallback_t(void * context, void (*)(void * context, string255 str));
-typedef void ipcToEngine_t(string255 str);
+typedef void RunEngine_t(int argc, const char ** argv);
+typedef void registerIPCCallback_t(void * context, void (*)(void * context, uint8_t len, const char * msg));
+typedef void ipcToEngine_t(uint8_t len, const char * msg);
 typedef void flibInit_t();
 
 #ifdef __cplusplus

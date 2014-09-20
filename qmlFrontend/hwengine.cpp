@@ -45,7 +45,7 @@ void HWEngine::run()
 
     m_args.resize(m_argsList.size());
     for(int i = m_argsList.size() - 1; i >=0; --i)
-        m_args[i] = m_argsList[i].data();
+        m_args[i] = m_argsList[i].constData();
 
     RunEngine(m_args.size(), m_args.data());
     sendIPC("!");
@@ -68,17 +68,15 @@ void HWEngine::exposeToQML()
 
 void HWEngine::sendIPC(const QByteArray & b)
 {
-    string255 str;
-    str.len = b.size() > 255 ? 255 : b.size();
-    qDebug() << "semdIPC: len = " << str.len;
-    qCopy(b.data(), &(b.data()[str.len - 1]), &(str.str[0]));
+    quint8 len = b.size() > 255 ? 255 : b.size();
+    qDebug() << "sendIPC: len = " << len;
 
-    ipcToEngine(str);
+    ipcToEngine(len, b.constData());
 }
 
-void HWEngine::engineMessageCallback(void *context, string255 str)
+void HWEngine::engineMessageCallback(void *context, quint8 len, const char *msg)
 {
-    QByteArray b = QByteArray::fromRawData((const char *)&str.s, str.len + 1);
+    QByteArray b = QByteArray::fromRawData(msg, len);
 
     qDebug() << "FLIPC in" << b;
 }
