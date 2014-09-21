@@ -6,7 +6,7 @@ type TIPCMessage = record
                    len: Longword;
                    buf: Pointer
                end;
-    TIPCCallback = procedure (p: pointer; len: byte; msg: PChar);
+    TIPCCallback = procedure (p: pointer; msg: PChar; len: Longword);
 
 implementation
 

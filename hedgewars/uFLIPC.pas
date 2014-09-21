@@ -9,11 +9,12 @@ var msgFrontend, msgEngine: TIPCMessage;
 procedure initIPC;
 procedure freeIPC;
 
-procedure ipcToEngine(len: byte; msg: PChar); cdecl; export;
-function  ipcReadFromEngine: shortstring;
-function  ipcCheckFromEngine: boolean;
+procedure ipcToEngine(p: PChar; len: byte); cdecl; export;
+//function  ipcReadFromEngine: shortstring;
+//function  ipcCheckFromEngine: boolean;
 
 procedure ipcToFrontend(s: shortstring);
+procedure ipcToFrontendRaw(p: pointer; len: Longword);
 function ipcReadFromFrontend: shortstring;
 function ipcCheckFromFrontend: boolean;
 
@@ -25,32 +26,37 @@ var callbackPointer: pointer;
     callbackFunction: TIPCCallback;
     callbackListenerThread: PSDL_Thread;
 
-procedure ipcSend(var s: shortstring; var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond);
+procedure ipcSend(var s: TIPCMessage; var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond);
 begin
     SDL_LockMutex(mut);
 
     while (msg.str[0] > #0) or (msg.buf <> nil) do
         SDL_CondWait(cond, mut);
 
-    msg.str:= s;
+    msg:= s;
     SDL_CondSignal(cond);
     SDL_UnlockMutex(mut);
 end;
 
-function ipcRead(var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond): shortstring;
+function ipcRead(var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond): TIPCMessage;
+var tmp: pointer;
 begin
     SDL_LockMutex(mut);
     while (msg.str[0] = #0) and (msg.buf = nil) do
         SDL_CondWait(cond, mut);
 
-    ipcRead:= msg.str;
-
-    msg.str[0]:= #0;
     if msg.buf <> nil then
     begin
-        FreeMem(msg.buf, msg.len);
-        msg.buf:= nil
+        tmp:= msg.buf;
+        msg.buf:= GetMem(msg.len);
+        Move(tmp^, msg.buf^, msg.len);
+        FreeMem(tmp, msg.len)
     end;
+
+    ipcRead:= msg;
+
+    msg.str[0]:= #0;
+    msg.buf:= nil;
 
     SDL_CondSignal(cond);
     SDL_UnlockMutex(mut)
@@ -63,28 +69,42 @@ begin
     SDL_UnlockMutex(mut)
 end;
 
-procedure ipcToEngine(len: byte; msg: PChar); cdecl; export;
-var s: shortstring;
+procedure ipcToEngine(p: PChar; len: byte); cdecl; export;
+var msg: TIPCMessage;
 begin
     writeln(stderr, len);
-    Move(msg^, s[1], len);
-    s[0]:= char(len);
-    ipcSend(s, msgEngine, mutEngine, condEngine)
+    Move(p^, msg.str[1], len);
+    msg.str[0]:= char(len);
+    msg.buf:= nil;
+    ipcSend(msg, msgEngine, mutEngine, condEngine)
 end;
 
 procedure ipcToFrontend(s: shortstring);
+var msg: TIPCMessage;
 begin
-    ipcSend(s, msgFrontend, mutFrontend, condFrontend)
+    msg.str:= s;
+    msg.buf:= nil;
+    ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
 end;
 
-function ipcReadFromEngine: shortstring;
+procedure ipcToFrontendRaw(p: pointer; len: Longword);
+var msg: TIPCMessage;
+begin
+    msg.str[0]:= #0;
+    msg.len:= len;
+    msg.buf:= GetMem(len);
+    Move(p^, msg.buf^, len);
+    ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
+end;
+
+function ipcReadFromEngine: TIPCMessage;
 begin
     ipcReadFromEngine:= ipcRead(msgFrontend, mutFrontend, condFrontend)
 end;
 
 function ipcReadFromFrontend: shortstring;
 begin
-    ipcReadFromFrontend:= ipcRead(msgEngine, mutEngine, condEngine)
+    ipcReadFromFrontend:= ipcRead(msgEngine, mutEngine, condEngine).str
 end;
 
 function ipcCheckFromEngine: boolean;
@@ -98,12 +118,18 @@ begin
 end;
 
 function  listener(p: pointer): Longint; cdecl; export;
-var s: shortstring;
+var msg: TIPCMessage;
 begin
     listener:= 0;
     repeat
-        s:= ipcReadFromEngine();
-        callbackFunction(callbackPointer, byte(s[0]), @s[1])
+        msg:= ipcReadFromEngine();
+        if msg.buf = nil then
+            callbackFunction(callbackPointer, @msg.str[1], byte(msg.str[0]))
+        else
+        begin
+            callbackFunction(callbackPointer, msg.buf, msg.len);
+            FreeMem(msg.buf, msg.len)
+        end
     until false
 end;
 

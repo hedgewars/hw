@@ -242,10 +242,7 @@ end;
 
 procedure SendIPCRaw(p: pointer; len: Longword);
 begin
-{    if IPCSock <> nil then
-    begin
-    SDLNet_TCP_Send(IPCSock, p, len)
-    end}
+    ipcToFrontendRaw(p, len)
 end;
 
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
