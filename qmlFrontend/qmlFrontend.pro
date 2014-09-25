@@ -32,4 +32,7 @@ HEADERS += \
 OTHER_FILES += \
     qtquick2applicationviewer/qtquick2applicationviewer.pri \
     qml/qmlFrontend/HWButton.qml \
-    qml/qmlFrontend/main.qml
+    qml/qmlFrontend/main.qml \
+    qml/qmlFrontend/LocalGame.qml \
+    qml/qmlFrontend/GameConfig.qml \
+    qml/qmlFrontend/First.qml

@@ -7,17 +7,36 @@ Rectangle {
     color: "#15193a"
     radius: 8
     border.width: 4
-    border.color: "#ea761d"
     opacity: 1
 
     signal clicked()
+
+    Behavior on border.color {
+        ColorAnimation {}
+    }
 
     MouseArea {
         id: mousearea
         anchors.fill: parent
         hoverEnabled: true
-        onEntered: parent.border.color = "#eaea00"
-        onExited: parent.border.color = "#ea761d"
-        onClicked: hwbutton.clicked()
+        onClicked: parent.clicked()
     }
+
+    states: [
+        State {
+            when: mousearea.containsMouse
+
+            PropertyChanges {
+                target: hwbutton
+                border.color: "#eaea00"
+            }
+        }
+        , State {
+            when: !mousearea.containsMouse
+
+            PropertyChanges {
+                target: hwbutton
+                border.color: "#ea761d"
+            }
+    }]
 }
