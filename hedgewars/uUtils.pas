@@ -313,7 +313,7 @@ end;
 
 
 function Str2PChar(const s: shortstring): PChar;
-var i :Integer ;
+var i: Integer;
 begin
    for i:= 1 to Length(s) do
       begin

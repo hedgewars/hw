@@ -10,15 +10,21 @@
 extern "C" {
     RunEngine_t *flibRunEngine;
     registerGUIMessagesCallback_t *flibRegisterGUIMessagesCallback;
+    setSeed_t *flibSetSeed;
+    getSeed_t *flibGetSeed;
     getPreview_t *flibGetPreview;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
 }
 
+Q_DECLARE_METATYPE(MessageType);
+
 HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     QObject(parent),
     m_engine(engine)
 {
+    qRegisterMetaType<MessageType>("MessageType");
+
     QLibrary hwlib("./libhwengine.so");
 
     if(!hwlib.load())
@@ -26,6 +32,8 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibRunEngine = (RunEngine_t*) hwlib.resolve("RunEngine");
     flibRegisterGUIMessagesCallback = (registerGUIMessagesCallback_t*) hwlib.resolve("registerGUIMessagesCallback");
+    flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
+    flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
@@ -41,7 +49,7 @@ HWEngine::~HWEngine()
 
 void HWEngine::getPreview()
 {
-    //m_seed = QUuid::createUuid().toString();
+    flibSetSeed(QUuid::createUuid().toString().toLatin1());
     flibGetPreview();
 }
 
@@ -67,20 +75,22 @@ void HWEngine::guiMessagesCallback(void *context, MessageType mt, const char * m
 
     qDebug() << "FLIPC in" << b.size() << b;
 
-    QMetaObject::invokeMethod(obj, "engineMessageHandler", Qt::QueuedConnection, Q_ARG(QByteArray, b));
+    QMetaObject::invokeMethod(obj, "engineMessageHandler", Qt::QueuedConnection, Q_ARG(MessageType, mt), Q_ARG(QByteArray, b));
 }
 
-void HWEngine::engineMessageHandler(const QByteArray &msg)
+void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
 {
-    if(msg.size() == 128 * 256)
+    switch(mt)
     {
+    case MSG_PREVIEW:
         PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
         preview->setPixmap(msg);
         emit previewImageChanged();
+        break;
     }
 }
 
 QString HWEngine::currentSeed()
 {
-    return m_seed;
+    return QString::fromLatin1(flibGetSeed());
 }

@@ -2,11 +2,14 @@ unit uFLGameConfig;
 interface
 uses uFLTypes;
 
-procedure resetGameConfig; cdecl; export;
-procedure runQuickGame; cdecl; export;
-procedure getPreview; cdecl; export;
+procedure resetGameConfig; cdecl;
+procedure runQuickGame; cdecl;
+procedure getPreview; cdecl;
 
-procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl; export;
+procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
+
+procedure setSeed(seed: PChar); cdecl;
+function  getSeed: PChar; cdecl;
 
 implementation
 uses uFLIPC, hwengine;
@@ -48,6 +51,18 @@ type
     PGameConfig = ^TGameConfig;
 
 var currentConfig: TGameConfig;
+    str2PCharBuffer: array[0..255] of char;
+
+function str2PChar(const s: shortstring): PChar;
+var i: Integer;
+begin
+   for i:= 1 to Length(s) do
+      begin
+      str2PCharBuffer[i - 1] := s[i];
+      end;
+   str2PCharBuffer[Length(s)]:= #0;
+   str2PChar:= @(str2PCharBuffer[0]);
+end;    
 
 procedure queueExecution;
 var pConfig: PGameConfig;
@@ -73,12 +88,22 @@ procedure resetGameConfig; cdecl;
 begin
 end;
 
-procedure runQuickGame; cdecl; export;
+procedure setSeed(seed: PChar); cdecl;
+begin
+    currentConfig.seed:= seed
+end;
+
+function getSeed: PChar; cdecl;
+begin
+    getSeed:= str2PChar(currentConfig.seed)
+end;
+
+procedure runQuickGame; cdecl;
 begin
 
 end;
 
-procedure getPreview; cdecl; export;
+procedure getPreview; cdecl;
 begin
     with currentConfig do
     begin
@@ -101,7 +126,7 @@ begin
     if len = 128 * 256 then guiCallbackFunction(guiCallbackPointer, mtPreview, msg, len)
 end;
 
-procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl; export;
+procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
 begin
     guiCallbackPointer:= p;
     guiCallbackFunction:= f;

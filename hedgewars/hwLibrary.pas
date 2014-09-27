@@ -47,66 +47,66 @@ uses hwengine
 {$INCLUDE "config.inc"}
 
 // retrieve protocol information
-procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl; export;
+procedure HW_versionInfo(netProto: PLongInt; versionStr: PPChar); cdecl;
 begin
     netProto^:= cNetProtoVersion;
     versionStr^:= cVersionString;
 end;
 
-function HW_versionString: PChar; cdecl; export;
+function HW_versionString: PChar; cdecl;
 begin
     exit(cVersionString + '-r' + cRevisionString + ' (' + cHashString + ')');
 end;
 
 // equivalent to esc+y; when closeFrontend = true the game exits after memory cleanup
-procedure HW_terminate(closeFrontend: boolean); cdecl; export;
+procedure HW_terminate(closeFrontend: boolean); cdecl;
 begin
     closeFrontend:= closeFrontend; // avoid hint
     ParseCommand('forcequit', true);
 end;
 
-function HW_getWeaponNameByIndex(whichone: LongInt): PChar; cdecl; export;
+function HW_getWeaponNameByIndex(whichone: LongInt): PChar; cdecl;
 begin
     HW_getWeaponNameByIndex:= (str2pchar(trammo[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
-(*function HW_getWeaponCaptionByIndex(whichone: LongInt): PChar; cdecl; export;
+(*function HW_getWeaponCaptionByIndex(whichone: LongInt): PChar; cdecl;
 begin
     HW_getWeaponCaptionByIndex:= (str2pchar(trammoc[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;
 
-function HW_getWeaponDescriptionByIndex(whichone: LongInt): PChar; cdecl; export;
+function HW_getWeaponDescriptionByIndex(whichone: LongInt): PChar; cdecl;
 begin
     HW_getWeaponDescriptionByIndex:= (str2pchar(trammod[Ammoz[TAmmoType(whichone+1)].NameId]));
 end;*)
 
-function HW_getNumberOfWeapons: LongInt; cdecl; export;
+function HW_getNumberOfWeapons: LongInt; cdecl;
 begin
     HW_getNumberOfWeapons:= ord(high(TAmmoType));
 end;
 
-function HW_getMaxNumberOfHogs: LongInt; cdecl; export;
+function HW_getMaxNumberOfHogs: LongInt; cdecl;
 begin
     HW_getMaxNumberOfHogs:= cMaxHHIndex + 1;
 end;
 
-function HW_getMaxNumberOfTeams: LongInt; cdecl; export;
+function HW_getMaxNumberOfTeams: LongInt; cdecl;
 begin
     HW_getMaxNumberOfTeams:= cMaxTeams;
 end;
 
-procedure HW_memoryWarningCallback; cdecl; export;
+procedure HW_memoryWarningCallback; cdecl;
 begin
     ReleaseSound(false);
 end;
 
-procedure flibInit(localPrefix, userPrefix: PChar); cdecl; export;
+procedure flibInit(localPrefix, userPrefix: PChar); cdecl;
 begin
     initIPC;
     uPhysFSLayer.initModule(localPrefix, userPrefix);
 end;
 
-procedure flibFree; cdecl; export;
+procedure flibFree; cdecl;
 begin
     uPhysFSLayer.freemodule;
     freeIPC;
@@ -149,6 +149,8 @@ exports
     registerGUIMessagesCallback,
     flibInit,
     flibFree,
+    setSeed,
+    getSeed,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

@@ -24,8 +24,10 @@ typedef union string255_
 
 typedef void RunEngine_t(int argc, const char ** argv);
 typedef void registerGUIMessagesCallback_t(void * context, void (*)(void * context, MessageType mt, const char * msg, uint32_t len));
-typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void getPreview_t();
+typedef void setSeed_t(const char * seed);
+typedef char *getSeed_t();
+typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 
 #ifdef __cplusplus

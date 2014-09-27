@@ -28,12 +28,11 @@ public slots:
 
 private:
     QQmlEngine * m_engine;
-    QString m_seed;
 
     static void guiMessagesCallback(void * context, MessageType mt, const char * msg, uint32_t len);
 
 private slots:
-    void engineMessageHandler(const QByteArray &msg);
+    void engineMessageHandler(MessageType mt, const QByteArray &msg);
 };
 
 #endif // HWENGINE_H
