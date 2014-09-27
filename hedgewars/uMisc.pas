@@ -256,7 +256,8 @@ ReduceImage(p, cScreenWidth, cScreenHeight, k);
 
 // allocate and fill structure that will be passed to new thread
 New(image); // will be disposed in SaveScreenshot()
-image^.filename:= shortstring(UserPathPrefix) + filename + ext;
+//image^.filename:= shortstring(UserPathPrefix) + filename + ext;
+image^.filename:= filename + ext;
 image^.width:= cScreenWidth div k;
 image^.height:= cScreenHeight div k;
 image^.size:= size;

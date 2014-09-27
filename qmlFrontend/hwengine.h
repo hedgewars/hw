@@ -19,6 +19,7 @@ public:
 
     static void exposeToQML();
     Q_INVOKABLE void run();
+    Q_INVOKABLE QString currentSeed();
     
 signals:
     void previewImageChanged();
@@ -29,6 +30,7 @@ private:
     QList<QByteArray> m_argsList;
     QVector<const char *> m_args;
     QQmlEngine * m_engine;
+    QString m_seed;
 
     static void engineMessageCallback(void *context, const char * msg, quint32 len);
     void sendIPC(const QByteArray &b);

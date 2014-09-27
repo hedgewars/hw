@@ -2,6 +2,7 @@
 #include <QtQml>
 #include <QDebug>
 #include <QPainter>
+#include <QUuid>
 
 #include "hwengine.h"
 #include "previewimageprovider.h"
@@ -11,6 +12,7 @@ extern "C" {
     registerIPCCallback_t *registerIPCCallback;
     ipcToEngine_t *ipcToEngine;
     flibInit_t *flibInit;
+    flibFree_t *flibFree;
 }
 
 HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
@@ -26,14 +28,15 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     registerIPCCallback = (registerIPCCallback_t*) hwlib.resolve("registerIPCCallback");
     ipcToEngine = (ipcToEngine_t*) hwlib.resolve("ipcToEngine");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
+    flibFree = (flibFree_t*) hwlib.resolve("flibFree");
 
-    flibInit();
+    flibInit(".", "~/.hedgewars");
     registerIPCCallback(this, &engineMessageCallback);
 }
 
 HWEngine::~HWEngine()
 {
-
+    flibFree();
 }
 
 void HWEngine::run()
@@ -41,18 +44,16 @@ void HWEngine::run()
     m_argsList.clear();
     m_argsList << "";
     m_argsList << "--internal";
-    //m_argsList << "--user-prefix";
-    //m_argsList << cfgdir->absolutePath();
-    //m_argsList << "--prefix";
-    //m_argsList << datadir->absolutePath();
     m_argsList << "--landpreview";
 
     m_args.resize(m_argsList.size());
     for(int i = m_argsList.size() - 1; i >=0; --i)
         m_args[i] = m_argsList[i].constData();
 
+    m_seed = QUuid::createUuid().toString();
+
     RunEngine(m_args.size(), m_args.data());
-    sendIPC("eseed helloworld");
+    sendIPC("eseed " + m_seed.toLatin1());
     sendIPC("e$mapgen 0");
     sendIPC("!");
 }
@@ -91,26 +92,12 @@ void HWEngine::engineMessageCallback(void *context, const char * msg, quint32 le
 
 void HWEngine::engineMessageHandler(const QByteArray &msg)
 {
-    if(msg.size() == 128 * 256)
-    {
-        QVector<QRgb> colorTable;
-        colorTable.resize(256);
-        for(int i = 0; i < 256; ++i)
-            colorTable[i] = qRgba(255, 255, 0, i);
+    PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
+    preview->setPixmap(msg);
+    emit previewImageChanged();
+}
 
-        const quint8 *buf = (const quint8*) msg.constData();
-        QImage im(buf, 256, 128, QImage::Format_Indexed8);
-        im.setColorTable(colorTable);
-
-        QPixmap px = QPixmap::fromImage(im, Qt::ColorOnly);
-        //QPixmap pxres(px.size());
-        //QPainter p(&pxres);
-
-        //p.fillRect(pxres.rect(), linearGrad);
-        //p.drawPixmap(0, 0, px);
-
-        PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
-        preview->setPixmap(px);
-        emit previewImageChanged();
-    }
+QString HWEngine::currentSeed()
+{
+    return m_seed;
 }

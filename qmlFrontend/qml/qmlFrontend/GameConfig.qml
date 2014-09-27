@@ -15,7 +15,7 @@ Rectangle {
 
         Connections {
             target: HWEngine
-            onPreviewImageChanged: previewImage.source = "image://preview/1"
+            onPreviewImageChanged: previewImage.source = "image://preview/" + HWEngine.currentSeed()
         }
     }
 

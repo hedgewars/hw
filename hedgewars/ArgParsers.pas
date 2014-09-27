@@ -204,8 +204,8 @@ const videoarray: array [0..4] of string = ('--fullscreen-width','--fullscreen-h
       otherarray: array [0..2] of string = ('--locale','--fullscreen','--showfps');
       mediaarray: array [0..9] of string = ('--fullscreen-width', '--fullscreen-height', '--width', '--height', '--depth', '--volume','--nomusic','--nosound','--locale','--fullscreen');
       allarray: array [0..17] of string = ('--fullscreen-width','--fullscreen-height', '--width', '--height', '--depth','--volume','--nomusic','--nosound','--locale','--fullscreen','--showfps','--altdmg','--frame-interval','--low-quality','--no-teamtag','--no-hogtag','--no-healthtag','--translucent-tags');
-      reallyAll: array[0..34] of shortstring = (
-                '--prefix', '--user-prefix', '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
+      reallyAll: array[0..32] of shortstring = (
+                '--locale', '--fullscreen-width', '--fullscreen-height', '--width',
                 '--height', '--frame-interval', '--volume','--nomusic', '--nosound',
                 '--fullscreen', '--showfps', '--altdmg', '--low-quality', '--raw-quality', '--stereo', '--nick',
   {deprecated}  '--depth', '--set-video', '--set-audio', '--set-other', '--set-multimedia', '--set-everything',
@@ -221,44 +221,42 @@ begin
 
     while (cmdIndex <= High(reallyAll)) and (cmd <> reallyAll[cmdIndex]) do inc(cmdIndex);
     case cmdIndex of
-        {--prefix}               0 : PathPrefix        := getstringParameter (arg, paramIndex, parseParameter);
-        {--user-prefix}          1 : UserPathPrefix    := getstringParameter (arg, paramIndex, parseParameter);
-        {--locale}               2 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
-        {--fullscreen-width}     3 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
-        {--fullscreen-height}    4 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
-        {--width}                5 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
-        {--height}               6 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
-        {--frame-interval}       7 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--volume}               8 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
-        {--nomusic}              9 : SetMusic           ( false );
-        {--nosound}             10 : SetSound           ( false );
-        {--fullscreen}          11 : cFullScreen       := true;
-        {--showfps}             12 : cShowFPS          := true;
-        {--altdmg}              13 : cAltDamage        := true;
-        {--low-quality}         14 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
-        {--raw-quality}         15 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
-        {--stereo}              16 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
-        {--nick}                17 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
+        {--locale}               0 : cLocaleFName      := getstringParameter (arg, paramIndex, parseParameter);
+        {--fullscreen-width}     1 : cFullscreenWidth  := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenWidth);
+        {--fullscreen-height}    2 : cFullscreenHeight := max(getLongIntParameter(arg, paramIndex, parseParameter), cMinScreenHeight);
+        {--width}                3 : cWindowedWidth    := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenWidth);
+        {--height}               4 : cWindowedHeight   := max(2 * (getLongIntParameter(arg, paramIndex, parseParameter) div 2), cMinScreenHeight);
+        {--frame-interval}       5 : cTimerInterval    := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--volume}               6 : SetVolume          ( max(getLongIntParameter(arg, paramIndex, parseParameter), 0) );
+        {--nomusic}              7 : SetMusic           ( false );
+        {--nosound}              8 : SetSound           ( false );
+        {--fullscreen}           9 : cFullScreen       := true;
+        {--showfps}             10 : cShowFPS          := true;
+        {--altdmg}              11 : cAltDamage        := true;
+        {--low-quality}         12 : cReducedQuality   := $FFFFFFFF xor rqLowRes;
+        {--raw-quality}         13 : cReducedQuality   := getLongIntParameter(arg, paramIndex, parseParameter);
+        {--stereo}              14 : setStereoMode      ( getLongIntParameter(arg, paramIndex, parseParameter) );
+        {--nick}                15 : UserNick          := parseNick( getstringParameter(arg, paramIndex, parseParameter) );
         {deprecated options}
-        {--depth}               18 : setDepth(paramIndex);
-        {--set-video}           19 : parseClassicParameter(videoarray,5,paramIndex);
-        {--set-audio}           20 : parseClassicParameter(audioarray,3,paramIndex);
-        {--set-other}           21 : parseClassicParameter(otherarray,3,paramIndex);
-        {--set-multimedia}      22 : parseClassicParameter(mediaarray,10,paramIndex);
-        {--set-everything}      23 : parseClassicParameter(allarray,14,paramIndex);
+        {--depth}               16 : setDepth(paramIndex);
+        {--set-video}           17 : parseClassicParameter(videoarray,5,paramIndex);
+        {--set-audio}           18 : parseClassicParameter(audioarray,3,paramIndex);
+        {--set-other}           19 : parseClassicParameter(otherarray,3,paramIndex);
+        {--set-multimedia}      20 : parseClassicParameter(mediaarray,10,paramIndex);
+        {--set-everything}      21 : parseClassicParameter(allarray,14,paramIndex);
         {"internal" options}
-        {--internal}            24 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
-        {--recorder}            25 : startVideoRecording(paramIndex);
-        {--landpreview}         26 : GameType := gmtLandPreview;
+        {--internal}            22 : {$IFDEF HWLIBRARY}isInternal:= true{$ENDIF};
+        {--recorder}            23 : startVideoRecording(paramIndex);
+        {--landpreview}         24 : GameType := gmtLandPreview;
         {anything else}
-        {--stats-only}          27 : statsOnlyGame();
-        {--gci}                 28 : GciEasterEgg();
-        {--help}                29 : DisplayUsage();
-        {--no-teamtag}          30 : cTagsMask := cTagsMask and (not htTeamName);
-        {--no-hogtag}           31 : cTagsMask := cTagsMask and (not htName);
-        {--no-healthtag}        32 : cTagsMask := cTagsMask and (not htHealth);
-        {--translucent-tags}    33 : cTagsMask := cTagsMask or htTransparent;
-        {--lua-test}            34: begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
+        {--stats-only}          25 : statsOnlyGame();
+        {--gci}                 26 : GciEasterEgg();
+        {--help}                27 : DisplayUsage();
+        {--no-teamtag}          28 : cTagsMask := cTagsMask and (not htTeamName);
+        {--no-hogtag}           29 : cTagsMask := cTagsMask and (not htName);
+        {--no-healthtag}        30 : cTagsMask := cTagsMask and (not htHealth);
+        {--translucent-tags}    31 : cTagsMask := cTagsMask or htTransparent;
+        {--lua-test}            32: begin cTestLua := true; SetSound(false); cScriptName := getstringParameter(arg, paramIndex, parseParameter); WriteLn(stdout, 'Lua test file specified: ' + cScriptName);end;
     else
         begin
         //Assume the first "non parameter" is the replay file, anything else is invalid
@@ -354,8 +352,6 @@ begin
         begin
         isInternal:= (ParamStr(1) = '--internal');
 
-        UserPathPrefix := _S'.';
-        PathPrefix     := cDefaultPathPrefix;
         recordFileName := '';
         parseCommandLine();
 

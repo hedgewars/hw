@@ -25,7 +25,6 @@ uses SDLh, uTypes;
 procedure initModule;
 procedure freeModule;
 
-procedure InitIPC;
 procedure SendIPC(s: shortstring);
 procedure SendIPCXY(cmd: char; X, Y: LongInt);
 procedure SendIPCRaw(p: pointer; len: Longword);
@@ -97,11 +96,6 @@ headcmd:= headcmd^.Next;
 if headcmd = nil then
     lastcmd:= nil;
 dispose(tmp)
-end;
-
-procedure InitIPC;
-begin
-    // do nothing, flib initialized everything for us
 end;
 
 procedure ParseChatCommand(command: shortstring; message: shortstring;

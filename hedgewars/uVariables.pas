@@ -40,8 +40,6 @@ var
     cLocaleFName       : shortstring;
     cLocale            : shortstring;
     cTimerInterval     : LongInt;
-    PathPrefix         : ansistring;
-    UserPathPrefix     : ansistring;
     cShowFPS           : boolean;
     cFlattenFlakes     : boolean;
     cFlattenClouds     : boolean;
@@ -2423,12 +2421,10 @@ begin
     cLocaleFName    := 'en.txt';
     cFullScreen     := false;
 
-    UserPathPrefix  := '';
     recordFileName  := '';
     UserNick        := '';
     cStereoMode     := smNone;
     GrayScale       := false;
-    PathPrefix      := './';
     GameType        := gmtLocal;
     cOnlyStats      := False;
     cScriptName     := '';

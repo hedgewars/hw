@@ -13,7 +13,7 @@ const PhyslayerLibName = 'libphyslayer';
     {$linklib physlayer}
 {$ENDIF}
 
-procedure initModule;
+procedure initModule(localPrefix, userPrefix: PChar);
 procedure freeModule;
 
 type PFSFile = pointer;
@@ -138,9 +138,9 @@ end;
 procedure pfsMount(path: ansistring; mountpoint: PChar);
 begin
     if PHYSFS_mount(PChar(path), mountpoint, false) then
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
+        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : ok')
     else
-        AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
+        //AddFileLog('[PhysFS] mount ' + shortstring(path) + ' at ' + shortstring(mountpoint) + ' : FAILED ("' + shortstring(PHYSFS_getLastError()) + '")');
 end;
 
 procedure pfsMountAtRoot(path: ansistring);
@@ -148,20 +148,16 @@ begin
     pfsMount(path, PChar(_S'/'));
 end;
 
-procedure initModule;
+procedure initModule(localPrefix, userPrefix: PChar);
 var i: LongInt;
     cPhysfsId: shortstring;
     fp: PChar;
 begin
-{$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
     cPhysfsId:= GetCurrentDir() + {$IFDEF DARWIN}{$IFNDEF IPHONEOS}'/Hedgewars.app/Contents/MacOS/' + {$ENDIF}{$ENDIF} ' hedgewars';
-{$ELSE}
-    cPhysfsId:= ParamStr(0);
-{$ENDIF}
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
-    AddFileLog('[PhysFS] init: ' + inttostr(i));
+    //AddFileLog('[PhysFS] init: ' + inttostr(i));
 
     // mount system fonts paths first
     for i:= low(cFontsPaths) to high(cFontsPaths) do
@@ -171,13 +167,13 @@ begin
                 pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
 
-    pfsMountAtRoot(PathPrefix);
-    pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));
+    pfsMountAtRoot(localPrefix);
+    pfsMountAtRoot(userPrefix + ansistring('/Data'));
 
     hedgewarsMountPackages;
 
     // need access to teams and frontend configs (for bindings)
-    pfsMountAtRoot(UserPathPrefix);
+    pfsMountAtRoot(userPrefix);
 
     {$IFNDEF PAS2C}
     if cTestLua then

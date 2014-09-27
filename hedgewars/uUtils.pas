@@ -524,7 +524,7 @@ begin
 {$IFNDEF PAS2C}
     f:= stderr; // if everything fails, write to stderr
 {$ENDIF}
-    if (length(UserPathPrefix) > 0) then
+(*    if (length(UserPathPrefix) > 0) then
         begin
         {$IFNDEF PAS2C}
         // create directory if it doesn't exist
@@ -540,7 +540,7 @@ begin
                 break;
             inc(i)
             end;
-        end;
+        end;*)
     Rewrite(f);
 {$I+}
 {$ENDIF}

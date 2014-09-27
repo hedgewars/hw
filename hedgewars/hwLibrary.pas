@@ -41,6 +41,7 @@ uses hwengine
     , uFLTypes
     , uFLGameConfig
     , uFLIPC
+    , uPhysFSLayer
     ;
 
 {$INCLUDE "config.inc"}
@@ -99,9 +100,16 @@ begin
     ReleaseSound(false);
 end;
 
-procedure flibInit; cdecl; export;
+procedure flibInit(localPrefix, userPrefix: PChar); cdecl; export;
 begin
-    initIPC
+    initIPC;
+    uPhysFSLayer.initModule(localPrefix, userPrefix);
+end;
+
+procedure flibFree; cdecl; export;
+begin
+    uPhysFSLayer.freemodule;
+    freeIPC;
 end;
 
 {$IFDEF ANDROID}
@@ -139,6 +147,7 @@ exports
     registerIPCCallback,
     ipcToEngine,
     flibInit,
+    flibFree,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

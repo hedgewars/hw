@@ -12,7 +12,7 @@ public:
 
     QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
 
-    void setPixmap(const QPixmap & px);
+    void setPixmap(const QByteArray & px);
 
 private:
     QPixmap m_px;

@@ -322,8 +322,8 @@ begin
     initEverything(true);
     WriteLnToConsole('Hedgewars engine ' + cVersionString + '-r' + cRevisionString +
                      ' (' + cHashString + ') with protocol #' + inttostr(cNetProtoVersion));
-    AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
-    AddFileLog('UserPrefix: "' + shortstring(UserPathPrefix) +'"');
+    //AddFileLog('Prefix: "' + shortstring(PathPrefix) +'"');
+    //AddFileLog('UserPrefix: "' + shortstring(UserPathPrefix) +'"');
 
     for i:= 0 to ParamCount do
         AddFileLog(inttostr(i) + ': ' + ParamStr(i));
@@ -385,7 +385,6 @@ begin
         begin
         if recordFileName = '' then
             begin
-            InitIPC;
             SendIPCAndWaitReply(_S'C');        // ask for game config
             end
         else
@@ -444,7 +443,6 @@ begin
     uLand.initModule;               // computes land
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
-    uPhysFSLayer.initModule;
     uScript.initModule;
 
     if complete then
@@ -513,7 +511,6 @@ begin
     uCommands.freeModule;
     uVariables.freeModule;
     uUtils.freeModule;              // closes debug file
-    uPhysFSLayer.freeModule;
     uScript.freeModule;
 end;
 
@@ -523,7 +520,6 @@ var Preview: TPreviewAlpha;
 begin
     initEverything(false);
 
-    InitIPC;
     IPCWaitPongEvent;
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
