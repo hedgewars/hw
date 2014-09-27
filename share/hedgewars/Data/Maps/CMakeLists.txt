@@ -11,6 +11,7 @@ foreach(dir
     Castle
     Cave
     Cheese
+    ClimbHome
     Cogs
     Control
     CrazyMission
