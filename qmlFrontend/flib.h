@@ -19,7 +19,7 @@ typedef union string255_
     } string255;
 
 typedef void RunEngine_t(int argc, const char ** argv);
-typedef void registerIPCCallback_t(void * context, void (*)(void * context, const char * msg, uint32_t len));
+typedef void registerPreviewCallback_t(void * context, void (*)(void * context, const char * msg, uint32_t len));
 typedef void ipcToEngine_t(const char * msg, uint8_t len);
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();

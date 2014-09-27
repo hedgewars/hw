@@ -144,7 +144,9 @@ exports
 {$ELSE}
 exports
     RunEngine,
-    registerIPCCallback,
+    runQuickGame,
+    getPreview,
+    registerPreviewCallback,
     ipcToEngine,
     flibInit,
     flibFree,

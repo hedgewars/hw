@@ -9,7 +9,7 @@
 
 extern "C" {
     RunEngine_t *RunEngine;
-    registerIPCCallback_t *registerIPCCallback;
+    registerPreviewCallback_t *registerPreviewCallback;
     ipcToEngine_t *ipcToEngine;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
@@ -25,13 +25,13 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
         qWarning() << "Engine library not found" << hwlib.errorString();
 
     RunEngine = (RunEngine_t*) hwlib.resolve("RunEngine");
-    registerIPCCallback = (registerIPCCallback_t*) hwlib.resolve("registerIPCCallback");
+    registerPreviewCallback = (registerPreviewCallback_t*) hwlib.resolve("registerIPCCallback");
     ipcToEngine = (ipcToEngine_t*) hwlib.resolve("ipcToEngine");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
 
     flibInit(".", "~/.hedgewars");
-    registerIPCCallback(this, &engineMessageCallback);
+    registerPreviewCallback(this, &enginePreviewCallback);
 }
 
 HWEngine::~HWEngine()
@@ -80,7 +80,7 @@ void HWEngine::sendIPC(const QByteArray & b)
     ipcToEngine(b.constData(), len);
 }
 
-void HWEngine::engineMessageCallback(void *context, const char * msg, quint32 len)
+void HWEngine::enginePreviewCallback(void *context, const char * msg, quint32 len)
 {
     HWEngine * obj = (HWEngine *)context;
     QByteArray b = QByteArray::fromRawData(msg, len);
@@ -92,9 +92,12 @@ void HWEngine::engineMessageCallback(void *context, const char * msg, quint32 le
 
 void HWEngine::engineMessageHandler(const QByteArray &msg)
 {
-    PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
-    preview->setPixmap(msg);
-    emit previewImageChanged();
+    if(msg.size() == 128 * 256)
+    {
+        PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
+        preview->setPixmap(msg);
+        emit previewImageChanged();
+    }
 }
 
 QString HWEngine::currentSeed()

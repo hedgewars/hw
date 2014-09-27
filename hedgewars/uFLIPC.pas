@@ -18,7 +18,7 @@ procedure ipcToFrontendRaw(p: pointer; len: Longword);
 function ipcReadFromFrontend: shortstring;
 function ipcCheckFromFrontend: boolean;
 
-procedure registerIPCCallback(p: pointer; f: TIPCCallback); cdecl; export;
+procedure registerPreviewCallback(p: pointer; f: TIPCCallback); cdecl; export;
 
 implementation
 
@@ -133,7 +133,7 @@ begin
     until false
 end;
 
-procedure registerIPCCallback(p: pointer; f: TIPCCallback); cdecl; export;
+procedure registerPreviewCallback(p: pointer; f: TIPCCallback); cdecl; export;
 begin
     callbackPointer:= p;
     callbackFunction:= f;

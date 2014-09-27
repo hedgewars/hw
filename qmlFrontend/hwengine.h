@@ -32,7 +32,7 @@ private:
     QQmlEngine * m_engine;
     QString m_seed;
 
-    static void engineMessageCallback(void *context, const char * msg, quint32 len);
+    static void enginePreviewCallback(void *context, const char * msg, quint32 len);
     void sendIPC(const QByteArray &b);
 
 private slots:
