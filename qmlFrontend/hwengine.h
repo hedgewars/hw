@@ -18,7 +18,7 @@ public:
     ~HWEngine();
 
     static void exposeToQML();
-    Q_INVOKABLE void run();
+    Q_INVOKABLE void getPreview();
     Q_INVOKABLE QString currentSeed();
     
 signals:
@@ -27,13 +27,10 @@ signals:
 public slots:
 
 private:
-    QList<QByteArray> m_argsList;
-    QVector<const char *> m_args;
     QQmlEngine * m_engine;
     QString m_seed;
 
-    static void enginePreviewCallback(void *context, const char * msg, quint32 len);
-    void sendIPC(const QByteArray &b);
+    static void guiMessagesCallback(void * context, MessageType mt, const char * msg, uint32_t len);
 
 private slots:
     void engineMessageHandler(const QByteArray &msg);

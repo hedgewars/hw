@@ -99,9 +99,10 @@ set(engine_sources
     uGearsHandlersMess.pas
     uGearsUtils.pas
     uTeams.pas
-    
+
     uFLIPC.pas
     uFLTypes.pas
+    uFLGameConfig.pas
 
     #these interact with everything, so compile last
     uScript.pas

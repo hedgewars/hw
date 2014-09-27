@@ -9,7 +9,7 @@ var msgFrontend, msgEngine: TIPCMessage;
 procedure initIPC;
 procedure freeIPC;
 
-procedure ipcToEngine(p: PChar; len: byte); cdecl; export;
+procedure ipcToEngine(s: shortstring);
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
@@ -18,7 +18,7 @@ procedure ipcToFrontendRaw(p: pointer; len: Longword);
 function ipcReadFromFrontend: shortstring;
 function ipcCheckFromFrontend: boolean;
 
-procedure registerPreviewCallback(p: pointer; f: TIPCCallback); cdecl; export;
+procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 
 implementation
 
@@ -69,12 +69,10 @@ begin
     SDL_UnlockMutex(mut)
 end;
 
-procedure ipcToEngine(p: PChar; len: byte); cdecl; export;
+procedure ipcToEngine(s: shortstring);
 var msg: TIPCMessage;
 begin
-    writeln(stderr, len);
-    Move(p^, msg.str[1], len);
-    msg.str[0]:= char(len);
+    msg.str:= s;
     msg.buf:= nil;
     ipcSend(msg, msgEngine, mutEngine, condEngine)
 end;
@@ -133,7 +131,7 @@ begin
     until false
 end;
 
-procedure registerPreviewCallback(p: pointer; f: TIPCCallback); cdecl; export;
+procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 begin
     callbackPointer:= p;
     callbackFunction:= f;

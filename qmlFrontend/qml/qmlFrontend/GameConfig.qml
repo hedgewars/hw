@@ -10,7 +10,7 @@ Rectangle {
         height: 150
 
         onClicked: {
-            HWEngine.run()
+            HWEngine.getPreview()
         }
 
         Connections {
