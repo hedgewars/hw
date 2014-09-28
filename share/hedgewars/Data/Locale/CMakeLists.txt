@@ -9,6 +9,7 @@ file(GLOB missionfiles missions_*.txt)
 file(GLOB campaignfiles campaigns_*.txt)
 file(GLOB tipfiles tips_*.xml)
 
+find_package(Qt4)
 QT4_ADD_TRANSLATION(QM ${tsfiles})
 
 add_custom_target (release-translation ALL
