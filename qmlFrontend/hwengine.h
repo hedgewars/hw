@@ -19,6 +19,7 @@ public:
 
     static void exposeToQML();
     Q_INVOKABLE void getPreview();
+    Q_INVOKABLE void runQuickGame();
     Q_INVOKABLE QString currentSeed();
     
 signals:

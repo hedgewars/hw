@@ -103,6 +103,8 @@ set(engine_sources
     uFLIPC.pas
     uFLTypes.pas
     uFLGameConfig.pas
+    uFLTeams.pas
+    uFLUtils.pas
 
     #these interact with everything, so compile last
     uScript.pas

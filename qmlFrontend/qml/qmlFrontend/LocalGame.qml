@@ -1,5 +1,5 @@
 import QtQuick 2.0
-//import Hedgewars.Engine 1.0
+import Hedgewars.Engine 1.0
 
 Rectangle {
     HWButton {
@@ -8,6 +8,8 @@ Rectangle {
         y: 66
         width: 150
         height: 150
+
+        onClicked: HWEngine.runQuickGame()
     }
 
     HWButton {

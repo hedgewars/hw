@@ -9,9 +9,7 @@ Rectangle {
         width: 150
         height: 150
 
-        onClicked: {
-            HWEngine.getPreview()
-        }
+        onClicked: HWEngine.getPreview()
 
         Connections {
             target: HWEngine

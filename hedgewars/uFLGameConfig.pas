@@ -12,7 +12,7 @@ procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 
 implementation
-uses uFLIPC, hwengine;
+uses uFLIPC, hwengine, uFLUtils, uFLTeams;
 
 var guiCallbackPointer: pointer;
     guiCallbackFunction: TGUICallback;
@@ -22,26 +22,11 @@ const
     MAXARGS = 32;
 
 type
-    TGameType = (gtPreview, gtLocal);
-    THedgehog = record
-            name: shortstring;
-            hat: shortstring;
-            end;
-    TTeam = record
-            teamName: shortstring;
-            flag: shortstring;
-            graveName: shortstring;
-            fortName: shortstring;
-            owner: shortstring;
-            extDriven: boolean;
-            botLevel: Longword;
-            hedgehogs: array[0..7] of THedgehog;
-            hogsNumber: Longword;
-            end;
     TGameConfig = record
             seed: shortstring;
             theme: shortstring;
             script: shortstring;
+            mapgen: Longint;
             gameType: TGameType;
             teams: array[0..7] of TTeam;
             arguments: array[0..Pred(MAXARGS)] of shortstring;
@@ -50,19 +35,40 @@ type
             end;
     PGameConfig = ^TGameConfig;
 
-var currentConfig: TGameConfig;
-    str2PCharBuffer: array[0..255] of char;
+var
+    currentConfig: TGameConfig;
 
-function str2PChar(const s: shortstring): PChar;
-var i: Integer;
+
+procedure sendConfig(config: PGameConfig);
+var i: Longword;
 begin
-   for i:= 1 to Length(s) do
-      begin
-      str2PCharBuffer[i - 1] := s[i];
-      end;
-   str2PCharBuffer[Length(s)]:= #0;
-   str2PChar:= @(str2PCharBuffer[0]);
-end;    
+with config^ do
+begin
+    case gameType of
+    gtPreview: begin
+            ipcToEngine('eseed ' + seed);
+            ipcToEngine('e$mapgen ' + intToStr(mapgen));
+        end;
+    gtLocal: begin
+            ipcToEngine('eseed ' + seed);
+            ipcToEngine('e$mapgen ' + intToStr(mapgen));
+            i:= 0;
+            while (i < 8) and (teams[i].hogsNumber > 0) do
+                begin
+                    ipcToEngine('eammloadt 93919294221991210322351110012000000002111001010111110001');
+                    ipcToEngine('eammprob 04050405416006555465544647765766666661555101011154111111');
+                    ipcToEngine('eammdelay 00000000000002055000000400070040000000002200000006000200');
+                    ipcToEngine('eammreinf 13111103121111111231141111111111111112111111011111111111');
+                    ipcToEngine('eammstore');
+                    sendTeamConfig(teams[i]);
+                    inc(i)
+                end;
+        end;
+    end;
+
+    ipcToEngine('!');
+end;
+end;
 
 procedure queueExecution;
 var pConfig: PGameConfig;
@@ -82,6 +88,8 @@ begin
         end;
 
     RunEngine(pConfig^.argumentsNumber, @pConfig^.argv);
+
+    sendConfig(pConfig)
 end;
 
 procedure resetGameConfig; cdecl;
@@ -100,7 +108,22 @@ end;
 
 procedure runQuickGame; cdecl;
 begin
+    with currentConfig do
+    begin
+        gameType:= gtLocal;
+        arguments[0]:= '';
+        arguments[1]:= '--internal';
+        arguments[2]:= '--nosound';
+        argumentsNumber:= 3;
 
+        teams[0]:= createRandomTeam;
+        teams[0].color:= '6341088';
+        teams[1]:= createRandomTeam;
+        teams[1].color:= '2113696';
+        teams[1].botLevel:= 1;
+
+        queueExecution;
+    end;
 end;
 
 procedure getPreview; cdecl;
@@ -114,10 +137,6 @@ begin
         argumentsNumber:= 3;
 
         queueExecution;
-
-        ipcToEngine('eseed ' + seed);
-        ipcToEngine('e$mapgen 0');
-        ipcToEngine('!');
     end;
 end;
 

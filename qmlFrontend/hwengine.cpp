@@ -13,6 +13,7 @@ extern "C" {
     setSeed_t *flibSetSeed;
     getSeed_t *flibGetSeed;
     getPreview_t *flibGetPreview;
+    runQuickGame_t *flibRunQuickGame;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
 }
@@ -35,10 +36,11 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
     flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
+    flibRunQuickGame = (runQuickGame_t*) hwlib.resolve("runQuickGame");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
 
-    flibInit(".", "~/.hedgewars");
+    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "~/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
 }
 
@@ -51,6 +53,12 @@ void HWEngine::getPreview()
 {
     flibSetSeed(QUuid::createUuid().toString().toLatin1());
     flibGetPreview();
+}
+
+void HWEngine::runQuickGame()
+{
+    flibSetSeed(QUuid::createUuid().toString().toLatin1());
+    flibRunQuickGame();
 }
 
 static QObject *hwengine_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
