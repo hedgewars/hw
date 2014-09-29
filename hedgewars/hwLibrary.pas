@@ -42,6 +42,7 @@ uses hwengine
     , uFLGameConfig
     , uFLIPC
     , uPhysFSLayer
+    , uFLData
     ;
 
 {$INCLUDE "config.inc"}
@@ -151,6 +152,8 @@ exports
     flibFree,
     setSeed,
     getSeed,
+    getThemesList,
+    freeThemesList,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

@@ -244,11 +244,11 @@ var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
     cPathz: array[TPathType] of shortstring = (
         '',                              // ptNone
-        '//',                            // ptData
+        '/',                             // ptData
         '/Graphics',                     // ptGraphics
         '/Themes',                       // ptThemes
         '/Themes/Bamboo',                // ptCurrTheme
-        '/Teams',                        // ptTeams
+        '/Config/Teams',                 // ptTeams
         '/Maps',                         // ptMaps
         '',                              // ptMapCurrent
         '/Demos',                        // ptDemos
@@ -265,7 +265,8 @@ var
         '/Missions/Maps',                // ptMissionMaps
         '/Graphics/SuddenDeath',         // ptSuddenDeath
         '/Graphics/Buttons',             // ptButton
-        '/Shaders'                       // ptShaders
+        '/Shaders',                      // ptShaders
+        '/Config'                        // ptConfig
     );
 
 var

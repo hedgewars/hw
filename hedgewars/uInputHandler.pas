@@ -331,7 +331,7 @@ DefaultBinds[KeyNameToCode('j0a1d')]:= '+down';
 for i:= 1 to 10 do DefaultBinds[KeyNameToCode('f'+IntToStr(i))]:= 'slot '+char(i+48);
 for i:= 1 to 5  do DefaultBinds[KeyNameToCode(IntToStr(i))]:= 'timer '+IntToStr(i);
 
-loadBinds('dbind', cPathz[ptData] + '/settings.ini');
+loadBinds('dbind', cPathz[ptConfig] + '/settings.ini');
 end;
 
 procedure SetBinds(var binds: TBinds);
@@ -472,7 +472,7 @@ var i: LongInt;
     b: byte;
 begin
     if cOnlyStats then exit;
-    
+
     AddFileLog('[BINDS] Loading binds from: ' + s);
 
     l:= '';

@@ -16,6 +16,8 @@ extern "C" {
     runQuickGame_t *flibRunQuickGame;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
+    getThemesList_t *flibGetThemesList;
+    freeThemesList_t *flibFreeThemesList;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -40,8 +42,13 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
 
-    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "~/.hedgewars");
+    flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
+    flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
+
+    flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
+
+    fillModels();
 }
 
 HWEngine::~HWEngine()
@@ -101,4 +108,19 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
 QString HWEngine::currentSeed()
 {
     return QString::fromLatin1(flibGetSeed());
+}
+
+void HWEngine::fillModels()
+{
+    QStringList resultModel;
+
+    char ** themes = flibGetThemesList();
+    for (char **i = themes; *i != NULL; i++) {
+        QString theme = QString::fromUtf8(*i);
+
+        resultModel << theme;
+    }
+    flibFreeThemesList(themes);
+
+    m_engine->rootContext()->setContextProperty("themesModel", QVariant::fromValue(resultModel));
 }

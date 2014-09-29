@@ -31,6 +31,7 @@ private:
     QQmlEngine * m_engine;
 
     static void guiMessagesCallback(void * context, MessageType mt, const char * msg, uint32_t len);
+    void fillModels();
 
 private slots:
     void engineMessageHandler(MessageType mt, const QByteArray &msg);

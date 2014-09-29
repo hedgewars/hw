@@ -5,9 +5,9 @@ Rectangle {
     HWButton {
         id: btnPreview
         x: 50
-        y: 66
-        width: 150
-        height: 150
+        y: 16
+        width: 256
+        height: 128
 
         onClicked: HWEngine.getPreview()
 
@@ -15,14 +15,27 @@ Rectangle {
             target: HWEngine
             onPreviewImageChanged: previewImage.source = "image://preview/" + HWEngine.currentSeed()
         }
+
+        Image {
+            id: previewImage
+            x: 0
+            y: 0
+            width: 256
+            height: 128
+            cache: false
+        }
     }
 
-    Image {
-        id: previewImage
-        x: 210
-        y: 70
-        width: 256
-        height: 128
-        cache: false
+    ListView {
+        x: 330
+        y: 16
+        width: 100; height: 100
+
+        model: themesModel
+        delegate: Rectangle {
+            height: 25
+            width: 100
+            Text { text: modelData }
+        }
     }
 }

@@ -31,6 +31,9 @@ typedef char *getSeed_t();
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 
+typedef char **getThemesList_t();
+typedef void freeThemesList_t(char **list);
+
 #ifdef __cplusplus
 }
 #endif
