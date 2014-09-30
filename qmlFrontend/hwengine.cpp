@@ -6,6 +6,7 @@
 
 #include "hwengine.h"
 #include "previewimageprovider.h"
+#include "themeiconprovider.h"
 
 extern "C" {
     RunEngine_t *flibRunEngine;
@@ -18,6 +19,7 @@ extern "C" {
     flibFree_t *flibFree;
     getThemesList_t *flibGetThemesList;
     freeThemesList_t *flibFreeThemesList;
+    getThemeIcon_t *flibGetThemeIcon;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -44,9 +46,13 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
+    flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
+
+    ThemeIconProvider * themeIcon = (ThemeIconProvider *)m_engine->imageProvider(QLatin1String("theme"));
+    themeIcon->setFileContentsFunction(flibGetThemeIcon);
 
     fillModels();
 }

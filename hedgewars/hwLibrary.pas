@@ -154,6 +154,7 @@ exports
     getSeed,
     getThemesList,
     freeThemesList,
+    getThemeIcon,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

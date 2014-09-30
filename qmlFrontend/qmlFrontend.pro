@@ -14,7 +14,8 @@ QML_IMPORT_PATH =
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     hwengine.cpp \
-    previewimageprovider.cpp
+    previewimageprovider.cpp \
+    themeiconprovider.cpp
 
 # Installation path
 # target.path =
@@ -27,7 +28,8 @@ HEADERS += \
     qtquick2applicationviewer/qtquick2applicationviewer.h \
     hwengine.h \
     flib.h \
-    previewimageprovider.h
+    previewimageprovider.h \
+    themeiconprovider.h
 
 OTHER_FILES += \
     qtquick2applicationviewer/qtquick2applicationviewer.pri \
