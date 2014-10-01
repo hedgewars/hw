@@ -545,10 +545,10 @@ begin
             begin
             WriteLnToConsole('Generating land...');
             case cMapGen of
-                0: GenTemplated(EdgeTemplates[SelectTemplate]);
-                1: begin ResizeLand(4096,2048); GenMaze; end;
-                2: begin ResizeLand(4096,2048); GenPerlin; end;
-                3: GenDrawnMap;
+                mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+                mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+                mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
+                mgDrawn : GenDrawnMap;
             else
                 OutError('Unknown mapgen', true);
             end;

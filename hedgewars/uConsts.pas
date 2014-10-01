@@ -316,6 +316,12 @@ const
 
     cMinPlayWidth = 200;
 
+    // MapGen
+    mgRandom = 0;
+    mgMaze   = 1;
+    mgPerlin = 2;
+    mgDrawn  = 3;
+
 implementation
 
 end.

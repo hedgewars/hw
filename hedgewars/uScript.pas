@@ -2751,8 +2751,14 @@ ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 
 // land flags
 ScriptSetInteger('lfIndestructible', lfIndestructible);
-ScriptSetInteger('lfIce',            lfIce);
-ScriptSetInteger('lfBouncy',         lfBouncy);
+ScriptSetInteger('lfIce'           , lfIce);
+ScriptSetInteger('lfBouncy'        , lfBouncy);
+
+// mapgen
+ScriptSetInteger('mgRandom', mgRandom);
+ScriptSetInteger('mgMaze'  , mgMaze);
+ScriptSetInteger('mgPerlin', mgPerlin);
+ScriptSetInteger('mgDrawn' , mgDrawn);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
