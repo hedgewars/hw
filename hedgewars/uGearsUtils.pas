@@ -364,16 +364,12 @@ var x, y, i, distL, distR, distB, minDist, maxDrops: LongInt;
     speed, hwTmp: hwFloat;
     vi, vs, tmp: real; // impact speed and sideways speed
     isImpactH, isImpactRight: boolean;
-const dist2surf = 6;
+const dist2surf = 4;
 begin
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
 
-splash:= AddVisualGear(x, y, vgtSplash);
-if splash = nil then
-    exit;
-
-// correct position and angle
+// find position for splash and impact speed
 
 distB:= cWaterline - y;
 
@@ -391,29 +387,17 @@ isImpactH:= (minDist <> distB);
 if not isImpactH then
     begin
     y:= cWaterline - dist2surf;
-    splash^.Y:= y;
     speed:= hwAbs(Gear^.dY);
-    vs:= abs(hwFloat2Float(Gear^.dX));
     end
 else
     begin
     isImpactRight := minDist = distR;
     if isImpactRight then
-        begin
-        x := rightX - dist2surf;;
-        splash^.Angle:= -90;
-        end
+        x:= rightX - dist2surf
     else
-        begin
-        x := leftX + dist2surf;;
-        splash^.Angle:=  90;
-        end;
-    splash^.X:= x;
+        x:= leftX + dist2surf;
     speed:= hwAbs(Gear^.dX);
-    vs:= abs(hwFloat2Float(Gear^.dY));
     end;
-
-vi:= hwFloat2Float(speed);
 
 // splash sound
 
@@ -431,6 +415,30 @@ else
     else
         PlaySound(sndDroplet2);
     end;
+
+
+// splash visuals
+
+if ((cReducedQuality and rqPlainSplash) <> 0) then
+    exit;
+
+splash:= AddVisualGear(x, y, vgtSplash);
+if splash = nil then
+    exit;
+
+if not isImpactH then
+    vs:= abs(hwFloat2Float(Gear^.dX))
+else
+    begin
+    if isImpactRight then
+        splash^.Angle:= -90
+    else
+        splash^.Angle:=  90;
+    vs:= abs(hwFloat2Float(Gear^.dY));
+    end;
+
+
+vi:= hwFloat2Float(speed);
 
 with splash^ do
     begin
@@ -596,7 +604,7 @@ begin
                         end
                     else
                         DrownGear(Gear);
-                    if (dist2Water < -1) or (Gear^.Kind = gtFlake) then
+                    if Gear^.Kind = gtFlake then
                         exit(true); // skip splashes
                 end
             else // submersible
@@ -629,8 +637,8 @@ begin
                         tmp:= abs(cWaterLine - tmp);
                         end;
 
-                    // there was an impact if distance was same as radius
-                    isImpact:= (tmp = Gear^.Radius)
+                    // there was an impact if distance was >= radius
+                    isImpact:= (tmp >= Gear^.Radius)
                     end;
                 end; // end of submersible
             end; // end of not skipping
