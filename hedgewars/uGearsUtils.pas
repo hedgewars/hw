@@ -364,6 +364,7 @@ var x, y, i, distL, distR, distB, minDist, maxDrops: LongInt;
     speed, hwTmp: hwFloat;
     vi, vs, tmp: real; // impact speed and sideways speed
     isImpactH, isImpactRight: boolean;
+const dist2surf = 6;
 begin
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
@@ -389,7 +390,7 @@ isImpactH:= (minDist <> distB);
 
 if not isImpactH then
     begin
-    dec(y, distB);
+    y:= cWaterline - dist2surf;
     splash^.Y:= y;
     speed:= hwAbs(Gear^.dY);
     vs:= abs(hwFloat2Float(Gear^.dX));
@@ -399,12 +400,12 @@ else
     isImpactRight := minDist = distR;
     if isImpactRight then
         begin
-        inc(x, distR);
+        x := rightX - dist2surf;;
         splash^.Angle:= -90;
         end
     else
         begin
-        dec(x, distL);
+        x := leftX + dist2surf;;
         splash^.Angle:=  90;
         end;
     splash^.X:= x;
