@@ -79,7 +79,6 @@ var AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
-    stereoDepth: GLfloat;
     isFirstFrame: boolean;
     AMAnimType: LongInt;
     recTexture: PTexture;
@@ -987,7 +986,7 @@ begin
         exit
     else if rm = rmLeftEye then
         d:= -d;
-    stereoDepth:= stereoDepth + d;
+    cStereoDepth:= cStereoDepth + d;
     openglTranslProjMatrix(d, 0, 0);
 {$ENDIF}
 end;
@@ -998,7 +997,7 @@ begin
 {$IFDEF USE_S3D_RENDERING}
     if rm = rmDefault then
         exit;
-    openglTranslProjMatrix(-stereoDepth, 0, 0);
+    openglTranslProjMatrix(-cStereoDepth, 0, 0);
     cStereoDepth:= 0;
 {$ENDIF}
 end;
@@ -2136,7 +2135,6 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-    stereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
 
