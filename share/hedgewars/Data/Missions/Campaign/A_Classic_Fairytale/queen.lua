@@ -743,7 +743,7 @@ function onGameInit()
 	MinesTime = 3000
 	Explosives = 0
 	Delay = 10 
-  MapGen = 2
+  MapGen = mgDrawn
 	Theme = "Hell"
   SuddenDeathTurns = 20
 
