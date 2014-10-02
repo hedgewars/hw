@@ -357,7 +357,7 @@ onGameInit()
 end
 
 function onGameInit()
-    MapGen = 2
+    MapGen = mgDrawn
     TemplateFilter = 0
     local TotGen = 0
     local Tries = 0
