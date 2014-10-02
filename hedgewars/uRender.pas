@@ -418,8 +418,8 @@ begin
     UpdateModelviewProjection;
 {$ENDIF}
 
-{$IFNDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+{$IFDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
     begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
