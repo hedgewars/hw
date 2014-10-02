@@ -849,10 +849,29 @@ procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloa
 var ft, fb, fl, fr: GLfloat;
     hw, hh, nx, ny: LongInt;
 begin
-
-// note: not taking scale into account
-if isAreaOffscreen(X, Y, w, h) then
-    exit;
+// visibility check only under trivial conditions
+if (Scale <= 1) then
+    begin
+    if Angle <> 0  then
+        begin
+        if (OffsetX = 0) and (OffsetY = 0) then
+            begin
+            // sized doubled because the sprite might occupy up to 1.4 * of it's
+            // original size in each dimension, because it is rotated
+            if isDxAreaOffscreen(X - w, 2 * w) <> 0 then
+                exit;
+            if isDYAreaOffscreen(Y - h, 2 * h) <> 0 then
+                exit;
+            end;
+        end
+    else
+        begin
+        if isDxAreaOffscreen(X + dir * trunc(OffsetX) - w div 2, w) <> 0 then
+            exit;
+        if isDYAreaOffscreen(Y + trunc(OffsetY) - h div 2, h) <> 0 then
+            exit;
+        end;
+    end;
 
 {
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
