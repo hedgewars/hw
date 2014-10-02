@@ -280,7 +280,7 @@ begin
 {$ENDIF}
 end;
 
-{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
+{$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
