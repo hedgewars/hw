@@ -25,7 +25,8 @@ QImage ThemeIconProvider::requestImage(const QString &id, QSize *size, const QSi
     QByteArray buf;
     buf.resize(65536);
 
-    uint32_t fileSize = getThemeIcon(id.toUtf8().data(), buf.data(), buf.size());
+    char * bufptr = buf.data();
+    uint32_t fileSize = getThemeIcon(id.toUtf8().data(), bufptr, buf.size());
     buf.truncate(fileSize);
     qDebug() << "ThemeIconProvider file size = " << fileSize;
 

@@ -5,9 +5,18 @@ uses uFLTypes;
 function createRandomTeam: TTeam;
 procedure sendTeamConfig(var team: TTeam);
 
+function getTeamsList: PPChar; cdecl;
+procedure freeTeamsList;
 
 implementation
-uses uFLUtils, uFLIPC;
+uses uFLUtils, uFLIPC, uPhysFSLayer;
+
+const MAX_TEAM_NAMES = 128;
+var
+    teamsList: PTeam;
+    teamsNumber: Longword;
+    listOfTeamNames: array[0..MAX_TEAM_NAMES] of PChar;
+
 
 function createRandomTeam: TTeam;
 var t: TTeam;
@@ -30,6 +39,7 @@ begin
     createRandomTeam:= t
 end;
 
+
 procedure sendTeamConfig(var team: TTeam);
 var i: Longword;
 begin
@@ -42,6 +52,111 @@ begin
             ipcToEngine('ehat ' + hedgehogs[i].hat);
         end;
     end
+end;
+
+
+procedure loadTeam(var team: TTeam; fileName: shortstring);
+var f: PFSFile;
+    section: LongInt;
+    l: shortstring;
+begin
+    section:= -1;
+    f:= pfsOpenRead(fileName);
+
+    while (not pfsEOF(f)) do
+    begin
+        pfsReadLn(f, l);
+
+        if l = '' then
+        else if l = '[Team]' then 
+            section:= 0
+        else if l[1] = '[' then
+            section:= -1
+        else if section = 0 then
+        begin // [Team]
+            if copy(l, 1, 5) = 'Name=' then
+                team.teamName:= midStr(l, 6)
+            else if copy(l, 1, 6) = 'Grave=' then
+                team.graveName:= midStr(l, 7)
+            else if copy(l, 1, 5) = 'Fort=' then
+                team.fortName:= midStr(l, 6)
+            else if copy(l, 1, 5) = 'Flag=' then
+                team.flag:= midStr(l, 6)
+        end;
+        // TODO: load hedgehogs and other stuff
+    end;
+
+    pfsClose(f)
+end;
+
+
+procedure loadTeams;
+var filesList, tmp: PPChar;
+    team: PTeam;
+    s: shortstring;
+    l: Longword;
+begin
+    filesList:= pfsEnumerateFiles('Teams');
+    teamsNumber:= 0;
+
+    tmp:= filesList;
+    while tmp^ <> nil do
+    begin
+        s:= shortstring(tmp^);
+        l:= length(s);
+        if (l > 4) and (copy(s, l - 3, 4) = '.hwt') then inc(teamsNumber)
+    end;
+
+    // TODO: no teams at all?
+    teamsList:= GetMem(sizeof(teamsList^) * teamsNumber);
+
+    team:= teamsList;
+    tmp:= filesList;
+    while tmp^ <> nil do
+    begin
+        s:= shortstring(tmp^);
+        l:= length(s);
+        if (l > 4) and (copy(s, l - 3, 4) = '.hwt') then 
+            begin
+                loadTeam(team^, '/Config/Teams/' + s);
+                inc(team)
+            end;
+    end;
+
+    pfsFreeList(filesList)
+end;
+
+
+function getTeamsList: PPChar; cdecl;
+var i, t, l: Longword;
+    team: PTeam;
+begin
+    if teamsList = nil then
+        loadTeams;
+
+    t:= teamsNumber;
+    if t >= MAX_TEAM_NAMES then 
+        t:= MAX_TEAM_NAMES;
+
+    team:= teamsList;
+    for i:= 0 to Pred(t) do
+    begin
+        l:= length(team^.teamName);
+        if l >= 255 then l:= 254;
+        team^.teamName[l + 1]:= #0;
+        listOfTeamNames[i]:= @team^.teamName[1]
+    end;
+
+    listOfTeamNames[t]:= nil;
+
+    getTeamsList:= listOfTeamNames
+end;
+
+
+procedure freeTeamsList;
+begin
+    if teamsList <> nil then
+        FreeMem(teamsList, sizeof(teamsList^) * teamsNumber)
 end;
 
 end.

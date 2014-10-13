@@ -3,6 +3,7 @@ interface
 
 function str2PChar(const s: shortstring): PChar;
 function intToStr(n: LongInt): shortstring;
+function midStr(s: shortstring; pos: byte): shortstring;
 
 implementation
 
@@ -23,6 +24,11 @@ end;
 function intToStr(n: LongInt): shortstring;
 begin
     str(n, intToStr)
+end;
+
+function midStr(s: shortstring; pos: byte): shortstring;
+begin
+    midStr:= copy(s, pos, length(s) - pos + 1)
 end;
 
 end.

@@ -27,7 +27,7 @@ else()
     option(LUA_SYSTEM "Use system lua (on)" ON)
 endif()
 
-option(BUILD_ENGINE_LIBRARY "Enable hwengine library (off)" OFF)
+set(BUILD_ENGINE_LIBRARY ON)
 option(ANDROID "Enable Android build (off)" OFF)
 
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)

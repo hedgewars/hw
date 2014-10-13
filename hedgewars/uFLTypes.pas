@@ -29,7 +29,8 @@ type
             botLevel: Longword;
             hedgehogs: array[0..7] of THedgehog;
             hogsNumber: Longword;
-            end;
+        end;
+    PTeam = ^TTeam;
 
 implementation
 

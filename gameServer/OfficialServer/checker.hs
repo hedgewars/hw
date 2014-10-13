@@ -12,7 +12,7 @@ import Control.Concurrent.Chan
 import Control.Concurrent
 import Network
 import Network.BSD
-import Network.Socket hiding (recv)
+import Network.Socket hiding (recv, sClose)
 import Network.Socket.ByteString
 import qualified Data.ByteString.Char8 as B
 import qualified Data.ByteString as BW
