@@ -539,7 +539,7 @@ procedure chAmmoMenu(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
-    bShowAmmoMenu:= true
+    bShowAmmoMenu:= (not bShowAmmoMenu)
 else
     begin
     with CurrentTeam^ do
