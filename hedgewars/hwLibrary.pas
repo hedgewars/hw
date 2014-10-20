@@ -43,6 +43,7 @@ uses hwengine
     , uFLIPC
     , uPhysFSLayer
     , uFLData
+    , uFLTeams
     ;
 
 {$INCLUDE "config.inc"}
@@ -155,6 +156,7 @@ exports
     getThemesList,
     freeThemesList,
     getThemeIcon,
+    getTeamsList,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

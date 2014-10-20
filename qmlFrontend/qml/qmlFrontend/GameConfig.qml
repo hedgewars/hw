@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Hedgewars.Engine 1.0
 
+
 Rectangle {
     HWButton {
         id: btnPreview
@@ -69,5 +70,43 @@ Rectangle {
                 }
             }
         }
+    }
+
+    ListView {
+        id: playingTeamsList
+        x: 440
+        y: 16
+        width: 100
+        height: 192
+        highlight: Rectangle { color: "#eaea00"; radius: 4 }
+        focus: true
+        clip: true
+
+        model: ListModel {
+            id: localTeamsModel
+        }
+
+        delegate: Rectangle {
+            id: teamDelegate
+            height: 24
+            width: parent.width
+            radius: 8
+            border.width: 2
+            border.color: "#eaea00"
+
+            Row {
+                Text { text: name }
+            }
+        }
+
+        Connections {
+            target: HWEngine
+            onLocalTeamAdded: localTeamsModel.append({"aiLevel": aiLevel, "name": teamName})
+        }
+    }
+
+    Component.onCompleted: {
+        HWEngine.getTeamsList()
+        HWEngine.getPreview()
     }
 }

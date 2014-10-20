@@ -20,6 +20,7 @@ extern "C" {
     getThemesList_t *flibGetThemesList;
     freeThemesList_t *flibFreeThemesList;
     getThemeIcon_t *flibGetThemeIcon;
+    getTeamsList_t *flibGetTeamsList;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -47,6 +48,8 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
     flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
+
+    flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
@@ -129,4 +132,14 @@ void HWEngine::fillModels()
     flibFreeThemesList(themes);
 
     m_engine->rootContext()->setContextProperty("themesModel", QVariant::fromValue(resultModel));
+}
+
+void HWEngine::getTeamsList()
+{
+    char ** teams = flibGetTeamsList();
+    for (char **i = teams; *i != NULL; i++) {
+        QString team = QString::fromUtf8(*i);
+
+        emit localTeamAdded(team, 0);
+    }
 }

@@ -96,15 +96,17 @@ var filesList, tmp: PPChar;
     s: shortstring;
     l: Longword;
 begin
-    filesList:= pfsEnumerateFiles('Teams');
+    filesList:= pfsEnumerateFiles('/Config/Teams');
     teamsNumber:= 0;
 
     tmp:= filesList;
     while tmp^ <> nil do
     begin
         s:= shortstring(tmp^);
+        writeln(stderr, '> ', s);
         l:= length(s);
-        if (l > 4) and (copy(s, l - 3, 4) = '.hwt') then inc(teamsNumber)
+        if (l > 4) and (copy(s, l - 3, 4) = '.hwt') then inc(teamsNumber);
+        inc(tmp)
     end;
 
     // TODO: no teams at all?
@@ -121,6 +123,7 @@ begin
                 loadTeam(team^, '/Config/Teams/' + s);
                 inc(team)
             end;
+        inc(tmp)
     end;
 
     pfsFreeList(filesList)
@@ -144,7 +147,8 @@ begin
         l:= length(team^.teamName);
         if l >= 255 then l:= 254;
         team^.teamName[l + 1]:= #0;
-        listOfTeamNames[i]:= @team^.teamName[1]
+        listOfTeamNames[i]:= @team^.teamName[1];
+        inc(team)
     end;
 
     listOfTeamNames[t]:= nil;

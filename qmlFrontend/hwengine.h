@@ -21,9 +21,11 @@ public:
     Q_INVOKABLE void getPreview();
     Q_INVOKABLE void runQuickGame();
     Q_INVOKABLE QString currentSeed();
+    Q_INVOKABLE void getTeamsList();
     
 signals:
     void previewImageChanged();
+    void localTeamAdded(const QString & teamName, int aiLevel);
     
 public slots:
 
