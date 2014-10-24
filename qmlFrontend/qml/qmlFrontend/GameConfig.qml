@@ -83,7 +83,7 @@ Rectangle {
         clip: true
 
         model: ListModel {
-            id: localTeamsModel
+            id: playingTeamsModel
         }
 
         delegate: Rectangle {
@@ -97,11 +97,68 @@ Rectangle {
             Row {
                 Text { text: name }
             }
+
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: HWEngine.tryRemoveTeam(name)
+            }
+        }
+
+        Connections {
+            target: HWEngine
+            onPlayingTeamAdded: playingTeamsModel.append({"aiLevel": aiLevel, "name": teamName, "local": isLocal})
+            onPlayingTeamRemoved: {
+                var i = playingTeamsModel.count - 1;
+                while ((i >= 0) && (playingTeamsModel.get(i).name !== teamName)) --i
+
+                if(i >= 0) playingTeamsModel.remove(i, 1)
+            }
+        }
+    }
+
+    ListView {
+        id: localTeamsList
+        x: 440
+        y: 224
+        width: 100
+        height: 192
+        highlight: Rectangle { color: "#eaea00"; radius: 4 }
+        focus: true
+        clip: true
+
+        model: ListModel {
+            id: localTeamsModel
+        }
+
+        delegate: Rectangle {
+            id: localTeamDelegate
+            height: 24
+            width: parent.width
+            radius: 8
+            border.width: 2
+            border.color: "#eaea00"
+
+            Row {
+                Text { text: name }
+            }
+
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: HWEngine.tryAddTeam(name)
+            }
         }
 
         Connections {
             target: HWEngine
             onLocalTeamAdded: localTeamsModel.append({"aiLevel": aiLevel, "name": teamName})
+            onLocalTeamRemoved: {
+                var i = localTeamsModel.count - 1;
+                while ((i >= 0) && (localTeamsModel.get(i).name !== teamName)) --i
+
+                if(i >= 0) localTeamsModel.remove(i, 1)
+            }
         }
     }
 

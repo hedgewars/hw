@@ -21,6 +21,8 @@ extern "C" {
     freeThemesList_t *flibFreeThemesList;
     getThemeIcon_t *flibGetThemeIcon;
     getTeamsList_t *flibGetTeamsList;
+    tryAddTeam_t * flibTryAddTeam;
+    tryRemoveTeam_t * flibTryRemoveTeam;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -50,6 +52,8 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
 
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
+    flibTryAddTeam = (tryAddTeam_t*) hwlib.resolve("tryAddTeam");
+    flibTryRemoveTeam = (tryRemoveTeam_t*) hwlib.resolve("tryRemoveTeam");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
@@ -95,7 +99,7 @@ void HWEngine::exposeToQML()
 void HWEngine::guiMessagesCallback(void *context, MessageType mt, const char * msg, uint32_t len)
 {
     HWEngine * obj = (HWEngine *)context;
-    QByteArray b = QByteArray::fromRawData(msg, len);
+    QByteArray b = QByteArray(msg, len);
 
     qDebug() << "FLIPC in" << b.size() << b;
 
@@ -106,11 +110,29 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
 {
     switch(mt)
     {
-    case MSG_PREVIEW:
+    case MSG_PREVIEW: {
         PreviewImageProvider * preview = (PreviewImageProvider *)m_engine->imageProvider(QLatin1String("preview"));
         preview->setPixmap(msg);
         emit previewImageChanged();
         break;
+    }
+    case MSG_ADDPLAYINGTEAM: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit playingTeamAdded(l[1], l[0].toInt(), true);
+        break;
+    }
+    case MSG_REMOVEPLAYINGTEAM: {
+        emit playingTeamRemoved(msg);
+        break;
+    }
+    case MSG_ADDTEAM: {
+        emit localTeamAdded(msg, 0);
+        break;
+    }
+    case MSG_REMOVETEAM: {
+        emit localTeamRemoved(msg);
+        break;
+    }
     }
 }
 
@@ -142,4 +164,14 @@ void HWEngine::getTeamsList()
 
         emit localTeamAdded(team, 0);
     }
+}
+
+void HWEngine::tryAddTeam(const QString &teamName)
+{
+    flibTryAddTeam(teamName.toUtf8().constData());
+}
+
+void HWEngine::tryRemoveTeam(const QString &teamName)
+{
+    flibTryRemoveTeam(teamName.toUtf8().constData());
 }

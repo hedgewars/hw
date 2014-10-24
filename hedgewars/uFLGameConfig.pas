@@ -11,6 +11,9 @@ procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
 procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 
+procedure tryAddTeam(teamName: PChar);
+procedure tryRemoveTeam(teamName: PChar);
+
 implementation
 uses uFLIPC, hwengine, uFLUtils, uFLTeams;
 
@@ -151,6 +154,28 @@ begin
     guiCallbackFunction:= f;
 
     registerIPCCallback(nil, @engineMessageCallback)
+end;
+
+
+procedure tryAddTeam(teamName: PChar);
+var msg: ansistring;
+begin
+    msg:= '0' + #10 + teamName;
+
+    guiCallbackFunction(guiCallbackPointer, mtAddPlayingTeam, @msg[1], length(msg));
+
+    msg:= teamName;
+
+    guiCallbackFunction(guiCallbackPointer, mtRemoveTeam, @msg[1], length(msg))
+end;
+
+procedure tryRemoveTeam(teamName: PChar);
+var msg: ansistring;
+begin
+    msg:= teamName;
+
+    guiCallbackFunction(guiCallbackPointer, mtRemovePlayingTeam, @msg[1], length(msg));
+    guiCallbackFunction(guiCallbackPointer, mtAddTeam, @msg[1], length(msg))
 end;
 
 end.

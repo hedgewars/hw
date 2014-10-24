@@ -157,6 +157,8 @@ exports
     freeThemesList,
     getThemeIcon,
     getTeamsList,
+    tryAddTeam,
+    tryRemoveTeam,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

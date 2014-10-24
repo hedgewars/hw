@@ -22,11 +22,18 @@ public:
     Q_INVOKABLE void runQuickGame();
     Q_INVOKABLE QString currentSeed();
     Q_INVOKABLE void getTeamsList();
-    
+
+    Q_INVOKABLE void tryAddTeam(const QString & teamName);
+    Q_INVOKABLE void tryRemoveTeam(const QString & teamName);
+
 signals:
     void previewImageChanged();
     void localTeamAdded(const QString & teamName, int aiLevel);
-    
+    void localTeamRemoved(const QString & teamName);
+
+    void playingTeamAdded(const QString & teamName, int aiLevel, bool isLocal);
+    void playingTeamRemoved(const QString & teamName);
+
 public slots:
 
 private:
