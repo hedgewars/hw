@@ -364,6 +364,9 @@ if not cOnlyStats then
     begin
     MakeCrossHairs;
     LoadGraves;
+    tmpHatSurf:= LoadDataImage(ptHats, 'Reserved/chef', ifNone);
+    ChefHatTexture:= Surface2Tex(tmpHatSurf, true);
+    freeTmpHatSurf();
     end;
     
 if not reload then
@@ -507,6 +510,7 @@ for ii:= Low(TSprite) to High(TSprite) do
 SDL_FreeSurface(MissionIcons);
 
 // free the textures declared in uVariables
+FreeAndNilTexture(ChefHatTexture);
 FreeAndNilTexture(CrosshairTexture);
 FreeAndNilTexture(WeaponTooltipTex);
 FreeAndNilTexture(PauseTexture);
