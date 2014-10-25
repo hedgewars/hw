@@ -366,7 +366,6 @@ with Hedgehog do
         end;
     TryDo(slot <= cMaxSlotIndex, 'Ammo slot index overflow', true);
     CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    if CurAmmoType = amKnife then LoadHedgehogHat(Hedgehog, 'Reserved/chef')
     end
 end;
 

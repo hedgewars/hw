@@ -118,13 +118,6 @@ with HHGear^.Hedgehog^ do
         end;
         if ammoidx >= 0 then
             CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    if (prevAmmo <> CurAmmoType) then
-        begin
-        if CurAmmoType = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
-        else if prevAmmo = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
-        end;
     // Try again in the next slot
     if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then
         begin

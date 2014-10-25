@@ -137,6 +137,7 @@ var
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
+    ChefHatTexture : PTexture;
     CrosshairTexture : PTexture;
     GenericHealthTexture : PTexture;
 
