@@ -810,22 +810,11 @@ begin
         begin
         if defaultPos then
             begin
-            if HH^.Team^.hasGone then
-                 Tint($FFFFFF80)
-            else if HH^.Effects[hePoisoned] <> 0 then
-                 Tint($B7FFBCFF)
-            else Tint(HH^.Gear^.Tint);
+            if HH^.Team^.hasGone then Tint($FFFFFF80);
             DrawSpriteRotatedF(sprHHIdle,
                 sx,
                 sy,
                 (RealTicks div 128 + Gear^.Pos) mod 19,
-                sign,
-                0);
-            untint;
-            DrawSpriteRotatedF(sprHHIdle,
-                sx,
-                sy,
-                (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
                 sign,
                 0);
             HatVisible:= true;
