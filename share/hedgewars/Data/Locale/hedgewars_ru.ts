@@ -23,7 +23,11 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>копия</translation>
+        <translation type="obsolete">копия</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -224,6 +228,56 @@ Please check your installation!</source>
 
 Пожалуйста, проверьте установку приложения!</translation>
     </message>
+    <message>
+        <source>Usage</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OPTION</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CONNECTSTRING</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display this help</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path for configuration data and user data</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Malformed option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWAskQuitDialog</name>
@@ -422,6 +476,17 @@ Please, enter the password:</source>
         <source>Cannot open demofile %1</source>
         <translation>Не могу открыть демо %1</translation>
     </message>
+    <message>
+        <source>A Fatal ERROR occured! - The game engine had to stop.
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+
+Last two engine messages:
+%2</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -549,6 +614,14 @@ Please, enter the password:</source>
         <source>Theme: %1</source>
         <translation>Тема: %1</translation>
     </message>
+    <message>
+        <source>Random perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -614,6 +687,10 @@ Please, enter the password:</source>
     <message>
         <source>The server is too old. Disconnecting now.</source>
         <translation>Слишком старый сервер. Отсоединяюсь.</translation>
+    </message>
+    <message>
+        <source>Server authentication error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -811,6 +888,10 @@ just enter your nickname.</source>
         <source>This page requires an internet connection.</source>
         <translation>Для этой страницы нужно соединение с интернетом.</translation>
     </message>
+    <message>
+        <source>Open packages directory</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageDrawMap</name>
@@ -861,6 +942,10 @@ just enter your nickname.</source>
     <message>
         <source>Ellipse</source>
         <translation>Эллипс</translation>
+    </message>
+    <message>
+        <source>Optimize</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -920,9 +1005,13 @@ just enter your nickname.</source>
         <source>Ranking</source>
         <translation>Рейтинг</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.</translation>
+        <translation type="unfinished">
+            <numerusform>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.</numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
@@ -983,6 +1072,8 @@ just enter your nickname.</source>
     <message numerus="yes">
         <source>(%1 %2)</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2169,6 +2260,10 @@ Do you really want to quit?</source>
         <source>World Edge</source>
         <translation>Край мира</translation>
     </message>
+    <message>
+        <source>Script parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2333,6 +2428,8 @@ Do you still want to join the room?</source>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2614,6 +2711,10 @@ Not all players are ready.</source>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
+    <message>
+        <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -2658,7 +2759,11 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>copy of</source>
-        <translation>копия</translation>
+        <translation type="obsolete">копия</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2670,6 +2775,15 @@ Not all players are ready.</source>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The game engine died unexpectedly!
+(exit code %1)
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2794,7 +2908,7 @@ Error code: %2</source>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>найти ёжика</translation>
+        <translation type="obsolete">найти ёжика</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -2872,6 +2986,14 @@ Error code: %2</source>
         <source>hedgehog info</source>
         <translation>информация о еже</translation>
     </message>
+    <message>
+        <source>autocam / find hedgehog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>speed up replay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2920,7 +3042,7 @@ Error code: %2</source>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Передвижение камеры на активного ежа:</translation>
+        <translation type="obsolete">Передвижение камеры на активного ежа:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -2961,6 +3083,14 @@ Error code: %2</source>
     <message>
         <source>Hedgehog movement</source>
         <translation>Движение ежа</translation>
+    </message>
+    <message>
+        <source>Toggle automatic camera / refocus on active hedgehog:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo replay:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3402,6 +3532,62 @@ Error code: %2</source>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>You already have voted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New voting started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause</source>
+        <translation type="unfinished">пауза</translation>
+    </message>
+    <message>
+        <source>Reconnected too fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Chat flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Excess flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Joins flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
