@@ -675,7 +675,7 @@ function onGameStart()
 	--trackTeams()
 
 	ShowMission(loc("Continental supplies"),loc("Let a Continent provide your weapons!"),
-	loc(generalinfo), -amLowGravity, 0)
+	generalinfo, -amLowGravity, 0)
 end
 
 --what happen when a turn starts
