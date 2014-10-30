@@ -8,6 +8,8 @@ procedure sendTeamConfig(var team: TTeam);
 function getTeamsList: PPChar; cdecl;
 procedure freeTeamsList;
 
+function teamByName(s: shortstring): PTeam;
+
 implementation
 uses uFLUtils, uFLIPC, uPhysFSLayer;
 
@@ -156,6 +158,20 @@ begin
     getTeamsList:= listOfTeamNames
 end;
 
+function teamByName(s: shortstring): PTeam;
+var i: Longword;
+    team: PTeam;
+begin
+    team:= teamsList;
+    i:= 0;
+    while (i < teamsNumber) and (team^.teamName <> s) do
+    begin
+        inc(team);
+        inc(i)
+    end;
+
+    if i < teamsNumber then teamByName:= team else teamByName:= nil
+end;
 
 procedure freeTeamsList;
 begin

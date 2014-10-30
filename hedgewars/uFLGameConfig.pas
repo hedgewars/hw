@@ -159,7 +159,34 @@ end;
 
 procedure tryAddTeam(teamName: PChar);
 var msg: ansistring;
+    i, hn, hedgehogsNumber: Longword;
+    team: PTeam;
 begin
+    with currentConfig do
+    begin
+        hedgehogsNumber:= 0;
+        i:= 0;
+
+        while (i < 8) and (teams[i].hogsNumber > 0) do
+        begin
+            inc(i);
+            inc(hedgehogsNumber, teams[i].hogsNumber)
+        end;
+
+        // no free space for a team or reached hogs number maximum
+        if (i > 7) or (hedgehogsNumber >= 48) then exit;
+
+        team:= teamByName(teamName);
+        if team = nil then exit;
+
+        teams[i]:= team^;
+
+        if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
+        if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;
+        teams[i].hogsNumber:= hn;
+    end;
+
+
     msg:= '0' + #10 + teamName;
 
     guiCallbackFunction(guiCallbackPointer, mtAddPlayingTeam, @msg[1], length(msg));
