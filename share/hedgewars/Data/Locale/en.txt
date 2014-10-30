@@ -83,6 +83,8 @@
 01:20=%1 Bounce
 01:21=Audio Muted
 01:22=AFK mode
+01:23=Auto Camera Off
+01:24=Auto Camera On
 
 ; Event messages
 ; Hog (%1) died
