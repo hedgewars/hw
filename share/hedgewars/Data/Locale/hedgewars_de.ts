@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de">
+<TS version="2.1" language="de">
 <context>
     <name>About</name>
     <message>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopie von %1</translation>
     </message>
 </context>
 <context>
@@ -237,52 +237,52 @@ Bitte überprüfe deine Installation!</translation>
     <message>
         <source>Usage</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Verwendung</translation>
     </message>
     <message>
         <source>OPTION</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>SCHALTER</translation>
     </message>
     <message>
         <source>CONNECTSTRING</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>VERBINDUNGSTEXT</translation>
     </message>
     <message>
         <source>Options</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Schalter</translation>
     </message>
     <message>
         <source>Display this help</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Diese Hilfe anzeigen</translation>
     </message>
     <message>
         <source>Custom path for configuration data and user data</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Pfad für Konfigurations- und Benutzerdaten</translation>
     </message>
     <message>
         <source>Custom path to the game data folder</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierter Pfad für das Spieldatenverzeichnis</translation>
     </message>
     <message>
         <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Hedgewars kann ein %1 (z.B. »%2«) verwenden, um beim Start zu verbinden.</translation>
     </message>
     <message>
         <source>Malformed option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Fehlerhaftes Schalterargument: %1</translation>
     </message>
     <message>
         <source>Unknown option argument: %1</source>
         <comment>command-line</comment>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannter Schalter: %1</translation>
     </message>
 </context>
 <context>
@@ -492,7 +492,14 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein kritischer FEHLER ist aufgetreten! Die Spiel-Engine musste angehalten werden.
+
+Diese Unannehmlichkeit tut uns fürchterlich Leid. :(
+
+Falls das öfters passiert, klicke auf den Knopf »%1« im Hauptmenü!
+
+Die letzten beiden Meldungen der Engine lauten:
+%2</translation>
     </message>
 </context>
 <context>
@@ -629,11 +636,11 @@ Karte bearbeiten</translation>
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Perlinzufall</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Stil:</translation>
     </message>
 </context>
 <context>
@@ -703,7 +710,7 @@ Karte bearbeiten</translation>
     </message>
     <message>
         <source>Server authentication error</source>
-        <translation type="unfinished"></translation>
+        <translation>Server-Authentifizierungsfehler</translation>
     </message>
 </context>
 <context>
@@ -903,7 +910,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Paketeverzeichnis öffnen</translation>
     </message>
 </context>
 <context>
@@ -958,7 +965,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message>
         <source>Optimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Optimieren</translation>
     </message>
 </context>
 <context>
@@ -1020,9 +1027,9 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkt.</numerusform>
             <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkten.</numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -2265,7 +2272,7 @@ Willst du wirklich verlassen?</translation>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Skriptparameter</translation>
     </message>
 </context>
 <context>
@@ -2747,7 +2754,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Zufälliges Perlin</translation>
     </message>
 </context>
 <context>
@@ -2797,7 +2804,7 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopie von %1</translation>
     </message>
 </context>
 <context>
@@ -2819,7 +2826,12 @@ Fehlercode: %2</translation>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Spiel-Engine ist unerwartet abgeschmiert!
+(Exit-Code: %1)
+
+Diese Unannehmlichkeit tut uns fürchterlich Leid. :(
+
+Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</translation>
     </message>
 </context>
 <context>
@@ -3023,11 +3035,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-        <translation type="unfinished"></translation>
+        <translation>Autokamera / Igel finden</translation>
     </message>
     <message>
         <source>speed up replay</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung beschleunigen</translation>
     </message>
 </context>
 <context>
@@ -3121,11 +3133,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatische Kamera umschalten / auf aktiven Igel wiederzentrieren:</translation>
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung abspielen:</translation>
     </message>
 </context>
 <context>
@@ -3571,59 +3583,62 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>You already have voted</source>
-        <translation type="unfinished"></translation>
+        <translation>Du hast bereits deine Stimme abgegeben</translation>
     </message>
     <message>
         <source>Voting closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Abstimmung abgeschlossen</translation>
     </message>
     <message>
         <source>New voting started</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue Abstimmung gestartet</translation>
     </message>
     <message>
         <source>Voting expired</source>
-        <translation type="unfinished"></translation>
+        <translation>Abstimmung abgelaufen</translation>
     </message>
     <message>
         <source>kick</source>
-        <translation type="unfinished"></translation>
+        <translation>hinauswerfen</translation>
     </message>
     <message>
         <source>map</source>
-        <translation type="unfinished"></translation>
+        <translation>Karte</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation type="unfinished">Pause</translation>
+        <translation>pausieren</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu schnell wieder verbunden</translation>
     </message>
     <message>
         <source>Warning! Chat flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher.</translatorcomment>
+        <translation>Achtung! Chat-Flood-Schutz ist aktiv. Bitte red etwas langsamer.</translation>
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher wird es hier umschrieben.</translatorcomment>
+        <translation>Zu viele Nachrichten in kurzer Zeit abgeschickt</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu viele Spielnachrichten in kurzer Zeit ermittelt – 1</translation>
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Zu viele Spielnachrichten in kurzer Zeit ermittelt – 2</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher und umschreibend.</translatorcomment>
+        <translation>Achtung! Der Server wird ein zu schnelles Beitreten in kurzer Zeit nicht akzeptieren</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
-        <translation type="unfinished"></translation>
+        <translation>Zur Zeit findet keine Abstimmung statt</translation>
     </message>
 </context>
 </TS>
