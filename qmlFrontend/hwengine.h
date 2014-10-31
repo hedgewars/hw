@@ -20,6 +20,7 @@ public:
     static void exposeToQML();
     Q_INVOKABLE void getPreview();
     Q_INVOKABLE void runQuickGame();
+    Q_INVOKABLE void runLocalGame();
     Q_INVOKABLE QString currentSeed();
     Q_INVOKABLE void getTeamsList();
 

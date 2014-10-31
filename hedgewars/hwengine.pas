@@ -444,6 +444,7 @@ begin
     uLandPainted.initModule;        // computes drawn land
     uIO.initModule;                 // sets up sockets
     uScript.initModule;
+    uTeams.initModule;              // clear CurrentTeam variable
 
     if complete then
     begin
@@ -467,7 +468,6 @@ begin
         uStats.initModule;
         uStore.initModule;
         uRender.initModule;
-        uTeams.initModule;
         uVisualGears.initModule;
         uVisualGearsHandlers.initModule;
         uWorld.initModule;

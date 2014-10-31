@@ -27,6 +27,16 @@ Rectangle {
         }
     }
 
+    HWButton {
+        id: btnRunGame
+        x: 600
+        y: 440
+        width: 32
+        height: 32
+
+        onClicked: HWEngine.runLocalGame()
+    }
+
     Rectangle {
         x: 320
         y: 16

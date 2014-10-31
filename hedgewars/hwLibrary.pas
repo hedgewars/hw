@@ -145,8 +145,8 @@ exports
     Game;
 {$ELSE}
 exports
-    RunEngine,
     runQuickGame,
+    runLocalGame,
     getPreview,
     registerGUIMessagesCallback,
     flibInit,
@@ -159,6 +159,8 @@ exports
     getTeamsList,
     tryAddTeam,
     tryRemoveTeam,
+    // dunno what these are
+    RunEngine,
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

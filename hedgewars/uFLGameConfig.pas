@@ -4,6 +4,7 @@ uses uFLTypes;
 
 procedure resetGameConfig; cdecl;
 procedure runQuickGame; cdecl;
+procedure runLocalGame; cdecl;
 procedure getPreview; cdecl;
 
 procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
@@ -15,7 +16,7 @@ procedure tryAddTeam(teamName: PChar);
 procedure tryRemoveTeam(teamName: PChar);
 
 implementation
-uses uFLIPC, hwengine, uFLUtils, uFLTeams;
+uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData;
 
 var guiCallbackPointer: pointer;
     guiCallbackFunction: TGUICallback;
@@ -104,9 +105,32 @@ begin
     currentConfig.seed:= seed
 end;
 
+
 function getSeed: PChar; cdecl;
 begin
     getSeed:= str2PChar(currentConfig.seed)
+end;
+
+function getUnusedColor: shortstring;
+var i, c: Longword;
+    fColorMatched: boolean;
+begin
+    c:= 0;
+    i:= 0;
+    repeat
+        repeat
+            fColorMatched:= (currentConfig.teams[i].hogsNumber > 0) and (currentConfig.teams[i].color = colorsSet[c]);
+            inc(i)
+        until (i >= 8) or (currentConfig.teams[i].hogsNumber = 0) or fColorMatched;
+
+        if fColorMatched then
+        begin
+            i:= 0;
+            inc(c)
+        end;
+    until not fColorMatched;
+
+    getUnusedColor:= colorsSet[c]
 end;
 
 procedure runQuickGame; cdecl;
@@ -116,18 +140,19 @@ begin
         gameType:= gtLocal;
         arguments[0]:= '';
         arguments[1]:= '--internal';
-        arguments[2]:= '--nosound';
+        arguments[2]:= '--nomusic';
         argumentsNumber:= 3;
 
         teams[0]:= createRandomTeam;
-        teams[0].color:= '6341088';
+        teams[0].color:= colorsSet[0];
         teams[1]:= createRandomTeam;
-        teams[1].color:= '2113696';
+        teams[1].color:= colorsSet[1];
         teams[1].botLevel:= 1;
 
         queueExecution;
     end;
 end;
+
 
 procedure getPreview; cdecl;
 begin
@@ -142,6 +167,21 @@ begin
         queueExecution;
     end;
 end;
+
+procedure runLocalGame; cdecl;
+begin
+    with currentConfig do
+    begin
+        gameType:= gtLocal;
+        arguments[0]:= '';
+        arguments[1]:= '--internal';
+        arguments[2]:= '--nomusic';
+        argumentsNumber:= 3;
+
+        queueExecution;
+    end;
+end;
+
 
 procedure engineMessageCallback(p: pointer; msg: PChar; len: Longword);
 begin
@@ -161,6 +201,7 @@ procedure tryAddTeam(teamName: PChar);
 var msg: ansistring;
     i, hn, hedgehogsNumber: Longword;
     team: PTeam;
+    c: shortstring;
 begin
     with currentConfig do
     begin
@@ -179,11 +220,15 @@ begin
         team:= teamByName(teamName);
         if team = nil then exit;
 
+        c:= getUnusedColor;
+
         teams[i]:= team^;
 
         if i = 0 then hn:= 4 else hn:= teams[i - 1].hogsNumber;
         if hn > 48 - hedgehogsNumber then hn:= 48 - hedgehogsNumber;
         teams[i].hogsNumber:= hn;
+
+        teams[i].color:= c;
     end;
 
 
@@ -196,9 +241,31 @@ begin
     guiCallbackFunction(guiCallbackPointer, mtRemoveTeam, @msg[1], length(msg))
 end;
 
+
 procedure tryRemoveTeam(teamName: PChar);
 var msg: ansistring;
+    i: Longword;
+    tn: shortstring;
 begin
+    with currentConfig do
+    begin
+        i:= 0;
+        tn:= teamName;
+        while (i < 8) and (teams[i].teamName <> tn) do
+            inc(i);
+
+        // team not found???
+        if (i > 7) then exit;
+
+        while (i < 7) and (teams[i + 1].hogsNumber > 0) do
+        begin
+            teams[i]:= teams[i + 1];
+            inc(i)
+        end;
+
+        teams[i].hogsNumber:= 0
+    end;
+
     msg:= teamName;
 
     guiCallbackFunction(guiCallbackPointer, mtRemovePlayingTeam, @msg[1], length(msg));

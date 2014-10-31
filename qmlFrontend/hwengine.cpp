@@ -15,6 +15,7 @@ extern "C" {
     getSeed_t *flibGetSeed;
     getPreview_t *flibGetPreview;
     runQuickGame_t *flibRunQuickGame;
+    runLocalGame_t *flibRunLocalGame;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
     getThemesList_t *flibGetThemesList;
@@ -44,6 +45,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
     flibRunQuickGame = (runQuickGame_t*) hwlib.resolve("runQuickGame");
+    flibRunLocalGame = (runLocalGame_t*) hwlib.resolve("runLocalGame");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
 
@@ -80,6 +82,12 @@ void HWEngine::runQuickGame()
     flibSetSeed(QUuid::createUuid().toString().toLatin1());
     flibRunQuickGame();
 }
+
+void HWEngine::runLocalGame()
+{
+    flibRunLocalGame();
+}
+
 
 static QObject *hwengine_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {

@@ -5,6 +5,17 @@ function getThemesList: PPChar; cdecl;
 procedure freeThemesList(list: PPChar); cdecl;
 function getThemeIcon(themeName: PChar; buffer: PChar; buflen: Longword): Longword; cdecl;
 
+const colorsSet: array[0..8] of shortstring = (
+                                               '16712196'
+                                               , '4817089'
+                                               , '1959610'
+                                               , '11878895'
+                                               , '10526880'
+                                               , '2146048'
+                                               , '16681742'
+                                               , '6239749'
+                                               , '16776961');
+
 implementation
 uses uPhysFSLayer;
 

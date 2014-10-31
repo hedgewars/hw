@@ -30,6 +30,7 @@ typedef void RunEngine_t(int argc, const char ** argv);
 typedef void registerGUIMessagesCallback_t(void * context, void (*)(void * context, MessageType mt, const char * msg, uint32_t len));
 typedef void getPreview_t();
 typedef void runQuickGame_t();
+typedef void runLocalGame_t();
 typedef void setSeed_t(const char * seed);
 typedef char *getSeed_t();
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
