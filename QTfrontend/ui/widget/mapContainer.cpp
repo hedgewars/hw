@@ -16,27 +16,28 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QPushButton>
-#include <QBuffer>
-#include <QUuid>
 #include <QBitmap>
-#include <QPainter>
-#include <QLinearGradient>
+#include <QBuffer>
 #include <QColor>
-#include <QTextStream>
-#include <QLabel>
-#include <QListView>
-#include <QVBoxLayout>
-#include <QIcon>
-#include <QLineEdit>
-#include <QStringListModel>
-#include <QListWidget>
-#include <QListWidgetItem>
 #include <QDebug>
 #include <QFile>
 #include <QFileDialog>
+#include <QIcon>
 #include <QInputDialog>
+#include <QLabel>
+#include <QLinearGradient>
+#include <QLineEdit>
+#include <QListView>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QMessageBox>
+#include <QPainter>
+#include <QPushButton>
+#include <QSlider>
+#include <QStringListModel>
+#include <QTextStream>
+#include <QUuid>
+#include <QVBoxLayout>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
@@ -151,6 +152,15 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapPreview->setContentsMargins(0, 0, 0, 0);
     leftLayout->addWidget(mapPreview, 0);
     connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
+
+    mapFeatureSize = new QSlider(Qt::Horizontal, this);
+    mapFeatureSize->setObjectName("mapFeatureSize");
+    //mapFeatureSize->setTickPosition(QSlider::TicksBelow);
+    mapFeatureSize->setMaximum(100);
+    mapFeatureSize->setMinimum(1);
+    mapFeatureSize->setFixedWidth(259);
+    mapFeatureSize->setValue(50);
+    leftLayout->addWidget(mapFeatureSize, 0);
 
     /* Bottom-Left layout */
 
