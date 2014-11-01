@@ -20,13 +20,14 @@
 #ifndef _HWMAP_CONTAINER_INCLUDED
 #define _HWMAP_CONTAINER_INCLUDED
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QComboBox>
-#include <QLabel>
 #include <QByteArray>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
 #include <QLineEdit>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include "DataManager.h"
 
@@ -117,6 +118,7 @@ class HWMapContainer : public QWidget
     private:
         QVBoxLayout mainLayout;
         QPushButton* mapPreview;
+        QSlider* mapFeatureSize;
         QComboBox* chooseMap;
         MapModel * m_staticMapModel;
         MapModel * m_missionMapModel;
