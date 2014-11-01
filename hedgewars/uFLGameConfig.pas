@@ -97,7 +97,13 @@ begin
 end;
 
 procedure resetGameConfig; cdecl;
+var i: Longword;
 begin
+    with currentConfig do
+    begin
+        for i:= 0 to 7 do
+            teams[i].hogsNumber:= 0
+    end
 end;
 
 procedure setSeed(seed: PChar); cdecl;
@@ -111,7 +117,7 @@ begin
     getSeed:= str2PChar(currentConfig.seed)
 end;
 
-function getUnusedColor: shortstring;
+function getUnusedColor: Longword;
 var i, c: Longword;
     fColorMatched: boolean;
 begin
@@ -119,7 +125,7 @@ begin
     i:= 0;
     repeat
         repeat
-            fColorMatched:= (currentConfig.teams[i].hogsNumber > 0) and (currentConfig.teams[i].color = colorsSet[c]);
+            fColorMatched:= (currentConfig.teams[i].hogsNumber > 0) and (currentConfig.teams[i].color = c);
             inc(i)
         until (i >= 8) or (currentConfig.teams[i].hogsNumber = 0) or fColorMatched;
 
@@ -130,7 +136,7 @@ begin
         end;
     until not fColorMatched;
 
-    getUnusedColor:= colorsSet[c]
+    getUnusedColor:= c
 end;
 
 procedure runQuickGame; cdecl;
@@ -144,9 +150,9 @@ begin
         argumentsNumber:= 3;
 
         teams[0]:= createRandomTeam;
-        teams[0].color:= colorsSet[0];
+        teams[0].color:= 0;
         teams[1]:= createRandomTeam;
-        teams[1].color:= colorsSet[1];
+        teams[1].color:= 1;
         teams[1].botLevel:= 1;
 
         queueExecution;
@@ -201,7 +207,7 @@ procedure tryAddTeam(teamName: PChar);
 var msg: ansistring;
     i, hn, hedgehogsNumber: Longword;
     team: PTeam;
-    c: shortstring;
+    c: Longword;
 begin
     with currentConfig do
     begin

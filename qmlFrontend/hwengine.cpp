@@ -18,6 +18,7 @@ extern "C" {
     runLocalGame_t *flibRunLocalGame;
     flibInit_t *flibInit;
     flibFree_t *flibFree;
+    resetGameConfig_t * flibResetGameConfig;
     getThemesList_t *flibGetThemesList;
     freeThemesList_t *flibFreeThemesList;
     getThemeIcon_t *flibGetThemeIcon;
@@ -53,6 +54,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
     flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
 
+    flibResetGameConfig = (resetGameConfig_t*) hwlib.resolve("resetGameConfig");
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
     flibTryAddTeam = (tryAddTeam_t*) hwlib.resolve("tryAddTeam");
     flibTryRemoveTeam = (tryRemoveTeam_t*) hwlib.resolve("tryRemoveTeam");
@@ -182,4 +184,9 @@ void HWEngine::tryAddTeam(const QString &teamName)
 void HWEngine::tryRemoveTeam(const QString &teamName)
 {
     flibTryRemoveTeam(teamName.toUtf8().constData());
+}
+
+void HWEngine::resetGameConfig()
+{
+    flibResetGameConfig();
 }

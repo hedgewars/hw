@@ -151,6 +151,7 @@ exports
     registerGUIMessagesCallback,
     flibInit,
     flibFree,
+    resetGameConfig,
     setSeed,
     getSeed,
     getThemesList,

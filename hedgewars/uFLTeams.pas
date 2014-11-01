@@ -11,7 +11,7 @@ procedure freeTeamsList;
 function teamByName(s: shortstring): PTeam;
 
 implementation
-uses uFLUtils, uFLIPC, uPhysFSLayer;
+uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
 
 const MAX_TEAM_NAMES = 128;
 var
@@ -47,7 +47,7 @@ var i: Longword;
 begin
     with team do
     begin
-        ipcToEngine('eaddteam <hash> ' + color + ' ' + teamName);
+        ipcToEngine('eaddteam <hash> ' + colorsSet[color] + ' ' + teamName);
         for i:= 0 to Pred(hogsNumber) do
         begin
             ipcToEngine('eaddhh ' + inttostr(botLevel) + ' 100 ' + hedgehogs[i].name);

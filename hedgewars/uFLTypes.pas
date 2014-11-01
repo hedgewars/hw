@@ -24,7 +24,7 @@ type
             graveName: shortstring;
             fortName: shortstring;
             owner: shortstring;
-            color: shortstring;
+            color: Longword;
             extDriven: boolean;
             botLevel: Longword;
             hedgehogs: array[0..7] of THedgehog;

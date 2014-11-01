@@ -173,6 +173,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
+        HWEngine.resetGameConfig()
         HWEngine.getTeamsList()
         HWEngine.getPreview()
     }
