@@ -160,6 +160,7 @@ exports
     getTeamsList,
     tryAddTeam,
     tryRemoveTeam,
+    changeTeamColor,
     // dunno what these are
     RunEngine,
     LoadLocaleWrapper,

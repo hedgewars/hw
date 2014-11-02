@@ -25,6 +25,7 @@ extern "C" {
     getTeamsList_t *flibGetTeamsList;
     tryAddTeam_t * flibTryAddTeam;
     tryRemoveTeam_t * flibTryRemoveTeam;
+    changeTeamColor_t * flibChangeTeamColor;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -58,6 +59,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
     flibTryAddTeam = (tryAddTeam_t*) hwlib.resolve("tryAddTeam");
     flibTryRemoveTeam = (tryRemoveTeam_t*) hwlib.resolve("tryRemoveTeam");
+    flibChangeTeamColor = (changeTeamColor_t*) hwlib.resolve("changeTeamColor");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
@@ -143,6 +145,11 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         emit localTeamRemoved(msg);
         break;
     }
+    case MSG_TEAMCOLOR: {
+        QStringList l = QString::fromUtf8(msg).split('\n');
+        emit teamColorChanged(l[0], QColor::fromRgba(l[1].toInt()).name());
+        break;
+    }
     }
 }
 
@@ -189,4 +196,9 @@ void HWEngine::tryRemoveTeam(const QString &teamName)
 void HWEngine::resetGameConfig()
 {
     flibResetGameConfig();
+}
+
+void HWEngine::changeTeamColor(const QString &teamName, int dir)
+{
+    flibChangeTeamColor(teamName.toUtf8().constData(), dir);
 }

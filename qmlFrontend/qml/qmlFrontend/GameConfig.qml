@@ -105,24 +105,51 @@ Rectangle {
             border.color: "#eaea00"
 
             Row {
-                Text { text: name }
+                Rectangle {
+                    height: 20
+                    width: height
+                    color: teamColor
+                    border.width: 2
+                    border.color: "#eaea00"                    
+
+                    MouseArea {
+                        z: 1
+                        anchors.fill: parent
+                        onClicked: HWEngine.changeTeamColor(name, 1)
+                   }
+                }
+
+                Text { text: name
+                    MouseArea {
+                        z: 1
+                        anchors.fill: parent
+                        onClicked: HWEngine.tryRemoveTeam(name)
+                   }
+                }
             }
 
-            MouseArea {
-                 z: 1
-                 anchors.fill: parent
-                 onClicked: HWEngine.tryRemoveTeam(name)
-            }
+
         }
 
         Connections {
             target: HWEngine
-            onPlayingTeamAdded: playingTeamsModel.append({"aiLevel": aiLevel, "name": teamName, "local": isLocal})
+            onPlayingTeamAdded: playingTeamsModel.append({
+                                                             "aiLevel": aiLevel
+                                                             , "name": teamName
+                                                             , "local": isLocal
+                                                             , "teamColor": "#000000"
+                                                         })
             onPlayingTeamRemoved: {
                 var i = playingTeamsModel.count - 1;
                 while ((i >= 0) && (playingTeamsModel.get(i).name !== teamName)) --i
 
                 if(i >= 0) playingTeamsModel.remove(i, 1)
+            }
+            onTeamColorChanged: {
+                var i = playingTeamsModel.count - 1;
+                while ((i >= 0) && (playingTeamsModel.get(i).name !== teamName)) --i
+
+                if(i >= 0) playingTeamsModel.setProperty(i, "teamColor", colorValue)
             }
         }
     }

@@ -27,6 +27,7 @@ public:
 
     Q_INVOKABLE void tryAddTeam(const QString & teamName);
     Q_INVOKABLE void tryRemoveTeam(const QString & teamName);
+    Q_INVOKABLE void changeTeamColor(const QString & teamName, int dir);
 
 signals:
     void previewImageChanged();
@@ -35,6 +36,8 @@ signals:
 
     void playingTeamAdded(const QString & teamName, int aiLevel, bool isLocal);
     void playingTeamRemoved(const QString & teamName);
+
+    void teamColorChanged(const QString & teamName, const QString & colorValue);
 
 public slots:
 

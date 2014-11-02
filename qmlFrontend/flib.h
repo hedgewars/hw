@@ -13,6 +13,7 @@ enum MessageType {
     , MSG_REMOVEPLAYINGTEAM
     , MSG_ADDTEAM
     , MSG_REMOVETEAM
+    , MSG_TEAMCOLOR
 };
 
 typedef union string255_
@@ -42,8 +43,9 @@ typedef void freeThemesList_t(char **list);
 typedef uint32_t getThemeIcon_t(char * theme, char * buffer, uint32_t size);
 
 typedef char **getTeamsList_t();
-typedef void tryAddTeam_t(const char * seed);
-typedef void tryRemoveTeam_t(const char * seed);
+typedef void tryAddTeam_t(const char * teamName);
+typedef void tryRemoveTeam_t(const char * teamName);
+typedef void changeTeamColor_t(const char * teamName, int32_t dir);
 
 #ifdef __cplusplus
 }

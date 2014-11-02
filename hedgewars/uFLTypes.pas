@@ -2,7 +2,8 @@ unit uFLTypes;
 interface
 
 type
-    TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam);
+    TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
+                   , mtTeamColor);
 
     TIPCMessage = record
                    str: shortstring;

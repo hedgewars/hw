@@ -12,8 +12,9 @@ procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
 procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 
-procedure tryAddTeam(teamName: PChar);
-procedure tryRemoveTeam(teamName: PChar);
+procedure tryAddTeam(teamName: PChar); cdecl;
+procedure tryRemoveTeam(teamName: PChar); cdecl;
+procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 
 implementation
 uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData;
@@ -203,7 +204,7 @@ begin
 end;
 
 
-procedure tryAddTeam(teamName: PChar);
+procedure tryAddTeam(teamName: PChar); cdecl;
 var msg: ansistring;
     i, hn, hedgehogsNumber: Longword;
     team: PTeam;
@@ -235,20 +236,20 @@ begin
         teams[i].hogsNumber:= hn;
 
         teams[i].color:= c;
-    end;
 
+        msg:= '0' + #10 + teamName;
+        guiCallbackFunction(guiCallbackPointer, mtAddPlayingTeam, @msg[1], length(msg));
 
-    msg:= '0' + #10 + teamName;
+        msg:= teamName + #10 + colorsSet[teams[i].color];
+        guiCallbackFunction(guiCallbackPointer, mtTeamColor, @msg[1], length(msg));
 
-    guiCallbackFunction(guiCallbackPointer, mtAddPlayingTeam, @msg[1], length(msg));
-
-    msg:= teamName;
-
-    guiCallbackFunction(guiCallbackPointer, mtRemoveTeam, @msg[1], length(msg))
+        msg:= teamName;
+        guiCallbackFunction(guiCallbackPointer, mtRemoveTeam, @msg[1], length(msg))
+    end
 end;
 
 
-procedure tryRemoveTeam(teamName: PChar);
+procedure tryRemoveTeam(teamName: PChar); cdecl;
 var msg: ansistring;
     i: Longword;
     tn: shortstring;
@@ -276,6 +277,29 @@ begin
 
     guiCallbackFunction(guiCallbackPointer, mtRemovePlayingTeam, @msg[1], length(msg));
     guiCallbackFunction(guiCallbackPointer, mtAddTeam, @msg[1], length(msg))
+end;
+
+
+procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
+var i, dc: Longword;
+    tn: shortstring;
+    msg: ansistring;
+begin
+    with currentConfig do
+    begin
+        i:= 0;
+        tn:= teamName;
+        while (i < 8) and (teams[i].teamName <> tn) do
+            inc(i);
+        // team not found???
+        if (i > 7) then exit;
+
+        if dir >= 0 then dc:= 1 else dc:= 8;
+        teams[i].color:= (teams[i].color + dc) mod 9;
+
+        msg:= tn + #10 + colorsSet[teams[i].color];
+        guiCallbackFunction(guiCallbackPointer, mtTeamColor, @msg[1], length(msg))
+    end
 end;
 
 end.
