@@ -13,6 +13,7 @@ extern "C" {
     registerGUIMessagesCallback_t *flibRegisterGUIMessagesCallback;
     setSeed_t *flibSetSeed;
     getSeed_t *flibGetSeed;
+    setTheme_t *flibSetTheme;
     getPreview_t *flibGetPreview;
     runQuickGame_t *flibRunQuickGame;
     runLocalGame_t *flibRunLocalGame;
@@ -45,6 +46,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibRegisterGUIMessagesCallback = (registerGUIMessagesCallback_t*) hwlib.resolve("registerGUIMessagesCallback");
     flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
     flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
+    flibSetTheme = (setTheme_t*) hwlib.resolve("setTheme");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
     flibRunQuickGame = (runQuickGame_t*) hwlib.resolve("runQuickGame");
     flibRunLocalGame = (runLocalGame_t*) hwlib.resolve("runLocalGame");
@@ -201,4 +203,9 @@ void HWEngine::resetGameConfig()
 void HWEngine::changeTeamColor(const QString &teamName, int dir)
 {
     flibChangeTeamColor(teamName.toUtf8().constData(), dir);
+}
+
+void HWEngine::setTheme(const QString &theme)
+{
+    flibSetTheme(theme.toUtf8().constData());
 }

@@ -11,6 +11,7 @@ procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
 
 procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
+procedure setTheme(themeName: PChar); cdecl;
 
 procedure tryAddTeam(teamName: PChar); cdecl;
 procedure tryRemoveTeam(teamName: PChar); cdecl;
@@ -57,6 +58,7 @@ begin
     gtLocal: begin
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
+            ipcToEngine('e$theme ' + theme);
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
                 begin
@@ -300,6 +302,11 @@ begin
         msg:= tn + #10 + colorsSet[teams[i].color];
         guiCallbackFunction(guiCallbackPointer, mtTeamColor, @msg[1], length(msg))
     end
+end;
+
+procedure setTheme(themeName: PChar); cdecl;
+begin
+    currentConfig.theme:= themeName
 end;
 
 end.

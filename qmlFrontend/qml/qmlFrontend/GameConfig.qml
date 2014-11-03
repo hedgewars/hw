@@ -76,6 +76,7 @@ Rectangle {
                      onClicked: {
                          themeImage.source = "image://theme/" + themeName.text
                          themesList.currentIndex = index
+                         HWEngine.setTheme(themeName.text)
                      }
                 }
             }

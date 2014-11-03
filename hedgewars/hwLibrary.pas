@@ -154,6 +154,7 @@ exports
     resetGameConfig,
     setSeed,
     getSeed,
+    setTheme,
     getThemesList,
     freeThemesList,
     getThemeIcon,
@@ -161,6 +162,7 @@ exports
     tryAddTeam,
     tryRemoveTeam,
     changeTeamColor,
+    
     // dunno what these are
     RunEngine,
     LoadLocaleWrapper,
