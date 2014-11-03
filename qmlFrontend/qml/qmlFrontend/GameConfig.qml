@@ -115,7 +115,14 @@ Rectangle {
                     MouseArea {
                         z: 1
                         anchors.fill: parent
-                        onClicked: HWEngine.changeTeamColor(name, 1)
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: {
+                            if (mouse.button === Qt.LeftButton)
+                                HWEngine.changeTeamColor(name, 1)
+                            else if (mouse.button === Qt.RightButton)
+                                HWEngine.changeTeamColor(name, -1)
+                        }
+                        onWheel: HWEngine.changeTeamColor(name, -wheel.angleDelta.y)
                    }
                 }
 
