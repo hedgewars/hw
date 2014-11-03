@@ -554,19 +554,24 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
     {
         mapgen = m;
 
+        bool f = false;
         switch (m)
         {
             case MAPGEN_REGULAR:
                 m_mapInfo.type = MapModel::GeneratedMap;
+                f = true;
                 break;
             case MAPGEN_MAZE:
                 m_mapInfo.type = MapModel::GeneratedMaze;
+                f = true;
                 break;
             case MAPGEN_PERLIN:
                 m_mapInfo.type = MapModel::GeneratedPerlin;
+                f = true;
                 break;
             case MAPGEN_DRAWN:
                 m_mapInfo.type = MapModel::HandDrawnMap;
+                f = true;
                 break;
             case MAPGEN_MAP:
                 switch (m_mapInfo.type)
@@ -582,7 +587,8 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                 break;
         }
 
-        emit mapgenChanged(m);
+        if(f)
+            changeMapType(m_mapInfo.type, QModelIndex());
     }
 }
 
@@ -883,11 +889,8 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
         mapList->scrollTo(map);
     }
 
-    if (map.data(Qt::UserRole + 1).canConvert<MapModel::MapInfo>())
-        setMapInfo(map.data(Qt::UserRole + 1).value<MapModel::MapInfo>());
-    else
-        Q_ASSERT(false); // Houston, we have a problem.
-
+    Q_ASSERT(map.data(Qt::UserRole + 1).canConvert<MapModel::MapInfo>()); // Houston, we have a problem.
+    setMapInfo(map.data(Qt::UserRole + 1).value<MapModel::MapInfo>());
 }
 
 void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)
