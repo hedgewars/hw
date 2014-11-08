@@ -22,10 +22,6 @@
         <translation>nuovo</translation>
     </message>
     <message>
-        <source>copy of</source>
-        <translation type="obsolete">copia di</translation>
-    </message>
-    <message>
         <source>copy of %1</source>
         <translation>copia di %1</translation>
     </message>
@@ -103,20 +99,8 @@
         <translation>Invia commento</translation>
     </message>
     <message>
-        <source>Please give us feedback!</source>
-        <translation type="obsolete">Per favore, inviaci un commento!</translation>
-    </message>
-    <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
         <translation>Siamo sempre felici di ricevere suggerimenti, idee o segnalazioni di bachi.</translation>
-    </message>
-    <message>
-        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="obsolete">Se trovi un baco, puoi vedere se è già conosciuto qui (in inglese): </translation>
-    </message>
-    <message>
-        <source>Your email address is optional, but we may want to contact you.</source>
-        <translation type="obsolete">Il tuo indirizzo di posta elettronica è opzionale, ma potremmo volerti contattare.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
@@ -154,10 +138,6 @@
     <message>
         <source>Edit schemes</source>
         <translation>Modifica schemi</translation>
-    </message>
-    <message>
-        <source>Game Options</source>
-        <translation type="obsolete">Opzioni di Gioco</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
@@ -610,10 +590,6 @@ Ultimi due messaggi del motore:
         <translation>Mappa:</translation>
     </message>
     <message>
-        <source>Theme: </source>
-        <translation type="obsolete">Tema: </translation>
-    </message>
-    <message>
         <source>Load drawn map</source>
         <translation>Carica mappa disegnata</translation>
     </message>
@@ -682,10 +658,6 @@ Ultimi due messaggi del motore:
     <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 è entrato nella stanza</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has joined</source>
-        <translation type="obsolete">%1 *** %2 è entrato</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -771,13 +743,6 @@ inserisci solo il tuo soprannome.</translation>
     </message>
 </context>
 <context>
-    <name>KB</name>
-    <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="obsolete">SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug della libreria freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
-    </message>
-</context>
-<context>
     <name>KeyBinder</name>
     <message>
         <source>Category</source>
@@ -786,19 +751,6 @@ inserisci solo il tuo soprannome.</translation>
 </context>
 <context>
     <name>LibavInteraction</name>
-    <message>
-        <source>Duration: %1m %2s
-</source>
-        <translation type="obsolete">Durata: %1m %2s</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2, </source>
-        <translation type="obsolete">Video: %1x%2, </translation>
-    </message>
-    <message>
-        <source>%1 fps, </source>
-        <translation type="obsolete">%1 fps, </translation>
-    </message>
     <message>
         <source>Audio: </source>
         <translation>Audio:</translation>
@@ -1176,10 +1128,6 @@ inserisci solo il tuo soprannome.</translation>
 <context>
     <name>PageNetGame</name>
     <message>
-        <source>Control</source>
-        <translation type="obsolete">Controllo</translation>
-    </message>
-    <message>
         <source>Edit game preferences</source>
         <translation>Modifica preferenze</translation>
     </message>
@@ -1392,36 +1340,8 @@ inserisci solo il tuo soprannome.</translation>
 <context>
     <name>PageRoomsList</name>
     <message>
-        <source>Create</source>
-        <translation type="obsolete">Crea</translation>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="obsolete">Entra</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Opzioni amministrative</translation>
-    </message>
-    <message>
-        <source>Room Name:</source>
-        <translation type="obsolete">Nome stanza:</translation>
-    </message>
-    <message>
-        <source>Rules:</source>
-        <translation type="obsolete">Regole:</translation>
-    </message>
-    <message>
-        <source>Weapons:</source>
-        <translation type="obsolete">Armi:</translation>
-    </message>
-    <message>
-        <source>Search:</source>
-        <translation type="obsolete">Cerca:</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Cancella</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1445,10 +1365,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Room state</source>
         <translation>Stato della stanza</translation>
-    </message>
-    <message>
-        <source>Clear filters</source>
-        <translation type="obsolete">Rimuovi filtri</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1689,18 +1605,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>caricamento</translation>
     </message>
     <message>
-        <source>Date: %1
-</source>
-        <translation type="obsolete">Data: %1
-</translation>
-    </message>
-    <message>
-        <source>Size: %1
-</source>
-        <translation type="obsolete">Dimensione: %1
-</translation>
-    </message>
-    <message>
         <source>Date: %1</source>
         <translation type="unfinished">Data: %1
  {1?}</translation>
@@ -1752,10 +1656,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Remove friend</source>
         <translation>Rimuovi amico</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="obsolete">Aggiorna</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
@@ -1896,18 +1796,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>Comunità</translation>
     </message>
     <message>
-        <source>Any</source>
-        <translation type="obsolete">Qualsiasi</translation>
-    </message>
-    <message>
-        <source>In lobby</source>
-        <translation type="obsolete">In lobby</translation>
-    </message>
-    <message>
-        <source>In progress</source>
-        <translation type="obsolete">In corso</translation>
-    </message>
-    <message>
         <source>Disabled</source>
         <translation>Disabilitato</translation>
     </message>
@@ -2046,10 +1934,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>Porta del server:</translation>
     </message>
     <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
         <source>Initial sound volume</source>
         <translation>Volume sonoro iniziale</translation>
     </message>
@@ -2110,10 +1994,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>Esplosivi</translation>
     </message>
     <message>
-        <source>Tip: </source>
-        <translation type="obsolete">Suggerimento: </translation>
-    </message>
-    <message>
         <source>Quality</source>
         <translation>Qualità</translation>
     </message>
@@ -2152,10 +2032,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>% Get Away Time</source>
         <translation>% Tempo regalo</translation>
-    </message>
-    <message>
-        <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="obsolete">Questo programma è distribuito con licenza GNU General Public License v2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -2299,10 +2175,6 @@ Vuoi veramente uscire?</translation>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
     </message>
-    <message>
-        <source>-r%1 (%2)</source>
-        <translation type="obsolete">-r%1 (%2)</translation>
-    </message>
 </context>
 <context>
     <name>QMessageBox</name>
@@ -2363,40 +2235,6 @@ Vuoi veramente uscire?</translation>
     <message>
         <source>All file associations have been set</source>
         <translation>Tutte le associazioni di file sono state impostate</translation>
-    </message>
-    <message>
-        <source>Main - Error</source>
-        <translation type="obsolete">Main - Errore</translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation type="obsolete">Impossibile creare la directory %1</translation>
-    </message>
-    <message>
-        <source>Failed to open data directory:
-%1
-
-Please check your installation!</source>
-        <translation type="obsolete">Impossibile creare la directory dati:
-%1
-
-Per favore controlla l&apos;installazione!</translation>
-    </message>
-    <message>
-        <source>TCP - Error</source>
-        <translation type="obsolete">TCP - Errore</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="obsolete">Impossibile avviare il server: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine at </source>
-        <translation type="obsolete">Impossibile avviare il motore a </translation>
-    </message>
-    <message>
-        <source>Error code: %1</source>
-        <translation type="obsolete">Codice di errore: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2542,10 +2380,6 @@ Voui comunque entrare nella stanza?</translation>
     <message>
         <source>Hedgewars - Information</source>
         <translation>Hedgewars - Avviso</translation>
-    </message>
-    <message>
-        <source>Hedgewars</source>
-        <translation type="obsolete">Hedgewars</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
@@ -2804,10 +2638,6 @@ Non tutti i giocatori sono pronti.</translation>
         <translation>nuovo</translation>
     </message>
     <message>
-        <source>copy of</source>
-        <translation type="obsolete">copia di</translation>
-    </message>
-    <message>
         <source>copy of %1</source>
         <translation>copia di %1</translation>
     </message>
@@ -2839,13 +2669,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>At least two teams are required to play!</source>
         <translation>Servono almeno due squadre per giocare!</translation>
-    </message>
-</context>
-<context>
-    <name>TeamShowWidget</name>
-    <message>
-        <source>%1&apos;s team</source>
-        <translation type="obsolete">Squadra di %1</translation>
     </message>
 </context>
 <context>
@@ -2892,10 +2715,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>switch</source>
         <translation>cambia</translation>
-    </message>
-    <message>
-        <source>find hedgehog</source>
-        <translation type="obsolete">trova riccio</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -3086,10 +2905,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>Set the timer on bombs and timed weapons:</source>
         <translation>Imposta il timer di granate e armi a tempo:</translation>
-    </message>
-    <message>
-        <source>Move the camera to the active hog:</source>
-        <translation type="obsolete">Muovi la camera verso il riccio attivo:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
