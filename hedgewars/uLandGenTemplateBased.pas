@@ -9,6 +9,7 @@ procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 implementation
 uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
+var minDistance: LongInt; // different details size
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
 var i: LongInt;
@@ -97,7 +98,6 @@ end;
 
 procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 40;
-    minDistance = 32; // adjust/parametrize this for different details size
 var p1, p2, p4, fp, mp: TPoint;
     i, t1, t2, iy, ix, aqpb: LongInt;
     a, b, p, q: LongInt;
@@ -336,7 +336,8 @@ begin
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
-            
+    
+    minDistance:= max(cFeatureSize,12);
     MaxHedgehogs:= Template.MaxHedgehogs;
     hasGirders:= Template.hasGirders;
     playHeight:= Template.TemplateHeight;

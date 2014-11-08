@@ -42,7 +42,7 @@ class HWMap : public TCPBase
     public:
         HWMap(QObject *parent = 0);
         virtual ~HWMap();
-        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script);
+        void getImage(const QString & seed, int templateFilter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script, int feature_size);
         bool couldBeRemoved();
 
     protected:
@@ -59,7 +59,8 @@ class HWMap : public TCPBase
         QString m_script;
         int templateFilter;
         MapGenerator m_mapgen;
-        int m_maze_size;
+        int m_maze_size;  // going to try and deprecate this one
+        int m_feature_size;
         QByteArray m_drawMapData;
 
     private slots:

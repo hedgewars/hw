@@ -61,6 +61,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_missionsViewSetup = false;
     m_staticViewSetup = false;
     m_script = QString();
+    m_prevMapFeatureSize = 50;
+    m_mapFeatureSize = 50;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -227,7 +229,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setMaximum(100);
     mapFeatureSize->setMinimum(1);
     //mapFeatureSize->setFixedWidth(259);
-    mapFeatureSize->setValue(50);
+    mapFeatureSize->setValue(m_mapFeatureSize);
     mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
     connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(mapFeatureSizeChanged(int)));
@@ -322,7 +324,8 @@ void HWMapContainer::askForGeneratedPreview()
                    get_mapgen(),
                    getMazeSize(),
                    getDrawnMapData(),
-                   m_script
+                   m_script,
+		   m_mapFeatureSize
                   );
 
     setHHLimit(0);
@@ -401,6 +404,11 @@ QString HWMapContainer::getCurrentWeapons() const
 quint32 HWMapContainer::getTemplateFilter() const
 {
     return generationStyles->currentRow();
+}
+
+quint32 HWMapContainer::getFeatureSize() const
+{
+    return m_mapFeatureSize;
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
@@ -811,8 +819,15 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     emit mapgenChanged(mapgen);
 }
 
-void HWMapContainer::mapFeatureSizeChanged(int index)
+void HWMapContainer::mapFeatureSizeChanged(int val)
 {
+    // needs to be per map type, scales will be different
+    m_mapFeatureSize = val;
+    if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 8)
+    {
+	m_prevMapFeatureSize = m_mapFeatureSize;
+	updatePreview();
+    }
 }
 
 // unused because I needed the space for the slider
