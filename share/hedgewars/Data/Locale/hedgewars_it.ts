@@ -22,10 +22,6 @@
         <translation>nuovo</translation>
     </message>
     <message>
-        <source>copy of</source>
-        <translation type="obsolete">copia di</translation>
-    </message>
-    <message>
         <source>copy of %1</source>
         <translation>copia di %1</translation>
     </message>
@@ -103,20 +99,8 @@
         <translation>Invia commento</translation>
     </message>
     <message>
-        <source>Please give us feedback!</source>
-        <translation type="obsolete">Per favore, inviaci un commento!</translation>
-    </message>
-    <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
         <translation>Siamo sempre felici di ricevere suggerimenti, idee o segnalazioni di bachi.</translation>
-    </message>
-    <message>
-        <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation type="obsolete">Se trovi un baco, puoi vedere se è già conosciuto qui (in inglese): </translation>
-    </message>
-    <message>
-        <source>Your email address is optional, but we may want to contact you.</source>
-        <translation type="obsolete">Il tuo indirizzo di posta elettronica è opzionale, ma potremmo volerti contattare.</translation>
     </message>
     <message>
         <source>Send us feedback!</source>
@@ -154,10 +138,6 @@
     <message>
         <source>Edit schemes</source>
         <translation>Modifica schemi</translation>
-    </message>
-    <message>
-        <source>Game Options</source>
-        <translation type="obsolete">Opzioni di Gioco</translation>
     </message>
     <message>
         <source>Game scheme will auto-select a weapon</source>
@@ -493,7 +473,7 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation type="unfinished">ERRORE non recuperabile! Il motore di gioco si è dovuto arrestare.
+        <translation>ERRORE non recuperabile! Il motore di gioco si è dovuto arrestare.
 
 Ci dispiace molto per l'inconveniente :(
 
@@ -610,10 +590,6 @@ Ultimi due messaggi del motore:
         <translation>Mappa:</translation>
     </message>
     <message>
-        <source>Theme: </source>
-        <translation type="obsolete">Tema: </translation>
-    </message>
-    <message>
         <source>Load drawn map</source>
         <translation>Carica mappa disegnata</translation>
     </message>
@@ -635,7 +611,7 @@ Ultimi due messaggi del motore:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumore casuale</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -682,10 +658,6 @@ Ultimi due messaggi del motore:
     <message>
         <source>%1 *** %2 has joined the room</source>
         <translation>%1 *** %2 è entrato nella stanza</translation>
-    </message>
-    <message>
-        <source>%1 *** %2 has joined</source>
-        <translation type="obsolete">%1 *** %2 è entrato</translation>
     </message>
     <message>
         <source>%1 *** %2 has left (%3)</source>
@@ -771,13 +743,6 @@ inserisci solo il tuo soprannome.</translation>
     </message>
 </context>
 <context>
-    <name>KB</name>
-    <message>
-        <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation type="obsolete">SDL_ttf ha restituito un errore durante il rendering del testo, probabilmente relativo ad un bug della libreria freetype2. Si raccomanda di aggiornare le proprie librerie freetype.</translation>
-    </message>
-</context>
-<context>
     <name>KeyBinder</name>
     <message>
         <source>Category</source>
@@ -786,19 +751,6 @@ inserisci solo il tuo soprannome.</translation>
 </context>
 <context>
     <name>LibavInteraction</name>
-    <message>
-        <source>Duration: %1m %2s
-</source>
-        <translation type="obsolete">Durata: %1m %2s</translation>
-    </message>
-    <message>
-        <source>Video: %1x%2, </source>
-        <translation type="obsolete">Video: %1x%2, </translation>
-    </message>
-    <message>
-        <source>%1 fps, </source>
-        <translation type="obsolete">%1 fps, </translation>
-    </message>
     <message>
         <source>Audio: </source>
         <translation>Audio:</translation>
@@ -1083,9 +1035,9 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
         </translation>
     </message>
 </context>
@@ -1175,10 +1127,6 @@ inserisci solo il tuo soprannome.</translation>
 </context>
 <context>
     <name>PageNetGame</name>
-    <message>
-        <source>Control</source>
-        <translation type="obsolete">Controllo</translation>
-    </message>
     <message>
         <source>Edit game preferences</source>
         <translation>Modifica preferenze</translation>
@@ -1392,36 +1340,8 @@ inserisci solo il tuo soprannome.</translation>
 <context>
     <name>PageRoomsList</name>
     <message>
-        <source>Create</source>
-        <translation type="obsolete">Crea</translation>
-    </message>
-    <message>
-        <source>Join</source>
-        <translation type="obsolete">Entra</translation>
-    </message>
-    <message>
         <source>Admin features</source>
         <translation>Opzioni amministrative</translation>
-    </message>
-    <message>
-        <source>Room Name:</source>
-        <translation type="obsolete">Nome stanza:</translation>
-    </message>
-    <message>
-        <source>Rules:</source>
-        <translation type="obsolete">Regole:</translation>
-    </message>
-    <message>
-        <source>Weapons:</source>
-        <translation type="obsolete">Armi:</translation>
-    </message>
-    <message>
-        <source>Search:</source>
-        <translation type="obsolete">Cerca:</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation type="obsolete">Cancella</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1445,10 +1365,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Room state</source>
         <translation>Stato della stanza</translation>
-    </message>
-    <message>
-        <source>Clear filters</source>
-        <translation type="obsolete">Rimuovi filtri</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1579,19 +1495,19 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>None (Default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno (Default)</translation>
     </message>
     <message>
         <source>Wrap (World wraps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvolgi (il mondo avvolge)</translation>
     </message>
     <message>
         <source>Bounce (Edges reflect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimbalza (i bordi si riflettono)</translation>
     </message>
     <message>
         <source>Sea (Edges connect to sea)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mare (i bordi si connettono al mare)</translation>
     </message>
 </context>
 <context>
@@ -1689,26 +1605,12 @@ inserisci solo il tuo soprannome.</translation>
         <translation>caricamento</translation>
     </message>
     <message>
-        <source>Date: %1
-</source>
-        <translation type="obsolete">Data: %1
-</translation>
-    </message>
-    <message>
-        <source>Size: %1
-</source>
-        <translation type="obsolete">Dimensione: %1
-</translation>
-    </message>
-    <message>
         <source>Date: %1</source>
-        <translation type="unfinished">Data: %1
- {1?}</translation>
+        <translation>Data: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation type="unfinished">Dimensione: %1
- {1?}</translation>
+        <translation>Dimensione: %1</translation>
     </message>
 </context>
 <context>
@@ -1752,10 +1654,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Remove friend</source>
         <translation>Rimuovi amico</translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="obsolete">Aggiorna</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
@@ -1846,35 +1744,35 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Squadra</translation>
+        <translation>Squadra</translation>
     </message>
     <message>
         <source>Enable team tags by default</source>
-        <translation type="unfinished">Abilita i tag della squadra in automatico</translation>
+        <translation>Abilita i tag della squadra in automatico</translation>
     </message>
     <message>
         <source>Hog</source>
-        <translation type="unfinished">Riccio</translation>
+        <translation>Riccio</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation type="unfinished">Abilita i tag dei ricci in automatico</translation>
+        <translation>Abilita i tag dei ricci in automatico</translation>
     </message>
     <message>
         <source>Health</source>
-        <translation type="unfinished">Vita</translation>
+        <translation>Vita</translation>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation type="unfinished">Abilita i tag della vita in automatico</translation>
+        <translation>Abilita i tag della vita in automatico</translation>
     </message>
     <message>
         <source>Translucent</source>
-        <translation type="unfinished"></translation>
+        <translation>Semitrasparente</translation>
     </message>
     <message>
         <source>Enable translucent tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita i tag semitrasparenti in automatico</translation>
     </message>
 </context>
 <context>
@@ -1894,18 +1792,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>Community</source>
         <translation>Comunità</translation>
-    </message>
-    <message>
-        <source>Any</source>
-        <translation type="obsolete">Qualsiasi</translation>
-    </message>
-    <message>
-        <source>In lobby</source>
-        <translation type="obsolete">In lobby</translation>
-    </message>
-    <message>
-        <source>In progress</source>
-        <translation type="obsolete">In corso</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -2046,10 +1932,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>Porta del server:</translation>
     </message>
     <message>
-        <source>Version</source>
-        <translation type="obsolete">Versione</translation>
-    </message>
-    <message>
         <source>Initial sound volume</source>
         <translation>Volume sonoro iniziale</translation>
     </message>
@@ -2110,10 +1992,6 @@ inserisci solo il tuo soprannome.</translation>
         <translation>Esplosivi</translation>
     </message>
     <message>
-        <source>Tip: </source>
-        <translation type="obsolete">Suggerimento: </translation>
-    </message>
-    <message>
         <source>Quality</source>
         <translation>Qualità</translation>
     </message>
@@ -2152,10 +2030,6 @@ inserisci solo il tuo soprannome.</translation>
     <message>
         <source>% Get Away Time</source>
         <translation>% Tempo regalo</translation>
-    </message>
-    <message>
-        <source>This program is distributed under the GNU General Public License v2</source>
-        <translation type="obsolete">Questo programma è distribuito con licenza GNU General Public License v2</translation>
     </message>
     <message>
         <source>There are videos that are currently being processed.
@@ -2263,19 +2137,19 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Tip: %1</source>
-        <translation type="unfinished">Consiglio: %1</translation>
+        <translation>Consiglio: %1</translation>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza i tag sopra i ricci e i tag semitrasparenti</translation>
     </message>
     <message>
         <source>World Edge</source>
-        <translation type="unfinished"></translation>
+        <translation>Bordi del mondo</translation>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished">Parametro dello script</translation>
+        <translation>Parametro dello script</translation>
     </message>
 </context>
 <context>
@@ -2286,7 +2160,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation>Riccio %1</translation>
+        <translation>riccio %1</translation>
     </message>
     <message>
         <source>anonymous</source>
@@ -2298,10 +2172,6 @@ Vuoi veramente uscire?</translation>
     <message>
         <source>Hedgewars %1</source>
         <translation>Hedgewars %1</translation>
-    </message>
-    <message>
-        <source>-r%1 (%2)</source>
-        <translation type="obsolete">-r%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2363,40 +2233,6 @@ Vuoi veramente uscire?</translation>
     <message>
         <source>All file associations have been set</source>
         <translation>Tutte le associazioni di file sono state impostate</translation>
-    </message>
-    <message>
-        <source>Main - Error</source>
-        <translation type="obsolete">Main - Errore</translation>
-    </message>
-    <message>
-        <source>Cannot create directory %1</source>
-        <translation type="obsolete">Impossibile creare la directory %1</translation>
-    </message>
-    <message>
-        <source>Failed to open data directory:
-%1
-
-Please check your installation!</source>
-        <translation type="obsolete">Impossibile creare la directory dati:
-%1
-
-Per favore controlla l&apos;installazione!</translation>
-    </message>
-    <message>
-        <source>TCP - Error</source>
-        <translation type="obsolete">TCP - Errore</translation>
-    </message>
-    <message>
-        <source>Unable to start the server: %1.</source>
-        <translation type="obsolete">Impossibile avviare il server: %1.</translation>
-    </message>
-    <message>
-        <source>Unable to run engine at </source>
-        <translation type="obsolete">Impossibile avviare il motore a </translation>
-    </message>
-    <message>
-        <source>Error code: %1</source>
-        <translation type="obsolete">Codice di errore: %1</translation>
     </message>
     <message>
         <source>Video upload - Error</source>
@@ -2542,10 +2378,6 @@ Voui comunque entrare nella stanza?</translation>
     <message>
         <source>Hedgewars - Information</source>
         <translation>Hedgewars - Avviso</translation>
-    </message>
-    <message>
-        <source>Hedgewars</source>
-        <translation type="obsolete">Hedgewars</translation>
     </message>
     <message>
         <source>Not all players are ready</source>
@@ -2759,7 +2591,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumore casuale</translation>
     </message>
 </context>
 <context>
@@ -2804,10 +2636,6 @@ Non tutti i giocatori sono pronti.</translation>
         <translation>nuovo</translation>
     </message>
     <message>
-        <source>copy of</source>
-        <translation type="obsolete">copia di</translation>
-    </message>
-    <message>
         <source>copy of %1</source>
         <translation>copia di %1</translation>
     </message>
@@ -2831,7 +2659,12 @@ Codice di errore: %2</translation>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished"></translation>
+        <translation>Il motore del gioco è morto inaspettatamente!
+(codice di uscita %1)
+
+Ci dispiace molto per l'inconveniente :(
+
+Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel menu principale!</translation>
     </message>
 </context>
 <context>
@@ -2839,13 +2672,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>At least two teams are required to play!</source>
         <translation>Servono almeno due squadre per giocare!</translation>
-    </message>
-</context>
-<context>
-    <name>TeamShowWidget</name>
-    <message>
-        <source>%1&apos;s team</source>
-        <translation type="obsolete">Squadra di %1</translation>
     </message>
 </context>
 <context>
@@ -2892,10 +2718,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     <message>
         <source>switch</source>
         <translation>cambia</translation>
-    </message>
-    <message>
-        <source>find hedgehog</source>
-        <translation type="obsolete">trova riccio</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -3035,7 +2857,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-        <translation type="unfinished"></translation>
+        <translation>camera automatica / trova riccio</translation>
     </message>
     <message>
         <source>speed up replay</source>
@@ -3088,10 +2910,6 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
         <translation>Imposta il timer di granate e armi a tempo:</translation>
     </message>
     <message>
-        <source>Move the camera to the active hog:</source>
-        <translation type="obsolete">Muovi la camera verso il riccio attivo:</translation>
-    </message>
-    <message>
         <source>Move the cursor or camera without using the mouse:</source>
         <translation>Muovi il cursore o la camera senza usare il mouse:</translation>
     </message>
@@ -3133,11 +2951,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Togli camera automatica / riposiziona sul riccio attivo:</translation>
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vizualizza demo:</translation>
     </message>
 </context>
 <context>
@@ -3575,7 +3393,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun diritto di modifica</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
@@ -3619,19 +3437,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished">Eccessivo numero messaggi</translation>
+        <translation>Eccessivo numero messaggi</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation type="unfinished">Rilevato numero messaggi di gioco eccessivo - 1</translation>
+        <translation>Rilevato numero messaggi di gioco eccessivo - 1</translation>
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
-        <translation type="unfinished">Rilevato numero messaggi di gioco eccessivo - 2</translation>
+        <translation>Rilevato numero messaggi di gioco eccessivo - 2</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished">Attenzione! Protezione congiunta eccessivo numero messaggi attivata</translation>
+        <translation>Attenzione! Protezione congiunta eccessivo numero messaggi attivata</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
