@@ -153,15 +153,6 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     leftLayout->addWidget(mapPreview, 0);
     connect(mapPreview, SIGNAL(clicked()), this, SLOT(previewClicked()));
 
-    mapFeatureSize = new QSlider(Qt::Horizontal, this);
-    mapFeatureSize->setObjectName("mapFeatureSize");
-    //mapFeatureSize->setTickPosition(QSlider::TicksBelow);
-    mapFeatureSize->setMaximum(100);
-    mapFeatureSize->setMinimum(1);
-    mapFeatureSize->setFixedWidth(259);
-    mapFeatureSize->setValue(50);
-    leftLayout->addWidget(mapFeatureSize, 0);
-
     /* Bottom-Left layout */
 
     QVBoxLayout * bottomLeftLayout = new QVBoxLayout();
@@ -230,6 +221,17 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_childWidgets << mazeStyles;
     rightLayout->addWidget(mazeStyles, 1);
 
+    mapFeatureSize = new QSlider(Qt::Horizontal, this);
+    mapFeatureSize->setObjectName("mapFeatureSize");
+    //mapFeatureSize->setTickPosition(QSlider::TicksBelow);
+    mapFeatureSize->setMaximum(100);
+    mapFeatureSize->setMinimum(1);
+    //mapFeatureSize->setFixedWidth(259);
+    mapFeatureSize->setValue(50);
+    mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    bottomLeftLayout->addWidget(mapFeatureSize, 0);
+    connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(mapFeatureSizeChanged(int)));
+
     /* Mission description */
 
     lblDesc = new QLabel();
@@ -247,6 +249,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     btnTheme = new QPushButton(this);
     btnTheme->setFlat(true);
+    btnTheme->setIconSize(QSize(30, 30));
+    btnTheme->setFixedHeight(30);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
     bottomLeftLayout->addWidget(btnTheme, 0);
@@ -733,6 +737,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     lblDesc->hide();
     btnLoadMap->hide();
     btnEditMap->hide();
+    mapFeatureSize->show();
 
     switch (type)
     {
@@ -770,6 +775,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
             missionMapList->show();
+	    mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
             emit mapChanged(m_curMap);
@@ -788,7 +794,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     }
 
     // Update theme button size
-    updateThemeButtonSize();
+    // updateThemeButtonSize();
 
     // Update cType combobox
     for (int i = 0; i < cType->count(); i++)
@@ -805,6 +811,11 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     emit mapgenChanged(mapgen);
 }
 
+void HWMapContainer::mapFeatureSizeChanged(int index)
+{
+}
+
+// unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
     if (m_mapInfo.type == MapModel::MissionMap)
@@ -838,12 +849,12 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
     m_themeID = current.row();
     QIcon icon = qVariantValue<QIcon>(current.data(Qt::DecorationRole));
-    QSize iconSize = icon.actualSize(QSize(65535, 65535));
-    btnTheme->setFixedHeight(64);
-    btnTheme->setIconSize(iconSize);
+    //QSize iconSize = icon.actualSize(QSize(65535, 65535));
+    //btnTheme->setFixedHeight(64);
+    //btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
     btnTheme->setText(tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString()));
-    updateThemeButtonSize();
+    // updateThemeButtonSize();
 }
 
 void HWMapContainer::staticMapChanged(const QModelIndex & map, const QModelIndex & old)
