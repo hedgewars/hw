@@ -60,6 +60,7 @@ class HWMapContainer : public QWidget
         QString getCurrentScheme() const;
         QString getCurrentWeapons() const;
         quint32 getTemplateFilter() const;
+        quint32 getFeatureSize() const;
         MapGenerator get_mapgen(void) const;
         int getMazeSize(void) const;
         bool getCurrentIsMission() const;
@@ -175,6 +176,8 @@ class HWMapContainer : public QWidget
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;
+        int m_prevMapFeatureSize;
+        int m_mapFeatureSize;
         QString m_theme;
         QString m_curMap;
 
