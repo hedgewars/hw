@@ -473,7 +473,7 @@ If this keeps happening, please click the &apos;%1&apos; button in the main menu
 
 Last two engine messages:
 %2</source>
-        <translation type="unfinished">ERRORE non recuperabile! Il motore di gioco si è dovuto arrestare.
+        <translation>ERRORE non recuperabile! Il motore di gioco si è dovuto arrestare.
 
 Ci dispiace molto per l'inconveniente :(
 
@@ -611,7 +611,7 @@ Ultimi due messaggi del motore:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumore casuale</translation>
     </message>
     <message>
         <source>Style:</source>
@@ -1035,9 +1035,9 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 %2)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>(%1 %2)</numerusform>
+            <numerusform>(%1 %2)</numerusform>
         </translation>
     </message>
 </context>
@@ -1495,19 +1495,19 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>None (Default)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessuno (Default)</translation>
     </message>
     <message>
         <source>Wrap (World wraps)</source>
-        <translation type="unfinished"></translation>
+        <translation>Avvolgi (il mondo avvolge)</translation>
     </message>
     <message>
         <source>Bounce (Edges reflect)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rimbalza (i bordi si riflettono)</translation>
     </message>
     <message>
         <source>Sea (Edges connect to sea)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mare (i bordi si connettono al mare)</translation>
     </message>
 </context>
 <context>
@@ -1606,13 +1606,11 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Date: %1</source>
-        <translation type="unfinished">Data: %1
- {1?}</translation>
+        <translation>Data: %1</translation>
     </message>
     <message>
         <source>Size: %1</source>
-        <translation type="unfinished">Dimensione: %1
- {1?}</translation>
+        <translation>Dimensione: %1</translation>
     </message>
 </context>
 <context>
@@ -1746,35 +1744,35 @@ inserisci solo il tuo soprannome.</translation>
     </message>
     <message>
         <source>Team</source>
-        <translation type="unfinished">Squadra</translation>
+        <translation>Squadra</translation>
     </message>
     <message>
         <source>Enable team tags by default</source>
-        <translation type="unfinished">Abilita i tag della squadra in automatico</translation>
+        <translation>Abilita i tag della squadra in automatico</translation>
     </message>
     <message>
         <source>Hog</source>
-        <translation type="unfinished">Riccio</translation>
+        <translation>Riccio</translation>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation type="unfinished">Abilita i tag dei ricci in automatico</translation>
+        <translation>Abilita i tag dei ricci in automatico</translation>
     </message>
     <message>
         <source>Health</source>
-        <translation type="unfinished">Vita</translation>
+        <translation>Vita</translation>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation type="unfinished">Abilita i tag della vita in automatico</translation>
+        <translation>Abilita i tag della vita in automatico</translation>
     </message>
     <message>
         <source>Translucent</source>
-        <translation type="unfinished"></translation>
+        <translation>Semitrasparente</translation>
     </message>
     <message>
         <source>Enable translucent tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Abilita i tag semitrasparenti in automatico</translation>
     </message>
 </context>
 <context>
@@ -2139,19 +2137,19 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>Tip: %1</source>
-        <translation type="unfinished">Consiglio: %1</translation>
+        <translation>Consiglio: %1</translation>
     </message>
     <message>
         <source>Displayed tags above hogs and translucent tags</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza i tag sopra i ricci e i tag semitrasparenti</translation>
     </message>
     <message>
         <source>World Edge</source>
-        <translation type="unfinished"></translation>
+        <translation>Bordi del mondo</translation>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished">Parametro dello script</translation>
+        <translation>Parametro dello script</translation>
     </message>
 </context>
 <context>
@@ -2162,7 +2160,7 @@ Vuoi veramente uscire?</translation>
     </message>
     <message>
         <source>hedgehog %1</source>
-        <translation>Riccio %1</translation>
+        <translation>riccio %1</translation>
     </message>
     <message>
         <source>anonymous</source>
@@ -2593,7 +2591,7 @@ Non tutti i giocatori sono pronti.</translation>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rumore casuale</translation>
     </message>
 </context>
 <context>
@@ -2661,7 +2659,12 @@ Codice di errore: %2</translation>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation type="unfinished"></translation>
+        <translation>Il motore del gioco è morto inaspettatamente!
+(codice di uscita %1)
+
+Ci dispiace molto per l'inconveniente :(
+
+Se questo continua a succedere, per piacere clicca il bottone &apos;%2&apos; nel menu principale!</translation>
     </message>
 </context>
 <context>
@@ -2854,7 +2857,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>autocam / find hedgehog</source>
-        <translation type="unfinished"></translation>
+        <translation>camera automatica / trova riccio</translation>
     </message>
     <message>
         <source>speed up replay</source>
@@ -2948,11 +2951,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation type="unfinished"></translation>
+        <translation>Togli camera automatica / riposiziona sul riccio attivo:</translation>
     </message>
     <message>
         <source>Demo replay:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vizualizza demo:</translation>
     </message>
 </context>
 <context>
@@ -3390,7 +3393,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>No checker rights</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun diritto di modifica</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
@@ -3434,19 +3437,19 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Excess flood</source>
-        <translation type="unfinished">Eccessivo numero messaggi</translation>
+        <translation>Eccessivo numero messaggi</translation>
     </message>
     <message>
         <source>Game messages flood detected - 1</source>
-        <translation type="unfinished">Rilevato numero messaggi di gioco eccessivo - 1</translation>
+        <translation>Rilevato numero messaggi di gioco eccessivo - 1</translation>
     </message>
     <message>
         <source>Game messages flood detected - 2</source>
-        <translation type="unfinished">Rilevato numero messaggi di gioco eccessivo - 2</translation>
+        <translation>Rilevato numero messaggi di gioco eccessivo - 2</translation>
     </message>
     <message>
         <source>Warning! Joins flood protection activated</source>
-        <translation type="unfinished">Attenzione! Protezione congiunta eccessivo numero messaggi attivata</translation>
+        <translation>Attenzione! Protezione congiunta eccessivo numero messaggi attivata</translation>
     </message>
     <message>
         <source>There&apos;s no voting going on</source>
