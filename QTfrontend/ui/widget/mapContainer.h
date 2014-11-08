@@ -103,6 +103,7 @@ class HWMapContainer : public QWidget
         void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
+        void mapFeatureSizeChanged(int);
         void showThemePrompt();
         void updateTheme(const QModelIndex & current);
         void staticMapChanged(const QModelIndex & map, const QModelIndex & old = QModelIndex());

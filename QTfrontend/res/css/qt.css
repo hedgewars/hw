@@ -275,21 +275,27 @@ width: 12px;
 height: 6px;
 border-radius: 3px;
 }
+/*
 #mapFeatureSize {
 margin-left: 3px;
 }
+*/
 
 #mapFeatureSize::groove::horizontal {
 /* background-color: #141250; 
 background-color: rgba(20, 18, 80, 50%);
 */
+/*
 background-color: rgba(0, 0, 0, 60%);
 }
 #mapFeatureSize::handle {
+*/
 /* background-color: #141250; */
+/*
 background-color: rgba(0, 0, 0, 60%);
 border-radius: 5px;
 }
+*/
 
 HatButton, ThemeButton {
 text-align: left;
