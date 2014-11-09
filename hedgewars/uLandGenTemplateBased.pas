@@ -152,6 +152,10 @@ begin
         iy:= (rightX - mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - rightX + mapBorderMargin, mp.y - iy).Round;
         if t1 > 0 then distR:= d else distL:= d;
+    end else
+    begin
+        distL:= LAND_WIDTH + LAND_HEIGHT;
+        distR:= distL;
     end;
 
     if b <> 0 then
