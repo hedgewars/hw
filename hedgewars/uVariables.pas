@@ -97,6 +97,7 @@ var
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
+    cFeatureSize    : LongInt;
     cMapGen         : LongInt;
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
@@ -2559,6 +2560,7 @@ begin
     cGetAwayTime        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
+    cFeatureSize        := 50;
     cMapGen             := 0;   // MAPGEN_REGULAR
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;

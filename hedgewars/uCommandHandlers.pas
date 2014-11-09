@@ -674,6 +674,11 @@ begin
 cTemplateFilter:= StrToInt(s)
 end;
 
+procedure chFeatureSize(var s: shortstring);
+begin
+cFeatureSize:= StrToInt(s)
+end;
+
 procedure chInactDelay(var s: shortstring);
 begin
 cInactDelay:= StrToInt(s)
@@ -814,6 +819,7 @@ begin
     RegisterVariable('template_filter', @chTemplateFilter, false);
     RegisterVariable('mapgen'  , @chMapGen        , false);
     RegisterVariable('maze_size',@chTemplateFilter, false);
+    RegisterVariable('feature_size',@chFeatureSize, false);
     RegisterVariable('delay'   , @chInactDelay    , false);
     RegisterVariable('ready'   , @chReadyDelay    , false);
     RegisterVariable('casefreq', @chCaseFactor    , false);
