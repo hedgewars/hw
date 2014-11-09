@@ -6,10 +6,11 @@ uses uLandTemplates, uLandOutline;
 procedure GenTemplated(var Template: TEdgeTemplate);
 procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 
+var minDistance: LongInt; // different details size
+
 implementation
 uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
-var minDistance: LongInt; // different details size
 
 procedure SetPoints(var Template: TEdgeTemplate; var pa: TPixAr; fps: PPointArray);
 var i: LongInt;
@@ -337,7 +338,7 @@ begin
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
     
-    minDistance:= max(cFeatureSize,12);
+    minDistance:= max(cFeatureSize*5,12);
     MaxHedgehogs:= Template.MaxHedgehogs;
     hasGirders:= Template.hasGirders;
     playHeight:= Template.TemplateHeight;
