@@ -477,7 +477,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
     }
 
-    if (slValue.size() == 5)
+    if (slValue.size() == 6)
     {
         if (param == "FULLMAPCONFIG")
         {
