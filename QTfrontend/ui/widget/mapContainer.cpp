@@ -61,8 +61,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_missionsViewSetup = false;
     m_staticViewSetup = false;
     m_script = QString();
-    m_prevMapFeatureSize = 50;
-    m_mapFeatureSize = 50;
+    m_prevMapFeatureSize = 12;
+    m_mapFeatureSize = 12;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -226,7 +226,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize = new QSlider(Qt::Horizontal, this);
     mapFeatureSize->setObjectName("mapFeatureSize");
     //mapFeatureSize->setTickPosition(QSlider::TicksBelow);
-    mapFeatureSize->setMaximum(100);
+    mapFeatureSize->setMaximum(25);
     mapFeatureSize->setMinimum(1);
     //mapFeatureSize->setFixedWidth(259);
     mapFeatureSize->setValue(m_mapFeatureSize);
@@ -325,7 +325,7 @@ void HWMapContainer::askForGeneratedPreview()
                    getMazeSize(),
                    getDrawnMapData(),
                    m_script,
-		   m_mapFeatureSize
+		           m_mapFeatureSize
                   );
 
     setHHLimit(0);
@@ -802,7 +802,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     }
 
     // Update theme button size
-    // updateThemeButtonSize();
+    updateThemeButtonSize();
 
     // Update cType combobox
     for (int i = 0; i < cType->count(); i++)
@@ -821,19 +821,20 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
 
 void HWMapContainer::mapFeatureSizeChanged(int val)
 {
-    // needs to be per map type, scales will be different
     m_mapFeatureSize = val;
-    if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 8)
+    // needs to be per map type, scales will be different
+    //m_mapFeatureSize = val>>2<<2;
+    //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
     {
-	m_prevMapFeatureSize = m_mapFeatureSize;
-	updatePreview();
+        m_prevMapFeatureSize = m_mapFeatureSize;
+        updatePreview();
     }
 }
 
 // unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
-    if (m_mapInfo.type == MapModel::MissionMap)
+    if (m_mapInfo.type != MapModel::StaticMap)
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
@@ -869,7 +870,7 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     //btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
     btnTheme->setText(tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString()));
-    // updateThemeButtonSize();
+    updateThemeButtonSize();
 }
 
 void HWMapContainer::staticMapChanged(const QModelIndex & map, const QModelIndex & old)
