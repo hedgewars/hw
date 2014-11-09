@@ -250,8 +250,8 @@ newRoom =
         []
         (
             Map.fromList $ Prelude.zip
-                ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
-                ["+rnd+", "0", "0", "seed", "0"]
+                ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE", "FEATURE_SIZE"]
+                ["+rnd+", "0", "0", "seed", "0", "12"]
         )
         (
             Map.fromList $ Prelude.zip

@@ -79,8 +79,9 @@ class HWMapContainer : public QWidget
         void setTemplateFilter(int);
         void setMapgen(MapGenerator m);
         void setMazeSize(int size);
+        void setFeatureSize(int size);
         void setDrawnMapData(const QByteArray & ar);
-        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl, int featureSize);
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
         void setMaster(bool master);
@@ -92,6 +93,7 @@ class HWMapContainer : public QWidget
         void newTemplateFilter(int filter);
         void mapgenChanged(MapGenerator m);
         void mazeSizeChanged(int s);
+        void mapFeatureSizeChanged(int s);
         void drawMapRequested();
         void drawnMapChanged(const QByteArray & data);
 
@@ -104,7 +106,6 @@ class HWMapContainer : public QWidget
         void addInfoToPreview(const QPixmap & image);
         void setNewSeed(const QString & newSeed);
         void mapTypeChanged(int);
-        void mapFeatureSizeChanged(int);
         void showThemePrompt();
         void updateTheme(const QModelIndex & current);
         void staticMapChanged(const QModelIndex & map, const QModelIndex & old = QModelIndex());
@@ -165,6 +166,7 @@ class HWMapContainer : public QWidget
         void intSetMapgen(MapGenerator m);
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
+        void intSetFeatureSize(int size);
         void intSetIconlessTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
