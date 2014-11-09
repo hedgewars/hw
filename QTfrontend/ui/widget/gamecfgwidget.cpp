@@ -481,15 +481,15 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
     {
         if (param == "FULLMAPCONFIG")
         {
-            QString seed = slValue[3];
+            QString seed = slValue[4];
 
             pMapContainer->setAllMapParameters(
-                slValue[0],
-                (MapGenerator)slValue[1].toUInt(),
-                slValue[2].toUInt(),
+                slValue[1],
+                (MapGenerator)slValue[2].toUInt(),
+                slValue[3].toUInt(),
                 seed,
-                slValue[4].toUInt(),
-                slValue[5].toUInt()
+                slValue[5].toUInt(),
+                slValue[0].toUInt()
             );
             return;
         }
