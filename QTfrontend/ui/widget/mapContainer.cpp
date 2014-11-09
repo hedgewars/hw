@@ -232,7 +232,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setValue(m_mapFeatureSize);
     mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
-    connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(mapFeatureSizeChanged(int)));
+    connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(setFeatureSize(int)));
 
     /* Mission description */
 
@@ -693,7 +693,7 @@ void HWMapContainer::updatePreview()
     }
 }
 
-void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl)
+void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl, int featureSize)
 {
     intSetMapgen(m);
     intSetMazeSize(mazesize);
@@ -701,6 +701,8 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
     intSetTemplateFilter(tmpl);
     // this one last because it will refresh the preview
     intSetMap(map);
+    intSetMazeSize(mazesize);
+    intSetFeatureSize(featureSize);
 }
 
 void HWMapContainer::updateModelViews()
@@ -774,6 +776,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapgen = MAPGEN_DRAWN;
             setMapInfo(MapModel::MapInfoDrawn);
             btnLoadMap->show();
+            mapFeatureSize->hide();
             btnEditMap->show();
             break;
         case MapModel::MissionMap:
@@ -783,7 +786,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
             missionMapList->show();
-	    mapFeatureSize->hide();
+            mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
             emit mapChanged(m_curMap);
@@ -794,6 +797,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
+            mapFeatureSize->hide();
             staticMapList->show();
             emit mapChanged(m_curMap);
             break;
@@ -819,10 +823,15 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     emit mapgenChanged(mapgen);
 }
 
-void HWMapContainer::mapFeatureSizeChanged(int val)
+void HWMapContainer::intSetFeatureSize(int val)
+{
+    mapFeatureSize->setValue(val);    
+    emit mapFeatureSizeChanged(val);
+}
+void HWMapContainer::setFeatureSize(int val)
 {
     m_mapFeatureSize = val;
-    // needs to be per map type, scales will be different
+    intSetFeatureSize(val);
     //m_mapFeatureSize = val>>2<<2;
     //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
     {
@@ -834,7 +843,7 @@ void HWMapContainer::mapFeatureSizeChanged(int val)
 // unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
-    if (m_mapInfo.type != MapModel::StaticMap)
+    if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::HandDrawnMap)
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);

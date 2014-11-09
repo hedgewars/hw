@@ -163,6 +163,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
     connect(pMapContainer, SIGNAL(mazeSizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
+    connect(pMapContainer, SIGNAL(mapFeatureSizeChanged(int)), this, SLOT(slMapFeatureSizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
@@ -403,6 +404,7 @@ void GameCFGWidget::fullNetConfig()
 
     mapgenChanged(pMapContainer->get_mapgen());
     maze_sizeChanged(pMapContainer->getMazeSize());
+    slMapFeatureSizeChanged(pMapContainer->getFeatureSize());
 
     if(pMapContainer->get_mapgen() == 2)
         onDrawnMapChanged(pMapContainer->getDrawnMapData());
@@ -443,6 +445,11 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
             pMapContainer->setMapgen((MapGenerator)value.toUInt());
             return;
         }
+        if (param == "FEATURE_SIZE")
+        {
+            pMapContainer->setFeatureSize(value.toUInt());
+            return;
+        }
         if (param == "MAZE_SIZE")
         {
             pMapContainer->setMazeSize(value.toUInt());
@@ -481,7 +488,8 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
                 (MapGenerator)slValue[1].toUInt(),
                 slValue[2].toUInt(),
                 seed,
-                slValue[4].toUInt()
+                slValue[4].toUInt(),
+                slValue[5].toUInt()
             );
             return;
         }
@@ -670,6 +678,11 @@ void GameCFGWidget::mapgenChanged(MapGenerator m)
 void GameCFGWidget::maze_sizeChanged(int s)
 {
     emit paramChanged("MAZE_SIZE", QStringList(QString::number(s)));
+}
+
+void GameCFGWidget::slMapFeatureSizeChanged(int s)
+{
+    emit paramChanged("FEATURE_SIZE", QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::resendSchemeData()
