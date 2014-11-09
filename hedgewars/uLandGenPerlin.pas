@@ -10,6 +10,7 @@ uses uVariables
     , uConsts
     , uRandom
     , uLandOutline // FillLand
+    , uUtils
     ;
 
 var p: array[0..511] of LongInt;
@@ -120,20 +121,21 @@ begin
         p[256 + i]:= p[i];
 end;
 
-const detail = 150000;
-    width = 4096;
-    height = 2048;
-    minY = 500;
+const width = 4096;
+      height = 2048;
+      minY = 500;
 
     //bottomPlateHeight = 90;
     //bottomPlateMargin = 1200;
     margin = 200;
 
 procedure GenPerlin;
-var y, x, {dy, }di, dj, df, r, param1, param2: LongInt;
+var y, x, {dy, }di, dj, df, r, param1, param2, rCutoff, detail: LongInt;
 begin
     param1:= cTemplateFilter div 3;
     param2:= cTemplateFilter mod 3;
+    rCutoff:= min(max(cFeatureSize*4,15),85);
+    detail:= cFeatureSize*16000+50000;
 
     df:= detail * (6 - param2 * 2);
 
@@ -169,7 +171,7 @@ begin
             end;
             }
 
-            if r < 50 then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
+            if r < rCutoff then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
 
         end;
     end;
