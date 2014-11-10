@@ -144,6 +144,7 @@ var i, pi, ni: LongInt;
     tsq, tcb, t, r1, r2, r3, cx1, cx2, cy1, cy2: hwFloat;
     X, Y: LongInt;
 begin
+if pa.Count >= cMaxEdgePoints-1 then exit;
 pi:= EndI;
 i:= StartI;
 ni:= Succ(StartI);
@@ -173,7 +174,7 @@ repeat
     cx2:= int2hwFloat(x2) + NVx;
     cy2:= int2hwFloat(y2) + NVy;
     t:= _0;
-    while t.Round = 0 do
+    while (t.Round = 0) and (pa.Count < cMaxEdgePoints-2) do
         begin
         tsq:= t * t;
         tcb:= tsq * t;
@@ -186,7 +187,7 @@ repeat
         pa.ar[pa.Count].x:= X;
         pa.ar[pa.Count].y:= Y;
         inc(pa.Count);
-        TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+        //TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
         end;
 until i = StartI;
 pa.ar[pa.Count].x:= opa.ar[StartI].X;
@@ -202,7 +203,7 @@ opa:= pa;
 pa.Count:= 0;
 i:= 0;
 StartLoop:= 0;
-while i < LongInt(opa.Count) do
+while (i < LongInt(opa.Count)) and (pa.Count < cMaxEdgePoints-1) do
     if (opa.ar[i + 1].X = NTPX) then
         begin
         AddLoopPoints(pa, opa, StartLoop, i, Delta);

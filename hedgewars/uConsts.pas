@@ -151,7 +151,7 @@ const
     cMaxHHIndex      = 7;
     cMaxHHs          = 48;
 
-    cMaxEdgePoints = 16384;
+    cMaxEdgePoints = 24576;
 
     cHHRadius = 9;
     cHHStepTicks = 29;
