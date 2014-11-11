@@ -1,5 +1,5 @@
 # Configure for Qt4
-set(QT_MIN_VERSION "4.5.0")
+set(QT_MIN_VERSION "4.7.0")
 include(CheckLibraryExists)
 
 set(QT_USE_QTCORE TRUE)
