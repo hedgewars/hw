@@ -372,8 +372,8 @@ with Obj do
                 inc(cnt);
                 if cnt > MaxPointsIndex then // buffer is full, do not check the rest land
                     begin
-                    y:= 5000;
-                    x:= 5000;
+                    y:= LAND_HEIGHT;
+                    x:= LAND_WIDTH;
                     end
                 end;
             inc(y, 3);

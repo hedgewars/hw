@@ -24,7 +24,6 @@ interface
 
 procedure WriteToConsole(s: shortstring);
 procedure WriteLnToConsole(s: shortstring);
-function  ShortStringAsPChar(s: shortstring): PChar;
 
 var lastConsoleline : shortstring;
 
@@ -55,14 +54,15 @@ begin
 {$ENDIF}
     lastConsoleline:= s;
 end;
-
+{$IFDEF ANDROID}
 function ShortStringAsPChar(s: shortstring) : PChar;
 begin
     if Length(s) = High(s) then
         Dec(s[0]);
     s[Ord(Length(s))+1] := #0;
+    // returning pointer to stack, rly?
     ShortStringAsPChar:= @s[1];
 end;
-
+{$ENDIF}
 
 end.

@@ -659,8 +659,6 @@ if GrayScale then
                 begin
                 w:= LandPixels[y div 2,x div 2];
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
-                if w > 255 then
-                    w:= 255;
                 w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end

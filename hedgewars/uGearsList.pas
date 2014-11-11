@@ -288,9 +288,9 @@ case Kind of
                     Health:= random(vobFrameTicks);
                     if gear^.Timer = 0 then Timer:= random(vobFramesCount);
                     Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
-                    Tint:= (ExplosionBorderColor and RMask shl RShift) or
-                           (ExplosionBorderColor and GMask shl GShift) or
-                           (ExplosionBorderColor and BMask shl BShift) or $FF;
+                    Tint:= ((ExplosionBorderColor and RMask) shl RShift) or
+                           ((ExplosionBorderColor and GMask) shl GShift) or
+                           ((ExplosionBorderColor and BMask) shl BShift) or $FF;
                     end
                 end;
        gtGrave: begin

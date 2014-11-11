@@ -1828,7 +1828,7 @@ var
     particle: PVisualGear;
     dxdy: hwFloat;
 begin
-    if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
+    if (Gear^.dX.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
         SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
     if Gear^.Health < cBarrelHealth then Gear^.State:= Gear^.State and (not gstFrozen);
@@ -4036,7 +4036,7 @@ begin
         or (iterator^.Y > Gear^.Y + r) then
             continue;
 
-        hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0)) or ((iterator^.State or gstMoving) = 0));
+        hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0)) or ((iterator^.State and gstMoving) = 0));
 
         // in case the object is not moving, let's asume it's falling towards the portal
         if not hasdxy then
