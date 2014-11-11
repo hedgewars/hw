@@ -333,6 +333,7 @@ int main(int argc, char *argv[])
         if (!Translator.load(QString("physfs://Locale/hedgewars_%1").arg(cc)))
             qWarning("Failed to install translation (%s)", qPrintable(cc));
         app.installTranslator(&Translator);
+        app.setLayoutDirection(QLocale(cc).textDirection());
     }
 
 #ifdef _WIN32
