@@ -134,8 +134,8 @@ var y, x, {dy, }di, dj, df, r, param1, param2, rCutoff, detail: LongInt;
 begin
     param1:= cTemplateFilter div 3;
     param2:= cTemplateFilter mod 3;
-    rCutoff:= min(max(cFeatureSize*4,15),85);
-    detail:= cFeatureSize*16000+50000;
+    rCutoff:= min(max((26-cFeatureSize)*4,15),85);
+    detail:= (26-cFeatureSize)*16000+50000; // feature size is a slider from 1-25 at present. flip it for perlin
 
     df:= detail * (6 - param2 * 2);
 
