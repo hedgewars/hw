@@ -171,8 +171,12 @@ begin
             end;
             }
 
-            if r < rCutoff then Land[y, x]:= 0 else Land[y, x]:= lfObjMask;
-
+            if r < rCutoff then
+                Land[y, x]:= 0
+            else if param1 = 0 then
+                Land[y, x]:= lfObjMask
+            else
+                Land[y, x]:= lfBasic 
         end;
     end;
 
