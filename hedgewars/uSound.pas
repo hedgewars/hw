@@ -435,14 +435,17 @@ begin
         end;
 
     i:= 0;
-    while (i<8) and (VoiceList[i].snd <> sndNone) do
+    while (i <= High(VoiceList)) and (VoiceList[i].snd <> sndNone) do
         inc(i);
 
     // skip playing same sound for same hog twice
     if (i>0) and (VoiceList[i-1].snd = snd) and (VoiceList[i-1].voicepack = voicepack) then
         exit;
-    VoiceList[i].snd:= snd;
-    VoiceList[i].voicepack:= voicepack;
+    if(i <= High(VoiceList)) then
+        begin
+        VoiceList[i].snd:= snd;
+        VoiceList[i].voicepack:= voicepack;
+        end
 end;
 
 procedure PlayNextVoice;

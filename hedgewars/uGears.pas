@@ -856,6 +856,8 @@ begin
         t:= byte(s[2]);  // team
         if Length(s) > 2 then
             h:= byte(s[3])  // target hog
+        else
+            h:= 0
         end;
     // allow targetting a hog by specifying a number as the first portion of the text
     if (x < 4) and (h > byte('0')) and (h < byte('9')) then
