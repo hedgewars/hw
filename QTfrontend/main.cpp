@@ -142,7 +142,7 @@ QString getUsage()
 .arg(HWApplication::tr("Display this help", "command-line"))
 .arg(HWApplication::tr("Custom path for configuration data and user data", "command-line"))
 .arg(HWApplication::tr("Custom path to the game data folder", "command-line"))
-.arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg("CONNECTSTRING").arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
+.arg(HWApplication::tr("Hedgewars can use a %1 (e.g. \"%2\") to connect on start.", "command-line").arg(HWApplication::tr("CONNECTSTRING", "command-line")).arg(QString("hwplay://") + NETGAME_DEFAULT_SERVER));
 }
 
 int main(int argc, char *argv[])
