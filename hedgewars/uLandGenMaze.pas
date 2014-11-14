@@ -311,7 +311,7 @@ for i := 0 to 3 do
 end;
 
 procedure GenMaze;
-var i: LongInt;
+var i: Longword;
 begin
 case cTemplateFilter of
     0: begin

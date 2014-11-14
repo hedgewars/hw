@@ -247,9 +247,9 @@ case Kind of
                 //gear^.Tint:= (($e0+random(32)) shl 24) or
                 //             ((random(80)+128) shl 16) or
                 //             (($d5+random(32)) shl 8) or $ff
-                c:= random(32);
+                c:= GetRandom(32);
                 gear^.Tint:= (($e0+c) shl 24) or
-                             ((random(90)+128) shl 16) or
+                             ((GetRandom(90)+128) shl 16) or
                              (($d5+c) shl 8) or $ff
                 end;
        gtShell: begin

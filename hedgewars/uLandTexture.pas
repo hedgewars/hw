@@ -129,13 +129,13 @@ else
                     while isEmpty and (ty < TEXSIZE) do
                         begin
                         isEmpty:= LandPixels[ly + ty, lx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[ly + ty, lx + TEXSIZE-1] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[ly + ty, Pred(lx + TEXSIZE)] and AMask = 0;
                         inc(ty)
                         end;
                     while isEmpty and (tx < TEXSIZE-1) do
                         begin
                         isEmpty:= LandPixels[ly, lx + tx] and AMask = 0;
-                        if isEmpty then isEmpty:= LandPixels[ly + TEXSIZE-1, lx + tx] and AMask = 0;
+                        if isEmpty then isEmpty:= LandPixels[Pred(ly + TEXSIZE), lx + tx] and AMask = 0;
                         inc(tx)
                         end;
                     // then search every other remaining. does this sort of stuff defeat compiler opts?

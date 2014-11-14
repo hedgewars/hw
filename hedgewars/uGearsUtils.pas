@@ -523,7 +523,7 @@ begin
     if WorldEdge = weSea then
         begin
         tmp:= dist2Water;
-        dist2Water:= min(dist2Water, min(X - Gear^.Radius - leftX, rightX - (X + Gear^.Radius)));
+        dist2Water:= min(dist2Water, min(X - Gear^.Radius - LongInt(leftX), LongInt(rightX) - (X + Gear^.Radius)));
         // if water on sides is closer than on bottom -> horizontal direction
         isDirH:= tmp <> dist2Water;
         end;

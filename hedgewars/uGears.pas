@@ -567,7 +567,8 @@ begin
 end;
 
 procedure AddMiscGears;
-var p,i,j,rx, ry, unplaced: Longword;
+var p,i,j, unplaced: Longword;
+    rx, ry: LongInt;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
@@ -644,7 +645,7 @@ if (not hasBorder) and cSnow then
         begin
         rx:=GetRandom(snowRight - snowLeft);
         ry:=GetRandom(750);
-        AddGear(rx + snowLeft, LAND_HEIGHT + ry - 1300, gtFlake, 0, _0, _0, 0)
+        AddGear(rx + snowLeft, LongInt(LAND_HEIGHT) + ry - 1300, gtFlake, 0, _0, _0, 0)
         end
 end;
 

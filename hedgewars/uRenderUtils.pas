@@ -77,13 +77,13 @@ begin
 end;*)
 
 function WriteInRoundRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: ansistring; maxLength: LongWord): TSDL_Rect;
-var w, h: LongInt;
+var w, h: Longword;
     tmpsurf: PSDL_Surface;
     clr: TSDL_Color;
     finalRect, textRect: TSDL_Rect;
 begin
     TTF_SizeUTF8(Fontz[Font].Handle, PChar(s), @w, @h);
-    if (maxLength <> 0) and (w > maxLength) then w := maxLength;
+    if (maxLength > 0) and (w > maxLength) then w := maxLength;
     finalRect.x:= X;
     finalRect.y:= Y;
     finalRect.w:= w + cFontBorder * 2 + 4;
@@ -274,7 +274,7 @@ begin
 end;
 
 function RenderStringTexLim(s: ansistring; Color: Longword; font: THWFont; maxLength: LongWord): PTexture;
-var w, h: LongInt;
+var w, h: Longword;
     finalSurface: PSDL_Surface;
 begin
     if cOnlyStats then
@@ -287,7 +287,7 @@ begin
         font:= CheckCJKFont(s, font);
         w:= 0; h:= 0; // avoid compiler hints
         TTF_SizeUTF8(Fontz[font].Handle, PChar(s), @w, @h);
-        if (maxLength <> 0) and (w > maxLength) then w := maxLength;
+        if (maxLength > 0) and (w > maxLength) then w := maxLength;
 
         finalSurface:= SDL_CreateRGBSurface(SDL_SWSURFACE, w + cFontBorder * 2 + 4, h + cFontBorder * 2,
                 32, RMask, GMask, BMask, AMask);

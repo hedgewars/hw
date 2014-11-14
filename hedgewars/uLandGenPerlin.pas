@@ -55,7 +55,7 @@ end;
 
 function lerp(t, a, b: LongInt) : LongInt; inline;
 begin
-    lerp:= a + (Int64(b - a) * t shr 12)
+    lerp:= a + ((Int64(b) - a) * t shr 12)
 end;
 
 
@@ -103,7 +103,7 @@ begin
 end;
 
 procedure inoise_setup();
-var i, ii, t: LongInt;
+var i, ii, t: Longword;
 begin
     for i:= 0 to 254 do
         p[i]:= i + 1;
