@@ -262,6 +262,8 @@ begin
     // don't move new point for more than length of initial segment
     // adjust/parametrize for more flat surfaces (try values 3/4, 1/2 of dab, or even 1/4)
     d:= dab;
+    //d:= dab * (1 + abs(cFeatureSize - 8)) div 6;
+    //d:= dab * (14 + cFeatureSize) div 20;
     if distL > d then distL:= d;
     if distR > d then distR:= d;
 
@@ -342,7 +344,7 @@ begin
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
     
-    minDistance:= max(cFeatureSize*5,12);
+    minDistance:= sqr(cFeatureSize) div 8 + 10;
     MaxHedgehogs:= Template.MaxHedgehogs;
     hasGirders:= Template.hasGirders;
     playHeight:= Template.TemplateHeight;
