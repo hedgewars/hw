@@ -196,7 +196,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(pa.ar[i].x - mp.x) * b + Int64(mp.y) * a) * q - Int64(pa.ar[i].y) * p * b) div aqpb;
+                    iy:= (((Int64(pa.ar[i].x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(pa.ar[i].y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -227,7 +227,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(p1.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p1.y) * p * b) div aqpb;
+                    iy:= (((Int64(p1.x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(p1.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -246,7 +246,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(p2.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p2.y) * p * b) div aqpb;
+                    iy:= (((Int64(p2.x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(p2.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else

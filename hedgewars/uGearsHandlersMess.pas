@@ -281,7 +281,7 @@ Gear^.Y := Gear^.Y + cDrownSpeed;
 
 if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
     begin
-    if leftX > hwRound(Gear^.X) - Gear^.Radius then
+    if LongInt(leftX) + Gear^.Radius > hwRound(Gear^.X) then
         Gear^.X := Gear^.X - cDrownSpeed
     else
         Gear^.X := Gear^.X + cDrownSpeed;
@@ -2671,7 +2671,7 @@ var
     HHGear: PGear;
     hedgehog: PHedgehog;
     State: Longword;
-    switchDir: LongInt;
+    switchDir: Longword;
 begin
     AllInactive := false;
 
@@ -2712,7 +2712,7 @@ begin
         PlaySound(sndSwitchHog);
 
         repeat
-            CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod (CurrentTeam^.HedgehogsNumber);
+            CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod CurrentTeam^.HedgehogsNumber;
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);

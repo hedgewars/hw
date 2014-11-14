@@ -1002,7 +1002,7 @@ begin
 {$ENDIF}
 end;
 
-procedure RenderWorldEdge(Lag: Longword);
+procedure RenderWorldEdge;
 var
     //VertexBuffer: array [0..3] of TVertex2f;
     tmp, w: LongInt;
@@ -1015,7 +1015,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
 
     rect.y:= ViewTopY;
     rect.h:= ViewHeight;
-    tmp:= leftX + WorldDx;
+    tmp:= LongInt(leftX) + WorldDx;
     w:= tmp - ViewLeftX;
 
     if w > 0 then
@@ -1027,7 +1027,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    tmp:= rightX + WorldDx;
+    tmp:= LongInt(rightX) + WorldDx;
     w:= ViewRightX - tmp;
 
     if w > 0 then
@@ -1271,12 +1271,12 @@ begin
 
     if Flip then
         begin
-        WorldDx:= -WorldDx - playWidth - Dir * playWidth;
+        WorldDx:= -WorldDx - LongInt(playWidth) - Dir * LongInt(playWidth);
         openglPushMatrix();
         openglScalef(-1, 1, 1);
         end
     else
-        WorldDx:= WorldDx + Dir * playWidth;
+        WorldDx:= WorldDx + Dir * LongInt(playWidth);
 
 end;
 
@@ -1306,8 +1306,8 @@ if (WorldEdge <> weWrap) {and (WorldEdge <> weBounce)} then
     end
 else
     begin
-    replicateToLeft := (leftX  + WorldDx > ViewLeftX);
-    replicateToRight:= (rightX + WorldDx < ViewRightX);
+    replicateToLeft := (LongInt(leftX)  + WorldDx > ViewLeftX);
+    replicateToRight:= (LongInt(rightX) + WorldDx < ViewRightX);
     flip:= (WorldEdge = weBounce);
     end;
 
@@ -1511,7 +1511,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     end;
 {$WARNINGS ON}
 
-RenderWorldEdge(Lag);
+RenderWorldEdge();
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
@@ -1835,7 +1835,7 @@ if isCursorVisible then
                     end;
                 end;
         //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
-        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight - TargetCursorPoint.Y + round(SpritesData[sprArrow].Height / cScaleFactor), (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
+        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
         end
     end;
 
@@ -1875,7 +1875,7 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         begin
         if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > rightX - leftX - 100 then
             begin
-            if (prevPoint.X - WorldDx) * 2 < rightX + leftX then
+            if (prevPoint.X - WorldDx) * 2 < LongInt(rightX + leftX) then
                 cameraJump:= rightX - leftX
                 else
                 cameraJump:= leftX - rightX;
