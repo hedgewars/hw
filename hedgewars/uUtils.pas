@@ -519,7 +519,7 @@ begin
         {$IFDEF PAS2C}
         logfileBase:= 'preview_pas2c';
         {$ELSE}
-        logfileBase:= 'preview_pas';
+        logfileBase:= 'preview';
         {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
