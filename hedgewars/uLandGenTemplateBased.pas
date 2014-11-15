@@ -6,7 +6,7 @@ uses uLandTemplates, uLandOutline;
 procedure GenTemplated(var Template: TEdgeTemplate);
 procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 
-var minDistance: LongInt; // different details size
+var minDistance, dabDiv: LongInt; // different details size
 
 implementation
 uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
@@ -261,7 +261,7 @@ begin
 
     // don't move new point for more than length of initial segment
     // adjust/parametrize for more flat surfaces (try values 3/4, 1/2 of dab, or even 1/4)
-    d:= dab;
+    d:= dab * 100 div dabDiv;
     //d:= dab * (1 + abs(cFeatureSize - 8)) div 6;
     //d:= dab * (14 + cFeatureSize) div 20;
     if distL > d then distL:= d;
@@ -345,6 +345,9 @@ begin
             Land[y, x]:= lfBasic;
     
     minDistance:= sqr(cFeatureSize) div 8 + 10;
+    //dabDiv:= getRandom(41)+60;
+    //dabDiv:= getRandom(31)+70;
+    dabDiv:= getRandom(21)+100;
     MaxHedgehogs:= Template.MaxHedgehogs;
     hasGirders:= Template.hasGirders;
     playHeight:= Template.TemplateHeight;
