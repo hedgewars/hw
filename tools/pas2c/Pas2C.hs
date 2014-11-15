@@ -518,7 +518,10 @@ fun2C True rv (FunctionDeclaration name@(Identifier i _) inline overload externa
         ph <- liftM2 ($+$) (typesAndVars2C False False True tvars) (phrase2C' phrase)
         return (p, ph)
 
-    let phrasesBlock = if isVoid then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
+    let isTrivialReturn = case phrase of
+         (Phrases (BuiltInFunctionCall _ (SimpleReference (Identifier "exit" BTUnknown)) : _)) -> True
+         _ -> False
+    let phrasesBlock = if isVoid || isTrivialReturn then ph else t empty <+> res <> semi $+$ ph $+$ text "return" <+> res <> semi
     --let define = if hasVars then text "#ifndef" <+> text n $+$ funWithVarsToDefine n params $+$ text "#endif" else empty
     let inlineDecor = if inline then case notDeclared of
                                     True -> text "static inline"
@@ -919,6 +922,7 @@ phrase2C (ForCycle i' e1' e2' p up) = do
         text "while" <> parens (i <+> text "!=" <+> iEnd <+> text add) <> semi
     where
         appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
+        appendPhrase _ _ = error "illegal appendPhrase call"
 phrase2C (RepeatCycle e' p') = do
     e <- expr2C e'
     p <- phrase2C (Phrases p')
