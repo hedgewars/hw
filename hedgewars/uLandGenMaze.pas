@@ -313,6 +313,7 @@ end;
 procedure GenMaze;
 var i: Longword;
 begin
+dabDiv:= 1;
 case cTemplateFilter of
     0: begin
         cellsize := small_cell_size;
