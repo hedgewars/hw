@@ -313,37 +313,42 @@ end;
 procedure GenMaze;
 var i: Longword;
 begin
-dabDiv:= 1;
 case cTemplateFilter of
     0: begin
         cellsize := small_cell_size;
         maze_inverted := false;
         minDistance:= max(cFeatureSize*8,32);
+	dabDiv:= 150;
     end;
     1: begin
         cellsize := medium_cell_size;
         minDistance:= max(cFeatureSize*6,20);
         maze_inverted := false;
+	dabDiv:= 100;
     end;
     2: begin
         cellsize := large_cell_size;
         minDistance:= max(cFeatureSize*5,12);
         maze_inverted := false;
+	dabDiv:= 90;
     end;
     3: begin
         cellsize := small_cell_size;
         minDistance:= max(cFeatureSize*8,32);
         maze_inverted := true;
+	dabDiv:= 130;
     end;
     4: begin
         cellsize := medium_cell_size;
         minDistance:= max(cFeatureSize*6,20);
         maze_inverted := true;
+	dabDiv:= 100;
     end;
     5: begin
         cellsize := large_cell_size;
         minDistance:= max(cFeatureSize*5,12);
         maze_inverted := true;
+	dabDiv:= 85;
     end;
 end;
 
