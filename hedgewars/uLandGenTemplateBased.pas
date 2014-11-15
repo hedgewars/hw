@@ -149,7 +149,7 @@ begin
         if t1 > 0 then distL:= d else distR:= d;
 
         // right border
-        iy:= (rightX - mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (LongInt(rightX) - mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - rightX + mapBorderMargin, mp.y - iy).Round;
         if t1 > 0 then distR:= d else distL:= d;
     end else

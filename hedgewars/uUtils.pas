@@ -516,7 +516,11 @@ begin
             logfileBase:= 'game';
     end
     else
+        {$IFDEF PAS2C}
         logfileBase:= 'preview';
+        {$ELSE}
+        logfileBase:= 'preview_pas2c';
+        {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}
