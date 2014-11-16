@@ -749,6 +749,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             FollowGear^.Health := content;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
@@ -787,6 +789,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
         AmmoCrate:

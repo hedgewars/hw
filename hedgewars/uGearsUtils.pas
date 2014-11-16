@@ -1306,6 +1306,8 @@ if t<h then
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
     FollowGear^.Health:= cHealthCaseAmount;
     FollowGear^.Pos:= posCaseHealth;
+    // health crate is smaller than the other crates
+    FollowGear^.Radius := cCaseHealthRadius;
     AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
     end
 else if (t<a+h) then
