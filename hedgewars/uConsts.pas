@@ -302,6 +302,8 @@ const
     posCaseExplode = $00000010;
     posCasePoison  = $00000020;
 
+    cCaseHealthRadius = 14;
+
     // hog tag mask
     //htNone        = $00;
     htTeamName    = $01;
