@@ -25,6 +25,7 @@ uses uTypes, uFloat;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 procedure AddSplashForGear(Gear: PGear; justSkipping: boolean);
+procedure AddBounceEffectForGear(Gear: PGear);
 
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -1441,7 +1442,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
             end;
         if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
-            PlaySound(sndMelonImpact)
+            AddBounceEffectForGear(Gear);
         end{
     else if WorldEdge = weSea then
         begin
@@ -1474,6 +1475,23 @@ This one would be really easy to freeze game unless it was flagged unfortunately
 *)
     WorldWrap:= true
     end;
+end;
+
+procedure AddBounceEffectForGear(Gear: PGear);
+var boing: PVisualGear;
+begin
+    boing:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot, 0, false, 1);
+    if boing <> nil then
+        with boing^ do
+            begin
+            Angle:= random(360);
+            dx:= 0;
+            dy:= 0;
+            FrameTicks:= 200;
+            Scale:= hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5;
+            State:= ord(sprBoing)
+            end;
+    PlaySound(sndMelonImpact, true)
 end;
 
 end.
