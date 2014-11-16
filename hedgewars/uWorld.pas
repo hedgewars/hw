@@ -1265,28 +1265,16 @@ end;
 
 var preShiftWorldDx: LongInt;
 
-procedure ShiftWorld(Dir: LongInt; Flip: Boolean);
+procedure ShiftWorld(Dir: LongInt); inline;
 begin
     preShiftWorldDx:= WorldDx;
-
-    if Flip then
-        begin
-        WorldDx:= -WorldDx - LongInt(playWidth) - Dir * LongInt(playWidth);
-        openglPushMatrix();
-        openglScalef(-1, 1, 1);
-        end
-    else
-        WorldDx:= WorldDx + Dir * LongInt(playWidth);
+    WorldDx:= WorldDx + Dir * LongInt(playWidth);
 
 end;
 
-procedure UnshiftWorld(Dir: LongInt; Flip: Boolean);
+procedure UnshiftWorld(); inline;
 begin
     WorldDx:= preShiftWorldDx;
-
-    if Flip then
-        openglPopMatrix();
-
 end;
 
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
@@ -1296,19 +1284,17 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    replicateToLeft, replicateToRight, tmp, flip: boolean;
+    replicateToLeft, replicateToRight, tmp: boolean;
 begin
-if (WorldEdge <> weWrap) {and (WorldEdge <> weBounce)} then
+if WorldEdge <> weWrap then
     begin
     replicateToLeft := false;
     replicateToRight:= false;
-    flip:= false;
     end
 else
     begin
     replicateToLeft := (LongInt(leftX)  + WorldDx > ViewLeftX);
     replicateToRight:= (LongInt(rightX) + WorldDx < ViewRightX);
-    flip:= (WorldEdge = weBounce);
     end;
 
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
@@ -1361,16 +1347,16 @@ else
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawLand(WorldDx, WorldDy);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawLand(WorldDx, WorldDy);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawWater(255, 0, 0);
@@ -1404,20 +1390,20 @@ bShowFinger:= false;
 
 if replicateToLeft then
     begin
-    ShiftWorld(-1, flip);
+    ShiftWorld(-1);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    UnshiftWorld(-1, flip);
+    UnshiftWorld();
     end;
 
 if replicateToRight then
     begin
-    ShiftWorld(1, flip);
+    ShiftWorld(1);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    UnshiftWorld(1, flip);
+    UnshiftWorld();
     end;
 
 bShowFinger:= tmp;
@@ -1463,16 +1449,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawVisualGears(2);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawVisualGears(2);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawVisualGears(2);
@@ -1483,16 +1469,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawVisualGears(3);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawVisualGears(3);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawVisualGears(3);
