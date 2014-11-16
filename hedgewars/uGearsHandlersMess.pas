@@ -310,7 +310,6 @@ var
     tX, tdX, tdY: hwFloat;
     collV, collH, gX, gY: LongInt;
     land, xland: word;
-    boing: PVisualGear;
 begin
     tX:= Gear^.X;
     gX:= hwRound(Gear^.X);
@@ -467,20 +466,7 @@ begin
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
         begin
-        boing:= AddVisualGear(gX, gY, vgtStraightShot, 0, false, 1);
-        if boing <> nil then
-            with boing^ do
-                begin
-                Angle:= random(360);
-                dx:= 0;
-                dy:= 0;
-                FrameTicks:= 200;
-                tX:= _0;
-                tX.QWordValue:= Gear^.dY.QWordValue + Gear^.dX.QWordValue;
-                Scale:= hwFloat2Float(Gear^.Density * tX) / 1.5;
-                State:= ord(sprBoing)
-                end;
-        PlaySound(sndMelonImpact, true)
+        AddBounceEffectForGear(Gear);
         end
     else if (Gear^.nImpactSounds > 0) and
         (Gear^.State and gstCollision <> 0) and
