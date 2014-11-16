@@ -46,7 +46,7 @@ function grav_onGameTick20()
             if delta > 0 and gravity + delta > maxgravity then
                 gravity = maxgravity
                 delta = -delta
-            elseif delta < 0 and gravity - delta < mingravity then
+            elseif delta < 0 and gravity + delta < mingravity then
                 gravity = mingravity
                 delta = -delta
             else
@@ -80,12 +80,14 @@ function onParameters()
             period = 125
         end
 
+        mingravity = mingravity * mln
+        maxgravity = maxgravity * mln
+
+        -- note: mingravity and maxgravity MUST NOT be strings at this point
         if mingravity > maxgravity then
             mingravity, maxgravity = maxgravity, mingravity
         end
 
-        mingravity = mingravity * mln
-        maxgravity = maxgravity * mln
         gravity = mingravity
 
         if period > 0 then
