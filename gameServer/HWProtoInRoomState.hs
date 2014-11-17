@@ -285,7 +285,7 @@ handleCmd_inRoom ["ROUNDFINISHED"] =
     handleCmd_inRoom ["ROUNDFINISHED", "1"]
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = roomAdminOnly $
-    return [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
+    return [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r}), SendUpdateOnThisRoom]
 
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = roomAdminOnly $
@@ -293,7 +293,7 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = roomAdminOnly $
 
 
 handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = roomAdminOnly $
-    return [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+    return [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r}), SendUpdateOnThisRoom]
 
 
 handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do

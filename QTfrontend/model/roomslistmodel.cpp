@@ -262,9 +262,10 @@ QStringList RoomsListModel::roomInfo2RoomRecord(const QStringList & info)
 
     result = info;
 
+    QString flags = info[StateColumn];
     // for matters of less memory usage and quicker access store
     // the boolean string as either "t" or empty
-    if (info[StateColumn].toLower() == "true")
+    if (flags.contains('g'))
         result[StateColumn] = "t";
     else
         result[StateColumn] = QString();
