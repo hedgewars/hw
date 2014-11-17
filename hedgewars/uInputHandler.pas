@@ -172,7 +172,7 @@ if CurrentBinds[code][0] <> #0 then
     if KeyDown then
         begin
         Trusted:= Trusted and (not isPaused); //releasing keys during pause should be allowed on the other hand
-                              
+
         if CurrentBinds[code] = 'switch' then
             LocalMessage:= LocalMessage or gmSwitch
         else if CurrentBinds[code] = '+precise' then
@@ -472,7 +472,7 @@ var i: LongInt;
     b: byte;
 begin
     if cOnlyStats then exit;
-    
+
     AddFileLog('[BINDS] Loading binds from: ' + s);
 
     l:= '';

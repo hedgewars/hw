@@ -128,7 +128,7 @@ begin
 
     // don't process too short segments or those which are too close to map borders
     if (p1.x = NTPX)
-            or (dab < minDistance * 3) 
+            or (dab < minDistance * 3)
             or (mp.x < LongInt(leftX) + mapBorderMargin)
             or (mp.x > LongInt(rightX) - mapBorderMargin)
             or (mp.y < LongInt(topY) + mapBorderMargin)
@@ -343,7 +343,7 @@ begin
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
-    
+
     minDistance:= sqr(cFeatureSize) div 8 + 10;
     //dabDiv:= getRandom(41)+60;
     //dabDiv:= getRandom(31)+70;
@@ -355,7 +355,7 @@ begin
     leftX:= (LAND_WIDTH - playWidth) div 2;
     rightX:= Pred(leftX + playWidth);
     topY:= LAND_HEIGHT - playHeight;
-    
+
     {$HINTS OFF}
     SetPoints(Template, pa, @fps);
     {$HINTS ON}

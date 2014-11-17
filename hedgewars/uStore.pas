@@ -360,7 +360,7 @@ if (not reload) and (not cOnlyStats) then
             WriteLnToConsole(msgOK)
             end;
 
-if not cOnlyStats then 
+if not cOnlyStats then
     begin
     MakeCrossHairs;
     LoadGraves;
@@ -368,7 +368,7 @@ if not cOnlyStats then
     ChefHatTexture:= Surface2Tex(tmpHatSurf, true);
     freeTmpHatSurf();
     end;
-    
+
 if not reload then
     AddProgress;
 
@@ -377,10 +377,10 @@ for ii:= Low(TSprite) to High(TSprite) do
         // FIXME - add a sprite attribute to match on rq flags?
         if (((cReducedQuality and (rqNoBackground or rqLowRes)) = 0) or   // why rqLowRes?
                 (not (ii in [sprSky, sprSkyL, sprSkyR, sprHorizont, sprHorizontL, sprHorizontR])))
-           and (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet])))) 
+           and (((cReducedQuality and rqPlainSplash) = 0) or ((not (ii in [sprSplash, sprDroplet, sprSDSplash, sprSDDroplet]))))
            and (((cReducedQuality and rqKillFlakes) = 0) or cSnow or ((not (ii in [sprFlake, sprSDFlake]))))
            and ((cCloudsNumber > 0) or (ii <> sprCloud))
-           and ((vobCount > 0) or (ii <> sprFlake)) 
+           and ((vobCount > 0) or (ii <> sprFlake))
            and (savesurf or (not cOnlyStats)) // in stats-only only load those which are needed later
             then
             begin

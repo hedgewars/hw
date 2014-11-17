@@ -2041,7 +2041,7 @@ if (not flagPrerecording) then
 end;
 
 procedure updateCursorVisibility;
-begin       
+begin
     if isPaused or isAFK then
         SDL_ShowCursor(1)
     else

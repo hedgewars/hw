@@ -581,7 +581,7 @@ while (i < cLandMines) and (unplaced < 4) do
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
-    if Gear = nil then 
+    if Gear = nil then
         inc(unplaced)
     else
         unplaced:= 0;
@@ -596,7 +596,7 @@ while (i < cExplosives) and (unplaced < 4) do
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
-    if Gear = nil then 
+    if Gear = nil then
         inc(unplaced)
     else
         unplaced:= 0;

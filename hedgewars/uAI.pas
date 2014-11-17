@@ -133,7 +133,7 @@ for i:= 0 to Pred(Targets.Count) do
             if (Score > BadTurn) and (Actions.Score + Score > BestActions.Score) then
                 if (BestActions.Score < 0) or (Actions.Score + Score > BestActions.Score + Byte(BotLevel - 1) * 2048) then
                     begin
-                    if useThisActions then 
+                    if useThisActions then
                         begin
                         BestActions.Count:= Actions.Count
                         end
@@ -161,9 +161,9 @@ for i:= 0 to Pred(Targets.Count) do
                             AddAction(BestActions, aia_Weapon, Longword(amExtraDamage), 80, 0, 0);
                             AddAction(BestActions, aia_attack, aim_push, 10, 0, 0);
                             AddAction(BestActions, aia_attack, aim_release, 10, 0, 0);
-                            end; 
+                            end;
                         end;
-    
+
                     AddAction(BestActions, aia_Weapon, Longword(a), 300 + random(400), 0, 0);
 
                     if (ap.Angle > 0) then
@@ -463,7 +463,7 @@ if ((Me^.State and gstAttacked) = 0) or isInMultiShoot or bonuses.activity then
             BestActions.Count:= 0;
 
             FillBonuses(false);
-            
+
             if not bonuses.activity then
                 AddAction(BestActions, aia_Skip, 0, 250, 0, 0);
             end;

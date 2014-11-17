@@ -54,9 +54,9 @@ begin
         GameState:= gsConfirm;
         end
     else
-        if GameState = gsConfirm then            
-            GameState:= prevGState;            
-            
+        if GameState = gsConfirm then
+            GameState:= prevGState;
+
     updateCursorVisibility;
 end;
 
