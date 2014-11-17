@@ -158,7 +158,7 @@ roomInfo p n r
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
-    | otherwise = [
+    | p < 48 = [
         showB $ isJust $ gameInfo r,
         name r,
         showB $ playersIn r,
@@ -169,6 +169,25 @@ roomInfo p n r
         head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
         head (Map.findWithDefault ["Default"] "AMMO" (params r))
         ]
+    | otherwise = [
+        B.pack roomFlags,
+        name r,
+        showB $ playersIn r,
+        showB $ length $ teams r,
+        n,
+        Map.findWithDefault "+rnd+" "MAP" (mapParams r),
+        head (Map.findWithDefault ["Normal"] "SCRIPT" (params r)),
+        head (Map.findWithDefault ["Default"] "SCHEME" (params r)),
+        head (Map.findWithDefault ["Default"] "AMMO" (params r))
+        ]
+    where
+        roomFlags = concat [
+            "-"
+            , ['g' | isJust $ gameInfo r]
+            , ['p' | B.null $ password r]
+            , ['j' | isRestrictedJoins  r]
+            , ['r' | isRegisteredOnly  r]
+            ]
 
 answerFullConfigParams ::
             ClientInfo
