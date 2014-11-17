@@ -15,7 +15,7 @@ uses uVariables
 
 var p: array[0..511] of LongInt;
 
-const fadear: array[byte] of LongInt = 
+const fadear: array[byte] of LongInt =
 (0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 3, 4, 6, 7, 9, 10, 12,
 14, 17, 19, 22, 25, 29, 32, 36, 40, 45, 49, 54, 60, 65, 71,
 77, 84, 91, 98, 105, 113, 121, 130, 139, 148, 158, 167, 178,
@@ -44,7 +44,7 @@ var t0, t1: LongInt;
 begin
     t0:= fadear[t shr 8];
 
-    if t0 = fadear[255] then 
+    if t0 = fadear[255] then
         t1:= t0
     else
         t1:= fadear[t shr 8 + 1];
@@ -176,7 +176,7 @@ begin
             else if param1 = 0 then
                 Land[y, x]:= lfObjMask
             else
-                Land[y, x]:= lfBasic 
+                Land[y, x]:= lfBasic
         end;
     end;
 

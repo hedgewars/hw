@@ -3511,7 +3511,7 @@ begin
             TurnTimeLeft:= 14 * 125;
             end;
 
-        if HHGear <> nil then 
+        if HHGear <> nil then
             HHGear^.Message := 0;
         ParseCommand('/taunt ' + #1, true)
         end
@@ -5555,9 +5555,9 @@ begin
                         Power := GameTicks;
                         end
                     end
-                else if (Target.Y >= cWaterLine) or 
-                        ((Target.X and LAND_WIDTH_MASK = 0) and 
-                         (Target.Y+iceHeight+4 >= cWaterLine) and 
+                else if (Target.Y >= cWaterLine) or
+                        ((Target.X and LAND_WIDTH_MASK = 0) and
+                         (Target.Y+iceHeight+4 >= cWaterLine) and
                          (Land[Target.Y, Target.X] = lfIce)) then
                     begin
                     if Timer = iceWaitCollision then

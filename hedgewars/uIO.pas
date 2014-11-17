@@ -157,11 +157,11 @@ case s[1] of
      'I': ParseCommand('pause server', true);
      's': if gameType = gmtNet then
              ParseChatCommand('chatmsg ', s, 2)
-          else 
+          else
              isProcessed:= false;
      'b': if gameType = gmtNet then
              ParseChatCommand('chatmsg ' + #4, s, 2)
-          else 
+          else
              isProcessed:= false;
      else
         isProcessed:= false;

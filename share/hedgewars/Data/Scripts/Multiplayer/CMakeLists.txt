@@ -5,5 +5,5 @@ file(GLOB hwpfiles *.hwp)
 install(FILES
     ${luafiles}
     ${cfgfiles}
-	${hwpfiles}
+    ${hwpfiles}
     DESTINATION ${SHAREPATH}Data/Scripts/Multiplayer)

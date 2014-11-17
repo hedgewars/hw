@@ -124,14 +124,14 @@ begin
         begin
         d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
         d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
-        
+
         if d1 < d then
             d:= d1;
         if d2 < d then
             d:= d2;
 
         d2:= d * _1div3 / d2;
-        
+
         Vx:= Vx * d2;
         Vy:= Vy * d2
         end

@@ -558,7 +558,7 @@ var s: shortstring;
 begin
     if (MusicFN = '') or (not isMusicEnabled) then
         exit;
-    if SuddenDeath and (SDMusicFN <> '') then 
+    if SuddenDeath and (SDMusicFN <> '') then
          s:= '/Music/' + SDMusicFN
     else s:= '/Music/' + MusicFN;
     WriteToConsole(msgLoading + s + ' ');
