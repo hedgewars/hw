@@ -556,7 +556,7 @@ begin
 
         // skipping
 
-        if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        if (not isSubmersible) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
         and ( ((not isDirH) and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)))
           or (isDirH and (hwAbs(Gear^.dY) > skipAngle * hwAbs(Gear^.dX))) ) then
             begin

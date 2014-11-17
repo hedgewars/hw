@@ -2428,6 +2428,8 @@ begin
             //                 Gear^.Tag, _0, 5000);
             end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
+        if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
+            FollowGear^.State:= FollowGear^.State or gstSubmersible;
         StopSoundChan(Gear^.SoundChannel, 4000);
         end;
 
