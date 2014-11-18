@@ -163,6 +163,7 @@ GameCFGWidget::GameCFGWidget(QWidget* parent) :
     connect(pMapContainer, SIGNAL(mapChanged(const QString &)), this, SLOT(mapChanged(const QString &)));
     connect(pMapContainer, SIGNAL(mapgenChanged(MapGenerator)), this, SLOT(mapgenChanged(MapGenerator)));
     connect(pMapContainer, SIGNAL(mazeSizeChanged(int)), this, SLOT(maze_sizeChanged(int)));
+    connect(pMapContainer, SIGNAL(mapFeatureSizeChanged(int)), this, SLOT(slMapFeatureSizeChanged(int)));
     connect(pMapContainer, SIGNAL(themeChanged(const QString &)), this, SLOT(themeChanged(const QString &)));
     connect(pMapContainer, SIGNAL(newTemplateFilter(int)), this, SLOT(templateFilterChanged(int)));
     connect(pMapContainer, SIGNAL(drawMapRequested()), this, SIGNAL(goToDrawMap()));
@@ -323,6 +324,7 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$getawaytime %1").arg(schemeData(40).toInt()).toUtf8();
     bcfg << QString("e$worldedge %1").arg(schemeData(41).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
+    bcfg << QString("e$feature_size %1").arg(pMapContainer->getFeatureSize()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
     if(!schemeData(42).isNull())
         bcfg << QString("e$scriptparam %1").arg(schemeData(42).toString()).toUtf8();
@@ -402,6 +404,7 @@ void GameCFGWidget::fullNetConfig()
 
     mapgenChanged(pMapContainer->get_mapgen());
     maze_sizeChanged(pMapContainer->getMazeSize());
+    slMapFeatureSizeChanged(pMapContainer->getFeatureSize());
 
     if(pMapContainer->get_mapgen() == 2)
         onDrawnMapChanged(pMapContainer->getDrawnMapData());
@@ -442,6 +445,11 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
             pMapContainer->setMapgen((MapGenerator)value.toUInt());
             return;
         }
+        if (param == "FEATURE_SIZE")
+        {
+            pMapContainer->setFeatureSize(value.toUInt());
+            return;
+        }
         if (param == "MAZE_SIZE")
         {
             pMapContainer->setMazeSize(value.toUInt());
@@ -469,18 +477,19 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         }
     }
 
-    if (slValue.size() == 5)
+    if (slValue.size() == 6)
     {
         if (param == "FULLMAPCONFIG")
         {
-            QString seed = slValue[3];
+            QString seed = slValue[4];
 
             pMapContainer->setAllMapParameters(
-                slValue[0],
-                (MapGenerator)slValue[1].toUInt(),
-                slValue[2].toUInt(),
+                slValue[1],
+                (MapGenerator)slValue[2].toUInt(),
+                slValue[3].toUInt(),
                 seed,
-                slValue[4].toUInt()
+                slValue[5].toUInt(),
+                slValue[0].toUInt()
             );
             return;
         }
@@ -669,6 +678,11 @@ void GameCFGWidget::mapgenChanged(MapGenerator m)
 void GameCFGWidget::maze_sizeChanged(int s)
 {
     emit paramChanged("MAZE_SIZE", QStringList(QString::number(s)));
+}
+
+void GameCFGWidget::slMapFeatureSizeChanged(int s)
+{
+    emit paramChanged("FEATURE_SIZE", QStringList(QString::number(s)));
 }
 
 void GameCFGWidget::resendSchemeData()

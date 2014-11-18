@@ -6,6 +6,8 @@ uses uLandTemplates, uLandOutline;
 procedure GenTemplated(var Template: TEdgeTemplate);
 procedure DivideEdges(fillPointsCount: LongWord; var pa: TPixAr);
 
+var minDistance, dabDiv: LongInt; // different details size
+
 implementation
 uses uVariables, uConsts, uFloat, uLandUtils, uRandom, SDLh, math;
 
@@ -97,7 +99,6 @@ end;
 
 procedure FindPoint(si: LongInt; fillPointsCount: LongWord; var newPoint: TPoint; var pa: TPixAr);
 const mapBorderMargin = 40;
-    minDistance = 32; // adjust/parametrize this for different details size
 var p1, p2, p4, fp, mp: TPoint;
     i, t1, t2, iy, ix, aqpb: LongInt;
     a, b, p, q: LongInt;
@@ -127,7 +128,7 @@ begin
 
     // don't process too short segments or those which are too close to map borders
     if (p1.x = NTPX)
-            or (dab < minDistance * 3) 
+            or (dab < minDistance * 3)
             or (mp.x < LongInt(leftX) + mapBorderMargin)
             or (mp.x > LongInt(rightX) - mapBorderMargin)
             or (mp.y < LongInt(topY) + mapBorderMargin)
@@ -148,9 +149,13 @@ begin
         if t1 > 0 then distL:= d else distR:= d;
 
         // right border
-        iy:= (rightX - mapBorderMargin - mp.x) * b div a + mp.y;
+        iy:= (LongInt(rightX) - mapBorderMargin - mp.x) * b div a + mp.y;
         d:= DistanceI(mp.x - rightX + mapBorderMargin, mp.y - iy).Round;
         if t1 > 0 then distR:= d else distL:= d;
+    end else
+    begin
+        distL:= LAND_WIDTH + LAND_HEIGHT;
+        distR:= distL;
     end;
 
     if b <> 0 then
@@ -191,7 +196,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(pa.ar[i].x - mp.x) * b + Int64(mp.y) * a) * q - Int64(pa.ar[i].y) * p * b) div aqpb;
+                    iy:= (((Int64(pa.ar[i].x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(pa.ar[i].y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -222,7 +227,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(p1.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p1.y) * p * b) div aqpb;
+                    iy:= (((Int64(p1.x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(p1.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -241,7 +246,7 @@ begin
                 if (aqpb <> 0) then
                 begin
                     // (ix; iy) is intersection point
-                    iy:= ((Int64(p2.x - mp.x) * b + Int64(mp.y) * a) * q - Int64(p2.y) * p * b) div aqpb;
+                    iy:= (((Int64(p2.x) - mp.x) * b + Int64(mp.y) * a) * q - Int64(p2.y) * p * b) div aqpb;
                     if abs(b) > abs(q) then
                         ix:= (iy - mp.y) * a div b + mp.x
                     else
@@ -256,7 +261,9 @@ begin
 
     // don't move new point for more than length of initial segment
     // adjust/parametrize for more flat surfaces (try values 3/4, 1/2 of dab, or even 1/4)
-    d:= dab;
+    d:= dab * 100 div dabDiv;
+    //d:= dab * (1 + abs(cFeatureSize - 8)) div 6;
+    //d:= dab * (14 + cFeatureSize) div 20;
     if distL > d then distL:= d;
     if distR > d then distR:= d;
 
@@ -336,7 +343,11 @@ begin
     for y:= 0 to LAND_HEIGHT - 1 do
         for x:= 0 to LAND_WIDTH - 1 do
             Land[y, x]:= lfBasic;
-            
+
+    minDistance:= sqr(cFeatureSize) div 8 + 10;
+    //dabDiv:= getRandom(41)+60;
+    //dabDiv:= getRandom(31)+70;
+    dabDiv:= getRandom(21)+100;
     MaxHedgehogs:= Template.MaxHedgehogs;
     hasGirders:= Template.hasGirders;
     playHeight:= Template.TemplateHeight;
@@ -344,7 +355,7 @@ begin
     leftX:= (LAND_WIDTH - playWidth) div 2;
     rightX:= Pred(leftX + playWidth);
     topY:= LAND_HEIGHT - playHeight;
-    
+
     {$HINTS OFF}
     SetPoints(Template, pa, @fps);
     {$HINTS ON}

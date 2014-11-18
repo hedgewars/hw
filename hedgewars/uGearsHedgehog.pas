@@ -118,13 +118,6 @@ with HHGear^.Hedgehog^ do
         end;
         if ammoidx >= 0 then
             CurAmmoType:= Ammo^[slot, ammoidx].AmmoType;
-    if (prevAmmo <> CurAmmoType) then
-        begin
-        if CurAmmoType = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, 'Reserved/chef')
-        else if prevAmmo = amKnife then
-            LoadHedgehogHat(HHGear^.Hedgehog^, Hat);
-        end;
     // Try again in the next slot
     if (CurAmmoType = prevAmmo) and (slot < cMaxSlotIndex) then
         begin
@@ -750,6 +743,7 @@ end;
 procedure HedgehogStep(Gear: PGear);
 var PrevdX: LongInt;
     CurWeapon: PAmmo;
+    portals: PGearArrayS;
 begin
 CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
@@ -812,6 +806,12 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
         exit
         end;
 
+    if (Gear^.Message and (gmLeft or gmRight) <> 0) and (Gear^.State and gstMoving = 0) then
+        begin
+        // slightly inefficient since it doesn't halt after one portal, maybe could add a param to GearsNear for number desired.
+        portals:= GearsNear(Gear^.X, Gear^.Y, gtPortal, 26);
+        if portals.size = 0 then Gear^.PortalCounter:= 0
+        end;
     PrevdX:= hwSign(Gear^.dX);
     if (Gear^.Message and gmLeft  )<>0 then
         Gear^.dX:= -cLittle else

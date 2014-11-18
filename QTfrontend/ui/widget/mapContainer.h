@@ -20,13 +20,14 @@
 #ifndef _HWMAP_CONTAINER_INCLUDED
 #define _HWMAP_CONTAINER_INCLUDED
 
-#include <QWidget>
-#include <QGridLayout>
-#include <QVBoxLayout>
-#include <QComboBox>
-#include <QLabel>
 #include <QByteArray>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
 #include <QLineEdit>
+#include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include "DataManager.h"
 
@@ -59,6 +60,7 @@ class HWMapContainer : public QWidget
         QString getCurrentScheme() const;
         QString getCurrentWeapons() const;
         quint32 getTemplateFilter() const;
+        quint32 getFeatureSize() const;
         MapGenerator get_mapgen(void) const;
         int getMazeSize(void) const;
         bool getCurrentIsMission() const;
@@ -77,8 +79,9 @@ class HWMapContainer : public QWidget
         void setTemplateFilter(int);
         void setMapgen(MapGenerator m);
         void setMazeSize(int size);
+        void setFeatureSize(int size);
         void setDrawnMapData(const QByteArray & ar);
-        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl);
+        void setAllMapParameters(const QString & map, MapGenerator m, int mazesize, const QString & seed, int tmpl, int featureSize);
         void updateModelViews();
         void onPreviewMapDestroyed(QObject * map);
         void setMaster(bool master);
@@ -90,6 +93,7 @@ class HWMapContainer : public QWidget
         void newTemplateFilter(int filter);
         void mapgenChanged(MapGenerator m);
         void mazeSizeChanged(int s);
+        void mapFeatureSizeChanged(int s);
         void drawMapRequested();
         void drawnMapChanged(const QByteArray & data);
 
@@ -117,6 +121,7 @@ class HWMapContainer : public QWidget
     private:
         QVBoxLayout mainLayout;
         QPushButton* mapPreview;
+        QSlider* mapFeatureSize;
         QComboBox* chooseMap;
         MapModel * m_staticMapModel;
         MapModel * m_missionMapModel;
@@ -161,6 +166,7 @@ class HWMapContainer : public QWidget
         void intSetMapgen(MapGenerator m);
         void intSetTemplateFilter(int);
         void intSetMazeSize(int size);
+        void intSetFeatureSize(int size);
         void intSetIconlessTheme(const QString & name);
         void mapChanged(const QModelIndex & map, int type, const QModelIndex & old = QModelIndex());
         void setMapInfo(MapModel::MapInfo mapInfo);
@@ -172,6 +178,8 @@ class HWMapContainer : public QWidget
 
         MapModel::MapInfo m_mapInfo;
         int m_themeID;
+        int m_prevMapFeatureSize;
+        int m_mapFeatureSize;
         QString m_theme;
         QString m_curMap;
 

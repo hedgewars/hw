@@ -151,7 +151,7 @@ const
     cMaxHHIndex      = 7;
     cMaxHHs          = 48;
 
-    cMaxEdgePoints = 16384;
+    cMaxEdgePoints = 32768;
 
     cHHRadius = 9;
     cHHStepTicks = 29;
@@ -302,6 +302,8 @@ const
     posCaseExplode = $00000010;
     posCasePoison  = $00000020;
 
+    cCaseHealthRadius = 14;
+
     // hog tag mask
     //htNone        = $00;
     htTeamName    = $01;
@@ -315,6 +317,12 @@ const
     kSystemSoundID_Vibrate = $00000FFF;
 
     cMinPlayWidth = 200;
+
+    // MapGen
+    mgRandom = 0;
+    mgMaze   = 1;
+    mgPerlin = 2;
+    mgDrawn  = 3;
 
 implementation
 

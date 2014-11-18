@@ -2,6 +2,7 @@
 Type=Application
 Version=1.0
 Name=Hedgewars
+Keywords=game;strategy;
 GenericName=Fighting Hedgehogs
 GenericName[de]=Kämpfende Igel
 GenericName[es]=Batallas entre erizos

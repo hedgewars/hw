@@ -1,3 +1,21 @@
+{-
+ * Hedgewars, a free turn based strategy game
+ * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; version 2 of the License
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ \-}
+
 {-# LANGUAGE OverloadedStrings #-}
 module HWProtoInRoomState where
 
@@ -267,7 +285,7 @@ handleCmd_inRoom ["ROUNDFINISHED"] =
     handleCmd_inRoom ["ROUNDFINISHED", "1"]
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_JOINS"] = roomAdminOnly $
-    return [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r})]
+    return [ModifyRoom (\r -> r{isRestrictedJoins = not $ isRestrictedJoins r}), SendUpdateOnThisRoom]
 
 
 handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = roomAdminOnly $
@@ -275,7 +293,7 @@ handleCmd_inRoom ["TOGGLE_RESTRICT_TEAMS"] = roomAdminOnly $
 
 
 handleCmd_inRoom ["TOGGLE_REGISTERED_ONLY"] = roomAdminOnly $
-    return [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r})]
+    return [ModifyRoom (\r -> r{isRegisteredOnly = not $ isRegisteredOnly r}), SendUpdateOnThisRoom]
 
 
 handleCmd_inRoom ["ROOM_NAME", newName] = roomAdminOnly $ do

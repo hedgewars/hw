@@ -94,6 +94,7 @@ var
     cDamagePercent  : LongInt;
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
+    cFeatureSize    : LongInt;
     cMapGen         : LongInt;
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
@@ -134,6 +135,7 @@ var
     LAND_WIDTH_MASK  : LongWord;
     LAND_HEIGHT_MASK : LongWord;
 
+    ChefHatTexture : PTexture;
     CrosshairTexture : PTexture;
     GenericHealthTexture : PTexture;
 
@@ -2553,6 +2555,7 @@ begin
     cGetAwayTime        := 100;
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
+    cFeatureSize        := 50;
     cMapGen             := 0;   // MAPGEN_REGULAR
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;

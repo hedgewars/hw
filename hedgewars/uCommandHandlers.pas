@@ -54,9 +54,9 @@ begin
         GameState:= gsConfirm;
         end
     else
-        if GameState = gsConfirm then            
-            GameState:= prevGState;            
-            
+        if GameState = gsConfirm then
+            GameState:= prevGState;
+
     updateCursorVisibility;
 end;
 
@@ -539,7 +539,7 @@ procedure chAmmoMenu(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
-    bShowAmmoMenu:= true
+    bShowAmmoMenu:= (not bShowAmmoMenu)
 else
     begin
     with CurrentTeam^ do
@@ -580,12 +580,12 @@ if CheckNoTeamOrHH then
 if autoCameraOn then
     begin
     FollowGear:= nil;
-    AddCaption(ansistring('Auto Camera Off'), $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOff], $CCCCCC, capgrpVolume);
     autoCameraOn:= false
     end
 else
     begin
-    AddCaption(ansistring('Auto Camera On'), $CCCCCC, capgrpVolume);
+    AddCaption(trmsg[sidAutoCameraOn], $CCCCCC, capgrpVolume);
     bShowFinger:= true;
     if not CurrentHedgehog^.Unplaced then
         FollowGear:= CurrentHedgehog^.Gear;
@@ -672,6 +672,11 @@ end;
 procedure chTemplateFilter(var s: shortstring);
 begin
 cTemplateFilter:= StrToInt(s)
+end;
+
+procedure chFeatureSize(var s: shortstring);
+begin
+cFeatureSize:= StrToInt(s)
 end;
 
 procedure chInactDelay(var s: shortstring);
@@ -814,6 +819,7 @@ begin
     RegisterVariable('template_filter', @chTemplateFilter, false);
     RegisterVariable('mapgen'  , @chMapGen        , false);
     RegisterVariable('maze_size',@chTemplateFilter, false);
+    RegisterVariable('feature_size',@chFeatureSize, false);
     RegisterVariable('delay'   , @chInactDelay    , false);
     RegisterVariable('ready'   , @chReadyDelay    , false);
     RegisterVariable('casefreq', @chCaseFactor    , false);

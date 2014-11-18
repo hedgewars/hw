@@ -513,10 +513,18 @@ begin
         if GameType = gmtRecord then
             logfileBase:= 'rec'
         else
-            logfileBase:= 'game';
+        {$IFDEF PAS2C}
+        logfileBase:= 'game_pas2c';
+        {$ELSE}
+        logfileBase:= 'game';
+        {$ENDIF}
     end
     else
+        {$IFDEF PAS2C}
+        logfileBase:= 'preview_pas2c';
+        {$ELSE}
         logfileBase:= 'preview';
+        {$ENDIF}
 {$IFDEF USE_VIDEO_RECORDING}
     InitCriticalSection(logMutex);
 {$ENDIF}

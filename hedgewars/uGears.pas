@@ -567,7 +567,8 @@ begin
 end;
 
 procedure AddMiscGears;
-var p,i,j,rx, ry, unplaced: Longword;
+var p,i,j, unplaced: Longword;
+    rx, ry: LongInt;
     rdx, rdy: hwFloat;
     Gear: PGear;
 begin
@@ -580,7 +581,7 @@ while (i < cLandMines) and (unplaced < 4) do
     Gear:= AddGear(0, 0, gtMine, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
-    if Gear = nil then 
+    if Gear = nil then
         inc(unplaced)
     else
         unplaced:= 0;
@@ -595,7 +596,7 @@ while (i < cExplosives) and (unplaced < 4) do
     Gear:= AddGear(0, 0, gtExplosives, 0, _0, _0, 0);
     FindPlace(Gear, false, 0, LAND_WIDTH);
 
-    if Gear = nil then 
+    if Gear = nil then
         inc(unplaced)
     else
         unplaced:= 0;
@@ -644,7 +645,7 @@ if (not hasBorder) and cSnow then
         begin
         rx:=GetRandom(snowRight - snowLeft);
         ry:=GetRandom(750);
-        AddGear(rx + snowLeft, LAND_HEIGHT + ry - 1300, gtFlake, 0, _0, _0, 0)
+        AddGear(rx + snowLeft, LongInt(LAND_HEIGHT) + ry - 1300, gtFlake, 0, _0, _0, 0)
         end
 end;
 
@@ -748,6 +749,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             FollowGear^.Health := content;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
@@ -786,6 +789,8 @@ begin
         HealthCrate:
             begin
             FollowGear^.Pos := FollowGear^.Pos + posCaseHealth;
+            // health crate is smaller than the other crates
+            FollowGear^.Radius := cCaseHealthRadius;
             AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
             end;
         AmmoCrate:
@@ -856,6 +861,8 @@ begin
         t:= byte(s[2]);  // team
         if Length(s) > 2 then
             h:= byte(s[3])  // target hog
+        else
+            h:= 0
         end;
     // allow targetting a hog by specifying a number as the first portion of the text
     if (x < 4) and (h > byte('0')) and (h < byte('9')) then

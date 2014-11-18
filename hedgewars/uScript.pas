@@ -1573,7 +1573,9 @@ begin
         left:= lua_tointeger(L, 3);
         right:= lua_tointeger(L, 4);
         if n = 5 then
-            tryhard:= lua_toboolean(L, 5);
+            tryhard:= lua_toboolean(L, 5)
+        else
+            tryhard:= false;
         if gear <> nil then
             FindPlace(gear, fall, left, right, tryhard);
         if gear <> nil then
@@ -2751,8 +2753,14 @@ ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 
 // land flags
 ScriptSetInteger('lfIndestructible', lfIndestructible);
-ScriptSetInteger('lfIce',            lfIce);
-ScriptSetInteger('lfBouncy',         lfBouncy);
+ScriptSetInteger('lfIce'           , lfIce);
+ScriptSetInteger('lfBouncy'        , lfBouncy);
+
+// mapgen
+ScriptSetInteger('mgRandom', mgRandom);
+ScriptSetInteger('mgMaze'  , mgMaze);
+ScriptSetInteger('mgPerlin', mgPerlin);
+ScriptSetInteger('mgDrawn' , mgDrawn);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);

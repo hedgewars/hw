@@ -279,7 +279,7 @@ begin
 {$ENDIF}
 end;
 
-{$IF DEFINED(USE_S3D_RENDERING) OR DEFINED(USE_VIDEO_RECORDING)}
+{$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint);
 begin
     glGenFramebuffersEXT(1, @frame);
@@ -417,8 +417,8 @@ begin
     UpdateModelviewProjection;
 {$ENDIF}
 
-{$IFNDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) or (cStereoMode = smAFR) then
+{$IFDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
     begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
@@ -848,10 +848,29 @@ procedure DrawTextureRotatedF(Texture: PTexture; Scale, OffsetX, OffsetY: GLfloa
 var ft, fb, fl, fr: GLfloat;
     hw, hh, nx, ny: LongInt;
 begin
-
-// note: not taking scale into account
-if isAreaOffscreen(X, Y, w, h) then
-    exit;
+// visibility check only under trivial conditions
+if (Scale <= 1) then
+    begin
+    if Angle <> 0  then
+        begin
+        if (OffsetX = 0) and (OffsetY = 0) then
+            begin
+            // sized doubled because the sprite might occupy up to 1.4 * of it's
+            // original size in each dimension, because it is rotated
+            if isDxAreaOffscreen(X - w, 2 * w) <> 0 then
+                exit;
+            if isDYAreaOffscreen(Y - h, 2 * h) <> 0 then
+                exit;
+            end;
+        end
+    else
+        begin
+        if isDxAreaOffscreen(X + dir * trunc(OffsetX) - w div 2, w) <> 0 then
+            exit;
+        if isDYAreaOffscreen(Y + trunc(OffsetY) - h div 2, h) <> 0 then
+            exit;
+        end;
+    end;
 
 {
 // do not draw anything outside the visible screen space (first check fixes some sprite drawing, e.g. hedgehogs)
@@ -1462,8 +1481,8 @@ if (WorldEdge <> weSea) then
 else
     PrepareVbForWater(true,
         OffsetY + WorldDy + cWaterLine, ViewTopY,
-        LeftX  + WorldDx - OffsetX, ViewLeftX,
-        RightX + WorldDx + OffsetX, ViewRightX,
+        LongInt(LeftX)  + WorldDx - OffsetX, ViewLeftX,
+        LongInt(RightX) + WorldDx + OffsetX, ViewRightX,
         ViewBottomY,
         first, count);
 
@@ -1541,8 +1560,8 @@ spriteHeight:= SpritesData[sprite].Height;
 dY:= -cWaveHeight + dy;
 ox:= -cWaveHeight + ox;
 
-lx:= LeftX  + WorldDx - ox;
-rx:= RightX + WorldDx + ox;
+lx:= LongInt(LeftX)  + WorldDx - ox;
+rx:= LongInt(RightX) + WorldDx + ox;
 
 topy:= cWaterLine + WorldDy + dY;
 

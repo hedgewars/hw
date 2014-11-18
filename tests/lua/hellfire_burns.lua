@@ -62,7 +62,7 @@ function onGameInit()
 	-- The base number for the random number generator
 	Seed = 1
 	-- The map to be played
-	MapGen = 2
+	MapGen = mgDrawn
 	-- The theme to be used
 	Theme = "Bamboo"
 	-- Game settings and rules

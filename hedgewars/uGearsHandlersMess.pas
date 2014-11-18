@@ -281,7 +281,7 @@ Gear^.Y := Gear^.Y + cDrownSpeed;
 
 if cWaterLine > hwRound(Gear^.Y) + Gear^.Radius then
     begin
-    if leftX > hwRound(Gear^.X) - Gear^.Radius then
+    if LongInt(leftX) + Gear^.Radius > hwRound(Gear^.X) then
         Gear^.X := Gear^.X - cDrownSpeed
     else
         Gear^.X := Gear^.X + cDrownSpeed;
@@ -310,7 +310,6 @@ var
     tX, tdX, tdY: hwFloat;
     collV, collH, gX, gY: LongInt;
     land, xland: word;
-    boing: PVisualGear;
 begin
     tX:= Gear^.X;
     gX:= hwRound(Gear^.X);
@@ -467,20 +466,7 @@ begin
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
         begin
-        boing:= AddVisualGear(gX, gY, vgtStraightShot, 0, false, 1);
-        if boing <> nil then
-            with boing^ do
-                begin
-                Angle:= random(360);
-                dx:= 0;
-                dy:= 0;
-                FrameTicks:= 200;
-                tX:= _0;
-                tX.QWordValue:= Gear^.dY.QWordValue + Gear^.dX.QWordValue;
-                Scale:= hwFloat2Float(Gear^.Density * tX) / 1.5;
-                State:= ord(sprBoing)
-                end;
-        PlaySound(sndMelonImpact, true)
+        AddBounceEffectForGear(Gear);
         end
     else if (Gear^.nImpactSounds > 0) and
         (Gear^.State and gstCollision <> 0) and
@@ -1828,7 +1814,7 @@ var
     particle: PVisualGear;
     dxdy: hwFloat;
 begin
-    if (Gear^.dY.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
+    if (Gear^.dX.QWordValue = 0) and (Gear^.dY.QWordValue = 0) and (TestCollisionYwithGear(Gear, 1) = 0) then
         SetLittle(Gear^.dY);
     Gear^.State := Gear^.State or gstAnimation;
     if Gear^.Health < cBarrelHealth then Gear^.State:= Gear^.State and (not gstFrozen);
@@ -2442,6 +2428,8 @@ begin
             //                 Gear^.Tag, _0, 5000);
             end;
         Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
+        if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
+            FollowGear^.State:= FollowGear^.State or gstSubmersible;
         StopSoundChan(Gear^.SoundChannel, 4000);
         end;
 
@@ -2671,7 +2659,7 @@ var
     HHGear: PGear;
     hedgehog: PHedgehog;
     State: Longword;
-    switchDir: LongInt;
+    switchDir: Longword;
 begin
     AllInactive := false;
 
@@ -2712,7 +2700,7 @@ begin
         PlaySound(sndSwitchHog);
 
         repeat
-            CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod (CurrentTeam^.HedgehogsNumber);
+            CurrentTeam^.CurrHedgehog := (CurrentTeam^.CurrHedgehog + switchDir) mod CurrentTeam^.HedgehogsNumber;
         until (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear <> nil) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Gear^.Damage = 0) and
               (CurrentTeam^.Hedgehogs[CurrentTeam^.CurrHedgehog].Effects[heFrozen]=0);
@@ -3525,7 +3513,7 @@ begin
             TurnTimeLeft:= 14 * 125;
             end;
 
-        if HHGear <> nil then 
+        if HHGear <> nil then
             HHGear^.Message := 0;
         ParseCommand('/taunt ' + #1, true)
         end
@@ -4036,7 +4024,7 @@ begin
         or (iterator^.Y > Gear^.Y + r) then
             continue;
 
-        hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0)) or ((iterator^.State or gstMoving) = 0));
+        hasdxy := (((iterator^.dX.QWordValue <> 0) or (iterator^.dY.QWordValue <> 0)) or ((iterator^.State and gstMoving) = 0));
 
         // in case the object is not moving, let's asume it's falling towards the portal
         if not hasdxy then
@@ -5569,7 +5557,10 @@ begin
                         Power := GameTicks;
                         end
                     end
-                else if (target.y >= cWaterLine) then
+                else if (Target.Y >= cWaterLine) or
+                        ((Target.X and LAND_WIDTH_MASK = 0) and
+                         (Target.Y+iceHeight+4 >= cWaterLine) and
+                         (Land[Target.Y, Target.X] = lfIce)) then
                     begin
                     if Timer = iceWaitCollision then
                         begin
@@ -5646,7 +5637,7 @@ begin
                     Timer := iceWaitCollision;
                     end;
 
-                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime) then
+                if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
                     begin
                     PlaySound(sndHogFreeze);
                     DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);

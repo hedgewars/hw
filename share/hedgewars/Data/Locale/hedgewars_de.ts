@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de">
+<TS version="2.1" language="de">
 <context>
     <name>About</name>
     <message>
@@ -23,7 +23,11 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>Kopie von</translation>
+        <translation type="obsolete">Kopie von</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation>Kopie von %1</translation>
     </message>
 </context>
 <context>
@@ -230,6 +234,56 @@ Please check your installation!</source>
 
 Bitte überprüfe deine Installation!</translation>
     </message>
+    <message>
+        <source>Usage</source>
+        <comment>command-line</comment>
+        <translation>Verwendung</translation>
+    </message>
+    <message>
+        <source>OPTION</source>
+        <comment>command-line</comment>
+        <translation>SCHALTER</translation>
+    </message>
+    <message>
+        <source>CONNECTSTRING</source>
+        <comment>command-line</comment>
+        <translation>VERBINDUNGSTEXT</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <comment>command-line</comment>
+        <translation>Schalter</translation>
+    </message>
+    <message>
+        <source>Display this help</source>
+        <comment>command-line</comment>
+        <translation>Diese Hilfe anzeigen</translation>
+    </message>
+    <message>
+        <source>Custom path for configuration data and user data</source>
+        <comment>command-line</comment>
+        <translation>Benutzerdefinierter Pfad für Konfigurations- und Benutzerdaten</translation>
+    </message>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <comment>command-line</comment>
+        <translation>Benutzerdefinierter Pfad für das Spieldatenverzeichnis</translation>
+    </message>
+    <message>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <comment>command-line</comment>
+        <translation>Hedgewars kann ein %1 (z.B. »%2«) verwenden, um beim Start zu verbinden.</translation>
+    </message>
+    <message>
+        <source>Malformed option argument: %1</source>
+        <comment>command-line</comment>
+        <translation>Fehlerhaftes Schalterargument: %1</translation>
+    </message>
+    <message>
+        <source>Unknown option argument: %1</source>
+        <comment>command-line</comment>
+        <translation>Unbekannter Schalter: %1</translation>
+    </message>
 </context>
 <context>
     <name>HWAskQuitDialog</name>
@@ -429,6 +483,24 @@ Bitte Kennwort eingeben:</translation>
         <source>Cannot open demofile %1</source>
         <translation>Wiederholungsdatei »%1« konnte nicht geöffnet werden</translation>
     </message>
+    <message>
+        <source>A Fatal ERROR occured! - The game engine had to stop.
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+
+Last two engine messages:
+%2</source>
+        <translation>Ein kritischer FEHLER ist aufgetreten! Die Spiel-Engine musste angehalten werden.
+
+Diese Unannehmlichkeit tut uns fürchterlich Leid. :(
+
+Falls das öfters passiert, klicke auf den Knopf »%1« im Hauptmenü!
+
+Die letzten beiden Meldungen der Engine lauten:
+%2</translation>
+    </message>
 </context>
 <context>
     <name>HWMapContainer</name>
@@ -562,6 +634,14 @@ Karte bearbeiten</translation>
         <source>Theme: %1</source>
         <translation>Szenerie: %1</translation>
     </message>
+    <message>
+        <source>Random perlin</source>
+        <translation>Perlinzufall</translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation>Stil:</translation>
+    </message>
 </context>
 <context>
     <name>HWNetServersModel</name>
@@ -627,6 +707,10 @@ Karte bearbeiten</translation>
     <message>
         <source>The server is too old. Disconnecting now.</source>
         <translation>Der Server ist zu alt. Verbindung wird beendet.</translation>
+    </message>
+    <message>
+        <source>Server authentication error</source>
+        <translation>Server-Authentifizierungsfehler</translation>
     </message>
 </context>
 <context>
@@ -824,6 +908,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>This page requires an internet connection.</source>
         <translation>Diese Seite benötigt eine Internetverbindung.</translation>
     </message>
+    <message>
+        <source>Open packages directory</source>
+        <translation>Paketeverzeichnis öffnen</translation>
+    </message>
 </context>
 <context>
     <name>PageDrawMap</name>
@@ -874,6 +962,10 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <source>Ellipse</source>
         <translation>Ellipse</translation>
+    </message>
+    <message>
+        <source>Optimize</source>
+        <translation>Optimieren</translation>
     </message>
 </context>
 <context>
@@ -933,9 +1025,12 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <source>Ranking</source>
         <translation>Platzierung</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkten.</translation>
+        <translation>
+            <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkt.</numerusform>
+            <numerusform>Der beste Schuss geht an &lt;br&gt;%1&lt;/b&gt; mit &lt;b&gt;%2&lt;/b&gt; Schadenspunkten.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
@@ -2175,6 +2270,10 @@ Willst du wirklich verlassen?</translation>
         <source>World Edge</source>
         <translation>Spielfeldgrenze</translation>
     </message>
+    <message>
+        <source>Script parameter</source>
+        <translation>Skriptparameter</translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -2653,6 +2752,10 @@ Es sind nicht alle Spieler bereit.</translation>
         <source>Script</source>
         <translation>Stil</translation>
     </message>
+    <message>
+        <source>Random Perlin</source>
+        <translation>Zufälliges Perlin</translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -2697,7 +2800,11 @@ Es sind nicht alle Spieler bereit.</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation>Kopie von</translation>
+        <translation type="obsolete">Kopie von</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation>Kopie von %1</translation>
     </message>
 </context>
 <context>
@@ -2711,6 +2818,20 @@ Es sind nicht alle Spieler bereit.</translation>
 Error code: %2</source>
         <translation>Ich bin unfähig, die Engine auf %1 laufen zu lassen.
 Fehlercode: %2</translation>
+    </message>
+    <message>
+        <source>The game engine died unexpectedly!
+(exit code %1)
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
+        <translation>Die Spiel-Engine ist unerwartet abgeschmiert!
+(Exit-Code: %1)
+
+Diese Unannehmlichkeit tut uns fürchterlich Leid. :(
+
+Falls das öfters passiert, klick bitte den Knopf »%2« im Hauptmenü an!</translation>
     </message>
 </context>
 <context>
@@ -2774,7 +2895,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>Igel finden</translation>
+        <translation type="obsolete">Igel finden</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -2912,6 +3033,14 @@ Fehlercode: %2</translation>
         <source>hedgehog info</source>
         <translation>Igel-Info</translation>
     </message>
+    <message>
+        <source>autocam / find hedgehog</source>
+        <translation>Autokamera / Igel finden</translation>
+    </message>
+    <message>
+        <source>speed up replay</source>
+        <translation>Wiederholung beschleunigen</translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2960,7 +3089,7 @@ Fehlercode: %2</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Die Kamera zum aktiven Igel bewegen:</translation>
+        <translation type="obsolete">Die Kamera zum aktiven Igel bewegen:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -3001,6 +3130,14 @@ Fehlercode: %2</translation>
     <message>
         <source>Hedgehog movement</source>
         <translation>Igel-Bewegung</translation>
+    </message>
+    <message>
+        <source>Toggle automatic camera / refocus on active hedgehog:</source>
+        <translation>Automatische Kamera umschalten / auf aktiven Igel wiederzentrieren:</translation>
+    </message>
+    <message>
+        <source>Demo replay:</source>
+        <translation>Wiederholung abspielen:</translation>
     </message>
 </context>
 <context>
@@ -3443,6 +3580,65 @@ Fehlercode: %2</translation>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
         <translation>Die Raumversion ist inkompatibel zu deiner Hedgewars-Version</translation>
+    </message>
+    <message>
+        <source>You already have voted</source>
+        <translation>Du hast bereits deine Stimme abgegeben</translation>
+    </message>
+    <message>
+        <source>Voting closed</source>
+        <translation>Abstimmung abgeschlossen</translation>
+    </message>
+    <message>
+        <source>New voting started</source>
+        <translation>Neue Abstimmung gestartet</translation>
+    </message>
+    <message>
+        <source>Voting expired</source>
+        <translation>Abstimmung abgelaufen</translation>
+    </message>
+    <message>
+        <source>kick</source>
+        <translation>hinauswerfen</translation>
+    </message>
+    <message>
+        <source>map</source>
+        <translation>Karte</translation>
+    </message>
+    <message>
+        <source>pause</source>
+        <translation>pausieren</translation>
+    </message>
+    <message>
+        <source>Reconnected too fast</source>
+        <translation>Zu schnell wieder verbunden</translation>
+    </message>
+    <message>
+        <source>Warning! Chat flood protection activated</source>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher.</translatorcomment>
+        <translation>Achtung! Chat-Flood-Schutz ist aktiv. Bitte red etwas langsamer.</translation>
+    </message>
+    <message>
+        <source>Excess flood</source>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher wird es hier umschrieben.</translatorcomment>
+        <translation>Zu viele Nachrichten in kurzer Zeit abgeschickt</translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 1</source>
+        <translation>Zu viele Spielnachrichten in kurzer Zeit ermittelt – 1</translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 2</source>
+        <translation>Zu viele Spielnachrichten in kurzer Zeit ermittelt – 2</translation>
+    </message>
+    <message>
+        <source>Warning! Joins flood protection activated</source>
+        <translatorcomment>Nicht jeder weiß, was »Flooding« heißt, daher ist die Übersetzung etwas ausführlicher und umschreibend.</translatorcomment>
+        <translation>Achtung! Der Server wird ein zu schnelles Beitreten in kurzer Zeit nicht akzeptieren</translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on</source>
+        <translation>Zur Zeit findet keine Abstimmung statt</translation>
     </message>
 </context>
 </TS>

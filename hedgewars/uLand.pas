@@ -545,10 +545,10 @@ begin
             begin
             WriteLnToConsole('Generating land...');
             case cMapGen of
-                0: GenTemplated(EdgeTemplates[SelectTemplate]);
-                1: begin ResizeLand(4096,2048); GenMaze; end;
-                2: begin ResizeLand(4096,2048); GenPerlin; end;
-                3: GenDrawnMap;
+                mgRandom: GenTemplated(EdgeTemplates[SelectTemplate]);
+                mgMaze  : begin ResizeLand(4096,2048); GenMaze; end;
+                mgPerlin: begin ResizeLand(4096,2048); GenPerlin; end;
+                mgDrawn : GenDrawnMap;
             else
                 OutError('Unknown mapgen', true);
             end;
@@ -659,8 +659,6 @@ if GrayScale then
                 begin
                 w:= LandPixels[y div 2,x div 2];
                 w:= ((w shr RShift and $FF) +  (w shr BShift and $FF) + (w shr GShift and $FF)) div 3;
-                if w > 255 then
-                    w:= 255;
                 w:= (w and $FF shl RShift) or (w and $FF shl BShift) or (w and $FF shl GShift) or (LandPixels[y div 2,x div 2] and AMask);
                 LandPixels[y,x]:= w or (LandPixels[y div 2, x div 2] and AMask)
                 end

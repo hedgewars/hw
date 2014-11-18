@@ -23,7 +23,11 @@
     </message>
     <message>
         <source>copy of</source>
-        <translation>kopya</translation>
+        <translation type="obsolete">kopya</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -100,7 +104,7 @@
     </message>
     <message>
         <source>Please give us feedback!</source>
-        <translation>Lütfen bize geribildirim gönder!</translation>
+        <translation type="obsolete">Lütfen bize geribildirim gönder!</translation>
     </message>
     <message>
         <source>We are always happy about suggestions, ideas, or bug reports.</source>
@@ -108,11 +112,23 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already known here (english): </source>
-        <translation>Eğer bir hata bulduysan, burada olup olmadığını görebilirsin (İngilizce): </translation>
+        <translation type="obsolete">Eğer bir hata bulduysan, burada olup olmadığını görebilirsin (İngilizce): </translation>
     </message>
     <message>
         <source>Your email address is optional, but we may want to contact you.</source>
-        <translation>E-posta adresi isteğe bağlıdır, ancak iletişime geçmek isteyebiliriz.</translation>
+        <translation type="obsolete">E-posta adresi isteğe bağlıdır, ancak iletişime geçmek isteyebiliriz.</translation>
+    </message>
+    <message>
+        <source>Send us feedback!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your email address is optional, but necessary if you want us to get back at you.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -149,6 +165,13 @@
     <message>
         <source>Game options</source>
         <translation>Oyun seçenekleri</translation>
+    </message>
+</context>
+<context>
+    <name>GameUIConfig</name>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -200,6 +223,56 @@ Please check your installation!</source>
 %1
 
 Lütfen kurulumunuzu denetleyin!</translation>
+    </message>
+    <message>
+        <source>Usage</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>OPTION</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CONNECTSTRING</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display this help</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path for configuration data and user data</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom path to the game data folder</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hedgewars can use a %1 (e.g. &quot;%2&quot;) to connect on start.</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Malformed option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown option argument: %1</source>
+        <comment>command-line</comment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -254,6 +327,18 @@ Lütfen kurulumunuzu denetleyin!</translation>
     <message>
         <source>%1 has been added to your ignore list</source>
         <translation>%1 yoksayma listenize eklendi</translation>
+    </message>
+    <message>
+        <source>%1 has joined</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has left (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -363,6 +448,23 @@ Please wait a few seconds and try again.</source>
         <translation>Çok hızlı yeniden bağlandın.
 Birkaç saniye bekle ve yeniden dene.</translation>
     </message>
+    <message>
+        <source>Guest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The room is protected with password.
+Please, enter the password:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>HWGame</name>
@@ -373,6 +475,17 @@ Birkaç saniye bekle ve yeniden dene.</translation>
     <message>
         <source>Cannot open demofile %1</source>
         <translation>Gösteri dosyası açılamadı %1</translation>
+    </message>
+    <message>
+        <source>A Fatal ERROR occured! - The game engine had to stop.
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%1&apos; button in the main menu!
+
+Last two engine messages:
+%2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -483,7 +596,7 @@ Birkaç saniye bekle ve yeniden dene.</translation>
     </message>
     <message>
         <source>Theme: </source>
-        <translation>Tema:</translation>
+        <translation type="obsolete">Tema:</translation>
     </message>
     <message>
         <source>Load drawn map</source>
@@ -500,6 +613,18 @@ Birkaç saniye bekle ve yeniden dene.</translation>
     <message>
         <source>Large tunnels</source>
         <translation>Büyük tüneller</translation>
+    </message>
+    <message>
+        <source>Random perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -545,7 +670,7 @@ Birkaç saniye bekle ve yeniden dene.</translation>
     </message>
     <message>
         <source>%1 *** %2 has joined</source>
-        <translation>%1 *** %2 katıldı</translation>
+        <translation type="obsolete">%1 *** %2 katıldı</translation>
     </message>
     <message>
         <source>%1 *** %2 has left</source>
@@ -566,6 +691,10 @@ Birkaç saniye bekle ve yeniden dene.</translation>
     <message>
         <source>The server is too old. Disconnecting now.</source>
         <translation>Sunucu çok eski. Bağlantı kesiliyor.</translation>
+    </message>
+    <message>
+        <source>Server authentication error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -630,7 +759,7 @@ sadece takma adını gir.</translation>
     <name>KB</name>
     <message>
         <source>SDL_ttf returned error while rendering text, most propably it is related to the bug in freetype2. It&apos;s recommended to update your freetype lib.</source>
-        <translation>SDL_ttf yazıyı yorumlarken hata verdi. Bu büyük ihtimalle freetype2&apos;deki bir hatadan kaynaklanıyor. Freetype kurulumunuzu güncellemenizi öneririz.</translation>
+        <translation type="obsolete">SDL_ttf yazıyı yorumlarken hata verdi. Bu büyük ihtimalle freetype2&apos;deki bir hatadan kaynaklanıyor. Freetype kurulumunuzu güncellemenizi öneririz.</translation>
     </message>
 </context>
 <context>
@@ -645,16 +774,16 @@ sadece takma adını gir.</translation>
     <message>
         <source>Duration: %1m %2s
 </source>
-        <translation>Süre: %1d %2s
+        <translation type="obsolete">Süre: %1d %2s
 </translation>
     </message>
     <message>
         <source>Video: %1x%2, </source>
-        <translation>Video: %1x%2, </translation>
+        <translation type="obsolete">Video: %1x%2, </translation>
     </message>
     <message>
         <source>%1 fps, </source>
-        <translation>%1 fps, </translation>
+        <translation type="obsolete">%1 fps, </translation>
     </message>
     <message>
         <source>Audio: </source>
@@ -663,6 +792,18 @@ sadece takma adını gir.</translation>
     <message>
         <source>unknown</source>
         <translation>bilinmiyor</translation>
+    </message>
+    <message>
+        <source>Duration: %1m %2s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Video: %1x%2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 fps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -743,6 +884,21 @@ sadece takma adını gir.</translation>
     </message>
 </context>
 <context>
+    <name>PageDataDownload</name>
+    <message>
+        <source>Open packages directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loading, please wait.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This page requires an internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageDrawMap</name>
     <message>
         <source>Undo</source>
@@ -779,6 +935,22 @@ sadece takma adını gir.</translation>
     <message>
         <source>Eraser</source>
         <translation>Silgi</translation>
+    </message>
+    <message>
+        <source>Polyline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rectangle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ellipse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Optimize</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -838,9 +1010,11 @@ sadece takma adını gir.</translation>
         <source>Ranking</source>
         <translation>Sıralama</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation>En iyi atış ödülü: &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="unfinished">
+            <numerusform>En iyi atış ödülü: &lt;b&gt;%2&lt;/b&gt; puanla &lt;b&gt;%1&lt;/b&gt;</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The best killer is &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; kills in a turn.</source>
@@ -876,6 +1050,20 @@ sadece takma adını gir.</translation>
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation>
             <numerusform>&lt;b&gt;%1&lt;/b&gt; korktu ve &lt;b&gt;%2&lt;/b&gt; kez turu pas geçti.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Play again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished">Kaydet</translation>
+    </message>
+    <message numerus="yes">
+        <source>(%1 %2)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -991,6 +1179,10 @@ sadece takma adını gir.</translation>
     <message>
         <source>Insert your address here</source>
         <translation>Adresi buraya girin</translation>
+    </message>
+    <message>
+        <source>Click here for details</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1191,11 +1383,11 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Rules:</source>
-        <translation>Kurallar:</translation>
+        <translation type="obsolete">Kurallar:</translation>
     </message>
     <message>
         <source>Weapons:</source>
-        <translation>Silahlar:</translation>
+        <translation type="obsolete">Silahlar:</translation>
     </message>
     <message numerus="yes">
         <source>%1 players online</source>
@@ -1221,7 +1413,7 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Clear filters</source>
-        <translation>Süzgeçleri temizle</translation>
+        <translation type="obsolete">Süzgeçleri temizle</translation>
     </message>
     <message>
         <source>Open server administration page</source>
@@ -1350,6 +1542,22 @@ sadece takma adını gir.</translation>
         <source>Add an indestructible border along the bottom</source>
         <translation>Alta yok edilemez bir sınır ekle</translation>
     </message>
+    <message>
+        <source>None (Default)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wrap (World wraps)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bounce (Edges reflect)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sea (Edges connect to sea)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PageSelectWeapon</name>
@@ -1447,14 +1655,24 @@ sadece takma adını gir.</translation>
     <message>
         <source>Date: %1
 </source>
-        <translation>Tarih: %1
+        <translation type="obsolete">Tarih: %1
 </translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation>Boyut: %1
+        <translation type="obsolete">Boyut: %1
 </translation>
+    </message>
+    <message>
+        <source>Date: %1</source>
+        <translation type="unfinished">Tarih: %1
+ {1?}</translation>
+    </message>
+    <message>
+        <source>Size: %1</source>
+        <translation type="unfinished">Boyut: %1
+ {1?}</translation>
     </message>
 </context>
 <context>
@@ -1590,6 +1808,38 @@ sadece takma adını gir.</translation>
         <source>Frontend music</source>
         <translation>Ön uç müziği</translation>
     </message>
+    <message>
+        <source>Team</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable team tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable hedgehog tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Health</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable health tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Translucent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable translucent tags by default</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QComboBox</name>
@@ -1611,7 +1861,7 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Any</source>
-        <translation>Herhangi</translation>
+        <translation type="obsolete">Herhangi</translation>
     </message>
     <message>
         <source>Disabled</source>
@@ -1817,7 +2067,7 @@ sadece takma adını gir.</translation>
     </message>
     <message>
         <source>Tip: </source>
-        <translation>İpucu: </translation>
+        <translation type="obsolete">İpucu: </translation>
     </message>
     <message>
         <source>Quality</source>
@@ -1963,6 +2213,22 @@ Gerçekten çıkmak istiyor musunuz?</translation>
         <source>This setting will be effective at next restart.</source>
         <translation>Bu ayar bir sonraki başlatmada etkin olacaktır.</translation>
     </message>
+    <message>
+        <source>Tip: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Displayed tags above hogs and translucent tags</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>World Edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Script parameter</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QLineEdit</name>
@@ -1987,7 +2253,7 @@ Gerçekten çıkmak istiyor musunuz?</translation>
     </message>
     <message>
         <source>-r%1 (%2)</source>
-        <translation>-r%1 (%2)</translation>
+        <translation type="obsolete">-r%1 (%2)</translation>
     </message>
 </context>
 <context>
@@ -2240,6 +2506,13 @@ Tüm oyuncular hazır değil.</translation>
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>No description available</source>
+        <translation type="unfinished">Kullanılabilir açıklama yok</translation>
+    </message>
+</context>
+<context>
     <name>QPushButton</name>
     <message>
         <source>default</source>
@@ -2355,11 +2628,15 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>Click to copy your unique server URL in your clipboard. Send this link to your friends ands and they will be able to join you.</source>
-        <translation>Benzersiz sunucu adresini panoya kopyalamak için tıkla. Bu bağlantıyı arkadaşlarına gönder ve sana katılmalarını sağla.</translation>
+        <translation type="obsolete">Benzersiz sunucu adresini panoya kopyalamak için tıkla. Bu bağlantıyı arkadaşlarına gönder ve sana katılmalarını sağla.</translation>
     </message>
     <message>
         <source>Start private server</source>
         <translation>Özel sunucuyu başlat</translation>
+    </message>
+    <message>
+        <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2375,6 +2652,10 @@ Tüm oyuncular hazır değil.</translation>
     <message>
         <source>Create room</source>
         <translation>Oda oluştur</translation>
+    </message>
+    <message>
+        <source>set password</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2423,6 +2704,14 @@ Tüm oyuncular hazır değil.</translation>
         <source>Hand-drawn</source>
         <translation>El Çizimi</translation>
     </message>
+    <message>
+        <source>Script</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Random Perlin</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SeedPrompt</name>
@@ -2467,7 +2756,11 @@ Tüm oyuncular hazır değil.</translation>
     </message>
     <message>
         <source>copy of</source>
-        <translation>kopya</translation>
+        <translation type="obsolete">kopya</translation>
+    </message>
+    <message>
+        <source>copy of %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2482,6 +2775,15 @@ Error code: %2</source>
         <translation>%1 içinde motor çalıştırılamıyor
 Hata kodu: %2</translation>
     </message>
+    <message>
+        <source>The game engine died unexpectedly!
+(exit code %1)
+
+We are very sorry for the inconvenience :(
+
+If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>TeamSelWidget</name>
@@ -2494,7 +2796,7 @@ Hata kodu: %2</translation>
     <name>TeamShowWidget</name>
     <message>
         <source>%1&apos;s team</source>
-        <translation>%1 takımı</translation>
+        <translation type="obsolete">%1 takımı</translation>
     </message>
 </context>
 <context>
@@ -2548,7 +2850,7 @@ Hata kodu: %2</translation>
     </message>
     <message>
         <source>find hedgehog</source>
-        <translation>kirpi bul</translation>
+        <translation type="obsolete">kirpi bul</translation>
     </message>
     <message>
         <source>ammo menu</source>
@@ -2682,6 +2984,14 @@ Hata kodu: %2</translation>
         <source>hedgehog info</source>
         <translation>kirpi bilgisi</translation>
     </message>
+    <message>
+        <source>autocam / find hedgehog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>speed up replay</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>binds (categories)</name>
@@ -2730,7 +3040,7 @@ Hata kodu: %2</translation>
     </message>
     <message>
         <source>Move the camera to the active hog:</source>
-        <translation>Kamerayı etkin kirpiye götür:</translation>
+        <translation type="obsolete">Kamerayı etkin kirpiye götür:</translation>
     </message>
     <message>
         <source>Move the cursor or camera without using the mouse:</source>
@@ -2771,6 +3081,14 @@ Hata kodu: %2</translation>
     <message>
         <source>Hedgehog movement</source>
         <translation>Kirpi hareketi</translation>
+    </message>
+    <message>
+        <source>Toggle automatic camera / refocus on active hedgehog:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Demo replay:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3205,6 +3523,70 @@ Hata kodu: %2</translation>
     <message>
         <source>Empty config entry</source>
         <translation>Boş yapılandırma girdisi</translation>
+    </message>
+    <message>
+        <source>You already have voted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New voting started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voting expired</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>kick</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>pause</source>
+        <translation type="unfinished">duraklat</translation>
+    </message>
+    <message>
+        <source>Restricted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Reconnected too fast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room version incompatible to your hedgewars version</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Chat flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Excess flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Game messages flood detected - 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Warning! Joins flood protection activated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There&apos;s no voting going on</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -232,16 +232,17 @@ include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
 enable_testing()
 
-set(LUATESTS "${CMAKE_SOURCE_DIR}/tests/lua")
-set(LUAAPITESTS "${LUATESTS}/luaAPI")
-set(TESTSDATADIR "${CMAKE_SOURCE_DIR}/share/hedgewars/Data")
-
-
-add_test("LuaAPI:GetZoom/SetZoom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" "--lua-test" "${LUAAPITESTS}/zoom_get_set.lua")
+set(LUATESTS_DIR "${CMAKE_SOURCE_DIR}/tests/lua")
+set(TESTSDATA_DIR "${CMAKE_SOURCE_DIR}/share/hedgewars/Data")
 
 # set set this to "" if you want to see what's going on
+# TODO: engine should do this implicitly when running tests,
+# unless some env var like HWENGINE_SHOWTESTS is set or something
 set(STATSONLYFLAG "--stats-only")
-add_test("LuaAPI:GetGravity/SetGravity" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUAAPITESTS}/gravity_get_set.lua")
-add_test("DrillRockets_drill" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_drill.lua")
-add_test("DrillRockets_boom" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/drillrockets_boom.lua")
-add_test("HellishFire_burns" "bin/hwengine" "--prefix" "${TESTSDATADIR}" "--nosound" "--nomusic" ${STATSONLYFLAG} "--lua-test" "${LUATESTS}/hellfire_burns.lua")
+
+# add all lua tests
+file(GLOB_RECURSE luatests RELATIVE "${LUATESTS_DIR}" "${LUATESTS_DIR}/*.lua")
+foreach(luatest ${luatests})
+    add_test("${luatest}" "bin/hwengine" "--prefix" "${TESTSDATA_DIR}" "--nosound" "--nomusic" "${STATSONLYFLAG}" "--lua-test" "${LUATESTS_DIR}/${luatest}")
+endforeach(luatest)
+

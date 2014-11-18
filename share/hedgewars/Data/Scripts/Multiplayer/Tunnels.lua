@@ -27,7 +27,7 @@ onGameInit()
 end
 
 function onGameInit()
-    MapGen = 2
+    MapGen = mgDrawn
     TemplateFilter = 0
     for i = 200,2000,600 do
         AddPoint(1,i,63)

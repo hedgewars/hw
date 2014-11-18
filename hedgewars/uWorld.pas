@@ -79,7 +79,6 @@ var AMShiftTargetX, AMShiftTargetY, AMShiftX, AMShiftY, SlotsNum: LongInt;
     amSel: TAmmoType = amNothing;
     missionTex: PTexture;
     missionTimer: LongInt;
-    stereoDepth: GLfloat;
     isFirstFrame: boolean;
     AMAnimType: LongInt;
     recTexture: PTexture;
@@ -987,7 +986,7 @@ begin
         exit
     else if rm = rmLeftEye then
         d:= -d;
-    stereoDepth:= stereoDepth + d;
+    cStereoDepth:= cStereoDepth + d;
     openglTranslProjMatrix(d, 0, 0);
 {$ENDIF}
 end;
@@ -998,12 +997,12 @@ begin
 {$IFDEF USE_S3D_RENDERING}
     if rm = rmDefault then
         exit;
-    openglTranslProjMatrix(-stereoDepth, 0, 0);
+    openglTranslProjMatrix(-cStereoDepth, 0, 0);
     cStereoDepth:= 0;
 {$ENDIF}
 end;
 
-procedure RenderWorldEdge(Lag: Longword);
+procedure RenderWorldEdge;
 var
     //VertexBuffer: array [0..3] of TVertex2f;
     tmp, w: LongInt;
@@ -1016,7 +1015,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
 
     rect.y:= ViewTopY;
     rect.h:= ViewHeight;
-    tmp:= leftX + WorldDx;
+    tmp:= LongInt(leftX) + WorldDx;
     w:= tmp - ViewLeftX;
 
     if w > 0 then
@@ -1028,7 +1027,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
 
-    tmp:= rightX + WorldDx;
+    tmp:= LongInt(rightX) + WorldDx;
     w:= ViewRightX - tmp;
 
     if w > 0 then
@@ -1266,28 +1265,16 @@ end;
 
 var preShiftWorldDx: LongInt;
 
-procedure ShiftWorld(Dir: LongInt; Flip: Boolean);
+procedure ShiftWorld(Dir: LongInt); inline;
 begin
     preShiftWorldDx:= WorldDx;
-
-    if Flip then
-        begin
-        WorldDx:= -WorldDx - playWidth - Dir * playWidth;
-        openglPushMatrix();
-        openglScalef(-1, 1, 1);
-        end
-    else
-        WorldDx:= WorldDx + Dir * playWidth;
+    WorldDx:= WorldDx + Dir * LongInt(playWidth);
 
 end;
 
-procedure UnshiftWorld(Dir: LongInt; Flip: Boolean);
+procedure UnshiftWorld(); inline;
 begin
     WorldDx:= preShiftWorldDx;
-
-    if Flip then
-        openglPopMatrix();
-
 end;
 
 procedure DrawWorldStereo(Lag: LongInt; RM: TRenderMode);
@@ -1297,19 +1284,17 @@ var i, t: LongInt;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
     VertexBuffer: array [0..3] of TVertex2f;
-    replicateToLeft, replicateToRight, tmp, flip: boolean;
+    replicateToLeft, replicateToRight, tmp: boolean;
 begin
-if (WorldEdge <> weWrap) {and (WorldEdge <> weBounce)} then
+if WorldEdge <> weWrap then
     begin
     replicateToLeft := false;
     replicateToRight:= false;
-    flip:= false;
     end
 else
     begin
-    replicateToLeft := (leftX  + WorldDx > ViewLeftX);
-    replicateToRight:= (rightX + WorldDx < ViewRightX);
-    flip:= (WorldEdge = weBounce);
+    replicateToLeft := (LongInt(leftX)  + WorldDx > ViewLeftX);
+    replicateToRight:= (LongInt(rightX) + WorldDx < ViewRightX);
     end;
 
 ScreenBottom:= (WorldDy - trunc(cScreenHeight/cScaleFactor) - (cScreenHeight div 2) + cWaterLine);
@@ -1362,16 +1347,16 @@ else
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawLand(WorldDx, WorldDy);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawLand(WorldDx, WorldDy);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawWater(255, 0, 0);
@@ -1405,20 +1390,20 @@ bShowFinger:= false;
 
 if replicateToLeft then
     begin
-    ShiftWorld(-1, flip);
+    ShiftWorld(-1);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    UnshiftWorld(-1, flip);
+    UnshiftWorld();
     end;
 
 if replicateToRight then
     begin
-    ShiftWorld(1, flip);
+    ShiftWorld(1);
     DrawVisualGears(1);
     DrawGears();
     DrawVisualGears(6);
-    UnshiftWorld(1, flip);
+    UnshiftWorld();
     end;
 
 bShowFinger:= tmp;
@@ -1464,16 +1449,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawVisualGears(2);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawVisualGears(2);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawVisualGears(2);
@@ -1484,16 +1469,16 @@ if (cReducedQuality and rq2DWater) = 0 then
 
     if replicateToLeft then
         begin
-        ShiftWorld(-1, flip);
+        ShiftWorld(-1);
         DrawVisualGears(3);
-        UnshiftWorld(-1, flip);
+        UnshiftWorld();
         end;
 
     if replicateToRight then
         begin
-        ShiftWorld(1, flip);
+        ShiftWorld(1);
         DrawVisualGears(3);
-        UnshiftWorld(1, flip);
+        UnshiftWorld();
         end;
 
     DrawVisualGears(3);
@@ -1512,7 +1497,7 @@ if (TargetPoint.X <> NoPointX) and (CurrentTeam <> nil) and (CurrentHedgehog <> 
     end;
 {$WARNINGS ON}
 
-RenderWorldEdge(Lag);
+RenderWorldEdge();
 
 // this scale is used to keep the various widgets at the same dimension at all zoom levels
 SetScale(cDefaultZoomLevel);
@@ -1836,7 +1821,7 @@ if isCursorVisible then
                     end;
                 end;
         //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
-        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight - TargetCursorPoint.Y + round(SpritesData[sprArrow].Height / cScaleFactor), (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
+        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
         end
     end;
 
@@ -1876,7 +1861,7 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         begin
         if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > rightX - leftX - 100 then
             begin
-            if (prevPoint.X - WorldDx) * 2 < rightX + leftX then
+            if (prevPoint.X - WorldDx) * 2 < LongInt(rightX + leftX) then
                 cameraJump:= rightX - leftX
                 else
                 cameraJump:= leftX - rightX;
@@ -2056,7 +2041,7 @@ if (not flagPrerecording) then
 end;
 
 procedure updateCursorVisibility;
-begin       
+begin
     if isPaused or isAFK then
         SDL_ShowCursor(1)
     else
@@ -2136,7 +2121,6 @@ begin
     missionTimer:= 0;
     missionTex:= nil;
     cOffsetY:= 0;
-    stereoDepth:= 0;
     AMState:= AMHidden;
     isFirstFrame:= true;
 

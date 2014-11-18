@@ -124,14 +124,14 @@ begin
         begin
         d:= DistanceI(p2.X - p1.X, p2.Y - p1.Y);
         d1:= DistanceI(p2.X - p3.X, p2.Y - p3.Y);
-        
+
         if d1 < d then
             d:= d1;
         if d2 < d then
             d:= d2;
 
         d2:= d * _1div3 / d2;
-        
+
         Vx:= Vx * d2;
         Vy:= Vy * d2
         end
@@ -144,54 +144,57 @@ var i, pi, ni: LongInt;
     tsq, tcb, t, r1, r2, r3, cx1, cx2, cy1, cy2: hwFloat;
     X, Y: LongInt;
 begin
-pi:= EndI;
-i:= StartI;
-ni:= Succ(StartI);
-{$HINTS OFF}
-Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
-{$HINTS ON}
-repeat
-    inc(pi);
-    if pi > EndI then
-        pi:= StartI;
-    inc(i);
-    if i > EndI then
-        i:= StartI;
-    inc(ni);
-    if ni > EndI then
-        ni:= StartI;
-    PVx:= NVx;
-    PVy:= NVy;
-    Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
-
-    x1:= opa.ar[pi].x;
-    y1:= opa.ar[pi].y;
-    x2:= opa.ar[i].x;
-    y2:= opa.ar[i].y;
-    cx1:= int2hwFloat(x1) - PVx;
-    cy1:= int2hwFloat(y1) - PVy;
-    cx2:= int2hwFloat(x2) + NVx;
-    cy2:= int2hwFloat(y2) + NVy;
-    t:= _0;
-    while t.Round = 0 do
+    if pa.Count < cMaxEdgePoints - 2 then
         begin
-        tsq:= t * t;
-        tcb:= tsq * t;
-        r1:= (_1 - t*3 + tsq*3 - tcb);
-        r2:= (     t*3 - tsq*6 + tcb*3);
-        r3:= (           tsq*3 - tcb*3);
-        X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
-        Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
-        t:= t + Delta;
-        pa.ar[pa.Count].x:= X;
-        pa.ar[pa.Count].y:= Y;
-        inc(pa.Count);
-        TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+        pi:= EndI;
+        i:= StartI;
+        ni:= Succ(StartI);
+        {$HINTS OFF}
+        Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+        {$HINTS ON}
+        repeat
+            i:= ni;
+            inc(pi);
+            if pi > EndI then
+                pi:= StartI;
+            inc(ni);
+            if ni > EndI then
+                ni:= StartI;
+            PVx:= NVx;
+            PVy:= NVy;
+            Vector(opa.ar[pi], opa.ar[i], opa.ar[ni], NVx, NVy);
+
+            x1:= opa.ar[pi].x;
+            y1:= opa.ar[pi].y;
+            x2:= opa.ar[i].x;
+            y2:= opa.ar[i].y;
+
+            cx1:= int2hwFloat(x1) - PVx;
+            cy1:= int2hwFloat(y1) - PVy;
+            cx2:= int2hwFloat(x2) + NVx;
+            cy2:= int2hwFloat(y2) + NVy;
+            t:= _0;
+            while (t.Round = 0) and (pa.Count < cMaxEdgePoints-2) do
+                begin
+                tsq:= t * t;
+                tcb:= tsq * t;
+                r1:= (_1 - t*3 + tsq*3 - tcb);
+                r2:= (     t*3 - tsq*6 + tcb*3);
+                r3:= (           tsq*3 - tcb*3);
+                X:= hwRound(r1 * x1 + r2 * cx1 + r3 * cx2 + tcb * x2);
+                Y:= hwRound(r1 * y1 + r2 * cy1 + r3 * cy2 + tcb * y2);
+                t:= t + Delta;
+                pa.ar[pa.Count].x:= X;
+                pa.ar[pa.Count].y:= Y;
+                inc(pa.Count);
+                //TryDo(pa.Count <= cMaxEdgePoints, 'Edge points overflow', true)
+                end;
+        until i = StartI;
         end;
-until i = StartI;
-pa.ar[pa.Count].x:= opa.ar[StartI].X;
-pa.ar[pa.Count].y:= opa.ar[StartI].Y;
-inc(pa.Count)
+
+    pa.ar[pa.Count].x:= opa.ar[StartI].X;
+    pa.ar[pa.Count].y:= opa.ar[StartI].Y;
+    inc(pa.Count)
 end;
 
 procedure BezierizeEdge(var pa: TPixAr; Delta: hwFloat);
@@ -202,7 +205,7 @@ opa:= pa;
 pa.Count:= 0;
 i:= 0;
 StartLoop:= 0;
-while i < LongInt(opa.Count) do
+while (i < LongInt(opa.Count)) and (pa.Count < cMaxEdgePoints-1) do
     if (opa.ar[i + 1].X = NTPX) then
         begin
         AddLoopPoints(pa, opa, StartLoop, i, Delta);

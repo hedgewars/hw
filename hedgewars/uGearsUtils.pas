@@ -25,6 +25,7 @@ uses uTypes, uFloat;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword); inline;
 procedure doMakeExplosion(X, Y, Radius: LongInt; AttackingHog: PHedgehog; Mask: Longword; const Tint: LongWord);
 procedure AddSplashForGear(Gear: PGear; justSkipping: boolean);
+procedure AddBounceEffectForGear(Gear: PGear);
 
 function  ModifyDamage(dmg: Longword; Gear: PGear): Longword;
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -364,15 +365,12 @@ var x, y, i, distL, distR, distB, minDist, maxDrops: LongInt;
     speed, hwTmp: hwFloat;
     vi, vs, tmp: real; // impact speed and sideways speed
     isImpactH, isImpactRight: boolean;
+const dist2surf = 4;
 begin
 x:= hwRound(Gear^.X);
 y:= hwRound(Gear^.Y);
 
-splash:= AddVisualGear(x, y, vgtSplash);
-if splash = nil then
-    exit;
-
-// correct position and angle
+// find position for splash and impact speed
 
 distB:= cWaterline - y;
 
@@ -389,30 +387,18 @@ isImpactH:= (minDist <> distB);
 
 if not isImpactH then
     begin
-    dec(y, distB);
-    splash^.Y:= y;
+    y:= cWaterline - dist2surf;
     speed:= hwAbs(Gear^.dY);
-    vs:= abs(hwFloat2Float(Gear^.dX));
     end
 else
     begin
     isImpactRight := minDist = distR;
     if isImpactRight then
-        begin
-        inc(x, distR);
-        splash^.Angle:= -90;
-        end
+        x:= rightX - dist2surf
     else
-        begin
-        dec(x, distL);
-        splash^.Angle:=  90;
-        end;
-    splash^.X:= x;
+        x:= leftX + dist2surf;
     speed:= hwAbs(Gear^.dX);
-    vs:= abs(hwFloat2Float(Gear^.dY));
     end;
-
-vi:= hwFloat2Float(speed);
 
 // splash sound
 
@@ -430,6 +416,30 @@ else
     else
         PlaySound(sndDroplet2);
     end;
+
+
+// splash visuals
+
+if ((cReducedQuality and rqPlainSplash) <> 0) then
+    exit;
+
+splash:= AddVisualGear(x, y, vgtSplash);
+if splash = nil then
+    exit;
+
+if not isImpactH then
+    vs:= abs(hwFloat2Float(Gear^.dX))
+else
+    begin
+    if isImpactRight then
+        splash^.Angle:= -90
+    else
+        splash^.Angle:=  90;
+    vs:= abs(hwFloat2Float(Gear^.dY));
+    end;
+
+
+vi:= hwFloat2Float(speed);
 
 with splash^ do
     begin
@@ -514,7 +524,7 @@ begin
     if WorldEdge = weSea then
         begin
         tmp:= dist2Water;
-        dist2Water:= min(dist2Water, min(X - Gear^.Radius - leftX, rightX - (X + Gear^.Radius)));
+        dist2Water:= min(dist2Water, min(X - Gear^.Radius - LongInt(leftX), LongInt(rightX) - (X + Gear^.Radius)));
         // if water on sides is closer than on bottom -> horizontal direction
         isDirH:= tmp <> dist2Water;
         end;
@@ -546,7 +556,7 @@ begin
 
         // skipping
 
-        if (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
+        if (not isSubmersible) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > skipSpeed)
         and ( ((not isDirH) and (hwAbs(Gear^.dX) > skipAngle * hwAbs(Gear^.dY)))
           or (isDirH and (hwAbs(Gear^.dY) > skipAngle * hwAbs(Gear^.dX))) ) then
             begin
@@ -595,7 +605,7 @@ begin
                         end
                     else
                         DrownGear(Gear);
-                    if (dist2Water < -1) or (Gear^.Kind = gtFlake) then
+                    if Gear^.Kind = gtFlake then
                         exit(true); // skip splashes
                 end
             else // submersible
@@ -628,8 +638,8 @@ begin
                         tmp:= abs(cWaterLine - tmp);
                         end;
 
-                    // there was an impact if distance was same as radius
-                    isImpact:= (tmp = Gear^.Radius)
+                    // there was an impact if distance was >= radius
+                    isImpact:= (tmp >= Gear^.Radius)
                     end;
                 end; // end of submersible
             end; // end of not skipping
@@ -1297,6 +1307,8 @@ if t<h then
     FollowGear:= AddGear(0, 0, gtCase, 0, _0, _0, 0);
     FollowGear^.Health:= cHealthCaseAmount;
     FollowGear^.Pos:= posCaseHealth;
+    // health crate is smaller than the other crates
+    FollowGear^.Radius := cCaseHealthRadius;
     AddCaption(GetEventString(eidNewHealthPack), cWhiteColor, capgrpAmmoInfo);
     end
 else if (t<a+h) then
@@ -1430,7 +1442,7 @@ if (hwRound(Gear^.X) < LongInt(leftX)) or
             Gear^.X:= int2hwfloat(rightX-Gear^.Radius)
             end;
         if (Gear^.Radius > 2) and (Gear^.dX.QWordValue > _0_001.QWordValue) then
-            PlaySound(sndMelonImpact)
+            AddBounceEffectForGear(Gear);
         end{
     else if WorldEdge = weSea then
         begin
@@ -1463,6 +1475,23 @@ This one would be really easy to freeze game unless it was flagged unfortunately
 *)
     WorldWrap:= true
     end;
+end;
+
+procedure AddBounceEffectForGear(Gear: PGear);
+var boing: PVisualGear;
+begin
+    boing:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot, 0, false, 1);
+    if boing <> nil then
+        with boing^ do
+            begin
+            Angle:= random(360);
+            dx:= 0;
+            dy:= 0;
+            FrameTicks:= 200;
+            Scale:= hwFloat2Float(Gear^.Density * hwAbs(Gear^.dY) + hwAbs(Gear^.dX)) / 1.5;
+            State:= ord(sprBoing)
+            end;
+    PlaySound(sndMelonImpact, true)
 end;
 
 end.

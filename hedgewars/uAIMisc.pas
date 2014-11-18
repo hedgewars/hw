@@ -236,7 +236,7 @@ while Gear <> nil do
 // avoid mines unless they are very likely to be duds, or are duds. also avoid if they are about to blow
             gtMine: begin
                 if (Gear^.State and gstMoving) <> 0 then bonuses.activity:= true;
-                
+
                 if ((Gear^.State and gstAttacking) = 0) and (((cMineDudPercent < 90) and (Gear^.Health <> 0))
                 or (isAfterAttack and (Gear^.Health = 0) and (Gear^.Damage > 30))) then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 50, -50)
@@ -266,14 +266,14 @@ while Gear <> nil do
 
             gtHedgehog:
                 begin
-                if (ThinkingHH <> Gear) 
-                    and (((Gear^.State and (gstMoving or gstDrowning or gstHHDeath)) <> 0) 
+                if (ThinkingHH <> Gear)
+                    and (((Gear^.State and (gstMoving or gstDrowning or gstHHDeath)) <> 0)
                         or (Gear^.Health = 0)
-                        or (Gear^.Damage >= Gear^.Health)) 
+                        or (Gear^.Damage >= Gear^.Health))
                     then begin
                     bonuses.activity:= true;
                     end;
-                
+
                 if Gear^.Damage >= Gear^.Health then
                     AddBonus(hwRound(Gear^.X), hwRound(Gear^.Y), 60, -25)
                 else

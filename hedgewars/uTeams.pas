@@ -752,8 +752,6 @@ begin
     if newCI then DeleteCI(newHog^.Gear);
     oldHH:= CurrentHedgehog;
     CurrentHedgehog:= newHog;
-   if (CurrentHedgehog <> nil) and (CurrentHedgehog^.CurAmmoType = amKnife) then
-       LoadHedgehogHat(CurrentHedgehog^, 'Reserved/chef');
     if oldCI then AddCI(oldHH^.Gear);
     if newCI then AddCI(newHog^.Gear)
 end;

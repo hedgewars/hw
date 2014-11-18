@@ -16,27 +16,28 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QPushButton>
-#include <QBuffer>
-#include <QUuid>
 #include <QBitmap>
-#include <QPainter>
-#include <QLinearGradient>
+#include <QBuffer>
 #include <QColor>
-#include <QTextStream>
-#include <QLabel>
-#include <QListView>
-#include <QVBoxLayout>
-#include <QIcon>
-#include <QLineEdit>
-#include <QStringListModel>
-#include <QListWidget>
-#include <QListWidgetItem>
 #include <QDebug>
 #include <QFile>
 #include <QFileDialog>
+#include <QIcon>
 #include <QInputDialog>
+#include <QLabel>
+#include <QLinearGradient>
+#include <QLineEdit>
+#include <QListView>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QMessageBox>
+#include <QPainter>
+#include <QPushButton>
+#include <QSlider>
+#include <QStringListModel>
+#include <QTextStream>
+#include <QUuid>
+#include <QVBoxLayout>
 
 #include "hwconsts.h"
 #include "mapContainer.h"
@@ -60,6 +61,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_missionsViewSetup = false;
     m_staticViewSetup = false;
     m_script = QString();
+    m_prevMapFeatureSize = 12;
+    m_mapFeatureSize = 12;
 
     hhSmall.load(":/res/hh_small.png");
     hhLimit = 18;
@@ -220,6 +223,17 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     m_childWidgets << mazeStyles;
     rightLayout->addWidget(mazeStyles, 1);
 
+    mapFeatureSize = new QSlider(Qt::Horizontal, this);
+    mapFeatureSize->setObjectName("mapFeatureSize");
+    //mapFeatureSize->setTickPosition(QSlider::TicksBelow);
+    mapFeatureSize->setMaximum(25);
+    mapFeatureSize->setMinimum(1);
+    //mapFeatureSize->setFixedWidth(259);
+    mapFeatureSize->setValue(m_mapFeatureSize);
+    mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    bottomLeftLayout->addWidget(mapFeatureSize, 0);
+    connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(setFeatureSize(int)));
+
     /* Mission description */
 
     lblDesc = new QLabel();
@@ -237,6 +251,8 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
 
     btnTheme = new QPushButton(this);
     btnTheme->setFlat(true);
+    btnTheme->setIconSize(QSize(30, 30));
+    btnTheme->setFixedHeight(30);
     connect(btnTheme, SIGNAL(clicked()), this, SLOT(showThemePrompt()));
     m_childWidgets << btnTheme;
     bottomLeftLayout->addWidget(btnTheme, 0);
@@ -308,7 +324,8 @@ void HWMapContainer::askForGeneratedPreview()
                    get_mapgen(),
                    getMazeSize(),
                    getDrawnMapData(),
-                   m_script
+                   m_script,
+		           m_mapFeatureSize
                   );
 
     setHHLimit(0);
@@ -387,6 +404,11 @@ QString HWMapContainer::getCurrentWeapons() const
 quint32 HWMapContainer::getTemplateFilter() const
 {
     return generationStyles->currentRow();
+}
+
+quint32 HWMapContainer::getFeatureSize() const
+{
+    return m_mapFeatureSize;
 }
 
 void HWMapContainer::resizeEvent ( QResizeEvent * event )
@@ -544,19 +566,24 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
     {
         mapgen = m;
 
+        bool f = false;
         switch (m)
         {
             case MAPGEN_REGULAR:
                 m_mapInfo.type = MapModel::GeneratedMap;
+                f = true;
                 break;
             case MAPGEN_MAZE:
                 m_mapInfo.type = MapModel::GeneratedMaze;
+                f = true;
                 break;
             case MAPGEN_PERLIN:
                 m_mapInfo.type = MapModel::GeneratedPerlin;
+                f = true;
                 break;
             case MAPGEN_DRAWN:
                 m_mapInfo.type = MapModel::HandDrawnMap;
+                f = true;
                 break;
             case MAPGEN_MAP:
                 switch (m_mapInfo.type)
@@ -572,7 +599,8 @@ void HWMapContainer::intSetMapgen(MapGenerator m)
                 break;
         }
 
-        emit mapgenChanged(m);
+        if(f)
+            changeMapType(m_mapInfo.type, QModelIndex());
     }
 }
 
@@ -665,7 +693,7 @@ void HWMapContainer::updatePreview()
     }
 }
 
-void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl)
+void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int mazesize, const QString &seed, int tmpl, int featureSize)
 {
     intSetMapgen(m);
     intSetMazeSize(mazesize);
@@ -673,6 +701,8 @@ void HWMapContainer::setAllMapParameters(const QString &map, MapGenerator m, int
     intSetTemplateFilter(tmpl);
     // this one last because it will refresh the preview
     intSetMap(map);
+    intSetMazeSize(mazesize);
+    intSetFeatureSize(featureSize);
 }
 
 void HWMapContainer::updateModelViews()
@@ -717,6 +747,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     lblDesc->hide();
     btnLoadMap->hide();
     btnEditMap->hide();
+    mapFeatureSize->show();
 
     switch (type)
     {
@@ -745,6 +776,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             mapgen = MAPGEN_DRAWN;
             setMapInfo(MapModel::MapInfoDrawn);
             btnLoadMap->show();
+            mapFeatureSize->hide();
             btnEditMap->show();
             break;
         case MapModel::MissionMap:
@@ -754,6 +786,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             lblMapList->setText(tr("Mission:"));
             lblMapList->show();
             missionMapList->show();
+            mapFeatureSize->hide();
             lblDesc->setText(m_mapInfo.desc);
             lblDesc->show();
             emit mapChanged(m_curMap);
@@ -764,6 +797,7 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
             staticMapChanged(newMap.isValid() ? newMap : staticMapList->currentIndex());
             lblMapList->setText(tr("Map:"));
             lblMapList->show();
+            mapFeatureSize->hide();
             staticMapList->show();
             emit mapChanged(m_curMap);
             break;
@@ -789,9 +823,27 @@ void HWMapContainer::changeMapType(MapModel::MapType type, const QModelIndex & n
     emit mapgenChanged(mapgen);
 }
 
+void HWMapContainer::intSetFeatureSize(int val)
+{
+    mapFeatureSize->setValue(val);    
+    emit mapFeatureSizeChanged(val);
+}
+void HWMapContainer::setFeatureSize(int val)
+{
+    m_mapFeatureSize = val;
+    intSetFeatureSize(val);
+    //m_mapFeatureSize = val>>2<<2;
+    //if (qAbs(m_prevMapFeatureSize-m_mapFeatureSize) > 4)
+    {
+        m_prevMapFeatureSize = m_mapFeatureSize;
+        updatePreview();
+    }
+}
+
+// unused because I needed the space for the slider
 void HWMapContainer::updateThemeButtonSize()
 {
-    if (m_mapInfo.type == MapModel::MissionMap)
+    if (m_mapInfo.type != MapModel::StaticMap && m_mapInfo.type != MapModel::HandDrawnMap)
     {
         btnTheme->setIconSize(QSize(30, 30));
         btnTheme->setFixedHeight(30);
@@ -822,9 +874,9 @@ void HWMapContainer::updateTheme(const QModelIndex & current)
     m_theme = selectedTheme = current.data(ThemeModel::ActualNameRole).toString();
     m_themeID = current.row();
     QIcon icon = qVariantValue<QIcon>(current.data(Qt::DecorationRole));
-    QSize iconSize = icon.actualSize(QSize(65535, 65535));
-    btnTheme->setFixedHeight(64);
-    btnTheme->setIconSize(iconSize);
+    //QSize iconSize = icon.actualSize(QSize(65535, 65535));
+    //btnTheme->setFixedHeight(64);
+    //btnTheme->setIconSize(iconSize);
     btnTheme->setIcon(icon);
     btnTheme->setText(tr("Theme: %1").arg(current.data(Qt::DisplayRole).toString()));
     updateThemeButtonSize();
@@ -873,11 +925,8 @@ void HWMapContainer::mapChanged(const QModelIndex & map, int type, const QModelI
         mapList->scrollTo(map);
     }
 
-    if (map.data(Qt::UserRole + 1).canConvert<MapModel::MapInfo>())
-        setMapInfo(map.data(Qt::UserRole + 1).value<MapModel::MapInfo>());
-    else
-        Q_ASSERT(false); // Houston, we have a problem.
-
+    Q_ASSERT(map.data(Qt::UserRole + 1).canConvert<MapModel::MapInfo>()); // Houston, we have a problem.
+    setMapInfo(map.data(Qt::UserRole + 1).value<MapModel::MapInfo>());
 }
 
 void HWMapContainer::setMapInfo(MapModel::MapInfo mapInfo)

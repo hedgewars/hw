@@ -660,14 +660,14 @@ case bpp of
         begin
         for x:= 0 to Pred(w) do
             if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
-                if (outOfMap and 
+                if (outOfMap and
                    ((cpY + y) < LAND_HEIGHT) and ((cpY + y) >= 0) and
                    ((cpX + x) < LAND_WIDTH) and ((cpX + x) >= 0) and
                    ((not force) and (Land[cpY + y, cpX + x] <> 0))) or
 
                    (not outOfMap and
                        (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                       ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or 
+                       ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or
                        ((not force) and (Land[cpY + y, cpX + x] <> 0)))) then
                    begin
                    if SDL_MustLock(Image) then
@@ -907,7 +907,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         else Land[y,x]:= lfBasic
         end
     end
-else if ((cReducedQuality and rqBlurryLand) = 0) and (LandPixels[Y, X] and AMask = 255)
+else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
 and (Land[Y, X] and (lfDamaged or lfBasic) = lfBasic)
 and (Y > LongInt(topY) + 1) and (Y < LAND_HEIGHT-2) and (X > LongInt(leftX) + 1) and (X < LongInt(rightX) - 1) then
     begin
@@ -1095,21 +1095,21 @@ function DrawDots(x, y, xx, yy: Longint; Color: Longword): Longword; inline;
 begin
     DrawDots:= 0;
 
-    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x + xx] <> Color) then 
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x + xx] <> Color) then
         begin inc(DrawDots); Land[y + yy, x + xx]:= Color; end;
-    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x + xx] <> Color) then 
+    if (((x + xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x + xx] <> Color) then
         begin inc(DrawDots); Land[y - yy, x + xx]:= Color; end;
-    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x - xx] <> Color) then 
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y + yy) and LAND_HEIGHT_MASK) = 0) and (Land[y + yy, x - xx] <> Color) then
         begin inc(DrawDots); Land[y + yy, x - xx]:= Color; end;
-    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x - xx] <> Color) then 
+    if (((x - xx) and LAND_WIDTH_MASK) = 0) and (((y - yy) and LAND_HEIGHT_MASK) = 0) and (Land[y - yy, x - xx] <> Color) then
         begin inc(DrawDots); Land[y - yy, x - xx]:= Color; end;
-    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x + yy] <> Color) then 
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x + yy] <> Color) then
         begin inc(DrawDots); Land[y + xx, x + yy]:= Color; end;
-    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x + yy] <> Color) then 
+    if (((x + yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x + yy] <> Color) then
         begin inc(DrawDots); Land[y - xx, x + yy]:= Color; end;
-    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x - yy] <> Color) then 
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y + xx) and LAND_HEIGHT_MASK) = 0) and (Land[y + xx, x - yy] <> Color) then
         begin inc(DrawDots); Land[y + xx, x - yy]:= Color; end;
-    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x - yy] <> Color) then 
+    if (((x - yy) and LAND_WIDTH_MASK) = 0) and (((y - xx) and LAND_HEIGHT_MASK) = 0) and (Land[y - xx, x - yy] <> Color) then
         begin inc(DrawDots); Land[y - xx, x - yy]:= Color; end;
 end;
 

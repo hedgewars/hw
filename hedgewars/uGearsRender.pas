@@ -6,7 +6,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; version 2 of the License
  *
- * This program is distributed in the hope that it will be useful,
+	 * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -219,10 +219,14 @@ var i, t: LongInt;
     CurWeapon: PAmmo;
     iceOffset:Longint;
     r:TSDL_Rect;
+    curhat: PTexture;
 begin
     HH:= Gear^.Hedgehog;
     if HH^.Unplaced then
         exit;
+    if (HH^.CurAmmoType = amKnife) and (HH = CurrentHedgehog) then
+         curhat:= ChefHatTexture
+    else curhat:= HH^.HatTex;
     m:= 1;
     if ((Gear^.State and gstHHHJump) <> 0) and (not cArtillery) then
         m:= -1;
@@ -431,14 +435,14 @@ begin
                                 0,
                                 DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + dAngle);
                         with HH^ do
-                            if (HatTex <> nil) then
+                            if (curhat <> nil) then
                                 begin
-                                DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
+                                DrawTextureRotatedF(curhat, 1.0, -1.0, -6.0, ox, oy, 0, i, 32, 32,
                                     i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
-                                if HatTex^.w > 64 then
+                                if curhat^.w > 64 then
                                     begin
                                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                                    DrawTextureRotatedF(HatTex, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
+                                    DrawTextureRotatedF(curhat, 1.0, -1.0, -6.0, ox, oy, 32, i, 32, 32,
                                         i*DxDy2Angle(CurAmmoGear^.dY, CurAmmoGear^.dX) + hAngle);
                                     untint
                                     end
@@ -456,9 +460,9 @@ begin
                             HH^.visStepPos div 2,
                             0);
                     with HH^ do
-                        if (HatTex <> nil) then
+                        if (curhat <> nil) then
                             begin
-                            DrawTextureF(HatTex,
+                            DrawTextureF(curhat,
                                 1,
                                 sx,
                                 sy - 5,
@@ -466,10 +470,10 @@ begin
                                 sign,
                                 32,
                                 32);
-                            if HatTex^.w > 64 then
+                            if curhat^.w > 64 then
                                 begin
                                 Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                                DrawTextureF(HatTex,
+                                DrawTextureF(curhat,
                                     1,
                                     sx,
                                     sy - 5,
@@ -810,22 +814,11 @@ begin
         begin
         if defaultPos then
             begin
-            if HH^.Team^.hasGone then
-                 Tint($FFFFFF80)
-            else if HH^.Effects[hePoisoned] <> 0 then
-                 Tint($B7FFBCFF)
-            else Tint(HH^.Gear^.Tint);
+            if HH^.Team^.hasGone then Tint($FFFFFF80);
             DrawSpriteRotatedF(sprHHIdle,
                 sx,
                 sy,
                 (RealTicks div 128 + Gear^.Pos) mod 19,
-                sign,
-                0);
-            untint;
-            DrawSpriteRotatedF(sprHHIdle,
-                sx,
-                sy,
-                (RealTicks div 128 + Gear^.Pos) mod 19 + 32,
                 sign,
                 0);
             HatVisible:= true;
@@ -839,11 +832,11 @@ begin
             if HatVisibility > 0.0 then
                 HatVisibility:= HatVisibility - 0.2;
 
-        if (HatTex <> nil)
+        if (curhat <> nil)
         and (HatVisibility > 0) then
             if DefaultPos then
                 begin
-                DrawTextureF(HatTex,
+                DrawTextureF(curhat,
                     HatVisibility,
                     sx,
                     sy - 5,
@@ -851,10 +844,10 @@ begin
                     sign,
                     32,
                     32);
-                if HatTex^.w > 64 then
+                if curhat^.w > 64 then
                     begin
                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                    DrawTextureF(HatTex,
+                    DrawTextureF(curhat,
                         HatVisibility,
                         sx,
                         sy - 5,
@@ -868,7 +861,7 @@ begin
                 end
             else
                 begin
-                DrawTextureF(HatTex,
+                DrawTextureF(curhat,
                     HatVisibility,
                     sx,
                     sy - 5,
@@ -876,10 +869,10 @@ begin
                     sign*m,
                     32,
                     32);
-                if HatTex^.w > 64 then
+                if curhat^.w > 64 then
                     begin
                     Tint(HH^.Team^.Clan^.Color shl 8 or $FF);
-                    DrawTextureF(HatTex,
+                    DrawTextureF(curhat,
                         HatVisibility,
                         sx,
                         sy - 5,

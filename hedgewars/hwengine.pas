@@ -63,7 +63,9 @@ begin
             SetDefaultBinds;
             if HasBorder then
                 DisableSomeWeapons;
-            AddClouds;
+            // wave "clouds" on underwater theme look weird w/ weSea, esp the blended bottom portion
+            if (WorldEdge <> weSea) or (Theme <> 'Underwater') then
+                AddClouds;
             AddFlakes;
             SetRandomSeed(cSeed, false);
             AssignHHCoords;
