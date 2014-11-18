@@ -58,6 +58,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatReady: boolean;
     showAll: boolean;
     liveLua: boolean;
+    ChatHidden: boolean;
 
 const
     colors: array[#0..#6] of TSDL_Color = (
@@ -204,20 +205,22 @@ inc(visibleCount)
 end;
 
 procedure DrawChat;
-var i, t, left, top, cnt: Longword;
+var i, t, left, top, cnt: LongInt;
 begin
 ChatReady:= true; // maybe move to somewhere else?
 
+if ChatHidden and (not showAll) then
+    visibleCount:= 0;
+
+// draw chat lines with some distance from screen border
 left:= 4 - cScreenWidth div 2;
-top := 10;
+top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 
+// draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
-    begin
-    // draw under all other lines
-    DrawTexture(left, top + visibleCount * ClHeight, InputStr.Tex);
-    end;
+    DrawTexture(left, top, InputStr.Tex);
 
-if UIDisplay <> uiNone then
+if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
     begin
     if MissedCount <> 0 then // there are chat strings we missed, so print them now
         begin
@@ -231,11 +234,13 @@ if UIDisplay <> uiNone then
     t  := 1; // # of current line processed
 
     // draw lines in reverse order
-    while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t < MaxStrIndex) and showAll))
+    while (((t < 7) and (Strs[i].Time > RealTicks)) or ((t <= MaxStrIndex + 1) and showAll))
     and (Strs[i].Tex <> nil) do
         begin
-        // draw lines 4px away from left screen border and 2px away from top
-        DrawTexture(left, top + (visibleCount - t) * ClHeight, Strs[i].Tex);
+        top:= top - ClHeight;
+        // draw chatline only if not offscreen
+        if top > 0 then
+            DrawTexture(left, top, Strs[i].Tex);
 
         if i = 0 then
             i:= MaxStrIndex
@@ -339,6 +344,14 @@ if (s[1] = '/') then
     if (copy(s, 2, 3) = 'me ') then
         begin
         ParseCommand('/say ' + s, true);
+        exit
+        end;
+
+    if (copy(s, 2, 10) = 'togglechat') then
+        begin
+        ChatHidden:= (not ChatHidden);
+        if ChatHidden then
+           showAll:= false;
         exit
         end;
 
@@ -516,9 +529,18 @@ begin
 end;
 
 procedure chHistory(var s: shortstring);
+var i: LongInt;
 begin
     s:= s; // avoid compiler hint
-    showAll:= not showAll
+    showAll:= not showAll;
+    // immediatly recount
+    visibleCount:= 0;
+    if showAll or (not ChatHidden) then
+        for i:= 0 to MaxStrIndex do
+            begin
+            if (Strs[i].Tex <> nil) and (showAll or (Strs[i].Time > RealTicks)) then
+                inc(visibleCount);
+            end;
 end;
 
 procedure chChat(var s: shortstring);
@@ -551,6 +573,7 @@ begin
     ChatReady:= false;
     missedCount:= 0;
     liveLua:= false;
+    ChatHidden:= false;
 
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
