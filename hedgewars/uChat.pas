@@ -268,6 +268,13 @@ var i: TWave;
     c, t: LongInt;
     x: byte;
 begin
+if s <> LocalStrs[localLastStr] then
+    begin
+    // put in input history
+    localLastStr:= (localLastStr + 1) mod MaxStrIndex;
+    LocalStrs[localLastStr]:= s;
+    end;
+
 t:= LocalTeam;
 x:= 0;
 if (s[1] = '"') and (s[Length(s)] = '"')
@@ -295,10 +302,6 @@ if x <> 0 then
 
 if (s[1] = '/') then
     begin
-    // put in input history
-    localLastStr:= (localLastStr + 1) mod MaxStrIndex;
-    LocalStrs[localLastStr]:= s;
-
     // These 3 are same as above, only are to make the hedgehog say it on next attack
     if (copy(s, 2, 4) = 'hsa ') then
         begin
@@ -498,11 +501,7 @@ begin
     if copy(s, 1, 4) = '/me ' then
         s:= #2 + '* ' + UserNick + ' ' + copy(s, 5, Length(s) - 4)
     else
-        begin
-        localLastStr:= (localLastStr + 1) mod MaxStrIndex;
-        LocalStrs[localLastStr]:= s;
         s:= #1 + UserNick + ': ' + s;
-        end;
 
     AddChatString(s)
 end;
