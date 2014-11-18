@@ -23,6 +23,7 @@ extern "C" {
     getThemesList_t *flibGetThemesList;
     freeThemesList_t *flibFreeThemesList;
     getThemeIcon_t *flibGetThemeIcon;
+    getScriptsList_t *flibGetScriptsList;
     getTeamsList_t *flibGetTeamsList;
     tryAddTeam_t * flibTryAddTeam;
     tryRemoveTeam_t * flibTryRemoveTeam;
@@ -56,6 +57,8 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
     flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
+
+    flibGetScriptsList = (getScriptsList_t*) hwlib.resolve("getScriptsList");
 
     flibResetGameConfig = (resetGameConfig_t*) hwlib.resolve("resetGameConfig");
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");

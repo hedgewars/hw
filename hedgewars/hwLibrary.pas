@@ -44,6 +44,7 @@ uses hwengine
     , uPhysFSLayer
     , uFLData
     , uFLTeams
+    , uFLScripts
     ;
 
 {$INCLUDE "config.inc"}
@@ -158,6 +159,7 @@ exports
     getThemesList,
     freeThemesList,
     getThemeIcon,
+    getScriptsList,
     getTeamsList,
     tryAddTeam,
     tryRemoveTeam,

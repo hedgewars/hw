@@ -43,6 +43,8 @@ typedef char **getThemesList_t();
 typedef void freeThemesList_t(char **list);
 typedef uint32_t getThemeIcon_t(char * theme, char * buffer, uint32_t size);
 
+typedef char **getScriptsList_t();
+
 typedef char **getTeamsList_t();
 typedef void tryAddTeam_t(const char * teamName);
 typedef void tryRemoveTeam_t(const char * teamName);

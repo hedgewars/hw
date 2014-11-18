@@ -4,6 +4,7 @@ interface
 function str2PChar(const s: shortstring): PChar;
 function intToStr(n: LongInt): shortstring;
 function midStr(s: shortstring; pos: byte): shortstring;
+procedure underScore2Space(var s: shortstring);
 
 implementation
 
@@ -29,6 +30,13 @@ end;
 function midStr(s: shortstring; pos: byte): shortstring;
 begin
     midStr:= copy(s, pos, length(s) - pos + 1)
+end;
+
+procedure underScore2Space(var s: shortstring);
+var i: LongInt;
+begin
+    for i:= length(s) downto 1 do
+        if s[i] = '_' then s[i]:= ' '
 end;
 
 end.

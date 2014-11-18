@@ -21,20 +21,30 @@ var
     scriptsNumber: Longword;
     listOfScriptNames: array[0..MAX_SCRIPT_NAMES] of PChar;
 
-procedure loadScript(var script: TScript; fileName: shortstring);
+procedure loadScript(var script: TScript; scriptName, fileName: shortstring);
 var f: PFSFile;
-    section: LongInt;
-    l: shortstring;
 begin
-    section:= -1;
-    f:= pfsOpenRead(fileName);
+    underScore2Space(scriptName);
+    script.scriptName:= scriptName;
+    script.description:= scriptName + ' script description';
 
-    while (not pfsEOF(f)) do
+    f:= pfsOpenRead(copy(fileName, 1, length(fileName) - 4) + '.txt');
+
+    script.gameScheme:= '';
+    script.weapons:= '';
+
+    if f <> nil then
     begin
-        pfsReadLn(f, l);
-    end;
+        if not pfsEOF(f) then
+        begin
+            pfsReadLn(f, script.gameScheme);
 
-    pfsClose(f)
+            if not pfsEOF(f) then
+                pfsReadLn(f, script.weapons);
+        end;
+
+        pfsClose(f)
+    end
 end;
 
 procedure loadScripts;
@@ -66,7 +76,7 @@ begin
         l:= length(s);
         if (l > 4) and (copy(s, l - 3, 4) = '.lua') then 
             begin
-                loadScript(script^, '/Config/Scripts/' + s);
+                loadScript(script^, copy(s, 1, l - 4), '/Config/Scripts/' + s);
                 inc(script)
             end;
         inc(tmp)
