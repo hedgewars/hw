@@ -1985,7 +1985,7 @@ var spr   : TSprite;
     placed: boolean;
 const
     call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx [, landFlags, ... ]';
+    params = 'x, y, sprite, frameIdx [, landFlag, ... ]';
 begin
     placed:= false;
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
