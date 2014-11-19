@@ -156,7 +156,7 @@ end;
 
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
-    c: byte;
+    //c: byte;
 begin
 inc(GCounter);
 

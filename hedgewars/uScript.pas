@@ -1237,9 +1237,9 @@ begin
             vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
+               vgear^.Text:= lua_tostring(L, 2);
                if Gear^.Kind = gtHedgehog then
                    begin
-                   vgear^.Text:= lua_tostring(L, 2);
                    AddChatString(#1+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text);
                    vgear^.Hedgehog:= gear^.Hedgehog
                    end
