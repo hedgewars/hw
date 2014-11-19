@@ -233,6 +233,7 @@ HWMapContainer::HWMapContainer(QWidget * parent) :
     mapFeatureSize->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     bottomLeftLayout->addWidget(mapFeatureSize, 0);
     connect(mapFeatureSize, SIGNAL(valueChanged(int)), this, SLOT(setFeatureSize(int)));
+    m_childWidgets << mapFeatureSize;
 
     /* Mission description */
 
