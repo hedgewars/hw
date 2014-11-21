@@ -184,7 +184,7 @@ roomInfo p n r
         roomFlags = concat [
             "-"
             , ['g' | isJust $ gameInfo r]
-            , ['p' | B.null $ password r]
+            , ['p' | not . B.null $ password r]
             , ['j' | isRestrictedJoins  r]
             , ['r' | isRegisteredOnly  r]
             ]
