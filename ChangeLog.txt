@@ -16,6 +16,7 @@
  + Various performance tweaks, especially for very large maps.
  + Allow switching through hogs in reverse order with PRECISE+HOGSWITCH (left shift + tab, by default)
  + Added support for custom Sudden Death music to theme.cfg (e.g. sd-music=hell.ogg ).
+ + New Hats: policegirl
  * Fixed drill rockets sometimes exploding on impact.
  * Fixed trainings broken due to indestructable targets/crates.
  * Fixes and tweaks for low qualily rendering.

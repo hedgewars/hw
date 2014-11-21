@@ -53,6 +53,7 @@ implementation
 uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
+var n: LongInt;
 begin
 with RopePoints do
     begin
@@ -64,24 +65,29 @@ with RopePoints do
 
 if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     begin
-    glDisable(GL_TEXTURE_2D);
+    EnableTexture(false);
     //glEnable(GL_LINE_SMOOTH);
 
-    glPushMatrix;
+    Tint($70, $70, $70, $FF);
 
-    glTranslatef(WorldDx, WorldDy, 0);
+    n:= RopePoints.Count + 2;
 
+    SetVertexPointer(@RopePoints.rounded[0], n);
+
+    openglPushMatrix();
+    openglTranslatef(WorldDx, WorldDy, 0);
+
+    glLineWidth(3.0 * cScaleFactor);
+    glDrawArrays(GL_LINE_STRIP, 0, n);
+    Tint($D8, $D8, $D8, $FF);
     glLineWidth(2.0 * cScaleFactor);
+    glDrawArrays(GL_LINE_STRIP, 0, n);
 
-    Tint($C0, $C0, $C0, $FF);
-
-    glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
-    glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
     untint;
 
-    glPopMatrix;
+    openglPopMatrix();
 
-    glEnable(GL_TEXTURE_2D);
+    EnableTexture(true);
     //glDisable(GL_LINE_SMOOTH)
     end
 end;
