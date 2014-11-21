@@ -37,7 +37,31 @@ Rectangle {
         onClicked: HWEngine.runLocalGame()
     }
 
-    Rectangle {
+    HWComboBox {
+        x: 320
+        y: 16
+        width: 100
+        height: 256
+
+        model: themesModel
+        delegate: Rectangle {
+            height: 25
+            width: 100
+            color: "transparent"
+            Text {id: themeName; text: modelData }
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: {
+                     themeImage.source = "image://theme/" + themeName.text
+                     model.currentIndex = index
+                     HWEngine.setTheme(themeName.text)
+                 }
+            }
+        }
+    }
+
+/*    Rectangle {
         x: 320
         y: 16
         width: 100
@@ -54,34 +78,7 @@ Rectangle {
             height: 64
             fillMode: Image.Pad
         }
-
-        ListView {
-            id: themesList
-            x: 0
-            y: 64
-            width: 100
-            height: 192
-            highlight: Rectangle { color: "#eaea00"; radius: 4 }
-            focus: true
-
-            model: themesModel
-            delegate: Rectangle {
-                height: 25
-                width: 100
-                color: "transparent"
-                Text {id: themeName; text: modelData }
-                MouseArea {
-                     z: 1
-                     anchors.fill: parent
-                     onClicked: {
-                         themeImage.source = "image://theme/" + themeName.text
-                         themesList.currentIndex = index
-                         HWEngine.setTheme(themeName.text)
-                     }
-                }
-            }
-        }
-    }
+*/
 
     ListView {
         id: playingTeamsList

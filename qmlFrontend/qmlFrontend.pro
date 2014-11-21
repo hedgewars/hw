@@ -37,4 +37,5 @@ OTHER_FILES += \
     qml/qmlFrontend/main.qml \
     qml/qmlFrontend/LocalGame.qml \
     qml/qmlFrontend/GameConfig.qml \
-    qml/qmlFrontend/First.qml
+    qml/qmlFrontend/First.qml \
+    qml/qmlFrontend/HWComboBox.qml
