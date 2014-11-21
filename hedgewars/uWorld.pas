@@ -1040,6 +1040,9 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         end;
 
     (*
+    WARNING: the following render code is outdated and does not work with
+             current Render.pas ! - don't just uncomment without fixing it first
+
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     if (WorldEdge = weWrap) or (worldEdge = weBounce) then
@@ -1729,12 +1732,12 @@ if ScreenFade <> sfNone then
         VertexBuffer[3].X:= cScreenWidth;
         VertexBuffer[3].Y:= cScreenHeight;
 
-        glDisable(GL_TEXTURE_2D);
+        EnableTexture(false);
 
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+        SetVertexPointer(@VertexBuffer[0], 4);
         glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
 
-        glEnable(GL_TEXTURE_2D);
+        EnableTexture(true);
         untint;
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
