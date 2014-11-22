@@ -807,7 +807,7 @@ begin
                 DrawTextureRotatedF(curhat, 1.0, -1.0, 0, sx, sy, 18, sign, 32, 32,
                     sign*Gear^.DirAngle)
             end;
-            
+
 
         if ((Gear^.State and gstHHJumping) <> 0) then
             begin
