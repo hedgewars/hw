@@ -37,6 +37,7 @@ var
     cNewScreenHeight   : LongInt;
     cScreenResizeDelay : LongWord;
     ipcPort            : Word;
+    AprilOne           : boolean;
     cFullScreen        : boolean;
     cLocaleFName       : shortstring;
     cLocale            : shortstring;
@@ -2651,6 +2652,7 @@ begin
     LocalMessage:= 0;
 
     cViewLimitsDebug:= false;
+    AprilOne := false;
 end;
 
 procedure freeModule;
