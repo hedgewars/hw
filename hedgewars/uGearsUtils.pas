@@ -205,7 +205,7 @@ if (Gear^.Kind = gtHedgehog) and (Gear^.Hedgehog <> nil) and
    (Gear^.Hedgehog^.King or (Gear^.Hedgehog^.Effects[heFrozen] > 0)) then
     ModifyDamage:= hwRound(cDamageModifier * dmg * i * cDamagePercent * _0_5 * _0_01)
 else
-    ModifyDamage:= hwRound(cDamageModifier * dmg * i * cDamagePercent * _0_01)
+    ModifyDamage:= hwRound(cDamageModifier * dmg * i * cDamagePercent * _0_01);
 end;
 
 procedure ApplyDamage(Gear: PGear; AttackerHog: PHedgehog; Damage: Longword; Source: TDamageSource);
@@ -262,6 +262,27 @@ begin
             end;
         uStats.HedgehogDamaged(Gear, AttackerHog, Damage, false);
         end;
+
+	if AprilOne and (Gear^.Hedgehog^.Hat = 'fr_tomato') and (Damage > 2) then
+	    for i := 0 to random(min(Damage,20))+5 do
+		begin
+		vg:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtStraightShot);
+		if vg <> nil then
+		    with vg^ do
+			begin
+			dx:= 0.001 * (random(100)+10);
+			dy:= 0.001 * (random(100)+10);
+			tdy:= -cGravityf;
+			if random(2) = 0 then
+			    dx := -dx;
+			//if random(2) = 0 then
+			//    dy := -dy;
+			FrameTicks:= random(500) + 1000;
+			State:= ord(sprBubbles);
+			//Tint:= $bd2f03ff
+			Tint:= $ff0000ff
+			end
+	end
     end else
     //else if Gear^.Kind <> gtStructure then // not gtHedgehog nor gtStructure
         Gear^.Hedgehog:= AttackerHog;
@@ -283,6 +304,7 @@ end;
 procedure HHHurt(Hedgehog: PHedgehog; Source: TDamageSource);
 begin
 if Hedgehog^.Effects[heFrozen] <> 0 then exit;
+
 if (Source = dsFall) or (Source = dsExplosion) then
     case random(3) of
         0: PlaySoundV(sndOoff1, Hedgehog^.Team^.voicepack);

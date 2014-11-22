@@ -797,13 +797,17 @@ begin
         if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
             begin
-            DrawHedgehog(sx, sy,
-                sign,
-                2,
-                1,
-                Gear^.DirAngle);
-            defaultPos:= false
-            end else
+            defaultPos:= false;
+                DrawHedgehog(sx, sy,
+                    sign,
+                    2,
+                    1,
+                    Gear^.DirAngle);
+            if AprilOne and (curhat <> nil) then
+                DrawTextureRotatedF(curhat, 1.0, -1.0, 0, sx, sy, 18, sign, 32, 32,
+                    sign*Gear^.DirAngle)
+            end;
+            
 
         if ((Gear^.State and gstHHJumping) <> 0) then
             begin
