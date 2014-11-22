@@ -1,5 +1,5 @@
 --[[
-Made for 0.9.20
+Made for 0.9.21
 
 Copyright (C) 2012 Vatten
 
@@ -44,11 +44,11 @@ function positive(num)
 	end
 end
 
-function EndTurn(baseRetreatTime)
-	local retreatTimePercentage = 100
+function EndTurn()
 	SetState(CurrentHedgehog,bor(GetState(CurrentHedgehog),gstAttacked))
-	TurnTimeLeft = baseRetreatTime / 100 * retreatTimePercentage
- end
+	--3 sec espace time
+	TurnTimeLeft = GetAwayTime*10*3
+end
 
 --for sundaland
 local turnhog=0
@@ -1036,7 +1036,7 @@ function onAttack()
 	if(africanSpecial == 1 and GetCurAmmoType() == amSeduction and band(GetState(CurrentHedgehog),gstAttacked)==0)
 	then
 		--SetState(CurrentHedgehog, gstAttacked)
-		EndTurn(3000)
+		EndTurn()
 		
 		temp_val=0
 		runOnGears(weapon_duststorm)
@@ -1097,7 +1097,7 @@ function onAttack()
 			end
 		end
 		
-		EndTurn(3000)
+		EndTurn()
 		
 		DeleteVisualGear(visualcircle)
 		visualcircle=nil
