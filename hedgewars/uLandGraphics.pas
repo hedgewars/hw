@@ -54,7 +54,7 @@ function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
-uses SDLh, uLandTexture, uTextures, uVariables, uUtils, uDebug;
+uses SDLh, uLandTexture, uTextures, uVariables, uUtils, uDebug, uScript;
 
 
 procedure calculatePixelsCoordinates(landX, landY: Longint; var pixelX, pixelY: Longint); inline;
@@ -722,7 +722,14 @@ x:= Max(cpX, leftX);
 w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
 y:= Max(cpY, topY);
 h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
-UpdateLandTexture(x, w, y, h, true)
+UpdateLandTexture(x, w, y, h, true);
+
+ScriptCall('onSpritePlacement', ord(Obj), cpX + w div 2, cpY + h div 2);
+if Obj = sprAmGirder then
+    ScriptCall('onGirderPlacement', frame, cpX + w div 2, cpY + h div 2)
+else if Obj = sprAmRubber then
+    ScriptCall('onRubberPlacement', frame, cpX + w div 2, cpY + h div 2);
+
 end;
 
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
