@@ -722,14 +722,14 @@ void HWChatWidget::chatNickDoubleClicked(const QModelIndex &index)
 void HWChatWidget::adminAccess(bool b)
 {
     chatNicks->removeAction(acKick);
-    chatNicks->removeAction(acBan);
+    //chatNicks->removeAction(acBan);
 
     m_isAdmin = b;
 
     if(b)
     {
         chatNicks->insertAction(0, acKick);
-        chatNicks->insertAction(0, acBan);
+        //chatNicks->insertAction(0, acBan);
     }
 }
 
