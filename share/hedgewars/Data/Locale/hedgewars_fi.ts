@@ -2,9 +2,9 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fi">
 
-<!-- Finnish translation updated by Janne Uusitupa <ju@cockli> on 2014/11/23. -->	
+<!-- Finnish translation updated by Janne Uusitupa <ju@cockli> on 2014/11/23. -->
 <!-- Based on the older translation. -->
-	
+
 <context>
     <name>About</name>
     <message>
@@ -392,7 +392,7 @@ If this nick isn&apos;t yours, please register your own nick at www.hedgewars.or
 
 Password:</source>
 	<translation>Tämä nimimerkki on rekisteröity, etkä antanut salasanaa.
-		
+
 Jos tämä ei ole nimesi, rekisteröi omasi osoitteessa hedgewars.org
 
 Salasana: </translation>
@@ -402,7 +402,7 @@ Salasana: </translation>
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
 	<translation>Nimimerkkiäsi ei ole rekisteröity.
-Estääksesi muita käyttämästä sitä, 
+Estääksesi muita käyttämästä sitä,
 voit rekisteröidä sen osoitteessa hedgewars.org</translation>
     </message>
     <message>
@@ -715,6 +715,10 @@ pelkkä nimimerkki riittää.</translation>
     <message>
         <source>Password:</source>
         <translation>Salasana:</translation>
+    </message>
+    <message>
+        <source>New Account</source>
+       <translation>Rekisteröidy</translation>
     </message>
 </context>
 <context>

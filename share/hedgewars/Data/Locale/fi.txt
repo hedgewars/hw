@@ -125,7 +125,7 @@
 02:00=%1 vie siilet askelta lähemmäksi sukupuuttoa
 02:00=%1 tuo kyyneleen silmääni
 02:00=%1 on ex-siili
-02:00=%1:stä nauttii enää rikkaheinät 
+02:00=%1:stä nauttii enää rikkaheinät
 02:00=%1 on lakannut olemasta
 02:00=Sano näkemiin %1:lle
 02:00=%1:llä ei ole enää toivoa
