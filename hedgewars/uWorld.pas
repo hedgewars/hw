@@ -978,9 +978,11 @@ begin
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+var tmp: LongInt;
 begin
-    rm:= rm; d:= d; // avoid hint
-{$IFDEF USE_S3D_RENDERING}
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; d:= d; tmp:= tmp; // avoid hint
+{$ELSE}
     d:= d / 5;
     if rm = rmDefault then
         exit
@@ -988,16 +990,24 @@ begin
         d:= -d;
     cStereoDepth:= cStereoDepth + d;
     openglTranslProjMatrix(d, 0, 0);
+    tmp:= round(d / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  - tmp;
+    ViewRightX:= ViewRightX - tmp;
 {$ENDIF}
 end;
 
 procedure ResetDepth(rm: TRenderMode);
+var tmp: LongInt;
 begin
-    rm:= rm; // avoid hint
-{$IFDEF USE_S3D_RENDERING}
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; tmp:= tmp; // avoid hint
+{$ELSE}
     if rm = rmDefault then
         exit;
     openglTranslProjMatrix(-cStereoDepth, 0, 0);
+    tmp:= round(cStereoDepth / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  + tmp;
+    ViewRightX:= ViewRightX + tmp;
     cStereoDepth:= 0;
 {$ENDIF}
 end;

@@ -2651,6 +2651,7 @@ begin
     UIDisplay:= uiAll;
     LocalMessage:= 0;
 
+    cStereoDepth:= 0;
     cViewLimitsDebug:= false;
     AprilOne := false;
 end;
