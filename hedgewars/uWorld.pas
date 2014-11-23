@@ -1354,25 +1354,25 @@ if (cReducedQuality and rq2DWater) = 0 then
 else
     DrawWaves(-1, 100, - cWaveHeight div 2, - cWaveHeight div 2, 0);
 
-    changeDepth(RM, cStereo_Land);
-    DrawVisualGears(5);
+ChangeDepth(RM, cStereo_Land);
+DrawVisualGears(5);
+DrawLand(WorldDx, WorldDy);
+
+if replicateToLeft then
+    begin
+    ShiftWorld(-1);
     DrawLand(WorldDx, WorldDy);
+    UnshiftWorld();
+    end;
 
-    if replicateToLeft then
-        begin
-        ShiftWorld(-1);
-        DrawLand(WorldDx, WorldDy);
-        UnshiftWorld();
-        end;
+if replicateToRight then
+    begin
+    ShiftWorld(1);
+    DrawLand(WorldDx, WorldDy);
+    UnshiftWorld();
+    end;
 
-    if replicateToRight then
-        begin
-        ShiftWorld(1);
-        DrawLand(WorldDx, WorldDy);
-        UnshiftWorld();
-        end;
-
-    DrawWater(255, 0, 0);
+DrawWater(255, 0, 0);
 
 (*
 // Attack bar
