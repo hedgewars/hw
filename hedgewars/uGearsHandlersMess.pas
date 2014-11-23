@@ -3099,6 +3099,8 @@ begin
                     dY:= -_450 * cGravity;
                     Active:= true;
                     end
+                else if Hedgehog^.Effects[heFrozen] > 255 then
+                    Hedgehog^.Effects[heFrozen]:= 255
         end ;
         AfterAttack;
         DeleteGear(Gear);
