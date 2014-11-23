@@ -3093,14 +3093,12 @@ begin
         begin
         for i:= 0 to hogs.size - 1 do
             with hogs.ar^[i]^ do
-                begin
-                if hogs.ar^[i] <> CurrentHedgehog^.Gear then
+                if (hogs.ar^[i] <> CurrentHedgehog^.Gear) and (Hedgehog^.Effects[heFrozen] = 0)  then
                     begin
                     dX:= _50 * cGravity * (Gear^.X - X) / _25;
                     dY:= -_450 * cGravity;
                     Active:= true;
                     end
-                end;
         end ;
         AfterAttack;
         DeleteGear(Gear);
