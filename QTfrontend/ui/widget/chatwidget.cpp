@@ -179,6 +179,8 @@ HWChatWidget::HWChatWidget(QWidget* parent, bool notify) :
     this->gameSettings = NULL;
     this->notify = notify;
 
+    m_usersModel = NULL;
+
     m_isAdmin = false;
     m_autoKickEnabled = false;
 
@@ -409,24 +411,25 @@ void HWChatWidget::onChatMessage(const QString & nick, const QString & message)
 void HWChatWidget::printChatString(
     const QString & nick, const QString & str, const QString & cssClassPart, bool highlight)
 {
-    QSortFilterProxyModel * playersSortFilterModel = qobject_cast<QSortFilterProxyModel *>(chatNicks->model());
-    if(!playersSortFilterModel)
-        return;
-
-    PlayersListModel * players = qobject_cast<PlayersListModel *>(playersSortFilterModel->sourceModel());
-
-    if(!players)
+    if(!m_usersModel)
         return;
 
     // don't show chat lines that are from ignored nicks
-    if (players->isFlagSet(nick, PlayersListModel::Ignore))
+    if (m_usersModel->isFlagSet(nick, PlayersListModel::Ignore))
         return;
 
-    bool isFriend = (!nick.isEmpty()) && players->isFlagSet(nick, PlayersListModel::Friend);
+    bool isFriend = (!nick.isEmpty()) && m_usersModel->isFlagSet(nick, PlayersListModel::Friend);
 
     QString cssClass = (isFriend ? "msg_Friend" : "msg_User") + cssClassPart;
 
     addLine(cssClass, str, highlight);
+}
+
+bool HWChatWidget::isInGame() {
+    if (!m_usersModel)
+        return false;
+
+    return m_usersModel->isFlagSet(m_userNick, PlayersListModel::InGame);
 }
 
 void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighlight)
@@ -452,7 +455,8 @@ void HWChatWidget::addLine(const QString & cssClass, QString line, bool isHighli
     {
         line = QString("<span class=\"highlight\">%1</span>").arg(line);
         SDLInteraction::instance().playSoundFile(m_hilightSound);
-        HWApplication::alert(this, 800);
+        if (!isInGame())
+            HWApplication::alert(this, 800);
     }
 
     chatStrings.append(line);
@@ -853,6 +857,12 @@ void HWChatWidget::setUsersModel(QAbstractItemModel *model)
 
     chatNicks->setModel(model);
     chatNicks->setModelColumn(0);
+
+    QSortFilterProxyModel * sfpModel = qobject_cast<QSortFilterProxyModel *>(model);
+    if (sfpModel)
+        m_usersModel = qobject_cast<PlayersListModel*>(sfpModel->sourceModel());
+    else
+        m_usersModel = qobject_cast<PlayersListModel*>(model);
 }
 
 void HWChatWidget::nicksContextMenuRequested(const QPoint &pos)
