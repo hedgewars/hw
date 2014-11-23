@@ -1516,7 +1516,7 @@ begin
                 end
             else // count is correct!
                 begin
-                if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
+                if needsTn then
                     begin
                     // 3: team name
                     for i:= 0 to Pred(TeamsCount) do
