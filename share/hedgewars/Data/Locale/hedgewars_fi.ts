@@ -993,7 +993,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Ranking</source>
-        <translation>Paremmuustaulukko</translation>
+        <translation>Tulos</translation>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
@@ -2004,7 +2004,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Initial sound volume</source>
-        <translation>Alkuperäinen äänten voimakkuus</translation>
+        <translation>Äänten voimakkuus</translation>
     </message>
     <message>
         <source>Damage Modifier</source>
