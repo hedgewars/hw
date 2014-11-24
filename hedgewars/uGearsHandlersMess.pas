@@ -2646,6 +2646,8 @@ begin
         HHGear^.X := int2hwFloat(Gear^.Target.X);
         HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
+        if not Gear^.Hedgehog^.Unplaced then
+            Gear^.State:= Gear^.State or gstAnimation;
         Gear^.Hedgehog^.Unplaced := false;
         isCursorVisible := false;
         playSound(sndWarp)
