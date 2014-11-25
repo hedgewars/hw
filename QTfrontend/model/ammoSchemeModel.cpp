@@ -84,6 +84,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
                          << "Timeless"
                          << "Thinking with Portals"
                          << "King Mode"
+						 << "Construction Mode"
                          ;
 
     numberOfDefaultSchemes = predefSchemesNames.size();
@@ -604,7 +605,53 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant()              // scriptparam    42
             ;
 
-
+	QList<QVariant> construction;
+    construction
+            << predefSchemesNames[11]  // name           0
+            << QVariant(false)         // fortsmode      1
+            << QVariant(false)         // team divide    2
+            << QVariant(false)         // solid land     3
+            << QVariant(false)         // border         4
+            << QVariant(false)         // low gravity    5
+            << QVariant(false)         // laser sight    6
+            << QVariant(false)         // invulnerable   7
+            << QVariant(false)         // reset health   8
+            << QVariant(false)         // vampiric       9
+            << QVariant(false)         // karma          10
+            << QVariant(false)         // artillery      11
+            << QVariant(true)          // random order   12
+            << QVariant(false)          // king           13
+            << QVariant(false)         // place hog      14
+            << QVariant(false)         // shared ammo    15
+            << QVariant(true)         // disable girders 16
+            << QVariant(true)         // disable land objects 17
+            << QVariant(false)         // AI survival    18
+            << QVariant(true)         // inf. attack    19
+            << QVariant(false)         // reset weps     20
+            << QVariant(true)         // per hog ammo   21
+            << QVariant(false)         // no wind        22
+            << QVariant(false)         // more wind      23
+            << QVariant(false)         // tag team       24
+            << QVariant(false)         // bottom border  25
+            << QVariant(100)           // damage modfier 26
+            << QVariant(45)            // turn time      27
+            << QVariant(100)           // init health    28
+            << QVariant(15)            // sudden death   29
+            << QVariant(5)             // case prob      30
+            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines number   32
+            << QVariant(0)             // mine dud pct   33
+            << QVariant(0)             // explosives     34
+            << QVariant(35)            // health case pct 35
+            << QVariant(25)            // health case amt 36
+            << QVariant(47)            // water rise amt 37
+            << QVariant(5)             // health dec amt 38
+            << QVariant(100)           // rope modfier   39
+            << QVariant(100)           // get away time  40
+            << QVariant(0)             // world edge     41
+            << QVariant()              // scriptparam    42
+            ;
+			
     schemes.append(defaultScheme);
     schemes.append(proMode);
     schemes.append(shoppa);
@@ -616,6 +663,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
     schemes.append(timeless);
     schemes.append(thinkingportals);
     schemes.append(kingmode);
+	schemes.append(construction);
 
 
     int size = fileConfig.beginReadArray("schemes");
