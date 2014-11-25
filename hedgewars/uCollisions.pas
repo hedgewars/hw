@@ -75,9 +75,9 @@ var Count: Longword;
     ga: TGearArray;
 
 procedure AddCI(Gear: PGear);
-var t: PGear;
 begin
-if Gear^.CollisionIndex >= 0 then
+if (Gear^.CollisionIndex >= 0) or 
+    ((Count > MAXRECTSINDEX-200) and ((Gear^.Kind = gtMine) or (Gear^.Kind = gtSMine) or (Gear^.Kind = gtKnife))) then
     exit;
 TryDo(Count <= MAXRECTSINDEX, 'Collision rects array overflow', true);
 with cinfos[Count] do
@@ -90,15 +90,6 @@ with cinfos[Count] do
     end;
 Gear^.CollisionIndex:= Count;
 inc(Count);
-// mines are the easiest way to overflow collision
-if (Count > (MAXRECTSINDEX-20)) then
-    begin
-    t:= GearsList;
-    while (t <> nil) and (t^.Kind <> gtMine) do
-        t:= t^.NextGear;
-    if (t <> nil) then
-        t^.State:= t^.State or gmDelete
-    end;
 end;
 
 procedure DeleteCI(Gear: PGear);
