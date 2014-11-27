@@ -6,6 +6,8 @@
  + Old Random generated maps are more diverse now.
  + Slider for adjusting land generation detail.
  + Highlander gamemode can now be used with custom weapon schemes (1-8=How probable to get this weapon. 9=All hogs get it)
+ + New gameplay mode "Construction Mode"
+ + New gameplay mode "TechRacer"
  + New training/multiplayer mission: "Climb Home"
  + Game scheme screen has a "Script parameter" field now. This allows to make more customizable scripts/modes.
  + Network game rejoining. Note: Your team(s) will vanish after 3 turns.
@@ -16,7 +18,7 @@
  + Various performance tweaks, especially for very large maps.
  + Allow switching through hogs in reverse order with PRECISE+HOGSWITCH (left shift + tab, by default)
  + Added support for custom Sudden Death music to theme.cfg (e.g. sd-music=hell.ogg ).
- + New Hats: policegirl, fr_tomato
+ + New Hats: policegirl, fr_tomato, cratehider
  * Fixed drill rockets sometimes exploding on impact.
  * Fixed trainings broken due to indestructable targets/crates.
  * Fixes and tweaks for low qualily rendering.
