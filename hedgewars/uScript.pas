@@ -1634,10 +1634,46 @@ begin
 end;
 
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
+var HHGear: PGear;
+    i, h  : LongInt;
+    hidden: boolean;
 begin
     if CheckLuaParamCount(L, 1, 'DismissTeam', 'teamname') then
-        ParseCommand('teamgone ' + lua_tostring(L, 1), true, true);
-    lc_dismissteam:= 0;;
+        begin
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+
+                // destroy all hogs of matching team, including the hidden ones
+                for h:= 0 to cMaxHHIndex do
+                    begin
+                    hidden:= (TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil);
+                    if hidden then
+                        RestoreHog(@TeamsArray[i]^.Hedgehogs[h]);
+                    // destroy hedgehog gear, if any
+                    HHGear:= TeamsArray[i]^.Hedgehogs[h].Gear;
+                    if HHGear <> nil then
+                        begin
+                        // smoke effect
+                        if (not hidden) then
+                            begin
+                            AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            end;
+                        HHGear^.Message:= HHGear^.Message or gmDestroy;
+                        end;
+                    end;
+                // can't dismiss more than one team
+                break;
+                end;
+        end;
+    lc_dismissteam:= 0;
 end;
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
