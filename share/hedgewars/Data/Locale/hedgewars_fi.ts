@@ -1712,7 +1712,7 @@ pelkkä nimimerkki riittää.</translation>
     </message>
     <message>
         <source>Restrict Unregistered Players Join</source>
-        <translation>Estä rekisteröityneitä liittymästä</translation>
+        <translation>Estä rekisteröimättömiä liittymästä</translation>
     </message>
     <message>
         <source>Show games in lobby</source>
@@ -2749,7 +2749,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
 
 Olemme pahoillamme tapahtuneesta :(
 
-Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon %1-napista!</translation>
+Jos vika toistuu jatkuvasti, lähetä palautetta päävalikon Palaute-napista!</translation>
     </message>
 </context>
 <context>
