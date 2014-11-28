@@ -232,6 +232,12 @@ case Layer of
                                     i:= 1;
                                 DrawTextureRotatedF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height, Gear^.Angle);
                                 end;
+			   vgtAvocadoSplat: begin 
+                                if SuddenDeathDmg then
+                                  DrawSprite(sprAvocadoSplat, round(Gear^.X) + WorldDx - 9, round(Gear^.Y) + WorldDy - 9, Gear^.Frame)
+                                else
+                                  DrawSprite(sprAvocadoSplat, round(Gear^.X) + WorldDx - 9, round(Gear^.Y) + WorldDy - 99, Gear^.Frame);
+                                end;
               end;
           //if (Gear^.Tint <> $FFFFFFFF) or tinted then untint;
           if (Gear^.Tint <> $FFFFFFFF) then
