@@ -37,6 +37,7 @@ set(CPACK_SOURCE_IGNORE_FILES
     "\\\\.hg"
     "\\\\.git"
     "\\\\.orig$"
+    "\\\\.travis.yml$"
     #output binary/library
     "\\\\.exe$"
     "\\\\.a$"
