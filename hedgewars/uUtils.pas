@@ -37,6 +37,7 @@ function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
+function  MinD(a, b: double) : double; inline;
 function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
@@ -194,6 +195,14 @@ else
     Min:= b
 end;
 
+function MinD(a, b: double): double;
+begin
+if a < b then
+    MinD:= a
+else
+    MinD:= b
+end;
+
 function Max(a, b: LongInt): LongInt;
 begin
 if a > b then
@@ -280,7 +289,7 @@ end;
 
 function DecodeBase64(s: shortstring): shortstring;
 const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-var i, t, c: Longword;
+var i, t, c: LongInt;
 begin
 c:= 0;
 for i:= 1 to Length(s) do

@@ -2534,7 +2534,7 @@ end;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
 if (not ScriptLoaded) or (not ScriptExists(fname)) then
-    exit;
+    exit(0);
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
 lua_pushinteger(luaState, par1);
