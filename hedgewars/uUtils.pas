@@ -96,7 +96,7 @@ implementation
 uses {$IFNDEF PAS2C}typinfo, {$ENDIF}Math, uConsts, uVariables, SysUtils;
 
 {$IFDEF DEBUGFILE}
-var f: textfile;
+var logFile: textfile;
 {$IFDEF USE_VIDEO_RECORDING}
     logMutex: TRTLCriticalSection; // mutex for debug file
 {$ENDIF}
@@ -226,7 +226,7 @@ val(s, StrToInt);
 val(s, StrToInt, c);
 {$IFDEF DEBUGFILE}
 if c <> 0 then
-    writeln(f, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
+    writeln(logFile, 'Error at position ' + IntToStr(c) + ' : ' + s[c])
 {$ENDIF}
 {$ENDIF}
 end;
@@ -354,8 +354,8 @@ begin
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-writeln(f, inttostr(GameTicks)  + ': ' + s);
-flush(f);
+writeln(logFile, inttostr(GameTicks)  + ': ' + s);
+flush(logFile);
 
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
@@ -372,8 +372,8 @@ s:= s;
 {$IFDEF USE_VIDEO_RECORDING}
 EnterCriticalSection(logMutex);
 {$ENDIF}
-write(f, s);
-flush(f);
+write(logFile, s);
+flush(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
 LeaveCriticalSection(logMutex);
 {$ENDIF}
@@ -539,7 +539,7 @@ begin
 {$ENDIF}
 {$I-}
 {$IFNDEF PAS2C}
-    f:= stderr; // if everything fails, write to stderr
+    logFile:= stderr; // if everything fails, write to stderr
 {$ENDIF}
     if (length(UserPathPrefix) > 0) then
         begin
@@ -552,13 +552,13 @@ begin
         i:= 0;
         while(i < 7) do
             begin
-            assign(f, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
             if IOResult = 0 then
                 break;
             inc(i)
             end;
         end;
-    Rewrite(f);
+    Rewrite(logFile);
 {$I+}
 {$ENDIF}
 
@@ -580,9 +580,9 @@ end;
 procedure freeModule;
 begin
 {$IFDEF DEBUGFILE}
-    writeln(f, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
-    flush(f);
-    close(f);
+    writeln(logFile, 'halt at ' + inttostr(GameTicks) + ' ticks. TurnTimeLeft = ' + inttostr(TurnTimeLeft));
+    flush(logFile);
+    close(logFile);
 {$IFDEF USE_VIDEO_RECORDING}
     DoneCriticalSection(logMutex);
 {$ENDIF}
