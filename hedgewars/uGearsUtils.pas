@@ -1038,7 +1038,7 @@ while t <> nil do
                         end;
                     if dmg > 0 then
                         begin
-                        if (Gear^.Kind <> gtHedgehog) or (t^.Hedgehog^.Effects[heInvulnerable] = 0) then
+                        if (t^.Kind <> gtHedgehog) or (t^.Hedgehog^.Effects[heInvulnerable] = 0) then
                             ApplyDamage(t, Gear^.Hedgehog, dmg, dsBullet)
                         else
                             Gear^.State:= Gear^.State or gstWinner;
