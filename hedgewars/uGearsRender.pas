@@ -166,8 +166,7 @@ begin
 end;
 
 procedure DrawRope(Gear: PGear);
-var roplen: LongInt;
-    i: Longword;
+var roplen, i: LongInt;
 begin
     if (cReducedQuality and rqSimpleRope) <> 0 then
         DrawRopeLinesRQ(Gear)
@@ -711,7 +710,7 @@ begin
                                             LongInt(rightX)+WorldDx,
                                             cWaterLine+WorldDy,
                                             LongInt(leftX)+WorldDx);
-                        if hwRound(Gear^.X) > rightX-256 then
+                        if hwRound(Gear^.X) > LongInt(rightX) - 256 then
                             DrawSpriteClipped(sprGirder,
                                             leftX-(rightX-ox)-256,
                                             oy-256,
@@ -1167,7 +1166,7 @@ begin
                         end;
                     if Gear^.Timer < 1833 then
                         begin
-                        DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
+                        DrawTextureRotatedF(SpritesData[sprPortal].texture, MinD(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
                                             x, LongInt(Gear^.Angle) + WorldDy - 16, 4 + Gear^.Tag, 1, 32, 32, 270);
                         end
                     end;

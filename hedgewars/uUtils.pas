@@ -37,6 +37,7 @@ function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
+function  MinD(a, b: double) : double; inline;
 function  Max(a, b: LongInt): LongInt; inline;
 
 function  IntToStr(n: LongInt): shortstring;
@@ -192,6 +193,14 @@ if a < b then
     Min:= a
 else
     Min:= b
+end;
+
+function MinD(a, b: double): double;
+begin
+if a < b then
+    MinD:= a
+else
+    MinD:= b
 end;
 
 function Max(a, b: LongInt): LongInt;

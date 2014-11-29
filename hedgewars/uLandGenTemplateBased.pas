@@ -18,7 +18,7 @@ begin
     with Template do
         begin
         pa.Count:= BasePointsCount;
-        for i:= 0 to pred(pa.Count) do
+        for i:= 0 to LongInt(pred(pa.Count)) do
             begin
             pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
             if pa.ar[i].x <> NTPX then

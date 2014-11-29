@@ -426,7 +426,7 @@ while (headcmd <> nil)
     end;
 
 if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
-    TryDo(GameTicks < hiTicks shl 16 + headcmd^.loTime,
+    TryDo(GameTicks < LongWord(hiTicks shl 16) + headcmd^.loTime,
             'oops, queue error. in buffer: ' + headcmd^.cmd +
             ' (' + IntToStr(GameTicks) + ' > ' +
             IntToStr(hiTicks shl 16 + headcmd^.loTime) + ')',
