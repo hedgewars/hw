@@ -3083,12 +3083,9 @@ begin
 end;
 
 procedure doStepCake(Gear: PGear);
-var
-    HHGear: PGear;
 begin
     AllInactive := false;
 
-    HHGear := Gear^.Hedgehog^.Gear;
     Gear^.CollisionMask:= lfNotCurrentMask;
 
     Gear^.dY:= cMaxWindSpeed * 100;
