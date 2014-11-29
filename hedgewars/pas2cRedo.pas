@@ -84,6 +84,7 @@ var
      min, max:function:integer;
     assign, rewrite, rewrite_2, reset, reset_2, flush, BlockWrite, BlockRead, close : procedure;
     FileExists, DirectoryExists, eof : function : boolean;
+    ExtractFileDir : function : string;
     ExtractFileName : function : string;
 
     ParamCount : function : integer;
