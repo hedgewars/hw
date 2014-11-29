@@ -253,7 +253,7 @@ function CheckSelfIntersect(var pa: TPixAr; ind: Longword): boolean;
 var i: Longword;
 begin
     CheckSelfIntersect:= false;
-    if (ind <= 0) or (ind >= Pred(pa.Count)) then
+    if (ind <= 0) or (LongInt(ind) >= Pred(pa.Count)) then
         exit;
 
     CheckSelfIntersect:= true;

@@ -280,7 +280,7 @@ end;
 
 function DecodeBase64(s: shortstring): shortstring;
 const table = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-var i, t, c: Longword;
+var i, t, c: LongInt;
 begin
 c:= 0;
 for i:= 1 to Length(s) do

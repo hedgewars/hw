@@ -624,7 +624,7 @@ begin
 
         if ((Gear^.State and gstAnimation) <> 0) then
             begin
-            if (TWave(Gear^.Tag) < Low(TWave)) or (TWave(Gear^.Tag) > High(TWave)) then
+            if (Gear^.Tag < LongInt(ord(Low(TWave)))) or (Gear^.Tag > LongInt(ord(High(TWave)))) then
                 begin
                 Gear^.State:= Gear^.State and (not gstAnimation);
                 end

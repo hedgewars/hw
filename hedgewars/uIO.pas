@@ -350,7 +350,7 @@ tmpflag:= true;
 
 while (headcmd <> nil)
     and (tmpflag or (headcmd^.cmd = '#')) // '#' is the only cmd which can be sent within same tick after 'N'
-    and ((GameTicks = hiTicks shl 16 + headcmd^.loTime)
+    and ((GameTicks = LongWord(hiTicks shl 16 + headcmd^.loTime))
         or (headcmd^.cmd = 's') // for these commands time is not specified
         or (headcmd^.cmd = 'h') // seems the hedgewars protocol does not allow remote synced commands
         or (headcmd^.cmd = '#') // must be synced for saves to work
