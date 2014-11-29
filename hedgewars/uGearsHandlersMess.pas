@@ -3089,10 +3089,7 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.Message := HHGear^.Message and (not gmAttack);
     Gear^.CollisionMask:= lfNotCurrentMask;
-
-    FollowGear := Gear;
 
     Gear^.dY:= cMaxWindSpeed * 100;
 

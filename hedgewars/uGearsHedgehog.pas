@@ -443,6 +443,7 @@ with Gear^,
                       amTardis, amPiano,
                       amIceGun, amRubber: CurAmmoGear:= newGear;
             end;
+	    if CurAmmoType = amCake then FollowGear:= newGear;
 
             if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
                 newGear^.FlightTime:= GameTicks + 1000
