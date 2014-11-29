@@ -43,11 +43,11 @@ procedure SwitchNotHeldAmmo(var Hedgehog: THedgehog);
 procedure SetWeapon(weap: TAmmoType);
 procedure DisableSomeWeapons;
 procedure ResetWeapons;
-function  GetAmmoByNum(num: Longword): PHHAmmo;
+function  GetAmmoByNum(num: LongInt): PHHAmmo;
 function  GetCurAmmoEntry(var Hedgehog: THedgehog): PAmmo;
 function  GetAmmoEntry(var Hedgehog: THedgehog; am: TAmmoType): PAmmo;
 
-var StoreCnt: Longword;
+var StoreCnt: LongInt;
 
 implementation
 uses uVariables, uCommands, uUtils, uCaptions, uDebug;
@@ -151,7 +151,7 @@ for a:= Low(TAmmoType) to High(TAmmoType) do
 FillAmmoStore(StoresList[Pred(StoreCnt)], newAmmos)
 end;
 
-function GetAmmoByNum(num: Longword): PHHAmmo;
+function GetAmmoByNum(num: LongInt): PHHAmmo;
 begin
     TryDo(num < StoreCnt, 'Invalid store number', true);
     GetAmmoByNum:= StoresList[num]

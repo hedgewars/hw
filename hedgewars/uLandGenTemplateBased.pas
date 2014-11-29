@@ -18,7 +18,7 @@ begin
     with Template do
         begin
         pa.Count:= BasePointsCount;
-        for i:= 0 to pred(pa.Count) do
+        for i:= 0 to pred(LongInt(pa.Count)) do
             begin
             pa.ar[i].x:= BasePoints^[i].x + LongInt(GetRandom(BasePoints^[i].w));
             if pa.ar[i].x <> NTPX then
@@ -174,7 +174,7 @@ begin
 
     // now go through all other segments
     fp:= pa.ar[0];
-    for i:= 0 to pa.Count - 2 do
+    for i:= 0 to LongInt(pa.Count) - 2 do
         if pa.ar[i].x = NTPX then
             fp:= pa.ar[i + 1]
         else if (i <> si) then
@@ -210,7 +210,7 @@ begin
         end;
 
     // go through all points, including fill points
-    for i:= 0 to Pred(pa.Count + fillPointsCount) do
+    for i:= 0 to Pred(LongInt(pa.Count + fillPointsCount)) do
         // if this point isn't on current segment
         if (si <> i) and (i <> si + 1) and (pa.ar[i].x <> NTPX) then
         begin
@@ -294,7 +294,7 @@ begin
     newPoint.y:= 0;
     i:= 0;
 
-    while i < pa.Count - 1 do
+    while i < LongInt(pa.Count) - 1 do
     begin
         FindPoint(i, fillPointsCount, newPoint, pa);
 

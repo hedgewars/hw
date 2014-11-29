@@ -253,15 +253,15 @@ repeat
     inc(x1, 2);
     if k = 16 then
         begin
-        while (x2 < (rightX-150)) and (CountNonZeroz(x2, y) = 0) do
+        while (x2 < (LongInt(rightX)-150)) and (CountNonZeroz(x2, y) = 0) do
             inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
         k:= CountNonZeroz(x2, y)
-        until (x2 >= (rightX-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
+        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
 
-        if (x2 < (rightX - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
+        if (x2 < (LongInt(rightX) - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
         end;

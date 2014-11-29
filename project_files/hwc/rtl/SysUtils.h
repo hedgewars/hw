@@ -31,6 +31,9 @@ Integer     fpcrtl_strToInt(string255 s);
 #define     StrToInt                fpcrtl_strToInt
 #define     strToInt                fpcrtl_strToInt
 
+string255   fpcrtl_extractFileDir(string255 f);
+#define     fpcrtl_ExtractFileDir  fpcrtl_extractFileDir
+
 string255   fpcrtl_extractFileName(string255 f);
 #define     fpcrtl_ExtractFileName  fpcrtl_extractFileName
 

@@ -131,6 +131,24 @@ Integer fpcrtl_strToInt(string255 s)
     return atoi(s.str);
 }
 
+string255 fpcrtl_extractFileDir(string255 f)
+{
+    const char sep[] = {'\\', '/', ':'};
+    LongInt i,j;
+
+    i = f.len - 1;
+    while(i >= 0){
+        for(j = 0; j < sizeof(sep); j++){
+            if(f.str[i] == sep[j]){
+                goto FPCRTL_EXTRACTFILEDIR_END;
+            }
+        }
+        i--;
+    }
+FPCRTL_EXTRACTFILEDIR_END:
+    return fpcrtl_copy(f, 1, i);
+}
+
 //function ExtractFileName(const FileName: string): string;
 //var
 //  i : longint;
