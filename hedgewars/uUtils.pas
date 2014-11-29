@@ -538,9 +538,6 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
-{$IFNDEF PAS2C}
-    logFile:= stderr; // if everything fails, write to stderr
-{$ENDIF}
     if (length(UserPathPrefix) > 0) then
         begin
         {$IFNDEF PAS2C}
@@ -553,12 +550,20 @@ begin
         while(i < 7) do
             begin
             assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
+            Rewrite(logFile);
             if IOResult = 0 then
                 break;
             inc(i)
             end;
         end;
-    Rewrite(logFile);
+
+{$IFNDEF PAS2C}
+    if (length(UserPathPrefix) = 0) or (IOResult = 0) then
+        begin
+        logFile:= stderr; // if everything fails, write to stderr
+        Rewrite(logFile);
+        end;
+{$ENDIF}
 {$I+}
 {$ENDIF}
 
