@@ -558,11 +558,9 @@ begin
         end;
 
 {$IFNDEF PAS2C}
+    // if everything fails, write to stderr
     if (length(UserPathPrefix) = 0) or (IOResult = 0) then
-        begin
-        logFile:= stderr; // if everything fails, write to stderr
-        Rewrite(logFile);
-        end;
+        logFile:= stderr;
 {$ENDIF}
 {$I+}
 {$ENDIF}
