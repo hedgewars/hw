@@ -162,7 +162,11 @@ void __attribute__((overloadable)) fpcrtl_write(FILE *f, string255 s) {
 
 void __attribute__((overloadable)) fpcrtl_writeLn(File f, string255 s) {
     FIX_STRING(s);
-    fprintf(f->fp, "%s\n", s.str);
+    // filthy hack to write to stderr
+    if (!f->fp)
+        fprintf(stderr, "%s\n", s.str);
+    else
+        fprintf(f->fp, "%s\n", s.str);
 }
 
 void __attribute__((overloadable)) fpcrtl_writeLn(FILE *f, string255 s) {
