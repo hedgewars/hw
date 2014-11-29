@@ -863,13 +863,6 @@ procedure doStepHedgehogMoving(Gear: PGear);
 var isFalling, isUnderwater: boolean;
     land: Word;
 begin
-land:= 0;
-isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
-if Gear^.dX.QWordValue > 8160437862 then
-    Gear^.dX.QWordValue:= 8160437862;
-if Gear^.dY.QWordValue > 8160437862 then
-    Gear^.dY.QWordValue:= 8160437862;
-
 if Gear^.Hedgehog^.Unplaced then
     begin
     Gear^.dY:= _0;
@@ -877,6 +870,14 @@ if Gear^.Hedgehog^.Unplaced then
     Gear^.State:= Gear^.State and (not gstMoving);
     exit
     end;
+
+land:= 0;
+isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
+if Gear^.dX.QWordValue > 8160437862 then
+    Gear^.dX.QWordValue:= 8160437862;
+if Gear^.dY.QWordValue > 8160437862 then
+    Gear^.dY.QWordValue:= 8160437862;
+
 isFalling:= (Gear^.dY.isNegative) or (TestCollisionYKick(Gear, 1) = 0);
 if isFalling then
     begin
@@ -1359,7 +1360,9 @@ end;
 procedure doStepHedgehog(Gear: PGear);
 var tX: hwFloat;
 begin
-CheckGearDrowning(Gear);
+// it might make sense to skip more than just drowning check here
+if (not Gear^.Hedgehog^.Unplaced) then
+    CheckGearDrowning(Gear);
 if Gear = nil then exit;
 tX:= Gear^.X;
 if WorldWrap(Gear) then
