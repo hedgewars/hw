@@ -13,9 +13,9 @@ local Fire = {}
 local HH = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
 local YouWon = false
+local HogsAreInvulnerable = false
 local WaterRise = nil
 local Cake = nil
-local CakeWasJustAdded = false
 local CakeTries = 0
 local Stars = {}
 
@@ -58,6 +58,11 @@ function onGameStart()
         SetGearPosition(h,x,108)
         SetHealth(h,1)
         if x < 1978 then x = x+32 else x = 1818 end
+	if GetEffect(h,heInvulnerable) == 0 then
+	    SetEffect(h,heInvulnerable,1)
+	else
+	    HogsAreInvulnerable = true
+	end
         SetState(h,bor(GetState(h),gstInvisible))
     end
 -- 1925,263 - Mr. Mine position
@@ -76,6 +81,9 @@ function onNewTurn()
     SetWaterLine(32768)
     if CurrentHedgehog ~= nil then
         SetGearPosition(CurrentHedgehog, 1951,32640)
+	if not HogsAreInvulnerable then
+	    SetEffect(CurrentHedgehog,heInvulnerable,0)
+	end
         AddVisualGear(19531,32640,vgtExplosion,0,false)
         SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
     end
@@ -104,10 +112,22 @@ end
 
 function FireBoom(x,y,d) -- going to add for rockets too
     AddVisualGear(x,y,vgtExplosion,0,false)
-    -- going to approximate circle by removing corners
+    -- should approximate circle by removing corners
     if BoomFire == nil then BoomFire = {} end
     for i = 0,50 do
-        flame = AddGear(x+GetRandom(d),y+GetRandom(d), gtFlame, gsttmpFlag,  0, 0, 0)
+	fx = GetRandom(d)-div(d,2)
+	fy = GetRandom(d)-div(d,2)
+	if fx<0 then
+	   fdx = -5000-GetRandom(3000)
+	else
+	   fdx = 5000+GetRandom(3000)
+	end
+	if fy<0 then
+	   fdy = -5000-GetRandom(3000)
+	else
+	   fdy = 5000+GetRandom(3000)
+	end
+        flame = AddGear(x+fx, y+fy, gtFlame, gsttmpFlag,  fdx, fdy, 0)
         SetTag(flame, 999999+i)
         Fire[flame]=1
 --        BoomFire[flame]=1
@@ -118,10 +138,6 @@ end
 function onGameTick20()
     if math.random(20) == 1 then
         AddVisualGear(2012,56,vgtSmoke,0,false)
-    end
-    if CakeWasJustAdded then
-        FollowGear(CurrentHedgehog)
-        CakeWasJustAdded = false
     end
     --if BoomFire ~= nil then
     --    for f,i in pairs(BoomFire) do
@@ -151,7 +167,7 @@ function onGameTick20()
             Cake = nil
         end
         if gearIsInCircle(CurrentHedgehog,cx,cy,450) then
-            FireBoom(cx,cy,350) -- todo animate
+            FireBoom(cx,cy,200) -- todo animate
             DeleteGear(Cake)
             Cake = nil
         end
@@ -216,8 +232,7 @@ function onGameTick20()
                cy = 400 end
             Cake = AddGear(GetRandom(2048), cy, gtCake, 0, 0, 0, 0)
             SetHealth(Cake,999999)
-            CakeWasJustAdded = true
-            CakeTries = CakeTries + 1  -- just try twice right now
+            CakeTries = CakeTries + 1 
         end
         if (y > 286) or (y < 286 and MaxHeight > 286) then
             if y < MaxHeight and y > 286 then MaxHeight = y end

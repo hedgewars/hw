@@ -55,6 +55,7 @@ procedure freeEverything(complete:boolean); forward;
 ///////////////////////////////////////////////////////////////////////////////
 function DoTimer(Lag: LongInt): boolean;
 var s: shortstring;
+    t: LongWord;
 begin
     DoTimer:= false;
     inc(RealTicks, Lag);
@@ -90,6 +91,9 @@ begin
             PlayMusic;
             InitZoom(zoom);
             ScriptCall('onGameStart');
+            for t:= 0 to Pred(TeamsCount) do
+                with TeamsArray[t]^ do
+                    MaxTeamHealth:= TeamHealth;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
