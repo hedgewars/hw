@@ -1,6 +1,7 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
+#include <stdlib.h>
 #include <time.h>
 #include "Types.h"
 #include "misc.h"
@@ -134,7 +135,8 @@ string255   fpcrtl_paramStr(int i);
 
 int         fpcrtl_UTF8ToUnicode(PWideChar dest, PChar src, SizeInt maxLen);
 
-#define     fpcrtl_halt(t)                                  assert(0)
+// #define     fpcrtl_halt(t)                                  assert(0)
+#define     fpcrtl_halt(t)                                  exit(t)
 
 #define     fpcrtl_Load_GL_VERSION_2_0()                    1
 
