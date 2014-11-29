@@ -2139,6 +2139,21 @@ begin
         begin
         AllInactive := false;
 
+        if GameTicks and $F = 0 then
+            begin
+            Gear^.Radius := 7;
+            tdX:= Gear^.dX;
+            tdY:= Gear^.dY;
+            Gear^.dX.QWordValue:= 120000000;
+            Gear^.dY.QWordValue:= 429496730;
+            Gear^.dX.isNegative:= getrandom(2)<>1;
+            Gear^.dY.isNegative:= true;
+            AmmoShove(Gear, 2, 125);
+            Gear^.dX:= tdX;
+            Gear^.dY:= tdY;
+            Gear^.Radius := 1
+	    end;
+
         if ((GameTicks mod 100) = 0) then
             begin
             vgt:= AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtFire, gstTmpFlag);
