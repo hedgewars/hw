@@ -408,6 +408,7 @@ case Kind of
                 gear^.Radius:= 1;
                 gear^.Health:= 5;
                 gear^.Density:= _1;
+                gear^.FlightTime:= 9999999; // determines whether in-air flames do damage. disabled by default
                 if (gear^.dY.QWordValue = 0) and (gear^.dX.QWordValue = 0) then
                     begin
                     gear^.dY:= (getrandomf - _0_8) * _0_03;

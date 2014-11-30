@@ -161,6 +161,7 @@ function FireBoom(x,y,d) -- going to add for rockets too
 	end
         flame = AddGear(x+fx, y+fy, gtFlame, gsttmpFlag,  fdx, fdy, 0)
         SetTag(flame, 999999+i)
+        SetFlightTime(flame, 0)
         Fire[flame]=1
 --        BoomFire[flame]=1
     end
