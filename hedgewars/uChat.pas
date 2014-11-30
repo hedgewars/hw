@@ -392,14 +392,14 @@ if (s[1] = '/') then
                 ParseCommand('/taunt ' + char(i), true);
                 exit
                 end;
-
-        for j:= Low(TChatCmd) to High(TChatCmd) do
-            if (s = ChatCommandz[j].ChatCmd) then
-                begin
-                ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
-                exit
-                end;
         end;
+
+    for j:= Low(TChatCmd) to High(TChatCmd) do
+        if (s = ChatCommandz[j].ChatCmd) then
+            begin
+            ParseCommand(ChatCommandz[j].ProcedureCallChatCmd, true);
+            exit
+            end;
 
     if (gameType = gmtNet) then
         SendConsoleCommand(s)
