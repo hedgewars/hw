@@ -2131,6 +2131,7 @@ var
     landPixel: Word;
 begin
     WorldWrap(Gear);
+    if Gear^.FlightTime > 0 then dec(Gear^.FlightTime);
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
 
@@ -2139,7 +2140,7 @@ begin
         begin
         AllInactive := false;
 
-        if GameTicks and $F = 0 then
+        if (GameTicks and $F = 0) and (Gear^.FlightTime = 0) then
             begin
             Gear^.Radius := 7;
             tdX:= Gear^.dX;
@@ -4769,6 +4770,7 @@ begin
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             flame^.CollisionMask:= lfNotCurrentMask;
+            flame^.FlightTime:= 500;
 
             if (Gear^.Health mod 30) = 0 then
                 begin
@@ -4776,6 +4778,7 @@ begin
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
                 flame^.CollisionMask:= lfNotCurrentMask;
+		flame^.FlightTime:= 500;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
