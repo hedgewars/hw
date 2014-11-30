@@ -1144,6 +1144,22 @@ begin
     lc_gettimer:= 1
 end;
 
+function lc_getflighttime(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetFlightTime', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.FlightTime)
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_getflighttime:= 1
+end;
+
 function lc_gethealth(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -1378,6 +1394,17 @@ begin
         if gear <> nil then gear^.Timer:= lua_tointeger(L, 2)
         end;
     lc_settimer:= 0
+end;
+
+function lc_setflighttime(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 2, 'SetFlightTime', 'gearUid, flighttime') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then gear^.FlightTime:= lua_tointeger(L, 2)
+        end;
+    lc_setflighttime:= 0
 end;
 
 function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
@@ -2877,6 +2904,8 @@ lua_register(luaState, _P'GetTag', @lc_gettag);
 lua_register(luaState, _P'SetTag', @lc_settag);
 lua_register(luaState, _P'SetTimer', @lc_settimer);
 lua_register(luaState, _P'GetTimer', @lc_gettimer);
+lua_register(luaState, _P'SetFlightTime', @lc_setflighttime);
+lua_register(luaState, _P'GetFlightTime', @lc_getflighttime);
 lua_register(luaState, _P'SetZoom', @lc_setzoom);
 lua_register(luaState, _P'GetZoom', @lc_getzoom);
 lua_register(luaState, _P'HogSay', @lc_hogsay);

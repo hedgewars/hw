@@ -4770,7 +4770,7 @@ begin
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             flame^.CollisionMask:= lfNotCurrentMask;
-            flame^.FlightTime:= 500;
+            //flame^.FlightTime:= 500;  use the default huge value to avoid sticky flame suddenly being damaging as opposed to other flames
 
             if (Gear^.Health mod 30) = 0 then
                 begin
@@ -4778,7 +4778,7 @@ begin
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
                 flame^.CollisionMask:= lfNotCurrentMask;
-		flame^.FlightTime:= 500;
+		//flame^.FlightTime:= 500;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
