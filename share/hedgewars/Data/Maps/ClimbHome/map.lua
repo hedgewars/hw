@@ -209,7 +209,7 @@ function onGameTick20()
             Cake = nil
         end
 
-        if GetHealth(Cake) < 999990 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+        if Cake ~= nil and GetHealth(Cake) < 999990 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
             FireBoom(cx,cy,200) -- todo animate
             DeleteGear(Cake)
             Cake = nil
