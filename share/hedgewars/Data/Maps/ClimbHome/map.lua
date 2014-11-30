@@ -110,16 +110,12 @@ function onNewTurn()
     tauntNoo = false
     recordBroken = false
     if CurrentHedgehog ~= nil then
-	if CurrentHedgehog ~= dummyHog then
-            SetGearPosition(CurrentHedgehog, 1951,32640)
-	    if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
-            AddVisualGear(19531,32640,vgtExplosion,0,false)
-            SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
-            SetWeapon(amRope)
-            ready = true
-        else
-            ParseCommand("/skip")
-	end
+        SetGearPosition(CurrentHedgehog, 1951,32640)
+        if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
+        AddVisualGear(19531,32640,vgtExplosion,0,false)
+        SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
+        SetWeapon(amRope)
+        ready = true
     end
     for f,i in pairs(Fire) do
         DeleteGear(f)
@@ -174,6 +170,9 @@ end
 function onGameTick20()
     local x,y;
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
+    if CurrentHedgehog == dummyHog then
+        ParseCommand("/skip")
+    end
 
     --if BoomFire ~= nil then
     --    for f,i in pairs(BoomFire) do
