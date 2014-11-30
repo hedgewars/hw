@@ -32,6 +32,7 @@ local recordBroken = false
 local ready = false
 local showWaterStats = false -- uses the AI team to draw water height.
 local dummyHog = nil
+local dummySkip = 0
 
 function onGameInit()
     -- Ensure people get same map for same theme
@@ -109,13 +110,17 @@ function onNewTurn()
     YouLost = false
     tauntNoo = false
     recordBroken = false
-    if CurrentHedgehog ~= nil and CurrentHedgehog ~= dummyHog then
-        SetGearPosition(CurrentHedgehog, 1951,32640)
-        if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
-        AddVisualGear(19531,32640,vgtExplosion,0,false)
-        SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
-        SetWeapon(amRope)
-        ready = true
+    if CurrentHedgehog ~= nil then
+        if CurrentHedgehog ~= dummyHog then
+            SetGearPosition(CurrentHedgehog, 1951,32640)
+            if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
+            AddVisualGear(19531,32640,vgtExplosion,0,false)
+            SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
+            SetWeapon(amRope)
+            ready = true
+        else
+            dummySkip = GameTime+1
+        end
     end
     for f,i in pairs(Fire) do
         DeleteGear(f)
@@ -171,8 +176,9 @@ end
 function onGameTick20()
     local x,y;
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
-    if CurrentHedgehog == dummyHog then
+    if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
         ParseCommand("/skip")
+        dummySkip = 0
     end
 
     --if BoomFire ~= nil then
