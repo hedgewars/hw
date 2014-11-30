@@ -514,6 +514,7 @@ procedure initModule(isNotPreview: boolean);
 {$IFDEF DEBUGFILE}
 var logfileBase: shortstring;
     i: LongInt;
+    rwfailed: boolean;
 {$ENDIF}
 begin
 {$IFDEF DEBUGFILE}
@@ -538,6 +539,7 @@ begin
     InitCriticalSection(logMutex);
 {$ENDIF}
 {$I-}
+    rwfailed:= false;
     if (length(UserPathPrefix) > 0) then
         begin
         {$IFNDEF PAS2C}
@@ -551,7 +553,8 @@ begin
             begin
             assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
             Rewrite(logFile);
-            if IOResult = 0 then
+            rwfailed:= (IOResult() <> 0);
+            if (not rwfailed) then
                 break;
             inc(i)
             end;
@@ -559,7 +562,7 @@ begin
 
 {$IFNDEF PAS2C}
     // if everything fails, write to stderr
-    if (length(UserPathPrefix) = 0) or (IOResult <> 0) then
+    if (length(UserPathPrefix) = 0) or (rwfailed) then
         logFile:= stderr;
 {$ENDIF}
 {$I+}
