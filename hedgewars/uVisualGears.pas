@@ -213,7 +213,7 @@ case Layer of
                            else
                                DrawTextureF(SpritesData[sprFlame].Texture, Gear^.FrameTicks / 900, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, (RealTicks shr 7 + Gear^.Frame) mod 8, 1, 16, 16);
                   vgtSplash: begin
-                             spriteData:= GetSpriteData(sprSplash, sprite);
+                             spriteData:= GetSpriteData(sprSplash, sprSDSplash);
                              if Gear^.Angle <> 0 then
                                 DrawTextureRotatedF(spriteData^.Texture, Gear^.scale, 0, 0, round(Gear^.X + WorldDx + (((spriteData^.Height+8)*Gear^.Scale)/2) * (Gear^.Angle / abs(Gear^.Angle))), round(Gear^.Y + WorldDy), 19 - (Gear^.FrameTicks div Gear^.Timer div 37), 1, spriteData^.Width, spriteData^.Height, Gear^.Angle)
                              else
