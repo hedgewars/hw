@@ -109,7 +109,7 @@ function onNewTurn()
     YouLost = false
     tauntNoo = false
     recordBroken = false
-    if CurrentHedgehog ~= nil then
+    if CurrentHedgehog ~= nil and CurrentHedgehog ~= dummyHog then
         SetGearPosition(CurrentHedgehog, 1951,32640)
         if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
         AddVisualGear(19531,32640,vgtExplosion,0,false)
@@ -201,7 +201,8 @@ function onGameTick20()
             DeleteGear(Cake)
             Cake = nil
         end
-        if gearIsInCircle(CurrentHedgehog,cx,cy,450) then
+
+        if GetHealth(Cake) < 999990 and gearIsInCircle(CurrentHedgehog,cx,cy,450) then
             FireBoom(cx,cy,200) -- todo animate
             DeleteGear(Cake)
             Cake = nil
