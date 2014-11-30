@@ -1027,7 +1027,9 @@ var clan : PClan;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
-        clan := ClansArray[lua_tointeger(L, 1)];
+	i:= lua_tointeger(L,1);
+	if i >= ClansCount then exit(0);
+        clan := ClansArray[i];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
 
         for i:= 0 to Pred(clan^.TeamsNumber) do
@@ -1047,6 +1049,7 @@ begin
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
+	FreeTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 

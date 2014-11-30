@@ -8,16 +8,30 @@ local rTag = nil
 local startTime = 0
 local MaxHeight = 32640
 local RecordHeight = 33000
+local RecordHeightHogName = nil
 local Fire = {}
 --local BoomFire = nil
 local HH = {}
+local totalHedgehogs = 0
+local deadHedgehogs = 0
+local teamScoreStats = {}
+local teamBests = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
 local YouWon = false
+local YouLost = false
 local HogsAreInvulnerable = false
 local WaterRise = nil
 local Cake = nil
 local CakeTries = 0
 local Stars = {}
+local tauntNoo = false
+local jokeAwardNavy = nil
+local jokeAwardSpeed = nil
+local jokeAwardDamage = nil
+local recordBroken = false
+local ready = false
+local showWaterStats = false -- uses the AI team to draw water height.
+local dummyHog = nil
 
 function onGameInit()
     -- Ensure people get same map for same theme
@@ -30,11 +44,17 @@ function onGameInit()
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ClimbHome
+    AddTeam(loc("Water Gods"), 0x0000AC, "Simple", "Island", "Default")
+    dummyHog = AddHog("Poseidon", 0, 1, "NoHat")
+    SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
+    SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
+    --HideHog(dummyHog)
 end
 
 function onGearAdd(gear)
     if GetGearType(gear) == gtHedgehog then
         HH[gear] = 1
+        totalHedgehogs = totalHedgehogs + 1
     end
 end
 
@@ -44,13 +64,17 @@ function onGearDelete(gear)
         MrMine = nil
     elseif gear == Cake then
         Cake = nil
+    elseif GetGearType(gear) == gtHedgehog then
+        HH[gear] = nil
     end
 end
 
 function onGameStart()
+    --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
+    SendHealthStatsOff()
     ShowMission(loc("Climb Home"),
                 loc("Rope to safety"),
-                loc("You are far from home, and the water is rising, climb up as high as you can!"),
+                loc("You are far from home, and the water is rising, climb up as high as you can!|Your score will be based on your height."),
                 -amRope, 0)
     local x = 1818
     for h,i in pairs(HH) do
@@ -68,24 +92,34 @@ function onGameStart()
 -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
 end
+
 function onAmmoStoreInit()
     SetAmmo(amRope, 9, 0, 0, 0)
 end
 
 function onNewTurn()
+    ready = false
     startTime = GameTime
     --disable to preserve highest over multiple turns
     --will need to change water check too ofc
     MaxHeight = 32640
     hTagHeight = 33000
     SetWaterLine(32768)
+    YouWon = false
+    YouLost = false
+    tauntNoo = false
+    recordBroken = false
     if CurrentHedgehog ~= nil then
-        SetGearPosition(CurrentHedgehog, 1951,32640)
-	if not HogsAreInvulnerable then
-	    SetEffect(CurrentHedgehog,heInvulnerable,0)
+	if CurrentHedgehog ~= dummyHog then
+            SetGearPosition(CurrentHedgehog, 1951,32640)
+	    if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
+            AddVisualGear(19531,32640,vgtExplosion,0,false)
+            SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
+            SetWeapon(amRope)
+            ready = true
+        else
+            ParseCommand("/skip")
 	end
-        AddVisualGear(19531,32640,vgtExplosion,0,false)
-        SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
     end
     for f,i in pairs(Fire) do
         DeleteGear(f)
@@ -95,10 +129,12 @@ function onNewTurn()
         Stars[s] = nil
     end
 
-    for i = 0,12 do
-        flame = AddGear(2000+i*2,308, gtFlame, gsttmpFlag,  0, 0, 0)
-        SetTag(flame, 999999+i)
-        Fire[flame]=1
+    if CurrentHedgehog ~= dummyHog then
+        for i = 0,12 do
+            flame = AddGear(2000+i*2,308, gtFlame, gsttmpFlag,  0, 0, 0)
+            SetTag(flame, 999999+i)
+            Fire[flame]=1
+        end
     end
     if Cake ~= nil then DeleteGear(Cake) end
     CakeTries = 0
@@ -113,7 +149,7 @@ end
 function FireBoom(x,y,d) -- going to add for rockets too
     AddVisualGear(x,y,vgtExplosion,0,false)
     -- should approximate circle by removing corners
-    if BoomFire == nil then BoomFire = {} end
+    --if BoomFire == nil then BoomFire = {} end
     for i = 0,50 do
 	fx = GetRandom(d)-div(d,2)
 	fy = GetRandom(d)-div(d,2)
@@ -136,9 +172,9 @@ end
 
 
 function onGameTick20()
-    if math.random(20) == 1 then
-        AddVisualGear(2012,56,vgtSmoke,0,false)
-    end
+    local x,y;
+    if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
+
     --if BoomFire ~= nil then
     --    for f,i in pairs(BoomFire) do
     --        if band(GetState(f),gstCollision~=0) then DeleteGear(f) end
@@ -159,9 +195,9 @@ function onGameTick20()
         --end
     end
 
+    if CurrentHedgehog ~= nil then x,y = GetGearPosition(CurrentHedgehog) end
     if Cake ~= nil and CurrentHedgehog ~= nil then
         local cx,cy = GetGearPosition(Cake)
-        local x,y = GetGearPosition(CurrentHedgehog)
         if y < cy-1500 then
             DeleteGear(Cake)
             Cake = nil
@@ -175,7 +211,6 @@ function onGameTick20()
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
         if MaxHeight < 32000 and MaxHeight > 286 and WaterLine > 286  then SetWaterLine(WaterLine-2) end
-        local x,y = GetGearPosition(CurrentHedgehog)
         if y > 0 and y < 30000 and MaxHeight > 286 and math.random(y) < 500 then
             local s = AddVisualGear(0, 0, vgtStraightShot, 0, true)
             local c = div(250000,y)
@@ -203,91 +238,189 @@ function onGameTick20()
         end
     end
 
-    if GameTime % 500 == 0 and CurrentHedgehog ~= nil and TurnTimeLeft > 0 then
-        --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
-        --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
-        --end
-        if isSinglePlayer and not YouWon and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
-            ShowMission(loc("Climb Home"),
-                        loc("Made it!"),
-                        string.format(loc("AHHh, home sweet home.  Made it in %d seconds."),(GameTime-startTime)/1000),
-                        -amRope, 0)
-            PlaySound(sndVictory,CurrentHedgehog)
-            EndGame()
-            YouWon = true
+    if CurrentHedgehog ~= nil and TurnTimeLeft > 0 then
+        local vx, vy = GetGearVelocity(CurrentHedgehog)
+	local distanceFromWater = WaterLine - y
+	
+        --[[ check joke awards ]]
+        -- navy award: when distance from main map is over 1000
+        local navyDistance = 1250
+        if x < -navyDistance or x > LAND_WIDTH+navyDistance then
+            local awarded = false
+            local dist = 0
+            if jokeAwardNavy == nil then
+                awarded = true
+            else
+                if x < 0 then
+                    dist = math.abs(x)
+                else
+                    dist = x - LAND_WIDTH
+                end
+                if dist > jokeAwardNavy.distance then
+                    awarded = true
+                end
+            end
+            if awarded == true then
+                jokeAwardNavy = {
+                    hogName = GetHogName(CurrentHedgehog),
+                    teamName = GetHogTeamName(CurrentHedgehog),
+                    distance = dist
+                }
+            end
         end
 
-        local x,y = GetGearPosition(CurrentHedgehog)
-        if CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
-            -- doing this just after the start the first time to take advantage of randomness sources
-            -- there's a small chance it'll jiggle the camera though, so trying not to do it too often
-            -- Pick a clear y to start with
-            if y > 31000 then cy = 24585 elseif
-               y > 28000 then cy = 21500 elseif
-               y > 24000 then cy = 19000 elseif
-               y > 21500 then cy = 16000 elseif
-               y > 19000 then cy = 12265 elseif
-               y > 16000 then cy =  8800 elseif
-               y > 12000 then cy =  5700 else
-               cy = 400 end
-            Cake = AddGear(GetRandom(2048), cy, gtCake, 0, 0, 0, 0)
-            SetHealth(Cake,999999)
-            CakeTries = CakeTries + 1 
-        end
-        if (y > 286) or (y < 286 and MaxHeight > 286) then
-            if y < MaxHeight and y > 286 then MaxHeight = y end
-            if y < 286 then MaxHeight = 286 end
-            if MaxHeight < hTagHeight then
-                hTagHeight = MaxHeight
-                if hTag ~= nil then DeleteVisualGear(hTag) end
-                hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
-                -- snagged from space invasion
-                SetVisualGearValues (
-                        hTag,        --id
-                        -(ScreenWidth/2) + 40, --xoffset
-                        ScreenHeight - 60, --yoffset
-                        0,          --dx
-                        0,          --dy
-                        1.1,        --zoom
-                        1,          --~= 0 means align to screen
-                        g7,         --frameticks
-        -- 116px off bottom for lowest rock, 286 or so off top for position of chair
-        -- 32650 is "0"
-                        32640-hTagHeight,    --value
-                        99999999999,--timer
-                        GetClanColor(GetHogClan(CurrentHedgehog))
-                        )
+        -- Speed award for largest distance from water
+        if distanceFromWater > 3000 and WaterLine < 32000 then
+            local awarded = false
+            if jokeAwardSpeed == nil or distanceFromWater > jokeAwardSpeed.distance then
+                awarded = true
             end
-            if MaxHeight < RecordHeight then
-                RecordHeight = MaxHeight
-                if rTag ~= nil then DeleteVisualGear(rTag) end
-                rTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
-                -- snagged from space invasion
-                SetVisualGearValues (
-                        rTag,        --id
-                        -(ScreenWidth/2) + 100, --xoffset
-                        ScreenHeight - 60, --yoffset
-                        0,          --dx
-                        0,          --dy
-                        1.1,        --zoom
-                        1,          --~= 0 means align to screen
-                        g7,         --frameticks
-        -- 116px off bottom for lowest rock, 286 or so off top for position of chair
-        -- 32650 is "0"
-                        32640-RecordHeight,    --value
-                        99999999999,--timer
-                        GetClanColor(GetHogClan(CurrentHedgehog))
-                        )
+            if awarded == true then
+                jokeAwardSpeed = {
+                    hogName = GetHogName(CurrentHedgehog),
+                    teamName = GetHogTeamName(CurrentHedgehog),
+                    distance = distanceFromWater
+                }
             end
         end
-        if MaxHeight > 286 then
-            if tTag ~= nil then DeleteVisualGear(tTag) end
-            tTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
-            local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tTag)
-            -- snagged from space invasion
-            SetVisualGearValues (
+
+        if GameTime % 500 == 0 then
+            --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
+            --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
+            --end
+            if showWaterStats == true then
+	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), loc("Water Gods"))
+            end
+            SendStat(siClanHealth, tostring(getActualHeight(y)), loc(GetHogTeamName(CurrentHedgehog)))
+            if isSinglePlayer then
+                if distanceFromWater < 0 and not YouLost and not YouWon then
+                    makeSinglePlayerLoserStats()
+                    YouLost = true
+                end
+                if not YouWon and not YouLost and gearIsInBox(CurrentHedgehog, 1920, 252, 50, 50) then
+                    local finishTime = (GameTime-startTime)/1000
+                    local roundedFinishTime = math.ceil(math.floor(finishTime+0.5))
+                    AddCaption(loc("Victory!"))
+                    ShowMission(loc("Climb Home"),
+                                loc("Made it!"),
+                                string.format(loc("Ahhh, home, sweet home. Made it in %d seconds."), roundedFinishTime),
+                                -amRope, 0)
+                    PlaySound(sndVictory,CurrentHedgehog)
+                    SetState(CurrentHedgehog, gstWinner)
+                    SendStat(siGameResult, loc("You have beaten the challenge!"))
+                    SendStat(siGraphTitle, loc("Your height over time"))
+                    SendStat(siCustomAchievement, string.format(loc("%s reached home in %.3f seconds. Congratulations!"), loc(GetHogName(CurrentHedgehog)), finishTime))
+                    SendStat(siCustomAchievement, string.format(loc("%s bravely climbed up to a dizzy height of %d to reach home."),loc(GetHogName(CurrentHedgehog)), getActualHeight(RecordHeight)))
+                    SendStat(siPointType, loc("seconds"))
+                    SendStat(siPlayerKills, tostring(roundedFinishTime), loc(GetHogTeamName(CurrentHedgehog)))
+
+		    if not showWaterStats == true then
+			SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
+		    end
+                    EndGame()
+                    YouWon = true
+                end
+            elseif distanceFromWater < 0 and not YouLost then
+                makeMultiPlayerLoserStat(CurrentHedgehog)
+                deadHedgehogs = deadHedgehogs + 1
+                YouLost = true
+                if deadHedgehogs >= totalHedgehogs-1 then
+                    makeFinalMultiPlayerStats()
+                    EndGame()
+                end
+            end
+    
+            -- play taunts
+            if not YouWon and not YouLost then
+                local nooDistance = 500
+                if ((x < -nooDistance and vx < 0) or (x > LAND_WIDTH+nooDistance and vx > 0)) then
+                    if (tauntNoo == false and distanceFromWater > 80) then
+                        PlaySound(sndNooo, CurrentHedgehog)
+                        tauntNoo = true
+                    end
+                end
+            end
+
+            if CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
+                -- doing this just after the start the first time to take advantage of randomness sources
+                -- Pick a clear y to start with
+                if y > 31000 then cy = 24585 elseif
+                   y > 28000 then cy = 21500 elseif
+                   y > 24000 then cy = 19000 elseif
+                   y > 21500 then cy = 16000 elseif
+                   y > 19000 then cy = 12265 elseif
+                   y > 16000 then cy =  8800 elseif
+                   y > 12000 then cy =  5700 else
+                   cy = 400 end
+                Cake = AddGear(GetRandom(2048), cy, gtCake, 0, 0, 0, 0)
+                SetHealth(Cake,999999)
+                CakeTries = CakeTries + 1 
+            end
+
+            if (y > 286) or (y < 286 and MaxHeight > 286) then
+                if y < MaxHeight and y > 286 then MaxHeight = y end
+                if y < 286 then MaxHeight = 286 end
+                if MaxHeight < hTagHeight then
+                    hTagHeight = MaxHeight
+                    if hTag ~= nil then DeleteVisualGear(hTag) end
+                    hTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
+                    local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
+                    -- snagged from space invasion
+                    SetVisualGearValues (
+                            hTag,        --id
+                            -(ScreenWidth/2) + 40, --xoffset
+                            ScreenHeight - 60, --yoffset
+                            0,          --dx
+                            0,          --dy
+                            1.1,        --zoom
+                            1,          --~= 0 means align to screen
+                            g7,         --frameticks
+            -- 116px off bottom for lowest rock, 286 or so off top for position of chair
+            -- 32650 is "0"
+                            32640-hTagHeight,    --value
+                            99999999999,--timer
+                            GetClanColor(GetHogClan(CurrentHedgehog))
+                            )
+                end
+
+                if MaxHeight < RecordHeight then
+                    RecordHeight = MaxHeight
+                    local oldName = RecordHeightHogName
+                    RecordHeightHogName = GetHogName(CurrentHedgehog)
+                    if oldName == nil then recordBroken = true end
+                    if not isSinglePlayer and RecordHeight > 1500 and not recordBroken then
+                        recordBroken = true
+                        AddCaption(string.format(loc("%s has passed the best height of %s!"), RecordHeightHogName, oldName))
+                    end
+                    if not isSinglePlayer then
+                        if rTag ~= nil then DeleteVisualGear(rTag) end
+                        rTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
+                        local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(hTag)
+                        -- snagged from space invasion
+                        SetVisualGearValues (
+                            rTag,        --id
+                            -(ScreenWidth/2) + 100, --xoffset
+                            ScreenHeight - 60, --yoffset
+                            0,          --dx
+                            0,          --dy
+                            1.1,        --zoom
+                            1,          --~= 0 means align to screen
+                            g7,         --frameticks
+            -- 116px off bottom for lowest rock, 286 or so off top for position of chair
+            -- 32650 is "0"
+                            getActualHeight(RecordHeight),    --value
+                            99999999999,--timer
+                            GetClanColor(GetHogClan(CurrentHedgehog))
+                            )
+                    end
+                end
+            end
+            if MaxHeight > 286 then
+                if tTag ~= nil then DeleteVisualGear(tTag) end
+                tTag = AddVisualGear(0, 0, vgtHealthTag, 0, true)
+                local g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tTag)
+                -- snagged from space invasion
+                SetVisualGearValues (
                     tTag,        --id
                     -(ScreenWidth/2) + 40, --xoffset
                     ScreenHeight - 100, --yoffset
@@ -300,6 +433,161 @@ function onGameTick20()
                     99999999999,--timer
                     0xffffffff
                     )
+            end
         end
     end
+end
+
+function onGearDamage(gear, damage)
+    if GetGearType(gear) == gtHedgehog and not YouLost and not YouWon then
+        -- Joke award for largest damage to hog
+        local qualifyDamage = 50
+        if (damage >= qualifyDamage) then
+            local awarded = false
+            if jokeAwardDamage == nil or damage > jokeAwardDamage.damage then
+                awarded = true
+            end
+            if awarded == true then
+                jokeAwardDamage = {
+                    hogName = GetHogName(CurrentHedgehog),
+                    teamName = GetHogTeamName(CurrentHedgehog),
+                    damage = damage
+                }
+            end
+        end
+
+        if isSinglePlayer then
+            makeSinglePlayerLoserStats()
+        else
+            deadHedgehogs = deadHedgehogs + 1
+            if deadHedgehogs >= totalHedgehogs-1 then
+                makeFinalMultiPlayerStats()
+                EndGame()
+            end
+            makeMultiPlayerLoserStat(gear)
+        end
+        YouLost = true
+    end
+end
+
+function makeLoserComment()
+    local m
+    if isSinglePlayer then m = 10 else m = 6 end
+    local r = math.random(1,m)
+    if r == 1 then text = loc("%s never got the ninja diploma.")
+    elseif r == 2 then text = loc("You have to move upwards, not downwards, %s!")
+    elseif r == 3 then text = loc("%s never wanted to reach for the sky in the first place.")
+    elseif r == 4 then text = loc("%s should try the rope training mission first.")
+    elseif r == 5 then text = loc("%s skipped ninja classes.")
+    elseif r == 6 then text = loc("%s doesn’t really know how to handle a rope properly.")
+    elseif r == 7 then text = loc("Better luck next time!")
+    elseif r == 8 then text = loc("It was all just bad luck!")
+    elseif r == 9 then text = loc("Well, that escalated quickly!")
+    elseif r == 10 then text = loc("What? Is it over already?") end
+    return text
+end
+
+function makeSinglePlayerLoserStats()
+    local actualHeight = getActualHeight(RecordHeight)
+    SendStat(siGameResult, loc("You lose!"))
+    SendStat(siGraphTitle, loc("Your height over time"))
+    local text
+    if actualHeight > 30000 then text = loc("%s was damn close to home.")
+    elseif actualHeight > 28000 then text = loc("%s was close to home.")
+    elseif actualHeight > 24265 then text = loc("%s was good, but not good enough.")
+    elseif actualHeight > 16177 then text = loc("%s managed to pass half of the distance towards home.")
+    elseif actualHeight > 8088 then text = loc("%s went over a quarter of the way towards home.")
+    elseif actualHeight > 5100 then text = loc("%s still had a long way to go.")
+    elseif actualHeight > 2000 then text = loc("%s made it past the hogosphere.")
+    elseif actualHeight > 1500  then text = loc("%s barely made it past the hogosphere.")
+    else
+        text = makeLoserComment()
+    end
+    if actualHeight > 1500 then
+        SendStat(siCustomAchievement, string.format(text, RecordHeightHogName, actualHeight))
+    else
+        SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
+    end
+    SendStat(siPointType, "points")
+    SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
+    EndGame()
+end
+
+function makeMultiPlayerLoserStat(gear)
+    local teamName = GetHogTeamName(gear)
+    local actualHeight = getActualHeight(MaxHeight)
+    if teamBests[teamName] == nil then teamBests[teamName] = actualHeight end
+    if teamBests[teamName] < actualHeight then teamBests[teamName] = actualHeight end
+    if teamScoreStats[teamName] == nil then teamScoreStats[teamName] = {} end
+    table.insert(teamScoreStats[teamName], actualHeight)
+    SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
+end
+
+function makeFinalMultiPlayerStats()
+    local ranking = {}
+    for k,v in pairs(teamBests) do
+        table.insert(ranking, {name=k, score=v})
+    end
+    local comp = function(table1, table2)
+        if table1.score < table2.score then
+            return true
+        else
+            return false
+        end
+    end
+    table.sort(ranking, comp)
+
+    local winner = ranking[#ranking]
+    local loser = ranking[1]
+    SendStat(siGameResult, string.format(loc("%s wins!"), winner.name))
+    SendStat(siGraphTitle, string.format(loc("Team’s best heights per round")))
+    
+    if winner.score < 1500 then
+        SendStat(siCustomAchievement, string.format(loc("This round’s award for ulitmate disappointment goes to: Everyone!")))
+    else
+        if winner.score > 30000 then text = loc("%s (%s) reached for the sky and beyond with a height of %d!")
+        elseif winner.score > 24750 then text = loc("%s (%s) was certainly not afraid of heights: Peak height of %d!")
+        elseif winner.score > 16500 then text = loc("%s (%s) does not have to feel ashamed for their best height of %d.")
+        elseif winner.score > 8250 then text = loc("%s (%s) reached a decent peak height of %d.")
+        else text = loc("%s (%s) reached a peak height of %d.") end
+        SendStat(siCustomAchievement, string.format(text, RecordHeightHogName, winner.name, winner.score))
+
+        if loser.score < 1500 then
+            text = makeLoserComment()
+            SendStat(siCustomAchievement, string.format(text, loser.name))
+        end
+    end
+    checkAwards()
+    for i = #ranking, 1, -1 do
+        SendStat(siPlayerKills, tostring(ranking[i].score), ranking[i].name)
+        SendStat(siPointType, "points")
+    end
+end
+
+function checkAwards()
+    if jokeAwardNavy ~= nil then
+        if isSinglePlayer then
+            SendStat(siCustomAchievement, string.format(loc("The Navy greets %s for managing to get in a distance of %d away from the mainland!"), jokeAwardNavy.hogName, jokeAwardNavy.distance))
+        else
+            SendStat(siCustomAchievement, string.format(loc("Greetings from the Navy, %s (%s), for being a distance of %d away from the mainland!"), jokeAwardNavy.hogName, jokeAwardNavy.teamName, jokeAwardNavy.distance))
+        end
+    end
+    if jokeAwardSpeed ~= nil then
+        if isSinglePlayer then
+            SendStat(siCustomAchievement, string.format(loc("Your hedgehog was panicly afraid of the water and decided to go in a safe distance of %d from it."), jokeAwardSpeed.distance))
+        else
+            SendStat(siCustomAchievement, string.format(loc("%s (%s) was panicly afraid of the water and decided to get in a safe distance of %d from it."), jokeAwardSpeed.hogName, jokeAwardSpeed.teamName, jokeAwardSpeed.distance))
+        end
+    end
+    if jokeAwardDamage ~= nil then
+        if isSinglePlayer then
+            SendStat(siCustomAchievement, string.format(loc("Ouch! That must have hurt. You mutilated your poor hedgehog hog with %d damage."), jokeAwardDamage.damage))
+        else
+            SendStat(siCustomAchievement, string.format(loc("Ouch! That must have hurt. %s (%s) hit the ground with %d damage points."), jokeAwardDamage.hogName, jokeAwardDamage.teamName, jokeAwardDamage.damage))
+        end
+    end
+end
+
+function getActualHeight(height)
+    return 32640-height
 end
