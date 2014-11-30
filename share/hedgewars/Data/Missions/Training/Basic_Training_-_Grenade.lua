@@ -141,7 +141,7 @@ function onGameTick20()
 			-- Remove the team to end the game. Only do this once.
 			if team_death == false then
 				team_death = true
-				DismissTeam("Grenadiers")
+				DismissTeam(loc("Grenadiers"))
 			end
 		else
 			-- ... or just lower the timer by 1.
