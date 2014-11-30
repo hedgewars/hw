@@ -2127,7 +2127,7 @@ var
     gX,gY,i: LongInt;
     sticky: Boolean;
     vgt: PVisualGear;
-    tdX,tdY: HWFloat;
+    tdX,tdY, f: HWFloat;
     landPixel: Word;
 begin
     WorldWrap(Gear);
@@ -2166,19 +2166,30 @@ begin
                 end;
             end;
 
+        if (Gear^.dX.QWordValue > _2.QWordValue)
+            or (Gear^.dY.QWordValue > _2.QWordValue)
+        then
+        begin
+            // norm speed vector to length of 2 for fire particles to keep flying in the same direction
+            f:= _2 / Distance(Gear^.dX, Gear^.dY);
+            Gear^.dX:= Gear^.dX * f;
+            Gear^.dY:= Gear^.dY * f;
+        end
+        else begin
+            if Gear^.dX.QWordValue > _0_01.QWordValue then
+                if Gear^.dX.QWordValue > _2.QWordValue then
+                    Gear^.dX := Gear^.dX * _0_995;
 
-        if Gear^.dX.QWordValue > _0_01.QWordValue then
-            Gear^.dX := Gear^.dX * _0_995;
+            Gear^.dY := Gear^.dY + cGravity;
+            // if sticky then Gear^.dY := Gear^.dY + cGravity;
 
-        Gear^.dY := Gear^.dY + cGravity;
-        // if sticky then Gear^.dY := Gear^.dY + cGravity;
+            if Gear^.dY.QWordValue > _0_2.QWordValue then
+                Gear^.dY := Gear^.dY * _0_995;
 
-        if Gear^.dY.QWordValue > _0_2.QWordValue then
-            Gear^.dY := Gear^.dY * _0_995;
-
-        //if sticky then Gear^.X := Gear^.X + Gear^.dX else
-        Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+            //if sticky then Gear^.X := Gear^.X + Gear^.dX else
+            Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
+            Gear^.Y := Gear^.Y + Gear^.dY;
+        end;
 
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
