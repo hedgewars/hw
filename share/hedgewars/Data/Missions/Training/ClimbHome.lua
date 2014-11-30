@@ -17,6 +17,9 @@ function onGameInit()
     CaseFreq = 0
     Explosives = 0
     Map = "ClimbHome"
-    AddTeam(loc("Lonely Hog"), 14483456, "Simple", "Island", "Default")
+    AddTeam(loc("Lonely Hog"), 0xDD0000, "Simple", "Island", "Default")
     player = AddHog(loc("Climber"), 0, 1, "NoHat")
+    AddTeam(loc("Water Gods"), 0x4980C1, "Simple", "Island", "Default")
+    dummyHog = AddHog("Poseidon", 5, 1, "NoHat")
+    --HideHog(dummyHog)
 end

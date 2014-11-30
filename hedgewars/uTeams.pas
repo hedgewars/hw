@@ -34,6 +34,7 @@ procedure AfterSwitchHedgehog;
 procedure InitTeams;
 function  TeamSize(p: PTeam): Longword;
 procedure RecountTeamHealth(team: PTeam);
+procedure RecountAllTeamsHealth();
 procedure RestoreHog(HH: PHedgehog);
 
 procedure RestoreTeamsFromSave;

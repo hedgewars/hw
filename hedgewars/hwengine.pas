@@ -94,6 +94,7 @@ begin
             for t:= 0 to Pred(TeamsCount) do
                 with TeamsArray[t]^ do
                     MaxTeamHealth:= TeamHealth;
+            RecountAllTeamsHealth;
             GameState:= gsGame;
             end;
         gsConfirm, gsGame, gsChat:
