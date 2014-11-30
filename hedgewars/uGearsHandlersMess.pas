@@ -5544,7 +5544,8 @@ begin
         ndY:= -AngleCos(HHGear^.Angle) * _4;
         if (ndX <> dX) or (ndY <> dY) or
            ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
-             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
+             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
+             (not CheckCoordInWater(Target.X, Target.Y))) then
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
@@ -5568,10 +5569,15 @@ begin
                         Power := GameTicks;
                         end
                     end
-                else if (Target.Y >= cWaterLine) or
-                        ((Target.X and LAND_WIDTH_MASK = 0) and
-                         (Target.Y+iceHeight+4 >= cWaterLine) and
-                         (Land[Target.Y, Target.X] = lfIce)) then
+                else if CheckCoordInWater(Target.X, Target.Y) or
+                        ((Target.X and LAND_WIDTH_MASK  = 0) and
+                         (Target.Y and LAND_HEIGHT_MASK = 0) and
+                         (Land[Target.Y, Target.X] = lfIce) and
+                         ((Target.Y+iceHeight+5 > cWaterLine) or
+                          ((WorldEdge = weSea) and
+                           ((Target.X+iceHeight+5 > LongInt(rightX)) or
+                            (Target.X-iceHeight-5 < LongInt(leftX)))))
+                         ) then
                     begin
                     if Timer = iceWaitCollision then
                         begin
@@ -5651,7 +5657,14 @@ begin
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
                     begin
                     PlaySound(sndHogFreeze);
-                    DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
+                    if CheckCoordInWater(Target.X, Target.Y) then
+                        DrawIceBreak(Target.X, Target.Y, iceRadius, iceHeight)
+                    else if Target.Y+iceHeight+5 > cWaterLine then
+                        DrawIceBreak(Target.X, Target.Y+iceHeight+5, iceRadius, iceHeight)
+                    else if Target.X+iceHeight+5 > LongInt(rightX) then
+                        DrawIceBreak(Target.X+iceHeight+5, Target.Y, iceRadius, iceHeight)
+                    else
+                        DrawIceBreak(Target.X-iceHeight-5, Target.Y, iceRadius, iceHeight);
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
                     end;
@@ -5689,7 +5702,7 @@ begin
                                 end;
                 inc(Pos)
                 end
-            else if (t > 400) and ((gY > cWaterLine) or
+            else if (t > 400) and (CheckCoordInWater(gX, gY) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and (Land[gY, gX] <> 0))) then
                 begin

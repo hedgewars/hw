@@ -372,12 +372,48 @@ end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 var
-    i, j: integer;
+    i, j, iceL, iceR, IceT, iceB: LongInt;
     landRect: TSDL_Rect;
 begin
-for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0), LAND_WIDTH - 1) do
+// figure out bottom/left/right/top coords of ice to draw
+
+// determine absolute limits first
+iceT:= 0;
+iceB:= min(cWaterLine, LAND_HEIGHT - 1);
+
+iceL:= 0;
+iceR:= LAND_WIDTH - 1;
+
+if WorldEdge <> weNone then
     begin
-    for j := min(max(y, 0), LAND_HEIGHT - 1) to min(max(y + iceHeight, 0), LAND_HEIGHT - 1) do
+    iceL:= max(leftX,  iceL);
+    iceR:= min(rightX, iceR);
+    end;
+
+// adjust based on location but without violating absolute limits
+if y >= cWaterLine then
+    begin
+    iceL:= max(x - iceRadius, iceL);
+    iceR:= min(x + iceRadius, iceR);
+    iceT:= max(cWaterLine - iceHeight, iceT);
+    end
+else {if WorldEdge = weSea then}
+    begin
+    iceT:= max(y - iceRadius, iceT);
+    iceB:= min(y + iceRadius, iceB);
+    if x <= leftX then
+        iceR:= min(leftX + iceHeight, iceR)
+    else {if x >= rightX then}
+        iceL:= max(LongInt(rightX) - iceHeight, iceL);
+    end;
+
+// don't continue if all ice is outside land array
+if (iceL > iceR) or (iceT > iceB) then
+    exit();
+
+for i := iceL to iceR do
+    begin
+    for j := iceT to iceB do
         begin
         if Land[j, i] = 0 then
             begin
@@ -389,10 +425,12 @@ for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0)
             end;
         end;
     end;
-landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
-landRect.y := min(max(y, 0), LAND_HEIGHT - 1);
-landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
-landRect.h := min(iceHeight, LAND_HEIGHT - landRect.y - 1);
+
+landRect.x := iceL;
+landRect.y := iceT;
+landRect.w := iceR - IceL + 1;
+landRect.h := iceB - iceT + 1;
+
 UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 end;
 
