@@ -849,7 +849,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and (LandPixels[yy, xx] <> 0);
+    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMASK) <> 0);
     if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
@@ -868,10 +868,10 @@ begin
                                 ny:= Y div 2 + i;
                                 nx:= X div 2 + j;
                                 if ((ny and (LAND_HEIGHT_MASK div 2)) = 0) and ((nx and (LAND_WIDTH_MASK div 2)) = 0) then
-                                    if LandPixels[ny, nx] <> 0 then
+                                    if (LandPixels[ny, nx] and AMASK) <> 0 then
                                         inc(c);
                             end
-                            else if LandPixels[ny, nx] <> 0 then
+                            else if (LandPixels[ny, nx] and AMASK)  <> 0 then
                                     inc(c);
                         end
                     else if Land[ny, nx] > 255 then
