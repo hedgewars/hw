@@ -73,6 +73,9 @@ QList< QPair<QString, QString> > cDefaultAmmos =
 		<< qMakePair(QString("Construction Mode"),   QString(
             AMMOLINE_CONSTRUCTION_QT AMMOLINE_CONSTRUCTION_PROB
             AMMOLINE_CONSTRUCTION_DELAY AMMOLINE_CONSTRUCTION_CRATE ))
+		<< qMakePair(QString("Shoppa Pro"), QString(
+            AMMOLINE_SHOPPAPRO_QT AMMOLINE_SHOPPAPRO_PROB
+            AMMOLINE_SHOPPAPRO_DELAY AMMOLINE_SHOPPAPRO_CRATE ))
         ;
 
 unsigned int colors[] = HW_TEAMCOLOR_ARRAY;
