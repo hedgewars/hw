@@ -2177,7 +2177,6 @@ begin
         end
         else begin
             if Gear^.dX.QWordValue > _0_01.QWordValue then
-                if Gear^.dX.QWordValue > _2.QWordValue then
                     Gear^.dX := Gear^.dX * _0_995;
 
             Gear^.dY := Gear^.dY + cGravity;
