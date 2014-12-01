@@ -1,13 +1,25 @@
 ------------------------------------------
--- TECH RACER
+-- TECH RACER v0.2
 -----------------------------------------
+
+--------------
+--0.2
+--------------
+-- should work better "out the box"
+-- changed map generation
+-- put a hog limiter in place
+-- removed parsecommand
+-- fix one of the test maps
+-- hopefully added some support for future official challenges etc
+-- changed theme
+-- minor cleanups?
 
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
---HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
+HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
 
@@ -15,8 +27,8 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 -- Got Variables?
 ------------------
 
- local activationStage = 0
- local jet = nil
+local activationStage = 0
+local jet = nil
 
 local fMod = 1000000 -- 1
 local roundLimit = 3
@@ -88,9 +100,8 @@ local RoundHasChanged
 -- general methods
 -------------------
 
-function onPrecise()
-	AddCaption(mapID)
-end
+--function onPrecise()
+--end
 
 function RebuildTeamInfo()
 
@@ -467,101 +478,101 @@ function HandleFreshMapCreation()
 
 		-- these are from onParameters()
 		if mapID == "0" then
-			--AddCaption("zero")
+			--AddCaption("don't load any map")
 		elseif mapID == "1" then
 
 			--testmap1
 			------ GIRDER LIST ------
-			PlaceGirder(306, 530, 7)
-			PlaceGirder(451, 474, 4)
-			PlaceGirder(595, 531, 5)
-			PlaceGirder(245, 679, 6)
-			PlaceGirder(305, 822, 5)
-			PlaceGirder(449, 887, 4)
-			PlaceGirder(593, 825, 7)
-			PlaceGirder(657, 681, 6)
-			PlaceGirder(1063, 682, 6)
-			PlaceGirder(1121, 532, 7)
-			PlaceGirder(1266, 476, 4)
-			PlaceGirder(1411, 535, 5)
-			PlaceGirder(1472, 684, 6)
-			PlaceGirder(1415, 828, 7)
-			PlaceGirder(1271, 892, 4)
-			PlaceGirder(1126, 827, 5)
-			PlaceGirder(841, 1079, 4)
-			PlaceGirder(709, 1153, 7)
-			PlaceGirder(975, 1154, 5)
-			PlaceGirder(653, 1265, 2)
-			PlaceGirder(1021, 1266, 2)
-			PlaceGirder(713, 1369, 5)
-			PlaceGirder(960, 1371, 7)
-			PlaceGirder(835, 1454, 4)
-			PlaceGirder(185, 1617, 2)
-			PlaceGirder(1317, 1399, 2)
-			PlaceGirder(1711, 1811, 2)
-			PlaceGirder(2087, 1424, 2)
-			PlaceGirder(2373, 1804, 2)
-			PlaceGirder(2646, 1434, 2)
-			PlaceGirder(1876, 667, 6)
-			PlaceGirder(1934, 517, 7)
-			PlaceGirder(2079, 461, 4)
-			PlaceGirder(2224, 519, 5)
-			PlaceGirder(1935, 810, 5)
-			PlaceGirder(2080, 875, 4)
-			PlaceGirder(2224, 811, 7)
-			PlaceGirder(2370, 582, 4)
-			PlaceGirder(2370, 759, 4)
-			PlaceGirder(2530, 582, 4)
-			PlaceGirder(2690, 582, 4)
-			PlaceGirder(2530, 759, 4)
-			PlaceGirder(2690, 759, 4)
-			PlaceGirder(2836, 634, 5)
-			PlaceGirder(2835, 822, 5)
-			PlaceGirder(2951, 751, 5)
-			PlaceGirder(2950, 939, 5)
-			PlaceGirder(2964, 1054, 7)
-			PlaceGirder(2978, 1172, 5)
-			PlaceGirder(3095, 1185, 7)
-			PlaceGirder(3211, 1069, 7)
-			PlaceGirder(3038, 843, 1)
-			PlaceGirder(3126, 825, 7)
-			PlaceGirder(3271, 768, 4)
-			PlaceGirder(3357, 1014, 4)
-			PlaceGirder(3416, 826, 5)
-			PlaceGirder(3454, 969, 6)
-			PlaceGirder(3439, 369, 6)
-			PlaceGirder(3500, 220, 7)
-			PlaceGirder(3502, 513, 5)
-			PlaceGirder(3646, 162, 4)
-			PlaceGirder(3791, 224, 5)
-			PlaceGirder(3851, 374, 6)
-			PlaceGirder(3792, 518, 7)
-			PlaceGirder(3994, 1731, 7)
-			PlaceGirder(3877, 1848, 7)
-			PlaceGirder(3789, 1942, 3)
-			PlaceGirder(3986, 1929, 2)
-			PlaceGirder(2837, 1937, 4)
-			PlaceGirder(2997, 1938, 4)
-			PlaceGirder(3157, 1938, 4)
-			PlaceGirder(1152, 1844, 4)
-			PlaceGirder(1299, 1898, 5)
-			PlaceGirder(1005, 1900, 7)
-			PlaceGirder(3578, 575, 6)
-			PlaceGirder(3714, 576, 6)
-			PlaceGirder(3579, 740, 6)
-			PlaceGirder(3714, 741, 6)
-			PlaceGirder(3580, 903, 6)
-			PlaceGirder(3715, 904, 6)
-			PlaceGirder(3552, 452, 1)
-			PlaceGirder(3528, 370, 2)
-			PlaceGirder(3568, 297, 3)
-			PlaceGirder(3736, 455, 3)
-			PlaceGirder(3757, 378, 2)
-			PlaceGirder(3725, 299, 1)
-			PlaceGirder(3646, 261, 0)
-			PlaceGirder(3648, 997, 4)
-			PlaceGirder(3649, 1275, 2)
-			PlaceGirder(3514, 1750, 0)
+			PlaceSprite(306, 530, sprAmGirder, 7, lfNormal)
+			PlaceSprite(451, 474, sprAmGirder, 4, lfNormal)
+			PlaceSprite(595, 531, sprAmGirder, 5, lfNormal)
+			PlaceSprite(245, 679, sprAmGirder, 6, lfNormal)
+			PlaceSprite(305, 822, sprAmGirder, 5, lfNormal)
+			PlaceSprite(449, 887, sprAmGirder, 4, lfNormal)
+			PlaceSprite(593, 825, sprAmGirder, 7, lfNormal)
+			PlaceSprite(657, 681, sprAmGirder, 6, lfNormal)
+			PlaceSprite(1063, 682, sprAmGirder, 6, lfNormal)
+			PlaceSprite(1121, 532, sprAmGirder, 7, lfNormal)
+			PlaceSprite(1266, 476, sprAmGirder, 4, lfNormal)
+			PlaceSprite(1411, 535, sprAmGirder, 5, lfNormal)
+			PlaceSprite(1472, 684, sprAmGirder, 6, lfNormal)
+			PlaceSprite(1415, 828, sprAmGirder, 7, lfNormal)
+			PlaceSprite(1271, 892, sprAmGirder, 4, lfNormal)
+			PlaceSprite(1126, 827, sprAmGirder, 5, lfNormal)
+			PlaceSprite(841, 1079, sprAmGirder, 4, lfNormal)
+			PlaceSprite(709, 1153, sprAmGirder, 7, lfNormal)
+			PlaceSprite(975, 1154, sprAmGirder, 5, lfNormal)
+			PlaceSprite(653, 1265, sprAmGirder, 2, lfNormal)
+			PlaceSprite(1021, 1266, sprAmGirder, 2, lfNormal)
+			PlaceSprite(713, 1369, sprAmGirder, 5, lfNormal)
+			PlaceSprite(960, 1371, sprAmGirder, 7, lfNormal)
+			PlaceSprite(835, 1454, sprAmGirder, 4, lfNormal)
+			PlaceSprite(185, 1617, sprAmGirder, 2, lfNormal)
+			PlaceSprite(1317, 1399, sprAmGirder, 2, lfNormal)
+			PlaceSprite(1711, 1811, sprAmGirder, 2, lfNormal)
+			PlaceSprite(2087, 1424, sprAmGirder, 2, lfNormal)
+			PlaceSprite(2373, 1804, sprAmGirder, 2, lfNormal)
+			PlaceSprite(2646, 1434, sprAmGirder, 2, lfNormal)
+			PlaceSprite(1876, 667, sprAmGirder, 6, lfNormal)
+			PlaceSprite(1934, 517, sprAmGirder, 7, lfNormal)
+			PlaceSprite(2079, 461, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2224, 519, sprAmGirder, 5, lfNormal)
+			PlaceSprite(1935, 810, sprAmGirder, 5, lfNormal)
+			PlaceSprite(2080, 875, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2224, 811, sprAmGirder, 7, lfNormal)
+			PlaceSprite(2370, 582, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2370, 759, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2530, 582, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2690, 582, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2530, 759, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2690, 759, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2836, 634, sprAmGirder, 5, lfNormal)
+			PlaceSprite(2835, 822, sprAmGirder, 5, lfNormal)
+			PlaceSprite(2951, 751, sprAmGirder, 5, lfNormal)
+			PlaceSprite(2950, 939, sprAmGirder, 5, lfNormal)
+			PlaceSprite(2964, 1054, sprAmGirder, 7, lfNormal)
+			PlaceSprite(2978, 1172, sprAmGirder, 5, lfNormal)
+			PlaceSprite(3095, 1185, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3211, 1069, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3038, 843, sprAmGirder, 1, lfNormal)
+			PlaceSprite(3126, 825, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3271, 768, sprAmGirder, 4, lfNormal)
+			PlaceSprite(3357, 1014, sprAmGirder, 4, lfNormal)
+			PlaceSprite(3416, 826, sprAmGirder, 5, lfNormal)
+			PlaceSprite(3454, 969, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3439, 369, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3500, 220, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3502, 513, sprAmGirder, 5, lfNormal)
+			PlaceSprite(3646, 162, sprAmGirder, 4, lfNormal)
+			PlaceSprite(3791, 224, sprAmGirder, 5, lfNormal)
+			PlaceSprite(3851, 374, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3792, 518, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3994, 1731, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3877, 1848, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3789, 1942, sprAmGirder, 3, lfNormal)
+			PlaceSprite(3986, 1929, sprAmGirder, 2, lfNormal)
+			PlaceSprite(2837, 1937, sprAmGirder, 4, lfNormal)
+			PlaceSprite(2997, 1938, sprAmGirder, 4, lfNormal)
+			PlaceSprite(3157, 1938, sprAmGirder, 4, lfNormal)
+			PlaceSprite(1152, 1844, sprAmGirder, 4, lfNormal)
+			PlaceSprite(1299, 1898, sprAmGirder, 5, lfNormal)
+			PlaceSprite(1005, 1900, sprAmGirder, 7, lfNormal)
+			PlaceSprite(3578, 575, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3714, 576, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3579, 740, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3714, 741, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3580, 903, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3715, 904, sprAmGirder, 6, lfNormal)
+			PlaceSprite(3552, 452, sprAmGirder, 1, lfNormal)
+			PlaceSprite(3528, 370, sprAmGirder, 2, lfNormal)
+			PlaceSprite(3568, 297, sprAmGirder, 3, lfNormal)
+			PlaceSprite(3736, 455, sprAmGirder, 3, lfNormal)
+			PlaceSprite(3757, 378, sprAmGirder, 2, lfNormal)
+			PlaceSprite(3725, 299, sprAmGirder, 1, lfNormal)
+			PlaceSprite(3646, 261, sprAmGirder, 0, lfNormal)
+			PlaceSprite(3648, 997, sprAmGirder, 4, lfNormal)
+			PlaceSprite(3649, 1275, sprAmGirder, 2, lfNormal)
+			PlaceSprite(3514, 1750, sprAmGirder, 0, lfNormal)
 
 			------ RUBBER BAND LIST ------
 
@@ -598,61 +609,48 @@ function HandleFreshMapCreation()
 
 		elseif mapID == "2" then
 
+			-- land flags test map
+			------ GIRDER LIST ------
+			PlaceSprite(335, 622, sprAmGirder, 16,16384)
+			PlaceSprite(474, 569, sprAmGirder, 13,16384)
+			PlaceSprite(343, 748, sprAmGirder, 14,16384)
+			PlaceSprite(466, 756, sprAmGirder, 16,16384)
+			PlaceSprite(609, 702, sprAmGirder, 13,16384)
+			PlaceSprite(635, 570, sprAmGirder, 13,16384)
+			PlaceSprite(770, 702, sprAmGirder, 13,16384)
+			PlaceSprite(960, 730, sprAmGirder, 18,2048)
+			PlaceSprite(1061, 608, sprAmGirder, 16,16384)
+			PlaceSprite(1207, 552, sprAmGirder, 13,16384)
+			PlaceSprite(1205, 409, sprAmGirder, 13,16384)
+			PlaceSprite(2312, 637, sprAmGirder, 6,0)
+			PlaceSprite(2312, 472, sprAmGirder, 6,0)
+			PlaceSprite(2311, 308, sprAmGirder, 6,0)
+			PlaceSprite(2292, 155, sprAmGirder, 6,0)
+			PlaceSprite(727, 611, sprAmGirder, 6,0)
+			PlaceSprite(1298, 480, sprAmGirder, 6,0)
 
-		-- land flags test map
+			------ RUBBER BAND LIST ------
+			PlaceSprite(1411, 625, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1525, 739, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1638, 852, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1754, 963, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1870, 1076, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(2013, 1131, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(2159, 1070, sprAmRubber, 3, lfBouncy)
+			PlaceSprite(2268, 952, sprAmRubber, 3, lfBouncy)
+			PlaceSprite(2315, 802, sprAmRubber, 2, lfBouncy)
 
+			------ AMMO CRATE LIST ------
+			tempG = SpawnAmmoCrate(472, 711, amBazooka)
 
+			tempG = SpawnUtilityCrate(540, 660, amParachute)
 
-				------ GIRDER LIST ------
-	PlaceSprite(335, 622, sprAmGirder, 16,16384)
-	PlaceSprite(474, 569, sprAmGirder, 13,16384)
-	PlaceSprite(343, 748, sprAmGirder, 14,16384)
-	PlaceSprite(466, 756, sprAmGirder, 16,16384)
-	PlaceSprite(609, 702, sprAmGirder, 13,16384)
-	PlaceSprite(635, 570, sprAmGirder, 13,16384)
-	PlaceSprite(770, 702, sprAmGirder, 13,16384)
-	PlaceSprite(960, 730, sprAmGirder, 18,2048)
-	PlaceSprite(1061, 608, sprAmGirder, 16,16384)
-	PlaceSprite(1207, 552, sprAmGirder, 13,16384)
-	PlaceSprite(1205, 409, sprAmGirder, 13,16384)
-	PlaceSprite(2312, 637, sprAmGirder, 6,0)
-	PlaceSprite(2312, 472, sprAmGirder, 6,0)
-	PlaceSprite(2311, 308, sprAmGirder, 6,0)
-	PlaceSprite(2292, 155, sprAmGirder, 6,0)
-	PlaceSprite(727, 611, sprAmGirder, 6,0)
-	PlaceSprite(1298, 480, sprAmGirder, 6,0)
+			tempG = SpawnAmmoCrate(1155, 528, amBazooka)
 
-	------ RUBBER BAND LIST ------
-	PlaceSprite(1411, 625, sprAmRubber, 1, lfBouncy)
-	PlaceSprite(1525, 739, sprAmRubber, 1, lfBouncy)
-	PlaceSprite(1638, 852, sprAmRubber, 1, lfBouncy)
-	PlaceSprite(1754, 963, sprAmRubber, 1, lfBouncy)
-	PlaceSprite(1870, 1076, sprAmRubber, 1, lfBouncy)
-	PlaceSprite(2013, 1131, sprAmRubber, 0, lfBouncy)
-	PlaceSprite(2159, 1070, sprAmRubber, 3, lfBouncy)
-	PlaceSprite(2268, 952, sprAmRubber, 3, lfBouncy)
-	PlaceSprite(2315, 802, sprAmRubber, 2, lfBouncy)
-
-	------ AMMO CRATE LIST ------
-	tempG = SpawnAmmoCrate(472, 711, amBazooka)
-
-	tempG = SpawnUtilityCrate(540, 660, amParachute)
-
-	tempG = SpawnAmmoCrate(1155, 528, amBazooka)
-
-	------ UTILITY CRATE LIST ------
-	tempG = SpawnUtilityCrate(2006, 1102, amRope)
-
-
+			------ UTILITY CRATE LIST ------
+			tempG = SpawnUtilityCrate(2006, 1102, amRope)
 
 		else
-
-
-
-
-
-
-
 
 
 
@@ -1105,20 +1103,71 @@ function onParameters()
 	mapID = params["m"]
 end
 
+PointsBuffer = ''  -- A string to accumulate points in
+
+function AddPoint(x, y, width, erase)
+ PointsBuffer = PointsBuffer .. string.char(band(x,0xff00) / 256 , band(x,0xff) , band(y,0xff00) / 256 , band(y,0xff))
+ if width then
+     width = bor(width,0x80)
+     if erase then
+         width = bor(width,0x40)
+     end
+     PointsBuffer = PointsBuffer .. string.char(width)
+ else
+     PointsBuffer = PointsBuffer .. string.char(0)
+ end
+ if #PointsBuffer > 245 then
+     ParseCommand('draw '..PointsBuffer)
+     PointsBuffer = ''
+ end
+end
+
+function FlushPoints()
+ if #PointsBuffer > 0 then
+     ParseCommand('draw '..PointsBuffer)
+     PointsBuffer = ''
+ end
+end
+
+function onPreviewInit()
+	onGameInit()
+end
+
 function onGameInit()
-        --EnableGameFlags(gfInfAttack, gfInvulnerable)
-        EnableGameFlags(gfInfAttack, gfDisableWind)
+
+		Theme = "Cave"
+
+		MapGen = mgDrawn
+		TemplateFilter = 0
+
+		EnableGameFlags(gfInfAttack, gfDisableWind)
 		DisableGameFlags(gfSolidLand)
 		CaseFreq = 0
         TurnTime = 90000
         WaterRise = 0
+
+		for x = 1, 16 do
+			AddPoint(x*100,100,5)
+		end
+
+		FlushPoints()
+
 end
 
+function limitHogs(gear)
+
+	cnthhs = cnthhs + 1
+	if cnthhs > 1 then
+		DeleteGear(gear)
+    end
+
+end
 
 function onGameStart()
 
 
 		trackTeams()
+
 		roundN = 0
         lastRound = TotalRounds
         RoundHasChanged = false -- true
@@ -1128,6 +1177,11 @@ function onGameStart()
         end
 
         RebuildTeamInfo()
+
+		for i=0 , TeamsCount - 1 do
+			cnthhs = 0
+			runOnHogsInTeam(limitHogs, teamNameArr[i])
+		end
 
         ShowMission     (
                                 loc("RACER"),
@@ -1171,9 +1225,7 @@ end
 
 function onNewTurn()
 
-        --runOnHogs(HideHog)
-
-		CheckForNewRound()
+        CheckForNewRound()
         TryRepositionHogs()
 
         racerActive = false
@@ -1214,7 +1266,7 @@ function onNewTurn()
                         loc("NOT ENOUGH WAYPOINTS"),
                         loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
                         AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-            ParseCommand("setweap " .. string.char(amAirAttack))
+						SetWeapon(amAirAttack)
                 end
         end
 
@@ -1411,6 +1463,42 @@ function onAttack()
     at = GetCurAmmoType()
 
     usedWeapons[at] = 0
+end
+
+function onAchievementsDeclaration()
+    usedWeapons[amSkip] = nil
+
+    usedRope = usedWeapons[amRope] ~= nil
+    usedPortal = usedWeapons[amPortalGun] ~= nil
+    usedSaucer = usedWeapons[amJetpack] ~= nil
+
+    usedWeapons[amRope] = nil
+    usedWeapons[amPortalGun] = nil
+    usedWeapons[amJetpack] = nil
+
+    usedOther = next(usedWeapons) ~= nil
+
+    if usedOther then -- smth besides skip, rope, portal or saucer used
+        raceType = "unknown race"
+    elseif usedRope and not usedPortal and not usedSaucer then
+        raceType = "rope race"
+    elseif not usedRope and usedPortal and not usedSaucer then
+        raceType = "portal race"
+    elseif not usedRope and not usedPortal and usedSaucer then
+        raceType = "saucer race"
+    elseif (usedRope or usedPortal or usedSaucer or usedOther) == false then -- no weapons used at all?
+        raceType = "no tools race"
+    else -- at least two of rope, portal and saucer used
+        raceType = "mixed race"
+    end
+
+    map = detectMap()
+
+    for i = 0, (numTeams-1) do
+        if teamScore[i] < 100000 then
+            DeclareAchievement(raceType, teamNameArr[i], map, teamScore[i])
+        end
+    end
 end
 
 
