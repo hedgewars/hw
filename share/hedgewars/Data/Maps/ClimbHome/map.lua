@@ -30,7 +30,9 @@ local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
 local recordBroken = false
 local ready = false
+-- TODO. Fix use of dummy team for scaling the graph.
 local showWaterStats = false -- uses the AI team to draw water height.
+local scaleGraph = false
 local dummyHog = nil
 local dummySkip = 0
 
@@ -40,16 +42,26 @@ function onGameInit()
     CaseFreq = 0
     Explosives = 0
     MineDudPercent = 0
+    EnableGameFlags(gfOneClanMode)
     DisableGameFlags(gfBottomBorder+gfBorder)
     --This reduced startup time by only about 15% and looked ugly
     --EnableGameFlags(gfDisableLandObjects) 
     -- force seed instead.  Some themes will still be easier, but at least you won't luck out on the same theme
     Seed = ClimbHome
-    AddTeam(loc("Water Gods"), 0x0000AC, "Simple", "Island", "Default")
-    dummyHog = AddHog("Poseidon", 0, 1, "NoHat")
-    SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
-    SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
-    --HideHog(dummyHog)
+    if showWaterStats then
+        AddTeam(" ", 0x545C9D, "Simple", "Island", "Default")
+    elseif scaleGraph then
+        AddTeam(" ", 0x050505, "Simple", "Island", "Default")
+    end
+    if showWaterStats or scaleGraph then
+        dummyHog = AddHog(" ", 0, 1, "NoHat")
+        HH[dummyHog] = nil
+        totalHedgehogs = totalHedgehogs - 1
+        if not showWaterStates then
+            SendStat(siClanHealth, tostring(32640), " ")
+        end
+        SendStat(siClanHealth, tostring(32640), " ")
+    end
 end
 
 function onGearAdd(gear)
@@ -71,6 +83,9 @@ function onGearDelete(gear)
 end
 
 function onGameStart()
+    if showWaterStats or scaleGraph then
+        DeleteGear(dummyHog)
+    end
     --SetClanColor(ClansCount-1, 0x0000ffff) appears to be broken
     SendHealthStatsOff()
     ShowMission(loc("Climb Home"),
@@ -79,16 +94,18 @@ function onGameStart()
                 -amRope, 0)
     local x = 1818
     for h,i in pairs(HH) do
-       -- SetGearPosition(h,x,32549)
-        SetGearPosition(h,x,108)
-        SetHealth(h,1)
-        if x < 1978 then x = x+32 else x = 1818 end
-	if GetEffect(h,heInvulnerable) == 0 then
-	    SetEffect(h,heInvulnerable,1)
-	else
-	    HogsAreInvulnerable = true
-	end
-        SetState(h,bor(GetState(h),gstInvisible))
+        if h ~= nil then
+            -- SetGearPosition(h,x,32549)
+            SetGearPosition(h,x,108)
+            SetHealth(h,1)
+            if x < 1978 then x = x+32 else x = 1818 end
+            if GetEffect(h,heInvulnerable) == 0 then
+                SetEffect(h,heInvulnerable,1)
+            else
+                HogsAreInvulnerable = true
+            end
+            SetState(h,bor(GetState(h),gstInvisible))
+        end
     end
 -- 1925,263 - Mr. Mine position
     MrMine = AddGear(1925,263,gtMine,0,0,0,0)
@@ -114,7 +131,7 @@ function onNewTurn()
         if CurrentHedgehog ~= dummyHog then
             SetGearPosition(CurrentHedgehog, 1951,32640)
             if not HogsAreInvulnerable then SetEffect(CurrentHedgehog,heInvulnerable,0) end
-            AddVisualGear(19531,32640,vgtExplosion,0,false)
+            AddVisualGear(1951,32640,vgtExplosion,0,false)
             SetState(CurrentHedgehog,band(GetState(CurrentHedgehog),bnot(gstInvisible)))
             SetWeapon(amRope)
             ready = true
@@ -291,14 +308,7 @@ function onGameTick20()
             end
         end
 
-        if GameTime % 500 == 0 then
-            --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
-            --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
-            --end
-            if showWaterStats == true then
-	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), loc("Water Gods"))
-            end
-            SendStat(siClanHealth, tostring(getActualHeight(y)), loc(GetHogTeamName(CurrentHedgehog)))
+-- this block was moved out of the % 500 below because it was not triggering fast enough to give correct stats for all teams.
             if isSinglePlayer then
                 if distanceFromWater < 0 and not YouLost and not YouWon then
                     makeSinglePlayerLoserStats()
@@ -321,9 +331,6 @@ function onGameTick20()
                     SendStat(siPointType, loc("seconds"))
                     SendStat(siPlayerKills, tostring(roundedFinishTime), loc(GetHogTeamName(CurrentHedgehog)))
 
-		    if not showWaterStats == true then
-			SendStat(siClanHealth, tostring(32640), loc("Water Gods"))
-		    end
                     EndGame()
                     YouWon = true
                 end
@@ -331,11 +338,20 @@ function onGameTick20()
                 makeMultiPlayerLoserStat(CurrentHedgehog)
                 deadHedgehogs = deadHedgehogs + 1
                 YouLost = true
-                if deadHedgehogs >= totalHedgehogs-1 then
+                if deadHedgehogs >= totalHedgehogs then
                     makeFinalMultiPlayerStats()
                     EndGame()
                 end
             end
+
+        if GameTime % 500 == 0 then
+            --if isSinglePlayer and MaxHeight < 32000 and WaterRise == nil then
+            --    WaterRise = AddGear(0,0,gtWaterUp, 0, 0, 0, 0)
+            --end
+            if showWaterStats == true then
+	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), " ")
+            end
+            SendStat(siClanHealth, tostring(getActualHeight(y)), GetHogTeamName(CurrentHedgehog))
     
             -- play taunts
             if not YouWon and not YouLost then
@@ -467,7 +483,7 @@ function onGearDamage(gear, damage)
             makeSinglePlayerLoserStats()
         else
             deadHedgehogs = deadHedgehogs + 1
-            if deadHedgehogs >= totalHedgehogs-1 then
+            if deadHedgehogs >= totalHedgehogs then
                 makeFinalMultiPlayerStats()
                 EndGame()
             end
@@ -527,7 +543,7 @@ function makeMultiPlayerLoserStat(gear)
     if teamBests[teamName] < actualHeight then teamBests[teamName] = actualHeight end
     if teamScoreStats[teamName] == nil then teamScoreStats[teamName] = {} end
     table.insert(teamScoreStats[teamName], actualHeight)
-    SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
+    --SendStat(siClanHealth, tostring(teamBests[teamName]), teamName)
 end
 
 function makeFinalMultiPlayerStats()
