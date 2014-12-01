@@ -983,7 +983,7 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy, ty, tx: LongInt;
-    bRes, updateBlock, resweep, recheck: boolean;
+    bRes, resweep, recheck: boolean;
 begin
 bRes:= false;
 reCheck:= true;
@@ -997,7 +997,6 @@ while recheck do
             begin
             if LandDirty[y, x] = 1 then
                 begin
-                updateBlock:= false;
                 resweep:= true;
                 ty:= y * 32;
                 tx:= x * 32;
@@ -1009,7 +1008,6 @@ while recheck do
                             if Despeckle(xx, yy) then
                                 begin
                                 bRes:= true;
-                                updateBlock:= true;
                                 resweep:= true;
                                 if (yy = ty) and (y > 0) then
                                     begin
@@ -1033,9 +1031,6 @@ while recheck do
                                     end
                                 end;
                     end;
-                if updateBlock then
-                    UpdateLandTexture(tx, 32, ty, 32, false);
-                LandDirty[y, x]:= 2;
                 end;
             end;
         end;
@@ -1045,12 +1040,21 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
     for x:= 0 to LAND_WIDTH div 32 - 1 do
         if LandDirty[y, x] <> 0 then
             begin
-            LandDirty[y, x]:= 0;
             ty:= y * 32;
             tx:= x * 32;
             for yy:= ty to ty + 31 do
                 for xx:= tx to tx + 31 do
                     Smooth(xx,yy)
+            end;
+
+for y:= 0 to LAND_HEIGHT div 32 - 1 do
+    for x:= 0 to LAND_WIDTH div 32 - 1 do
+        if LandDirty[y, x] <> 0 then
+            begin
+            LandDirty[y, x]:= 0;
+            ty:= y * 32;
+            tx:= x * 32;
+            UpdateLandTexture(tx, 32, ty, 32, false);
             end;
 
 SweepDirty:= bRes;
