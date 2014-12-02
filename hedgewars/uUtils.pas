@@ -35,6 +35,7 @@ function  EnumToStr(const en : TStatInfoType) : shortstring; overload;
 function  EnumToStr(const en : THogEffect) : shortstring; overload;
 function  EnumToStr(const en : TCapGroup) : shortstring; overload;
 function  EnumToStr(const en : TSprite) : shortstring; overload;
+function  EnumToStr(const en : TMapGen) : shortstring; overload;
 
 function  Min(a, b: LongInt): LongInt; inline;
 function  MinD(a, b: double) : double; inline;
@@ -184,6 +185,11 @@ end;
 function EnumToStr(const en: TSprite) : shortstring; overload;
 begin
 EnumToStr := GetEnumName(TypeInfo(TSprite), ord(en))
+end;
+
+function EnumToStr(const en: TMapGen) : shortstring; overload;
+begin
+EnumToStr := GetEnumName(TypeInfo(TMapGen), ord(en))
 end;
 
 
