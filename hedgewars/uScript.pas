@@ -100,6 +100,7 @@ var luaState : Plua_State;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
     mapDims : boolean;
+    PointsBuffer: shortString;
 
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
@@ -188,6 +189,19 @@ begin
         end;
 
     CheckAndFetchParamCount:= true;
+end;
+
+// check if is in range of count1 and count2
+function CheckAndFetchParamCountRange(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+begin
+    actual:= lua_gettop(L);
+    if (actual < count1) or (actual > count2) then
+        begin
+        LuaParameterCountError('at least ' + inttostr(count1) + ', but at most ' + inttostr(count2), call, paramsyntax, actual);
+        exit(false);
+        end;
+
+    CheckAndFetchParamCountRange:= true;
 end;
 
 // check if is same or higher as minCount
@@ -2252,6 +2266,60 @@ begin
     lc_declareachievement:= 0
 end;
 
+
+procedure ScriptFlushPoints();
+begin
+    ParseCommand('draw ' + PointsBuffer, true, true);
+    PointsBuffer:= '';
+end;
+
+
+function lc_addPoint(L : Plua_State) : LongInt; Cdecl;
+var np, param: integer;
+begin
+    if CheckAndFetchParamCountRange(L, 2, 4, 'AddPoint', 'x, y, width [, erase]', np) then
+        begin
+        // x
+        param:= lua_tointeger(L,1);
+        PointsBuffer:= PointsBuffer + char((param and $FF00) shr 8);
+        PointsBuffer:= PointsBuffer + char((param and $FF));
+        // y
+        param:= lua_tointeger(L,2);
+        PointsBuffer:= PointsBuffer + char((param and $FF00) shr 8);
+        PointsBuffer:= PointsBuffer + char((param and $FF));
+        // width
+        if np > 2 then
+            param:= lua_tointeger(L,3)
+        else
+            param:= 0;
+
+        if param <> 0 then
+            begin
+            param:= (param or $80);
+            // erase
+            if (np > 3) and lua_toboolean(L, 4) then
+                param:= (param or $40);
+            PointsBuffer:= PointsBuffer + char(param);
+            end
+        // width is 0
+        else
+            PointsBuffer:= PointsBuffer + char(0);
+
+        // flush before shortstring limit length is reached
+        if length(PointsBuffer) > 245 then
+            ScriptFlushPoints();
+        end;
+    lc_addPoint:= 0
+end;
+
+
+function lc_flushPoints(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 0, 'FlushPoints', '') then
+        ScriptFlushPoints();
+    lc_flushPoints:= 0
+end;
+
 // stuff for testing the lua API
 function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
 begin
@@ -2947,6 +3015,9 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+// drawn map functions
+lua_register(luaState, _P'AddPoint', @lc_addPoint);
+lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
@@ -3051,6 +3122,7 @@ end;
 procedure initModule;
 begin
 mapDims:= false;
+PointsBuffer:= '';
 end;
 
 procedure freeModule;

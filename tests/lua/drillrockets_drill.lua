@@ -1,6 +1,4 @@
 
-HedgewarsScriptLoad("/Scripts/Draw.lua")
-
 local ta_pointsize = 63
 local ta_radius = (ta_pointsize * 10 + 6) / 2
 

@@ -1,4 +1,3 @@
-HedgewarsScriptLoad("/Scripts/Draw.lua")
 
 function onPreviewInit()
 onGameInit()
