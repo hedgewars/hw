@@ -200,6 +200,11 @@ answerFullConfigParams cl mpr pr
                 ++ (("SCHEME", pr Map.! "SCHEME")
                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
 
+        | clientProto cl < 48 = map (toAnswer cl) $
+                ("FULLMAPCONFIG", tail $ Map.elems mpr)
+                : ("SCHEME", pr Map.! "SCHEME")
+                : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
+
         | otherwise = map (toAnswer cl) $
                 ("FULLMAPCONFIG", Map.elems mpr)
                 : ("SCHEME", pr Map.! "SCHEME")
