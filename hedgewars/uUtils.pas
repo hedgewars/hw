@@ -559,7 +559,8 @@ begin
             begin
             assign(logFile, shortstring(UserPathPrefix) + '/Logs/' + logfileBase + inttostr(i) + '.log');
             Rewrite(logFile);
-            rwfailed:= (IOResult() <> 0);
+            // note: IOResult is a function in pascal and a variable in pas2c
+            rwfailed:= (IOResult <> 0);
             if (not rwfailed) then
                 break;
             inc(i)
