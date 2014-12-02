@@ -273,6 +273,11 @@ for t:= 0 to Pred(TeamsCount) do
                         else if (month = 10) and (md = 31) then
                             Hat := 'fr_pumpkin'; // Halloween/Hedgewars' birthday
                         end;
+                    if (month = 4) and (md = 1) then
+                        begin
+                        AprilOne:= true;
+                        Hat := 'fr_tomato'; // avoid promoting violence to hedgehogs. see http://hedgewars.org/node/5818
+                        end;
 
                     if Hat <> 'NoHat' then
                         begin

@@ -184,7 +184,7 @@ roomInfo p n r
         roomFlags = concat [
             "-"
             , ['g' | isJust $ gameInfo r]
-            , ['p' | B.null $ password r]
+            , ['p' | not . B.null $ password r]
             , ['j' | isRestrictedJoins  r]
             , ['r' | isRegisteredOnly  r]
             ]
@@ -199,6 +199,11 @@ answerFullConfigParams cl mpr pr
                 (reverse . map (\(a, b) -> (a, [b])) $ Map.toList mpr)
                 ++ (("SCHEME", pr Map.! "SCHEME")
                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
+
+        | clientProto cl < 48 = map (toAnswer cl) $
+                ("FULLMAPCONFIG", tail $ Map.elems mpr)
+                : ("SCHEME", pr Map.! "SCHEME")
+                : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
 
         | otherwise = map (toAnswer cl) $
                 ("FULLMAPCONFIG", Map.elems mpr)

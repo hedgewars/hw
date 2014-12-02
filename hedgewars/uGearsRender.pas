@@ -53,6 +53,7 @@ implementation
 uses uRender, uUtils, uVariables, uAmmos, Math, uVisualGearsList;
 
 procedure DrawRopeLinesRQ(Gear: PGear);
+var n: LongInt;
 begin
 with RopePoints do
     begin
@@ -64,24 +65,29 @@ with RopePoints do
 
 if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     begin
-    glDisable(GL_TEXTURE_2D);
+    EnableTexture(false);
     //glEnable(GL_LINE_SMOOTH);
 
-    glPushMatrix;
+    Tint($70, $70, $70, $FF);
 
-    glTranslatef(WorldDx, WorldDy, 0);
+    n:= RopePoints.Count + 2;
 
+    SetVertexPointer(@RopePoints.rounded[0], n);
+
+    openglPushMatrix();
+    openglTranslatef(WorldDx, WorldDy, 0);
+
+    glLineWidth(3.0 * cScaleFactor);
+    glDrawArrays(GL_LINE_STRIP, 0, n);
+    Tint($D8, $D8, $D8, $FF);
     glLineWidth(2.0 * cScaleFactor);
+    glDrawArrays(GL_LINE_STRIP, 0, n);
 
-    Tint($C0, $C0, $C0, $FF);
-
-    glVertexPointer(2, GL_FLOAT, 0, @RopePoints.rounded[0]);
-    glDrawArrays(GL_LINE_STRIP, 0, RopePoints.Count + 2);
     untint;
 
-    glPopMatrix;
+    openglPopMatrix();
 
-    glEnable(GL_TEXTURE_2D);
+    EnableTexture(true);
     //glDisable(GL_LINE_SMOOTH)
     end
 end;
@@ -160,8 +166,7 @@ begin
 end;
 
 procedure DrawRope(Gear: PGear);
-var roplen: LongInt;
-    i: Longword;
+var roplen, i: LongInt;
 begin
     if (cReducedQuality and rqSimpleRope) <> 0 then
         DrawRopeLinesRQ(Gear)
@@ -618,7 +623,7 @@ begin
 
         if ((Gear^.State and gstAnimation) <> 0) then
             begin
-            if (TWave(Gear^.Tag) < Low(TWave)) or (TWave(Gear^.Tag) > High(TWave)) then
+            if (Gear^.Tag < LongInt(ord(Low(TWave)))) or (Gear^.Tag > LongInt(ord(High(TWave)))) then
                 begin
                 Gear^.State:= Gear^.State and (not gstAnimation);
                 end
@@ -705,7 +710,7 @@ begin
                                             LongInt(rightX)+WorldDx,
                                             cWaterLine+WorldDy,
                                             LongInt(leftX)+WorldDx);
-                        if hwRound(Gear^.X) > rightX-256 then
+                        if hwRound(Gear^.X) > LongInt(rightX) - 256 then
                             DrawSpriteClipped(sprGirder,
                                             leftX-(rightX-ox)-256,
                                             oy-256,
@@ -791,13 +796,17 @@ begin
         if (Gear^.Damage > 0) and (HH^.Effects[heFrozen] = 0)
         and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
             begin
-            DrawHedgehog(sx, sy,
-                sign,
-                2,
-                1,
-                Gear^.DirAngle);
-            defaultPos:= false
-            end else
+            defaultPos:= false;
+                DrawHedgehog(sx, sy,
+                    sign,
+                    2,
+                    1,
+                    Gear^.DirAngle);
+            if AprilOne and (curhat <> nil) then
+                DrawTextureRotatedF(curhat, 1.0, -1.0, 0, sx, sy, 18, sign, 32, 32,
+                    sign*Gear^.DirAngle)
+            end;
+
 
         if ((Gear^.State and gstHHJumping) <> 0) then
             begin
@@ -1157,7 +1166,7 @@ begin
                         end;
                     if Gear^.Timer < 1833 then
                         begin
-                        DrawTextureRotatedF(SpritesData[sprPortal].texture, min(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
+                        DrawTextureRotatedF(SpritesData[sprPortal].texture, MinD(abs(1.25 - (Gear^.Timer mod 1333) / 400), 1.25), 0, 0,
                                             x, LongInt(Gear^.Angle) + WorldDy - 16, 4 + Gear^.Tag, 1, 32, 32, 270);
                         end
                     end;
@@ -1195,7 +1204,7 @@ begin
          gtAirBomb: DrawSpriteRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
                     HHGear:= Gear^.Hedgehog^.Gear;
-                    if not Gear^.Hedgehog^.Unplaced then
+                    if ((Gear^.State and gstAnimation) <> 0) then
                         DrawSpriteRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
                     DrawSpriteRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
                     end;

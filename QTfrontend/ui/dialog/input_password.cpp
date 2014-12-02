@@ -56,7 +56,7 @@ HWPasswordDialog::HWPasswordDialog(QWidget* parent) : QDialog(parent)
     layout->addWidget(cbSave, 5, 0);
 
     QDialogButtonBox* dbbButtons = new QDialogButtonBox(this);
-    pbNewAccount = dbbButtons->addButton(QString("New Account"), QDialogButtonBox::ActionRole);
+    pbNewAccount = dbbButtons->addButton(tr("New Account"), QDialogButtonBox::ActionRole);
     QPushButton * pbOK = dbbButtons->addButton(QDialogButtonBox::Ok);
     QPushButton * pbCancel = dbbButtons->addButton(QDialogButtonBox::Cancel);
     layout->addWidget(dbbButtons, 6, 0);

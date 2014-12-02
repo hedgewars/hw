@@ -2127,10 +2127,11 @@ var
     gX,gY,i: LongInt;
     sticky: Boolean;
     vgt: PVisualGear;
-    tdX,tdY: HWFloat;
+    tdX,tdY, f: HWFloat;
     landPixel: Word;
 begin
     WorldWrap(Gear);
+    if Gear^.FlightTime > 0 then dec(Gear^.FlightTime);
     sticky:= (Gear^.State and gsttmpFlag) <> 0;
     if not sticky then AllInactive := false;
 
@@ -2138,6 +2139,21 @@ begin
     if landPixel = 0 then
         begin
         AllInactive := false;
+
+        if (GameTicks and $F = 0) and (Gear^.FlightTime = 0) then
+            begin
+            Gear^.Radius := 7;
+            tdX:= Gear^.dX;
+            tdY:= Gear^.dY;
+            Gear^.dX.QWordValue:= 120000000;
+            Gear^.dY.QWordValue:= 429496730;
+            Gear^.dX.isNegative:= getrandom(2)<>1;
+            Gear^.dY.isNegative:= true;
+            AmmoShove(Gear, 2, 125);
+            Gear^.dX:= tdX;
+            Gear^.dY:= tdY;
+            Gear^.Radius := 1
+	    end;
 
         if ((GameTicks mod 100) = 0) then
             begin
@@ -2150,19 +2166,29 @@ begin
                 end;
             end;
 
+        if (Gear^.dX.QWordValue > _2.QWordValue)
+            or (Gear^.dY.QWordValue > _2.QWordValue)
+        then
+        begin
+            // norm speed vector to length of 2 for fire particles to keep flying in the same direction
+            f:= _2 / Distance(Gear^.dX, Gear^.dY);
+            Gear^.dX:= Gear^.dX * f;
+            Gear^.dY:= Gear^.dY * f;
+        end
+        else begin
+            if Gear^.dX.QWordValue > _0_01.QWordValue then
+                    Gear^.dX := Gear^.dX * _0_995;
 
-        if Gear^.dX.QWordValue > _0_01.QWordValue then
-            Gear^.dX := Gear^.dX * _0_995;
+            Gear^.dY := Gear^.dY + cGravity;
+            // if sticky then Gear^.dY := Gear^.dY + cGravity;
 
-        Gear^.dY := Gear^.dY + cGravity;
-        // if sticky then Gear^.dY := Gear^.dY + cGravity;
+            if Gear^.dY.QWordValue > _0_2.QWordValue then
+                Gear^.dY := Gear^.dY * _0_995;
 
-        if Gear^.dY.QWordValue > _0_2.QWordValue then
-            Gear^.dY := Gear^.dY * _0_995;
-
-        //if sticky then Gear^.X := Gear^.X + Gear^.dX else
-        Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
-        Gear^.Y := Gear^.Y + Gear^.dY;
+            //if sticky then Gear^.X := Gear^.X + Gear^.dX else
+            Gear^.X := Gear^.X + Gear^.dX + cWindSpeed * 640;
+            Gear^.Y := Gear^.Y + Gear^.dY;
+        end;
 
         gX := hwRound(Gear^.X);
         gY := hwRound(Gear^.Y);
@@ -2646,6 +2672,8 @@ begin
         HHGear^.X := int2hwFloat(Gear^.Target.X);
         HHGear^.Y := int2hwFloat(Gear^.Target.Y);
         HHGear^.State := HHGear^.State or gstMoving;
+        if not Gear^.Hedgehog^.Unplaced then
+            Gear^.State:= Gear^.State or gstAnimation;
         Gear^.Hedgehog^.Unplaced := false;
         isCursorVisible := false;
         playSound(sndWarp)
@@ -3066,16 +3094,10 @@ begin
 end;
 
 procedure doStepCake(Gear: PGear);
-var
-    HHGear: PGear;
 begin
     AllInactive := false;
 
-    HHGear := Gear^.Hedgehog^.Gear;
-    HHGear^.Message := HHGear^.Message and (not gmAttack);
     Gear^.CollisionMask:= lfNotCurrentMask;
-
-    FollowGear := Gear;
 
     Gear^.dY:= cMaxWindSpeed * 100;
 
@@ -3093,14 +3115,14 @@ begin
         begin
         for i:= 0 to hogs.size - 1 do
             with hogs.ar^[i]^ do
-                begin
-                if hogs.ar^[i] <> CurrentHedgehog^.Gear then
+                if (hogs.ar^[i] <> CurrentHedgehog^.Gear) and (Hedgehog^.Effects[heFrozen] = 0)  then
                     begin
                     dX:= _50 * cGravity * (Gear^.X - X) / _25;
                     dY:= -_450 * cGravity;
                     Active:= true;
                     end
-                end;
+                else if Hedgehog^.Effects[heFrozen] > 255 then
+                    Hedgehog^.Effects[heFrozen]:= 255
         end ;
         AfterAttack;
         DeleteGear(Gear);
@@ -4758,6 +4780,7 @@ begin
                     SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                     AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
             flame^.CollisionMask:= lfNotCurrentMask;
+            //flame^.FlightTime:= 500;  use the default huge value to avoid sticky flame suddenly being damaging as opposed to other flames
 
             if (Gear^.Health mod 30) = 0 then
                 begin
@@ -4765,6 +4788,7 @@ begin
                         SignAs(AngleSin(HHGear^.Angle) * speed, HHGear^.dX) + rx,
                         AngleCos(HHGear^.Angle) * ( - speed) + ry, 0);
                 flame^.CollisionMask:= lfNotCurrentMask;
+		//flame^.FlightTime:= 500;
                 end
             end;
         Gear^.Timer:= Gear^.Tag
@@ -5533,7 +5557,8 @@ begin
         ndY:= -AngleCos(HHGear^.Angle) * _4;
         if (ndX <> dX) or (ndY <> dY) or
            ((Target.X <> NoPointX) and (Target.X and LAND_WIDTH_MASK = 0) and
-             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0))) then
+             (Target.Y and LAND_HEIGHT_MASK = 0) and ((Land[Target.Y, Target.X] = 0)) and
+             (not CheckCoordInWater(Target.X, Target.Y))) then
             begin
             updateTarget(Gear, ndX, ndY);
             Timer := iceWaitCollision;
@@ -5557,10 +5582,15 @@ begin
                         Power := GameTicks;
                         end
                     end
-                else if (Target.Y >= cWaterLine) or
-                        ((Target.X and LAND_WIDTH_MASK = 0) and
-                         (Target.Y+iceHeight+4 >= cWaterLine) and
-                         (Land[Target.Y, Target.X] = lfIce)) then
+                else if CheckCoordInWater(Target.X, Target.Y) or
+                        ((Target.X and LAND_WIDTH_MASK  = 0) and
+                         (Target.Y and LAND_HEIGHT_MASK = 0) and
+                         (Land[Target.Y, Target.X] = lfIce) and
+                         ((Target.Y+iceHeight+5 > cWaterLine) or
+                          ((WorldEdge = weSea) and
+                           ((Target.X+iceHeight+5 > LongInt(rightX)) or
+                            (Target.X-iceHeight-5 < LongInt(leftX)))))
+                         ) then
                     begin
                     if Timer = iceWaitCollision then
                         begin
@@ -5640,7 +5670,14 @@ begin
                 if (Timer = iceCollideWithWater) and ((GameTicks - Power) > groundFreezingTime div 2) then
                     begin
                     PlaySound(sndHogFreeze);
-                    DrawIceBreak(Target.X, cWaterLine - iceHeight, iceRadius, iceHeight);
+                    if CheckCoordInWater(Target.X, Target.Y) then
+                        DrawIceBreak(Target.X, Target.Y, iceRadius, iceHeight)
+                    else if Target.Y+iceHeight+5 > cWaterLine then
+                        DrawIceBreak(Target.X, Target.Y+iceHeight+5, iceRadius, iceHeight)
+                    else if Target.X+iceHeight+5 > LongInt(rightX) then
+                        DrawIceBreak(Target.X+iceHeight+5, Target.Y, iceRadius, iceHeight)
+                    else
+                        DrawIceBreak(Target.X-iceHeight-5, Target.Y, iceRadius, iceHeight);
                     SetAllHHToActive;
                     Timer := iceWaitCollision;
                     end;
@@ -5678,7 +5715,7 @@ begin
                                 end;
                 inc(Pos)
                 end
-            else if (t > 400) and ((gY > cWaterLine) or
+            else if (t > 400) and (CheckCoordInWater(gX, gY) or
                     (((gX and LAND_WIDTH_MASK = 0) and (gY and LAND_HEIGHT_MASK = 0))
                         and (Land[gY, gX] <> 0))) then
                 begin

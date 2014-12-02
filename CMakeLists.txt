@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules")
 include(${CMAKE_MODULE_PATH}/utils.cmake)
 
 #possible cmake configuration
-option(NOSERVER "Disable gameServer build (off)]" OFF)
+option(NOSERVER "Disable gameServer build (off)" OFF)
 option(NOPNG "Disable screenshoot compression (off)" OFF)
 option(NOVIDEOREC "Disable video recording (off)" OFF)
 
@@ -33,8 +33,8 @@ option(ANDROID "Enable Android build (off)" OFF)
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
 
-option(BUILD_ENGINE_C "Compile hwengine as native C [default: off]" OFF)
-option(GL2 "Enable OpenGL 2 rendering [default: off]" OFF)
+option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
+option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
 
 set(GHFLAGS "" CACHE STRING "Additional Haskell flags")
 if(UNIX AND NOT APPLE)
@@ -230,7 +230,11 @@ endif(ANDROID)
 
 include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
+if(NOT BUILD_ENGINE_C)
 enable_testing()
+endif(NOT BUILD_ENGINE_C)
+add_custom_target(test         COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random)
+add_custom_target(test_verbose COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random -V)
 
 set(LUATESTS_DIR "${CMAKE_SOURCE_DIR}/tests/lua")
 set(TESTSDATA_DIR "${CMAKE_SOURCE_DIR}/share/hedgewars/Data")

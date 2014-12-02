@@ -978,9 +978,11 @@ begin
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+var tmp: LongInt;
 begin
-    rm:= rm; d:= d; // avoid hint
-{$IFDEF USE_S3D_RENDERING}
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; d:= d; tmp:= tmp; // avoid hint
+{$ELSE}
     d:= d / 5;
     if rm = rmDefault then
         exit
@@ -988,16 +990,24 @@ begin
         d:= -d;
     cStereoDepth:= cStereoDepth + d;
     openglTranslProjMatrix(d, 0, 0);
+    tmp:= round(d / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  - tmp;
+    ViewRightX:= ViewRightX - tmp;
 {$ENDIF}
 end;
 
 procedure ResetDepth(rm: TRenderMode);
+var tmp: LongInt;
 begin
-    rm:= rm; // avoid hint
-{$IFDEF USE_S3D_RENDERING}
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; tmp:= tmp; // avoid hint
+{$ELSE}
     if rm = rmDefault then
         exit;
     openglTranslProjMatrix(-cStereoDepth, 0, 0);
+    tmp:= round(cStereoDepth / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  + tmp;
+    ViewRightX:= ViewRightX + tmp;
     cStereoDepth:= 0;
 {$ENDIF}
 end;
@@ -1040,6 +1050,9 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         end;
 
     (*
+    WARNING: the following render code is outdated and does not work with
+             current Render.pas ! - don't just uncomment without fixing it first
+
     glDisable(GL_TEXTURE_2D);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     if (WorldEdge = weWrap) or (worldEdge = weBounce) then
@@ -1341,25 +1354,25 @@ if (cReducedQuality and rq2DWater) = 0 then
 else
     DrawWaves(-1, 100, - cWaveHeight div 2, - cWaveHeight div 2, 0);
 
-    changeDepth(RM, cStereo_Land);
-    DrawVisualGears(5);
+ChangeDepth(RM, cStereo_Land);
+DrawVisualGears(5);
+DrawLand(WorldDx, WorldDy);
+
+if replicateToLeft then
+    begin
+    ShiftWorld(-1);
     DrawLand(WorldDx, WorldDy);
+    UnshiftWorld();
+    end;
 
-    if replicateToLeft then
-        begin
-        ShiftWorld(-1);
-        DrawLand(WorldDx, WorldDy);
-        UnshiftWorld();
-        end;
+if replicateToRight then
+    begin
+    ShiftWorld(1);
+    DrawLand(WorldDx, WorldDy);
+    UnshiftWorld();
+    end;
 
-    if replicateToRight then
-        begin
-        ShiftWorld(1);
-        DrawLand(WorldDx, WorldDy);
-        UnshiftWorld();
-        end;
-
-    DrawWater(255, 0, 0);
+DrawWater(255, 0, 0);
 
 (*
 // Attack bar
@@ -1729,12 +1742,12 @@ if ScreenFade <> sfNone then
         VertexBuffer[3].X:= cScreenWidth;
         VertexBuffer[3].Y:= cScreenHeight;
 
-        glDisable(GL_TEXTURE_2D);
+        EnableTexture(false);
 
-        glVertexPointer(2, GL_FLOAT, 0, @VertexBuffer[0]);
+        SetVertexPointer(@VertexBuffer[0], 4);
         glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
 
-        glEnable(GL_TEXTURE_2D);
+        EnableTexture(true);
         untint;
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
@@ -1802,7 +1815,7 @@ if isCursorVisible then
         with CurrentHedgehog^ do
             if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
                 begin
-            if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) then
+            if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
                 DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
             i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
             with Ammoz[CurAmmoType] do
@@ -1859,12 +1872,12 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         end
     else
         begin
-        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > rightX - leftX - 100 then
+        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > LongInt(rightX) - leftX - 100 then
             begin
-            if (prevPoint.X - WorldDx) * 2 < LongInt(rightX + leftX) then
-                cameraJump:= rightX - leftX
+            if (prevPoint.X - WorldDx) * 2 < LongInt((rightX + leftX)) then
+                cameraJump:= LongInt(rightX) - leftX
                 else
-                cameraJump:= leftX - rightX;
+                cameraJump:= LongInt(leftX) - rightX;
             WorldDx:= WorldDx - cameraJump;
             end;
 

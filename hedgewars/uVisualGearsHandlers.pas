@@ -887,6 +887,9 @@ begin
 Gear^.X:= Gear^.X + Gear^.dX * Steps;
 Gear^.Y:= Gear^.Y - Gear^.dY * Steps;
 
+Gear^.dY:= Gear^.dY + Gear^.tdY * Steps;
+Gear^.dX:= Gear^.dX + Gear^.tdX * Steps;
+
 if Gear^.FrameTicks <= Steps then
     DeleteVisualGear(Gear)
 else

@@ -307,6 +307,19 @@ begin
         LuaToSpriteOrd:= i;
 end;
 
+function LuaToMapGenOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TMapGen))) or (i > ord(High(TMapGen))) then
+        begin
+        LuaCallError('Invalid mapgen id!', call, paramsyntax);
+        LuaToMapGenOrd:= -1;
+        end
+    else
+        LuaToMapGenOrd:= i;
+end;
+
 // wrapped calls //
 
 // functions called from Lua:
@@ -1027,7 +1040,9 @@ var clan : PClan;
 begin
     if CheckLuaParamCount(L, 2, 'SetClanColor', 'clan, color') then
         begin
-        clan := ClansArray[lua_tointeger(L, 1)];
+	i:= lua_tointeger(L,1);
+	if i >= ClansCount then exit(0);
+        clan := ClansArray[i];
         clan^.Color:= lua_tointeger(L, 2) shr 8;
 
         for i:= 0 to Pred(clan^.TeamsNumber) do
@@ -1047,6 +1062,7 @@ begin
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
+	FreeTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 
@@ -1139,6 +1155,22 @@ begin
     else
         lua_pushnil(L); // return value on stack (nil)
     lc_gettimer:= 1
+end;
+
+function lc_getflighttime(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetFlightTime', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            lua_pushinteger(L, gear^.FlightTime)
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_getflighttime:= 1
 end;
 
 function lc_gethealth(L : Plua_State) : LongInt; Cdecl;
@@ -1237,9 +1269,9 @@ begin
             vgear:= AddVisualGear(0, 0, vgtSpeechBubble, s, true);
             if vgear <> nil then
                begin
+               vgear^.Text:= lua_tostring(L, 2);
                if Gear^.Kind = gtHedgehog then
                    begin
-                   vgear^.Text:= lua_tostring(L, 2);
                    AddChatString(#1+'[' + gear^.Hedgehog^.Name + '] '+vgear^.text);
                    vgear^.Hedgehog:= gear^.Hedgehog
                    end
@@ -1375,6 +1407,17 @@ begin
         if gear <> nil then gear^.Timer:= lua_tointeger(L, 2)
         end;
     lc_settimer:= 0
+end;
+
+function lc_setflighttime(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 2, 'SetFlightTime', 'gearUid, flighttime') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then gear^.FlightTime:= lua_tointeger(L, 2)
+        end;
+    lc_setflighttime:= 0
 end;
 
 function lc_seteffect(L : Plua_State) : LongInt; Cdecl;
@@ -1516,7 +1559,7 @@ begin
                 end
             else // count is correct!
                 begin
-                if ((statInfo = siPlayerKills) or (statInfo = siClanHealth)) then
+                if needsTn then
                     begin
                     // 3: team name
                     for i:= 0 to Pred(TeamsCount) do
@@ -1634,10 +1677,46 @@ begin
 end;
 
 function lc_dismissteam(L : Plua_State) : LongInt; Cdecl;
+var HHGear: PGear;
+    i, h  : LongInt;
+    hidden: boolean;
 begin
     if CheckLuaParamCount(L, 1, 'DismissTeam', 'teamname') then
-        ParseCommand('teamgone ' + lua_tostring(L, 1), true, true);
-    lc_dismissteam:= 0;;
+        begin
+        if TeamsCount > 0 then
+            for i:= 0 to Pred(TeamsCount) do
+                begin
+                // skip teams that don't have matching name
+                if TeamsArray[i]^.TeamName <> lua_tostring(L, 1) then
+                    continue;
+
+                // destroy all hogs of matching team, including the hidden ones
+                for h:= 0 to cMaxHHIndex do
+                    begin
+                    hidden:= (TeamsArray[i]^.Hedgehogs[h].GearHidden <> nil);
+                    if hidden then
+                        RestoreHog(@TeamsArray[i]^.Hedgehogs[h]);
+                    // destroy hedgehog gear, if any
+                    HHGear:= TeamsArray[i]^.Hedgehogs[h].Gear;
+                    if HHGear <> nil then
+                        begin
+                        // smoke effect
+                        if (not hidden) then
+                            begin
+                            AddVisualGear(hwRound(HHGear^.X), hwRound(HHGear^.Y), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            AddVisualGear(hwRound(HHGear^.X) - 16 + Random(32), hwRound(HHGear^.Y) - 16 + Random(32), vgtSmokeWhite);
+                            end;
+                        HHGear^.Message:= HHGear^.Message or gmDestroy;
+                        end;
+                    end;
+                // can't dismiss more than one team
+                break;
+                end;
+        end;
+    lc_dismissteam:= 0;
 end;
 
 function lc_addhog(L : Plua_State) : LongInt; Cdecl;
@@ -1985,7 +2064,7 @@ var spr   : TSprite;
     placed: boolean;
 const
     call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx [, landFlags, ... ]';
+    params = 'x, y, sprite, frameIdx [, landFlag, ... ]';
 begin
     placed:= false;
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
@@ -2247,7 +2326,7 @@ if not ScriptLoaded then
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
-ScriptSetInteger('MapGen', cMapGen);
+ScriptSetInteger('MapGen', ord(cMapGen));
 
 ScriptCall('onPreviewInit');
 
@@ -2255,7 +2334,7 @@ ScriptCall('onPreviewInit');
 ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
-cMapGen          := ScriptGetInteger('MapGen');
+cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
 end;
 
 procedure ScriptOnGameInit;
@@ -2271,7 +2350,7 @@ ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
-ScriptSetInteger('MapGen', cMapGen);
+ScriptSetInteger('MapGen', ord(cMapGen));
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
@@ -2300,7 +2379,7 @@ ScriptCall('onGameInit');
 ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
-cMapGen          := ScriptGetInteger('MapGen');
+cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
 cCaseFactor      := ScriptGetInteger('CaseFreq');
@@ -2498,7 +2577,7 @@ end;
 function ScriptCall(fname : shortstring; par1, par2, par3, par4 : LongInt) : LongInt;
 begin
 if (not ScriptLoaded) or (not ScriptExists(fname)) then
-    exit;
+    exit(0);
 SetGlobals;
 lua_getglobal(luaState, Str2PChar(fname));
 lua_pushinteger(luaState, par1);
@@ -2634,6 +2713,7 @@ var at : TGearType;
     he : THogEffect;
     cg : TCapGroup;
     spr: TSprite;
+    mg : TMapGen;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -2725,6 +2805,8 @@ for cg:= Low(TCapGroup) to High(TCapGroup) do
 for spr:= Low(TSprite) to High(TSprite) do
     ScriptSetInteger(EnumToStr(spr), ord(spr));
 
+for mg:= Low(TMapGen) to High(TMapGen) do
+    ScriptSetInteger(EnumToStr(mg), ord(mg));
 
 ScriptSetInteger('gstDrowning'      , gstDrowning);
 ScriptSetInteger('gstHHDriven'      , gstHHDriven);
@@ -2755,12 +2837,6 @@ ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 ScriptSetInteger('lfIndestructible', lfIndestructible);
 ScriptSetInteger('lfIce'           , lfIce);
 ScriptSetInteger('lfBouncy'        , lfBouncy);
-
-// mapgen
-ScriptSetInteger('mgRandom', mgRandom);
-ScriptSetInteger('mgMaze'  , mgMaze);
-ScriptSetInteger('mgPerlin', mgPerlin);
-ScriptSetInteger('mgDrawn' , mgDrawn);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);
@@ -2838,6 +2914,8 @@ lua_register(luaState, _P'GetTag', @lc_gettag);
 lua_register(luaState, _P'SetTag', @lc_settag);
 lua_register(luaState, _P'SetTimer', @lc_settimer);
 lua_register(luaState, _P'GetTimer', @lc_gettimer);
+lua_register(luaState, _P'SetFlightTime', @lc_setflighttime);
+lua_register(luaState, _P'GetFlightTime', @lc_getflighttime);
 lua_register(luaState, _P'SetZoom', @lc_setzoom);
 lua_register(luaState, _P'GetZoom', @lc_getzoom);
 lua_register(luaState, _P'HogSay', @lc_hogsay);

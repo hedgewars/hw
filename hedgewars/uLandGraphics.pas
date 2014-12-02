@@ -54,7 +54,7 @@ function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
-uses SDLh, uLandTexture, uTextures, uVariables, uUtils, uDebug;
+uses SDLh, uLandTexture, uTextures, uVariables, uUtils, uDebug, uScript;
 
 
 procedure calculatePixelsCoordinates(landX, landY: Longint; var pixelX, pixelY: Longint); inline;
@@ -372,12 +372,48 @@ end;
 
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 var
-    i, j: integer;
+    i, j, iceL, iceR, IceT, iceB: LongInt;
     landRect: TSDL_Rect;
 begin
-for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0), LAND_WIDTH - 1) do
+// figure out bottom/left/right/top coords of ice to draw
+
+// determine absolute limits first
+iceT:= 0;
+iceB:= min(cWaterLine, LAND_HEIGHT - 1);
+
+iceL:= 0;
+iceR:= LAND_WIDTH - 1;
+
+if WorldEdge <> weNone then
     begin
-    for j := min(max(y, 0), LAND_HEIGHT - 1) to min(max(y + iceHeight, 0), LAND_HEIGHT - 1) do
+    iceL:= max(leftX,  iceL);
+    iceR:= min(rightX, iceR);
+    end;
+
+// adjust based on location but without violating absolute limits
+if y >= cWaterLine then
+    begin
+    iceL:= max(x - iceRadius, iceL);
+    iceR:= min(x + iceRadius, iceR);
+    iceT:= max(cWaterLine - iceHeight, iceT);
+    end
+else {if WorldEdge = weSea then}
+    begin
+    iceT:= max(y - iceRadius, iceT);
+    iceB:= min(y + iceRadius, iceB);
+    if x <= leftX then
+        iceR:= min(leftX + iceHeight, iceR)
+    else {if x >= rightX then}
+        iceL:= max(LongInt(rightX) - iceHeight, iceL);
+    end;
+
+// don't continue if all ice is outside land array
+if (iceL > iceR) or (iceT > iceB) then
+    exit();
+
+for i := iceL to iceR do
+    begin
+    for j := iceT to iceB do
         begin
         if Land[j, i] = 0 then
             begin
@@ -389,10 +425,12 @@ for i := min(max(x - iceRadius, 0), LAND_WIDTH - 1) to min(max(x + iceRadius, 0)
             end;
         end;
     end;
-landRect.x := min(max(x - iceRadius, 0), LAND_WIDTH - 1);
-landRect.y := min(max(y, 0), LAND_HEIGHT - 1);
-landRect.w := min(2*iceRadius, LAND_WIDTH - landRect.x - 1);
-landRect.h := min(iceHeight, LAND_HEIGHT - landRect.y - 1);
+
+landRect.x := iceL;
+landRect.y := iceT;
+landRect.w := iceR - IceL + 1;
+landRect.h := iceB - iceT + 1;
+
 UpdateLandTexture(landRect.x, landRect.w, landRect.y, landRect.h, true);
 end;
 
@@ -722,7 +760,14 @@ x:= Max(cpX, leftX);
 w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
 y:= Max(cpY, topY);
 h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
-UpdateLandTexture(x, w, y, h, true)
+UpdateLandTexture(x, w, y, h, true);
+
+ScriptCall('onSpritePlacement', ord(Obj), cpX + w div 2, cpY + h div 2);
+if Obj = sprAmGirder then
+    ScriptCall('onGirderPlacement', frame, cpX + w div 2, cpY + h div 2)
+else if Obj = sprAmRubber then
+    ScriptCall('onRubberPlacement', frame, cpX + w div 2, cpY + h div 2);
+
 end;
 
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
@@ -804,7 +849,7 @@ begin
         yy:= Y div 2;
     end;
 
-    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and (LandPixels[yy, xx] <> 0);
+    pixelsweep:= (Land[Y, X] <= lfAllObjMask) and ((LandPixels[yy, xx] and AMASK) <> 0);
     if (((Land[Y, X] and lfDamaged) <> 0) and ((Land[Y, X] and lfIndestructible) = 0)) or pixelsweep then
     begin
         c:= 0;
@@ -823,10 +868,10 @@ begin
                                 ny:= Y div 2 + i;
                                 nx:= X div 2 + j;
                                 if ((ny and (LAND_HEIGHT_MASK div 2)) = 0) and ((nx and (LAND_WIDTH_MASK div 2)) = 0) then
-                                    if LandPixels[ny, nx] <> 0 then
+                                    if (LandPixels[ny, nx] and AMASK) <> 0 then
                                         inc(c);
                             end
-                            else if LandPixels[ny, nx] <> 0 then
+                            else if (LandPixels[ny, nx] and AMASK)  <> 0 then
                                     inc(c);
                         end
                     else if Land[ny, nx] > 255 then
@@ -938,7 +983,7 @@ end;
 
 function SweepDirty: boolean;
 var x, y, xx, yy, ty, tx: LongInt;
-    bRes, updateBlock, resweep, recheck: boolean;
+    bRes, resweep, recheck: boolean;
 begin
 bRes:= false;
 reCheck:= true;
@@ -952,7 +997,6 @@ while recheck do
             begin
             if LandDirty[y, x] = 1 then
                 begin
-                updateBlock:= false;
                 resweep:= true;
                 ty:= y * 32;
                 tx:= x * 32;
@@ -964,7 +1008,6 @@ while recheck do
                             if Despeckle(xx, yy) then
                                 begin
                                 bRes:= true;
-                                updateBlock:= true;
                                 resweep:= true;
                                 if (yy = ty) and (y > 0) then
                                     begin
@@ -988,9 +1031,6 @@ while recheck do
                                     end
                                 end;
                     end;
-                if updateBlock then
-                    UpdateLandTexture(tx, 32, ty, 32, false);
-                LandDirty[y, x]:= 2;
                 end;
             end;
         end;
@@ -1000,12 +1040,21 @@ for y:= 0 to LAND_HEIGHT div 32 - 1 do
     for x:= 0 to LAND_WIDTH div 32 - 1 do
         if LandDirty[y, x] <> 0 then
             begin
-            LandDirty[y, x]:= 0;
             ty:= y * 32;
             tx:= x * 32;
             for yy:= ty to ty + 31 do
                 for xx:= tx to tx + 31 do
                     Smooth(xx,yy)
+            end;
+
+for y:= 0 to LAND_HEIGHT div 32 - 1 do
+    for x:= 0 to LAND_WIDTH div 32 - 1 do
+        if LandDirty[y, x] <> 0 then
+            begin
+            LandDirty[y, x]:= 0;
+            ty:= y * 32;
+            tx:= x * 32;
+            UpdateLandTexture(tx, 32, ty, 32, false);
             end;
 
 SweepDirty:= bRes;

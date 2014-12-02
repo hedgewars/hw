@@ -666,7 +666,7 @@ end;
 
 procedure chMapGen(var s: shortstring);
 begin
-cMapGen:= StrToInt(s)
+cMapGen:= TMapGen(StrToInt(s))
 end;
 
 procedure chTemplateFilter(var s: shortstring);

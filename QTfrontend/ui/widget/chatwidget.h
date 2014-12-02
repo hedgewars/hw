@@ -32,6 +32,7 @@
 #include "SDLInteraction.h"
 
 #include "SmartLineEdit.h"
+#include "playerslistmodel.h"
 
 class QTextBrowser;
 class QLineEdit;
@@ -87,6 +88,7 @@ class HWChatWidget : public QWidget
         QString linkedNick(const QString & nickname);
         void beforeContentAdd();
         void afterContentAdd();
+        bool isInGame();
 
         /**
          * @brief Checks whether the message contains a highlight.
@@ -132,6 +134,7 @@ class HWChatWidget : public QWidget
         void consoleCommand(const QString & command);
 
     private:
+        PlayersListModel* m_usersModel;
         bool m_isAdmin;
         QHBoxLayout mainLayout;
         QTextBrowser* chatText;

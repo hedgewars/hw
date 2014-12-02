@@ -145,6 +145,7 @@ void HWGame::SendQuickConfig()
     HWProto::addStringToBuffer(teamscfg, "eseed " + QUuid::createUuid().toString());
 
     HWProto::addStringToBuffer(teamscfg, "e$template_filter 2");
+    HWProto::addStringToBuffer(teamscfg, "e$feature_size "+QString::number(rand()%18+4));
 
     HWTeam team1;
     team1.setDifficulty(0);
