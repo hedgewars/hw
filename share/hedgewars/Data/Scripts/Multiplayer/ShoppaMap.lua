@@ -1,7 +1,5 @@
 ObjectList = {}
 
-HedgewarsScriptLoad("/Scripts/Draw.lua")
-
 -- Overall padding for roping freedom
 Padding = 430
 
