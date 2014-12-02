@@ -38,6 +38,7 @@ Rectangle {
     }
 
     HWComboBox {
+        id: cbTheme
         x: 320
         y: 16
         width: 100
@@ -48,13 +49,15 @@ Rectangle {
             height: 25
             width: 100
             color: "transparent"
-            Text {id: themeName; text: modelData }
+            Row {
+                Image {width: height; height: parent.height; source: "image://theme/" + modelData}
+                Text {id: themeName; text: modelData }
+            }
             MouseArea {
                  z: 1
                  anchors.fill: parent
                  onClicked: {
-                     themeImage.source = "image://theme/" + themeName.text
-                     model.currentIndex = index
+                     cbTheme.currentIndex = index
                      HWEngine.setTheme(themeName.text)
                  }
             }

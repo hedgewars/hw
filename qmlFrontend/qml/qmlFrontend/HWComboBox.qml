@@ -4,6 +4,7 @@ import QtQuick.Window 2.1
 HWButton {
     property alias model: itemsList.model
     property alias delegate: itemsList.delegate
+    property alias currentIndex: itemsList.currentIndex
 
     Window {
         id: selection
