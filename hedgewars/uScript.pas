@@ -307,6 +307,19 @@ begin
         LuaToSpriteOrd:= i;
 end;
 
+function LuaToMapGenOrd(L : Plua_State; i: LongInt; call, paramsyntax: shortstring): LongInt; inline;
+begin
+    if lua_isnoneornil(L, i) then i:= -1
+    else i:= lua_tointeger(L, i);
+    if (i < ord(Low(TMapGen))) or (i > ord(High(TMapGen))) then
+        begin
+        LuaCallError('Invalid mapgen id!', call, paramsyntax);
+        LuaToMapGenOrd:= -1;
+        end
+    else
+        LuaToMapGenOrd:= i;
+end;
+
 // wrapped calls //
 
 // functions called from Lua:
@@ -2313,7 +2326,7 @@ if not ScriptLoaded then
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
-ScriptSetInteger('MapGen', cMapGen);
+ScriptSetInteger('MapGen', ord(cMapGen));
 
 ScriptCall('onPreviewInit');
 
@@ -2321,7 +2334,7 @@ ScriptCall('onPreviewInit');
 ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
-cMapGen          := ScriptGetInteger('MapGen');
+cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
 end;
 
 procedure ScriptOnGameInit;
@@ -2337,7 +2350,7 @@ ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
-ScriptSetInteger('MapGen', cMapGen);
+ScriptSetInteger('MapGen', ord(cMapGen));
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
@@ -2366,7 +2379,7 @@ ScriptCall('onGameInit');
 ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
-cMapGen          := ScriptGetInteger('MapGen');
+cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
 cCaseFactor      := ScriptGetInteger('CaseFreq');
@@ -2700,6 +2713,7 @@ var at : TGearType;
     he : THogEffect;
     cg : TCapGroup;
     spr: TSprite;
+    mg : TMapGen;
 begin
 // initialize lua
 luaState:= lua_open;
@@ -2791,6 +2805,8 @@ for cg:= Low(TCapGroup) to High(TCapGroup) do
 for spr:= Low(TSprite) to High(TSprite) do
     ScriptSetInteger(EnumToStr(spr), ord(spr));
 
+for mg:= Low(TMapGen) to High(TMapGen) do
+    ScriptSetInteger(EnumToStr(mg), ord(mg));
 
 ScriptSetInteger('gstDrowning'      , gstDrowning);
 ScriptSetInteger('gstHHDriven'      , gstHHDriven);
@@ -2821,12 +2837,6 @@ ScriptSetInteger('aihDoesntMatter'   , aihDoesntMatter);
 ScriptSetInteger('lfIndestructible', lfIndestructible);
 ScriptSetInteger('lfIce'           , lfIce);
 ScriptSetInteger('lfBouncy'        , lfBouncy);
-
-// mapgen
-ScriptSetInteger('mgRandom', mgRandom);
-ScriptSetInteger('mgMaze'  , mgMaze);
-ScriptSetInteger('mgPerlin', mgPerlin);
-ScriptSetInteger('mgDrawn' , mgDrawn);
 
 // register functions
 lua_register(luaState, _P'HideHog', @lc_hidehog);

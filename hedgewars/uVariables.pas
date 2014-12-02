@@ -99,7 +99,7 @@ var
     cMineDudPercent : LongWord;
     cTemplateFilter : LongInt;
     cFeatureSize    : LongInt;
-    cMapGen         : LongInt;
+    cMapGen         : TMapGen;
     cRopePercent    : LongWord;
     cGetAwayTime    : LongWord;
 
@@ -2562,7 +2562,7 @@ begin
     cMineDudPercent     := 0;
     cTemplateFilter     := 0;
     cFeatureSize        := 50;
-    cMapGen             := 0;   // MAPGEN_REGULAR
+    cMapGen             := mgRandom;
     cHedgehogTurnTime   := 45000;
     cMinesTime          := 3000;
     cMaxAIThinkTime     := 9000;
