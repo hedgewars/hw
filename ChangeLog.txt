@@ -40,6 +40,10 @@ Lua API:
       SetWaterLine(waterline) -- moves water level to the specified y. the current value is in read-only global waterline
       SetNextWeapon() -- make current hedgehog switch to next weapon. e.g. use in trainings to preselect weapon
       SetWeapon(ammoType) -- decide which weapon the current hedgehog should equip
+ + Map Drawing:
+      -- to be used in onGameInit() -- first set MapGen to mgDrawn and then use the commands below
+      AddPoint(x, y [, width [, erase] ]) -- takes x,y location, a width (means start of a new line) and erase (if line should erase, not draw)
+      FlushPoints() -- makes sure that all the points/lines specified using the command above are actually applied to the map
  + New global enumerations:
       Mapgens: mgRandom, mgMaze, mgPerlin, mgDrawn
       TSprite values
