@@ -36,6 +36,7 @@ const
     HaltTestSuccess     =  0;
     HaltTestFailed      =  10;
     HaltTestLuaError    =  11;
+    HaltTestUnexpected  =  12;
 
 
     sfMax = 1000;
