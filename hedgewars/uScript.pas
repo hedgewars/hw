@@ -100,7 +100,7 @@ var luaState : Plua_State;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
     mapDims : boolean;
-    PointsBuffer: shortString;
+    PointsBuffer: shortstring;
 
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
@@ -2289,19 +2289,15 @@ begin
         PointsBuffer:= PointsBuffer + char((param and $FF));
         // width
         if np > 2 then
-            param:= lua_tointeger(L,3)
-        else
-            param:= 0;
-
-        if param <> 0 then
             begin
+            param:= lua_tointeger(L,3);
             param:= (param or $80);
             // erase
             if (np > 3) and lua_toboolean(L, 4) then
                 param:= (param or $40);
             PointsBuffer:= PointsBuffer + char(param);
             end
-        // width is 0
+        // no width defined
         else
             PointsBuffer:= PointsBuffer + char(0);
 
@@ -2316,7 +2312,8 @@ end;
 function lc_flushPoints(L : Plua_State) : LongInt; Cdecl;
 begin
     if CheckLuaParamCount(L, 0, 'FlushPoints', '') then
-        ScriptFlushPoints();
+        if length(PointsBuffer) > 0 then
+            ScriptFlushPoints();
     lc_flushPoints:= 0
 end;
 
