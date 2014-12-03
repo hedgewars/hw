@@ -587,6 +587,18 @@ begin
         halt(HaltUsageError);
         {$ENDIF}
 
+    if cTestLua then
+        {$IFDEF PAS2C}
+        exit(HaltTestUnexpected);
+        {$ELSE}
+        halt(HaltTestUnexpected);
+        {$ENDIF}
+
+    {$IFDEF PAS2C}
+    exit(HaltNoError);
+    {$ELSE}
+    halt(HaltNoError);
+    {$ENDIF}
 {$IFDEF HWLIBRARY}
 end;
 {$ENDIF}
