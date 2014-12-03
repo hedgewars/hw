@@ -588,11 +588,14 @@ begin
         {$ENDIF}
 
     if cTestLua then
+        begin
+        WriteLnToConsole('WARNING: Lua test terminated before the test was properly finished with EndLuaTest()!');
         {$IFDEF PAS2C}
         exit(HaltTestUnexpected);
         {$ELSE}
         halt(HaltTestUnexpected);
         {$ENDIF}
+        end;
 
     {$IFDEF PAS2C}
     exit(HaltNoError);
