@@ -109,8 +109,10 @@ procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
 var LuaDebugInfo: lua_Debug;
 
+procedure SetGlobals; forward;
 procedure LuaParseString(s: shortString);
 begin
+    SetGlobals;
     AddFileLog('[Lua] input string: ' + s);
     AddChatString(#3 + '[Lua] > ' + s);
     if luaL_dostring(luaState, Str2PChar(s)) <> 0 then
