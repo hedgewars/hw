@@ -39,20 +39,25 @@ Rectangle {
 
     HWComboBox {
         id: cbTheme
-        x: 320
-        y: 16
-        width: 100
-        height: 256
+        x: 50
+        y: 160
+        width: 256
+        height: 64
 
         model: themesModel
         delegate: Rectangle {
             height: 25
             width: 100
             color: "transparent"
+
+            property alias itemIconSource: themeIcon.source
+            property alias itemText: themeName.text
+
             Row {
-                Image {width: height; height: parent.height; source: "image://theme/" + modelData}
+                Image {id: themeIcon; width: height; height: parent.height; source: "image://theme/" + modelData}
                 Text {id: themeName; text: modelData }
             }
+
             MouseArea {
                  z: 1
                  anchors.fill: parent
