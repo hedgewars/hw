@@ -49,6 +49,7 @@ const
     errmsgIncorrectUse    = 'Incorrect use';
     errmsgShouldntRun     = 'This program shouldn''t be run manually';
     errmsgWrongNumber     = 'Wrong parameters number';
+    errmsgLuaTestTerm     = 'WARNING: Lua test terminated before the test was properly finished with EndLuaTest()!';
 
     msgLoading           = 'Loading ';
     msgOK                = 'ok';
