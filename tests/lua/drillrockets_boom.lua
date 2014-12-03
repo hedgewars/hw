@@ -141,8 +141,7 @@ function onGearDelete(gear)
 			if (nfailed > 0) then
 				EndLuaTest(TEST_FAILED)
 			else
-                EndGame()
-				--EndLuaTest(TEST_SUCCESSFUL)
+				EndLuaTest(TEST_SUCCESSFUL)
 			end
 		end
 	end
