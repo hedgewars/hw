@@ -58,7 +58,7 @@ function onGameInit()
 	DamagePercent = 1
 
 	-- Draw Map
-	AddPoint(10,30,0) -- hog spawn platform
+	-- AddPoint(10,30,0) -- hog spawn platform
 	-- test areas
 	AddTestArea(taa_v1)
 	AddTestArea(taa_v2)
@@ -141,7 +141,8 @@ function onGearDelete(gear)
 			if (nfailed > 0) then
 				EndLuaTest(TEST_FAILED)
 			else
-				EndLuaTest(TEST_SUCCESSFUL)
+                EndGame()
+				--EndLuaTest(TEST_SUCCESSFUL)
 			end
 		end
 	end

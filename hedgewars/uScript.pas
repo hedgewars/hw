@@ -2319,16 +2319,35 @@ begin
     lc_flushPoints:= 0
 end;
 
-// stuff for testing the lua API
+// stuff for lua tests
 function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
+var rstring: shortstring;
+const
+    call = 'EndLuaTest';
+    params = 'TEST_SUCCESSFUL or TEST_FAILED';
 begin
-    if CheckLuaParamCount(L, 1, 'EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED') then
+    if CheckLuaParamCount(L, 1, call, params) then
         begin
-        WriteLnToConsole('Lua test finished');
-        halt(lua_tointeger(L, 1));
-        end
-    else
-        lua_pushnil(L);
+
+        case lua_tointeger(L, 1) of
+            HaltTestSuccess : rstring:= 'Success';
+            HaltTestLuaError: rstring:= 'FAILED';
+        else
+            begin
+            LuaCallError('Parameter must be either ' + params, call, params);
+            exit(0);
+            end;
+        end;
+
+        if cTestLua then
+            begin
+            WriteLnToConsole('Lua test finished, result: ' + rstring);
+            halt(lua_tointeger(L, 1));
+            end
+        else LuaError('Not in lua test mode, engine will keep running. Reported test result: ' + rstring);
+
+        end;
+
     lc_endluatest:= 0;
 end;
 ///////////////////
@@ -3022,12 +3041,9 @@ lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
-if cTestLua then
-    begin
-    ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
-    ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
-    lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
-    end;
+ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
+ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
+lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;
