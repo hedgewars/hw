@@ -14,6 +14,7 @@ extern "C" {
     setSeed_t *flibSetSeed;
     getSeed_t *flibGetSeed;
     setTheme_t *flibSetTheme;
+    setScript_t *flibSetScript;
     getPreview_t *flibGetPreview;
     runQuickGame_t *flibRunQuickGame;
     runLocalGame_t *flibRunLocalGame;
@@ -45,14 +46,16 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibRunEngine = (RunEngine_t*) hwlib.resolve("RunEngine");
     flibRegisterGUIMessagesCallback = (registerGUIMessagesCallback_t*) hwlib.resolve("registerGUIMessagesCallback");
-    flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
     flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
-    flibSetTheme = (setTheme_t*) hwlib.resolve("setTheme");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
     flibRunQuickGame = (runQuickGame_t*) hwlib.resolve("runQuickGame");
     flibRunLocalGame = (runLocalGame_t*) hwlib.resolve("runLocalGame");
     flibInit = (flibInit_t*) hwlib.resolve("flibInit");
     flibFree = (flibFree_t*) hwlib.resolve("flibFree");
+
+    flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
+    flibSetTheme = (setTheme_t*) hwlib.resolve("setTheme");
+    flibSetScript = (setScript_t*) hwlib.resolve("setScript");
 
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
@@ -176,6 +179,17 @@ void HWEngine::fillModels()
     flibFreeThemesList(themes);
 
     m_engine->rootContext()->setContextProperty("themesModel", QVariant::fromValue(resultModel));
+
+    resultModel.clear();
+    char ** scripts = flibGetScriptsList();
+
+    for (char **i = scripts; *i != NULL; i++) {
+        QString script = QString::fromUtf8(*i);
+
+        resultModel << script;
+    }
+
+    m_engine->rootContext()->setContextProperty("scriptsModel", QVariant::fromValue(resultModel));
 }
 
 void HWEngine::getTeamsList()
@@ -211,4 +225,9 @@ void HWEngine::changeTeamColor(const QString &teamName, int dir)
 void HWEngine::setTheme(const QString &theme)
 {
     flibSetTheme(theme.toUtf8().constData());
+}
+
+void HWEngine::setScript(const QString &script)
+{
+    flibSetScript(script.toUtf8().constData());
 }

@@ -54,7 +54,7 @@ var filesList, tmp: PPChar;
     l: Longword;
 begin
     filesList:= pfsEnumerateFiles('/Scripts/Multiplayer');
-    scriptsNumber:= 0;
+    scriptsNumber:= 1;
 
     tmp:= filesList;
     while tmp^ <> nil do
@@ -66,9 +66,16 @@ begin
         inc(tmp)
     end;
 
-    scriptsList:= GetMem(sizeof(scriptsList^) * scriptsNumber);
+    scriptsList:= GetMem(sizeof(scriptsList^) * (scriptsNumber + 1));
 
     script:= scriptsList;
+
+    // add 'normal' script
+    script^.scriptName:= 'Normal';
+    script^.description:= 'Normal gameplay';
+    inc(script);
+
+    // fill the rest from *.lua list
     tmp:= filesList;
     while tmp^ <> nil do
     begin

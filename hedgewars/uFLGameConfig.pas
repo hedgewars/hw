@@ -12,6 +12,7 @@ procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
 procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 procedure setTheme(themeName: PChar); cdecl;
+procedure setScript(scriptName: PChar); cdecl;
 
 procedure tryAddTeam(teamName: PChar); cdecl;
 procedure tryRemoveTeam(teamName: PChar); cdecl;
@@ -52,13 +53,18 @@ with config^ do
 begin
     case gameType of
     gtPreview: begin
+            if script <> '' then
+                ipcToEngine('escript ' + script);
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
         end;
     gtLocal: begin
+            if script <> '' then
+                ipcToEngine('escript ' + script);
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             ipcToEngine('e$theme ' + theme);
+
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
                 begin
@@ -307,6 +313,14 @@ end;
 procedure setTheme(themeName: PChar); cdecl;
 begin
     currentConfig.theme:= themeName
+end;
+
+procedure setScript(scriptName: PChar); cdecl;
+begin
+    if scriptName <> 'Normal' then
+        currentConfig.script:= '/Scripts/Multiplayer/' + scriptName + '.lua'
+    else
+        currentConfig.script:= ''
 end;
 
 end.

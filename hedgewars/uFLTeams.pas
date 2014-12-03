@@ -50,8 +50,8 @@ begin
         ipcToEngine('eaddteam <hash> ' + colorsSet[color] + ' ' + teamName);
         for i:= 0 to Pred(hogsNumber) do
         begin
-            ipcToEngine('eaddhh ' + inttostr(botLevel) + ' 100 ' + hedgehogs[i].name);
-            ipcToEngine('ehat ' + hedgehogs[i].hat);
+            ipcToEngine('eaddhh ' + inttostr(botLevel) + ' 100 hog');// + hedgehogs[i].name);
+            //ipcToEngine('ehat ' + hedgehogs[i].hat);
         end;
     end
 end;

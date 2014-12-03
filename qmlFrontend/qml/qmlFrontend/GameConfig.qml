@@ -69,24 +69,38 @@ Rectangle {
         }
     }
 
-/*    Rectangle {
-        x: 320
-        y: 16
-        width: 100
-        height: 256
-        color: "#15193a"
-        radius: 8
-        border.width: 4
-        border.color: "#eaea00"
-        Image {
-            id: themeImage
-            x: 0
-            y: 0
-            width: 64
-            height: 64
-            fillMode: Image.Pad
+    HWComboBox {
+        id: cbScript
+        x: 50
+        y: 256
+        width: 256
+        height: 64
+
+        model: scriptsModel
+        delegate: Rectangle {
+            height: 25
+            width: 100
+            color: "transparent"
+
+            property string itemIconSource: ""
+            property alias itemText: scriptName.text
+
+            Row {
+                //Image {id: themeIcon; width: height; height: parent.height; source: "image://theme/" + modelData}
+                Text {id: scriptName; text: modelData }
+            }
+
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: {
+                     cbScript.currentIndex = index
+                     HWEngine.setScript(scriptName.text)
+                 }
+            }
         }
-*/
+    }
+
 
     ListView {
         id: playingTeamsList
