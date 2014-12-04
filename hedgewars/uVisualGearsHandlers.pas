@@ -86,7 +86,7 @@ if vobCount = 0 then exit;
 sign:= 1;
 with Gear^ do
     begin
-    if FrameTicks < 1000000 then
+    if vobFrameTicks < 1000000 then
         begin
         inc(FrameTicks, Steps);
         if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
