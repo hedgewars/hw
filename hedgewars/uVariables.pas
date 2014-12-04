@@ -2617,13 +2617,13 @@ begin
 
     dirtyLandTexCount:= 0;
 
-    vobFrameTicks:= 99999;
+    vobFrameTicks:= 0;
     vobFramesCount:= 4;
     vobCount:= 0;
     vobVelocity:= 10;
     vobFallSpeed:= 100;
 
-    vobSDFrameTicks:= 99999;
+    vobSDFrameTicks:= 0;
     vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 15;
