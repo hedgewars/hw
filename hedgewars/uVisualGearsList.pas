@@ -102,12 +102,14 @@ with gear^ do
                 Scale:= 1.0;
                 if SuddenDeathDmg then
                     begin
-                    FrameTicks:= random(vobSDFrameTicks);
+                    if vobSDFrameTicks > 0 then
+                        FrameTicks:= random(vobSDFrameTicks);
                     Frame:= random(vobSDFramesCount);
                     end
                 else
                     begin
-                    FrameTicks:= random(vobFrameTicks);
+                    if vobFrameTicks > 0 then
+                        FrameTicks:= random(vobFrameTicks);
                     Frame:= random(vobFramesCount);
                     end;
                 Angle:= random(360);

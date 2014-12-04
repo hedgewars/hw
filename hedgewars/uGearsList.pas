@@ -285,7 +285,12 @@ case Kind of
                             dx := -dx
                         end;
                     State:= State or gstInvisible;
-                    Health:= random(vobFrameTicks);
+                    // use health field to store current frameticks
+                    if vobFrameTicks > 0 then
+                        Health:= random(vobFrameTicks)
+                    else
+                        Health:= 0;
+                    // use timer to store currently displayed frame index
                     if gear^.Timer = 0 then Timer:= random(vobFramesCount);
                     Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
                     Tint:= ((ExplosionBorderColor and RMask) shl RShift) or
