@@ -86,20 +86,23 @@ if vobCount = 0 then exit;
 sign:= 1;
 with Gear^ do
     begin
-    inc(FrameTicks, Steps);
-    if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
+    if FrameTicks < 1000000 then
         begin
-        dec(FrameTicks, vobFrameTicks);
-        inc(Frame);
-        if Frame = vobFramesCount then
-            Frame:= 0
-        end
-    else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
-        begin
-        dec(FrameTicks, vobSDFrameTicks);
-        inc(Frame);
-        if Frame = vobSDFramesCount then
-            Frame:= 0
+        inc(FrameTicks, Steps);
+        if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
+            begin
+            dec(FrameTicks, vobFrameTicks);
+            inc(Frame);
+            if Frame = vobFramesCount then
+                Frame:= 0
+            end
+        else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
+            begin
+            dec(FrameTicks, vobSDFrameTicks);
+            inc(Frame);
+            if Frame = vobSDFramesCount then
+                Frame:= 0
+            end;
         end;
     X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps * Gear^.Scale;
     if SuddenDeathDmg then
