@@ -2,6 +2,7 @@ foreach(dir
     Bamboo
     BambooPlinko
     Basketball
+    BasketballField
     Bath
     Battlefield
     Blizzard
