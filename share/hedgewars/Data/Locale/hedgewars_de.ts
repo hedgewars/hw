@@ -275,7 +275,7 @@
 %1
 
 Please check your installation!</source>
-        <translation>Ich konnte dieses Daten-Verzeichnis nicht öffnen:
+        <translation>Folgendes Daten-Verzeichnis konnte nicht geöffnet werden:
 %1
 
 Bitte überprüfe deine Installation!</translation>
@@ -3456,13 +3456,15 @@ Es sind nicht alle Spieler bereit.</translation>
     <message>
         <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="122"/>
         <source>Unable to start server at %1.</source>
-        <translation>Ich bin unfähig, den Server auf %1 zu starten.</translation>
+        <translation>Der Server konnte nicht gestartet werden.
+Pfad: %1</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/net/tcpBase.cpp" line="221"/>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation>Ich bin unfähig, die Engine auf %1 laufen zu lassen.
+        <translation>Die Spiel-Engine konnte nicht gestartet werden.
+Pfad: %1
 Fehlercode: %2</translation>
     </message>
     <message>
