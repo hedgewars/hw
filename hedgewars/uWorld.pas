@@ -1032,7 +1032,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         begin
         rect.w:= w;
         rect.x:= ViewLeftX;
-        DrawRect(rect, $30, $30, $30, $40, true);
+        DrawRect(rect, $10, $10, $10, $80, true);
         if WorldEdge = weBounce then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
@@ -1044,7 +1044,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         begin
         rect.w:= w;
         rect.x:= tmp;
-        DrawRect(rect, $30, $30, $30, $40, true);
+        DrawRect(rect, $10, $10, $10, $80, true);
         if WorldEdge = weBounce then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
