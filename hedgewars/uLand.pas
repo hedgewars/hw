@@ -665,6 +665,9 @@ if GrayScale then
     end;
 
 PrettifyLandAlpha();
+
+InitWorldEdges();
+
 end;
 
 procedure GenPreview(out Preview: TPreview);
