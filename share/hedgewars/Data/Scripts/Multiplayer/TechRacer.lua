@@ -481,7 +481,7 @@ function HandleFreshMapCreation()
 			--AddCaption("don't load any map")
 		elseif mapID == "1" then
 
-			--testmap1
+			--simple testmap
 			------ GIRDER LIST ------
 			PlaceSprite(306, 530, sprAmGirder, 7, lfNormal)
 			PlaceSprite(451, 474, sprAmGirder, 4, lfNormal)
@@ -574,12 +574,6 @@ function HandleFreshMapCreation()
 			PlaceSprite(3649, 1275, sprAmGirder, 2, lfNormal)
 			PlaceSprite(3514, 1750, sprAmGirder, 0, lfNormal)
 
-			------ RUBBER BAND LIST ------
-
-			------ LAND SPRITE LIST ------
-
-			------ HEALTH CRATE LIST ------
-
 			------ AMMO CRATE LIST ------
 			tempG = SpawnAmmoCrate(1707, 1755, amBazooka)
 			tempG = SpawnAmmoCrate(3983, 1873, amBazooka)
@@ -609,7 +603,7 @@ function HandleFreshMapCreation()
 
 		elseif mapID == "2" then
 
-			-- land flags test map
+			-- simple land flags test map
 			------ GIRDER LIST ------
 			PlaceSprite(335, 622, sprAmGirder, 16,16384)
 			PlaceSprite(474, 569, sprAmGirder, 13,16384)
@@ -642,13 +636,207 @@ function HandleFreshMapCreation()
 
 			------ AMMO CRATE LIST ------
 			tempG = SpawnAmmoCrate(472, 711, amBazooka)
-
 			tempG = SpawnUtilityCrate(540, 660, amParachute)
-
 			tempG = SpawnAmmoCrate(1155, 528, amBazooka)
 
 			------ UTILITY CRATE LIST ------
 			tempG = SpawnUtilityCrate(2006, 1102, amRope)
+
+		elseif mapID == "3" then
+
+			-- more detailed landflag test map
+			------ GIRDER LIST ------
+			PlaceSprite(396, 665, sprAmGirder, 1,0)
+			PlaceSprite(619, 665, sprAmGirder, 3,0)
+			PlaceSprite(696, 635, sprAmGirder, 0,0)
+			PlaceSprite(319, 637, sprAmGirder, 0,0)
+			PlaceSprite(268, 604, sprAmGirder, 2,0)
+			PlaceSprite(746, 603, sprAmGirder, 2,0)
+			PlaceSprite(325, 495, sprAmGirder, 7,0)
+			PlaceSprite(689, 493, sprAmGirder, 5,0)
+			PlaceSprite(504, 422, sprAmGirder, 6,0)
+			PlaceSprite(595, 422, sprAmGirder, 4,0)
+			PlaceSprite(412, 422, sprAmGirder, 4,0)
+			PlaceSprite(320, 696, sprAmGirder, 4,0)
+			PlaceSprite(249, 786, sprAmGirder, 6,0)
+			PlaceSprite(249, 948, sprAmGirder, 6,0)
+			PlaceSprite(191, 785, sprAmGirder, 6,0)
+			PlaceSprite(191, 946, sprAmGirder, 6,0)
+			PlaceSprite(191, 1107, sprAmGirder, 6,0)
+			PlaceSprite(249, 1109, sprAmGirder, 6,0)
+			PlaceSprite(130, 1251, sprAmGirder, 7,0)
+			PlaceSprite(306, 1251, sprAmGirder, 5,0)
+			PlaceSprite(72, 1360, sprAmGirder, 2,0)
+			PlaceSprite(364, 1360, sprAmGirder, 2,0)
+			PlaceSprite(132, 1462, sprAmGirder, 5,0)
+			PlaceSprite(304, 1463, sprAmGirder, 7,0)
+			PlaceSprite(182, 1616, sprAmGirder, 6,0)
+			PlaceSprite(255, 1613, sprAmGirder, 6,0)
+			PlaceSprite(217, 1796, sprAmGirder, 4,0)
+			PlaceSprite(221, 1381, sprAmGirder, 0,0)--
+			PlaceSprite(154, 669, sprAmGirder, 1,0)
+			PlaceSprite(124, 553, sprAmGirder, 6,0)
+			PlaceSprite(326, 467, sprAmGirder, 3,0)
+			PlaceSprite(223, 592, sprAmGirder, 3,0)
+
+			PlaceSprite(638, 791, sprAmGirder, 5,0)
+			PlaceSprite(752, 907, sprAmGirder, 5,0)
+			PlaceSprite(866, 1022, sprAmGirder, 5,0)
+			PlaceSprite(402, 1863, sprAmGirder, 18,2048)
+			PlaceSprite(442, 1863, sprAmGirder, 22,2048)
+			PlaceSprite(2067, 1945, sprAmGirder, 15,16384)
+			PlaceSprite(2005, 1797, sprAmGirder, 14,16384)
+			PlaceSprite(1943, 1653, sprAmGirder, 15,16384)
+			PlaceSprite(1999, 1504, sprAmGirder, 16,16384)
+			PlaceSprite(2143, 1445, sprAmGirder, 13,16384)
+			PlaceSprite(2288, 1503, sprAmGirder, 14,16384)
+			PlaceSprite(2432, 1565, sprAmGirder, 13,16384)
+			PlaceSprite(2593, 1565, sprAmGirder, 13,16384)
+			PlaceSprite(2752, 1565, sprAmGirder, 13,16384)
+			PlaceSprite(2206, 1949, sprAmGirder, 15,16384)
+			PlaceSprite(2262, 1800, sprAmGirder, 16,16384)
+			PlaceSprite(2407, 1745, sprAmGirder, 13,16384)
+			PlaceSprite(2569, 1745, sprAmGirder, 13,16384)
+			PlaceSprite(2715, 1802, sprAmGirder, 14,16384)
+			PlaceSprite(2898, 1624, sprAmGirder, 14,16384)
+			PlaceSprite(3014, 1740, sprAmGirder, 14,16384)
+			PlaceSprite(2830, 1919, sprAmGirder, 14,16384)
+			PlaceSprite(3131, 1856, sprAmGirder, 14,16384)
+			PlaceSprite(3191, 1968, sprAmGirder, 11,16384)
+			PlaceSprite(3264, 2021, sprAmGirder, 13,16384)
+			PlaceSprite(2840, 2006, sprAmGirder, 12,16384)
+			PlaceSprite(1505, 395, sprAmGirder, 7,0)
+			PlaceSprite(1445, 544, sprAmGirder, 6,0)
+			PlaceSprite(1506, 686, sprAmGirder, 5,0)
+			PlaceSprite(1650, 339, sprAmGirder, 4,0)
+			PlaceSprite(1797, 397, sprAmGirder, 5,0)
+			PlaceSprite(1857, 547, sprAmGirder, 6,0)
+			PlaceSprite(1797, 688, sprAmGirder, 7,0)
+			PlaceSprite(1652, 754, sprAmGirder, 4,0)
+			PlaceSprite(3326, 863, sprAmGirder, 4,0)
+			PlaceSprite(3474, 921, sprAmGirder, 5,0)
+			PlaceSprite(3180, 921, sprAmGirder, 7,0)
+			PlaceSprite(3120, 1071, sprAmGirder, 6,0)
+			PlaceSprite(3183, 1214, sprAmGirder, 5,0)
+			PlaceSprite(3536, 1071, sprAmGirder, 6,0)
+			PlaceSprite(3480, 1214, sprAmGirder, 7,0)
+			PlaceSprite(3330, 1279, sprAmGirder, 4,0)
+			PlaceSprite(2502, 556, sprAmGirder, 16,16384)
+			PlaceSprite(2601, 634, sprAmGirder, 16,16384)
+			PlaceSprite(2616, 441, sprAmGirder, 16,16384)
+			PlaceSprite(2716, 519, sprAmGirder, 16,16384)
+			PlaceSprite(2756, 379, sprAmGirder, 13,16384)
+			PlaceSprite(2862, 466, sprAmGirder, 13,16384)
+			PlaceSprite(2918, 379, sprAmGirder, 13,16384)
+			PlaceSprite(3023, 467, sprAmGirder, 13,16384)
+			PlaceSprite(3080, 378, sprAmGirder, 13,16384)
+			PlaceSprite(3172, 527, sprAmGirder, 14,16384)
+			PlaceSprite(3232, 428, sprAmGirder, 14,16384)
+			PlaceSprite(3289, 647, sprAmGirder, 14,16384)
+			PlaceSprite(3350, 545, sprAmGirder, 14,16384)
+			PlaceSprite(3406, 764, sprAmGirder, 14,16384)
+			PlaceSprite(3469, 556, sprAmGirder, 16,16384)
+			PlaceSprite(3616, 503, sprAmGirder, 13,16384)
+			PlaceSprite(3552, 828, sprAmGirder, 13,16384)
+			PlaceSprite(3696, 763, sprAmGirder, 16,16384)
+			PlaceSprite(3708, 575, sprAmGirder, 15,16384)
+			PlaceSprite(3705, 680, sprAmGirder, 10,16384)
+
+			PlaceSprite(1481, 1133, sprAmGirder, 7,0)
+			PlaceSprite(1626, 1078, sprAmGirder, 4,0)
+			PlaceSprite(1772, 1135, sprAmGirder, 5,0)
+			PlaceSprite(1422, 1280, sprAmGirder, 6,0)
+			PlaceSprite(1831, 1286, sprAmGirder, 6,0)
+			PlaceSprite(1773, 1429, sprAmGirder, 7,0)
+			PlaceSprite(1627, 1492, sprAmGirder, 4,0)
+			PlaceSprite(1482, 1427, sprAmGirder, 5,0)
+			PlaceSprite(587, 855, sprAmGirder, 4,0)
+			PlaceSprite(425, 855, sprAmGirder, 4,0)
+			PlaceSprite(302, 822, sprAmGirder, 1,0)
+
+			------ RUBBER BAND LIST ------
+			PlaceSprite(505, 708, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(175, 451, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(822, 1693, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(982, 1691, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(1142, 1688, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(1302, 1684, sprAmRubber, 0, lfBouncy)
+			PlaceSprite(1450, 1750, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1566, 1860, sprAmRubber, 1, lfBouncy)
+			PlaceSprite(1680, 1973, sprAmRubber, 1, lfBouncy)
+
+			------ AMMO CRATE LIST ------
+			tempG = SpawnAmmoCrate(324, 613, amFirePunch)
+			tempG = SpawnAmmoCrate(2361, 1721, amBazooka)
+			tempG = SpawnAmmoCrate(2430, 1721, amBazooka)
+			tempG = SpawnAmmoCrate(2510, 1721, amBazooka)
+			tempG = SpawnAmmoCrate(2581, 1721, amBazooka)
+			tempG = SpawnAmmoCrate(405, 1839, amSineGun)
+			tempG = SpawnAmmoCrate(481, 1839, amSineGun)
+
+			------ UTILITY CRATE LIST ------
+			tempG = SpawnUtilityCrate(696, 611, amParachute)
+			tempG = SpawnUtilityCrate(825, 1664, amJetpack)
+			tempG = SpawnUtilityCrate(919, 1657, amJetpack)
+			tempG = SpawnUtilityCrate(1015, 1662, amJetpack)
+			tempG = SpawnUtilityCrate(1095, 1654, amJetpack)
+			tempG = SpawnUtilityCrate(1166, 1659, amJetpack)
+			tempG = SpawnUtilityCrate(1250, 1650, amJetpack)
+			tempG = SpawnUtilityCrate(1335, 1655, amJetpack)
+
+			------ MINE LIST ------
+			SetTimer(AddGear(221, 1373, gtMine, 0, 0, 0, 0), 1)
+			SetTimer(AddGear(609, 661, gtMine, 0, 0, 0, 0), 3000)
+
+			------ STICKY MINE LIST ------
+			tempG = AddGear(190, 756, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(191, 810, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(189, 868, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(190, 923, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(192, 984, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(192, 1045, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(189, 1097, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(192, 1159, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(248, 753, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(248, 808, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(249, 868, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(250, 921, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(246, 982, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(247, 1041, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(249, 1094, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(249, 1156, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2571, 665, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2614, 623, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2658, 580, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2704, 533, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2751, 484, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2830, 466, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2912, 465, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2992, 465, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(3072, 468, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2465, 592, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2518, 540, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2580, 477, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2635, 425, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2713, 381, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2796, 378, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2892, 379, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(2988, 379, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(3061, 377, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(3136, 377, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(627, 770, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(661, 804, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(705, 850, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(754, 899, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(805, 950, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(850, 996, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(902, 1048, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(888, 1034, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(788, 933, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(839, 985, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(736, 881, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(686, 829, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(649, 792, gtSMine, 0, 0, 0, 0)
 
 		else
 
@@ -904,7 +1092,6 @@ function HandleFreshMapCreation()
 
 			------ AMMO CRATE LIST ------
 			tempG = SpawnAmmoCrate(889, 1126, amBaseballBat)
-
 			tempG = SpawnAmmoCrate(1211, 975, amSineGun)
 			tempG = SpawnAmmoCrate(3619, 451, amFirePunch)
 
