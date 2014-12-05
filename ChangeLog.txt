@@ -12,6 +12,7 @@
  + Game scheme screen has a "Script parameter" field now. This allows to make more customizable scripts/modes.
  + Network game rejoining. Note: Your team(s) will vanish after 3 turns.
  + Visual and gameplay changes to "sea" - world edges.
+ + The map of the Basketball Mission can be selected for regular games again ("BasketballField")
  + New engine command: /togglechat will disable/enable chat display (does not affect chat history display)
  + Change to Racer: first weapon/utility available will be automatically selected on start
  + Added some visual feedback to failed girder placement.
