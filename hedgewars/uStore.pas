@@ -97,7 +97,6 @@ end;
 procedure InitZoom(zoom: real);
 begin
     SetScale(zoom);
-    UpdateViewLimits();
 end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
