@@ -14,6 +14,8 @@ local Fire = {}
 local HH = {}
 local totalHedgehogs = 0
 local deadHedgehogs = 0
+local currTeam = ''
+local teams = {}
 local teamScoreStats = {}
 local teamBests = {}
 local MrMine -- in honour of sparkle's first arrival in the cabin
@@ -30,9 +32,8 @@ local jokeAwardSpeed = nil
 local jokeAwardDamage = nil
 local recordBroken = false
 local ready = false
--- TODO. Fix use of dummy team for scaling the graph.
 local showWaterStats = false -- uses the AI team to draw water height.
-local scaleGraph = false
+local scaleGraph = true
 local dummyHog = nil
 local dummySkip = 0
 
@@ -68,6 +69,7 @@ function onGearAdd(gear)
     if GetGearType(gear) == gtHedgehog then
         HH[gear] = 1
         totalHedgehogs = totalHedgehogs + 1
+        teams[GetHogTeamName(gear)] = 1
     end
 end
 
@@ -127,6 +129,7 @@ function onNewTurn()
     YouLost = false
     tauntNoo = false
     recordBroken = false
+    currTeam = GetHogTeamName(CurrentHedgehog)
     if CurrentHedgehog ~= nil then
         if CurrentHedgehog ~= dummyHog then
             SetGearPosition(CurrentHedgehog, 1951,32640)
@@ -307,8 +310,6 @@ function onGameTick20()
                 }
             end
         end
-
--- this block was moved out of the % 500 below because it was not triggering fast enough to give correct stats for all teams.
             if isSinglePlayer then
                 if distanceFromWater < 0 and not YouLost and not YouWon then
                     makeSinglePlayerLoserStats()
@@ -351,7 +352,13 @@ function onGameTick20()
             if showWaterStats == true then
 	        SendStat(siClanHealth, tostring(getActualHeight(WaterLine)), " ")
             end
-            SendStat(siClanHealth, tostring(getActualHeight(y)), GetHogTeamName(CurrentHedgehog))
+	    for t,i in pairs(teams) do
+                if currTeam == t then
+                    SendStat(siClanHealth, tostring(getActualHeight(y)), t)
+                else
+                    SendStat(siClanHealth, '0', t)
+                end
+            end
     
             -- play taunts
             if not YouWon and not YouLost then
@@ -531,7 +538,6 @@ function makeSinglePlayerLoserStats()
     else
         SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
     end
-    SendStat(siPointType, "points")
     SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
     EndGame()
 end
@@ -582,8 +588,8 @@ function makeFinalMultiPlayerStats()
     end
     checkAwards()
     for i = #ranking, 1, -1 do
+	SendStat(siPointType, loc("points"))
         SendStat(siPlayerKills, tostring(ranking[i].score), ranking[i].name)
-        SendStat(siPointType, "points")
     end
 end
 
