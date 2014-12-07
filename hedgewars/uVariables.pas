@@ -189,6 +189,7 @@ var
 
 
     flagMakeCapture : boolean;
+    flagDumpLand    : boolean;
 
     InitStepsFlags  : Longword;
     RealTicks       : Longword;
@@ -2589,6 +2590,7 @@ begin
     cVampiric       := false;
     cArtillery      := false;
     flagMakeCapture := false;
+    flagDumpLand    := false;
     bBetweenTurns   := false;
     bWaterRising    := false;
     isCursorVisible := false;
