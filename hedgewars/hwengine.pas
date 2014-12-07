@@ -123,10 +123,13 @@ begin
     if flagMakeCapture then
         begin
         flagMakeCapture:= false;
+        if flagDumpLand then
+             s:= '/Screenshots/mapdump_'
+        else s:= '/Screenshots/hw_';
         {$IFDEF PAS2C}
-        s:= '/Screenshots/hw_' + inttostr(GameTicks);
+        s:= s + inttostr(GameTicks);
         {$ELSE}
-        s:= '/Screenshots/hw_' + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
+        s:= s + FormatDateTime('YYYY-MM-DD_HH-mm-ss', Now()) + inttostr(GameTicks);
         {$ENDIF}
 
         // flash
@@ -134,8 +137,8 @@ begin
         ScreenFade:= sfFromWhite;
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
-
-        if MakeScreenshot(s, 1) then
+        
+        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or (flagDumpLand and MakeScreenshot(s, 1, 1) and MakeScreenshot(s, 1, 2)) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin
