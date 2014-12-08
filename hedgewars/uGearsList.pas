@@ -660,7 +660,7 @@ else if Gear^.Kind = gtHedgehog then
         end
     else*)
         begin
-        if (Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
+        if ((CurrentHedgehog = nil) or (Gear <> CurrentHedgehog^.Gear)) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
             Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             begin
@@ -671,7 +671,7 @@ else if Gear^.Kind = gtHedgehog then
             end;
 
         team:= Gear^.Hedgehog^.Team;
-        if CurrentHedgehog^.Gear = Gear then
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear = Gear) then
             begin
             AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
@@ -700,7 +700,7 @@ else if Gear^.Kind = gtHedgehog then
         // same stand for CheckHHDamage
         if (Gear^.LastDamage <> nil) then
             uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
-        else
+        else if CurrentHedgehog <> nil then
             uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
 
         inc(KilledHHs);
