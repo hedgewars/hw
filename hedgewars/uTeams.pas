@@ -854,9 +854,9 @@ if TeamsCount > 0 then
             with TeamsArray[i]^.Hedgehogs[h] do
                 begin
                 if Gear <> nil then
-                    DeleteGear(Gear);
+                    DeleteGearStage(Gear, true);
                 if GearHidden <> nil then
-                    DeleteGear(GearHidden);
+                    DeleteGearStage(GearHidden, true);
 
                 FreeAndNilTexture(NameTagTex);
                 FreeAndNilTexture(HealthTagTex);
