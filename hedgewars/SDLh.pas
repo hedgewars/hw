@@ -1105,6 +1105,7 @@ function  TTF_RenderUTF8_Shaded(font: PTTF_Font; const text: PChar; fg, bg: TSDL
 
 function  TTF_OpenFontRW(src: PSDL_RWops; freesrc: LongBool; size: LongInt): PTTF_Font; cdecl; external SDL_TTFLibName;
 procedure TTF_SetFontStyle(font: PTTF_Font; style: LongInt); cdecl; external SDL_TTFLibName;
+procedure TTF_CloseFont(font: PTTF_Font); cdecl; external SDL_TTFLibName;
 
 (*  SDL_mixer  *)
 function  Mix_Init(flags: LongInt): LongInt; {$IFDEF SDL_MIXER_NEWER}cdecl; external SDL_MixerLibName{$ELSE}inline{$ENDIF};

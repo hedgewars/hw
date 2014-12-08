@@ -1257,8 +1257,20 @@ begin
 end;
 
 procedure freeModule;
+var fi: THWFont;
 begin
     StoreRelease(false);
+    // make sure fonts are cleaned up
+    for fi:= Low(THWFont) to High(THWFont) do
+        with Fontz[fi] do
+            begin
+            if Handle <> nil then
+                begin
+                TTF_CloseFont(Handle);
+                Handle:= nil;
+                end;
+            end;
+
     TTF_Quit();
 {$IFDEF SDL2}
     SDL_GL_DeleteContext(SDLGLcontext);
