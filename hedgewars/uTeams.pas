@@ -845,6 +845,7 @@ end;
 procedure freeModule;
 var i, h: LongWord;
 begin
+CurrentHedgehog:= nil;
 if TeamsCount > 0 then
     begin
     for i:= 0 to Pred(TeamsCount) do
