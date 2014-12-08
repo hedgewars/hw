@@ -211,6 +211,7 @@ begin
     rTime:= 350;
     ap.ExplR:= 0;
     valueResult:= BadTurn;
+    timer:= 0;
     repeat
         rTime:= rTime + 300 + Level * 50 + random(300);
         Vx:= - windSpeed * rTime * 0.5 + (Targ.Point.X + AIrndSign(2) - mX) / rTime;
@@ -253,7 +254,7 @@ begin
             EX:= trunc(x);
             EY:= trunc(y);
             // Try to prevent AI from thinking firing into water will cause a drowning
-            if (EY < cWaterLine-5) and (Timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then exit(BadTurn);
+            if (EY < cWaterLine-5) and (timer > 0) and (Abs(Targ.Point.X - trunc(x)) + Abs(Targ.Point.Y - trunc(y)) > 21) then exit(BadTurn);
             if Level = 1 then
                 value:= RateExplosion(Me, EX, EY, 101, afTrackFall or afErasesLand)
             else value:= RateExplosion(Me, EX, EY, 101);
