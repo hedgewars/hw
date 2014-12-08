@@ -96,6 +96,9 @@ end;
 procedure InitZoom(zoom: real);
 begin
     SetScale(zoom);
+    // make sure view limits are updated
+    // because SetScale() doesn't do it, if zoom=cScaleFactor
+    updateViewLimits();
 end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
