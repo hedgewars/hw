@@ -556,6 +556,7 @@ for i:= 0 to Targets.Count do
                 pX:= Point.x;
                 pY:= Point.y;
                 fallDmg:= 0;
+                dX:= 0;
                 if (Flags and afTrackFall <> 0) and (Score > 0) and (dmg < Score) then
                     begin
                     dX:= (0.005 * dmg + 0.01) / Density;
@@ -741,10 +742,11 @@ for i:= 0 to Targets.Count do
                 end;
             if dmg > 0 then
                 begin
+                fallDmg:= 0;
+                pX:= Point.x;
+                pY:= Point.y;
                 if (not dead) and (Score > 0) and (dmg < Score) then
                     begin
-                    pX:= Point.x;
-                    pY:= Point.y;
                     dX:= gdX * dmg / Density;
                     dY:= gdY * dmg / Density;
                     if dX < 0 then dX:= dX - 0.01
