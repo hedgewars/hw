@@ -727,9 +727,8 @@ if FollowGear = Gear then
 if lastGearByUID = Gear then
     lastGearByUID := nil;
 if (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.GearHidden <> Gear) then // hidden hedgehogs shouldn't be in the list
-    RemoveGearFromList(Gear);
-if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.GearHidden = Gear) then
-    Gear^.Hedgehog^.GearHidden:= nil;
+     RemoveGearFromList(Gear)
+else Gear^.Hedgehog^.GearHidden:= nil;
 
 Dispose(Gear)
 end;
