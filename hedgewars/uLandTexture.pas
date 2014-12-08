@@ -169,10 +169,7 @@ else
                         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXSIZE, TEXSIZE, 0, GL_RGBA, GL_UNSIGNED_BYTE, Pixels(x,y));
                         end
                     else if tex <> nil then
-                        begin
-                        FreeTexture(tex);
-                        tex:= nil
-                        end;
+                        FreeAndNilTexture(tex);
 
                     // nothing else to do
                     if dirtyLandTexCount < 1 then
@@ -284,13 +281,8 @@ begin
     for x:= 0 to LANDTEXARW - 1 do
         for y:= 0 to LANDTEXARH - 1 do
             with LandTextures[x, y] do
-                begin
                 if tex <> nil then
-                    begin
-                    FreeTexture(tex);
-                    tex:= nil
-                    end
-                end;
+                    FreeAndNilTexture(tex)
 end;
 
 procedure freeModule;

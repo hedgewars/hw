@@ -388,7 +388,7 @@ type
             Hedgehogs: array[0..cMaxHHIndex] of THedgehog;
             CurrHedgehog: LongWord;
             NameTagTex,
-            OwnerTex: PTexture;
+            OwnerTex,
             GraveTex,
             AIKillsTex,
             FlagTex: PTexture;
