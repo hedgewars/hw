@@ -2171,7 +2171,7 @@ begin
         then
         begin
             // norm speed vector to length of 2 for fire particles to keep flying in the same direction
-            f:= _2 / Distance(Gear^.dX, Gear^.dY);
+            f:= _1_9 / Distance(Gear^.dX, Gear^.dY);
             Gear^.dX:= Gear^.dX * f;
             Gear^.dY:= Gear^.dY * f;
         end
