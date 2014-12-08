@@ -404,17 +404,12 @@ end;
 // for uStore texture resetting
 procedure ResetWorldTex;
 begin
-    FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-    FreeTexture(timeTexture);
-    timeTexture:= nil;
-    FreeTexture(missionTex);
-    missionTex:= nil;
-    FreeTexture(recTexture);
-    recTexture:= nil;
-    FreeTexture(AmmoMenuTex);
+    FreeAndNilTexture(fpsTexture);
+    FreeAndNilTexture(timeTexture);
+    FreeAndNilTexture(missionTex);
+    FreeAndNilTexture(recTexture);
+    FreeAndNilTexture(AmmoMenuTex);
     AmmoMenuInvalidated:= true;
-    AmmoMenuTex:= nil;
 end;
 
 function GetAmmoMenuTexture(Ammo: PHHAmmo): PTexture;
@@ -566,7 +561,7 @@ if Ammo = nil then
 if(AmmoMenuInvalidated) then
     begin
     AmmoMenuInvalidated:= false;
-    FreeTexture(AmmoMenuTex);
+    FreeAndNilTexture(AmmoMenuTex);
     AmmoMenuTex:= GetAmmoMenuTexture(Ammo);
 
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
@@ -749,7 +744,7 @@ c:= -1;
                 bShowAmmoMenu:= false;
                 SetWeapon(Ammo^[Slot, Pos].AmmoType);
                 bSelected:= false;
-                FreeWeaponTooltip;
+                FreeAndNilTexture(WeaponTooltipTex);
 {$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
                 if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
                     begin
@@ -772,7 +767,7 @@ c:= -1;
             end
         end
     else
-        FreeWeaponTooltip;
+        FreeAndNilTexture(WeaponTooltipTex);
 
     if (WeaponTooltipTex <> nil) and (AMShiftX = 0) and (AMShiftY = 0) then
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
@@ -1682,7 +1677,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
-        FreeTexture(timeTexture);
+        FreeAndNilTexture(timeTexture);
         timeTexture:= Surface2Tex(tmpSurface, false);
         SDL_FreeSurface(tmpSurface)
         end;
@@ -1700,7 +1695,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             s:= inttostr(FPS) + ' fps';
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
-            FreeTexture(fpsTexture);
+            FreeAndNilTexture(fpsTexture);
             fpsTexture:= Surface2Tex(tmpSurface, false);
             SDL_FreeSurface(tmpSurface)
             end;
@@ -1763,7 +1758,7 @@ if flagPrerecording then
         s:= 'rec';
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fntBig].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
-        FreeTexture(recTexture);
+        FreeAndNilTexture(recTexture);
         recTexture:= Surface2Tex(tmpSurface, false);
         SDL_FreeSurface(tmpSurface)
         end;
@@ -2001,7 +1996,7 @@ r.h:= 32;
 if time = 0 then
     time:= 5000;
 missionTimer:= time;
-FreeTexture(missionTex);
+FreeAndNilTexture(missionTex);
 
 if icon > -1 then
     begin

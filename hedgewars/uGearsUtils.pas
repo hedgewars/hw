@@ -700,7 +700,7 @@ begin
         with CurrentHedgehog^ do
             begin
             inc(Team^.stats.AIKills);
-            FreeTexture(Team^.AIKillsTex);
+            FreeAndNilTexture(Team^.AIKillsTex);
             Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
             end;
     tempTeam := gear^.Hedgehog^.Team;

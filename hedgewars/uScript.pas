@@ -1069,16 +1069,16 @@ begin
                 hh:= team^.Hedgehogs[j];
                 if (hh.Gear <> nil) or (hh.GearHidden <> nil) then
                     begin
-                    FreeTexture(hh.NameTagTex);
+                    FreeAndNilTexture(hh.NameTagTex);
                     hh.NameTagTex:= RenderStringTex(ansistring(hh.Name), clan^.Color, fnt16);
                     RenderHealth(hh);
                     end;
                 end;
-            FreeTexture(team^.NameTagTex);
+            FreeAndNilTexture(team^.NameTagTex);
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
-	FreeTexture(clan^.HealthTex);
+	    FreeAndNilTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 
@@ -1111,7 +1111,7 @@ begin
             begin
             gear^.Hedgehog^.Team^.TeamName := lua_tostring(L, 2);
 
-            FreeTexture(gear^.Hedgehog^.Team^.NameTagTex);
+            FreeAndNilTexture(gear^.Hedgehog^.Team^.NameTagTex);
             gear^.Hedgehog^.Team^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Team^.TeamName), gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
             end
         else
@@ -1150,7 +1150,7 @@ begin
             begin
             gear^.Hedgehog^.Name:= lua_tostring(L, 2);
 
-            FreeTexture(gear^.Hedgehog^.NameTagTex);
+            FreeAndNilTexture(gear^.Hedgehog^.NameTagTex);
             gear^.Hedgehog^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Name), gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
             end
         end;

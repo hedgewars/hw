@@ -3645,7 +3645,7 @@ begin
         begin
         Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
-        FreeTexture(Gear^.Tex);
+        FreeAndNilTexture(Gear^.Tex);
         Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
         end;
 
@@ -4805,7 +4805,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            FreeTexture(Gear^.Tex);
+            FreeAndNilTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
                          '%'), cWhiteColor, fntSmall)
             end
@@ -4882,7 +4882,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            FreeTexture(Gear^.Tex);
+            FreeAndNilTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
                          '%'), cWhiteColor, fntSmall)
             end
@@ -5487,7 +5487,7 @@ begin
     if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
     begin
     Gear^.Damage:= t;
-    FreeTexture(Gear^.Tex);
+    FreeAndNilTexture(Gear^.Tex);
     Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(t) +
               '%'), cWhiteColor, fntSmall)
     end;

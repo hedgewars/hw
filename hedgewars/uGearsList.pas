@@ -143,14 +143,22 @@ end;
 
 procedure RemoveGearFromList(Gear: PGear);
 begin
-TryDo((curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
+if (Gear <> GearsList) and (Gear <> nil) and (Gear^.NextGear = nil) and (Gear^.PrevGear = nil) then
+    begin
+    AddFileLog('Attempted to remove Gear #'+inttostr(Gear^.uid)+' from the list twice.');
+    exit
+    end;
+TryDo((Gear = nil) or (curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
 
 if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
     Gear^.PrevGear^.NextGear:= Gear^.NextGear
-else
-    GearsList:= Gear^.NextGear
+else 
+    GearsList:= Gear^.NextGear;
+
+Gear^.NextGear:= nil;
+Gear^.PrevGear:= nil
 end;
 
 
@@ -631,8 +639,7 @@ ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
 
-FreeTexture(Gear^.Tex);
-Gear^.Tex:= nil;
+FreeAndNilTexture(Gear^.Tex);
 
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
@@ -704,7 +711,7 @@ else if Gear^.Kind = gtHedgehog then
             with CurrentHedgehog^ do
                 begin
                 inc(Team^.stats.AIKills);
-                FreeTexture(Team^.AIKillsTex);
+                FreeAndNilTexture(Team^.AIKillsTex);
                 Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
                 end
         end;
@@ -719,7 +726,9 @@ if FollowGear = Gear then
     FollowGear:= nil;
 if lastGearByUID = Gear then
     lastGearByUID := nil;
-RemoveGearFromList(Gear);
+if Gear^.Hedgehog^.GearHidden <> Gear then // hidden hedgehogs shouldn't be in the list
+    RemoveGearFromList(Gear);
+Gear^.Hedgehog^.GearHidden:= nil;
 Dispose(Gear)
 end;
 

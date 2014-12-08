@@ -852,28 +852,31 @@ if TeamsCount > 0 then
         for h:= 0 to cMaxHHIndex do
             with TeamsArray[i]^.Hedgehogs[h] do
                 begin
+                if Gear <> nil then
+                    DeleteGear(Gear);
                 if GearHidden <> nil then
-                    Dispose(GearHidden);
+                    DeleteGear(GearHidden);
 
-                FreeTexture(NameTagTex);
-                FreeTexture(HealthTagTex);
-                FreeTexture(HatTex);
+                FreeAndNilTexture(NameTagTex);
+                FreeAndNilTexture(HealthTagTex);
+                FreeAndNilTexture(HatTex)
                 end;
 
         with TeamsArray[i]^ do
             begin
-            FreeTexture(NameTagTex);
-            FreeTexture(GraveTex);
-            FreeTexture(AIKillsTex);
-            FreeTexture(FlagTex);
+            FreeAndNilTexture(NameTagTex);
+            FreeAndNilTexture(OwnerTex);
+            FreeAndNilTexture(GraveTex);
+            FreeAndNilTexture(AIKillsTex);
+            FreeAndNilTexture(FlagTex);
             end;
 
-        Dispose(TeamsArray[i]);
-    end;
+        Dispose(TeamsArray[i])
+        end;
     for i:= 0 to Pred(ClansCount) do
         begin
-        FreeTexture(ClansArray[i]^.HealthTex);
-        Dispose(ClansArray[i]);
+        FreeAndNilTexture(ClansArray[i]^.HealthTex);
+        Dispose(ClansArray[i])
         end
     end;
 TeamsCount:= 0;

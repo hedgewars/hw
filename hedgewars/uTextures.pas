@@ -28,7 +28,7 @@ function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
 procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
 procedure FreeTexture(tex: PTexture);
-procedure FreeAndNilTexture(var tex: PTexture);
+procedure FreeAndNilTexture(var tex: PTexture); inline;
 
 procedure initModule;
 procedure freeModule;
@@ -312,7 +312,7 @@ if tex <> nil then
     end
 end;
 
-procedure FreeAndNilTexture(var tex: PTexture);
+procedure FreeAndNilTexture(var tex: PTexture); inline;
 begin
     FreeTexture(tex);
     tex:= nil
