@@ -698,7 +698,7 @@ else if Gear^.Kind = gtHedgehog then
 
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
         // same stand for CheckHHDamage
-        if (Gear^.LastDamage <> nil) then
+        if (Gear^.LastDamage <> nil) and (CurrentHedgehog <> nil) then
             uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
         else if CurrentHedgehog <> nil then
             uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
