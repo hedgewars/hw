@@ -27,8 +27,7 @@ procedure Surface2GrayScale(surf: PSDL_Surface);
 function  Surface2Tex(surf: PSDL_Surface; enableClamp: boolean): PTexture;
 procedure PrettifySurfaceAlpha(surf: PSDL_Surface; pixels: PLongwordArray);
 procedure PrettifyAlpha2D(pixels: TLandArray; height, width: LongWord);
-procedure FreeTexture(tex: PTexture);
-procedure FreeAndNilTexture(var tex: PTexture); inline;
+procedure FreeAndNilTexture(var tex: PTexture);
 
 procedure initModule;
 procedure freeModule;
@@ -297,25 +296,20 @@ end;
 
 // deletes texture and frees the memory allocated for it.
 // if nil is passed nothing is done
-procedure FreeTexture(tex: PTexture);
+procedure FreeAndNilTexture(var tex: PTexture);
 begin
-if tex <> nil then
-    begin
-    if tex^.NextTexture <> nil then
-        tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
-    if tex^.PrevTexture <> nil then
-        tex^.PrevTexture^.NextTexture:= tex^.NextTexture
-    else
-        TextureList:= tex^.NextTexture;
-    glDeleteTextures(1, @tex^.id);
-    Dispose(tex);
-    end
-end;
-
-procedure FreeAndNilTexture(var tex: PTexture); inline;
-begin
-    FreeTexture(tex);
-    tex:= nil
+    if tex <> nil then
+        begin
+        if tex^.NextTexture <> nil then
+            tex^.NextTexture^.PrevTexture:= tex^.PrevTexture;
+        if tex^.PrevTexture <> nil then
+            tex^.PrevTexture^.NextTexture:= tex^.NextTexture
+        else
+            TextureList:= tex^.NextTexture;
+        glDeleteTextures(1, @tex^.id);
+        Dispose(tex);
+        tex:= nil;
+        end;
 end;
 
 procedure initModule;
@@ -324,13 +318,15 @@ TextureList:= nil;
 end;
 
 procedure freeModule;
+var tex: PTexture;
 begin
 if TextureList <> nil then
     WriteToConsole('FIXME FIXME FIXME. App shutdown without full cleanup of texture list; read game0.log and please report this problem');
     while TextureList <> nil do
         begin
-        AddFileLog('Texture not freed: width='+inttostr(LongInt(TextureList^.w))+' height='+inttostr(LongInt(TextureList^.h))+' priority='+inttostr(round(TextureList^.priority*1000)));
-        FreeTexture(TextureList);
+        tex:= TextureList;
+        AddFileLog('Texture not freed: width='+inttostr(LongInt(tex^.w))+' height='+inttostr(LongInt(tex^.h))+' priority='+inttostr(round(tex^.priority*1000)));
+        FreeAndNilTexture(tex);
         end
 end;
 
