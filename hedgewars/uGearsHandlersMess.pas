@@ -882,7 +882,10 @@ if draw then
                                 end
                             else Land[ly, lx]:= lf;
                         if gun then
-                            LandPixels[ry, rx]:= (ExplosionBorderColor and (not AMask)) or (p^[px] and AMask)
+                             LandPixels[ry, rx]:= (Gear^.Tint shr 24         shl RShift) or 
+                                                  (Gear^.Tint shr 16 and $FF shl GShift) or 
+                                                  (Gear^.Tint shr  8 and $FF shl BShift) or 
+                                                  (p^[px] and AMask)
                         else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
                         end
                     else allpx:= false

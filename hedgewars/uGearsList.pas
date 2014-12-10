@@ -291,8 +291,13 @@ case Kind of
                         dy.isNegative:= false;
                         dy.QWordValue:= QWord($3AD3) * GetRandom(7000) * 8;
                         if GetRandom(2) = 0 then
-                            dx := -dx
-                        end;
+                            dx := -dx;
+                        Tint:= $FFFFFFFF
+                        end
+                    else
+                        Tint:= (ExplosionBorderColor shr RShift and $FF shl 24) or
+                               (ExplosionBorderColor shr GShift and $FF shl 16) or
+                               (ExplosionBorderColor shr BShift and $FF shl 8) or $FF;
                     State:= State or gstInvisible;
                     // use health field to store current frameticks
                     if vobFrameTicks > 0 then
@@ -301,10 +306,7 @@ case Kind of
                         Health:= 0;
                     // use timer to store currently displayed frame index
                     if gear^.Timer = 0 then Timer:= random(vobFramesCount);
-                    Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
-                    Tint:= ((ExplosionBorderColor and RMask) shl RShift) or
-                           ((ExplosionBorderColor and GMask) shl GShift) or
-                           ((ExplosionBorderColor and BMask) shl BShift) or $FF;
+                    Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8
                     end
                 end;
        gtGrave: begin
