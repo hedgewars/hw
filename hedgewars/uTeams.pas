@@ -853,10 +853,11 @@ if TeamsCount > 0 then
         for h:= 0 to cMaxHHIndex do
             with TeamsArray[i]^.Hedgehogs[h] do
                 begin
-                if Gear <> nil then
-                    DeleteGearStage(Gear, true);
+//                if Gear <> nil then
+//                    DeleteGearStage(Gear, true);
                 if GearHidden <> nil then
-                    DeleteGearStage(GearHidden, true);
+                    Dispose(GearHidden);
+//                    DeleteGearStage(GearHidden, true);
 
                 FreeAndNilTexture(NameTagTex);
                 FreeAndNilTexture(HealthTagTex);

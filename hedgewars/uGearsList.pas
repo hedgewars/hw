@@ -23,8 +23,7 @@ interface
 uses uFloat, uTypes, SDLh;
 
 function  AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
-procedure DeleteGear(Gear: PGear); inline;
-procedure DeleteGearStage(Gear: PGear; cleanup: boolean);
+procedure DeleteGear(Gear: PGear);
 procedure InsertGearToList(Gear: PGear);
 procedure RemoveGearFromList(Gear: PGear);
 
@@ -632,12 +631,7 @@ AddGear:= gear;
 ScriptCall('onGearAdd', gear^.uid);
 end;
 
-procedure DeleteGear(Gear: PGear); inline;
-begin
-DeleteGearStage(Gear, false)
-end;
-
-procedure DeleteGearStage(Gear: PGear; cleanup: boolean);
+procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t,i: Longword;
     k: boolean;
@@ -668,39 +662,17 @@ else if Gear^.Kind = gtHedgehog then
         end
     else*)
         begin
-        team:= Gear^.Hedgehog^.Team;
-        if not cleanup then
+        if ((CurrentHedgehog = nil) or (Gear <> CurrentHedgehog^.Gear)) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
+            Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
+        if not CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             begin
-            if ((CurrentHedgehog = nil) or (Gear <> CurrentHedgehog^.Gear)) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
-                Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
-            if not CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
-                begin
-                t:= max(Gear^.Damage, Gear^.Health);
-                Gear^.Damage:= t;
-                if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
-                    spawnHealthTagForHH(Gear, t);
-                end;
-
-            // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
-            // same stand for CheckHHDamage
-            if (Gear^.LastDamage <> nil) and (CurrentHedgehog <> nil) then
-                uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
-            else if CurrentHedgehog <> nil then
-                uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
-
-            inc(KilledHHs);
-            RecountTeamHealth(team);
-            if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
-            //(Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
-            (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan) then
-                with CurrentHedgehog^ do
-                    begin
-                    inc(Team^.stats.AIKills);
-                    FreeAndNilTexture(Team^.AIKillsTex);
-                    Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
-                    end
+            t:= max(Gear^.Damage, Gear^.Health);
+            Gear^.Damage:= t;
+            if (((not SuddenDeathDmg) and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
+                spawnHealthTagForHH(Gear, t);
             end;
 
+        team:= Gear^.Hedgehog^.Team;
         if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear = Gear) then
             begin
             AttackBar:= 0;
@@ -711,6 +683,7 @@ else if Gear^.Kind = gtHedgehog then
             end;
 
         Gear^.Hedgehog^.Gear:= nil;
+
         if Gear^.Hedgehog^.King then
             begin
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
@@ -725,6 +698,25 @@ else if Gear^.Kind = gtHedgehog then
                     TeamGoneEffect(team^.Clan^.Teams[i]^)
                     end
             end;
+
+        // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
+        // same stand for CheckHHDamage
+        if (Gear^.LastDamage <> nil) and (CurrentHedgehog <> nil) then
+            uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
+        else if CurrentHedgehog <> nil then
+            uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
+
+        inc(KilledHHs);
+        RecountTeamHealth(team);
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Effects[heResurrectable] <> 0)  and
+        //(Gear^.Hedgehog^.Effects[heResurrectable] = 0) then
+        (Gear^.Hedgehog^.Team^.Clan <> CurrentHedgehog^.Team^.Clan) then
+            with CurrentHedgehog^ do
+                begin
+                inc(Team^.stats.AIKills);
+                FreeAndNilTexture(Team^.AIKillsTex);
+                Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
+                end
         end;
 with Gear^ do
     begin
