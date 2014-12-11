@@ -105,7 +105,7 @@ dmgBase:= Radius shl 1 + cHHRadius div 2;
 
 // we might have to run twice if weWrap is enabled
 wrap:= false;
-repeat;
+repeat
 
 fX:= int2hwFloat(X);
 fY:= int2hwFloat(Y);

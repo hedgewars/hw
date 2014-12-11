@@ -4622,14 +4622,14 @@ begin
         if WorldEdge = weWrap then
             begin
             if x > LongInt(rightX) then
-                repeat;
-                dec(x,  playWidth);
-                dec(rx, playWidth);
+                repeat
+                    dec(x,  playWidth);
+                    dec(rx, playWidth);
                 until x <= LongInt(rightX)
             else if x < LongInt(leftX) then
-                repeat;
-                inc(x,  playWidth);
-                inc(rx, playWidth);
+                repeat
+                    inc(x,  playWidth);
+                    inc(rx, playWidth);
                 until x >= LongInt(leftX);
             end
         else if (WorldEdge = weBounce) then
