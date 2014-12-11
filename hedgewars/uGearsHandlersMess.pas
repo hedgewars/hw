@@ -1267,15 +1267,22 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0
         end;
-    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and ((not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
+
+    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
         begin
-        for i:=(Gear^.Health - Gear^.Damage) * 4 downto 0 do
+        // draw bubbles
+        if (not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF)) then
             begin
-            if Random(6) = 0 then
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
-            Gear^.X := Gear^.X + Gear^.dX;
-            Gear^.Y := Gear^.Y + Gear^.dY;
+            for i:=(Gear^.Health * 4) downto 0 do
+                begin
+                if Random(6) = 0 then
+                    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
+                Gear^.X := Gear^.X + Gear^.dX;
+                Gear^.Y := Gear^.Y + Gear^.dY;
+                end;
             end;
+        // bullet dies underwater
+        Gear^.Health:= 0;
         end;
 
     if (Gear^.Health <= 0)
@@ -1288,7 +1295,7 @@ begin
                 cArtillery := false;
 
         // Bullet Hit
-            if (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
+            if ((Gear^.State and gstDrowning) = 0) and (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
                 begin
                 VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
                 if VGear <> nil then
