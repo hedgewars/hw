@@ -102,13 +102,14 @@ else
     dmgRadius:= Radius;
 dmgBase:= dmgRadius + cHHRadius div 2;*)
 dmgBase:= Radius shl 1 + cHHRadius div 2;
-fX:= int2hwFloat(X);
-fY:= int2hwFloat(Y);
-Gear:= GearsList;
 
 // we might have to run twice if weWrap is enabled
 wrap:= false;
 repeat;
+
+fX:= int2hwFloat(X);
+fY:= int2hwFloat(Y);
+Gear:= GearsList;
 
 while Gear <> nil do
     begin
