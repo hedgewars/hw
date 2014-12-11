@@ -230,9 +230,8 @@ endif(ANDROID)
 
 include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
-if(NOT BUILD_ENGINE_C)
 enable_testing()
-endif(NOT BUILD_ENGINE_C)
+
 add_custom_target(test         COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random)
 add_custom_target(test_verbose COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random -V)
 

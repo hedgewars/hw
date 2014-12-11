@@ -61,7 +61,7 @@ typedef char * PChar;
 typedef LongInt * PLongInt;
 typedef LongWord * PLongWord;
 typedef Integer * PInteger;
-typedef int PtrInt;
+typedef ptrdiff_t PtrInt;
 typedef wchar_t widechar;
 typedef wchar_t* PWideChar;
 typedef char Char;
