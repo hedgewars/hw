@@ -287,7 +287,7 @@ if dump = 2 then
      image^.filename:= shortstring(UserPathPrefix) + filename + '_landpixels' + ext
 else if dump = 1 then
      image^.filename:= shortstring(UserPathPrefix) + filename + '_land' + ext
-else image^.filename:= shortstring(UserPathPrefix) + filename + '_land' + ext;
+else image^.filename:= shortstring(UserPathPrefix) + filename + ext;
 
 if dump <> 0 then
     begin
