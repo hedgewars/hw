@@ -2277,17 +2277,17 @@ end;
 
 
 function lc_addPoint(L : Plua_State) : LongInt; Cdecl;
-var np, param: integer;
+var np, param: LongInt;
 begin
     if CheckAndFetchParamCountRange(L, 2, 4, 'AddPoint', 'x, y [, width [, erase] ]', np) then
         begin
         // x
-        param:= lua_tointeger(L,1);
-        PointsBuffer:= PointsBuffer + char((param and $FF00) shr 8);
+        param:= LongInt(lua_tointeger(L,1));
+        PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
         PointsBuffer:= PointsBuffer + char((param and $FF));
         // y
-        param:= lua_tointeger(L,2);
-        PointsBuffer:= PointsBuffer + char((param and $FF00) shr 8);
+        param:= LongInt(lua_tointeger(L,2));
+        PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
         PointsBuffer:= PointsBuffer + char((param and $FF));
         // width
         if np > 2 then
