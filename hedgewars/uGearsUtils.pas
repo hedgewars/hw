@@ -81,6 +81,7 @@ var Gear: PGear;
     fX, fY, tdX, tdY: hwFloat;
     vg: PVisualGear;
     i, cnt: LongInt;
+    wrap: boolean;
 begin
 if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
@@ -104,6 +105,11 @@ dmgBase:= Radius shl 1 + cHHRadius div 2;
 fX:= int2hwFloat(X);
 fY:= int2hwFloat(Y);
 Gear:= GearsList;
+
+// we might have to run twice if weWrap is enabled
+wrap:= false;
+repeat;
+
 while Gear <> nil do
     begin
     dmg:= 0;
@@ -187,6 +193,27 @@ if (Mask and EXPLDontDraw) = 0 then
             for i:= 0 to cnt do
                 AddVisualGear(X, Y, vgtChunk)
         end;
+
+if (WorldEdge = weWrap) then
+    begin
+    // already wrapped? let's not wrap again!
+    if wrap then
+        break;
+
+    // Radius + 5 because that's the actual radius the explosion changes graphically
+    if X + (Radius + 5) > LongInt(rightX) then
+        begin
+        dec(X, playWidth);
+        wrap:= true;
+        end
+    else if X - (Radius + 5) < LongInt(leftX) then
+        begin
+        inc(X, playWidth);
+        wrap:= true;
+        end;
+    end;
+
+until (not wrap);
 
 uAIMisc.AwareOfExplosion(0, 0, 0)
 end;
