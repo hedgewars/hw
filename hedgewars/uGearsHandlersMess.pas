@@ -4574,7 +4574,7 @@ procedure doStepSineGunShotWork(Gear: PGear);
 var
     x, y, rX, rY, t, tmp, initHealth: LongInt;
     oX, oY, ldX, ldY, sdX, sdY, sine, lx, ly, amp: hwFloat;
-    justCollided: boolean;
+    justCollided, justBounced: boolean;
 begin
     AllInactive := false;
     initHealth := Gear^.Health;
@@ -4597,6 +4597,8 @@ begin
 
     // used for a work-around detection of area that is within land array, but outside borders
     justCollided := false;
+    // this variable is just to ensure we don't run in infinite loop due to precision errors
+    justBounced:= false;
 
     repeat
         lX := lX + ldX;
@@ -4609,7 +4611,6 @@ begin
         amp := _128 * (_1 - hwSqr(int2hwFloat(Gear^.Health)/initHealth));
         sine := amp * AngleSin(tmp mod 2048);
         sine.isNegative := (tmp < 2048);
-        inc(t,Gear^.Health div 313);
         Gear^.X := lX + (sine * sdX);
         Gear^.Y := ly + (sine * sdY);
         Gear^.dX := Gear^.X - oX;
@@ -4630,7 +4631,27 @@ begin
                 inc(x,  playWidth);
                 inc(rx, playWidth);
                 until x >= LongInt(leftX);
+            end
+        else if (WorldEdge = weBounce) then
+            begin
+            if (not justBounced) and ((x > LongInt(rightX)) or (x < LongInt(leftX))) then
+                begin
+                // reflect
+                lX:= lX - ldX + ((oX - lX) * 2);
+                lY:= lY - ldY;
+                Gear^.X:= oX;
+                Gear^.Y:= oY;
+                ldX.isNegative:= (not ldX.isNegative);
+                sdX.isNegative:= (not sdX.isNegative);
+                justBounced:= true;
+                continue;
+                end
+            else
+                justBounced:= false;
             end;
+
+
+        inc(t,Gear^.Health div 313);
 
         // if borders are on, stop outside land array
         if hasBorder and (((x and LAND_WIDTH_MASK) <> 0) or ((y and LAND_HEIGHT_MASK) <> 0)) then
