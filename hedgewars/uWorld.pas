@@ -1867,12 +1867,17 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         end
     else
         begin
-        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > LongInt(rightX) - leftX - 100 then
+        if (WorldEdge = weWrap) then
+            cameraJump:= LongInt(playWidth) div 2 + 50
+        else
+            cameraJump:= LongInt(rightX) - leftX - 100;
+
+        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > cameraJump then
             begin
-            if (prevPoint.X - WorldDx) * 2 < LongInt((rightX + leftX)) then
-                cameraJump:= LongInt(rightX) - leftX
-                else
-                cameraJump:= LongInt(leftX) - rightX;
+            if prevPoint.X - WorldDx < LongInt(playWidth div 2) then
+                cameraJump:= LongInt(playWidth)
+            else
+                cameraJump:= -LongInt(playWidth);
             WorldDx:= WorldDx - cameraJump;
             end;
 
