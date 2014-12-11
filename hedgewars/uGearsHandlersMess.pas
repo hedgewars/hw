@@ -4618,6 +4618,20 @@ begin
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
 
+        if WorldEdge = weWrap then
+            begin
+            if x > LongInt(rightX) then
+                repeat;
+                dec(x,  playWidth);
+                dec(rx, playWidth);
+                until x <= LongInt(rightX)
+            else if x < LongInt(leftX) then
+                repeat;
+                inc(x,  playWidth);
+                inc(rx, playWidth);
+                until x >= LongInt(leftX);
+            end;
+
         // if borders are on, stop outside land array
         if hasBorder and (((x and LAND_WIDTH_MASK) <> 0) or ((y and LAND_HEIGHT_MASK) <> 0)) then
             begin
