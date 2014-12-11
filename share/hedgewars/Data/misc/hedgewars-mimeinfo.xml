@@ -7,7 +7,7 @@
     <generic-icon name="applications-games"/>
     -->
     <comment>Hedgewars Demo</comment>
-    <comment xml:lang="de">Hedgewars Demo</comment>
+    <comment xml:lang="de">Hedgewars-Wiederholung</comment>
     <comment xml:lang="es">Demo de Hedgewars</comment>
     <comment xml:lang="fr">Démonstration d'Hedgewars</comment>
     <comment xml:lang="it">Demo di Hedgewars</comment>
@@ -29,7 +29,7 @@
     <icon name="hedgewars" />
     <!--<generic-icon name="applications-games"/>-->
     <comment>Hedgewars Save</comment>
-    <comment xml:lang="de">Hedgewars gespeichertes Spiel</comment>
+    <comment xml:lang="de">Hedgewars-Spielstand</comment>
     <comment xml:lang="es">Partida guardada de Hedgewars</comment>
     <comment xml:lang="fr">Parties enregistrées d'Hedgewars</comment>
     <comment xml:lang="ko">헤즈와스 저장된 게임</comment>
