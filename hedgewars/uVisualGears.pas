@@ -508,11 +508,11 @@ for i:= 0 to 6 do
     vg:= VisualGearLayers[i];
     while vg <> nil do
         if vg^.Kind = vgtFlake then
-        begin
-        tmp:= vg^.NextGear;
-        DeleteVisualGear(vg);
-        vg:= tmp
-        end
+            begin
+            tmp:= vg^.NextGear;
+            DeleteVisualGear(vg);
+            vg:= tmp
+            end
         else vg:= vg^.NextGear;
     end;
 if hasBorder or (not cSnow) then
