@@ -4749,7 +4749,6 @@ begin
             if (Gear^.Health <= (initHealth div 6)) then
                 dec(Gear^.Radius)
             end;
-
     until (Gear^.Health <= 0);
 
     DeleteGear(Gear);

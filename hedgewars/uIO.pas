@@ -222,7 +222,7 @@ s[0]:= #0;
 repeat
     BlockRead(f, s[1], 255 - Length(ss), i);
     if i > 0 then
-    begin
+        begin
         s[0]:= char(i);
         ss:= ss + s;
         while (Length(ss) > 1)and(Length(ss) > byte(ss[1])) do
