@@ -649,38 +649,38 @@ begin
     Delete(s, 1, 1);
 
     t:= 0;
-    while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
+    while (t < TeamsCount) and (TeamsArray[t]^.TeamName <> s) do
         inc(t);
-    if (t = cMaxTeams) or (TeamsArray[t] = nil) then
+    if t = TeamsCount then
         exit;
 
     TeamsArray[t]^.isGoneFlagPendingToBeSet:= true;
 
     if isSynced then
-    begin
-    for i:= 0 to Pred(cMaxTeams) do
-        with TeamsArray[i]^ do
-            begin
-            if (not hasGone) and isGoneFlagPendingToBeSet then
+        begin
+        for i:= 0 to Pred(TeamsCount) do
+            with TeamsArray[i]^ do
                 begin
-                AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
-                if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
-                hasGone:= true;
-                skippedTurns:= 0;
-                isGoneFlagPendingToBeSet:= false;
-                RecountTeamHealth(TeamsArray[i])
-                end;
-            if hasGone and isGoneFlagPendingToBeUnset then
-                ParseCommand('/teamback s' + s, true);
-            end;
-    end
+                if (not hasGone) and isGoneFlagPendingToBeSet then
+                    begin
+                    AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
+                    if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
+                    hasGone:= true;
+                    skippedTurns:= 0;
+                    isGoneFlagPendingToBeSet:= false;
+                    RecountTeamHealth(TeamsArray[i])
+                    end;
+                if hasGone and isGoneFlagPendingToBeUnset then
+                    ParseCommand('/teamback s' + s, true)
+                end
+        end
     else
-    begin
+        begin
         TeamsArray[t]^.isGoneFlagPendingToBeSet:= true;
 
         if (not CurrentTeam^.ExtDriven) or (CurrentTeam^.TeamName = s) or (CurrentTeam^.hasGone) then
-            ParseCommand('/teamgone s' + s, true);
-    end;
+            ParseCommand('/teamgone s' + s, true)
+        end;
 end;
 
 procedure chTeamBack(var s:shortstring);
@@ -692,9 +692,9 @@ begin
     Delete(s, 1, 1);
 
     t:= 0;
-    while (t < cMaxTeams) and (TeamsArray[t] <> nil) and (TeamsArray[t]^.TeamName <> s) do
+    while (t < TeamsCount) and (TeamsArray[t]^.TeamName <> s) do
         inc(t);
-    if (t = cMaxTeams) or (TeamsArray[t] = nil) then
+    if t = TeamsCount then
         exit;
 
     if isSynced then
@@ -715,12 +715,12 @@ begin
                 end;
         end
     else
-    begin
+        begin
         TeamsArray[t]^.isGoneFlagPendingToBeUnset:= true;
 
         if not CurrentTeam^.ExtDriven then
             ParseCommand('/teamback s' + s, true);
-    end;
+        end;
 end;
 
 
@@ -731,10 +731,10 @@ begin
 s:= s;
 
 t:= 0;
-while (t < cMaxTeams) and (TeamsArray[t] <> nil) do
+while t < TeamsCount do
     begin
     TeamsArray[t]^.hasGone:= true;
-    inc(t);
+    inc(t)
     end;
 
 AddChatString('** Good-bye!');
