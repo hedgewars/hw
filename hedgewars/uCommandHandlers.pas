@@ -323,6 +323,7 @@ with CurrentHedgehog^.Gear^ do
 end;
 
 procedure chAttack_p(var s: shortstring);
+var inbtwnTrgtAttks: Boolean;
 begin
 s:= s; // avoid compiler hint
 if CheckNoTeamOrHH then
@@ -333,7 +334,9 @@ with CurrentHedgehog^.Gear^ do
     AddFileLog('/+attack: hedgehog''s Gear^.State = '+inttostr(State));
     if ((State and gstHHDriven) <> 0) then
         begin
-        FollowGear:= CurrentHedgehog^.Gear;
+        inbtwnTrgtAttks:= ((GameFlags and gfInfAttack) <> 0) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0);
+        if (not inbtwnTrgtAttks) then
+            FollowGear:= CurrentHedgehog^.Gear;
         if not isExternalSource then
             SendIPC(_S'A');
         Message:= Message or (gmAttack and InputMask);
