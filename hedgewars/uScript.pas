@@ -2824,6 +2824,7 @@ ScriptSetInteger('gfDivideTeams', gfDivideTeams);
 ScriptSetInteger('gfLowGravity', gfLowGravity);
 ScriptSetInteger('gfLaserSight', gfLaserSight);
 ScriptSetInteger('gfInvulnerable', gfInvulnerable);
+ScriptSetInteger('gfResetHealth', gfResetHealth);
 ScriptSetInteger('gfVampiric', gfVampiric);
 ScriptSetInteger('gfKarma', gfKarma);
 ScriptSetInteger('gfArtillery', gfArtillery);
