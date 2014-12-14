@@ -1857,7 +1857,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and 
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-inbtwnTrgtAttks := (CurrentHedgehog <> nil) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0) and ((GameFlags and gfInfAttack) <> 0);
+inbtwnTrgtAttks := ((GameFlags and gfInfAttack) <> 0) and (CurrentHedgehog <> nil) and ((CurrentHedgehog^.Gear = nil) or (CurrentHedgehog^.Gear <> FollowGear)) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0);
 if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and (not inbtwnTrgtAttks) then
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
