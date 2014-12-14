@@ -698,6 +698,8 @@ begin
         if isImpact or isSkip then
             addSplashForGear(Gear, isSkip);
 
+        if isSkip then
+            ScriptCall('onGearWaterSkip', Gear^.uid);
         end
     else
         begin
