@@ -505,9 +505,11 @@ with Gear^,
             end
         else
             Message:= Message and (not gmAttack);
-    end;
+
+    ScriptCall('onHogAttack', ord(CurAmmoType));
+    end; // of with Gear^, Gear^.Hedgehog^ do
+
     TargetPoint.X := NoPointX;
-    ScriptCall('onHogAttack');
 end;
 
 procedure AfterAttack;
