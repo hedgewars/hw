@@ -2660,12 +2660,13 @@ begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
-        DeleteGear(Gear);
         isCursorVisible := true;
         warn:= AddVisualGear(Gear^.Target.X, oy, vgtNoPlaceWarn, 0, true);
         if warn <> nil then
             warn^.Tex := GetPlaceCollisionTex(lx, ty, sprHHTelepMask, 0);
-        PlaySound(sndDenied)
+        DeleteGear(Gear);
+        PlaySound(sndDenied);
+        exit
         end
     else
         begin
