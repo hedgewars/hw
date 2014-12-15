@@ -799,7 +799,7 @@ end;
 
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 var X, Y, bpp, h, w, row, col, numFramesFirstCol: LongInt;
-    p, pt: PByteArray;
+    p, pt: PLongWordArray;
     Image, finalSurface: PSDL_Surface;
 begin
 GetPlaceCollisionTex:= nil;
@@ -827,23 +827,20 @@ TryDo(finalSurface <> nil, 'GetPlaceCollisionTex: fail to create surface', true)
 if SDL_MustLock(finalSurface) then
     SDLTry(SDL_LockSurface(finalSurface) >= 0, true);
 
-// draw on surface based on collisions
-p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
-pt:= PByteArray(@(PByteArray(finalSurface^.pixels)^));
+p:= PLongWordArray(@(PLongWordArray(Image^.pixels)^[ (Image^.pitch div 4) * row * h + col * w ]));
+pt:= PLongWordArray(finalSurface^.pixels);
 
-case bpp of
-    4: for y:= 0 to Pred(h) do
-        begin
-        for x:= 0 to Pred(w) do
-            if (((PLongword(@(p^[x * 4]))^) and AMask) <> 0)
-                and (((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
-                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0)) then
-                    (PLongword(@(pt^[x * 4]))^):= cWhiteColor
-            else
-                (PLongword(@(pt^[x * 4]))^):= 0;
-        p:= PByteArray(@(p^[Image^.pitch]));
-        pt:= PByteArray(@(pt^[finalSurface^.pitch]));
-        end;
+for y:= 0 to Pred(h) do
+    begin
+    for x:= 0 to Pred(w) do
+        if ((p^[x] and AMask) <> 0)
+            and (((cpY + y) < Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+            ((cpX + x) < Longint(leftX)) or ((cpX + x) > Longint(rightX)) or (Land[cpY + y, cpX + x] <> 0)) then
+                pt^[x]:= cWhiteColor
+        else
+            (pt^[x]):= cWhiteColor and (not AMask);
+    p:= PLongWordArray(@(p^[Image^.pitch div 4]));
+    pt:= PLongWordArray(@(pt^[finalSurface^.pitch div 4]));
     end;
 
 if SDL_MustLock(Image) then
