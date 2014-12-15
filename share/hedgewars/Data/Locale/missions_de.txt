@@ -51,3 +51,28 @@ User_Mission_-_RCPlane_Challenge.desc="Bist wohl ziemlich eingebildet, was, Flie
 
 portal.name=Mission: Knifflige Portalherausforderung
 portal.desc="Benutze das Portalgerät, um dich schnell und weit zu bewegen; benutze es zum Töten; benutze es mit Vorsicht!"
+
+Target_Practice_-_Bazooka_easy.name=Zielübung: Bazooka (einfach)
+Target_Practice_-_Bazooka_easy.desc="Nun gut, Soldat: Zerstör einfach die Zielscheiben so schnell, wie du kannst!"
+
+Target_Practice_-_Bazooka_hard.name=Zielübung: Bazooka (schwer)
+Target_Practice_-_Bazooka_hard.desc="Kannst du die Zielscheiben treffen, auch wenn sie sehr weit weg sind?"
+
+Target_Practice_-_Cluster_Bomb.name=Zielübung: Splittergranate
+Target_Practice_-_Cluster_Bomb.desc="Jemand braucht eine heiße Dusche!"
+
+Target_Practice_-_Shotgun.name=Zielübung: Schrotflinte
+Target_Practice_-_Shotgun.desc="Erst schießen, dann fragen!"
+
+Target_Practice_-_Homing_Bee.name=Zielübung: Zielsuchende Biene
+Target_Practice_-_Homing_Bee.desc="Die zielsuchende Biene zu benutzen ist kniffliger, als es aussieht!"
+
+Target_Practice_-_Grenade_easy.name=Zielübung: Granate (einfach)
+Target_Practice_-_Grenade_easy.desc="Eine Aufwärmübung für den aufstrebenden Grenadier."
+
+Target_Practice_-_Grenade_hard.name=Zielübung: Granate (schwer)
+Target_Practice_-_Grenade_hard.desc="Das ist nichts für Grünschnäbel! Wir werden die Zielscheiben an ein paar wirklich knifflige Stellen platzieren."
+
+ClimbHome.name=Herausforderung: Nach Hause klettern
+ClimbHome.desc="Du bist weit von Zuhause weg und das Wasser steigt ständig. Klettere so hoch, wie du kannst!"
+
