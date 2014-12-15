@@ -527,15 +527,18 @@ for t:= 0 to 7 do
     end;
 end;
 
+type TWrapNeeded = (wnNone, wnLeft, wnRight);
 
 //
 //  - (dX, dY) - direction, vector of length = 0.5
 //
-procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
+function DrawTunnel_real(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt): TWrapNeeded;
 var nx, ny, dX8, dY8: hwFloat;
     i, t, tx, ty, by, bx, stX, stY, ddy, ddx: Longint;
     despeckle : Boolean;
 begin  // (-dY, dX) is (dX, dY) rotated by PI/2
+DrawTunnel_real:= wnNone;
+
 stY:= hwRound(Y);
 stX:= hwRound(X);
 
@@ -637,12 +640,36 @@ for i:= 0 to 7 do
     ny:= ny + dX;
     end;
 
-tx:= Max(stX - HalfWidth * 2 - 4 - abs(hwRound(dX * ticks)), 0);
+tx:= stX - HalfWidth * 2 - 4 - abs(hwRound(dX * ticks));
+ddx:= stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks));
+
+if WorldEdge = weWrap then
+    begin
+    if (tx < leftX) or (ddx < leftX) then
+        DrawTunnel_real:= wnLeft
+    else if (tx > rightX) or (ddx > rightX) then
+        DrawTunnel_real:= wnRight;
+    end;
+
+tx:= Max(tx, 0);
 ty:= Max(stY - HalfWidth * 2 - 4 - abs(hwRound(dY * ticks)), 0);
-ddx:= Min(stX + HalfWidth * 2 + 4 + abs(hwRound(dX * ticks)), LAND_WIDTH) - tx;
+ddx:= Min(ddx, LAND_WIDTH) - tx;
 ddy:= Min(stY + HalfWidth * 2 + 4 + abs(hwRound(dY * ticks)), LAND_HEIGHT) - ty;
 
 UpdateLandTexture(tx, ddx, ty, ddy, false)
+end;
+
+procedure DrawTunnel(X, Y, dX, dY: hwFloat; ticks, HalfWidth: LongInt);
+var wn: TWrapNeeded;
+begin
+wn:= DrawTunnel_real(X, Y, dX, dY, ticks, HalfWidth);
+if wn <> wnNone then
+    begin
+    if wn = wnLeft then
+        DrawTunnel_real(X + int2hwFloat(playWidth), Y, dX, dY, ticks, HalfWidth)
+    else
+        DrawTunnel_real(X - int2hwFloat(playWidth), Y, dX, dY, ticks, HalfWidth);
+    end;
 end;
 
 function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
