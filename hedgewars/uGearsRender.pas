@@ -168,6 +168,7 @@ end;
 procedure DrawRope(Gear: PGear);
 var roplen, i: LongInt;
 begin
+    if Gear^.Hedgehog^.Gear = nil then exit;
     if (cReducedQuality and rqSimpleRope) <> 0 then
         DrawRopeLinesRQ(Gear)
     else
