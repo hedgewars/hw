@@ -1205,9 +1205,12 @@ begin
          gtAirBomb: DrawSpriteRotated(sprAirBomb, x, y, 0, DxDy2Angle(Gear^.dY, Gear^.dX));
         gtTeleport: begin
                     HHGear:= Gear^.Hedgehog^.Gear;
-                    if ((Gear^.State and gstAnimation) <> 0) then
-                        DrawSpriteRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
-                    DrawSpriteRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0);
+                    if HHGear <> nil then
+                        begin
+                        if ((Gear^.State and gstAnimation) <> 0) then
+                            DrawSpriteRotatedF(sprTeleport, x + 1, y - 3, Gear^.Pos, hwSign(Gear^.dX), 0);
+                        DrawSpriteRotatedF(sprTeleport, hwRound(HHGear^.X) + 1 + WorldDx, hwRound(HHGear^.Y) - 3 + WorldDy, 11 - Gear^.Pos, hwSign(HHGear^.dX), 0)
+                        end
                     end;
         gtSwitcher: DrawSprite(sprSwitch, x - 16, y - 56, (GameTicks shr 6) mod 12);
           gtTarget: begin
