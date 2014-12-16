@@ -34,6 +34,12 @@ var
     tX:     hwFloat;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit()
+        end;
+
     tX:= HHGear^.X;
     if WorldWrap(HHGear) and (WorldEdge = weWrap) and
        ((TestCollisionXwithGear(HHGear, 1) <> 0) or (TestCollisionXwithGear(HHGear, -1) <> 0))  then
@@ -124,6 +130,11 @@ begin
     if GameTicks mod 4 <> 0 then exit;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit()
+        end;
 
     tX:= HHGear^.X;
     if WorldWrap(HHGear) and (WorldEdge = weWrap) and
@@ -414,6 +425,12 @@ begin
     Gear^.Elasticity := Gear^.Elasticity + _1;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(Gear);
+        exit()
+        end;
+
     DeleteCI(HHGear);
 
     if (HHGear^.State and gstMoving) <> 0 then
