@@ -121,9 +121,17 @@ var
     haveDivided: boolean;
     wrongSide: boolean;
 begin
-    if GameTicks mod 4 <> 0 then exit;
-
     HHGear := Gear^.Hedgehog^.Gear;
+
+    if ((HHGear^.State and gstHHDriven) = 0) or
+        (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
+        begin
+        PlaySound(sndRopeRelease);
+        RopeDeleteMe(Gear, HHGear);
+        exit
+        end;
+
+    if GameTicks mod 4 <> 0 then exit;
 
     tX:= HHGear^.X;
     if WorldWrap(HHGear) and (WorldEdge = weWrap) and
@@ -137,14 +145,6 @@ begin
         end;
 
     tX:= HHGear^.X;
-    if ((HHGear^.State and gstHHDriven) = 0) or
-        (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
-        begin
-        PlaySound(sndRopeRelease);
-        RopeDeleteMe(Gear, HHGear);
-        exit
-        end;
-
     HHGear^.dX.QWordValue:= HHGear^.dX.QWordValue shl 2;
     HHGear^.dY.QWordValue:= HHGear^.dY.QWordValue shl 2;
     if (Gear^.Message and gmLeft  <> 0) and (TestCollisionXwithGear(HHGear, -1) = 0) then
