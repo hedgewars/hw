@@ -1661,6 +1661,7 @@ end;
 procedure doStepMine(Gear: PGear);
 var vg: PVisualGear;
     dxdy: hwFloat;
+    dmg: LongWord;
 begin
     if Gear^.Health = 0 then dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
     if (Gear^.State and gstMoving) <> 0 then
@@ -1681,7 +1682,11 @@ begin
     if (Gear^.Health = 0) then
         begin
         if (dxdy > _0_4) and (Gear^.State and gstCollision <> 0) then
-            inc(Gear^.Damage, hwRound(dxdy * _50));
+            begin
+            dmg:= hwRound(dxdy * _50);
+            inc(Gear^.Damage, dmg);
+            ScriptCall('onGearDamage', Gear^.UID, dmg)
+            end;
 
         if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
             begin
@@ -1820,7 +1825,7 @@ end;
 
 procedure doStepRollingBarrel(Gear: PGear);
 var
-    i: LongInt;
+    i, dmg: LongInt;
     particle: PVisualGear;
     dxdy: hwFloat;
 begin
@@ -1848,7 +1853,9 @@ begin
                         particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
                     end
                 end;
-            inc(Gear^.Damage, hwRound(dxdy * _50))
+            dmg:= hwRound(dxdy * _50);
+            inc(Gear^.Damage, dmg);
+            ScriptCall('onGearDamage', Gear^.UID, dmg)
             end;
         CalcRotationDirAngle(Gear);
         //CheckGearDrowning(Gear)
