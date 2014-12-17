@@ -25,6 +25,7 @@ extern "C" {
     freeThemesList_t *flibFreeThemesList;
     getThemeIcon_t *flibGetThemeIcon;
     getScriptsList_t *flibGetScriptsList;
+    getSchemesList_t *flibGetSchemesList;
     getTeamsList_t *flibGetTeamsList;
     tryAddTeam_t * flibTryAddTeam;
     tryRemoveTeam_t * flibTryRemoveTeam;
@@ -62,6 +63,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibGetThemeIcon = (getThemeIcon_t*) hwlib.resolve("getThemeIcon");
 
     flibGetScriptsList = (getScriptsList_t*) hwlib.resolve("getScriptsList");
+    flibGetSchemesList = (getSchemesList_t*) hwlib.resolve("getSchemesList");
 
     flibResetGameConfig = (resetGameConfig_t*) hwlib.resolve("resetGameConfig");
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
@@ -171,25 +173,25 @@ void HWEngine::fillModels()
     QStringList resultModel;
 
     char ** themes = flibGetThemesList();
-    for (char **i = themes; *i != NULL; i++) {
-        QString theme = QString::fromUtf8(*i);
-
-        resultModel << theme;
-    }
+    for (char **i = themes; *i != NULL; i++)
+        resultModel << QString::fromUtf8(*i);
     flibFreeThemesList(themes);
 
     m_engine->rootContext()->setContextProperty("themesModel", QVariant::fromValue(resultModel));
 
+    // scripts model
     resultModel.clear();
-    char ** scripts = flibGetScriptsList();
-
-    for (char **i = scripts; *i != NULL; i++) {
-        QString script = QString::fromUtf8(*i);
-
-        resultModel << script;
-    }
+    for (char **i = flibGetScriptsList(); *i != NULL; i++)
+        resultModel << QString::fromUtf8(*i);
 
     m_engine->rootContext()->setContextProperty("scriptsModel", QVariant::fromValue(resultModel));
+
+    // schemes model
+    resultModel.clear();
+    for (char **i = flibGetSchemesList(); *i != NULL; i++)
+        resultModel << QString::fromUtf8(*i);
+
+    m_engine->rootContext()->setContextProperty("schemesModel", QVariant::fromValue(resultModel));
 }
 
 void HWEngine::getTeamsList()

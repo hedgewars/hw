@@ -3,6 +3,7 @@ interface
 
 function str2PChar(const s: shortstring): PChar;
 function intToStr(n: LongInt): shortstring;
+function strToInt(s: shortstring): LongInt;
 function midStr(s: shortstring; pos: byte): shortstring;
 procedure underScore2Space(var s: shortstring);
 
@@ -25,6 +26,11 @@ end;
 function intToStr(n: LongInt): shortstring;
 begin
     str(n, intToStr)
+end;
+
+function strToInt(s: shortstring): LongInt;
+begin
+val(s, strToInt);
 end;
 
 function midStr(s: shortstring; pos: byte): shortstring;

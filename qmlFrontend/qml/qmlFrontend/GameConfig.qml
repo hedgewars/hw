@@ -101,6 +101,38 @@ Rectangle {
         }
     }
 
+    HWComboBox {
+        id: cbScheme
+        x: 50
+        y: 336
+        width: 256
+        height: 64
+
+        model: schemesModel
+        delegate: Rectangle {
+            height: 25
+            width: 100
+            color: "transparent"
+
+            property string itemIconSource: ""
+            property alias itemText: schemeName.text
+
+            Row {
+                //Image {id: themeIcon; width: height; height: parent.height; source: "image://theme/" + modelData}
+                Text {id: schemeName; text: modelData }
+            }
+
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: {
+                     cbScheme.currentIndex = index
+                     //HWEngine.setScheme(schemeName.text)
+                 }
+            }
+        }
+    }
+
 
     ListView {
         id: playingTeamsList
