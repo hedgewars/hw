@@ -304,9 +304,49 @@ begin
         end;
 end;
 
+function GetNextSpeechLine(s: ansistring; ldelim: char; var startFrom: LongInt; out substr: shortstring): boolean;
+var p, l, m, r: Integer;
+    newl      : boolean;
+    c         : char;
+begin
+    m:= Length(s);
+
+    SetLength(substr, m);
+
+    // number of chars read
+    r:= 0;
+
+    // number of chars to be written
+    l:= 0;
+
+    newl:= true;
+
+    for p:= max(1, startFrom) to m do
+        begin
+        inc(r);
+        c:= s[p];
+
+        // strip empty lines, spaces and newlines on beginnings of line
+        if (newl or (p = m)) and ((c = ' ') or (c = ldelim)) then
+            continue;
+
+        newl:= (c = ldelim);
+        if newl then
+            break;
+
+        inc(l);
+        substr[l]:= c;
+        end;
+
+    inc(startFrom, r);
+
+    SetLength(substr, l);
+
+    GetNextSpeechLine:= (l > 0);
+end;
 
 function RenderSpeechBubbleTex(s: ansistring; SpeechType: Longword; font: THWFont): PTexture;
-var textWidth, textHeight, x, y, w, h, i, j, pos, prevpos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
+var textWidth, textHeight, x, y, w, h, i, j, pos, line, numLines, edgeWidth, edgeHeight, cornerWidth, cornerHeight: LongInt;
     finalSurface, tmpsurf, rotatedEdge: PSDL_Surface;
     rect: TSDL_Rect;
     {$IFNDEF PAS2C}
@@ -362,26 +402,24 @@ begin
         {$IFNDEF PAS2C}
         s:= WrapText(s, #1, chars, i);
         {$ENDIF}
-        pos:= 1; prevpos:= 0; line:= 0;
+        pos:= 1; line:= 0;
     // Find the longest line for the purposes of centring the text.  Font dependant.
-        while pos <= length(s) do
+        while GetNextSpeechLine(s, #1, pos, substr) do
             begin
-            if (s[pos] = #1) or (pos = length(s)) then
-                begin
-                inc(numlines);
-                if s[pos] <> #1 then inc(pos);
-                while s[prevpos+1] = ' ' do inc(prevpos);
-                substr:= copy(s, prevpos+1, pos-prevpos-1);
-                i:= 0; j:= 0;
-                TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), @i, @j);
-                if i > w then
-                    w:= i;
-                prevpos:= pos;
-                end;
-            inc(pos);
+            inc(numLines);
+            i:= 0; j:= 0;
+            TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), @i, @j);
+            if i > w then
+                w:= i;
             end;
         end
     else numLines := 1;
+
+    if numLines < 1 then
+        begin
+        s:= '...';
+        numLines:= 1;
+        end;
 
     textWidth:=((w-(cornerWidth-edgeWidth)*2) div edgeWidth)*edgeWidth+edgeWidth;
     textHeight:=(((numlines * h + 2)-((cornerHeight-edgeWidth)*2)) div edgeWidth)*edgeWidth;
@@ -468,30 +506,17 @@ begin
     j:= rect.h;
     SDL_FillRect(finalSurface, @rect, cWhiteColor);
 
-    pos:= 1; prevpos:= 0; line:= 0;
-    while pos <= length(s) do
+    pos:= 1; line:= 0;
+    while GetNextSpeechLine(s, #1, pos, substr) do
         begin
-        if (s[pos] = #1) or (pos = length(s)) then
-            begin
-            if s[pos] <> #1 then
-                inc(pos);
-            while s[prevpos+1] = ' 'do
-                inc(prevpos);
-            substr:= copy(s, prevpos+1, pos-prevpos-1);
-            if Length(substr) <> 0 then
-                begin
-                tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
-                rect.x:= edgeHeight + 1 + ((i - w) div 2);
-                // trying to more evenly position the text, vertically
-                rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
-                SDLTry(tmpsurf <> nil, true);
-                SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
-                SDL_FreeSurface(tmpsurf);
-                inc(line);
-                prevpos:= pos;
-                end;
-                end;
-        inc(pos);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
+        rect.x:= edgeHeight + 1 + ((i - w) div 2);
+        // trying to more evenly position the text, vertically
+        rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
+        SDLTry(tmpsurf <> nil, true);
+        SDL_UpperBlit(tmpsurf, nil, finalSurface, @rect);
+        SDL_FreeSurface(tmpsurf);
+        inc(line);
         end;
 
     RenderSpeechBubbleTex:= Surface2Tex(finalSurface, true);
