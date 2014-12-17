@@ -306,7 +306,7 @@ end;
 
 function GetNextSpeechLine(s: ansistring; ldelim: char; var startFrom: LongInt; out substr: ansistring): boolean;
 var p, l, m, r: Integer;
-    newl      : boolean;
+    newl, skip: boolean;
     c         : char;
 begin
     m:= Length(s);
@@ -325,19 +325,26 @@ begin
 
     for p:= max(1, startFrom) to m do
         begin
+
         inc(r);
+        // read char from source string
         c:= s[p];
 
         // strip empty lines, spaces and newlines on beginnings of line
-        if (newl or (p = m)) and ((c = ' ') or (c = ldelim)) then
-            continue;
+        skip:= ((newl or (p = m)) and ((c = ' ') or (c = ldelim)));
 
-        newl:= (c = ldelim);
-        if newl then
-            break;
+        if (not skip) then
+            begin
+            newl:= (c = ldelim);
+            // stop if we went past the end of the line
+            if newl then
+                break;
 
-        inc(l);
-        substr[l]:= c;
+            // copy current char to output substring
+            inc(l);
+            substr[l]:= c;
+            end;
+
         end;
 
     inc(startFrom, r);
