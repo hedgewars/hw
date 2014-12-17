@@ -33,9 +33,12 @@ Frontend / Netgame:
 
 Lua API:
  + More helpful syntax error messages.
- + New hooks: onParameters(), onPreviewInit().
+ + New hooks:
+      onParameters(paramString) -- called when script parameters are configured. the parameter contains the parameter(s) as text string
+      onPreviewInit() -- called during map preview initialization
+      onGearWaterSkip(gearUid) -- called when a gear skims the water without drowning (when hitting it with high speed at low angle). By checking gearUid you can figure out which gear that was.
  + New functions:
-      Dismissteam(teamname)
+      Dismissteam(teamname) -- removes a team from the game (note: if you used loc() on teamnames, don't forget to the translated teamname here too)
       GetGameFlag(gameflag) -- returns true/false
       PlaceSprite(x, y, sprite, frameIdx [, landFlag, ... ]) -- sprite refers to an id from the TSprite list
       SetWaterLine(waterline) -- moves water level to the specified y. the current value is in read-only global waterline
@@ -51,7 +54,10 @@ Lua API:
       LandFlags: lfIndestructible, lfIce, lfBouncy
  + Changed functions:
       HogSay(gearUid, text, manner [, vgState]) -- now also allows you to make NON-Hedgehog gears speak, e.g. barrels... wait what?!
-
+ + Changed hooks:
+      onHogAttack() can now be hooked with new parameter: onHogAttack(ammoType) - to conveniently find out which ammo/weapon is being used
+ * Fixes:
+      gfResetHealth is now a available like the other GameFlags
 0.9.19 -> 0.9.20:
  + New campaign, A Space Adventure!
  + Password protected rooms
