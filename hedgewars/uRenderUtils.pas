@@ -304,14 +304,14 @@ begin
         end;
 end;
 
-function GetNextSpeechLine(s: ansistring; ldelim: char; var startFrom: LongInt; out substr: shortstring): boolean;
+function GetNextSpeechLine(s: ansistring; ldelim: char; var startFrom: LongInt; out substr: ansistring): boolean;
 var p, l, m, r: Integer;
     newl      : boolean;
     c         : char;
 begin
     m:= Length(s);
 
-    SetLength(substr, m);
+    SetLengthA(substr, m);
 
     // number of chars read
     r:= 0;
@@ -340,7 +340,7 @@ begin
 
     inc(startFrom, r);
 
-    SetLength(substr, l);
+    SetLengthA(substr, l);
 
     GetNextSpeechLine:= (l > 0);
 end;
@@ -352,7 +352,7 @@ var textWidth, textHeight, x, y, w, h, i, j, pos, line, numLines, edgeWidth, edg
     {$IFNDEF PAS2C}
     chars: set of char = [#9,' ',';',':','?','!',','];
     {$ENDIF}
-    substr: shortstring;
+    substr: ansistring;
     edge, corner, tail: TSPrite;
 begin
     if cOnlyStats then exit(nil);
@@ -408,7 +408,7 @@ begin
             begin
             inc(numLines);
             i:= 0; j:= 0;
-            TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(substr), @i, @j);
+            TTF_SizeUTF8(Fontz[font].Handle, PChar(substr), @i, @j);
             if i > w then
                 w:= i;
             end;
@@ -509,7 +509,7 @@ begin
     pos:= 1; line:= 0;
     while GetNextSpeechLine(s, #1, pos, substr) do
         begin
-        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, Str2PChar(substr), cNearBlackColorChannels);
+        tmpsurf:= TTF_RenderUTF8_Blended(Fontz[Font].Handle, PChar(substr), cNearBlackColorChannels);
         rect.x:= edgeHeight + 1 + ((i - w) div 2);
         // trying to more evenly position the text, vertically
         rect.y:= edgeHeight + ((j-(numLines*h)) div 2) + line * h;
