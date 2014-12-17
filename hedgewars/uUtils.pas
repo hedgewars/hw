@@ -74,6 +74,7 @@ function  GetLaunchY(at: TAmmoType; angle: LongInt): LongInt;
 procedure Write(var f: textfile; s: shortstring);
 procedure WriteLn(var f: textfile; s: shortstring);
 function StrLength(s: PChar): Longword;
+procedure SetLengthA(var s: ansistring; len: Longword);
 {$ENDIF}
 
 function  isPhone: Boolean; inline;

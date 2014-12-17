@@ -311,6 +311,8 @@ var p, l, m, r: Integer;
 begin
     m:= Length(s);
 
+    substr:= '';
+
     SetLengthA(substr, m);
 
     // number of chars read
