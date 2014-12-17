@@ -46,6 +46,7 @@ type PScreenshot = ^TScreenshot;
          filename: shortstring;
          width, height: LongInt;
          size: QWord;
+         alpha: boolean;
          end;
 
 var conversionFormat : PSDL_PixelFormat;
@@ -69,8 +70,20 @@ var i: LongInt;
     info_ptr: ^png_info;
     f: File;
     image: PScreenshot;
+    bpp: Integer; // bytes per pixel
+    ctype: Integer; // png color type
 begin
 image:= PScreenshot(screenshot);
+if image^.alpha then
+    begin
+    bpp:= 4;
+    ctype:= PNG_COLOR_TYPE_RGBA;
+    end
+else
+    begin
+    bpp:= 3;
+    ctype:= PNG_COLOR_TYPE_RGB;
+    end;
 
 png_ptr := png_create_write_struct(png_get_libpng_ver(nil), nil, nil, nil);
 if png_ptr = nil then
@@ -97,12 +110,12 @@ if IOResult = 0 then
     png_init_pascal_io(png_ptr,@f);
     png_set_IHDR(png_ptr, info_ptr, image^.width, image^.height,
                  8, // bit depth
-                 PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
+                 ctype, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
     png_write_info(png_ptr, info_ptr);
     // glReadPixels and libpng number rows in different order
     for i:= image^.height-1 downto 0 do
-        png_write_row(png_ptr, image^.buffer + i*4*image^.width);
+        png_write_row(png_ptr, image^.buffer + i*bpp*image^.width);
     png_write_end(png_ptr, info_ptr);
     Close(f);
     end;
@@ -130,7 +143,7 @@ var f: file;
     0, 0, 0, 0,     // width
     0, 0, 0, 0,     // height
     1, 0,           // color planes
-    32, 0,          // bit depth
+    24, 0,          // bit depth
     0, 0, 0, 0,     // compression method (uncompressed)
     0, 0, 0, 0,     // image size
     96, 0, 0, 0,    // horizontal resolution
@@ -163,6 +176,9 @@ head[$23]:= (size shr 8) and $ff;
 head[$24]:= (size shr 16) and $ff;
 head[$25]:= (size shr 24) and $ff;
 
+if image^.alpha then
+    head[$1C]:= 32;
+
 {$IOCHECKS OFF}
 Assign(f, image^.filename);
 Rewrite(f, 1);
@@ -188,8 +204,8 @@ end;
 
 {$IFDEF USE_VIDEO_RECORDING}
 // make image k times smaller (useful for saving thumbnails)
-procedure ReduceImage(img: PByte; width, height, k: LongInt);
-var i, j, i0, j0, w, h, r, g, b: LongInt;
+procedure ReduceImage(img: PByte; width, height, k: LongInt; bpp: Integer);
+    var i, j, i0, j0, w, h, r, g, b, off, ksqr: LongInt;
 begin
     w:= width  div k;
     h:= height div k;
@@ -197,6 +213,7 @@ begin
     // rescale inplace
     if k <> 1 then
     begin
+        ksqr:= k*k;
         for i:= 0 to h-1 do
             for j:= 0 to w-1 do
             begin
@@ -206,14 +223,21 @@ begin
                 for i0:= 0 to k-1 do
                     for j0:= 0 to k-1 do
                     begin
-                        inc(r, img[4*(width*(i*k+i0) + j*k+j0)+0]);
-                        inc(g, img[4*(width*(i*k+i0) + j*k+j0)+1]);
-                        inc(b, img[4*(width*(i*k+i0) + j*k+j0)+2]);
+                        off:= bpp*(width*(i*k+i0) + j*k+j0);
+                        inc(r, img[off]); inc(off);
+                        inc(g, img[off]); inc(off);
+                        inc(b, img[off]);
                     end;
-                img[4*(w*i + j)+0]:= r div (k*k);
-                img[4*(w*i + j)+1]:= g div (k*k);
-                img[4*(w*i + j)+2]:= b div (k*k);
-                img[4*(w*i + j)+3]:= 255;
+                off:= bpp*(w*i + j);
+                img[off]:= r div (ksqr); inc(off);
+                img[off]:= g div (ksqr); inc(off);
+                img[off]:= b div (ksqr);
+                // if there's an alpha channel set opacity to max
+                if bpp > 3 then
+                    begin
+                    inc(off);
+                    img[off]:= 255;
+                    end;
             end;
     end;
 end;
@@ -228,18 +252,33 @@ var p: Pointer;
     format: GLenum;
     ext: string[4];
     x,y: LongWord;
+    hasA: boolean;
+    bpp: Integer;
 begin
+hasA:= (dump > 0);
+
+if hasA then
+    bpp:= 4
+else
+    bpp:= 3;
+
 {$IFDEF PNG_SCREENSHOTS}
-format:= GL_RGBA;
+if hasA then
+    format:= GL_RGBA
+else
+    format:= GL_RGB;
 ext:= '.png';
 {$ELSE}
-format:= GL_BGRA;
+if hasA then
+    format:= GL_BGRA
+else
+    format:= GL_BGR;
 ext:= '.bmp';
 {$ENDIF}
 
 if dump > 0 then
-     size:= LAND_WIDTH*LAND_HEIGHT*4
-else size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * 4;
+     size:= LAND_WIDTH*LAND_HEIGHT*bpp
+else size:= toPowerOf2(cScreenWidth) * toPowerOf2(cScreenHeight) * bpp;
 p:= GetMem(size); // will be freed in SaveScreenshot()
 
 // memory could not be allocated
@@ -277,7 +316,7 @@ else
     begin
     glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
 {$IFDEF USE_VIDEO_RECORDING}
-    ReduceImage(p, cScreenWidth, cScreenHeight, k)
+    ReduceImage(p, cScreenWidth, cScreenHeight, k, bpp)
 {$ENDIF}
     end;
 
@@ -301,6 +340,7 @@ else
     end;
 image^.size:= size;
 image^.buffer:= p;
+image^.alpha:= hasA;
 
 SDL_CreateThread(@SaveScreenshot{$IFDEF SDL2}, 'snapshot'{$ENDIF}, image);
 MakeScreenshot:= true; // possibly it is not true but we will not wait for thread to terminate
