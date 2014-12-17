@@ -909,17 +909,15 @@ phrase2C (ForCycle i' e1' e2' p up) = do
     iType <- gets lastIdTypeDecl
     e1 <- expr2C e1'
     e2 <- expr2C e2'
-    let inc = if up then "inc" else "dec"
-    let add = if up then "+ 1" else "- 1"
     let iEnd = i <> text "__end__"
-    ph <- phrase2C . appendPhrase (BuiltInFunctionCall [Reference $ SimpleReference i'] (SimpleReference (Identifier inc BTUnknown))) $ wrapPhrase p
+    ph <- phrase2C $ wrapPhrase p
     return . braces $
         i <+> text "=" <+> e1 <> semi
         $$
         iType <+> iEnd <+> text "=" <+> e2 <> semi
         $$
         text "if" <+> (parens $ i <+> text (if up then "<=" else ">=") <+> iEnd) <+> text "do" <+> ph <+>
-        text "while" <> parens (i <+> text "!=" <+> iEnd <+> text add) <> semi
+        text "while" <> parens (i <> text (if up then "++" else "--") <+> text "!=" <+> iEnd) <> semi
     where
         appendPhrase p (Phrases ps) = Phrases $ ps ++ [p]
         appendPhrase _ _ = error "illegal appendPhrase call"
