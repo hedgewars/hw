@@ -1345,7 +1345,11 @@ function PlaceObject(x,y)
 		placedCount = placedCount + 1
 
 	else
-		AddCaption("Invalid Placement",0xffba00ff,capgrpVolume)
+	    if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
+            AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+        else
+            AddCaption(loc("Insufficient Power"),0xffba00ff,capgrpVolume)
+        end
 		PlaySound(sndDenied)
 	end
 
