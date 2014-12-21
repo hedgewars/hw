@@ -1130,7 +1130,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="49"/>
         <source>Save</source>
-        <translation>Wiederholung speichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="78"/>
