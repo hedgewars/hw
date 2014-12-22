@@ -36,7 +36,7 @@ class PlayersListModel;
 class QSortFilterProxyModel;
 class QAbstractItemModel;
 
-extern char delimeter;
+extern char delimiter;
 
 class HWNewNet : public QObject
 {
