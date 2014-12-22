@@ -45,6 +45,7 @@ QLayout * PageDrawMap::bodyLayoutDefinition()
 
     pbClear = addButton(tr("Clear"), pageLayout, 5, 0);
     pbOptimize = addButton(tr("Optimize"), pageLayout, 6, 0);
+    pbOptimize->setVisible(false);
     pbLoad = addButton(tr("Load"), pageLayout, 7, 0);
     pbSave = addButton(tr("Save"), pageLayout, 8, 0);
 
