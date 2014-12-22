@@ -33,7 +33,7 @@ local jokeAwardDamage = nil
 local recordBroken = false
 local ready = false
 local showWaterStats = false -- uses the AI team to draw water height.
-local scaleGraph = true
+local scaleGraph = false
 local dummyHog = nil
 local dummySkip = 0
 
@@ -58,7 +58,7 @@ function onGameInit()
         dummyHog = AddHog(" ", 0, 1, "NoHat")
         HH[dummyHog] = nil
         totalHedgehogs = totalHedgehogs - 1
-        if not showWaterStates then
+        if not showWaterStats then
             SendStat(siClanHealth, tostring(32640), " ")
         end
         SendStat(siClanHealth, tostring(32640), " ")
