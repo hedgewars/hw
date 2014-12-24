@@ -8,10 +8,14 @@
  + Highlander gamemode can now be used with custom weapon schemes (1-8=How probable to get this weapon. 9=All hogs get it)
  + New gameplay mode "Construction Mode"
  + New gameplay mode "TechRacer"
+ + New game play mode "DiagonalMaze" (generates a simple diagonal maze)
+ + Add 7 target practice missions, now with simple scoring
+ + Update RC Plane Challenge: Stats screen reworked and shows now several facts, simple ranking system based on used planes, some taunts in the game
+ + Hand-drawn maps editor allows maps to be optimized for file size
  + New training/multiplayer mission: "Climb Home"
  + Game scheme screen has a "Script parameter" field now. This allows to make more customizable scripts/modes.
  + Network game rejoining. Note: Your team(s) will vanish after 3 turns.
- + Visual and gameplay changes to "sea" - world edges.
+ + Visual and gameplay changes to "sea" - world edge, visual change to wrap world edge to allow seeing through the wrap, visual change to bounce worldedge 
  + The map of the Basketball Mission can be selected for regular games again ("BasketballField")
  + New engine command: /togglechat will disable/enable chat display (does not affect chat history display)
  + Change to Racer: first weapon/utility available will be automatically selected on start
@@ -32,13 +36,15 @@ Frontend / Netgame:
  + Moved room status filter to top left of rooms list.
 
 Lua API:
+ + New library: Params, makes parsing of script parameters easier
+ + New library: TargetPractice, used to generate target practice missions (the newly added missions use it)
  + More helpful syntax error messages.
  + New hooks:
       onParameters(paramString) -- called when script parameters are configured. the parameter contains the parameter(s) as text string
       onPreviewInit() -- called during map preview initialization
       onGearWaterSkip(gearUid) -- called when a gear skims the water without drowning (when hitting it with high speed at low angle). By checking gearUid you can figure out which gear that was.
  + New functions:
-      Dismissteam(teamname) -- removes a team from the game (note: if you used loc() on teamnames, don't forget to the translated teamname here too)
+      DismissTeam(teamname) -- removes a team from the game (note: if you used loc() on teamnames, don't forget to the translated teamname here too)
       GetGameFlag(gameflag) -- returns true/false
       PlaceSprite(x, y, sprite, frameIdx [, landFlag, ... ]) -- sprite refers to an id from the TSprite list
       SetWaterLine(waterline) -- moves water level to the specified y. the current value is in read-only global waterline
