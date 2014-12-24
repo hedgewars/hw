@@ -21,6 +21,7 @@ foreach(dir
     Golf
     Halloween
     Hell
+    Hoggywood
     Island
     Jungle
     Nature
