@@ -56,18 +56,18 @@ begin
     begin
         yd:= LAND_HEIGHT - 1;
         repeat
-            while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
+            while (yd > 0) and (Land[yd, x] <> lfBasic) do dec(yd);
 
             if (yd < 0) then
                 yd:= 0;
 
-            while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do
+            while (yd < LAND_HEIGHT) and (Land[yd, x] = lfBasic) do
                 inc(yd);
             dec(yd);
             yu:= yd;
 
-            while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
-            while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
+            while (yu > 0  ) and (Land[yu, x] = lfBasic) do dec(yu);
+            while (yu < yd ) and (Land[yu, x] <>  lfBasic) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
                 begin
