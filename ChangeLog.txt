@@ -11,7 +11,6 @@
  + New game play mode "DiagonalMaze" (generates a simple diagonal maze)
  + Add 7 target practice missions, now with simple scoring
  + Update RC Plane Challenge: Stats screen reworked and shows now several facts, simple ranking system based on used planes, some taunts in the game
- + Hand-drawn maps editor allows maps to be optimized for file size
  + New training/multiplayer mission: "Climb Home"
  + Game scheme screen has a "Script parameter" field now. This allows to make more customizable scripts/modes.
  + Network game rejoining. Note: Your team(s) will vanish after 3 turns.
