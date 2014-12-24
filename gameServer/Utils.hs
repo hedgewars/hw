@@ -113,6 +113,8 @@ protoNumber2ver v = Map.findWithDefault "Unknown" v vermap
             , (46, "0.9.20-dev")
             , (47, "0.9.20")
             , (48, "0.9.21-dev")
+            , (49, "0.9.21")
+            , (50, "0.9.22-dev")
             ]
 
 askFromConsole :: B.ByteString -> IO B.ByteString
@@ -201,7 +203,7 @@ answerFullConfigParams cl mpr pr
                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr))
 
         | clientProto cl < 48 = map (toAnswer cl) $
-                ("FULLMAPCONFIG", tail $ Map.elems mpr)
+                ("FULLMAPCONFIG", let l = Map.elems mpr in if length l > 5 then tail l else l)
                 : ("SCHEME", pr Map.! "SCHEME")
                 : (filter (\(p, _) -> p /= "SCHEME") $ Map.toList pr)
 
