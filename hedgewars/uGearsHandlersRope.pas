@@ -29,7 +29,7 @@ uses uConsts, uFloat, uCollisions, uVariables, uGearsList, uSound, uGearsUtils,
     uAmmos, uDebug, uUtils, uGearsHedgehog, uGearsRender;
 
 const
-    IsNilHHFatal = true;
+    IsNilHHFatal = false;
 
 procedure doStepRopeAfterAttack(Gear: PGear);
 var
