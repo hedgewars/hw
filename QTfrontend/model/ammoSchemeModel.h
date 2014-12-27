@@ -70,7 +70,7 @@ class NetAmmoSchemeModel : public QAbstractTableModel
         QVariant data(const QModelIndex &index, int role) const;
 
     public slots:
-        void setNetSchemeConfig(QStringList & cfg);
+        void setNetSchemeConfig(QStringList cfg);
 
     private:
         QList<QVariant> netScheme;
