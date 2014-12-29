@@ -30,11 +30,11 @@ macro(CHECK_HASKELL_MODULE_EXISTS MODULE FUNCTION PARAMCOUNT LIBRARY)
                     "-DPARAMETERS=${PARAMETERS}"
                     -cpp
                     -c "${CMAKE_MODULE_PATH}/checkModule.hs"
+                    RESULT_VARIABLE COMMAND_RESULT
                     ERROR_VARIABLE BUILD_ERROR
                     OUTPUT_STRIP_TRAILING_WHITESPACE
                     )
-
-    if("${BUILD_ERROR}" STREQUAL "")
+    if(${COMMAND_RESULT} EQUAL 0)
       message(STATUS "Looking for ${FUNCTION} in ${MODULE} - found")
       set(${VARIABLE} 1 CACHE INTERNAL "Have module ${MODULE}")
       file(APPEND ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeOutput.log
