@@ -87,15 +87,19 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
             return [Warning $ loc "Restricted"]
         else if isMaster cl then
            return [
-                ModifyRoom f,
+                ModifyRoom $ f (clientProto cl),
                 AnswerClients chans ("CFG" : paramName : paramStrs)]
             else
             return [ProtocolError $ loc "Not room master"]
     where
-        f r = if paramName `Map.member` (mapParams r) then
+        f clproto r = if paramName `Map.member` (mapParams r) then
                 r{mapParams = Map.insert paramName (head paramStrs) (mapParams r)}
                 else
-                r{params = Map.insert paramName paramStrs (params r)}
+                r{params = Map.insert paramName (fixedParamStr clproto) (params r)}
+        fixedParamStr clproto
+            | clproto /= 49 = paramStrs
+            | paramName /= "SCHEME" = paramStrs
+            | otherwise = L.init paramStrs ++ [B.replicate 50 'X' `B.append` L.last paramStrs]
 
 
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
