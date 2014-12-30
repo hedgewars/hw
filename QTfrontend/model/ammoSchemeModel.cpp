@@ -852,8 +852,11 @@ void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
         qWarning("Incorrect scheme cfg size");
         return;
     }
-
-    cfg[42] = cfg[42].mid(1);
+    
+    if (cfg[42].at(0)=='!')
+        cfg[42] = cfg[42].mid(1);
+    else
+        qDebug() <<  "Script param didn't start with !: " << cfg[42];
 
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);
