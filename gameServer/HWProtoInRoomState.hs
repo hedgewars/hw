@@ -41,7 +41,7 @@ startGame = do
     chans <- roomClientsChans
 
     let nicks = map (nick . client rnc) . roomClients rnc $ clientRoom rnc ci
-    let allPlayersRegistered = all ((<) 0 . B.length . webPassword . client rnc . teamownerId) $ teams rm
+    let allPlayersRegistered = all isOwnerRegistered $ teams rm
 
     if (playersIn rm == readyPlayers rm || clientProto cl > 43) && not (isJust $ gameInfo rm) then
         if enoughClans rm then
@@ -107,11 +107,13 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
     | otherwise = do
         (ci, _) <- ask
         rm <- thisRoom
+        cl <- thisClient
         clNick <- clientNick
         clChan <- thisClientChans
         othChans <- roomOthersChans
         roomChans <- roomClientsChans
         cl <- thisClient
+        let isRegistered = (<) 0 . B.length . webPassword $ cl
         teamColor <-
             if clientProto cl < 42 then
                 return color
@@ -119,7 +121,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
         let roomTeams = teams rm
         let hhNum = let p = if not $ null roomTeams then minimum [hhnum $ head roomTeams, canAddNumber roomTeams] else 4 in newTeamHHNum roomTeams p
-        let newTeam = clNick `seq` TeamInfo ci clNick tName teamColor grave fort voicepack flag dif hhNum (hhsList hhsInfo)
+        let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ roomTeams then
                 [Warning $ loc "too many teams"]
@@ -156,6 +158,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
 handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         (ci, _) <- ask
         r <- thisRoom
+        clNick <- clientNick
 
         let maybeTeam = findTeam r
         let team = fromJust maybeTeam
@@ -163,18 +166,18 @@ handleCmd_inRoom ["REMOVE_TEAM", tName] = do
         return $
             if isNothing $ maybeTeam then
                 [Warning $ loc "REMOVE_TEAM: no such team"]
-            else if ci /= teamownerId team then
+            else if clNick /= teamowner team then
                 [ProtocolError $ loc "Not team owner!"]
             else
                 [RemoveTeam tName,
                 ModifyClient
                     (\c -> c{
                         teamsInGame = teamsInGame c - 1,
-                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan ci team r
+                        clientClan = if teamsInGame c == 1 then Nothing else Just $ anotherTeamClan clNick team r
                     })
                 ]
     where
-        anotherTeamClan ci team = teamcolor . fromMaybe (error "CHECKPOINT 011") . find (\t -> (teamownerId t == ci) && (t /= team)) . teams
+        anotherTeamClan clNick team = teamcolor . fromMaybe (error "CHECKPOINT 011") . find (\t -> (teamowner t == clNick) && (t /= team)) . teams
         findTeam = find (\t -> tName == teamname t) . teams
 
 
@@ -211,16 +214,18 @@ handleCmd_inRoom ["TEAM_COLOR", teamName, newColor] = do
 
     let maybeTeam = findTeam r
     let team = fromJust maybeTeam
+    maybeClientId <- clientByNick $ teamowner team
+    let teamOwnerId = fromJust maybeClientId
 
     return $
         if not $ isMaster cl then
             [ProtocolError $ loc "Not room master"]
-        else if isNothing maybeTeam then
+        else if isNothing maybeTeam || isNothing maybeClientId then
             []
         else
             [ModifyRoom $ modifyTeam team{teamcolor = newColor},
             AnswerClients others ["TEAM_COLOR", teamName, newColor],
-            ModifyClient2 (teamownerId team) (\c -> c{clientClan = Just newColor})]
+            ModifyClient2 teamOwnerId (\c -> c{clientClan = Just newColor})]
     where
         findTeam = find (\t -> teamName == teamname t) . teams
 

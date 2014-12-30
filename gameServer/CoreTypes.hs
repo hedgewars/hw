@@ -162,7 +162,6 @@ data HedgehogInfo =
 data TeamInfo =
     TeamInfo
     {
-        teamownerId :: ClientIndex,
         teamowner :: B.ByteString,
         teamname :: B.ByteString,
         teamcolor :: B.ByteString,
@@ -170,6 +169,7 @@ data TeamInfo =
         teamfort :: B.ByteString,
         teamvoicepack :: B.ByteString,
         teamflag :: B.ByteString,
+        isOwnerRegistered :: Bool,
         difficulty :: Int,
         hhnum :: Int,
         hedgehogs :: [HedgehogInfo]
