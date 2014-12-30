@@ -845,7 +845,7 @@ QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
     return netScheme[index.column()];
 }
 
-void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
+void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
 {
     if(cfg.size() != netScheme.size())
     {

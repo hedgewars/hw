@@ -1832,7 +1832,7 @@ void HWForm::NetGameSlave()
     if (hwnet)
     {
         NetAmmoSchemeModel * netAmmo = new NetAmmoSchemeModel(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)), netAmmo, SLOT(setNetSchemeConfig(QStringList)));
+        connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)), netAmmo, SLOT(setNetSchemeConfig(QStringList &)));
 
         ui.pageNetGame->pGameCFG->GameSchemes->setModel(netAmmo);
 
