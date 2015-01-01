@@ -845,18 +845,15 @@ QVariant NetAmmoSchemeModel::data(const QModelIndex &index, int role) const
     return netScheme[index.column()];
 }
 
-void NetAmmoSchemeModel::setNetSchemeConfig(QStringList & cfg)
+void NetAmmoSchemeModel::setNetSchemeConfig(QStringList cfg)
 {
     if(cfg.size() != netScheme.size())
     {
         qWarning("Incorrect scheme cfg size");
         return;
     }
-    
-    if (cfg[42].at(0)=='!')
-        cfg[42] = cfg[42].mid(1);
-    else
-        qDebug() <<  "Script param didn't start with !: " << cfg[42];
+
+    cfg[42] = cfg[42].mid(1);
 
     for(int i = 0; i < cfg.size(); ++i)
         netScheme[i] = QVariant(cfg[i]);
