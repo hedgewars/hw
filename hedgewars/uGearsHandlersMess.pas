@@ -804,6 +804,8 @@ We aren't using frametick right now, so just a waste of cycles.
             move:= true
         else if (xx > snowRight) or (xx < snowLeft) then
             move:=true
+        else if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+            move:=true
         // Solid pixel encountered
         else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
@@ -920,7 +922,9 @@ if move then
         end;
     Gear^.Pos:= 0;
     Gear^.X:= int2hwFloat(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft);
-    Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1325);
+    if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+         Gear^.Y:= int2hwFloat(LAND_HEIGHT - 50 - LongInt(GetRandom(50)))
+    else Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1250);
     Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
