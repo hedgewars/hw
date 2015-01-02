@@ -204,7 +204,7 @@ main = withSocketsDo $ do
     Exception.bracket
         setupConnection
         (\s -> noticeM "Core" "Shutting down" >> sClose s)
-        (session login password d exeFullname dataPrefix)
+        (session login password (d ++ "/.hedgewars") exeFullname dataPrefix)
     where
         setupConnection = do
             noticeM "Core" "Connecting to the server..."
