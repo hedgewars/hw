@@ -611,17 +611,17 @@ begin
     // loading failed
     if tmpsurf = nil then
         begin
-
-        // anounce that loading failed
-        OutError(msgFailed, false);
-
         // output sdl error if loading failed when data source was available
         if rwops <> nil then
             begin
+            // anounce that loading failed
+            OutError(msgFailed, false);
+
             SDLTry(false, (imageFlags and ifCritical) <> 0);
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
-            end;
+            end else
+            OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
         end;
 
