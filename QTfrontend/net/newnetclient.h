@@ -36,7 +36,7 @@ class PlayersListModel;
 class QSortFilterProxyModel;
 class QAbstractItemModel;
 
-extern char delimeter;
+extern char delimiter;
 
 class HWNewNet : public QObject
 {
@@ -111,7 +111,7 @@ class HWNewNet : public QObject
         void roomNameUpdated(const QString & name);
         void askForRoomPassword();
 
-        void netSchemeConfig(QStringList &);
+        void netSchemeConfig(QStringList);
         void paramChanged(const QString & param, const QStringList & value);
         void configAsked();
 

@@ -215,7 +215,7 @@ while t <> nil do
             begin
             if curHandledGear^.RenderTimer and (curHandledGear^.Timer > 500) and ((curHandledGear^.Timer mod 1000) = 0) then
                 begin
-                FreeTexture(curHandledGear^.Tex);
+                FreeAndNilTexture(curHandledGear^.Tex);
                 curHandledGear^.Tex:= RenderStringTex(ansistring(inttostr(curHandledGear^.Timer div 1000)), cWhiteColor, fntSmall);
                 end;
             curHandledGear^.doStep(curHandledGear);

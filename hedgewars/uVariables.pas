@@ -186,6 +186,7 @@ var
 
 
     flagMakeCapture : boolean;
+    flagDumpLand    : boolean;
 
     InitStepsFlags  : Longword;
     RealTicks       : Longword;
@@ -2584,6 +2585,7 @@ begin
     cVampiric       := false;
     cArtillery      := false;
     flagMakeCapture := false;
+    flagDumpLand    := false;
     bBetweenTurns   := false;
     bWaterRising    := false;
     isCursorVisible := false;
@@ -2612,13 +2614,13 @@ begin
 
     dirtyLandTexCount:= 0;
 
-    vobFrameTicks:= 99999;
+    vobFrameTicks:= 0;
     vobFramesCount:= 4;
     vobCount:= 0;
     vobVelocity:= 10;
     vobFallSpeed:= 100;
 
-    vobSDFrameTicks:= 99999;
+    vobSDFrameTicks:= 0;
     vobSDFramesCount:= 4;
     vobSDCount:= 30 * cScreenSpace div LAND_WIDTH;
     vobSDVelocity:= 15;

@@ -804,6 +804,8 @@ We aren't using frametick right now, so just a waste of cycles.
             move:= true
         else if (xx > snowRight) or (xx < snowLeft) then
             move:=true
+        else if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+            move:=true
         // Solid pixel encountered
         else if ((yy and LAND_HEIGHT_MASK) = 0) and ((xx and LAND_WIDTH_MASK) = 0) and (Land[yy, xx] <> 0) then
             begin
@@ -882,7 +884,10 @@ if draw then
                                 end
                             else Land[ly, lx]:= lf;
                         if gun then
-                            LandPixels[ry, rx]:= (ExplosionBorderColor and (not AMask)) or (p^[px] and AMask)
+                             LandPixels[ry, rx]:= (Gear^.Tint shr 24         shl RShift) or 
+                                                  (Gear^.Tint shr 16 and $FF shl GShift) or 
+                                                  (Gear^.Tint shr  8 and $FF shl BShift) or 
+                                                  (p^[px] and AMask)
                         else LandPixels[ry, rx]:= addBgColor(LandPixels[ry, rx], p^[px]);
                         end
                     else allpx:= false
@@ -917,7 +922,9 @@ if move then
         end;
     Gear^.Pos:= 0;
     Gear^.X:= int2hwFloat(LongInt(GetRandom(snowRight - snowLeft)) + snowLeft);
-    Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1325);
+    if (cGravity < _0) and (yy < LAND_HEIGHT-1200) then
+         Gear^.Y:= int2hwFloat(LAND_HEIGHT - 50 - LongInt(GetRandom(50)))
+    else Gear^.Y:= int2hwFloat(LAND_HEIGHT + LongInt(GetRandom(50)) - 1250);
     Gear^.State:= Gear^.State or gstInvisible;
     end
 end;
@@ -1264,15 +1271,22 @@ begin
         dec(Gear^.Health, Gear^.Damage);
         Gear^.Damage := 0
         end;
-    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Damage < Gear^.Health) and ((not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF))) then
+
+    if ((Gear^.State and gstDrowning) <> 0) and (Gear^.Health > 0) then
         begin
-        for i:=(Gear^.Health - Gear^.Damage) * 4 downto 0 do
+        // draw bubbles
+        if (not SuddenDeathDmg and (WaterOpacity < $FF)) or (SuddenDeathDmg and (SDWaterOpacity < $FF)) then
             begin
-            if Random(6) = 0 then
-                AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
-            Gear^.X := Gear^.X + Gear^.dX;
-            Gear^.Y := Gear^.Y + Gear^.dY;
+            for i:=(Gear^.Health * 4) downto 0 do
+                begin
+                if Random(6) = 0 then
+                    AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBubble);
+                Gear^.X := Gear^.X + Gear^.dX;
+                Gear^.Y := Gear^.Y + Gear^.dY;
+                end;
             end;
+        // bullet dies underwater
+        Gear^.Health:= 0;
         end;
 
     if (Gear^.Health <= 0)
@@ -1285,7 +1299,7 @@ begin
                 cArtillery := false;
 
         // Bullet Hit
-            if (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
+            if ((Gear^.State and gstDrowning) = 0) and (hwRound(Gear^.X) and LAND_WIDTH_MASK = 0) and (hwRound(Gear^.Y) and LAND_HEIGHT_MASK = 0) then
                 begin
                 VGear := AddVisualGear(hwRound(Gear^.X), hwRound(Gear^.Y), vgtBulletHit);
                 if VGear <> nil then
@@ -1651,6 +1665,7 @@ end;
 procedure doStepMine(Gear: PGear);
 var vg: PVisualGear;
     dxdy: hwFloat;
+    dmg: LongWord;
 begin
     if Gear^.Health = 0 then dxdy:= hwAbs(Gear^.dX)+hwAbs(Gear^.dY);
     if (Gear^.State and gstMoving) <> 0 then
@@ -1671,7 +1686,11 @@ begin
     if (Gear^.Health = 0) then
         begin
         if (dxdy > _0_4) and (Gear^.State and gstCollision <> 0) then
-            inc(Gear^.Damage, hwRound(dxdy * _50));
+            begin
+            dmg:= hwRound(dxdy * _50);
+            inc(Gear^.Damage, dmg);
+            ScriptCall('onGearDamage', Gear^.UID, dmg)
+            end;
 
         if ((GameTicks and $FF) = 0) and (Gear^.Damage > random(30)) then
             begin
@@ -1810,7 +1829,7 @@ end;
 
 procedure doStepRollingBarrel(Gear: PGear);
 var
-    i: LongInt;
+    i, dmg: LongInt;
     particle: PVisualGear;
     dxdy: hwFloat;
 begin
@@ -1838,7 +1857,9 @@ begin
                         particle^.dX := particle^.dX + (Gear^.dX.QWordValue / 21474836480)
                     end
                 end;
-            inc(Gear^.Damage, hwRound(dxdy * _50))
+            dmg:= hwRound(dxdy * _50);
+            inc(Gear^.Damage, dmg);
+            ScriptCall('onGearDamage', Gear^.UID, dmg)
             end;
         CalcRotationDirAngle(Gear);
         //CheckGearDrowning(Gear)
@@ -2171,7 +2192,7 @@ begin
         then
         begin
             // norm speed vector to length of 2 for fire particles to keep flying in the same direction
-            f:= _2 / Distance(Gear^.dX, Gear^.dY);
+            f:= _1_9 / Distance(Gear^.dX, Gear^.dY);
             Gear^.dX:= Gear^.dX * f;
             Gear^.dY:= Gear^.dY * f;
         end
@@ -2650,12 +2671,13 @@ begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
         HHGear^.State := HHGear^.State or gstHHChooseTarget;
-        DeleteGear(Gear);
         isCursorVisible := true;
         warn:= AddVisualGear(Gear^.Target.X, oy, vgtNoPlaceWarn, 0, true);
         if warn <> nil then
             warn^.Tex := GetPlaceCollisionTex(lx, ty, sprHHTelepMask, 0);
-        PlaySound(sndDenied)
+        DeleteGear(Gear);
+        PlaySound(sndDenied);
+        exit
         end
     else
         begin
@@ -3645,7 +3667,7 @@ begin
         begin
         Gear^.Damage:= i;
         //AddCaption('Fuel: '+inttostr(round(Gear^.Health/20))+'%', cWhiteColor, capgrpAmmostate);
-        FreeTexture(Gear^.Tex);
+        FreeAndNilTexture(Gear^.Tex);
         Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) + '%'), cWhiteColor, fntSmall)
         end;
 
@@ -4564,7 +4586,7 @@ procedure doStepSineGunShotWork(Gear: PGear);
 var
     x, y, rX, rY, t, tmp, initHealth: LongInt;
     oX, oY, ldX, ldY, sdX, sdY, sine, lx, ly, amp: hwFloat;
-    justCollided: boolean;
+    justCollided, justBounced: boolean;
 begin
     AllInactive := false;
     initHealth := Gear^.Health;
@@ -4587,6 +4609,8 @@ begin
 
     // used for a work-around detection of area that is within land array, but outside borders
     justCollided := false;
+    // this variable is just to ensure we don't run in infinite loop due to precision errors
+    justBounced:= false;
 
     repeat
         lX := lX + ldX;
@@ -4599,7 +4623,6 @@ begin
         amp := _128 * (_1 - hwSqr(int2hwFloat(Gear^.Health)/initHealth));
         sine := amp * AngleSin(tmp mod 2048);
         sine.isNegative := (tmp < 2048);
-        inc(t,Gear^.Health div 313);
         Gear^.X := lX + (sine * sdX);
         Gear^.Y := ly + (sine * sdY);
         Gear^.dX := Gear^.X - oX;
@@ -4607,6 +4630,40 @@ begin
 
         x := hwRound(Gear^.X);
         y := hwRound(Gear^.Y);
+
+        if WorldEdge = weWrap then
+            begin
+            if x > LongInt(rightX) then
+                repeat
+                    dec(x,  playWidth);
+                    dec(rx, playWidth);
+                until x <= LongInt(rightX)
+            else if x < LongInt(leftX) then
+                repeat
+                    inc(x,  playWidth);
+                    inc(rx, playWidth);
+                until x >= LongInt(leftX);
+            end
+        else if (WorldEdge = weBounce) then
+            begin
+            if (not justBounced) and ((x > LongInt(rightX)) or (x < LongInt(leftX))) then
+                begin
+                // reflect
+                lX:= lX - ldX + ((oX - lX) * 2);
+                lY:= lY - ldY;
+                Gear^.X:= oX;
+                Gear^.Y:= oY;
+                ldX.isNegative:= (not ldX.isNegative);
+                sdX.isNegative:= (not sdX.isNegative);
+                justBounced:= true;
+                continue;
+                end
+            else
+                justBounced:= false;
+            end;
+
+
+        inc(t,Gear^.Health div 313);
 
         // if borders are on, stop outside land array
         if hasBorder and (((x and LAND_WIDTH_MASK) <> 0) or ((y and LAND_HEIGHT_MASK) <> 0)) then
@@ -4704,7 +4761,6 @@ begin
             if (Gear^.Health <= (initHealth div 6)) then
                 dec(Gear^.Radius)
             end;
-
     until (Gear^.Health <= 0);
 
     DeleteGear(Gear);
@@ -4805,7 +4861,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            FreeTexture(Gear^.Tex);
+            FreeAndNilTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
                          '%'), cWhiteColor, fntSmall)
             end
@@ -4882,7 +4938,7 @@ begin
         if (i <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
             begin
             Gear^.Damage:= i;
-            FreeTexture(Gear^.Tex);
+            FreeAndNilTexture(Gear^.Tex);
             Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(i) +
                          '%'), cWhiteColor, fntSmall)
             end
@@ -5487,7 +5543,7 @@ begin
     if (t <> Gear^.Damage) and ((GameTicks and $3F) = 0) then
     begin
     Gear^.Damage:= t;
-    FreeTexture(Gear^.Tex);
+    FreeAndNilTexture(Gear^.Tex);
     Gear^.Tex := RenderStringTex(trmsg[sidFuel] + ansistring(': ' + inttostr(t) +
               '%'), cWhiteColor, fntSmall)
     end;

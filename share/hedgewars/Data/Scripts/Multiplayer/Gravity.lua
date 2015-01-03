@@ -17,7 +17,12 @@ local script2_onGameStart
 
 
 function grav_onNewTurn()
-    SetGravity(gravity)
+    if delta ~= nil and period == nil then 
+      SetGravity(gravity)
+    else
+      SetGravity(div(gravity, mln))
+    end
+    
     wdGameTicks = GameTime
     
     if script2_onNewTurn ~= nil then

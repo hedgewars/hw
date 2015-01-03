@@ -97,7 +97,7 @@ begin
 if Gear^.CollisionIndex >= 0 then
     begin
     with cinfos[Gear^.CollisionIndex] do
-        ChangeRoundInLand(X, Y, Radius - 1, false, (Gear = CurrentHedgehog^.Gear) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
+        ChangeRoundInLand(X, Y, Radius - 1, false, ((CurrentHedgehog <> nil) and (Gear = CurrentHedgehog^.Gear)) or ((Gear^.Kind = gtCase) and (Gear^.State and gstFrozen = 0)));
     cinfos[Gear^.CollisionIndex]:= cinfos[Pred(Count)];
     cinfos[Gear^.CollisionIndex].cGear^.CollisionIndex:= Gear^.CollisionIndex;
     Gear^.CollisionIndex:= -1;

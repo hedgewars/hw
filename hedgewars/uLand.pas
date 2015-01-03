@@ -56,18 +56,18 @@ begin
     begin
         yd:= LAND_HEIGHT - 1;
         repeat
-            while (yd > 0) and (Land[yd, x] =  0) do dec(yd);
+            while (yd > 0) and (Land[yd, x] <> lfBasic) do dec(yd);
 
             if (yd < 0) then
                 yd:= 0;
 
-            while (yd < LAND_HEIGHT) and (Land[yd, x] <> 0) do
+            while (yd < LAND_HEIGHT) and (Land[yd, x] = lfBasic) do
                 inc(yd);
             dec(yd);
             yu:= yd;
 
-            while (yu > 0  ) and (Land[yu, x] <> 0) do dec(yu);
-            while (yu < yd ) and (Land[yu, x] =  0) do inc(yu);
+            while (yu > 0  ) and (Land[yu, x] = lfBasic) do dec(yu);
+            while (yu < yd ) and (Land[yu, x] <>  lfBasic) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
                 begin
@@ -578,10 +578,19 @@ else
 
 if hasBorder then
     begin
-    for y:= 0 to LAND_HEIGHT - 1 do
-        for x:= 0 to LAND_WIDTH - 1 do
-            if (y < topY) or (x < leftX) or (x > rightX) then
+    if WorldEdge = weNone then
+        begin
+        for y:= 0 to LAND_HEIGHT - 1 do
+            for x:= 0 to LAND_WIDTH - 1 do
+                if (y < topY) or (x < leftX) or (x > rightX) then
+                    Land[y, x]:= lfIndestructible;
+        end
+    else if topY > 0 then
+        begin
+        for y:= 0 to LongInt(topY) - 1 do
+            for x:= 0 to LAND_WIDTH - 1 do
                 Land[y, x]:= lfIndestructible;
+        end;
     // experiment hardcoding cave
     // also try basing cave dimensions on map/template dimensions, if they exist
     for w:= 0 to 5 do // width of 3 allowed hogs to be knocked through with grenade
@@ -665,6 +674,11 @@ if GrayScale then
     end;
 
 PrettifyLandAlpha();
+
+// adjust world edges for borderless maps
+if (WorldEdge <> weNone) and (not hasBorder) then
+    InitWorldEdges();
+
 end;
 
 procedure GenPreview(out Preview: TPreview);

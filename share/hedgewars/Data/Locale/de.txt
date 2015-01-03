@@ -130,7 +130,7 @@
 02:00=%1 ist ab jetzt ein Ex-Igel
 02:00=%1 sieht sich die Radieschen von unten an
 02:00=%1 hat aufgehört zu existieren
-02:00=Verabschieden Sie sich von %1
+02:00=Wir verabschieden uns von %1
 02:00=Für %1 gibt es keine Hoffnung mehr
 02:00=%1 trat von der Lebensbühne ab
 02:00=%1 erleidet ein spontanes multiples Organversagen
@@ -153,6 +153,21 @@
 02:00=%1 spürt keinen Schmerz mehr
 02:00=%1 muss nicht mehr leiden
 02:00=%1 hat eine Abkürzung gefunden …
+02:00=%1 war ohnehin nur Kanonenfutter
+02:00=Mir kommen die Tränen, %1!
+02:00=Man wird dich rächen, %1!
+02:00=%1 wartet auf die Wiederbelebung.
+02:00=%1 hat ein Nach-Tod-Erlebnis
+02:00=%1 hat im Spiel des Lebens verloren
+02:00=%1 wurde vernichtend geschlagen
+02:00=%1 hat alle Lebenspunkte aufgebraucht
+02:00=%1 wird nicht mehr auf Futtersuche gehen müssen
+02:00=%1 schläft den ganz langen Winterschlaf
+02:00=Warum musstest du sterben, %1?
+02:00=Oh, nein, %1! Wir hatten noch so viel vor …
+02:00=Jetzt braucht sich %1 nicht mehr vor dem Tod zu fürchten.
+02:00=%1 wurde von den Schrecken des Krieges erlöst
+02:00=Klappe zu, %1 tot!
 
 ; Hog (%1) drowned
 02:01=%1 geht auf Tauchstation!
@@ -221,6 +236,7 @@
 02:01=%1 lässt sich diese  einmalige  Tauchgelegenheit nicht entgehen
 02:01=Und wir dachten %1 könnte nicht noch tiefer sinken …
 02:01=%1 zieht eine Etage tiefer
+02:01=Seht, %1 kann schwimmen! Nein, doch nicht …
 
 ; Round starts
 02:02=Auf in die Schlacht!
@@ -253,7 +269,6 @@
 02:02=Lassen Sie den Kampf in der Woche beginnen
 02:02=Lassen Sie den Kampf des Tages beginnen
 02:02=Lassen Sie den Kampf der Stunde beginnen
-02:02=Tun Sie Ihr Bestes!
 02:02=Zerstört den Feind!
 02:02=Viel Glück!
 02:02=Viel Spaß!
@@ -292,6 +307,18 @@
 02:05=Ein Grund zur Hoffnung!
 02:05=Frisch aus dem Jungbrunnen
 02:05=Lebenszeit in Kisten
+02:05=Hilfe ist in Sicht!
+02:05=Das macht kranke Igel wieder gesund
+02:05=Schlagt das Lazarett auf!
+02:05=Erhöhe deine Lebenserwartung …
+02:05=Erste Hilfe!
+02:05=Endlich kommt Hilfe!
+02:05=Gesundmacher aus der Luft!
+02:05=Lebenspunkterhöhungsmittel!
+02:05=Kiste des Lebens
+02:05=Tankt eure Lebensenergie wieder auf!
+02:05=Hat jemand »Hatschi!« gesagt?
+02:05=Damit fühlt sich der Igel wieder pudelwohl!
 
 ; New ammo crate
 02:06=Nachschub!
@@ -312,13 +339,30 @@
 02:06=Was auch immer da drin ist, es ist bestimmt nicht Pizza
 02:06=Einsammlen!
 02:06=Eine Waffenkiste!
-02:06=Lassen Sie nicht zu, dass sich der Feind sie holt!
+02:06=Lasse nicht zu, dass der Feind sie holt!
 02:06=Schönes neues Spielzeug!
 02:06=Eine geheimnisvolle Kiste!
 02:06=Ein eckiges Ü-Ei!
 02:06=Die Holzkiste der Pandora!
 02:06=Willst du mit mir spielen?
 02:06=Quadratisch, praktisch, … gefährlich?
+02:06=Diese Kiste bringt Bombenstimmung!
+02:06=Damit kann man dem Feind so richtig einheizen
+02:06=Jetzt geht die Party erst richtig los!
+02:06=Damit kommt Freude auf!
+02:06=Ob da eine Melonenbombe drin ist?
+02:06=Das ist wie ein Kindergeburtstag!
+02:06=Wir brauchen Waffen, viele Waffen!
+02:06=Davon kann man nie genug haben.
+02:06=Neue Waffen, um das Spiel etwas spannender zu machen
+02:06=Neue Waffen braucht das Land!
+02:06=Nichts für Weicheier!
+02:06=Achtung: Inhalt hochexplosiv
+02:06=Wer zuerst kommt, mahlt zuerst!
+02:06=Für die Waffennarren
+02:06=Damit schlägt das Herz jedes Waffennarren höher!
+02:06=Waffenkiste: Nur echt mit dem Fragezeichen
+02:06=Dies könnte die spielentscheidende Waffe sein!
 
 ; New utility crate
 02:07=Nützliches?
@@ -327,11 +371,23 @@
 02:07=Lieferung frei Haus!
 02:07=Mehr als nur eine Kiste!
 02:07=Weitere Hilfsmittel!
-02:07=Extras für Sie!
+02:07=Extras für dich!
 02:07=Dies sollte gut sein!
-02:07=Verwenden Sie diese mit Bedacht
+02:07=Verwende diese mit Bedacht
 02:07=Uff, diese Box ist schwer
 02:07=Futter für Strategen
+02:07=Heimwerker atmen auf!
+02:07=Schaffe, schaffe, Häusle baue
+02:07=Werkzeuge kann man immer gebrauchen
+02:07=Auf diese Kisten können Sie bauen
+02:07=Ein Geschenk der Techniker!
+02:07=Strategen freuen sich!
+02:07=Dies könnte deine Mobilität wiederherstellen …
+02:07=Verschaffe dir einen strategischen Vorteil
+02:07=Muttern und Schrauben!
+02:07=Lieferung aus den Igelwerken!
+02:07=Damit schlägt das Herz jedes Mechanikers höher!
+02:07=So viele Möglichkeiten …
 
 ; Hog (%1) skips his turn
 02:08=%1 ist so ein Langeweiler …
@@ -392,7 +448,7 @@
 02:09=Das hat wohl nicht ganz geklappt, %1
 02:09=%1 geht ein wenig zu sorglos mit gefährlichen Waffen um
 02:09=%1 sollte eine Änderung der Laufbahn betrachten
-02:09=Nein, nein, nein, %1, Sie müssen auf den Feind schießen!
+02:09=Nein, nein, nein, %1, du musst auf den Feind schießen!
 02:09=%1 bewegt sich einen Schritt näher zum Selbstmord
 02:09=%1, Helfer des Feindes
 02:09=%1 hatte das anders geplant
@@ -418,6 +474,22 @@
 02:09=%1 wird vom Pech verfolgt
 02:09=Auch %1 macht mal Fehler
 02:09=Hoppla?!
+02:09=%1 will unbedingt den Darwin-Award gewinnen
+02:09=%1 macht sich lächerlich
+02:09=%1 hat absolut nichts dazugelernt
+02:09=%1 hat wohl nicht mehr alle Tassen im Schrank
+02:09=%1 ist durchgeknallt
+02:09=%1 bekommt so bald keine Beförderung mehr
+02:09=%1 verstümmelt sich selbst
+02:09=%1 mag Schmerzen
+02:09=%1 ist heute auf dem falschen Bein aufgestanden
+02:09=%1 schoss in die falsche Richtung
+02:09=Das sah schmerzhaft aus!
+02:09=%1 verwirrt den Feind
+02:09=Was ist denn mit %1 los?
+02:09=Keine Sorge, %1, nächstes Mal klappt’s bestimmt!
+02:09=%1 ist eine Gefahr für sich selbst
+02:09=%1 braucht keine Feinde mehr
 
 ; Hog (%1) shot an home run (using the bat and another hog)
 02:10=Home Run!

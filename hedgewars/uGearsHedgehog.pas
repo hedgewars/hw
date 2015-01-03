@@ -505,9 +505,11 @@ with Gear^,
             end
         else
             Message:= Message and (not gmAttack);
-    end;
+
+    ScriptCall('onHogAttack', ord(CurAmmoType));
+    end; // of with Gear^, Gear^.Hedgehog^ do
+
     TargetPoint.X := NoPointX;
-    ScriptCall('onHogAttack');
 end;
 
 procedure AfterAttack;
@@ -832,7 +834,9 @@ if ((Gear^.State and (gstAttacking or gstMoving)) = 0) then
 
     Gear^.Hedgehog^.visStepPos:= (Gear^.Hedgehog^.visStepPos + 1) and 7;
 
-    if (not cArtillery) and ((Gear^.Message and gmPrecise) = 0) then
+    if (not cArtillery or
+           ((CurAmmoGear <> nil) and (CurAmmoGear^.Kind = gtBlowTorch))) and
+       ((Gear^.Message and gmPrecise) = 0) then
         MakeHedgehogsStep(Gear);
 
     SetAllHHToActive(false);

@@ -50,7 +50,6 @@ procedure SetupOpenGL;
 function  RenderHelpWindow(caption, subcaption, description, extra: ansistring; extracolor: LongInt; iconsurf: PSDL_Surface; iconrect: PSDL_Rect): PTexture;
 procedure RenderWeaponTooltip(atype: TAmmoType);
 procedure ShowWeaponTooltip(x, y: LongInt);
-procedure FreeWeaponTooltip;
 procedure MakeCrossHairs;
 {$IFDEF USE_VIDEO_RECORDING}
 procedure InitOffscreenOpenGL;
@@ -97,7 +96,9 @@ end;
 procedure InitZoom(zoom: real);
 begin
     SetScale(zoom);
-    UpdateViewLimits();
+    // make sure view limits are updated
+    // because SetScale() doesn't do it, if zoom=cScaleFactor
+    updateViewLimits();
 end;
 
 function WriteInRect(Surface: PSDL_Surface; X, Y: LongInt; Color: LongWord; Font: THWFont; s: PChar): TSDL_Rect;
@@ -475,7 +476,7 @@ if not cOnlyStats then
             tmpsurf:= TTF_RenderUTF8_Blended(Fontz[CheckCJKFont(trAmmo[NameId],fnt16)].Handle, PChar(trAmmo[NameId]), cWhiteColorChannels);
             TryDo(tmpsurf <> nil,'Name-texture creation for ammo type #' + intToStr(ord(ai)) + ' failed!',true);
             tmpsurf:= doSurfaceConversion(tmpsurf);
-            FreeTexture(NameTex);
+            FreeAndNilTexture(NameTex);
             NameTex:= Surface2Tex(tmpsurf, false);
             SDL_FreeSurface(tmpsurf)
             end;
@@ -485,7 +486,7 @@ if not cOnlyStats then
         begin
         tmpsurf:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(IntToStr(i) + 'x'), cWhiteColorChannels);
         tmpsurf:= doSurfaceConversion(tmpsurf);
-        FreeTexture(CountTexz[i]);
+        FreeAndNilTexture(CountTexz[i]);
         CountTexz[i]:= Surface2Tex(tmpsurf, false);
         SDL_FreeSurface(tmpsurf)
         end;
@@ -580,7 +581,7 @@ procedure RenderHealth(var Hedgehog: THedgehog);
 var s: shortstring;
 begin
 str(Hedgehog.Gear^.Health, s);
-FreeTexture(Hedgehog.HealthTagTex);
+FreeAndNilTexture(Hedgehog.HealthTagTex);
 Hedgehog.HealthTagTex:= RenderStringTex(ansistring(s), Hedgehog.Team^.Clan^.Color, fnt16)
 end;
 
@@ -610,17 +611,17 @@ begin
     // loading failed
     if tmpsurf = nil then
         begin
-
-        // anounce that loading failed
-        OutError(msgFailed, false);
-
         // output sdl error if loading failed when data source was available
         if rwops <> nil then
             begin
+            // anounce that loading failed
+            OutError(msgFailed, false);
+
             SDLTry(false, (imageFlags and ifCritical) <> 0);
             // rwops was already freed by IMG_Load_RW
             rwops:= nil;
-            end;
+            end else
+            OutError(msgFailed, (imageFlags and ifCritical) <> 0);
         exit;
         end;
 
@@ -697,10 +698,7 @@ procedure LoadHedgehogHat2(var HH: THedgehog; newHat: shortstring; allowSurfReus
 begin
     // free the mem of any previously assigned texture.  This was previously only if the new one could be loaded, but, NoHat is usually a better choice
     if HH.HatTex <> nil then
-        begin
-        FreeTexture(HH.HatTex);
-        HH.HatTex:= nil
-        end;
+        FreeAndNilTexture(HH.HatTex);
 
     // load new hat surface if this hat is different than the one already loaded
     if newHat <> prevHat then
@@ -843,8 +841,7 @@ begin
             GameLoaded();
     {$ENDIF}
     WriteLnToConsole('Freeing progress surface... ');
-    FreeTexture(ProgrTex);
-    ProgrTex:= nil;
+    FreeAndNilTexture(ProgrTex);
     Step:= 0
 end;
 
@@ -982,7 +979,7 @@ begin
         end;
 
 // free old texture
-FreeWeaponTooltip;
+FreeAndNilTexture(WeaponTooltipTex);
 
 // image region
 i:= LongInt(atype) - 1;
@@ -1020,13 +1017,6 @@ begin
 // draw the texture if it exists
 if WeaponTooltipTex <> nil then
     DrawTexture(x, y, WeaponTooltipTex)
-end;
-
-procedure FreeWeaponTooltip;
-begin
-// free the existing texture (if there is any)
-FreeTexture(WeaponTooltipTex);
-WeaponTooltipTex:= nil
 end;
 
 {$IFDEF USE_VIDEO_RECORDING}
@@ -1270,8 +1260,20 @@ begin
 end;
 
 procedure freeModule;
+var fi: THWFont;
 begin
     StoreRelease(false);
+    // make sure fonts are cleaned up
+    for fi:= Low(THWFont) to High(THWFont) do
+        with Fontz[fi] do
+            begin
+            if Handle <> nil then
+                begin
+                TTF_CloseFont(Handle);
+                Handle:= nil;
+                end;
+            end;
+
     TTF_Quit();
 {$IFDEF SDL2}
     SDL_GL_DeleteContext(SDLGLcontext);

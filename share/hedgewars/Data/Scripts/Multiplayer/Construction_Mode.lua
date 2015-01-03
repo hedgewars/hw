@@ -1070,12 +1070,12 @@ placeholder = 20
 
 				{amLowGravity, 		"amLowGravity",		0, loc("Low Gravity"), 		4*placeholder},
 				{amExtraDamage, 	"amExtraDamage",	0, loc("Extra Damage"), 	6*placeholder},
-				{amExtraTime,		"amExtraTime",		0, loc("Extra Time"), 		8*placeholder},
+				{amExtraTime,		"amExtraTime",		0, loc("Extra Time"), 		8*placeholder}
 
-				{amResurrector, 	"amResurrector",	0, loc("Resurrector"), 		8*placeholder},
-				{amTardis, 			"amTardis",			0, loc("Tardis"), 			2*placeholder},
+				--{amResurrector, 	"amResurrector",	0, loc("Resurrector"), 		8*placeholder},
+				--{amTardis, 			"amTardis",			0, loc("Tardis"), 			2*placeholder},
 
-				{amSwitch,			"amSwitch",			0, loc("Switch Hog"), 		4*placeholder}
+				--{amSwitch,			"amSwitch",			0, loc("Switch Hog"), 		4*placeholder}
 				}
 
 ----------------------------
@@ -1345,7 +1345,11 @@ function PlaceObject(x,y)
 		placedCount = placedCount + 1
 
 	else
-		AddCaption("Invalid Placement",0xffba00ff,capgrpVolume)
+	    if (clanPower[GetHogClan(CurrentHedgehog)] >= placedExpense) then
+            AddCaption(loc("Invalid Placement"),0xffba00ff,capgrpVolume)
+        else
+            AddCaption(loc("Insufficient Power"),0xffba00ff,capgrpVolume)
+        end
 		PlaySound(sndDenied)
 	end
 

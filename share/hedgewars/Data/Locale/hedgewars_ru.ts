@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>копия %1</translation>
     </message>
 </context>
 <context>
@@ -616,11 +616,11 @@ Last two engine messages:
     </message>
     <message>
         <source>Random perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайная перлиновская</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль:</translation>
     </message>
 </context>
 <context>
@@ -690,7 +690,7 @@ Last two engine messages:
     </message>
     <message>
         <source>Server authentication error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка аутентификации сервера</translation>
     </message>
 </context>
 <context>
@@ -890,7 +890,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Open packages directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть папку с пакетами</translation>
     </message>
 </context>
 <context>
@@ -945,7 +945,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Optimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Оптимизировать</translation>
     </message>
 </context>
 <context>
@@ -1007,10 +1007,10 @@ just enter your nickname.</source>
     </message>
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
-        <translation type="unfinished">
+        <translation>
+            <numerusform>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктом урона.</numerusform>
             <numerusform>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Приз за лучший выстрел получает &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;%2&lt;/b&gt; пунктами урона.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1073,8 +1073,6 @@ just enter your nickname.</source>
         <source>(%1 %2)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -1096,7 +1094,7 @@ just enter your nickname.</source>
     <name>PageMain</name>
     <message>
         <source>Downloadable Content</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачиваемые дополнения</translation>
     </message>
     <message>
         <source>Play a game on a single computer</source>
@@ -1116,7 +1114,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Access the user created content downloadable from our website</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ к скачиваемым с нашего сайта дополнениям, созданным пользователями</translation>
     </message>
     <message>
         <source>Exit game</source>
@@ -1837,7 +1835,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable team tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить ярлыки команд по умолчанию</translation>
     </message>
     <message>
         <source>Hog</source>
@@ -1845,7 +1843,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable hedgehog tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить ярлыки ежей по умолчанию</translation>
     </message>
     <message>
         <source>Health</source>
@@ -1853,7 +1851,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable health tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить ярлыки уровня здоровья по умолчанию</translation>
     </message>
     <message>
         <source>Translucent</source>
@@ -1861,7 +1859,7 @@ just enter your nickname.</source>
     </message>
     <message>
         <source>Enable translucent tags by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Включить прозрачность ярлыков по умолчанию</translation>
     </message>
 </context>
 <context>
@@ -2262,7 +2260,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Script parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметр скрипта</translation>
     </message>
 </context>
 <context>
@@ -2428,8 +2426,6 @@ Do you still want to join the room?</source>
     <message numerus="yes">
         <source>Do you really want to remove %1 file(s)?</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
@@ -2623,7 +2619,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <source>Set the default server port for Hedgewars</source>
@@ -2713,7 +2709,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Random Perlin</source>
-        <translation type="unfinished"></translation>
+        <translation>Случайная перлиновская</translation>
     </message>
 </context>
 <context>
@@ -2763,7 +2759,7 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>copy of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>копия %1</translation>
     </message>
 </context>
 <context>
@@ -2992,7 +2988,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>speed up replay</source>
-        <translation type="unfinished"></translation>
+        <translation>ускорить проигрывание</translation>
     </message>
 </context>
 <context>
@@ -3440,7 +3436,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>ограничено</translation>
     </message>
     <message>
         <source>REMOVE_TEAM: no such team</source>
@@ -3496,7 +3492,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>kicked</source>
-        <translation type="unfinished"></translation>
+        <translation>выкинут</translation>
     </message>
     <message>
         <source>Ping timeout</source>
@@ -3504,7 +3500,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>bye</source>
-        <translation type="unfinished"></translation>
+        <translation>пока</translation>
     </message>
     <message>
         <source>No such room</source>
@@ -3512,7 +3508,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Joining restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Вход ограничен</translation>
     </message>
     <message>
         <source>Registered users only</source>
@@ -3528,7 +3524,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Restricted</source>
-        <translation type="unfinished"></translation>
+        <translation>Ограничено</translation>
     </message>
     <message>
         <source>Room version incompatible to your hedgewars version</source>
@@ -3552,15 +3548,15 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>kick</source>
-        <translation type="unfinished"></translation>
+        <translation>выкинуть</translation>
     </message>
     <message>
         <source>map</source>
-        <translation type="unfinished"></translation>
+        <translation>карта</translation>
     </message>
     <message>
         <source>pause</source>
-        <translation type="unfinished">пауза</translation>
+        <translation>пауза</translation>
     </message>
     <message>
         <source>Reconnected too fast</source>

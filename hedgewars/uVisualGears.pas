@@ -205,9 +205,9 @@ case Layer of
                   vgtSmoke: DrawTextureF(SpritesData[sprSmoke].Texture, Gear^.scale, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, 1, SpritesData[sprSmoke].Width, SpritesData[sprSmoke].Height);
                   vgtSmokeWhite: DrawSprite(sprSmokeWhite, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame);
                   vgtDust: if Gear^.State = 1 then
-                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle)
+                               DrawSpriteRotatedF(sprSnowDust, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle)
                            else
-                               DrawSpriteRotatedF(sprDust, round(Gear^.X) + WorldDx - 11, round(Gear^.Y) + WorldDy - 11, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle);
+                               DrawSpriteRotatedF(sprDust, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, 7 - Gear^.Frame, Gear^.Tag, Gear^.Angle);
                   vgtFire: if (Gear^.State and gstTmpFlag) = 0 then
                                DrawSprite(sprFlame, round(Gear^.X) + WorldDx - 8, round(Gear^.Y) + WorldDy, (RealTicks shr 6 + Gear^.Frame) mod 8)
                            else
@@ -508,11 +508,11 @@ for i:= 0 to 6 do
     vg:= VisualGearLayers[i];
     while vg <> nil do
         if vg^.Kind = vgtFlake then
-        begin
-        tmp:= vg^.NextGear;
-        DeleteVisualGear(vg);
-        vg:= tmp
-        end
+            begin
+            tmp:= vg^.NextGear;
+            DeleteVisualGear(vg);
+            vg:= tmp
+            end
         else vg:= vg^.NextGear;
     end;
 if hasBorder or (not cSnow) then

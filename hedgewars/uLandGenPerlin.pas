@@ -97,11 +97,6 @@ begin
                             grad(p[BB  ], x-N , y-N)));
 end;
 
-function f(t: double): double; inline;
-begin
-    f:= t * t * t * (t * (t * 6 - 15) + 10);
-end;
-
 procedure inoise_setup();
 var i, ii, t: Longword;
 begin
@@ -130,7 +125,8 @@ const width = 4096;
     margin = 200;
 
 procedure GenPerlin;
-var y, x, {dy, }di, dj, df, r, param1, param2, rCutoff, detail: LongInt;
+var y, x, di, dj, r, param1, param2, rCutoff, detail: LongInt;
+var df: Int64;
 begin
     param1:= cTemplateFilter div 3;
     param2:= cTemplateFilter mod 3;

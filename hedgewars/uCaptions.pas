@@ -48,10 +48,7 @@ begin
     if Length(s) = 0 then
         exit;
     if Captions[Group].Text <> s then
-        begin
-        FreeTexture(Captions[Group].Tex);
-        Captions[Group].Tex:= nil
-        end;
+        FreeAndNilTexture(Captions[Group].Tex);
 
     if Captions[Group].Tex = nil then
         begin
@@ -73,7 +70,7 @@ var Group: TCapGroup;
 begin
 for Group:= Low(TCapGroup) to High(TCapGroup) do
     if unload then
-        FreeTexture(Captions[Group].Tex)
+        FreeAndNilTexture(Captions[Group].Tex)
     else if length(Captions[Group].Text) > 0 then
         Captions[Group].Tex:= RenderStringTex(Captions[Group].Text, Captions[Group].Color, fntBig)
 end;
@@ -97,8 +94,7 @@ begin
                 inc(offset, Tex^.h + 2);
                 if EndTime <= RealTicks then
                     begin
-                    FreeTexture(Tex);
-                    Tex:= nil;
+                    FreeAndNilTexture(Tex);
                     Text:= ansistring('');
                     EndTime:= 0
                     end;
@@ -114,10 +110,7 @@ procedure freeModule;
 var group: TCapGroup;
 begin
     for group:= Low(TCapGroup) to High(TCapGroup) do
-        begin
-        FreeTexture(Captions[group].Tex);
-        Captions[group].Tex:= nil
-        end
+        FreeAndNilTexture(Captions[group].Tex);
 end;
 
 end.

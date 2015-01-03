@@ -100,6 +100,7 @@ var luaState : Plua_State;
     ScriptAmmoReinforcement : shortstring;
     ScriptLoaded : boolean;
     mapDims : boolean;
+    PointsBuffer: shortstring;
 
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
@@ -108,8 +109,10 @@ procedure ScriptSetAmmoDelay(ammo : TAmmoType; delay: Byte); forward;
 
 var LuaDebugInfo: lua_Debug;
 
+procedure SetGlobals; forward;
 procedure LuaParseString(s: shortString);
 begin
+    SetGlobals;
     AddFileLog('[Lua] input string: ' + s);
     AddChatString(#3 + '[Lua] > ' + s);
     if luaL_dostring(luaState, Str2PChar(s)) <> 0 then
@@ -188,6 +191,19 @@ begin
         end;
 
     CheckAndFetchParamCount:= true;
+end;
+
+// check if is in range of count1 and count2
+function CheckAndFetchParamCountRange(L : Plua_State; count1, count2: LongInt; call, paramsyntax: shortstring; out actual: LongInt): boolean; inline;
+begin
+    actual:= lua_gettop(L);
+    if (actual < count1) or (actual > count2) then
+        begin
+        LuaParameterCountError('at least ' + inttostr(count1) + ', but at most ' + inttostr(count2), call, paramsyntax, actual);
+        exit(false);
+        end;
+
+    CheckAndFetchParamCountRange:= true;
 end;
 
 // check if is same or higher as minCount
@@ -1053,16 +1069,16 @@ begin
                 hh:= team^.Hedgehogs[j];
                 if (hh.Gear <> nil) or (hh.GearHidden <> nil) then
                     begin
-                    FreeTexture(hh.NameTagTex);
+                    FreeAndNilTexture(hh.NameTagTex);
                     hh.NameTagTex:= RenderStringTex(ansistring(hh.Name), clan^.Color, fnt16);
                     RenderHealth(hh);
                     end;
                 end;
-            FreeTexture(team^.NameTagTex);
+            FreeAndNilTexture(team^.NameTagTex);
             team^.NameTagTex:= RenderStringTex(ansistring(clan^.Teams[i]^.TeamName), clan^.Color, fnt16);
             end;
 
-	FreeTexture(clan^.HealthTex);
+	    FreeAndNilTexture(clan^.HealthTex);
         clan^.HealthTex:= makeHealthBarTexture(cTeamHealthWidth + 5, clan^.Teams[0]^.NameTagTex^.h, clan^.Color);
         end;
 
@@ -1095,7 +1111,7 @@ begin
             begin
             gear^.Hedgehog^.Team^.TeamName := lua_tostring(L, 2);
 
-            FreeTexture(gear^.Hedgehog^.Team^.NameTagTex);
+            FreeAndNilTexture(gear^.Hedgehog^.Team^.NameTagTex);
             gear^.Hedgehog^.Team^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Team^.TeamName), gear^.Hedgehog^.Team^.Clan^.Color, fnt16);
             end
         else
@@ -1134,7 +1150,7 @@ begin
             begin
             gear^.Hedgehog^.Name:= lua_tostring(L, 2);
 
-            FreeTexture(gear^.Hedgehog^.NameTagTex);
+            FreeAndNilTexture(gear^.Hedgehog^.NameTagTex);
             gear^.Hedgehog^.NameTagTex:= RenderStringTex(ansistring(gear^.Hedgehog^.Name), gear^.Hedgehog^.Team^.Clan^.Color, fnt16)
             end
         end;
@@ -2252,16 +2268,86 @@ begin
     lc_declareachievement:= 0
 end;
 
-// stuff for testing the lua API
-function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
+
+procedure ScriptFlushPoints();
 begin
-    if CheckLuaParamCount(L, 1, 'EndLuaAPITest', 'LUA_API_TEST_SUCCESSFUL or LUA_API_TEST_FAILED') then
+    ParseCommand('draw ' + PointsBuffer, true, true);
+    PointsBuffer:= '';
+end;
+
+
+function lc_addPoint(L : Plua_State) : LongInt; Cdecl;
+var np, param: LongInt;
+begin
+    if CheckAndFetchParamCountRange(L, 2, 4, 'AddPoint', 'x, y [, width [, erase] ]', np) then
         begin
-        WriteLnToConsole('Lua test finished');
-        halt(lua_tointeger(L, 1));
-        end
-    else
-        lua_pushnil(L);
+        // x
+        param:= LongInt(lua_tointeger(L,1));
+        PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
+        PointsBuffer:= PointsBuffer + char((param and $FF));
+        // y
+        param:= LongInt(lua_tointeger(L,2));
+        PointsBuffer:= PointsBuffer + char((param shr 8) and $FF);
+        PointsBuffer:= PointsBuffer + char((param and $FF));
+        // width
+        if np > 2 then
+            begin
+            param:= lua_tointeger(L,3);
+            param:= (param or $80);
+            // erase
+            if (np > 3) and lua_toboolean(L, 4) then
+                param:= (param or $40);
+            PointsBuffer:= PointsBuffer + char(param);
+            end
+        // no width defined
+        else
+            PointsBuffer:= PointsBuffer + char(0);
+
+        // flush before shortstring limit length is reached
+        if length(PointsBuffer) > 245 then
+            ScriptFlushPoints();
+        end;
+    lc_addPoint:= 0
+end;
+
+
+function lc_flushPoints(L : Plua_State) : LongInt; Cdecl;
+begin
+    if CheckLuaParamCount(L, 0, 'FlushPoints', '') then
+        if length(PointsBuffer) > 0 then
+            ScriptFlushPoints();
+    lc_flushPoints:= 0
+end;
+
+// stuff for lua tests
+function lc_endluatest(L : Plua_State) : LongInt; Cdecl;
+var rstring: shortstring;
+const
+    call = 'EndLuaTest';
+    params = 'TEST_SUCCESSFUL or TEST_FAILED';
+begin
+    if CheckLuaParamCount(L, 1, call, params) then
+        begin
+
+        case lua_tointeger(L, 1) of
+            HaltTestSuccess : rstring:= 'Success';
+            HaltTestLuaError: rstring:= 'FAILED';
+        else
+            begin
+            LuaCallError('Parameter must be either ' + params, call, params);
+            exit(0);
+            end;
+        end;
+
+        if cTestLua then
+            begin
+            WriteLnToConsole('Lua test finished, result: ' + rstring);
+            halt(lua_tointeger(L, 1));
+            end
+        else LuaError('Not in lua test mode, engine will keep running. Reported test result: ' + rstring);
+
+        end;
+
     lc_endluatest:= 0;
 end;
 ///////////////////
@@ -2738,6 +2824,7 @@ ScriptSetInteger('gfDivideTeams', gfDivideTeams);
 ScriptSetInteger('gfLowGravity', gfLowGravity);
 ScriptSetInteger('gfLaserSight', gfLaserSight);
 ScriptSetInteger('gfInvulnerable', gfInvulnerable);
+ScriptSetInteger('gfResetHealth', gfResetHealth);
 ScriptSetInteger('gfVampiric', gfVampiric);
 ScriptSetInteger('gfKarma', gfKarma);
 ScriptSetInteger('gfArtillery', gfArtillery);
@@ -2947,17 +3034,17 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+// drawn map functions
+lua_register(luaState, _P'AddPoint', @lc_addPoint);
+lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 
 lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
-if cTestLua then
-    begin
-    ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
-    ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
-    lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
-    end;
+ScriptSetInteger('TEST_SUCCESSFUL'   , HaltTestSuccess);
+ScriptSetInteger('TEST_FAILED'       , HaltTestFailed);
+lua_register(luaState, _P'EndLuaTest', @lc_endluatest);
 
 ScriptClearStack; // just to be sure stack is empty
 ScriptLoaded:= false;
@@ -3051,6 +3138,7 @@ end;
 procedure initModule;
 begin
 mapDims:= false;
+PointsBuffer:= '';
 end;
 
 procedure freeModule;

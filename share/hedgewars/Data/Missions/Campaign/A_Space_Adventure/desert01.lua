@@ -526,7 +526,7 @@ function saveCheckPointLocal(cpoint)
 	-- bazooka - grenade - rope - parachute - deagle - btorch - construct - portal - rcplane
 	SaveCampaignVar("HeroAmmo", GetAmmoCount(hero.gear, amBazooka)..GetAmmoCount(hero.gear, amGrenade)..
 			GetAmmoCount(hero.gear, amRope)..GetAmmoCount(hero.gear, amParachute)..GetAmmoCount(hero.gear, amDEagle)..
-			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amConstruction)..
+			GetAmmoCount(hero.gear, amBlowTorch)..GetAmmoCount(hero.gear, amGirder)..
 			GetAmmoCount(hero.gear, amPortalGun)..GetAmmoCount(hero.gear, amRCPlane))
 	AnimCaption(hero.gear, loc("Checkpoint reached!"), 5000)
 end
@@ -542,7 +542,7 @@ function loadHeroAmmo()
 	AddAmmo(hero.gear, amBlowTorch, tonumber(ammo:sub(6,6)))
 	-- weird, if 0 bazooka isn't displayed in the weapons menu
 	if tonumber(ammo:sub(7,7)) > 0 then
-		AddAmmo(hero.gear, amConstruction, tonumber(ammo:sub(7,7)))
+		AddAmmo(hero.gear, amGirder, tonumber(ammo:sub(7,7)))
 	end
 	AddAmmo(hero.gear, amPortalGun, tonumber(ammo:sub(8,8)))
 	AddAmmo(hero.gear, amRCPlane, tonumber(ammo:sub(9,9)))

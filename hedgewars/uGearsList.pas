@@ -143,14 +143,22 @@ end;
 
 procedure RemoveGearFromList(Gear: PGear);
 begin
-TryDo((curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
+if (Gear <> GearsList) and (Gear <> nil) and (Gear^.NextGear = nil) and (Gear^.PrevGear = nil) then
+    begin
+    AddFileLog('Attempted to remove Gear #'+inttostr(Gear^.uid)+' from the list twice.');
+    exit
+    end;
+TryDo((Gear = nil) or (curHandledGear = nil) or (Gear = curHandledGear), 'You''re doing it wrong', true);
 
 if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
     Gear^.PrevGear^.NextGear:= Gear^.NextGear
-else
-    GearsList:= Gear^.NextGear
+else 
+    GearsList:= Gear^.NextGear;
+
+Gear^.NextGear:= nil;
+Gear^.PrevGear:= nil
 end;
 
 
@@ -282,15 +290,22 @@ case Kind of
                         dy.isNegative:= false;
                         dy.QWordValue:= QWord($3AD3) * GetRandom(7000) * 8;
                         if GetRandom(2) = 0 then
-                            dx := -dx
-                        end;
+                            dx := -dx;
+                        Tint:= $FFFFFFFF
+                        end
+                    else
+                        Tint:= (ExplosionBorderColor shr RShift and $FF shl 24) or
+                               (ExplosionBorderColor shr GShift and $FF shl 16) or
+                               (ExplosionBorderColor shr BShift and $FF shl 8) or $FF;
                     State:= State or gstInvisible;
-                    Health:= random(vobFrameTicks);
+                    // use health field to store current frameticks
+                    if vobFrameTicks > 0 then
+                        Health:= random(vobFrameTicks)
+                    else
+                        Health:= 0;
+                    // use timer to store currently displayed frame index
                     if gear^.Timer = 0 then Timer:= random(vobFramesCount);
-                    Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8;
-                    Tint:= ((ExplosionBorderColor and RMask) shl RShift) or
-                           ((ExplosionBorderColor and GMask) shl GShift) or
-                           ((ExplosionBorderColor and BMask) shl BShift) or $FF;
+                    Damage:= (random(2) * 2 - 1) * (vobVelocity + random(vobVelocity)) * 8
                     end
                 end;
        gtGrave: begin
@@ -626,8 +641,7 @@ ScriptCall('onGearDelete', gear^.uid);
 
 DeleteCI(Gear);
 
-FreeTexture(Gear^.Tex);
-Gear^.Tex:= nil;
+FreeAndNilTexture(Gear^.Tex);
 
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
@@ -648,7 +662,7 @@ else if Gear^.Kind = gtHedgehog then
         end
     else*)
         begin
-        if (Gear <> CurrentHedgehog^.Gear) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
+        if ((CurrentHedgehog = nil) or (Gear <> CurrentHedgehog^.Gear)) or (CurAmmoGear = nil) or (CurAmmoGear^.Kind <> gtKamikaze) then
             Gear^.Hedgehog^.Team^.Clan^.Flawless:= false;
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             begin
@@ -659,7 +673,7 @@ else if Gear^.Kind = gtHedgehog then
             end;
 
         team:= Gear^.Hedgehog^.Team;
-        if CurrentHedgehog^.Gear = Gear then
+        if (CurrentHedgehog <> nil) and (CurrentHedgehog^.Gear = Gear) then
             begin
             AttackBar:= 0;
             FreeActionsList; // to avoid ThinkThread on drawned gear
@@ -669,6 +683,7 @@ else if Gear^.Kind = gtHedgehog then
             end;
 
         Gear^.Hedgehog^.Gear:= nil;
+
         if Gear^.Hedgehog^.King then
             begin
             // are there any other kings left? Just doing nil check.  Presumably a mortally wounded king will get reaped soon enough
@@ -686,9 +701,9 @@ else if Gear^.Kind = gtHedgehog then
 
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
         // same stand for CheckHHDamage
-        if (Gear^.LastDamage <> nil) then
+        if (Gear^.LastDamage <> nil) and (CurrentHedgehog <> nil) then
             uStats.HedgehogDamaged(Gear, Gear^.LastDamage, 0, true)
-        else
+        else if CurrentHedgehog <> nil then
             uStats.HedgehogDamaged(Gear, CurrentHedgehog, 0, true);
 
         inc(KilledHHs);
@@ -699,7 +714,7 @@ else if Gear^.Kind = gtHedgehog then
             with CurrentHedgehog^ do
                 begin
                 inc(Team^.stats.AIKills);
-                FreeTexture(Team^.AIKillsTex);
+                FreeAndNilTexture(Team^.AIKillsTex);
                 Team^.AIKillsTex := RenderStringTex(ansistring(inttostr(Team^.stats.AIKills)), Team^.Clan^.Color, fnt16);
                 end
         end;
@@ -714,7 +729,10 @@ if FollowGear = Gear then
     FollowGear:= nil;
 if lastGearByUID = Gear then
     lastGearByUID := nil;
-RemoveGearFromList(Gear);
+if (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.GearHidden <> Gear) then // hidden hedgehogs shouldn't be in the list
+     RemoveGearFromList(Gear)
+else Gear^.Hedgehog^.GearHidden:= nil;
+
 Dispose(Gear)
 end;
 

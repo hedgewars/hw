@@ -147,7 +147,7 @@ procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var color  : TSDL_Color;
 begin
 if cl.Tex <> nil then
-    FreeTexture(cl.Tex);
+    FreeAndNilTexture(cl.Tex);
 
 if isInput then
     begin
@@ -583,9 +583,9 @@ end;
 procedure freeModule;
 var i: ShortInt;
 begin
-    FreeTexture(InputStr.Tex);
+    FreeAndNilTexture(InputStr.Tex);
     for i:= 0 to MaxStrIndex do
-        FreeTexture(Strs[i].Tex);
+        FreeAndNilTexture(Strs[i].Tex);
 end;
 
 end.

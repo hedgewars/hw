@@ -239,7 +239,7 @@ begin
     thumbpath:= '/VideoTemp/' + RecPrefix;
     AddFileLog('Saving thumbnail ' + thumbpath);
     k:= max(max(cScreenWidth, cScreenHeight) div 400, 1); // here 400 is minimum size of thumbnail
-    MakeScreenshot(thumbpath, k);
+    MakeScreenshot(thumbpath, k, 0);
     thumbnailSaved:= true;
 end;
 

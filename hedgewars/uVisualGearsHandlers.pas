@@ -80,32 +80,41 @@ uses uCollisions, uVariables, Math, uConsts, uVisualGearsList, uFloat, uSound, u
 procedure doStepFlake(Gear: PVisualGear; Steps: Longword);
 var sign: real;
     moved: boolean;
+    vfc, vft: LongWord;
 begin
 if vobCount = 0 then exit;
 
 sign:= 1;
 with Gear^ do
     begin
-    inc(FrameTicks, Steps);
-    if not SuddenDeathDmg and (FrameTicks > vobFrameTicks) then
-        begin
-        dec(FrameTicks, vobFrameTicks);
-        inc(Frame);
-        if Frame = vobFramesCount then
-            Frame:= 0
-        end
-    else if SuddenDeathDmg and (FrameTicks > vobSDFrameTicks) then
-        begin
-        dec(FrameTicks, vobSDFrameTicks);
-        inc(Frame);
-        if Frame = vobSDFramesCount then
-            Frame:= 0
-        end;
+
     X:= X + (cWindSpeedf * 400 + dX + tdX) * Steps * Gear^.Scale;
+
     if SuddenDeathDmg then
-        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale
+        begin
+        Y:= Y + (dY + tdY + cGravityf * vobSDFallSpeed) * Steps * Gear^.Scale;
+        vfc:= vobSDFramesCount;
+        vft:= vobSDFrameTicks;
+        end
     else
+        begin
         Y:= Y + (dY + tdY + cGravityf * vobFallSpeed) * Steps * Gear^.Scale;
+        vfc:= vobFramesCount;
+        vft:= vobFrameTicks;
+        end;
+
+    if vft > 0 then
+        begin
+        inc(FrameTicks, Steps);
+        if FrameTicks > vft then
+            begin
+            dec(FrameTicks, vft);
+            inc(Frame);
+            if Frame = vfc then
+                Frame:= 0
+            end;
+        end;
+
     Angle:= Angle + dAngle * Steps;
     if Angle > 360 then
         Angle:= Angle - 360

@@ -228,7 +228,7 @@ prevPoint.X:= 0;
 prevPoint.Y:= cScreenHeight div 2;
 //prevTargetPoint.X:= 0;
 //prevTargetPoint.Y:= 0;
-WorldDx:=  -(LAND_WIDTH div 2);// + cScreenWidth div 2;
+WorldDx:=  -(LongInt(leftX + (playWidth div 2))); // -(LAND_WIDTH div 2);// + cScreenWidth div 2;
 WorldDy:=  -(LAND_HEIGHT - (playHeight div 2)) + (cScreenHeight div 2);
 
 //aligns it to the bottom of the screen, minus the border
@@ -404,17 +404,12 @@ end;
 // for uStore texture resetting
 procedure ResetWorldTex;
 begin
-    FreeTexture(fpsTexture);
-    fpsTexture:= nil;
-    FreeTexture(timeTexture);
-    timeTexture:= nil;
-    FreeTexture(missionTex);
-    missionTex:= nil;
-    FreeTexture(recTexture);
-    recTexture:= nil;
-    FreeTexture(AmmoMenuTex);
+    FreeAndNilTexture(fpsTexture);
+    FreeAndNilTexture(timeTexture);
+    FreeAndNilTexture(missionTex);
+    FreeAndNilTexture(recTexture);
+    FreeAndNilTexture(AmmoMenuTex);
     AmmoMenuInvalidated:= true;
-    AmmoMenuTex:= nil;
 end;
 
 function GetAmmoMenuTexture(Ammo: PHHAmmo): PTexture;
@@ -566,7 +561,7 @@ if Ammo = nil then
 if(AmmoMenuInvalidated) then
     begin
     AmmoMenuInvalidated:= false;
-    FreeTexture(AmmoMenuTex);
+    FreeAndNilTexture(AmmoMenuTex);
     AmmoMenuTex:= GetAmmoMenuTexture(Ammo);
 
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
@@ -749,7 +744,7 @@ c:= -1;
                 bShowAmmoMenu:= false;
                 SetWeapon(Ammo^[Slot, Pos].AmmoType);
                 bSelected:= false;
-                FreeWeaponTooltip;
+                FreeAndNilTexture(WeaponTooltipTex);
 {$IFDEF USE_TOUCH_INTERFACE}//show the aiming buttons + animation
                 if (Ammo^[Slot, Pos].Propz and ammoprop_NeedUpDown) <> 0 then
                     begin
@@ -772,7 +767,7 @@ c:= -1;
             end
         end
     else
-        FreeWeaponTooltip;
+        FreeAndNilTexture(WeaponTooltipTex);
 
     if (WeaponTooltipTex <> nil) and (AMShiftX = 0) and (AMShiftY = 0) then
 {$IFDEF USE_LANDSCAPE_AMMOMENU}
@@ -1032,7 +1027,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         begin
         rect.w:= w;
         rect.x:= ViewLeftX;
-        DrawRect(rect, $30, $30, $30, $40, true);
+        DrawRect(rect, $10, $10, $10, $80, true);
         if WorldEdge = weBounce then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
@@ -1044,7 +1039,7 @@ if (WorldEdge <> weNone) and (WorldEdge <> weSea) then
         begin
         rect.w:= w;
         rect.x:= tmp;
-        DrawRect(rect, $30, $30, $30, $40, true);
+        DrawRect(rect, $10, $10, $10, $80, true);
         if WorldEdge = weBounce then
             DrawLineOnScreen(tmp - 1, ViewTopY, tmp - 1, ViewBottomY, 2, $54, $54, $FF, $FF);
         end;
@@ -1682,7 +1677,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
 
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
-        FreeTexture(timeTexture);
+        FreeAndNilTexture(timeTexture);
         timeTexture:= Surface2Tex(tmpSurface, false);
         SDL_FreeSurface(tmpSurface)
         end;
@@ -1700,7 +1695,7 @@ if (RM = rmDefault) or (RM = rmRightEye) then
             s:= inttostr(FPS) + ' fps';
             tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fnt16].Handle, Str2PChar(s), cWhiteColorChannels);
             tmpSurface:= doSurfaceConversion(tmpSurface);
-            FreeTexture(fpsTexture);
+            FreeAndNilTexture(fpsTexture);
             fpsTexture:= Surface2Tex(tmpSurface, false);
             SDL_FreeSurface(tmpSurface)
             end;
@@ -1763,7 +1758,7 @@ if flagPrerecording then
         s:= 'rec';
         tmpSurface:= TTF_RenderUTF8_Blended(Fontz[fntBig].Handle, Str2PChar(s), cWhiteColorChannels);
         tmpSurface:= doSurfaceConversion(tmpSurface);
-        FreeTexture(recTexture);
+        FreeAndNilTexture(recTexture);
         recTexture:= Surface2Tex(tmpSurface, false);
         SDL_FreeSurface(tmpSurface)
         end;
@@ -1862,7 +1857,7 @@ if (not (CurrentTeam^.ExtDriven and isCursorVisible and (not bShowAmmoMenu) and 
     uCursor.updatePosition();
 {$ENDIF}
 z:= round(200/zoom);
-inbtwnTrgtAttks := (CurrentHedgehog <> nil) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0) and ((GameFlags and gfInfAttack) <> 0);
+inbtwnTrgtAttks := ((GameFlags and gfInfAttack) <> 0) and (CurrentHedgehog <> nil) and ((CurrentHedgehog^.Gear = nil) or (CurrentHedgehog^.Gear <> FollowGear)) and ((Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget) <> 0);
 if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorVisible) and (not bShowAmmoMenu) and (not fastUntilLag) and (not inbtwnTrgtAttks) then
     if ((abs(CursorPoint.X - prevPoint.X) + abs(CursorPoint.Y - prevpoint.Y)) > 4) then
         begin
@@ -1872,12 +1867,17 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         end
     else
         begin
-        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > LongInt(rightX) - leftX - 100 then
+        if (WorldEdge = weWrap) then
+            cameraJump:= LongInt(playWidth) div 2 + 50
+        else
+            cameraJump:= LongInt(rightX) - leftX - 100;
+
+        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > cameraJump then
             begin
-            if (prevPoint.X - WorldDx) * 2 < LongInt((rightX + leftX)) then
-                cameraJump:= LongInt(rightX) - leftX
-                else
-                cameraJump:= LongInt(leftX) - rightX;
+            if prevPoint.X - WorldDx < LongInt(playWidth div 2) then
+                cameraJump:= LongInt(playWidth)
+            else
+                cameraJump:= -LongInt(playWidth);
             WorldDx:= WorldDx - cameraJump;
             end;
 
@@ -2001,7 +2001,7 @@ r.h:= 32;
 if time = 0 then
     time:= 5000;
 missionTimer:= time;
-FreeTexture(missionTex);
+FreeAndNilTexture(missionTex);
 
 if icon > -1 then
     begin
