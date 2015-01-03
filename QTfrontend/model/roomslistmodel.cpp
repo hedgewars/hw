@@ -119,20 +119,20 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
         if (flags.contains("g"))
         {
             if (flags.contains("j"))
-                return QVariant(roomWaitingIconRed);
-            else if (flags.contains("p"))
-                return QVariant(roomWaitingIconGreen);
-            else
-                return QVariant(roomWaitingIcon);
-        }
-        else
-        {
-            if (flags.contains("j"))
                 return QVariant(roomBusyIconRed);
             else if (flags.contains("p"))
                 return QVariant(roomBusyIconGreen);
             else
                 return QVariant(roomBusyIcon);
+        }
+        else
+        {
+            if (flags.contains("j"))
+                return QVariant(roomWaitingIconRed);
+            else if (flags.contains("p"))
+                return QVariant(roomWaitingIconGreen);
+            else
+                return QVariant(roomWaitingIcon);
         }
     }
 
