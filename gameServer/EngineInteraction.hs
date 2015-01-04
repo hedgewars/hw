@@ -104,6 +104,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         , schemeFlags
         , schemeAdditional
         , [eml ["e$template_filter ", mParams Map.! "TEMPLATE"]]
+        , [eml ["e$feature_size ", mParams Map.! "FEATURE_SIZE"]]
         , [eml ["e$mapgen ", mapgen]]
         , mapgenSpecific
         , concatMap teamSetup ti
@@ -112,7 +113,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         ]
     where
         keys1, keys2 :: Set.Set B.ByteString
-        keys1 = Set.fromList ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
+        keys1 = Set.fromList ["FEATURE_SIZE", "MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
         keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME"]
         sane = Set.null (keys1 Set.\\ Map.keysSet mParams)
             && Set.null (keys2 Set.\\ Map.keysSet prms)
