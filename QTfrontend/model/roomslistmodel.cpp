@@ -114,7 +114,7 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
         const QIcon roomWaitingIconGreen(":/res/iconTimeLockG.png");
         const QIcon roomWaitingIconRed(":/res/iconTimeLockR.png");
 
-        QString flags = m_data.at(row).at(0);
+        QString flags = m_data.at(row).at(StateColumn);
 
         if (flags.contains("g"))
         {
@@ -140,10 +140,6 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole)
     {
-        // supply in progress flag as bool
-        if (column == 0)
-            return QVariant(QString(!content.isEmpty()));
-
         // display room names
         if (column == 5)
         {
