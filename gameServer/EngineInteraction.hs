@@ -117,7 +117,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME"]
         sane = Set.null (keys1 Set.\\ Map.keysSet mParams)
             && Set.null (keys2 Set.\\ Map.keysSet prms)
-            && (not . null . drop 40 $ scheme)
+            && (not . null . drop 41 $ scheme)
             && (not . null . tail $ prms Map.! "AMMO")
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
         maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
