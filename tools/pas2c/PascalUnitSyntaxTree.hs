@@ -89,6 +89,7 @@ data InitExpression = InitBinOp String InitExpression InitExpression
     | InitNumber String
     | InitHexNumber String
     | InitString String
+    | InitPChar String
     | InitChar String
     | BuiltInFunction String [InitExpression]
     | InitSet [InitExpression]
