@@ -166,7 +166,7 @@ begin
     // mount system fonts paths first
     for i:= low(cFontsPaths) to high(cFontsPaths) do
         begin
-            fp := cFontsPaths[i];
+            fp := PChar(cFontsPaths[i]);
             if fp <> nil then
                 pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
