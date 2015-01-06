@@ -20,7 +20,7 @@
 <context>
     <name>AmmoSchemeModel</name>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="697"/>
+        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="745"/>
         <source>new</source>
         <translation>Neu</translation>
     </message>
@@ -29,7 +29,7 @@
         <translation type="obsolete">Kopie von</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="703"/>
+        <location filename="../../../../QTfrontend/model/ammoSchemeModel.cpp" line="751"/>
         <source>copy of %1</source>
         <translation>Kopie von %1</translation>
     </message>
@@ -578,18 +578,18 @@ Bitte Kennwort eingeben:</translation>
 <context>
     <name>HWGame</name>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="383"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="384"/>
         <location filename="../../../../QTfrontend/net/recorder.cpp" line="113"/>
         <source>en.txt</source>
         <translation>de.txt</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="433"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="434"/>
         <source>Cannot open demofile %1</source>
         <translation>Wiederholungsdatei »%1« konnte nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/game.cpp" line="252"/>
+        <location filename="../../../../QTfrontend/game.cpp" line="253"/>
         <source>A Fatal ERROR occured! - The game engine had to stop.
 
 We are very sorry for the inconvenience :(
@@ -1123,34 +1123,34 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation>Leeren</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="48"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="49"/>
         <source>Load</source>
         <translation>Laden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="49"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="50"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="78"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="79"/>
         <source>Load drawn map</source>
         <translation>Gezeichnete Karte laden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="86"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="87"/>
         <source>Save drawn map</source>
         <translation>Gezeichnete Karte sichern</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="78"/>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="86"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="79"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="87"/>
         <source>Drawn Maps</source>
         <translation>Gezeichnete Karten</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="78"/>
-        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="86"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="79"/>
+        <location filename="../../../../QTfrontend/ui/page/pagedrawmap.cpp" line="87"/>
         <source>All files</source>
         <translation>Alle Dateien</translation>
     </message>
@@ -1706,7 +1706,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation type="obsolete">Betreten</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="169"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="177"/>
         <source>Admin features</source>
         <translation>Verwalten</translation>
     </message>
@@ -1731,7 +1731,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation type="obsolete">Leeren</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="531"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="541"/>
         <source>%1 players online</source>
         <translation>
             <numerusform>%1 Spieler online</numerusform>
@@ -1739,17 +1739,17 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         </translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="85"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="93"/>
         <source>Search for a room:</source>
         <translation>Nach einem Raum suchen:</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="112"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="120"/>
         <source>Create room</source>
         <translation>Raum erstellen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="116"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="124"/>
         <source>Join room</source>
         <translation>Raum beitreten</translation>
     </message>
@@ -1763,7 +1763,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <translation type="obsolete">Filter leeren</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="171"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="179"/>
         <source>Open server administration page</source>
         <translation>Server-Administrationsseite öffnen</translation>
     </message>
@@ -2148,6 +2148,16 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
         <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="77"/>
         <source>Show games in-progress</source>
         <translation>Zur Zeit laufende Spiele zeigen</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="80"/>
+        <source>Show password protected</source>
+        <translation>Passwortgeschützte Spiele zeigen</translation>
+    </message>
+    <message>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="83"/>
+        <source>Show join restricted</source>
+        <translation>Beitrittbeschränkte Spiele zeigen</translation>
     </message>
 </context>
 <context>
@@ -2966,22 +2976,22 @@ Bitte überprüfe deine Installation!</translation>
         <translation>Datei konnte nicht gelöscht werden</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="492"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="502"/>
         <source>Room Name - Error</source>
         <translation>Raumname - Fehler</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="493"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="503"/>
         <source>Please select room from the list</source>
         <translation>Bitte einen Raum aus der Liste auswählen</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="518"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="528"/>
         <source>Room Name - Are you sure?</source>
         <translation>Raumname - Bist du dir sicher?</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="519"/>
+        <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="529"/>
         <source>The game you are trying to join has started.
 Do you still want to join the room?</source>
         <translation>Das Spiel in das du beitreten möchtest hat bereits begonnen.
@@ -3364,17 +3374,17 @@ Es sind nicht alle Spieler bereit.</translation>
         <translation>Arsenal</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="133"/>
+        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="149"/>
         <source>Random Map</source>
         <translation>Zufallskarte</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="134"/>
+        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="150"/>
         <source>Random Maze</source>
         <translation>Zufallslabyrinth</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="136"/>
+        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="152"/>
         <source>Hand-drawn</source>
         <translation>Handgemalt</translation>
     </message>
@@ -3384,7 +3394,7 @@ Es sind nicht alle Spieler bereit.</translation>
         <translation>Stil</translation>
     </message>
     <message>
-        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="135"/>
+        <location filename="../../../../QTfrontend/model/roomslistmodel.cpp" line="151"/>
         <source>Random Perlin</source>
         <translation>Zufälliges Perlin</translation>
     </message>

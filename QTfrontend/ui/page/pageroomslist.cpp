@@ -85,8 +85,8 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     showJoinRestricted->setChecked(true);
     stateMenu->addAction(showGamesInLobby);
     stateMenu->addAction(showGamesInProgress);
-    stateMenu->addAction(showPassword);
-    stateMenu->addAction(showJoinRestricted);
+    //stateMenu->addAction(showPassword);
+    //stateMenu->addAction(showJoinRestricted);
     btnState->setMenu(stateMenu);
 
     // Help/prompt message at top
