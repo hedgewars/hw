@@ -668,6 +668,7 @@ initExpr2C' (InitFloat s) = return $ text s
 initExpr2C' (InitHexNumber s) = return $ text "0x" <> (text . map toLower $ s)
 initExpr2C' (InitString [a]) = return . quotes $ text [a]
 initExpr2C' (InitString s) = return $ strInit s
+initExpr2C' (InitPChar s) = return $ doubleQuotes (text $ escapeStr s)
 initExpr2C' (InitChar a) = return $ text "0x" <> text (showHex (read a) "")
 initExpr2C' (InitReference i) = id2C IOLookup i
 initExpr2C' (InitRecord fields) = do
