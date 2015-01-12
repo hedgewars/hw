@@ -104,7 +104,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtAirMine); // 66
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -154,7 +154,8 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife, amRubber); // 56
+            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
+            amIceGun, amKnife, amRubber, amAirMine); // 57
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -247,6 +248,7 @@ type
             CollisionIndex: LongInt;    // Position in collision array
             Message: LongWord;          // Game messages are stored here. See gm bitmasks in uConsts
             uid: Longword;              // Lua use this to reference gears
+            Hedgehog: PHedgehog;        // set to CurrentHedgehog on gear creation.  uStats damage code appears to assume it will never be nil and never be changed.
 // Strongly recommended not to override these.  Will mess up generic operations like portaling
             X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
             Y : hwFloat;
@@ -278,7 +280,6 @@ type
             Tex: PTexture;          // A texture created by the gear. Shouldn't use for anything but textures
             Tint: LongWord;         // Used to colour a texture
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
-            Hedgehog: PHedgehog;    // set to CurrentHedgehog on gear creation
             SoundChannel: LongInt;  // Used to track a sound the gear started
             end;
     TPGearArray = array of PGear;
@@ -445,7 +446,7 @@ type
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
