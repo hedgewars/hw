@@ -425,6 +425,15 @@ processAction RemoveClientTeams = do
     mapM_ processAction removeTeamActions
 
 
+processAction SetRandomSeed = do
+    ri <- clientRoomA
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+    seed <- liftM showB $ io $ (randomRIO (0, 10^9) :: IO Int)
+    mapM_ processAction [
+        ModifyRoom (\r -> r{mapParams = Map.insert "SEED" seed $ mapParams r})
+        , AnswerClients thisRoomChans ["CFG", "SEED", seed]
+        ]
+
 
 processAction CheckRegistered = do
     (Just ci) <- gets clientIndex

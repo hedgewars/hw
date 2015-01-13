@@ -101,6 +101,7 @@ data Action =
     | LoadRoom B.ByteString
     | ReactCmd [B.ByteString]
     | CheckVotes
+    | SetRandomSeed
 
 
 data Event = LobbyChatMessage
@@ -110,7 +111,7 @@ data Event = LobbyChatMessage
 type EventsInfo = [(Int, UTCTime)]
 
 newEventsInfo :: EventsInfo
-newEventsInfo = []   
+newEventsInfo = []
 
 type ClientChan = Chan [B.ByteString]
 
@@ -222,6 +223,7 @@ data RoomInfo =
         isRestrictedTeams :: Bool,
         isRegisteredOnly :: Bool,
         isSpecial :: Bool,
+        defaultHedgehogsNumber :: Int,
         greeting :: B.ByteString,
         voting :: Maybe Voting,
         roomBansList :: ![B.ByteString],
@@ -245,6 +247,7 @@ newRoom =
         False
         False
         False
+        4
         ""
         Nothing
         []
@@ -319,6 +322,8 @@ data Voting = Voting {
 data VoteType = VoteKick B.ByteString
               | VoteMap B.ByteString
               | VotePause
+              | VoteNewSeed
+              | VoteHedgehogsPerTeam Int
 
 
 newVoting :: VoteType -> Voting

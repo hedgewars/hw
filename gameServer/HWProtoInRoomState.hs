@@ -105,14 +105,12 @@ handleCmd_inRoom ("CFG" : paramName : paramStrs)
 handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag : difStr : hhsInfo)
     | length hhsInfo /= 16 = return [ProtocolError $ loc "Corrupted hedgehogs info"]
     | otherwise = do
-        (ci, _) <- ask
         rm <- thisRoom
         cl <- thisClient
         clNick <- clientNick
         clChan <- thisClientChans
         othChans <- roomOthersChans
         roomChans <- roomClientsChans
-        cl <- thisClient
         let isRegistered = (<) 0 . B.length . webPassword $ cl
         teamColor <-
             if clientProto cl < 42 then
@@ -120,7 +118,11 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                 else
                 liftM (head . (L.\\) (map B.singleton ['0'..]) . map teamcolor . teams) thisRoom
         let roomTeams = teams rm
-        let hhNum = let p = if not $ null roomTeams then minimum [hhnum $ head roomTeams, canAddNumber roomTeams] else 4 in newTeamHHNum roomTeams p
+        let hhNum = newTeamHHNum roomTeams $
+                if not $ null roomTeams then
+                    minimum [hhnum $ head roomTeams, canAddNumber roomTeams]
+                else
+                    defaultHedgehogsNumber rm
         let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
         return $
             if not . null . drop (maxTeams rm - 1) $ roomTeams then
@@ -401,11 +403,13 @@ handleCmd_inRoom ["GREETING", msg] = do
 
 handleCmd_inRoom ["CALLVOTE"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "Available callvote commands: kick <nickname>, map <name>, pause"]]
+    return [AnswerClients [sendChan cl]
+        ["CHAT", "[server]", loc "Available callvote commands: kick <nickname>, map <name>, pause, newseed, hedgehogs"]
+        ]
 
 handleCmd_inRoom ["CALLVOTE", "KICK"] = do
     cl <- thisClient
-    return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: specify nickname"]]
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote kick: specify nickname"]]
 
 handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
     (thisClientId, rnc) <- ask
@@ -421,7 +425,7 @@ handleCmd_inRoom ["CALLVOTE", "KICK", nickname] = do
         if isJust maybeClientId && sameRoom then
             startVote $ VoteKick nickname
             else
-            return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote kick: no such user"]]
+            return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote kick: no such user"]]
 
 
 handleCmd_inRoom ["CALLVOTE", "MAP"] = do
@@ -437,16 +441,37 @@ handleCmd_inRoom ["CALLVOTE", "MAP", roomSave] = do
     if Map.member roomSave $ roomSaves rm then
         startVote $ VoteMap roomSave
         else
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote map: no such map"]]
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote map: no such map"]]
+
 
 handleCmd_inRoom ["CALLVOTE", "PAUSE"] = do
     cl <- thisClient
     rm <- thisRoom
 
     if isJust $ gameInfo rm then
-        startVote VotePause    
+        startVote VotePause
         else 
-        return [AnswerClients [sendChan cl] ["CHAT", "[server]", "callvote pause: no game in progress"]]
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote pause: no game in progress"]]
+
+
+handleCmd_inRoom ["CALLVOTE", "NEWSEED"] = do
+    startVote VoteNewSeed
+
+
+handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS"] = do
+    cl <- thisClient
+    return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
+
+
+handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
+    cl <- thisClient
+    let h = readInt_ hhs
+
+    if h > 0 && h <= 8 then
+        startVote $ VoteHedgehogsPerTeam h
+        else
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
+
 
 handleCmd_inRoom ["VOTE", m] = do
     cl <- thisClient
