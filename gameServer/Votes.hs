@@ -116,7 +116,7 @@ voted vote = do
         chans <- roomClientsChans
         let answers = concatMap (\t -> 
                 [ModifyRoom $ modifyTeam t{hhnum = h}
-                , AnswerClients chans ["HHNUM", teamname t, showB h]]
+                , AnswerClients chans ["HH_NUM", teamname t, showB h]]
                 )
                 $
                 if isJust $ gameInfo rm then
