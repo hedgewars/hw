@@ -684,6 +684,7 @@ begin
                 amHellishBomb: DrawSpriteRotated(sprHandHellish, hx, hy, sign, aangle);
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
+                amAirMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
                 amSMine: DrawSpriteRotated(sprHandSMine, hx, hy, sign, aangle);
                 amKnife: DrawSpriteRotatedF(sprHandKnife, hx, hy, 0, sign, aangle);
                 amSeduction: begin
@@ -1119,6 +1120,7 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
+         gtAirMine:  DrawSpriteRotated(sprMineOff, x, y, 0, 0);
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)

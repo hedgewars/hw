@@ -104,7 +104,7 @@ type
             gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
             gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtAirMine); // 66
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
@@ -154,7 +154,8 @@ type
             amRCPlane, amLowGravity, amExtraDamage, amInvulnerable, amExtraTime, // 35
             amLaserSight, amVampiric, amSniperRifle, amJetpack, amMolotov, amBirdy, amPortalGun, // 42
             amPiano, amGasBomb, amSineGun, amFlamethrower, amSMine, amHammer, // 48
-            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, amIceGun, amKnife, amRubber); // 56
+            amResurrector, amDrillStrike, amSnowball, amTardis, {amStructure,} amLandGun, // 53
+            amIceGun, amKnife, amRubber, amAirMine); // 57
 
     // Different kind of crates that e.g. hedgehogs can pick up
     TCrateType = (HealthCrate, AmmoCrate, UtilityCrate);
@@ -445,7 +446,7 @@ type
             sidMolotov, sidBirdy, sidPortalGun, sidPiano, sidGasBomb,
             sidSineGun, sidFlamethrower,sidSMine, sidHammer, sidResurrector,
             sidDrillStrike, sidSnowball, sidNothing, sidTardis,
-            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber);
+            {sidStructure,} sidLandGun, sidIceGun, sidKnife, sidRubber, sidAirMine);
 
     TMsgStrId = (sidStartFight, sidDraw, sidWinner, sidVolume, sidPaused,
             sidConfirm, sidSuddenDeath, sidRemaining, sidFuel, sidSync,
