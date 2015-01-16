@@ -70,12 +70,13 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 if(CMAKE_BUILD_TYPE)
     string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if(NOT((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR
-           (CMAKE_BUILD_TYPE MATCHES "DEBUG")))
-        set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
-        message(STATUS "Unknown build type, using default (${default_build_type})")
+           (CMAKE_BUILD_TYPE MATCHES "DEBUG") OR
+           (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")))
+        set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
+        message(STATUS "Unknown build type ${CMAKE_BUILD_TYPE}, using default (${default_build_type})")
     endif()
 else(CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
+    set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
 endif(CMAKE_BUILD_TYPE)
 
 
