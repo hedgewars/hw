@@ -190,9 +190,9 @@ endif()
 
 #when debugging, always prompt a console to see fronted messages
 #TODO: check it doesn't interfere on UNIX
-if(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+if(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
     set(console_access "WIN32")
-endif(CMAKE_BUILD_TYPE MATCHES "RELEASE")
+endif(CMAKE_BUILD_TYPE MATCHES "RELEASE" OR CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")
 
 add_executable(hedgewars ${console_access}
     ${hwfr_src}
