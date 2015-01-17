@@ -1778,7 +1778,9 @@ begin
     else if Gear^.Hedgehog <> nil then
         targ:= Gear^.Hedgehog^.Gear;
     // todo, allow not finding new target, set timeout on target retention
-    if (Gear^.State and gsttmpFlag <> 0) and (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) then // recheck hunted hog
+    if (Gear^.State and (gsttmpFlag or gstAttacking) =  gsttmpFlag) and
+       (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) and
+       (GameTicks > Gear^.FlightTime) then // recheck hunted hog
         begin
         if targ <> nil then
              targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
@@ -1804,7 +1806,8 @@ begin
                                 targ:= tmpG;
                                 end
                             end
-                        end
+                        end;
+        Gear^.FlightTime:= GameTicks + 10000
         end;
     if targ <> nil then
         begin
@@ -1841,10 +1844,29 @@ begin
                 PlaySound(sndMineTick);
             if Gear^.Timer = 0 then
                 begin
-                Gear^.Hedgehog:= CurrentHedgehog;
-                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
-                DeleteGear(Gear);
-                exit
+                // recheck
+                if targ <> nil then
+                    begin
+                    tX:=Gear^.X-targ^.X;
+                    tY:=Gear^.Y-targ^.Y;
+                    if (tX.Round+tY.Round < Gear^.Karma) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
+                        begin
+                        Gear^.Hedgehog:= CurrentHedgehog;
+                        doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                        DeleteGear(Gear);
+                        exit
+                        end
+                    end
+                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
+                    begin
+                    Gear^.Hedgehog:= CurrentHedgehog;
+                    doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                    DeleteGear(Gear);
+                    exit
+                    end;
+                Gear^.State:= Gear^.State and not gstAttacking;
+                Gear^.Timer:= Gear^.WDTimer
                 end;
             dec(Gear^.Timer);
             end
@@ -1852,7 +1874,10 @@ begin
         if (TurnTimeLeft = 0)
         or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
         or (CurrentHedgehog^.Gear = nil) then
-            Gear^.State := Gear^.State or gsttmpFlag;
+        begin
+        Gear^.FlightTime:= GameTicks;
+        Gear^.State := Gear^.State or gsttmpFlag
+        end
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
