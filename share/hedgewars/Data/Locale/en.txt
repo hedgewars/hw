@@ -59,6 +59,7 @@
 00:55=Freezer
 00:56=Cleaver
 00:57=Rubber
+00:58=Air Mine
 
 01:00=Let's fight!
 01:01=Round draw
