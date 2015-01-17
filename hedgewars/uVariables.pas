@@ -2300,6 +2300,31 @@ var
             PosCount: 4;
             PosSprite: sprAmRubber;
             ejectX: 0;
+            ejectY: 0),
+// Air Mine
+            (NameId: sidAirMine;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
+                Count: 2;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amAirMine;
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
+            Slot: 5;
+            TimeAfterTurn: 5000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
+            ejectX: 0;
             ejectY: 0)
         );
 

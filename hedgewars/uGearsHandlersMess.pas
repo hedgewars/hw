@@ -57,6 +57,7 @@ procedure doStepPickHammer(Gear: PGear);
 procedure doStepBlowTorchWork(Gear: PGear);
 procedure doStepBlowTorch(Gear: PGear);
 procedure doStepMine(Gear: PGear);
+procedure doStepAirMine(Gear: PGear);
 procedure doStepSMine(Gear: PGear);
 procedure doStepDynamite(Gear: PGear);
 procedure doStepRollingBarrel(Gear: PGear);
@@ -446,7 +447,8 @@ begin
 
     if isFalling then
         begin
-        Gear^.dY := Gear^.dY + cGravity;
+        if Gear^.State and gstNoGravity = 0 then
+            Gear^.dY := Gear^.dY + cGravity;
         if (GameFlags and gfMoreWind) <> 0 then
             Gear^.dX := Gear^.dX + cWindSpeed / Gear^.Density
         end;
@@ -1661,6 +1663,7 @@ begin
     Gear^.doStep := @doStepBlowTorchWork
 end;
 
+
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepMine(Gear: PGear);
 var vg: PVisualGear;
@@ -1746,6 +1749,109 @@ begin
         if (TurnTimeLeft = 0)
         or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
         or (Gear^.Hedgehog^.Gear = nil) then
+            Gear^.State := Gear^.State or gsttmpFlag;
+end;
+
+(*
+Just keeping track for my own benefit.
+Every second, locate new target.  Clear if target radius has been set to 0 or no target in range.
+Every... 16 milliseconds? Update vector to target.
+*)
+
+procedure doStepAirMine(Gear: PGear);
+var i,t,targDist,tmpDist: LongWord;
+    targ, tmpG: PGear;
+    trackSpeed, tX, tY: hwFloat;
+begin
+    if Gear^.dX.QWordValue > Gear^.Pos then
+         dec(Gear^.dX.QWordValue,Gear^.Pos)
+    else Gear^.dX:= _0;
+    if Gear^.dY.QWordValue > Gear^.Pos then
+         dec(Gear^.dY.QWordValue,Gear^.Pos)
+    else Gear^.dY:= _0;
+    doStepFallingGear(Gear);
+    if (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
+        begin
+        Gear^.Hedgehog:= nil;
+        targ:= nil;
+        end
+    else if Gear^.Hedgehog <> nil then
+        targ:= Gear^.Hedgehog^.Gear;
+    // todo, allow not finding new target, set timeout on target retention
+    if (Gear^.State and gsttmpFlag <> 0) and (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) then // recheck hunted hog
+        begin
+        if targ <> nil then
+             targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
+        else targDist:= 0;
+        for t:= 0 to Pred(TeamsCount) do
+            with TeamsArray[t]^ do
+                for i:= 0 to cMaxHHIndex do
+                    if Hedgehogs[i].Gear <> nil then
+                        begin
+                        tmpG:= Hedgehogs[i].Gear;
+                        tX:=Gear^.X-tmpG^.X;
+                        tY:=Gear^.Y-tmpG^.Y;
+                        if (Gear^.Angle = $FFFFFFFF) or
+                            ((tX.Round+tY.Round < Gear^.Angle) and
+                            (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Angle))) then
+                            begin
+                            if targ <> nil then tmpDist:= Distance(tX,tY).Round;
+                            if (targ = nil) or (tmpDist < targDist) then
+                                begin
+                                if targ = nil then targDist:= Distance(tX,tY).Round
+                                else targDist:= tmpDist;
+                                Gear^.Hedgehog:= @Hedgehogs[i];
+                                targ:= tmpG;
+                                end
+                            end
+                        end
+        end;
+    if targ <> nil then
+        begin
+        trackSpeed.QWordValue:= Gear^.Power;
+        if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
+             Gear^.dX:= Gear^.dX+trackSpeed
+        else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
+            Gear^.dX:= Gear^.dX-trackSpeed;
+        if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then
+             Gear^.dY:= Gear^.dY+trackSpeed
+        else if (Gear^.Y > targ^.Y) and (Gear^.dY > -_0_1) then
+            Gear^.dY:= Gear^.dY-trackSpeed;
+        end;
+
+    if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
+        if ((Gear^.State and gstAttacking) = 0) then
+            begin
+            if ((GameTicks and $1F) = 0) then
+                if targ <> nil then
+                    begin
+                    tX:=Gear^.X-targ^.X;
+                    tY:=Gear^.Y-targ^.Y;
+                    if (tX.Round+tY.Round < Gear^.Karma) and
+                       (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
+                    Gear^.State := Gear^.State or gstAttacking
+                    end
+                else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
+                    Gear^.State := Gear^.State or gstAttacking
+            end
+        else // gstAttacking <> 0
+            begin
+            AllInactive := false;
+            if (Gear^.Timer and $FF) = 0 then
+                PlaySound(sndMineTick);
+            if Gear^.Timer = 0 then
+                begin
+                Gear^.Hedgehog:= CurrentHedgehog;
+                doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                DeleteGear(Gear);
+                exit
+                end;
+            dec(Gear^.Timer);
+            end
+    else // gsttmpFlag = 0
+        if (TurnTimeLeft = 0)
+        or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
+        or (CurrentHedgehog^.Gear = nil) then
             Gear^.State := Gear^.State or gsttmpFlag;
 end;
 

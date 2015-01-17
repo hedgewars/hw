@@ -231,6 +231,7 @@ const
     gstInvisible      = $00200000;
     gstSubmersible    = $00400000;
     gstFrozen         = $00800000;
+    gstNoGravity      = $01000000;
 
     // gear messages
     gmLeft           = $00000001;
