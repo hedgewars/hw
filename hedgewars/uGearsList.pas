@@ -369,11 +369,12 @@ case Kind of
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1;
-                gear^.Angle:= 125; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
-                gear^.Power:= 536871; // hwFloat converted. 1/4 g default. defines the "seek" speed when a gear is in range.
+                gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                gear^.Power:= cGravity.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= 134217; // air friction. slows it down when not hitting stuff
                 gear^.Karma:= 30; // damage
                 gear^.Timer:= 500;
+                gear^.WDTimer:= 500;
                 end;
        gtSMine: begin
                 gear^.Health:= 10;
