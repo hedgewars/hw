@@ -1120,7 +1120,7 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
-         gtAirMine: DrawSprite(sprAirMine, x, y, (RealTicks div 125) mod 16);
+         gtAirMine: DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125) mod 16);
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)

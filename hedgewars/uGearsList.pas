@@ -365,7 +365,7 @@ case Kind of
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
                 gear^.State:= gear^.State or gstMoving or gstNoGravity;
-                gear^.Radius:= 3;
+                gear^.Radius:= 7;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1;
