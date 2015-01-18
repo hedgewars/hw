@@ -1811,6 +1811,7 @@ begin
         end;
     if targ <> nil then
         begin
+        AddVisualGear(hwRound(targ^.X), hwRound(targ^.Y), vgtBubble);
         trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
              Gear^.dX:= Gear^.dX+trackSpeed
@@ -1826,6 +1827,7 @@ begin
         if ((Gear^.State and gstAttacking) = 0) then
             begin
             if ((GameTicks and $1F) = 0) then
+                begin
                 if targ <> nil then
                     begin
                     tX:=Gear^.X-targ^.X;
@@ -1836,6 +1838,7 @@ begin
                     end
                 else if (Gear^.Angle > 0) and (CheckGearNear(Gear, gtHedgehog, Gear^.Karma, Gear^.Karma) <> nil) then
                     Gear^.State := Gear^.State or gstAttacking
+                end
             end
         else // gstAttacking <> 0
             begin
