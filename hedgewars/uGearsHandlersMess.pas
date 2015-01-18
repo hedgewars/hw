@@ -1824,6 +1824,7 @@ begin
         end;
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
+        begin
         if ((Gear^.State and gstAttacking) = 0) then
             begin
             if ((GameTicks and $1F) = 0) then
@@ -1873,6 +1874,7 @@ begin
                 end;
             dec(Gear^.Timer);
             end
+        end
     else // gsttmpFlag = 0
         if (TurnTimeLeft = 0)
         or ((GameFlags and gfInfAttack <> 0) and (GameTicks > Gear^.FlightTime))
