@@ -1783,13 +1783,15 @@ begin
         tX:=Gear^.X-targ^.X;
         tY:=Gear^.Y-targ^.Y;
         // allow escaping - should maybe flag this too
-        if ((tX.Round+tY.Round > Gear^.Angle*4) and
-            (hwRound(hwSqr(tX) + hwSqr(tY)) > sqr(Gear^.Angle*4))) then
+        if (GameTicks > Gear^.FlightTime+10000) or 
+            ((tX.Round+tY.Round > Gear^.Angle*6) and
+            (hwRound(hwSqr(tX) + hwSqr(tY)) > sqr(Gear^.Angle*6))) then
             targ:= nil
         end;
 
     // todo, allow not finding new target, set timeout on target retention
-    if (Gear^.State and (gsttmpFlag or gstAttacking) =  gsttmpFlag) and
+    if (ReadyTimeLeft = 0) and (TurnTimeLeft > 0) and ((TurnTimeLeft > cHedgehogTurnTime) or (cHedgehogTurnTime-TurnTimeLeft > 5000)) and
+       (Gear^.State and (gsttmpFlag or gstAttacking) =  gsttmpFlag) and
        (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) and
        (GameTicks > Gear^.FlightTime) then // recheck hunted hog
         begin
@@ -1818,7 +1820,7 @@ begin
                                 end
                             end
                         end;
-        if targ <> nil then Gear^.FlightTime:= GameTicks + 10000
+        if targ <> nil then Gear^.FlightTime:= GameTicks + 5000
         end;
     if targ <> nil then
         begin
@@ -1831,7 +1833,7 @@ begin
         if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then
              Gear^.dY:= Gear^.dY+trackSpeed
         else if (Gear^.Y > targ^.Y) and (Gear^.dY > -_0_1) then
-            Gear^.dY:= Gear^.dY-trackSpeed;
+            Gear^.dY:= Gear^.dY-trackSpeed
         end
     else Gear^.Hedgehog:= nil;
 
