@@ -1868,7 +1868,7 @@ begin
                     DeleteGear(Gear);
                     exit
                     end;
-                Gear^.State:= Gear^.State and not gstAttacking;
+                Gear^.State:= Gear^.State and (not gstAttacking);
                 Gear^.Timer:= Gear^.WDTimer
                 end;
             dec(Gear^.Timer);
