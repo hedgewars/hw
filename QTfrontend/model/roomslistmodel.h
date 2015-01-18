@@ -66,8 +66,6 @@ private:
     QStringList m_headerData;
     MapModel * m_staticMapModel;
     MapModel * m_missionMapModel;
-
-    QStringList roomInfo2RoomRecord(const QStringList & info);
 };
 
 #endif // HEDGEWARS_ROOMSLISTMODEL_H

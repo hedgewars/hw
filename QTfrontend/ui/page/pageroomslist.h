@@ -96,6 +96,8 @@ class PageRoomsList : public AbstractPage
         QSortFilterProxyModel * stateFilteredModel;
         QAction * showGamesInLobby;
         QAction * showGamesInProgress;
+        QAction * showPassword;
+        QAction * showJoinRestricted;
         QSplitter * m_splitter;
 
         AmmoSchemeModel * ammoSchemeModel;
