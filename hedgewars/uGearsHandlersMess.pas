@@ -1807,10 +1807,11 @@ begin
                                 end
                             end
                         end;
-        Gear^.FlightTime:= GameTicks + 10000
+        if targ <> nil then Gear^.FlightTime:= GameTicks + 10000
         end;
     if targ <> nil then
         begin
+        trackSpeed:= _0;
         trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
              Gear^.dX:= Gear^.dX+trackSpeed
