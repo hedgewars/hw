@@ -124,7 +124,11 @@
         <file>res/iconHealth.png</file>
         <file>res/iconSuddenDeath.png</file>
         <file>res/iconDamage.png</file>
+        <file>res/iconDamageLockG.png</file>
+        <file>res/iconDamageLockR.png</file>
         <file>res/iconTime.png</file>
+        <file>res/iconTimeLockG.png</file>
+        <file>res/iconTimeLockR.png</file>
         <file>res/iconMine.png</file>
         <file>res/iconDud.png</file>
         <file>res/iconRope.png</file>
