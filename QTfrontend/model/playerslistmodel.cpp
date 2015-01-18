@@ -237,6 +237,7 @@ void PlayersListModel::updateIcon(const QModelIndex & index)
         << index.data(InGame).toBool()
         << index.data(RoomFilterRole).toBool()
         << index.data(InRoom).toBool()
+        << index.data(Contributor).toBool()
         ;
 
     for(int i = flags.size() - 1; i >= 0; --i)
