@@ -1120,7 +1120,9 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
-         gtAirMine: DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125) mod 16);
+         gtAirMine: if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then
+                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 25) mod 16)
+                    else DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125) mod 16);
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)

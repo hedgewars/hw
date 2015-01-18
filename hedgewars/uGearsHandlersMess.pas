@@ -1761,14 +1761,15 @@ Every... 16 milliseconds? Update vector to target.
 procedure doStepAirMine(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
-    trackSpeed, tX, tY: hwFloat;
+    trackSpeed, airFriction, tX, tY: hwFloat;
 begin
-    if Gear^.dX.QWordValue > Gear^.Pos then
-         dec(Gear^.dX.QWordValue,Gear^.Pos)
-    else Gear^.dX:= _0;
-    if Gear^.dY.QWordValue > Gear^.Pos then
-         dec(Gear^.dY.QWordValue,Gear^.Pos)
-    else Gear^.dY:= _0;
+    if Gear^.Pos > 0 then
+        begin
+        airFriction:= _1;
+        dec(airFriction.QWordValue,Gear^.Pos);
+        Gear^.dX:= Gear^.dX*airFriction;
+        Gear^.dY:= Gear^.dY*airFriction
+        end;
     doStepFallingGear(Gear);
     if (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
         begin
@@ -1777,6 +1778,16 @@ begin
         end
     else if Gear^.Hedgehog <> nil then
         targ:= Gear^.Hedgehog^.Gear;
+    if targ <> nil then
+        begin
+        tX:=Gear^.X-targ^.X;
+        tY:=Gear^.Y-targ^.Y;
+        // allow escaping - should maybe flag this too
+        if ((tX.Round+tY.Round > Gear^.Angle*4) and
+            (hwRound(hwSqr(tX) + hwSqr(tY)) > sqr(Gear^.Angle*4))) then
+            targ:= nil
+        end;
+
     // todo, allow not finding new target, set timeout on target retention
     if (Gear^.State and (gsttmpFlag or gstAttacking) =  gsttmpFlag) and
        (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) and
@@ -1821,7 +1832,8 @@ begin
              Gear^.dY:= Gear^.dY+trackSpeed
         else if (Gear^.Y > targ^.Y) and (Gear^.dY > -_0_1) then
             Gear^.dY:= Gear^.dY-trackSpeed;
-        end;
+        end
+    else Gear^.Hedgehog:= nil;
 
     if ((Gear^.State and gsttmpFlag) <> 0) and (Gear^.Health <> 0) then
         begin
