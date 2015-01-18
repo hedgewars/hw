@@ -1811,7 +1811,6 @@ begin
         end;
     if targ <> nil then
         begin
-        AddVisualGear(hwRound(targ^.X), hwRound(targ^.Y), vgtBubble);
         trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
              Gear^.dX:= Gear^.dX+trackSpeed
