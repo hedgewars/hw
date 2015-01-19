@@ -373,8 +373,14 @@ case Kind of
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
                 gear^.Pos:= cMaxWindSpeed.QWordValue; // air friction. slows it down when not hitting stuff
                 gear^.Karma:= 30; // damage
-                gear^.Timer:= 500;
-                gear^.WDTimer:= 500;
+                if gear^.Timer = 0 then
+                    begin
+                    if cMinesTime < 0 then
+                        gear^.Timer:= getrandom(13)*100
+                    else
+                        gear^.Timer:= cMinesTime div 4
+                    end;
+                gear^.WDTimer:= gear^.Timer
                 end;
        gtSMine: begin
                 gear^.Health:= 10;
