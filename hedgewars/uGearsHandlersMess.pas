@@ -1771,7 +1771,10 @@ begin
         Gear^.dY:= Gear^.dY*airFriction
         end;
     doStepFallingGear(Gear);
-    if (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
+    if (TurnTimeLeft = 0) and ((Gear^.dX.QWordValue + Gear^.dY.QWordValue) > _0_02.QWordValue) then
+        AllInactive := false;
+
+    if (TurnTimeLeft = 0) or (Gear^.Angle = 0) or (Gear^.Hedgehog = nil) or (Gear^.Hedgehog^.Gear = nil) then
         begin
         Gear^.Hedgehog:= nil;
         targ:= nil;
