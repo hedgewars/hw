@@ -1792,12 +1792,21 @@ begin
             targ:= nil
         end;
 
+    // If in ready timer, or after turn, or in first 5 seconds of turn (really a window due to extra time utility)
+    // or mine is inactive due to lack of gsttmpflag or hunting is disabled due to seek radius of 0
+    // then we aren't hunting
+    if (ReadyTimeLeft > 0) or (TurnTimeLeft = 0) or 
+        ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
+        (Gear^.State and gsttmpFlag = 0) or
+        (Gear^.Angle = 0) then
+        gear^.State:= gear^.State and not gstHHChooseTarget
+    else if
     // todo, allow not finding new target, set timeout on target retention
-    if (ReadyTimeLeft = 0) and (TurnTimeLeft > 0) and ((TurnTimeLeft > cHedgehogTurnTime) or (cHedgehogTurnTime-TurnTimeLeft > 5000)) and
-       (Gear^.State and (gsttmpFlag or gstAttacking) =  gsttmpFlag) and
-       (Gear^.Angle > 0) and ((GameTicks and $FF) = 17) and
-       (GameTicks > Gear^.FlightTime) then // recheck hunted hog
+        (Gear^.State and gstAttacking = 0) and
+        ((GameTicks and $FF) = 17) and
+        (GameTicks > Gear^.FlightTime) then // recheck hunted hog
         begin
+        gear^.State:= gear^.State or gstHHChooseTarget;
         if targ <> nil then
              targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
         else targDist:= 0;
