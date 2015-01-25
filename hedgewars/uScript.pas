@@ -847,17 +847,26 @@ begin
         vg:= VisualGearByUID(lua_tointeger(L, 1));
         if vg <> nil then
             begin
-            vg^.X:= lua_tointeger(L, 2);
-            vg^.Y:= lua_tointeger(L, 3);
-            vg^.dX:= lua_tonumber(L, 4);
-            vg^.dY:= lua_tonumber(L, 5);
-            vg^.Angle:= lua_tonumber(L, 6);
-            vg^.Frame:= lua_tointeger(L, 7);
-            if lua_tointeger(L, 8) <> 0 then
-                vg^.FrameTicks:= lua_tointeger(L, 8);  // find a better way to do this. maybe need to break all these up.
-            vg^.State:= lua_tointeger(L, 9);
-            vg^.Timer:= lua_tointeger(L, 10);
-            vg^.Tint:= lua_tointeger(L, 11);
+            if not lua_isnoneornil(L, 2) then
+                vg^.X:= lua_tointeger(L, 2);
+            if not lua_isnoneornil(L, 3) then
+                vg^.Y:= lua_tointeger(L, 3);
+            if not lua_isnoneornil(L, 4) then
+                vg^.dX:= lua_tonumber(L, 4);
+            if not lua_isnoneornil(L, 5) then
+                vg^.dY:= lua_tonumber(L, 5);
+            if not lua_isnoneornil(L, 6) then
+                vg^.Angle:= lua_tonumber(L, 6);
+            if not lua_isnoneornil(L, 7) then
+                vg^.Frame:= lua_tointeger(L, 7);
+            if not lua_isnoneornil(L, 8) then
+                vg^.FrameTicks:= lua_tointeger(L, 8);
+            if not lua_isnoneornil(L, 9) then
+                vg^.State:= lua_tointeger(L, 9);
+            if not lua_isnoneornil(L, 10) then
+                vg^.Timer:= lua_tointeger(L, 10);
+            if not lua_isnoneornil(L, 11) then
+                vg^.Tint:= lua_tointeger(L, 11);
             end
         end
     else
@@ -925,6 +934,30 @@ begin
     else
         lua_pushnil(L); // return value on stack (nil)
     lc_getgearelasticity:= 1
+end;
+
+function lc_setgearelasticity(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if CheckLuaParamCount(L, 2, 'SetGearElasticity', 'gearUid, Elasticity') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.Elasticity:= int2hwFloat(lua_tointeger(L, 2)) / 10000
+        end;
+    lc_setgearelasticity:= 0
+end;
+
+function lc_setgearfriction(L : Plua_State) : LongInt; Cdecl;
+var gear: PGear;
+begin
+    if CheckLuaParamCount(L, 2, 'SetGearFriction', 'gearUid, Friction') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if gear <> nil then
+            gear^.Friction:= int2hwFloat(lua_tointeger(L, 2)) / 10000
+        end;
+    lc_setgearfriction:= 0
 end;
 
 function lc_setgearmessage(L : Plua_State) : LongInt; Cdecl;
@@ -3011,6 +3044,8 @@ lua_register(luaState, _P'HogTurnLeft', @lc_hogturnleft);
 lua_register(luaState, _P'CampaignLock', @lc_campaignlock);
 lua_register(luaState, _P'CampaignUnlock', @lc_campaignunlock);
 lua_register(luaState, _P'GetGearElasticity', @lc_getgearelasticity);
+lua_register(luaState, _P'SetGearElasticity', @lc_setgearelasticity);
+lua_register(luaState, _P'SetGearFriction', @lc_setgearfriction);
 lua_register(luaState, _P'GetGearRadius', @lc_getgearradius);
 lua_register(luaState, _P'GetGearMessage', @lc_getgearmessage);
 lua_register(luaState, _P'SetGearMessage', @lc_setgearmessage);
