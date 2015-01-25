@@ -249,7 +249,7 @@ type
             CollisionIndex: LongInt;    // Position in collision array
             Message: LongWord;          // Game messages are stored here. See gm bitmasks in uConsts
             uid: Longword;              // Lua use this to reference gears
-            Hedgehog: PHedgehog;        // set to CurrentHedgehog on gear creation.  uStats damage code appears to assume it will never be nil and never be changed.
+            Hedgehog: PHedgehog;        // set to CurrentHedgehog on gear creation.  uStats damage code appears to assume it will never be nil and never be changed.  If you override it, make sure it is set to a non-nil PHedgehog before dealing damage.
 // Strongly recommended not to override these.  Will mess up generic operations like portaling
             X : hwFloat;              // X/Y/dX/dY are position/velocity. People count on these having semi-normal values
             Y : hwFloat;
