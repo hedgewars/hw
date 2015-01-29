@@ -11,7 +11,55 @@ uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
 const MAX_SCHEME_NAMES = 64;
 type
     TScheme = record
-            schemeName: shortstring;
+            schemeName
+            , scriptparam : shortstring;
+            fortsmode
+            , divteams
+            , solidland
+            , border
+            , lowgrav
+            , laser
+            , invulnerability
+            , mines
+            , vampiric
+            , karma
+            , artillery
+            , randomorder
+            , king
+            , placehog
+            , sharedammo
+            , disablegirders
+            , randomorder
+            , king
+            , placehog
+            , sharedammo
+            , disablegirders
+            , randomorder
+            , king
+            , placehog
+            , sharedammo
+            , disablegirders
+            , disablewind
+            , morewind
+            , tagteam
+            , bottomborder: boolean;
+            damagefactor
+            , turntime
+            , health
+            , suddendeath
+            , caseprobability
+            , minestime
+            , landadds
+            , minedudpct
+            , explosives
+            , minesnum
+            , healthprobability
+            , healthcaseamount
+            , waterrise
+            , healthdecrease
+            , ropepct
+            , getawaytime
+            , worldedge: LongInt
         end;
     PScheme = ^TScheme;
     TSchemeArray = array [0..0] of TScheme;
@@ -71,48 +119,48 @@ begin
     end;
 {
 name=AI TEST
-fortsmode=false
-divteams=false
-solidland=false
-border=false
-lowgrav=false
-laser=false
-invulnerability=false
-mines=true
+fortsmode
+divteams
+solidland
+border
+lowgrav
+laser
+invulnerability
+mines
 damagefactor=100
 turntime=40
 health=100
 suddendeath=0
 caseprobability=5
-vampiric=false
-karma=false
-artillery=false
+vampiric
+karma
+artillery
 minestime=0
 landadds=4
-randomorder=true
-king=false
-placehog=false
-sharedammo=false
-disablegirders=false
+randomorder
+king
+placehog
+sharedammo
+disablegirders
 minedudpct=100
 explosives=40
-disablelandobjects=true
-aisurvival=true
-resethealth=false
-infattack=true
-resetweps=true
-perhogammo=false
+disablelandobjects
+aisurvival
+resethealth
+infattack
+resetweps
+perhogammo
 minesnum=0
 healthprobability=100
 healthcaseamount=50
 waterrise=0
 healthdecrease=0
-disablewind=false
-morewind=false
+disablewind
+morewind
 ropepct=100
-tagteam=false
+tagteam
 getawaytime=100
-bottomborder=false
+bottomborder
 worldedge=1
 scriptparam=@Invalid()
 }
