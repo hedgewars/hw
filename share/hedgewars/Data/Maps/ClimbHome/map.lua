@@ -1,5 +1,6 @@
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Utils.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 local hTag = nil
 local hTagHeight = 33000
@@ -25,6 +26,7 @@ local HogsAreInvulnerable = false
 local WaterRise = nil
 local Cake = nil
 local CakeTries = 0
+local addCake = true
 local Stars = {}
 local tauntNoo = false
 local jokeAwardNavy = nil
@@ -36,6 +38,22 @@ local showWaterStats = false -- uses the AI team to draw water height.
 local scaleGraph = false
 local dummyHog = nil
 local dummySkip = 0
+local baseWaterSpeed = 2
+local waterSpeed = 0
+local waterAccel = 0
+local delayHeight = 32000
+local delayTime = 0
+
+function onParameters()
+    parseParams()
+
+    baseWaterSpeed = params["speed"]
+    waterAccel = params["accel"]
+    if waterAccel ~= 0 then waterAccel = div(32640000,waterAccel) end
+    delayTime = params["delaytime"]
+    delayHeight = 32768-params["delayheight"]
+    if params["nocake"] ~= nil then addCake = false end
+end
 
 function onGameInit()
     -- Ensure people get same map for same theme
@@ -237,7 +255,15 @@ function onGameTick20()
     end
 
     if CurrentHedgehog ~= nil and TurnTimeLeft > 0 and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then
-        if MaxHeight < 32000 and MaxHeight > 286 and WaterLine > 286  then SetWaterLine(WaterLine-2) end
+        if MaxHeight < delayHeight and
+           TurnTimeLeft<(999999999-delayTime) and 
+            MaxHeight > 286 and WaterLine > 286 then
+            if waterAccel ~= 0 then
+                SetWaterLine(WaterLine-(baseWaterSpeed+div(getActualHeight(MaxHeight)*100,waterAccel)))
+            else
+                SetWaterLine(WaterLine-baseWaterSpeed)
+            end
+        end
         if y > 0 and y < 30000 and MaxHeight > 286 and math.random(y) < 500 then
             local s = AddVisualGear(0, 0, vgtStraightShot, 0, true)
             local c = div(250000,y)
@@ -371,7 +397,7 @@ function onGameTick20()
                 end
             end
 
-            if CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
+            if addCake and CakeTries < 10 and y < 32600 and y > 3000 and Cake == nil and band(GetState(CurrentHedgehog),gstHHDriven) ~= 0 then 
                 -- doing this just after the start the first time to take advantage of randomness sources
                 -- Pick a clear y to start with
                 if y > 31000 then cy = 24585 elseif
