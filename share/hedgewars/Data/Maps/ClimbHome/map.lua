@@ -50,7 +50,7 @@ function onParameters()
     if params["speed"] ~= nil then
         baseWaterSpeed = params["speed"]
     end
-    if params["wateraccel"] ~= nil then
+    if params["accel"] ~= nil then
         waterAccel = params["accel"]
         if waterAccel ~= 0 then waterAccel = div(32640000,waterAccel) end
     end
