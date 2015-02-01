@@ -47,11 +47,19 @@ local delayTime = 0
 function onParameters()
     parseParams()
 
-    baseWaterSpeed = params["speed"]
-    waterAccel = params["accel"]
-    if waterAccel ~= 0 then waterAccel = div(32640000,waterAccel) end
-    delayTime = params["delaytime"]
-    delayHeight = 32768-params["delayheight"]
+    if params["speed"] ~= nil then
+        baseWaterSpeed = params["speed"]
+    end
+    if params["wateraccel"] ~= nil then
+        waterAccel = params["accel"]
+        if waterAccel ~= 0 then waterAccel = div(32640000,waterAccel) end
+    end
+    if params["delaytime"] ~= nil then
+        delayTime = params["delaytime"]
+    end
+    if params["delaytime"] ~= nil then
+        delayHeight = 32768-params["delayheight"]
+    end
     if params["nocake"] ~= nil then addCake = false end
 end
 
