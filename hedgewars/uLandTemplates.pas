@@ -1805,8 +1805,38 @@ const Template45Points: array[0..11] of TSDL_Rect =
        (x:1005; y: 805; w:   0; h:   0)
       );
 
+      
+const Template46Points: array[0..19] of TSDL_Rect =
+      (
+       (x:  800; y: 1424; w:    1; h:    1),
+       (x:  800; y: 1224; w:    1; h:    1),
+       (x: 2200; y: 1224; w:    1; h:    1),
+       (x: 2200; y: 1424; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y: 1024; w:    1; h:    1),
+       (x:  800; y:  844; w:    1; h:    1),
+       (x: 2200; y:  844; w:    1; h:    1),
+       (x: 2200; y: 1024; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y:  664; w:    1; h:    1),
+       (x:  800; y:  484; w:    1; h:    1),
+       (x: 2200; y:  484; w:    1; h:    1),
+       (x: 2200; y:  664; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1),
+       (x:  800; y:  304; w:    1; h:    1),
+       (x:  800; y:  104; w:    1; h:    1),
+       (x: 2200; y:  104; w:    1; h:    1),
+       (x: 2200; y:  304; w:    1; h:    1),
+       (x: NTPX; y:    0; w:    1; h:    1)
+
+      );
+      Template46FPoints: array[0..0] of TPoint =
+      (
+       (x: 1023; y:    0)
+      );
+      
 ////////////////////////////////////////////////////////////////////////
-var EdgeTemplates: array[0..45] of TEdgeTemplate =
+var EdgeTemplates: array[0..46] of TEdgeTemplate =
       (
        (BasePoints: PPointArray(@Template0Points);
         BasePointsCount: Succ(High(Template0Points));
@@ -2313,11 +2343,22 @@ var EdgeTemplates: array[0..45] of TEdgeTemplate =
         canMirror: false; canFlip: false; isNegative: true; canInvert: false;
         hasGirders: false;
         MaxHedgeHogs: 48;
+       ),
+       (BasePoints: PPointArray(@Template46Points);
+        BasePointsCount: Succ(High(Template46Points));
+        FillPoints: PPointArray(@Template46FPoints);
+        FillPointsCount: Succ(High(Template46FPoints));
+        BezierizeCount: 2;
+        RandPassesCount: 8;
+        TemplateHeight: 1424; TemplateWidth: 3072;
+        canMirror: true; canFlip: false; isNegative: false; canInvert: false;
+        hasGirders: true;
+        MaxHedgeHogs: 18;
        )
       );
 const SmallTemplates: array[0..2] of Longword = ( 39, 40, 42 );
-const MediumTemplates: array[0..17] of Longword =
-      ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 );
+const MediumTemplates: array[0..18] of Longword =
+      ( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 46 );
 const LargeTemplates: array[0..20] of Longword =
       (
         18, 19, 20, 21, 22, 23, 24, 25, 26, 27,
