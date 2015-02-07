@@ -356,6 +356,9 @@ processAction FinishGame = do
                         ) joinedMidGame
                      ) ri
 
+    rteams <- io $ room'sM rnc (L.nub . rejoinedTeams . fromJust . gameInfo) ri
+    mapM_ (processAction . RemoveTeam) rteams
+
     mapM_ processAction $ (
         SaveReplay
         : ModifyRoom
@@ -424,6 +427,15 @@ processAction RemoveClientTeams = do
 
     mapM_ processAction removeTeamActions
 
+
+processAction SetRandomSeed = do
+    ri <- clientRoomA
+    thisRoomChans <- liftM (map sendChan) $ roomClientsS ri
+    seed <- liftM showB $ io $ (randomRIO (0, 10^9) :: IO Int)
+    mapM_ processAction [
+        ModifyRoom (\r -> r{mapParams = Map.insert "SEED" seed $ mapParams r})
+        , AnswerClients thisRoomChans ["CFG", "SEED", seed]
+        ]
 
 
 processAction CheckRegistered = do

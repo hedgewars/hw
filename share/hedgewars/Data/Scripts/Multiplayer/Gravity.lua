@@ -41,7 +41,7 @@ function grav_onGameTick20()
         if delta == nil then
             if periodtimer == 0 then
                 periodtimer = period * 2
-                SetGravity(div(GetRandom(maxgravity - mingravity) + mingravity, mln))
+                SetGravity(div(GetRandom(maxgravity - mingravity + 1) + mingravity, mln))
             else
                 periodtimer = periodtimer - 1
             end

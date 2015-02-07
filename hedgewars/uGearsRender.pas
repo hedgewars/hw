@@ -684,6 +684,7 @@ begin
                 amHellishBomb: DrawSpriteRotated(sprHandHellish, hx, hy, sign, aangle);
                 amGasBomb: DrawSpriteRotated(sprHandCheese, hx, hy, sign, aangle);
                 amMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
+                amAirMine: DrawSpriteRotated(sprHandMine, hx, hy, sign, aangle);
                 amSMine: DrawSpriteRotated(sprHandSMine, hx, hy, sign, aangle);
                 amKnife: DrawSpriteRotatedF(sprHandKnife, hx, hy, 0, sign, aangle);
                 amSeduction: begin
@@ -1119,6 +1120,18 @@ begin
                        DrawSpriteRotated(sprMineOn, x, y, 0, Gear^.DirAngle)
                     else DrawSpriteRotated(sprMineDead, x, y, 0, Gear^.DirAngle);
                     end;
+         gtAirMine: if Gear^.State and gstTmpFlag = 0 then                // mine is inactive
+                        begin
+                        Tint(150,150,150,255);
+                        DrawSprite(sprAirMine, x-16, y-16, 15);
+                        untint
+                        end
+                    else if (Gear^.Hedgehog <> nil) and (Gear^.Hedgehog^.Gear <> nil) then  // mine is chasing a hog
+                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 25) mod 16)
+                    else if Gear^.State and gstHHChooseTarget <> 0 then   // mine is seeking for hogs
+                         DrawSprite(sprAirMine, x-16, y-16, (RealTicks div 125) mod 16)
+                    else
+                         DrawSprite(sprAirMine, x-16, y-16, 4);           // mine is active but not seeking
 
            gtSMine: if (((Gear^.State and gstAttacking) = 0)or((Gear^.Timer and $3FF) < 420)) and (Gear^.Health <> 0) then
                            DrawSpriteRotated(sprSMineOff, x, y, 0, Gear^.DirAngle)

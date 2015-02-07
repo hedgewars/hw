@@ -108,22 +108,38 @@ QVariant RoomsListModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DecorationRole)
     {
         const QIcon roomBusyIcon(":/res/iconDamage.png");
+        const QIcon roomBusyIconGreen(":/res/iconDamageLockG.png");
+        const QIcon roomBusyIconRed(":/res/iconDamageLockR.png");
         const QIcon roomWaitingIcon(":/res/iconTime.png");
+        const QIcon roomWaitingIconGreen(":/res/iconTimeLockG.png");
+        const QIcon roomWaitingIconRed(":/res/iconTimeLockR.png");
 
-        if (m_data.at(row).at(0).isEmpty())
-            return QVariant(roomWaitingIcon);
+        QString flags = m_data.at(row).at(StateColumn);
+
+        if (flags.contains("g"))
+        {
+            if (flags.contains("j"))
+                return QVariant(roomBusyIconRed);
+            else if (flags.contains("p"))
+                return QVariant(roomBusyIconGreen);
+            else
+                return QVariant(roomBusyIcon);
+        }
         else
-            return QVariant(roomBusyIcon);
+        {
+            if (flags.contains("j"))
+                return QVariant(roomWaitingIconRed);
+            else if (flags.contains("p"))
+                return QVariant(roomWaitingIconGreen);
+            else
+                return QVariant(roomWaitingIcon);
+        }
     }
 
     QString content = m_data.at(row).at(column);
 
     if (role == Qt::DisplayRole)
     {
-        // supply in progress flag as bool
-        if (column == 0)
-            return QVariant(QString(!content.isEmpty()));
-
         // display room names
         if (column == 5)
         {
@@ -190,7 +206,7 @@ void RoomsListModel::setRoomsList(const QStringList & rooms)
             l.append(rooms[i + t]);
         }
 
-        m_data.append(roomInfo2RoomRecord(l));
+        m_data.append(l);
     }
 
     endResetModel();
@@ -201,7 +217,7 @@ void RoomsListModel::addRoom(const QStringList & info)
 {
     beginInsertRows(QModelIndex(), 0, 0);
 
-    m_data.prepend(roomInfo2RoomRecord(info));
+    m_data.prepend(info);
 
     endInsertRows();
 }
@@ -250,25 +266,7 @@ void RoomsListModel::updateRoom(const QString & name, const QStringList & info)
     if (i < 0)
         return;
 
-    m_data[i] = roomInfo2RoomRecord(info);
+    m_data[i] = info;
 
     emit dataChanged(index(i, 0), index(i, columnCount(QModelIndex()) - 1));
-}
-
-
-QStringList RoomsListModel::roomInfo2RoomRecord(const QStringList & info)
-{
-    QStringList result;
-
-    result = info;
-
-    QString flags = info[StateColumn];
-    // for matters of less memory usage and quicker access store
-    // the boolean string as either "t" or empty
-    if (flags.contains('g'))
-        result[StateColumn] = "t";
-    else
-        result[StateColumn] = QString();
-
-    return result;
 }

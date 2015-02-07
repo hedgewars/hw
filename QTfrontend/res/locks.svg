@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   viewBox="0 0 225.52 116.94"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   width="100%"
+   height="100%"
+   sodipodi:docname="sloten.svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     id="namedview12"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="6.3586638"
+     inkscape:cx="102.46566"
+     inkscape:cy="54.65346"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2">
+    <sodipodi:guide
+       orientation="0,1"
+       position="141.89589,74.728869"
+       id="guide3765" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="105.52531,92.000461"
+       id="guide3767" />
+    <sodipodi:guide
+       orientation="1,0"
+       position="80.362796,66.52341"
+       id="guide3769" />
+  </sodipodi:namedview>
+  <path
+     style="fill:#dd2727"
+     inkscape:connector-curvature="0"
+     d="M 73.809216,100.09273 73.879916,44.786734 H 0.40991832 L -0.03314168,99.516734 C 0.03755832,119.84473 16.535858,116.77773 36.887858,116.77773 57.239856,116.77773 73.808856,120.44373 73.808856,100.09173 z"
+     id="path2865-1"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <path
+     style="fill:#920312"
+     inkscape:connector-curvature="0"
+     d="M 37.036484,61.912734 C 33.023684,61.912734 29.788884,65.147534 29.788884,69.160334 29.788884,72.084634 31.494584,74.619834 33.984884,75.772234 L 31.299484,93.859234 H 43.760484 L 40.883284,75.327234 C 42.936484,74.043334 44.316384,71.760434 44.316384,69.160434 44.316384,65.147634 41.049784,61.912834 37.036984,61.912834 z"
+     id="path2860-7"
+     inkscape:export-filename="/home/nemo/hg/hedgewars/0.9.21/QTfrontend/res/path2865-1.png"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <path
+     style="fill:#dd2727"
+     inkscape:connector-curvature="0"
+     d="M 4.7043898,42.314248 C 4.7043898,42.314248 3.1630898,0.18524828 36.55839,0.18524828 69.95369,0.18524828 67.89839,42.314248 67.89839,42.314248 H 59.16429 C 59.16429,42.314248 58.9074,10.460249 36.55829,9.6902482 14.20929,8.9195882 15.49329,42.314248 15.49329,42.314248 H 4.7042898 z"
+     id="path3743"
+     inkscape:export-filename="/home/nemo/hg/hedgewars/0.9.21/QTfrontend/res/path2865-1.png"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <path
+     style="fill:#60df33"
+     inkscape:connector-curvature="0"
+     d="M 85.015528,42.497266 C 85.015528,42.497266 83.474228,0.36826574 116.86953,0.36826574 150.26483,0.36826574 148.20953,42.497266 148.20953,42.497266 H 139.47543 C 139.47543,42.497266 139.21854,10.643266 116.86943,9.8732657 94.520428,9.1026057 95.804428,42.497266 95.804428,42.497266 H 85.015428 z"
+     id="path2858"
+     inkscape:export-filename="/home/nemo/hg/hedgewars/0.9.21/QTfrontend/res/path2860.png"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <path
+     style="fill:#60df33"
+     inkscape:connector-curvature="0"
+     d="M 154.04553,100.41727 154.11623,45.111266 H 80.646228 L 80.203168,99.841266 C 80.273868,120.16927 96.772168,117.10227 117.12417,117.10227 137.47617,117.10227 154.04517,120.76827 154.04517,100.41627 z"
+     id="path2865"
+     inkscape:export-filename="/home/nemo/hg/hedgewars/0.9.21/QTfrontend/res/path2860.png"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <path
+     style="fill:#287f09"
+     inkscape:connector-curvature="0"
+     d="M 117.11553,62.227266 C 113.10273,62.227266 109.86793,65.462066 109.86793,69.474866 109.86793,72.399166 111.57363,74.934366 114.06393,76.086766 L 111.37853,94.173766 H 123.83953 L 120.96233,75.641766 C 123.01553,74.357866 124.39543,72.074966 124.39543,69.474966 124.39543,65.462166 121.12883,62.227366 117.11603,62.227366 z"
+     id="path2860"
+     inkscape:export-xdpi="13.85"
+     inkscape:export-ydpi="13.85" />
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Open and closed lock</dc:title>
+        <dc:date>2013-11-07T10:50:32</dc:date>
+        <dc:description>Set of 2 locks, one opened and one closed.</dc:description>
+        <dc:source>https://openclipart.org/detail/188421/open-and-closed-lock-by-iyo-188421</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Iyo</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>closed</rdf:li>
+            <rdf:li>lock</rdf:li>
+            <rdf:li>locks</rdf:li>
+            <rdf:li>open</rdf:li>
+            <rdf:li>pic</rdf:li>
+            <rdf:li>pictogram</rdf:li>
+            <rdf:li>sign</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>

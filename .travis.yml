@@ -11,13 +11,13 @@ env:
   # Debug build
   - BUILD_ARGS="-DCMAKE_BUILD_TYPE=Debug"
   # Everything that's optional
+  - BUILD_ARGS="-DBUILD_ENGINE_C=1"
   - BUILD_ARGS="-DNOPNG=1"
   - BUILD_ARGS="-DNOVIDEOREC=1"
   - BUILD_ARGS="-DNOSERVER=1"
   - BUILD_ARGS="-DLUA_SYSTEM=0"
   - BUILD_ARGS="-DPHYSFS_SYSTEM=0"
   - BUILD_ARGS="-DGL2=1"
-  - BUILD_ARGS="-DBUILD_ENGINE_C=1"
 matrix:
   allow_failures:
     # Failures we expect here
@@ -27,10 +27,12 @@ before_install:
 script: 
   - mkdir build && cd build && cmake $BUILD_ARGS .. && make VERBOSE=1 && make test_verbose
 notifications:
+  email: false
   irc:
     channels:
       - "chat.freenode.net#hedgewars"
     template:
       - "hw-build #%{build_number} (%{commit} by %{author}): %{message}"
       - "See details at %{build_url}"
-  email: false
+    on_success: change
+    on_failure: always

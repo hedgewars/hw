@@ -127,6 +127,7 @@ while Gear <> nil do
                 gtClusterBomb,
             //    gtCluster, too game breaking I think
                 gtSMine,
+                gtAirMine,
                 gtCase,
                 gtTarget,
                 gtFlame,

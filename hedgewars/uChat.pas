@@ -32,7 +32,7 @@ procedure KeyPressChat(Key, Sym: Longword);
 procedure SendHogSpeech(s: shortstring);
 
 implementation
-uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript;
+uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
 
 const MaxStrIndex = 27;
 
@@ -91,8 +91,6 @@ var strSurface,
     dstrect   : TSDL_Rect; // destination rectangle for blitting
     font      : THWFont;
 const
-    shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$FF);
-    //shadowcolor: TSDL_Color = (r:$00; g:$00; b:$00; a:$80);
     shadowint  = $80 shl AShift;
 begin
 
@@ -117,23 +115,11 @@ dstrect.h:= ClHeight;
 
 // draw background
 SDL_FillRect(resSurface, @dstrect, shadowint);
-dstrect.x:= Padding + 1;
-dstrect.y:= Padding + 1;
-// doesn't matter if .w and .h still include padding, SDL_UpperBlit will clip
-
-
-// create and blit text shadow
-strSurface:= TTF_RenderUTF8_Solid(Fontz[font].Handle, Str2PChar(str), shadowcolor);
-SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
-SDL_FreeSurface(strSurface);
-
-// non-shadow text starts at padding
-dstrect.x:= Padding;
-dstrect.y:= Padding;
 
 // create and blit text
 strSurface:= TTF_RenderUTF8_Blended(Fontz[font].Handle, Str2PChar(str), cl.color);
-SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+//SDL_UpperBlit(strSurface, nil, resSurface, @dstrect);
+if strSurface <> nil then copyTOXY(strSurface, resSurface, Padding, Padding);
 SDL_FreeSurface(strSurface);
 
 cl.Tex:= Surface2Tex(resSurface, false);

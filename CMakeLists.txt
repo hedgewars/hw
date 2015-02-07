@@ -51,8 +51,8 @@ set(FONTS_DIRS "" CACHE STRING "Additional paths to folders where required fonts
 #versioning
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
 set(CPACK_PACKAGE_VERSION_MINOR 9)
-set(CPACK_PACKAGE_VERSION_PATCH 21)
-set(HEDGEWARS_PROTO_VER 48)
+set(CPACK_PACKAGE_VERSION_PATCH 22)
+set(HEDGEWARS_PROTO_VER 50)
 set(HEDGEWARS_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}")
 include(${CMAKE_MODULE_PATH}/revinfo.cmake)
 
@@ -70,12 +70,13 @@ include(${CMAKE_MODULE_PATH}/platform.cmake)
 if(CMAKE_BUILD_TYPE)
     string(TOUPPER ${CMAKE_BUILD_TYPE} CMAKE_BUILD_TYPE)
     if(NOT((CMAKE_BUILD_TYPE MATCHES "RELEASE") OR
-           (CMAKE_BUILD_TYPE MATCHES "DEBUG")))
-        set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
-        message(STATUS "Unknown build type, using default (${default_build_type})")
+           (CMAKE_BUILD_TYPE MATCHES "DEBUG") OR
+           (CMAKE_BUILD_TYPE MATCHES "RELWITHDEBINFO")))
+        set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
+        message(STATUS "Unknown build type ${CMAKE_BUILD_TYPE}, using default (${default_build_type})")
     endif()
 else(CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release)" FORCE)
+    set(CMAKE_BUILD_TYPE ${default_build_type} CACHE STRING "Build type (Debug/Release/RelWithDebInfo)" FORCE)
 endif(CMAKE_BUILD_TYPE)
 
 
@@ -232,7 +233,7 @@ include(${CMAKE_MODULE_PATH}/cpackvars.cmake)
 
 enable_testing()
 
-add_custom_target(test         COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random)
+add_custom_target(test_normal  COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random)
 add_custom_target(test_verbose COMMAND ${CMAKE_CTEST_COMMAND} -E '^todo/' --timeout 300 --schedule-random -V)
 
 set(LUATESTS_DIR "${CMAKE_SOURCE_DIR}/tests/lua")

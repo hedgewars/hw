@@ -268,7 +268,7 @@ void FeedbackDialog::GenerateSpecs()
     number_of_cores += QString::number(sysconf(_SC_NPROCESSORS_ONLN)) + "\n";
     quint32 pages = sysconf(_SC_PHYS_PAGES);
     quint32 page_size = sysconf(_SC_PAGE_SIZE);
-    quint32 total = pages * page_size / 1024 / 1024;
+    quint64 total = (quint64)pages * page_size / 1024 / 1024;
     total_ram += QString::number(total) + " MB\n";
     os_version += "GNU/Linux or BSD\n";
 #endif

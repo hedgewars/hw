@@ -49,7 +49,7 @@ voted vote = do
                 return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
             else
                 actOnVoting $ voting{votes = (uid, vote):votes voting}
-      
+
     where
     actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
     actOnVoting vt = do
@@ -107,8 +107,24 @@ voted vote = do
         chans <- roomClientsChans
         let modifyGameInfo f room  = room{gameInfo = fmap f $ gameInfo room}
         return [ModifyRoom (modifyGameInfo $ \g -> g{isPaused = not $ isPaused g}),
-                AnswerClients chans ["CHAT", "[server]", "Pause toggled"],
+                AnswerClients chans ["CHAT", "[server]", loc "Pause toggled"],
                 AnswerClients chans ["EM", toEngineMsg "I"]]
+    act (VoteNewSeed) =
+        return [SetRandomSeed]
+    act (VoteHedgehogsPerTeam h) = do
+        rm <- thisRoom
+        chans <- roomClientsChans
+        let answers = concatMap (\t -> 
+                [ModifyRoom $ modifyTeam t{hhnum = h}
+                , AnswerClients chans ["HH_NUM", teamname t, showB h]]
+                )
+                $
+                if isJust $ gameInfo rm then
+                    teamsAtStart . fromJust . gameInfo $ rm 
+                else
+                    teams rm
+
+        return $ ModifyRoom (\r -> r{defaultHedgehogsNumber = h}) : answers
 
 
 startVote :: VoteType -> Reader (ClientIndex, IRnC) [Action]
@@ -154,3 +170,5 @@ voteInfo :: VoteType -> B.ByteString
 voteInfo (VoteKick n) = B.concat [loc "kick", " ", n]
 voteInfo (VoteMap n) = B.concat [loc "map", " ", n]
 voteInfo (VotePause) = B.concat [loc "pause"]
+voteInfo (VoteNewSeed) = B.concat [loc "new seed"]
+voteInfo (VoteHedgehogsPerTeam i) = B.concat [loc "number of hedgehogs in team", " ", showB i]

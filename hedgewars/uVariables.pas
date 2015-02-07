@@ -699,7 +699,9 @@ var
             (FileName:       'custom1'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom1
             (FileName:       'custom2'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
-            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: true; getImageDimensions: true) // sprCustom2
+            Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: true; priority: tpLow; getDimensions: true; getImageDimensions: true), // sprCustom2
+            (FileName:      'AirMine'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  32; Height: 32; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true)// sprAirMine
             );
 
 const
@@ -2297,6 +2299,31 @@ var
             SkipTurns: 0;
             PosCount: 4;
             PosSprite: sprAmRubber;
+            ejectX: 0;
+            ejectY: 0),
+// Air Mine
+            (NameId: sidAirMine;
+            NameTex: nil;
+            Probability: 100;
+            NumberInCase: 1;
+            Ammo: (Propz: ammoprop_Power or
+                          ammoprop_AltUse or
+                          ammoprop_NeedUpDown;
+                Count: 2;
+                NumPerTurn: 0;
+                Timer: 0;
+                Pos: 0;
+                AmmoType: amAirMine;
+                AttackVoice: sndLaugh;
+                Bounciness: 1000);
+            Slot: 5;
+            TimeAfterTurn: 5000;
+            minAngle: 0;
+            maxAngle: 0;
+            isDamaging: true;
+            SkipTurns: 0;
+            PosCount: 1;
+            PosSprite: sprWater;
             ejectX: 0;
             ejectY: 0)
         );

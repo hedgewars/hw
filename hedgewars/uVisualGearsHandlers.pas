@@ -125,7 +125,7 @@ with Gear^ do
 
     if (round(X) >= cLeftScreenBorder)
     and (round(X) <= cRightScreenBorder)
-    and (round(Y) - 75 <= LAND_HEIGHT)
+    and (round(Y) - 250 <= LAND_HEIGHT)
     and (Timer > 0) and (Timer-Steps > 0) then
         begin
         if tdX > 0 then
@@ -152,23 +152,31 @@ with Gear^ do
             X:= X + cScreenSpace;
             moved:= true
             end
-        else
-            if round(X) > cRightScreenBorder then
-                begin
-                X:= X - cScreenSpace;
-                moved:= true
-                end;
+        else if round(X) > cRightScreenBorder then
+            begin
+            X:= X - cScreenSpace;
+            moved:= true
+            end;
             // if round(Y) < (LAND_HEIGHT - 1024 - 75) then Y:= Y + 25.0; // For if flag is set for flakes rising upwards?
-        if (Gear^.Layer = 2) and (round(Y) - 225 > LAND_HEIGHT) then
+        if (Gear^.Layer = 2) and (round(Y) - 400 > LAND_HEIGHT) and (cGravityf >= 0) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + 250 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
+            Y:= Y-(1024 + 400 + random(50)); // TODO - configure in theme (jellies for example could use limited range)
             moved:= true
             end
-        else if (Gear^.Layer <> 2) and (round(Y) + 50 > LAND_HEIGHT) then
+        else if (Gear^.Layer <> 2) and (round(Y) - 150 > LAND_HEIGHT) and (cGravityf >= 0) then
             begin
             X:= cLeftScreenBorder + random(cScreenSpace);
-            Y:= Y - (1024 + random(25));
+            Y:= Y-(1024 + 200 + random(50));
+            moved:= true
+            end
+        else if (round(Y) < LAND_HEIGHT-1200) and (cGravityf < 0) then // gravity can make flakes move upwards
+            begin
+            X:= cLeftScreenBorder + random(cScreenSpace);
+            if Gear^.Layer = 2 then
+                Y:= Y+(1024 + 150 + random(100))
+            else
+                Y:= Y+(1024 + random(50));
             moved:= true
             end;
         if moved then

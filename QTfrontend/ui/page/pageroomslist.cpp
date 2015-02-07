@@ -77,8 +77,16 @@ QLayout * PageRoomsList::bodyLayoutDefinition()
     showGamesInProgress = new QAction(QAction::tr("Show games in-progress"), stateMenu);
     showGamesInProgress->setCheckable(true);
     showGamesInProgress->setChecked(true);
+    showPassword = new QAction(QAction::tr("Show password protected"), stateMenu);
+    showPassword->setCheckable(true);
+    showPassword->setChecked(true);
+    showJoinRestricted = new QAction(QAction::tr("Show join restricted"), stateMenu);
+    showJoinRestricted->setCheckable(true);
+    showJoinRestricted->setChecked(true);
     stateMenu->addAction(showGamesInLobby);
     stateMenu->addAction(showGamesInProgress);
+    stateMenu->addAction(showPassword);
+    stateMenu->addAction(showJoinRestricted);
     btnState->setMenu(stateMenu);
 
     // Help/prompt message at top
@@ -186,6 +194,8 @@ void PageRoomsList::connectSignals()
     connect(roomsList, SIGNAL(clicked (const QModelIndex &)), searchText, SLOT(setFocus()));
     connect(showGamesInLobby, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(showGamesInProgress, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showPassword, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
+    connect(showJoinRestricted, SIGNAL(triggered()), this, SLOT(onFilterChanged()));
     connect(searchText, SIGNAL(textChanged (const QString &)), this, SLOT(onFilterChanged()));
     connect(this, SIGNAL(askJoinConfirmation (const QString &)), this, SLOT(onJoinConfirmation(const QString &)), Qt::QueuedConnection);
 
@@ -630,13 +640,29 @@ void PageRoomsList::onFilterChanged()
 
     bool stateLobby = showGamesInLobby->isChecked();
     bool stateProgress = showGamesInProgress->isChecked();
+    bool statePassword = showPassword->isChecked();
+    bool stateJoinRestricted = showJoinRestricted->isChecked();
 
-    if (stateLobby && stateProgress)
-        stateFilteredModel->setFilterFixedString(QString()); // "any"
-    else if (stateLobby != stateProgress)
-        stateFilteredModel->setFilterFixedString(QString(stateProgress));
+    QString filter;
+    if (!stateLobby && !stateProgress)
+        filter = "O_o";
+    else if (stateLobby && stateProgress && statePassword && stateJoinRestricted)
+        filter = "";
     else
-        stateFilteredModel->setFilterFixedString(QString("none")); // Basically, none.
+    {
+        QString exclude = "[^";
+        if (!stateProgress) exclude += "g";
+        if (!statePassword) exclude += "p";
+        if (!stateJoinRestricted) exclude += "j";
+        exclude += "]*";
+        if (stateProgress && statePassword && stateJoinRestricted) exclude = ".*";
+        filter = "^" + exclude;
+        if (!stateLobby) filter += "g" + exclude;
+        filter += "$";
+    }
+    //qDebug() << filter;
+
+    stateFilteredModel->setFilterRegExp(filter);
 }
 
 void PageRoomsList::setSettings(QSettings *settings)

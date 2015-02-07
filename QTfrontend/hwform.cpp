@@ -1839,7 +1839,7 @@ void HWForm::NetGameSlave()
         ui.pageNetGame->setRoomName(hwnet->getRoom());
 
         ui.pageNetGame->pGameCFG->GameSchemes->view()->disconnect(hwnet);
-        connect(hwnet, SIGNAL(netSchemeConfig(QStringList &)),
+        connect(hwnet, SIGNAL(netSchemeConfig(QStringList)),
                 this, SLOT(selectFirstNetScheme()));
     }
 

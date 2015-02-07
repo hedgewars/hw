@@ -103,6 +103,7 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
+(*        gtAirMine *) , amAirMine
     );
 
 
@@ -358,6 +359,28 @@ case Kind of
                     else
                         gear^.Timer:= cMinesTime
                     end
+                end;
+     gtAirMine: begin
+                gear^.ImpactSound:= sndDenied;
+                gear^.nImpactSounds:= 1;
+                gear^.Health:= 30;
+                gear^.State:= gear^.State or gstMoving or gstNoGravity;
+                gear^.Radius:= 8;
+                gear^.Elasticity:= _0_55;
+                gear^.Friction:= _0_995;
+                gear^.Density:= _1;
+                gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
+                gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
+                gear^.Pos:= cMaxWindSpeed.QWordValue; // air friction. slows it down when not hitting stuff
+                gear^.Karma:= 30; // damage
+                if gear^.Timer = 0 then
+                    begin
+                    if cMinesTime < 0 then
+                        gear^.Timer:= getrandom(13)*100
+                    else
+                        gear^.Timer:= cMinesTime div 4
+                    end;
+                gear^.WDTimer:= gear^.Timer
                 end;
        gtSMine: begin
                 gear^.Health:= 10;

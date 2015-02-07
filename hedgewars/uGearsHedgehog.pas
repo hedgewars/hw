@@ -290,6 +290,7 @@ with Gear^,
 
             case CurAmmoType of
                       amGrenade: newGear:= AddGear(hwRound(lx), hwRound(ly), gtGrenade,         0, newDx, newDy, CurWeapon^.Timer);
+                      amAirMine: newGear:= AddGear(hwRound(lx), hwRound(ly), gtAirMine,         0, newDx, newDy, 0);
                       amMolotov: newGear:= AddGear(hwRound(lx), hwRound(ly), gtMolotov,      0, newDx, newDy, 0);
                   amClusterBomb: newGear:= AddGear(hwRound(lx), hwRound(ly), gtClusterBomb,  0, newDx, newDy, CurWeapon^.Timer);
                       amGasBomb: newGear:= AddGear(hwRound(lx), hwRound(ly), gtGasBomb,      0, newDx, newDy, CurWeapon^.Timer);
@@ -425,7 +426,8 @@ with Gear^,
                      amBazooka, amSnowball,
                          amBee, amSMine,
                       amMortar, amWatermelon,
-                 amHellishBomb, amDrill: FollowGear:= newGear;
+                 amHellishBomb, amDrill,
+                     amAirMine: FollowGear:= newGear;
 
                      amShotgun, amPickHammer,
                         amRope, amDEagle,
@@ -443,9 +445,10 @@ with Gear^,
                       amTardis, amPiano,
                       amIceGun, amRubber: CurAmmoGear:= newGear;
             end;
-	    if CurAmmoType = amCake then FollowGear:= newGear;
+            if CurAmmoType = amCake then FollowGear:= newGear;
+            if CurAmmoType = amAirMine then newGear^.Hedgehog:= nil;
 
-            if ((CurAmmoType = amMine) or (CurAmmoType = amSMine)) and (GameFlags and gfInfAttack <> 0) then
+            if ((CurAmmoType = amMine) or (CurAmmoType = amSMine) or (CurAmmoType = amAirMine)) and (GameFlags and gfInfAttack <> 0) then
                 newGear^.FlightTime:= GameTicks + 1000
             else if CurAmmoType = amDrill then
                 newGear^.FlightTime:= GameTicks + 250;

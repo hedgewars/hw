@@ -104,6 +104,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         , schemeFlags
         , schemeAdditional
         , [eml ["e$template_filter ", mParams Map.! "TEMPLATE"]]
+        , [eml ["e$feature_size ", mParams Map.! "FEATURE_SIZE"]]
         , [eml ["e$mapgen ", mapgen]]
         , mapgenSpecific
         , concatMap teamSetup ti
@@ -112,21 +113,21 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         ]
     where
         keys1, keys2 :: Set.Set B.ByteString
-        keys1 = Set.fromList ["MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
+        keys1 = Set.fromList ["FEATURE_SIZE", "MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
         keys2 = Set.fromList ["AMMO", "SCHEME", "SCRIPT", "THEME"]
         sane = Set.null (keys1 Set.\\ Map.keysSet mParams)
             && Set.null (keys2 Set.\\ Map.keysSet prms)
-            && (not . null . drop 40 $ scheme)
+            && (not . null . drop 41 $ scheme)
             && (not . null . tail $ prms Map.! "AMMO")
-        mapGenTypes = ["+rnd+", "+maze+", "+drawn+"]
+        mapGenTypes = ["+rnd+", "+maze+", "+drawn+", "+perlin+"]
         maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
+        templateFilterMsg = eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]
         mapgenSpecific = case mapgen of
-            "1" -> [eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]]
-            "2" -> let d = head . fromMaybe [""] $ Map.lookup "DRAWNMAP" prms in if BW.length d <= 4 then [] else drawnMapData d
-            _ -> []
+            "3" -> let d = head . fromMaybe [""] $ Map.lookup "DRAWNMAP" prms in if BW.length d <= 4 then [] else drawnMapData d
+            _ -> [templateFilterMsg]
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
         schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])

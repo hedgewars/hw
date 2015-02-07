@@ -122,7 +122,8 @@ const AmmoTests: array[TAmmoType] of TAmmoTest =
             (proc: nil;              flags: 0), // amLandGun
             (proc: nil;              flags: 0), // amIceGun
             (proc: nil;              flags: 0), // amKnife
-            (proc: nil;              flags: 0)  // amGirder
+            (proc: nil;              flags: 0), // amRubber
+            (proc: nil;              flags: 0)  // amAirMine
             );
 
 implementation

@@ -16,6 +16,18 @@ include_directories(${LUA_INCLUDE_DIR})
 include_directories(${SDL_INCLUDE_DIR})
 add_subdirectory(rtl)
 
+# convert list into pascal array
+if(FONTS_DIRS)
+  list(LENGTH FONTS_DIRS ndirs)
+  set(FONTS_DIRS_ARRAY "array [0..${ndirs}] of PChar = (")
+  foreach(fontdir ${FONTS_DIRS})
+      set(FONTS_DIRS_ARRAY "${FONTS_DIRS_ARRAY}\n_P'${fontdir}',")
+  endforeach(fontdir)
+  set(FONTS_DIRS_ARRAY "${FONTS_DIRS_ARRAY}\nnil);\n")
+else(FONTS_DIRS)
+  set(FONTS_DIRS_ARRAY "array [0..1] of PChar = (nil, nil);")
+endif(FONTS_DIRS)
+
 configure_file(${CMAKE_SOURCE_DIR}/hedgewars/config.inc.in ${CMAKE_CURRENT_BINARY_DIR}/config.inc)
 
 #get the list of pas files that are going to be converted and compiled
