@@ -186,6 +186,7 @@ data GameInfo =
         roundMsgs :: [B.ByteString],
         lastFilteredTimedMsg :: Maybe B.ByteString,
         leftTeams :: [B.ByteString],
+        rejoinedTeams :: [B.ByteString], -- for 0.9.21 frontend workaround
         teamsAtStart :: [TeamInfo],
         teamsInGameNumber :: Int,
         allPlayersHaveRegisteredAccounts :: !Bool,
@@ -205,6 +206,7 @@ newGameInfo =
     GameInfo
         []
         Nothing
+        []
         []
 
 
