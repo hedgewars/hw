@@ -356,6 +356,9 @@ processAction FinishGame = do
                         ) joinedMidGame
                      ) ri
 
+    rteams <- io $ room'sM rnc (L.nub . rejoinedTeams . fromJust . gameInfo) ri
+    mapM_ (processAction . RemoveTeam) rteams
+
     mapM_ processAction $ (
         SaveReplay
         : ModifyRoom

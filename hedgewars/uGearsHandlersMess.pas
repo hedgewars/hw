@@ -1799,7 +1799,7 @@ begin
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
         (Gear^.State and gsttmpFlag = 0) or
         (Gear^.Angle = 0) then
-        gear^.State:= gear^.State and not gstHHChooseTarget
+        gear^.State:= gear^.State and (not gstHHChooseTarget)
     else if
     // todo, allow not finding new target, set timeout on target retention
         (Gear^.State and gstAttacking = 0) and
