@@ -15,6 +15,7 @@ extern "C" {
     getSeed_t *flibGetSeed;
     setTheme_t *flibSetTheme;
     setScript_t *flibSetScript;
+    setScheme_t *flibSetScheme;
     getPreview_t *flibGetPreview;
     runQuickGame_t *flibRunQuickGame;
     runLocalGame_t *flibRunLocalGame;
@@ -57,6 +58,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibSetSeed = (setSeed_t*) hwlib.resolve("setSeed");
     flibSetTheme = (setTheme_t*) hwlib.resolve("setTheme");
     flibSetScript = (setScript_t*) hwlib.resolve("setScript");
+    flibSetScheme = (setScheme_t*) hwlib.resolve("setScheme");
 
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
@@ -232,4 +234,9 @@ void HWEngine::setTheme(const QString &theme)
 void HWEngine::setScript(const QString &script)
 {
     flibSetScript(script.toUtf8().constData());
+}
+
+void HWEngine::setScheme(const QString &scheme)
+{
+    flibSetScheme(scheme.toUtf8().constData());
 }

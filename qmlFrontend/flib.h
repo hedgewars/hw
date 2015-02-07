@@ -37,6 +37,7 @@ typedef void setSeed_t(const char * seed);
 typedef char *getSeed_t();
 typedef void setTheme_t(const char * themeName);
 typedef void setScript_t(const char * scriptName);
+typedef void setScheme_t(const char * schemeName);
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
 

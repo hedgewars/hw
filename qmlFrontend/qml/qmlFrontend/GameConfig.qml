@@ -127,7 +127,7 @@ Rectangle {
                  anchors.fill: parent
                  onClicked: {
                      cbScheme.currentIndex = index
-                     //HWEngine.setScheme(schemeName.text)
+                     HWEngine.setScheme(schemeName.text)
                  }
             }
         }

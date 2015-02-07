@@ -15,6 +15,7 @@ add_executable(hedgewars WIN32
     previewimageprovider
     themeiconprovider
     qtquick2applicationviewer/qtquick2applicationviewer
+    flib.h
     )
 
 include_directories(${OPENGL_INCLUDE_DIR})

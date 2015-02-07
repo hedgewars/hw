@@ -13,13 +13,14 @@ procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 procedure setTheme(themeName: PChar); cdecl;
 procedure setScript(scriptName: PChar); cdecl;
+procedure setScheme(schemeName: PChar); cdecl;
 
 procedure tryAddTeam(teamName: PChar); cdecl;
 procedure tryRemoveTeam(teamName: PChar); cdecl;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 
 implementation
-uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData;
+uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes;
 
 var guiCallbackPointer: pointer;
     guiCallbackFunction: TGUICallback;
@@ -33,6 +34,7 @@ type
             seed: shortstring;
             theme: shortstring;
             script: shortstring;
+            scheme: TScheme;
             mapgen: Longint;
             gameType: TGameType;
             teams: array[0..7] of TTeam;
@@ -64,6 +66,8 @@ begin
             ipcToEngine('eseed ' + seed);
             ipcToEngine('e$mapgen ' + intToStr(mapgen));
             ipcToEngine('e$theme ' + theme);
+
+            sendSchemeConfig(scheme);
 
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
@@ -321,6 +325,15 @@ begin
         currentConfig.script:= '/Scripts/Multiplayer/' + scriptName + '.lua'
     else
         currentConfig.script:= ''
+end;
+
+procedure setScheme(schemeName: PChar); cdecl;
+var scheme: PScheme;
+begin
+    scheme:= schemeByName(schemeName);
+
+    if scheme <> nil then
+        currentConfig.scheme:= scheme^
 end;
 
 end.

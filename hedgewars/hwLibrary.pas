@@ -158,6 +158,7 @@ exports
     getSeed,
     setTheme,
     setScript,
+    setScheme,
     getThemesList,
     freeThemesList,
     getThemeIcon,

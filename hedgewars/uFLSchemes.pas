@@ -5,53 +5,14 @@ uses uFLTypes;
 function getSchemesList: PPChar; cdecl;
 procedure freeSchemesList;
 
+function schemeByName(s: shortstring): PScheme;
+procedure sendSchemeConfig(var scheme: TScheme);
+
 implementation
 uses uFLUtils, uFLIPC, uPhysFSLayer, uFLData;
 
 const MAX_SCHEME_NAMES = 64;
 type
-    TScheme = record
-            schemeName
-            , scriptparam : shortstring;
-            fortsmode
-            , divteams
-            , solidland
-            , border
-            , lowgrav
-            , laser
-            , invulnerability
-            , mines
-            , vampiric
-            , karma
-            , artillery
-            , randomorder
-            , king
-            , placehog
-            , sharedammo
-            , disablegirders
-            , disablewind
-            , morewind
-            , tagteam
-            , bottomborder: boolean;
-            damagefactor
-            , turntime
-            , health
-            , suddendeath
-            , caseprobability
-            , minestime
-            , landadds
-            , minedudpct
-            , explosives
-            , minesnum
-            , healthprobability
-            , healthcaseamount
-            , waterrise
-            , healthdecrease
-            , ropepct
-            , getawaytime
-            , worldedge: LongInt
-        end;
-    PScheme = ^TScheme;
     TSchemeArray = array [0..0] of TScheme;
     PSchemeArray = ^TSchemeArray;
 var
@@ -152,9 +113,9 @@ begin
                     scheme:= @schemes^[l - 1];
 
                     if copy(s, 1, 5) = 'name=' then
-                        tmpScheme. schemeName:= midStr(s, 6)
+                        tmpScheme.schemeName:= midStr(s, 6)
                     else if copy(s, 1, 12) = 'scriptparam=' then
-                        tmpScheme. schemeName:= midStr(s, 13) else
+                        tmpScheme.scriptparam:= midStr(s, 13) else
                     begin
                         ii:= 0;
                         repeat
@@ -208,11 +169,36 @@ begin
     getSchemesList:= listOfSchemeNames
 end;
 
+function schemeByName(s: shortstring): PScheme;
+var i: Longword;
+    scheme: PScheme;
+begin
+    scheme:= schemesList;
+    i:= 0;
+    while (i < schemesNumber) and (scheme^.schemeName <> s) do
+    begin
+        inc(scheme);
+        inc(i)
+    end;
+
+    if i < schemesNumber then schemeByName:= scheme else schemeByName:= nil
+end;
 
 procedure freeSchemesList;
 begin
     if schemesList <> nil then
         FreeMem(schemesList, sizeof(schemesList^) * (schemesNumber + 1))
+end;
+
+
+procedure sendSchemeConfig(var scheme: TScheme);
+var i: Longword;
+begin
+    with scheme do
+    begin
+        ipcToEngine('e$turntime ' + inttostr(scheme.turntime));
+        ipcToEngine('e$minesnum ' + inttostr(scheme.minesnum));
+    end
 end;
 
 end.

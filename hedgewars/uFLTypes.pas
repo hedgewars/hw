@@ -33,6 +33,49 @@ type
         end;
     PTeam = ^TTeam;
 
+    TScheme = record
+            schemeName
+            , scriptparam : shortstring;
+            fortsmode
+            , divteams
+            , solidland
+            , border
+            , lowgrav
+            , laser
+            , invulnerability
+            , mines
+            , vampiric
+            , karma
+            , artillery
+            , randomorder
+            , king
+            , placehog
+            , sharedammo
+            , disablegirders
+            , disablewind
+            , morewind
+            , tagteam
+            , bottomborder: boolean;
+            damagefactor
+            , turntime
+            , health
+            , suddendeath
+            , caseprobability
+            , minestime
+            , landadds
+            , minedudpct
+            , explosives
+            , minesnum
+            , healthprobability
+            , healthcaseamount
+            , waterrise
+            , healthdecrease
+            , ropepct
+            , getawaytime
+            , worldedge: LongInt
+        end;
+    PScheme = ^TScheme;
+
 implementation
 
 end.
