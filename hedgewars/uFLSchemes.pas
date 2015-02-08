@@ -110,16 +110,14 @@ begin
 
                 if (l <= schemesNumber) and (l > 0) then
                 begin
-                    scheme:= @schemes^[l - 1];
-
                     if copy(s, 1, 5) = 'name=' then
-                        tmpScheme.schemeName:= midStr(s, 6)
+                        schemes^[l - 1].schemeName:= midStr(s, 6)
                     else if copy(s, 1, 12) = 'scriptparam=' then
-                        tmpScheme.scriptparam:= midStr(s, 13) else
+                        schemes^[l - 1].scriptparam:= midStr(s, 13) else
                     begin
                         ii:= 0;
                         repeat
-                            isFound:= readInt(ints[ii].name, s, ints[ii].param^);
+                            isFound:= readInt(ints[ii].name, s, PLongInt(ints[ii].param - @tmpScheme + @schemes^[l - 1])^);
                             inc(ii)
                         until isFound or (ii > High(ints));
 
@@ -127,13 +125,11 @@ begin
                             begin
                                 ii:= 0;
                                 repeat
-                                    isFound:= readBool(bools[ii].name, s, bools[ii].param^);
+                                    isFound:= readBool(bools[ii].name, s, PBoolean(bools[ii].param - @tmpScheme + @schemes^[l - 1])^);
                                     inc(ii)
                                 until isFound or (ii > High(bools));
                             end;
                     end;
-
-                    scheme^:= tmpScheme
                 end;
             end;
         end;
@@ -196,8 +192,10 @@ var i: Longword;
 begin
     with scheme do
     begin
-        ipcToEngine('e$turntime ' + inttostr(scheme.turntime));
-        ipcToEngine('e$minesnum ' + inttostr(scheme.minesnum));
+        if scheme.turntime <> 45 then
+            ipcToEngine('e$turntime ' + inttostr(scheme.turntime * 1000));
+        if scheme.minesnum <> 4 then
+            ipcToEngine('e$minesnum ' + inttostr(scheme.minesnum));
     end
 end;
 
