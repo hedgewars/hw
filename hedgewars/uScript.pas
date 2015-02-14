@@ -2309,7 +2309,7 @@ var rtn: Boolean;
 begin
     if CheckLuaParamCount(L, 5, 'TestRectForObstacle', 'x1, y1, x2, y2, landOnly') then
         begin
-        rtn:= TestRectancleForObstacle(
+        rtn:= TestRectangleForObstacle(
                     lua_tointeger(L, 1),
                     lua_tointeger(L, 2),
                     lua_tointeger(L, 3),
@@ -3027,7 +3027,7 @@ ScriptSetInteger('gstMoving'        , gstMoving);
 ScriptSetInteger('gstAttacked'      , gstAttacked);
 ScriptSetInteger('gstAttacking'     , gstAttacking);
 ScriptSetInteger('gstCollision'     , gstCollision);
-ScriptSetInteger('gstHHChooseTarget', gstHHChooseTarget);
+ScriptSetInteger('gstChooseTarget', gstChooseTarget);
 ScriptSetInteger('gstHHJumping'     , gstHHJumping);
 ScriptSetInteger('gsttmpFlag'       , gsttmpFlag);
 ScriptSetInteger('gstHHThinking'    , gstHHThinking);

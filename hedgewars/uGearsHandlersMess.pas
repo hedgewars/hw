@@ -1799,14 +1799,14 @@ begin
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
         (Gear^.State and gsttmpFlag = 0) or
         (Gear^.Angle = 0) then
-        gear^.State:= gear^.State and (not gstHHChooseTarget)
+        gear^.State:= gear^.State and (not gstChooseTarget)
     else if
     // todo, allow not finding new target, set timeout on target retention
         (Gear^.State and gstAttacking = 0) and
         ((GameTicks and $FF) = 17) and
         (GameTicks > Gear^.FlightTime) then // recheck hunted hog
         begin
-        gear^.State:= gear^.State or gstHHChooseTarget;
+        gear^.State:= gear^.State or gstChooseTarget;
         if targ <> nil then
              targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
         else targDist:= 0;
@@ -2747,7 +2747,7 @@ begin
             end;
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        HHGear^.State := HHGear^.State or gstChooseTarget;
         isCursorVisible := true;
         DeleteGear(Gear)
         end
@@ -2832,7 +2832,7 @@ begin
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        HHGear^.State := HHGear^.State or gstChooseTarget;
         isCursorVisible := true;
         warn:= AddVisualGear(Gear^.Target.X, oy, vgtNoPlaceWarn, 0, true);
         if warn <> nil then
