@@ -632,9 +632,9 @@ while (i < cAirMines) and (j < 1000*cAirMines) do
        (TestCollisionYwithGear(Gear, 1) = 0) then
         begin
         t:= 0;
-        h:= 0;
         while (t < TeamsCount) and (p = 0) do
             begin
+            h:= 0;
             with TeamsArray[t]^ do
                 while (h < cMaxHHIndex) and (p = 0) do
                     begin
@@ -647,7 +647,7 @@ while (i < cAirMines) and (j < 1000*cAirMines) do
                             (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
                             begin
 // Debug line. Remove later
-AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+// AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
 
                             p:= 1
                             end
