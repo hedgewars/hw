@@ -748,6 +748,11 @@ begin
 cLandMines:= StrToInt(s)
 end;
 
+procedure chAirMines(var s: shortstring);
+begin
+cAirMines:= StrToInt(s)
+end;
+
 procedure chExplosives(var s: shortstring);
 begin
 cExplosives:= StrToInt(s)

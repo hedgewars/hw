@@ -1808,7 +1808,7 @@ if isCursorVisible then
         begin
         if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
         with CurrentHedgehog^ do
-            if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
+            if (Gear <> nil) and ((Gear^.State and gstChooseTarget) <> 0) then
                 begin
             if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
                 DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);

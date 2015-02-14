@@ -462,7 +462,7 @@ if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
 
 with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
-    if (State and gstHHChooseTarget) <> 0 then
+    if (State and gstChooseTarget) <> 0 then
         begin
         isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
@@ -485,7 +485,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and (not gstHHChooseTarget);
+        State:= State and (not gstChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end

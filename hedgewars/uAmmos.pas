@@ -400,12 +400,12 @@ with Hedgehog do
         AddCaption(s, Team^.Clan^.Color, capgrpAmmoinfo);
         if (Propz and ammoprop_NeedTarget) <> 0 then
             begin
-            if Gear <> nil then Gear^.State:= Gear^.State or      gstHHChooseTarget;
+            if Gear <> nil then Gear^.State:= Gear^.State or      gstChooseTarget;
             isCursorVisible:= true
             end
         else
             begin
-            if Gear <> nil then Gear^.State:= Gear^.State and (not gstHHChooseTarget);
+            if Gear <> nil then Gear^.State:= Gear^.State and (not gstChooseTarget);
             isCursorVisible:= false
             end;
         end

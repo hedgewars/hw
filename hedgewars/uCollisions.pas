@@ -52,7 +52,7 @@ function  TestCollisionXwithXYShift(Gear: PGear; ShiftX: hwFloat; ShiftY: LongIn
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt): Word; inline;
 function  TestCollisionYwithXYShift(Gear: PGear; ShiftX, ShiftY: LongInt; Dir: LongInt; withGear: boolean): Word;
 
-function  TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+function  TestRectangleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 
 function  CheckCoordInWater(X, Y: LongInt): boolean; inline;
 
@@ -398,11 +398,11 @@ Gear^.X:= Gear^.X - int2hwFloat(ShiftX);
 Gear^.Y:= Gear^.Y - int2hwFloat(ShiftY)
 end;
 
-function TestRectancleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
+function TestRectangleForObstacle(x1, y1, x2, y2: LongInt; landOnly: boolean): boolean;
 var x, y: LongInt;
     TestWord: LongWord;
 begin
-TestRectancleForObstacle:= true;
+TestRectangleForObstacle:= true;
 
 if landOnly then
     TestWord:= 255
@@ -431,7 +431,7 @@ for y := y1 to y2 do
         if ((y and LAND_HEIGHT_MASK) = 0) and ((x and LAND_WIDTH_MASK) = 0) and (Land[y, x] > TestWord) then
             exit;
 
-TestRectancleForObstacle:= false
+TestRectangleForObstacle:= false
 end;
 
 function CalcSlopeTangent(Gear: PGear; collisionX, collisionY: LongInt; var outDeltaX, outDeltaY: LongInt; TestWord: LongWord): boolean;

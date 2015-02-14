@@ -40,7 +40,7 @@ import System.Posix
 
 setupLoggers :: IO ()
 setupLoggers = do
-    updateGlobalLogger "Clients" (setLevel NOTICE)
+    updateGlobalLogger "Clients" (setLevel DEBUG)
     updateGlobalLogger "Core" (setLevel NOTICE)
     updateGlobalLogger "REPLAYS" (setLevel NOTICE)
 

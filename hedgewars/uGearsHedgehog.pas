@@ -222,7 +222,7 @@ CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
     Gear^.Hedgehog^ do
         begin
-        if ((State and gstHHDriven) <> 0) and ((State and (gstAttacked or gstHHChooseTarget)) = 0) and (((State and gstMoving) = 0)
+        if ((State and gstHHDriven) <> 0) and ((State and (gstAttacked or gstChooseTarget)) = 0) and (((State and gstMoving) = 0)
         or (Power > 0)
         or (CurAmmoType = amTeleport)
         or
@@ -1318,7 +1318,7 @@ else
     begin
     if Gear^.Timer = 0 then
         begin
-        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstHHChooseTarget));
+        Gear^.State:= Gear^.State and (not (gstWait or gstLoser or gstWinner or gstAttacked or gstNotKickable or gstChooseTarget));
         if Gear^.Hedgehog^.Effects[heFrozen] = 0 then Gear^.Active:= false;
         AddCI(Gear);
         exit
