@@ -1839,7 +1839,7 @@ begin
         trackSpeed:= _0;
         trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
-             Gear^.dX:= Gear^.dX+trackSpeed
+             Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
         else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
             Gear^.dX:= Gear^.dX-trackSpeed;
         if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then

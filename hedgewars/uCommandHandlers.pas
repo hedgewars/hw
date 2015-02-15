@@ -842,6 +842,7 @@ begin
     RegisterVariable('getawaytime' , @chGetAwayTime , false);
     RegisterVariable('minedudpct',@chMineDudPercent, false);
     RegisterVariable('minesnum', @chLandMines     , false);
+    RegisterVariable('airmines', @chAirMines      , false);
     RegisterVariable('explosives',@chExplosives    , false);
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);
