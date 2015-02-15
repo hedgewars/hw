@@ -43,6 +43,10 @@ local waterSpeed = 0
 local waterAccel = 0
 local delayHeight = 32000
 local delayTime = 0
+local airMineX = {}
+local airMineY = {}
+local airMine = {}
+local init = true
 
 function onParameters()
     parseParams()
@@ -96,6 +100,8 @@ function onGearAdd(gear)
         HH[gear] = 1
         totalHedgehogs = totalHedgehogs + 1
         teams[GetHogTeamName(gear)] = 1
+    elseif init and GetGearType(gear) == gtAirMine then
+        airMine[gear] = 1
     end
 end
 
@@ -144,6 +150,23 @@ function onAmmoStoreInit()
 end
 
 function onNewTurn()
+    if init then
+        init = false
+        for a,i in pairs(airMine) do
+            x,y = GetGearPosition(a)
+            airMineX[a] = x
+            airMineY[a] = y
+        end
+    else
+        for a,i in pairs(airMine) do
+            local x,y = GetGearPosition(a)
+            if not x or airMineX[a] ~= x or airMineY[a] ~= y then
+                DeleteGear(a)
+                AddGear(airMineX[a],airMineY[a], gtAirMine, gsttmpFlag, 0, 0, 0)
+            end
+        end
+    end
+        
     ready = false
     startTime = GameTime
     --disable to preserve highest over multiple turns
@@ -220,7 +243,7 @@ end
 
 
 function onGameTick20()
-    local x,y;
+    local x,y
     if math.random(20) == 1 then AddVisualGear(2012,56,vgtSmoke,0,false) end
     if CurrentHedgehog == dummyHog and dummySkip ~= 0 and dummySkip < GameTime then
         ParseCommand("/skip")
