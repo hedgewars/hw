@@ -218,7 +218,7 @@ AmmoSchemeModel::AmmoSchemeModel(QObject* parent, const QString & fileName) :
             << QVariant(100)           // init health    28
             << QVariant(50)            // sudden death   29
             << QVariant(1)             // case prob      30
-            << QVariant(3)             // mines time     31
+            << QVariant(0)             // mines time     31
             << QVariant(0)             // mines number   32
             << QVariant(0)             // mine dud pct   33
             << QVariant(0)             // explosives     34
