@@ -364,7 +364,7 @@ case Kind of
                 gear^.ImpactSound:= sndDenied;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
-                gear^.State:= gear^.State or gstMoving or gstNoGravity;
+                gear^.State:= gear^.State or gstMoving or gstNoGravity or gstSubmersible;
                 gear^.Radius:= 8;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
