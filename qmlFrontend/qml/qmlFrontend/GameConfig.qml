@@ -134,6 +134,38 @@ Rectangle {
     }
 
 
+    HWComboBox {
+        id: cbAmmo
+        x: 50
+        y: 416
+        width: 256
+        height: 64
+
+        model: ammoModel
+        delegate: Rectangle {
+            height: 25
+            width: 100
+            color: "transparent"
+
+            property string itemIconSource: ""
+            property alias itemText: ammoName.text
+
+            Row {
+                //Image {id: themeIcon; width: height; height: parent.height; source: "image://theme/" + modelData}
+                Text {id: ammoName; text: modelData }
+            }
+
+            MouseArea {
+                 z: 1
+                 anchors.fill: parent
+                 onClicked: {
+                     cbAmmo.currentIndex = index
+                     HWEngine.setAmmo(ammoName.text)
+                 }
+            }
+        }
+    }
+
     ListView {
         id: playingTeamsList
         x: 440
