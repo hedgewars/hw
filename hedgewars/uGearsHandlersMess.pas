@@ -1762,11 +1762,16 @@ procedure doStepAirMine(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
     trackSpeed, airFriction, tX, tY: hwFloat;
+    isUnderwater: Boolean;
 begin
+    isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         begin
         airFriction:= _1;
-        dec(airFriction.QWordValue,Gear^.Pos);
+        if isUnderwater then
+            dec(airFriction.QWordValue,Gear^.Pos*2)
+        else
+            dec(airFriction.QWordValue,Gear^.Pos);
         Gear^.dX:= Gear^.dX*airFriction;
         Gear^.dY:= Gear^.dY*airFriction
         end;
@@ -1837,7 +1842,10 @@ begin
     if targ <> nil then
         begin
         trackSpeed:= _0;
-        trackSpeed.QWordValue:= Gear^.Power;
+        if isUnderwater then
+            trackSpeed.QWordValue:= Gear^.Power div 2
+        else
+            trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
              Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
         else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
