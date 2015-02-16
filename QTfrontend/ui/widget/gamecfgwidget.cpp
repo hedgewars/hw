@@ -587,7 +587,7 @@ void GameCFGWidget::schemeChanged(int index)
 
     if (sl.size() >= 42)
     {
-        sl[42].prepend('!');
+        sl[sl.size()-1].prepend('!');
         emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
     }
 
