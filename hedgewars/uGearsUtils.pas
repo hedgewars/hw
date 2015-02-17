@@ -714,11 +714,7 @@ begin
             ScriptCall('onGearWaterSkip', Gear^.uid);
         end
     else
-        begin
-        if (not ((Gear^.Kind = gtJetpack) or (Gear^.Kind = gtBee))) then
-            Gear^.State:= (Gear^.State and (not gstSubmersible));  // making it temporary for most gears is more attractive I think
         CheckGearDrowning := false
-        end
 end;
 
 
