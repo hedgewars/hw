@@ -92,20 +92,21 @@ type
             );
 
     // Gears that interact with other Gears and/or Land
-    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtExplosives, // these gears should be avoided when searching a spawn place
-            gtGrenade, gtShell, gtGrave, gtBee, // 8
-            gtShotgunShot, gtPickHammer, gtRope,  // 11
-            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 16
-            gtFirePunch, gtATStartGame, // 18
-            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 23
-            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 28
-            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 34
-            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 40
-            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 44
-            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 50
-            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 55
+    // first row of gears (<gtExplosives) should be avoided when searching a spawn place
+    TGearType = (gtFlame, gtHedgehog, gtMine, gtCase, gtAirMine, gtExplosives, 
+            gtGrenade, gtShell, gtGrave, gtBee, // 9
+            gtShotgunShot, gtPickHammer, gtRope,  // 12
+            gtDEagleShot, gtDynamite, gtClusterBomb, gtCluster, gtShover, // 17
+            gtFirePunch, gtATStartGame, // 19
+            gtATFinishGame, gtParachute, gtAirAttack, gtAirBomb, gtBlowTorch, // 24
+            gtGirder, gtTeleport, gtSwitcher, gtTarget, gtMortar, // 29
+            gtWhip, gtKamikaze, gtCake, gtSeduction, gtWatermelon, gtMelonPiece, // 35
+            gtHellishBomb, gtWaterUp, gtDrill, gtBallGun, gtBall, gtRCPlane, // 41
+            gtSniperRifleShot, gtJetpack, gtMolotov, gtBirdy, // 45
+            gtEgg, gtPortal, gtPiano, gtGasBomb, gtSineGunShot, gtFlamethrower, // 51
+            gtSMine, gtPoisonCloud, gtHammer, gtHammerHit, gtResurrector, // 56
             gtNapalmBomb, gtSnowball, gtFlake, {gtStructure,} gtLandGun, gtTardis, // 61
-            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife, gtAirMine); // 66
+            gtIceGun, gtAddAmmo, gtGenericFaller, gtKnife); // 65
 
     // Gears that are _only_ of visual nature (e.g. background stuff, visual effects, speechbubbles, etc.)
     TVisualGearType = (vgtFlake, vgtCloud, vgtExplPart, vgtExplPart2, vgtFire,
