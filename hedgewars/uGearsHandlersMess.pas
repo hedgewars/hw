@@ -1382,6 +1382,7 @@ begin
         dec(TurnTimeLeft)
     else
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end;
@@ -3567,6 +3568,11 @@ begin
     AllInactive := false;
     dec(Gear^.Timer);
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -3583,6 +3589,7 @@ begin
 
     if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end
@@ -3639,7 +3646,7 @@ begin
         else if Gear^.Angle < 2048 then
             inc(Gear^.Angle)
         else fChanged := false
-    end
+        end
     else
         begin
         if ((Gear^.Message and gmLeft) <> 0) then
@@ -3714,6 +3721,7 @@ begin
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
                 end;
+            if HHGear <> nil then HHGear^.State := HHGear^.State and (not gstNotKickable);
             DeleteGear(Gear)
             end;
 
@@ -4970,6 +4978,11 @@ var
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -5022,6 +5035,7 @@ begin
 
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end
@@ -5057,6 +5071,11 @@ var
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -5099,6 +5118,7 @@ begin
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
         HHGear^.Message:= HHGear^.Message and (not gmAttack);
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end
