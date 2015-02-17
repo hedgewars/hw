@@ -41,6 +41,7 @@ const
 (*       gtHedgehog *) , amNothing
 (*           gtMine *) , amMine
 (*           gtCase *) , amNothing
+(*        gtAirMine *) , amAirMine
 (*     gtExplosives *) , amNothing
 (*        gtGrenade *) , amGrenade
 (*          gtShell *) , amBazooka
@@ -103,7 +104,6 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
-(*        gtAirMine *) , amAirMine
     );
 
 

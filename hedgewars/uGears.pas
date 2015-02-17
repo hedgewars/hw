@@ -994,6 +994,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepHedgehog,
             @doStepMine,
             @doStepCase,
+            @doStepAirMine,
             @doStepCase,
             @doStepBomb,
             @doStepShell,
@@ -1055,8 +1056,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepIceGun,
             @doStepAddAmmo,
             @doStepGenericFaller,
-            @doStepKnife,
-            @doStepAirMine);
+            @doStepKnife);
 begin
     doStepHandlers:= handlers;
 
