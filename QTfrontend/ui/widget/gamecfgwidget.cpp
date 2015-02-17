@@ -528,8 +528,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = GameSchemes->findText(pMapContainer->getCurrentScheme());
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (pMapContainer->getCurrentWeapons() == "locked")
@@ -543,8 +543,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = WeaponsName->findText(pMapContainer->getCurrentWeapons());
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (pMapContainer->getCurrentScheme() != "locked" && pMapContainer->getCurrentWeapons() != "locked")
@@ -629,8 +629,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = GameSchemes->findText(scheme);
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (weapons == "locked")
@@ -644,8 +644,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = WeaponsName->findText(weapons);
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (scheme != "locked" && weapons != "locked")
