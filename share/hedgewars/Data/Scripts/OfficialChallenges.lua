@@ -20,6 +20,8 @@ function detectMap()
                 return("Racer Challenge #11")
             elseif LandDigest == "M706743197Scripts/Multiplayer/Racer.lua" then
                 return("Racer Challenge #12")
+            elseif LandDigest == "M157242054Scripts/Multiplayer/Racer.lua" then
+                return("Racer Challenge #13")
             end
 -- challenges without border
         elseif LandDigest == "M-134869715Scripts/Multiplayer/Racer.lua" then
