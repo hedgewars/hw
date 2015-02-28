@@ -54,13 +54,19 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     history: LongInt;
     visibleCount: LongWord;
     InputStr: TChatLine;
-    InputStrL: array[0..260] of char; // for full str + 4-byte utf-8 char
+    InputStrL: array[0..260] of byte; // for full str + 4-byte utf-8 char
     ChatReady: boolean;
     showAll: boolean;
     liveLua: boolean;
     ChatHidden: boolean;
+    InputLinePrefix: shortstring;
+    // cursor
+    cursorPos, cursorX: LongInt;
+    LastKeyPressTick: LongWord;
 
 const
+    InputStrLNoPred: byte = 255;
+
     colors: array[#0..#6] of TSDL_Color = (
             (r:$FF; g:$FF; b:$FF; a:$FF), // unused, feel free to take it for anything
             (r:$FF; g:$FF; b:$FF; a:$FF), // chat message [White]
@@ -84,6 +90,31 @@ const
 
 const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
+
+procedure UpdateCursorCoords();
+var font: THWFont;
+    str : shortstring;
+    coff: LongInt;
+begin
+    // calculate cursor offset
+
+    str:= InputLinePrefix + InputStr.s;
+    font:= CheckCJKFont(ansistring(str), fnt16);
+
+    // get only substring before cursor to determine length
+    SetLength(str, Length(InputLinePrefix) + cursorPos);
+    // get render size of text
+    TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
+
+
+    cursorX:= 7 - cScreenWidth div 2 + coff;
+end;
+
+procedure ResetCursor();
+begin
+    cursorPos:= 0;
+    UpdateCursorCoords();
+end;
 
 procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
 var strSurface,
@@ -139,7 +170,7 @@ if isInput then
     begin
     cl.s:= str;
     color:= colors[#6];
-    str:= UserNick + '> ' + str + '_'
+    str:= InputLinePrefix + str + ' ';
     end
 else
     begin
@@ -204,8 +235,15 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
+    begin
     DrawTexture(left, top, InputStr.Tex);
+    // draw cursor
+    if ((RealTicks - LastKeyPressTick) and 512) < 256 then
+        DrawLineOnScreen(cursorX, top + 2, cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
+    end;
 
+
+// draw chat lines
 if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
     begin
     if MissedCount <> 0 then // there are chat strings we missed, so print them now
@@ -410,26 +448,95 @@ begin
     ResetKbd;
 end;
 
+procedure DelBytesFromInputStr(endIdx: integer; count: byte);
+var i, startIdx: integer;
+begin
+    // nothing to do if count is 0
+    if count = 0 then
+        exit;
+
+    // first byte to delete
+    startIdx:= endIdx - (count - 1);
+
+    // delete bytes from string
+    Delete(InputStr.s, startIdx, count);
+
+    // wipe utf8 info for deleted char
+    InputStrL[endIdx]:= InputStrLNoPred;
+
+    // shift utf8 char info to reflect new string
+    for i:= endIdx + 1 to Length(InputStr.s) + count do
+        begin
+        if InputStrL[i] <> InputStrLNoPred then
+            begin
+            InputStrL[i-count]:= InputStrL[i] - count;
+            InputStrL[i]:= InputStrLNoPred;
+            end;
+        end;
+
+    SetLine(InputStr, InputStr.s, true);
+end;
+
+// returns count of removed bytes
+function DelCharFromInputStr(idx: integer): integer;
+var btw: byte;
+begin
+    // note: idx is always at last byte of utf8 chars. cuz relevant for InputStrL
+
+    if (Length(InputStr.s) < 1) or (idx < 1) or (idx > Length(InputStr.s)) then
+        exit(0);
+
+    btw:= byte(idx) - InputStrL[idx];
+
+    DelCharFromInputStr:= btw;
+
+    DelBytesFromInputStr(idx, btw);
+end;
+
+procedure DoCursorStepForward();
+begin
+    if cursorPos < Length(InputStr.s) then
+        begin
+        // go to end of next utf8-char
+        repeat
+            inc(cursorPos);
+        until InputStrL[cursorPos] <> InputStrLNoPred;
+        end;
+end;
+
 procedure KeyPressChat(Key, Sym: Longword);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
     action: boolean;
 begin
+    LastKeyPressTick:= RealTicks;
     action:= true;
     case Sym of
         SDLK_BACKSPACE:
             begin
-            if Length(InputStr.s) > 0 then
+            // remove char before cursor (note: cursorPos is 0-based, char idx isn't)
+            dec(cursorPos, DelCharFromInputStr(cursorPos));
+            UpdateCursorCoords();
+            end;
+        SDLK_DELETE:
+            begin
+            // remove char after cursor
+            if cursorPos < Length(InputStr.s) then
                 begin
-                InputStr.s[0]:= InputStrL[byte(InputStr.s[0])];
-                SetLine(InputStr, InputStr.s, true)
-                end
+                DoCursorStepForward();
+                dec(cursorPos, DelCharFromInputStr(cursorPos));
+                UpdateCursorCoords();
+                end;
             end;
         SDLK_ESCAPE:
             begin
             if Length(InputStr.s) > 0 then
-                SetLine(InputStr, '', true)
+                begin
+                SetLine(InputStr, '', true);
+                FillChar(InputStrL, sizeof(InputStrL), InputStrLNoPred);
+                ResetCursor();
+                end
             else CleanupInput
             end;
         SDLK_RETURN, SDLK_KP_ENTER:
@@ -437,7 +544,9 @@ begin
             if Length(InputStr.s) > 0 then
                 begin
                 AcceptChatString(InputStr.s);
-                SetLine(InputStr, '', false)
+                SetLine(InputStr, '', false);
+                FillChar(InputStrL, sizeof(InputStrL), InputStrLNoPred);
+                ResetCursor();
                 end;
             CleanupInput
             end;
@@ -448,10 +557,43 @@ begin
             index:= localLastStr - history + 1;
             if (index > localLastStr) then
                  SetLine(InputStr, '', true)
-            else SetLine(InputStr, LocalStrs[index], true)
+            else SetLine(InputStr, LocalStrs[index], true);
+            // TODO rebuild/restore InputStrL!!
+            cursorPos:= Length(InputStr.s);
+            UpdateCursorCoords();
             end;
-        SDLK_RIGHT, SDLK_LEFT, SDLK_DELETE,
-        SDLK_HOME, SDLK_END,
+        SDLK_HOME:
+            begin
+            if cursorPos > 0 then
+                begin
+                cursorPos:= 0;
+                UpdateCursorCoords();
+                end;
+            end;
+        SDLK_END:
+            begin
+            i:= Length(InputStr.s);
+            if cursorPos < i then
+                begin
+                // TODO uft-8
+                cursorPos:= i;
+                UpdateCursorCoords();
+                end;
+            end;
+        SDLK_LEFT:
+            begin
+            if cursorPos > 0 then
+                begin
+                // go to end of previous utf8-char
+                cursorPos:= InputStrL[cursorPos];
+                UpdateCursorCoords();
+                end;
+            end;
+        SDLK_RIGHT:
+            begin
+            DoCursorStepForward();
+            UpdateCursorCoords();
+            end;
         SDLK_PAGEUP, SDLK_PAGEDOWN:
             begin
             // ignore me!!!
@@ -480,11 +622,28 @@ begin
 
         utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-        if byte(InputStr.s[0]) + btw > 240 then
+        if Length(InputStr.s) + btw > 240 then
             exit;
 
-        InputStrL[byte(InputStr.s[0]) + btw]:= InputStr.s[0];
-        SetLine(InputStr, InputStr.s + utf8, true)
+        // if we insert rather than append, shift info in InputStrL accordingly
+        if cursorPos < Length(InputStr.s) then
+            begin
+            for i:= Length(InputStr.s) downto cursorPos + 1 do
+                begin
+                if InputStrL[i] <> InputStrLNoPred then
+                    begin
+                    InputStrL[i+btw]:= InputStrL[i] + btw;
+                    InputStrL[i]:= InputStrLNoPred;
+                    end;
+                end;
+            end;
+
+        InputStrL[cursorPos + btw]:= cursorPos;
+        Insert(utf8, InputStr.s, cursorPos + 1);
+        SetLine(InputStr, InputStr.s, true);
+
+        cursorPos:= cursorPos + btw;
+        UpdateCursorCoords();
         end
 end;
 
@@ -561,9 +720,16 @@ begin
     liveLua:= false;
     ChatHidden:= false;
 
+    InputLinePrefix:= UserNick + '> ';
+    inputStr.s:= '';
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
         Strs[i].Tex := nil;
+
+    FillChar(InputStrL, sizeof(InputStrL), InputStrLNoPred);
+
+    LastKeyPressTick:= 0;
+    ResetCursor();
 end;
 
 procedure freeModule;
