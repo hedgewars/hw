@@ -45,16 +45,19 @@ type TChatLine = record
     end;
     TChatCmd = (ccQuit, ccPause, ccFinish, ccShowHistory, ccFullScreen);
 
+type TInputStrL = array[0..260] of byte;
+
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
     LocalStrs: array[0 .. MaxStrIndex] of shortstring;
+    LocalStrsL: array[0 .. MaxStrIndex] of TInputStrL;
     missedCount: LongWord;
     lastStr: LongWord;
     localLastStr: LongInt;
     history: LongInt;
     visibleCount: LongWord;
     InputStr: TChatLine;
-    InputStrL: array[0..260] of byte; // for full str + 4-byte utf-8 char
+    InputStrL: TInputStrL; // for full str + 4-byte utf-8 char
     ChatReady: boolean;
     showAll: boolean;
     liveLua: boolean;
@@ -302,6 +305,7 @@ if s <> LocalStrs[localLastStr] then
     // put in input history
     localLastStr:= (localLastStr + 1) mod MaxStrIndex;
     LocalStrs[localLastStr]:= s;
+    LocalStrsL[localLastStr]:= InputStrL;
     end;
 
 t:= LocalTeam;
@@ -556,8 +560,15 @@ begin
             if (Sym = SDLK_DOWN) and (history > 0) then dec(history);
             index:= localLastStr - history + 1;
             if (index > localLastStr) then
-                 SetLine(InputStr, '', true)
-            else SetLine(InputStr, LocalStrs[index], true);
+                begin
+                SetLine(InputStr, '', true);
+                FillChar(InputStrL, sizeof(InputStrL), InputStrLNoPred);
+                end
+            else
+                begin
+                SetLine(InputStr, LocalStrs[index], true);
+                InputStrL:= LocalStrsL[index];
+                end;
             // TODO rebuild/restore InputStrL!!
             cursorPos:= Length(InputStr.s);
             UpdateCursorCoords();
