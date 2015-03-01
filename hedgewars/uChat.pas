@@ -62,6 +62,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     showAll: boolean;
     liveLua: boolean;
     ChatHidden: boolean;
+    firstDraw: boolean;
     InputLinePrefix: shortstring;
     // cursor
     cursorPos, cursorX, selectedPos, selectionDx: LongInt;
@@ -118,7 +119,7 @@ begin
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
-    cursorX:= 3 + coff;
+    cursorX:= 2 + coff;
 
     // calculate selection width on screen
     if selectedPos >= 0 then
@@ -263,6 +264,12 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
+    if firstDraw then
+        begin
+        UpdateCursorCoords();
+        firstDraw:= false;
+        end;
+
     DrawTexture(left, top, InputStr.Tex);
     if selectedPos < 0 then
         begin
@@ -852,6 +859,7 @@ begin
     missedCount:= 0;
     liveLua:= false;
     ChatHidden:= false;
+    firstDraw:= true;
 
     InputLinePrefix:= UserNick + '> ';
     inputStr.s:= '';
