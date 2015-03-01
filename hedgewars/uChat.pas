@@ -824,8 +824,14 @@ begin
     if length(s) = 0 then
         SetLine(InputStr, '', true)
     else
+        begin
         SetLine(InputStr, '/team ', true)
-        // TODO: update InputStrL accordingly!
+        // update InputStrL and cursor accordingly
+        // this allows cursor-jumping over '/team ' as if it was a single char
+        InputStrL[6]:= 0;
+        cursorPos:= 6;
+        UpdateCursorCoords();
+        end;
 end;
 
 procedure initModule;
