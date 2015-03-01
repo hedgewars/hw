@@ -338,7 +338,7 @@ void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongWord *a)
 LongInt fpcrtl_random(LongInt l) {
     // random(0) is undefined in docs but effectively returns 0 in free pascal
     if (l == 0) {
-        printf("WARNING: random(0) called!");
+        printf("WARNING: random(0) called!\n");
         return 0;
     }
     return (LongInt) (rand() / (double) RAND_MAX * l);
