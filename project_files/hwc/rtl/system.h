@@ -26,6 +26,13 @@ string255   fpcrtl_copy(string255 s, Integer Index, Integer Count);
 astring     fpcrtl_copyA(astring s, Integer Index, Integer Count);
 
 /*
+ * Insert a shortstring in another at a specified index
+ */
+void        fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index);
+#define     fpcrtl_insert(src, dst, index)                  fpcrtl_insert__vars(&(src), &(dst), index);
+#define     fpcrtl_Insert                                   fpcrtl_insert
+
+/*
  * Delete removes Count characters from string S, starting at position Index.
  * All characters after the deleted characters are shifted Count positions to the left,
  * and the length of the string is adjusted.
@@ -33,6 +40,7 @@ astring     fpcrtl_copyA(astring s, Integer Index, Integer Count);
 #define     fpcrtl_delete(s, index, count)                  fpcrtl_delete__vars(&(s), index, count)
 void        __attribute__((overloadable))                   fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count);
 void        __attribute__((overloadable))                   fpcrtl_delete__vars(astring *s, SizeInt index, SizeInt count);
+#define     fpcrtl_Delete                                   fpcrtl_delete
 
 string255   fpcrtl_floatToStr(double n);
 
