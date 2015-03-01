@@ -578,17 +578,101 @@ else
     ResetSelection();
 end;
 
+type TCharSkip = ( none, wspace, numalpha, special );
+
+function GetInputCharSkipClass(index: LongInt): TCharSkip;
+var  c: char;
+begin
+    // multi-byte chars counts as letter
+    if (index > 1) and (InputStrL[index] <> index - 1) then
+        exit(numalpha);
+
+    c:= InputStr.s[index];
+
+    // non-ascii counts as letter
+    if c > #127 then
+        exit(numalpha);
+
+    // low-ascii whitespaces and DEL
+    if (c < #33) or (c = #127) then
+        exit(wspace);
+
+    // low-ascii special chars
+    if c < #48 then
+        exit(special);
+
+    // digits
+    if c < #58 then
+        exit(numalpha);
+
+    // make c upper-case
+    if c > #96 then
+        c:= char(byte(c) - 32);
+
+    // letters
+    if (c > #64) and (c < #90) then
+        exit(numalpha);
+
+    // remaining ascii are special chars
+    exit(special);
+end;
+
+// skip from word to word, similar to Qt
+procedure skipInputChars(skip: TCharSkip; backwards: boolean);
+begin
+if backwards then
+    begin
+    // skip trailing whitespace, similar to Qt
+    while (skip = wspace) and (cursorPos > 0) do
+        begin
+        skip:= GetInputCharSkipClass(cursorPos);
+        if skip = wspace then
+            cursorPos:= InputStrL[cursorPos];
+        end;
+    // skip same-type chars
+    while (cursorPos > 0) and (GetInputCharSkipClass(cursorPos) = skip) do
+        cursorPos:= InputStrL[cursorPos];
+    end
+else
+    begin
+    // skip same-type chars
+    while cursorPos < Length(InputStr.s) do
+        begin
+        DoCursorStepForward();
+        if (GetInputCharSkipClass(cursorPos) <> skip) then
+            begin
+            // go back 1 char
+            cursorPos:= InputStrL[cursorPos];
+            break;
+            end;
+        end;
+    // skip trailing whitespace, similar to Qt
+    while cursorPos < Length(InputStr.s) do
+        begin
+        DoCursorStepForward();
+        if (GetInputCharSkipClass(cursorPos) <> wspace) then
+            begin
+            // go back 1 char
+            cursorPos:= InputStrL[cursorPos];
+            break;
+            end;
+        end;
+    end;
+end;
+
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
     action, selMode, ctrl: boolean;
+    skip: TCharSkip;
 begin
     LastKeyPressTick:= RealTicks;
     action:= true;
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
+    skip:= none;
 
     case Sym of
         SDLK_BACKSPACE:
@@ -680,6 +764,10 @@ begin
             begin
             if cursorPos > 0 then
                 begin
+
+                if ctrl then
+                    skip:= GetInputCharSkipClass(cursorPos);
+
                 if selMode or (selectedPos < 0) then
                     begin
                     HandleSelection(selMode);
@@ -691,6 +779,10 @@ begin
                     cursorPos:= min(cursorPos, selectedPos);
                     ResetSelection();
                     end;
+
+                if ctrl then
+                    skipInputChars(skip, true);
+
                 UpdateCursorCoords();
                 end;
             end;
@@ -698,6 +790,7 @@ begin
             begin
             if cursorPos < Length(InputStr.s) then
                 begin
+
                 if selMode or (selectedPos < 0) then
                     begin
                     HandleSelection(selMode);
@@ -708,6 +801,10 @@ begin
                     cursorPos:= max(cursorPos, selectedPos);
                     ResetSelection();
                     end;
+
+                if ctrl then
+                    skipInputChars(GetInputCharSkipClass(cursorPos), false);
+
                 UpdateCursorCoords();
                 end;
             end;
