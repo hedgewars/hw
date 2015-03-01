@@ -113,7 +113,8 @@ begin
     font:= CheckCJKFont(ansistring(str), fnt16);
 
     // get only substring before cursor to determine length
-    SetLength(str, Length(InputLinePrefix) + cursorPos);
+    // SetLength(str, Length(InputLinePrefix) + cursorPos); // makes pas2c unhappy
+    str[0]:= char(Length(InputLinePrefix) + cursorPos);
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
@@ -124,7 +125,8 @@ begin
         begin
         if selectedPos > cursorPos then
             str:= InputLinePrefix + InputStr.s;
-        SetLength(str, Length(InputLinePrefix) + selectedPos);
+        // SetLength(str, Length(InputLinePrefix) + selectedPos); // makes pas2c unhappy
+        str[0]:= char(Length(InputLinePrefix) + selectedPos);
         TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @soff, nil);
         selectionDx:= soff - coff;
         end
