@@ -28,7 +28,7 @@ procedure ReloadLines;
 procedure CleanupInput;
 procedure AddChatString(s: shortstring);
 procedure DrawChat;
-procedure KeyPressChat(Key, Sym: Longword);
+procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 procedure SendHogSpeech(s: shortstring);
 
 implementation
@@ -64,7 +64,7 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     ChatHidden: boolean;
     InputLinePrefix: shortstring;
     // cursor
-    cursorPos, cursorX: LongInt;
+    cursorPos, cursorX, selectedPos, selectionDx: LongInt;
     LastKeyPressTick: LongWord;
 
 const
@@ -94,11 +94,19 @@ const
 const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
 
+procedure ResetSelection();
+begin
+    selectedPos:= -1;
+end;
+
 procedure UpdateCursorCoords();
 var font: THWFont;
     str : shortstring;
-    coff: LongInt;
+    coff, soff: LongInt;
 begin
+    if cursorPos = selectedPos then
+        ResetSelection();
+
     // calculate cursor offset
 
     str:= InputLinePrefix + InputStr.s;
@@ -109,12 +117,25 @@ begin
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
-
     cursorX:= 7 - cScreenWidth div 2 + coff;
+
+    // calculate selection width on screen
+    if selectedPos >= 0 then
+        begin
+        if selectedPos > cursorPos then
+            str:= InputLinePrefix + InputStr.s;
+        SetLength(str, Length(InputLinePrefix) + selectedPos);
+        TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @soff, nil);
+        selectionDx:= soff - coff;
+        end
+    else
+        selectionDx:= 0;
 end;
+
 
 procedure ResetCursor();
 begin
+    ResetSelection();
     cursorPos:= 0;
     UpdateCursorCoords();
 end;
@@ -226,6 +247,7 @@ end;
 
 procedure DrawChat;
 var i, t, left, top, cnt: LongInt;
+    selRect: TSDL_Rect;
 begin
 ChatReady:= true; // maybe move to somewhere else?
 
@@ -240,9 +262,29 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
     DrawTexture(left, top, InputStr.Tex);
-    // draw cursor
-    if ((RealTicks - LastKeyPressTick) and 512) < 256 then
-        DrawLineOnScreen(cursorX, top + 2, cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
+    if selectedPos < 0 then
+        begin
+        // draw cursor
+        if ((RealTicks - LastKeyPressTick) and 512) < 256 then
+            DrawLineOnScreen(cursorX, top + 2, cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
+        end
+    else // draw selection
+        begin
+        selRect.y:= top + 2;
+        selRect.h:= clHeight - 4;
+        if selectionDx < 0 then
+            begin
+            selRect.x:= cursorX + selectionDx;
+            selRect.w:= -selectionDx;
+            end
+        else
+            begin
+            selRect.x:= cursorX;
+            selRect.w:= selectionDx;
+            end;
+
+        DrawRect(selRect, $FF, $FF, $FF, $40, true);
+        end;
     end;
 
 
@@ -452,7 +494,7 @@ begin
     ResetKbd;
 end;
 
-procedure DelBytesFromInputStr(endIdx: integer; count: byte);
+procedure DelBytesFromInputStrBack(endIdx: integer; count: byte);
 var i, startIdx: integer;
 begin
     // nothing to do if count is 0
@@ -494,44 +536,77 @@ begin
 
     DelCharFromInputStr:= btw;
 
-    DelBytesFromInputStr(idx, btw);
+    DelBytesFromInputStrBack(idx, btw);
 end;
 
+// unchecked
 procedure DoCursorStepForward();
 begin
-    if cursorPos < Length(InputStr.s) then
+    // go to end of next utf8-char
+    repeat
+        inc(cursorPos);
+    until InputStrL[cursorPos] <> InputStrLNoPred;
+end;
+
+procedure DeleteSelected();
+begin
+    if (selectedPos >= 0) and (cursorPos <> selectedPos) then
         begin
-        // go to end of next utf8-char
-        repeat
-            inc(cursorPos);
-        until InputStrL[cursorPos] <> InputStrLNoPred;
+        DelBytesFromInputStrBack(max(cursorPos, selectedPos), abs(selectedPos-cursorPos));
+        cursorPos:= min(cursorPos, selectedPos);
+        ResetSelection();
         end;
 end;
 
-procedure KeyPressChat(Key, Sym: Longword);
+procedure HandleSelection(enabled: boolean);
+begin
+if enabled then
+    begin
+    if selectedPos < 0 then
+        selectedPos:= cursorPos;
+    end
+else
+    ResetSelection();
+end;
+
+procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
     utf8: shortstring;
-    action: boolean;
+    action, selMode, ctrl: boolean;
 begin
     LastKeyPressTick:= RealTicks;
     action:= true;
+
+    selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
+    ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
+
     case Sym of
         SDLK_BACKSPACE:
             begin
-            // remove char before cursor (note: cursorPos is 0-based, char idx isn't)
-            dec(cursorPos, DelCharFromInputStr(cursorPos));
+            if selectedPos < 0 then
+                begin
+                // remove char before cursor (note: cursorPos is 0-based, char idx isn't)
+                dec(cursorPos, DelCharFromInputStr(cursorPos));
+                end
+            else
+                DeleteSelected();
             UpdateCursorCoords();
             end;
         SDLK_DELETE:
             begin
-            // remove char after cursor
-            if cursorPos < Length(InputStr.s) then
+            if selectedPos < 0 then
                 begin
-                DoCursorStepForward();
-                dec(cursorPos, DelCharFromInputStr(cursorPos));
-                UpdateCursorCoords();
-                end;
+                // remove char after cursor
+                if cursorPos < Length(InputStr.s) then
+                    begin
+                    DoCursorStepForward();
+                    dec(cursorPos, DelCharFromInputStr(cursorPos));
+                    end;
+                end
+            else
+                DeleteSelected();
+            UpdateCursorCoords();
             end;
         SDLK_ESCAPE:
             begin
@@ -569,14 +644,15 @@ begin
                 SetLine(InputStr, LocalStrs[index], true);
                 InputStrL:= LocalStrsL[index];
                 end;
-            // TODO rebuild/restore InputStrL!!
             cursorPos:= Length(InputStr.s);
+            ResetSelection();
             UpdateCursorCoords();
             end;
         SDLK_HOME:
             begin
             if cursorPos > 0 then
                 begin
+                HandleSelection(selMode);
                 cursorPos:= 0;
                 UpdateCursorCoords();
                 end;
@@ -586,7 +662,7 @@ begin
             i:= Length(InputStr.s);
             if cursorPos < i then
                 begin
-                // TODO uft-8
+                HandleSelection(selMode);
                 cursorPos:= i;
                 UpdateCursorCoords();
                 end;
@@ -595,25 +671,62 @@ begin
             begin
             if cursorPos > 0 then
                 begin
-                // go to end of previous utf8-char
-                cursorPos:= InputStrL[cursorPos];
+                if selMode or (selectedPos < 0) then
+                    begin
+                    HandleSelection(selMode);
+                    // go to end of previous utf8-char
+                    cursorPos:= InputStrL[cursorPos];
+                    end
+                else // if we're leaving selection mode, jump to its left end
+                    begin
+                    cursorPos:= min(cursorPos, selectedPos);
+                    ResetSelection();
+                    end;
                 UpdateCursorCoords();
                 end;
             end;
         SDLK_RIGHT:
             begin
-            DoCursorStepForward();
-            UpdateCursorCoords();
+            if cursorPos < Length(InputStr.s) then
+                begin
+                if selMode or (selectedPos < 0) then
+                    begin
+                    HandleSelection(selMode);
+                    DoCursorStepForward();
+                    end
+                else // if we're leaving selection mode, jump to its right end
+                    begin
+                    cursorPos:= max(cursorPos, selectedPos);
+                    ResetSelection();
+                    end;
+                UpdateCursorCoords();
+                end;
             end;
         SDLK_PAGEUP, SDLK_PAGEDOWN:
             begin
             // ignore me!!!
+            end;
+        SDLK_a:
+            begin
+            // select all
+            if ctrl then
+                begin
+                ResetSelection();
+                cursorPos:= Length(InputStr.s);
+                HandleSelection(true);
+                cursorPos:= 0;
+                UpdateCursorCoords();
+                end
+            else
+                action:= false;
             end;
         else
             action:= false;
         end;
     if not action and (Key <> 0) then
         begin
+        DeleteSelected();
+
         if (Key < $80) then
             btw:= 1
         else if (Key < $800) then

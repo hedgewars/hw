@@ -173,7 +173,7 @@ begin
                     if GameState = gsChat then
                         begin
                     // sdl on iphone supports only ashii keyboards and the unicode field is deprecated in sdl 1.3
-                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym); //TODO correct for keymodifiers
+                        KeyPressChat(SDL_GetKeyFromScancode(event.key.keysym.sym), event.key.keysym.sym, event.key.keysym.modifier);
                         end
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
@@ -219,7 +219,7 @@ begin
 {$ELSE}
                 SDL_KEYDOWN:
                     if GameState = gsChat then
-                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym)
+                        KeyPressChat(event.key.keysym.unicode, event.key.keysym.sym, event.key.keysym.modifier)
                     else
                         if GameState >= gsGame then ProcessKey(event.key);
                 SDL_KEYUP:
