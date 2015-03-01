@@ -618,7 +618,7 @@ begin
 end;
 
 // skip from word to word, similar to Qt
-procedure skipInputChars(skip: TCharSkip; backwards: boolean);
+procedure SkipInputChars(skip: TCharSkip; backwards: boolean);
 begin
 if backwards then
     begin
@@ -679,8 +679,19 @@ begin
             begin
             if selectedPos < 0 then
                 begin
-                // remove char before cursor (note: cursorPos is 0-based, char idx isn't)
+                if ctrl then
+                    skip:= GetInputCharSkipClass(cursorPos);
+
+                // remove char before cursor
                 dec(cursorPos, DelCharFromInputStr(cursorPos));
+
+                // delete more if ctrl is held
+                if ctrl and (selectedPos < 0) then
+                    begin
+                    HandleSelection(true);
+                    SkipInputChars(skip, true);
+                    DeleteSelected();
+                    end;
                 end
             else
                 DeleteSelected();
@@ -694,11 +705,24 @@ begin
                 if cursorPos < Length(InputStr.s) then
                     begin
                     DoCursorStepForward();
+                    if ctrl then
+                        skip:= GetInputCharSkipClass(cursorPos);
+
+                    // delete char
                     dec(cursorPos, DelCharFromInputStr(cursorPos));
+
+                    // delete more if ctrl is held
+                    if ctrl and (cursorPos < Length(InputStr.s)) then
+                        begin
+                        HandleSelection(true);
+                        SkipInputChars(skip, false);
+                        DeleteSelected();
+                        end;
                     end;
                 end
             else
                 DeleteSelected();
+
             UpdateCursorCoords();
             end;
         SDLK_ESCAPE:
@@ -781,7 +805,7 @@ begin
                     end;
 
                 if ctrl then
-                    skipInputChars(skip, true);
+                    SkipInputChars(skip, true);
 
                 UpdateCursorCoords();
                 end;
@@ -803,7 +827,7 @@ begin
                     end;
 
                 if ctrl then
-                    skipInputChars(GetInputCharSkipClass(cursorPos), false);
+                    SkipInputChars(GetInputCharSkipClass(cursorPos), false);
 
                 UpdateCursorCoords();
                 end;
