@@ -832,7 +832,7 @@ begin
         SetLine(InputStr, '', true)
     else
         begin
-        SetLine(InputStr, '/team ', true)
+        SetLine(InputStr, '/team ', true);
         // update InputStrL and cursor accordingly
         // this allows cursor-jumping over '/team ' as if it was a single char
         InputStrL[6]:= 0;
