@@ -771,8 +771,11 @@ begin
                 begin
                 HandleSelection(selMode);
                 cursorPos:= 0;
-                UpdateCursorCoords();
-                end;
+                end
+            else if (not selMode) then
+                ResetSelection();
+
+            UpdateCursorCoords();
             end;
         SDLK_END:
             begin
@@ -781,8 +784,11 @@ begin
                 begin
                 HandleSelection(selMode);
                 cursorPos:= i;
-                UpdateCursorCoords();
-                end;
+                end
+            else if (not selMode) then
+                ResetSelection();
+
+            UpdateCursorCoords();
             end;
         SDLK_LEFT:
             begin
@@ -807,8 +813,11 @@ begin
                 if ctrl then
                     SkipInputChars(skip, true);
 
-                UpdateCursorCoords();
-                end;
+                end
+            else if (not selMode) then
+                ResetSelection();
+
+            UpdateCursorCoords();
             end;
         SDLK_RIGHT:
             begin
@@ -829,8 +838,11 @@ begin
                 if ctrl then
                     SkipInputChars(GetInputCharSkipClass(cursorPos), false);
 
-                UpdateCursorCoords();
-                end;
+                end
+            else if (not selMode) then
+                ResetSelection();
+
+            UpdateCursorCoords();
             end;
         SDLK_PAGEUP, SDLK_PAGEDOWN:
             begin
@@ -842,9 +854,9 @@ begin
             if ctrl then
                 begin
                 ResetSelection();
-                cursorPos:= Length(InputStr.s);
-                HandleSelection(true);
                 cursorPos:= 0;
+                HandleSelection(true);
+                cursorPos:= Length(InputStr.s);
                 UpdateCursorCoords();
                 end
             else
