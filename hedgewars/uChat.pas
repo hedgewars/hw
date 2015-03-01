@@ -118,7 +118,7 @@ begin
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
-    cursorX:= 7 - cScreenWidth div 2 + coff;
+    cursorX:= 3 + coff;
 
     // calculate selection width on screen
     if selectedPos >= 0 then
@@ -268,7 +268,7 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
         begin
         // draw cursor
         if ((RealTicks - LastKeyPressTick) and 512) < 256 then
-            DrawLineOnScreen(cursorX, top + 2, cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
+            DrawLineOnScreen(left + cursorX, top + 2, left + cursorX, top + ClHeight - 2, 2.0, $00, $FF, $FF, $FF);
         end
     else // draw selection
         begin
@@ -276,12 +276,12 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
         selRect.h:= clHeight - 4;
         if selectionDx < 0 then
             begin
-            selRect.x:= cursorX + selectionDx;
+            selRect.x:= left + cursorX + selectionDx;
             selRect.w:= -selectionDx;
             end
         else
             begin
-            selRect.x:= cursorX;
+            selRect.x:= left + cursorX;
             selRect.w:= selectionDx;
             end;
 
@@ -825,6 +825,7 @@ begin
         SetLine(InputStr, '', true)
     else
         SetLine(InputStr, '/team ', true)
+        // TODO: update InputStrL accordingly!
 end;
 
 procedure initModule;
