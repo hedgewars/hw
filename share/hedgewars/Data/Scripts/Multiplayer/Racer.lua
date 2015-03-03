@@ -742,13 +742,14 @@ function onAchievementsDeclaration()
     usedPortal = usedWeapons[amPortalGun] ~= nil
     usedSaucer = usedWeapons[amJetpack] ~= nil
     
+    usedWeapons[amNothing] = nil
     usedWeapons[amRope] = nil
     usedWeapons[amPortalGun] = nil
     usedWeapons[amJetpack] = nil
 
     usedOther = next(usedWeapons) ~= nil
 
-    if usedOther then -- smth besides skip, rope, portal or saucer used
+    if usedOther then -- smth besides nothing, skip, rope, portal or saucer used
         raceType = "unknown race"
     elseif usedRope and not usedPortal and not usedSaucer then
         raceType = "rope race"
