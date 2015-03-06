@@ -30,6 +30,7 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 procedure SendHogSpeech(s: shortstring);
+procedure CopyToClipboard(var newContent: shortstring);
 
 implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
@@ -565,6 +566,7 @@ begin
         cursorPos:= min(cursorPos, selectedPos);
         ResetSelection();
         end;
+    UpdateCursorCoords();
 end;
 
 procedure HandleSelection(enabled: boolean);
@@ -660,6 +662,58 @@ else
     end;
 end;
 
+var clipboardBuffer: shortstring;
+
+procedure CopyToClipboard(var newContent: shortstring);
+begin
+    clipboardBuffer:= newContent;
+end;
+
+procedure CopySelectionToClipboard();
+var selection: shortstring;
+begin
+    if selectedPos >= 0 then
+        begin
+        selection:= copy(InputStr.s, min(CursorPos, selectedPos) + 1, abs(CursorPos - selectedPos));
+        CopyToClipboard(selection);
+        end;
+end;
+
+// TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
+procedure InsertIntoInputStr(var s: shortstring);
+var i, l, lastc: integer;
+begin
+    l:= Length(s);
+
+    // if we insert rather than append, shift info in InputStrL accordingly
+    if cursorPos < Length(InputStr.s) then
+        begin
+        for i:= Length(InputStr.s) downto cursorPos + 1 do
+            begin
+            if InputStrL[i] <> InputStrLNoPred then
+                begin
+                InputStrL[i+l]:= InputStrL[i] + l;
+                InputStrL[i]:= InputStrLNoPred;
+                end;
+            end;
+        end;
+
+    InputStrL[cursorPos + l]:= cursorPos;
+    Insert(s, InputStr.s, cursorPos + 1);
+    SetLine(InputStr, InputStr.s, true);
+
+    // move cursor to end of inserted string
+    lastc:= 255;
+    cursorPos:= min(lastc, cursorPos + l);
+    UpdateCursorCoords();
+end;
+
+procedure PasteFromClipboard();
+begin
+    DeleteSelected();
+    InsertIntoInputStr(clipboardBuffer);
+end;
+
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
@@ -691,11 +745,13 @@ begin
                     HandleSelection(true);
                     SkipInputChars(skip, true);
                     DeleteSelected();
-                    end;
+                    end
+                else
+                    UpdateCursorCoords();
+
                 end
             else
                 DeleteSelected();
-            UpdateCursorCoords();
             end;
         SDLK_DELETE:
             begin
@@ -718,12 +774,12 @@ begin
                         SkipInputChars(skip, false);
                         DeleteSelected();
                         end;
-                    end;
+                    end
+                else
+                    UpdateCursorCoords();
                 end
             else
                 DeleteSelected();
-
-            UpdateCursorCoords();
             end;
         SDLK_ESCAPE:
             begin
@@ -862,6 +918,33 @@ begin
             else
                 action:= false;
             end;
+        SDLK_c:
+            begin
+            // copy
+            if ctrl then
+                CopySelectionToClipboard()
+            else
+                action:= false;
+            end;
+        SDLK_v:
+            begin
+            // paste
+            if ctrl then
+                PasteFromClipboard()
+            else
+                action:= false;
+            end;
+        SDLK_x:
+            begin
+            // cut
+            if ctrl then
+                begin
+                CopySelectionToClipboard();
+                DeleteSelected();
+                end
+            else
+                action:= false;
+            end;
         else
             action:= false;
         end;
@@ -891,25 +974,7 @@ begin
         if Length(InputStr.s) + btw > 240 then
             exit;
 
-        // if we insert rather than append, shift info in InputStrL accordingly
-        if cursorPos < Length(InputStr.s) then
-            begin
-            for i:= Length(InputStr.s) downto cursorPos + 1 do
-                begin
-                if InputStrL[i] <> InputStrLNoPred then
-                    begin
-                    InputStrL[i+btw]:= InputStrL[i] + btw;
-                    InputStrL[i]:= InputStrLNoPred;
-                    end;
-                end;
-            end;
-
-        InputStrL[cursorPos + btw]:= cursorPos;
-        Insert(utf8, InputStr.s, cursorPos + 1);
-        SetLine(InputStr, InputStr.s, true);
-
-        cursorPos:= cursorPos + btw;
-        UpdateCursorCoords();
+        InsertIntoInputStr(utf8);
         end
 end;
 
@@ -1004,6 +1069,8 @@ begin
 
     LastKeyPressTick:= 0;
     ResetCursor();
+
+    clipboardBuffer:= '';
 end;
 
 procedure freeModule;
