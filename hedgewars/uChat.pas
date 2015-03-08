@@ -65,10 +65,11 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     liveLua: boolean;
     ChatHidden: boolean;
     firstDraw: boolean;
-    InputLinePrefix: shortstring;
+    InputLinePrefix: TChatLine;
     // cursor
     cursorPos, cursorX, selectedPos, selectionDx: LongInt;
     LastKeyPressTick: LongWord;
+
 
 const
     InputStrLNoPred: byte = 255;
@@ -112,12 +113,12 @@ begin
 
     // calculate cursor offset
 
-    str:= InputLinePrefix + InputStr.s;
+    str:= InputStr.s;
     font:= CheckCJKFont(ansistring(str), fnt16);
 
     // get only substring before cursor to determine length
-    // SetLength(str, Length(InputLinePrefix) + cursorPos); // makes pas2c unhappy
-    str[0]:= char(Length(InputLinePrefix) + cursorPos);
+    // SetLength(str, cursorPos); // makes pas2c unhappy
+    str[0]:= char(cursorPos);
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
@@ -127,9 +128,9 @@ begin
     if selectedPos >= 0 then
         begin
         if selectedPos > cursorPos then
-            str:= InputLinePrefix + InputStr.s;
-        // SetLength(str, Length(InputLinePrefix) + selectedPos); // makes pas2c unhappy
-        str[0]:= char(Length(InputLinePrefix) + selectedPos);
+            str:= InputStr.s;
+        // SetLength(str, selectedPos); // makes pas2c unhappy
+        str[0]:= char(selectedPos);
         TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @soff, nil);
         selectionDx:= soff - coff;
         end
@@ -199,8 +200,7 @@ if isInput then
     begin
     cl.s:= str;
     color:= colors[#6];
-    // TODO FIX render InputLinePrefix seperately so that it doesn't mess up max len
-    str:= InputLinePrefix + str + ' ';
+    str:= str + ' ';
     end
 else
     begin
@@ -253,6 +253,22 @@ end;
 
 procedure CheckPasteBuffer(); forward;
 
+procedure UpdateInputLinePrefix();
+begin
+if liveLua then
+    begin
+    InputLinePrefix.color:= colors[#1];
+    InputLinePrefix.s:= '[Lua] >';
+    end
+else
+    begin
+    InputLinePrefix.color:= colors[#6];
+    InputLinePrefix.s:= UserNick + '>';
+    end;
+
+FreeAndNilTexture(InputLinePrefix.Tex);
+end;
+
 procedure DrawChat;
 var i, t, left, top, cnt: LongInt;
     selRect: TSDL_Rect;
@@ -271,13 +287,19 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
     CheckPasteBuffer();
 
+    if InputLinePrefix.Tex = nil then
+        RenderChatLineTex(InputLinePrefix, InputLinePrefix.s);
+
+    DrawTexture(left, top, InputLinePrefix.Tex);
+    inc(left, InputLinePrefix.Width);
+    DrawTexture(left, top, InputStr.Tex);
+
     if firstDraw then
         begin
         UpdateCursorCoords();
         firstDraw:= false;
         end;
 
-    DrawTexture(left, top, InputStr.Tex);
     if selectedPos < 0 then
         begin
         // draw cursor
@@ -301,8 +323,9 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
 
         DrawRect(selRect, $FF, $FF, $FF, $40, true);
         end;
-    end;
 
+    dec(left, InputLinePrefix.Width);
+    end;
 
 // draw chat lines
 if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
@@ -465,6 +488,7 @@ if (s[1] = '/') then
                 AddFileLog('[Lua] chat input string parsing disabled');
                 AddChatString(#3 + 'Lua parsing: OFF');
                 end;
+            UpdateInputLinePrefix();
             end;
         exit
         end;
@@ -1081,7 +1105,8 @@ begin
     ChatHidden:= false;
     firstDraw:= true;
 
-    InputLinePrefix:= '';
+    InputLinePrefix.Tex:= nil;
+    UpdateInputLinePrefix();
     inputStr.s:= '';
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
@@ -1096,6 +1121,7 @@ end;
 procedure freeModule;
 var i: ShortInt;
 begin
+    FreeAndNilTexture(InputLinePrefix.Tex);
     FreeAndNilTexture(InputStr.Tex);
     for i:= 0 to MaxStrIndex do
         FreeAndNilTexture(Strs[i].Tex);
