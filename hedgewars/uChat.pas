@@ -36,6 +36,7 @@ implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
 
 const MaxStrIndex = 27;
+      MaxInputStrLen = 240;
 
 type TChatLine = record
     Tex: PTexture;
@@ -198,6 +199,7 @@ if isInput then
     begin
     cl.s:= str;
     color:= colors[#6];
+    // TODO FIX render InputLinePrefix seperately so that it doesn't mess up max len
     str:= InputLinePrefix + str + ' ';
     end
 else
@@ -668,7 +670,7 @@ end;
 
 procedure CopyToClipboard(var newContent: shortstring);
 begin
-    SendIPC(_S'Y' + copy(newContent, 1, 253) + #0);
+    SendIPC(_S'y' + copy(newContent, 1, 253) + #0);
 end;
 
 procedure CopySelectionToClipboard();
@@ -683,9 +685,10 @@ end;
 
 // TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
 procedure InsertIntoInputStr(var s: shortstring);
-var i, l, lastc: integer;
+var i, l, il, lastc: integer;
 begin
-    l:= Length(s);
+    // safe length for string
+    l:= min(MaxInputStrLen-cursorPos, Length(s));
 
     // if we insert rather than append, shift info in InputStrL accordingly
     if cursorPos < Length(InputStr.s) then
@@ -694,25 +697,32 @@ begin
             begin
             if InputStrL[i] <> InputStrLNoPred then
                 begin
-                InputStrL[i+l]:= InputStrL[i] + l;
+                il:= i + l;
+                // only shift if not overflowing
+                if il <= MaxInputStrLen then
+                    InputStrL[il]:= InputStrL[i] + l;
                 InputStrL[i]:= InputStrLNoPred;
                 end;
             end;
         end;
 
     InputStrL[cursorPos + l]:= cursorPos;
-    Insert(s, InputStr.s, cursorPos + 1);
+    // insert string truncated to safe length
+    Insert(copy(s,1,l), InputStr.s, cursorPos + 1);
+    if Length(InputStr.s) > MaxInputStrLen then
+        InputStr.s[0]:= char(MaxInputStrLen);
+
     SetLine(InputStr, InputStr.s, true);
 
     // move cursor to end of inserted string
-    lastc:= 255;
+    lastc:= MaxInputStrLen;
     cursorPos:= min(lastc, cursorPos + l);
     UpdateCursorCoords();
 end;
 
 procedure PasteFromClipboard();
 begin
-    SendIPC(_S'P');
+    SendIPC(_S'Y');
 end;
 
 procedure CheckPasteBuffer();
@@ -983,7 +993,7 @@ begin
 
         utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-        if Length(InputStr.s) + btw > 240 then
+        if Length(InputStr.s) + btw > MaxInputStrLen then
             exit;
 
         InsertIntoInputStr(utf8);
@@ -1071,7 +1081,7 @@ begin
     ChatHidden:= false;
     firstDraw:= true;
 
-    InputLinePrefix:= UserNick + '> ';
+    InputLinePrefix:= '';
     inputStr.s:= '';
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do

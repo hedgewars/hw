@@ -213,18 +213,6 @@ void HWGame::ParseMessage(const QByteArray & msg)
             SendIPC("!");
             break;
         }
-        case 'Y':
-        {
-            // copy string to clipboard
-            QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
-            break;
-        }
-        case 'P':
-        {
-            // paste clipboard to game
-            SendIPC(QString("P").toAscii() + QApplication::clipboard()->text().toUtf8().left(254).replace('\n', ' '));
-            break;
-        }
         case 'C':
         {
             switch (gameType)
@@ -272,6 +260,18 @@ void HWGame::ParseMessage(const QByteArray & msg)
                 .arg("Feedback")
                 .arg(QString::fromUtf8(msg.mid(2).left(size - 4))));
             return;
+        }
+        case 'y':
+        {
+            // copy string to clipboard
+            QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
+            break;
+        }
+        case 'Y':
+        {
+            // paste clipboard to game
+            SendIPC(QString("Y").toAscii() + QApplication::clipboard()->text().toUtf8().left(250).replace('\n', ' '));
+            break;
         }
         case 'i':
         {
