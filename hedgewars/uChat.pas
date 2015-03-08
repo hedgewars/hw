@@ -708,11 +708,12 @@ begin
 end;
 
 // TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
-procedure InsertIntoInputStr(var s: shortstring);
+procedure InsertIntoInputStr(s: shortstring);
 var i, l, il, lastc: integer;
 begin
     // safe length for string
     l:= min(MaxInputStrLen-cursorPos, Length(s));
+    s:= copy(s,1,l);
 
     // if we insert rather than append, shift info in InputStrL accordingly
     if cursorPos < Length(InputStr.s) then
@@ -732,7 +733,7 @@ begin
 
     InputStrL[cursorPos + l]:= cursorPos;
     // insert string truncated to safe length
-    Insert(copy(s,1,l), InputStr.s, cursorPos + 1);
+    Insert(s, InputStr.s, cursorPos + 1);
     if Length(InputStr.s) > MaxInputStrLen then
         InputStr.s[0]:= char(MaxInputStrLen);
 
