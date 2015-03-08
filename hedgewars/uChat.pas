@@ -249,6 +249,8 @@ SetLine(Strs[lastStr], s, false);
 inc(visibleCount)
 end;
 
+procedure CheckPasteBuffer(); forward;
+
 procedure DrawChat;
 var i, t, left, top, cnt: LongInt;
     selRect: TSDL_Rect;
@@ -265,6 +267,8 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
+    CheckPasteBuffer();
+
     if firstDraw then
         begin
         UpdateCursorCoords();
@@ -662,11 +666,9 @@ else
     end;
 end;
 
-var clipboardBuffer: shortstring;
-
 procedure CopyToClipboard(var newContent: shortstring);
 begin
-    clipboardBuffer:= newContent;
+    SendIPC(_S'Y' + copy(newContent, 1, 253) + #0);
 end;
 
 procedure CopySelectionToClipboard();
@@ -710,8 +712,16 @@ end;
 
 procedure PasteFromClipboard();
 begin
-    DeleteSelected();
-    InsertIntoInputStr(clipboardBuffer);
+    SendIPC(_S'P');
+end;
+
+procedure CheckPasteBuffer();
+begin
+    if Length(ChatPasteBuffer) > 0 then
+        begin
+        InsertIntoInputStr(ChatPasteBuffer);
+        ChatPasteBuffer:= '';
+        end;
 end;
 
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
@@ -723,6 +733,8 @@ var i, btw, index: integer;
 begin
     LastKeyPressTick:= RealTicks;
     action:= true;
+
+    CheckPasteBuffer();
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
@@ -1069,8 +1081,6 @@ begin
 
     LastKeyPressTick:= 0;
     ResetCursor();
-
-    clipboardBuffer:= '';
 end;
 
 procedure freeModule;

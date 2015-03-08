@@ -16,6 +16,9 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <QApplication>
+#include <QClipboard>
+
 #include <QString>
 #include <QCheckBox>
 #include <QByteArray>
@@ -208,6 +211,18 @@ void HWGame::ParseMessage(const QByteArray & msg)
         case '?':
         {
             SendIPC("!");
+            break;
+        }
+        case 'Y':
+        {
+            // copy string to clipboard
+            QApplication::clipboard()->setText(QString::fromUtf8(msg.mid(2)));
+            break;
+        }
+        case 'P':
+        {
+            // paste clipboard to game
+            SendIPC(QString("P").toAscii() + QApplication::clipboard()->text().toUtf8().left(254).replace('\n', ' '));
             break;
         }
         case 'C':

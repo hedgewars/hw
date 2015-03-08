@@ -138,6 +138,7 @@ isProcessed := true;
 case s[1] of
      '!': begin AddFileLog('Ping? Pong!'); isPonged:= true; end;
      '?': SendIPC(_S'!');
+     'P': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      'e': ParseCommand(copy(s, 2, Length(s) - 1), true);
      'E': OutError(copy(s, 2, Length(s) - 1), true);
      'W': OutError(copy(s, 2, Length(s) - 1), false);
