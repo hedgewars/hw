@@ -237,6 +237,8 @@ var
 
     MaxTextureSize: LongInt;
 
+    ChatPasteBuffer: shortstring;
+
 /////////////////////////////////////
 //Buttons
 {$IFDEF USE_TOUCH_INTERFACE}
@@ -2685,6 +2687,8 @@ begin
     cStereoDepth:= 0;
     cViewLimitsDebug:= false;
     AprilOne := false;
+
+    ChatPasteBuffer:= '';
 end;
 
 procedure freeModule;
