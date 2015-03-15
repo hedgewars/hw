@@ -30,11 +30,13 @@ procedure AddChatString(s: shortstring);
 procedure DrawChat;
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 procedure SendHogSpeech(s: shortstring);
+procedure CopyToClipboard(var newContent: shortstring);
 
 implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
 
 const MaxStrIndex = 27;
+      MaxInputStrLen = 240;
 
 type TChatLine = record
     Tex: PTexture;
@@ -63,10 +65,11 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
     liveLua: boolean;
     ChatHidden: boolean;
     firstDraw: boolean;
-    InputLinePrefix: shortstring;
+    InputLinePrefix: TChatLine;
     // cursor
     cursorPos, cursorX, selectedPos, selectionDx: LongInt;
     LastKeyPressTick: LongWord;
+
 
 const
     InputStrLNoPred: byte = 255;
@@ -110,12 +113,12 @@ begin
 
     // calculate cursor offset
 
-    str:= InputLinePrefix + InputStr.s;
+    str:= InputStr.s;
     font:= CheckCJKFont(ansistring(str), fnt16);
 
     // get only substring before cursor to determine length
-    // SetLength(str, Length(InputLinePrefix) + cursorPos); // makes pas2c unhappy
-    str[0]:= char(Length(InputLinePrefix) + cursorPos);
+    // SetLength(str, cursorPos); // makes pas2c unhappy
+    str[0]:= char(cursorPos);
     // get render size of text
     TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @coff, nil);
 
@@ -125,9 +128,9 @@ begin
     if selectedPos >= 0 then
         begin
         if selectedPos > cursorPos then
-            str:= InputLinePrefix + InputStr.s;
-        // SetLength(str, Length(InputLinePrefix) + selectedPos); // makes pas2c unhappy
-        str[0]:= char(Length(InputLinePrefix) + selectedPos);
+            str:= InputStr.s;
+        // SetLength(str, selectedPos); // makes pas2c unhappy
+        str[0]:= char(selectedPos);
         TTF_SizeUTF8(Fontz[font].Handle, Str2PChar(str), @soff, nil);
         selectionDx:= soff - coff;
         end
@@ -197,7 +200,7 @@ if isInput then
     begin
     cl.s:= str;
     color:= colors[#6];
-    str:= InputLinePrefix + str + ' ';
+    str:= str + ' ';
     end
 else
     begin
@@ -248,6 +251,24 @@ SetLine(Strs[lastStr], s, false);
 inc(visibleCount)
 end;
 
+procedure CheckPasteBuffer(); forward;
+
+procedure UpdateInputLinePrefix();
+begin
+if liveLua then
+    begin
+    InputLinePrefix.color:= colors[#1];
+    InputLinePrefix.s:= '[Lua] >';
+    end
+else
+    begin
+    InputLinePrefix.color:= colors[#6];
+    InputLinePrefix.s:= UserNick + '>';
+    end;
+
+FreeAndNilTexture(InputLinePrefix.Tex);
+end;
+
 procedure DrawChat;
 var i, t, left, top, cnt: LongInt;
     selRect: TSDL_Rect;
@@ -264,13 +285,21 @@ top := 10 + visibleCount * ClHeight; // we start with input line (if any)
 // draw chat input line first and under all other lines
 if (GameState = gsChat) and (InputStr.Tex <> nil) then
     begin
+    CheckPasteBuffer();
+
+    if InputLinePrefix.Tex = nil then
+        RenderChatLineTex(InputLinePrefix, InputLinePrefix.s);
+
+    DrawTexture(left, top, InputLinePrefix.Tex);
+    inc(left, InputLinePrefix.Width);
+    DrawTexture(left, top, InputStr.Tex);
+
     if firstDraw then
         begin
         UpdateCursorCoords();
         firstDraw:= false;
         end;
 
-    DrawTexture(left, top, InputStr.Tex);
     if selectedPos < 0 then
         begin
         // draw cursor
@@ -294,8 +323,9 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
 
         DrawRect(selRect, $FF, $FF, $FF, $40, true);
         end;
-    end;
 
+    dec(left, InputLinePrefix.Width);
+    end;
 
 // draw chat lines
 if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
@@ -458,6 +488,7 @@ if (s[1] = '/') then
                 AddFileLog('[Lua] chat input string parsing disabled');
                 AddChatString(#3 + 'Lua parsing: OFF');
                 end;
+            UpdateInputLinePrefix();
             end;
         exit
         end;
@@ -565,6 +596,7 @@ begin
         cursorPos:= min(cursorPos, selectedPos);
         ResetSelection();
         end;
+    UpdateCursorCoords();
 end;
 
 procedure HandleSelection(enabled: boolean);
@@ -660,6 +692,73 @@ else
     end;
 end;
 
+procedure CopyToClipboard(var newContent: shortstring);
+begin
+    SendIPC(_S'y' + copy(newContent, 1, 253) + #0);
+end;
+
+procedure CopySelectionToClipboard();
+var selection: shortstring;
+begin
+    if selectedPos >= 0 then
+        begin
+        selection:= copy(InputStr.s, min(CursorPos, selectedPos) + 1, abs(CursorPos - selectedPos));
+        CopyToClipboard(selection);
+        end;
+end;
+
+// TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
+procedure InsertIntoInputStr(s: shortstring);
+var i, l, il, lastc: integer;
+begin
+    // safe length for string
+    l:= min(MaxInputStrLen-cursorPos, Length(s));
+    s:= copy(s,1,l);
+
+    // if we insert rather than append, shift info in InputStrL accordingly
+    if cursorPos < Length(InputStr.s) then
+        begin
+        for i:= Length(InputStr.s) downto cursorPos + 1 do
+            begin
+            if InputStrL[i] <> InputStrLNoPred then
+                begin
+                il:= i + l;
+                // only shift if not overflowing
+                if il <= MaxInputStrLen then
+                    InputStrL[il]:= InputStrL[i] + l;
+                InputStrL[i]:= InputStrLNoPred;
+                end;
+            end;
+        end;
+
+    InputStrL[cursorPos + l]:= cursorPos;
+    // insert string truncated to safe length
+    Insert(s, InputStr.s, cursorPos + 1);
+    if Length(InputStr.s) > MaxInputStrLen then
+        InputStr.s[0]:= char(MaxInputStrLen);
+
+    SetLine(InputStr, InputStr.s, true);
+
+    // move cursor to end of inserted string
+    lastc:= MaxInputStrLen;
+    cursorPos:= min(lastc, cursorPos + l);
+    UpdateCursorCoords();
+end;
+
+procedure PasteFromClipboard();
+begin
+    SendIPC(_S'Y');
+end;
+
+procedure CheckPasteBuffer();
+begin
+    if Length(ChatPasteBuffer) > 0 then
+        begin
+        InsertIntoInputStr(ChatPasteBuffer);
+        ChatPasteBuffer:= '';
+        end;
+end;
+
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
 var i, btw, index: integer;
@@ -669,6 +768,8 @@ var i, btw, index: integer;
 begin
     LastKeyPressTick:= RealTicks;
     action:= true;
+
+    CheckPasteBuffer();
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
@@ -691,11 +792,13 @@ begin
                     HandleSelection(true);
                     SkipInputChars(skip, true);
                     DeleteSelected();
-                    end;
+                    end
+                else
+                    UpdateCursorCoords();
+
                 end
             else
                 DeleteSelected();
-            UpdateCursorCoords();
             end;
         SDLK_DELETE:
             begin
@@ -718,12 +821,12 @@ begin
                         SkipInputChars(skip, false);
                         DeleteSelected();
                         end;
-                    end;
+                    end
+                else
+                    UpdateCursorCoords();
                 end
             else
                 DeleteSelected();
-
-            UpdateCursorCoords();
             end;
         SDLK_ESCAPE:
             begin
@@ -862,6 +965,33 @@ begin
             else
                 action:= false;
             end;
+        SDLK_c:
+            begin
+            // copy
+            if ctrl then
+                CopySelectionToClipboard()
+            else
+                action:= false;
+            end;
+        SDLK_v:
+            begin
+            // paste
+            if ctrl then
+                PasteFromClipboard()
+            else
+                action:= false;
+            end;
+        SDLK_x:
+            begin
+            // cut
+            if ctrl then
+                begin
+                CopySelectionToClipboard();
+                DeleteSelected();
+                end
+            else
+                action:= false;
+            end;
         else
             action:= false;
         end;
@@ -888,28 +1018,10 @@ begin
 
         utf8:= char(Key or firstByteMark[Pred(btw)]) + utf8;
 
-        if Length(InputStr.s) + btw > 240 then
+        if Length(InputStr.s) + btw > MaxInputStrLen then
             exit;
 
-        // if we insert rather than append, shift info in InputStrL accordingly
-        if cursorPos < Length(InputStr.s) then
-            begin
-            for i:= Length(InputStr.s) downto cursorPos + 1 do
-                begin
-                if InputStrL[i] <> InputStrLNoPred then
-                    begin
-                    InputStrL[i+btw]:= InputStrL[i] + btw;
-                    InputStrL[i]:= InputStrLNoPred;
-                    end;
-                end;
-            end;
-
-        InputStrL[cursorPos + btw]:= cursorPos;
-        Insert(utf8, InputStr.s, cursorPos + 1);
-        SetLine(InputStr, InputStr.s, true);
-
-        cursorPos:= cursorPos + btw;
-        UpdateCursorCoords();
+        InsertIntoInputStr(utf8);
         end
 end;
 
@@ -994,7 +1106,8 @@ begin
     ChatHidden:= false;
     firstDraw:= true;
 
-    InputLinePrefix:= UserNick + '> ';
+    InputLinePrefix.Tex:= nil;
+    UpdateInputLinePrefix();
     inputStr.s:= '';
     inputStr.Tex := nil;
     for i:= 0 to MaxStrIndex do
@@ -1009,6 +1122,7 @@ end;
 procedure freeModule;
 var i: ShortInt;
 begin
+    FreeAndNilTexture(InputLinePrefix.Tex);
     FreeAndNilTexture(InputStr.Tex);
     for i:= 0 to MaxStrIndex do
         FreeAndNilTexture(Strs[i].Tex);
