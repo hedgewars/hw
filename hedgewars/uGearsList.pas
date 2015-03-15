@@ -342,6 +342,8 @@ case Kind of
                 gear^.Radius:= 3;
                 gear^.Friction:= _450 * _0_01 * cRopePercent;
                 RopePoints.Count:= 0;
+                gear^.Tint:= $D8D8D8FF;
+                gear^.Tag:= 0; // normal rope render
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;
