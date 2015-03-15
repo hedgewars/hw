@@ -68,7 +68,8 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
     EnableTexture(false);
     //glEnable(GL_LINE_SMOOTH);
 
-    Tint($70, $70, $70, $FF);
+    
+    Tint(Gear^.Tint shr 24 div 3, Gear^.Tint shr 16 and $FF div 3, Gear^.Tint shr 8 and $FF div 3, Gear^.Tint and $FF);
 
     n:= RopePoints.Count + 2;
 
@@ -79,7 +80,7 @@ if (RopePoints.Count > 0) or (Gear^.Elasticity.QWordValue > 0) then
 
     glLineWidth(3.0 * cScaleFactor);
     glDrawArrays(GL_LINE_STRIP, 0, n);
-    Tint($D8, $D8, $D8, $FF);
+    Tint(Gear^.Tint);
     glLineWidth(2.0 * cScaleFactor);
     glDrawArrays(GL_LINE_STRIP, 0, n);
 
@@ -169,7 +170,7 @@ procedure DrawRope(Gear: PGear);
 var roplen, i: LongInt;
 begin
     if Gear^.Hedgehog^.Gear = nil then exit;
-    if (cReducedQuality and rqSimpleRope) <> 0 then
+    if (Gear^.Tag = 1) or ((cReducedQuality and rqSimpleRope) <> 0) then
         DrawRopeLinesRQ(Gear)
     else
         begin
