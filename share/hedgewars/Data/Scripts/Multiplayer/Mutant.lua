@@ -21,6 +21,7 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 --[[
     MUTANT SCRIPT
@@ -605,6 +606,11 @@ function onGearDelete(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
         trackDeletion(gear)
     end
+end
+
+function onParameters()
+    parseParams()
+    winScore = tonumber(params["winscore"]) or winScore
 end
 
 --[[
