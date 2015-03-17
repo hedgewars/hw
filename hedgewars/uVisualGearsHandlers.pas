@@ -515,7 +515,8 @@ end;
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
 var i, t, h: LongInt;
 begin
-for t:= 1 to min(Steps, Gear^.Timer) do
+if currsorter = Gear then
+  for t:= 1 to min(Steps, Gear^.Timer) do
     begin
     dec(Gear^.Timer);
     if (Gear^.Timer and 15) = 0 then
