@@ -102,8 +102,9 @@ while (GameState <> gsExit) and (i <= Lag) do
         if isInLag then
             case GameType of
                 gmtNet: begin
-                        // just update the health bars
+                        // update health bars and the wind indicator
                         AddVisualGear(0, 0, vgtTeamHealthSorter);
+                        AddVisualGear(0, 0, vgtSmoothWindBar);
                         break;
                         end;
                 gmtDemo, gmtRecord: begin
