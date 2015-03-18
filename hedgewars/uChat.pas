@@ -204,8 +204,15 @@ if isInput then
     end
 else
     begin
-    color:= colors[str[1]];
-    delete(str, 1, 1);
+    if str[1] <= High(colors) then
+        begin
+        color:= colors[str[1]];
+        delete(str, 1, 1);
+        end
+    // fallback if invalid color
+    else
+        color:= colors[Low(colors)];
+
     cl.s:= str;
     end;
 
