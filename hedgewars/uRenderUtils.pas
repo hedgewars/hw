@@ -171,7 +171,7 @@ begin
             r0:= (r0 * (255 - LongInt(a1)) + r1 * LongInt(a1)) div 255;
             g0:= (g0 * (255 - LongInt(a1)) + g1 * LongInt(a1)) div 255;
             b0:= (b0 * (255 - LongInt(a1)) + b1 * LongInt(a1)) div 255;
-            a0:= (a0 * (255 - LongInt(a1)) + a1 * LongInt(a1)) div 255;
+            a0:= a0 + ((255 - LongInt(a0)) * a1 div 255);
             destPixels^[i]:= SDL_MapRGBA(dest^.format, r0, g0, b0, a0);
             end;
         end;
