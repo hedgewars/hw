@@ -435,7 +435,11 @@ if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 
-if isInLag then fastUntilLag:= false
+if isInLag and fastUntilLag then 
+begin
+    ParseCommand('spectate 0', true);
+    fastUntilLag:= false
+end;
 end;
 
 procedure chFatalError(var s: shortstring);
