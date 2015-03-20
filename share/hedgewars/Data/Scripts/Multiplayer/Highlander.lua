@@ -110,7 +110,7 @@ local utilWeps =  {
 					[amRope]=true, [amParachute]=true, [amTeleport]=true, [amJetpack]=true,
 					[amInvulnerable]=true, [amLaserSight]=true, [amVampiric]=true,
 					[amLowGravity]=true, [amExtraDamage]=true, [amExtraTime]=true,
-					[amLandGun]=true, [amSwitch]=true, [amRubber]=true, [amIceGun]=true,
+					[amLandGun]=true, [amRubber]=true, [amIceGun]=true,
 					}
 
 local wepArray = {}
