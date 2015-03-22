@@ -36,6 +36,7 @@ type
             rounded   : array[0..MAXROPEPOINTS + 2] of TVertex2f;
          end;
 procedure RenderGear(Gear: PGear; x, y: LongInt);
+procedure DrawHHOrder();
 
 var RopePoints: record
                 Count: Longword;
@@ -213,6 +214,48 @@ with Gear^.Hedgehog^ do
     DrawTexture(sx + 16, sy + 16, ropeIconTex);
     DrawTextureF(SpritesData[sprAMAmmos].Texture, 0.75, sx + 30, sy + 30, ord(CurAmmoType) - 1, 1, 32, 32);
     end;
+end;
+
+procedure DrawHHOrder();
+var HHGear: PGear;
+    hh: PHedgehog;
+    c, i, t, x, y, sprH, sprW, fSprOff: LongInt;
+begin
+t:= LocalTeam;
+
+if not CurrentTeam^.ExtDriven then
+    for i:= 0 to Pred(TeamsCount) do
+        if (TeamsArray[i] = CurrentTeam) then
+            t:= i;
+
+if TeamsArray[t] <> nil then
+    begin
+    sprH:= SpritesData[sprBigDigit].Height;
+    sprW:= SpritesData[sprBigDigit].Width;
+    fSprOff:= sprW div 4 + SpritesData[sprFrame].Width div 4 - 1; // - 1 for overlap to avoid artifacts
+    i:= 0;
+    c:= 0;
+        repeat
+        hh:= @TeamsArray[t]^.Hedgehogs[i];
+        inc(i);
+        if (hh <> nil) and (hh^.Gear <> nil) then
+            begin
+            inc(c);
+            HHGear:= hh^.Gear;
+            x:= hwRound(HHGear^.X) + WorldDx;
+            y:= hwRound(HHGear^.Y) + WorldDy - 2;
+            if (SpeechHogNumber <> c) or ((RealTicks and 512) < 256) then
+                begin
+                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x - fSprOff, y, 0, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x + fSprOff, y, 1, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+                DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
+                end
+            else
+                DrawCircle(x, y, 20, 3, 0, $FF, 0, $60);
+            end;
+        until (i > cMaxHHIndex);
+    end
+
 end;
 
 

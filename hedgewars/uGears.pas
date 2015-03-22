@@ -551,6 +551,9 @@ while Gear <> nil do
         end;
     Gear:= Gear^.NextGear
     end;
+
+if SpeechHogNumber > 0 then
+    DrawHHOrder();
 end;
 
 procedure FreeGearsList;

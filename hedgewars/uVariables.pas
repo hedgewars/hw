@@ -217,6 +217,8 @@ var
     WorldDx: LongInt;
     WorldDy: LongInt;
 
+    SpeechHogNumber: LongInt;
+
     // for tracking the limits of the visible grid based on cScaleFactor
     ViewLeftX, ViewRightX, ViewBottomY, ViewTopY, ViewWidth, ViewHeight: LongInt;
 
@@ -2675,6 +2677,7 @@ begin
     if cFullscreenHeight = 0 then
         cFullscreenHeight:= min(cWindowedHeight, 480);
 
+    SpeechHogNumber:= -1;
 
     LuaGoals:= '';
     cMapName:= '';
