@@ -98,6 +98,11 @@ const
 const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
 
+function charIsForHogSpeech(c: char): boolean;
+begin
+exit((c = '"') or (c = '''') or (c = '-'));
+end;
+
 procedure ResetSelection();
 begin
     selectedPos:= -1;
@@ -279,6 +284,7 @@ end;
 procedure DrawChat;
 var i, t, left, top, cnt: LongInt;
     selRect: TSDL_Rect;
+    c: char;
 begin
 ChatReady:= true; // maybe move to somewhere else?
 
@@ -332,7 +338,27 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
         end;
 
     dec(left, InputLinePrefix.Width);
-    end;
+
+
+    if (Length(InputStr.s) > 0) and ((CursorPos = 1) or (CursorPos = 2)) then
+        begin
+        c:= InputStr.s[1];
+        if charIsForHogSpeech(c) then
+            begin
+            SpeechHogNumber:= 1;
+            if Length(InputStr.s) > 1 then
+                begin
+                c:= InputStr.s[2];
+                if (c > '0') and (c < '9') then
+                    SpeechHogNumber:= byte(c) - 48;
+                end;
+            end;
+        end
+    else
+        SpeechHogNumber:= 0;
+    end
+else
+    SpeechHogNumber:= 0;
 
 // draw chat lines
 if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
@@ -1028,7 +1054,15 @@ begin
         if Length(InputStr.s) + btw > MaxInputStrLen then
             exit;
 
-        InsertIntoInputStr(utf8);
+        if (Length(InputStr.s) = 0) and (Length(utf8) = 1) and (charIsForHogSpeech(utf8[1])) then
+            begin
+            InsertIntoInputStr(utf8);
+            InsertIntoInputStr(utf8);
+            cursorPos:= 1;
+            UpdateCursorCoords();
+            end
+        else
+            InsertIntoInputStr(utf8);
         end
 end;
 
