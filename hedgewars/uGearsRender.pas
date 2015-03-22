@@ -228,6 +228,9 @@ if not CurrentTeam^.ExtDriven then
         if (TeamsArray[i] = CurrentTeam) then
             t:= i;
 
+if t < 0 then
+    exit;
+
 if TeamsArray[t] <> nil then
     begin
     sprH:= SpritesData[sprBigDigit].Height;
