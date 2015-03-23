@@ -345,20 +345,28 @@ if (GameState = gsChat) and (InputStr.Tex <> nil) then
         c:= InputStr.s[1];
         if charIsForHogSpeech(c) then
             begin
-            SpeechHogNumber:= 1;
+            SpeechHogNumber:= 0;
             if Length(InputStr.s) > 1 then
                 begin
                 c:= InputStr.s[2];
                 if (c > '0') and (c < '9') then
                     SpeechHogNumber:= byte(c) - 48;
                 end;
+            // default to current hedgehog (if own) or first hedgehog
+            if SpeechHogNumber = 0 then
+                begin
+                if not CurrentTeam^.ExtDriven then
+                    SpeechHogNumber:= CurrentTeam^.CurrHedgehog + 1
+                else
+                    SpeechHogNumber:= 1;
+                end;
             end;
         end
     else
-        SpeechHogNumber:= 0;
+        SpeechHogNumber:= -1;
     end
 else
-    SpeechHogNumber:= 0;
+    SpeechHogNumber:= -1;
 
 // draw chat lines
 if ((not ChatHidden) or showAll) and (UIDisplay <> uiNone) then
