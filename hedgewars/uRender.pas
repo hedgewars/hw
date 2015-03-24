@@ -48,6 +48,7 @@ procedure DrawTextureRotatedF   (Texture: PTexture; Scale, OffsetX, OffsetY: GLf
 
 procedure DrawCircle            (X, Y, Radius, Width: LongInt);
 procedure DrawCircle            (X, Y, Radius, Width: LongInt; r, g, b, a: Byte);
+procedure DrawCircleFilled      (X, Y, Radius: LongInt; r, g, b, a: Byte);
 
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; color: LongWord); inline;
 procedure DrawLine              (X0, Y0, X1, Y1, Width: Single; r, g, b, a: Byte);
@@ -80,6 +81,9 @@ procedure UpdateViewLimits();
 
 procedure RendererSetup();
 procedure RendererCleanup();
+
+procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+procedure ResetDepth(rm: TRenderMode);
 
 // TODO everything below this should not need a public interface
 
@@ -1394,6 +1398,25 @@ begin
     glDisable(GL_LINE_SMOOTH);
 end;
 
+procedure DrawCircleFilled(X, Y, Radius: LongInt; r, g, b, a: Byte);
+var
+    i: LongInt;
+begin
+    VertexBuffer[0].X := X;
+    VertexBuffer[0].Y := Y;
+
+    for i := 1 to 19 do begin
+        VertexBuffer[i].X := X + Radius*cos(i*pi/9);
+        VertexBuffer[i].Y := Y + Radius*sin(i*pi/9);
+    end;
+
+    EnableTexture(False);
+    Tint(r, g, b, a);
+    SetVertexPointer(@VertexBuffer[0], 20);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 20);
+    Untint();
+    EnableTexture(True);
+end;
 
 procedure DrawHedgehog(X, Y: LongInt; Dir: LongInt; Pos, Step: LongWord; Angle: real);
 const VertexBuffer: array [0..3] of TVertex2f = (
@@ -1885,6 +1908,42 @@ begin
     else
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 end;
+
+procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
+var tmp: LongInt;
+begin
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; d:= d; tmp:= tmp; // avoid hint
+{$ELSE}
+    d:= d / 5;
+    if rm = rmDefault then
+        exit
+    else if rm = rmLeftEye then
+        d:= -d;
+    cStereoDepth:= cStereoDepth + d;
+    openglTranslProjMatrix(d, 0, 0);
+    tmp:= round(d / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  - tmp;
+    ViewRightX:= ViewRightX - tmp;
+{$ENDIF}
+end;
+
+procedure ResetDepth(rm: TRenderMode);
+var tmp: LongInt;
+begin
+{$IFNDEF USE_S3D_RENDERING}
+    rm:= rm; tmp:= tmp; // avoid hint
+{$ELSE}
+    if rm = rmDefault then
+        exit;
+    openglTranslProjMatrix(-cStereoDepth, 0, 0);
+    tmp:= round(cStereoDepth / cScaleFactor * cScreenWidth);
+    ViewLeftX := ViewLeftX  + tmp;
+    ViewRightX:= ViewRightX + tmp;
+    cStereoDepth:= 0;
+{$ENDIF}
+end;
+
 
 procedure initModule;
 begin
