@@ -400,7 +400,7 @@ end
 
 function setAIHints()
     for i = 0, #hhs do
-        if mutant == nil or hhs[i] == mutant or CurrentHedgehog == mutant then
+        if mutant == nil or hhs[i] == mutant or CurrentHedgehog == mutant or getGearValue(CurrentHedgehog, "Feeder") then
             SetGearAIHints(hhs[i], aihUsual)
         else
             SetGearAIHints(hhs[i], aihDoesntMatter)
