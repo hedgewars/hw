@@ -857,119 +857,28 @@ begin
     else
         ZoomValue:= zoom;
 
-    // Sky
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glPushMatrix;
-    //glScalef(1.0, 1.0, 1.0);
-
     if (not isPaused) and (not isAFK) and (GameType <> gmtRecord) then
         MoveCamera;
 
     if cStereoMode = smNone then
         begin
-        glClear(GL_COLOR_BUFFER_BIT);
+        RenderClear();
         DrawWorldStereo(Lag, rmDefault)
         end
 {$IFDEF USE_S3D_RENDERING}
-    else if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
-        begin
-        // create left fb
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        DrawWorldStereo(Lag, rmLeftEye);
-
-        // create right fb
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        DrawWorldStereo(0, rmRightEye);
-
-        // detatch drawing from fbs
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        SetScale(cDefaultZoomLevel);
-
-        // draw left frame
-        glBindTexture(GL_TEXTURE_2D, texl);
-        glBegin(GL_QUADS);
-            if cStereoMode = smHorizontal then
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(0, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(0, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, 0);
-                end
-            else
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, 0);
-                end;
-        glEnd();
-
-        // draw right frame
-        glBindTexture(GL_TEXTURE_2D, texr);
-        glBegin(GL_QUADS);
-            if cStereoMode = smHorizontal then
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(0, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(0, 0);
-                end
-            else
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
-                end;
-        glEnd();
-        SetScale(zoom);
-        end
     else
         begin
-        // clear scene
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        // draw left eye in red channel only
-        if cStereoMode = smGreenRed then
-            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
-        else if cStereoMode = smBlueRed then
-            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
-        else if cStereoMode = smCyanRed then
-            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
-        else
-            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+        // draw frame for left eye
+        RenderClear(rmLeftEye);
         DrawWorldStereo(Lag, rmLeftEye);
-        // draw right eye in selected channel(s) only
-        if cStereoMode = smRedGreen then
-            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
-        else if cStereoMode = smRedBlue then
-            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
-        else if cStereoMode = smRedCyan then
-            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
-        else
-            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
-        DrawWorldStereo(Lag, rmRightEye);
-        end
+
+        // draw frame for right eye
+        RenderClear(rmRightEye);
+        DrawWorldStereo(0, rmRightEye);
+        end;
 {$ENDIF}
+
+FinishRender();
 end;
 
 procedure ChangeDepth(rm: TRenderMode; d: GLfloat);

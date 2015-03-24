@@ -59,11 +59,15 @@ procedure DrawWater             (Alpha: byte; OffsetY, OffsetX: LongInt);
 procedure DrawWaves             (Dir, dX, dY, oX: LongInt; tnt: Byte);
 
 procedure RenderClear           ();
-procedure RenderSetClearColor      (r, g, b, a: real);
+procedure RenderClear           (mode: TRenderMode);
+procedure RenderSetClearColor   (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
 procedure untint(); inline;
 procedure setTintAdd            (f: boolean); inline;
+
+// call this to finish the rendering of current frame
+procedure FinishRender();
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 
@@ -74,7 +78,8 @@ function isDyAreaOffscreen(Y, Height: LongInt): LongInt; inline;
 procedure SetScale(f: GLfloat);
 procedure UpdateViewLimits();
 
-procedure RenderSetup();
+procedure RendererSetup();
+procedure RendererCleanup();
 
 // TODO everything below this should not need a public interface
 
@@ -124,6 +129,11 @@ var VertexBuffer : array [0 ..59] of TVertex2f;
     LastColorPointerN, LastTexCoordPointerN, LastVertexPointerN: Integer;
 {$ENDIF}
 
+{$IFDEF USE_S3D_RENDERING}
+    // texture/vertex buffers for left/right/default eye modes
+    texLRDtb, texLvb, texRvb: array [0..3] of TVertex2f;
+{$ENDIF}
+
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin
     isAreaOffscreen:= (isDxAreaOffscreen(X, Width) <> 0) or (isDyAreaOffscreen(Y, Height) <> 0);
@@ -148,9 +158,90 @@ begin
     glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
 end;
 
+{$IFDEF USE_S3D_RENDERING}
+procedure RenderClear(mode: TRenderMode);
+var frame: GLuint;
+begin
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
+        begin
+        case mode of
+            rmLeftEye:  frame:= frameL;
+            rmRightEye: frame:= frameR;
+            else
+                frame:= defaultFrame;
+        end;
+
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frame);
+
+        RenderClear();
+        end
+    else
+        begin
+        // draw left eye in red channel only
+        if mode = rmLeftEye then
+            begin
+            glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+            RenderClear();
+            if cStereoMode = smGreenRed then
+                glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
+            else if cStereoMode = smBlueRed then
+                glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
+            else if cStereoMode = smCyanRed then
+                glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
+            else
+                glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+            end
+        else
+            begin
+            // draw right eye in selected channel(s) only
+            if cStereoMode = smRedGreen then
+                glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
+            else if cStereoMode = smRedBlue then
+                glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
+            else if cStereoMode = smRedCyan then
+                glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
+            else
+                glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+            end;
+        end;
+end;
+{$ENDIF}
+
 procedure RenderSetClearColor(r, g, b, a: real);
 begin
     glClearColor(r, g, b, a);
+end;
+
+procedure FinishRender();
+begin
+
+{$IFDEF USE_S3D_RENDERING}
+if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
+    begin
+    RenderClear(rmDefault);
+
+    SetScale(cDefaultZoomLevel);
+
+
+    // same for all
+    SetTexCoordPointer(@texLRDtb, Length(texLRDtb));
+
+
+    // draw left frame
+    glBindTexture(GL_TEXTURE_2D, texl);
+    SetVertexPointer(@texLvb, Length(texLvb));
+    //UpdateModelviewProjection;
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(texLvb));
+
+    // draw right frame
+    glBindTexture(GL_TEXTURE_2D, texl);
+    SetVertexPointer(@texRvb, Length(texRvb));
+    //UpdateModelviewProjection;
+    glDrawArrays(GL_TRIANGLE_FAN, 0, Length(texRvb));
+
+    SetScale(zoom);
+    end;
+{$ENDIF}
 end;
 
 {$IFDEF GL2}
@@ -303,14 +394,42 @@ begin
     glDeleteRenderbuffersEXT(1, @depth);
     glDeleteFramebuffersEXT(1, @frame);
 end;
-
 {$ENDIF}
-procedure RenderSetup();
+
+procedure RendererCleanup();
+begin
+{$IFNDEF PAS2C}
+{$IFDEF USE_VIDEO_RECORDING}
+    if defaultFrame <> 0 then
+        DeleteFramebuffer(defaultFrame, depthv, texv);
+{$ENDIF}
+{$IFDEF USE_S3D_RENDERING}
+    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
+        begin
+        DeleteFramebuffer(framel, depthl, texl);
+        DeleteFramebuffer(framer, depthr, texr);
+        end
+{$ENDIF}
+{$ENDIF}
+end;
+
+procedure RendererSetup();
 var AuxBufNum: LongInt = 0;
     tmpstr: ansistring;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
+{$IFDEF MOBILE}
+    // TODO: this function creates an opengles1.1 context
+    // un-comment below and add proper logic to support opengles2.0
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    if SDLGLcontext = nil then
+        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
+    SDLTry(SDLGLcontext <> nil, true);
+    SDL_GL_SetSwapInterval(1);
+{$ENDIF}
+
     // suppress hint/warning
     AuxBufNum:= AuxBufNum;
 
@@ -427,12 +546,66 @@ begin
             CreateFramebuffer(framel, depthl, texl);
             CreateFramebuffer(framer, depthr, texr);
 
+
+
+
             // reset
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame)
             end
         else
             cStereoMode:= smNone;
     end;
+
+    // set up vertex/texture buffers for frame textures
+    texLRDtb[0].X:= 0.0;
+    texLRDtb[0].Y:= 0.0;
+    texLRDtb[1].X:= 1.0;
+    texLRDtb[1].Y:= 0.0;
+    texLRDtb[2].X:= 1.0;
+    texLRDtb[2].Y:= 1.0;
+    texLRDtb[3].X:= 0.0;
+    texLRDtb[3].Y:= 1.0;
+
+    if cStereoMode = smHorizontal then
+        begin
+        texLvb[0].X:= cScreenWidth / -2;
+        texLvb[0].Y:= cScreenHeight;
+        texLvb[1].X:= 0;
+        texLvb[1].Y:= cScreenHeight;
+        texLvb[2].X:= 0;
+        texLvb[2].Y:= 0;
+        texLvb[3].X:= cScreenWidth / -2;
+        texLvb[3].Y:= 0;
+
+        texRvb[0].X:= 0;
+        texRvb[0].Y:= cScreenHeight;
+        texRvb[1].X:= cScreenWidth / 2;
+        texRvb[1].Y:= cScreenHeight;
+        texRvb[2].X:= cScreenWidth / 2;
+        texRvb[2].Y:= 0;
+        texRvb[3].X:= 0;
+        texRvb[3].Y:= 0;
+        end
+    else
+        begin
+        texLvb[0].X:= cScreenWidth / -2;
+        texLvb[0].Y:= cScreenHeight / 2;
+        texLvb[1].X:= cScreenWidth / 2;
+        texLvb[1].Y:= cScreenHeight / 2;
+        texLvb[2].X:= cScreenWidth / 2;
+        texLvb[2].Y:= 0;
+        texLvb[3].X:= cScreenWidth / -2;
+        texLvb[3].Y:= 0;
+
+        texRvb[0].X:= cScreenWidth / -2;
+        texRvb[0].Y:= cScreenHeight;
+        texRvb[1].X:= cScreenWidth / 2;
+        texRvb[1].Y:= cScreenHeight;
+        texRvb[2].X:= cScreenWidth / 2;
+        texRvb[2].Y:= cScreenHeight / 2;
+        texRvb[3].X:= cScreenWidth / -2;
+        texRvb[3].Y:= cScreenHeight / 2;
+        end;
 {$ENDIF}
 
 // set view port to whole window

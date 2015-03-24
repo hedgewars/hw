@@ -561,19 +561,8 @@ for i:= Low(CountTexz) to High(CountTexz) do
                 end;
             end;
         end;
-{$IFNDEF PAS2C}
-{$IFDEF USE_VIDEO_RECORDING}
-    if defaultFrame <> 0 then
-        DeleteFramebuffer(defaultFrame, depthv, texv);
-{$ENDIF}
-{$IFDEF USE_S3D_RENDERING}
-    if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
-        begin
-        DeleteFramebuffer(framel, depthl, texl);
-        DeleteFramebuffer(framer, depthr, texr);
-        end
-{$ENDIF}
-{$ENDIF}
+
+RendererCleanup();
 end;
 
 
@@ -756,18 +745,7 @@ begin
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
 {$ENDIF}
 
-{$IFDEF MOBILE}
-    // TODO: this function creates an opengles1.1 context
-    // un-comment below and add proper logic to support opengles2.0
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    if SDLGLcontext = nil then
-        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
-    SDL_GL_SetSwapInterval(1);
-{$ENDIF}
-
-    RenderSetup();
+    RendererSetup();
 end;
 
 (*

@@ -254,7 +254,7 @@ if TeamsArray[t] <> nil then
                 DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
                 end
             else
-                DrawCircle(x, y, 20, 3, 0, $FF, 0, $60);
+                DrawCircle(x, y, 20, 3, 0, $FF, $FF, $80);
             end;
         until (i > cMaxHHIndex);
     end
