@@ -17,7 +17,6 @@
  *)
 
 {$INCLUDE "options.inc"}
-{$IF GLunit = GL}{$DEFINE GLunit:=GL}{$ENDIF}
 
 unit uWorld;
 interface
@@ -53,7 +52,6 @@ uses
     , uVisualGears
     , uChat
     , uLandTexture
-    , GLunit
     , uVariables
     , uUtils
     , uTextures
@@ -881,41 +879,6 @@ begin
 FinishRender();
 end;
 
-procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
-var tmp: LongInt;
-begin
-{$IFNDEF USE_S3D_RENDERING}
-    rm:= rm; d:= d; tmp:= tmp; // avoid hint
-{$ELSE}
-    d:= d / 5;
-    if rm = rmDefault then
-        exit
-    else if rm = rmLeftEye then
-        d:= -d;
-    cStereoDepth:= cStereoDepth + d;
-    openglTranslProjMatrix(d, 0, 0);
-    tmp:= round(d / cScaleFactor * cScreenWidth);
-    ViewLeftX := ViewLeftX  - tmp;
-    ViewRightX:= ViewRightX - tmp;
-{$ENDIF}
-end;
-
-procedure ResetDepth(rm: TRenderMode);
-var tmp: LongInt;
-begin
-{$IFNDEF USE_S3D_RENDERING}
-    rm:= rm; tmp:= tmp; // avoid hint
-{$ELSE}
-    if rm = rmDefault then
-        exit;
-    openglTranslProjMatrix(-cStereoDepth, 0, 0);
-    tmp:= round(cStereoDepth / cScaleFactor * cScreenWidth);
-    ViewLeftX := ViewLeftX  + tmp;
-    ViewRightX:= ViewRightX + tmp;
-    cStereoDepth:= 0;
-{$ENDIF}
-end;
-
 procedure RenderWorldEdge;
 var
     //VertexBuffer: array [0..3] of TVertex2f;
@@ -1200,8 +1163,8 @@ var i, t: LongInt;
     tdx, tdy: Double;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    VertexBuffer: array [0..3] of TVertex2f;
     replicateToLeft, replicateToRight, tmp: boolean;
+    a: Byte;
 begin
 if WorldEdge <> weWrap then
     begin
@@ -1632,27 +1595,16 @@ if ScreenFade <> sfNone then
             end;
     if ScreenFade <> sfNone then
         begin
+        r.x:= ViewLeftX;
+        r.y:= ViewTopY;
+        r.w:= ViewWidth;
+        r.h:= ViewHeight;
+
         case ScreenFade of
-            sfToBlack, sfFromBlack: Tint(0, 0, 0, ScreenFadeValue * 255 div 1000);
-            sfToWhite, sfFromWhite: Tint($FF, $FF, $FF, ScreenFadeValue * 255 div 1000);
+            sfToBlack, sfFromBlack: DrawRect(r, 0, 0, 0, ScreenFadeValue * 255 div 1000, true);
+            sfToWhite, sfFromWhite: DrawRect(r, $FF, $FF, $FF, ScreenFadeValue * 255 div 1000, true);
             end;
 
-        VertexBuffer[0].X:= -cScreenWidth;
-        VertexBuffer[0].Y:= cScreenHeight;
-        VertexBuffer[1].X:= -cScreenWidth;
-        VertexBuffer[1].Y:= 0;
-        VertexBuffer[2].X:= cScreenWidth;
-        VertexBuffer[2].Y:= 0;
-        VertexBuffer[3].X:= cScreenWidth;
-        VertexBuffer[3].Y:= cScreenHeight;
-
-        EnableTexture(false);
-
-        SetVertexPointer(@VertexBuffer[0], 4);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
-
-        EnableTexture(true);
-        untint;
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
         end
@@ -1673,15 +1625,11 @@ if flagPrerecording then
         end;
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
+    //a:= Byte(Round(127*(1 + sin(RealTicks*0.007))));
+    a:= Byte(min(255, abs(-255 + ((RealTicks div 2) and 511))));
+
     // draw red circle
-    glDisable(GL_TEXTURE_2D);
-    Tint($FF, $00, $00, Byte(Round(127*(1 + sin(SDL_GetTicks()*0.007)))));
-    glBegin(GL_POLYGON);
-    for i:= 0 to 20 do
-        glVertex2f(-(cScreenWidth shr 1) + 30 + sin(i*2*Pi/20)*10, 35 + cos(i*2*Pi/20)*10);
-    glEnd();
-    untint;
-    glEnable(GL_TEXTURE_2D);
+    DrawCircleFilled(-(cScreenWidth shr 1) + 30, 35, 10, $FF, $00, $00, a);
     end;
 {$ENDIF}
 
