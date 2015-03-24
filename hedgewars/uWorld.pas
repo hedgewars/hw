@@ -17,7 +17,7 @@
  *)
 
 {$INCLUDE "options.inc"}
-{$IF GLunit = GL}{$DEFINE GLunit:=GL,GLext}{$ENDIF}
+{$IF GLunit = GL}{$DEFINE GLunit:=GL}{$ENDIF}
 
 unit uWorld;
 interface

@@ -83,9 +83,6 @@ procedure RendererCleanup();
 
 // TODO everything below this should not need a public interface
 
-procedure CreateFramebuffer(var frame, depth, tex: GLuint);
-procedure DeleteFramebuffer(var frame, depth, tex: GLuint);
-
 procedure EnableTexture(enable:Boolean);
 
 procedure SetTexCoordPointer(p: Pointer;n: Integer); inline;
@@ -133,6 +130,9 @@ var VertexBuffer : array [0 ..59] of TVertex2f;
     // texture/vertex buffers for left/right/default eye modes
     texLRDtb, texLvb, texRvb: array [0..3] of TVertex2f;
 {$ENDIF}
+
+procedure CreateFramebuffer(var frame, depth, tex: GLuint); forward;
+procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin

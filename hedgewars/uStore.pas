@@ -1023,7 +1023,7 @@ begin
     glutHideWindow();
     // we do not need to set this callback, but it is required for GLUT3 compat
     glutDisplayFunc(@SwapBuffers);
-    RenderSetup();
+    RendererSetup();
 end;
 {$ENDIF} // SDL2
 {$ENDIF} // USE_VIDEO_RECORDING
