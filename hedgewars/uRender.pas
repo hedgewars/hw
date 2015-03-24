@@ -95,14 +95,9 @@ procedure SetColorPointer(p: Pointer;n: Integer); inline;
 
 procedure UpdateModelviewProjection(); inline;
 
-procedure openglLoadIdentity    (); inline;
-procedure openglTranslProjMatrix(X, Y, Z: GLFloat); inline;
 procedure openglPushMatrix      (); inline;
 procedure openglPopMatrix       (); inline;
 procedure openglTranslatef      (X, Y, Z: GLfloat); inline;
-procedure openglScalef          (ScaleX, ScaleY, ScaleZ: GLfloat); inline;
-procedure openglRotatef         (RotX, RotY, RotZ: GLfloat; dir: LongInt); inline;
-procedure openglTint            (r, g, b, a: Byte); inline;
 
 
 implementation
@@ -134,6 +129,12 @@ var VertexBuffer : array [0 ..59] of TVertex2f;
     // texture/vertex buffers for left/right/default eye modes
     texLRDtb, texLvb, texRvb: array [0..3] of TVertex2f;
 {$ENDIF}
+
+procedure openglLoadIdentity    (); forward;
+procedure openglTranslProjMatrix(X, Y, Z: GLFloat); forward;
+procedure openglScalef          (ScaleX, ScaleY, ScaleZ: GLfloat); forward;
+procedure openglRotatef         (RotX, RotY, RotZ: GLfloat; dir: LongInt); forward;
+procedure openglTint            (r, g, b, a: Byte); forward;
 
 procedure CreateFramebuffer(var frame, depth, tex: GLuint); forward;
 procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
@@ -1584,11 +1585,6 @@ begin
 firsti:= -1;
 afteri:=  0;
 
-if GameTicks < 2000 then
-    lol:= 2000 - GameTicks
-else
-    lol:= 0;
-
 if InTopY < 0 then
     InTopY:= 0;
 
@@ -1600,6 +1596,13 @@ if not WithWalls then
     end
 else
     begin
+
+    // animate water walls raise animation at start of game
+    if GameTicks < 2000 then
+        lol:= 2000 - GameTicks
+    else
+        lol:= 0;
+
     if InLeftX > ViewLeftX then
         begin
         VertexBuffer[0].X:= OutLeftX - lol;
