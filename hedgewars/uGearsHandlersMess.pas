@@ -3225,7 +3225,9 @@ begin
         Gear^.RenderTimer := false;
         Gear^.doStep := @doStepCakeDown;
         exit
-        end;
+        end
+    else if Gear^.Timer < 6000 then
+        Gear^.RenderTimer:= true;
 
     if not cakeStep(Gear) then Gear^.doStep:= @doStepCakeFall;
 
