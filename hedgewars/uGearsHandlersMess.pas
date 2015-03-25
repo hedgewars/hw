@@ -3140,13 +3140,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const cakeh =   27;
-var
-    CakePoints: array[0..Pred(cakeh)] of record
-        x, y: hwFloat;
-    end;
-    CakeI: Longword;
-
 procedure doStepCakeExpl(Gear: PGear);
 begin
     AllInactive := false;
@@ -3213,6 +3206,7 @@ end;
 procedure doStepCakeWork(Gear: PGear);
 var
     tdx, tdy: hwFloat;
+    cakeData: PCakeData;
 begin
     AllInactive := false;
 
@@ -3237,18 +3231,23 @@ begin
 
     if Gear^.Tag = 0 then
         begin
-        CakeI := (CakeI + 1) mod cakeh;
-        tdx := CakePoints[CakeI].x - Gear^.X;
-        tdy := - CakePoints[CakeI].y + Gear^.Y;
-        CakePoints[CakeI].x := Gear^.X;
-        CakePoints[CakeI].y := Gear^.Y;
-        Gear^.DirAngle := DxDy2Angle(tdx, tdy);
+        cakeData:= PCakeData(Gear^.Data);
+        with cakeData^ do
+            begin
+            CakeI := (CakeI + 1) mod cakeh;
+            tdx := CakePoints[CakeI].x - Gear^.X;
+            tdy := - CakePoints[CakeI].y + Gear^.Y;
+            CakePoints[CakeI].x := Gear^.X;
+            CakePoints[CakeI].y := Gear^.Y;
+            Gear^.DirAngle := DxDy2Angle(tdx, tdy);
+            end;
         end;
 end;
 
 procedure doStepCakeUp(Gear: PGear);
 var
     i: Longword;
+    cakeData: PCakeData;
 begin
     AllInactive := false;
 
@@ -3259,12 +3258,16 @@ begin
 
     if Gear^.Pos = 6 then
         begin
-        for i:= 0 to Pred(cakeh) do
+        cakeData:= PCakeData(Gear^.Data);
+        with cakeData^ do
             begin
-            CakePoints[i].x := Gear^.X;
-            CakePoints[i].y := Gear^.Y
+            for i:= 0 to Pred(cakeh) do
+                begin
+                CakePoints[i].x := Gear^.X;
+                CakePoints[i].y := Gear^.Y
+                end;
+            CakeI := 0;
             end;
-        CakeI := 0;
         Gear^.doStep := @doStepCakeWork
         end
     else
