@@ -283,6 +283,7 @@ type
             Tint: LongWord;         // Used to colour a texture
             LinkedGear: PGear;      // Used to track a related gear. Portal pairs for example.
             SoundChannel: LongInt;  // Used to track a sound the gear started
+            Data: Pointer; // pointer to gear type specific data structure (if any)
             end;
     TPGearArray = array of PGear;
     PGearArrayS = record
@@ -515,6 +516,19 @@ type
             priority: GLfloat;
             getDimensions, getImageDimensions: boolean;
             end;
+
+    // gear data types
+
+    const cakeh =   27;
+
+    type TCakeData = record
+        CakeI: integer;
+        CakePoints: array[0..Pred(cakeh)] of record
+            x, y: hwFloat;
+        end;
+    end;
+
+    PCakeData = ^TCakeData;
 
 implementation
 

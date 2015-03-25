@@ -166,6 +166,7 @@ end;
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
     //c: byte;
+    cakeData: PCakeData;
 begin
 inc(GCounter);
 
@@ -193,6 +194,7 @@ gear^.Density:= _1;
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
 gear^.Tint:= $FFFFFFFF;
+gear^.Data:= nil;
 
 if CurrentHedgehog <> nil then
     begin
@@ -507,7 +509,9 @@ case Kind of
                 if not dX.isNegative then
                     gear^.Angle:= 1
                 else
-                    gear^.Angle:= 3
+                    gear^.Angle:= 3;
+                New(cakeData);
+                gear^.Data:= Pointer(cakeData);
                 end;
  gtHellishBomb: begin
                 gear^.ImpactSound:= sndHellishImpact1;
@@ -660,6 +664,7 @@ procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t,i: Longword;
     k: boolean;
+    cakeData: PCakeData;
 begin
 
 ScriptCall('onGearDelete', gear^.uid);
@@ -674,6 +679,12 @@ if (Gear^.Kind = gtPortal) then
     if (Gear^.LinkedGear <> nil) then
         if (Gear^.LinkedGear^.LinkedGear = Gear) then
             Gear^.LinkedGear^.LinkedGear:= nil;
+    end
+else if Gear^.Kind = gtCake then
+    begin
+        cakeData:= PCakeData(Gear^.Data);
+        Dispose(cakeData);
+        cakeData:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
     (*
