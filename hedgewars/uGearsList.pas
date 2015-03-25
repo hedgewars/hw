@@ -504,7 +504,7 @@ case Kind of
                 gear^.Health:= 2048;
                 gear^.Radius:= 7;
                 gear^.Z:= cOnHHZ;
-                gear^.RenderTimer:= true;
+                gear^.RenderTimer:= false;
                 gear^.DirAngle:= -90 * hwSign(Gear^.dX);
                 if not dX.isNegative then
                     gear^.Angle:= 1
