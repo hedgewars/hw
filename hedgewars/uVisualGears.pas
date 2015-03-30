@@ -288,6 +288,14 @@ case Layer of
                                     i:= 1;
                                 DrawTextureRotatedF(SpritesData[TSprite(Gear^.State)].Texture, Gear^.Scale, 0, 0, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, i, SpritesData[TSprite(Gear^.State)].Width, SpritesData[TSprite(Gear^.State)].Height, Gear^.Angle);
                                 end;
+                   vgtFeather: begin
+                               if Gear^.FrameTicks < 255 then
+                                   begin
+                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
+                                   tinted:= true
+                                   end;
+                               DrawSpriteRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
+                             end;
            end;
            if (cReducedQuality and rqAntiBoom) = 0 then
                case Gear^.Kind of
@@ -332,14 +340,6 @@ case Layer of
                                  tinted:= true
                                  end;
                              DrawSpriteRotatedF(sprShell, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
-                             end;
-                   vgtFeather: begin
-                               if Gear^.FrameTicks < 255 then
-                                   begin
-                                   Tint($FF, $FF, $FF, Gear^.FrameTicks);
-                                   tinted:= true
-                                   end;
-                               DrawSpriteRotatedF(sprFeather, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                              end;
                    vgtEgg: DrawSpriteRotatedF(sprEgg, round(Gear^.X) + WorldDx, round(Gear^.Y) + WorldDy, Gear^.Frame, 1, Gear^.Angle);
                    vgtBeeTrace: begin
