@@ -78,6 +78,7 @@ if ((cReducedQuality and rqAntiBoom) <> 0) and
     vgtSmokeTrace,
     vgtEvilTrace,
     vgtNote,
+    vgtFeather,
     vgtSmoothWindBar])) then
 
         exit;
@@ -399,6 +400,7 @@ case Gear^.Kind of
     vgtSmallDamageTag,
     vgtHealthTag,
     vgtStraightShot,
+    vgtFeather,
     vgtChunk: gear^.Layer:= 3;
 
     // 2: this layer is outside the screen when stereo
@@ -409,7 +411,6 @@ case Gear^.Kind of
     vgtSteam,
     vgtAmmo,
     vgtShell,
-    vgtFeather,
     vgtEgg,
     vgtBeeTrace,
     vgtSmokeRing,
