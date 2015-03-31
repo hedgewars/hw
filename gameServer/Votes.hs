@@ -117,10 +117,11 @@ voted vote = do
         let answers = concatMap (\t -> 
                 [ModifyRoom $ modifyTeam t{hhnum = h}
                 , AnswerClients chans ["HH_NUM", teamname t, showB h]]
-                )
-                $
+                ) $ if length curteams * h > 48 then [] else curteams
+            ;
+            curteams =
                 if isJust $ gameInfo rm then
-                    teamsAtStart . fromJust . gameInfo $ rm 
+                    teamsAtStart . fromJust . gameInfo $ rm
                 else
                     teams rm
 
