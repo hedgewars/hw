@@ -129,6 +129,7 @@ var
     ExplosionBorderColorR,
     ExplosionBorderColorG,
     ExplosionBorderColorB,
+    ExplosionBorderColorNoA,
     ExplosionBorderColor:  LongWord;
     IceColor            : LongWord;
     IceEdgeColor        : LongWord;
@@ -2549,6 +2550,7 @@ begin
     ExplosionBorderColorG:= 80;
     ExplosionBorderColorB:= 80;
     ExplosionBorderColor:= $FF808080;
+    ExplosionBorderColorNoA:= ExplosionBorderColor and (not AMask);
     IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     IceEdgeColor:= ($8A shl RShift) or ($AF shl GShift) or ($B2 shl BShift) or ($FF shl AShift);
 

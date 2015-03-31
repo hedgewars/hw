@@ -82,7 +82,7 @@ if (Land[LandY, landX] and lfIndestructible) = 0 then
             inc(drawPixelBG);
         end
         else if ((Land[landY, landX] and lfObject) <> 0) or (((LandPixels[pixelY, pixelX] and AMask) shr AShift) < 255) then
-            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and (not AMASK)
+            LandPixels[pixelY, pixelX]:= ExplosionBorderColorNoA
     end;
 end;
 
@@ -199,7 +199,7 @@ begin
             begin
             calculatePixelsCoordinates(i, y, px, py);
             if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
-                LandPixels[py, px]:= LandPixels[py, px] and (not AMASK);
+                LandPixels[py, px]:= ExplosionBorderColorNoA;
             end;
     icePixel:
         for i:= fromPix to toPix do
