@@ -226,6 +226,7 @@ data RoomInfo =
         isRegisteredOnly :: Bool,
         isSpecial :: Bool,
         defaultHedgehogsNumber :: Int,
+        teamsNumberLimit :: Int,
         greeting :: B.ByteString,
         voting :: Maybe Voting,
         roomBansList :: ![B.ByteString],
@@ -250,6 +251,7 @@ newRoom =
         False
         False
         4
+        8
         ""
         Nothing
         []
