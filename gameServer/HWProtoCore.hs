@@ -76,6 +76,7 @@ handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
                          | otherwise = let (c, p) = extractParameters msg in
                                            if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
         h "VOTE" msg = handleCmd ["VOTE", upperCase msg]
+        h "FORCE" msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
