@@ -126,7 +126,10 @@ var
     isAudioMuted     : boolean;
 
     // originally typed consts
-    ExplosionBorderColor: LongWord;
+    ExplosionBorderColorR,
+    ExplosionBorderColorG,
+    ExplosionBorderColorB,
+    ExplosionBorderColor:  LongWord;
     IceColor            : LongWord;
     IceEdgeColor        : LongWord;
     WaterOpacity: byte;
@@ -2542,6 +2545,9 @@ begin
     SDWaterOpacity:= $80;
 
     SDTint:= $80;
+    ExplosionBorderColorR:= 80;
+    ExplosionBorderColorG:= 80;
+    ExplosionBorderColorB:= 80;
     ExplosionBorderColor:= $FF808080;
     IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     IceEdgeColor:= ($8A shl RShift) or ($AF shl GShift) or ($B2 shl BShift) or ($FF shl AShift);
