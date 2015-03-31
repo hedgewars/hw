@@ -473,11 +473,11 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
 
 
-handleCmd_inRoom ["VOTE", m] = do
+handleCmd_inRoom ("VOTE" : m : p) = do
     cl <- thisClient
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
     if isJust b then
-        voted (fromJust b)
+        voted (p == ["FORCE"]) (fromJust b)
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 
