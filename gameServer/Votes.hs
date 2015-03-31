@@ -26,6 +26,7 @@ import qualified Data.ByteString.Char8 as B
 import qualified Data.List as L
 import qualified Data.Map as Map
 import Data.Maybe
+import Control.Applicative
 -------------------
 import Utils
 import CoreTypes
@@ -48,7 +49,8 @@ voted vote = do
             else if uid `L.elem` map fst (votes voting) then
                 return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
             else
-                actOnVoting $ voting{votes = (uid, vote):votes voting}
+                ((:) (AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Your vote counted"]))
+                <$> (actOnVoting $ voting{votes = (uid, vote):votes voting})
 
     where
     actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
