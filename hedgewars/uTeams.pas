@@ -549,10 +549,12 @@ var s: shortstring;
     Gear: PGear;
 begin
 s:= '';
-if (not isDeveloperMode) or (CurrentTeam = nil) then
+if (not isDeveloperMode) then
     exit;
+TryDo((CurrentTeam <> nil), 'Can''t add hedgehogs yet, add a team first!', true);
 with CurrentTeam^ do
     begin
+    TryDo(HedgehogsNumber<=cMaxHHIndex, 'Can''t add hedgehog to "' + TeamName + '"! (already ' + intToStr(HedgehogsNumber) + ' hogs)', true);
     SplitBySpace(id, s);
     SwitchCurrentHedgehog(@Hedgehogs[HedgehogsNumber]);
     CurrentHedgehog^.BotLevel:= StrToInt(id);
