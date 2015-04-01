@@ -125,7 +125,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                     defaultHedgehogsNumber rm
         let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
         return $
-            if not . null . drop (teamsNumberLimit rm) $ roomTeams then
+            if not . null . drop (teamsNumberLimit rm - 1) $ roomTeams then
                 [Warning $ loc "too many teams"]
             else if canAddNumber roomTeams <= 0 then
                 [Warning $ loc "too many hedgehogs"]
