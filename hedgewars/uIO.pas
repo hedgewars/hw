@@ -143,6 +143,7 @@ case s[1] of
              ParseChatCommand('chatmsg ' + #4, s, 2)
           else
              isProcessed:= false;
+     'Y': ChatPasteBuffer:= copy(s, 2, Length(s) - 1);
      else
         isProcessed:= false;
      end;
@@ -370,7 +371,11 @@ if (headcmd <> nil) and tmpflag and (not CurrentTeam^.hasGone) then
 
 isInLag:= (headcmd = nil) and tmpflag and (not CurrentTeam^.hasGone);
 
-if isInLag then fastUntilLag:= false
+if isInLag and fastUntilLag then 
+begin
+    ParseCommand('spectate 0', true);
+    fastUntilLag:= false
+end;
 end;
 
 procedure chFatalError(var s: shortstring);
@@ -398,7 +403,7 @@ if (not CurrentTeam^.ExtDriven) and bShowAmmoMenu then
 
 with CurrentHedgehog^.Gear^,
     CurrentHedgehog^ do
-    if (State and gstHHChooseTarget) <> 0 then
+    if (State and gstChooseTarget) <> 0 then
         begin
         isCursorVisible:= false;
         if not CurrentTeam^.ExtDriven then
@@ -421,7 +426,7 @@ with CurrentHedgehog^.Gear^,
             TargetPoint.Y:= putY
             end;
         AddFileLog('put: ' + inttostr(TargetPoint.X) + ', ' + inttostr(TargetPoint.Y));
-        State:= State and (not gstHHChooseTarget);
+        State:= State and (not gstChooseTarget);
         if (Ammoz[CurAmmoType].Ammo.Propz and ammoprop_AttackingPut) <> 0 then
             Message:= Message or (gmAttack and InputMask);
         end

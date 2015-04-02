@@ -82,6 +82,7 @@ var Gear: PGear;
     vg: PVisualGear;
     i, cnt: LongInt;
     wrap: boolean;
+    bubble: PVisualGear;
 begin
 if Radius > 4 then AddFileLog('Explosion: at (' + inttostr(x) + ',' + inttostr(y) + ')');
 if Radius > 25 then KickFlakes(Radius, X, Y);
@@ -89,7 +90,17 @@ if Radius > 25 then KickFlakes(Radius, X, Y);
 if ((Mask and EXPLNoGfx) = 0) then
     begin
     vg:= nil;
-    if Radius > 50 then vg:= AddVisualGear(X, Y, vgtBigExplosion)
+    if CheckCoordInWater(X, Y - Radius) then
+        begin
+        cnt:= 2 * Radius;
+        for i:= (Radius * Radius) div 4 downto 0 do
+            begin
+            bubble := AddVisualGear(X - Radius + random(cnt), Y - Radius + random(cnt), vgtBubble);
+            if bubble <> nil then
+                bubble^.dY:= 0.1 + random(20)/10;
+            end
+        end
+    else if Radius > 50 then vg:= AddVisualGear(X, Y, vgtBigExplosion)
     else if Radius > 10 then vg:= AddVisualGear(X, Y, vgtExplosion);
     if vg <> nil then
         vg^.Tint:= Tint;
@@ -703,11 +714,7 @@ begin
             ScriptCall('onGearWaterSkip', Gear^.uid);
         end
     else
-        begin
-        if (not ((Gear^.Kind = gtJetpack) or (Gear^.Kind = gtBee))) then
-            Gear^.State:= (Gear^.State and (not gstSubmersible));  // making it temporary for most gears is more attractive I think
         CheckGearDrowning := false
-        end
 end;
 
 

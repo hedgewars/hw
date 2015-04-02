@@ -1382,6 +1382,7 @@ begin
         dec(TurnTimeLeft)
     else
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end;
@@ -1762,11 +1763,16 @@ procedure doStepAirMine(Gear: PGear);
 var i,t,targDist,tmpDist: LongWord;
     targ, tmpG: PGear;
     trackSpeed, airFriction, tX, tY: hwFloat;
+    isUnderwater: Boolean;
 begin
+    isUnderwater:= CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y) + Gear^.Radius);
     if Gear^.Pos > 0 then
         begin
         airFriction:= _1;
-        dec(airFriction.QWordValue,Gear^.Pos);
+        if isUnderwater then
+            dec(airFriction.QWordValue,Gear^.Pos*2)
+        else
+            dec(airFriction.QWordValue,Gear^.Pos);
         Gear^.dX:= Gear^.dX*airFriction;
         Gear^.dY:= Gear^.dY*airFriction
         end;
@@ -1799,14 +1805,14 @@ begin
         ((TurnTimeLeft < cHedgehogTurnTime) and (cHedgehogTurnTime-TurnTimeLeft < 5000)) or
         (Gear^.State and gsttmpFlag = 0) or
         (Gear^.Angle = 0) then
-        gear^.State:= gear^.State and (not gstHHChooseTarget)
+        gear^.State:= gear^.State and (not gstChooseTarget)
     else if
     // todo, allow not finding new target, set timeout on target retention
         (Gear^.State and gstAttacking = 0) and
         ((GameTicks and $FF) = 17) and
         (GameTicks > Gear^.FlightTime) then // recheck hunted hog
         begin
-        gear^.State:= gear^.State or gstHHChooseTarget;
+        gear^.State:= gear^.State or gstChooseTarget;
         if targ <> nil then
              targDist:= Distance(Gear^.X-targ^.X,Gear^.Y-targ^.Y).Round
         else targDist:= 0;
@@ -1837,9 +1843,12 @@ begin
     if targ <> nil then
         begin
         trackSpeed:= _0;
-        trackSpeed.QWordValue:= Gear^.Power;
+        if isUnderwater then
+            trackSpeed.QWordValue:= Gear^.Power div 2
+        else
+            trackSpeed.QWordValue:= Gear^.Power;
         if (Gear^.X < targ^.X) and (Gear^.dX < _0_1)  then
-             Gear^.dX:= Gear^.dX+trackSpeed
+             Gear^.dX:= Gear^.dX+trackSpeed // please leave as an add.  I like the effect
         else if (Gear^.X > targ^.X) and (Gear^.dX > -_0_1) then
             Gear^.dX:= Gear^.dX-trackSpeed;
         if (Gear^.Y < targ^.Y) and (Gear^.dY < _0_1)  then
@@ -2747,7 +2756,7 @@ begin
             end;
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        HHGear^.State := HHGear^.State or gstChooseTarget;
         isCursorVisible := true;
         DeleteGear(Gear)
         end
@@ -2832,7 +2841,7 @@ begin
         begin
         HHGear^.Message := HHGear^.Message and (not gmAttack);
         HHGear^.State := HHGear^.State and (not gstAttacking);
-        HHGear^.State := HHGear^.State or gstHHChooseTarget;
+        HHGear^.State := HHGear^.State or gstChooseTarget;
         isCursorVisible := true;
         warn:= AddVisualGear(Gear^.Target.X, oy, vgtNoPlaceWarn, 0, true);
         if warn <> nil then
@@ -3131,13 +3140,6 @@ end;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const cakeh =   27;
-var
-    CakePoints: array[0..Pred(cakeh)] of record
-        x, y: hwFloat;
-    end;
-    CakeI: Longword;
-
 procedure doStepCakeExpl(Gear: PGear);
 begin
     AllInactive := false;
@@ -3204,6 +3206,7 @@ end;
 procedure doStepCakeWork(Gear: PGear);
 var
     tdx, tdy: hwFloat;
+    cakeData: PCakeData;
 begin
     AllInactive := false;
 
@@ -3222,24 +3225,31 @@ begin
         Gear^.RenderTimer := false;
         Gear^.doStep := @doStepCakeDown;
         exit
-        end;
+        end
+    else if Gear^.Timer < 6000 then
+        Gear^.RenderTimer:= true;
 
     if not cakeStep(Gear) then Gear^.doStep:= @doStepCakeFall;
 
     if Gear^.Tag = 0 then
         begin
-        CakeI := (CakeI + 1) mod cakeh;
-        tdx := CakePoints[CakeI].x - Gear^.X;
-        tdy := - CakePoints[CakeI].y + Gear^.Y;
-        CakePoints[CakeI].x := Gear^.X;
-        CakePoints[CakeI].y := Gear^.Y;
-        Gear^.DirAngle := DxDy2Angle(tdx, tdy);
+        cakeData:= PCakeData(Gear^.Data);
+        with cakeData^ do
+            begin
+            CakeI := (CakeI + 1) mod cakeh;
+            tdx := CakePoints[CakeI].x - Gear^.X;
+            tdy := - CakePoints[CakeI].y + Gear^.Y;
+            CakePoints[CakeI].x := Gear^.X;
+            CakePoints[CakeI].y := Gear^.Y;
+            Gear^.DirAngle := DxDy2Angle(tdx, tdy);
+            end;
         end;
 end;
 
 procedure doStepCakeUp(Gear: PGear);
 var
     i: Longword;
+    cakeData: PCakeData;
 begin
     AllInactive := false;
 
@@ -3250,12 +3260,16 @@ begin
 
     if Gear^.Pos = 6 then
         begin
-        for i:= 0 to Pred(cakeh) do
+        cakeData:= PCakeData(Gear^.Data);
+        with cakeData^ do
             begin
-            CakePoints[i].x := Gear^.X;
-            CakePoints[i].y := Gear^.Y
+            for i:= 0 to Pred(cakeh) do
+                begin
+                CakePoints[i].x := Gear^.X;
+                CakePoints[i].y := Gear^.Y
+                end;
+            CakeI := 0;
             end;
-        CakeI := 0;
         Gear^.doStep := @doStepCakeWork
         end
     else
@@ -3559,6 +3573,11 @@ begin
     AllInactive := false;
     dec(Gear^.Timer);
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -3575,6 +3594,7 @@ begin
 
     if (Gear^.Timer = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end
@@ -3631,7 +3651,7 @@ begin
         else if Gear^.Angle < 2048 then
             inc(Gear^.Angle)
         else fChanged := false
-    end
+        end
     else
         begin
         if ((Gear^.Message and gmLeft) <> 0) then
@@ -3706,6 +3726,7 @@ begin
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, dY, 0);
                 AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtFlame, 0, dX, -dY, 0);
                 end;
+            if HHGear <> nil then HHGear^.State := HHGear^.State and (not gstNotKickable);
             DeleteGear(Gear)
             end;
 
@@ -4962,6 +4983,11 @@ var
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -5014,6 +5040,7 @@ begin
 
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) then
         begin
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end
@@ -5049,6 +5076,11 @@ var
 begin
     AllInactive := false;
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+        begin
+        DeleteGear(gear);
+        exit
+        end;
     HedgehogChAngle(HHGear);
     gX := hwRound(Gear^.X) + GetLaunchX(amBallgun, hwSign(HHGear^.dX), HHGear^.Angle);
     gY := hwRound(Gear^.Y) + GetLaunchY(amBallgun, HHGear^.Angle);
@@ -5091,6 +5123,7 @@ begin
     if (Gear^.Health = 0) or ((HHGear^.State and gstHHDriven) = 0) or ((HHGear^.Message and gmAttack) <> 0) then
         begin
         HHGear^.Message:= HHGear^.Message and (not gmAttack);
+        HHGear^.State := HHGear^.State and (not gstNotKickable);
         DeleteGear(Gear);
         AfterAttack
         end

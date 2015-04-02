@@ -26,6 +26,7 @@ import qualified Data.ByteString.Char8 as B
 import qualified Data.List as L
 import qualified Data.Map as Map
 import Data.Maybe
+import Control.Applicative
 -------------------
 import Utils
 import CoreTypes
@@ -33,8 +34,8 @@ import HandlerUtils
 import EngineInteraction
 
 
-voted :: Bool -> Reader (ClientIndex, IRnC) [Action]
-voted vote = do
+voted :: Bool -> Bool -> Reader (ClientIndex, IRnC) [Action]
+voted forced vote = do
     cl <- thisClient
     rm <- thisRoom
     uid <- liftM clUID thisClient
@@ -43,12 +44,15 @@ voted vote = do
         Nothing -> 
             return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "There's no voting going on"]]
         Just voting ->
-            if uid `L.notElem` entitledToVote voting then
+            if (not forced) && (uid `L.notElem` entitledToVote voting) then
                 return []
-            else if uid `L.elem` map fst (votes voting) then
+            else if (not forced) && (uid `L.elem` map fst (votes voting)) then
                 return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "You already have voted"]]
+            else if forced && (not $ isAdministrator cl) then
+                return []
             else
-                actOnVoting $ voting{votes = (uid, vote):votes voting}
+                ((:) (AnswerClients [sendChan cl] ["CHAT", "[server]", loc "Your vote counted"]))
+                <$> (actOnVoting $ voting{votes = (uid, vote):votes voting})
 
     where
     actOnVoting :: Voting -> Reader (ClientIndex, IRnC) [Action]
@@ -57,9 +61,9 @@ voted vote = do
         let totalV = length $ entitledToVote vt 
         let successV = totalV `div` 2 + 1
 
-        if length contra > totalV - successV then
+        if (forced && not vote) || (length contra > totalV - successV) then
             closeVoting
-        else if length pro >= successV then do
+        else if (forced && vote) || (length pro >= successV) then do
             a <- act $ voteType vt
             c <- closeVoting
             return $ c ++ a
@@ -117,10 +121,11 @@ voted vote = do
         let answers = concatMap (\t -> 
                 [ModifyRoom $ modifyTeam t{hhnum = h}
                 , AnswerClients chans ["HH_NUM", teamname t, showB h]]
-                )
-                $
+                ) $ if length curteams * h > 48 then [] else curteams
+            ;
+            curteams =
                 if isJust $ gameInfo rm then
-                    teamsAtStart . fromJust . gameInfo $ rm 
+                    teamsAtStart . fromJust . gameInfo $ rm
                 else
                     teams rm
 

@@ -79,6 +79,7 @@
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 ------------------
 -- Got Variables?
@@ -102,6 +103,8 @@ local currCount = 0
 local specialPointsX = {}
 local specialPointsY = {}
 local specialPointsCount = 0
+
+local TeamRope = false
 
 --------------------------
 -- hog and team tracking variales
@@ -151,6 +154,13 @@ local RoundHasChanged
 -------------------
 -- general methods
 -------------------
+
+function onParameters()
+    parseParams()
+    if params["teamrope"] ~= nil then
+        TeamRope = true
+    end
+end
 
 function RebuildTeamInfo()
 
@@ -713,12 +723,14 @@ function onGearAdd(gear)
                 hhs[numhhs] = gear
                 numhhs = numhhs + 1
                 SetEffect(gear, heResurrectable, 1)
-        end
-
-        if GetGearType(gear) == gtAirAttack then
+        elseif GetGearType(gear) == gtAirAttack then
                 cGear = gear
+        elseif GetGearType(gear) == gtRope and TeamRope then
+            SetTag(gear,1)
+            SetGearValues(gear,nil,nil,nil,nil,nil,nil,nil,nil,nil,nil,GetClanColor(GetHogClan(CurrentHedgehog)))
+        elseif GetGearType(gear) == gtAirMine then
+            DeleteGear(gear)
         end
-
 end
 
 function onGearDelete(gear)
@@ -742,13 +754,14 @@ function onAchievementsDeclaration()
     usedPortal = usedWeapons[amPortalGun] ~= nil
     usedSaucer = usedWeapons[amJetpack] ~= nil
     
+    usedWeapons[amNothing] = nil
     usedWeapons[amRope] = nil
     usedWeapons[amPortalGun] = nil
     usedWeapons[amJetpack] = nil
 
     usedOther = next(usedWeapons) ~= nil
 
-    if usedOther then -- smth besides skip, rope, portal or saucer used
+    if usedOther then -- smth besides nothing, skip, rope, portal or saucer used
         raceType = "unknown race"
     elseif usedRope and not usedPortal and not usedSaucer then
         raceType = "rope race"

@@ -369,27 +369,41 @@ QLayout * PageScheme::bodyLayoutDefinition()
     glBSLayout->addWidget(SB_Explosives,13,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("% Get Away Time"));
+    l->setText(QLabel::tr("Air Mines"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,14,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconTime.png"));
+    l->setPixmap(QPixmap(":/res/iconMine.png")); // TODO: icon
     glBSLayout->addWidget(l,14,1,1,1);
-    SB_GetAwayTime = new QSpinBox(gbBasicSettings);
-    SB_GetAwayTime->setRange(0, 999);
-    SB_GetAwayTime->setValue(100);
-    SB_GetAwayTime->setSingleStep(25);
-    glBSLayout->addWidget(SB_GetAwayTime,14,2,1,1);
+    SB_AirMines = new QSpinBox(gbBasicSettings);
+    SB_AirMines->setRange(0, 200);
+    SB_AirMines->setValue(0);
+    SB_AirMines->setSingleStep(5);
+    glBSLayout->addWidget(SB_AirMines,14,2,1,1);
 
     l = new QLabel(gbBasicSettings);
-    l->setText(QLabel::tr("World Edge"));
+    l->setText(QLabel::tr("% Get Away Time"));
     l->setWordWrap(true);
     glBSLayout->addWidget(l,15,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
-    l->setPixmap(QPixmap(":/res/iconEarth.png"));
+    l->setPixmap(QPixmap(":/res/iconTime.png"));
     glBSLayout->addWidget(l,15,1,1,1);
+    SB_GetAwayTime = new QSpinBox(gbBasicSettings);
+    SB_GetAwayTime->setRange(0, 999);
+    SB_GetAwayTime->setValue(100);
+    SB_GetAwayTime->setSingleStep(25);
+    glBSLayout->addWidget(SB_GetAwayTime,15,2,1,1);
+
+    l = new QLabel(gbBasicSettings);
+    l->setText(QLabel::tr("World Edge"));
+    l->setWordWrap(true);
+    glBSLayout->addWidget(l,16,0,1,1);
+    l = new QLabel(gbBasicSettings);
+    l->setFixedSize(32,32);
+    l->setPixmap(QPixmap(":/res/iconEarth.png"));
+    glBSLayout->addWidget(l,16,1,1,1);
 
     CB_WorldEdge = new QComboBox(gbBasicSettings);
     CB_WorldEdge->insertItem(0, tr("None (Default)"));
@@ -397,21 +411,21 @@ QLayout * PageScheme::bodyLayoutDefinition()
     CB_WorldEdge->insertItem(2, tr("Bounce (Edges reflect)"));
     CB_WorldEdge->insertItem(3, tr("Sea (Edges connect to sea)"));
     /* CB_WorldEdge->insertItem(4, tr("Skybox")); */
-    glBSLayout->addWidget(CB_WorldEdge,15,2,1,1);
+    glBSLayout->addWidget(CB_WorldEdge,16,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
     l->setText(QLabel::tr("Script parameter"));
     l->setWordWrap(true);
-    glBSLayout->addWidget(l,16,0,1,1);
+    glBSLayout->addWidget(l,17,0,1,1);
     l = new QLabel(gbBasicSettings);
     l->setFixedSize(32,32);
     l->setPixmap(QPixmap(":/res/iconBox.png"));
-    glBSLayout->addWidget(l,16,1,1,1);
+    glBSLayout->addWidget(l,17,1,1,1);
 
     LE_ScriptParam = new QLineEdit(gbBasicSettings);
     LE_ScriptParam->setMaxLength(240);
-    glBSLayout->addWidget(LE_ScriptParam,16,2,1,1);
+    glBSLayout->addWidget(LE_ScriptParam,17,2,1,1);
 
 
     l = new QLabel(gbBasicSettings);
@@ -497,14 +511,15 @@ void PageScheme::setModel(QAbstractItemModel * model)
     mapper->addMapping(SB_Mines, 32);
     mapper->addMapping(SB_MineDuds, 33);
     mapper->addMapping(SB_Explosives, 34);
-    mapper->addMapping(SB_HealthCrates, 35);
-    mapper->addMapping(SB_CrateHealth, 36);
-    mapper->addMapping(SB_WaterRise, 37);
-    mapper->addMapping(SB_HealthDecrease, 38);
-    mapper->addMapping(SB_RopeModifier, 39);
-    mapper->addMapping(SB_GetAwayTime, 40);
-    mapper->addMapping(CB_WorldEdge, 41, "currentIndex");
-    mapper->addMapping(LE_ScriptParam, 42);
+    mapper->addMapping(SB_AirMines, 35);
+    mapper->addMapping(SB_HealthCrates, 36);
+    mapper->addMapping(SB_CrateHealth, 37);
+    mapper->addMapping(SB_WaterRise, 38);
+    mapper->addMapping(SB_HealthDecrease, 39);
+    mapper->addMapping(SB_RopeModifier, 40);
+    mapper->addMapping(SB_GetAwayTime, 41);
+    mapper->addMapping(CB_WorldEdge, 42, "currentIndex");
+    mapper->addMapping(LE_ScriptParam, 43);
 
     mapper->toFirst();
 }

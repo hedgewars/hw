@@ -71,11 +71,14 @@ handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
         h "WATCH" f = return [QueryReplay f]
         h "FIX" _ = handleCmd ["FIX"]
         h "UNFIX" _ = handleCmd ["UNFIX"]
-        h "GREETING" msg = handleCmd ["GREETING", msg]
+        h "GREETING" msg | not $ B.null msg = handleCmd ["GREETING", msg]
         h "CALLVOTE" msg | B.null msg = handleCmd ["CALLVOTE"]
                          | otherwise = let (c, p) = extractParameters msg in
                                            if B.null p then handleCmd ["CALLVOTE", c] else handleCmd ["CALLVOTE", c, p]
-        h "VOTE" msg = handleCmd ["VOTE", upperCase msg]
+        h "VOTE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg]
+        h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
+        h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
+        h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)

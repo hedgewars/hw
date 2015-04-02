@@ -82,7 +82,7 @@ if (Land[LandY, landX] and lfIndestructible) = 0 then
             inc(drawPixelBG);
         end
         else if ((Land[landY, landX] and lfObject) <> 0) or (((LandPixels[pixelY, pixelX] and AMask) shr AShift) < 255) then
-            LandPixels[pixelY, pixelX]:= LandPixels[pixelY, pixelX] and (not AMASK)
+            LandPixels[pixelY, pixelX]:= ExplosionBorderColorNoA
     end;
 end;
 
@@ -199,7 +199,7 @@ begin
             begin
             calculatePixelsCoordinates(i, y, px, py);
             if ((Land[y, i] and lfIndestructible) = 0) and (not disableLandBack or (Land[y, i] > 255))  then
-                LandPixels[py, px]:= LandPixels[py, px] and (not AMASK);
+                LandPixels[py, px]:= ExplosionBorderColorNoA;
             end;
     icePixel:
         for i:= fromPix to toPix do
@@ -920,7 +920,68 @@ begin
     Despeckle:= false
 end;
 
+// a bit of AA for explosions
 procedure Smooth(X, Y: LongInt);
+var c, r, g, b, a, i: integer;
+    nx, ny: LongInt;
+    pixel: LongWord;
+begin
+
+// only AA inwards
+if (Land[Y, X] and lfDamaged) = 0 then
+    exit;
+
+// check location
+if (Y <= LongInt(topY) + 1) or (Y >= LAND_HEIGHT-2)
+or (X <= LongInt(leftX) + 1) or (X >= LongInt(rightX) - 1) then
+    exit;
+
+// counter for neighbor pixels that are not known to be undamaged
+c:= 8;
+
+// accumalating rgba value of relevant pixels here
+r:= 0;
+g:= 0;
+b:= 0;
+a:= 0;
+
+// iterate over all neighbor pixels (also itself, will be skipped anyway)
+for nx:= X-1 to X+1 do
+    for ny:= Y-1 to Y+1 do
+        // only consider undamaged neighbors (also leads to skipping itself)
+        if (Land[ny, nx] and lfDamaged) = 0 then
+            begin
+            pixel:= LandPixels[ny, nx];
+            inc(r, (pixel and RMask) shr RShift);
+            inc(g, (pixel and GMask) shr GShift);
+            inc(b, (pixel and BMask) shr BShift);
+            inc(a, (pixel and AMask) shr AShift);
+            dec(c);
+            end;
+
+// nothing do to if all neighbors damaged
+if c < 1 then
+    exit;
+
+// use explosion color for damaged pixels
+for i:= 1 to c do
+    begin
+    inc(r, ExplosionBorderColorR);
+    inc(g, ExplosionBorderColorG);
+    inc(b, ExplosionBorderColorB);
+    inc(a, 255);
+    end;
+
+// set resulting color value based on average of all neighbors
+r:= r div 8;
+g:= g div 8;
+b:= b div 8;
+a:= a div 8;
+LandPixels[y,x]:= (r shl RShift) or (g shl GShift) or (b shl BShift) or (a shl AShift);
+
+end;
+
+procedure Smooth_oldImpl(X, Y: LongInt);
 begin
 // a bit of AA for explosions
 if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
@@ -939,12 +1000,14 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
                                 (((((LandPixels[y,x] and GMask shr GShift) div 2)+((ExplosionBorderColor and GMask) shr GShift) div 2) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) div 2)+((ExplosionBorderColor and BMask) shr BShift) div 2) and $FF) shl BShift) or ($FF shl AShift)
             end;
+{
         if (Land[y, x-1] = lfObject) then
             Land[y,x]:= lfObject
         else if (Land[y, x+1] = lfObject) then
             Land[y,x]:= lfObject
         else
             Land[y,x]:= lfBasic;
+}
         end
     else if ((((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y+1,x-1] and lfDamaged) <> 0) and ((Land[y+2,x] and lfDamaged) <> 0))
     or (((Land[y, x-1] and lfDamaged) <> 0) and ((Land[y-1,x-1] and lfDamaged) <> 0) and ((Land[y-2,x] and lfDamaged) <> 0))
@@ -965,6 +1028,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
                                 (((((LandPixels[y,x] and GMask shr GShift) * 3 div 4)+((ExplosionBorderColor and GMask) shr GShift) div 4) and $FF) shl GShift) or
                                 (((((LandPixels[y,x] and BMask shr BShift) * 3 div 4)+((ExplosionBorderColor and BMask) shr BShift) div 4) and $FF) shl BShift) or ($FF shl AShift)
             end;
+{
         if (Land[y, x-1] = lfObject) then
             Land[y, x]:= lfObject
         else if (Land[y, x+1] = lfObject) then
@@ -974,6 +1038,7 @@ if (Land[Y, X] = 0) and (Y > LongInt(topY) + 1) and
         else if (Land[y-1, x] = lfObject) then
         Land[y, x]:= lfObject
         else Land[y,x]:= lfBasic
+}
         end
     end
 else if ((cReducedQuality and rqBlurryLand) = 0) and ((LandPixels[Y, X] and AMask) = AMask)
@@ -1060,16 +1125,18 @@ while recheck do
         end;
      end;
 
-for y:= 0 to LAND_HEIGHT div 32 - 1 do
-    for x:= 0 to LAND_WIDTH div 32 - 1 do
-        if LandDirty[y, x] <> 0 then
-            begin
-            ty:= y * 32;
-            tx:= x * 32;
-            for yy:= ty to ty + 31 do
-                for xx:= tx to tx + 31 do
-                    Smooth(xx,yy)
-            end;
+// smooth explosion borders (except if land is blurry)
+if (cReducedQuality and rqBlurryLand) = 0 then
+    for y:= 0 to LAND_HEIGHT div 32 - 1 do
+        for x:= 0 to LAND_WIDTH div 32 - 1 do
+            if LandDirty[y, x] <> 0 then
+                begin
+                ty:= y * 32;
+                tx:= x * 32;
+                for yy:= ty to ty + 31 do
+                    for xx:= tx to tx + 31 do
+                        Smooth(xx,yy)
+                end;
 
 for y:= 0 to LAND_HEIGHT div 32 - 1 do
     for x:= 0 to LAND_WIDTH div 32 - 1 do

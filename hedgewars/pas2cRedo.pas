@@ -66,12 +66,12 @@ var
 
     Now : function : integer;
 
-    new, dispose, FillChar, Move : procedure;
+    new, dispose, FillChar, Insert, Delete, Move : procedure;
 
     trunc, round : function : integer;
     abs, sqr : function : integer;
 
-    StrPas, FormatDateTime, copy, delete, str, PosS, trim, LowerCase : function : shortstring;
+    StrPas, FormatDateTime, copy, str, PosS, trim, LowerCase : function : shortstring;
     pos : function : integer;
     StrToInt : function : integer;
     SetLength, SetLengthA, val, StrDispose, StrCopy : procedure;

@@ -9,6 +9,8 @@ find_package(OpenGL)
 
 find_package(Qt5 COMPONENTS Core Qml Quick Gui)
 
+qt5_add_resources(qresources qmlFrontend.qrc)
+
 add_executable(hedgewars WIN32
     main
     hwengine
@@ -16,6 +18,7 @@ add_executable(hedgewars WIN32
     themeiconprovider
     qtquick2applicationviewer/qtquick2applicationviewer
     flib.h
+    ${qresources}
     )
 
 include_directories(${OPENGL_INCLUDE_DIR})

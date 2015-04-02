@@ -27,6 +27,7 @@ procedure freeModule;
 
 implementation
 uses uCommands, uTypes, uVariables, uIO, uDebug, uConsts, uScript, uUtils, SDLh, uWorld, uRandom, uCaptions
+    , uVisualGearsList
      {$IFDEF USE_VIDEO_RECORDING}, uVideoRec {$ENDIF};
 
 var prevGState: TGameState = gsConfirm;
@@ -748,6 +749,11 @@ begin
 cLandMines:= StrToInt(s)
 end;
 
+procedure chAirMines(var s: shortstring);
+begin
+cAirMines:= StrToInt(s)
+end;
+
 procedure chExplosives(var s: shortstring);
 begin
 cExplosives:= StrToInt(s)
@@ -771,7 +777,14 @@ end;
 
 procedure chFastUntilLag(var s: shortstring);
 begin
-fastUntilLag:= StrToInt(s) <> 0
+    fastUntilLag:= StrToInt(s) <> 0;
+
+    if not fastUntilLag then
+    begin
+        // update health bars and the wind indicator
+        AddVisualGear(0, 0, vgtTeamHealthSorter);
+        AddVisualGear(0, 0, vgtSmoothWindBar)
+    end
 end;
 
 procedure chCampVar(var s:shortstring);
@@ -837,6 +850,7 @@ begin
     RegisterVariable('getawaytime' , @chGetAwayTime , false);
     RegisterVariable('minedudpct',@chMineDudPercent, false);
     RegisterVariable('minesnum', @chLandMines     , false);
+    RegisterVariable('airmines', @chAirMines      , false);
     RegisterVariable('explosives',@chExplosives    , false);
     RegisterVariable('gmflags' , @chGameFlags      , false);
     RegisterVariable('turntime', @chHedgehogTurnTime, false);

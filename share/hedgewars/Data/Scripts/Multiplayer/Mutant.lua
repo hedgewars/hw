@@ -21,6 +21,7 @@ ___ .-. .-. ___  ___ | |_    .---. ___ .-. | |_
 
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
+HedgewarsScriptLoad("/Scripts/Params.lua")
 
 --[[
     MUTANT SCRIPT
@@ -399,7 +400,7 @@ end
 
 function setAIHints()
     for i = 0, #hhs do
-        if mutant == nil or hhs[i] == mutant or CurrentHedgehog == mutant then
+        if mutant == nil or hhs[i] == mutant or CurrentHedgehog == mutant or getGearValue(CurrentHedgehog, "Feeder") then
             SetGearAIHints(hhs[i], aihUsual)
         else
             SetGearAIHints(hhs[i], aihDoesntMatter)
@@ -605,6 +606,11 @@ function onGearDelete(gear)
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
         trackDeletion(gear)
     end
+end
+
+function onParameters()
+    parseParams()
+    winScore = tonumber(params["winscore"]) or winScore
 end
 
 --[[

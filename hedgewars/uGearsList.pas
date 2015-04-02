@@ -41,6 +41,7 @@ const
 (*       gtHedgehog *) , amNothing
 (*           gtMine *) , amMine
 (*           gtCase *) , amNothing
+(*        gtAirMine *) , amAirMine
 (*     gtExplosives *) , amNothing
 (*        gtGrenade *) , amGrenade
 (*          gtShell *) , amBazooka
@@ -103,7 +104,6 @@ const
 (*        gtAddAmmo *) , amNothing
 (*  gtGenericFaller *) , amNothing
 (*          gtKnife *) , amKnife
-(*        gtAirMine *) , amAirMine
     );
 
 
@@ -166,6 +166,7 @@ end;
 function AddGear(X, Y: LongInt; Kind: TGearType; State: Longword; dX, dY: hwFloat; Timer: LongWord): PGear;
 var gear: PGear;
     //c: byte;
+    cakeData: PCakeData;
 begin
 inc(GCounter);
 
@@ -193,6 +194,7 @@ gear^.Density:= _1;
 gear^.AmmoType:= GearKindAmmoTypeMap[Kind];
 gear^.CollisionMask:= $FFFF;
 gear^.Tint:= $FFFFFFFF;
+gear^.Data:= nil;
 
 if CurrentHedgehog <> nil then
     begin
@@ -342,6 +344,8 @@ case Kind of
                 gear^.Radius:= 3;
                 gear^.Friction:= _450 * _0_01 * cRopePercent;
                 RopePoints.Count:= 0;
+                gear^.Tint:= $D8D8D8FF;
+                gear^.Tag:= 0; // normal rope render
                 end;
         gtMine: begin
                 gear^.ImpactSound:= sndMineImpact;
@@ -364,14 +368,14 @@ case Kind of
                 gear^.ImpactSound:= sndDenied;
                 gear^.nImpactSounds:= 1;
                 gear^.Health:= 30;
-                gear^.State:= gear^.State or gstMoving or gstNoGravity;
+                gear^.State:= gear^.State or gstMoving or gstNoGravity or gstSubmersible;
                 gear^.Radius:= 8;
                 gear^.Elasticity:= _0_55;
                 gear^.Friction:= _0_995;
                 gear^.Density:= _1;
                 gear^.Angle:= 175; // Radius at which air bombs will start "seeking". $FFFFFFFF = unlimited. check is skipped.
                 gear^.Power:= cMaxWindSpeed.QWordValue div 2; // hwFloat converted. 1/2 g default. defines the "seek" speed when a gear is in range.
-                gear^.Pos:= cMaxWindSpeed.QWordValue; // air friction. slows it down when not hitting stuff
+                gear^.Pos:= cMaxWindSpeed.QWordValue * 3 div 2; // air friction. slows it down when not hitting stuff
                 gear^.Karma:= 30; // damage
                 if gear^.Timer = 0 then
                     begin
@@ -500,12 +504,14 @@ case Kind of
                 gear^.Health:= 2048;
                 gear^.Radius:= 7;
                 gear^.Z:= cOnHHZ;
-                gear^.RenderTimer:= true;
+                gear^.RenderTimer:= false;
                 gear^.DirAngle:= -90 * hwSign(Gear^.dX);
                 if not dX.isNegative then
                     gear^.Angle:= 1
                 else
-                    gear^.Angle:= 3
+                    gear^.Angle:= 3;
+                New(cakeData);
+                gear^.Data:= Pointer(cakeData);
                 end;
  gtHellishBomb: begin
                 gear^.ImpactSound:= sndHellishImpact1;
@@ -658,6 +664,7 @@ procedure DeleteGear(Gear: PGear);
 var team: PTeam;
     t,i: Longword;
     k: boolean;
+    cakeData: PCakeData;
 begin
 
 ScriptCall('onGearDelete', gear^.uid);
@@ -672,6 +679,12 @@ if (Gear^.Kind = gtPortal) then
     if (Gear^.LinkedGear <> nil) then
         if (Gear^.LinkedGear^.LinkedGear = Gear) then
             Gear^.LinkedGear^.LinkedGear:= nil;
+    end
+else if Gear^.Kind = gtCake then
+    begin
+        cakeData:= PCakeData(Gear^.Data);
+        Dispose(cakeData);
+        cakeData:= nil;
     end
 else if Gear^.Kind = gtHedgehog then
     (*

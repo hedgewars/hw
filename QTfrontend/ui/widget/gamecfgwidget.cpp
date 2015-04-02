@@ -316,18 +316,19 @@ QByteArray GameCFGWidget::getFullConfig() const
     bcfg << QString("e$minesnum %1").arg(schemeData(32).toInt()).toUtf8();
     bcfg << QString("e$minedudpct %1").arg(schemeData(33).toInt()).toUtf8();
     bcfg << QString("e$explosives %1").arg(schemeData(34).toInt()).toUtf8();
-    bcfg << QString("e$healthprob %1").arg(schemeData(35).toInt()).toUtf8();
-    bcfg << QString("e$hcaseamount %1").arg(schemeData(36).toInt()).toUtf8();
-    bcfg << QString("e$waterrise %1").arg(schemeData(37).toInt()).toUtf8();
-    bcfg << QString("e$healthdec %1").arg(schemeData(38).toInt()).toUtf8();
-    bcfg << QString("e$ropepct %1").arg(schemeData(39).toInt()).toUtf8();
-    bcfg << QString("e$getawaytime %1").arg(schemeData(40).toInt()).toUtf8();
-    bcfg << QString("e$worldedge %1").arg(schemeData(41).toInt()).toUtf8();
+    bcfg << QString("e$airmines %1").arg(schemeData(35).toInt()).toUtf8();
+    bcfg << QString("e$healthprob %1").arg(schemeData(36).toInt()).toUtf8();
+    bcfg << QString("e$hcaseamount %1").arg(schemeData(37).toInt()).toUtf8();
+    bcfg << QString("e$waterrise %1").arg(schemeData(38).toInt()).toUtf8();
+    bcfg << QString("e$healthdec %1").arg(schemeData(39).toInt()).toUtf8();
+    bcfg << QString("e$ropepct %1").arg(schemeData(40).toInt()).toUtf8();
+    bcfg << QString("e$getawaytime %1").arg(schemeData(41).toInt()).toUtf8();
+    bcfg << QString("e$worldedge %1").arg(schemeData(42).toInt()).toUtf8();
     bcfg << QString("e$template_filter %1").arg(pMapContainer->getTemplateFilter()).toUtf8();
     bcfg << QString("e$feature_size %1").arg(pMapContainer->getFeatureSize()).toUtf8();
     bcfg << QString("e$mapgen %1").arg(mapgen).toUtf8();
-    if(!schemeData(42).isNull())
-        bcfg << QString("e$scriptparam %1").arg(schemeData(42).toString()).toUtf8();
+    if(!schemeData(43).isNull())
+        bcfg << QString("e$scriptparam %1").arg(schemeData(43).toString()).toUtf8();
 
 
     switch (mapgen)
@@ -527,8 +528,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = GameSchemes->findText(pMapContainer->getCurrentScheme());
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (pMapContainer->getCurrentWeapons() == "locked")
@@ -542,8 +543,8 @@ void GameCFGWidget::mapChanged(const QString & value)
             int num = WeaponsName->findText(pMapContainer->getCurrentWeapons());
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (pMapContainer->getCurrentScheme() != "locked" && pMapContainer->getCurrentWeapons() != "locked")
@@ -586,7 +587,7 @@ void GameCFGWidget::schemeChanged(int index)
 
     if (sl.size() >= 42)
     {
-        sl[42].prepend('!');
+        sl[sl.size()-1].prepend('!');
         emit paramChanged("SCHEME", sl);  // this is a stupid hack for the fact that SCHEME is being sent once, empty. Still need to find out why.
     }
 
@@ -628,8 +629,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = GameSchemes->findText(scheme);
             if (num != -1)
                 GameSchemes->setCurrentIndex(num);
-            else
-                GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
+            //else
+            //    GameSchemes->setCurrentIndex(GameSchemes->findText("Default"));
         }
 
         if (weapons == "locked")
@@ -643,8 +644,8 @@ void GameCFGWidget::scriptChanged(int index)
             int num = WeaponsName->findText(weapons);
             if (num != -1)
                 WeaponsName->setCurrentIndex(num);
-            else
-                WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
+            //else
+            //    WeaponsName->setCurrentIndex(WeaponsName->findText("Default"));
         }
 
         if (scheme != "locked" && weapons != "locked")

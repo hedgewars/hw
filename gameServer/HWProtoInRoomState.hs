@@ -125,7 +125,7 @@ handleCmd_inRoom ("ADD_TEAM" : tName : color : grave : fort : voicepack : flag :
                     defaultHedgehogsNumber rm
         let newTeam = clNick `seq` TeamInfo clNick tName teamColor grave fort voicepack flag isRegistered dif hhNum (hhsList hhsInfo)
         return $
-            if not . null . drop (maxTeams rm - 1) $ roomTeams then
+            if not . null . drop (teamsNumberLimit rm - 1) $ roomTeams then
                 [Warning $ loc "too many teams"]
             else if canAddNumber roomTeams <= 0 then
                 [Warning $ loc "too many hedgehogs"]
@@ -389,6 +389,15 @@ handleCmd_inRoom ("RND":rs) = do
     s <- roomClientsChans
     return [AnswerClients s ["CHAT", n, B.unwords $ "/rnd" : rs], Random s rs]
 
+
+handleCmd_inRoom ["MAXTEAMS", n] = roomAdminOnly $ do
+    cl <- thisClient
+    let m = readInt_ n
+    if m < 2 || m > 8 then
+        return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "/maxteams: specify number from 2 to 8"]]
+    else
+        return [ModifyRoom (\r -> r{teamsNumberLimit = m})]
+
 handleCmd_inRoom ["FIX"] = serverAdminOnly $
     return [ModifyRoom (\r -> r{isSpecial = True})]
 
@@ -473,11 +482,11 @@ handleCmd_inRoom ["CALLVOTE", "HEDGEHOGS", hhs] = do
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", loc "callvote hedgehogs: specify number from 1 to 8"]]
 
 
-handleCmd_inRoom ["VOTE", m] = do
+handleCmd_inRoom ("VOTE" : m : p) = do
     cl <- thisClient
     let b = if m == "YES" then Just True else if m == "NO" then Just False else Nothing
     if isJust b then
-        voted (fromJust b)
+        voted (p == ["FORCE"]) (fromJust b)
         else
         return [AnswerClients [sendChan cl] ["CHAT", "[server]", "vote: 'yes' or 'no'"]]
 

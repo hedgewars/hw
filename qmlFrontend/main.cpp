@@ -13,12 +13,14 @@ int main(int argc, char *argv[])
 
     HWEngine::exposeToQML();
 
+    Q_INIT_RESOURCE(qmlFrontend);
+
     QtQuick2ApplicationViewer viewer;
 
     viewer.engine()->addImageProvider(QLatin1String("preview"), new PreviewImageProvider());
     viewer.engine()->addImageProvider(QLatin1String("theme"), new ThemeIconProvider());
 
-    viewer.setMainQmlFile(QStringLiteral("qml/qmlFrontend/main.qml"));
+    viewer.setSource(QUrl("qrc:/qml/qmlFrontend/main.qml"));
     viewer.showExpanded();
 
     return app.exec();

@@ -17,7 +17,6 @@
  *)
 
 {$INCLUDE "options.inc"}
-{$IF GLunit = GL}{$DEFINE GLunit:=GL,GLext}{$ENDIF}
 
 unit uWorld;
 interface
@@ -53,7 +52,6 @@ uses
     , uVisualGears
     , uChat
     , uLandTexture
-    , GLunit
     , uVariables
     , uUtils
     , uTextures
@@ -857,154 +855,28 @@ begin
     else
         ZoomValue:= zoom;
 
-    // Sky
-    glClear(GL_COLOR_BUFFER_BIT);
-    //glPushMatrix;
-    //glScalef(1.0, 1.0, 1.0);
-
     if (not isPaused) and (not isAFK) and (GameType <> gmtRecord) then
         MoveCamera;
 
     if cStereoMode = smNone then
         begin
-        glClear(GL_COLOR_BUFFER_BIT);
+        RenderClear();
         DrawWorldStereo(Lag, rmDefault)
         end
 {$IFDEF USE_S3D_RENDERING}
-    else if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
-        begin
-        // create left fb
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framel);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        DrawWorldStereo(Lag, rmLeftEye);
-
-        // create right fb
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framer);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        DrawWorldStereo(0, rmRightEye);
-
-        // detatch drawing from fbs
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        SetScale(cDefaultZoomLevel);
-
-        // draw left frame
-        glBindTexture(GL_TEXTURE_2D, texl);
-        glBegin(GL_QUADS);
-            if cStereoMode = smHorizontal then
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(0, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(0, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, 0);
-                end
-            else
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, 0);
-                end;
-        glEnd();
-
-        // draw right frame
-        glBindTexture(GL_TEXTURE_2D, texr);
-        glBegin(GL_QUADS);
-            if cStereoMode = smHorizontal then
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(0, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, 0);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(0, 0);
-                end
-            else
-                begin
-                glTexCoord2f(0.0, 0.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight);
-                glTexCoord2f(1.0, 0.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight);
-                glTexCoord2f(1.0, 1.0);
-                glVertex2d(cScreenWidth / 2, cScreenHeight / 2);
-                glTexCoord2f(0.0, 1.0);
-                glVertex2d(cScreenWidth / -2, cScreenHeight / 2);
-                end;
-        glEnd();
-        SetScale(zoom);
-        end
     else
         begin
-        // clear scene
-        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-        glClear(GL_COLOR_BUFFER_BIT or GL_DEPTH_BUFFER_BIT);
-        // draw left eye in red channel only
-        if cStereoMode = smGreenRed then
-            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
-        else if cStereoMode = smBlueRed then
-            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
-        else if cStereoMode = smCyanRed then
-            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
-        else
-            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+        // draw frame for left eye
+        RenderClear(rmLeftEye);
         DrawWorldStereo(Lag, rmLeftEye);
-        // draw right eye in selected channel(s) only
-        if cStereoMode = smRedGreen then
-            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE)
-        else if cStereoMode = smRedBlue then
-            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE)
-        else if cStereoMode = smRedCyan then
-            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE)
-        else
-            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
-        DrawWorldStereo(Lag, rmRightEye);
-        end
-{$ENDIF}
-end;
 
-procedure ChangeDepth(rm: TRenderMode; d: GLfloat);
-var tmp: LongInt;
-begin
-{$IFNDEF USE_S3D_RENDERING}
-    rm:= rm; d:= d; tmp:= tmp; // avoid hint
-{$ELSE}
-    d:= d / 5;
-    if rm = rmDefault then
-        exit
-    else if rm = rmLeftEye then
-        d:= -d;
-    cStereoDepth:= cStereoDepth + d;
-    openglTranslProjMatrix(d, 0, 0);
-    tmp:= round(d / cScaleFactor * cScreenWidth);
-    ViewLeftX := ViewLeftX  - tmp;
-    ViewRightX:= ViewRightX - tmp;
+        // draw frame for right eye
+        RenderClear(rmRightEye);
+        DrawWorldStereo(0, rmRightEye);
+        end;
 {$ENDIF}
-end;
 
-procedure ResetDepth(rm: TRenderMode);
-var tmp: LongInt;
-begin
-{$IFNDEF USE_S3D_RENDERING}
-    rm:= rm; tmp:= tmp; // avoid hint
-{$ELSE}
-    if rm = rmDefault then
-        exit;
-    openglTranslProjMatrix(-cStereoDepth, 0, 0);
-    tmp:= round(cStereoDepth / cScaleFactor * cScreenWidth);
-    ViewLeftX := ViewLeftX  + tmp;
-    ViewRightX:= ViewRightX + tmp;
-    cStereoDepth:= 0;
-{$ENDIF}
+FinishRender();
 end;
 
 procedure RenderWorldEdge;
@@ -1291,8 +1163,8 @@ var i, t: LongInt;
     tdx, tdy: Double;
     s: shortstring;
     offsetX, offsetY, screenBottom: LongInt;
-    VertexBuffer: array [0..3] of TVertex2f;
     replicateToLeft, replicateToRight, tmp: boolean;
+    a: Byte;
 begin
 if WorldEdge <> weWrap then
     begin
@@ -1723,27 +1595,16 @@ if ScreenFade <> sfNone then
             end;
     if ScreenFade <> sfNone then
         begin
+        r.x:= ViewLeftX;
+        r.y:= ViewTopY;
+        r.w:= ViewWidth;
+        r.h:= ViewHeight;
+
         case ScreenFade of
-            sfToBlack, sfFromBlack: Tint(0, 0, 0, ScreenFadeValue * 255 div 1000);
-            sfToWhite, sfFromWhite: Tint($FF, $FF, $FF, ScreenFadeValue * 255 div 1000);
+            sfToBlack, sfFromBlack: DrawRect(r, 0, 0, 0, ScreenFadeValue * 255 div 1000, true);
+            sfToWhite, sfFromWhite: DrawRect(r, $FF, $FF, $FF, ScreenFadeValue * 255 div 1000, true);
             end;
 
-        VertexBuffer[0].X:= -cScreenWidth;
-        VertexBuffer[0].Y:= cScreenHeight;
-        VertexBuffer[1].X:= -cScreenWidth;
-        VertexBuffer[1].Y:= 0;
-        VertexBuffer[2].X:= cScreenWidth;
-        VertexBuffer[2].Y:= 0;
-        VertexBuffer[3].X:= cScreenWidth;
-        VertexBuffer[3].Y:= cScreenHeight;
-
-        EnableTexture(false);
-
-        SetVertexPointer(@VertexBuffer[0], 4);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, High(VertexBuffer) - Low(VertexBuffer) + 1);
-
-        EnableTexture(true);
-        untint;
         if not isFirstFrame and ((ScreenFadeValue = 0) or (ScreenFadeValue = sfMax)) then
             ScreenFade:= sfNone
         end
@@ -1764,15 +1625,11 @@ if flagPrerecording then
         end;
     DrawTexture( -(cScreenWidth shr 1) + 50, 20, recTexture);
 
+    //a:= Byte(Round(127*(1 + sin(RealTicks*0.007))));
+    a:= Byte(min(255, abs(-255 + ((RealTicks div 2) and 511))));
+
     // draw red circle
-    glDisable(GL_TEXTURE_2D);
-    Tint($FF, $00, $00, Byte(Round(127*(1 + sin(SDL_GetTicks()*0.007)))));
-    glBegin(GL_POLYGON);
-    for i:= 0 to 20 do
-        glVertex2f(-(cScreenWidth shr 1) + 30 + sin(i*2*Pi/20)*10, 35 + cos(i*2*Pi/20)*10);
-    glEnd();
-    untint;
-    glEnable(GL_TEXTURE_2D);
+    DrawCircleFilled(-(cScreenWidth shr 1) + 30, 35, 10, $FF, $00, $00, a);
     end;
 {$ENDIF}
 
@@ -1808,7 +1665,7 @@ if isCursorVisible then
         begin
         if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
         with CurrentHedgehog^ do
-            if (Gear <> nil) and ((Gear^.State and gstHHChooseTarget) <> 0) then
+            if (Gear <> nil) and ((Gear^.State and gstChooseTarget) <> 0) then
                 begin
             if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
                 DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);

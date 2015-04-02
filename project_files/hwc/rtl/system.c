@@ -73,6 +73,46 @@ astring fpcrtl_copyA(astring s, Integer index, Integer count) {
     return result;
 }
 
+void fpcrtl_insert__vars(string255 *src, string255 *dst, SizeInt index) {
+    int num_insert;
+    int num_shift;
+    int num_preshift;
+
+    // nothing to do if empty string is inserted or index invalid
+    if ((src->len == 0) || (index < 1) || (index > 255)) {
+        return;
+    }
+
+    num_insert = src->len;
+    // number of chars from start of destination string to end of insertion
+    num_preshift = index - 1 + num_insert;
+
+    // don't overflow on insert
+    if (num_preshift > 255) {
+        num_insert = 255 - (index - 1);
+        num_shift = 0;
+    }
+    // shift trailing chars
+    else {
+        // number of bytes to be shifted
+        num_shift = dst->len - (index - 1);
+
+        if (num_shift > 0) {
+            // don't overflow when shifting
+            if (num_shift + num_preshift > 255)
+                num_shift = 255 - num_preshift;
+
+            // time to move some bytes!
+            memmove(dst->str + num_preshift, dst->str + index - 1, num_shift);
+        }
+    }
+
+    // actual byte insertion
+    memmove(dst->str + index - 1, src->str, num_insert);
+    // store new length
+    dst->len = num_shift + num_preshift;
+}
+
 void __attribute__((overloadable)) fpcrtl_delete__vars(string255 *s, SizeInt index, SizeInt count) {
     // number of chars to be move
     int num_move;
@@ -298,7 +338,7 @@ void __attribute__((overloadable)) fpcrtl_val__vars(string255 s, LongWord *a)
 LongInt fpcrtl_random(LongInt l) {
     // random(0) is undefined in docs but effectively returns 0 in free pascal
     if (l == 0) {
-        printf("WARNING: random(0) called!");
+        printf("WARNING: random(0) called!\n");
         return 0;
     }
     return (LongInt) (rand() / (double) RAND_MAX * l);

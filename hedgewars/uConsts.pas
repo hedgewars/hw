@@ -215,7 +215,7 @@ const
     gstAttacked       = $00000008;
     gstAttacking      = $00000010;
     gstCollision      = $00000020;
-    gstHHChooseTarget = $00000040;
+    gstChooseTarget   = $00000040;
     gstHHJumping      = $00000100;
     gsttmpFlag        = $00000200;
     gstHHThinking     = $00000800;

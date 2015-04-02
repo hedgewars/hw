@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/qmlFrontend/First.qml</file>
+        <file>qml/qmlFrontend/GameConfig.qml</file>
+        <file>qml/qmlFrontend/HWButton.qml</file>
+        <file>qml/qmlFrontend/HWComboBox.qml</file>
+        <file>qml/qmlFrontend/LocalGame.qml</file>
+        <file>qml/qmlFrontend/main.qml</file>
+    </qresource>
+</RCC>

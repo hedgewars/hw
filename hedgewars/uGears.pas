@@ -33,7 +33,7 @@ unit uGears;
  *       effects are called "Visual Gears" and defined in the respective unit!
  *)
 interface
-uses uConsts, uFloat, uTypes, uChat;
+uses uConsts, uFloat, uTypes, uChat, uCollisions;
 
 procedure initModule;
 procedure freeModule;
@@ -394,7 +394,7 @@ else if ((GameFlags and gfInfAttack) <> 0) then
             if (CurrentHedgehog^.Gear^.State and gstAttacked <> 0)
             and (Ammoz[CurrentHedgehog^.CurAmmoType].Ammo.Propz and ammoprop_NeedTarget <> 0) then
                 begin
-                CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstHHChooseTarget;
+                CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State or gstChooseTarget;
                 isCursorVisible := true
                 end;
             CurrentHedgehog^.Gear^.State:= CurrentHedgehog^.Gear^.State and (not gstAttacked);
@@ -551,6 +551,9 @@ while Gear <> nil do
         end;
     Gear:= Gear^.NextGear
     end;
+
+if SpeechHogNumber > 0 then
+    DrawHHOrder();
 end;
 
 procedure FreeGearsList;
@@ -567,7 +570,7 @@ begin
 end;
 
 procedure AddMiscGears;
-var p,i,j, unplaced: Longword;
+var p,i,j,t,h,unplaced: Longword;
     rx, ry: LongInt;
     rdx, rdy: hwFloat;
     Gear: PGear;
@@ -603,6 +606,70 @@ while (i < cExplosives) and (unplaced < 4) do
 
     inc(i)
     end;
+
+i:= 0;
+j:= 0;
+p:= 0; // 0 searching, 1 bad position, 2 added.
+unplaced:= 0;
+if cAirMines > 0 then
+    Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0);
+while (i < cAirMines) and (j < 1000*cAirMines) do
+    begin
+    p:= 0;
+    if hasBorder then
+        begin
+        rx:= leftX+GetRandom(rightX-leftX-16)+8;
+        ry:= topY+GetRandom(LAND_HEIGHT-topY-16)+8
+        end
+    else
+        begin
+        rx:= leftX+GetRandom(rightX-leftX+400)-200;
+        ry:= topY+GetRandom(LAND_HEIGHT-topY+400)-200
+        end;
+    Gear^.X:= int2hwFloat(rx);
+    Gear^.Y:= int2hwFloat(ry);
+    if CheckLandValue(rx, ry, $FFFF) and
+       (TestCollisionYwithGear(Gear,-1) = 0) and
+       (TestCollisionXwithGear(Gear, 1) = 0) and
+       (TestCollisionXwithGear(Gear,-1) = 0) and
+       (TestCollisionYwithGear(Gear, 1) = 0) then
+        begin
+        t:= 0;
+        while (t < TeamsCount) and (p = 0) do
+            begin
+            h:= 0;
+            with TeamsArray[t]^ do
+                while (h < cMaxHHIndex) and (p = 0) do
+                    begin
+                    if (Hedgehogs[h].Gear <> nil) then
+                        begin
+                        rdx:=Gear^.X-Hedgehogs[h].Gear^.X;
+                        rdy:=Gear^.Y-Hedgehogs[h].Gear^.Y;
+                        if (Gear^.Angle < $FFFFFFFF) and
+                            ((rdx.Round+rdy.Round < Gear^.Angle) and
+                            (hwRound(hwSqr(rdx) + hwSqr(rdy)) < sqr(Gear^.Angle))) then
+                            begin
+// Debug line. Remove later
+// AddFileLog('Too Close to Hog @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+
+                            p:= 1
+                            end
+                        end;
+                    inc(h)
+                    end;
+            inc(t)
+            end;
+        if p = 0 then
+            begin
+            inc(i);
+            AddFileLog('Placed Air Mine @ (' + inttostr(rx) + ',' + inttostr(ry) + ')');
+            if i < cAirMines then
+                Gear:= AddGear(0, 0, gtAirMine, 0, _0, _0, 0)
+            end
+        end;
+    inc(j)
+    end;
+if p <> 0 then DeleteGear(Gear);
 
 if (GameFlags and gfLowGravity) <> 0 then
     begin
@@ -930,6 +997,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepHedgehog,
             @doStepMine,
             @doStepCase,
+            @doStepAirMine,
             @doStepCase,
             @doStepBomb,
             @doStepShell,
@@ -991,8 +1059,7 @@ const handlers: array[TGearType] of TGearStepProcedure = (
             @doStepIceGun,
             @doStepAddAmmo,
             @doStepGenericFaller,
-            @doStepKnife,
-            @doStepAirMine);
+            @doStepKnife);
 begin
     doStepHandlers:= handlers;
 

@@ -553,7 +553,12 @@ while not pfsEOF(f) do
             c2.g:= t;
             c2.b:= t
             end;
-        ExplosionBorderColor:= (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift) or AMask;
+        ExplosionBorderColorR:= c2.r;
+        ExplosionBorderColorG:= c2.g;
+        ExplosionBorderColorB:= c2.b;
+        ExplosionBorderColorNoA:=
+            (c2.r shl RShift) or (c2.g shl GShift) or (c2.b shl BShift);
+        ExplosionBorderColor:= ExplosionBorderColorNoA or AMask;
         end
     else if key = 'water-top' then
         begin

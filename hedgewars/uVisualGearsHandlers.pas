@@ -515,7 +515,8 @@ end;
 procedure doStepTeamHealthSorterWork(Gear: PVisualGear; Steps: Longword);
 var i, t, h: LongInt;
 begin
-for t:= 1 to min(Steps, Gear^.Timer) do
+if currsorter = Gear then
+  for t:= 1 to min(Steps, Gear^.Timer) do
     begin
     dec(Gear^.Timer);
     if (Gear^.Timer and 15) = 0 then
@@ -872,31 +873,47 @@ with Gear^ do
 end;
 
 ////////////////////////////////////////////////////////////////////////////////
+var
+    currwindbar: PVisualGear = nil;
+
+procedure doStepSmoothWindBarWork(Gear: PVisualGear; Steps: Longword);
+begin
+    if currwindbar = Gear then
+    begin
+    inc(Gear^.Timer, Steps);
+
+    while Gear^.Timer >= 10 do
+        begin
+        dec(Gear^.Timer, 10);
+        if WindBarWidth < Gear^.Tag then
+            inc(WindBarWidth)
+        else if WindBarWidth > Gear^.Tag then
+            dec(WindBarWidth);
+        end;
+    if cWindspeedf > Gear^.dAngle then
+        begin
+        cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
+        if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+        end
+    else if cWindspeedf < Gear^.dAngle then
+        begin
+        cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
+        if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
+        end;
+    end;
+
+    if ((WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)) or (currwindbar <> Gear) then
+    begin
+        if currwindbar = Gear then currwindbar:= nil;
+        DeleteVisualGear(Gear)
+    end
+end;
+
 procedure doStepSmoothWindBar(Gear: PVisualGear; Steps: Longword);
 begin
-inc(Gear^.Timer, Steps);
-
-while Gear^.Timer >= 10 do
-    begin
-    dec(Gear^.Timer, 10);
-    if WindBarWidth < Gear^.Tag then
-        inc(WindBarWidth)
-    else if WindBarWidth > Gear^.Tag then
-        dec(WindBarWidth);
-    end;
-if cWindspeedf > Gear^.dAngle then
-    begin
-    cWindspeedf := cWindspeedf - Gear^.Angle*Steps;
-    if cWindspeedf < Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
-    end
-else if cWindspeedf < Gear^.dAngle then
-    begin
-    cWindspeedf := cWindspeedf + Gear^.Angle*Steps;
-    if cWindspeedf > Gear^.dAngle then cWindspeedf:= Gear^.dAngle;
-    end;
-
-if (WindBarWidth = Gear^.Tag) and (cWindspeedf = Gear^.dAngle)  then
-    DeleteVisualGear(Gear)
+    currwindbar:= Gear;
+    Gear^.doStep:= @doStepSmoothWindBarWork;
+    doStepSmoothWindBarWork(Gear, Steps)
 end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure doStepStraightShot(Gear: PVisualGear; Steps: Longword);

@@ -123,7 +123,11 @@ var
     isAudioMuted     : boolean;
 
     // originally typed consts
-    ExplosionBorderColor: LongWord;
+    ExplosionBorderColorR,
+    ExplosionBorderColorG,
+    ExplosionBorderColorB,
+    ExplosionBorderColorNoA,
+    ExplosionBorderColor:  LongWord;
     IceColor            : LongWord;
     IceEdgeColor        : LongWord;
     WaterOpacity: byte;
@@ -146,6 +150,7 @@ var
 
     cCaseFactor     : Longword;
     cLandMines      : Longword;
+    cAirMines       : Longword;
     cExplosives     : Longword;
 
     cScriptName     : shortstring;
@@ -213,6 +218,8 @@ var
     WorldDx: LongInt;
     WorldDy: LongInt;
 
+    SpeechHogNumber: LongInt;
+
     // for tracking the limits of the visible grid based on cScaleFactor
     ViewLeftX, ViewRightX, ViewBottomY, ViewTopY, ViewWidth, ViewHeight: LongInt;
 
@@ -232,6 +239,8 @@ var
     mobileRecord: TMobileRecord;
 
     MaxTextureSize: LongInt;
+
+    ChatPasteBuffer: shortstring;
 
 /////////////////////////////////////
 //Buttons
@@ -2532,7 +2541,11 @@ begin
     SDWaterOpacity:= $80;
 
     SDTint:= $80;
+    ExplosionBorderColorR:= 80;
+    ExplosionBorderColorG:= 80;
+    ExplosionBorderColorB:= 80;
     ExplosionBorderColor:= $FF808080;
+    ExplosionBorderColorNoA:= ExplosionBorderColor and (not AMask);
     IceColor:= ($44 shl RShift) or ($97 shl GShift) or ($A9 shl BShift) or ($A0 shl AShift);
     IceEdgeColor:= ($8A shl RShift) or ($AF shl GShift) or ($B2 shl BShift) or ($FF shl AShift);
 
@@ -2602,6 +2615,7 @@ begin
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
     cLandMines      := 4;
+    cAirMines       := 4;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
@@ -2666,6 +2680,7 @@ begin
     if cFullscreenHeight = 0 then
         cFullscreenHeight:= min(cWindowedHeight, 480);
 
+    SpeechHogNumber:= -1;
 
     LuaGoals:= '';
     cMapName:= '';
@@ -2678,6 +2693,8 @@ begin
     cStereoDepth:= 0;
     cViewLimitsDebug:= false;
     AprilOne := false;
+
+    ChatPasteBuffer:= '';
 end;
 
 procedure freeModule;
