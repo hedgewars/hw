@@ -237,7 +237,8 @@ case Kind of
                 end;
   gtMelonPiece: begin
                 gear^.AdvBounce:= 1;
-                gear^.Density:= _2
+                gear^.Density:= _2;
+                gear^.Radius:= 4
                 end;
     gtHedgehog: begin
                 gear^.AdvBounce:= 1;
