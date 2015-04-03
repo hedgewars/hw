@@ -2516,7 +2516,7 @@ begin
     if hwRound(HHGear^.Y) <= Gear^.Tag - 2 then
         begin
         Gear^.Tag := hwRound(HHGear^.Y);
-        DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4, 2);
+        DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4+2, 2);
         HHGear^.State := HHGear^.State or gstNoDamage;
         Gear^.Y := HHGear^.Y;
         AmmoShove(Gear, 30, 40);
