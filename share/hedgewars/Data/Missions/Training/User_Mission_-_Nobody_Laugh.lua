@@ -96,7 +96,7 @@ function onGameStart()
 	AddAmmo(hhs[2],amWhip,1)
 
 	for i = 3, 10 do
-		AddAmmo(hhs[i], amDeagle, 100)
+		AddAmmo(hhs[i], amDEagle, 100)
 		AddAmmo(hhs[i], amShotgun, 100)
 		AddAmmo(hhs[i], amGrenade, 100)
 		AddAmmo(hhs[i], amBazooka, 100)
