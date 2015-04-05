@@ -895,6 +895,7 @@ if isFalling then
         if land and lfBouncy <> 0 then
             begin
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
             Gear^.dX:= Gear^.dX * _0_8
             end;
         if (land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0) then
@@ -935,6 +936,7 @@ else
         if land and lfBouncy <> 0 then
             begin
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
             // hogs for some reason have very low friction. slippery little buggers
             Gear^.dX:= Gear^.dX * _0_8
             end;
@@ -1072,6 +1074,7 @@ if (Gear^.State and gstMoving) <> 0 then
         land:= TestCollisionYwithXYShift(Gear, 0, 1, 1);
         if land and lfBouncy <> 0 then
             doStepFallingGear(Gear);
+            Gear^.AdvBounce:= 1;
 
         if (land <> 0) and ((land and lfBouncy = 0) or (Gear^.State and gstCollision <> 0)) then
             begin

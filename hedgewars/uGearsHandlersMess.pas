@@ -437,7 +437,26 @@ begin
             Gear^.dY := tdX*cElastic
             end;
 
-        Gear^.dY.isNegative := not tdY.isNegative;
+        Gear^.dX.isNegative:= tdX.isNegative;
+        Gear^.dY.isNegative:= tdY.isNegative;
+        if (collV > 0) and (collH > 0) and (not tdX.isNegative) and (not tdY.isNegative) then
+            begin
+            Gear^.dX.isNegative := true;
+            Gear^.dY.isNegative := true
+            end
+        else if (collV > 0) and (collH < 0) and (tdX.isNegative or tdY.isNegative) then
+            begin
+            Gear^.dY.isNegative := not tdY.isNegative;
+            if not tdY.isNegative then Gear^.dX.isNegative := false
+            end
+        else if (collV < 0) and (collH > 0) and (not tdX.isNegative) then
+            begin
+            Gear^.dX.isNegative := true;
+            Gear^.dY.isNegative := false
+            end
+        else if (collV < 0) and (collH < 0) and tdX.isNegative and tdY.isNegative then
+            Gear^.dX.isNegative := false;
+       
         isFalling := false;
         Gear^.AdvBounce := 10;
         end;
@@ -463,7 +482,10 @@ begin
         Gear^.State := Gear^.State or gstMoving;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
+        begin
         Gear^.State := Gear^.State or gstCollision;
+        AddFileLog('no more bounce for you!');
+        end;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
@@ -3484,6 +3506,7 @@ begin
         begin
         StopSoundChan(Gear^.SoundChannel);
         Gear^.Tag := 1;
+        Gear^.AdvBounce:= 50;
         Gear^.doStep := @doStepDrill
         end;
 
