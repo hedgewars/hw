@@ -2218,13 +2218,13 @@ begin
         if not lua_isnoneornil(L, 6) then
 	     flipHoriz := lua_toboolean(L, 6)
         else flipHoriz := false;
-        if not lua_isnoneornil(L, 6) then
-	     flipVert := lua_toboolean(L, 6)
+        if not lua_isnoneornil(L, 7) then
+	     flipVert := lua_toboolean(L, 7)
         else flipVert := false;
         lf:= 0;
 
         // accept any amount of landflags, loop is never executed if n>6
-        for i:= 6 to n do
+        for i:= 8 to n do
             lf:= lf or lua_tointeger(L, i);
 
         n:= LuaToSpriteOrd(L, 3, call, params);
