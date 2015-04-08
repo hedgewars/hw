@@ -2202,19 +2202,29 @@ end;
 function lc_placesprite(L : Plua_State) : LongInt; Cdecl;
 var spr   : TSprite;
     lf    : Word;
+    tint  : LongWord;
     i, n : LongInt;
-    placed: boolean;
+    placed, behind, flipHoriz, flipVert : boolean;
 const
     call = 'PlaceSprite';
-    params = 'x, y, sprite, frameIdx [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, tint, behind, flipHoriz, flipVert, [, landFlag, ... ]';
 begin
     placed:= false;
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
+        if not lua_isnoneornil(L, 5) then
+	     tint := lua_tointeger(L, 5)
+        else tint := $FFFFFFFF;
+        if not lua_isnoneornil(L, 6) then
+	     flipHoriz := lua_toboolean(L, 6)
+        else flipHoriz := false;
+        if not lua_isnoneornil(L, 6) then
+	     flipVert := lua_toboolean(L, 6)
+        else flipVert := false;
         lf:= 0;
 
-        // accept any amount of landflags, loop is never executed if n>5
-        for i:= 5 to n do
+        // accept any amount of landflags, loop is never executed if n>6
+        for i:= 6 to n do
             lf:= lf or lua_tointeger(L, i);
 
         n:= LuaToSpriteOrd(L, 3, call, params);
@@ -2227,7 +2237,7 @@ begin
                 placed:= ForcePlaceOnLand(
                     lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
                     lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
-                    spr, lua_tointeger(L, 4), lf);
+                    spr, lua_tointeger(L, 4), lf, tint, behind, flipHoriz, flipVert);
             end;
         end;
 

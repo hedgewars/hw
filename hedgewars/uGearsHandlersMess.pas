@@ -2851,7 +2851,7 @@ begin
 
     for y:= ty downto ty - ytol do
         begin
-        if TryPlaceOnLand(lx, y, sprHHTelepMask, 0, false, not hasBorder, false, 0) then
+        if TryPlaceOnLand(lx, y, sprHHTelepMask, 0, false, not hasBorder, false, false, false, false, 0, $FFFFFFFF) then
             begin
             valid:= true;
             break;
