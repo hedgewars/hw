@@ -141,7 +141,7 @@ Rectangle {
         width: 256
         height: 64
 
-        model: ammoModel
+        model: ammosModel
         delegate: Rectangle {
             height: 25
             width: 100

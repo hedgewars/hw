@@ -23,6 +23,7 @@ function rwopsOpenWrite(fname: shortstring): PSDL_RWops;
 
 function pfsOpenRead(fname: shortstring): PFSFile;
 function pfsClose(f: PFSFile): boolean;
+function pfsSeek(f: PFSFile; pos: QWord): boolean;
 
 procedure pfsReadLn(f: PFSFile; var s: shortstring);
 procedure pfsReadLnA(f: PFSFile; var s: ansistring);
@@ -50,6 +51,7 @@ function PHYSFS_mount(newDir, mountPoint: PChar; appendToPath: LongBool) : LongB
 function PHYSFS_openRead(fname: PChar): PFSFile; cdecl; external PhysfsLibName;
 function PHYSFS_eof(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_readBytes(f: PFSFile; buffer: pointer; len: Int64): Int64; cdecl; external PhysfsLibName;
+function PHYSFS_seek(f: PFSFile; pos: QWord): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_close(f: PFSFile): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_exists(fname: PChar): LongBool; cdecl; external PhysfsLibName;
 function PHYSFS_getLastError(): PChar; cdecl; external PhysfsLibName;
@@ -85,6 +87,11 @@ end;
 function pfsClose(f: PFSFile): boolean;
 begin
     exit(PHYSFS_close(f))
+end;
+
+function pfsSeek(f: PFSFile; pos: QWord): boolean;
+begin
+    exit(PHYSFS_seek(f, 0));
 end;
 
 function pfsExists(fname: shortstring): boolean;

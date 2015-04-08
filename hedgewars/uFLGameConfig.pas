@@ -14,13 +14,14 @@ function  getSeed: PChar; cdecl;
 procedure setTheme(themeName: PChar); cdecl;
 procedure setScript(scriptName: PChar); cdecl;
 procedure setScheme(schemeName: PChar); cdecl;
+procedure setAmmo(ammoName: PChar); cdecl;
 
 procedure tryAddTeam(teamName: PChar); cdecl;
 procedure tryRemoveTeam(teamName: PChar); cdecl;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 
 implementation
-uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes;
+uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo;
 
 var guiCallbackPointer: pointer;
     guiCallbackFunction: TGUICallback;
@@ -35,6 +36,7 @@ type
             theme: shortstring;
             script: shortstring;
             scheme: TScheme;
+            ammo: ansistring;
             mapgen: Longint;
             gameType: TGameType;
             teams: array[0..7] of TTeam;
@@ -334,6 +336,15 @@ begin
 
     if scheme <> nil then
         currentConfig.scheme:= scheme^
+end;
+
+procedure setAmmo(ammoName: PChar); cdecl;
+var ammo: PAmmo;
+begin
+    ammo:= ammoByName(ammoName);
+
+    if ammo <> nil then
+        currentConfig.ammo:= ammo^.ammoStr
 end;
 
 end.

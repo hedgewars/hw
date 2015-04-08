@@ -46,6 +46,7 @@ uses hwengine
     , uFLTeams
     , uFLScripts
     , uFLSchemes
+    , uFLAmmo
     ;
 
 {$INCLUDE "config.inc"}
@@ -159,11 +160,13 @@ exports
     setTheme,
     setScript,
     setScheme,
+    setAmmo,
     getThemesList,
     freeThemesList,
     getThemeIcon,
     getScriptsList,
     getSchemesList,
+    getAmmosList,
     getTeamsList,
     tryAddTeam,
     tryRemoveTeam,

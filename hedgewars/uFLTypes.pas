@@ -75,6 +75,11 @@ type
             , worldedge: LongInt
         end;
     PScheme = ^TScheme;
+    TAmmo = record
+            ammoName: shortstring;
+            ammoStr: shortstring;
+        end;
+    PAmmo = ^TAmmo;
 
 implementation
 

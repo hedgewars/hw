@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void setTheme(const QString & theme);
     Q_INVOKABLE void setScript(const QString & script);
     Q_INVOKABLE void setScheme(const QString & scheme);
+    Q_INVOKABLE void setAmmo(const QString & ammo);
 
     Q_INVOKABLE void tryAddTeam(const QString & teamName);
     Q_INVOKABLE void tryRemoveTeam(const QString & teamName);

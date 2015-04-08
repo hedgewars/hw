@@ -60,7 +60,6 @@ begin
     while tmp^ <> nil do
     begin
         s:= shortstring(tmp^);
-        writeln(stderr, '> ', s);
         l:= length(s);
         if (l > 4) and (copy(s, l - 3, 4) = '.lua') then inc(scriptsNumber);
         inc(tmp)

@@ -16,6 +16,7 @@ extern "C" {
     setTheme_t *flibSetTheme;
     setScript_t *flibSetScript;
     setScheme_t *flibSetScheme;
+    setAmmo_t *flibSetAmmo;
     getPreview_t *flibGetPreview;
     runQuickGame_t *flibRunQuickGame;
     runLocalGame_t *flibRunLocalGame;
@@ -27,6 +28,7 @@ extern "C" {
     getThemeIcon_t *flibGetThemeIcon;
     getScriptsList_t *flibGetScriptsList;
     getSchemesList_t *flibGetSchemesList;
+    getAmmosList_t *flibGetAmmosList;
     getTeamsList_t *flibGetTeamsList;
     tryAddTeam_t * flibTryAddTeam;
     tryRemoveTeam_t * flibTryRemoveTeam;
@@ -59,6 +61,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibSetTheme = (setTheme_t*) hwlib.resolve("setTheme");
     flibSetScript = (setScript_t*) hwlib.resolve("setScript");
     flibSetScheme = (setScheme_t*) hwlib.resolve("setScheme");
+    flibSetAmmo = (setAmmo_t*) hwlib.resolve("setAmmo");
 
     flibGetThemesList = (getThemesList_t*) hwlib.resolve("getThemesList");
     flibFreeThemesList = (freeThemesList_t*) hwlib.resolve("freeThemesList");
@@ -66,6 +69,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
 
     flibGetScriptsList = (getScriptsList_t*) hwlib.resolve("getScriptsList");
     flibGetSchemesList = (getSchemesList_t*) hwlib.resolve("getSchemesList");
+    flibGetAmmosList = (getAmmosList_t*) hwlib.resolve("getAmmosList");
 
     flibResetGameConfig = (resetGameConfig_t*) hwlib.resolve("resetGameConfig");
     flibGetTeamsList = (getTeamsList_t*) hwlib.resolve("getTeamsList");
@@ -194,6 +198,13 @@ void HWEngine::fillModels()
         resultModel << QString::fromUtf8(*i);
 
     m_engine->rootContext()->setContextProperty("schemesModel", QVariant::fromValue(resultModel));
+
+    // ammos model
+    resultModel.clear();
+    for (char **i = flibGetAmmosList(); *i != NULL; i++)
+        resultModel << QString::fromUtf8(*i);
+
+    m_engine->rootContext()->setContextProperty("ammosModel", QVariant::fromValue(resultModel));
 }
 
 void HWEngine::getTeamsList()
@@ -239,4 +250,9 @@ void HWEngine::setScript(const QString &script)
 void HWEngine::setScheme(const QString &scheme)
 {
     flibSetScheme(scheme.toUtf8().constData());
+}
+
+void HWEngine::setAmmo(const QString &ammo)
+{
+    flibSetAmmo(ammo.toUtf8().constData());
 }
