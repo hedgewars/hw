@@ -1217,7 +1217,7 @@ function PlaceObject(x,y)
 			PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Rubber Placement Mode" then
-			PlaceSprite(x,y, sprAmRubber, CGR, lfBouncy)
+			PlaceSprite(x,y, sprAmRubber, CGR, nil, nil, nil, nil, lfBouncy)
 			--PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = CGR
 		elseif cat[cIndex] == "Target Placement Mode" then
@@ -1320,7 +1320,7 @@ function PlaceObject(x,y)
 
 		elseif cat[cIndex] == "Sprite Placement Mode" then
 
-			PlaceSprite(x,y, reducedSpriteIDArray[pIndex], 1, landType)
+			PlaceSprite(x,y, reducedSpriteIDArray[pIndex], 1, nil, nil, nil, nil, landType)
 			--PlaceGirder(x, y, CGR)
 			placedSpec[placedCount] = reducedSpriteTextArray[pIndex]
 			placedSuperSpec[placedCount] = landType
