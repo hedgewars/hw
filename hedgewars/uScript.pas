@@ -2213,18 +2213,21 @@ begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
         if not lua_isnoneornil(L, 5) then
-	     tint := lua_tointeger(L, 5)
+	        tint := lua_tointeger(L, 5)
         else tint := $FFFFFFFF;
         if not lua_isnoneornil(L, 6) then
-	     flipHoriz := lua_toboolean(L, 6)
-        else flipHoriz := false;
+	        behind := lua_toboolean(L, 6)
+        else behind := false;
         if not lua_isnoneornil(L, 7) then
-	     flipVert := lua_toboolean(L, 7)
+	        flipHoriz := lua_toboolean(L, 7)
+        else flipHoriz := false;
+        if not lua_isnoneornil(L, 8) then
+	        flipVert := lua_toboolean(L, 8)
         else flipVert := false;
         lf:= 0;
 
         // accept any amount of landflags, loop is never executed if n>6
-        for i:= 8 to n do
+        for i:= 9 to n do
             lf:= lf or lua_tointeger(L, i);
 
         n:= LuaToSpriteOrd(L, 3, call, params);
@@ -2243,6 +2246,48 @@ begin
 
     lua_pushboolean(L, placed);
     lc_placesprite:= 1
+end;
+
+function lc_erasesprite(L : Plua_State) : LongInt; Cdecl;
+var spr   : TSprite;
+    lf    : Word;
+    i, n : LongInt;
+    eraseOnLFMatch, flipHoriz, flipVert : boolean;
+const
+    call = 'EraseSprite';
+    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, flipHoriz, flipVert, [, landFlag, ... ]';
+begin
+    if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
+        begin
+        if not lua_isnoneornil(L, 5) then
+	        eraseOnLFMatch := lua_toboolean(L, 5)
+        else eraseOnLFMatch := false;
+        if not lua_isnoneornil(L, 6) then
+	        flipHoriz := lua_toboolean(L, 6)
+        else flipHoriz := false;
+        if not lua_isnoneornil(L, 7) then
+	        flipVert := lua_toboolean(L, 7)
+        else flipVert := false;
+        lf:= 0;
+
+        // accept any amount of landflags, loop is never executed if n>6
+        for i:= 8 to n do
+            lf:= lf or lua_tointeger(L, i);
+
+        n:= LuaToSpriteOrd(L, 3, call, params);
+        if n >= 0 then
+            begin
+            spr:= TSprite(n);
+            if SpritesData[spr].Surface = nil then
+                LuaError(call + ': ' + EnumToStr(spr) + ' cannot be placed! (required information not loaded)' )
+            else
+                EraseLand(
+                    lua_tointeger(L, 1) - SpritesData[spr].Width div 2,
+                    lua_tointeger(L, 2) - SpritesData[spr].Height div 2,
+                    spr, lua_tointeger(L, 4), lf, eraseOnLFMatch, flipHoriz, flipVert);
+            end;
+        end;
+    lc_erasesprite:= 0
 end;
 
 function lc_placegirder(L : Plua_State) : LongInt; Cdecl;
@@ -3166,6 +3211,7 @@ lua_register(luaState, _P'GetUserDataPath', @lc_getuserdatapath);
 lua_register(luaState, _P'MapHasBorder', @lc_maphasborder);
 lua_register(luaState, _P'GetHogHat', @lc_gethoghat);
 lua_register(luaState, _P'SetHogHat', @lc_sethoghat);
+lua_register(luaState, _P'EraseSprite', @lc_erasesprite);
 lua_register(luaState, _P'PlaceSprite', @lc_placesprite);
 lua_register(luaState, _P'PlaceGirder', @lc_placegirder);
 lua_register(luaState, _P'GetCurAmmoType', @lc_getcurammotype);
