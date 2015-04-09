@@ -51,6 +51,7 @@ function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; d
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, flipHoriz, flipVert: boolean);
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -739,8 +740,8 @@ case bpp of
                        SDL_UnlockSurface(Image);
                    exit
                    end;
-        p:= PByteArray(@(p^[Image^.pitch]));
-        end;
+        p:= PByteArray(@(p^[Image^.pitch]))
+        end
     end;
 
 TryPlaceOnLand:= true;
@@ -813,6 +814,88 @@ if Obj = sprAmGirder then
 else if Obj = sprAmRubber then
     ScriptCall('onRubberPlacement', frame, cpX + w div 2, cpY + h div 2);
 
+end;
+
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, flipHoriz, flipVert: boolean);
+var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
+    p: PByteArray;
+    Image: PSDL_Surface;
+    pixel: LongWord;
+begin
+numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
+
+TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+
+Image:= SpritesData[Obj].Surface;
+w:= SpritesData[Obj].Width;
+h:= SpritesData[Obj].Height;
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
+row:= Frame mod numFramesFirstCol;
+col:= Frame div numFramesFirstCol;
+
+if SDL_MustLock(Image) then
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
+
+bpp:= Image^.format^.BytesPerPixel;
+TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+// Check that sprite fits free space
+p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+case bpp of
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
+                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) then
+                   begin
+                   if SDL_MustLock(Image) then
+                       SDL_UnlockSurface(Image);
+                   exit
+                   end;
+        p:= PByteArray(@(p^[Image^.pitch]))
+        end
+    end;
+
+// Checked, now place
+p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+case bpp of
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
+                   begin
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    begin
+                    gX:= cpX + x;
+                    gY:= cpY + y;
+                    end
+                else
+                    begin
+                    gX:= (cpX + x) div 2;
+                    gY:= (cpY + y) div 2;
+                    end;
+		        if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
+                    (PLongword(@(p^[x * 4]))^ and AMask <> 0) then
+                    begin
+                    LandPixels[gY, gX]:= 0;
+                    Land[cpY + y, cpX + x]:= 0
+                    end
+                end;
+        p:= PByteArray(@(p^[Image^.pitch]));
+        end;
+    end;
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
+
+x:= Max(cpX, leftX);
+w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
+y:= Max(cpY, topY);
+h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
+UpdateLandTexture(x, w, y, h, true)
 end;
 
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
