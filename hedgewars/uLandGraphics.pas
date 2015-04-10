@@ -51,7 +51,7 @@ function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; d
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
-procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, flipHoriz, flipVert: boolean);
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -816,11 +816,10 @@ else if Obj = sprAmRubber then
 
 end;
 
-procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, flipHoriz, flipVert: boolean);
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
-    pixel: LongWord;
 begin
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
@@ -878,8 +877,12 @@ case bpp of
 		        if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
                     (PLongword(@(p^[x * 4]))^ and AMask <> 0) then
                     begin
-                    LandPixels[gY, gX]:= 0;
-                    Land[cpY + y, cpX + x]:= 0
+                    if not onlyEraseLF then
+                        begin
+                        LandPixels[gY, gX]:= 0;
+                        Land[cpY + y, cpX + x]:= 0
+                        end
+                    else Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] and not LandFlags
                     end
                 end;
         p:= PByteArray(@(p^[Image^.pitch]));
