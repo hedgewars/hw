@@ -25,8 +25,9 @@ import Control.Monad
 import Control.Exception
 import System.IO
 import Data.Maybe
-import Database.HDBC
-import Database.HDBC.MySQL
+import Database.MySQL.Simple
+import Database.MySQL.Simple.QueryResults
+import Database.MySQL.Simple.Result
 import Data.List (lookup)
 import qualified Data.ByteString.Char8 as B
 import Data.Word
@@ -58,45 +59,44 @@ dbInteractionLoop dbConn = forever $ do
 
     case q of
         CheckAccount clId clUid clNick _ -> do
-                statement <- prepare dbConn dbQueryAccount
-                execute statement [SqlByteString clNick]
-                result <- fetchRow statement
-                finish statement
-                let response =
-                        if isJust result then let [pass, adm, contr] = fromJust result in
-                        (
-                            clId,
-                            clUid,
-                            HasAccount
-                                (fromSql pass)
-                                (fromSql adm == Just (1 :: Int))
-                                (fromSql contr == Just (1 :: Int))
-                        )
-                        else
-                        (clId, clUid, Guest)
+                results <- query dbConn dbQueryAccount $ Only clNick
+                let response = case results of
+                        [(pass, adm, contr)] ->
+                            (
+                                clId,
+                                clUid,
+                                HasAccount
+                                    (pass)
+                                    (adm == Just (1 :: Int))
+                                    (contr == Just (1 :: Int))
+                            )
+                        _ ->
+                            (clId, clUid, Guest)
                 print response
                 hFlush stdout
 
         GetReplayName clId clUid fileId -> do
-                statement <- prepare dbConn dbQueryReplayFilename
-                execute statement [SqlByteString fileId]
-                result <- fetchRow statement
-                finish statement
-                let fn = if (isJust result) then fromJust . fromSql . head . fromJust $ result else ""
+                results <- query dbConn dbQueryReplayFilename $ Only fileId
+                let fn = if null results then "" else fromOnly $ head results
                 print (clId, clUid, ReplayName fn)
                 hFlush stdout
 
         SendStats clients rooms ->
-                run dbConn dbQueryStats [SqlInt32 $ fromIntegral clients, SqlInt32 $ fromIntegral rooms] >> return ()
+                void $ execute dbConn dbQueryStats (clients, rooms)
 --StoreAchievements (B.pack fileName) (map toPair teams) info
         StoreAchievements p fileName teams info ->
-            mapM_ (run dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
+            void $ executeMany dbConn dbQueryAchievement $ (parseStats p fileName teams) info
 
 
 readTime = read . B.unpack . B.take 19 . B.drop 8
 
 
-parseStats :: Word16 -> B.ByteString -> [(B.ByteString, B.ByteString)] -> [B.ByteString] -> [[SqlValue]]
+parseStats :: 
+    Word16 
+    -> B.ByteString 
+    -> [(B.ByteString, B.ByteString)] 
+    -> [B.ByteString] 
+    -> [(B.ByteString, B.ByteString, B.ByteString, Int, B.ByteString, B.ByteString, Int)]
 parseStats p fileName teams = ps
     where
     time = readTime fileName
@@ -104,22 +104,22 @@ parseStats p fileName teams = ps
     ps ("DRAW" : bs) = ps bs
     ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
     ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
-        [ SqlUTCTime time
-        , SqlByteString typ
-        , SqlByteString $ fromMaybe "" (lookup teamname teams)
-        , SqlInt32 (readInt_ value)
-        , SqlByteString fileName
-        , SqlByteString location
-        , SqlInt32 $ fromIntegral p
-        ] : ps bs
+        ( time
+        , typ
+        , fromMaybe "" (lookup teamname teams)
+        , readInt_ value
+        , fileName
+        , location
+        , fromIntegral p
+        ) : ps bs
     ps (b:bs) = ps bs
 
 
 dbConnectionLoop mySQLConnectionInfo =
-    Control.Exception.handle (\(e :: IOException) -> hPutStrLn stderr $ show e) $ handleSqlError $
+    Control.Exception.handle (\(e :: SomeException) -> hPutStrLn stderr $ show e) $
         bracket
-            (connectMySQL mySQLConnectionInfo)
-            disconnect
+            (connect mySQLConnectionInfo)
+            close
             dbInteractionLoop
 
 
@@ -132,6 +132,11 @@ main = do
         dbLogin <- getLine
         dbPassword <- getLine
 
-        let mySQLConnectInfo = defaultMySQLConnectInfo {mysqlHost = dbHost, mysqlDatabase = dbName, mysqlUser = dbLogin, mysqlPassword = dbPassword}
+        let mySQLConnectInfo = defaultConnectInfo {
+            connectHost = dbHost
+            , connectDatabase = dbName
+            , connectUser = dbLogin
+            , connectPassword = dbPassword
+            }
 
         dbConnectionLoop mySQLConnectInfo
