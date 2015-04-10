@@ -4213,6 +4213,7 @@ begin
 
     // destroy portal if ground it was attached too is gone
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
+    or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and lfBouncy <> 0)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
     or CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
