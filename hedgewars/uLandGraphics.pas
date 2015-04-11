@@ -875,14 +875,14 @@ case bpp of
                     gY:= (cpY + y) div 2;
                     end;
 		        if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
-                    (PLongword(@(p^[x * 4]))^ and AMask <> 0) then
+                    ((PLongword(@(p^[x * 4]))^) and AMask <> 0) then
                     begin
                     if not onlyEraseLF then
                         begin
                         LandPixels[gY, gX]:= 0;
                         Land[cpY + y, cpX + x]:= 0
                         end
-                    else Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] and not LandFlags
+                    else Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] and (not LandFlags)
                     end
                 end;
         p:= PByteArray(@(p^[Image^.pitch]));
