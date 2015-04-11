@@ -93,6 +93,7 @@ void        fpcrtl_new__vars(void **p, int size);
 #define     fpcrtl_Assigned                                 fpcrtl_assigned
 
 Integer     fpcrtl_trunc(extended n);
+Integer     fpcrtl_ceil(extended n);
 
 #define     fpcrtl_val(s, a)                                fpcrtl_val__vars(s, &(a))
 void        __attribute__((overloadable))                   fpcrtl_val__vars(string255 s, LongInt *a);
