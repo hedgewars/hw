@@ -77,7 +77,7 @@ type
     PScheme = ^TScheme;
     TAmmo = record
             ammoName: shortstring;
-            ammoStr: shortstring;
+            a, b, c, d: shortstring;
         end;
     PAmmo = ^TAmmo;
 

@@ -36,7 +36,7 @@ type
             theme: shortstring;
             script: shortstring;
             scheme: TScheme;
-            ammo: ansistring;
+            ammo: TAmmo;
             mapgen: Longint;
             gameType: TGameType;
             teams: array[0..7] of TTeam;
@@ -74,10 +74,7 @@ begin
             i:= 0;
             while (i < 8) and (teams[i].hogsNumber > 0) do
                 begin
-                    ipcToEngine('eammloadt 93919294221991210322351110012000000002111001010111110001');
-                    ipcToEngine('eammprob 04050405416006555465544647765766666661555101011154111111');
-                    ipcToEngine('eammdelay 00000000000002055000000400070040000000002200000006000200');
-                    ipcToEngine('eammreinf 13111103121111111231141111111111111112111111011111111111');
+                    sendAmmoConfig(config^.ammo);
                     ipcToEngine('eammstore');
                     sendTeamConfig(teams[i]);
                     inc(i)
@@ -344,7 +341,7 @@ begin
     ammo:= ammoByName(ammoName);
 
     if ammo <> nil then
-        currentConfig.ammo:= ammo^.ammoStr
+        currentConfig.ammo:= ammo^
 end;
 
 end.

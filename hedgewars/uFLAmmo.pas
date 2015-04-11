@@ -58,7 +58,11 @@ begin
                 ammo^.ammoName:= copy(s, 1, i - 1);
                 delete(s, 1, i);
                 // TODO: split into 4 shortstrings
-                ammo^.ammoStr:= s;
+                i:= length(s) div 4;
+                ammo^.a:= copy(s, 1, i);
+                ammo^.b:= copy(s, i + 1, i);
+                ammo^.c:= copy(s, i * 2 + 1, i);
+                ammo^.d:= copy(s, i * 3 + 1, i);
                 inc(ammo)
             end;
         end;
@@ -121,8 +125,10 @@ var i: Longword;
 begin
     with ammo do
     begin
-        //ipcToEngine('e$turntime ' + inttostr(ammo.turntime * 1000));
-        //ipcToEngine('e$minesnum ' + inttostr(ammo.minesnum));
+        ipcToEngine('eammloadt ' + ammo.a);
+        ipcToEngine('eammprob '  + ammo.b);
+        ipcToEngine('eammdelay ' + ammo.c);
+        ipcToEngine('eammreinf ' + ammo.d);
     end
 end;
 
