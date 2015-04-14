@@ -36,6 +36,8 @@ function detectMap()
             return("Racer Challenge #6")
         elseif LandDigest == "M256715557Scripts/Multiplayer/Racer.lua" then
             return("Racer Challenge #15")
+        elseif LandDigest == "M-1389184823Scripts/Multiplayer/Racer.lua" then
+            return("Racer Challenge #17")
         end
     end
 end
