@@ -34,6 +34,8 @@ public:
     Q_INVOKABLE void tryRemoveTeam(const QString & teamName);
     Q_INVOKABLE void changeTeamColor(const QString & teamName, int dir);
 
+    Q_INVOKABLE void connect(const QString & host, quint16 port);
+
 signals:
     void previewImageChanged();
     void localTeamAdded(const QString & teamName, int aiLevel);

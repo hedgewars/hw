@@ -33,6 +33,8 @@ extern "C" {
     tryAddTeam_t * flibTryAddTeam;
     tryRemoveTeam_t * flibTryRemoveTeam;
     changeTeamColor_t * flibChangeTeamColor;
+
+    connectOfficialServer_t * flibConnectOfficialServer;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -76,6 +78,8 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibTryAddTeam = (tryAddTeam_t*) hwlib.resolve("tryAddTeam");
     flibTryRemoveTeam = (tryRemoveTeam_t*) hwlib.resolve("tryRemoveTeam");
     flibChangeTeamColor = (changeTeamColor_t*) hwlib.resolve("changeTeamColor");
+
+    flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
     flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
@@ -235,6 +239,11 @@ void HWEngine::resetGameConfig()
 void HWEngine::changeTeamColor(const QString &teamName, int dir)
 {
     flibChangeTeamColor(teamName.toUtf8().constData(), dir);
+}
+
+void HWEngine::connect(const QString &host, quint16 port)
+{
+    flibConnectOfficialServer();
 }
 
 void HWEngine::setTheme(const QString &theme)

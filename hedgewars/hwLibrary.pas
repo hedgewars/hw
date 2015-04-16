@@ -47,6 +47,7 @@ uses hwengine
     , uFLScripts
     , uFLSchemes
     , uFLAmmo
+    , uFLNet
     ;
 
 {$INCLUDE "config.inc"}
@@ -109,10 +110,12 @@ procedure flibInit(localPrefix, userPrefix: PChar); cdecl;
 begin
     initIPC;
     uPhysFSLayer.initModule(localPrefix, userPrefix);
+    uFLNet.initModule;
 end;
 
 procedure flibFree; cdecl;
 begin
+    uFLNet.freeModule;
     uPhysFSLayer.freemodule;
     freeIPC;
 end;
@@ -154,6 +157,7 @@ exports
     registerGUIMessagesCallback,
     flibInit,
     flibFree,
+    //game config
     resetGameConfig,
     setSeed,
     getSeed,
@@ -171,6 +175,8 @@ exports
     tryAddTeam,
     tryRemoveTeam,
     changeTeamColor,
+    // network
+    connectOfficialServer,
 
     // dunno what these are
     RunEngine,

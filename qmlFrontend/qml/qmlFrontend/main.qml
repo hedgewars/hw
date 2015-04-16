@@ -9,6 +9,7 @@ Rectangle {
         "First"
         , "LocalGame"
         , "GameConfig"
+        , "Connect"
     ];
 
     property string  currentPage : "First";

@@ -108,6 +108,7 @@ set(engine_sources
     uFLData.pas
     uFLGameConfig.pas
     uFLIPC.pas
+    uFLNet.pas
     uFLScripts.pas
     uFLSchemes.pas
     uFLTeams.pas

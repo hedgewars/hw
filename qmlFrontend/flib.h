@@ -55,6 +55,8 @@ typedef void tryAddTeam_t(const char * teamName);
 typedef void tryRemoveTeam_t(const char * teamName);
 typedef void changeTeamColor_t(const char * teamName, int32_t dir);
 
+typedef void connectOfficialServer_t();
+
 #ifdef __cplusplus
 }
 #endif

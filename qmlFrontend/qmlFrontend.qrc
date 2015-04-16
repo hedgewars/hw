@@ -6,5 +6,6 @@
         <file>qml/qmlFrontend/HWComboBox.qml</file>
         <file>qml/qmlFrontend/LocalGame.qml</file>
         <file>qml/qmlFrontend/main.qml</file>
+        <file>qml/qmlFrontend/Connect.qml</file>
     </qresource>
 </RCC>

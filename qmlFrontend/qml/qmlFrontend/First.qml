@@ -17,6 +17,8 @@ Rectangle {
         y: 80
         width: 166
         height: 166
+
+        onClicked: pages.currentPage = "Connect"
     }
 
     HWButton {
