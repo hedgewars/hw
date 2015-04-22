@@ -10,6 +10,7 @@ procedure initIPC;
 procedure freeIPC;
 
 procedure ipcToEngine(s: shortstring);
+procedure ipcToEngineRaw(p: pointer; len: Longword);
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
@@ -83,6 +84,16 @@ begin
     msg.str:= s;
     msg.buf:= nil;
     ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
+end;
+
+procedure ipcToEngineRaw(p: pointer; len: Longword);
+var msg: TIPCMessage;
+begin
+    msg.str[0]:= #0;
+    msg.len:= len;
+    msg.buf:= GetMem(len);
+    Move(p^, msg.buf^, len);
+    ipcSend(msg, msgEngine, mutEngine, condEngine)
 end;
 
 procedure ipcToFrontendRaw(p: pointer; len: Longword);
