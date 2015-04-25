@@ -1,6 +1,7 @@
 module Main where
 
 import Text.PrettyPrint.HughesPJ
+import Data.Tree
 
 data HWProtocol = Command String [CmdParam]
 data CmdParam = Skip
@@ -26,4 +27,6 @@ commands = [
         , cmd1 "LOBBY:JOINED" $ Many [SS]
     ]
 
-main = undefined
+pas = 
+    
+main = putStrLn $ render pas
