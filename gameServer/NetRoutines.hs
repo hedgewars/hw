@@ -29,18 +29,18 @@ import qualified Data.ByteString as BW
 import qualified Data.ByteString.Char8 as B
 import qualified Control.Exception as E
 import System.Entropy
+import Data.Either
 -----------------------------
 import CoreTypes
 import Utils
 
 
 acceptLoop :: Socket -> Chan CoreMessage -> IO ()
-acceptLoop servSock chan = E.bracket openHandle closeHandle f
+acceptLoop servSock chan = E.bracket openHandle closeHandle (forever . f)
     where
-    f ch = forever $
-        do
-        (sock, sockAddr) <- Network.Socket.accept servSock
-
+    f ch = E.try (Network.Socket.accept servSock) >>= \v -> case v of
+      Left (e :: E.IOException) -> return ()
+      Right (sock, sockAddr) -> do
         clientHost <- sockAddr2String sockAddr
 
         currentTime <- getCurrentTime
