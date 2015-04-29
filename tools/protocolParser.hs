@@ -16,7 +16,7 @@ data ClientStates = NotConnected
                   | ServerAuth
                   | Lobby
 
-data ParseTree = PTChar Char [ParseTree]
+data ParseTree = PTPrefix String [ParseTree]
                | PTCommand HWProtocol
 
 cmd = Command
@@ -55,12 +55,25 @@ buildParseTree cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed el
     where
         emptyNamed = find (\(_, (Command n _:_)) -> null n) assocs
         assocs = groupByFirstChar cmds
-        subtree = map (\(c, cmds) -> PTChar c $ buildParseTree cmds) assocs
-        cmdLeaf (c, (hwc:_)) = [PTChar c [PTCommand hwc]]
+        subtree = map buildsub assocs
+        buildsub (c, cmds) = let st = buildParseTree cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
+        maybeMerge c cmd@[PTCommand _] = PTPrefix [c] cmd
+        maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
+        cmdLeaf (c, (hwc:_)) = [PTPrefix [c] [PTCommand hwc]]
 
-dumpTree (PTChar c st) = char c $$ (nest 2 $ vcat $ map dumpTree st)
-dumpTree _ = empty
+dumpTree = vcat . map dt
+    where
+    dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
+    dt _ = empty
 
-pas = vcat . map dumpTree $ buildParseTree commands
-    
+pas = buildSwitch $ buildParseTree commands
+    where
+        buildSwitch cmds = text "case getNextChar of" $$ (nest 4 . vcat $ map buildCase cmds) $$ elsePart
+        buildCase (PTCommand _ ) = text "#10: <call cmd handler>;"
+        buildCase (PTPrefix (s:ss) cmds) = quotes (char s) <> text ": " <> consumePrefix ss (buildSwitch cmds)
+        consumePrefix "" = id
+        consumePrefix str = (text "consume" <> (parens . quotes $ text str) <> semi $$)
+        zeroChar = text "#0: state:= pstDisconnected;"
+        elsePart = text "else <unknown cmd> end;"
+
 main = putStrLn $ render pas
