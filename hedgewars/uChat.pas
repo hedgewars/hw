@@ -52,7 +52,6 @@ type TInputStrL = array[0..260] of byte;
 var Strs: array[0 .. MaxStrIndex] of TChatLine;
     MStrs: array[0 .. MaxStrIndex] of shortstring;
     LocalStrs: array[0 .. MaxStrIndex] of shortstring;
-    LocalStrsL: array[0 .. MaxStrIndex] of TInputStrL;
     missedCount: LongWord;
     lastStr: LongWord;
     localLastStr: LongInt;
@@ -427,7 +426,6 @@ if s <> LocalStrs[localLastStr] then
     // put in input history
     localLastStr:= (localLastStr + 1) mod MaxStrIndex;
     LocalStrs[localLastStr]:= s;
-    LocalStrsL[localLastStr]:= InputStrL;
     end;
 
 t:= LocalTeam;
@@ -748,7 +746,36 @@ begin
         end;
 end;
 
-// TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
+// regenerate UTF-8 info for current input string
+procedure RegenInputStrL();
+var i, n, lastL: integer;
+    b: byte;
+begin
+    lastL:= InputStrLNoPred;
+    i:= 0;
+    n:= Length(InputStr.s);
+    while i <= n do
+        begin
+
+        // also save lastL if we reached the end
+        if i = n then
+            b:= 0
+        else
+            b:= byte(InputStr.s[i+1]);
+
+        // start of char, based on https://en.wikipedia.org/wiki/UTF-8#Description
+        if (b and $C0) <> $80 then
+            begin
+            InputStrL[i]:= lastL;
+            lastL:= i;
+            end
+        else
+            InputStrL[i]:= InputStrLNoPred;
+
+        inc(i);
+        end;
+end;
+
 procedure InsertIntoInputStr(s: shortstring);
 var i, l, il, lastc: integer;
 begin
@@ -756,29 +783,16 @@ begin
     l:= min(MaxInputStrLen-cursorPos, Length(s));
     s:= copy(s,1,l);
 
-    // if we insert rather than append, shift info in InputStrL accordingly
-    if cursorPos < Length(InputStr.s) then
-        begin
-        for i:= Length(InputStr.s) downto cursorPos + 1 do
-            begin
-            if InputStrL[i] <> InputStrLNoPred then
-                begin
-                il:= i + l;
-                // only shift if not overflowing
-                if il <= MaxInputStrLen then
-                    InputStrL[il]:= InputStrL[i] + l;
-                InputStrL[i]:= InputStrLNoPred;
-                end;
-            end;
-        end;
-
-    InputStrL[cursorPos + l]:= cursorPos;
     // insert string truncated to safe length
+    // TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
     Insert(s, InputStr.s, cursorPos + 1);
     if Length(InputStr.s) > MaxInputStrLen then
         InputStr.s[0]:= char(MaxInputStrLen);
 
     SetLine(InputStr, InputStr.s, true);
+
+    // update InputStrL to also reflect whatever was inserted
+    RegenInputStrL();
 
     // move cursor to end of inserted string
     lastc:= MaxInputStrLen;
@@ -903,7 +917,7 @@ begin
             else
                 begin
                 SetLine(InputStr, LocalStrs[index], true);
-                InputStrL:= LocalStrsL[index];
+                RegenInputStrL();
                 end;
             cursorPos:= Length(InputStr.s);
             ResetSelection();
@@ -1062,6 +1076,7 @@ begin
         if Length(InputStr.s) + btw > MaxInputStrLen then
             exit;
 
+        // if speech bubble quotes are used as first input, add the closing quote and place cursor inbetween
         if (Length(InputStr.s) = 0) and (Length(utf8) = 1) and (charIsForHogSpeech(utf8[1])) then
             begin
             InsertIntoInputStr(utf8);
