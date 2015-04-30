@@ -36,7 +36,7 @@ implementation
 uses SDLh, uInputHandler, uTypes, uVariables, uCommands, uUtils, uTextures, uRender, uIO, uScript, uRenderUtils;
 
 const MaxStrIndex = 27;
-      MaxInputStrLen = 240;
+      MaxInputStrLen = 200;
 
 type TChatLine = record
     Tex: PTexture;
@@ -68,8 +68,6 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 
 const
-    InputStrLNoPred: byte = 255;
-
     colors: array[#0..#6] of TSDL_Color = (
             (r:$FF; g:$FF; b:$FF; a:$FF), // unused, feel free to take it for anything
             (r:$FF; g:$FF; b:$FF; a:$FF), // chat message [White]
@@ -95,10 +93,10 @@ const Padding  = 2;
       ClHeight = 2 * Padding + 16; // font height
 
 // relevant for UTF-8 handling
-function IsFirstCharByte(b: byte): boolean; inline;
+function IsFirstCharByte(c: char): boolean; inline;
 begin
     // based on https://en.wikipedia.org/wiki/UTF-8#Description
-    IsFirstCharByte:= (b and $C0) <> $80;
+    IsFirstCharByte:= (byte(c) and $C0) <> $80;
 end;
 
 function charIsForHogSpeech(c: char): boolean;
@@ -597,7 +595,7 @@ procedure MoveCursorToPreviousChar();
 begin
     if cursorPos > 0 then
         begin
-        while (not IsFirstCharByte(byte(InputStr.s[cursorPos]))) do
+        while (not IsFirstCharByte(InputStr.s[cursorPos])) do
             begin
             dec(cursorPos);
             end;
@@ -610,12 +608,28 @@ begin
     if cursorPos <  Length(InputStr.s) then
         begin
         inc(cursorPos, 2);
-        while (cursorPos <  Length(InputStr.s)) and (not IsFirstCharByte(byte(InputStr.s[cursorPos]))) do
+        while (cursorPos <  Length(InputStr.s)) and (not IsFirstCharByte(InputStr.s[cursorPos])) do
             begin
             inc(cursorPos);
             end;
         dec(cursorPos);
         end;
+end;
+
+procedure DeleteLastUTF8CharFromStr(var s: shortstring);
+var l: byte;
+begin
+    l:= Length(s);
+
+    while (l > 1) and (not IsFirstCharByte(s[l])) do
+        begin
+        dec(l);
+        end;
+
+    if l > 0 then
+        dec(l);
+
+    s[0]:= char(l);
 end;
 
 procedure DeleteSelected();
@@ -732,25 +746,43 @@ begin
 end;
 
 procedure InsertIntoInputStr(s: shortstring);
-var l, lastc: integer;
+var limit: integer;
 begin
-    // safe length for string
-    l:= min(MaxInputStrLen-cursorPos, Length(s));
-    // SetLength(s, l);
-    s[0]:= char(l);
+    // we check limit for trailing stuff before insertion limit for a reason
+    // (possible remaining space after too long UTF8-insertion has been shortened)
 
-    // insert string truncated to safe length
-    Insert(s, InputStr.s, cursorPos + 1);
-    // TODO: honor utf8, don't break utf8 chars when shifting chars beyond limit
-    if Length(InputStr.s) > MaxInputStrLen then
-        InputStr.s[0]:= char(MaxInputStrLen);
+    // length limit for stuff to that will trail the insertion
+    limit:= max(cursorPos, MaxInputStrLen-Length(s));
 
-    SetLine(InputStr, InputStr.s, true);
+    while Length(InputStr.s) > limit do
+        begin
+        DeleteLastUTF8CharFromStr(InputStr.s);
+        end;
 
-    // move cursor to end of inserted string
-    lastc:= MaxInputStrLen;
-    cursorPos:= min(lastc, cursorPos + l);
-    UpdateCursorCoords();
+    // length limit for stuff to insert
+    limit:= max(0, MaxInputStrLen-cursorPos);
+
+    if limit = 0 then
+        s:= ''
+    else while Length(s) > limit do
+        begin
+        DeleteLastUTF8CharFromStr(s);
+        end;
+
+    if Length(s) > 0 then
+        begin
+        // insert string truncated to safe length
+        Insert(s, InputStr.s, cursorPos + 1);
+
+        if Length(InputStr.s) > MaxInputStrLen then
+            InputStr.s[0]:= char(MaxInputStrLen);
+
+        SetLine(InputStr, InputStr.s, true);
+
+        // move cursor to end of inserted string
+        inc(cursorPos, Length(s));
+        UpdateCursorCoords();
+        end;
 end;
 
 procedure PasteFromClipboard();
@@ -963,7 +995,10 @@ begin
             begin
             // paste
             if ctrl then
-                PasteFromClipboard()
+                begin
+                DeleteSelected();
+                PasteFromClipboard();
+                end
             else
                 action:= false;
             end;
