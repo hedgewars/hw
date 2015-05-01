@@ -1,5 +1,5 @@
 ------------------------------------------
--- TECH RACER v0.2
+-- TECH RACER v0.3
 -----------------------------------------
 
 --------------
@@ -13,6 +13,12 @@
 -- hopefully added some support for future official challenges etc
 -- changed theme
 -- minor cleanups?
+
+--------------
+--0.3
+--------------
+-- ehh, scrap everything? those old maps probably still desync so they can die for now
+-- add a new crappy map to test an idea.
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -479,7 +485,7 @@ function HandleFreshMapCreation()
 		-- these are from onParameters()
 		if mapID == "0" then
 			--AddCaption("don't load any map")
-		elseif mapID == "1" then
+		--[[elseif mapID == "1" then
 
 			--simple testmap
 			------ GIRDER LIST ------
@@ -836,7 +842,168 @@ function HandleFreshMapCreation()
 			tempG = AddGear(839, 985, gtSMine, 0, 0, 0, 0)
 			tempG = AddGear(736, 881, gtSMine, 0, 0, 0, 0)
 			tempG = AddGear(686, 829, gtSMine, 0, 0, 0, 0)
-			tempG = AddGear(649, 792, gtSMine, 0, 0, 0, 0)
+			tempG = AddGear(649, 792, gtSMine, 0, 0, 0, 0)]]
+
+		elseif mapID == "4" then
+
+			------ GIRDER LIST ------
+	PlaceSprite(3942, 116, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3999, 270, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3925, 407, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3777, 470, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3791, 65, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3644, 121, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+	PlaceSprite(3629, 413, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+
+	------ AMMO CRATE LIST ------
+	tempG = SpawnAmmoCrate(3772, 446, amWatermelon)
+	tempG = SpawnAmmoCrate(3769, 415, amWatermelon)
+	tempG = SpawnAmmoCrate(3773, 384, amWatermelon)
+	tempG = SpawnAmmoCrate(3771, 353, amWatermelon)
+	tempG = SpawnAmmoCrate(3770, 322, amWatermelon)
+	tempG = SpawnAmmoCrate(3775, 291, amWatermelon)
+	tempG = SpawnAmmoCrate(3776, 260, amWatermelon)
+	tempG = SpawnAmmoCrate(3775, 229, amWatermelon)
+	tempG = SpawnAmmoCrate(3772, 198, amWatermelon)
+	tempG = SpawnAmmoCrate(3776, 167, amWatermelon)
+
+	------ UTILITY CRATE LIST ------
+	tempG = SpawnUtilityCrate(3723, 446, amJetpack)
+	tempG = SpawnUtilityCrate(3725, 415, amJetpack)
+	tempG = SpawnUtilityCrate(3814, 446, amJetpack)
+	tempG = SpawnUtilityCrate(3814, 415, amJetpack)
+	tempG = SpawnUtilityCrate(3815, 384, amJetpack)
+	tempG = SpawnUtilityCrate(3728, 384, amJetpack)
+
+	------ AIR MINE LIST ------
+	SetTimer(AddGear(3489, 110, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3509, 366, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3399, 114, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3438, 383, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3322, 113, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3369, 384, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3290, 379, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3253, 112, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3178, 111, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3228, 375, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3173, 384, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3115, 118, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3039, 126, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2954, 139, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3121, 404, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2918, 414, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2880, 144, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2815, 146, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2731, 140, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2867, 408, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2802, 394, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2733, 392, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2661, 392, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2672, 147, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2608, 144, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2558, 117, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2495, 86, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2425, 49, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2373, 79, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2313, 104, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2256, 156, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2218, 226, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2205, 318, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2218, 419, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2255, 479, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2290, 522, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2343, 557, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2413, 540, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2500, 514, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2572, 471, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2618, 436, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2926, 478, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2926, 548, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2924, 615, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3126, 472, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3128, 553, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3136, 623, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3139, 683, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2927, 657, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2919, 720, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3132, 746, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2920, 771, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3137, 798, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2926, 820, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3140, 848, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(945, 441, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(900, 477, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(899, 540, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(915, 631, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1013, 616, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(970, 533, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1062, 458, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1060, 537, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1094, 640, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1029, 692, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(928, 718, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(831, 592, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(860, 666, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(823, 493, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1032, 427, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(953, 351, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(845, 375, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1101, 326, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1128, 565, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1126, 446, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1208, 703, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1139, 726, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1024, 777, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(918, 775, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(812, 758, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3171, 887, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3222, 939, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3273, 977, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3330, 1011, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3401, 1051, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2928, 899, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2935, 966, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2959, 1021, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2999, 1077, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3050, 1136, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3108, 1184, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3159, 1221, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3214, 1243, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3289, 1279, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3453, 1087, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3515, 1136, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3566, 1202, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3604, 1275, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3618, 1345, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3608, 1436, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3582, 1505, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3528, 1565, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3456, 1610, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3368, 1651, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3289, 1666, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3205, 1668, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3132, 1672, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3270, 1325, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3192, 1346, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3140, 1346, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3067, 1359, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2997, 1373, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2918, 1391, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2839, 1406, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3078, 1672, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3019, 1659, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2936, 1667, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2859, 1675, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(975, 722, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(967, 636, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1078, 687, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(868, 740, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(863, 453, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1010, 494, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1080, 590, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(869, 589, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1013, 569, gtAirMine, 0, 0, 0, 0), 1)
+
 
 		else
 
