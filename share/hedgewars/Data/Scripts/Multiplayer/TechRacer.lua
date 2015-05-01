@@ -1747,6 +1747,7 @@ function isATrackedGear(gear)
 		(GetGearType(gear) == gtExplosives) or
 		(GetGearType(gear) == gtMine) or
 		(GetGearType(gear) == gtSMine) or
+		(GetGearType(gear) == gtAirMine) or
 		(GetGearType(gear) == gtCase)
 	then
 		return(true)
