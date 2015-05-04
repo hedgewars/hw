@@ -44,7 +44,7 @@ commands = [
         , cmd2 "CHAT" SS LS
         , cmd2 "SERVER_VARS" SS LS
         , cmd2 "BYE" SS LS
-        , cmd "INFO" [SS, SS, SS, SS]
+        , cmd1 "INFO" $ Many [SS]
         , cmd "KICKED" []
     ]
 
@@ -66,7 +66,7 @@ dumpTree = vcat . map dt
     dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
     dt _ = empty
 
-pas = buildSwitch $ buildParseTree commands
+pas2 = buildSwitch $ buildParseTree commands
     where
         buildSwitch cmds = text "case getNextChar of" $$ (nest 4 . vcat $ map buildCase cmds) $$ elsePart
         buildCase (PTCommand _ ) = text "#10: <call cmd handler>;"
@@ -75,5 +75,12 @@ pas = buildSwitch $ buildParseTree commands
         consumePrefix str = (text "consume" <> (parens . quotes $ text str) <> semi $$)
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
+
+pas = text $ show $ buildTables $ buildParseTree commands
+    where
+        buildTables cmds = let (_, _, t1, t2) = foldl walk (0, 0, [], []) cmds in (reverse t1, reverse t2)
+        walk (lc, cc, tbl1, tbl2) (PTCommand _ ) = (lc, cc + 1, ("#10"):tbl1, (show $ -10 - cc):(tbl2))
+        walk lct (PTPrefix prefix cmds) = foldl walk (foldl fpf lct prefix) cmds
+        fpf (lc, cc, tbl1, tbl2) c = (lc + 1, cc, [c]:tbl1, (show lc):tbl2)
 
 main = putStrLn $ render pas
