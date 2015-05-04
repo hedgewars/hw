@@ -437,7 +437,26 @@ begin
             Gear^.dY := tdX*cElastic
             end;
 
-        Gear^.dY.isNegative := not tdY.isNegative;
+        Gear^.dX.isNegative:= tdX.isNegative;
+        Gear^.dY.isNegative:= tdY.isNegative;
+        if (collV > 0) and (collH > 0) and (not tdX.isNegative) and (not tdY.isNegative) then
+            begin
+            Gear^.dX.isNegative := true;
+            Gear^.dY.isNegative := true
+            end
+        else if (collV > 0) and (collH < 0) and (tdX.isNegative or tdY.isNegative) then
+            begin
+            Gear^.dY.isNegative := not tdY.isNegative;
+            if not tdY.isNegative then Gear^.dX.isNegative := false
+            end
+        else if (collV < 0) and (collH > 0) and (not tdX.isNegative) then
+            begin
+            Gear^.dX.isNegative := true;
+            Gear^.dY.isNegative := false
+            end
+        else if (collV < 0) and (collH < 0) and tdX.isNegative and tdY.isNegative then
+            Gear^.dX.isNegative := false;
+       
         isFalling := false;
         Gear^.AdvBounce := 10;
         end;
@@ -463,7 +482,10 @@ begin
         Gear^.State := Gear^.State or gstMoving;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.dX.QWordValue < _0_15.QWordValue) and (Gear^.dY.QWordValue < _0_15.QWordValue) then
+        begin
         Gear^.State := Gear^.State or gstCollision;
+        AddFileLog('no more bounce for you!');
+        end;
 
     if ((xland or land) and lfBouncy <> 0) and (Gear^.Radius >= 3) and
        ((Gear^.dX.QWordValue > _0_15.QWordValue) or (Gear^.dY.QWordValue > _0_15.QWordValue)) then
@@ -2516,7 +2538,7 @@ begin
     if hwRound(HHGear^.Y) <= Gear^.Tag - 2 then
         begin
         Gear^.Tag := hwRound(HHGear^.Y);
-        DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4, 2);
+        DrawTunnel(HHGear^.X - int2hwFloat(cHHRadius), HHGear^.Y - _1, _0_5, _0, cHHRadius * 4+2, 2);
         HHGear^.State := HHGear^.State or gstNoDamage;
         Gear^.Y := HHGear^.Y;
         AmmoShove(Gear, 30, 40);
@@ -2829,7 +2851,7 @@ begin
 
     for y:= ty downto ty - ytol do
         begin
-        if TryPlaceOnLand(lx, y, sprHHTelepMask, 0, false, not hasBorder, false, 0) then
+        if TryPlaceOnLand(lx, y, sprHHTelepMask, 0, false, not hasBorder, false, false, false, false, 0, $FFFFFFFF) then
             begin
             valid:= true;
             break;
@@ -3484,6 +3506,7 @@ begin
         begin
         StopSoundChan(Gear^.SoundChannel);
         Gear^.Tag := 1;
+        Gear^.AdvBounce:= 50;
         Gear^.doStep := @doStepDrill
         end;
 
@@ -4190,6 +4213,7 @@ begin
 
     // destroy portal if ground it was attached too is gone
     if (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] <= lfAllObjMask)
+    or (Land[hwRound(Gear^.Y), hwRound(Gear^.X)] and lfBouncy <> 0)
     or (Gear^.Timer < 1)
     or (Gear^.Hedgehog^.Team <> CurrentHedgehog^.Team)
     or CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then

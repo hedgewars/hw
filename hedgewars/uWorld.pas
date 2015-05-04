@@ -1706,7 +1706,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, cameraJump: LongInt;
+var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, cameraJump, dstX: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
@@ -1724,27 +1724,35 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
         end
     else
         begin
-        if (WorldEdge = weWrap) then
-            cameraJump:= LongInt(playWidth) div 2 + 50
-        else
-            cameraJump:= LongInt(rightX) - leftX - 100;
+            dstX:= hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx;
 
-        if abs(prevPoint.X - WorldDx - hwRound(FollowGear^.X)) > cameraJump then
-            begin
-            if prevPoint.X - WorldDx < LongInt(playWidth div 2) then
-                cameraJump:= LongInt(playWidth)
-            else
-                cameraJump:= -LongInt(playWidth);
-            WorldDx:= WorldDx - cameraJump;
-            end;
+            if (WorldEdge = weWrap) then
+                begin
+                    if dstX - prevPoint.X < (LongInt(leftX) - rightX) div 2 then
+                        CursorPoint.X:= (prevPoint.X * 7 + dstX - (leftX - rightX)) div 8
+                    else if dstX - prevPoint.X > (LongInt(rightX) - leftX) div 2 then
+                        CursorPoint.X:= (prevPoint.X * 7 + dstX - (rightX - leftX)) div 8
+                    else
+                        CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
+                end
+            else // usual camera movement routine
+                begin
+                    CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
+                end;
 
-        CursorPoint.X:= (prevPoint.X * 7 + hwRound(FollowGear^.X) + hwSign(FollowGear^.dX) * z + WorldDx) div 8;
-
-        if isPhone() or (cScreenHeight < 600) or ((hwSign(FollowGear^.dY) * z) < 10)  then
+        if isPhone() or (cScreenHeight < 600) or ((FollowGear^.dY * z).Round < 10) then
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
         else
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * z + WorldDy)) div 8;
         end;
+
+if (WorldEdge = weWrap) then
+    begin
+        if -WorldDx < leftX then
+            WorldDx:= WorldDx - LongInt(rightX) + leftX
+        else if -WorldDx > rightX then
+            WorldDx:= WorldDx + LongInt(rightX) - leftX;
+    end;
 
 wdy:= trunc(cScreenHeight / cScaleFactor) + cScreenHeight div 2 - cWaterLine - cVisibleWater;
 if WorldDy < wdy then

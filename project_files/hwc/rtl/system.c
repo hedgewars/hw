@@ -300,6 +300,10 @@ Integer fpcrtl_trunc(extended n) {
     return (int) n;
 }
 
+Integer fpcrtl_ceil(extended n) {
+    return (int) (ceil(n));
+}
+
 LongInt str_to_int(char *src)
 {
     int i;

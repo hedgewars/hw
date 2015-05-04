@@ -20,7 +20,7 @@
 
 unit uLandGraphics;
 interface
-uses uFloat, uConsts, uTypes;
+uses uFloat, uConsts, uTypes, Math, uRenderUtils;
 
 type
     fillType = (nullPixel, backgroundPixel, ebcPixel, icePixel, setNotCurrentMask, changePixelSetNotCurrent, setCurrentHog, changePixelNotSetNotCurrent);
@@ -49,8 +49,9 @@ procedure DumpLandToLog(x, y, r: LongInt);
 procedure DrawIceBreak(x, y, iceRadius, iceHeight: Longint);
 function TryPlaceOnLandSimple(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, indestructible: boolean): boolean; inline;
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
-function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word): boolean; inline;
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force: boolean; LandFlags: Word): boolean;
+function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
 
 implementation
@@ -679,37 +680,37 @@ if indestructible then
     lf:= lfIndestructible
 else
     lf:= 0;
-TryPlaceOnLandSimple:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, lf);
+TryPlaceOnLandSimple:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, false, false, false, lf, $FFFFFFFF);
 end;
 
 function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace: boolean; LandFlags: Word): boolean; inline;
 begin
-TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, LandFlags);
+TryPlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, doPlace, false, false, false, false, false, LandFlags, $FFFFFFFF);
 end;
 
-function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word): boolean; inline;
+function ForcePlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; Tint: LongWord; Behind, flipHoriz, flipVert: boolean): boolean; inline;
 begin
-    ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, false, true, LandFlags)
+    ForcePlaceOnLand:= TryPlaceOnLand(cpX, cpY, Obj, Frame, true, false, true, behind, flipHoriz, flipVert, LandFlags, Tint)
 end;
 
-function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force: boolean; LandFlags: Word): boolean;
+function TryPlaceOnLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; doPlace, outOfMap, force, behind, flipHoriz, flipVert: boolean; LandFlags: Word; Tint: LongWord): boolean;
 var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
     p: PByteArray;
     Image: PSDL_Surface;
-    indestructible: boolean;
+    pixel: LongWord;
 begin
 TryPlaceOnLand:= false;
 numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
 
-// make land indestructible if lfIndestructible is passed
-indestructible:= (LandFlags and lfIndestructible <> 0);
-
 if outOfMap then doPlace:= false; // just using for a check
 
 TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+
 Image:= SpritesData[Obj].Surface;
 w:= SpritesData[Obj].Width;
 h:= SpritesData[Obj].Height;
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
 row:= Frame mod numFramesFirstCol;
 col:= Frame div numFramesFirstCol;
 
@@ -739,8 +740,8 @@ case bpp of
                        SDL_UnlockSurface(Image);
                    exit
                    end;
-        p:= PByteArray(@(p^[Image^.pitch]));
-        end;
+        p:= PByteArray(@(p^[Image^.pitch]))
+        end
     end;
 
 TryPlaceOnLand:= true;
@@ -765,23 +766,41 @@ case bpp of
                     gY:= cpY + y;
                     end
                 else
-                     begin
-                     gX:= (cpX + x) div 2;
-                     gY:= (cpY + y) div 2;
+                    begin
+                    gX:= (cpX + x) div 2;
+                    gY:= (cpY + y) div 2;
                     end;
-                if indestructible then
-                    Land[cpY + y, cpX + x]:= {lfIndestructible or }LandFlags
-                else if (LandPixels[gY, gX] and AMask) shr AShift = 255 then  // This test assumes lfBasic and lfObject differ only graphically
-                    Land[cpY + y, cpX + x]:= lfBasic or LandFlags
-                else
-                    Land[cpY + y, cpX + x]:= lfObject or LandFlags;
-                LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+		if not behind or (Land[cpY + y, cpX + x] and lfLandMask = 0) then
+                    begin
+                    if (LandFlags and lfBasic <> 0) or 
+                       (((LandPixels[gY, gX] and AMask) shr AShift = 255) and  // This test assumes lfBasic and lfObject differ only graphically
+                         (LandFlags or lfObject = 0)) then
+                         Land[cpY + y, cpX + x]:= lfBasic or LandFlags
+                    else Land[cpY + y, cpX + x]:= lfObject or LandFlags
+                    end;
+		if not behind or (LandPixels[gY, gX] = 0) then
+                    begin
+                    if tint = $FFFFFFFF then
+                        LandPixels[gY, gX]:= PLongword(@(p^[x * 4]))^
+                    else 
+                        begin
+                        pixel:= PLongword(@(p^[x * 4]))^;
+                        LandPixels[gY, gX]:= 
+                           ceil((pixel shr RShift and $FF) * ((tint shr 24) / 255)) shl RShift or
+                           ceil((pixel shr GShift and $FF) * ((tint shr 16 and $ff) / 255)) shl GShift or
+                           ceil((pixel shr BShift and $FF) * ((tint shr  8 and $ff) / 255)) shl BShift or
+                           ceil((pixel shr AShift and $FF) * ((tint and $ff) / 255)) shl AShift;
+                        end
+                    end
                 end;
         p:= PByteArray(@(p^[Image^.pitch]));
         end;
     end;
 if SDL_MustLock(Image) then
     SDL_UnlockSurface(Image);
+
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
 
 x:= Max(cpX, leftX);
 w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
@@ -795,6 +814,91 @@ if Obj = sprAmGirder then
 else if Obj = sprAmRubber then
     ScriptCall('onRubberPlacement', frame, cpX + w div 2, cpY + h div 2);
 
+end;
+
+procedure EraseLand(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt; LandFlags: Word; eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert: boolean);
+var X, Y, bpp, h, w, row, col, gx, gy, numFramesFirstCol: LongInt;
+    p: PByteArray;
+    Image: PSDL_Surface;
+begin
+numFramesFirstCol:= SpritesData[Obj].imageHeight div SpritesData[Obj].Height;
+
+TryDo(SpritesData[Obj].Surface <> nil, 'Assert SpritesData[Obj].Surface failed', true);
+
+Image:= SpritesData[Obj].Surface;
+w:= SpritesData[Obj].Width;
+h:= SpritesData[Obj].Height;
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
+row:= Frame mod numFramesFirstCol;
+col:= Frame div numFramesFirstCol;
+
+if SDL_MustLock(Image) then
+    SDLTry(SDL_LockSurface(Image) >= 0, true);
+
+bpp:= Image^.format^.BytesPerPixel;
+TryDo(bpp = 4, 'It should be 32 bpp sprite', true);
+// Check that sprite fits free space
+p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+case bpp of
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
+                if ((cpY + y) <= Longint(topY)) or ((cpY + y) >= LAND_HEIGHT) or
+                   ((cpX + x) <= Longint(leftX)) or ((cpX + x) >= Longint(rightX)) then
+                   begin
+                   if SDL_MustLock(Image) then
+                       SDL_UnlockSurface(Image);
+                   exit
+                   end;
+        p:= PByteArray(@(p^[Image^.pitch]))
+        end
+    end;
+
+// Checked, now place
+p:= PByteArray(@(PByteArray(Image^.pixels)^[ Image^.pitch * row * h + col * w * 4 ]));
+case bpp of
+    4: for y:= 0 to Pred(h) do
+        begin
+        for x:= 0 to Pred(w) do
+            if ((PLongword(@(p^[x * 4]))^) and AMask) <> 0 then
+                   begin
+                if (cReducedQuality and rqBlurryLand) = 0 then
+                    begin
+                    gX:= cpX + x;
+                    gY:= cpY + y;
+                    end
+                else
+                    begin
+                    gX:= (cpX + x) div 2;
+                    gY:= (cpY + y) div 2;
+                    end;
+		        if (not eraseOnLFMatch or (Land[cpY + y, cpX + x] and LandFlags <> 0)) and
+                    ((PLongword(@(p^[x * 4]))^) and AMask <> 0) then
+                    begin
+                    if not onlyEraseLF then
+                        begin
+                        LandPixels[gY, gX]:= 0;
+                        Land[cpY + y, cpX + x]:= 0
+                        end
+                    else Land[cpY + y, cpX + x]:= Land[cpY + y, cpX + x] and (not LandFlags)
+                    end
+                end;
+        p:= PByteArray(@(p^[Image^.pitch]));
+        end;
+    end;
+if SDL_MustLock(Image) then
+    SDL_UnlockSurface(Image);
+
+if flipVert then flipSurface(Image, true);
+if flipHoriz then flipSurface(Image, false);
+
+x:= Max(cpX, leftX);
+w:= Min(cpX + Image^.w, LAND_WIDTH) - x;
+y:= Max(cpY, topY);
+h:= Min(cpY + Image^.h, LAND_HEIGHT) - y;
+UpdateLandTexture(x, w, y, h, true)
 end;
 
 function GetPlaceCollisionTex(cpX, cpY: LongInt; Obj: TSprite; Frame: LongInt): PTexture;
