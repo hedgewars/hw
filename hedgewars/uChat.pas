@@ -594,26 +594,19 @@ end;
 procedure MoveCursorToPreviousChar();
 begin
     if cursorPos > 0 then
-        begin
-        while (not IsFirstCharByte(InputStr.s[cursorPos])) do
-            begin
+        repeat
             dec(cursorPos);
-            end;
-        dec(cursorPos);
-        end;
+        until ((cursorPos = 0) or IsFirstCharByte(InputStr.s[cursorPos + 1]));
 end;
 
 procedure MoveCursorToNextChar();
+var len: integer;
 begin
-    if cursorPos <  Length(InputStr.s) then
-        begin
-        inc(cursorPos, 2);
-        while (cursorPos <  Length(InputStr.s)) and (not IsFirstCharByte(InputStr.s[cursorPos])) do
-            begin
+    len:= Length(InputStr.s);
+    if cursorPos < len then
+        repeat
             inc(cursorPos);
-            end;
-        dec(cursorPos);
-        end;
+        until ((cursorPos = len) or IsFirstCharByte(InputStr.s[cursorPos + 1]));
 end;
 
 procedure DeleteLastUTF8CharFromStr(var s: shortstring);
