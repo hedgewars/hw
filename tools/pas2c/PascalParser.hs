@@ -48,7 +48,7 @@ unit = do
 
 
 reference :: Parsec String u Reference
-reference = buildExpressionParser table term <?> "reference"
+reference = term <?> "reference"
     where
     term = comments >> choice [
         parens pas (liftM RefExpression expression >>= postfixes) >>= postfixes
@@ -56,9 +56,6 @@ reference = buildExpressionParser table term <?> "reference"
         , char' '@' >> liftM Address reference >>= postfixes
         , liftM SimpleReference iD >>= postfixes
         ] <?> "simple reference"
-
-    table = [
-        ]
 
     postfixes r = many postfix >>= return . foldl (flip ($)) r
     postfix = choice [
@@ -401,7 +398,7 @@ expression = do
     where
     term = comments >> choice [
         builtInFunction expression >>= \(n, e) -> return $ BuiltInFunCall e (SimpleReference (Identifier n BTUnknown))
-        , try (parens pas $ expression >>= \e -> notFollowedBy (comments >> char' '.') >> return e)
+        , try (parens pas expression >>= \e -> notFollowedBy (comments >> char' '.') >> return e)
         , brackets pas (commaSep pas iD) >>= return . SetExpression
         , try $ integer pas >>= \i -> notFollowedBy (char' '.') >> (return . NumberLiteral . show) i
         , float pas >>= return . FloatLiteral . show
