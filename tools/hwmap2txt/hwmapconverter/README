@@ -1,0 +1,23 @@
+
+This tool allows editing the contents of .hwmap files as human-readable text.
+
+
+Dependencies:
+-------------
+
+Needs Qt / qmake to build
+
+
+Instructions:
+-------------
+
+Build with these 2 commands:
+
+qmake hwmapconverter.pro
+make
+
+
+If compiled successfully, run with:
+
+./hwmapconverter
+
