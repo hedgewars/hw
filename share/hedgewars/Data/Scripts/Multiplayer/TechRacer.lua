@@ -1947,9 +1947,8 @@ end
 
 function onGameTick20()
 
-
 		if (jet ~= nil) and (infUFO == "true") then
-			SetHealth(ufoGear, 2000)
+			SetHealth(jet, 2000)
 		end
 
         -- airstrike detected, convert this into a potential waypoint spot
