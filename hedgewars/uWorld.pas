@@ -1706,7 +1706,7 @@ end;
 var PrevSentPointTime: LongWord = 0;
 
 procedure MoveCamera;
-var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, cameraJump, dstX: LongInt;
+var EdgesDist, wdy, shs,z, amNumOffsetX, amNumOffsetY, dstX: LongInt;
     inbtwnTrgtAttks: Boolean;
 begin
 {$IFNDEF MOBILE}
