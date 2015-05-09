@@ -51,12 +51,13 @@ commands = [
 groupByFirstChar :: [HWProtocol] -> [(Char, [HWProtocol])]
 groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
 
-buildParseTree cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed else subtree
+buildParseTree cmds = [PTPrefix "!" $ bpt cmds]
+bpt cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed else subtree
     where
         emptyNamed = find (\(_, (Command n _:_)) -> null n) assocs
         assocs = groupByFirstChar cmds
         subtree = map buildsub assocs
-        buildsub (c, cmds) = let st = buildParseTree cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
+        buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
         maybeMerge c cmd@[PTCommand _] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
         cmdLeaf (c, (hwc:_)) = [PTPrefix [c] [PTCommand hwc]]
@@ -76,11 +77,21 @@ pas2 = buildSwitch $ buildParseTree commands
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-pas = text $ show $ buildTables $ buildParseTree commands
+renderArrays letters commands = l $+$ s
     where
-        buildTables cmds = let (_, _, t1, t2) = foldl walk (0, 0, [], []) cmds in (reverse t1, reverse t2)
-        walk (lc, cc, tbl1, tbl2) (PTCommand _ ) = (lc, cc + 1, ("#10"):tbl1, (show $ -10 - cc):(tbl2))
-        walk lct (PTPrefix prefix cmds) = foldl walk (foldl fpf lct prefix) cmds
-        fpf (lc, cc, tbl1, tbl2) c = (lc + 1, cc, [c]:tbl1, (show lc):tbl2)
+        maybeQuotes s = if null $ tail s then quotes $ text s else text s
+        l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
+            <> parens (hsep . punctuate comma $ map maybeQuotes letters) <> semi
+        s = text "const commands: array[0.." <> (int $ length commands - 1) <> text "] of integer = "
+            <> parens (hsep . punctuate comma $ map text commands) <> semi
 
-main = putStrLn $ render pas
+pas = uncurry renderArrays $ buildTables $ buildParseTree commands
+    where
+        buildTables cmds = let (_, _, _, t1, t2) = foldr walk (0, [0], -10, [], []) cmds in (tail t1, tail t2)
+        walk (PTCommand _ ) (lc, s:sh, pc, tbl1, tbl2) = (lc, 2:sh, pc - 1, "#10":"0":tbl1, "0":(show pc):tbl2)
+        walk (PTPrefix prefix cmds) l = lvldown $ foldr fpf (foldr walk (lvlup l) cmds) prefix
+        lvlup (lc, sh, pc, tbl1, tbl2) = (lc, 0:sh, pc, tbl1, tbl2)
+        lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2) = (lc, s1+s2:sh, pc, tbl1, show s1:tbl2)
+        fpf c (lc, s:sh, pc, tbl1, tbl2) = (lc + 1, s+1:sh, pc, [c]:tbl1, "0":tbl2)
+
+main = putStrLn $ renderStyle style{lineLength = 80} pas
