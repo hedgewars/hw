@@ -1,6 +1,12 @@
 ------------------------------------------
--- TECH RACER v0.3
+-- TECH RACER v0.4
 -----------------------------------------
+
+--------------
+-- TO DO
+--------------
+-- allow scrolling of maps
+-- place waypoints for the registered maps automatically.
 
 --------------
 --0.2
@@ -21,6 +27,16 @@
 -- hopefully fix map 3
 -- add two new crappy map to test an idea.
 
+--------------
+--0.4
+--------------
+-- updated version text (lol)
+-- some preliminary support for hand-drawn map loading
+-- some support for being really lazy
+-- an extra map or two
+-- param for infinite UFO fuel
+-- param for number of rounds
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -33,6 +49,84 @@ HedgewarsScriptLoad("/Scripts/Params.lua")
 ------------------
 -- Got Variables?
 ------------------
+
+local atkArray =
+				{
+				{amBazooka, 	"amBazooka",		0},
+				{amBee, 		"amBee",			0},
+				{amMortar, 		"amMortar",			0},
+				{amDrill, 		"amDrill",			0},
+				{amSnowball, 	"amSnowball",		0},
+
+				{amGrenade,		"amGrenade",		0},
+				{amClusterBomb,	"amClusterBomb",	0},
+				{amMolotov, 	"amMolotov",		0},
+				{amWatermelon, 	"amWatermelon",		0},
+				{amHellishBomb,	"amHellishBomb",	0},
+				{amGasBomb, 	"amGasBomb",		0},
+
+				{amShotgun,		"amShotgun",		0},
+				{amDEagle,		"amDEagle",			0},
+				{amFlamethrower,"amFlamethrower",	0},
+				{amSniperRifle,	"amSniperRifle",	0},
+				{amSineGun, 	"amSineGun",		0},
+				{amIceGun, 		"amIceGun",			0},
+				{amLandGun,		"amLandGun",		0},
+
+				{amFirePunch, 	"amFirePunch",		0},
+				{amWhip,		"amWhip",			0},
+				{amBaseballBat, "amBaseballBat",	0},
+				{amKamikaze, 	"amKamikaze",		0},
+				{amSeduction, 	"amSeduction",		0},
+				{amHammer,		"amHammer",			0},
+
+				{amMine, 		"amMine",			0},
+				{amDynamite, 	"amDynamite",		0},
+				{amCake, 		"amCake",			0},
+				{amBallgun, 	"amBallgun",		0},
+				{amRCPlane,		"amRCPlane",		0},
+				{amSMine,		"amSMine",			0},
+				{amAirMine,		"amAirMine",		0},
+
+				{amAirAttack,	"amAirAttack",		0},
+				{amMineStrike,	"amMineStrike",		0},
+				{amDrillStrike,	"amDrillStrike",	0},
+				{amAirMine,		"amAirMine",		0},
+				{amNapalm, 		"amNapalm",			0},
+				{amPiano,		"amPiano",			0},
+
+				{amKnife,		"amKnife",			0},
+
+				{amBirdy,		"amBirdy",			0}
+
+				}
+
+local utilArray =
+				{
+				{amBlowTorch, 		"amBlowTorch",		0},
+				{amPickHammer,		"amPickHammer",		0},
+				{amGirder, 			"amGirder",			0},
+				{amRubber, 			"amRubber",			0},
+				{amPortalGun,		"amPortalGun",		0},
+
+				{amRope, 			"amRope",			0},
+				{amParachute, 		"amParachute",		0},
+				{amTeleport,		"amTeleport",		0},
+				{amJetpack,			"amJetpack",		0},
+
+				{amInvulnerable,	"amInvulnerable",	0},
+				{amLaserSight,		"amLaserSight",		0},
+				{amVampiric,		"amVampiric",		0},
+
+				{amLowGravity, 		"amLowGravity",		0},
+				{amExtraDamage, 	"amExtraDamage",	0},
+				{amExtraTime,		"amExtraTime",		0},
+
+				{amResurrector, 	"amResurrector",	0},
+				{amTardis, 			"amTardis",			0},
+
+				{amSwitch,			"amSwitch",			0}
+				}
 
 local activationStage = 0
 local jet = nil
@@ -55,6 +149,7 @@ local currCount = 0
 
 local specialPointsX = {}
 local specialPointsY = {}
+local specialPointsFlag = {}
 local specialPointsCount = 0
 
 mapID = 22
@@ -470,6 +565,11 @@ function ClearMap()
 
 	runOnGears(RemoveGear)
 
+end
+
+-- this handles interim lazy copypasta from HedgeEditor while I'm still messing with things
+function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
+	PlaceSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 end
 
 function HandleFreshMapCreation()
@@ -1786,9 +1886,17 @@ end
 ----------------------------------
 
 function onParameters()
-    parseParams()
+
+	parseParams()
 	mapID = params["m"]
 	infUFO = params["ufo"]
+
+	roundLimit = tonumber(params["rounds"])
+
+	if (roundLimit == 0) or (roundLimit == nil) then
+		roundLimit = 3
+	end
+
 end
 
 function onPreviewInit()
@@ -1825,8 +1933,176 @@ function limitHogs(gear)
 
 end
 
-function onGameStart()
+function onSpecialPoint(x,y,flag)
+    specialPointsX[specialPointsCount] = x
+    specialPointsY[specialPointsCount] = y
+	specialPointsFlag[specialPointsCount] = flag
+    specialPointsCount = specialPointsCount + 1
+end
 
+function InterpretPoints()
+
+	-- flags run from 0 to 127
+	for i = 0, (specialPointsCount-1) do
+
+		-- Mines
+		if specialPointsFlag[i] == 1 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 1)
+		elseif specialPointsFlag[i] == 2 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 1000)
+		elseif specialPointsFlag[i] == 3 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 2000)
+		elseif specialPointsFlag[i] == 4 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 3000)
+		elseif specialPointsFlag[i] == 5 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 4000)
+		elseif specialPointsFlag[i] == 6 then
+			SetTimer(AddGear(specialPointsX[i], specialPointsY[i], gtMine, 0, 0, 0, 0), 5000)
+
+		-- Sticky Mines
+		elseif specialPointsFlag[i] == 7 then
+			AddGear(specialPointsX[i], specialPointsY[i], gtSMine, 0, 0, 0, 0)
+
+		-- Air Mines
+		elseif specialPointsFlag[i] == 8 then
+			AddGear(specialPointsX[i], specialPointsY[i], gtAirMine, 0, 0, 0, 0)
+
+		-- Health Crates
+		elseif specialPointsFlag[i] == 9 then
+			SetHealth(SpawnHealthCrate(specialPointsX[i],specialPointsY[i]),25)
+		elseif specialPointsFlag[i] == 10 then
+			SetHealth(SpawnHealthCrate(specialPointsX[i],specialPointsY[i]),50)
+		elseif specialPointsFlag[i] == 11 then
+			SetHealth(SpawnHealthCrate(specialPointsX[i],specialPointsY[i]),75)
+		elseif specialPointsFlag[i] == 12 then
+			SetHealth(SpawnHealthCrate(specialPointsX[i],specialPointsY[i]),100)
+
+		-- Cleaver
+		elseif specialPointsFlag[i] == 13 then
+			AddGear(specialPointsX[i], specialPointsY[i], gtKnife, 0, 0, 0, 0)
+
+		-- Target
+		elseif specialPointsFlag[i] == 14 then
+			AddGear(specialPointsX[i], specialPointsY[i], gtTarget, 0, 0, 0, 0)
+
+		--Barrels
+		elseif specialPointsFlag[i] == 15 then
+			SetHealth(AddGear(specialPointsX[i], specialPointsY[i], gtExplosives, 0, 0, 0, 0),1)
+		elseif specialPointsFlag[i] == 16 then
+			SetHealth(AddGear(specialPointsX[i], specialPointsY[i], gtExplosives, 0, 0, 0, 0),25)
+		elseif specialPointsFlag[i] == 17 then
+			SetHealth(AddGear(specialPointsX[i], specialPointsY[i], gtExplosives, 0, 0, 0, 0),50)
+		elseif specialPointsFlag[i] == 18 then
+			SetHealth(AddGear(specialPointsX[i], specialPointsY[i], gtExplosives, 0, 0, 0, 0),75)
+		elseif specialPointsFlag[i] == 19 then
+			SetHealth(AddGear(specialPointsX[i], specialPointsY[i], gtExplosives, 0, 0, 0, 0),100)
+
+		-- There are about 58+- weps / utils
+		-- Weapon Crates
+		elseif (specialPointsFlag[i] >= 20) and (specialPointsFlag[i] < (#atkArray+20)) then
+			SpawnAmmoCrate(specialPointsX[i],specialPointsY[i],atkArray[i-19][1])
+
+		-- Utility Crates
+		elseif (specialPointsFlag[i] >= (#atkArray+20)) and (specialPointsFlag[i] < (#atkArray+20+#utilArray)) then
+			SpawnUtilityCrateCrate(specialPointsX[i],specialPointsY[i],utilArray[i-19-#atkArray][1])
+
+		--79-82 (reserved for future wep crates)
+		--89,88,87,86 and 85,84,83,82 (reserved for the 2 custom sprites and their landflags)
+
+		--90-99 reserved for scripted structures
+		--[[elseif specialPointsFlag[i] == 90 then
+			--PlaceStruc("generator")
+		elseif specialPointsFlag[i] == 91 then
+			--PlaceStruc("healingstation")
+		elseif specialPointsFlag[i] == 92 then
+			--PlaceStruc("respawner")
+		elseif specialPointsFlag[i] == 93 then
+			--PlaceStruc("teleportationnode")
+		elseif specialPointsFlag[i] == 94 then
+			--PlaceStruc("biofilter")
+		elseif specialPointsFlag[i] == 95 then
+			--PlaceStruc("supportstation")
+		elseif specialPointsFlag[i] == 96 then
+			--PlaceStruc("constructionstation")
+		elseif specialPointsFlag[i] == 97 then
+			--PlaceStruc("reflectorshield")
+		elseif specialPointsFlag[i] == 98 then
+			--PlaceStruc("weaponfilter")]]
+
+		-- Normal Girders
+		elseif specialPointsFlag[i] == 100 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 101 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 102 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 103 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 104 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 105 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 106 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		elseif specialPointsFlag[i] == 107 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+
+		-- Invulnerable Girders
+		elseif specialPointsFlag[i] == 108 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 109 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 110 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 111 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 112 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 113 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 114 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+		elseif specialPointsFlag[i] == 115 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+
+		-- Icy Girders
+		elseif specialPointsFlag[i] == 116 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 117 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 1, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 118 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 2, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 119 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 3, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 120 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 121 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 5, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 121 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 6, 16448250, nil, nil, nil, lfIce)
+		elseif specialPointsFlag[i] == 123 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 7, 16448250, nil, nil, nil, lfIce)
+
+		-- Rubber Bands
+		elseif specialPointsFlag[i] == 124 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+		elseif specialPointsFlag[i] == 125 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+		elseif specialPointsFlag[i] == 126 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+		elseif specialPointsFlag[i] == 127 then
+			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+
+		-- Waypoints
+		else -- 0 / no value
+			PlaceWayPoint(specialPointsX[i], specialPointsY[i])
+		end
+
+	end
+
+end
+
+function onGameStart()
 
 		trackTeams()
 
@@ -1834,9 +2110,7 @@ function onGameStart()
         lastRound = TotalRounds
         RoundHasChanged = false -- true
 
-        for i = 0, (specialPointsCount-1) do
-                PlaceWayPoint(specialPointsX[i], specialPointsY[i])
-        end
+        InterpretPoints()
 
         RebuildTeamInfo()
 
@@ -1851,6 +2125,9 @@ function onGameStart()
 
                                 loc("Build a track and race.") .. "|" ..
                                 loc("Round Limit:") .. " " .. roundLimit .. "|" ..
+								loc("You can further customize the race by changing the scheme script paramater.") .. "|" ..
+								--loc("For example, the below line would play map 4, with infinite fuel for the flying saucer, and four rounds.") .. "|" ..
+								--"m=4, ufo=true, rounds=4" .. "|" ..
 
                                 "", 4, 4000
                                 )
@@ -1876,14 +2153,6 @@ function PlaceWayPoint(x,y)
         end
     end
 end
-
-function onSpecialPoint(x,y,flag)
-    specialPointsX[specialPointsCount] = x
-    specialPointsY[specialPointsCount] = y
-    specialPointsCount = specialPointsCount + 1
-end
-
-
 
 function onNewTurn()
 
