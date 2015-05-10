@@ -4,6 +4,7 @@ import Text.PrettyPrint.HughesPJ
 import qualified Data.MultiMap as MM
 import Data.Maybe
 import Data.List
+import Data.Char
 
 data HWProtocol = Command String [CmdParam]
 data CmdParam = Skip
@@ -17,13 +18,13 @@ data ClientStates = NotConnected
                   | Lobby
 
 data ParseTree = PTPrefix String [ParseTree]
-               | PTCommand HWProtocol
+               | PTCommand String HWProtocol
 
 cmd = Command
 cmd1 s p = Command s [p]
 cmd2 s p1 p2 = Command s [p1, p2]
 
-breakCmd (Command (c:cs) params) = (c, Command cs params)
+breakCmd (PTCommand (c:cs) params) = (c, PTCommand cs params)
 
 commands = [
         cmd "CONNECTED" [Skip, IntP]
@@ -48,19 +49,21 @@ commands = [
         , cmd "KICKED" []
     ]
 
-groupByFirstChar :: [HWProtocol] -> [(Char, [HWProtocol])]
+groupByFirstChar :: [ParseTree] -> [(Char, [ParseTree])]
 groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
 
-buildParseTree cmds = [PTPrefix "!" $ bpt cmds]
+makePT cmd@(Command n p) = PTCommand n cmd
+
+buildParseTree cmds = [PTPrefix "!" $ bpt $ map makePT cmds]
 bpt cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed else subtree
     where
-        emptyNamed = find (\(_, (Command n _:_)) -> null n) assocs
+        emptyNamed = find (\(_, (PTCommand n _:_)) -> null n) assocs
         assocs = groupByFirstChar cmds
         subtree = map buildsub assocs
         buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
-        maybeMerge c cmd@[PTCommand _] = PTPrefix [c] cmd
+        maybeMerge c cmd@[PTCommand {}] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
-        cmdLeaf (c, (hwc:_)) = [PTPrefix [c] [PTCommand hwc]]
+        cmdLeaf (c, (hwc:_)) = [PTPrefix [c] [hwc]]
 
 dumpTree = vcat . map dt
     where
@@ -70,28 +73,35 @@ dumpTree = vcat . map dt
 pas2 = buildSwitch $ buildParseTree commands
     where
         buildSwitch cmds = text "case getNextChar of" $$ (nest 4 . vcat $ map buildCase cmds) $$ elsePart
-        buildCase (PTCommand _ ) = text "#10: <call cmd handler>;"
+        buildCase (PTCommand {}) = text "#10: <call cmd handler>;"
         buildCase (PTPrefix (s:ss) cmds) = quotes (char s) <> text ": " <> consumePrefix ss (buildSwitch cmds)
         consumePrefix "" = id
         consumePrefix str = (text "consume" <> (parens . quotes $ text str) <> semi $$)
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-renderArrays letters commands = l $+$ s
+renderArrays (letters, commands, handlers) = l $+$ s $+$ c
     where
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
         l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
             <> parens (hsep . punctuate comma $ map maybeQuotes letters) <> semi
         s = text "const commands: array[0.." <> (int $ length commands - 1) <> text "] of integer = "
             <> parens (hsep . punctuate comma $ map text commands) <> semi
+        c = text "const handlers: array[0.." <> (int $ length handlers - 1) <> text "] of integer = "
+            <> parens (hsep . punctuate comma $ map (text . mangle . fixName) handlers) <> semi
+        mangle = (++) "handler_"
+        fixName = map fixChar
+        fixChar c | isLetter c = c
+                  | otherwise = '_'
 
-pas = uncurry renderArrays $ buildTables $ buildParseTree commands
+pas = renderArrays $ buildTables $ buildParseTree commands
     where
-        buildTables cmds = let (_, _, _, t1, t2) = foldr walk (0, [0], -10, [], []) cmds in (tail t1, tail t2)
-        walk (PTCommand _ ) (lc, s:sh, pc, tbl1, tbl2) = (lc, 2:sh, pc - 1, "#10":"0":tbl1, "0":(show pc):tbl2)
+        buildTables cmds = let (_, _, _, t1, t2, t3) = foldr walk (0, [0], -10, [], [], [[]]) cmds in (tail t1, tail t2, concat t3)
+        walk (PTCommand _ (Command n params)) (lc, s:sh, pc, tbl1, tbl2, (t3:tbl3)) =
+            (lc, 2:sh, pc - 1, "#10":"0":tbl1, "0":show pc:tbl2, (n:t3):tbl3)
         walk (PTPrefix prefix cmds) l = lvldown $ foldr fpf (foldr walk (lvlup l) cmds) prefix
-        lvlup (lc, sh, pc, tbl1, tbl2) = (lc, 0:sh, pc, tbl1, tbl2)
-        lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2) = (lc, s1+s2:sh, pc, tbl1, show s1:tbl2)
-        fpf c (lc, s:sh, pc, tbl1, tbl2) = (lc + 1, s+1:sh, pc, [c]:tbl1, "0":tbl2)
+        lvlup (lc, sh, pc, tbl1, tbl2, tbl3) = (lc, 0:sh, pc, tbl1, tbl2, []:tbl3)
+        lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2, t31:t32:tbl3) = (lc, s1+s2:sh, pc, tbl1, (if null t32 then "0" else show s1):tbl2, (t31 ++ t32):tbl3)
+        fpf c (lc, s:sh, pc, tbl1, tbl2, tbl3) = (lc + 1, s+1:sh, pc, [c]:tbl1, "0":tbl2, tbl3)
 
 main = putStrLn $ renderStyle style{lineLength = 80} pas
