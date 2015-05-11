@@ -219,49 +219,54 @@ CheckIntersect:= res;
 end;
 
 
-function CountNonZeroz(x, y: LongInt): Longword;
+function CountNonZeroz(x, y, h: LongInt): Longword;
 var i: LongInt;
     lRes: Longword;
 begin
     lRes:= 0;
-    for i:= y to y + 15 do
+    for i:= y to Pred(y + h) do
         if Land[i, x] <> 0 then
             inc(lRes);
     CountNonZeroz:= lRes;
 end;
 
 function AddGirder(gX: LongInt; var girSurf: PSDL_Surface): boolean;
-var x1, x2, y, k, i: LongInt;
+var x1, x2, y, k, i, girderHeight: LongInt;
     rr: TSDL_Rect;
     bRes: boolean;
 begin
+if girSurf = nil then
+    girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
+
+girderHeight:= girSurf^.h;
+
 y:= topY+150;
 repeat
     inc(y, 24);
     x1:= gX;
     x2:= gX;
 
-    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y) = 0) do
+    while (x1 > Longint(leftX)+150) and (CountNonZeroz(x1, y, girderHeight) = 0) do
         dec(x1, 2);
 
     i:= x1 - 12;
     repeat
-        dec(x1, 2);
-        k:= CountNonZeroz(x1, y)
-    until (x1 < Longint(leftX)+150) or (k = 0) or (k = 16) or (x1 < i);
+        k:= CountNonZeroz(x1, y, girderHeight);
+        dec(x1, 2)
+    until (x1 < Longint(leftX) + 100) or (k = 0) or (k = girderHeight) or (x1 < i);
 
     inc(x1, 2);
-    if k = 16 then
+    if k = girderHeight then
         begin
-        while (x2 < (LongInt(rightX)-150)) and (CountNonZeroz(x2, y) = 0) do
+        while (x2 < (LongInt(rightX) - 100)) and (CountNonZeroz(x2, y, girderHeight) = 0) do
             inc(x2, 2);
         i:= x2 + 12;
         repeat
         inc(x2, 2);
-        k:= CountNonZeroz(x2, y)
-        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = 16) or (x2 > i) or (x2 - x1 >= 768);
+        k:= CountNonZeroz(x2, y, girderHeight)
+        until (x2 >= (LongInt(rightX)-150)) or (k = 0) or (k = girderHeight) or (x2 > i) or (x2 - x1 >= 900);
 
-        if (x2 < (LongInt(rightX) - 150)) and (k = 16) and (x2 - x1 > 250) and (x2 - x1 < 768)
+        if (x2 < (LongInt(rightX) - 100)) and (k = girderHeight) and (x2 - x1 > 200) and (x2 - x1 < 900)
         and (not CheckIntersect(x1 - 32, y - 64, x2 - x1 + 64, 144)) then
                 break;
         end;
@@ -271,8 +276,6 @@ until y > (LAND_HEIGHT-125);
 if x1 > 0 then
 begin
     bRes:= true;
-    if girSurf = nil then
-        girSurf:= LoadDataImageAltPath(ptCurrTheme, ptGraphics, 'Girder', ifCritical or ifTransparent or ifIgnoreCaps);
 
     rr.x:= x1;
     while rr.x < x2 do
