@@ -33,6 +33,10 @@ commands = [
         , cmd1 "ASKPASSWORD" SS
         , cmd1 "SERVER_AUTH" SS
         , cmd1 "JOINING" SS
+        , cmd1 "TEAM_ACCEPTED" SS
+        , cmd1 "HH_NUM" $ Many [SS]
+        , cmd1 "TEAM_COLOR" $ Many [SS]
+        , cmd1 "TEAM_ACCEPTED" SS
         , cmd1 "BANLIST" $ Many [SS]
         , cmd1 "JOINED" $ Many [SS]
         , cmd1 "LOBBY:JOINED" $ Many [SS]
@@ -40,21 +44,30 @@ commands = [
         , cmd2 "CLIENT_FLAGS" SS $ Many [SS]
         , cmd2 "LEFT" SS $ Many [SS]
         , cmd1 "SERVER_MESSAGE" LS
+        , cmd1 "ERROR" LS
+        , cmd1 "NOTICE" LS
+        , cmd1 "WARNING" LS
+        , cmd1 "JOINING" SS
         , cmd1 "EM" $ Many [LS]
         , cmd1 "PING" $ Many [SS]
         , cmd2 "CHAT" SS LS
         , cmd2 "SERVER_VARS" SS LS
         , cmd2 "BYE" SS LS
         , cmd1 "INFO" $ Many [SS]
+        , cmd1 "ROOMS" $ Many [SS]
         , cmd "KICKED" []
+        , cmd "RUN_GAME" []
+        , cmd "ROUND_FINISHED" []
     ]
+
+unknowncmd = PTPrefix "$" [PTCommand "$" $ Command "__UNKNOWN__" [Many [SS]]]
 
 groupByFirstChar :: [ParseTree] -> [(Char, [ParseTree])]
 groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
 
 makePT cmd@(Command n p) = PTCommand n cmd
 
-buildParseTree cmds = [PTPrefix "!" $ bpt $ map makePT cmds]
+buildParseTree cmds = [PTPrefix "!" $ (bpt $ map makePT cmds) ++ [unknowncmd]]
 bpt cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed else subtree
     where
         emptyNamed = find (\(_, (PTCommand n _:_)) -> null n) assocs
@@ -80,25 +93,33 @@ pas2 = buildSwitch $ buildParseTree commands
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-renderArrays (letters, commands, handlers) = l $+$ s $+$ c
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, bodies, c]
     where
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
         l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
             <> parens (hsep . punctuate comma $ map maybeQuotes letters) <> semi
         s = text "const commands: array[0.." <> (int $ length commands - 1) <> text "] of integer = "
             <> parens (hsep . punctuate comma $ map text commands) <> semi
-        c = text "const handlers: array[0.." <> (int $ length handlers - 1) <> text "] of integer = "
-            <> parens (hsep . punctuate comma $ map (text . mangle . fixName) handlers) <> semi
-        mangle = (++) "handler_"
+        c = text "const handlers: array[0.." <> (int $ length fixedNames - 1) <> text "] of PHandler = "
+            <> parens (hsep . punctuate comma $ map (text . (++) "@handler_") $ reverse fixedNames) <> semi
+        fixedNames = map fixName handlers
         fixName = map fixChar
         fixChar c | isLetter c = c
                   | otherwise = '_'
+        bodies = vcat $ punctuate (char '\n') $ map handlerBody fixedNames
+        handlerBody n = text "procedure handler_" <> text n <> semi
+            $+$ text "begin" 
+            $+$ nest 4 (
+                text "state.cmd:= cmd_" <> text n <> semi
+            )
+            $+$ text "end" <> semi
+        cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) fixedNames) <> semi
 
 pas = renderArrays $ buildTables $ buildParseTree commands
     where
         buildTables cmds = let (_, _, _, t1, t2, t3) = foldr walk (0, [0], -10, [], [], [[]]) cmds in (tail t1, tail t2, concat t3)
         walk (PTCommand _ (Command n params)) (lc, s:sh, pc, tbl1, tbl2, (t3:tbl3)) =
-            (lc, 2:sh, pc - 1, "#10":"0":tbl1, "0":show pc:tbl2, (n:t3):tbl3)
+            (lc, 2:sh, pc - 1, "#10":"#0":tbl1, "0":show pc:tbl2, (n:t3):tbl3)
         walk (PTPrefix prefix cmds) l = lvldown $ foldr fpf (foldr walk (lvlup l) cmds) prefix
         lvlup (lc, sh, pc, tbl1, tbl2, tbl3) = (lc, 0:sh, pc, tbl1, tbl2, []:tbl3)
         lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2, t31:t32:tbl3) = (lc, s1+s2:sh, pc, tbl1, (if null t32 then "0" else show s1):tbl2, (t31 ++ t32):tbl3)
