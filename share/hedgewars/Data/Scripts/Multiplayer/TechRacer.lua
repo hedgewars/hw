@@ -729,11 +729,12 @@ function InterpretPoints()
 		-- There are about 58+- weps / utils
 		-- Weapon Crates
 		elseif (specialPointsFlag[i] >= 20) and (specialPointsFlag[i] < (#atkArray+20)) then
-			SpawnAmmoCrate(specialPointsX[i],specialPointsY[i],atkArray[i-19][1])
+			SpawnAmmoCrate(specialPointsX[i],specialPointsY[i],atkArray[specialPointsFlag[i]-19][1])
+
 
 		-- Utility Crates
 		elseif (specialPointsFlag[i] >= (#atkArray+20)) and (specialPointsFlag[i] < (#atkArray+20+#utilArray)) then
-			SpawnUtilityCrateCrate(specialPointsX[i],specialPointsY[i],utilArray[i-19-#atkArray][1])
+			SpawnUtilityCrate(specialPointsX[i],specialPointsY[i],utilArray[specialPointsFlag[i]-19-#atkArray][1])
 
 		--79-82 (reserved for future wep crates)
 		--89,88,87,86 and 85,84,83,82 (reserved for the 2 custom sprites and their landflags)
