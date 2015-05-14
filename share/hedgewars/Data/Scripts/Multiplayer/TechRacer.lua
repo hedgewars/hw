@@ -1,5 +1,5 @@
 ------------------------------------------
--- TECH RACER v0.5
+-- TECH RACER v0.6
 -----------------------------------------
 
 --------------
@@ -41,6 +41,11 @@
 --0.5
 --------------
 -- migrated maps to an external script
+
+--------------
+--0.6
+--------------
+-- move 1 line of code :D (allows loading of HWMAP points to actually work)
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -582,6 +587,8 @@ function HandleFreshMapCreation()
 	-- the creation stage, place girders and needed gears, grant ammo
 	elseif activationStage == 2 then
 
+		InterpretPoints()
+
 		-- these are from onParameters()
 		if (mapID == nil) or (mapID == 0) then
 			LoadMap(2000)
@@ -840,9 +847,7 @@ function onGameStart()
         lastRound = TotalRounds
         RoundHasChanged = false -- true
 
-        InterpretPoints()
-
-        RebuildTeamInfo()
+	    RebuildTeamInfo()
 
 		for i=0 , TeamsCount - 1 do
 			cnthhs = 0
