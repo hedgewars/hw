@@ -119,7 +119,7 @@ pas = renderArrays $ buildTables $ buildParseTree commands
     where
         buildTables cmds = let (_, _, _, t1, t2, t3) = foldr walk (0, [0], -10, [], [], [[]]) cmds in (tail t1, tail t2, concat t3)
         walk (PTCommand _ (Command n params)) (lc, s:sh, pc, tbl1, tbl2, (t3:tbl3)) =
-            (lc, 2:sh, pc - 1, "#10":"#0":tbl1, "0":show pc:tbl2, (n:t3):tbl3)
+            (lc, 1:sh, pc - 1, "#10":tbl1, show pc:tbl2, (n:t3):tbl3)
         walk (PTPrefix prefix cmds) l = lvldown $ foldr fpf (foldr walk (lvlup l) cmds) prefix
         lvlup (lc, sh, pc, tbl1, tbl2, tbl3) = (lc, 0:sh, pc, tbl1, tbl2, []:tbl3)
         lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2, t31:t32:tbl3) = (lc, s1+s2:sh, pc, tbl1, (if null t32 then "0" else show s1):tbl2, (t31 ++ t32):tbl3)
