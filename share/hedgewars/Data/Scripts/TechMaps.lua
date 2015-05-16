@@ -14,7 +14,7 @@ HedgewarsScriptLoad("/Scripts/Tracker.lua")
 -- this handles interim lazy copypasta from HedgeEditor
 -- while I'm still messing with things
 function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
-	LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
+	PlaceSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 end
 
 function LoadMap(mID)
