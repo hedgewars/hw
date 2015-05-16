@@ -126,10 +126,10 @@ begin
     ipcCheckFromFrontend:= ipcCheck(msgEngine, mutEngine)
 end;
 
-function  listener(p: pointer): Longint; cdecl; export;
+function  engineListener(p: pointer): Longint; cdecl; export;
 var msg: TIPCMessage;
 begin
-    listener:= 0;
+    engineListener:= 0;
     repeat
         msg:= ipcReadFromEngine();
         if msg.buf = nil then
@@ -146,7 +146,7 @@ procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 begin
     callbackPointer:= p;
     callbackFunction:= f;
-    callbackListenerThread:= SDL_CreateThread(@listener{$IFDEF SDL2}, 'ipcListener'{$ENDIF}, nil);
+    callbackListenerThread:= SDL_CreateThread(@engineListener{$IFDEF SDL2}, 'engineListener'{$ENDIF}, nil);
 end;
 
 procedure initIPC;

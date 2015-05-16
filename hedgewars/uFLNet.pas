@@ -15,7 +15,7 @@ function getNextChar: char; forward;
 function getCurrChar: char; forward;
 procedure sendNet(s: shortstring); forward;
 
-type TCmdType = (cmd_ASKPASSWORD, cmd_BANLIST, cmd_BYE, cmd_CHAT, cmd_CLIENT_FLAGS, cmd_CONNECTED, cmd_EM, cmd_HH_NUM, cmd_INFO, cmd_JOINED, cmd_JOINING, cmd_KICKED, cmd_LEFT, cmd_LOBBY_JOINED, cmd_LOBBY_LEFT, cmd_NICK, cmd_NOTICE, cmd_PING, cmd_PROTO, cmd_ROOMS, cmd_ROUND_FINISHED, cmd_RUN_GAME, cmd_SERVER_AUTH, cmd_SERVER_MESSAGE, cmd_SERVER_VARS, cmd_TEAM_ACCEPTED, cmd_TEAM_COLOR, cmd_WARNING, cmd___UNKNOWN__);
+type TCmdType = (cmd___UNKNOWN__, cmd_WARNING, cmd_TEAM_COLOR, cmd_TEAM_ACCEPTED, cmd_SERVER_VARS, cmd_SERVER_MESSAGE, cmd_SERVER_AUTH, cmd_RUN_GAME, cmd_ROUND_FINISHED, cmd_ROOMS, cmd_PROTO, cmd_PING, cmd_NOTICE, cmd_NICK, cmd_LOBBY_LEFT, cmd_LOBBY_JOINED, cmd_LEFT, cmd_KICKED, cmd_JOINING, cmd_JOINED, cmd_INFO, cmd_HH_NUM, cmd_EM, cmd_CONNECTED, cmd_CLIENT_FLAGS, cmd_CHAT, cmd_BYE, cmd_BANLIST, cmd_ASKPASSWORD);
 
 type
     TNetState = (netDisconnected, netConnecting, netLoggedIn);
@@ -37,150 +37,119 @@ const commands: array[0..206] of integer = (12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -3
 
 procedure handler_ASKPASSWORD;
 begin
-    state.cmd:= cmd_ASKPASSWORD;
 end;
 
 procedure handler_BANLIST;
 begin
-    state.cmd:= cmd_BANLIST;
 end;
 
 procedure handler_BYE;
 begin
-    state.cmd:= cmd_BYE;
 end;
 
 procedure handler_CHAT;
 begin
-    state.cmd:= cmd_CHAT;
 end;
 
 procedure handler_CLIENT_FLAGS;
 begin
-    state.cmd:= cmd_CLIENT_FLAGS;
 end;
 
 procedure handler_CONNECTED;
 begin
-    state.cmd:= cmd_CONNECTED;
 end;
 
 procedure handler_EM;
 begin
-    state.cmd:= cmd_EM;
 end;
 
 procedure handler_HH_NUM;
 begin
-    state.cmd:= cmd_HH_NUM;
 end;
 
 procedure handler_INFO;
 begin
-    state.cmd:= cmd_INFO;
 end;
 
 procedure handler_JOINED;
 begin
-    state.cmd:= cmd_JOINED;
 end;
 
 procedure handler_JOINING;
 begin
-    state.cmd:= cmd_JOINING;
 end;
 
 procedure handler_KICKED;
 begin
-    state.cmd:= cmd_KICKED;
 end;
 
 procedure handler_LEFT;
 begin
-    state.cmd:= cmd_LEFT;
 end;
 
 procedure handler_LOBBY_JOINED;
 begin
-    state.cmd:= cmd_LOBBY_JOINED;
 end;
 
 procedure handler_LOBBY_LEFT;
 begin
-    state.cmd:= cmd_LOBBY_LEFT;
 end;
 
 procedure handler_NICK;
 begin
-    state.cmd:= cmd_NICK;
 end;
 
 procedure handler_NOTICE;
 begin
-    state.cmd:= cmd_NOTICE;
 end;
 
 procedure handler_PING;
 begin
-    state.cmd:= cmd_PING;
-
-    sendNet('PONG');
+    sendNet('PONG')
 end;
 
 procedure handler_PROTO;
 begin
-    state.cmd:= cmd_PROTO;
 end;
 
 procedure handler_ROOMS;
 begin
-    state.cmd:= cmd_ROOMS;
 end;
 
 procedure handler_ROUND_FINISHED;
 begin
-    state.cmd:= cmd_ROUND_FINISHED;
 end;
 
 procedure handler_RUN_GAME;
 begin
-    state.cmd:= cmd_RUN_GAME;
 end;
 
 procedure handler_SERVER_AUTH;
 begin
-    state.cmd:= cmd_SERVER_AUTH;
 end;
 
 procedure handler_SERVER_MESSAGE;
 begin
-    state.cmd:= cmd_SERVER_MESSAGE;
 end;
 
 procedure handler_SERVER_VARS;
 begin
-    state.cmd:= cmd_SERVER_VARS;
 end;
 
 procedure handler_TEAM_ACCEPTED;
 begin
-    state.cmd:= cmd_TEAM_ACCEPTED;
 end;
 
 procedure handler_TEAM_COLOR;
 begin
-    state.cmd:= cmd_TEAM_COLOR;
 end;
 
 procedure handler_WARNING;
 begin
-    state.cmd:= cmd_WARNING;
 end;
 
 procedure handler___UNKNOWN__;
 begin
-    state.cmd:= cmd___UNKNOWN__;
-
     writeln('[NET] Unknown cmd');
 end;
 
@@ -205,7 +174,6 @@ begin
 end;
 
 var sock: PTCPSocket;
-    fds: PSDLNet_SocketSet;
     netReaderThread: PSDL_Thread;
 
 function getCurrChar: char;
@@ -236,36 +204,53 @@ begin
     getNextChar:= state.buf[state.bufpos];
 end;
 
+function netWriter(sock: PTCPSocket): LongInt; cdecl; export;
+begin
+    netWriter:= 0;
+end;
+
 function netReader(data: pointer): LongInt; cdecl; export;
 var c: char;
+    ipaddr: TIPAddress;
 begin
-repeat
-    c:= getNextChar;
-    writeln('>>>>> ', c, ' [', letters[state.l], '] ', commands[state.l]);
-    if c = #0 then
-        state.netState:= netDisconnected
-    else
-    begin
-        while (letters[state.l] <> c) and (commands[state.l] > 0) do
-            inc(state.l, commands[state.l]);
+    netReader:= 0;
 
-        if c = letters[state.l] then
-            if commands[state.l] < 0 then
+    if SDLNet_ResolveHost(ipaddr, PChar('netserver.hedgewars.org'), 46631) = 0 then
+        sock:= SDLNet_TCP_Open(ipaddr);
+
+    SDL_CreateThread(@netWriter{$IFDEF SDL2}, 'netWriter'{$ENDIF}, sock);
+
+    repeat
+        c:= getNextChar;
+        //writeln('>>>>> ', c, ' [', letters[state.l], '] ', commands[state.l]);
+        if c = #0 then
+            state.netState:= netDisconnected
+        else
+        begin
+            while (letters[state.l] <> c) and (commands[state.l] > 0) do
+                inc(state.l, commands[state.l]);
+
+            if c = letters[state.l] then
+                if commands[state.l] < 0 then
                 begin
+                    state.cmd:= TCmdType(-10 - commands[state.l]);
+                    writeln('[NET] ', state.cmd);
                     handlers[-10 - commands[state.l]]();
                     handleTail()
                 end
+                else
+                    inc(state.l)
             else
-                inc(state.l)
-        else
-        begin
-            handler___UNKNOWN__();
-            handleTail()
+            begin
+                handler___UNKNOWN__();
+                handleTail()
+            end
         end
-    end
-until state.netState = netDisconnected;
+    until state.netState = netDisconnected;
 
-writeln('[NET] netReader: disconnected');
+    sock:= nil;
+
+    writeln('[NET] netReader: disconnected');
 end;
 
 procedure sendNet(s: shortstring);
@@ -276,13 +261,9 @@ begin
 end;
 
 procedure connectOfficialServer;
-var ipaddr: TIPAddress;
 begin
     if sock <> nil then
         exit;
-
-    if SDLNet_ResolveHost(ipaddr, PChar('netserver.hedgewars.org'), 46631) = 0 then
-        sock:= SDLNet_TCP_Open(ipaddr);
 
     state.bufpos:= 0;
     state.buf:= '';
@@ -298,7 +279,6 @@ begin
     sock:= nil;
 
     SDLNet_Init;
-    fds:= SDLNet_AllocSocketSet(1);
 end;
 
 procedure freeModule;

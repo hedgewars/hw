@@ -109,11 +109,8 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
         bodies = vcat $ punctuate (char '\n') $ map handlerBody fixedNames
         handlerBody n = text "procedure handler_" <> text n <> semi
             $+$ text "begin" 
-            $+$ nest 4 (
-                text "state.cmd:= cmd_" <> text n <> semi
-            )
             $+$ text "end" <> semi
-        cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) fixedNames) <> semi
+        cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) $ reverse fixedNames) <> semi
 
 pas = renderArrays $ buildTables $ buildParseTree commands
     where
