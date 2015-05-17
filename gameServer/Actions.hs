@@ -381,8 +381,9 @@ processAction (SendTeamRemovalMessage teamName) = do
         ModifyRoom (\r -> r{
                 gameInfo = liftM (\g -> g{
                     teamsInGameNumber = teamsInGameNumber g - 1
-                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then (:) (fromJust $ lastFilteredTimedMsg g) else id)
-                      $ rmTeamMsg : roundMsgs g
+                    , lastFilteredTimedMsg = Nothing
+                    , roundMsgs = (if isJust $ lastFilteredTimedMsg g then ((:) rmTeamMsg . (:) (fromJust $ lastFilteredTimedMsg g)) else ((:) rmTeamMsg)) 
+                        $ roundMsgs g
                 }) $ gameInfo r
             })
         ]

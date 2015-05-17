@@ -245,7 +245,7 @@ void SDLInteraction::startMusic()
     if (m_music == NULL)
         m_music = Mix_LoadMUS_RW(PHYSFSRWOPS_openRead(m_musicTrack.toLocal8Bit().constData()));
 
-    Mix_VolumeMusic(MIX_MAX_VOLUME - 28);
+    Mix_VolumeMusic(MIX_MAX_VOLUME/4);
     Mix_FadeInMusic(m_music, -1, 1750);
 }
 
