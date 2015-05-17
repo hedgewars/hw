@@ -2,9 +2,9 @@ unit uFLIPC;
 interface
 uses SDLh, uFLTypes;
 
-var msgFrontend, msgEngine: TIPCMessage;
-    mutFrontend, mutEngine: PSDL_mutex;
-    condFrontend, condEngine: PSDL_cond;
+var msgFrontend, msgEngine, msgNet: TIPCMessage;
+    mutFrontend, mutEngine, mutNet: PSDL_mutex;
+    condFrontend, condEngine, condNet: PSDL_cond;
 
 procedure initIPC;
 procedure freeIPC;
@@ -14,18 +14,25 @@ procedure ipcToEngineRaw(p: pointer; len: Longword);
 //function  ipcReadFromEngine: shortstring;
 //function  ipcCheckFromEngine: boolean;
 
+procedure ipcToNet(s: shortstring);
+procedure ipcToNetRaw(p: pointer; len: Longword);
+
 procedure ipcToFrontend(s: shortstring);
 procedure ipcToFrontendRaw(p: pointer; len: Longword);
 function ipcReadFromFrontend: shortstring;
 function ipcCheckFromFrontend: boolean;
 
 procedure registerIPCCallback(p: pointer; f: TIPCCallback);
+procedure registerNetCallback(p: pointer; f: TIPCCallback);
 
 implementation
 
-var callbackPointer: pointer;
-    callbackFunction: TIPCCallback;
-    callbackListenerThread: PSDL_Thread;
+var callbackPointerF: pointer;
+    callbackFunctionF: TIPCCallback;
+    callbackListenerThreadF: PSDL_Thread;
+    callbackPointerN: pointer;
+    callbackFunctionN: TIPCCallback;
+    callbackListenerThreadN: PSDL_Thread;
 
 procedure ipcSend(var s: TIPCMessage; var msg: TIPCMessage; mut: PSDL_mutex; cond: PSDL_cond);
 begin
@@ -86,6 +93,14 @@ begin
     ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
 end;
 
+procedure ipcToNet(s: shortstring);
+var msg: TIPCMessage;
+begin
+    msg.str:= s;
+    msg.buf:= nil;
+    ipcSend(msg, msgNet, mutNet, condNet)
+end;
+
 procedure ipcToEngineRaw(p: pointer; len: Longword);
 var msg: TIPCMessage;
 begin
@@ -106,6 +121,16 @@ begin
     ipcSend(msg, msgFrontend, mutFrontend, condFrontend)
 end;
 
+procedure ipcToNetRaw(p: pointer; len: Longword);
+var msg: TIPCMessage;
+begin
+    msg.str[0]:= #0;
+    msg.len:= len;
+    msg.buf:= GetMem(len);
+    Move(p^, msg.buf^, len);
+    ipcSend(msg, msgNet, mutNet, condNet)
+end;
+
 function ipcReadFromEngine: TIPCMessage;
 begin
     ipcReadFromEngine:= ipcRead(msgFrontend, mutFrontend, condFrontend)
@@ -114,6 +139,11 @@ end;
 function ipcReadFromFrontend: shortstring;
 begin
     ipcReadFromFrontend:= ipcRead(msgEngine, mutEngine, condEngine).str
+end;
+
+function ipcReadToNet: TIPCMessage;
+begin
+    ipcReadToNet:= ipcRead(msgNet, mutNet, condNet)
 end;
 
 function ipcCheckFromEngine: boolean;
@@ -133,10 +163,26 @@ begin
     repeat
         msg:= ipcReadFromEngine();
         if msg.buf = nil then
-            callbackFunction(callbackPointer, @msg.str[1], byte(msg.str[0]))
+            callbackFunctionF(callbackPointerF, @msg.str[1], byte(msg.str[0]))
         else
         begin
-            callbackFunction(callbackPointer, msg.buf, msg.len);
+            callbackFunctionF(callbackPointerF, msg.buf, msg.len);
+            FreeMem(msg.buf, msg.len)
+        end
+    until false
+end;
+
+function  netListener(p: pointer): Longint; cdecl; export;
+var msg: TIPCMessage;
+begin
+    netListener:= 0;
+    repeat
+        msg:= ipcReadToNet();
+        if msg.buf = nil then
+            callbackFunctionN(callbackPointerN, @msg.str[1], byte(msg.str[0]))
+        else
+        begin
+            callbackFunctionN(callbackPointerN, msg.buf, msg.len);
             FreeMem(msg.buf, msg.len)
         end
     until false
@@ -144,9 +190,16 @@ end;
 
 procedure registerIPCCallback(p: pointer; f: TIPCCallback);
 begin
-    callbackPointer:= p;
-    callbackFunction:= f;
-    callbackListenerThread:= SDL_CreateThread(@engineListener{$IFDEF SDL2}, 'engineListener'{$ENDIF}, nil);
+    callbackPointerF:= p;
+    callbackFunctionF:= f;
+    callbackListenerThreadF:= SDL_CreateThread(@engineListener{$IFDEF SDL2}, 'engineListener'{$ENDIF}, nil);
+end;
+
+procedure registerNetCallback(p: pointer; f: TIPCCallback);
+begin
+    callbackPointerN:= p;
+    callbackFunctionN:= f;
+    callbackListenerThreadN:= SDL_CreateThread(@netListener{$IFDEF SDL2}, 'netListener'{$ENDIF}, nil);
 end;
 
 procedure initIPC;
@@ -155,23 +208,30 @@ begin
     msgFrontend.buf:= nil;
     msgEngine.str:= '';
     msgEngine.buf:= nil;
+    msgNet.str:= '';
+    msgNet.buf:= nil;
 
-    callbackPointer:= nil;
-    callbackListenerThread:= nil;
+    callbackPointerF:= nil;
+    callbackListenerThreadF:= nil;
 
     mutFrontend:= SDL_CreateMutex;
     mutEngine:= SDL_CreateMutex;
+    mutNet:= SDL_CreateMutex;
     condFrontend:= SDL_CreateCond;
     condEngine:= SDL_CreateCond;
+    condNet:= SDL_CreateCond;
 end;
 
 procedure freeIPC;
 begin
-    SDL_KillThread(callbackListenerThread);
+    SDL_KillThread(callbackListenerThreadF);
+    SDL_KillThread(callbackListenerThreadN);
     SDL_DestroyMutex(mutFrontend);
     SDL_DestroyMutex(mutEngine);
+    SDL_DestroyMutex(mutNet);
     SDL_DestroyCond(condFrontend);
     SDL_DestroyCond(condEngine);
+    SDL_DestroyCond(condNet);
 end;
 
 end.

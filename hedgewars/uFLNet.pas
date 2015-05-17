@@ -7,9 +7,9 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses SDLh;
+uses SDLh, uFLIPC;
 
-const endCmd: array[0..1] of char = (#10, #10);
+const endCmd: string = #10 + #10;
 
 function getNextChar: char; forward;
 function getCurrChar: char; forward;
@@ -256,8 +256,13 @@ end;
 procedure sendNet(s: shortstring);
 begin
     writeln('[NET] Send: ', s);
-    SDLNet_TCP_Send(sock, @s[1], byte(s[0]));
-    SDLNet_TCP_Send(sock, @endCmd, 2);
+    ipcToNet(s + endCmd);
+end;
+
+procedure netSendCallback(p: pointer; msg: PChar; len: Longword);
+begin
+    // W A R N I N G: totally thread-unsafe due to use of sock variable
+    SDLNet_TCP_Send(sock, msg, len);
 end;
 
 procedure connectOfficialServer;
@@ -279,6 +284,8 @@ begin
     sock:= nil;
 
     SDLNet_Init;
+
+    registerNetCallback(nil, @netSendCallback);
 end;
 
 procedure freeModule;
