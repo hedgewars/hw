@@ -7,8 +7,6 @@ procedure runQuickGame; cdecl;
 procedure runLocalGame; cdecl;
 procedure getPreview; cdecl;
 
-procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
-
 procedure setSeed(seed: PChar); cdecl;
 function  getSeed: PChar; cdecl;
 procedure setTheme(themeName: PChar); cdecl;
@@ -21,10 +19,7 @@ procedure tryRemoveTeam(teamName: PChar); cdecl;
 procedure changeTeamColor(teamName: PChar; dir: LongInt); cdecl;
 
 implementation
-uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo;
-
-var guiCallbackPointer: pointer;
-    guiCallbackFunction: TGUICallback;
+uses uFLIPC, hwengine, uFLUtils, uFLTeams, uFLData, uFLSChemes, uFLAmmo, uFLUICallback;
 
 const
     MAXCONFIGS = 5;
@@ -200,21 +195,6 @@ begin
     end;
 end;
 
-
-procedure engineMessageCallback(p: pointer; msg: PChar; len: Longword);
-begin
-    if len = 128 * 256 then guiCallbackFunction(guiCallbackPointer, mtPreview, msg, len)
-end;
-
-procedure registerGUIMessagesCallback(p: pointer; f: TGUICallback); cdecl;
-begin
-    guiCallbackPointer:= p;
-    guiCallbackFunction:= f;
-
-    registerIPCCallback(nil, @engineMessageCallback)
-end;
-
-
 procedure tryAddTeam(teamName: PChar); cdecl;
 var msg: ansistring;
     i, hn, hedgehogsNumber: Longword;
@@ -249,13 +229,13 @@ begin
         teams[i].color:= c;
 
         msg:= '0' + #10 + teamName;
-        guiCallbackFunction(guiCallbackPointer, mtAddPlayingTeam, @msg[1], length(msg));
+        sendUI(mtAddPlayingTeam, @msg[1], length(msg));
 
         msg:= teamName + #10 + colorsSet[teams[i].color];
-        guiCallbackFunction(guiCallbackPointer, mtTeamColor, @msg[1], length(msg));
+        sendUI(mtTeamColor, @msg[1], length(msg));
 
         msg:= teamName;
-        guiCallbackFunction(guiCallbackPointer, mtRemoveTeam, @msg[1], length(msg))
+        sendUI(mtRemoveTeam, @msg[1], length(msg))
     end
 end;
 
@@ -286,8 +266,8 @@ begin
 
     msg:= teamName;
 
-    guiCallbackFunction(guiCallbackPointer, mtRemovePlayingTeam, @msg[1], length(msg));
-    guiCallbackFunction(guiCallbackPointer, mtAddTeam, @msg[1], length(msg))
+    sendUI(mtRemovePlayingTeam, @msg[1], length(msg));
+    sendUI(mtAddTeam, @msg[1], length(msg))
 end;
 
 
@@ -309,7 +289,7 @@ begin
         teams[i].color:= (teams[i].color + dc) mod 9;
 
         msg:= tn + #10 + colorsSet[teams[i].color];
-        guiCallbackFunction(guiCallbackPointer, mtTeamColor, @msg[1], length(msg))
+        sendUI(mtTeamColor, @msg[1], length(msg))
     end
 end;
 

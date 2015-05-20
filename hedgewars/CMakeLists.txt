@@ -109,10 +109,12 @@ set(engine_sources
     uFLGameConfig.pas
     uFLIPC.pas
     uFLNet.pas
+    uFLNetProtocol.pas
     uFLScripts.pas
     uFLSchemes.pas
     uFLTeams.pas
     uFLTypes.pas
+    uFLUICallback.pas
     uFLUtils.pas
 
     #these interact with everything, so compile last

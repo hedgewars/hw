@@ -10,7 +10,7 @@
 
 extern "C" {
     RunEngine_t *flibRunEngine;
-    registerGUIMessagesCallback_t *flibRegisterGUIMessagesCallback;
+    registerUIMessagesCallback_t *flibRegisterUIMessagesCallback;
     setSeed_t *flibSetSeed;
     getSeed_t *flibGetSeed;
     setTheme_t *flibSetTheme;
@@ -35,6 +35,7 @@ extern "C" {
     changeTeamColor_t * flibChangeTeamColor;
 
     connectOfficialServer_t * flibConnectOfficialServer;
+    passNetData_t * flibPassNetData;
 }
 
 Q_DECLARE_METATYPE(MessageType);
@@ -51,7 +52,7 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
         qWarning() << "Engine library not found" << hwlib.errorString();
 
     flibRunEngine = (RunEngine_t*) hwlib.resolve("RunEngine");
-    flibRegisterGUIMessagesCallback = (registerGUIMessagesCallback_t*) hwlib.resolve("registerGUIMessagesCallback");
+    flibRegisterUIMessagesCallback = (registerUIMessagesCallback_t*) hwlib.resolve("registerUIMessagesCallback");
     flibGetSeed = (getSeed_t*) hwlib.resolve("getSeed");
     flibGetPreview = (getPreview_t*) hwlib.resolve("getPreview");
     flibRunQuickGame = (runQuickGame_t*) hwlib.resolve("runQuickGame");
@@ -80,9 +81,10 @@ HWEngine::HWEngine(QQmlEngine *engine, QObject *parent) :
     flibChangeTeamColor = (changeTeamColor_t*) hwlib.resolve("changeTeamColor");
 
     flibConnectOfficialServer = (connectOfficialServer_t*) hwlib.resolve("connectOfficialServer");
+    flibPassNetData = (passNetData_t*) hwlib.resolve("passNetData");
 
     flibInit("/usr/home/unC0Rr/Sources/Hedgewars/Hedgewars-GC/share/hedgewars/Data", "/usr/home/unC0Rr/.hedgewars");
-    flibRegisterGUIMessagesCallback(this, &guiMessagesCallback);
+    flibRegisterUIMessagesCallback(this, &guiMessagesCallback);
 
     ThemeIconProvider * themeIcon = (ThemeIconProvider *)m_engine->imageProvider(QLatin1String("theme"));
     themeIcon->setFileContentsFunction(flibGetThemeIcon);
@@ -169,6 +171,9 @@ void HWEngine::engineMessageHandler(MessageType mt, const QByteArray &msg)
         QStringList l = QString::fromUtf8(msg).split('\n');
         emit teamColorChanged(l[0], QColor::fromRgba(l[1].toInt()).name());
         break;
+    }
+    case MSG_NETDATA: {
+        flibPassNetData(msg.constData());
     }
     }
 }

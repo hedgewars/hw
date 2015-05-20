@@ -48,6 +48,8 @@ uses hwengine
     , uFLSchemes
     , uFLAmmo
     , uFLNet
+    , uFLNetProtocol
+    , uFLUICallback
     ;
 
 {$INCLUDE "config.inc"}
@@ -154,7 +156,7 @@ exports
     runQuickGame,
     runLocalGame,
     getPreview,
-    registerGUIMessagesCallback,
+    registerUIMessagesCallback,
     flibInit,
     flibFree,
     //game config
@@ -177,6 +179,7 @@ exports
     changeTeamColor,
     // network
     connectOfficialServer,
+    passNetData,
 
     // dunno what these are
     RunEngine,

@@ -7,7 +7,7 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses SDLh, uFLIPC;
+uses SDLh, uFLIPC, uFLTypes, uFLUICallback;
 
 const endCmd: string = #10 + #10;
 
@@ -57,6 +57,7 @@ end;
 
 procedure handler_CONNECTED;
 begin
+    sendUI(mtNetData, nil, 0);
 end;
 
 procedure handler_EM;

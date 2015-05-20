@@ -3,7 +3,7 @@ interface
 
 type
     TMessageType = (mtPreview, mtAddPlayingTeam, mtRemovePlayingTeam, mtAddTeam, mtRemoveTeam
-                   , mtTeamColor);
+                   , mtTeamColor, mtNetData);
 
     TIPCMessage = record
                    str: shortstring;
@@ -12,7 +12,7 @@ type
                end;
 
     TIPCCallback = procedure (p: pointer; msg: PChar; len: Longword);
-    TGUICallback = procedure (p: pointer; msgType: TMessageType; msg: PChar; len: Longword); cdecl;
+    TUICallback = procedure (p: pointer; msgType: TMessageType; msg: PChar; len: Longword); cdecl;
 
     TGameType = (gtPreview, gtLocal);
     THedgehog = record

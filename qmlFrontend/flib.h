@@ -14,6 +14,7 @@ enum MessageType {
     , MSG_ADDTEAM
     , MSG_REMOVETEAM
     , MSG_TEAMCOLOR
+    , MSG_NETDATA
 };
 
 typedef union string255_
@@ -28,7 +29,7 @@ typedef union string255_
     } string255;
 
 typedef void RunEngine_t(int argc, const char ** argv);
-typedef void registerGUIMessagesCallback_t(void * context, void (*)(void * context, MessageType mt, const char * msg, uint32_t len));
+typedef void registerUIMessagesCallback_t(void * context, void (*)(void * context, MessageType mt, const char * msg, uint32_t len));
 typedef void getPreview_t();
 typedef void runQuickGame_t();
 typedef void runLocalGame_t();
@@ -41,6 +42,7 @@ typedef void setScheme_t(const char * schemeName);
 typedef void setAmmo_t(const char * ammoName);
 typedef void flibInit_t(const char * localPrefix, const char * userPrefix);
 typedef void flibFree_t();
+typedef void passNetData_t(const char * data);
 
 typedef char **getThemesList_t();
 typedef void freeThemesList_t(char **list);
