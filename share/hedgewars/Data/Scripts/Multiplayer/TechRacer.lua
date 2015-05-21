@@ -1,5 +1,5 @@
 ------------------------------------------
--- TECH RACER v0.6
+-- TECH RACER v0.7
 -----------------------------------------
 
 --------------
@@ -46,6 +46,13 @@
 --0.6
 --------------
 -- move 1 line of code :D (allows loading of HWMAP points to actually work)
+
+--------------
+--0.7
+--------------
+-- allow waypoints to be loaded automatically via TechMaps or HWMAP
+-- (temporarily?) remove ability to place waypoints manually
+-- break stuff?
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -202,7 +209,7 @@ local wpCol = {}
 local wpActive = {}
 local wpRad = 450 --75
 local wpCount = 0
-local wpLimit = 8
+local wpLimit = 20
 
 local usedWeapons = {}
 
@@ -576,6 +583,26 @@ function ClearMap()
 
 end
 
+function CallBob(x,y)
+	if not racerActive then
+        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
+
+            wpX[wpCount] = x
+            wpY[wpCount] = y
+            wpCol[wpCount] = 0xffffffff
+            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
+
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+
+            wpCount = wpCount + 1
+
+            --AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
+        end
+    end
+end
+
+
+
 function HandleFreshMapCreation()
 
 	-- the boom stage, boom girders, reset ammo, and delete other map objects
@@ -594,6 +621,15 @@ function HandleFreshMapCreation()
 			LoadMap(2000)
 		else
 			LoadMap(mapID)
+		end
+
+		for i = 0,(wpCount-1) do
+			DeleteVisualGear(wpCirc[i])
+		end
+		wpCount = 0
+
+		for i = 1, techCount-1 do
+			CallBob(techX[i],techY[i])
 		end
 
 		activationStage = 200
@@ -832,7 +868,7 @@ function InterpretPoints()
 
 		-- Waypoints
 		else -- 0 / no value
-			PlaceWayPoint(specialPointsX[i], specialPointsY[i])
+			CallBob(specialPointsX[i], specialPointsY[i])
 		end
 
 	end
@@ -869,25 +905,12 @@ function onGameStart()
 
         TryRepositionHogs()
 
+		activationStage = 2
+		HandleFreshMapCreation()
+
 end
 
-function PlaceWayPoint(x,y)
-    if not racerActive then
-        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
-            wpX[wpCount] = x
-            wpY[wpCount] = y
-            wpCol[wpCount] = 0xffffffff
-            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
-
-            wpCount = wpCount + 1
-
-            AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
-        end
-    end
-end
 
 function onNewTurn()
 
@@ -907,7 +930,7 @@ function onNewTurn()
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
-        AddAmmo(CurrentHedgehog, amAirAttack, 0)
+    --    AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
@@ -919,21 +942,21 @@ function onNewTurn()
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
-                if wpCount >= 3 then
+               -- if wpCount >= 3 then
                         gameBegun = true
-						--activationStage = 200
+						--  --[[activationStage = 200]]
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
                         ShowMission(loc("RACER"),
                         loc("GAME BEGUN!!!"),
                         loc("Complete the track as fast as you can!"), 2, 4000)
-                else
-                        ShowMission(loc("RACER"),
-                        loc("NOT ENOUGH WAYPOINTS"),
-                        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
-                        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-						SetWeapon(amAirAttack)
-                end
+                --else
+                --        ShowMission(loc("RACER"),
+                --        loc("NOT ENOUGH WAYPOINTS"),
+                --        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
+                --        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+				--		SetWeapon(amAirAttack)
+               -- end
         end
 
         if gameOver == true then
@@ -969,7 +992,7 @@ function onGameTick20()
                 AddCaption(loc("Please place the way-point further from the waterline."))
                 PlaySound(sndDenied)
             else
-                PlaceWayPoint(x, y)
+                CallBob(x, y)
                 if wpCount == wpLimit then
                     AddCaption(loc("Race complexity limit reached."))
                     DisableTumbler()

@@ -11,6 +11,16 @@
 
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
+techX = {}
+techY = {}
+techCount = 1
+
+function AddWayPoint(x,y)
+	techX[techCount] = x
+	techY[techCount] = y
+	techCount = techCount +1
+end
+
 -- this handles interim lazy copypasta from HedgeEditor
 -- while I'm still messing with things
 function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
@@ -18,6 +28,10 @@ function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 end
 
 function LoadMap(mID)
+
+	techX = {}
+	techY = {}
+	techCount = 1
 
 	if mID == 1 then
 
@@ -149,86 +163,11 @@ function LoadMap(mID)
 ]]
 	elseif mID == 2 then
 
-	-- not really a racing map, just a simple testmap that contains
-	-- a bunch of different stuff to test HWMAP conversion
-	------ GIRDER LIST ------
-	LoadSprite(366, 540, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(312, 696, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(377, 837, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(513, 485, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(657, 550, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(712, 704, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(655, 848, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(512, 913, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(1044, 530, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-	LoadSprite(968, 623, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-	LoadSprite(1125, 623, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-	LoadSprite(1042, 716, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-	LoadSprite(844, 613, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
-	LoadSprite(118, 425, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-
-	------ RUBBER BAND LIST ------
-	LoadSprite(688, 957, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(804, 1070, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(921, 1182, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1036, 1299, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1184, 1349, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1348, 1345, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1490, 1278, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1601, 1161, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-	LoadSprite(1712, 1044, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-
-	------ LAND SPRITE LIST ------
-
-	------ HEALTH CRATE LIST ------
-	SetHealth(SpawnHealthCrate(694, 553), 25)
-
-	------ AMMO CRATE LIST ------
-	tempG = SpawnAmmoCrate(463, 461, amBazooka)
-	setGearValue(tempG,"caseType", "ammo")
-	setGearValue(tempG,"contents", "amBazooka")
-	tempG = SpawnAmmoCrate(579, 461, amWatermelon)
-	setGearValue(tempG,"caseType", "ammo")
-	setGearValue(tempG,"contents", "amWatermelon")
-
-	------ UTILITY CRATE LIST ------
-	tempG = SpawnUtilityCrate(367, 500, amBlowTorch)
-	setGearValue(tempG,"caseType", "util")
-	setGearValue(tempG,"contents", "amBlowTorch")
-	tempG = SpawnUtilityCrate(638, 493, amExtraTime)
-	setGearValue(tempG,"caseType", "util")
-	setGearValue(tempG,"contents", "amExtraTime")
-
-	------ BARREL LIST ------
-	SetHealth(AddGear(140, 409, gtExplosives, 0, 0, 0, 0), 1)
-
-	------ MINE LIST ------
-	SetTimer(AddGear(1016, 520, gtMine, 0, 0, 0, 0), 3000)
-	SetTimer(AddGear(1057, 520, gtMine, 0, 0, 0, 0), 3000)
-	SetTimer(AddGear(1104, 520, gtMine, 0, 0, 0, 0), 3000)
-
-	------ STICKY MINE LIST ------
-	tempG = AddGear(311, 651, gtSMine, 0, 0, 0, 0)
-	tempG = AddGear(311, 686, gtSMine, 0, 0, 0, 0)
-	tempG = AddGear(308, 729, gtSMine, 0, 0, 0, 0)
-
-	------ AIR MINE LIST ------
-	SetTimer(AddGear(1023, 600, gtAirMine, 0, 0, 0, 0), 1)
-	SetTimer(AddGear(1073, 657, gtAirMine, 0, 0, 0, 0), 1)
-
-	------ TARGET LIST ------
-	tempG = AddGear(485, 895, gtTarget, 0, 0, 0, 0)
-
-	------ CLEAVER LIST ------
-	tempG = AddGear(560, 898, gtKnife, 0, 0, 0, 0)
-
-	elseif mID == 3 then
-
 		-- more detailed landflag test map, should hopefully work now
 		-- probably my second favorite techracer map
+			------ GIRDER LIST ------
 		LoadSprite(402, 1863, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
 		LoadSprite(442, 1863, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
-
 		LoadSprite(2067, 1945, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(1943, 1653, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(1999, 1504, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
@@ -250,8 +189,6 @@ function LoadMap(mID)
 		LoadSprite(3191, 1968, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3264, 2021, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2840, 2006, sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
-
-
 		LoadSprite(396, 665, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(619, 665, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(696, 635, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
@@ -279,16 +216,14 @@ function LoadMap(mID)
 		LoadSprite(182, 1616, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(255, 1613, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(217, 1796, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(221, 1381, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)--
+		LoadSprite(221, 1381, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(154, 669, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(124, 553, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(326, 467, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(223, 592, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
-
 		LoadSprite(638, 791, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(752, 907, sprAmGirder,  5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(752, 907, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(866, 1022, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-
 		LoadSprite(1505, 395, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(1445, 544, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(1506, 686, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
@@ -316,15 +251,12 @@ function LoadMap(mID)
 		LoadSprite(587, 855, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(425, 855, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(302, 822, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
-
 		LoadSprite(2502, 556, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2601, 634, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2616, 441, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2716, 519, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3469, 556, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3696, 763, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-
-
 		LoadSprite(2756, 379, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2862, 466, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(2918, 379, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
@@ -332,13 +264,11 @@ function LoadMap(mID)
 		LoadSprite(3080, 378, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3616, 503, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3552, 828, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-
 		LoadSprite(3172, 527, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3232, 428, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3289, 647, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3350, 545, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3406, 764, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-
 		LoadSprite(3708, 575, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
 		LoadSprite(3705, 680, sprAmGirder, 1, 2516582650, nil, nil, nil, lfIndestructible)
 
@@ -352,6 +282,15 @@ function LoadMap(mID)
 		LoadSprite(1450, 1750, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
 		LoadSprite(1566, 1860, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
 		LoadSprite(1680, 1973, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+
+		------ WAYPOINT LIST ------
+		AddWayPoint(387, 621)
+		AddWayPoint(215, 1748)
+		AddWayPoint(1617, 1313)
+		AddWayPoint(1642, 562)
+		AddWayPoint(3318, 1102)
+		AddWayPoint(3554, 684)
+		AddWayPoint(2142, 1674)
 
 		------ AMMO CRATE LIST ------
 		tempG = SpawnAmmoCrate(324, 613, amFirePunch)
@@ -456,170 +395,7 @@ function LoadMap(mID)
 		tempG = AddGear(686, 829, gtSMine, 0, 0, 0, 0)
 		tempG = AddGear(649, 792, gtSMine, 0, 0, 0, 0)
 
-	elseif mID == 4 then
-
-		-- tiny airmine explosion knock concept test
-		-- currently won't play nicely with others
-		------ GIRDER LIST ------
-		LoadSprite(3942, 116, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3999, 270, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3925, 407, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3777, 470, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3791, 65, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3644, 121, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(3629, 413, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-
-		------ AMMO CRATE LIST ------
-		tempG = SpawnAmmoCrate(3772, 446, amWatermelon)
-		tempG = SpawnAmmoCrate(3769, 415, amWatermelon)
-		tempG = SpawnAmmoCrate(3773, 384, amWatermelon)
-		tempG = SpawnAmmoCrate(3771, 353, amWatermelon)
-		tempG = SpawnAmmoCrate(3770, 322, amWatermelon)
-		tempG = SpawnAmmoCrate(3775, 291, amWatermelon)
-		tempG = SpawnAmmoCrate(3776, 260, amWatermelon)
-		tempG = SpawnAmmoCrate(3775, 229, amWatermelon)
-		tempG = SpawnAmmoCrate(3772, 198, amWatermelon)
-		tempG = SpawnAmmoCrate(3776, 167, amWatermelon)
-
-		------ UTILITY CRATE LIST ------
-		tempG = SpawnUtilityCrate(3723, 446, amJetpack)
-		tempG = SpawnUtilityCrate(3725, 415, amJetpack)
-		tempG = SpawnUtilityCrate(3814, 446, amJetpack)
-		tempG = SpawnUtilityCrate(3814, 415, amJetpack)
-		tempG = SpawnUtilityCrate(3815, 384, amJetpack)
-		tempG = SpawnUtilityCrate(3728, 384, amJetpack)
-
-		------ AIR MINE LIST ------
-		SetTimer(AddGear(3489, 110, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3509, 366, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3399, 114, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3438, 383, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3322, 113, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3369, 384, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3290, 379, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3253, 112, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3178, 111, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3228, 375, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3173, 384, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3115, 118, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3039, 126, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2954, 139, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3121, 404, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2918, 414, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2880, 144, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2815, 146, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2731, 140, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2867, 408, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2802, 394, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2733, 392, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2661, 392, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2672, 147, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2608, 144, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2558, 117, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2495, 86, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2425, 49, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2373, 79, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2313, 104, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2256, 156, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2218, 226, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2205, 318, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2218, 419, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2255, 479, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2290, 522, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2343, 557, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2413, 540, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2500, 514, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2572, 471, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2618, 436, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2926, 478, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2926, 548, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2924, 615, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3126, 472, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3128, 553, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3136, 623, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3139, 683, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2927, 657, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2919, 720, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3132, 746, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2920, 771, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3137, 798, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2926, 820, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3140, 848, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(945, 441, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(900, 477, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(899, 540, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(915, 631, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1013, 616, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(970, 533, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1062, 458, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1060, 537, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1094, 640, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1029, 692, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(928, 718, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(831, 592, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(860, 666, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(823, 493, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1032, 427, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(953, 351, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(845, 375, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1101, 326, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1128, 565, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1126, 446, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1208, 703, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1139, 726, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1024, 777, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(918, 775, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(812, 758, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3171, 887, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3222, 939, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3273, 977, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3330, 1011, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3401, 1051, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2928, 899, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2935, 966, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2959, 1021, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2999, 1077, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3050, 1136, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3108, 1184, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3159, 1221, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3214, 1243, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3289, 1279, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3453, 1087, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3515, 1136, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3566, 1202, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3604, 1275, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3618, 1345, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3608, 1436, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3582, 1505, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3528, 1565, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3456, 1610, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3368, 1651, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3289, 1666, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3205, 1668, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3132, 1672, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3270, 1325, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3192, 1346, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3140, 1346, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3067, 1359, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2997, 1373, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2918, 1391, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2839, 1406, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3078, 1672, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3019, 1659, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2936, 1667, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2859, 1675, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(975, 722, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(967, 636, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1078, 687, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(868, 740, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(863, 453, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1010, 494, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1080, 590, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(869, 589, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1013, 569, gtAirMine, 0, 0, 0, 0), 1)
-
-
-	elseif mID == 5 then
+	elseif mID == 3 then
 
 		--Helix airmine map
 		------ GIRDER LIST ------
@@ -640,6 +416,15 @@ function LoadMap(mID)
 		LoadSprite(426, 167, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(266, 166, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(105, 166, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+
+		------ WAYPOINT LIST ------
+		AddWayPoint(3892, 478)
+		AddWayPoint(1146, 413)
+		AddWayPoint(934, 1459)
+		AddWayPoint(2635, 1459)
+		AddWayPoint(2656, 523)
+		AddWayPoint(1958, 834)
+		AddWayPoint(555, 864)
 
 		------ UTILITY CRATE LIST ------
 		tempG = SpawnUtilityCrate(3801, 491, amJetpack)
@@ -883,7 +668,7 @@ function LoadMap(mID)
 		SetTimer(AddGear(1633, 626, gtAirMine, 0, 0, 0, 0), 1)
 		SetTimer(AddGear(1683, 651, gtAirMine, 0, 0, 0, 0), 1)
 
-	elseif mID == 6 then
+	elseif mID == 4 then
 
 	---nice rope and airmines landflag testmap
 	------ GIRDER LIST ------
@@ -1014,6 +799,17 @@ function LoadMap(mID)
 	LoadSprite(2987, 489, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(338, 559, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 
+	------ WAYPOINT LIST ------
+	AddWayPoint(337, 533)
+	AddWayPoint(1069, 1367)
+	AddWayPoint(884, 729)
+	AddWayPoint(1682, 464)
+	AddWayPoint(2773, 505)
+	AddWayPoint(3512, 929)
+	AddWayPoint(4002, 106)
+	AddWayPoint(3964, 1520)
+	AddWayPoint(2592, 1334)
+
 	------ AMMO CRATE LIST ------
 	tempG = SpawnAmmoCrate(548, 1844, amBazooka)
 	setGearValue(tempG,"caseType", "ammo")
@@ -1082,7 +878,7 @@ function LoadMap(mID)
 	SetTimer(AddGear(894, 726, gtAirMine, 0, 0, 0, 0), 1)
 	SetTimer(AddGear(1080, 1690, gtAirMine, 0, 0, 0, 0), 1)
 
-	elseif mID == 7 then
+	elseif mID == 5 then
 	-- gimmicky bounce map, probably not possible at the moment due
 	-- to only having a single land flag and techracer forbidding
 	-- indestructible landflag
@@ -1134,6 +930,14 @@ function LoadMap(mID)
 		LoadSprite(1438, 431, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
 		LoadSprite(1589, 378, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
 		LoadSprite(1736, 448, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+
+		------ WAYPOINT LIST ------
+		AddWayPoint(3761, 428)
+		AddWayPoint(750, 1801)
+		AddWayPoint(511, 1232)
+		AddWayPoint(1579, 297)
+		AddWayPoint(2007, 1618)
+		AddWayPoint(3642, 1601)
 
 		------ AMMO CRATE LIST ------
 		tempG = SpawnAmmoCrate(397, 1295, amSineGun)
@@ -1222,7 +1026,7 @@ function LoadMap(mID)
 		setGearValue(tempG,"contents","amSineGun")
 
 
-	elseif mID == 8 then
+	elseif mID == 6 then
 	--incomplete challenge, still working on this map
 
 		------ GIRDER LIST ------
@@ -1279,12 +1083,26 @@ function LoadMap(mID)
 	LoadSprite(1762, 1929, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(1811, 1853, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
 	LoadSprite(1811, 1692, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-	LoadSprite(1710, 1769, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
-	LoadSprite(1778, 1768, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1708, 1735, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1776, 1734, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1680, 1527, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1811, 1532, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1608, 1437, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1883, 1443, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1955, 1354, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1883, 1264, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1723, 1264, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1562, 1264, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1519, 1354, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 
 	------ RUBBER BAND LIST ------
 	LoadSprite(210, 958, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
 	LoadSprite(98, 844, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+
+	------ WAYPOINT LIST ------
+	AddWayPoint(438, 278)
+	AddWayPoint(1870, 1354)
+	AddWayPoint(892, 1119)
 
 	------ AMMO CRATE LIST ------
 	tempG = SpawnAmmoCrate(1740, 1905, amBazooka)
@@ -1332,541 +1150,819 @@ function LoadMap(mID)
 	SetTimer(AddGear(967, 1422, gtAirMine, 0, 0, 0, 0), 1)
 	SetTimer(AddGear(968, 1493, gtAirMine, 0, 0, 0, 0), 1)
 
-	elseif mID == 9 then
+	elseif mID == 7 then
 	--Bouncy UFO MAP
 	-- should be played with infinite fuel
 
-		------ GIRDER LIST ------
-		LoadSprite(3699, 436, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
-		LoadSprite(934, 806, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(934, 969, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(1233, 1342, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(1377, 1403, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(1497, 1376, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(2816, 1284, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(2698, 1401, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(2640, 1552, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(2640, 1718, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(2641, 1881, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(2643, 2007, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(3823, 363, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
-		LoadSprite(233, 596, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(288, 446, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(79, 642, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(80, 479, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(140, 335, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(281, 268, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(343, 334, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(57, 747, sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(32, 852, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(33, 1015, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(33, 1179, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(34, 1342, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(1346, 1939, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(1347, 1774, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(1294, 1636, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(1180, 1522, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(1067, 1410, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(931, 1357, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(772, 1358, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(96, 1303, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(236, 1362, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(396, 1363, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(520, 1364, sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(696, 1450, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(556, 1454, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(489, 1598, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(697, 1574, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(639, 1681, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(520, 1798, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(369, 1715, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(243, 1716, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(128, 1735, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(133, 1870, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(251, 1987, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(402, 1915, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
-		LoadSprite(276, 1938, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	------ GIRDER LIST ------
+	LoadSprite(3699, 436, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
+	LoadSprite(934, 806, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(934, 969, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1233, 1342, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1377, 1403, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1497, 1376, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2816, 1284, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2698, 1401, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2640, 1552, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2640, 1718, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2641, 1881, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2643, 2007, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(3823, 363, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(233, 596, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(288, 446, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(79, 642, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(80, 479, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(140, 335, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(281, 268, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(343, 334, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(57, 747, sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(32, 852, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(33, 1015, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(33, 1179, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(34, 1342, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1346, 1939, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1347, 1774, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1294, 1636, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1180, 1522, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1067, 1410, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(931, 1357, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(772, 1358, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(96, 1303, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(236, 1362, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(396, 1363, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(520, 1364, sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(696, 1450, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(556, 1454, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(489, 1598, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(697, 1574, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(639, 1681, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(520, 1798, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(369, 1715, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(243, 1716, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(128, 1735, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(133, 1870, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(251, 1987, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(402, 1915, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(276, 1938, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(95, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(257, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(419, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(581, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(742, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(903, 140, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1064, 141, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1157, 90, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
 
-		------ RUBBER BAND LIST ------
-		LoadSprite(3433, 237, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3581, 185, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3741, 182, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3879, 257, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3921, 411, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3844, 555, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3692, 615, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3529, 618, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3381, 555, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3282, 289, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3223, 514, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3111, 289, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3058, 516, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2947, 287, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2889, 515, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2785, 288, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2788, 578, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2790, 741, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2862, 884, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2749, 1073, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2865, 1186, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2979, 990, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3123, 1036, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3188, 934, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3010, 1234, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3175, 1230, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3339, 1226, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3345, 949, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3405, 804, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3531, 702, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3444, 1007, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3499, 1221, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3604, 1002, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3755, 1038, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3802, 1186, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3741, 1342, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3626, 1456, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3510, 1314, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3392, 1435, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3506, 1577, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2637, 348, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2583, 496, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2633, 952, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2573, 803, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2474, 556, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2468, 742, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2335, 476, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2214, 358, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2322, 812, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2202, 936, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2060, 305, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1898, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1736, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(2085, 1049, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1966, 1161, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1818, 1209, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1657, 1212, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1947, 685, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1801, 735, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1659, 677, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1491, 902, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1346, 955, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1210, 881, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1576, 305, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1414, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1253, 302, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1108, 374, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(991, 491, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1557, 1273, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(938, 639, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(999, 1117, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(847, 1079, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(831, 702, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(667, 702, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(687, 1084, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1115, 1230, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(566, 764, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(525, 1083, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(422, 1024, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(464, 703, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(302, 704, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(297, 795, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(316, 1089, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1559, 1436, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1560, 1598, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1560, 1759, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1561, 1920, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(1620, 2022, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3388, 1688, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
-		LoadSprite(3276, 1546, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	------ RUBBER BAND LIST ------
+	LoadSprite(3433, 237, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3581, 185, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3741, 182, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3879, 257, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3921, 411, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3844, 555, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3692, 615, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3529, 618, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3381, 555, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3282, 289, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3223, 514, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3111, 289, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3058, 516, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2947, 287, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2889, 515, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2785, 288, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2788, 578, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2790, 741, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2862, 884, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2749, 1073, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2865, 1186, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2979, 990, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3123, 1036, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3188, 934, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3010, 1234, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3175, 1230, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3339, 1226, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3345, 949, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3405, 804, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3531, 702, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3444, 1007, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3499, 1221, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3604, 1002, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3755, 1038, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3802, 1186, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3741, 1342, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3626, 1456, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3510, 1314, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3392, 1435, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3506, 1577, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2637, 348, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2583, 496, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2633, 952, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2573, 803, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2474, 556, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2468, 742, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2335, 476, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2214, 358, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2322, 812, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2202, 936, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2060, 305, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1898, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1736, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(2085, 1049, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1966, 1161, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1818, 1209, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1657, 1212, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1947, 685, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1801, 735, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1659, 677, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1491, 902, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1346, 955, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1210, 881, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1576, 305, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1414, 304, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1253, 302, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1108, 374, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(991, 491, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1557, 1273, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(938, 639, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(999, 1117, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(847, 1079, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(831, 702, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(667, 702, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(687, 1084, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1115, 1230, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(566, 764, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(525, 1083, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(422, 1024, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(464, 703, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(302, 704, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(297, 795, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(316, 1089, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1559, 1436, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1560, 1598, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1560, 1759, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1561, 1920, sprAmRubber, 2, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1620, 2022, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3388, 1688, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(3276, 1546, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
 
-		------ LAND SPRITE LIST ------
+	------ WAYPOINT LIST ------
+	AddWayPoint(3820, 342)
+	AddWayPoint(3343, 1612)
+	AddWayPoint(272, 351)
+	AddWayPoint(159, 1774)
+	AddWayPoint(2248, 1573)
+	AddWayPoint(1379, 1192)
 
-		------ HEALTH CRATE LIST ------
+	------ AMMO CRATE LIST ------
+	tempG = SpawnAmmoCrate(1757, 706, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(1838, 706, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(1319, 926, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(1389, 926, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(3184, 839, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(3185, 808, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
 
-		------ AMMO CRATE LIST ------
-		tempG = SpawnAmmoCrate(1757, 706, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
-		tempG = SpawnAmmoCrate(1838, 706, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
-		tempG = SpawnAmmoCrate(1319, 926, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
-		tempG = SpawnAmmoCrate(1389, 926, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
-		tempG = SpawnAmmoCrate(3184, 839, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
-		tempG = SpawnAmmoCrate(3185, 808, amBazooka)
-		setGearValue(tempG,"caseType", "ammo")
-		setGearValue(tempG,"contents", "amBazooka")
+	------ UTILITY CRATE LIST ------
+	tempG = SpawnUtilityCrate(3677, 412, amJetpack)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amJetpack")
+	tempG = SpawnUtilityCrate(3079, 1007, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
+	tempG = SpawnUtilityCrate(3138, 1007, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
+	tempG = SpawnUtilityCrate(420, 929, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
 
-		------ UTILITY CRATE LIST ------
-		tempG = SpawnUtilityCrate(3677, 412, amJetpack)
-		setGearValue(tempG,"caseType", "util")
-		setGearValue(tempG,"contents", "amJetpack")
-		tempG = SpawnUtilityCrate(3079, 1007, amExtraTime)
-		setGearValue(tempG,"caseType", "util")
-		setGearValue(tempG,"contents", "amExtraTime")
-		tempG = SpawnUtilityCrate(3138, 1007, amExtraTime)
-		setGearValue(tempG,"caseType", "util")
-		setGearValue(tempG,"contents", "amExtraTime")
-		tempG = SpawnUtilityCrate(420, 929, amExtraTime)
-		setGearValue(tempG,"caseType", "util")
-		setGearValue(tempG,"contents", "amExtraTime")
+	------ BARREL LIST ------
 
-		------ BARREL LIST ------
+	------ MINE LIST ------
+	SetTimer(AddGear(481, 1603, gtMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(485, 1835, gtMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(325, 1759, gtMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(244, 1941, gtMine, 0, 0, 0, 0), 1)
 
-		------ MINE LIST ------
-		SetTimer(AddGear(481, 1603, gtMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(485, 1835, gtMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(325, 1759, gtMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(244, 1941, gtMine, 0, 0, 0, 0), 1)
+	------ STICKY MINE LIST ------
+	tempG = AddGear(226, 270, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(264, 269, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(309, 268, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(340, 268, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(175, 296, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(148, 325, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(121, 356, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(100, 381, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(202, 1352, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(280, 1352, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(359, 1353, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(439, 1353, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(531, 1354, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(744, 1348, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(833, 1348, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(931, 1347, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(990, 1347, gtSMine, 0, 0, 0, 0)
 
-		------ STICKY MINE LIST ------
-		tempG = AddGear(226, 270, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(264, 269, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(309, 268, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(340, 268, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(175, 296, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(148, 325, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(121, 356, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(100, 381, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(202, 1352, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(280, 1352, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(359, 1353, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(439, 1353, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(531, 1354, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(744, 1348, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(833, 1348, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(931, 1347, gtSMine, 0, 0, 0, 0)
-		tempG = AddGear(990, 1347, gtSMine, 0, 0, 0, 0)
+	------ AIR MINE LIST ------
+	SetTimer(AddGear(3195, 1621, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3155, 1655, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3112, 1691, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3078, 1730, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3044, 1764, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3011, 1805, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2998, 1843, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2986, 1886, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2978, 1937, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(733, 1753, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3345, 1773, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3332, 1806, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3317, 1840, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3302, 1873, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3262, 1902, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3237, 1937, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(3225, 1978, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1272, 1839, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(863, 1776, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(712, 1902, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2361, 1922, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2360, 1877, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2362, 1825, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2364, 1772, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2364, 1723, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2362, 1670, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2395, 1645, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2426, 1600, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2434, 1543, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2435, 1480, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2406, 1431, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2362, 1392, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2313, 1368, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2249, 1359, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2202, 1386, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2151, 1434, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1039, 1861, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2154, 1946, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2156, 1902, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2155, 1840, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2152, 1777, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2161, 1724, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2128, 1681, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2094, 1442, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2036, 1448, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1976, 1450, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1924, 1454, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2082, 1685, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(2046, 1692, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1999, 1696, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1961, 1701, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1939, 1737, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1925, 1783, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1916, 1821, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1904, 1864, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1888, 1913, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1870, 1961, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1100, 1660, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1876, 1486, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1826, 1533, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1799, 1580, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1784, 1637, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1765, 1681, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1755, 1718, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1726, 1779, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1718, 1836, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1705, 1885, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1696, 1934, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1685, 1975, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(859, 1569, gtAirMine, 0, 0, 0, 0), 1)
 
-		------ AIR MINE LIST ------
-		SetTimer(AddGear(3195, 1621, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3155, 1655, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3112, 1691, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3078, 1730, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3044, 1764, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3011, 1805, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2998, 1843, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2986, 1886, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2978, 1937, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(733, 1753, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3345, 1773, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3332, 1806, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3317, 1840, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3302, 1873, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3262, 1902, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3237, 1937, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(3225, 1978, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1272, 1839, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(863, 1776, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(712, 1902, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2361, 1922, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2360, 1877, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2362, 1825, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2364, 1772, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2364, 1723, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2362, 1670, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2395, 1645, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2426, 1600, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2434, 1543, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2435, 1480, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2406, 1431, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2362, 1392, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2313, 1368, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2249, 1359, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2202, 1386, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2151, 1434, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1039, 1861, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2154, 1946, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2156, 1902, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2155, 1840, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2152, 1777, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2161, 1724, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2128, 1681, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2094, 1442, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2036, 1448, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1976, 1450, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1924, 1454, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2082, 1685, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(2046, 1692, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1999, 1696, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1961, 1701, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1939, 1737, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1925, 1783, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1916, 1821, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1904, 1864, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1888, 1913, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1870, 1961, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1100, 1660, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1876, 1486, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1826, 1533, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1799, 1580, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1784, 1637, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1765, 1681, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1755, 1718, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1726, 1779, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1718, 1836, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1705, 1885, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1696, 1934, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(1685, 1975, gtAirMine, 0, 0, 0, 0), 1)
-		SetTimer(AddGear(859, 1569, gtAirMine, 0, 0, 0, 0), 1)
 
+--IF NEEDED, YOU CAN PASTE THIS DATA INTO HWMAP CONVERTER
+--[[
+
+	3699 436 116
+	934 806 106
+	934 969 106
+	1233 1342 105
+	1377 1403 104
+	1497 1376 103
+	2816 1284 115
+	2698 1401 115
+	2640 1552 114
+	2640 1718 114
+	2641 1881 114
+	2643 2007 110
+	3823 363 100
+	233 596 114
+	288 446 115
+	79 642 114
+	80 479 114
+	140 335 115
+	281 268 112
+	343 334 110
+	57 747 111
+	32 852 114
+	33 1015 114
+	33 1179 114
+	34 1342 114
+	1346 1939 114
+	1347 1774 114
+	1294 1636 113
+	1180 1522 113
+	1067 1410 113
+	931 1357 112
+	772 1358 112
+	96 1303 113
+	236 1362 112
+	396 1363 112
+	520 1364 108
+	696 1450 114
+	556 1454 114
+	489 1598 115
+	697 1574 110
+	639 1681 115
+	520 1798 115
+	369 1715 115
+	243 1716 113
+	128 1735 115
+	133 1870 113
+	251 1987 113
+	402 1915 115
+	276 1938 112
+	95 140 112
+	257 140 112
+	419 140 112
+	581 140 112
+	742 140 112
+	903 140 112
+	1064 141 112
+	1157 90 114
+	3433 237 127
+	3581 185 124
+	3741 182 124
+	3879 257 125
+	3921 411 126
+	3844 555 127
+	3692 615 124
+	3529 618 124
+	3381 555 125
+	3282 289 124
+	3223 514 124
+	3111 289 124
+	3058 516 124
+	2947 287 124
+	2889 515 124
+	2785 288 124
+	2788 578 126
+	2790 741 126
+	2862 884 125
+	2749 1073 125
+	2865 1186 125
+	2979 990 125
+	3123 1036 124
+	3188 934 126
+	3010 1234 124
+	3175 1230 124
+	3339 1226 124
+	3345 949 126
+	3405 804 127
+	3531 702 127
+	3444 1007 124
+	3499 1221 124
+	3604 1002 124
+	3755 1038 125
+	3802 1186 126
+	3741 1342 127
+	3626 1456 127
+	3510 1314 127
+	3392 1435 127
+	3506 1577 127
+	2637 348 127
+	2583 496 126
+	2633 952 125
+	2573 803 126
+	2474 556 124
+	2468 742 124
+	2335 476 125
+	2214 358 125
+	2322 812 127
+	2202 936 127
+	2060 305 124
+	1898 304 124
+	1736 304 124
+	2085 1049 127
+	1966 1161 127
+	1818 1209 124
+	1657 1212 124
+	1947 685 127
+	1801 735 124
+	1659 677 125
+	1491 902 127
+	1346 955 124
+	1210 881 125
+	1576 305 124
+	1414 304 124
+	1253 302 124
+	1108 374 127
+	991 491 127
+	1557 1273 126
+	938 639 126
+	999 1117 125
+	847 1079 124
+	831 702 124
+	667 702 124
+	687 1084 124
+	1115 1230 125
+	566 764 126
+	525 1083 124
+	422 1024 126
+	464 703 124
+	302 704 124
+	297 795 126
+	316 1089 124
+	1559 1436 126
+	1560 1598 126
+	1560 1759 126
+	1561 1920 126
+	1620 2022 124
+	3388 1688 127
+	3276 1546 127
+	3820 342 0
+	3343 1612 0
+	272 351 0
+	159 1774 0
+	2248 1573 0
+	1379 1192 0
+	1757 706 20
+	1838 706 20
+	1319 926 20
+	1389 926 20
+	3184 839 20
+	3185 808 20
+	3677 412 67
+	3079 1007 73
+	3138 1007 73
+	420 929 73
+	481 1603 1
+	485 1835 1
+	325 1759 1
+	244 1941 1
+	226 270 7
+	264 269 7
+	309 268 7
+	340 268 7
+	175 296 7
+	148 325 7
+	121 356 7
+	100 381 7
+	202 1352 7
+	280 1352 7
+	359 1353 7
+	439 1353 7
+	531 1354 7
+	744 1348 7
+	833 1348 7
+	931 1347 7
+	990 1347 7
+	3195 1621 8
+	3155 1655 8
+	3112 1691 8
+	3078 1730 8
+	3044 1764 8
+	3011 1805 8
+	2998 1843 8
+	2986 1886 8
+	2978 1937 8
+	733 1753 8
+	3345 1773 8
+	3332 1806 8
+	3317 1840 8
+	3302 1873 8
+	3262 1902 8
+	3237 1937 8
+	3225 1978 8
+	1272 1839 8
+	863 1776 8
+	712 1902 8
+	2361 1922 8
+	2360 1877 8
+	2362 1825 8
+	2364 1772 8
+	2364 1723 8
+	2362 1670 8
+	2395 1645 8
+	2426 1600 8
+	2434 1543 8
+	2435 1480 8
+	2406 1431 8
+	2362 1392 8
+	2313 1368 8
+	2249 1359 8
+	2202 1386 8
+	2151 1434 8
+	1039 1861 8
+	2154 1946 8
+	2156 1902 8
+	2155 1840 8
+	2152 1777 8
+	2161 1724 8
+	2128 1681 8
+	2094 1442 8
+	2036 1448 8
+	1976 1450 8
+	1924 1454 8
+	2082 1685 8
+	2046 1692 8
+	1999 1696 8
+	1961 1701 8
+	1939 1737 8
+	1925 1783 8
+	1916 1821 8
+	1904 1864 8
+	1888 1913 8
+	1870 1961 8
+	1100 1660 8
+	1876 1486 8
+	1826 1533 8
+	1799 1580 8
+	1784 1637 8
+	1765 1681 8
+	1755 1718 8
+	1726 1779 8
+	1718 1836 8
+	1705 1885 8
+	1696 1934 8
+	1685 1975 8
+	859 1569 8]]
 
 	else
 
 		-- the first test epic multi map
 		-- default to this crazy shit
-		------ GIRDER LIST ------
-		LoadSprite(430, 1871, sprAmGirder, 2)
-		LoadSprite(1249, 1914, sprAmGirder, 4)
-		LoadSprite(1394, 1849, sprAmGirder, 7)
-		LoadSprite(1522, 1848, sprAmGirder, 5)
-		LoadSprite(1578, 1959, sprAmGirder, 2)
-		LoadSprite(1545, 2011, sprAmGirder, 0)
-		LoadSprite(430, 1749, sprAmGirder, 6)
-		LoadSprite(430, 1589, sprAmGirder, 6)
-		LoadSprite(358, 1499, sprAmGirder, 4)
-		LoadSprite(198, 1499, sprAmGirder, 4)
-		LoadSprite(72, 1571, sprAmGirder, 7)
-		LoadSprite(339, 1618, sprAmGirder, 4)
-		LoadSprite(520, 1499, sprAmGirder, 4)
-		LoadSprite(680, 1499, sprAmGirder, 4)
-		LoadSprite(839, 1499, sprAmGirder, 4)
-		LoadSprite(1000, 1499, sprAmGirder, 4)
-		LoadSprite(1404, 1730, sprAmGirder, 5)
-		LoadSprite(1288, 1613, sprAmGirder, 5)
-		LoadSprite(1200, 1529, sprAmGirder, 1)
-		LoadSprite(1125, 1495, sprAmGirder, 0)
-		LoadSprite(1667, 2011, sprAmGirder, 4)
-		LoadSprite(1812, 1951, sprAmGirder, 7)
-		LoadSprite(1964, 2024, sprAmGirder, 0)
-		LoadSprite(1957, 1892, sprAmGirder, 4)
-		LoadSprite(2103, 1949, sprAmGirder, 5)
-		LoadSprite(2242, 2017, sprAmGirder, 4)
-		LoadSprite(2404, 2017, sprAmGirder, 4)
-		LoadSprite(2548, 1955, sprAmGirder, 7)
-		LoadSprite(2635, 1871, sprAmGirder, 3)
-		LoadSprite(2749, 1836, sprAmGirder, 4)
-		LoadSprite(2751, 1999, sprAmGirder, 2)
-		LoadSprite(2749, 1947, sprAmGirder, 0)
-		LoadSprite(2865, 1870, sprAmGirder, 1)
-		LoadSprite(2954, 1954, sprAmGirder, 5)
-		LoadSprite(3061, 2017, sprAmGirder, 0)
-		LoadSprite(3137, 1984, sprAmGirder, 3)
-		LoadSprite(3169, 1864, sprAmGirder, 6)
-		LoadSprite(3169, 1702, sprAmGirder, 6)
-		LoadSprite(3170, 1540, sprAmGirder, 6)
-		LoadSprite(3170, 1418, sprAmGirder, 2)
-		LoadSprite(3138, 1339, sprAmGirder, 1)
-		LoadSprite(3107, 1260, sprAmGirder, 2)
-		LoadSprite(3153, 1194, sprAmGirder, 3)
-		LoadSprite(3230, 1163, sprAmGirder, 0)
-		LoadSprite(3305, 1201, sprAmGirder, 1)
-		LoadSprite(3334, 1277, sprAmGirder, 2)
-		LoadSprite(3227, 1540, sprAmGirder, 6)
-		LoadSprite(3228, 1419, sprAmGirder, 2)
-		LoadSprite(3334, 1358, sprAmGirder, 2)
-		LoadSprite(3280, 1387, sprAmGirder, 0)
-		LoadSprite(3227, 1702, sprAmGirder, 6)
-		LoadSprite(3227, 1864, sprAmGirder, 6)
-		LoadSprite(3253, 1981, sprAmGirder, 1)
-		LoadSprite(3366, 2017, sprAmGirder, 4)
-		LoadSprite(3528, 2018, sprAmGirder, 4)
-		LoadSprite(3689, 2018, sprAmGirder, 4)
-		LoadSprite(246, 1262, sprAmGirder, 4)
-		LoadSprite(407, 1262, sprAmGirder, 4)
-		LoadSprite(568, 1262, sprAmGirder, 4)
-		LoadSprite(731, 1262, sprAmGirder, 4)
-		LoadSprite(894, 1261, sprAmGirder, 4)
-		LoadSprite(1056, 1261, sprAmGirder, 4)
-		LoadSprite(1179, 1262, sprAmGirder, 0)
-		LoadSprite(1288, 1314, sprAmGirder, 5)
-		LoadSprite(1406, 1433, sprAmGirder, 5)
-		LoadSprite(1525, 1549, sprAmGirder, 5)
-		LoadSprite(1642, 1666, sprAmGirder, 5)
-		LoadSprite(1749, 1728, sprAmGirder, 0)
-		LoadSprite(1956, 1802, sprAmGirder, 6)
-		LoadSprite(1956, 1640, sprAmGirder, 6)
-		LoadSprite(1782, 1638, sprAmGirder, 6)
-		LoadSprite(1835, 1487, sprAmGirder, 7)
-		LoadSprite(1942, 1430, sprAmGirder, 0)
-		LoadSprite(2051, 1486, sprAmGirder, 5)
-		LoadSprite(2109, 1639, sprAmGirder, 6)
-		LoadSprite(2177, 1778, sprAmGirder, 5)
-		LoadSprite(2323, 1840, sprAmGirder, 4)
-		LoadSprite(49, 1029, sprAmGirder, 0)
-		LoadSprite(499, 1172, sprAmGirder, 6)
-		LoadSprite(527, 1054, sprAmGirder, 3)
-		LoadSprite(604, 1026, sprAmGirder, 0)
-		LoadSprite(680, 1056, sprAmGirder, 1)
-		LoadSprite(719, 1168, sprAmGirder, 6)
-		LoadSprite(89, 728, sprAmGirder, 4)
-		LoadSprite(251, 728, sprAmGirder, 4)
-		LoadSprite(412, 728, sprAmGirder, 4)
-		LoadSprite(572, 728, sprAmGirder, 4)
-		LoadSprite(733, 728, sprAmGirder, 4)
-		LoadSprite(894, 728, sprAmGirder, 4)
-		LoadSprite(1016, 728, sprAmGirder, 0)
-		LoadSprite(1067, 799, sprAmGirder, 6)
-		LoadSprite(1139, 891, sprAmGirder, 4)
-		LoadSprite(1067, 1171, sprAmGirder, 6)
-		LoadSprite(1067, 1049, sprAmGirder, 2)
-		LoadSprite(1136, 999, sprAmGirder, 4)
-		LoadSprite(1005, 854, sprAmGirder, 2)
-		LoadSprite(972, 803, sprAmGirder, 0)
-		LoadSprite(920, 780, sprAmGirder, 2)
-		LoadSprite(891, 1206, sprAmGirder, 2)
-		LoadSprite(887, 1150, sprAmGirder, 0)
-		LoadSprite(3018, 1311, sprAmGirder, 4)
-		LoadSprite(2871, 1369, sprAmGirder, 7)
-		LoadSprite(2809, 1523, sprAmGirder, 6)
-		LoadSprite(2809, 1647, sprAmGirder, 2)
-		LoadSprite(2469, 1777, sprAmGirder, 7)
-		LoadSprite(2612, 1715, sprAmGirder, 4)
-		LoadSprite(2809, 1702, sprAmGirder, 0)
-		LoadSprite(2727, 1694, sprAmGirder, 0)
+		---------- GIRDER LIST---------
+		LoadSprite(430, 1871, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1249, 1914, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1394, 1849, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1522, 1848, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1578, 1959, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1545, 2011, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(430, 1749, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(430, 1589, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(358, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(198, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(72, 1571, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(339, 1618, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(520, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(680, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(839, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1000, 1499, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1404, 1730, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1288, 1613, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1200, 1529, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1125, 1495, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1667, 2011, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1812, 1951, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1964, 2024, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1957, 1892, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2103, 1949, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2242, 2017, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2404, 2017, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2548, 1955, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2635, 1871, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2749, 1836, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2751, 1999, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2749, 1947, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2865, 1870, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2954, 1954, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3061, 2017, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3137, 1984, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3169, 1864, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3169, 1702, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3170, 1540, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3170, 1418, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3138, 1339, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3107, 1260, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3153, 1194, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3230, 1163, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3305, 1201, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3334, 1277, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3227, 1540, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3228, 1419, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3334, 1358, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3280, 1387, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3227, 1702, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3227, 1864, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3253, 1981, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3366, 2017, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3528, 2018, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3689, 2018, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(246, 1262, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(407, 1262, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(568, 1262, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(731, 1262, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(894, 1261, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1056, 1261, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1179, 1262, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1288, 1314, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1406, 1433, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1525, 1549, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1642, 1666, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1749, 1728, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1956, 1802, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1956, 1640, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1782, 1638, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1835, 1487, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1942, 1430, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2051, 1486, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2109, 1639, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2177, 1778, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2323, 1840, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(49, 1029, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(499, 1172, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(527, 1054, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(604, 1026, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(680, 1056, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(719, 1168, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(89, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(251, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(412, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(572, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(733, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(894, 728, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1016, 728, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1067, 799, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1139, 891, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1067, 1171, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1067, 1049, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1136, 999, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1005, 854, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(972, 803, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(920, 780, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(891, 1206, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(887, 1150, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3018, 1311, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2871, 1369, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2809, 1523, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2809, 1647, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2469, 1777, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2612, 1715, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2809, 1702, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2727, 1694, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
 
-		LoadSprite(3334, 1481, sprAmGirder, 6)
-		LoadSprite(3334, 1643, sprAmGirder, 6)
-		LoadSprite(3334, 1804, sprAmGirder, 6)
-		LoadSprite(3403, 1940, sprAmGirder, 5)
-		LoadSprite(1120, 944, sprAmGirder, 2)
-		LoadSprite(1163, 945, sprAmGirder, 2)
-		LoadSprite(1141, 781, sprAmGirder, 5)
-		LoadSprite(81, 629, sprAmGirder, 1)
-		LoadSprite(102, 498, sprAmGirder, 3)
-		LoadSprite(81, 373, sprAmGirder, 1)
-		LoadSprite(179, 453, sprAmGirder, 6)
-		LoadSprite(100, 260, sprAmGirder, 3)
-		LoadSprite(179, 330, sprAmGirder, 2)
-		LoadSprite(249, 544, sprAmGirder, 4)
-		LoadSprite(410, 545, sprAmGirder, 4)
-		LoadSprite(571, 543, sprAmGirder, 4)
-		LoadSprite(731, 543, sprAmGirder, 4)
-		LoadSprite(891, 544, sprAmGirder, 4)
-		LoadSprite(1014, 544, sprAmGirder, 0)
-		LoadSprite(1779, 1321, sprAmGirder, 6)
-		LoadSprite(1779, 1159, sprAmGirder, 6)
-		LoadSprite(1779, 997, sprAmGirder, 6)
-		LoadSprite(1779, 836, sprAmGirder, 6)
-		LoadSprite(1722, 684, sprAmGirder, 5)
-		LoadSprite(1137, 545, sprAmGirder, 4)
-		LoadSprite(1298, 545, sprAmGirder, 4)
-		LoadSprite(1460, 546, sprAmGirder, 4)
-		LoadSprite(1608, 600, sprAmGirder, 5)
-		LoadSprite(1508, 1005, sprAmGirder, 4)
-		LoadSprite(160, 246, sprAmGirder, 1)
-		LoadSprite(1821, 1356, sprAmGirder, 3)
-		LoadSprite(1938, 1323, sprAmGirder, 4)
-		LoadSprite(2086, 1381, sprAmGirder, 5)
-		LoadSprite(4004, 2018, sprAmGirder, 4)
-		LoadSprite(3934, 1926, sprAmGirder, 6)
-		LoadSprite(3965, 1835, sprAmGirder, 0)
-		LoadSprite(4015, 1763, sprAmGirder, 6)
-		LoadSprite(4015, 1603, sprAmGirder, 6)
-		LoadSprite(4015, 1442, sprAmGirder, 6)
-		LoadSprite(4015, 1280, sprAmGirder, 6)
-		LoadSprite(4014, 1118, sprAmGirder, 6)
-		LoadSprite(4014, 956, sprAmGirder, 6)
-		LoadSprite(4014, 793, sprAmGirder, 6)
-		LoadSprite(4014, 632, sprAmGirder, 6)
-		LoadSprite(4014, 469, sprAmGirder, 6)
-		LoadSprite(3981, 351, sprAmGirder, 1)
-		LoadSprite(3985, 204, sprAmGirder, 3)
-		LoadSprite(4045, 156, sprAmGirder, 0)
-		LoadSprite(3667, 344, sprAmGirder, 0)
-		LoadSprite(4016, 1925, sprAmGirder, 6)
-		LoadSprite(3998, 1926, sprAmGirder, 6)
-		LoadSprite(3980, 1925, sprAmGirder, 6)
-		LoadSprite(3957, 1926, sprAmGirder, 6)
-		LoadSprite(3843, 1832, sprAmGirder, 4)
-		LoadSprite(3682, 1832, sprAmGirder, 4)
-		LoadSprite(3561, 1833, sprAmGirder, 0)
-		LoadSprite(3484, 1796, sprAmGirder, 1)
-		LoadSprite(3455, 1675, sprAmGirder, 6)
-		LoadSprite(3455, 1513, sprAmGirder, 6)
-		LoadSprite(3455, 1351, sprAmGirder, 6)
-		LoadSprite(1601, 476, sprAmGirder, 7)
-		LoadSprite(1706, 421, sprAmGirder, 0)
-		LoadSprite(1888, 366, sprAmGirder, 6)
+		LoadSprite(3334, 1481, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3334, 1643, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3334, 1804, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3403, 1940, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1120, 944, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1163, 945, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1141, 781, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(81, 629, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(102, 498, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(81, 373, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(179, 453, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(100, 260, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(179, 330, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(249, 544, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(410, 545, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(571, 543, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(731, 543, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(891, 544, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1014, 544, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1779, 1321, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1779, 1159, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1779, 997, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1779, 836, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1722, 684, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1137, 545, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1298, 545, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1460, 546, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1608, 600, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1508, 1005, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(160, 246, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1821, 1356, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1938, 1323, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2086, 1381, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4004, 2018, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3934, 1926, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3965, 1835, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4015, 1763, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4015, 1603, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4015, 1442, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4015, 1280, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4014, 1118, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4014, 956, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4014, 793, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4014, 632, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4014, 469, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3981, 351, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3985, 204, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4045, 156, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3667, 344, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(4016, 1925, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3998, 1926, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3980, 1925, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3957, 1926, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3843, 1832, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3682, 1832, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3561, 1833, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3484, 1796, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 1675, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 1513, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 1351, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1601, 476, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1706, 421, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1888, 366, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 
-		LoadSprite(3997, 1743, sprAmGirder, 6)
-		LoadSprite(3979, 1742, sprAmGirder, 6)
-		LoadSprite(3962, 1741, sprAmGirder, 6)
-		LoadSprite(3943, 1741, sprAmGirder, 6)
-		LoadSprite(2199, 393, sprAmGirder, 7)
-		LoadSprite(2304, 337, sprAmGirder, 0)
-		LoadSprite(2409, 392, sprAmGirder, 5)
-		LoadSprite(2470, 502, sprAmGirder, 2)
-		LoadSprite(2412, 606, sprAmGirder, 7)
-		LoadSprite(2308, 673, sprAmGirder, 0)
-		LoadSprite(2202, 612, sprAmGirder, 5)
-		LoadSprite(2138, 507, sprAmGirder, 2)
-		LoadSprite(2739, 378, sprAmGirder, 7)
-		LoadSprite(2847, 322, sprAmGirder, 0)
-		LoadSprite(2953, 378, sprAmGirder, 5)
-		LoadSprite(2680, 489, sprAmGirder, 2)
-		LoadSprite(3012, 489, sprAmGirder, 2)
-		LoadSprite(2736, 594, sprAmGirder, 5)
-		LoadSprite(2841, 657, sprAmGirder, 0)
-		LoadSprite(2949, 594, sprAmGirder, 7)
-		LoadSprite(2448, 837, sprAmGirder, 7)
-		LoadSprite(2594, 779, sprAmGirder, 4)
-		LoadSprite(2739, 836, sprAmGirder, 5)
-		LoadSprite(2390, 950, sprAmGirder, 2)
-		LoadSprite(2789, 950, sprAmGirder, 2)
-		LoadSprite(2593, 904, sprAmGirder, 4)
-		LoadSprite(2727, 1056, sprAmGirder, 7)
-		LoadSprite(2452, 1058, sprAmGirder, 5)
-		LoadSprite(2510, 1215, sprAmGirder, 6)
-		LoadSprite(2663, 1208, sprAmGirder, 6)
-		LoadSprite(2510, 1378, sprAmGirder, 6)
-		LoadSprite(2664, 1369, sprAmGirder, 6)
-		LoadSprite(300, 275, sprAmGirder, 0)
-		LoadSprite(439, 274, sprAmGirder, 0)
-		LoadSprite(628, 273, sprAmGirder, 4)
-		LoadSprite(811, 271, sprAmGirder, 0)
-		LoadSprite(737, 373, sprAmGirder, 4)
-		LoadSprite(934, 440, sprAmGirder, 0)
-		LoadSprite(1075, 439, sprAmGirder, 0)
-		LoadSprite(1209, 438, sprAmGirder, 0)
-		LoadSprite(1383, 439, sprAmGirder, 4)
-		--LoadSprite(2159, 1525, sprAmGirder, 6)
-		LoadSprite(3547, 344, sprAmGirder, 4)
-		LoadSprite(3584, 254, sprAmGirder, 6)
-		LoadSprite(3508, 132, sprAmGirder, 5)
-		LoadSprite(3335, 1117, sprAmGirder, 6)
-		LoadSprite(3335, 956, sprAmGirder, 6)
-		LoadSprite(3335, 795, sprAmGirder, 6)
-		LoadSprite(3335, 634, sprAmGirder, 6)
-		LoadSprite(3335, 513, sprAmGirder, 2)
-		LoadSprite(3401, 404, sprAmGirder, 7)
-		LoadSprite(3455, 1190, sprAmGirder, 6)
-		LoadSprite(3455, 1029, sprAmGirder, 6)
-		LoadSprite(3455, 868, sprAmGirder, 6)
-		LoadSprite(3455, 705, sprAmGirder, 6)
-		LoadSprite(3455, 582, sprAmGirder, 2)
-		LoadSprite(3485, 503, sprAmGirder, 3)
-		LoadSprite(3601, 475, sprAmGirder, 4)
-		LoadSprite(3719, 444, sprAmGirder, 3)
-		LoadSprite(3094, 828, sprAmGirder, 5)
-		LoadSprite(2064, 947, sprAmGirder, 7)
-		LoadSprite(1826, 512, sprAmGirder, 7)
+		LoadSprite(3997, 1743, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3979, 1742, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3962, 1741, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3943, 1741, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2199, 393, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2304, 337, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2409, 392, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2470, 502, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2412, 606, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2308, 673, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2202, 612, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2138, 507, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2739, 378, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2847, 322, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2953, 378, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2680, 489, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3012, 489, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2736, 594, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2841, 657, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2949, 594, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2448, 837, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2594, 779, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2739, 836, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2390, 950, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2789, 950, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2593, 904, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2727, 1056, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2452, 1058, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2510, 1215, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2663, 1208, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2510, 1378, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2664, 1369, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(300, 275, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(439, 274, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(628, 273, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(811, 271, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(737, 373, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(934, 440, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1075, 439, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1209, 438, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1383, 439, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3547, 344, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3584, 254, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3508, 132, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3335, 1117, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3335, 956, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3335, 795, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3335, 634, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3335, 513, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3401, 404, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 1190, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 1029, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 868, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 705, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3455, 582, sprAmGirder, 2, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3485, 503, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3601, 475, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3719, 444, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3094, 828, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(2064, 947, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(1826, 512, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
 
-		LoadSprite(3420, 49, sprAmGirder, 1)
-		LoadSprite(410, 682, sprAmGirder, 3)
-		LoadSprite(528, 653, sprAmGirder, 4)
-		LoadSprite(688, 653, sprAmGirder, 4)
-		LoadSprite(805, 684, sprAmGirder, 1)
-		LoadSprite(528, 672, sprAmGirder, 4)
-		LoadSprite(688, 672, sprAmGirder, 4)
-		LoadSprite(500, 696, sprAmGirder, 4)
-		LoadSprite(701, 696, sprAmGirder, 4)
+		LoadSprite(3420, 49, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(410, 682, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(528, 653, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(688, 653, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(805, 684, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(528, 672, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(688, 672, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(500, 696, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(701, 696, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+
+		------ WAYPOINT LIST ------
+		AddWayPoint(383, 1595)
+		AddWayPoint(605, 1157)
+		AddWayPoint(2296, 517)
+		AddWayPoint(2841, 497)
+		AddWayPoint(3209, 1286)
+		AddWayPoint(3708, 1945)
+		AddWayPoint(4075, 1887)
 
 		------ AMMO CRATE LIST ------
 		tempG = SpawnAmmoCrate(889, 1126, amBaseballBat)
@@ -2039,3 +2135,247 @@ function LoadMap(mID)
 
 end
 
+	--[[
+	-----------------------------------------------------------------
+	-- not really a racing map, just a simple testmap that contains
+	-- a bunch of different stuff to test HWMAP conversion
+	--still lacks waypoints
+	-- currently disabled because it's only really used to test stuff
+	------ GIRDER LIST ------
+	LoadSprite(366, 540, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(312, 696, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(377, 837, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(513, 485, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(657, 550, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(712, 704, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(655, 848, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(512, 913, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1044, 530, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(968, 623, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1125, 623, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1042, 716, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(844, 613, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
+	LoadSprite(118, 425, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+
+	------ RUBBER BAND LIST ------
+	LoadSprite(688, 957, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(804, 1070, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(921, 1182, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1036, 1299, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1184, 1349, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1348, 1345, sprAmRubber, 0, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1490, 1278, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1601, 1161, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(1712, 1044, sprAmRubber, 3, 4294967295, nil, nil, nil, lfBouncy)
+
+	------ LAND SPRITE LIST ------
+
+	------ HEALTH CRATE LIST ------
+	SetHealth(SpawnHealthCrate(694, 553), 25)
+
+	------ AMMO CRATE LIST ------
+	tempG = SpawnAmmoCrate(463, 461, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(579, 461, amWatermelon)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amWatermelon")
+
+	------ UTILITY CRATE LIST ------
+	tempG = SpawnUtilityCrate(367, 500, amBlowTorch)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amBlowTorch")
+	tempG = SpawnUtilityCrate(638, 493, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
+
+	------ BARREL LIST ------
+	SetHealth(AddGear(140, 409, gtExplosives, 0, 0, 0, 0), 1)
+
+	------ MINE LIST ------
+	SetTimer(AddGear(1016, 520, gtMine, 0, 0, 0, 0), 3000)
+	SetTimer(AddGear(1057, 520, gtMine, 0, 0, 0, 0), 3000)
+	SetTimer(AddGear(1104, 520, gtMine, 0, 0, 0, 0), 3000)
+
+	------ STICKY MINE LIST ------
+	tempG = AddGear(311, 651, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(311, 686, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(308, 729, gtSMine, 0, 0, 0, 0)
+
+	------ AIR MINE LIST ------
+	SetTimer(AddGear(1023, 600, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(1073, 657, gtAirMine, 0, 0, 0, 0), 1)
+
+	------ TARGET LIST ------
+	tempG = AddGear(485, 895, gtTarget, 0, 0, 0, 0)
+
+	------ CLEAVER LIST ------
+	tempG = AddGear(560, 898, gtKnife, 0, 0, 0, 0)]]
+
+
+
+
+
+
+	--[[
+		------------------------------------------
+		-- tiny airmine explosion knock concept test
+		-- currently won't play nicely with others
+		-- removed because it is small and boring
+		------ GIRDER LIST ------
+		LoadSprite(3942, 116, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3999, 270, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3925, 407, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3777, 470, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3791, 65, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3644, 121, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
+		LoadSprite(3629, 413, sprAmGirder, 5, 4294967295, nil, nil, nil, lfNormal)
+
+		------ AMMO CRATE LIST ------
+		tempG = SpawnAmmoCrate(3772, 446, amWatermelon)
+		tempG = SpawnAmmoCrate(3769, 415, amWatermelon)
+		tempG = SpawnAmmoCrate(3773, 384, amWatermelon)
+		tempG = SpawnAmmoCrate(3771, 353, amWatermelon)
+		tempG = SpawnAmmoCrate(3770, 322, amWatermelon)
+		tempG = SpawnAmmoCrate(3775, 291, amWatermelon)
+		tempG = SpawnAmmoCrate(3776, 260, amWatermelon)
+		tempG = SpawnAmmoCrate(3775, 229, amWatermelon)
+		tempG = SpawnAmmoCrate(3772, 198, amWatermelon)
+		tempG = SpawnAmmoCrate(3776, 167, amWatermelon)
+
+		------ UTILITY CRATE LIST ------
+		tempG = SpawnUtilityCrate(3723, 446, amJetpack)
+		tempG = SpawnUtilityCrate(3725, 415, amJetpack)
+		tempG = SpawnUtilityCrate(3814, 446, amJetpack)
+		tempG = SpawnUtilityCrate(3814, 415, amJetpack)
+		tempG = SpawnUtilityCrate(3815, 384, amJetpack)
+		tempG = SpawnUtilityCrate(3728, 384, amJetpack)
+
+		------ AIR MINE LIST ------
+		SetTimer(AddGear(3489, 110, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3509, 366, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3399, 114, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3438, 383, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3322, 113, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3369, 384, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3290, 379, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3253, 112, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3178, 111, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3228, 375, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3173, 384, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3115, 118, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3039, 126, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2954, 139, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3121, 404, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2918, 414, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2880, 144, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2815, 146, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2731, 140, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2867, 408, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2802, 394, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2733, 392, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2661, 392, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2672, 147, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2608, 144, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2558, 117, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2495, 86, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2425, 49, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2373, 79, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2313, 104, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2256, 156, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2218, 226, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2205, 318, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2218, 419, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2255, 479, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2290, 522, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2343, 557, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2413, 540, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2500, 514, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2572, 471, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2618, 436, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2926, 478, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2926, 548, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2924, 615, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3126, 472, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3128, 553, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3136, 623, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3139, 683, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2927, 657, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2919, 720, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3132, 746, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2920, 771, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3137, 798, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2926, 820, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3140, 848, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(945, 441, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(900, 477, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(899, 540, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(915, 631, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1013, 616, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(970, 533, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1062, 458, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1060, 537, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1094, 640, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1029, 692, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(928, 718, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(831, 592, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(860, 666, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(823, 493, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1032, 427, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(953, 351, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(845, 375, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1101, 326, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1128, 565, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1126, 446, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1208, 703, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1139, 726, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1024, 777, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(918, 775, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(812, 758, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3171, 887, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3222, 939, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3273, 977, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3330, 1011, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3401, 1051, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2928, 899, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2935, 966, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2959, 1021, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2999, 1077, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3050, 1136, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3108, 1184, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3159, 1221, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3214, 1243, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3289, 1279, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3453, 1087, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3515, 1136, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3566, 1202, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3604, 1275, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3618, 1345, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3608, 1436, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3582, 1505, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3528, 1565, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3456, 1610, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3368, 1651, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3289, 1666, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3205, 1668, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3132, 1672, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3270, 1325, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3192, 1346, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3140, 1346, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3067, 1359, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2997, 1373, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2918, 1391, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2839, 1406, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3078, 1672, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(3019, 1659, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2936, 1667, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(2859, 1675, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(975, 722, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(967, 636, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1078, 687, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(868, 740, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(863, 453, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1010, 494, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1080, 590, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(869, 589, gtAirMine, 0, 0, 0, 0), 1)
+		SetTimer(AddGear(1013, 569, gtAirMine, 0, 0, 0, 0), 1)]]
