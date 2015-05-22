@@ -1929,7 +1929,8 @@ begin
                 Gear^.State:= Gear^.State and (not gstAttacking);
                 Gear^.Timer:= Gear^.WDTimer
                 end;
-            dec(Gear^.Timer);
+            if Gear^.Timer > 0 then
+                dec(Gear^.Timer);
             end
         end
     else // gsttmpFlag = 0
