@@ -2620,7 +2620,7 @@ begin
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
     cLandMines      := 4;
-    cAirMines       := 4;
+    cAirMines       := 0;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);
