@@ -606,6 +606,7 @@ void GameCFGWidget::schemeChanged(int index)
             }
         }
     }
+    pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
 }
 
 void GameCFGWidget::scriptChanged(int index)
