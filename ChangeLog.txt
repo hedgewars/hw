@@ -2,6 +2,7 @@
 * bugfixes
 
 0.9.21 -> 0.9.22
+ + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
  + Small improvements to the interface and in-game chat
  * Generated bridges/girders are now connected better to the land mass
