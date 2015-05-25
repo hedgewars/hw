@@ -62,7 +62,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
-HedgewarsScriptLoad("/Scripts/TechMapsDev.lua")
+HedgewarsScriptLoad("/Scripts/TechMaps.lua")
 
 ------------------
 -- Got Variables?
