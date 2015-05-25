@@ -73,7 +73,7 @@ class HWMapContainer : public QWidget
     public slots:
         void askForGeneratedPreview();
         void setSeed(const QString & seed);
-        void setScript(const QString & script);
+        void setScript(const QString & script, const QString & scriptparam);
         void setMap(const QString & map);
         void setTheme(const QString & theme);
         void setTemplateFilter(int);
@@ -131,6 +131,7 @@ class HWMapContainer : public QWidget
         HWMap* pMap;
         QString m_seed;
         QString m_script;
+        QString m_scriptparam;
         QPushButton* seedSet;
         QLabel* seedLabel;
         int hhLimit;

@@ -62,7 +62,7 @@ HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/OfficialChallenges.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
-HedgewarsScriptLoad("/Scripts/TechMaps.lua")
+HedgewarsScriptLoad("/Scripts/TechMapsDev.lua")
 
 ------------------
 -- Got Variables?
@@ -669,10 +669,6 @@ function onParameters()
 		roundLimit = 3
 	end
 
-end
-
-function onPreviewInit()
-	onGameInit()
 end
 
 function onGameInit()
