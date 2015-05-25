@@ -89,7 +89,8 @@ end;
 
 procedure drawPixelEBC(landX, landY, pixelX, pixelY: Longint); inline;
 begin
-if ((Land[landY, landX] and lfBasic) <> 0) or ((Land[landY, landX] and lfObject) <> 0) then
+if (Land[landY, landX] and lfIndestructible = 0) and 
+    (((Land[landY, landX] and lfBasic) <> 0) or ((Land[landY, landX] and lfObject) <> 0)) then
     begin
     LandPixels[pixelY, pixelX]:= ExplosionBorderColor;
     Land[landY, landX]:= (Land[landY, landX] or lfDamaged) and (not lfIce);
