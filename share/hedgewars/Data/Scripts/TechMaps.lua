@@ -26,6 +26,16 @@ end
 function LoadSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 	PlaceSprite(pX, pY, pSprite, pFrame, pTint, p1, p2, p3, pLandFlags)
 end
+function PreviewWayPoint(x,y)
+    AddPoint(x,y,20)
+    AddPoint(x,y,19,true)
+    for i = 0,100,50 do 
+        AddPoint(x-120,y+i,1,true)
+        AddPoint(x+120,y-i)
+        AddPoint(x-i,y+120,1,true)
+        AddPoint(x+i,y-120)
+    end
+end
 
 function PreviewGirder(x, y, f)
     if f == 0 then
@@ -68,6 +78,15 @@ function onPreviewInit()
 	if mapID == 4 then
 	---nice rope and airmines landflag testmap
     -- it'd be nice if these coordinates were stored somewhere generic so they didn't have to be edited twice. Some map array or something
+	PreviewWayPoint(337, 533)
+	PreviewWayPoint(1069, 1367)
+	PreviewWayPoint(884, 729)
+	PreviewWayPoint(1682, 464)
+	PreviewWayPoint(2773, 505)
+	PreviewWayPoint(3512, 929)
+	PreviewWayPoint(4002, 106)
+	PreviewWayPoint(3964, 1520)
+	PreviewWayPoint(2592, 1334)
 	PreviewGirder(194, 388, 7)
 	PreviewGirder(338, 334, 4)
 	PreviewGirder(484, 390, 5)
