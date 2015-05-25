@@ -1,6 +1,13 @@
 + features
 * bugfixes
 
+0.9.21 -> 0.9.22
+ + Added a couple new flags
+ + Small improvements to the interface and in-game chat
+ * Generated bridges/girders are now connected better to the land mass
+ * Fixed rubberband sprite
+ * Many other bug fixes
+
 0.9.20 -> 0.9.21:
  + New type of randomly generated maps: Perlin Maps.
  + Old Random generated maps are more diverse now.
