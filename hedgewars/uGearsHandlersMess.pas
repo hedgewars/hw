@@ -1954,7 +1954,7 @@ begin
     if land = 0 then land:= TestCollisionYwithGear(Gear, 2);
     if (land <> 0) and (land and lfBouncy = 0) then
         begin
-        if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
+        if ((Gear^.State and gstMoving) <> 0) or (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
