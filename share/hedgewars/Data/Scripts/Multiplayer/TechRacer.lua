@@ -1,12 +1,11 @@
 ------------------------------------------
--- TECH RACER v0.7
+-- TECH RACER v0.8
 -----------------------------------------
 
 --------------
 -- TO DO
 --------------
--- allow scrolling of maps
--- place waypoints for the registered maps automatically.
+-- allow scrolling of maps (was going to add this in the engine itself, but it can be done now by refreshing preview)
 
 --------------
 --0.2
@@ -53,6 +52,14 @@
 -- allow waypoints to be loaded automatically via TechMaps or HWMAP
 -- (temporarily?) remove ability to place waypoints manually
 -- break stuff?
+
+--------------
+--0.8
+--------------
+-- should (more or less) work "out of the box" now
+-- generate map previews for level
+-- randomly assign a map in the case of no map param
+-- no longer allow custom ammosets (ammo should be specified by map so that records can be valid, though we probably still need to completely limit gameflags)
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -170,7 +177,7 @@ local specialPointsY = {}
 local specialPointsFlag = {}
 local specialPointsCount = 0
 
-mapID = 22
+mapID = nil
 
 --------------------------
 -- hog and team tracking variales
@@ -669,6 +676,10 @@ function onParameters()
 		roundLimit = 3
 	end
 
+	if mapID == nil then
+		mapID = 2 + GetRandom(7)
+	end
+
 end
 
 function onGameInit()
@@ -678,7 +689,7 @@ function onGameInit()
 		MapGen = mgDrawn
 		TemplateFilter = 0
 
-		EnableGameFlags(gfInfAttack, gfDisableWind)
+		EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
 		DisableGameFlags(gfSolidLand)
 		CaseFreq = 0
         TurnTime = 90000
@@ -1186,5 +1197,17 @@ function onAchievementsDeclaration()
     end
 end
 
+function onAmmoStoreInit()
 
+	SetAmmo(amSkip, 9, 0, 0, 0)
+
+	for i = 1, #atkArray do
+		SetAmmo(atkArray[i][1], 0, 0, 0, 1)
+	end
+
+	for i = 1, #utilArray do
+		SetAmmo(utilArray[i][1], 0, 0, 0, 1)
+	end
+
+end
 
