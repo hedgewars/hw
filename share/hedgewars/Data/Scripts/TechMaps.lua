@@ -96,6 +96,13 @@ function onPreviewInit()
 	if mapID == 1 then
 			--
 	elseif mapID == 2 then
+			PreviewWayPoint(387, 621)
+		PreviewWayPoint(215, 1748)
+		PreviewWayPoint(1617, 1313)
+		PreviewWayPoint(1642, 562)
+		PreviewWayPoint(3318, 1102)
+		PreviewWayPoint(3554, 684)
+		PreviewWayPoint(2142, 1674)
 		PreviewGirder(402, 1863, 0)
 		PreviewGirder(442, 1863, 4)
 		PreviewGirder(2067, 1945, 6)
@@ -210,13 +217,7 @@ function onPreviewInit()
 		PreviewRubber(1450, 1750, 1)
 		PreviewRubber(1566, 1860, 1)
 		PreviewRubber(1680, 1973, 1)
-		PreviewWayPoint(387, 621)
-		PreviewWayPoint(215, 1748)
-		PreviewWayPoint(1617, 1313)
-		PreviewWayPoint(1642, 562)
-		PreviewWayPoint(3318, 1102)
-		PreviewWayPoint(3554, 684)
-		PreviewWayPoint(2142, 1674)
+
 		PreviewPlacedGear(324, 613)
 		PreviewPlacedGear(2361, 1721)
 		PreviewPlacedGear(2430, 1721)
@@ -233,6 +234,13 @@ function onPreviewInit()
 		PreviewPlacedGear(1250, 1650)
 		PreviewPlacedGear(1335, 1655)
 	elseif mapID == 3 then
+			PreviewWayPoint(3892, 478)
+		PreviewWayPoint(1146, 413)
+		PreviewWayPoint(934, 1459)
+		PreviewWayPoint(2635, 1459)
+		PreviewWayPoint(2656, 523)
+		PreviewWayPoint(1958, 834)
+		PreviewWayPoint(555, 864)
 		PreviewGirder(3703, 157, 7)
 		PreviewGirder(3846, 100, 4)
 		PreviewGirder(3991, 162, 5)
@@ -250,13 +258,7 @@ function onPreviewInit()
 		PreviewGirder(426, 167, 4)
 		PreviewGirder(266, 166, 4)
 		PreviewGirder(105, 166, 4)
-		PreviewWayPoint(3892, 478)
-		PreviewWayPoint(1146, 413)
-		PreviewWayPoint(934, 1459)
-		PreviewWayPoint(2635, 1459)
-		PreviewWayPoint(2656, 523)
-		PreviewWayPoint(1958, 834)
-		PreviewWayPoint(555, 864)
+
 		PreviewPlacedGear(3801, 491)
 		PreviewPlacedGear(3803, 460)
 		PreviewPlacedGear(3799, 429)
@@ -484,6 +486,15 @@ function onPreviewInit()
 		PreviewPlacedGear(1633, 626)
 		PreviewPlacedGear(1683, 651)
 	elseif mapID == 4 then
+			PreviewWayPoint(337, 533)
+		PreviewWayPoint(1069, 1367)
+		PreviewWayPoint(884, 729)
+		PreviewWayPoint(1682, 464)
+		PreviewWayPoint(2773, 505)
+		PreviewWayPoint(3512, 929)
+		PreviewWayPoint(4002, 106)
+		PreviewWayPoint(3964, 1520)
+		PreviewWayPoint(2592, 1334)
 		PreviewGirder(194, 388, 7)
 		PreviewGirder(338, 334, 4)
 		PreviewGirder(484, 390, 5)
@@ -610,15 +621,7 @@ function onPreviewInit()
 		PreviewGirder(2936, 433, 5)
 		PreviewGirder(2987, 489, 1)
 		PreviewGirder(338, 559, 4)
-		PreviewWayPoint(337, 533)
-		PreviewWayPoint(1069, 1367)
-		PreviewWayPoint(884, 729)
-		PreviewWayPoint(1682, 464)
-		PreviewWayPoint(2773, 505)
-		PreviewWayPoint(3512, 929)
-		PreviewWayPoint(4002, 106)
-		PreviewWayPoint(3964, 1520)
-		PreviewWayPoint(2592, 1334)
+
 		PreviewPlacedGear(548, 1844)
 		PreviewPlacedGear(595, 1844)
 		PreviewPlacedGear(642, 1844)
@@ -648,6 +651,12 @@ function onPreviewInit()
 		PreviewPlacedGear(894, 726)
 		PreviewPlacedGear(1080, 1690)
 	elseif mapID == 5 then
+			PreviewWayPoint(3761, 428)
+		PreviewWayPoint(750, 1801)
+		PreviewWayPoint(511, 1232)
+		PreviewWayPoint(1579, 297)
+		PreviewWayPoint(2007, 1618)
+		PreviewWayPoint(3642, 1601)
 		PreviewRubber(3776, 447, 3)
 		PreviewRubber(3629, 503, 0)
 		PreviewRubber(3486, 446, 1)
@@ -694,12 +703,7 @@ function onPreviewInit()
 		PreviewRubber(1438, 431, 3)
 		PreviewRubber(1589, 378, 0)
 		PreviewRubber(1736, 448, 1)
-		PreviewWayPoint(3761, 428)
-		PreviewWayPoint(750, 1801)
-		PreviewWayPoint(511, 1232)
-		PreviewWayPoint(1579, 297)
-		PreviewWayPoint(2007, 1618)
-		PreviewWayPoint(3642, 1601)
+
 		PreviewPlacedGear(397, 1295)
 		PreviewPlacedGear(461, 1295)
 		PreviewPlacedGear(555, 1295)
@@ -729,6 +733,9 @@ function onPreviewInit()
 		PreviewPlacedGear(2458, 523)
 		PreviewPlacedGear(2595, 521)
 	elseif mapID == 6 then
+		PreviewWayPoint(438, 278)
+		PreviewWayPoint(1870, 1354)
+		PreviewWayPoint(892, 1119)
 		PreviewGirder(419, 298, 4)
 		PreviewGirder(348, 387, 6)
 		PreviewGirder(521, 359, 0)
@@ -795,9 +802,7 @@ function onPreviewInit()
 		PreviewGirder(1519, 1354, 6)
 		PreviewRubber(210, 958, 1)
 		PreviewRubber(98, 844, 1)
-		PreviewWayPoint(438, 278)
-		PreviewWayPoint(1870, 1354)
-		PreviewWayPoint(892, 1119)
+
 		PreviewPlacedGear(1740, 1905)
 		PreviewPlacedGear(1780, 1905)
 		PreviewPlacedGear(1782, 1874)
@@ -815,6 +820,12 @@ function onPreviewInit()
 		PreviewPlacedGear(967, 1422)
 		PreviewPlacedGear(968, 1493)
 	elseif mapID == 7 then
+			PreviewWayPoint(3820, 342)
+		PreviewWayPoint(3343, 1612)
+		PreviewWayPoint(272, 351)
+		PreviewWayPoint(159, 1774)
+		PreviewWayPoint(2248, 1573)
+		PreviewWayPoint(1379, 1192)
 		PreviewGirder(3699, 436, 0)
 		PreviewGirder(934, 806, 6)
 		PreviewGirder(934, 969, 6)
@@ -962,12 +973,7 @@ function onPreviewInit()
 		PreviewRubber(1620, 2022, 0)
 		PreviewRubber(3388, 1688, 3)
 		PreviewRubber(3276, 1546, 3)
-		PreviewWayPoint(3820, 342)
-		PreviewWayPoint(3343, 1612)
-		PreviewWayPoint(272, 351)
-		PreviewWayPoint(159, 1774)
-		PreviewWayPoint(2248, 1573)
-		PreviewWayPoint(1379, 1192)
+
 		PreviewPlacedGear(1757, 706)
 		PreviewPlacedGear(1838, 706)
 		PreviewPlacedGear(1319, 926)
@@ -1051,6 +1057,13 @@ function onPreviewInit()
 
 	else
 
+		PreviewWayPoint(383, 1595)
+		PreviewWayPoint(605, 1157)
+		PreviewWayPoint(2296, 517)
+		PreviewWayPoint(2841, 497)
+		PreviewWayPoint(3209, 1286)
+		PreviewWayPoint(3708, 1945)
+		PreviewWayPoint(4075, 1887)
 		PreviewGirder(430, 1871, 2)
 		PreviewGirder(1249, 1914, 4)
 		PreviewGirder(1394, 1849, 7)
@@ -1292,13 +1305,7 @@ function onPreviewInit()
 		PreviewGirder(688, 672, 4)
 		PreviewGirder(500, 696, 4)
 		PreviewGirder(701, 696, 4)
-		PreviewWayPoint(383, 1595)
-		PreviewWayPoint(605, 1157)
-		PreviewWayPoint(2296, 517)
-		PreviewWayPoint(2841, 497)
-		PreviewWayPoint(3209, 1286)
-		PreviewWayPoint(3708, 1945)
-		PreviewWayPoint(4075, 1887)
+
 		PreviewPlacedGear(889, 1126)
 		PreviewPlacedGear(1211, 975)
 		PreviewPlacedGear(3619, 451)
@@ -1473,7 +1480,8 @@ function LoadMap(mID)
 
 		-- more detailed landflag test map, should hopefully work now
 		-- probably my second favorite techracer map
-			------ GIRDER LIST ------
+		infUFO = "false"
+		------ GIRDER LIST ------
 		LoadSprite(402, 1863, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
 		LoadSprite(442, 1863, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
 		LoadSprite(2067, 1945, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
@@ -1706,6 +1714,7 @@ function LoadMap(mID)
 	elseif mID == 3 then
 
 		--Helix airmine map
+		infUFO = "true"
 		------ GIRDER LIST ------
 		LoadSprite(3703, 157, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(3846, 100, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
@@ -2338,7 +2347,8 @@ function LoadMap(mID)
 	elseif mID == 6 then
 	--incomplete challenge, still working on this map
 
-		------ GIRDER LIST ------
+	infUFO = "false"
+	------ GIRDER LIST ------
 	LoadSprite(419, 298, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(348, 387, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(521, 359, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
@@ -2463,6 +2473,7 @@ function LoadMap(mID)
 	--Bouncy UFO MAP
 	-- should be played with infinite fuel
 
+	infUFO = "true"
 	------ GIRDER LIST ------
 	LoadSprite(3699, 436, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
 	LoadSprite(934, 806, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
@@ -3016,6 +3027,7 @@ function LoadMap(mID)
 
 	else
 
+		infUFO = "false"
 		-- the first test epic multi map
 		-- default to this crazy shit
 		---------- GIRDER LIST---------

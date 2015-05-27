@@ -155,7 +155,7 @@ local utilArray =
 
 local activationStage = 0
 local jet = nil
-local infUFO = nil
+infUFO = nil
 
 local fMod = 1000000 -- 1
 local roundLimit = 3
