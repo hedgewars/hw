@@ -1,7 +1,16 @@
-ObjectList = {}
+HedgewarsScriptLoad("/Scripts/Params.lua")
+
+local ObjectList = {}
 
 -- Overall padding for roping freedom
-Padding = 430
+local Padding = 430
+
+function onParameters()
+    parseParams()
+    if params["pad"] ~= nil then
+        Padding = params["pad"]
+    end
+end
 
 -- This could probably use less points and more precision
 -- 700x700 for object space
@@ -381,8 +390,8 @@ function onGameInit()
         end
     end
     if GetRandom(2)==0 then
-        x = GetRandom(3300)+350
-        y = GetRandom(1300)+350
+        x = GetRandom(3300)+382
+        y = GetRandom(1300)+382
         if DrawStar(x,y, 1, 1+GetRandom(2)*-2) then
             TotGen = TotGen+1
         end
@@ -414,8 +423,8 @@ function onGameInit()
         else
             if Tries > 500 then d = GetRandom(2)+3
             else d = GetRandom(3)+2 end
-            x = GetRandom(4000-div(700,d))+div(700,d*2)
-            y = GetRandom(1300-div(700,d))+div(700,d*2)
+            x = GetRandom(4000-div(764,d))+div(764,d*2)
+            y = GetRandom(1300-div(764,d))+div(764,d*2)
             if DrawStar(x,y, d, 1+GetRandom(2)*-2) then
                 TotGen = TotGen+1
             end
