@@ -164,14 +164,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageVideos->init(config);
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && defined(SPARKLE_ENABLED)
     if (config->isAutoUpdateEnabled())
     {
         AutoUpdater* updater = NULL;
 
-#ifdef SPARKLE_ENABLED
         updater = new SparkleAutoUpdater();
-#endif
         if (updater)
         {
             updater->checkForUpdates();
