@@ -6,7 +6,7 @@ if(NOT APPLE)
     add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 endif()
 
-if(APPLE)
+if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt4 REQUIRED QUIET)
     find_package(SDL REQUIRED)
     find_package(SDL_image REQUIRED)

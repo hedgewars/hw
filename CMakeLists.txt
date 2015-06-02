@@ -32,6 +32,7 @@ option(ANDROID "Enable Android build (off)" OFF)
 
 option(MINIMAL_FLAGS "Respect system flags as much as possible (off)" OFF)
 option(NOAUTOUPDATE "Disable OS X Sparkle update checking (off)" OFF)
+option(SKIPBUNDLE "Do not create relocate bundle (off)" OFF)
 
 option(BUILD_ENGINE_C "Compile hwengine as native C (off)" OFF)
 option(GL2 "Enable OpenGL 2 rendering !!!EXPERIMENTAL - DO NOT USE!!! [default: off)" OFF)
