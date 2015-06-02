@@ -29,6 +29,8 @@ if(APPLE)
 
     #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
     string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
+    #remove the "libSDLmain.a" from the SDL_LIBRARY variable
+    string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
     if(NOT NOPNG)
         #get the neme of the library (harmelss if it is static)
