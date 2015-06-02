@@ -45,6 +45,8 @@
     </array>
     <key>LSMinimumSystemVersion</key>
     <string>${minimum_macosx_version}</string>
+    <key>NSHighResolutionCapable</key>
+    <string>True</string>
     <key>SUPublicDSAKeyFile</key>
     <string>dsa_pub.pem</string>
     <key>SUFeedURL</key>
