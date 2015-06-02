@@ -53,20 +53,6 @@ interface
     type PLongInt = ^LongInt;
 {$ENDIF}
 
-{$IFDEF DARWIN}
-    {$IFNDEF HWLIBRARY}
-        {$linklib SDLmain}
-        {$PASCALMAINNAME SDL_main}
-        {$linkframework Cocoa}
-        {$linkframework SDL}
-        {$linkframework SDL_net}
-        {$linkframework SDL_image}
-        {$linkframework SDL_ttf}
-        {$linkframework SDL_mixer}
-        {$linkframework OpenGL}
-    {$ENDIF}
-{$ENDIF}
-
 
 (*  SDL  *)
 const
