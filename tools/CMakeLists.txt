@@ -8,6 +8,7 @@ endif()
 
 if(APPLE)
     find_package(Qt4 REQUIRED QUIET)
+    find_package(PNG REQUIRED)
     find_package(SDL REQUIRED)
     find_package(SDL_image REQUIRED)
     find_package(SDL_net REQUIRED)
@@ -32,11 +33,9 @@ if(APPLE)
     #remove the "libSDLmain.a" from the SDL_LIBRARY variable
     string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
-    if(NOT NOPNG)
-        #get the neme of the library (harmelss if it is static)
-        string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
-        string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
-    endif()
+    #get the neme of the library (harmelss if it is static)
+    string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
+    string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
     if(${BUILD_ENGINE_LIBRARY})
