@@ -38,7 +38,7 @@ import RoomsAndClients
 instance NFData B.ByteString
 #endif
 
-instance NFData (Chan a) where rnf a  = ()
+instance NFData (Chan a) where rnf a  = a `seq` ()
 
 instance NFData Action where
     rnf (AnswerClients chans msg) = chans `deepseq` msg `deepseq` ()
