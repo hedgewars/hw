@@ -87,7 +87,8 @@ uses LuaPas,
     uIO,
     uVisualGearsList,
     uGearsHandlersMess,
-    uPhysFSLayer
+    uPhysFSLayer,
+    SDLh
 {$IFNDEF PAS2C}
     , typinfo
 {$ENDIF}
@@ -101,6 +102,7 @@ var luaState : Plua_State;
     ScriptLoaded : boolean;
     mapDims : boolean;
     PointsBuffer: shortstring;
+    prevCursorPoint: TPoint;  // why is tpoint still in sdlh...
 
 procedure ScriptPrepareAmmoStore; forward;
 procedure ScriptApplyAmmoStore; forward;
@@ -2615,6 +2617,8 @@ if not ScriptLoaded then
     exit;
 
 // push game variables so they may be modified by the script
+ScriptSetInteger('CursorX', CursorPoint.X);
+ScriptSetInteger('CursorY', CursorPoint.Y);
 ScriptSetInteger('BorderColor', ExplosionBorderColor);
 ScriptSetInteger('GameFlags', GameFlags);
 ScriptSetString('Seed', cSeed);
@@ -2773,6 +2777,23 @@ ScriptSetInteger('TurnTimeLeft', TurnTimeLeft);
 ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
+if isCursorVisible and (not bShowAmmoMenu) then
+    if (prevCursorPoint.X <> CursorPoint.X) or 
+       (prevCursorPoint.Y <> CursorPoint.Y) then
+        begin
+        ScriptSetInteger('CursorX', CursorPoint.X - WorldDx);
+        ScriptSetInteger('CursorY', cScreenHeight - CursorPoint.Y- WorldDy);
+        prevCursorPoint.X:= CursorPoint.X;
+        prevCursorPoint.Y:= CursorPoint.Y;
+        end
+else
+    begin
+    ScriptSetInteger('CursorX', NoPointX);
+    ScriptSetInteger('CursorY', NoPointX);
+    prevCursorPoint.X:= NoPointX;
+    prevCursorPoint.Y:= NoPointX
+    end;
+
 if not mapDims then
     begin
     mapDims:= true;
@@ -3329,6 +3350,8 @@ procedure initModule;
 begin
 mapDims:= false;
 PointsBuffer:= '';
+prevCursorPoint.X:= NoPointX;
+prevCursorPoint.Y:= 0;
 end;
 
 procedure freeModule;
