@@ -61,6 +61,13 @@
 -- randomly assign a map in the case of no map param
 -- no longer allow custom ammosets (ammo should be specified by map so that records can be valid, though we probably still need to completely limit gameflags)
 
+--------------
+--0.9
+--------------
+-- added variable portal limiter (and effects) from Escape script
+-- allow variable ufoFuel (nil is default, 2000 is infinite)
+-- disallow specifying fuel in params (do this in TechMaps or HedgeEditor please)
+
 -----------------------------
 -- SCRIPT BEGINS
 -----------------------------
@@ -155,8 +162,8 @@ local utilArray =
 
 local activationStage = 0
 local jet = nil
-infUFO = nil
-
+portalDistance = 5000 -- 15
+ufoFuel = 0
 local fMod = 1000000 -- 1
 local roundLimit = 3
 local roundNumber = 0
@@ -668,8 +675,8 @@ function onParameters()
 
 	parseParams()
 	mapID = tonumber(params["m"])
-	infUFO = params["ufo"]
 
+	--ufoFuel = tonumber(params["ufoFuel"])
 	roundLimit = tonumber(params["rounds"])
 
 	if (roundLimit == 0) or (roundLimit == nil) then
@@ -808,6 +815,10 @@ function InterpretPoints()
 			--PlaceStruc("reflectorshield")
 		elseif specialPointsFlag[i] == 98 then
 			--PlaceStruc("weaponfilter")]]
+
+		elseif specialPointsFlag[i] == 98 then
+			portalDistance = specialPointsX[i]
+			ufoFuel = specialPointsY[i]
 
 		-- Normal Girders
 		elseif specialPointsFlag[i] == 100 then
@@ -981,9 +992,13 @@ end
 
 function onGameTick20()
 
-		if (jet ~= nil) and (infUFO == "true") then
-			SetHealth(jet, 2000)
+		if (jet ~= nil) and (ufoFuel ~= 0) then
+			if ufoFuel == 2000 then
+				SetHealth(jet, 2000)
+			end
 		end
+
+		runOnGears(PortalEffects)
 
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
@@ -1096,6 +1111,61 @@ function onGameTick20()
 
 end
 
+-- handle short range portal gun
+function PortalEffects(gear)
+
+	if GetGearType(gear) == gtPortal then
+
+		tag = GetTag(gear)
+		if tag == 0 then
+			col = 0xfab02aFF -- orange ball
+		elseif tag == 1 then
+			col = 0x00FF00FF -- orange portal
+		elseif tag == 2 then
+			col = 0x364df7FF  -- blue ball
+		elseif tag == 3 then
+			col = 0xFFFF00FF  -- blue portal
+		end
+
+		if (tag == 0) or (tag == 2) then -- i.e ball form
+			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
+			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, col )
+
+			remLife = getGearValue(gear,"life")
+			remLife = remLife - 1
+			setGearValue(gear, "life", remLife)
+
+			if remLife == 0 then
+
+				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+
+				PlaySound(sndVaporize)
+				DeleteGear(gear)
+
+			end
+
+		end
+
+	end
+
+end
+
 function onGearResurrect(gear)
 
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
@@ -1112,6 +1182,7 @@ function isATrackedGear(gear)
 		(GetGearType(gear) == gtTarget) or
 		(GetGearType(gear) == gtFlame) or
 		(GetGearType(gear) == gtExplosives) or
+		(GetGearType(gear) == gtPortal) or
 		(GetGearType(gear) == gtMine) or
 		(GetGearType(gear) == gtSMine) or
 		(GetGearType(gear) == gtAirMine) or
@@ -1125,21 +1196,28 @@ end
 
 function onGearAdd(gear)
 
-        if isATrackedGear(gear) then
-			trackGear(gear)
+       if isATrackedGear(gear) then
+		trackGear(gear)
+
+		if GetGearType(gear) == gtPortal then
+			setGearValue(gear,"life",portalDistance)
+		elseif GetGearType(gear) == gtHedgehog then
+            hhs[numhhs] = gear
+            numhhs = numhhs + 1
+            SetEffect(gear, heResurrectable, 1)
 		end
 
-		if GetGearType(gear) == gtHedgehog then
-                hhs[numhhs] = gear
-                numhhs = numhhs + 1
-                SetEffect(gear, heResurrectable, 1)
-        end
+	end
 
-        if GetGearType(gear) == gtAirAttack then
-                cGear = gear
-        elseif GetGearType(gear) == gtJetpack then
-			jet = gear
+	if GetGearType(gear) == gtAirAttack then
+       cGear = gear
+	elseif GetGearType(gear) == gtJetpack then
+		jet = gear
+		if (ufoFuel ~= 0) then
+			SetHealth(jet, ufoFuel)
 		end
+	end
+
 
 end
 

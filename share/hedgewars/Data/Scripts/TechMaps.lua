@@ -8,6 +8,8 @@
 -- TO DO
 --------------
 -- continue to fix/improve old/broken/incompatible maps, and add more maps.
+-- add ufo fuel per map
+
 
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 
@@ -1480,7 +1482,7 @@ function LoadMap(mID)
 
 		-- more detailed landflag test map, should hopefully work now
 		-- probably my second favorite techracer map
-		infUFO = "false"
+
 		------ GIRDER LIST ------
 		LoadSprite(402, 1863, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
 		LoadSprite(442, 1863, sprAmGirder, 4, 16448250, nil, nil, nil, lfIce)
@@ -1714,7 +1716,7 @@ function LoadMap(mID)
 	elseif mID == 3 then
 
 		--Helix airmine map
-		infUFO = "true"
+		ufoFuel = 2000
 		------ GIRDER LIST ------
 		LoadSprite(3703, 157, sprAmGirder, 7, 4294967295, nil, nil, nil, lfNormal)
 		LoadSprite(3846, 100, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
@@ -2347,8 +2349,158 @@ function LoadMap(mID)
 	elseif mID == 6 then
 	--incomplete challenge, still working on this map
 
-	infUFO = "false"
 	------ GIRDER LIST ------
+	LoadSprite(419, 298, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(348, 387, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(521, 359, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(459, 385, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(570, 387, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(601, 298, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(348, 547, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(570, 547, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(348, 707, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(570, 707, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(397, 466, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(458, 491, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(521, 592, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(458, 620, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(397, 713, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(459, 740, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(348, 867, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(570, 866, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(641, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(800, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(959, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(482, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(323, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(163, 1038, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(48, 1038, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(813, 1126, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(989, 1127, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(989, 1288, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(989, 1449, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(813, 1287, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(813, 1448, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(900, 1214, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(989, 1570, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(813, 1569, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(813, 1690, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(521, 844, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(457, 870, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(392, 941, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(813, 1851, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(813, 1972, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(989, 1690, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1044, 1817, sprAmGirder, 5, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(901, 1979, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1002, 2005, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(1176, 1873, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1333, 1873, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1491, 1873, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1649, 1873, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1808, 1873, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1898, 1800, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1942, 1798, sprAmGirder, 3, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2010, 1798, sprAmGirder, 1, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2054, 1804, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2054, 1925, sprAmGirder, 2, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1898, 1639, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2054, 1643, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2125, 1553, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2197, 1464, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2126, 1374, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1965, 1374, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1804, 1374, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1733, 1464, sprAmGirder, 6, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1823, 1547, sprAmGirder, 4, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2023, 1976, sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(1961, 2003, sprAmGirder, 3, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2216, 1464, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2234, 1464, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2252, 1464, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2270, 1464, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
+	LoadSprite(2245, 1553, sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2246, 1374, sprAmGirder, 0, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2351, 1310, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+	LoadSprite(2350, 1490, sprAmGirder, 7, 2516582650, nil, nil, nil, lfIndestructible)
+
+	------ RUBBER BAND LIST ------
+	LoadSprite(210, 958, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+	LoadSprite(98, 844, sprAmRubber, 1, 4294967295, nil, nil, nil, lfBouncy)
+
+	------ LAND SPRITE LIST ------
+
+	------ WAYPOINT LIST ------
+	AddWayPoint(438, 278)
+	AddWayPoint(1870, 1354)
+	AddWayPoint(892, 1100)
+
+	------ HEALTH CRATE LIST ------
+
+	------ AMMO CRATE LIST ------
+	tempG = SpawnAmmoCrate(1943, 1978, amBazooka)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amBazooka")
+	tempG = SpawnAmmoCrate(2002, 1952, amSineGun)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amSineGun")
+	tempG = SpawnAmmoCrate(2002, 1890, amSineGun)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amSineGun")
+	tempG = SpawnAmmoCrate(2002, 1921, amSineGun)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amSineGun")
+	tempG = SpawnAmmoCrate(1998, 1859, amSineGun)
+	setGearValue(tempG,"caseType", "ammo")
+	setGearValue(tempG,"contents", "amSineGun")
+
+	------ UTILITY CRATE LIST ------
+	tempG = SpawnUtilityCrate(368, 274, amPickHammer)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amPickHammer")
+	tempG = SpawnUtilityCrate(526, 568, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
+	tempG = SpawnUtilityCrate(474, 1014, amExtraTime)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amExtraTime")
+	tempG = SpawnUtilityCrate(906, 1955, amRope)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amRope")
+	tempG = SpawnUtilityCrate(2127, 1529, amBlowTorch)
+	setGearValue(tempG,"caseType", "util")
+	setGearValue(tempG,"contents", "amBlowTorch")
+
+	------ BARREL LIST ------
+	SetHealth(AddGear(1860, 1523, gtExplosives, 0, 0, 0, 0), 1)
+	SetHealth(AddGear(1817, 1523, gtExplosives, 0, 0, 0, 0), 1)
+	SetHealth(AddGear(1836, 1493, gtExplosives, 0, 0, 0, 0), 1)
+	SetHealth(AddGear(1769, 1523, gtExplosives, 0, 0, 0, 0), 1)
+	SetHealth(AddGear(1792, 1494, gtExplosives, 0, 0, 0, 0), 1)
+
+	------ MINE LIST ------
+	SetTimer(AddGear(318, 1028, gtMine, 0, 0, 0, 0), 1)
+
+	------ STICKY MINE LIST ------
+	tempG = AddGear(1767, 1506, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1792, 1477, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1813, 1506, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1837, 1476, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1858, 1506, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1882, 1537, gtSMine, 0, 0, 0, 0)
+	tempG = AddGear(1748, 1537, gtSMine, 0, 0, 0, 0)
+
+	------ AIR MINE LIST ------
+	SetTimer(AddGear(837, 1570, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(835, 1361, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(836, 1425, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(833, 1495, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(967, 1566, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(970, 1354, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(967, 1422, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(968, 1493, gtAirMine, 0, 0, 0, 0), 1)
+
+	--[[------ GIRDER LIST ------
 	LoadSprite(419, 298, sprAmGirder, 4, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(348, 387, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
 	LoadSprite(521, 359, sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
@@ -2467,13 +2619,13 @@ function LoadMap(mID)
 	SetTimer(AddGear(967, 1566, gtAirMine, 0, 0, 0, 0), 1)
 	SetTimer(AddGear(970, 1354, gtAirMine, 0, 0, 0, 0), 1)
 	SetTimer(AddGear(967, 1422, gtAirMine, 0, 0, 0, 0), 1)
-	SetTimer(AddGear(968, 1493, gtAirMine, 0, 0, 0, 0), 1)
+	SetTimer(AddGear(968, 1493, gtAirMine, 0, 0, 0, 0), 1)]]
 
 	elseif mID == 7 then
 	--Bouncy UFO MAP
 	-- should be played with infinite fuel
 
-	infUFO = "true"
+	ufoFuel = 2000
 	------ GIRDER LIST ------
 	LoadSprite(3699, 436, sprAmGirder, 0, 16448250, nil, nil, nil, lfIce)
 	LoadSprite(934, 806, sprAmGirder, 6, 4294967295, nil, nil, nil, lfNormal)
@@ -3027,7 +3179,6 @@ function LoadMap(mID)
 
 	else
 
-		infUFO = "false"
 		-- the first test epic multi map
 		-- default to this crazy shit
 		---------- GIRDER LIST---------
