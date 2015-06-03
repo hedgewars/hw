@@ -65,3 +65,8 @@ glob:version_info.txt
 glob:*.tar.*
 glob:*.or
 glob:*.res
+glob:Hedgewars.app/*
+glob:tools/CreateMacBundle.cmake
+glob:share/Info.plist
+glob:CTestTestfile.cmake
+glob:arch.c
