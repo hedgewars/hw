@@ -16,9 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 
+#if defined(OFFICIAL_SERVER)
 module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
+#else
+module EngineInteraction(checkNetCmd, toEngineMsg, drawnMapData) where
+#endif
 
 import qualified Data.Set as Set
 import Control.Monad
@@ -89,6 +93,7 @@ checkNetCmd msg = check decoded
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
         timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgfc12345" ++ slotMessages
 
+#if defined(OFFICIAL_SERVER)
 replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
         -> Map.Map B.ByteString [B.ByteString]
@@ -152,6 +157,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
                             ])
                         $ hedgehogs t
                         )
+#endif
 
 drawnMapData :: B.ByteString -> [B.ByteString]
 drawnMapData =
