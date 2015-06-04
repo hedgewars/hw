@@ -21,7 +21,7 @@
 #if defined(OFFICIAL_SERVER)
 module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
 #else
-module EngineInteraction(checkNetCmd, toEngineMsg, drawnMapData) where
+module EngineInteraction(checkNetCmd, toEngineMsg) where
 #endif
 
 import qualified Data.Set as Set
@@ -40,6 +40,7 @@ import Data.Maybe
 import CoreTypes
 import Utils
 
+#if defined(OFFICIAL_SERVER)
 {-
     this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
     because standard 'catch' doesn't seem to catch decompression errors for some reason
@@ -55,6 +56,7 @@ decompressWithoutExceptions = finalise
         cons chunk = right (chunk :)
         finalise = right BL.fromChunks
 {- end snippet  -}
+#endif
 
 toEngineMsg :: B.ByteString -> B.ByteString
 toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
@@ -157,7 +159,6 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
                             ])
                         $ hedgehogs t
                         )
-#endif
 
 drawnMapData :: B.ByteString -> [B.ByteString]
 drawnMapData =
@@ -225,6 +226,4 @@ gameFlagConsts = [
         , 0x02000000
         , 0x04000000
         ]
-
-
-
+#endif
