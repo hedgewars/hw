@@ -14,6 +14,7 @@
  + Old Random generated maps are more diverse now.
  + Slider for adjusting land generation detail.
  + Highlander gamemode can now be used with custom weapon schemes (1-8=How probable to get this weapon. 9=All hogs get it)
+ + New playable themes: "Hoggywood" and "Cake"
  + New gameplay mode "Construction Mode"
  + New gameplay mode "TechRacer"
  + New game play mode "DiagonalMaze" (generates a simple diagonal maze)
