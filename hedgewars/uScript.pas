@@ -2778,6 +2778,7 @@ ScriptSetInteger('GameTime', GameTicks);
 ScriptSetInteger('TotalRounds', TotalRounds);
 ScriptSetInteger('WaterLine', cWaterLine);
 if isCursorVisible and (not bShowAmmoMenu) then
+    begin
     if (prevCursorPoint.X <> CursorPoint.X) or 
        (prevCursorPoint.Y <> CursorPoint.Y) then
         begin
@@ -2786,6 +2787,7 @@ if isCursorVisible and (not bShowAmmoMenu) then
         prevCursorPoint.X:= CursorPoint.X;
         prevCursorPoint.Y:= CursorPoint.Y;
         end
+    end
 else
     begin
     ScriptSetInteger('CursorX', NoPointX);
