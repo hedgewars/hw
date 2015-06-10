@@ -83,9 +83,8 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
---StoreAchievements (B.pack fileName) (map toPair teams) info
         StoreAchievements p fileName teams info ->
-            void $ executeMany dbConn dbQueryAchievement $ (parseStats p fileName teams) info
+            mapM_ (execute dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
 
 
 readTime = read . B.unpack . B.take 19 . B.drop 8
