@@ -87,8 +87,8 @@ dbInteractionLoop dbConn = forever $ do
             mapM_ (execute dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
 
 
-readTime = read . B.unpack . B.take 19 . B.drop 8
-
+--readTime = read . B.unpack . B.take 19 . B.drop 8
+readTime = B.take 19 . B.drop 8
 
 parseStats :: 
     Word16 
