@@ -247,13 +247,10 @@ if TeamsArray[t] <> nil then
             HHGear:= hh^.Gear;
             x:= hwRound(HHGear^.X) + WorldDx;
             y:= hwRound(HHGear^.Y) + WorldDy - 2;
-            if (SpeechHogNumber <> c) or ((RealTicks and 512) < 256) then
-                begin
-                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x - fSprOff, y, 0, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
-                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x + fSprOff, y, 1, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
-                DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
-                end
-            else
+            DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x - fSprOff, y, 0, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+            DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x + fSprOff, y, 1, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+            DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
+            if SpeechHogNumber = c then
                 DrawCircle(x, y, 20, 3, 0, $FF, $FF, $80);
             end;
         until (i > cMaxHHIndex);
