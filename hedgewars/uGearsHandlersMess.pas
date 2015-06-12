@@ -1914,7 +1914,9 @@ begin
                        (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
                         begin
                         Gear^.Hedgehog:= CurrentHedgehog;
+                        tmpG:= FollowGear;
                         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                        FollowGear:= tmpG;
                         DeleteGear(Gear);
                         exit
                         end
