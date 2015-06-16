@@ -27,7 +27,7 @@ if (potW <> LAND_WIDTH) or (potH <> LAND_HEIGHT) then
     SetLength(Land, LAND_HEIGHT, LAND_WIDTH);
     SetLength(LandDirty, (LAND_HEIGHT div 32), (LAND_WIDTH div 32));
     // 0.5 is already approaching on unplayable
-    if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= 0.5;
+    if (width div 4096 >= 2) or (height div 2048 >= 2) then cMaxZoomLevel:= cMaxZoomLevel/2;
     cMinMaxZoomLevelDelta:= cMaxZoomLevel - cMinZoomLevel
     end;
 end;
