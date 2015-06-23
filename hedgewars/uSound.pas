@@ -70,7 +70,7 @@ procedure PlaySoundV(snd: TSound; voicepack: PVoicepack; keepPlaying: boolean);
 // Returns sound channel of the looped sound.
 function  LoopSound(snd: TSound): LongInt;
 function  LoopSound(snd: TSound; fadems: LongInt): LongInt;
-function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt; // WTF?
+function  LoopSoundV(snd: TSound; voicepack: PVoicepack): LongInt;
 function  LoopSoundV(snd: TSound; voicepack: PVoicepack; fadems: LongInt): LongInt;
 
 // Stops the normal/looped sound of the given type/in the given channel
@@ -261,8 +261,9 @@ function  AskForVoicepack(name: shortstring): Pointer;
 var i: Longword;
     locName, path: shortstring;
 begin
-i:= 0;
-    // First, attempt to locate a localised version of the voice
+    i:= 0;
+
+    // Adjust voicepack name if there's a localised version version of the voice
     if cLocale <> 'en' then
         begin
         locName:= name+'_'+cLocale;
@@ -279,7 +280,16 @@ i:= 0;
                 end
         end;
 
-    // If that fails, use the unmodified one
+    path:= cPathz[ptVoices] + '/' + name;
+
+    // Fallback to Default if voicepack can't be found at all
+    if (name <> 'Default') and (not pfsExists(path)) then
+        begin
+        path:= cPathz[ptVoices] + '/Default';
+        if pfsExists(path) then
+            exit(AskForVoicepack('Default'));
+        end;
+
     while (voicepacks[i].name <> name) and (voicepacks[i].name <> '') do
         begin
         inc(i);
