@@ -59,6 +59,7 @@
 00:55=Eiskanone
 00:56=Hackebeil
 00:57=Gummi
+00:58=Luftmine
 
 01:00=Auf in die Schlacht!
 01:01=Unentschieden
