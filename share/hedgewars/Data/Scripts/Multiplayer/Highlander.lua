@@ -102,7 +102,7 @@ local atkWeps = 	{
 					[amFirePunch]=true, [amWhip]=true, [amBaseballBat]=true, [amKamikaze]=true,
                     [amSeduction]=true, [amHammer]=true, [amMine]=true, [amDynamite]=true, [amCake]=true,
                     [amBallgun]=true, [amSMine]=true, [amRCPlane]=true, [amBirdy]=true, [amKnife]=true,
-                    [amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true
+                    [amAirAttack]=true, [amMineStrike]=true, [amNapalm]=true, [amDrillStrike]=true, [amPiano]=true, [amAirMine] = true,
 					}
 
 local utilWeps =  {
@@ -129,7 +129,7 @@ local shotsFired = 0
 local probability = {1,2,5,10,20,50,200,500,1000000};
 local atktot = 0
 local utiltot = 0
-local maxWep = 56 -- game crashes if you exceed supported #
+local maxWep = 57 -- game crashes if you exceed supported #
 
 local someHog = nil -- just for looking up the weps
 
