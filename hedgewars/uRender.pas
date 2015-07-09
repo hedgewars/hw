@@ -60,7 +60,9 @@ procedure DrawWater             (Alpha: byte; OffsetY, OffsetX: LongInt);
 procedure DrawWaves             (Dir, dX, dY, oX: LongInt; tnt: Byte);
 
 procedure RenderClear           ();
+{$IFDEF USE_S3D_RENDERING}
 procedure RenderClear           (mode: TRenderMode);
+{$ENDIF}
 procedure RenderSetClearColor   (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
@@ -136,8 +138,10 @@ procedure openglScalef          (ScaleX, ScaleY, ScaleZ: GLfloat); forward;
 procedure openglRotatef         (RotX, RotY, RotZ: GLfloat; dir: LongInt); forward;
 procedure openglTint            (r, g, b, a: Byte); forward;
 
+{$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint); forward;
 procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
+{$ENDIF}
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin

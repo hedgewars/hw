@@ -862,8 +862,8 @@ begin
         begin
         RenderClear();
         DrawWorldStereo(Lag, rmDefault)
-        end
 {$IFDEF USE_S3D_RENDERING}
+        end
     else
         begin
         // draw frame for left eye
@@ -873,8 +873,8 @@ begin
         // draw frame for right eye
         RenderClear(rmRightEye);
         DrawWorldStereo(0, rmRightEye);
-        end;
 {$ENDIF}
+        end;
 
 FinishRender();
 end;
