@@ -733,10 +733,12 @@ else if Gear^.Kind = gtHedgehog then
                     k:= true;
             if not k then
                 for i:= 0 to Pred(team^.Clan^.TeamsNumber) do
-                    begin
-                    team^.Clan^.Teams[i]^.hasGone:= true;
-                    TeamGoneEffect(team^.Clan^.Teams[i]^)
-                    end
+                    with team^.Clan^.Teams[i]^ do
+                        for t:= 0 to cMaxHHIndex do
+                            if Hedgehogs[t].Gear <> nil then
+                                Hedgehogs[t].Gear^.Health:= 0
+                            else if (Hedgehogs[t].GearHidden <> nil) then
+                                Hedgehogs[t].GearHidden^.Health:= 0  // hog is still hidden. if tardis should return though, lua, eh...
             end;
 
         // should be not CurrentHedgehog, but hedgehog of the last gear which caused damage to this hog
