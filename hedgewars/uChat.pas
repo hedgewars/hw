@@ -794,9 +794,10 @@ end;
 
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
+      nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
 var i, btw, index: integer;
     utf8: shortstring;
-    action, selMode, ctrl: boolean;
+    action, selMode, ctrl, ctrlonly: boolean;
     skip: TCharSkip;
 begin
     LastKeyPressTick:= RealTicks;
@@ -806,6 +807,7 @@ begin
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
+    ctrlonly:= ctrl and ((modifier and nonStateMask and (not (KMOD_LCTRL or KMOD_RCTRL))) = 0);
     skip:= none;
 
     case Sym of
@@ -965,7 +967,7 @@ begin
         SDLK_a:
             begin
             // select all
-            if ctrl then
+            if ctrlonly then
                 begin
                 ResetSelection();
                 cursorPos:= 0;
@@ -979,7 +981,7 @@ begin
         SDLK_c:
             begin
             // copy
-            if ctrl then
+            if ctrlonly then
                 CopySelectionToClipboard()
             else
                 action:= false;
@@ -987,7 +989,7 @@ begin
         SDLK_v:
             begin
             // paste
-            if ctrl then
+            if ctrlonly then
                 begin
                 DeleteSelected();
                 PasteFromClipboard();
@@ -998,7 +1000,7 @@ begin
         SDLK_x:
             begin
             // cut
-            if ctrl then
+            if ctrlonly then
                 begin
                 CopySelectionToClipboard();
                 DeleteSelected();
