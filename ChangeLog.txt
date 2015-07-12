@@ -7,6 +7,7 @@
  + Small improvements to the interface and in-game chat
  * Generated bridges/girders are now connected better to the land mass
  * Fixed rubberband sprite
+ * The game will now fallback to default voicepack if a team's voicepack is not locally installed. (Instead of rendering team voiceless)
  * Many other bug fixes
 
 0.9.20 -> 0.9.21:
