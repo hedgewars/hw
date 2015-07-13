@@ -723,7 +723,7 @@ var i, t, p, j: LongInt;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-if (GameFlags and gfDivideTeams) <> 0 then
+if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
     TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);

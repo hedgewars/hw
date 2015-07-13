@@ -5,6 +5,7 @@
  + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
  + Small improvements to the interface and in-game chat
+ + Divided teams options will now just be ignored when more/less than 2 teams, instead of displaying a fatal error
  * Generated bridges/girders are now connected better to the land mass
  * Fixed rubberband sprite
  * The game will now fallback to default voicepack if a team's voicepack is not locally installed. (Instead of rendering team voiceless)
