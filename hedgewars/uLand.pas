@@ -372,8 +372,16 @@ tmpsurf:= LoadDataImage(ptForts, ClansArray[0]^.Teams[0]^.FortName + 'L', ifAlph
 BlitImageAndGenerateCollisionInfo(leftX+150, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 
-tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
-BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
+// not critical because if no R we can fallback to mirrored L
+tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'R', ifAlpha or ifTransparent or ifIgnoreCaps);
+// fallback
+if tmpsurf = nil then
+    begin
+    tmpsurf:= LoadDataImage(ptForts, ClansArray[1]^.Teams[0]^.FortName + 'L', ifAlpha or ifCritical or ifTransparent or ifIgnoreCaps);
+    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf, 0, true);
+    end
+else
+    BlitImageAndGenerateCollisionInfo(rightX - 150 - tmpsurf^.w, LAND_HEIGHT - tmpsurf^.h, tmpsurf^.w, tmpsurf);
 SDL_FreeSurface(tmpsurf);
 end;
 
