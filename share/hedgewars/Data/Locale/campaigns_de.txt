@@ -1,43 +1,43 @@
-A_Classic_Fairytale-first_blood.desc="Hilf Leaks a lot dabei, sein Training zu absolvieren und zu einem richtigen Igelkrieger zu werden. Du wirst in der Kunst des Seils, Fallschirms, Shoryukens und der Desert Eagle trainiert."
+A_Classic_Fairytale-first_blood.desc="Hilf Undichte Stelle dabei, sein Training zu absolvieren und zu einem richtigen Igelkrieger zu werden. Du wirst in der Kunst des Seils, Fallschirms, Shoryukens und der Desert Eagle trainiert."
 
-A_Classic_Fairytale-shadow.desc="Leaks a lot und Dense Cloud gehen für die Jagd raus. Sei auf Gefahren im Wald gefasst. Denk dran, bedenke deine Entscheidungen gut."
+A_Classic_Fairytale-shadow.desc="Undichte Stelle und Dichte Wolke gehen für die Jagd raus. Sei auf Gefahren im Wald gefasst. Denk dran, bedenke deine Entscheidungen gut."
 
-A_Classic_Fairytale-journey.desc="Leaks a lot muss zur anderen Seite der Insel gehen. Sei schnell und vorsichtig."
+A_Classic_Fairytale-journey.desc="Undichte Stelle muss zur anderen Seite der Insel gehen. Sei schnell und vorsichtig."
 
-A_Classic_Fairytale-united.desc="Nach seiner langen Reise kehrte Leaks a lot endlich wieder zum Dorf zurück. Allerdings gibt es keine Zeit zum Ausruhen. Du musst das Dorf von der Rage der Kannibalen verteidigen."
+A_Classic_Fairytale-united.desc="Nach seiner langen Reise kehrte Undichte Stelle endlich wieder zum Dorf zurück. Allerdings gibt es keine Zeit zum Ausruhen. Du musst das Dorf von der Rage der Kannibalen verteidigen."
 
-A_Classic_Fairytale-backstab.desc="Die monströsen Kannibalen jagen Leaks a lot und seine Freunde. Besiege sie erneut und beschütze deine Freunde. Benutze deine Ressourcen entsprechend, um die eintreffenden Feinde zu besiegen!"
+A_Classic_Fairytale-backstab.desc="Die monströsen Kannibalen jagen Undichte Stelle und seine Freunde. Besiege sie erneut und beschütze deine Freunde. Benutze deine Ressourcen entsprechend, um die eintreffenden Feinde zu besiegen!"
 
-A_Classic_Fairytale-dragon.desc="Leaks a lot muss auf die andere Seite des Sees kommen. Werd zum Seilprofi und vermeide es, von feindlichen Schüssen getroffen zu werden."
+A_Classic_Fairytale-dragon.desc="Undichte Stelle muss auf die andere Seite des Sees kommen. Werd zum Seilprofi und vermeide es, von feindlichen Schüssen getroffen zu werden."
 
-A_Classic_Fairytale-family.desc="Leaks a lot muss erneut seine Freunde retten. Eliminiere die feindlichen Igel und befreie deine Kameraden. Benutze deine Ressourcen vorsichtig, weil sie begrenzt sind. Bohr ein paar Löcher an den richtigen Stellen und nähere dich der Prinzessin."
+A_Classic_Fairytale-family.desc="Undichte Stelle muss erneut seine Freunde retten. Eliminiere die feindlichen Igel und befreie deine Kameraden. Benutze deine Ressourcen vorsichtig, weil sie begrenzt sind. Bohr ein paar Löcher an den richtigen Stellen und nähere dich der Prinzessin."
 
-A_Classic_Fairytale-queen.desc="Leaks a lot muss noch einmal kämpfen. Um zu gewinnen, muss er den Veräräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
+A_Classic_Fairytale-queen.desc="Undichte Stelle muss noch einmal kämpfen. Um zu gewinnen, muss er den Veräräter bekämpfen und alle verfügbaren Ressourcen benutzen. Besieg den Feind!"
 
-A_Classic_Fairytale-enemy.desc="Was für eine umwerfende Wendung! Leaks a lot muss mit den … »Kannibalen« gegen den gemeinsamen Feind – die bösen Cyborgs – kämpfen!"
+A_Classic_Fairytale-enemy.desc="Was für eine umwerfende Wendung! Undichte Stelle muss mit den … »Kannibalen« gegen den gemeinsamen Feind – die bösen Cyborgs – kämpfen!"
 
-A_Classic_Fairytale-epil.desc="Gratulation! Leaks a lot kann endlich in Frieden gehen und von seinen neuen Freunden und seinem Stamm angepriesen werden. Sei stolz auf das, was du erreicht hast! Du kannst vorherige Missionen wieder spielen und andere mögliche Enden sehen."
+A_Classic_Fairytale-epil.desc="Gratulation! Undichte Stelle kann endlich in Frieden gehen und von seinen neuen Freunden und seinem Stamm angepriesen werden. Sei stolz auf das, was du erreicht hast! Du kannst vorherige Missionen wieder spielen und andere mögliche Enden sehen."
 
-A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteroid getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Hog Solo, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teil des lang verschollenem Antigravitationsgeräts zu finden!"
+A_Space_Adventure-cosmos.desc="Hogera, der Igelplanet, wird bald von einem riesigen Meteroid getroffen. In diesem Wettlauf ums Überleben musst du PAdIs besten Piloten, Igel Einsam, in einer Weltraumreise um die Nachbarplaneten führen, um alle 4 Teil des lang verschollenem Antigravitationsgeräts zu finden!"
 
-A_Space_Adventure-moon01.desc="Hog Solo ist auf dem Mond gelandet, um seine fliegende Untertasse aufzutanken, aber Prof. Hogevil war zuerst da und hat einen Hinterhalt aufgestellt! Rette die gefangenen PAdI-Forscher und verscheuche Prof. Hogevil!"
+A_Space_Adventure-moon01.desc="Igel Einsam ist auf dem Mond gelandet, um seine fliegende Untertasse aufzutanken, aber Prof. Bösigel war zuerst da und hat einen Hinterhalt aufgestellt! Rette die gefangenen PAdI-Forscher und verscheuche Prof. Bösigel!"
 
-A_Space_Adventure-moon02.desc="Hog Solo besucht einen Eremiten, einen alten PAdI-Veteran, der im Mond lebt, um Prof. Hogevil auszuspionieren. Allerdings muss er den Eremiten, Soneek the Crazy Runner, zuerst in einem Wettlauf besiegen!"
+A_Space_Adventure-moon02.desc="Igel Einsam besucht einen Eremiten, einen alten PAdI-Veteran, der im Mond lebt, um Prof. Bösigel auszuspionieren. Allerdings muss er den Eremiten, Verrückter Renner, zuerst in einem Wettlauf besiegen!"
 
-A_Space_Adventure-ice01.desc="Willkommen auf dem Planeten des Eises. Hier ist es so kalt, dass Hog Solos meiste Waffe nicht funktionieren werden. Du musst dir das verlorene Teil von dem Banditenanführer Thanta ergattern, indem du die Waffen, die du hier findest, verwendest!"
+A_Space_Adventure-ice01.desc="Willkommen auf dem Planeten des Eises. Hier ist es so kalt, dass die meisten Waffen von Igel Einsam nicht funktionieren werden. Du musst dir das verlorene Teil von dem Banditenanführer Thanta ergattern, indem du die Waffen, die du hier findest, verwendest!"
 
-A_Space_Adventure-ice02.desc="Hog Solo konnt nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
+A_Space_Adventure-ice02.desc="Igel Einsam konnt nicht einfach nur den Eisplaneten besuchen, ohne das Olympiastadion des Untertassenfliegens zu besuchen! In dieser Mission kannst du deine Flugkünste unter Beweis stellen und deinen Platz unter den Besten einnehmen!"
 
-A_Space_Adventure-desert01.desc="Du must auf dem Planeten aus Sand gelandet! Hog Solo muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
+A_Space_Adventure-desert01.desc="Du must auf dem Planeten aus Sand gelandet! Igel Einsam muss das fehlende Teil in den Berkwerksstollen finden. Sei vorsichtig, weil bösartige Schmuggler nur darauf warten, dich anzugreifen und auszurauben!"
 
-A_Space_Adventure-desert02.desc="Hog Solo suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
-A_Space_Adventure-desert03.desc="Hog Solo hat etwas Zeit, um sein Funkflugzeug zu fliegen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele!"
+A_Space_Adventure-desert02.desc="Igel Einsam suchte nach dem Teil in diesem Tunnel, als er unerwarteterweise anfing, geflutet zu werden! Komm so schnell wie möglich zur Oberfläche und pass auf, keine Mine auszulösen."
+A_Space_Adventure-desert03.desc="Igel Einsam hat etwas Zeit, um sein Funkflugzeug zu fliegen und etwas Spaß zu haben. Flieg das Funkflugzeug und triff alle Ziele!"
 A_Space_Adventure-fruit01.desc="Auf dem Obstplaneten laufen die Dinge nicht so gut. Igel sammeln kein Obst, sondern sie bereiten sich auf den Kampf vor. Du musst dich entscheiden, ob du kämpfen oder fliehen wirst."
-A_Space_Adventure-fruit02.desc="Hog Solo nähert sich dem verlorenen Teil des Obstplaneten. Wird ihn Captain Lime dabei helfen, das Teil zu besorgen? Oder nicht?"
+A_Space_Adventure-fruit02.desc="Igel Einsam nähert sich dem verlorenen Teil des Obstplaneten. Wird ihn Leutnant Limone dabei helfen, das Teil zu besorgen? Oder nicht?"
 
-A_Space_Adventure-fruit03.desc="Hog Solo has sich verlaufen und ist in den Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Getting to the device« zu gewinnen."
+A_Space_Adventure-fruit03.desc="Igel Einsam has sich verlaufen und ist in den Hinterhalt der Roten Erdbeeren geraten. Hilf ihm, sie zu eliminieren, um etwas zusätzliche Munition für die Mission »Zum Greifen nah« zu gewinnen."
 
-A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist Hog Solo ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschnug."
+A_Space_Adventure-death01.desc="Auf dem Todesplaneten, dem sterilsten Planeten in der Gegend, ist Igel Einsam ganz kurz davor, das letzte Teil des Geräts zu holen! Allerdings erwartet ihn eine unangenehme Überraschnug."
 
-A_Space_Adventure-death02.desc="Hog Solo ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
-A_Space_Adventure-final.desc="Hog Solo muss ein paar Sprengkörper, die auf dem Meterioden platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"
+A_Space_Adventure-death02.desc="Igel Einsam ist wieder in eine schwierige Situation geraten. Hilf ihm, die »5 tödlichen Igel« in ihrem eigenem Spiel zu besiegen!"
+A_Space_Adventure-final.desc="Igel Einsam muss ein paar Sprengkörper, die auf dem Meteriot platziert wurden, detonieren. Hilf ihm, diese Mission zu beenden, ohne verletzt zu werden!"

@@ -31,7 +31,7 @@ User_Mission_-_Spooky_Tree.desc="Viele Kisten hier draußen. Ich hoffe jedenfall
 User_Mission_-_Bamboo_Thicket.name=Mission: Bambusdickicht
 User_Mission_-_Bamboo_Thicket.desc="Tod von oben."
 
-User_Mission_-_That_Sinking_Feeling.name=Mission: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.name=Mission: Land unter
 User_Mission_-_That_Sinking_Feeling.desc="Hier steht einen das Wasser ganz schön schnell bis zum Halse. Viele sind hieran gescheitert. Kannst du alle Igel retten?"
 
 User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton und die Hängematte
