@@ -1741,7 +1741,7 @@ dann trag einfach nur deinen Spitznamen ein.</translation>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="93"/>
         <source>Search for a room:</source>
-        <translation>Nach einem Raum suchen:</translation>
+        <translation>Raumsuche:</translation>
     </message>
     <message>
         <location filename="../../../../QTfrontend/ui/page/pageroomslist.cpp" line="120"/>
