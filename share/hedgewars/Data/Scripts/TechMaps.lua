@@ -1349,8 +1349,6 @@ function onPreviewInit()
     FlushPoints()
 end
 
-local bastard = nil
-
 function LoadMap(mID)
 
 	techX = {}
