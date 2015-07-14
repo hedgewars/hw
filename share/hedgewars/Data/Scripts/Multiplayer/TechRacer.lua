@@ -691,6 +691,10 @@ end
 
 function onGameInit()
 
+		if mapID == nil then
+			mapID = 2 + GetRandom(7)
+		end
+
 		Theme = "Cave"
 
 		MapGen = mgDrawn

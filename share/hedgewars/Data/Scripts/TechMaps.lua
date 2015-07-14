@@ -88,7 +88,12 @@ function PreviewPlacedGear(x, y)
 end
 
 function onPreviewInit()
-    MapGen = mgDrawn
+
+	if mapID == nil then
+		mapID = 2 + GetRandom(7)
+	end
+
+	MapGen = mgDrawn
     TemplateFilter = 0
 
     for x = 1, 16 do
@@ -1343,6 +1348,8 @@ function onPreviewInit()
 
     FlushPoints()
 end
+
+local bastard = nil
 
 function LoadMap(mID)
 
