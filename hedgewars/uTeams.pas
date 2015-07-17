@@ -732,6 +732,8 @@ begin
 // avoid compiler hint
 s:= s;
 
+isPaused:= false;
+
 t:= 0;
 while t < TeamsCount do
     begin
