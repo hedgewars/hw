@@ -1504,6 +1504,11 @@ begin
         SetLittle(HHGear^.dX);
         HHGear^.dY := _0;
         end
+    else if Gear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
+        begin
+        Gear^.dY := cGravity;
+        HHGear^.dY := cGravity;
+        end
     else
         begin
         if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfLandMask) then
