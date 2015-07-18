@@ -36,6 +36,7 @@ uses uConsole, uStore, uRandom, uLandObjects, uIO, uLandTexture, SysUtils,
      uLandGenTemplateBased, uLandUtils;
 
 var digest: shortstring;
+    maskOnly: boolean;
 
 
 procedure PrettifyLandAlpha();
@@ -50,24 +51,32 @@ procedure DrawBorderFromImage(Surface: PSDL_Surface);
 var tmpsurf: PSDL_Surface;
     r, rr: TSDL_Rect;
     x, yd, yu: LongInt;
+    targetMask: Word;
 begin
     tmpsurf:= LoadDataImage(ptCurrTheme, 'Border', ifCritical or ifIgnoreCaps or ifTransparent);
+
+    // if mask only, all land gets filled with landtex and therefore needs borders
+    if maskOnly then
+        targetMask:= lfLandMask
+    else
+        targetMask:= lfBasic;
+
     for x:= 0 to LAND_WIDTH - 1 do
     begin
         yd:= LAND_HEIGHT - 1;
         repeat
-            while (yd > 0) and (Land[yd, x] <> lfBasic) do dec(yd);
+            while (yd > 0) and ((Land[yd, x] and targetMask) = 0) do dec(yd);
 
             if (yd < 0) then
                 yd:= 0;
 
-            while (yd < LAND_HEIGHT) and (Land[yd, x] = lfBasic) do
+            while (yd < LAND_HEIGHT) and ((Land[yd, x] and targetMask) <> 0) do
                 inc(yd);
             dec(yd);
             yu:= yd;
 
-            while (yu > 0  ) and (Land[yu, x] = lfBasic) do dec(yu);
-            while (yu < yd ) and (Land[yu, x] <>  lfBasic) do inc(yu);
+            while (yu > 0  ) and ((Land[yu, x] and targetMask) <> 0) do dec(yu);
+            while (yu < yd ) and ((Land[yu, x] and targetMask) =  0) do inc(yu);
 
             if (yd < LAND_HEIGHT - 1) and ((yd - yu) >= 16) then
                 begin
@@ -525,7 +534,6 @@ end;
 procedure GenMap;
 var x, y, w, c: Longword;
     map, mask: shortstring;
-    maskOnly: boolean;
 begin
     hasBorder:= false;
     maskOnly:= false;
@@ -810,6 +818,7 @@ begin
 
     LandBackSurface:= nil;
     digest:= '';
+    maskOnly:= false;
     LAND_WIDTH:= 0;
     LAND_HEIGHT:= 0;
 (*
