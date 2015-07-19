@@ -665,7 +665,7 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
+                    AddChatString(#7 + '* '+ TeamName + ' is gone'); // TODO: localize
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -704,7 +704,7 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString('** '+ TeamName + ' is back');
+                AddChatString(#8 + '* '+ TeamName + ' is back');
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
@@ -741,7 +741,7 @@ while t < TeamsCount do
     inc(t)
     end;
 
-AddChatString('** Good-bye!');
+AddChatString(#7 + '* Good-bye!');
 RecountAllTeamsHealth();
 end;
 

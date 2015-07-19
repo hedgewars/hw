@@ -68,14 +68,17 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 
 const
-    colors: array[#0..#6] of TSDL_Color = (
-            (r:$FF; g:$FF; b:$FF; a:$FF), // unused, feel free to take it for anything
-            (r:$FF; g:$FF; b:$FF; a:$FF), // chat message [White]
-            (r:$FF; g:$00; b:$FF; a:$FF), // action message [Purple]
-            (r:$90; g:$FF; b:$90; a:$FF), // join/leave message [Lime]
-            (r:$FF; g:$FF; b:$A0; a:$FF), // team message [Light Yellow]
-            (r:$FF; g:$00; b:$00; a:$FF), // error messages [Red]
-            (r:$00; g:$FF; b:$FF; a:$FF)  // input line [Light Blue]
+    colors: array[#0..#9] of TSDL_Color = (
+            (r:$FF; g:$FF; b:$FF; a:$FF), // #0 unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$FF; a:$FF), // #1 chat message [White]
+            (r:$FF; g:$00; b:$FF; a:$FF), // #2 action message [Purple]
+            (r:$90; g:$FF; b:$90; a:$FF), // #3 join/leave message [Lime]
+            (r:$FF; g:$FF; b:$A0; a:$FF), // #4 team message [Light Yellow]
+            (r:$FF; g:$00; b:$00; a:$FF), // #5 error messages [Red]
+            (r:$00; g:$FF; b:$FF; a:$FF), // #6 input line [Light Blue]
+            (r:$FF; g:$80; b:$80; a:$FF), // #7 team gone [Light Red]
+            (r:$FF; g:$D0; b:$80; a:$FF), // #8 team back [Light Orange]
+            (r:$DF; g:$DF; b:$DF; a:$FF)  // #9 hog speech [Light Gray]
             );
     ChatCommandz: array [TChatCmd] of record
             ChatCmd: string[31];
