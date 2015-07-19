@@ -1381,12 +1381,12 @@ begin
                             Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF)
                         else
                             Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
-                        DrawSprite(sprTardis, x-24, y-63,0);
+                        DrawSprite(sprTardis, x-25, y-64,0);
                         if Gear^.Pos = 2 then
                             untint
                         else
                             Tint($FF,$FF,$FF,max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
-                        DrawSprite(sprTardis, x-24, y-63,1);
+                        DrawSprite(sprTardis, x-25, y-64,1);
                         if Gear^.Pos <> 2 then
                             untint
 (*
