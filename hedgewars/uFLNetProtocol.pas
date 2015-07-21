@@ -4,10 +4,11 @@ interface
 procedure passNetData(p: pointer); cdecl;
 
 implementation
+uses uFLNetTypes;
 
 procedure passNetData(p: pointer); cdecl;
 begin
-    writeln('meow')
+
 end;
 
 end.

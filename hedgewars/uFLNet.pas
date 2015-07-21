@@ -7,15 +7,13 @@ procedure initModule;
 procedure freeModule;
 
 implementation
-uses SDLh, uFLIPC, uFLTypes, uFLUICallback;
+uses SDLh, uFLIPC, uFLTypes, uFLUICallback, uFLNetTypes;
 
 const endCmd: string = #10 + #10;
 
 function getNextChar: char; forward;
 function getCurrChar: char; forward;
 procedure sendNet(s: shortstring); forward;
-
-type TCmdType = (cmd___UNKNOWN__, cmd_WARNING, cmd_TEAM_COLOR, cmd_TEAM_ACCEPTED, cmd_SERVER_VARS, cmd_SERVER_MESSAGE, cmd_SERVER_AUTH, cmd_RUN_GAME, cmd_ROUND_FINISHED, cmd_ROOMS, cmd_PROTO, cmd_PING, cmd_NOTICE, cmd_NICK, cmd_LOBBY_LEFT, cmd_LOBBY_JOINED, cmd_LEFT, cmd_KICKED, cmd_JOINING, cmd_JOINED, cmd_INFO, cmd_HH_NUM, cmd_EM, cmd_CONNECTED, cmd_CLIENT_FLAGS, cmd_CHAT, cmd_BYE, cmd_BANLIST, cmd_ASKPASSWORD);
 
 type
     TNetState = (netDisconnected, netConnecting, netLoggedIn);
@@ -56,6 +54,7 @@ begin
 end;
 
 procedure handler_CONNECTED;
+var data: TCmdConnectedData;
 begin
     sendUI(mtNetData, nil, 0);
 end;
