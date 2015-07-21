@@ -492,7 +492,7 @@ procedure chCapture(var s: shortstring);
 begin
 s:= s; // avoid compiler hint
 flagMakeCapture:= true;
-flagDumpLand:= (LocalMessage and gmPrecise  <> 0) and (cReducedQuality and rqBlurryLand = 0);
+flagDumpLand:= (LocalMessage and gmPrecise  <> 0);
 end;
 
 procedure chRecord(var s: shortstring);
