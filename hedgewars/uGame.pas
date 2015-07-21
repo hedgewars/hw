@@ -108,6 +108,7 @@ while (GameState <> gsExit) and (i <= Lag) do
                         break;
                         end;
                 gmtDemo, gmtRecord: begin
+                        AddFileLog('End of input, halting now');
                         GameState:= gsExit;
                         exit
                         end;
