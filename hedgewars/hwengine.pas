@@ -138,7 +138,8 @@ begin
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
         
-        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or (flagDumpLand and MakeScreenshot(s, 1, 1) and MakeScreenshot(s, 1, 2)) then
+        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
+           (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin
