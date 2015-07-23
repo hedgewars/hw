@@ -55,6 +55,7 @@ listenLoop sock chan ci = receiveWithBufferLoop B.empty
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket
+                when (B.length newrecvBuf > 128 * 1024) $ sendPacket ["QUIT", "Protocol violation"]
                 receiveWithBufferLoop $ B.copy newrecvBuf
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)
