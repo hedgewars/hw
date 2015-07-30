@@ -131,10 +131,12 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
-        templateFilterMsg = eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]
+        mazeSizeMsg = eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]
         mapgenSpecific = case mapgen of
+            "1" -> [mazeSizeMsg]
+            "2" -> [mazeSizeMsg]
             "3" -> let d = head . fromMaybe [""] $ Map.lookup "DRAWNMAP" prms in if BW.length d <= 4 then [] else drawnMapData d
-            _ -> [templateFilterMsg]
+            _ -> []
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
         schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])
