@@ -1213,6 +1213,54 @@ begin
     lc_setclancolor:= 0
 end;
 
+function lc_gethogvoicepack(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetHogVoicepack', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.Voicepack^.name))
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_gethogvoicepack:= 1
+end;
+
+function lc_gethoggrave(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetHogGrave', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and ((gear^.Kind = gtHedgehog) or (gear^.Kind = gtGrave)) and (gear^.Hedgehog <> nil) then
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.GraveName))
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_gethoggrave:= 1
+end;
+
+function lc_gethogflag(L : Plua_State) : LongInt; Cdecl;
+var gear : PGear;
+begin
+    if CheckLuaParamCount(L, 1, 'GetHogFlag', 'gearUid') then
+        begin
+        gear:= GearByUID(lua_tointeger(L, 1));
+        if (gear <> nil) and (gear^.Kind = gtHedgehog) and (gear^.Hedgehog <> nil) then
+            lua_pushstring(L, str2pchar(gear^.Hedgehog^.Team^.Flag))
+        else
+            lua_pushnil(L);
+        end
+    else
+        lua_pushnil(L); // return value on stack (nil)
+    lc_gethogflag:= 1
+end;
+
 function lc_gethogteamname(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
@@ -3193,6 +3241,9 @@ lua_register(luaState, _P'GetEffect', @lc_geteffect);
 lua_register(luaState, _P'GetHogClan', @lc_gethogclan);
 lua_register(luaState, _P'GetClanColor', @lc_getclancolor);
 lua_register(luaState, _P'SetClanColor', @lc_setclancolor);
+lua_register(luaState, _P'GetHogVoicepack', @lc_gethogvoicepack);
+lua_register(luaState, _P'GetHogFlag', @lc_gethogflag);
+lua_register(luaState, _P'GetHogGrave', @lc_gethoggrave);
 lua_register(luaState, _P'GetHogTeamName', @lc_gethogteamname);
 lua_register(luaState, _P'SetHogTeamName', @lc_sethogteamname);
 lua_register(luaState, _P'GetHogName', @lc_gethogname);
