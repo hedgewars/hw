@@ -163,65 +163,52 @@ handleCmd_lobby ("RND":rs) = do
     ---------------------------
     -- Administrator's stuff --
 
-handleCmd_lobby ["KICK", kickNick] = do
+handleCmd_lobby ["KICK", kickNick] = serverAdminOnly $ do
     (ci, _) <- ask
-    cl <- thisClient
     kickId <- clientByNick kickNick
-    return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
+    return [KickClient $ fromJust kickId | isJust kickId && fromJust kickId /= ci]
 
 
-handleCmd_lobby ["BAN", banNick, reason, duration] = do
+handleCmd_lobby ["BAN", banNick, reason, duration] = serverAdminOnly $ do
     (ci, _) <- ask
-    cl <- thisClient
     banId <- clientByNick banNick
-    return [BanClient (readInt_ duration) reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
+    return [BanClient (readInt_ duration) reason (fromJust banId) | isJust banId && fromJust banId /= ci]
 
-handleCmd_lobby ["BANIP", ip, reason, duration] = do
-    cl <- thisClient
-    return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
+handleCmd_lobby ["BANIP", ip, reason, duration] = serverAdminOnly $
+    return [BanIP ip (readInt_ duration) reason]
 
-handleCmd_lobby ["BANNICK", n, reason, duration] = do
-    cl <- thisClient
-    return [BanNick n (readInt_ duration) reason | isAdministrator cl]
+handleCmd_lobby ["BANNICK", n, reason, duration] = serverAdminOnly $
+    return [BanNick n (readInt_ duration) reason]
 
-handleCmd_lobby ["BANLIST"] = do
-    cl <- thisClient
-    return [BanList | isAdministrator cl]
+handleCmd_lobby ["BANLIST"] = serverAdminOnly $
+    return [BanList]
 
 
-handleCmd_lobby ["UNBAN", entry] = do
-    cl <- thisClient
-    return [Unban entry | isAdministrator cl]
+handleCmd_lobby ["UNBAN", entry] = serverAdminOnly $
+    return [Unban entry]
 
 
-handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator cl]
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{serverMessage = newMessage})]
 
-handleCmd_lobby ["SET_SERVER_VAR", "MOTD_OLD", newMessage] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator cl]
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_OLD", newMessage] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage})]
 
-handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
+handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | readNum > 0]
     where
         readNum = readInt_ protoNum
 
-handleCmd_lobby ["GET_SERVER_VAR"] = do
-    cl <- thisClient
-    return [SendServerVars | isAdministrator cl]
+handleCmd_lobby ["GET_SERVER_VAR"] = serverAdminOnly $
+    return [SendServerVars]
 
-handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
-    cl <- thisClient
-    return [ClearAccountsCache | isAdministrator cl]
+handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = serverAdminOnly $
+    return [ClearAccountsCache]
 
-handleCmd_lobby ["RESTART_SERVER"] = do
-    cl <- thisClient
-    return [RestartServer | isAdministrator cl]
+handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+    return [RestartServer]
 
-handleCmd_lobby ["STATS"] = do
-    cl <- thisClient
-    return [Stats | isAdministrator cl]
+handleCmd_lobby ["STATS"] = serverAdminOnly $
+    return [Stats]
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]
