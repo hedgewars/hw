@@ -9,6 +9,7 @@
  + Divided teams options will now just be ignored when more/less than 2 teams, instead of displaying a fatal error
  + Added 6 TechRacer maps to TechMaps
  + Added 3 SpeedShoppa Challenges: Shoppa Love, Ropes and Crates, The Customer is King
+ + Improved "Art" theme.
  * Generated bridges/girders are now connected better to the land mass
  * Fixed rubberband sprite
  * The game will now fallback to default voicepack if a team's voicepack is not locally installed. (Instead of rendering team voiceless)
