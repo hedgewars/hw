@@ -2,10 +2,13 @@
 * bugfixes
 
 0.9.21 -> 0.9.22
+ + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
  + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
  + Small improvements to the interface and in-game chat
  + Divided teams options will now just be ignored when more/less than 2 teams, instead of displaying a fatal error
+ + Added 6 TechRacer maps to TechMaps
+ + Added 3 SpeedShoppa Challenges: Shoppa Love, Ropes and Crates, The Customer is King
  * Generated bridges/girders are now connected better to the land mass
  * Fixed rubberband sprite
  * The game will now fallback to default voicepack if a team's voicepack is not locally installed. (Instead of rendering team voiceless)
