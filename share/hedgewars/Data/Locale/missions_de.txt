@@ -76,3 +76,12 @@ Target_Practice_-_Grenade_hard.desc="Das ist nichts für Grünschnäbel! Wir wer
 ClimbHome.name=Herausforderung: Nach Hause klettern
 ClimbHome.desc="Du bist weit von Zuhause weg und das Wasser steigt ständig. Klettere so hoch, wie du kannst!"
 
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Herausforderung: Seilliebe
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Zeig deine Liebe zum Seilschwingen, sammle ein paar wenige Kisten auf dieser kleinen Karte ein."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Herausforderung: Seile und Kisten
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Nimm dein Seil, und sammle alle Kisten auf dieser mittelgroßen Karte ein."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Herausforderung: Der Kunde ist König
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Zeig, dass du dem Titel eines Königs würdig bist und sammle alle Kisten so schnell wie möglich mit deinem Seil auf dieser großen Karte ein."
+

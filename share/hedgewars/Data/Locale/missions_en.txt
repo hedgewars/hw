@@ -72,3 +72,12 @@ Target_Practice_-_Grenade_easy.desc="A warm-up training for the aspiring grenadi
 
 Target_Practice_-_Grenade_hard.name=Target Practice: Grenade (hard)
 Target_Practice_-_Grenade_hard.desc="This is nothing for greenhorns! We will place the targets at some really tricky positions."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Challenge: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Show your love to rope and collect a few crates on a small map."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Challenge: Ropes and Crates
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Take your rope and collect all crates on this medium-sized map."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Challenge: The Customer is King
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Show you're worthy of a true king and collect all crates as fast as possible on this large map."
