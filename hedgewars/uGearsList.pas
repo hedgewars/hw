@@ -238,6 +238,8 @@ case Kind of
   gtMelonPiece: begin
                 gear^.AdvBounce:= 1;
                 gear^.Density:= _2;
+                gear^.Elasticity:= _0_8;
+                gear^.Friction:= _0_995;
                 gear^.Radius:= 4
                 end;
     gtHedgehog: begin
