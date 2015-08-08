@@ -63,11 +63,19 @@ const
     SDL_ImageLibName = 'SDL_image.dll';
     SDL_NetLibName = 'SDL_net.dll';
 {$ELSE}
-    SDLLibName = 'libSDL';
-    SDL_TTFLibName = 'libSDL_ttf';
-    SDL_MixerLibName = 'libSDL_mixer';
-    SDL_ImageLibName = 'libSDL_image';
-    SDL_NetLibName = 'libSDL_net';
+    {$IFDEF SDL2}
+        SDLLibName = 'libSDL2';
+        SDL_TTFLibName = 'libSDL2_ttf';
+        SDL_MixerLibName = 'libSDL2_mixer';
+        SDL_ImageLibName = 'libSDL2_image';
+        SDL_NetLibName = 'libSDL2_net';
+    {$ELSE}
+        SDLLibName = 'libSDL';
+        SDL_TTFLibName = 'libSDL_ttf';
+        SDL_MixerLibName = 'libSDL_mixer';
+        SDL_ImageLibName = 'libSDL_image';
+        SDL_NetLibName = 'libSDL_net';
+    {$ENDIF}
 {$ENDIF}
 
 /////////////////////////////////////////////////////////////////
