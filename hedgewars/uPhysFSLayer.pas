@@ -162,7 +162,7 @@ begin
 
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
-
+(*
     // mount system fonts paths first
     for i:= low(cFontsPaths) to high(cFontsPaths) do
         begin
@@ -170,7 +170,7 @@ begin
             if fp <> nil then
                 pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
-
+*)
     pfsMountAtRoot(PathPrefix);
     pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));
 
