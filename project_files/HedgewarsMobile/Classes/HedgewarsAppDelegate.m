@@ -51,6 +51,8 @@
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
 -(void) postFinishLaunch {
+    [super postFinishLaunch];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
