@@ -417,9 +417,6 @@
 		61177BA7148A658900686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61177BA9148A660C00686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61177BAA148A661600686905 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = German; path = Locale/German.lproj/About.strings; sourceTree = "<group>"; };
-		61177BAC148A671600686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/About.strings; sourceTree = "<group>"; };
-		61177BAD148A672000686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Localizable.strings; sourceTree = "<group>"; };
-		61177BAE148A672C00686905 /* Turkish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Turkish; path = Locale/Turkish.lproj/Scheme.strings; sourceTree = "<group>"; };
 		61177BE4148B881C00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/About.strings; sourceTree = "<group>"; };
 		61177BF0148B882500686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		61177BF1148B882F00686905 /* Danish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Danish; path = Locale/Danish.lproj/Scheme.strings; sourceTree = "<group>"; };
@@ -1785,7 +1782,6 @@
 				6115652D147F4C52006729A9 /* French */,
 				61156530147F4D10006729A9 /* Polish */,
 				61177BAA148A661600686905 /* German */,
-				61177BAC148A671600686905 /* Turkish */,
 				61177BE4148B881C00686905 /* Danish */,
 				617BC22D1490210E00E1C294 /* Italian */,
 				619BCEC41495615700C1C409 /* Bulgarian */,
@@ -1804,7 +1800,6 @@
 				6115652C147F4C4C006729A9 /* French */,
 				61156531147F4D17006729A9 /* Polish */,
 				61177BA7148A658900686905 /* German */,
-				61177BAD148A672000686905 /* Turkish */,
 				61177BF0148B882500686905 /* Danish */,
 				617BC2391490211500E1C294 /* Italian */,
 				619BCED01495615F00C1C409 /* Bulgarian */,
@@ -1823,7 +1818,6 @@
 				6115652B147F4C45006729A9 /* French */,
 				61156532147F4D1E006729A9 /* Polish */,
 				61177BA9148A660C00686905 /* German */,
-				61177BAE148A672C00686905 /* Turkish */,
 				61177BF1148B882F00686905 /* Danish */,
 				617BC23A1490211F00E1C294 /* Italian */,
 				619BCED11495616700C1C409 /* Bulgarian */,
