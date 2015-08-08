@@ -823,7 +823,6 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F6D7E0C51B769819004F3BCF /* CoreMotion.framework */,
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
@@ -843,6 +842,7 @@
 				61272338117DF778005B90CF /* MobileCoreServices.framework */,
 				6199E81512463EA800DADF8C /* CFNetwork.framework */,
 				6199E81912463EC400DADF8C /* SystemConfiguration.framework */,
+				F6D7E0C51B769819004F3BCF /* CoreMotion.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
