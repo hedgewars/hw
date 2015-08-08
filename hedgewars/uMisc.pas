@@ -250,7 +250,7 @@ begin
     exit;
 end;
 
-// read pixels from the front buffer
+// read pixels from land array
 if dump > 0 then
     begin
     for y:= 0 to LAND_HEIGHT-1 do
@@ -274,6 +274,7 @@ if dump > 0 then
                 end
     end
 else
+// read pixels from the front buffer
     begin
     glReadPixels(0, 0, cScreenWidth, cScreenHeight, format, GL_UNSIGNED_BYTE, p);
 {$IFDEF USE_VIDEO_RECORDING}
