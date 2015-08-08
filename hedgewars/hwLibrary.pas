@@ -120,6 +120,9 @@ exports
 {$ELSE}
 exports
     RunEngine,
+{$IFDEF MOBILE}
+    GenLandPreview,
+{$ENDIF}
     LoadLocaleWrapper,
     HW_versionInfo,
     HW_versionString,

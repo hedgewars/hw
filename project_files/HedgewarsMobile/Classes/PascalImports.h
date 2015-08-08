@@ -28,7 +28,7 @@ extern "C" {
      * that you want to use in your non-Pascal code
      */
 
-    void Game(const int argc, const char *argv[]);
+    void RunEngine(const int argc, const char *argv[]);
     void GenLandPreview(void);
     void LoadLocaleWrapper(const char *filename);
 

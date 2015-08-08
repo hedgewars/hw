@@ -176,7 +176,7 @@ static UIViewController *callingController;
     [gameParameters release];
 
     // this is the pascal function that starts the game
-    Game(argc, argv);
+    RunEngine(argc, argv);
 
     // cleanup
     for (int i = 0; i < argc; i++)
