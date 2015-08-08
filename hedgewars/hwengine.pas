@@ -44,6 +44,9 @@ procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
+{$IFDEF MOBILE}
+procedure GenLandPreview; cdecl; export;
+{$ENDIF MOBILE}
 
 implementation
 {$ELSE}
@@ -540,7 +543,7 @@ begin
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure GenLandPreview;
+procedure GenLandPreview;{$IFDEF MOBILE} cdecl; export;{$ENDIF MOBILE}
 var Preview: TPreviewAlpha;
 begin
     initEverything(false);
