@@ -1926,7 +1926,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6";
+				VALID_ARCHS = "armv7 armv6 arm64 x86_64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
