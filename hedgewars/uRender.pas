@@ -434,17 +434,6 @@ var AuxBufNum: LongInt = 0;
     tmpint: LongInt;
     tmpn: LongInt;
 begin
-{$IFDEF MOBILE}
-    // TODO: this function creates an opengles1.1 context
-    // un-comment below and add proper logic to support opengles2.0
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-    if SDLGLcontext = nil then
-        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
-    SDLTry(SDLGLcontext <> nil, true);
-    SDL_GL_SetSwapInterval(1);
-{$ENDIF}
-
     // suppress hint/warning
     AuxBufNum:= AuxBufNum;
 
