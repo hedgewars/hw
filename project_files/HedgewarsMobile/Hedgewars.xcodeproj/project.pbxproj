@@ -249,6 +249,7 @@
 		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
 		F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */; };
 		F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D7E0C51B769819004F3BCF /* CoreMotion.framework */; };
+		F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -702,6 +703,7 @@
 		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
 		F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandUtils.pas; path = ../../hedgewars/uLandUtils.pas; sourceTree = "<group>"; };
 		F6D7E0C51B769819004F3BCF /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -709,6 +711,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */,
 				F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */,
 				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
 				617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */,
@@ -831,6 +834,7 @@
 				61A19C1E14D20F51004B1E6D /* SDL_mixer.xcodeproj */,
 				61A19BF414D20D83004B1E6D /* SDL_net.xcodeproj */,
 				61A19BC114D20CDA004B1E6D /* SDL_ttf.xcodeproj */,
+				F6D7E0C71B7698BE004F3BCF /* libstdc++.dylib */,
 				61798934114AB25F00BA94A9 /* AudioToolbox.framework */,
 				612CABAA1391CE68005E9596 /* AVFoundation.framework */,
 				61A117FE1168322700359010 /* CoreGraphics.framework */,
