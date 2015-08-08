@@ -5206,7 +5206,7 @@ end;
 procedure doStepHammer(Gear: PGear);
 var HHGear, tmp, tmp2: PGear;
          t: PGearArray;
-         i: LongInt;
+ i, dmg, d: LongInt;
 begin
 HHGear:= Gear^.Hedgehog^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
@@ -5227,7 +5227,25 @@ while i > 0 do
             begin
             //tmp^.State:= tmp^.State or gstFlatened;
             if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
-                ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
+                begin
+                // do 1/2 current hp worth of damage if extra damage is enabled (1/3 damage if not)
+                if cDamageModifier > _1 then
+                    d:= 2
+                else
+                    d:= 3;
+                // base damage on remaining health
+                dmg:= (tmp^.Health - tmp^.Damage);
+                if dmg > 0 then
+                    begin
+                    // always round up
+                    if dmg mod d > 0 then
+                        dmg:= dmg div d + 1
+                    else
+                        dmg:= dmg div d;
+
+                    ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
+                    end;
+            end;
             //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
             tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
             tmp2^.LinkedGear:= tmp;
