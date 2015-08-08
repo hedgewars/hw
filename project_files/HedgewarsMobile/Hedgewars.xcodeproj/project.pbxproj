@@ -245,6 +245,9 @@
 		61F904D711DF7DA30068B24D /* WeaponCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 61F904D611DF7DA30068B24D /* WeaponCellView.m */; };
 		922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 928301170F10CAFC00CC5A3C /* libfpc.a */; };
 		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
+		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
+		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
+		F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -694,6 +697,9 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		928301170F10CAFC00CC5A3C /* libfpc.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfpc.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
+		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
+		F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandUtils.pas; path = ../../hedgewars/uLandUtils.pas; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1229,10 +1235,13 @@
 				617987FC114AA34C00BA94A9 /* uGears.pas */,
 				617987FD114AA34C00BA94A9 /* uIO.pas */,
 				617987FF114AA34C00BA94A9 /* uLand.pas */,
+				F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */,
+				F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */,
 				61798800114AA34C00BA94A9 /* uLandGraphics.pas */,
 				61798801114AA34C00BA94A9 /* uLandObjects.pas */,
 				61798802114AA34C00BA94A9 /* uLandTemplates.pas */,
 				61798803114AA34C00BA94A9 /* uLandTexture.pas */,
+				F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */,
 				61798804114AA34C00BA94A9 /* uLocale.pas */,
 				61798805114AA34C00BA94A9 /* uMisc.pas */,
 				61798806114AA34C00BA94A9 /* uRandom.pas */,
@@ -1630,6 +1639,7 @@
 				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
 				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
 				61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */,
+				F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */,
 				61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */,
 				61798832114AA34C00BA94A9 /* uLocale.pas in Sources */,
 				61798833114AA34C00BA94A9 /* uMisc.pas in Sources */,
@@ -1694,6 +1704,7 @@
 				61AC067412B2E32D000B52A2 /* Appirater.m in Sources */,
 				61E2E12E12BAAEE30051B659 /* ServerProtocolNetwork.m in Sources */,
 				61B7A33812CC21080086B604 /* StatsPageViewController.m in Sources */,
+				F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */,
 				61EDB5B0135B3F97009B29A6 /* GameInterfaceBridge.m in Sources */,
 				61A976B3136F668500DD9878 /* uCursor.pas in Sources */,
 				6167A6761391514600AA6D07 /* RestoreViewController.m in Sources */,
@@ -1716,6 +1727,7 @@
 				619349C9160BAF3E00A08518 /* uGearsHandlers.pas in Sources */,
 				619349CA160BAF3E00A08518 /* uGearsHandlersRope.pas in Sources */,
 				610FB7C81661390E002FB2A7 /* uPhysFSLayer.pas in Sources */,
+				F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */,
 				61B37A1F17837C78009F283D /* ArgParsers.pas in Sources */,
 				61B37A2017837C78009F283D /* uVisualGearsList.pas in Sources */,
 				61B37A80178381DB009F283D /* uGearsHandlersMess.pas in Sources */,
