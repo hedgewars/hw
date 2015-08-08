@@ -248,6 +248,7 @@
 		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
 		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
 		F6D7E0C41B768F19004F3BCF /* uLandUtils.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */; };
+		F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D7E0C51B769819004F3BCF /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -700,6 +701,7 @@
 		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
 		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
 		F6D7E0C11B768F19004F3BCF /* uLandUtils.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandUtils.pas; path = ../../hedgewars/uLandUtils.pas; sourceTree = "<group>"; };
+		F6D7E0C51B769819004F3BCF /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -707,6 +709,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */,
 				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
 				617D795716D9345F0091D4D6 /* libPhyslayer.a in Frameworks */,
 				922F64900F10F53100DC6EC0 /* libfpc.a in Frameworks */,
@@ -820,6 +823,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6D7E0C51B769819004F3BCF /* CoreMotion.framework */,
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
