@@ -155,7 +155,7 @@ if Gear^.NextGear <> nil then
     Gear^.NextGear^.PrevGear:= Gear^.PrevGear;
 if Gear^.PrevGear <> nil then
     Gear^.PrevGear^.NextGear:= Gear^.NextGear
-else 
+else
     GearsList:= Gear^.NextGear;
 
 Gear^.NextGear:= nil;
@@ -671,6 +671,7 @@ var team: PTeam;
     t,i: Longword;
     k: boolean;
     cakeData: PCakeData;
+    iterator: PGear;
 begin
 
 ScriptCall('onGearDelete', gear^.uid);
@@ -678,6 +679,31 @@ ScriptCall('onGearDelete', gear^.uid);
 DeleteCI(Gear);
 
 FreeAndNilTexture(Gear^.Tex);
+
+// remove potential links to this gear
+// currently relevant to: gears linked by hammer
+if (Gear^.Kind = gtHedgehog) or (Gear^.Kind = gtMine) or (Gear^.Kind = gtExplosives) then
+    begin
+    // check all gears for stuff to port through
+    iterator := nil;
+    while true do
+        begin
+
+        // iterate through GearsList
+        if iterator = nil then
+            iterator := GearsList
+        else
+            iterator := iterator^.NextGear;
+
+        // end of list?
+        if iterator = nil then
+            break;
+
+        if iterator^.LinkedGear = Gear then
+            iterator^.LinkedGear:= nil;
+        end;
+
+    end;
 
 // make sure that portals have their link removed before deletion
 if (Gear^.Kind = gtPortal) then
