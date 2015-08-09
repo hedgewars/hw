@@ -370,7 +370,11 @@ if not cOnlyStats then
     begin
     MakeCrossHairs;
     LoadGraves;
+{$IFDEF IPHONEOS}
+    tmpHatSurf:= LoadDataImage(ptHats, 'chef', ifNone);
+{$ELSE}
     tmpHatSurf:= LoadDataImage(ptHats, 'Reserved/chef', ifNone);
+{$ENDIF}
     ChefHatTexture:= Surface2Tex(tmpHatSurf, true);
     freeTmpHatSurf();
     end;
