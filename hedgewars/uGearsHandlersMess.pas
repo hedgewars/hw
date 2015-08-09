@@ -5211,6 +5211,9 @@ begin
 HHGear:= Gear^.Hedgehog^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 DeleteCI(HHGear);
+SetLittle(HHGear^.dY);
+HHGear^.dY.IsNegative:= true;
+HHGear^.State:= HHGear^.State or gstMoving;
 
 t:= CheckGearsCollision(Gear);
 
