@@ -5225,6 +5225,7 @@ while i > 0 do
     if (tmp^.State and gstNoDamage) = 0 then
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
+            dmg:= 0;
             //tmp^.State:= tmp^.State or gstFlatened;
             if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
                 begin
@@ -5245,15 +5246,16 @@ while i > 0 do
 
                     ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
                     end;
+                end;
+
+            if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
+                begin
+                //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
+                tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
+                tmp2^.LinkedGear:= tmp;
+                SetAllToActive
+                end;
             end;
-            //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
-            tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.LinkedGear:= tmp;
-            SetAllToActive
-            end
-        else
-            begin
-            end
     end;
 
 HHGear^.State:= HHGear^.State and (not gstNoDamage);
