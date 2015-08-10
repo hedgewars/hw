@@ -351,8 +351,8 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    if (IS_IPAD())
-        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+//    if (IS_IPAD())
+//        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
 
     [self.mapConfigViewController viewWillAppear:animated];
     [self.teamConfigViewController viewWillAppear:animated];
