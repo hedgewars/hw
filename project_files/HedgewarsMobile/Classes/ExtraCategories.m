@@ -33,11 +33,12 @@
 }
 
 -(CGRect) safeBounds {
-    CGRect original = [self bounds];
-    if (IS_ON_PORTRAIT())
-        return original;
-    else
-        return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
+    return [self bounds];
+//    CGRect original = [self bounds];
+//    if (IS_ON_PORTRAIT())
+//        return original;
+//    else
+//        return CGRectMake(original.origin.x, original.origin.y, original.size.height, original.size.width);
 }
 
 @end
