@@ -240,7 +240,7 @@
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), self.enginePort);
+        DLog(@"SDLNet_TCP_Open: %s %d\n", SDLNet_GetError(), self.enginePort);
         clientQuit = YES;
     }
 
