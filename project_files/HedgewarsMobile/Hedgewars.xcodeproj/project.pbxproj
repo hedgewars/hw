@@ -1603,7 +1603,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Build libfpc.a\n# 9 July 2006 (Jonas Maebe)\n#   * original version\n# 15 September 2006 (Erling Johansen)\n#   * simplified\n# 26 April 2007 (Jonas Maebe)\n#  * added support for ppc64/x86_64 (future proofing)\n# 4 August 2007 (Jonas Maebe)\n#  * call ranlib after ar so the toc of the library is up-to-date\n# 3 January 2009 (Jonas Maebe)\n#  * support for ARM\n# 24 October 2009 (Jonas Maebe)\n#  * don't hardcode version 2.3.1 anymore under certain circumstances\n#  * use the FPC_RTL_UNITS_BASE setting\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nrm -f \"$TARGET_TEMP_DIR\"/*.a\nnarch=\n\ntemparchs=`echo $ARCHS|sed -e 's/arm[^\\w]*/arm\\\n/'|sort -u`\necho $temparchs\nfor arch in $temparchs\ndo\n\ttargetos=darwin;\n\tcase $arch in\n        arm64) fpc_arch=rossa64; fpc_rtl=aarch64 ;;\n        armv7) fpc_arch=rossarm; fpc_rtl=arm ;;\n        x86_64) fpc_arch=x64; fpc_rtl=x86_64; targetos=iphonesim ;;\n#       ppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n#\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n#\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n#\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n#\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t*) continue\n\tesac\n\tif test -e \"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch}\n\tthen\n\t\tupath=\"$FPC_RTL_UNITS_BASE\"/`\"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch} -iV`/units/${fpc_rtl}-${targetos}\n\t\tar -q \"$TARGET_TEMP_DIR\"/libfpc${narch}.a `ls \"$upath\"/*/*.o | grep -v 'darwin/fv/'`\n\t\tranlib \"$TARGET_TEMP_DIR\"/libfpc${narch}.a\n\t\tnarch=${narch}x\n\telse\n\t\techo error: can\\'t build libfpc.a for $arch \\(${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch} not found, derived from FPC_COMPILER_BINARY_DIR project setting\\)\n\tfi\ndone\n\nif test ${#narch} -gt 1\nthen\n\tlipo -create \"$TARGET_TEMP_DIR\"/libfpc*.a -output \"$TARGET_BUILD_DIR\"/libfpc.a\n\trm -f \"$TARGET_TEMP_DIR\"/*.a\nelse\n\tmv \"$TARGET_TEMP_DIR\"/libfpc.a \"$TARGET_BUILD_DIR\"\nfi\n";
+			shellScript = "# Build libfpc.a\n# 9 July 2006 (Jonas Maebe)\n#   * original version\n# 15 September 2006 (Erling Johansen)\n#   * simplified\n# 26 April 2007 (Jonas Maebe)\n#  * added support for ppc64/x86_64 (future proofing)\n# 4 August 2007 (Jonas Maebe)\n#  * call ranlib after ar so the toc of the library is up-to-date\n# 3 January 2009 (Jonas Maebe)\n#  * support for ARM\n# 24 October 2009 (Jonas Maebe)\n#  * don't hardcode version 2.3.1 anymore under certain circumstances\n#  * use the FPC_RTL_UNITS_BASE setting\n# 13 December 2009 (Jonas Maebe)\n#  * use new FPC_COMPILER_BINARY_DIR setting to make it easier to change the used FPC version\n\nrm -f \"$TARGET_TEMP_DIR\"/*.a\nnarch=\n\n#temparchs=`echo $ARCHS|sed -e 's/arm[^\\w]*/arm\\\n#/'|sort -u`\ntemparchs=($ARCHS)\necho $temparchs\nfor arch in $temparchs\ndo\n\ttargetos=darwin;\n\tcase $arch in\n        arm64) fpc_arch=rossa64; fpc_rtl=aarch64 ;;\n        armv7) fpc_arch=rossarm; fpc_rtl=arm ;;\n        x86_64) fpc_arch=x64; fpc_rtl=x86_64; targetos=iphonesim ;;\n#       ppc) fpc_arch=ppc; fpc_rtl=powerpc ;;\n#\t\ti386) fpc_arch=386; fpc_rtl=i386; targetos=iphonesim ;;\n#\t\tppc64) fpc_arch=ppc64; fpc_rtl=powerpc64 ;;\n#\t\tx86_64) fpc_arch=x64; fpc_rtl=x86_64 ;;\n#\t\tarm*) fpc_arch=arm; fpc_rtl=arm ;;\n\t\t*) continue\n\tesac\n\tif test -e \"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch}\n\tthen\n\t\tupath=\"$FPC_RTL_UNITS_BASE\"/`\"${FPC_COMPILER_BINARY_DIR}\"/ppc${fpc_arch} -iV`/units/${fpc_rtl}-${targetos}\n\t\tar -q \"$TARGET_TEMP_DIR\"/libfpc${narch}.a `ls \"$upath\"/*/*.o | grep -v 'darwin/fv/'`\n\t\tranlib \"$TARGET_TEMP_DIR\"/libfpc${narch}.a\n\t\tnarch=${narch}x\n\telse\n\t\techo error: can\\'t build libfpc.a for $arch \\(${FPC_COMPILER_BINARY_DIR}/ppc${fpc_arch} not found, derived from FPC_COMPILER_BINARY_DIR project setting\\)\n\tfi\ndone\n\nif test ${#narch} -gt 1\nthen\n\tlipo -create \"$TARGET_TEMP_DIR\"/libfpc*.a -output \"$TARGET_BUILD_DIR\"/libfpc.a\n\trm -f \"$TARGET_TEMP_DIR\"/*.a\nelse\n\tmv \"$TARGET_TEMP_DIR\"/libfpc.a \"$TARGET_BUILD_DIR\"\nfi\n";
 		};
 		928301560F10E04C00CC5A3C /* Compile Pascal Sources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1945,7 +1945,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6 arm64 x86_64";
+				VALID_ARCHS = "armv7 x86_64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -2058,7 +2058,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
-				VALID_ARCHS = "armv7 armv6 arm64 x86_64";
+				VALID_ARCHS = "armv7 x86_64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -2214,7 +2214,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6 arm64 x86_64";
+				VALID_ARCHS = "armv7 x86_64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
@@ -2245,7 +2245,7 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dDEBUGFILE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs -dDEBUGFILE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -2294,7 +2294,7 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = NO;
-				VALID_ARCHS = "armv7 armv6 arm64 x86_64";
+				VALID_ARCHS = "armv7 x86_64";
 				WARNING_CFLAGS = (
 					"-Wall",
 					"-Wbad-function-cast",
