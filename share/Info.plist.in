@@ -23,7 +23,7 @@
     <key>CFBundleShortVersionString</key>
     <string>${HEDGEWARS_VERSION}</string>
     <key>NSHumanReadableCopyright</key>
-    <string>Copyright © 2004-2014, Hedgewars Project</string>
+    <string>Copyright © 2004-2015, Hedgewars Project</string>
     <key>NSAppleScriptEnabled</key>
     <true/>
     <key>LSRequiresNativeExecution</key>
