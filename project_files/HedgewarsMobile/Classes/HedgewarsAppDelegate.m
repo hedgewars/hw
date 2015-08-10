@@ -51,7 +51,7 @@
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
 -(void) postFinishLaunch {
-    [super postFinishLaunch];
+    [self performSelector:@selector(hideLaunchScreen) withObject:nil afterDelay:0.0];
     
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
