@@ -1895,7 +1895,7 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs  -Cfvfpv3 -dNOCONSOLE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs -Cfvfpv3 -dNOCONSOLE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -2245,7 +2245,7 @@
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
 				FPC_MAIN_FILE = "$(PROJECT_DIR)/../../hedgewars/hwLibrary.pas";
 				FPC_RTL_UNITS_BASE = /usr/local/lib/fpc;
-				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs -dDEBUGFILE";
+				FPC_SPECIFIC_OPTIONS = "-Ci- -Cr- -Co- -Os -Xs -Cparmv7 -Cfvfpv3 -dDEBUGFILE";
 				FPC_UNITS_PATH = "-Fu\"$(PROJECT_DIR)\"";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -2283,7 +2283,7 @@
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LLVM_LTO = NO;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
