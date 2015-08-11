@@ -367,6 +367,7 @@
 				GCC_PREFIX_HEADER = Lua_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Lua;
+				VALID_ARCHS = "armv7 x86_64";
 			};
 			name = Debug;
 		};
@@ -380,6 +381,7 @@
 				GCC_PREFIX_HEADER = Lua_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Lua;
+				VALID_ARCHS = "armv7 x86_64";
 			};
 			name = Release;
 		};
