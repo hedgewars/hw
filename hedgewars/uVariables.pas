@@ -417,13 +417,13 @@ var
 {$IFDEF USE_TOUCH_INTERFACE}
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprFireButton
-            (FileName: 'arrowUp'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowup'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowUp
-            (FileName: 'arrowDown'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowdown'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowDown
-            (FileName: 'arrowLeft'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowleft'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowLeft
-            (FileName: 'arrowRight'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowright'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowRight
             (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprAMWidget
