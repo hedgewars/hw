@@ -5,6 +5,7 @@ import qualified Data.MultiMap as MM
 import Data.Maybe
 import Data.List
 import Data.Char
+import qualified Data.Set as Set
 
 data HWProtocol = Command String [CmdParam]
 data CmdParam = Skip
@@ -26,7 +27,30 @@ cmd2 s p1 p2 = Command s [p1, p2]
 
 breakCmd (PTCommand (c:cs) params) = (c, PTCommand cs params)
 
-commands = [
+cmdParams2str (Command _ p) = "TCmdParam" ++ concatMap f p
+    where
+    f Skip = ""
+    f SS = "S"
+    f LS = "L"
+    f IntP = "i"
+    f (Many p) = ""
+    
+cmdParams2record cmd@(Command _ p) = renderStyle style{lineLength = 80} $ 
+    text "type " <> text (cmdParams2str cmd)
+    <> text " = record" $+$ nest 4 (
+    vcat (map (uncurry f) $ zip [1..] $ filter isRendered p) 
+    $+$ text "end;")
+    where
+    isRendered Skip = False
+    isRendered (Many _) = False
+    isRendered _ = True
+    f n Skip = empty
+    f n SS = text "str" <> int n <> text ": shortstring;"
+    f n LS = text "str" <> int n <> text ": longstring;"
+    f n IntP = text "param" <> int n <> text ": LongInt;"
+    f _ (Many _) = empty
+
+commandsDescription = [
         cmd "CONNECTED" [Skip, IntP]
         , cmd1 "NICK" SS
         , cmd1 "PROTO" IntP
@@ -83,7 +107,7 @@ dumpTree = vcat . map dt
     dt (PTPrefix s st) = text s $$ (nest 1 $ vcat $ map dt st)
     dt _ = empty
 
-pas2 = buildSwitch $ buildParseTree commands
+pas2 = buildSwitch $ buildParseTree commandsDescription
     where
         buildSwitch cmds = text "case getNextChar of" $$ (nest 4 . vcat $ map buildCase cmds) $$ elsePart
         buildCase (PTCommand {}) = text "#10: <call cmd handler>;"
@@ -93,7 +117,7 @@ pas2 = buildSwitch $ buildParseTree commands
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, bodies, c]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, bodies, c, structs]
     where
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
         l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
@@ -111,8 +135,9 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
             $+$ text "begin" 
             $+$ text "end" <> semi
         cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) $ reverse fixedNames) <> semi
+        structs = vcat (map text . Set.toList . Set.fromList $ map cmdParams2record commandsDescription)
 
-pas = renderArrays $ buildTables $ buildParseTree commands
+pas = renderArrays $ buildTables $ buildParseTree commandsDescription
     where
         buildTables cmds = let (_, _, _, t1, t2, t3) = foldr walk (0, [0], -10, [], [], [[]]) cmds in (tail t1, tail t2, concat t3)
         walk (PTCommand _ (Command n params)) (lc, s:sh, pc, tbl1, tbl2, (t3:tbl3)) =
