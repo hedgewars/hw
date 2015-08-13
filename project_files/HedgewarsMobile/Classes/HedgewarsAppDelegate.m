@@ -60,7 +60,7 @@
 
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
-    [self.uiwindow addSubview:self.mainViewController.view];
+    self.uiwindow.rootViewController = self.mainViewController;
     [self.mainViewController release];
 
     [self.uiwindow makeKeyAndVisible];
