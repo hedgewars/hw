@@ -607,7 +607,7 @@ begin
     {$IFDEF PAS2C}
     exit(HaltNoError);
     {$ELSE}
-    halt(HaltNoError);
+    exit;
     {$ENDIF}
 {$IFDEF HWLIBRARY}
 end;
