@@ -60,26 +60,31 @@
         [CreationChamber createFirstLaunch];
     }
 
-//    // prompt for restoring any previous game
-//    NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
-//    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
-//        if (self.restoreViewController == nil) {
-//            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
-//            RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
-//            if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
-//                restored.modalPresentationStyle = UIModalPresentationFormSheet;
-//            self.restoreViewController = restored;
-//            [restored release];
-//        }
-//        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.25];
-//    } else {
-//        // let's not prompt for rating when app crashed >_>
-//        [Appirater appLaunched];
-//    }
+    // prompt for restoring any previous game
+    NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
+    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
+        if (self.restoreViewController == nil) {
+            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
+            RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
+            if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
+                restored.modalPresentationStyle = UIModalPresentationFormSheet;
+            self.restoreViewController = restored;
+            [restored release];
+        }
+        [self performSelector:@selector(presentViewController:) withObject:self.restoreViewController afterDelay:0.25];
+    } else {
+        // let's not prompt for rating when app crashed >_>
+        [Appirater appLaunched];
+    }
 
     /*
     [ServerProtocolNetwork openServerConnection];
     */
+}
+
+- (void) presentViewController:(UIViewController *)vc
+{
+    [self presentViewController:vc animated:NO completion:nil];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
