@@ -325,8 +325,20 @@
     if (IS_IPAD() == NO)
         return;
 
-    if ((toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+    [self updateUIForInterfaceOrientation:toInterfaceOrientation];
+
+    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
+                                                                            duration:duration];
+    if (self.helpPage)
+    {
+        self.helpPage.view.frame = self.view.frame;
+    }
+}
+
+- (void)updateUIForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    if ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
         self.imgContainer.alpha = 1;
         self.titleImage.frame = CGRectMake(357, 17, 309, 165);
         self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
@@ -345,19 +357,16 @@
         self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
         self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
     }
-
-    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
-                                                                            duration:duration];
-    if (self.helpPage)
-    {
-        self.helpPage.view.frame = self.view.frame;
-    }
 }
 
 -(void) viewWillAppear:(BOOL)animated {
 //    if (IS_IPAD())
 //        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
-
+    
+    // we assume here what 'statusBarOrientation' will never be changed manually!
+    UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    [self updateUIForInterfaceOrientation:currentOrientation];
+    
     [self.mapConfigViewController viewWillAppear:animated];
     [self.teamConfigViewController viewWillAppear:animated];
     [self.schemeWeaponConfigViewController viewWillAppear:animated];
