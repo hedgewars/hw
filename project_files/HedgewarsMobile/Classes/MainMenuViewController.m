@@ -127,7 +127,7 @@
                 debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
             else
                 debugStr = [[NSString alloc] initWithString:@"Here be log"];
-            UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+            UITextView *scroll = [[UITextView alloc] initWithFrame:self.view.frame];
             scroll.text = debugStr;
             [debugStr release];
             scroll.editable = NO;
@@ -136,7 +136,7 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
             [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            btn.frame = CGRectMake(self.view.frame.size.height-58, -6, 64, 64);
+            btn.frame = CGRectMake(self.view.frame.size.width-58, -6, 64, 64);
             btn.backgroundColor = [UIColor blackColor];
             btn.titleLabel.textColor = [UIColor whiteColor];
             btn.titleLabel.textAlignment = UITextAlignmentCenter;
