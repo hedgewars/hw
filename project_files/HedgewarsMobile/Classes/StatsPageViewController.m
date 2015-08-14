@@ -44,7 +44,9 @@
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.delegate = self;
     aTableView.dataSource = self;
-
+    
+    aTableView.rowHeight = 44;
+    
     [self.view addSubview:aTableView];
     [aTableView release];
 
