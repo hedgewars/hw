@@ -22,10 +22,10 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "GameInterfaceBridge.h"
-
+#import "HelpPageLobbyViewController.h"
 
 @implementation GameConfigViewController
-@synthesize imgContainer, titleImage, sliderBackground, //helpPage,
+@synthesize imgContainer, titleImage, sliderBackground, helpPage,
             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -66,7 +66,6 @@
             break;
         case 2:
             [[AudioManagerController mainManager] playClickSound];
-            /*
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
@@ -74,7 +73,6 @@
             [UIView beginAnimations:@"helplobby" context:NULL];
             self.helpPage.view.alpha = 1;
             [UIView commitAnimations];
-            */
             break;
         default:
             DLog(@"Nope");
@@ -104,7 +102,6 @@
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
             break;
         case 3:
-            /*
             if (helpPage == nil) {
                 helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
                 [self.view addSubview:helpPage.view];
@@ -112,7 +109,6 @@
             // this message is compulsory otherwise the table won't be loaded at all
             [helpPage viewWillAppear:NO];
             [self.view bringSubviewToFront:helpPage.view];
-            */
             break;
         default:
             DLog(@"Nope");
@@ -397,8 +393,8 @@
         self.teamConfigViewController = nil;
     if (self.schemeWeaponConfigViewController.view.superview == nil)
         self.schemeWeaponConfigViewController = nil;
-    //if (self.helpPage.view.superview == nil)
-    //    self.helpPage = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -410,7 +406,7 @@
     self.schemeWeaponConfigViewController = nil;
     self.teamConfigViewController = nil;
     self.mapConfigViewController = nil;
-    //self.helpPage = nil;
+    self.helpPage = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -422,7 +418,7 @@
     releaseAndNil(schemeWeaponConfigViewController);
     releaseAndNil(teamConfigViewController);
     releaseAndNil(mapConfigViewController);
-    //releaseAndNil(helpPage);
+    releaseAndNil(helpPage);
     [super dealloc];
 }
 
