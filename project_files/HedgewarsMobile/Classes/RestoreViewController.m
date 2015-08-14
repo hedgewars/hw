@@ -32,14 +32,14 @@
 
     if (theButton.tag != 0) {
         [[AudioManagerController mainManager] playClickSound];
-        [GameInterfaceBridge registerCallingController:self.parentViewController];
+        [GameInterfaceBridge registerCallingController:self.presentingViewController];
         [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
     } else {
         [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
         [defaults synchronize];
     }
-    [self.parentViewController dismissModalViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) viewDidLoad {

@@ -133,7 +133,7 @@
 
 -(void) dismissSplitView {
     [[AudioManagerController mainManager] playBackSound];
-    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
+    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {

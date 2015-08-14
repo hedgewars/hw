@@ -201,7 +201,7 @@ static UIViewController *callingController;
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
-        [callingController presentModalViewController:statsPage animated:YES];
+        [callingController presentViewController:statsPage animated:YES completion:nil];
         [statsPage release];
     }
 }

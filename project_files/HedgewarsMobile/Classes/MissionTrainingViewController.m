@@ -65,7 +65,7 @@
 
     if (button.tag == 0) {
         [[AudioManagerController mainManager] playBackSound];
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
         [GameInterfaceBridge registerCallingController:self];
         [GameInterfaceBridge startMissionGame:self.missionName];

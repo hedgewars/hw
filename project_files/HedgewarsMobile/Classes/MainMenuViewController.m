@@ -105,7 +105,7 @@
                 self.gameConfigViewController = gcvc;
                 [gcvc release];
             }
-            [self presentModalViewController:self.gameConfigViewController animated:YES];
+            [self presentViewController:self.gameConfigViewController animated:YES completion:nil];
             break;
         case 2:
             if (nil == self.settingsViewController) {
@@ -114,7 +114,7 @@
                 self.settingsViewController = svrc;
                 [svrc release];
             }
-            [self presentModalViewController:self.settingsViewController animated:YES];
+            [self presentViewController:self.settingsViewController animated:YES completion:nil];
             break;
         case 3:
 #ifdef DEBUG
@@ -160,7 +160,7 @@
                 self.aboutViewController = about;
                 [about release];
             }
-            [self presentModalViewController:self.aboutViewController animated:YES];
+            [self presentViewController:self.aboutViewController animated:YES completion:nil];
 #endif
             break;
         case 4:
@@ -172,7 +172,7 @@
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }
-            [self presentModalViewController:self.savedGamesViewController animated:YES];
+            [self presentViewController:self.savedGamesViewController animated:YES completion:nil];
             break;
         case 5:
             if (nil == self.missionsViewController) {
@@ -184,7 +184,7 @@
                 self.missionsViewController = missions;
                 [missions release];
             }
-            [self presentModalViewController:self.missionsViewController animated:YES];
+            [self presentViewController:self.missionsViewController animated:YES completion:nil];
             break;
         case 6:
             [GameInterfaceBridge registerCallingController:self];
