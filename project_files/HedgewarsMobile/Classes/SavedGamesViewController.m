@@ -68,7 +68,7 @@
     if (button.tag == 0) {
         [[AudioManagerController mainManager] playBackSound];
         [self.tableView setEditing:NO animated:YES];
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
+        [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
     } else {
         NSString *titleStr, *cancelStr, *confirmStr;
         titleStr = NSLocalizedString(@"Are you reeeeeally sure?", @"");

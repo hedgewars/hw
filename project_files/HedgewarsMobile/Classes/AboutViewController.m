@@ -53,7 +53,7 @@
 
 -(IBAction) buttonPressed:(id) sender {
     [[AudioManagerController mainManager] playBackSound];
-    [[self parentViewController] dismissModalViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(IBAction) segmentedControlChanged:(id) sender {

@@ -47,7 +47,7 @@
                 [alert release];
             } else {
                 [[AudioManagerController mainManager] playBackSound];
-                [[self parentViewController] dismissModalViewControllerAnimated:YES];
+                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
             }
             break;
         case 1:
