@@ -71,9 +71,9 @@
             self.helpPage.view.alpha = 0;
             self.helpPage.view.frame = self.view.frame;
             [self.view addSubview:self.helpPage.view];
-            [UIView beginAnimations:@"helplobby" context:NULL];
-            self.helpPage.view.alpha = 1;
-            [UIView commitAnimations];
+            [UIView animateWithDuration:0.5 animations:^{
+                self.helpPage.view.alpha = 1;
+            }];
             break;
         default:
             DLog(@"Nope");

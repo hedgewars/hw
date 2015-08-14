@@ -55,10 +55,11 @@
 }
 
 -(IBAction) dismiss {
-    [UIView beginAnimations:@"dismiss help" context:NULL];
-    self.view.alpha = 0;
-    [UIView commitAnimations];
-    [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:1];
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.alpha = 0;
+    } completion:^(BOOL finished){
+        [self.view performSelector:@selector(removeFromSuperview) withObject:nil afterDelay:0];
+    }];
 }
 
 @end
