@@ -69,6 +69,7 @@
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
+            self.helpPage.view.frame = self.view.frame;
             [self.view addSubview:self.helpPage.view];
             [UIView beginAnimations:@"helplobby" context:NULL];
             self.helpPage.view.alpha = 1;
@@ -104,6 +105,9 @@
         case 3:
             if (helpPage == nil) {
                 helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
+                CGRect helpPageFrame = self.view.frame;
+                helpPageFrame.size.height -= 44; //toolbar height
+                self.helpPage.view.frame = helpPageFrame;
                 [self.view addSubview:helpPage.view];
             }
             // this message is compulsory otherwise the table won't be loaded at all
@@ -344,6 +348,10 @@
 
     [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
                                                                             duration:duration];
+    if (self.helpPage)
+    {
+        self.helpPage.view.frame = self.view.frame;
+    }
 }
 
 -(void) viewWillAppear:(BOOL)animated {
