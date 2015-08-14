@@ -8,6 +8,12 @@ import Data.Char
 import qualified Data.Set as Set
 
 data HWProtocol = Command String [CmdParam]
+
+instance Ord HWProtocol where
+    (Command a _) `compare` (Command b _) = a `compare` b    
+instance Eq HWProtocol where
+    (Command a _) == (Command b _) = a == b
+
 data CmdParam = Skip
               | SS
               | LS
@@ -34,6 +40,14 @@ cmdParams2str (Command _ p) = "TCmdParam" ++ concatMap f p
     f LS = "L"
     f IntP = "i"
     f (Many p) = ""
+
+cmdParams2handlerType (Command _ p) = "handler_" ++ concatMap f p
+    where
+    f Skip = "_"
+    f SS = "S"
+    f LS = "L"
+    f IntP = "i"
+    f (Many p) = 'M' : concatMap f p
     
 cmdParams2record cmd@(Command _ p) = renderStyle style{lineLength = 80} $ 
     text "type " <> text (cmdParams2str cmd)
@@ -68,7 +82,7 @@ commandsDescription = [
         , cmd2 "CLIENT_FLAGS" SS $ Many [SS]
         , cmd2 "LEFT" SS $ Many [SS]
         , cmd1 "SERVER_MESSAGE" LS
-        , cmd1 "ERROR" LS
+        , cmd1 "ERROR" LS -- not rendered? wth
         , cmd1 "NOTICE" LS
         , cmd1 "WARNING" LS
         , cmd1 "JOINING" SS
@@ -119,13 +133,15 @@ pas2 = buildSwitch $ buildParseTree commandsDescription
 
 renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, bodies, c, structs]
     where
+        maybeQuotes "$" = text "#0"
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
         l = text "const letters: array[0.." <> (int $ length letters - 1) <> text "] of char = "
             <> parens (hsep . punctuate comma $ map maybeQuotes letters) <> semi
         s = text "const commands: array[0.." <> (int $ length commands - 1) <> text "] of integer = "
             <> parens (hsep . punctuate comma $ map text commands) <> semi
         c = text "const handlers: array[0.." <> (int $ length fixedNames - 1) <> text "] of PHandler = "
-            <> parens (hsep . punctuate comma $ map (text . (++) "@handler_") $ reverse fixedNames) <> semi
+            <> parens (hsep . punctuate comma $ map (text . (:) '@') handlerTypes) <> semi
+        handlerTypes = map cmdParams2handlerType . reverse $ sort commandsDescription
         fixedNames = map fixName handlers
         fixName = map fixChar
         fixChar c | isLetter c = c
