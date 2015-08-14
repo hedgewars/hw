@@ -35,7 +35,7 @@
 // on iPhone the XIBs contain UIScrollView
 -(void) viewDidLoad {
     if (IS_IPAD() == NO){
-        scrollView.contentSize = CGSizeMake(480,650);
+        scrollView.contentSize = CGSizeMake(self.view.frame.size.width, 650);
         scrollView.maximumZoomScale = 4.0;
         scrollView.minimumZoomScale = 0.75;
         scrollView.clipsToBounds = YES;
