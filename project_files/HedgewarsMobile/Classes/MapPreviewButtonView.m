@@ -83,11 +83,33 @@
         serverQuit = YES;
     }
 
-    // launch the preview here so that we're sure the tcp channel is open
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *(*)(void *))GenLandPreview, (void *)port);
-    pthread_detach(thread_id);
-
+    // launch the preview in background here so that we're sure the tcp channel is open
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^{
+        NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", port];
+        NSString *documentsDirectory = DOCUMENTS_FOLDER();
+        
+        NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
+                                          @"--internal",
+                                          @"--port", ipcString,
+                                          @"--user-prefix", documentsDirectory,
+                                          @"--landpreview",
+                                          nil];
+        [ipcString release];
+        
+        int argc = [gameParameters count];
+        const char **argv = (const char **)malloc(sizeof(const char*)*argc);
+        for (int i = 0; i < argc; i++)
+            argv[i] = strdup([[gameParameters objectAtIndex:i] UTF8String]);
+        [gameParameters release];
+        
+        RunEngine(argc, argv);
+        
+        // cleanup
+        for (int i = 0; i < argc; i++)
+            free((void *)argv[i]);
+        free(argv);
+    });
+    
     DLog(@"Waiting for a client on port %d", port);
     while (!serverQuit) {
         /* This check the sd if there is a pending connection.
@@ -135,7 +157,7 @@
 
     // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
-    CGContextRef bitmapImage = CGBitmapContextCreate(unpackedMap, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
+    CGContextRef bitmapImage = CGBitmapContextCreate(unpackedMap, 256, 128, 8, 256, colorspace, (CGBitmapInfo)kCGImageAlphaNone);
     CGColorSpaceRelease(colorspace);
 
     CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
