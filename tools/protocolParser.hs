@@ -31,8 +31,6 @@ cmd = Command
 cmd1 s p = Command s [p]
 cmd2 s p1 p2 = Command s [p1, p2]
 
-breakCmd (PTCommand (c:cs) params) = (c, PTCommand cs params)
-
 cmdParams2str (Command _ p) = "TCmdParam" ++ concatMap f p
     where
     f Skip = ""
@@ -48,7 +46,7 @@ cmdParams2handlerType (Command _ p) = "handler_" ++ concatMap f p
     f LS = "L"
     f IntP = "i"
     f (Many p) = 'M' : concatMap f p
-    
+
 cmdParams2record cmd@(Command _ p) = renderStyle style{lineLength = 80} $ 
     text "type " <> text (cmdParams2str cmd)
     <> text " = record" $+$ nest 4 (
@@ -82,10 +80,9 @@ commandsDescription = [
         , cmd2 "CLIENT_FLAGS" SS $ Many [SS]
         , cmd2 "LEFT" SS $ Many [SS]
         , cmd1 "SERVER_MESSAGE" LS
-        , cmd1 "ERROR" LS -- not rendered? wth
+        , cmd1 "ERROR" LS
         , cmd1 "NOTICE" LS
         , cmd1 "WARNING" LS
-        , cmd1 "JOINING" SS
         , cmd1 "EM" $ Many [LS]
         , cmd1 "PING" $ Many [SS]
         , cmd2 "CHAT" SS LS
@@ -102,19 +99,21 @@ unknowncmd = PTPrefix "$" [PTCommand "$" $ Command "__UNKNOWN__" [Many [SS]]]
 
 groupByFirstChar :: [ParseTree] -> [(Char, [ParseTree])]
 groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
+    where
+    breakCmd (PTCommand (c:cs) params) = (c, PTCommand cs params)
 
 makePT cmd@(Command n p) = PTCommand n cmd
 
 buildParseTree cmds = [PTPrefix "!" $ (bpt $ map makePT cmds) ++ [unknowncmd]]
-bpt cmds = if isJust emptyNamed then cmdLeaf $ fromJust emptyNamed else subtree
+bpt cmds = if not . null $ fst emptyNamed then cmdLeaf emptyNamed else subtree
     where
-        emptyNamed = find (\(_, (PTCommand n _:_)) -> null n) assocs
+        emptyNamed = partition (\(_, (PTCommand n _:_)) -> null n) assocs
         assocs = groupByFirstChar cmds
         subtree = map buildsub assocs
         buildsub (c, cmds) = let st = bpt cmds in if null $ drop 1 st then maybeMerge c st else PTPrefix [c] st
         maybeMerge c cmd@[PTCommand {}] = PTPrefix [c] cmd
         maybeMerge c cmd@[PTPrefix s ss] = PTPrefix (c:s) ss
-        cmdLeaf (c, (hwc:_)) = [PTPrefix [c] [hwc]]
+        cmdLeaf ([(c, (hwc:_))], assocs2) = (PTPrefix [c] [hwc]) : map buildsub assocs2
 
 dumpTree = vcat . map dt
     where
@@ -163,4 +162,6 @@ pas = renderArrays $ buildTables $ buildParseTree commandsDescription
         lvldown (lc, s1:s2:sh, pc, tbl1, t:tbl2, t31:t32:tbl3) = (lc, s1+s2:sh, pc, tbl1, (if null t32 then "0" else show s1):tbl2, (t31 ++ t32):tbl3)
         fpf c (lc, s:sh, pc, tbl1, tbl2, tbl3) = (lc + 1, s+1:sh, pc, [c]:tbl1, "0":tbl2, tbl3)
 
-main = putStrLn $ renderStyle style{lineLength = 80} pas
+main =
+    putStrLn $ renderStyle style{lineLength = 80} $ pas
+    --putStrLn $ renderStyle style{lineLength = 80} $ dumpTree $ buildParseTree commandsDescription
