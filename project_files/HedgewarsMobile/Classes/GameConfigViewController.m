@@ -325,7 +325,7 @@
     if (IS_IPAD() == NO)
         return;
 
-    [self updateUIForInterfaceOrientation:toInterfaceOrientation];
+    [self updateiPadUIForInterfaceOrientation:toInterfaceOrientation];
 
     [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
                                                                             duration:duration];
@@ -335,7 +335,7 @@
     }
 }
 
-- (void)updateUIForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+- (void)updateiPadUIForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
          interfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
@@ -363,9 +363,12 @@
 //    if (IS_IPAD())
 //        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
     
-    // we assume here what 'statusBarOrientation' will never be changed manually!
-    UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
-    [self updateUIForInterfaceOrientation:currentOrientation];
+    if (IS_IPAD())
+    {
+        // we assume here what 'statusBarOrientation' will never be changed manually!
+        UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self updateiPadUIForInterfaceOrientation:currentOrientation];
+    }
     
     [self.mapConfigViewController viewWillAppear:animated];
     [self.teamConfigViewController viewWillAppear:animated];
