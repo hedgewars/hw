@@ -83,7 +83,8 @@
     cell.textLabel.text = [[self.people objectAtIndex:self.segmentedControl.selectedSegmentIndex] objectAtIndex:[indexPath row]];
     cell.textLabel.adjustsFontSizeToFitWidth = YES;
     cell.textLabel.minimumFontSize = 8;
-    cell.detailTextLabel.text = [[self.people objectAtIndex:(self.segmentedControl.selectedSegmentIndex + 5)] objectAtIndex:[indexPath row]];
+    NSString *detailsKey = [[self.people objectAtIndex:(self.segmentedControl.selectedSegmentIndex + 5)] objectAtIndex:[indexPath row]];
+    cell.detailTextLabel.text = NSLocalizedStringFromTable(detailsKey, @"About", nil);
 
     return cell;
 }
