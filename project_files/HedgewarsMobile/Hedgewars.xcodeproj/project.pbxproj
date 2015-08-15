@@ -711,6 +711,9 @@
 		F65724FA1B7E784700A86262 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpleft.png; sourceTree = "<group>"; };
 		F65724FB1B7E784700A86262 /* helpplain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpplain.png; sourceTree = "<group>"; };
 		F65724FC1B7E784700A86262 /* helpright.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpright.png; sourceTree = "<group>"; };
+		F65725291B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/About.strings; sourceTree = "<group>"; };
+		F657252A1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F657252B1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Scheme.strings; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
 		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
@@ -1372,6 +1375,7 @@
 				Bulgarian,
 				Portuguese,
 				Romanian,
+				ru,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
@@ -1851,6 +1855,7 @@
 				61D08D8714AEA9670007C078 /* Japanese */,
 				61C6783F14B3DD020087425A /* Portuguese */,
 				6154A53114C37E4A00F6EEF6 /* Romanian */,
+				F65725291B7EB9CC00A86262 /* ru */,
 			);
 			name = About.strings;
 			sourceTree = "<group>";
@@ -1869,6 +1874,7 @@
 				61D08D8814AEA9700007C078 /* Japanese */,
 				61C6784B14B3DD0B0087425A /* Portuguese */,
 				6154A53E14C37E5400F6EEF6 /* Romanian */,
+				F657252A1B7EB9CC00A86262 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1887,6 +1893,7 @@
 				61D08D8914AEA9780007C078 /* Japanese */,
 				61C6784C14B3DD140087425A /* Portuguese */,
 				6154A54014C37EB100F6EEF6 /* Romanian */,
+				F657252B1B7EB9CC00A86262 /* ru */,
 			);
 			name = Scheme.strings;
 			sourceTree = "<group>";
