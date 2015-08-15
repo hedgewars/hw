@@ -44,9 +44,6 @@ procedure RunEngine(argc: LongInt; argv: PPChar); cdecl; export;
 procedure preInitEverything();
 procedure initEverything(complete:boolean);
 procedure freeEverything(complete:boolean);
-{$IFDEF MOBILE}
-procedure GenLandPreview; cdecl; export;
-{$ENDIF MOBILE}
 
 implementation
 {$ELSE}
@@ -543,8 +540,12 @@ begin
 end;
 
 ///////////////////////////////////////////////////////////////////////////////
-procedure GenLandPreview;{$IFDEF MOBILE} cdecl; export;{$ENDIF MOBILE}
+procedure GenLandPreview;
+{$IFDEF MOBILE}
+var Preview: TPreview;
+{$ELSE}
 var Preview: TPreviewAlpha;
+{$ENDIF MOBILE}
 begin
     initEverything(false);
 
@@ -553,7 +554,11 @@ begin
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
     ScriptOnPreviewInit;
+{$IFDEF MOBILE}
+    GenPreview(Preview);
+{$ELSE}
     GenPreviewAlpha(Preview);
+{$ENDIF MOBILE}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));

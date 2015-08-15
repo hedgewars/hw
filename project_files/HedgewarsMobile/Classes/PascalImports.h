@@ -29,7 +29,6 @@ extern "C" {
      */
 
     void RunEngine(const int argc, const char *argv[]);
-    void GenLandPreview(void);
     void LoadLocaleWrapper(const char *filename);
 
     void HW_versionInfo(int *protoNum, char **versionStr);
