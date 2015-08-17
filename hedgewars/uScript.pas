@@ -3156,7 +3156,7 @@ ScriptSetInteger('gstMoving'        , gstMoving);
 ScriptSetInteger('gstAttacked'      , gstAttacked);
 ScriptSetInteger('gstAttacking'     , gstAttacking);
 ScriptSetInteger('gstCollision'     , gstCollision);
-ScriptSetInteger('gstChooseTarget', gstChooseTarget);
+ScriptSetInteger('gstChooseTarget'  , gstChooseTarget);
 ScriptSetInteger('gstHHJumping'     , gstHHJumping);
 ScriptSetInteger('gsttmpFlag'       , gsttmpFlag);
 ScriptSetInteger('gstHHThinking'    , gstHHThinking);
@@ -3170,6 +3170,9 @@ ScriptSetInteger('gstNotKickable'   , gstNotKickable);
 ScriptSetInteger('gstLoser'         , gstLoser);
 ScriptSetInteger('gstHHGone'        , gstHHGone);
 ScriptSetInteger('gstInvisible'     , gstInvisible);
+ScriptSetInteger('gstSubmersible'   , gstSubmersible);
+ScriptSetInteger('gstFrozen'        , gstFrozen);
+ScriptSetInteger('gstNoGravity'     , gstNoGravity);
 
 // ai hints
 ScriptSetInteger('aihUsualProcessing', aihUsualProcessing);
