@@ -24,6 +24,10 @@
 
 #define INDICATOR_TAG 7654
 
+@interface MapPreviewButtonView ()
+@property (nonatomic) int port;
+@end
+
 @implementation MapPreviewButtonView
 @synthesize delegate;
 
@@ -64,7 +68,7 @@
     IPaddress ip;
     BOOL serverQuit = NO;
     uint8_t packedMap[128*32];
-    int port = [HWUtils randomPort];
+    self.port = [HWUtils randomPort];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -72,20 +76,20 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, port) < 0) {
+    if (SDLNet_ResolveHost(&ip, NULL, self.port) < 0) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         serverQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip))) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
+        DLog(@"SDLNet_TCP_Open: %s %d\n", SDLNet_GetError(), self.port);
         serverQuit = YES;
     }
 
     // launch the preview in background here so that we're sure the tcp channel is open
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^{
-        NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", port];
+        NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.port];
         NSString *documentsDirectory = DOCUMENTS_FOLDER();
         
         NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
@@ -110,7 +114,7 @@
         free(argv);
     });
     
-    DLog(@"Waiting for a client on port %d", port);
+    DLog(@"Waiting for a client on port %d", self.port);
     while (!serverQuit) {
         /* This check the sd if there is a pending connection.
          * If there is one, accept that, and open a new socket for communicating */
@@ -133,7 +137,7 @@
             serverQuit = YES;
         }
     }
-    [HWUtils freePort:port];
+    [HWUtils freePort:self.port];
     SDLNet_TCP_Close(sd);
     SDLNet_Quit();
 
