@@ -79,7 +79,8 @@
 }
 
 - (void)main {
-  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+
   [NSThread sleepForTimeInterval:_delay];
   if ([self.audioPlayer isKindOfClass:[AVAudioPlayer class]]) {
     [self beginFadeOperation];
@@ -88,7 +89,7 @@
     ALog(@"AudioPlayerFadeOperation began with invalid AVAudioPlayer");
   }
 
-  [pool release];
+  }
 }
 
 - (void)beginFadeOperation {

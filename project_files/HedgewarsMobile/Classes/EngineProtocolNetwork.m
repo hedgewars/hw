@@ -214,7 +214,8 @@
 
 // this is launched as thread and handles all IPC with engine
 -(void) engineProtocol:(id) object {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     NSDictionary *gameConfig = (NSDictionary *)object;
     NSMutableArray *statsArray = nil;
     TCPsocket sd;
@@ -403,8 +404,9 @@
     [HWUtils freePort:self.enginePort];
     SDLNet_TCP_Close(csd);
     SDLNet_Quit();
+    
+    }
 
-    [pool release];
     // Invoking this method should be avoided as it does not give your thread a chance
     // to clean up any resources it allocated during its execution.
     //[NSThread exit];
