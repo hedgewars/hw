@@ -2672,8 +2672,13 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
+{$IFDEF MOBILE}
+    cMinScreenWidth  := min(cScreenWidth, 480);
+    cMinScreenHeight := min(cScreenHeight, 320);
+{$ELSE}
     cMinScreenWidth  := min(cScreenWidth, 640);
     cMinScreenHeight := min(cScreenHeight, 480);
+{$ENDIF}
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;
