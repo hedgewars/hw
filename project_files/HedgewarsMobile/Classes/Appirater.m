@@ -47,7 +47,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
 }
 
 -(void) appLaunchedHandler {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
     if (APPIRATER_DEBUG) {
         [self performSelectorOnMainThread:@selector(showPrompt) withObject:nil waitUntilDone:NO];
@@ -116,7 +116,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
     if (!willShowPrompt)
         [self autorelease];
 
-    [pool release];
+    }
 }
 
 -(void) showPrompt {

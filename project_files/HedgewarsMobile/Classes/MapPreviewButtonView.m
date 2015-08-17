@@ -151,7 +151,8 @@
 }
 
 -(void) drawingThread {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     uint8_t unpackedMap[128*32*8];
     [self engineProtocol:unpackedMap];
 
@@ -179,8 +180,8 @@
     [self performSelectorOnMainThread:@selector(removeIndicator)
                            withObject:nil
                         waitUntilDone:NO];
-
-    [pool release];
+    
+    }
 }
 
 -(void) updatePreviewWithSeed:(NSString *)seed {

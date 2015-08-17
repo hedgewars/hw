@@ -230,7 +230,8 @@
 }
 
 -(void) loadNiceHogs {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     srand(time(NULL));
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
@@ -284,7 +285,8 @@
 
     [self.view addSubview:self.imgContainer];
     [hogSprite release];
-    [pool drain];
+        
+    }
 }
 
 -(void) viewDidLoad {
