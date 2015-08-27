@@ -27,8 +27,8 @@
 
 -(CGFloat) safeScale {
     CGFloat theScale = 1.0f;
-    if ([self respondsToSelector:@selector(scale)])
-         theScale = [self scale];
+//    if ([self respondsToSelector:@selector(scale)])
+//         theScale = [self scale];
     return theScale;
 }
 
