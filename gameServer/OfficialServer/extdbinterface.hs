@@ -37,7 +37,7 @@ import Utils
 
 
 dbQueryAccount =
-    "SELECT users.pass, \
+    "SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END, \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3), \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 13) \
     \ FROM users WHERE users.name = ?"
