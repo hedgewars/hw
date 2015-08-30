@@ -113,6 +113,7 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             ++ watchRound cl jRoom chans
             ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
             ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeams
+            ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 
         where
         moveTeams :: [B.ByteString] -> GameInfo -> ([TeamInfo], GameInfo)
