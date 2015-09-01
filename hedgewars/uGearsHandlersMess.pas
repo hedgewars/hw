@@ -2769,10 +2769,10 @@ begin
     if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy
     else if cIce then LandFlags:= lfIce;
 
-    distFail:= ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or
+    distFail:= (cBuildMaxDist > 0) and ((hwRound(Distance(tx - x, ty - y)) > cBuildMaxDist) and ((WorldEdge <> weWrap) or
             (
-            (Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y) > _256) and
-            (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
+            (hwRound(Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y)) > cBuildMaxDist) and
+            (hwRound(Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y)) > cBuildMaxDist)
             )));
     if distFail
     or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, LandFlags)) then
