@@ -171,6 +171,8 @@ const
 
     cFontBorder = 2;
 
+    cDefaultBuildMaxDist = 256;
+
     // do not change this value
     cDefaultZoomLevel = 2.0;
 
