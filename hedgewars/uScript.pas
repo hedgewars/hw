@@ -440,6 +440,26 @@ begin
     lc_setweapon:= 0;
 end;
 
+// no parameter means reset to default (and 0 means unlimited)
+function lc_setmaxbuilddistance(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
+const
+    call = 'SetMaxBuildDistance';
+    params = '[ distInPx ]';
+begin
+    if CheckAndFetchParamCountRange(L, 0, 1, call, params, np) then
+        begin
+        if np = 0 then
+            begin
+            // no args? reset
+            cBuildMaxDist:= cDefaultBuildMaxDist;
+            end
+        else
+            CBuildMaxDist:= lua_tointeger(L, 1);
+        end;
+    lc_setmaxbuilddistance:= 0;
+end;
+
 // sets weapon to whatever weapons is next (wraps around, amSkip is skipped)
 function lc_setnextweapon(L : Plua_State) : LongInt; Cdecl;
 var at          : LongInt;
@@ -3301,6 +3321,7 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
