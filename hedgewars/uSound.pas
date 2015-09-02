@@ -727,6 +727,7 @@ begin
     RegisterVariable('mute'     , @chMute     , true );
 
     MusicFN:='';
+    SDMusicFN:= 'sdmusic.ogg';
     Mus:= nil;
     isAudioMuted:= false;
     isSEBackup:= isSoundEnabled;
