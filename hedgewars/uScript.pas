@@ -2667,6 +2667,7 @@ ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', ord(cMapGen));
+ScriptSetInteger('MapFeatureSize', cFeatureSize);
 
 ScriptCall('onPreviewInit');
 
@@ -2675,6 +2676,7 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
+cFeatureSize     := ScriptGetInteger('MapFeatureSize');
 end;
 
 procedure ScriptOnGameInit;
