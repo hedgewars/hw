@@ -2492,7 +2492,7 @@ begin
     lc_setwaterline:= 0
 end;
 
-function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
+function lc_setgearaihints(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
@@ -2501,7 +2501,7 @@ begin
         if gear <> nil then
             gear^.aihints:= lua_tointeger(L, 2);
         end;
-    lc_setaihintsongear:= 0
+    lc_setgearaihints:= 0
 end;
 
 
@@ -3330,7 +3330,7 @@ lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 
-lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
+lua_register(luaState, _P'SetGearAIHints', @lc_setgearaihints);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 
