@@ -2296,7 +2296,7 @@ begin
         else flipVert := false;
         lf:= 0;
 
-        // accept any amount of landflags, loop is never executed if n>6
+        // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
             lf:= lf or lua_tointeger(L, i);
 
@@ -2693,6 +2693,7 @@ ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', ord(cMapGen));
+ScriptSetInteger('MapFeatureSize', cFeatureSize);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
@@ -2722,6 +2723,7 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
+cFeatureSize     := ScriptGetInteger('MapFeatureSize');
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
 cCaseFactor      := ScriptGetInteger('CaseFreq');
