@@ -88,9 +88,7 @@ function onGameInit()
         dummyHog = AddHog(" ", 0, 1, "NoHat")
         HH[dummyHog] = nil
         totalHedgehogs = totalHedgehogs - 1
-        if not showWaterStats then
-            SendStat(siClanHealth, tostring(32640), " ")
-        end
+        teams[GetHogTeamName(dummyHog)] = nil
         SendStat(siClanHealth, tostring(32640), " ")
     end
 end
@@ -112,6 +110,8 @@ function onGearDelete(gear)
     elseif gear == Cake then
         Cake = nil
     elseif GetGearType(gear) == gtHedgehog then
+	onGameTick20()
+	onGearDamage(gear, 0)
         HH[gear] = nil
     end
 end
@@ -595,6 +595,7 @@ function makeSinglePlayerLoserStats()
     else
         SendStat(siCustomAchievement, string.format(text, RecordHeightHogName))
     end
+    SendStat(siPointType, loc("points"))
     SendStat(siPlayerKills, actualHeight, loc(GetHogTeamName(CurrentHedgehog)))
     EndGame()
 end
@@ -629,7 +630,7 @@ function makeFinalMultiPlayerStats()
     SendStat(siGraphTitle, string.format(loc("Team’s best heights per round")))
     
     if winner.score < 1500 then
-        SendStat(siCustomAchievement, string.format(loc("This round’s award for ulitmate disappointment goes to: Everyone!")))
+        SendStat(siCustomAchievement, string.format(loc("This round’s award for ultimate disappointment goes to: Everyone!")))
     else
         if winner.score > 30000 then text = loc("%s (%s) reached for the sky and beyond with a height of %d!")
         elseif winner.score > 24750 then text = loc("%s (%s) was certainly not afraid of heights: Peak height of %d!")
