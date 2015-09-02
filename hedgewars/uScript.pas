@@ -2325,7 +2325,7 @@ var spr   : TSprite;
     eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert : boolean;
 const
     call = 'EraseSprite';
-    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert, [, landFlag, ... ]';
 begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
@@ -2343,7 +2343,7 @@ begin
         else flipVert := false;
         lf:= 0;
 
-        // accept any amount of landflags, loop is never executed if n>6
+        // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
             lf:= lf or lua_tointeger(L, i);
 
