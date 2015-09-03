@@ -2807,11 +2807,12 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    doStepHedgehogMoving(HHGear);
+    if HHGear <> nil then doStepHedgehogMoving(HHGear);
     // if not infattack mode wait for hedgehog finish falling to collect cases
     if ((GameFlags and gfInfAttack) <> 0)
+    or (HHGear = nil)
     or ((HHGear^.State and gstMoving) = 0)
-    or (Gear^.Hedgehog^.Gear^.Damage > 0)
+    or (HHGear^.Damage > 0)
     or ((HHGear^.State and gstDrowning) = 1) then
         begin
         DeleteGear(Gear);
@@ -2821,7 +2822,7 @@ end;
 
 procedure doStepTeleportAnim(Gear: PGear);
 begin
-    if (Gear^.Hedgehog^.Gear^.Damage > 0) then
+    if (Gear^.Hedgehog^.Gear = nil) or (Gear^.Hedgehog^.Gear^.Damage > 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
@@ -2848,6 +2849,11 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+    begin
+        DeleteGear(Gear);
+        exit
+    end; 
 
     valid:= false;
 
