@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -862,8 +862,8 @@ begin
         begin
         RenderClear();
         DrawWorldStereo(Lag, rmDefault)
-        end
 {$IFDEF USE_S3D_RENDERING}
+        end
     else
         begin
         // draw frame for left eye
@@ -873,8 +873,8 @@ begin
         // draw frame for right eye
         RenderClear(rmRightEye);
         DrawWorldStereo(0, rmRightEye);
-        end;
 {$ENDIF}
+        end;
 
 FinishRender();
 end;
@@ -1659,35 +1659,32 @@ SetScale(zoom);
 
 
 // Cursor
-if isCursorVisible then
+if isCursorVisible and (not bShowAmmoMenu) then
     begin
-    if (not bShowAmmoMenu) then
-        begin
-        if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
-        with CurrentHedgehog^ do
-            if (Gear <> nil) and ((Gear^.State and gstChooseTarget) <> 0) then
+    if not CurrentTeam^.ExtDriven then TargetCursorPoint:= CursorPoint;
+    with CurrentHedgehog^ do
+        if (Gear <> nil) and ((Gear^.State and gstChooseTarget) <> 0) then
+            begin
+        if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
+            DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
+        i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
+        with Ammoz[CurAmmoType] do
+            if PosCount > 1 then
                 begin
-            if (CurAmmoType = amNapalm) or (CurAmmoType = amMineStrike) or (((GameFlags and gfMoreWind) <> 0) and ((CurAmmoType = amDrillStrike) or (CurAmmoType = amAirAttack))) then
-                DrawLine(-3000, topY-300, 7000, topY-300, 3.0, (Team^.Clan^.Color shr 16), (Team^.Clan^.Color shr 8) and $FF, Team^.Clan^.Color and $FF, $FF);
-            i:= GetCurAmmoEntry(CurrentHedgehog^)^.Pos;
-            with Ammoz[CurAmmoType] do
-                if PosCount > 1 then
+                if (CurAmmoType = amGirder) or (CurAmmoType = amTeleport) then
                     begin
-                    if (CurAmmoType = amGirder) or (CurAmmoType = amTeleport) then
-                        begin
-                    // pulsating transparency
-                        if ((GameTicks div 16) mod $80) >= $40 then
-                            Tint($FF, $FF, $FF, $C0 - (GameTicks div 16) mod $40)
-                        else
-                            Tint($FF, $FF, $FF, $80 + (GameTicks div 16) mod $40);
-                        end;
-                    DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
-                    Untint();
+                // pulsating transparency
+                    if ((GameTicks div 16) mod $80) >= $40 then
+                        Tint($FF, $FF, $FF, $C0 - (GameTicks div 16) mod $40)
+                    else
+                        Tint($FF, $FF, $FF, $80 + (GameTicks div 16) mod $40);
                     end;
+                DrawSprite(PosSprite, TargetCursorPoint.X - (SpritesData[PosSprite].Width shr 1), cScreenHeight - TargetCursorPoint.Y - (SpritesData[PosSprite].Height shr 1),i);
+                Untint();
                 end;
-        //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
-        DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
-        end
+            end;
+    //DrawSprite(sprArrow, TargetCursorPoint.X, cScreenHeight - TargetCursorPoint.Y, (RealTicks shr 6) mod 8)
+    DrawTextureF(SpritesData[sprArrow].Texture, cDefaultZoomLevel / cScaleFactor, TargetCursorPoint.X + round(SpritesData[sprArrow].Width / cScaleFactor), cScreenHeight + round(SpritesData[sprArrow].Height / cScaleFactor) - TargetCursorPoint.Y, (RealTicks shr 6) mod 8, 1, SpritesData[sprArrow].Width, SpritesData[sprArrow].Height);
     end;
 
 // debug stuff

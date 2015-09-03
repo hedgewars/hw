@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -247,13 +247,10 @@ if TeamsArray[t] <> nil then
             HHGear:= hh^.Gear;
             x:= hwRound(HHGear^.X) + WorldDx;
             y:= hwRound(HHGear^.Y) + WorldDy - 2;
-            if (SpeechHogNumber <> c) or ((RealTicks and 512) < 256) then
-                begin
-                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x - fSprOff, y, 0, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
-                DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x + fSprOff, y, 1, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
-                DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
-                end
-            else
+            DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x - fSprOff, y, 0, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+            DrawTextureF(SpritesData[sprFrame].Texture, 0.5, x + fSprOff, y, 1, 1, SpritesData[sprFrame].Width, SpritesData[sprFrame].Height);
+            DrawTextureF(SpritesData[sprBigDigit].Texture, 0.5, x, y, c, 1, sprW, sprH);
+            if SpeechHogNumber = c then
                 DrawCircle(x, y, 20, 3, 0, $FF, $FF, $80);
             end;
         until (i > cMaxHHIndex);
@@ -749,32 +746,39 @@ begin
                 amRubber,
                 amGirder: begin
                     DrawSpriteRotated(sprHandConstruction, hx, hy, sign, aangle);
-                    if WorldEdge = weWrap then
+                    if cBuildMaxDist = cDefaultBuildMaxDist then
                         begin
-                        if hwRound(Gear^.X) < LongInt(leftX) + 256 then
-                            DrawSpriteClipped(sprGirder,
-                                            rightX+(ox-leftX)-256,
-                                            oy-256,
-                                            LongInt(topY)+WorldDy,
-                                            LongInt(rightX)+WorldDx,
-                                            cWaterLine+WorldDy,
-                                            LongInt(leftX)+WorldDx);
-                        if hwRound(Gear^.X) > LongInt(rightX) - 256 then
-                            DrawSpriteClipped(sprGirder,
-                                            leftX-(rightX-ox)-256,
-                                            oy-256,
-                                            LongInt(topY)+WorldDy,
-                                            LongInt(rightX)+WorldDx,
-                                            cWaterLine+WorldDy,
-                                            LongInt(leftX)+WorldDx)
+                        if WorldEdge = weWrap then
+                            begin
+                            if hwRound(Gear^.X) < LongInt(leftX) + 256 then
+                                DrawSpriteClipped(sprGirder,
+                                                rightX+(ox-leftX)-256,
+                                                oy-256,
+                                                LongInt(topY)+WorldDy,
+                                                LongInt(rightX)+WorldDx,
+                                                cWaterLine+WorldDy,
+                                                LongInt(leftX)+WorldDx);
+                            if hwRound(Gear^.X) > LongInt(rightX) - 256 then
+                                DrawSpriteClipped(sprGirder,
+                                                leftX-(rightX-ox)-256,
+                                                oy-256,
+                                                LongInt(topY)+WorldDy,
+                                                LongInt(rightX)+WorldDx,
+                                                cWaterLine+WorldDy,
+                                                LongInt(leftX)+WorldDx)
+                            end;
+                        DrawSpriteClipped(sprGirder,
+                                        ox-256,
+                                        oy-256,
+                                        LongInt(topY)+WorldDy,
+                                        LongInt(rightX)+WorldDx,
+                                        cWaterLine+WorldDy,
+                                        LongInt(leftX)+WorldDx)
+                        end
+                    else if cBuildMaxDist > 0 then
+                        begin
+                            DrawCircle(hx, hy, cBuildMaxDist, 3, $FF, 0, 0, $80);
                         end;
-                    DrawSpriteClipped(sprGirder,
-                                    ox-256,
-                                    oy-256,
-                                    LongInt(topY)+WorldDy,
-                                    LongInt(rightX)+WorldDx,
-                                    cWaterLine+WorldDy,
-                                    LongInt(leftX)+WorldDx)
                     end;
                 amBee: DrawSpriteRotatedF(sprHandBee, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
                 amFlamethrower: DrawSpriteRotatedF(sprHandFlamethrower, hx, hy, (RealTicks div 125) mod 4, sign, aangle);
@@ -1384,12 +1388,12 @@ begin
                             Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF)
                         else
                             Tint(Gear^.Hedgehog^.Team^.Clan^.Color shl 8 or max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
-                        DrawSprite(sprTardis, x-24, y-63,0);
+                        DrawSprite(sprTardis, x-25, y-64,0);
                         if Gear^.Pos = 2 then
                             untint
                         else
                             Tint($FF,$FF,$FF,max($00, round(Gear^.Power * (1-abs(0.5 - (GameTicks mod 2000) / 2000)))));
-                        DrawSprite(sprTardis, x-24, y-63,1);
+                        DrawSprite(sprTardis, x-25, y-64,1);
                         if Gear^.Pos <> 2 then
                             untint
 (*

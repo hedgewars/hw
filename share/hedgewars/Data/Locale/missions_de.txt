@@ -31,7 +31,7 @@ User_Mission_-_Spooky_Tree.desc="Viele Kisten hier draußen. Ich hoffe jedenfall
 User_Mission_-_Bamboo_Thicket.name=Mission: Bambusdickicht
 User_Mission_-_Bamboo_Thicket.desc="Tod von oben."
 
-User_Mission_-_That_Sinking_Feeling.name=Mission: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.name=Mission: Land unter
 User_Mission_-_That_Sinking_Feeling.desc="Hier steht einen das Wasser ganz schön schnell bis zum Halse. Viele sind hieran gescheitert. Kannst du alle Igel retten?"
 
 User_Mission_-_Newton_and_the_Hammock.name=Mission: Newton und die Hängematte
@@ -75,4 +75,13 @@ Target_Practice_-_Grenade_hard.desc="Das ist nichts für Grünschnäbel! Wir wer
 
 ClimbHome.name=Herausforderung: Nach Hause klettern
 ClimbHome.desc="Du bist weit von Zuhause weg und das Wasser steigt ständig. Klettere so hoch, wie du kannst!"
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Herausforderung: Seilliebe
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Zeig deine Liebe zum Seilschwingen, sammle ein paar wenige Kisten auf dieser kleinen Karte ein."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Herausforderung: Seile und Kisten
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Nimm dein Seil, und sammle alle Kisten auf dieser mittelgroßen Karte ein."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Herausforderung: Der Kunde ist König
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Zeig, dass du dem Titel eines Königs würdig bist und sammle alle Kisten so schnell wie möglich mit deinem Seil auf dieser großen Karte ein."
 

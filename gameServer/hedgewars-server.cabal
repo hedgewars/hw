@@ -33,7 +33,7 @@ Executable hedgewars-server
     utf8-string,
     SHA,
     entropy,
-    zlib
+    zlib >= 0.5.3 && < 0.6
 
   if !os(windows)
     build-depends: unix

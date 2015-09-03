@@ -1,6 +1,6 @@
  (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -665,7 +665,7 @@ begin
                 begin
                 if (not hasGone) and isGoneFlagPendingToBeSet then
                     begin
-                    AddChatString('** '+ TeamName + ' is gone'); // TODO: localize
+                    AddChatString(#7 + '* '+ TeamName + ' is gone'); // TODO: localize
                     if not CurrentTeam^.ExtDriven then SendIPC(_S'f' + s);
                     hasGone:= true;
                     skippedTurns:= 0;
@@ -704,7 +704,7 @@ begin
         with TeamsArray[t]^ do
             if hasGone then
                 begin
-                AddChatString('** '+ TeamName + ' is back');
+                AddChatString(#8 + '* '+ TeamName + ' is back');
                 if not CurrentTeam^.ExtDriven then SendIPC(_S'g' + s);
                 hasGone:= false;
 
@@ -732,6 +732,8 @@ begin
 // avoid compiler hint
 s:= s;
 
+isPaused:= false;
+
 t:= 0;
 while t < TeamsCount do
     begin
@@ -739,7 +741,7 @@ while t < TeamsCount do
     inc(t)
     end;
 
-AddChatString('** Good-bye!');
+AddChatString(#7 + '* Good-bye!');
 RecountAllTeamsHealth();
 end;
 

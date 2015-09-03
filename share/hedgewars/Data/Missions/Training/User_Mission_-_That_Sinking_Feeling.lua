@@ -20,14 +20,15 @@ function onPrecise()
 		genCounter = 0
 		FollowGear(CurrentHedgehog)
 		AddCaption(loc("Good luck out there!"))
-		ShowMission(loc("That Sinking Feeling"), loc("User Challenge"), loc("Save as many hapless hogs as possible!"), 4, 0)
+		ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!"), 4, 0)
+		SetInputMask(0xFFFFFFFF)
 	end
 end
 
 function onGameInit()
 
 	Seed = 0
-	GameFlags = gfInfAttack + gfInvulnerable
+	GameFlags = gfInfAttack + gfInvulnerable + gfOneClanMode
 	TurnTime = 90000
 	CaseFreq = 0
 	MinesNum = 0
@@ -38,10 +39,7 @@ function onGameInit()
 	Theme = "City"
 	SuddenDeathTurns = 1
 
-	AddTeam(loc("Nameless Heroes"), 14483456, "Simple", "Island", "Default")
-	player = AddHog(loc("The Nameless One"), 0, 1, "NoHat")
-
-	AddTeam(loc("Hapless Hogs"), 	1175851, "Simple", "Island", "Default")
+	AddTeam(loc("Hapless Hogs"), 14483456, "Simple", "Island", "Default")
 	hh[0] = AddHog(loc("Sinky"), 1, 100, "fr_lemon")
 	hh[1] = AddHog(loc("Drowner"), 1, 100, "fr_orange")
 	hh[2] = AddHog(loc("Heavy"), 1, 100, "dish_Teapot")
@@ -50,6 +48,9 @@ function onGameInit()
 	hh[5] = AddHog(loc("Careless"), 1, 100, "StrawHatEyes")
 	hh[6] = AddHog(loc("Sponge"), 1, 100, "sf_chunli")
 	hh[7] = AddHog(loc("Deadweight"), 1, 100, "dish_Teacup")
+
+	AddTeam(loc("Nameless Heroes"), 14483456, "Simple", "Island", "Default", "cm_crossedswords")
+	player = AddHog(loc("The Nameless One"), 0, 1, "NoHat")
 
 	SetGearPosition(player, 3992, 733)
 	SetGearPosition(hh[0], 938, 1369)
@@ -61,12 +62,15 @@ function onGameInit()
 	SetGearPosition(hh[6], 2191, 810)
 	SetGearPosition(hh[7], 3799, 945)
 
+	-- Disable all input except [Precise] for the intro
+	SetInputMask(gmPrecise)
 end
 
 
 function onGameStart()
+	SendHealthStatsOff()
 
-	ShowMission(loc("That Sinking Feeling"), loc("User Challenge"), loc("Save as many hapless hogs as possible!"), 4, 1)
+	ShowMission(loc("That Sinking Feeling"), loc("Challenge"), loc("Save as many hapless hogs as possible!"), 4, 1)
 
 	HogTurnLeft(hh[0], false)
 	HogTurnLeft(hh[1], true)
@@ -193,6 +197,7 @@ function onGameTick()
 				introStage = 110
 				FollowGear(CurrentHedgehog)
 				ShowMission(loc("That Sinking Feeling"), loc("User Challenge"), loc("Save as many hapless hogs as possible!"), 4, 0)
+				SetInputMask(0xFFFFFFFF)
 			end
 
 		end
@@ -211,24 +216,33 @@ function onGameTick()
 
 			if (waterPix >= 1615) and (GameOver == false) then
 				GameOver = true
-				SetHealth(player, 0)
-				TurnTimeLeft = 1
-				ShowMission(loc("That Sinking Feeling"), loc("MISSION SUCCESS"), loc("You saved") .. " " .. hhCount .. " " .. loc("Hapless Hogs") .."!", 0, 0)
+				AddCaption("The flood has stopped! Challenge over.")
+				SendStat(siGameResult, loc("Challenge completed!"))
+				SendStat(siPlayerKills, tostring(hhCount), loc("Nameless Heroes"))
+				SendStat(siPointType, "rescues")
 
-				if hhCount == 8 then
-					AddCaption(loc("Achievement Unlocked") .. ": " .. loc("Lively Lifeguard"),0xffba00ff,capgrpMessage2)
+				-- Do not count drowning hedgehogs
+				local hhLeft = hhCount
+				for i=1,#hh do
+					local isDrowning = band(GetState(hh[i]),gstDrowning) ~= 0
+					if isDrowning then
+						hhLeft = hhLeft - 1
+					end
 				end
+
+				SendStat(siCustomAchievement, string.format(loc("You saved %d of 8 Hapless Hogs."), hhLeft))
+
+				if hhLeft == 8 then
+					AddCaption(loc("Achievement obtained: Lively Lifeguard"),0xffba00ff,capgrpMessage2)
+					SendStat(siCustomAchievement, loc("You have obtained an achievement: Lively Lifeguard"))
+				end
+				EndGame()
 
 			end
 
 		end
 
 	end
-
-	if TurnTimeLeft == 1 then
-		SetHealth(player, 0)
-	end
-
 end
 
 
@@ -253,17 +267,27 @@ end
 function onGearDelete(gear)
 
 	if GetGearType(gear) == gtHedgehog then
-		if GetHogTeamName(gear) == "Hapless Hogs" then
+		if GetHogTeamName(gear) == loc("Hapless Hogs") then
 			hhCount = hhCount - 1
-			AddCaption(hhCount .. loc(" Hapless Hogs left!"))
+			AddCaption(string.format(loc("%d Hapless Hogs left"), hhCount))
 		end
 	end
 
 	if ((gear == player) or (hhCount == 0)) and (GameOver == false) then
 		SetHealth(player, 0)
-		TurnTimeLeft = 1
-		ShowMission(loc("That Sinking Feeling"), loc("MISSION FAILED"), loc("Oh no! Just try again!"), -amSkip, 0)
+		AddCaption(loc("Disqualified!"))
+		if gear == player then
+			SendStat(siCustomAchievement, loc("Your hedgehog died!"))
+			SendStat(siCustomAchievement, loc("You must survive the flood in order to score."))
+		else
+			SendStat(siCustomAchievement, loc("You haven't rescued anyone."))
+		end
+		SendStat(siPlayerKills, "0", loc("Nameless Heroes"))
+		SendStat(siPointType, "points")
+
+		SendStat(siGameResult, loc("Disqualified!"))
 		GameOver = true
+		EndGame()
 	end
 
 end

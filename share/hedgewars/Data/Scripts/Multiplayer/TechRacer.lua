@@ -1,12 +1,11 @@
 ------------------------------------------
--- TECH RACER v0.6
+-- TECH RACER v0.8
 -----------------------------------------
 
 --------------
 -- TO DO
 --------------
--- allow scrolling of maps
--- place waypoints for the registered maps automatically.
+-- allow scrolling of maps (was going to add this in the engine itself, but it can be done now by refreshing preview)
 
 --------------
 --0.2
@@ -46,6 +45,28 @@
 --0.6
 --------------
 -- move 1 line of code :D (allows loading of HWMAP points to actually work)
+
+--------------
+--0.7
+--------------
+-- allow waypoints to be loaded automatically via TechMaps or HWMAP
+-- (temporarily?) remove ability to place waypoints manually
+-- break stuff?
+
+--------------
+--0.8
+--------------
+-- should (more or less) work "out of the box" now
+-- generate map previews for level
+-- randomly assign a map in the case of no map param
+-- no longer allow custom ammosets (ammo should be specified by map so that records can be valid, though we probably still need to completely limit gameflags)
+
+--------------
+--0.9
+--------------
+-- added variable portal limiter (and effects) from Escape script
+-- allow variable ufoFuel (nil is default, 2000 is infinite)
+-- disallow specifying fuel in params (do this in TechMaps or HedgeEditor please)
 
 -----------------------------
 -- SCRIPT BEGINS
@@ -141,8 +162,8 @@ local utilArray =
 
 local activationStage = 0
 local jet = nil
-local infUFO = nil
-
+portalDistance = 5000 -- 15
+ufoFuel = 0
 local fMod = 1000000 -- 1
 local roundLimit = 3
 local roundNumber = 0
@@ -163,7 +184,7 @@ local specialPointsY = {}
 local specialPointsFlag = {}
 local specialPointsCount = 0
 
-mapID = 22
+mapID = nil
 
 --------------------------
 -- hog and team tracking variales
@@ -202,7 +223,7 @@ local wpCol = {}
 local wpActive = {}
 local wpRad = 450 --75
 local wpCount = 0
-local wpLimit = 8
+local wpLimit = 20
 
 local usedWeapons = {}
 
@@ -576,6 +597,26 @@ function ClearMap()
 
 end
 
+function CallBob(x,y)
+	if not racerActive then
+        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
+
+            wpX[wpCount] = x
+            wpY[wpCount] = y
+            wpCol[wpCount] = 0xffffffff
+            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
+
+            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
+
+            wpCount = wpCount + 1
+
+            --AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
+        end
+    end
+end
+
+
+
 function HandleFreshMapCreation()
 
 	-- the boom stage, boom girders, reset ammo, and delete other map objects
@@ -594,6 +635,15 @@ function HandleFreshMapCreation()
 			LoadMap(2000)
 		else
 			LoadMap(mapID)
+		end
+
+		for i = 0,(wpCount-1) do
+			DeleteVisualGear(wpCirc[i])
+		end
+		wpCount = 0
+
+		for i = 1, techCount-1 do
+			CallBob(techX[i],techY[i])
 		end
 
 		activationStage = 200
@@ -625,28 +675,32 @@ function onParameters()
 
 	parseParams()
 	mapID = tonumber(params["m"])
-	infUFO = params["ufo"]
 
+	--ufoFuel = tonumber(params["ufoFuel"])
 	roundLimit = tonumber(params["rounds"])
 
 	if (roundLimit == 0) or (roundLimit == nil) then
 		roundLimit = 3
 	end
 
-end
+	if mapID == nil then
+		mapID = 2 + GetRandom(7)
+	end
 
-function onPreviewInit()
-	onGameInit()
 end
 
 function onGameInit()
+
+		if mapID == nil then
+			mapID = 2 + GetRandom(7)
+		end
 
 		Theme = "Cave"
 
 		MapGen = mgDrawn
 		TemplateFilter = 0
 
-		EnableGameFlags(gfInfAttack, gfDisableWind)
+		EnableGameFlags(gfInfAttack, gfDisableWind, gfBorder)
 		DisableGameFlags(gfSolidLand)
 		CaseFreq = 0
         TurnTime = 90000
@@ -766,6 +820,10 @@ function InterpretPoints()
 		elseif specialPointsFlag[i] == 98 then
 			--PlaceStruc("weaponfilter")]]
 
+		elseif specialPointsFlag[i] == 98 then
+			portalDistance = specialPointsX[i]
+			ufoFuel = specialPointsY[i]
+
 		-- Normal Girders
 		elseif specialPointsFlag[i] == 100 then
 			PlaceSprite(specialPointsX[i], specialPointsY[i], sprAmGirder, 0, 4294967295, nil, nil, nil, lfNormal)
@@ -832,7 +890,7 @@ function InterpretPoints()
 
 		-- Waypoints
 		else -- 0 / no value
-			PlaceWayPoint(specialPointsX[i], specialPointsY[i])
+			CallBob(specialPointsX[i], specialPointsY[i])
 		end
 
 	end
@@ -869,25 +927,12 @@ function onGameStart()
 
         TryRepositionHogs()
 
+		activationStage = 2
+		HandleFreshMapCreation()
+
 end
 
-function PlaceWayPoint(x,y)
-    if not racerActive then
-        if wpCount == 0 or wpX[wpCount - 1] ~= x or wpY[wpCount - 1] ~= y then
 
-            wpX[wpCount] = x
-            wpY[wpCount] = y
-            wpCol[wpCount] = 0xffffffff
-            wpCirc[wpCount] = AddVisualGear(wpX[wpCount],wpY[wpCount],vgtCircle,0,true)
-
-            SetVisualGearValues(wpCirc[wpCount], wpX[wpCount], wpY[wpCount], 20, 100, 1, 10, 0, wpRad, 5, wpCol[wpCount])
-
-            wpCount = wpCount + 1
-
-            AddCaption(loc("Waypoint placed.") .. " " .. loc("Available points remaining: ") .. (wpLimit-wpCount))
-        end
-    end
-end
 
 function onNewTurn()
 
@@ -907,7 +952,7 @@ function onNewTurn()
         trackTime = 0
 
         currCount = 0 -- hopefully this solves problem
-        AddAmmo(CurrentHedgehog, amAirAttack, 0)
+    --    AddAmmo(CurrentHedgehog, amAirAttack, 0)
         gTimer = 0
 
         -- Set the waypoints to unactive on new round
@@ -919,21 +964,21 @@ function onNewTurn()
 
         -- Handle Starting Stage of Game
         if (gameOver == false) and (gameBegun == false) then
-                if wpCount >= 3 then
+               -- if wpCount >= 3 then
                         gameBegun = true
-						--activationStage = 200
+						--  --[[activationStage = 200]]
                         roundNumber = 0
                         firstClan = GetHogClan(CurrentHedgehog)
                         ShowMission(loc("RACER"),
                         loc("GAME BEGUN!!!"),
                         loc("Complete the track as fast as you can!"), 2, 4000)
-                else
-                        ShowMission(loc("RACER"),
-                        loc("NOT ENOUGH WAYPOINTS"),
-                        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
-                        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
-						SetWeapon(amAirAttack)
-                end
+                --else
+                --        ShowMission(loc("RACER"),
+                --        loc("NOT ENOUGH WAYPOINTS"),
+                --        loc("Place more waypoints using the 'Air Attack' weapon."), 2, 4000)
+                --        AddAmmo(CurrentHedgehog, amAirAttack, 4000)
+				--		SetWeapon(amAirAttack)
+               -- end
         end
 
         if gameOver == true then
@@ -951,9 +996,13 @@ end
 
 function onGameTick20()
 
-		if (jet ~= nil) and (infUFO == "true") then
-			SetHealth(jet, 2000)
+		if (jet ~= nil) and (ufoFuel ~= 0) then
+			if ufoFuel == 2000 then
+				SetHealth(jet, 2000)
+			end
 		end
+
+		runOnGears(PortalEffects)
 
         -- airstrike detected, convert this into a potential waypoint spot
         if cGear ~= nil then
@@ -969,7 +1018,7 @@ function onGameTick20()
                 AddCaption(loc("Please place the way-point further from the waterline."))
                 PlaySound(sndDenied)
             else
-                PlaceWayPoint(x, y)
+                CallBob(x, y)
                 if wpCount == wpLimit then
                     AddCaption(loc("Race complexity limit reached."))
                     DisableTumbler()
@@ -1066,6 +1115,61 @@ function onGameTick20()
 
 end
 
+-- handle short range portal gun
+function PortalEffects(gear)
+
+	if GetGearType(gear) == gtPortal then
+
+		tag = GetTag(gear)
+		if tag == 0 then
+			col = 0xfab02aFF -- orange ball
+		elseif tag == 1 then
+			col = 0x00FF00FF -- orange portal
+		elseif tag == 2 then
+			col = 0x364df7FF  -- blue ball
+		elseif tag == 3 then
+			col = 0xFFFF00FF  -- blue portal
+		end
+
+		if (tag == 0) or (tag == 2) then -- i.e ball form
+			tempE = AddVisualGear(GetX(gear), GetY(gear), vgtDust, 0, true)
+			g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+			SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, 1, g9, col )
+
+			remLife = getGearValue(gear,"life")
+			remLife = remLife - 1
+			setGearValue(gear, "life", remLife)
+
+			if remLife == 0 then
+
+				tempE = AddVisualGear(GetX(gear)+15, GetY(gear), vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear)-15, GetY(gear), vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear), GetY(gear)+15, vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+				tempE = AddVisualGear(GetX(gear), GetY(gear)-15, vgtSmoke, 0, true)
+				g1, g2, g3, g4, g5, g6, g7, g8, g9, g10 = GetVisualGearValues(tempE)
+				SetVisualGearValues(tempE, g1, g2, g3, g4, g5, g6, g7, g8, g9, col )
+
+
+				PlaySound(sndVaporize)
+				DeleteGear(gear)
+
+			end
+
+		end
+
+	end
+
+end
+
 function onGearResurrect(gear)
 
         AddVisualGear(GetX(gear), GetY(gear), vgtBigExplosion, 0, false)
@@ -1082,6 +1186,7 @@ function isATrackedGear(gear)
 		(GetGearType(gear) == gtTarget) or
 		(GetGearType(gear) == gtFlame) or
 		(GetGearType(gear) == gtExplosives) or
+		(GetGearType(gear) == gtPortal) or
 		(GetGearType(gear) == gtMine) or
 		(GetGearType(gear) == gtSMine) or
 		(GetGearType(gear) == gtAirMine) or
@@ -1095,21 +1200,28 @@ end
 
 function onGearAdd(gear)
 
-        if isATrackedGear(gear) then
-			trackGear(gear)
+       if isATrackedGear(gear) then
+		trackGear(gear)
+
+		if GetGearType(gear) == gtPortal then
+			setGearValue(gear,"life",portalDistance)
+		elseif GetGearType(gear) == gtHedgehog then
+            hhs[numhhs] = gear
+            numhhs = numhhs + 1
+            SetEffect(gear, heResurrectable, 1)
 		end
 
-		if GetGearType(gear) == gtHedgehog then
-                hhs[numhhs] = gear
-                numhhs = numhhs + 1
-                SetEffect(gear, heResurrectable, 1)
-        end
+	end
 
-        if GetGearType(gear) == gtAirAttack then
-                cGear = gear
-        elseif GetGearType(gear) == gtJetpack then
-			jet = gear
+	if GetGearType(gear) == gtAirAttack then
+       cGear = gear
+	elseif GetGearType(gear) == gtJetpack then
+		jet = gear
+		if (ufoFuel ~= 0) then
+			SetHealth(jet, ufoFuel)
 		end
+	end
+
 
 end
 
@@ -1167,5 +1279,17 @@ function onAchievementsDeclaration()
     end
 end
 
+function onAmmoStoreInit()
 
+	SetAmmo(amSkip, 9, 0, 0, 0)
+
+	for i = 1, #atkArray do
+		SetAmmo(atkArray[i][1], 0, 0, 0, 1)
+	end
+
+	for i = 1, #utilArray do
+		SetAmmo(utilArray[i][1], 0, 0, 0, 1)
+	end
+
+end
 

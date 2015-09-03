@@ -675,7 +675,7 @@ function SetupAmmo()
   AddAmmo(natives[1], amBazooka, 0)
   AddAmmo(natives[1], amGrenade, 0)
   AddAmmo(natives[1], amShotgun, 0)
-  AddAmmo(natives[1], amAirStrike, 0)
+  AddAmmo(natives[1], amAirAttack, 0)
   AddAmmo(natives[1], amMolotov, 0)
 end
 

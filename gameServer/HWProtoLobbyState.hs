@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,9 +82,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let isBanned = host cl `elem` roomBansList jRoom
     let clTeams =
             if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) then
-                map teamname . filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
+                filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
                 else
                 []
+    let clTeamsNames = map teamname clTeams
     return $
         if isNothing maybeRI then
             [Warning $ loc "No such room"]
@@ -101,18 +102,21 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             (
                 MoveToRoom jRI
-                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom, teamsInGame = fromIntegral $ length clTeams})
+                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom
+                                        , teamsInGame = fromIntegral $ length clTeams
+                                        , clientClan = teamcolor `fmap` listToMaybe clTeams})
                 : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
                 : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
             )
-            ++ [ModifyRoom (\r -> let (t', g') = moveTeams clTeams . fromJust $ gameInfo r in r{gameInfo = Just g', teams = t'}) | not $ null clTeams]
+            ++ [ModifyRoom (\r -> let (t', g') = moveTeams clTeamsNames . fromJust $ gameInfo r in r{gameInfo = Just g', teams = t'}) | not $ null clTeams]
             ++ [AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
             ++ [sendStateFlags cl jRoomClients | not $ null jRoomClients]
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
             ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
-            ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeams
+            ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeamsNames
+            ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 
         where
         moveTeams :: [B.ByteString] -> GameInfo -> ([TeamInfo], GameInfo)
@@ -163,65 +167,52 @@ handleCmd_lobby ("RND":rs) = do
     ---------------------------
     -- Administrator's stuff --
 
-handleCmd_lobby ["KICK", kickNick] = do
+handleCmd_lobby ["KICK", kickNick] = serverAdminOnly $ do
     (ci, _) <- ask
-    cl <- thisClient
     kickId <- clientByNick kickNick
-    return [KickClient $ fromJust kickId | isAdministrator cl && isJust kickId && fromJust kickId /= ci]
+    return [KickClient $ fromJust kickId | isJust kickId && fromJust kickId /= ci]
 
 
-handleCmd_lobby ["BAN", banNick, reason, duration] = do
+handleCmd_lobby ["BAN", banNick, reason, duration] = serverAdminOnly $ do
     (ci, _) <- ask
-    cl <- thisClient
     banId <- clientByNick banNick
-    return [BanClient (readInt_ duration) reason (fromJust banId) | isAdministrator cl && isJust banId && fromJust banId /= ci]
+    return [BanClient (readInt_ duration) reason (fromJust banId) | isJust banId && fromJust banId /= ci]
 
-handleCmd_lobby ["BANIP", ip, reason, duration] = do
-    cl <- thisClient
-    return [BanIP ip (readInt_ duration) reason | isAdministrator cl]
+handleCmd_lobby ["BANIP", ip, reason, duration] = serverAdminOnly $
+    return [BanIP ip (readInt_ duration) reason]
 
-handleCmd_lobby ["BANNICK", n, reason, duration] = do
-    cl <- thisClient
-    return [BanNick n (readInt_ duration) reason | isAdministrator cl]
+handleCmd_lobby ["BANNICK", n, reason, duration] = serverAdminOnly $
+    return [BanNick n (readInt_ duration) reason]
 
-handleCmd_lobby ["BANLIST"] = do
-    cl <- thisClient
-    return [BanList | isAdministrator cl]
+handleCmd_lobby ["BANLIST"] = serverAdminOnly $
+    return [BanList]
 
 
-handleCmd_lobby ["UNBAN", entry] = do
-    cl <- thisClient
-    return [Unban entry | isAdministrator cl]
+handleCmd_lobby ["UNBAN", entry] = serverAdminOnly $
+    return [Unban entry]
 
 
-handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{serverMessage = newMessage}) | isAdministrator cl]
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_NEW", newMessage] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{serverMessage = newMessage})]
 
-handleCmd_lobby ["SET_SERVER_VAR", "MOTD_OLD", newMessage] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage}) | isAdministrator cl]
+handleCmd_lobby ["SET_SERVER_VAR", "MOTD_OLD", newMessage] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{serverMessageForOldVersions = newMessage})]
 
-handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = do
-    cl <- thisClient
-    return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | isAdministrator cl && readNum > 0]
+handleCmd_lobby ["SET_SERVER_VAR", "LATEST_PROTO", protoNum] = serverAdminOnly $
+    return [ModifyServerInfo (\si -> si{latestReleaseVersion = readNum}) | readNum > 0]
     where
         readNum = readInt_ protoNum
 
-handleCmd_lobby ["GET_SERVER_VAR"] = do
-    cl <- thisClient
-    return [SendServerVars | isAdministrator cl]
+handleCmd_lobby ["GET_SERVER_VAR"] = serverAdminOnly $
+    return [SendServerVars]
 
-handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = do
-    cl <- thisClient
-    return [ClearAccountsCache | isAdministrator cl]
+handleCmd_lobby ["CLEAR_ACCOUNTS_CACHE"] = serverAdminOnly $
+    return [ClearAccountsCache]
 
-handleCmd_lobby ["RESTART_SERVER"] = do
-    cl <- thisClient
-    return [RestartServer | isAdministrator cl]
+handleCmd_lobby ["RESTART_SERVER"] = serverAdminOnly $
+    return [RestartServer]
 
-handleCmd_lobby ["STATS"] = do
-    cl <- thisClient
-    return [Stats | isAdministrator cl]
+handleCmd_lobby ["STATS"] = serverAdminOnly $
+    return [Stats]
 
 handleCmd_lobby _ = return [ProtocolError "Incorrect command (state: in lobby)"]

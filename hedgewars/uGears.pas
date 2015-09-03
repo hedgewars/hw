@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -723,7 +723,7 @@ var i, t, p, j: LongInt;
 begin
 if (GameFlags and gfPlaceHog) <> 0 then
     PlacingHogs:= true;
-if (GameFlags and gfDivideTeams) <> 0 then
+if (ClansCount = 2) and ((GameFlags and gfDivideTeams) <> 0) then
     begin
     t:= 0;
     TryDo(ClansCount = 2, 'More or less than 2 clans on map in divided teams mode!', true);
@@ -981,7 +981,7 @@ begin
                 Gear^.FrameTicks:= x
                 end;
             //ParseCommand('/say [' + hh^.Name + '] '+text, true)
-            AddChatString(#1+'[' + HH^.Name + '] '+text);
+            AddChatString(#9+'[' + HH^.Name + '] '+text);
             end
         end
     else if (x >= 4) then

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Igor Ulyanov <iulyanov@gmail.com>
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,7 +73,7 @@ class HWMapContainer : public QWidget
     public slots:
         void askForGeneratedPreview();
         void setSeed(const QString & seed);
-        void setScript(const QString & script);
+        void setScript(const QString & script, const QString & scriptparam);
         void setMap(const QString & map);
         void setTheme(const QString & theme);
         void setTemplateFilter(int);
@@ -131,6 +131,7 @@ class HWMapContainer : public QWidget
         HWMap* pMap;
         QString m_seed;
         QString m_script;
+        QString m_scriptparam;
         QPushButton* seedSet;
         QLabel* seedLabel;
         int hhLimit;

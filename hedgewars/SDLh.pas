@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,20 +51,6 @@ interface
     type PByte = ^Byte;
     type PInteger = ^Integer;
     type PLongInt = ^LongInt;
-{$ENDIF}
-
-{$IFDEF DARWIN}
-    {$IFNDEF HWLIBRARY}
-        {$linklib SDLmain}
-        {$PASCALMAINNAME SDL_main}
-        {$linkframework Cocoa}
-        {$linkframework SDL}
-        {$linkframework SDL_net}
-        {$linkframework SDL_image}
-        {$linkframework SDL_ttf}
-        {$linkframework SDL_mixer}
-        {$linkframework OpenGL}
-    {$ENDIF}
 {$ENDIF}
 
 

@@ -326,6 +326,7 @@ void HWMapContainer::askForGeneratedPreview()
                    getMazeSize(),
                    getDrawnMapData(),
                    m_script,
+                   m_scriptparam,
 		           m_mapFeatureSize
                   );
 
@@ -431,9 +432,10 @@ void HWMapContainer::setSeed(const QString & seed)
         updatePreview();
 }
 
-void HWMapContainer::setScript(const QString & script)
+void HWMapContainer::setScript(const QString & script, const QString & scriptparam)
 {
     m_script = script;
+    m_scriptparam = scriptparam;
     if ((m_mapInfo.type == MapModel::GeneratedMap)
             || (m_mapInfo.type == MapModel::GeneratedMaze)
             || (m_mapInfo.type == MapModel::GeneratedPerlin)

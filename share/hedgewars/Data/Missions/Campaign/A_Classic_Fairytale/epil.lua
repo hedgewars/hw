@@ -378,7 +378,7 @@ function onGearDelete(gear)
 end
 
 function onAmmoStoreInit()
-  SetAmmo(amAirStrike, 9, 0, 0, 0)
+  SetAmmo(amAirAttack, 9, 0, 0, 0)
   SetAmmo(amBaseballBat, 9, 0, 0, 0)
   SetAmmo(amBazooka, 9, 0, 0, 0)
   SetAmmo(amBlowTorch, 9, 0, 0, 0)

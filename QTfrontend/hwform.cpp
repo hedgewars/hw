@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -164,14 +164,12 @@ HWForm::HWForm(QWidget *parent, QString styleSheet)
     ui.pageVideos->init(config);
 #endif
 
-#ifdef __APPLE__
+#if defined(__APPLE__) && defined(SPARKLE_ENABLED)
     if (config->isAutoUpdateEnabled())
     {
         AutoUpdater* updater = NULL;
 
-#ifdef SPARKLE_ENABLED
         updater = new SparkleAutoUpdater();
-#endif
         if (updater)
         {
             updater->checkForUpdates();

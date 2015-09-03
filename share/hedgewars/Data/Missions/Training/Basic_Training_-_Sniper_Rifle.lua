@@ -85,7 +85,7 @@ function onGameInit()
 	-- The map to be played
 	Map = "Ropes"
 	-- The theme to be used
-	Theme = "City"
+	Theme = "Golf"
 
 	-- Create the player team
 	AddTeam(loc("Sniperz"), 14483456, "Simple", "Island", "Default")
@@ -102,7 +102,7 @@ function onGameStart()
 	SendHealthStatsOff()
 	-- Spawn the first target.
 	spawnTarget(860,1020)
-	
+
 	-- Show some nice mission goals.
 	-- Parameters are: caption, sub caption, description,
 	-- extra text, icon and time to show.
@@ -178,12 +178,12 @@ end
 -- This function is called before a gear is destroyed.
 -- We use it to count the number of targets destroyed.
 function onGearDelete(gear)
-    
+
 	if GetGearType(gear) == gtCase then
 		game_lost = true
 		return
 	end
-	
+
 	if (GetGearType(gear) == gtTarget) then
 		-- remember when the target was hit for adjusting the camera
 		last_hit_time = TurnTimeLeft
@@ -339,7 +339,7 @@ function generateStats()
 		SendStat(siCustomAchievement, string.format(loc("You had %.2fs remaining on the clock (+%d points)."), (time_goal/1000), end_score_time))
 	else
 		SendStat(siGameResult, loc("You lose!"))
-	
+
 		SendStat(siCustomAchievement, string.format(loc("You have destroyed %d of %d targets (+%d points)."), score, score_goal, end_score_targets))
 		SendStat(siCustomAchievement, string.format(loc("You have made %d shots."), shots))
 		end_score_overall = end_score_targets

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@ procedure AddObjects();
 procedure FreeLandObjects();
 procedure LoadThemeConfig;
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 procedure BlitImageUsingMask(cpX, cpY: Longword;  Image, Mask: PSDL_Surface);
 procedure AddOnLandObjects(Surface: PSDL_Surface);
 procedure SetLand(var LandWord: Word; Pixel: LongWord); inline;
@@ -92,12 +93,17 @@ end;
 
 procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface); inline;
 begin
-    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0);
+    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, 0, false);
 end;
 
-procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word);
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word); inline;
+begin
+    BlitImageAndGenerateCollisionInfo(cpX, cpY, Width, Image, LandFlags, false);
+end;
+
+procedure BlitImageAndGenerateCollisionInfo(cpX, cpY, Width: Longword; Image: PSDL_Surface; LandFlags: Word; Flip: boolean);
 var p: PLongwordArray;
-    x, y: Longword;
+    px, x, y: Longword;
     bpp: LongInt;
 begin
 WriteToConsole('Generating collision info... ');
@@ -115,21 +121,29 @@ p:= Image^.pixels;
 for y:= 0 to Pred(Image^.h) do
     begin
     for x:= 0 to Pred(Width) do
-        if (p^[x] and AMask) <> 0 then
+        begin
+        // map image pixels per line backwards if in flip mode
+        if Flip then
+            px:= Pred(Image^.w) - x
+        else
+            px:= x;
+
+        if (p^[px] and AMask) <> 0 then
             begin
             if (cReducedQuality and rqBlurryLand) = 0 then
                 begin
                 if (LandPixels[cpY + y, cpX + x] = 0)
-                or (((p^[x] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
-                    LandPixels[cpY + y, cpX + x]:= p^[x];
+                or (((p^[px] and AMask) <> 0) and (((LandPixels[cpY + y, cpX + x] and AMask) shr AShift) < 255)) then
+                    LandPixels[cpY + y, cpX + x]:= p^[px];
                 end
             else
                 if LandPixels[(cpY + y) div 2, (cpX + x) div 2] = 0 then
-                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[x];
+                    LandPixels[(cpY + y) div 2, (cpX + x) div 2]:= p^[px];
 
-            if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[x] and AMask) <> 0) then
+            if (Land[cpY + y, cpX + x] <= lfAllObjMask) and ((p^[px] and AMask) <> 0) then
                 Land[cpY + y, cpX + x]:= lfObject or LandFlags
             end;
+        end;
     p:= PLongwordArray(@(p^[Image^.pitch shr 2]))
     end;
 

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -213,6 +213,7 @@ var xx, yy, newDx, newDy, lx, ly: hwFloat;
     speech: PVisualGear;
     newGear:  PGear;
     CurWeapon: PAmmo;
+    usedAmmoType: TAmmoType;
     altUse: boolean;
     elastic: hwFloat;
 begin
@@ -222,6 +223,7 @@ CurWeapon:= GetCurAmmoEntry(Gear^.Hedgehog^);
 with Gear^,
     Gear^.Hedgehog^ do
         begin
+        usedAmmoType:= CurAmmoType;
         if ((State and gstHHDriven) <> 0) and ((State and (gstAttacked or gstChooseTarget)) = 0) and (((State and gstMoving) = 0)
         or (Power > 0)
         or (CurAmmoType = amTeleport)
@@ -509,7 +511,7 @@ with Gear^,
         else
             Message:= Message and (not gmAttack);
 
-    ScriptCall('onHogAttack', ord(CurAmmoType));
+    ScriptCall('onHogAttack', ord(usedAmmoType));
     end; // of with Gear^, Gear^.Hedgehog^ do
 
     TargetPoint.X := NoPointX;

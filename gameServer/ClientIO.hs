@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,6 +55,7 @@ listenLoop sock chan ci = receiveWithBufferLoop B.empty
             unless (B.null recvBS) $ do
                 let (packets, newrecvBuf) = bs2Packets $ B.append recvBuf recvBS
                 forM_ packets sendPacket
+                when (B.length newrecvBuf > 128 * 1024) $ sendPacket ["QUIT", "Protocol violation"]
                 receiveWithBufferLoop $ B.copy newrecvBuf
 
         sendPacket packet = writeChan chan $ ClientMessage (ci, packet)

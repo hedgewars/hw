@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -176,6 +176,7 @@ var
     cElastic        : hwFloat;
     cGravity        : hwFloat;
     cGravityf       : real;
+    cBuildMaxDist   : LongInt;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
     cVampiric       : boolean;
@@ -683,8 +684,8 @@ var
             Width:  80; Height: 50; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: false; getImageDimensions: true),// sprSDSplash
             (FileName:  'SDDroplet'; Path: ptCurrTheme; AltPath: ptSuddenDeath; Texture: nil; Surface: nil;
             Width:  16; Height: 16; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprSDDroplet
-            (FileName:  'TARDIS'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
-            Width:  48; Height: 79; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprTardis
+            (FileName:  'Timebox'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
+            Width:  50; Height: 81; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHighest; getDimensions: false; getImageDimensions: true),// sprTardis
             (FileName:  'slider'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 3; Height: 17; imageWidth: 3; imageHeight: 17; saveSurf: false; priority: tpLow; getDimensions: false; getImageDimensions: false), // sprSlider
             (FileName:  'botlevels'; Path: ptGraphics; AltPath: ptNone; Texture: nil; Surface: nil;
@@ -2560,6 +2561,7 @@ begin
     cElastic                := _0_9;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
+    cBuildMaxDist           := cDefaultBuildMaxDist;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
 
@@ -2615,7 +2617,7 @@ begin
     AttackBar       := 0; // 0 - none, 1 - just bar at the right-down corner, 2 - from weapon
     cCaseFactor     := 5;  {0..9}
     cLandMines      := 4;
-    cAirMines       := 4;
+    cAirMines       := 0;
     cExplosives     := 2;
 
     GameState       := Low(TGameState);

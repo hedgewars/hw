@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,7 +50,19 @@ handleCmd ["PONG"] = do
         else
         return [ModifyClient (\c -> c{pingsQueue = pingsQueue c - 1})]
 
-handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
+handleCmd cmd = do
+    (ci, irnc) <- ask
+    let cl = irnc `client` ci
+    if logonPassed cl then
+        if isChecker cl then
+            handleCmd_checker cmd
+            else
+            handleCmd_loggedin cmd
+        else
+        handleCmd_NotEntered cmd
+
+
+handleCmd_loggedin ["CMD", parameters] = uncurry h $ extractParameters parameters
     where
         h "DELEGATE" n | not $ B.null n = handleCmd ["DELEGATE", n]
         h "SAVEROOM" n | not $ B.null n = handleCmd ["SAVEROOM", n]
@@ -79,22 +91,10 @@ handleCmd ["CMD", parameters] = uncurry h $ extractParameters parameters
         h "FORCE" msg | not $ B.null msg = handleCmd ["VOTE", upperCase msg, "FORCE"]
         h "MAXTEAMS" n | not $ B.null n = handleCmd ["MAXTEAMS", n]
         h "INFO" n | not $ B.null n = handleCmd ["INFO", n]
+        h "RESTART_SERVER" "YES" = handleCmd ["RESTART_SERVER"]
         h c p = return [Warning $ B.concat ["Unknown cmd: /", c, " ", p]]
 
         extractParameters p = let (a, b) = B.break (== ' ') p in (upperCase a, B.dropWhile (== ' ') b)
-
-
-handleCmd cmd = do
-    (ci, irnc) <- ask
-    let cl = irnc `client` ci
-    if logonPassed cl then
-        if isChecker cl then
-            handleCmd_checker cmd
-            else
-            handleCmd_loggedin cmd
-        else
-        handleCmd_NotEntered cmd
-
 
 handleCmd_loggedin ["INFO", asknick] = do
     (_, rnc) <- ask

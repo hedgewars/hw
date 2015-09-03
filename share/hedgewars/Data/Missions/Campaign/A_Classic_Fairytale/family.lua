@@ -417,7 +417,7 @@ function SetupAmmo()
   AddAmmo(cyborgs[1], amBaseballBat, 100)
   AddAmmo(cyborgs[1], amMolotov, 100)
   AddAmmo(cyborgs[1], amWatermelon, 1)
-  AddAmmo(cyborgs[1], amAirStrike, 2)
+  AddAmmo(cyborgs[1], amAirAttack, 2)
   AddAmmo(cyborgs[1], amDrillStrike, 1)
 end
 

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -127,7 +127,8 @@ begin
         ScreenFadeValue:= sfMax;
         ScreenFadeSpeed:= 5;
         
-        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or (flagDumpLand and MakeScreenshot(s, 1, 1) and MakeScreenshot(s, 1, 2)) then
+        if (not flagDumpLand and MakeScreenshot(s, 1, 0)) or
+           (flagDumpLand and MakeScreenshot(s, 1, 1) and ((cReducedQuality and rqBlurryLand <> 0) or MakeScreenshot(s, 1, 2))) then
             WriteLnToConsole('Screenshot saved: ' + s)
         else
             begin

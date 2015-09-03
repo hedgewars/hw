@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ import Utils
 
 
 dbQueryAccount =
-    "SELECT users.pass, \
+    "SELECT CASE WHEN users.status = 1 THEN users.pass ELSE '' END, \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 3), \
     \ (SELECT COUNT(users_roles.rid) FROM users_roles WHERE users.uid = users_roles.uid AND users_roles.rid = 13) \
     \ FROM users WHERE users.name = ?"
@@ -83,13 +83,12 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
---StoreAchievements (B.pack fileName) (map toPair teams) info
         StoreAchievements p fileName teams info ->
-            void $ executeMany dbConn dbQueryAchievement $ (parseStats p fileName teams) info
+            mapM_ (execute dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
 
 
-readTime = read . B.unpack . B.take 19 . B.drop 8
-
+--readTime = read . B.unpack . B.take 19 . B.drop 8
+readTime = B.take 19 . B.drop 8
 
 parseStats :: 
     Word16 

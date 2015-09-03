@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1504,6 +1504,11 @@ begin
         SetLittle(HHGear^.dX);
         HHGear^.dY := _0;
         end
+    else if Gear^.dY.isNegative and (TestCollisionYwithGear(HHGear, -1) <> 0) then
+        begin
+        Gear^.dY := cGravity;
+        HHGear^.dY := cGravity;
+        end
     else
         begin
         if CheckLandValue(hwRound(Gear^.X), hwRound(Gear^.Y + Gear^.dY + cGravity), lfLandMask) then
@@ -1914,7 +1919,9 @@ begin
                        (hwRound(hwSqr(tX) + hwSqr(tY)) < sqr(Gear^.Karma)) then
                         begin
                         Gear^.Hedgehog:= CurrentHedgehog;
+                        tmpG:= FollowGear;
                         doMakeExplosion(hwRound(Gear^.X), hwRound(Gear^.Y), Gear^.Karma, Gear^.Hedgehog, EXPLAutoSound);
+                        FollowGear:= tmpG;
                         DeleteGear(Gear);
                         exit
                         end
@@ -1929,7 +1936,8 @@ begin
                 Gear^.State:= Gear^.State and (not gstAttacking);
                 Gear^.Timer:= Gear^.WDTimer
                 end;
-            dec(Gear^.Timer);
+            if Gear^.Timer > 0 then
+                dec(Gear^.Timer);
             end
         end
     else // gsttmpFlag = 0
@@ -1953,7 +1961,7 @@ begin
     if land = 0 then land:= TestCollisionYwithGear(Gear, 2);
     if (land <> 0) and (land and lfBouncy = 0) then
         begin
-        if (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
+        if ((Gear^.State and gstMoving) <> 0) or (not isZero(Gear^.dX)) or (not isZero(Gear^.dY)) then
             begin
             PlaySound(sndRopeAttach);
             Gear^.dX:= _0;
@@ -2761,10 +2769,10 @@ begin
     if Gear^.AmmoType = amRubber then LandFlags:= lfBouncy
     else if cIce then LandFlags:= lfIce;
 
-    distFail:= ((Distance(tx - x, ty - y) > _256) and ((WorldEdge <> weWrap) or
+    distFail:= (cBuildMaxDist > 0) and ((hwRound(Distance(tx - x, ty - y)) > cBuildMaxDist) and ((WorldEdge <> weWrap) or
             (
-            (Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y) > _256) and
-            (Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y) > _256)
+            (hwRound(Distance(tx - int2hwFloat(rightX+(rx-leftX)), ty - y)) > cBuildMaxDist) and
+            (hwRound(Distance(tx - int2hwFloat(leftX-(rightX-rx)), ty - y)) > cBuildMaxDist)
             )));
     if distFail
     or (not TryPlaceOnLand(Gear^.Target.X - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Width div 2, Gear^.Target.Y - SpritesData[Ammoz[Gear^.AmmoType].PosSprite].Height div 2, Ammoz[Gear^.AmmoType].PosSprite, Gear^.State, true, LandFlags)) then
@@ -2799,11 +2807,12 @@ var
     HHGear: PGear;
 begin
     HHGear := Gear^.Hedgehog^.Gear;
-    doStepHedgehogMoving(HHGear);
+    if HHGear <> nil then doStepHedgehogMoving(HHGear);
     // if not infattack mode wait for hedgehog finish falling to collect cases
     if ((GameFlags and gfInfAttack) <> 0)
+    or (HHGear = nil)
     or ((HHGear^.State and gstMoving) = 0)
-    or (Gear^.Hedgehog^.Gear^.Damage > 0)
+    or (HHGear^.Damage > 0)
     or ((HHGear^.State and gstDrowning) = 1) then
         begin
         DeleteGear(Gear);
@@ -2813,7 +2822,7 @@ end;
 
 procedure doStepTeleportAnim(Gear: PGear);
 begin
-    if (Gear^.Hedgehog^.Gear^.Damage > 0) then
+    if (Gear^.Hedgehog^.Gear = nil) or (Gear^.Hedgehog^.Gear^.Damage > 0) then
         begin
         DeleteGear(Gear);
         AfterAttack;
@@ -2840,6 +2849,11 @@ begin
     AllInactive := false;
 
     HHGear := Gear^.Hedgehog^.Gear;
+    if HHGear = nil then
+    begin
+        DeleteGear(Gear);
+        exit
+    end; 
 
     valid:= false;
 
@@ -5198,11 +5212,14 @@ end;
 procedure doStepHammer(Gear: PGear);
 var HHGear, tmp, tmp2: PGear;
          t: PGearArray;
-         i: LongInt;
+ i, dmg, d: LongInt;
 begin
 HHGear:= Gear^.Hedgehog^.Gear;
 HHGear^.State:= HHGear^.State or gstNoDamage;
 DeleteCI(HHGear);
+SetLittle(HHGear^.dY);
+HHGear^.dY.IsNegative:= true;
+HHGear^.State:= HHGear^.State or gstMoving;
 
 t:= CheckGearsCollision(Gear);
 
@@ -5217,17 +5234,37 @@ while i > 0 do
     if (tmp^.State and gstNoDamage) = 0 then
         if (tmp^.Kind = gtHedgehog) or (tmp^.Kind = gtMine) or (tmp^.Kind = gtExplosives) then
             begin
+            dmg:= 0;
             //tmp^.State:= tmp^.State or gstFlatened;
             if (tmp^.Kind <> gtHedgehog) or (tmp^.Hedgehog^.Effects[heInvulnerable] = 0) then
-                ApplyDamage(tmp, CurrentHedgehog, tmp^.Health div 3, dsUnknown);
-            //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
-            tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
-            tmp2^.LinkedGear:= tmp;
-            SetAllToActive
-            end
-        else
-            begin
-            end
+                begin
+                // base damage on remaining health
+                dmg:= (tmp^.Health - tmp^.Damage);
+                if dmg > 0 then
+                    begin
+                    // do 1/2 current hp worth of damage if extra damage is enabled (1/3 damage if not)
+                    if cDamageModifier > _1 then
+                        d:= 2
+                    else
+                        d:= 3;
+                    // always round up
+                    if dmg mod d > 0 then
+                        dmg:= dmg div d + 1
+                    else
+                        dmg:= dmg div d;
+
+                    ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
+                    end;
+                end;
+
+            if (tmp^.Kind <> gtHedgehog) or (dmg > 0) or (tmp^.Health > tmp^.Damage) then
+                begin
+                //DrawTunnel(tmp^.X, tmp^.Y - _1, _0, _0_5, cHHRadius * 6, cHHRadius * 3);
+                tmp2:= AddGear(hwRound(tmp^.X), hwRound(tmp^.Y), gtHammerHit, 0, _0, _0, 0);
+                tmp2^.LinkedGear:= tmp;
+                SetAllToActive
+                end;
+            end;
     end;
 
 HHGear^.State:= HHGear^.State and (not gstNoDamage);

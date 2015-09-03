@@ -12,7 +12,7 @@ function onGameInit()
     end
 
     side = 0
-    for i = 0,GetRandom(15)+25 do
+    for i = 0,1+MapFeatureSize*2 do
         if side > 3 then 
             size = GetRandom(4)+4
         else

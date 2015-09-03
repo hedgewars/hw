@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -60,7 +60,9 @@ procedure DrawWater             (Alpha: byte; OffsetY, OffsetX: LongInt);
 procedure DrawWaves             (Dir, dX, dY, oX: LongInt; tnt: Byte);
 
 procedure RenderClear           ();
+{$IFDEF USE_S3D_RENDERING}
 procedure RenderClear           (mode: TRenderMode);
+{$ENDIF}
 procedure RenderSetClearColor   (r, g, b, a: real);
 procedure Tint                  (r, g, b, a: Byte); inline;
 procedure Tint                  (c: Longword); inline;
@@ -135,8 +137,10 @@ procedure openglScalef          (ScaleX, ScaleY, ScaleZ: GLfloat); forward;
 procedure openglRotatef         (RotX, RotY, RotZ: GLfloat; dir: LongInt); forward;
 procedure openglTint            (r, g, b, a: Byte); forward;
 
+{$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
 procedure CreateFramebuffer(var frame, depth, tex: GLuint); forward;
 procedure DeleteFramebuffer(var frame, depth, tex: GLuint); forward;
+{$ENDIF}
 
 function isAreaOffscreen(X, Y, Width, Height: LongInt): boolean; inline;
 begin
@@ -468,7 +472,7 @@ begin
     tmpint := 1;
 
     repeat
-    begin
+        begin
         // print up to 3 extentions per row
         // ExtractWord will return empty string if index out of range
         AddFileLog(TrimRight(
@@ -477,7 +481,7 @@ begin
             ExtractWord(tmpint+2, tmpstr, [' '])
         ));
         tmpint := tmpint + 3;
-    end;
+        end;
     until (tmpint > tmpn);
 {$ENDIF}
     AddFileLog('');
@@ -486,26 +490,26 @@ begin
 
 {$IFDEF USE_VIDEO_RECORDING}
     if GameType = gmtRecord then
-    begin
-        if glLoadExtension('GL_EXT_framebuffer_object') then
         begin
+        if glLoadExtension('GL_EXT_framebuffer_object') then
+            begin
             CreateFramebuffer(defaultFrame, depthv, texv);
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, defaultFrame);
             AddFileLog('Using framebuffer for video recording.');
-        end
+            end
         else if AuxBufNum > 0 then
-        begin
+            begin
             glDrawBuffer(GL_AUX0);
             glReadBuffer(GL_AUX0);
             AddFileLog('Using auxiliary buffer for video recording.');
-        end
+            end
         else
-        begin
+            begin
             glDrawBuffer(GL_BACK);
             glReadBuffer(GL_BACK);
             AddFileLog('Warning: off-screen rendering is not supported; using back buffer but it may not work.');
+            end;
         end;
-    end;
 {$ENDIF}
 
 {$IFDEF GL2}
@@ -513,10 +517,10 @@ begin
 {$IFDEF PAS2C}
     err := glewInit();
     if err <> GLEW_OK then
-    begin
+        begin
         WriteLnToConsole('Failed to initialize GLEW.');
         halt(HaltStartupError);
-    end;
+        end;
 {$ENDIF}
 
 {$IFNDEF PAS2C}
@@ -543,7 +547,7 @@ begin
 
 {$IFDEF USE_S3D_RENDERING}
     if (cStereoMode = smHorizontal) or (cStereoMode = smVertical) then
-    begin
+        begin
         // prepare left and right frame buffers and associated textures
         if glLoadExtension('GL_EXT_framebuffer_object') then
             begin
@@ -558,7 +562,7 @@ begin
             end
         else
             cStereoMode:= smNone;
-    end;
+        end;
 
     // set up vertex/texture buffers for frame textures
     texLRDtb[0].X:= 0.0;

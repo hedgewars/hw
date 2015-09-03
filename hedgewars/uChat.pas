@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -68,14 +68,17 @@ var Strs: array[0 .. MaxStrIndex] of TChatLine;
 
 
 const
-    colors: array[#0..#6] of TSDL_Color = (
-            (r:$FF; g:$FF; b:$FF; a:$FF), // unused, feel free to take it for anything
-            (r:$FF; g:$FF; b:$FF; a:$FF), // chat message [White]
-            (r:$FF; g:$00; b:$FF; a:$FF), // action message [Purple]
-            (r:$90; g:$FF; b:$90; a:$FF), // join/leave message [Lime]
-            (r:$FF; g:$FF; b:$A0; a:$FF), // team message [Light Yellow]
-            (r:$FF; g:$00; b:$00; a:$FF), // error messages [Red]
-            (r:$00; g:$FF; b:$FF; a:$FF)  // input line [Light Blue]
+    colors: array[#0..#9] of TSDL_Color = (
+            (r:$FF; g:$FF; b:$FF; a:$FF), // #0 unused, feel free to take it for anything
+            (r:$FF; g:$FF; b:$FF; a:$FF), // #1 chat message [White]
+            (r:$FF; g:$00; b:$FF; a:$FF), // #2 action message [Purple]
+            (r:$90; g:$FF; b:$90; a:$FF), // #3 join/leave message [Lime]
+            (r:$FF; g:$FF; b:$A0; a:$FF), // #4 team message [Light Yellow]
+            (r:$FF; g:$00; b:$00; a:$FF), // #5 error messages [Red]
+            (r:$00; g:$FF; b:$FF; a:$FF), // #6 input line [Light Blue]
+            (r:$FF; g:$80; b:$80; a:$FF), // #7 team gone [Light Red]
+            (r:$FF; g:$D0; b:$80; a:$FF), // #8 team back [Light Orange]
+            (r:$DF; g:$DF; b:$DF; a:$FF)  // #9 hog speech [Light Gray]
             );
     ChatCommandz: array [TChatCmd] of record
             ChatCmd: string[31];
@@ -152,6 +155,9 @@ begin
     UpdateCursorCoords();
 end;
 
+(* This procedure [re]renders a texture showing str for the chat line cl.
+ * It will use the color stored in cl and update width
+ *)
 procedure RenderChatLineTex(var cl: TChatLine; var str: shortstring);
 var strSurface,
     resSurface: PSDL_Surface;
@@ -160,6 +166,8 @@ var strSurface,
 const
     shadowint  = $80 shl AShift;
 begin
+
+FreeAndNilTexture(cl.Tex);
 
 font:= CheckCJKFont(ansistring(str), fnt16);
 
@@ -199,9 +207,6 @@ const ClDisplayDuration = 12500;
 procedure SetLine(var cl: TChatLine; str: shortstring; isInput: boolean);
 var color  : TSDL_Color;
 begin
-if cl.Tex <> nil then
-    FreeAndNilTexture(cl.Tex);
-
 if isInput then
     begin
     cl.s:= str;
@@ -232,16 +237,14 @@ end;
 
 // For uStore texture recreation
 procedure ReloadLines;
-var i, t: LongWord;
+var i: LongWord;
 begin
     if InputStr.s <> '' then
         SetLine(InputStr, InputStr.s, true);
     for i:= 0 to MaxStrIndex do
         if Strs[i].s <> '' then
             begin
-            t:= Strs[i].Time;
-            SetLine(Strs[i], Strs[i].s, false);
-            Strs[i].Time:= t
+            RenderChatLineTex(Strs[i], Strs[i].s);
             end;
 end;
 
@@ -794,9 +797,10 @@ end;
 
 procedure KeyPressChat(Key, Sym: Longword; Modifier: Word);
 const firstByteMark: array[0..3] of byte = (0, $C0, $E0, $F0);
+      nonStateMask = (not (KMOD_NUM or KMOD_CAPS));
 var i, btw, index: integer;
     utf8: shortstring;
-    action, selMode, ctrl: boolean;
+    action, selMode, ctrl, ctrlonly: boolean;
     skip: TCharSkip;
 begin
     LastKeyPressTick:= RealTicks;
@@ -806,6 +810,7 @@ begin
 
     selMode:= (modifier and (KMOD_LSHIFT or KMOD_RSHIFT)) <> 0;
     ctrl:= (modifier and (KMOD_LCTRL or KMOD_RCTRL)) <> 0;
+    ctrlonly:= ctrl and ((modifier and nonStateMask and (not (KMOD_LCTRL or KMOD_RCTRL))) = 0);
     skip:= none;
 
     case Sym of
@@ -965,7 +970,7 @@ begin
         SDLK_a:
             begin
             // select all
-            if ctrl then
+            if ctrlonly then
                 begin
                 ResetSelection();
                 cursorPos:= 0;
@@ -979,7 +984,7 @@ begin
         SDLK_c:
             begin
             // copy
-            if ctrl then
+            if ctrlonly then
                 CopySelectionToClipboard()
             else
                 action:= false;
@@ -987,7 +992,7 @@ begin
         SDLK_v:
             begin
             // paste
-            if ctrl then
+            if ctrlonly then
                 begin
                 DeleteSelected();
                 PasteFromClipboard();
@@ -998,7 +1003,7 @@ begin
         SDLK_x:
             begin
             // cut
-            if ctrl then
+            if ctrlonly then
                 begin
                 CopySelectionToClipboard();
                 DeleteSelected();

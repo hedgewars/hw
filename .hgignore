@@ -55,7 +55,6 @@ glob:project_files/Android-build/SDL-android-project/.*
 glob:project_files/Android-build/out
 glob:project_files/Android-build/Makefile.android
 glob:hedgewars-build-desktop-Qt*
-glob:hedgewars-build-desktop-Qt*
 glob:*.depends
 glob:tools/build_windows_koda.bat
 glob:share/hedgewars/Data/misc/hwengine.desktop
@@ -68,3 +67,9 @@ glob:*.res
 glob:build-*
 glob:hedgewars-build-*
 glob:*.pro.user
+glob:Hedgewars.app/*
+glob:tools/CreateMacBundle.cmake
+glob:share/Info.plist
+glob:CTestTestfile.cmake
+glob:arch.c
+

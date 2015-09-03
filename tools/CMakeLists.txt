@@ -6,8 +6,9 @@ if(NOT APPLE)
     add_custom_target(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
 endif()
 
-if(APPLE)
+if(APPLE AND NOT SKIPBUNDLE)
     find_package(Qt4 REQUIRED QUIET)
+    find_package(PNG REQUIRED)
     find_package(SDL REQUIRED)
     find_package(SDL_image REQUIRED)
     find_package(SDL_net REQUIRED)
@@ -29,12 +30,12 @@ if(APPLE)
 
     #remove the ";-framework Cocoa" from the SDL_LIBRARY variable
     string(REGEX REPLACE "(.*);-.*" "\\1" sdl_library_only "${SDL_LIBRARY}")
+    #remove the "libSDLmain.a" from the SDL_LIBRARY variable
+    string(REGEX REPLACE ".*;(.*)" "\\1" sdl_library_only "${sdl_library_only}")
 
-    if(NOT NOPNG)
-        #get the neme of the library (harmelss if it is static)
-        string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
-        string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
-    endif()
+    #get the neme of the library (harmelss if it is static)
+    string(REGEX REPLACE ".*/(.*)$" "\\1" PNG_LIBNAME "${PNG_LIBRARY}")
+    string(REGEX REPLACE ".*/(.*)$" "\\1" ZLIB_LIBNAME "${ZLIB_LIBRARY}")
 
     set(frameworks_dir ${CMAKE_INSTALL_PREFIX}/${target_library_install_dir})
     if(${BUILD_ENGINE_LIBRARY})

@@ -1,7 +1,7 @@
 /*
  * Hedgewars, a free turn based strategy game
  * Copyright (c) 2006-2007 Ulyanov Igor <iulyanov@gmail.com>
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,13 +42,14 @@ bool HWMap::couldBeRemoved()
     return !m_hasStarted;
 }
 
-void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script, int feature_size)
+void HWMap::getImage(const QString & seed, int filter, MapGenerator mapgen, int maze_size, const QByteArray & drawMapData, QString & script, QString & scriptparam, int feature_size)
 {
     m_seed = seed;
     m_script = script;
+    m_scriptparam = scriptparam;
     templateFilter = filter;
     m_mapgen = mapgen;
-    m_maze_size = maze_size; // TODO replace with feature_size
+    m_maze_size = maze_size;
     m_feature_size = feature_size;
     if(mapgen == MAPGEN_DRAWN) m_drawMapData = drawMapData;
     Start(true);
@@ -125,6 +126,7 @@ void HWMap::SendToClientFirst()
     if (!m_script.isEmpty())
     {
         SendIPC(QString("escript Scripts/Multiplayer/%1.lua").arg(m_script).toUtf8());
+        SendIPC(QString("e$scriptparam %1").arg(m_scriptparam).toUtf8());
     }
 
     switch (m_mapgen)

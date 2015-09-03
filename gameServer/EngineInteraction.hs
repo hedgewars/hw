@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,9 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE CPP, OverloadedStrings #-}
 
+#if defined(OFFICIAL_SERVER)
 module EngineInteraction(replayToDemo, checkNetCmd, toEngineMsg, drawnMapData) where
+#else
+module EngineInteraction(checkNetCmd, toEngineMsg) where
+#endif
 
 import qualified Data.Set as Set
 import Control.Monad
@@ -36,6 +40,7 @@ import Data.Maybe
 import CoreTypes
 import Utils
 
+#if defined(OFFICIAL_SERVER)
 {-
     this is snippet from http://stackoverflow.com/questions/10043102/how-to-catch-the-decompress-ioerror
     because standard 'catch' doesn't seem to catch decompression errors for some reason
@@ -51,6 +56,7 @@ decompressWithoutExceptions = finalise
         cons chunk = right (chunk :)
         finalise = right BL.fromChunks
 {- end snippet  -}
+#endif
 
 toEngineMsg :: B.ByteString -> B.ByteString
 toEngineMsg msg = B.pack $ Base64.encode (fromIntegral (BW.length msg) : BW.unpack msg)
@@ -89,6 +95,7 @@ checkNetCmd msg = check decoded
         slotMessages = "\128\129\130\131\132\133\134\135\136\137\138"
         timedMessages = Set.fromList $ "+LlRrUuDdZzAaSjJ,NpPwtgfc12345" ++ slotMessages
 
+#if defined(OFFICIAL_SERVER)
 replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
         -> Map.Map B.ByteString [B.ByteString]
@@ -124,10 +131,12 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
-        templateFilterMsg = eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]
+        mazeSizeMsg = eml ["e$maze_size ", mParams Map.! "MAZE_SIZE"]
         mapgenSpecific = case mapgen of
+            "1" -> [mazeSizeMsg]
+            "2" -> [mazeSizeMsg]
             "3" -> let d = head . fromMaybe [""] $ Map.lookup "DRAWNMAP" prms in if BW.length d <= 4 then [] else drawnMapData d
-            _ -> [templateFilterMsg]
+            _ -> []
         gameFlags :: Word32
         gameFlags = foldl (\r (b, f) -> if b == "false" then r else r .|. f) 0 $ zip scheme gameFlagConsts
         schemeFlags = map (\(v, (n, m)) -> eml [n, " ", showB $ (readInt_ v) * m])
@@ -219,6 +228,4 @@ gameFlagConsts = [
         , 0x02000000
         , 0x04000000
         ]
-
-
-
+#endif

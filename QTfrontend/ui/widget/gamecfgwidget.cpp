@@ -1,6 +1,6 @@
 /*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -459,7 +459,7 @@ void GameCFGWidget::setParam(const QString & param, const QStringList & slValue)
         if (param == "SCRIPT")
         {
             Scripts->setCurrentIndex(Scripts->findText(value));
-            pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8());
+            pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
             return;
         }
         if (param == "DRAWNMAP")
@@ -606,6 +606,7 @@ void GameCFGWidget::schemeChanged(int index)
             }
         }
     }
+    pMapContainer->setScript(Scripts->itemData(Scripts->currentIndex(), GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
 }
 
 void GameCFGWidget::scriptChanged(int index)
@@ -661,12 +662,11 @@ void GameCFGWidget::scriptChanged(int index)
     }
     if (!index)
     {
-        pMapContainer->setScript(QString(""));
+        pMapContainer->setScript(QString(""), QString(""));
     }
     else
     {
-        pMapContainer->setScript(name);
-        pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8());
+        pMapContainer->setScript(Scripts->itemData(index, GameStyleModel::ScriptRole).toString().toUtf8(), schemeData(43).toString());
     }
     emit paramChanged("SCRIPT", QStringList(name));
 }

@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,7 +89,8 @@ end;
 
 procedure drawPixelEBC(landX, landY, pixelX, pixelY: Longint); inline;
 begin
-if ((Land[landY, landX] and lfBasic) <> 0) or ((Land[landY, landX] and lfObject) <> 0) then
+if (Land[landY, landX] and lfIndestructible = 0) and 
+    (((Land[landY, landX] and lfBasic) <> 0) or ((Land[landY, landX] and lfObject) <> 0)) then
     begin
     LandPixels[pixelY, pixelX]:= ExplosionBorderColor;
     Land[landY, landX]:= (Land[landY, landX] or lfDamaged) and (not lfIce);
