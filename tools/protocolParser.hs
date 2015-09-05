@@ -72,7 +72,6 @@ commandsDescription = [
         , cmd1 "TEAM_ACCEPTED" SS
         , cmd1 "HH_NUM" $ Many [SS]
         , cmd1 "TEAM_COLOR" $ Many [SS]
-        , cmd1 "TEAM_ACCEPTED" SS
         , cmd1 "BANLIST" $ Many [SS]
         , cmd1 "JOINED" $ Many [SS]
         , cmd1 "LOBBY:JOINED" $ Many [SS]
@@ -96,6 +95,10 @@ commandsDescription = [
     ]
 
 unknowncmd = PTPrefix "$" [PTCommand "$" $ Command "__UNKNOWN__" [Many [SS]]]
+
+fixName = map fixChar
+fixChar c | isLetter c = c
+          | otherwise = '_'
 
 groupByFirstChar :: [ParseTree] -> [(Char, [ParseTree])]
 groupByFirstChar = MM.assocs . MM.fromList . map breakCmd
@@ -143,9 +146,6 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
         handlerTypes = map cmdParams2handlerType sortedCmdDescriptions
         sortedCmdDescriptions = reverse $ sort commandsDescription
         fixedNames = map fixName handlers
-        fixName = map fixChar
-        fixChar c | isLetter c = c
-                  | otherwise = '_'
         bodies = vcat $ punctuate (char '\n') $ map handlerBody fixedNames
         handlerBody n = text "procedure handler_" <> text n <> semi
             $+$ text "begin" 
@@ -153,9 +153,15 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
         cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) $ reverse fixedNames) <> semi
         structs = vcat (map text . Set.toList . Set.fromList $ map cmdParams2record commandsDescription)
         realHandlers = vcat $ punctuate (char '\n') $ map rh sortedCmdDescriptions
-        rh cmd@(Command n _) = text "procedure handler_" <> text (fixName n) <> parens (text "var p: " <> text (cmdParams2str cmd)) <> semi
-            $+$ text "begin" 
-            $+$ text "end" <> semi
+
+rh cmd@(Command n p) = text "procedure handler_" <> text (fixName n) <> parens (text "var p: " <> text (cmdParams2str cmd)) <> semi
+    $+$ emptyBody $+$ if hasMany then vcat [space, text "procedure handler_" <> text (fixName n) <> text "_s" <> parens (text "var s: shortstring") <> semi
+    , emptyBody] else empty
+    where
+        hasMany = any isMany p
+        isMany (Many _) = True
+        isMany _ = False
+        emptyBody = text "begin"  $+$ text "end" <> semi
 
 pas = renderArrays $ buildTables $ buildParseTree commandsDescription
     where
