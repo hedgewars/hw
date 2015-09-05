@@ -175,6 +175,7 @@
 				GCC_PREFIX_HEADER = Physlayer_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Physlayer;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -188,6 +189,7 @@
 				GCC_PREFIX_HEADER = Physlayer_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Physlayer;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -221,7 +223,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 x86_64";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 			};
 			name = Debug;
 		};
@@ -253,7 +255,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
-				VALID_ARCHS = "armv7 x86_64";
+				VALID_ARCHS = "armv7 x86_64 arm64";
 			};
 			name = Release;
 		};
