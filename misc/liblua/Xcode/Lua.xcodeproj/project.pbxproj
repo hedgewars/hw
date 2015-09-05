@@ -367,7 +367,8 @@
 				GCC_PREFIX_HEADER = Lua_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Lua;
-				VALID_ARCHS = "armv7 x86_64";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 x86_64 arm64";
 			};
 			name = Debug;
 		};
@@ -381,7 +382,8 @@
 				GCC_PREFIX_HEADER = Lua_Prefix.pch;
 				INSTALL_PATH = /usr/local/lib;
 				PRODUCT_NAME = Lua;
-				VALID_ARCHS = "armv7 x86_64";
+				SKIP_INSTALL = YES;
+				VALID_ARCHS = "armv7 x86_64 arm64";
 			};
 			name = Release;
 		};
@@ -413,7 +415,7 @@
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Debug;
 		};
@@ -444,7 +446,7 @@
 				PREBINDING = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "armv7 armv7s";
+				VALID_ARCHS = "armv7 armv7s arm64";
 			};
 			name = Release;
 		};
