@@ -16,6 +16,9 @@
 		<string>Icon-Small.png</string>
 		<string>Icon-Small-50.png</string>
 		<string>Icon-Small@2x.png</string>
+		<string>Icon-60@2x.png</string>
+		<string>Icon-76.png</string>
+		<string>Icon-76@2x.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.AC27.Hedgewars</string>

@@ -249,6 +249,9 @@
 		F65724FF1B7E784700A86262 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FA1B7E784700A86262 /* helpleft.png */; };
 		F65725001B7E784700A86262 /* helpplain.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FB1B7E784700A86262 /* helpplain.png */; };
 		F65725011B7E784700A86262 /* helpright.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FC1B7E784700A86262 /* helpright.png */; };
+		F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */; };
+		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
+		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
 		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
 		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
 		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
@@ -714,6 +717,9 @@
 		F65725291B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/About.strings; sourceTree = "<group>"; };
 		F657252A1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F657252B1B7EB9CC00A86262 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = Locale/ru.lproj/Scheme.strings; sourceTree = "<group>"; };
+		F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Resources/Icons/Icon-60@2x.png"; sourceTree = "<group>"; };
+		F65E1DBD1B9B95A400A78ADF /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Resources/Icons/Icon-76.png"; sourceTree = "<group>"; };
+		F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Resources/Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
 		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
@@ -1158,6 +1164,9 @@
 				61F7A43411E290650040BA66 /* Icon-Small@2x.png */,
 				61F7A43511E290650040BA66 /* Icon.png */,
 				61F7A43611E290650040BA66 /* Icon@2x.png */,
+				F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */,
+				F65E1DBD1B9B95A400A78ADF /* Icon-76.png */,
+				F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */,
 				61F7A43711E290650040BA66 /* iTunesArtwork.png */,
 			);
 			name = Icons;
@@ -1500,6 +1509,7 @@
 				61F7A43C11E290650040BA66 /* Icon.png in Resources */,
 				F65724FE1B7E784700A86262 /* helpbottom.png in Resources */,
 				61F7A43E11E290650040BA66 /* iTunesArtwork.png in Resources */,
+				F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */,
 				6129B9F711EFB04D0017E305 /* denied.png in Resources */,
 				61F2E7CF1205EDE0005734F7 /* AboutViewController.xib in Resources */,
 				61F2E7EC12060E31005734F7 /* checkbox.png in Resources */,
@@ -1515,6 +1525,7 @@
 				610D5FB21270E2660033333A /* Icon-Small@2x.png in Resources */,
 				F6F07BDF1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib in Resources */,
 				610D5FB31270E26C0033333A /* Icon@2x.png in Resources */,
+				F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */,
 				61A670C012747D9B00B06CE7 /* Default.png in Resources */,
 				61A670C112747DB900B06CE7 /* MainMenuViewController-iPhone.xib in Resources */,
 				61A670C212747DBD00B06CE7 /* MapConfigViewController-iPhone.xib in Resources */,
@@ -1524,6 +1535,7 @@
 				61D3D2A51290E03A003CE7C3 /* irc.png in Resources */,
 				6172FED91298CF9800D73365 /* background~iphone.png in Resources */,
 				6172FEEF1298D25D00D73365 /* mediumBackground~ipad.png in Resources */,
+				F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */,
 				6172FEF11298D25D00D73365 /* smallerBackground~ipad.png in Resources */,
 				6172FEF21298D25D00D73365 /* smallerBackground~iphone.png in Resources */,
 				61889985129995B500D55FD6 /* title~ipad.png in Resources */,
