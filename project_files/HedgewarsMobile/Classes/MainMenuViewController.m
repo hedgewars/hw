@@ -29,6 +29,10 @@
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
 
+@interface MainMenuViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
+@property (retain, nonatomic) IBOutlet UIButton *missionsButton;
+@end
 
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController,
@@ -42,7 +46,10 @@
 -(void) viewDidLoad {
     self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
-
+    
+    [self.simpleGameButton applyDarkBlueQuickStyle];
+    [self.missionsButton applyDarkBlueQuickStyle];
+    
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 
@@ -243,6 +250,8 @@
     releaseAndNil(savedGamesViewController);
     releaseAndNil(restoreViewController);
     releaseAndNil(missionsViewController);
+    [_simpleGameButton release];
+    [_missionsButton release];
     [super dealloc];
 }
 
