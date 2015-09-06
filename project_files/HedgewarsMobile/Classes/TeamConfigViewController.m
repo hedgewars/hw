@@ -45,6 +45,8 @@
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [backgroundImage release];
         [self.view addSubview:background];
         [background release];
