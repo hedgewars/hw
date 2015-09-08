@@ -31,6 +31,8 @@ cmd = Command
 cmd1 s p = Command s [p]
 cmd2 s p1 p2 = Command s [p1, p2]
 
+cmdName (Command n _) = n
+
 cmdParams2str (Command _ p) = "TCmdParam" ++ concatMap f p
     where
     f Skip = ""
@@ -133,7 +135,7 @@ pas2 = buildSwitch $ buildParseTree commandsDescription
         zeroChar = text "#0: state:= pstDisconnected;"
         elsePart = text "else <unknown cmd> end;"
 
-renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, {-bodies, -}c, structs, realHandlers]
+renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds, l, s, {-bodies, -}c, structs, realHandlers, realHandlersArray]
     where
         maybeQuotes "$" = text "#0"
         maybeQuotes s = if null $ tail s then quotes $ text s else text s
@@ -153,6 +155,8 @@ renderArrays (letters, commands, handlers) = vcat $ punctuate (char '\n') [cmds,
         cmds = text "type TCmdType = " <> parens (hsep $ punctuate comma $ map ((<>) (text "cmd_") . text) $ reverse fixedNames) <> semi
         structs = vcat (map text . Set.toList . Set.fromList $ map cmdParams2record commandsDescription)
         realHandlers = vcat $ punctuate (char '\n') $ map rh sortedCmdDescriptions
+        realHandlersArray = text "const handlers: array[TCmdType] of PHandler = "
+            <> parens (hsep . punctuate comma . (:) (text "@handler__UNKNOWN_") $ map (text . (++) "@handler_" . fixName . cmdName) sortedCmdDescriptions) <> semi
 
 rh cmd@(Command n p) = text "procedure handler_" <> text (fixName n) <> parens (text "var p: " <> text (cmdParams2str cmd)) <> semi
     $+$ emptyBody $+$ if hasMany then vcat [space, text "procedure handler_" <> text (fixName n) <> text "_s" <> parens (text "var s: shortstring") <> semi
