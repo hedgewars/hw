@@ -287,7 +287,7 @@
 
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
-    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
+    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInteger:theSlider.value]];
 }
 
 #pragma mark -

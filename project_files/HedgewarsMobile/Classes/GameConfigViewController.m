@@ -238,7 +238,7 @@
     [filePath release];
 
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
-    int numberOfHats = [hatArray count];
+    NSUInteger numberOfHats = [hatArray count];
     int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
 
     if (self.imgContainer != nil)
@@ -246,7 +246,7 @@
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     NSInteger numberOfHogs = 1 + random() % 20;
-    DLog(@"Drawing %d nice hedgehogs", numberOfHogs);
+    DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
     for (int i = 0; i < numberOfHogs; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
 

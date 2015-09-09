@@ -96,8 +96,8 @@
     for (int i = 0; i < numberOfPlayingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
 
-        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %d %@",
-                                           [hog objectForKey:@"level"], initialHealth, [hog objectForKey:@"hogname"]];
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %ld %@",
+                                           [hog objectForKey:@"level"], (long)initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
         [hogLevelHealthAndName release];
 
