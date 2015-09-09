@@ -322,20 +322,32 @@
 
             self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
             NSString *scheme = [scriptOptions objectAtIndex:0];
-            if ([scheme isEqualToString:@"locked"]) {
+            if ([scheme isEqualToString:@"locked"])
+            {
                 self.selectedScheme = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:0];
-            } else {
-                self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
+            }
+            else
+            {
+                if (![scheme isEqualToString:@"*"])
+                {
+                    self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
+                }
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
             }
 
             NSString *weapon = [scriptOptions objectAtIndex:1];
-            if ([weapon isEqualToString:@"locked"]) {
+            if ([weapon isEqualToString:@"locked"])
+            {
                 self.selectedWeapon = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:1];
-            } else {
-                self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
+            }
+            else
+            {
+                if (![weapon isEqualToString:@"*"])
+                {
+                    self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
+                }
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
         }
