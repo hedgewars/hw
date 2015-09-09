@@ -25,7 +25,7 @@
 #define INDICATOR_TAG 7654
 
 @interface MapPreviewButtonView ()
-@property (nonatomic) int port;
+@property (nonatomic) NSInteger port;
 @end
 
 @implementation MapPreviewButtonView
@@ -83,13 +83,13 @@
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip))) {
-        DLog(@"SDLNet_TCP_Open: %s %d\n", SDLNet_GetError(), self.port);
+        DLog(@"SDLNet_TCP_Open: %s %ld\n", SDLNet_GetError(), (long)self.port);
         serverQuit = YES;
     }
 
     // launch the preview in background here so that we're sure the tcp channel is open
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^{
-        NSString *ipcString = [[NSString alloc] initWithFormat:@"%d", self.port];
+        NSString *ipcString = [[NSString alloc] initWithFormat:@"%ld", (long)self.port];
         NSString *documentsDirectory = DOCUMENTS_FOLDER();
         
         NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
@@ -114,7 +114,7 @@
         free(argv);
     });
     
-    DLog(@"Waiting for a client on port %d", self.port);
+    DLog(@"Waiting for a client on port %ld", (long)self.port);
     while (!serverQuit) {
         /* This check the sd if there is a pending connection.
          * If there is one, accept that, and open a new socket for communicating */
@@ -176,7 +176,7 @@
                         waitUntilDone:NO];
     [previewImage release];
     [self performSelectorOnMainThread:@selector(setLabelText:)
-                           withObject:[NSString stringWithFormat:@"%d", maxHogs]
+                           withObject:[NSString stringWithFormat:@"%ld", (long)maxHogs]
                         waitUntilDone:NO];
     [self performSelectorOnMainThread:@selector(turnOnWidgets)
                            withObject:nil

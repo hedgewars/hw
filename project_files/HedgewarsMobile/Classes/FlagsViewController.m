@@ -131,10 +131,10 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
-    int newSection = [indexPath section];
-    int oldSection = (lastIndexPath != nil) ? [lastIndexPath section] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newSection = [indexPath section];
+    NSInteger oldSection = (lastIndexPath != nil) ? [lastIndexPath section] : -1;
 
     if (newRow != oldRow || newSection != oldSection) {
         NSString *flag = nil;

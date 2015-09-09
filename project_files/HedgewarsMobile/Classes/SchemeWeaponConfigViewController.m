@@ -278,8 +278,8 @@
     else
         lastIndexPath = self.lastIndexPath_lu;
 
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
@@ -299,7 +299,7 @@
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int row = [self.listOfSchemes indexOfObject:str];
+                        NSInteger row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
                         self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
