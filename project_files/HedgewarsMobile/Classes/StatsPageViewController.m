@@ -44,7 +44,9 @@
     aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     aTableView.delegate = self;
     aTableView.dataSource = self;
-
+    
+    aTableView.rowHeight = 44;
+    
     [self.view addSubview:aTableView];
     [aTableView release];
 
@@ -162,7 +164,7 @@
 #pragma mark button delegate
 -(void) dismissView {
     [[AudioManagerController mainManager] playClickSound];
-    [self dismissModalViewControllerAnimated:YES];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -

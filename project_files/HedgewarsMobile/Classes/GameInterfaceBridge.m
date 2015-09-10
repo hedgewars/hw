@@ -176,7 +176,7 @@ static UIViewController *callingController;
     [gameParameters release];
 
     // this is the pascal function that starts the game
-    Game(argc, argv);
+    RunEngine(argc, argv);
 
     // cleanup
     for (int i = 0; i < argc; i++)
@@ -201,7 +201,7 @@ static UIViewController *callingController;
         statsPage.statsArray = stats;
         statsPage.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
 
-        [callingController presentModalViewController:statsPage animated:YES];
+        [callingController presentViewController:statsPage animated:YES completion:nil];
         [statsPage release];
     }
 }

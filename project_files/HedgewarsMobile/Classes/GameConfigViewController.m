@@ -22,10 +22,10 @@
 #import "TeamConfigViewController.h"
 #import "SchemeWeaponConfigViewController.h"
 #import "GameInterfaceBridge.h"
-
+#import "HelpPageLobbyViewController.h"
 
 @implementation GameConfigViewController
-@synthesize imgContainer, titleImage, sliderBackground, //helpPage,
+@synthesize imgContainer, titleImage, sliderBackground, helpPage,
             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -47,7 +47,7 @@
                 [alert release];
             } else {
                 [[AudioManagerController mainManager] playBackSound];
-                [[self parentViewController] dismissModalViewControllerAnimated:YES];
+                [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
             }
             break;
         case 1:
@@ -66,15 +66,14 @@
             break;
         case 2:
             [[AudioManagerController mainManager] playClickSound];
-            /*
             if (self.helpPage == nil)
                 self.helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPad" bundle:nil];
             self.helpPage.view.alpha = 0;
+            self.helpPage.view.frame = self.view.frame;
             [self.view addSubview:self.helpPage.view];
-            [UIView beginAnimations:@"helplobby" context:NULL];
-            self.helpPage.view.alpha = 1;
-            [UIView commitAnimations];
-            */
+            [UIView animateWithDuration:0.5 animations:^{
+                self.helpPage.view.alpha = 1;
+            }];
             break;
         default:
             DLog(@"Nope");
@@ -104,15 +103,16 @@
             [self.view bringSubviewToFront:schemeWeaponConfigViewController.view];
             break;
         case 3:
-            /*
             if (helpPage == nil) {
                 helpPage = [[HelpPageLobbyViewController alloc] initWithNibName:@"HelpPageLobbyViewController-iPhone" bundle:nil];
+                CGRect helpPageFrame = self.view.frame;
+                helpPageFrame.size.height -= 44; //toolbar height
+                self.helpPage.view.frame = helpPageFrame;
                 [self.view addSubview:helpPage.view];
             }
             // this message is compulsory otherwise the table won't be loaded at all
             [helpPage viewWillAppear:NO];
             [self.view bringSubviewToFront:helpPage.view];
-            */
             break;
         default:
             DLog(@"Nope");
@@ -230,14 +230,15 @@
 }
 
 -(void) loadNiceHogs {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     srand(time(NULL));
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
     [filePath release];
 
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
-    int numberOfHats = [hatArray count];
+    NSUInteger numberOfHats = [hatArray count];
     int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
 
     if (self.imgContainer != nil)
@@ -245,7 +246,7 @@
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
     NSInteger numberOfHogs = 1 + random() % 20;
-    DLog(@"Drawing %d nice hedgehogs", numberOfHogs);
+    DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
     for (int i = 0; i < numberOfHogs; i++) {
         NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
 
@@ -284,7 +285,8 @@
 
     [self.view addSubview:self.imgContainer];
     [hogSprite release];
-    [pool drain];
+        
+    }
 }
 
 -(void) viewDidLoad {
@@ -325,8 +327,20 @@
     if (IS_IPAD() == NO)
         return;
 
-    if ((toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
-         toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
+    [self updateiPadUIForInterfaceOrientation:toInterfaceOrientation];
+
+    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
+                                                                            duration:duration];
+    if (self.helpPage)
+    {
+        self.helpPage.view.frame = self.view.frame;
+    }
+}
+
+- (void)updateiPadUIForInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    if ((interfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+         interfaceOrientation == UIInterfaceOrientationLandscapeRight)) {
         self.imgContainer.alpha = 1;
         self.titleImage.frame = CGRectMake(357, 17, 309, 165);
         self.schemeWeaponConfigViewController.view.frame = CGRectMake(0, 60, 320, 620);
@@ -345,15 +359,19 @@
         self.sliderBackground.frame = CGRectMake(465, 975, 200, 40);
         self.mapConfigViewController.slider.frame = CGRectMake(475, 983, 180, 23);
     }
-
-    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
-                                                                            duration:duration];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
+//    if (IS_IPAD())
+//        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+    
     if (IS_IPAD())
-        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
-
+    {
+        // we assume here what 'statusBarOrientation' will never be changed manually!
+        UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self updateiPadUIForInterfaceOrientation:currentOrientation];
+    }
+    
     [self.mapConfigViewController viewWillAppear:animated];
     [self.teamConfigViewController viewWillAppear:animated];
     [self.schemeWeaponConfigViewController viewWillAppear:animated];
@@ -397,8 +415,8 @@
         self.teamConfigViewController = nil;
     if (self.schemeWeaponConfigViewController.view.superview == nil)
         self.schemeWeaponConfigViewController = nil;
-    //if (self.helpPage.view.superview == nil)
-    //    self.helpPage = nil;
+    if (self.helpPage.view.superview == nil)
+        self.helpPage = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
@@ -410,7 +428,7 @@
     self.schemeWeaponConfigViewController = nil;
     self.teamConfigViewController = nil;
     self.mapConfigViewController = nil;
-    //self.helpPage = nil;
+    self.helpPage = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -422,7 +440,7 @@
     releaseAndNil(schemeWeaponConfigViewController);
     releaseAndNil(teamConfigViewController);
     releaseAndNil(mapConfigViewController);
-    //releaseAndNil(helpPage);
+    releaseAndNil(helpPage);
     [super dealloc];
 }
 

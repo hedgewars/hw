@@ -65,7 +65,7 @@
 
     if (button.tag == 0) {
         [[AudioManagerController mainManager] playBackSound];
-        [[self parentViewController] dismissModalViewControllerAnimated:YES];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
         [GameInterfaceBridge registerCallingController:self];
         [GameInterfaceBridge startMissionGame:self.missionName];
@@ -92,11 +92,18 @@
         for (NSUInteger i = 0; i < [self.listOfMissions count]; i++) {
             NSString *desc = [[self.listOfMissions objectAtIndex:i] stringByDeletingPathExtension];
             for (NSString *str in descArray)
+            {
                 if ([str hasPrefix:desc] && [str hasSuffix:@"\""]) {
                     NSArray *descriptionText = [str componentsSeparatedByString:@"\""];
-                    [filteredArray insertObject:[descriptionText objectAtIndex:1] atIndex:i];
+                    [filteredArray addObject:[descriptionText objectAtIndex:1]];
                     break;
                 }
+            }
+            
+            if ([filteredArray count] == i)
+            {
+                [filteredArray addObject:@""];
+            }
         }
         self.listOfDescriptions = filteredArray;
         [filteredArray release];

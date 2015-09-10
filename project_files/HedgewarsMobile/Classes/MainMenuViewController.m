@@ -29,6 +29,10 @@
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
 
+@interface MainMenuViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
+@property (retain, nonatomic) IBOutlet UIButton *missionsButton;
+@end
 
 @implementation MainMenuViewController
 @synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController,
@@ -42,7 +46,10 @@
 -(void) viewDidLoad {
     self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
-
+    
+    [self.simpleGameButton applyDarkBlueQuickStyle];
+    [self.missionsButton applyDarkBlueQuickStyle];
+    
     // get the app's version
     NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString*)kCFBundleVersionKey];
 
@@ -71,7 +78,7 @@
             self.restoreViewController = restored;
             [restored release];
         }
-        [self performSelector:@selector(presentModalViewController:animated:) withObject:self.restoreViewController afterDelay:0.25];
+        [self performSelector:@selector(presentViewController:) withObject:self.restoreViewController afterDelay:0.25];
     } else {
         // let's not prompt for rating when app crashed >_>
         [Appirater appLaunched];
@@ -80,6 +87,11 @@
     /*
     [ServerProtocolNetwork openServerConnection];
     */
+}
+
+- (void) presentViewController:(UIViewController *)vc
+{
+    [self presentViewController:vc animated:NO completion:nil];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -105,7 +117,7 @@
                 self.gameConfigViewController = gcvc;
                 [gcvc release];
             }
-            [self presentModalViewController:self.gameConfigViewController animated:YES];
+            [self presentViewController:self.gameConfigViewController animated:YES completion:nil];
             break;
         case 2:
             if (nil == self.settingsViewController) {
@@ -114,7 +126,7 @@
                 self.settingsViewController = svrc;
                 [svrc release];
             }
-            [self presentModalViewController:self.settingsViewController animated:YES];
+            [self presentViewController:self.settingsViewController animated:YES completion:nil];
             break;
         case 3:
 #ifdef DEBUG
@@ -122,7 +134,7 @@
                 debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
             else
                 debugStr = [[NSString alloc] initWithString:@"Here be log"];
-            UITextView *scroll = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width)];
+            UITextView *scroll = [[UITextView alloc] initWithFrame:self.view.frame];
             scroll.text = debugStr;
             [debugStr release];
             scroll.editable = NO;
@@ -131,7 +143,7 @@
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
             [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            btn.frame = CGRectMake(self.view.frame.size.height-58, -6, 64, 64);
+            btn.frame = CGRectMake(self.view.frame.size.width-58, -6, 64, 64);
             btn.backgroundColor = [UIColor blackColor];
             btn.titleLabel.textColor = [UIColor whiteColor];
             btn.titleLabel.textAlignment = UITextAlignmentCenter;
@@ -160,7 +172,7 @@
                 self.aboutViewController = about;
                 [about release];
             }
-            [self presentModalViewController:self.aboutViewController animated:YES];
+            [self presentViewController:self.aboutViewController animated:YES completion:nil];
 #endif
             break;
         case 4:
@@ -172,7 +184,7 @@
                 self.savedGamesViewController = savedgames;
                 [savedgames release];
             }
-            [self presentModalViewController:self.savedGamesViewController animated:YES];
+            [self presentViewController:self.savedGamesViewController animated:YES completion:nil];
             break;
         case 5:
             if (nil == self.missionsViewController) {
@@ -184,7 +196,7 @@
                 self.missionsViewController = missions;
                 [missions release];
             }
-            [self presentModalViewController:self.missionsViewController animated:YES];
+            [self presentViewController:self.missionsViewController animated:YES completion:nil];
             break;
         case 6:
             [GameInterfaceBridge registerCallingController:self];
@@ -238,6 +250,8 @@
     releaseAndNil(savedGamesViewController);
     releaseAndNil(restoreViewController);
     releaseAndNil(missionsViewController);
+    [_simpleGameButton release];
+    [_missionsButton release];
     [super dealloc];
 }
 

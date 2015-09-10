@@ -47,7 +47,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
 }
 
 -(void) appLaunchedHandler {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 
     if (APPIRATER_DEBUG) {
         [self performSelectorOnMainThread:@selector(showPrompt) withObject:nil waitUntilDone:NO];
@@ -82,11 +82,11 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
         double secondsUntilPrompt = 60 * 60 * 24 * DAYS_UNTIL_PROMPT;
 
         // get the launch count
-        int launchCount = [userDefaults integerForKey:kAppiraterLaunchCount];
+        NSInteger launchCount = [userDefaults integerForKey:kAppiraterLaunchCount];
         launchCount++;
         [userDefaults setInteger:launchCount forKey:kAppiraterLaunchCount];
         if (APPIRATER_DEBUG)
-            NSLog(@"APPIRATER Launch count: %d", launchCount);
+            NSLog(@"APPIRATER Launch count: %ld", (long)launchCount);
 
         // have they previously declined to rate this version of the app?
         BOOL declinedToRate = [userDefaults boolForKey:kAppiraterDeclinedToRate];
@@ -116,7 +116,7 @@ NSString *templateReviewURL = @"itms-apps://itunes.apple.com/WebObjects/MZStore.
     if (!willShowPrompt)
         [self autorelease];
 
-    [pool release];
+    }
 }
 
 -(void) showPrompt {

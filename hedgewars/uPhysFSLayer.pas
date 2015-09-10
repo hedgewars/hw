@@ -151,7 +151,9 @@ end;
 procedure initModule;
 var i: LongInt;
     cPhysfsId: shortstring;
+{$IFNDEF MOBILE}
     fp: PChar;
+{$ENDIF MOBILE}
 begin
 {$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
@@ -163,6 +165,7 @@ begin
     i:= PHYSFS_init(Str2PChar(cPhysfsId));
     AddFileLog('[PhysFS] init: ' + inttostr(i));
 
+{$IFNDEF MOBILE}
     // mount system fonts paths first
     for i:= low(cFontsPaths) to high(cFontsPaths) do
         begin
@@ -170,6 +173,7 @@ begin
             if fp <> nil then
                 pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
+{$ENDIF MOBILE}
 
     pfsMountAtRoot(PathPrefix);
     pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));

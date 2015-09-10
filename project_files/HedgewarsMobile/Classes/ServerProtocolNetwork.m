@@ -82,7 +82,8 @@ static ServerProtocolNetwork *serverConnection;
 }
 
 -(void) serverProtocol {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     IPaddress ip;
     BOOL clientQuit = NO;
     char *buffer = (char *)malloc(sizeof(char)*BUFFER_SIZE);
@@ -206,7 +207,7 @@ static ServerProtocolNetwork *serverConnection;
     SDLNet_TCP_Close(self.ssd);
     SDLNet_Quit();
 
-    [pool release];
+    }
 }
 
 @end

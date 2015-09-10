@@ -61,7 +61,7 @@
 -(void) selectColor:(NSUInteger) color {
     if (color != self.selectedColor) {
         self.selectedColor = color;
-        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInt:color]];
+        self.colorIndex = [self.colorArray indexOfObject:[NSNumber numberWithUnsignedInteger:color]];
 
         self.backgroundColor = [UIColor colorWithRed:((color & 0x00FF0000) >> 16)/255.0f
                                                green:((color & 0x0000FF00) >> 8)/255.0f

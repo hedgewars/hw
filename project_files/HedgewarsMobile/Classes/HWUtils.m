@@ -111,15 +111,15 @@ static TGameStatus gameStatus = gsNone;
     NSInteger res = 0;
     do {
         res = (random() % 64511) + 1024;
-    } while ([activePorts containsObject:[NSNumber numberWithInt:res]]);
+    } while ([activePorts containsObject:[NSNumber numberWithInteger:res]]);
 
     // add this number to the forbdding list
-    [activePorts addObject:[NSNumber numberWithInt:res]];
+    [activePorts addObject:[NSNumber numberWithInteger:res]];
     return res;
 }
 
 +(void) freePort:(NSInteger) port {
-    [activePorts removeObject:[NSNumber numberWithInt:port]];
+    [activePorts removeObject:[NSNumber numberWithInteger:port]];
 }
 
 +(BOOL) isNetworkReachable {
