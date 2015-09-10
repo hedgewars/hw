@@ -63,6 +63,7 @@ implementation
 
 const
     clickTime = 200;
+    nilFingerId = High(TSDL_FingerId);
     baseRectSize = 96;
 
 var

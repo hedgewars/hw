@@ -200,10 +200,10 @@
         crateLab.text = ((int)crateSli.value == 9) ? @"∞" : [NSString stringWithFormat:@"%d",(int)crateSli.value];
 
         [delegate updateValues:[NSArray arrayWithObjects:
-                                [NSNumber numberWithInt:(int)initialSli.value],
-                                [NSNumber numberWithInt:(int)probabilitySli.value],
-                                [NSNumber numberWithInt:(int)delaySli.value],
-                                [NSNumber numberWithInt:(int)crateSli.value], nil]
+                                [NSNumber numberWithInteger:initialSli.value],
+                                [NSNumber numberWithInteger:probabilitySli.value],
+                                [NSNumber numberWithInteger:delaySli.value],
+                                [NSNumber numberWithInteger:crateSli.value], nil]
                        atIndex:self.tag];
     } else
         DLog(@"error - delegate = nil!");

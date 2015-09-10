@@ -190,7 +190,8 @@
             [img release];
 
             UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
-            cellLabel.text = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            NSString *basicSettingTitleKey = [[self.basicSettingList objectAtIndex:row] objectForKey:@"title"];
+            cellLabel.text = NSLocalizedStringFromTable(basicSettingTitleKey, @"Scheme", nil);
             cellLabel.adjustsFontSizeToFitWidth = YES;
 
             // can't use the viewWithTag method because row is dynamic
@@ -221,7 +222,7 @@
             cellSlider.frame = CGRectMake(hOffset, vOffset, sliderLength, 23);
 
             NSString *prestring = nil;
-            checkValueString(prestring,cellLabel.text,cellSlider);
+            checkValueString(prestring,basicSettingTitleKey,cellSlider);
 
             // forced to use this weird format otherwise the label disappears when size of the text is bigger than the original
             while ([prestring length] <= 4)
@@ -251,8 +252,10 @@
             [image release];
             cell.imageView.layer.cornerRadius = 6.0f;
             cell.imageView.layer.masksToBounds = YES;
-            cell.textLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
-            cell.detailTextLabel.text = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
+            NSString *gameModTitleKey = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"title"];
+            cell.textLabel.text = NSLocalizedStringFromTable(gameModTitleKey, @"Scheme", nil);
+            NSString *gameModDescKey = [[self.gameModifierArray objectAtIndex:row] objectForKey:@"description"];
+            cell.detailTextLabel.text = NSLocalizedStringFromTable(gameModDescKey, @"Scheme", nil);
             cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
             cell.detailTextLabel.minimumFontSize = 6;
 
@@ -284,7 +287,7 @@
 
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
-    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInt:(NSInteger) theSlider.value]];
+    [array replaceObjectAtIndex:theSlider.tag-SLIDER_TAG withObject:[NSNumber numberWithInteger:theSlider.value]];
 }
 
 #pragma mark -

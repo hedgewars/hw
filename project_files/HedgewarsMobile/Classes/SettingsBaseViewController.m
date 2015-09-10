@@ -133,7 +133,7 @@
 
 -(void) dismissSplitView {
     [[AudioManagerController mainManager] playBackSound];
-    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissModalViewControllerAnimated:YES];
+    [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -198,8 +198,8 @@
 #pragma mark -
 #pragma mark Table view delegate
 -(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     UIViewController *nextController = nil;
 
     if (newRow != oldRow) {

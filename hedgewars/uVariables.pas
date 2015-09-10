@@ -21,7 +21,7 @@
 unit uVariables;
 interface
 
-uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils, uMatrix;
+uses SDLh, uTypes, uFloat, GLunit, uConsts, Math, uUtils{$IFDEF GL2}, uMatrix{$ENDIF};
 
 var
 /////// init flags ///////
@@ -418,13 +418,13 @@ var
 {$IFDEF USE_TOUCH_INTERFACE}
             (FileName: 'firebutton'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprFireButton
-            (FileName: 'arrowUp'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowup'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowUp
-            (FileName: 'arrowDown'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowdown'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowDown
-            (FileName: 'arrowLeft'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowleft'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowLeft
-            (FileName: 'arrowRight'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
+            (FileName: 'arrowright'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 100; Height: 100; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprArrowRight
             (FileName: 'forwardjump'; Path: ptButtons; AltPath: ptNone; Texture: nil; Surface: nil;
             Width: 128; Height: 128; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpHigh; getDimensions: false; getImageDimensions: true), // sprAMWidget
@@ -2674,8 +2674,13 @@ begin
     vobSDVelocity:= 15;
     vobSDFallSpeed:= 250;
 
+{$IFDEF MOBILE}
+    cMinScreenWidth  := min(cScreenWidth, 480);
+    cMinScreenHeight := min(cScreenHeight, 320);
+{$ELSE}
     cMinScreenWidth  := min(cScreenWidth, 640);
     cMinScreenHeight := min(cScreenHeight, 480);
+{$ENDIF}
 
     cNewScreenWidth    := cScreenWidth;
     cNewScreenHeight   := cScreenHeight;

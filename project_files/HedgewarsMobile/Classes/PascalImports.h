@@ -28,9 +28,8 @@ extern "C" {
      * that you want to use in your non-Pascal code
      */
 
-    void Game(const int argc, const char *argv[]);
-    void GenLandPreview(void);
-    void LoadLocaleWrapper(const char *filename);
+    void RunEngine(const int argc, const char *argv[]);
+    void LoadLocaleWrapper(const char *filepath, const char *filename);
 
     void HW_versionInfo(int *protoNum, char **versionStr);
     void *HW_getSDLWindow(void);

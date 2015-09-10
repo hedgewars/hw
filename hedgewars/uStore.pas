@@ -370,7 +370,11 @@ if not cOnlyStats then
     begin
     MakeCrossHairs;
     LoadGraves;
+{$IFDEF IPHONEOS}
+    tmpHatSurf:= LoadDataImage(ptHats, 'chef', ifNone);
+{$ELSE}
     tmpHatSurf:= LoadDataImage(ptHats, 'Reserved/chef', ifNone);
+{$ENDIF}
     ChefHatTexture:= Surface2Tex(tmpHatSurf, true);
     freeTmpHatSurf();
     end;
@@ -719,6 +723,9 @@ begin
 {$IFDEF IPHONEOS}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 0);
     SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
+ 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 1);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 {$ELSE}
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 {$ENDIF}
@@ -743,6 +750,17 @@ begin
 {$ELSE}
     buf[0]:= char(0); // avoid compiler hint
     AddFileLog('Setting up OpenGL (using driver: ' + shortstring(SDL_VideoDriverName(buf, sizeof(buf))) + ')');
+{$ENDIF}
+
+{$IFDEF MOBILE}
+    // TODO: this function creates an opengles1.1 context
+    // un-comment below and add proper logic to support opengles2.0
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    //SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+    if SDLGLcontext = nil then
+        SDLGLcontext:= SDL_GL_CreateContext(SDLwindow);
+    SDLTry(SDLGLcontext <> nil, true);
+    SDL_GL_SetSwapInterval(1);
 {$ENDIF}
 
     RendererSetup();

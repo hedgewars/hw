@@ -1148,7 +1148,7 @@ var preShiftWorldDx: LongInt;
 procedure ShiftWorld(Dir: LongInt); inline;
 begin
     preShiftWorldDx:= WorldDx;
-    WorldDx:= WorldDx + Dir * LongInt(playWidth);
+    WorldDx:= WorldDx + LongInt(Dir * LongInt(playWidth));
 
 end;
 

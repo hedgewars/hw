@@ -24,6 +24,10 @@
 
 #define INDICATOR_TAG 7654
 
+@interface MapPreviewButtonView ()
+@property (nonatomic) NSInteger port;
+@end
+
 @implementation MapPreviewButtonView
 @synthesize delegate;
 
@@ -64,7 +68,7 @@
     IPaddress ip;
     BOOL serverQuit = NO;
     uint8_t packedMap[128*32];
-    int port = [HWUtils randomPort];
+    self.port = [HWUtils randomPort];
 
     if (SDLNet_Init() < 0) {
         DLog(@"SDLNet_Init: %s", SDLNet_GetError());
@@ -72,23 +76,45 @@
     }
 
     // Resolving the host using NULL make network interface to listen
-    if (SDLNet_ResolveHost(&ip, NULL, port) < 0) {
+    if (SDLNet_ResolveHost(&ip, NULL, self.port) < 0) {
         DLog(@"SDLNet_ResolveHost: %s\n", SDLNet_GetError());
         serverQuit = YES;
     }
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip))) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), port);
+        DLog(@"SDLNet_TCP_Open: %s %ld\n", SDLNet_GetError(), (long)self.port);
         serverQuit = YES;
     }
 
-    // launch the preview here so that we're sure the tcp channel is open
-    pthread_t thread_id;
-    pthread_create(&thread_id, NULL, (void *(*)(void *))GenLandPreview, (void *)port);
-    pthread_detach(thread_id);
-
-    DLog(@"Waiting for a client on port %d", port);
+    // launch the preview in background here so that we're sure the tcp channel is open
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0), ^{
+        NSString *ipcString = [[NSString alloc] initWithFormat:@"%ld", (long)self.port];
+        NSString *documentsDirectory = DOCUMENTS_FOLDER();
+        
+        NSMutableArray *gameParameters = [[NSMutableArray alloc] initWithObjects:
+                                          @"--internal",
+                                          @"--port", ipcString,
+                                          @"--user-prefix", documentsDirectory,
+                                          @"--landpreview",
+                                          nil];
+        [ipcString release];
+        
+        int argc = [gameParameters count];
+        const char **argv = (const char **)malloc(sizeof(const char*)*argc);
+        for (int i = 0; i < argc; i++)
+            argv[i] = strdup([[gameParameters objectAtIndex:i] UTF8String]);
+        [gameParameters release];
+        
+        RunEngine(argc, argv);
+        
+        // cleanup
+        for (int i = 0; i < argc; i++)
+            free((void *)argv[i]);
+        free(argv);
+    });
+    
+    DLog(@"Waiting for a client on port %ld", (long)self.port);
     while (!serverQuit) {
         /* This check the sd if there is a pending connection.
          * If there is one, accept that, and open a new socket for communicating */
@@ -111,7 +137,7 @@
             serverQuit = YES;
         }
     }
-    [HWUtils freePort:port];
+    [HWUtils freePort:self.port];
     SDLNet_TCP_Close(sd);
     SDLNet_Quit();
 
@@ -129,13 +155,14 @@
 }
 
 -(void) drawingThread {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     uint8_t unpackedMap[128*32*8];
     [self engineProtocol:unpackedMap];
 
     // http://developer.apple.com/mac/library/qa/qa2001/qa1037.html
     CGColorSpaceRef colorspace = CGColorSpaceCreateDeviceGray();
-    CGContextRef bitmapImage = CGBitmapContextCreate(unpackedMap, 256, 128, 8, 256, colorspace, kCGImageAlphaNone);
+    CGContextRef bitmapImage = CGBitmapContextCreate(unpackedMap, 256, 128, 8, 256, colorspace, (CGBitmapInfo)kCGImageAlphaNone);
     CGColorSpaceRelease(colorspace);
 
     CGImageRef previewCGImage = CGBitmapContextCreateImage(bitmapImage);
@@ -149,7 +176,7 @@
                         waitUntilDone:NO];
     [previewImage release];
     [self performSelectorOnMainThread:@selector(setLabelText:)
-                           withObject:[NSString stringWithFormat:@"%d", maxHogs]
+                           withObject:[NSString stringWithFormat:@"%ld", (long)maxHogs]
                         waitUntilDone:NO];
     [self performSelectorOnMainThread:@selector(turnOnWidgets)
                            withObject:nil
@@ -157,8 +184,8 @@
     [self performSelectorOnMainThread:@selector(removeIndicator)
                            withObject:nil
                         waitUntilDone:NO];
-
-    [pool release];
+    
+    }
 }
 
 -(void) updatePreviewWithSeed:(NSString *)seed {

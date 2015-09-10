@@ -23,7 +23,7 @@
 @class SchemeWeaponConfigViewController;
 @class TeamConfigViewController;
 @class MapConfigViewController;
-//@class HelpPageLobbyViewController;
+@class HelpPageLobbyViewController;
 
 @interface GameConfigViewController : UIViewController {
     UIView *imgContainer;
@@ -33,7 +33,7 @@
     SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
     TeamConfigViewController *teamConfigViewController;
     MapConfigViewController *mapConfigViewController;
-    //HelpPageLobbyViewController *helpPage;
+    HelpPageLobbyViewController *helpPage;
 }
 
 @property (retain) UIView *imgContainer;
@@ -42,7 +42,7 @@
 @property (nonatomic,retain) IBOutlet SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
 @property (nonatomic,retain) IBOutlet TeamConfigViewController *teamConfigViewController;
 @property (nonatomic,retain) IBOutlet MapConfigViewController *mapConfigViewController;
-//@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
+@property (nonatomic,retain) HelpPageLobbyViewController *helpPage;
 
 -(IBAction) buttonPressed:(id) sender;
 -(IBAction) segmentPressed:(id) sender;

@@ -51,6 +51,8 @@
 
 // override the direct execution of SDL_main to allow us to implement our own frontend
 -(void) postFinishLaunch {
+    [self performSelector:@selector(hideLaunchScreen) withObject:nil afterDelay:0.0];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
 
     self.uiwindow = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -58,7 +60,7 @@
 
     NSString *controllerName = (IS_IPAD() ? @"MainMenuViewController-iPad" : @"MainMenuViewController-iPhone");
     self.mainViewController = [[MainMenuViewController alloc] initWithNibName:controllerName bundle:nil];
-    [self.uiwindow addSubview:self.mainViewController.view];
+    self.uiwindow.rootViewController = self.mainViewController;
     [self.mainViewController release];
 
     [self.uiwindow makeKeyAndVisible];

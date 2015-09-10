@@ -57,7 +57,29 @@
 
 -(void) holdAction {
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(holdAction:onTable:)])
-        [self.delegate holdAction:self.textLabel.text onTable:(UITableView *)self.superview];
+    {
+        UITableView *tableView = [self findTable];
+        if (tableView)
+        {
+            [self.delegate holdAction:self.textLabel.text onTable:tableView];
+        }
+    }
+}
+
+- (UITableView *)findTable
+{
+    UIView *tableView = self.superview;
+    while (![tableView isKindOfClass:[UITableView class]] || (tableView == nil))
+    {
+        tableView = tableView.superview;
+        
+        if ([tableView isEqual:self.window])
+        {
+            tableView = nil;
+        }
+    }
+    
+    return (UITableView *)tableView;
 }
 
 -(void) dealloc {

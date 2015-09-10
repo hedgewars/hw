@@ -96,8 +96,8 @@
     for (int i = 0; i < numberOfPlayingHogs; i++) {
         NSDictionary *hog = [hogs objectAtIndex:i];
 
-        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %d %@",
-                                           [hog objectForKey:@"level"], initialHealth, [hog objectForKey:@"hogname"]];
+        NSString *hogLevelHealthAndName = [[NSString alloc] initWithFormat:@"eaddhh %@ %ld %@",
+                                           [hog objectForKey:@"level"], (long)initialHealth, [hog objectForKey:@"hogname"]];
         [self sendToEngine: hogLevelHealthAndName];
         [hogLevelHealthAndName release];
 
@@ -214,7 +214,8 @@
 
 // this is launched as thread and handles all IPC with engine
 -(void) engineProtocol:(id) object {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
+    
     NSDictionary *gameConfig = (NSDictionary *)object;
     NSMutableArray *statsArray = nil;
     TCPsocket sd;
@@ -240,7 +241,7 @@
 
     // Open a connection with the IP provided (listen on the host's port)
     if (!(sd = SDLNet_TCP_Open(&ip)) && !clientQuit) {
-        DLog(@"SDLNet_TCP_Open: %s %\n", SDLNet_GetError(), self.enginePort);
+        DLog(@"SDLNet_TCP_Open: %s %d\n", SDLNet_GetError(), self.enginePort);
         clientQuit = YES;
     }
 
@@ -403,8 +404,9 @@
     [HWUtils freePort:self.enginePort];
     SDLNet_TCP_Close(csd);
     SDLNet_Quit();
+    
+    }
 
-    [pool release];
     // Invoking this method should be avoided as it does not give your thread a chance
     // to clean up any resources it allocated during its execution.
     //[NSThread exit];

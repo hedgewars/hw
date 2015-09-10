@@ -125,6 +125,8 @@
     } else {
         UIImage *backgroundImage = [[UIImage alloc] initWithContentsOfFile:@"background~iphone.png"];
         UIImageView *background = [[UIImageView alloc] initWithImage:backgroundImage];
+        background.contentMode = UIViewContentModeScaleAspectFill;
+        background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [backgroundImage release];
         [self.view addSubview:background];
         [background release];
@@ -276,8 +278,8 @@
     else
         lastIndexPath = self.lastIndexPath_lu;
 
-    int newRow = [indexPath row];
-    int oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+    NSInteger newRow = [indexPath row];
+    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
 
     if (newRow != oldRow) {
         //TODO: this code works only for a single section table
@@ -297,7 +299,7 @@
             if ([[settings objectForKey:@"sync_ws"] boolValue]) {
                 for (NSString *str in self.listOfWeapons) {
                     if ([str isEqualToString:self.selectedScheme]) {
-                        int row = [self.listOfSchemes indexOfObject:str];
+                        NSInteger row = [self.listOfSchemes indexOfObject:str];
                         self.selectedWeapon = str;
                         self.lastIndexPath_we = [NSIndexPath indexPathForRow:row inSection:1];
                         break;
@@ -320,20 +322,32 @@
 
             self.scriptCommand = [NSString stringWithFormat:@"escript Scripts/Multiplayer/%@",self.selectedScript];
             NSString *scheme = [scriptOptions objectAtIndex:0];
-            if ([scheme isEqualToString:@"locked"]) {
+            if ([scheme isEqualToString:@"locked"])
+            {
                 self.selectedScheme = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:0];
-            } else {
-                self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
+            }
+            else
+            {
+                if (![scheme isEqualToString:@"*"])
+                {
+                    self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
+                }
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
             }
 
             NSString *weapon = [scriptOptions objectAtIndex:1];
-            if ([weapon isEqualToString:@"locked"]) {
+            if ([weapon isEqualToString:@"locked"])
+            {
                 self.selectedWeapon = @"Default.plist";
                 [self.topControl setEnabled:NO forSegmentAtIndex:1];
-            } else {
-                self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
+            }
+            else
+            {
+                if (![weapon isEqualToString:@"*"])
+                {
+                    self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
+                }
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
         }

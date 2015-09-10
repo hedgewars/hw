@@ -30,7 +30,7 @@ function  FormatA(fmt: ansistring; var arg: ansistring): ansistring;
 function  GetEventString(e: TEventId): ansistring;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(str: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
 {$ENDIF}
 
 implementation
@@ -133,9 +133,17 @@ else
 end;
 
 {$IFDEF HWLIBRARY}
-procedure LoadLocaleWrapper(str: pchar); cdecl; export;
+procedure LoadLocaleWrapper(path: pchar; filename: pchar); cdecl; export;
 begin
-    LoadLocale(Strpas(str));
+    PathPrefix := Strpas(path);
+ 
+    uUtils.initModule(false);
+    uPhysFSLayer.initModule;
+ 
+    LoadLocale(Strpas(filename));
+ 
+    uPhysFSLayer.freeModule;
+    uUtils.freeModule;
 end;
 {$ENDIF}
 

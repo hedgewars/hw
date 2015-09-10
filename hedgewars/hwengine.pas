@@ -29,7 +29,7 @@ interface
 program hwengine;
 {$ENDIF}
 
-uses SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
+uses {$IFDEF IPHONEOS}cmem, {$ENDIF} SDLh, uMisc, uConsole, uGame, uConsts, uLand, uAmmos, uVisualGears, uGears, uStore, uWorld, uInputHandler
      , uSound, uScript, uTeams, uStats, uIO, uLocale, uChat, uAI, uAIMisc, uAILandMarks, uLandTexture, uCollisions
      , SysUtils, uTypes, uVariables, uCommands, uUtils, uCaptions, uDebug, uCommandHandlers, uLandPainted
      , uPhysFSLayer, uCursor, uRandom, ArgParsers, uVisualGearsHandlers, uTextures, uRender
@@ -541,7 +541,11 @@ end;
 
 ///////////////////////////////////////////////////////////////////////////////
 procedure GenLandPreview;
+{$IFDEF MOBILE}
+var Preview: TPreview;
+{$ELSE}
 var Preview: TPreviewAlpha;
+{$ENDIF MOBILE}
 begin
     initEverything(false);
 
@@ -550,7 +554,11 @@ begin
     TryDo(InitStepsFlags = cifRandomize, 'Some parameters not set (flags = ' + inttostr(InitStepsFlags) + ')', true);
 
     ScriptOnPreviewInit;
+{$IFDEF MOBILE}
+    GenPreview(Preview);
+{$ELSE}
     GenPreviewAlpha(Preview);
+{$ENDIF MOBILE}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
@@ -602,9 +610,13 @@ begin
         end;
 
     {$IFDEF PAS2C}
-    exit(HaltNoError);
+        exit(HaltNoError);
     {$ELSE}
-    halt(HaltNoError);
+        {$IFDEF IPHONEOS}
+            exit;
+        {$ELSE}
+            halt(HaltNoError);
+        {$ENDIF}
     {$ENDIF}
 {$IFDEF HWLIBRARY}
 end;
