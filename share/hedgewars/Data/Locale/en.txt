@@ -103,7 +103,6 @@
 02:00=%1 has timed out!
 02:00=%1 says peace out!
 02:00=%1 will be fondly remembered!
-02:00=%1 has an aneurysm!
 02:00=%1 leaves behind a wife and child
 02:00=%1 has launched his last bazooka
 02:00=%1 has tossed his last grenade
