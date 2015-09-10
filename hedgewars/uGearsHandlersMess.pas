@@ -3677,7 +3677,14 @@ begin
     FollowGear := Gear;
 
     if Gear^.Timer > 0 then
+        begin
+        if Gear^.Timer = 1 then
+            begin
+            StopSoundChan(Gear^.SoundChannel);
+            Gear^.SoundChannel:= -1;
+            end;
         dec(Gear^.Timer);
+        end;
 
     fChanged := false;
     if (HHGear = nil) or ((HHGear^.State and gstHHDriven) = 0) or (Gear^.Timer = 0) then
