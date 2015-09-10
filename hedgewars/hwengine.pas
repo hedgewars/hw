@@ -610,9 +610,13 @@ begin
         end;
 
     {$IFDEF PAS2C}
-    exit(HaltNoError);
+        exit(HaltNoError);
     {$ELSE}
-    exit;
+        {$IFDEF IPHONEOS}
+            exit;
+        {$ELSE}
+            halt(HaltNoError);
+        {$ENDIF}
     {$ENDIF}
 {$IFDEF HWLIBRARY}
 end;
