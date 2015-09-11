@@ -1767,7 +1767,7 @@ function RedefineSubset()
 	elseif cat[cIndex] == loc("Cleaver Placement Mode") then
 		pMode = {loc("Standard Cleaver")}
 	elseif cat[cIndex] == loc("Barrel Placement Mode") then
-		pMode = {1,50,75,100}
+		pMode = {1,50,60,75,100,120}
 	elseif cat[cIndex] == loc("Health Crate Placement Mode") then
 		pMode = {25,50,75,100}
 	elseif cat[cIndex] == loc("Weapon Crate Placement Mode") then
