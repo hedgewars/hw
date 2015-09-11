@@ -545,7 +545,7 @@ procedure GenLandPreview;
 var Preview: TPreview;
 {$ELSE}
 var Preview: TPreviewAlpha;
-{$ENDIF MOBILE}
+{$ENDIF}
 begin
     initEverything(false);
 
@@ -558,7 +558,7 @@ begin
     GenPreview(Preview);
 {$ELSE}
     GenPreviewAlpha(Preview);
-{$ENDIF MOBILE}
+{$ENDIF}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
