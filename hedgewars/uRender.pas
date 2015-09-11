@@ -359,31 +359,29 @@ end;
 {$ENDIF}
 
 function glLoadExtension(extension : shortstring) : boolean;
+var logmsg: shortstring;
 begin
-(*
-//TODO: pas2c does not handle {$IF (GLunit = gles11) OR DEFINED(PAS2C)}
-{$IFNDEF PAS2C}
-{$IF GLunit = gles11}
-    // FreePascal doesnt come with OpenGL ES 1.1 Extension headers
     extension:= extension; // avoid hint
     glLoadExtension:= false;
-    AddFileLog('OpenGL - "' + extension + '" skipped')
-{$ELSE}
-    glLoadExtension:= glext_LoadExtension(extension);
-    if glLoadExtension then
-        AddFileLog('OpenGL - "' + extension + '" loaded')
-    else
-        AddFileLog('OpenGL - "' + extension + '" failed to load');
-{$ENDIF}
+    logmsg:= 'OpenGL - "' + extension + '" skipped';
 
-{$ELSE} // pas2c part
-    glLoadExtension:= false;
+{$IFNDEF IPHONEOS}
+//TODO: pas2c does not handle
+{$IFNDEF PAS2C}
+// FreePascal doesnt come with OpenGL ES 1.1 Extension headers
+{$IF GLunit <> gles11}
+
+    glLoadExtension:= glext_LoadExtension(extension);
+
+    if glLoadExtension then
+        logmsg:= 'OpenGL - "' + extension + '" loaded'
+    else
+        logmsg:= 'OpenGL - "' + extension + '" failed to load';
+
 {$ENDIF}
-*)
- 
- extension:= extension; // avoid hint
- glLoadExtension:= false;
- AddFileLog('OpenGL - "' + extension + '" skipped')
+{$ENDIF}
+{$ENDIF}
+    AddFileLog(logmsg);
 end;
 
 {$IFDEF USE_S3D_RENDERING OR USE_VIDEO_RECORDING}
