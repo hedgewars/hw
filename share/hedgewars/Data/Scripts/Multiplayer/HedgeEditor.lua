@@ -279,6 +279,9 @@ WEP AND UTIL CRATE MENU
 -- HEDGE EDITOR, SCRIPT BEGINS (Hey yo, it's about time)
 ---------------------------------------------------------
 
+-- Tell other scripts that we exist
+HedgeEditor = true
+
 HedgewarsScriptLoad("/Scripts/Locale.lua")
 HedgewarsScriptLoad("/Scripts/Tracker.lua")
 HedgewarsScriptLoad("/Scripts/Params.lua")
