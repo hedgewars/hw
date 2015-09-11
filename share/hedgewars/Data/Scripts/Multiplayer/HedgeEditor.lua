@@ -833,12 +833,14 @@ local spriteTextArray = {"sprWater", "sprCloud", "sprBomb", "sprBigDigit", "sprF
  "sprKnife", "sprStar", "sprIceTexture", "sprIceGun", "sprFrozenHog", "sprAmRubber", "sprBoing"}
 
  local reducedSpriteIDArray = {
-  sprBigDigit, sprTarget, sprKowtow, sprBee, sprAmGirder, sprExplosion50, sprGirder,sprCustom1,sprCustom2
-  }
+  sprAmRubber, sprAmGirder, sprAMSlot, sprAMAmmos, sprAMAmmosBW, sprAMCorners, sprHHTelepMask, sprTurnsLeft,
+  sprSpeechCorner, sprSpeechEdge, sprSpeechTail, sprThoughtCorner, sprThoughtEdge, sprThoughtTail, sprShoutCorner,
+  sprShoutEdge, sprShoutTail, sprBotlevels, sprIceTexture, sprCustom1, sprCustom2, }
 
-  local reducedSpriteTextArray = {
-  "sprBigDigit", "sprTarget", "sprKowtow", "sprBee", "sprAmGirder", "sprExplosion50", "sprGirder","sprCustom1","sprCustom2"
-  }
+ local reducedSpriteTextArray = {
+  "sprAmRubber", "sprAmGirder", "sprAMSlot", "sprAMAmmos", "sprAMAmmosBW", "sprAMCorners", "sprHHTelepMask", "sprTurnsLeft",
+  "sprSpeechCorner", "sprSpeechEdge", "sprSpeechTail", "sprThoughtCorner", "sprThoughtEdge", "sprThoughtTail", "sprShoutCorner",
+  "sprShoutEdge", "sprShoutTail", "sprBotlevels", "sprIceTexture", "sprCustom1", "sprCustom2", }
 
 ----------------------------
 -- placement shite
