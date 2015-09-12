@@ -238,7 +238,7 @@ var
 
     LuaTemplateNumber : LongWord;
 
-    LastVoice : TVoice = ( snd: sndNone; voicepack: nil );
+    LastVoice : TVoice;
 
     mobileRecord: TMobileRecord;
 
@@ -259,7 +259,10 @@ var
 
 var
     // these consts are here because they would cause circular dependencies in uConsts/uTypes
-    cPathz: array[TPathType] of shortstring = (
+    cPathz: array[TPathType] of shortstring;
+
+const
+    cPathzInit: array[TPathType] of shortstring = (
         '',                              // ptNone
         '//',                            // ptData
         '/Graphics',                     // ptGraphics
@@ -286,7 +289,10 @@ var
     );
 
 var
-    Fontz: array[THWFont] of THHFont = (
+    Fontz: array[THWFont] of THHFont;
+
+const
+    FontzInit: array[THWFont] of THHFont = (
             (Handle: nil;
             Height: 12;
             style: TTF_STYLE_NORMAL;
@@ -316,7 +322,10 @@ var
             );
 
 var
-    SpritesData: array[TSprite] of TSpriteData = (
+    SpritesData: array[TSprite] of TSpriteData;
+
+const
+    SpritesDataInit: array[TSprite] of TSpriteData = (
             (FileName:  'BlueWater'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
             Width:   0; Height:  0; imageWidth: 0; imageHeight: 0; saveSurf: false; priority: tpMedium; getDimensions: true; getImageDimensions: true),// sprWater
             (FileName:     'Clouds'; Path: ptCurrTheme;AltPath: ptGraphics; Texture: nil; Surface: nil;
@@ -734,8 +743,8 @@ const
             (Sprite:   sprJuggle; FramesCount: 49; Interval:  38; cmd: '/juggle'; Voice: sndNone; VoiceDelay: 0)
             );
 
-var
-    Ammoz: array [TAmmoType] of record
+type
+    TAmmozRec = record
             NameId: TAmmoStrId;
             NameTex: PTexture;
             Probability, NumberInCase: Longword;
@@ -748,7 +757,13 @@ var
             PosCount: Longword;
             PosSprite: TSprite;
             ejectX, ejectY: Longint;
-            end = (
+            end;
+
+var
+    Ammoz: array [TAmmoType] of TAmmozRec;
+
+const
+    AmmozInit: array [TAmmoType] of TAmmozRec = (
             (NameId: sidNothing;
             NameTex: nil;
             Probability: 0;
@@ -2495,6 +2510,17 @@ procedure initModule;
 var s: shortstring;
     i: integer;
 begin
+    // init LastVoice
+    LastVoice.snd:= sndNone;
+    LastVoice.voicepack:= nil;
+
+    // init arrays
+    Move(cPathzInit, cPathz, sizeof(cPathz));
+    Move(FontzInit, Fontz, sizeof(Fontz));
+    Move(SpritesDataInit, SpritesData, sizeof(SpritesData));
+    Move(AmmozInit, Ammoz, sizeof(Ammoz));
+
+
     cLocale:= cLocaleFName;
     SplitByChar(cLocale, s, '.');
 
