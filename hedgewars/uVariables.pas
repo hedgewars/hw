@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -179,6 +179,7 @@ var
     cElastic        : hwFloat;
     cGravity        : hwFloat;
     cGravityf       : real;
+    cBuildMaxDist   : LongInt;
     cDamageModifier : hwFloat;
     cLaserSighting  : boolean;
     cVampiric       : boolean;
@@ -2492,6 +2493,7 @@ end;
 
 procedure initModule;
 var s: shortstring;
+    i: integer;
 begin
     cLocale:= cLocaleFName;
     SplitByChar(cLocale, s, '.');
@@ -2565,6 +2567,7 @@ begin
     cElastic                := _0_9;
     cGravity                := cMaxWindSpeed * 2;
     cGravityf               := 0.00025 * 2;
+    cBuildMaxDist           := cDefaultBuildMaxDist;
     cDamageModifier         := _1;
     TargetPoint             := cTargetPointRef;
 
@@ -2705,6 +2708,43 @@ begin
     AprilOne := false;
 
     ChatPasteBuffer:= '';
+
+    // initialize pointers to nil
+    // (don't rely on implicit init of fpc, because that one only happens ONCE when used as lib)
+    CurAmmoGear:= nil;
+    lastGearByUID:= nil;
+    GearsList:= nil;
+    CurrentTeam:= nil;
+    PreviousTeam:= nil;
+    CurrentHedgehog:= nil;
+    FollowGear:= nil;
+    lastVisualGearByUID:= nil;
+
+    ChefHatTexture:= nil;
+    CrosshairTexture:= nil;
+    GenericHealthTexture:= nil;
+    WeaponTooltipTex:= nil;
+    HHTexture:= nil;
+    LandBackSurface:= nil;
+    ConfirmTexture:= nil;
+    MissionIcons:= nil;
+    ropeIconTex:= nil;
+
+    for i:= Low(ClansArray) to High(ClansArray) do
+        begin
+        ClansArray[i]:= nil;
+        end;
+
+    for i:= Low(TeamsArray) to High(TeamsArray) do
+        begin
+        TeamsArray[i]:= nil;
+        end;
+
+    for i:= Low(CountTexz) to High(CountTexz) do
+        begin
+        CountTexz[i]:= nil;
+        end;
+
 end;
 
 procedure freeModule;

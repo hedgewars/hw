@@ -315,42 +315,42 @@ var i: Longword;
 begin
 case cTemplateFilter of
     0: begin
-        cellsize := small_cell_size;
-        maze_inverted := false;
-        minDistance:= max(cFeatureSize*8,32);
-	dabDiv:= 150;
-    end;
+       cellsize := small_cell_size;
+       maze_inverted := false;
+       minDistance:= max(cFeatureSize*8,32);
+       dabDiv:= 150;
+       end;
     1: begin
-        cellsize := medium_cell_size;
-        minDistance:= max(cFeatureSize*6,20);
-        maze_inverted := false;
-	dabDiv:= 100;
-    end;
+       cellsize := medium_cell_size;
+       minDistance:= max(cFeatureSize*6,20);
+       maze_inverted := false;
+       dabDiv:= 100;
+       end;
     2: begin
-        cellsize := large_cell_size;
-        minDistance:= max(cFeatureSize*5,12);
-        maze_inverted := false;
-	dabDiv:= 90;
-    end;
+       cellsize := large_cell_size;
+       minDistance:= max(cFeatureSize*5,12);
+       maze_inverted := false;
+       dabDiv:= 90;
+       end;
     3: begin
-        cellsize := small_cell_size;
-        minDistance:= max(cFeatureSize*8,32);
-        maze_inverted := true;
-	dabDiv:= 130;
-    end;
+       cellsize := small_cell_size;
+       minDistance:= max(cFeatureSize*8,32);
+       maze_inverted := true;
+       dabDiv:= 130;
+       end;
     4: begin
-        cellsize := medium_cell_size;
-        minDistance:= max(cFeatureSize*6,20);
-        maze_inverted := true;
-	dabDiv:= 100;
-    end;
+       cellsize := medium_cell_size;
+       minDistance:= max(cFeatureSize*6,20);
+       maze_inverted := true;
+       dabDiv:= 100;
+       end;
     5: begin
-        cellsize := large_cell_size;
-        minDistance:= max(cFeatureSize*5,12);
-        maze_inverted := true;
-	dabDiv:= 85;
+       cellsize := large_cell_size;
+       minDistance:= max(cFeatureSize*5,12);
+       maze_inverted := true;
+       dabDiv:= 85;
+       end;
     end;
-end;
 
 num_cells_x := LAND_WIDTH div cellsize;
 if not odd(num_cells_x) then
@@ -379,10 +379,10 @@ SetLength(came_from, num_steps, num_cells_x*num_cells_y);
 done := false;
 
 for current_step := 0 to num_steps - 1 do
-begin
+    begin
     step_done[current_step] := false;
     came_from_pos[current_step] := 0;
-end;
+    end;
 
 current_step := 0;
 
@@ -444,14 +444,14 @@ while not done do
     begin
     done := true;
     for current_step := 0 to num_steps-1 do
-    begin
-        if not step_done[current_step] then
         begin
+        if not step_done[current_step] then
+            begin
             see_cell;
             done := false;
+            end;
         end;
     end;
-end;
 
 for x := 0 to seen_cells_x - 1 do
     for y := 0 to seen_cells_y - 1 do

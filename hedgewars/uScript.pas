@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -438,6 +438,26 @@ begin
             ParseCommand('setweap ' + char(at), true, true);
         end;
     lc_setweapon:= 0;
+end;
+
+// no parameter means reset to default (and 0 means unlimited)
+function lc_setmaxbuilddistance(L : Plua_State) : LongInt; Cdecl;
+var np: LongInt;
+const
+    call = 'SetMaxBuildDistance';
+    params = '[ distInPx ]';
+begin
+    if CheckAndFetchParamCountRange(L, 0, 1, call, params, np) then
+        begin
+        if np = 0 then
+            begin
+            // no args? reset
+            cBuildMaxDist:= cDefaultBuildMaxDist;
+            end
+        else
+            CBuildMaxDist:= lua_tointeger(L, 1);
+        end;
+    lc_setmaxbuilddistance:= 0;
 end;
 
 // sets weapon to whatever weapons is next (wraps around, amSkip is skipped)
@@ -2276,7 +2296,7 @@ begin
         else flipVert := false;
         lf:= 0;
 
-        // accept any amount of landflags, loop is never executed if n>6
+        // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
             lf:= lf or lua_tointeger(L, i);
 
@@ -2305,7 +2325,7 @@ var spr   : TSprite;
     eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert : boolean;
 const
     call = 'EraseSprite';
-    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, flipHoriz, flipVert, [, landFlag, ... ]';
+    params = 'x, y, sprite, frameIdx, eraseOnLFMatch, onlyEraseLF, flipHoriz, flipVert, [, landFlag, ... ]';
 begin
     if CheckAndFetchLuaParamMinCount(L, 4, call, params, n) then
         begin
@@ -2323,7 +2343,7 @@ begin
         else flipVert := false;
         lf:= 0;
 
-        // accept any amount of landflags, loop is never executed if n>6
+        // accept any amount of landflags, loop is never executed if n<9
         for i:= 9 to n do
             lf:= lf or lua_tointeger(L, i);
 
@@ -2472,7 +2492,7 @@ begin
     lc_setwaterline:= 0
 end;
 
-function lc_setaihintsongear(L : Plua_State) : LongInt; Cdecl;
+function lc_setgearaihints(L : Plua_State) : LongInt; Cdecl;
 var gear: PGear;
 begin
     if CheckLuaParamCount(L, 2, 'SetAIHintOnGear', 'gearUid, aiHints') then
@@ -2481,7 +2501,7 @@ begin
         if gear <> nil then
             gear^.aihints:= lua_tointeger(L, 2);
         end;
-    lc_setaihintsongear:= 0
+    lc_setgearaihints:= 0
 end;
 
 
@@ -2647,6 +2667,7 @@ ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', ord(cMapGen));
+ScriptSetInteger('MapFeatureSize', cFeatureSize);
 
 ScriptCall('onPreviewInit');
 
@@ -2655,6 +2676,7 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
+cFeatureSize     := ScriptGetInteger('MapFeatureSize');
 end;
 
 procedure ScriptOnGameInit;
@@ -2673,6 +2695,7 @@ ScriptSetString('Seed', cSeed);
 ScriptSetInteger('TemplateFilter', cTemplateFilter);
 ScriptSetInteger('TemplateNumber', LuaTemplateNumber);
 ScriptSetInteger('MapGen', ord(cMapGen));
+ScriptSetInteger('MapFeatureSize', cFeatureSize);
 ScriptSetInteger('ScreenHeight', cScreenHeight);
 ScriptSetInteger('ScreenWidth', cScreenWidth);
 ScriptSetInteger('TurnTime', cHedgehogTurnTime);
@@ -2702,6 +2725,7 @@ ParseCommand('seed ' + ScriptGetString('Seed'), true, true);
 cTemplateFilter  := ScriptGetInteger('TemplateFilter');
 LuaTemplateNumber:= ScriptGetInteger('TemplateNumber');
 cMapGen          := TMapGen(ScriptGetInteger('MapGen'));
+cFeatureSize     := ScriptGetInteger('MapFeatureSize');
 GameFlags        := ScriptGetInteger('GameFlags');
 cHedgehogTurnTime:= ScriptGetInteger('TurnTime');
 cCaseFactor      := ScriptGetInteger('CaseFreq');
@@ -3156,7 +3180,7 @@ ScriptSetInteger('gstMoving'        , gstMoving);
 ScriptSetInteger('gstAttacked'      , gstAttacked);
 ScriptSetInteger('gstAttacking'     , gstAttacking);
 ScriptSetInteger('gstCollision'     , gstCollision);
-ScriptSetInteger('gstChooseTarget', gstChooseTarget);
+ScriptSetInteger('gstChooseTarget'  , gstChooseTarget);
 ScriptSetInteger('gstHHJumping'     , gstHHJumping);
 ScriptSetInteger('gsttmpFlag'       , gsttmpFlag);
 ScriptSetInteger('gstHHThinking'    , gstHHThinking);
@@ -3170,6 +3194,9 @@ ScriptSetInteger('gstNotKickable'   , gstNotKickable);
 ScriptSetInteger('gstLoser'         , gstLoser);
 ScriptSetInteger('gstHHGone'        , gstHHGone);
 ScriptSetInteger('gstInvisible'     , gstInvisible);
+ScriptSetInteger('gstSubmersible'   , gstSubmersible);
+ScriptSetInteger('gstFrozen'        , gstFrozen);
+ScriptSetInteger('gstNoGravity'     , gstNoGravity);
 
 // ai hints
 ScriptSetInteger('aihUsualProcessing', aihUsualProcessing);
@@ -3298,11 +3325,12 @@ lua_register(luaState, _P'SetGravity', @lc_setgravity);
 lua_register(luaState, _P'SetWaterLine', @lc_setwaterline);
 lua_register(luaState, _P'SetNextWeapon', @lc_setnextweapon);
 lua_register(luaState, _P'SetWeapon', @lc_setweapon);
+lua_register(luaState, _P'SetMaxBuildDistance', @lc_setmaxbuilddistance);
 // drawn map functions
 lua_register(luaState, _P'AddPoint', @lc_addPoint);
 lua_register(luaState, _P'FlushPoints', @lc_flushPoints);
 
-lua_register(luaState, _P'SetGearAIHints', @lc_setaihintsongear);
+lua_register(luaState, _P'SetGearAIHints', @lc_setgearaihints);
 lua_register(luaState, _P'HedgewarsScriptLoad', @lc_hedgewarsscriptload);
 lua_register(luaState, _P'DeclareAchievement', @lc_declareachievement);
 

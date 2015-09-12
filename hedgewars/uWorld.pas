@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1737,7 +1737,7 @@ if autoCameraOn and (not PlacingHogs) and (FollowGear <> nil) and (not isCursorV
                     CursorPoint.X:= (prevPoint.X * 7 + dstX) div 8;
                 end;
 
-        if isPhone() or (cScreenHeight < 600) or ((FollowGear^.dY * z).Round < 10) then
+        if isPhone() or (cScreenHeight < 600) or (hwFloat(FollowGear^.dY * z).Round < 10) then
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + WorldDy)) div 8
         else
             CursorPoint.Y:= (prevPoint.Y * 7 + cScreenHeight - (hwRound(FollowGear^.Y) + hwSign(FollowGear^.dY) * z + WorldDy)) div 8;

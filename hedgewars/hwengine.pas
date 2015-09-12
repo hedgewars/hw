@@ -1,6 +1,6 @@
 (*
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -545,7 +545,7 @@ procedure GenLandPreview;
 var Preview: TPreview;
 {$ELSE}
 var Preview: TPreviewAlpha;
-{$ENDIF MOBILE}
+{$ENDIF}
 begin
     initEverything(false);
 
@@ -558,7 +558,7 @@ begin
     GenPreview(Preview);
 {$ELSE}
     GenPreviewAlpha(Preview);
-{$ENDIF MOBILE}
+{$ENDIF}
     WriteLnToConsole('Sending preview...');
     SendIPCRaw(@Preview, sizeof(Preview));
     SendIPCRaw(@MaxHedgehogs, sizeof(byte));
