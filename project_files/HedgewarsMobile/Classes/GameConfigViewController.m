@@ -371,34 +371,8 @@
         UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
         [self updateiPadUIForInterfaceOrientation:currentOrientation];
     }
-    
-    [self.mapConfigViewController viewWillAppear:animated];
-    [self.teamConfigViewController viewWillAppear:animated];
-    [self.schemeWeaponConfigViewController viewWillAppear:animated];
-    // add other controllers here and below
 
     [super viewWillAppear:animated];
-}
-
--(void) viewDidAppear:(BOOL)animated {
-    [self.mapConfigViewController viewDidAppear:animated];
-    [self.teamConfigViewController viewDidAppear:animated];
-    [self.schemeWeaponConfigViewController viewDidAppear:animated];
-    [super viewDidAppear:animated];
-}
-
--(void) viewWillDisappear:(BOOL)animated {
-    [self.mapConfigViewController viewWillDisappear:animated];
-    [self.teamConfigViewController viewWillDisappear:animated];
-    [self.schemeWeaponConfigViewController viewWillDisappear:animated];
-    [super viewWillDisappear:animated];
-}
-
--(void) viewDidDisappear:(BOOL)animated {
-    [self.mapConfigViewController viewDidDisappear:animated];
-    [self.teamConfigViewController viewDidDisappear:animated];
-    [self.schemeWeaponConfigViewController viewDidDisappear:animated];
-    [super viewDidDisappear:animated];
 }
 
 -(void) didReceiveMemoryWarning {
