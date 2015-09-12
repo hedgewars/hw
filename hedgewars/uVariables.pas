@@ -2749,6 +2749,7 @@ end;
 
 procedure freeModule;
 begin
+    cPathz[ptMapCurrent] := '';
 end;
 
 end.
