@@ -1,6 +1,6 @@
 {-
  * Hedgewars, a free turn based strategy game
- * Copyright (c) 2004-2014 Andrey Korotaev <unC0Rr@gmail.com>
+ * Copyright (c) 2004-2015 Andrey Korotaev <unC0Rr@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -82,9 +82,10 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
     let isBanned = host cl `elem` roomBansList jRoom
     let clTeams =
             if (clientProto cl >= 48) && (isJust $ gameInfo jRoom) then
-                map teamname . filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
+                filter (\t -> teamowner t == nick cl) . teamsAtStart . fromJust $ gameInfo jRoom 
                 else
                 []
+    let clTeamsNames = map teamname clTeams
     return $
         if isNothing maybeRI then
             [Warning $ loc "No such room"]
@@ -101,18 +102,21 @@ handleCmd_lobby ["JOIN_ROOM", roomName, roomPassword] = do
             else
             (
                 MoveToRoom jRI
-                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom, teamsInGame = fromIntegral $ length clTeams})
+                : ModifyClient (\c -> c{isJoinedMidGame = isJust $ gameInfo jRoom
+                                        , teamsInGame = fromIntegral $ length clTeams
+                                        , clientClan = teamcolor `fmap` listToMaybe clTeams})
                 : AnswerClients chans ["CLIENT_FLAGS", "-r", nick cl]
                 : [(AnswerClients [sendChan cl] $ "JOINED" : nicks) | not $ null nicks]
             )
-            ++ [ModifyRoom (\r -> let (t', g') = moveTeams clTeams . fromJust $ gameInfo r in r{gameInfo = Just g', teams = t'}) | not $ null clTeams]
+            ++ [ModifyRoom (\r -> let (t', g') = moveTeams clTeamsNames . fromJust $ gameInfo r in r{gameInfo = Just g', teams = t'}) | not $ null clTeams]
             ++ [AnswerClients [sendChan cl] ["CLIENT_FLAGS", "+h", nick $ fromJust owner] | isJust owner]
             ++ [sendStateFlags cl jRoomClients | not $ null jRoomClients]
             ++ answerFullConfig cl jRoom
             ++ answerTeams cl jRoom
             ++ watchRound cl jRoom chans
             ++ [AnswerClients [sendChan cl] ["CHAT", "[greeting]", greeting jRoom] | greeting jRoom /= ""]
-            ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeams
+            ++ map (\t -> AnswerClients chans ["EM", toEngineMsg $ 'G' `B.cons` t]) clTeamsNames
+            ++ [AnswerClients [sendChan cl] ["EM", toEngineMsg "I"] | isPaused `fmap` gameInfo jRoom == Just True]
 
         where
         moveTeams :: [B.ByteString] -> GameInfo -> ([TeamInfo], GameInfo)

@@ -153,7 +153,7 @@ var i: LongInt;
     cPhysfsId: shortstring;
 {$IFNDEF MOBILE}
     fp: PChar;
-{$ENDIF MOBILE}
+{$ENDIF}
 begin
 {$IFDEF HWLIBRARY}
     //TODO: http://icculus.org/pipermail/physfs/2011-August/001006.html
@@ -173,7 +173,7 @@ begin
             if fp <> nil then
                 pfsMount(ansistring(fp), PChar('/Fonts'));
         end;
-{$ENDIF MOBILE}
+{$ENDIF}
 
     pfsMountAtRoot(PathPrefix);
     pfsMountAtRoot(UserPathPrefix + ansistring('/Data'));
