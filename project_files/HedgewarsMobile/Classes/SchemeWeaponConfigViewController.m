@@ -396,16 +396,6 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    if ([HWUtils isGameLaunched]) {
-        self.lastIndexPath_sc = nil;
-        self.lastIndexPath_we = nil;
-        self.lastIndexPath_lu = nil;
-        self.selectedScheme = nil;
-        self.selectedWeapon = nil;
-        self.selectedScript = nil;
-        self.scriptCommand = nil;
-        self.topControl = nil;
-    }
     self.listOfSchemes = nil;
     self.listOfWeapons = nil;
     self.listOfScripts = nil;
