@@ -940,7 +940,7 @@ function lc_setgearvalues(L : Plua_State) : LongInt; Cdecl;
 var gear : PGear;
 begin
 // Currently allows 1-13 params
-//    if CheckLuaParamCount(L, 13, 'SetGearValues', 'gearUid, Damage, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint') then
+//    if CheckLuaParamCount(L, 13, 'SetGearValues', 'gearUid, Angle, Power, WDTimer, Radius, Density, Karma, DirAngle, AdvBounce, ImpactSound, # ImpactSounds, Tint, Damage') then
 //        begin
         gear:= GearByUID(lua_tointeger(L, 1));
         if gear <> nil then
