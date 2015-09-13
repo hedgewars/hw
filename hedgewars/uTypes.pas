@@ -88,7 +88,7 @@ type
             sprBulletHit, sprSnowball, sprHandSnowball, sprSnow,
             sprSDFlake, sprSDWater, sprSDCloud, sprSDSplash, sprSDDroplet, sprTardis,
             sprSlider, sprBotlevels, sprHandKnife, sprKnife, sprStar, sprIceTexture, sprIceGun,
-            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine
+            sprFrozenHog, sprAmRubber, sprBoing, sprCustom1, sprCustom2, sprAirMine, sprHandAirMine
             );
 
     // Gears that interact with other Gears and/or Land
