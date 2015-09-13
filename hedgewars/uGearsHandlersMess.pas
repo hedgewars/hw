@@ -2718,7 +2718,6 @@ begin
             Gear^.dX := Gear^.dX - cBombsSpeed * hwSqrt((int2hwFloat(Gear^.Target.Y) - Gear^.Y) * 2 /
                 cGravity) * Gear^.Tag;
 
-    Gear^.Health := 6;
     Gear^.doStep := @doStepAirAttackWork;
     Gear^.SoundChannel := LoopSound(sndPlane, 4000);
 
