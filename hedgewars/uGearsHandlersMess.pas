@@ -2675,7 +2675,7 @@ begin
             //4: FollowGear := AddGear(hwRound(Gear^.X), hwRound(Gear^.Y), gtWaterMelon, 0, cBombsSpeed *
             //                 Gear^.Tag, _0, 5000);
             end;
-        Gear^.dX := Gear^.dX + int2hwFloat(30 * Gear^.Tag);
+        Gear^.dX := Gear^.dX + int2hwFloat(Gear^.Damage * Gear^.Tag);
         if CheckCoordInWater(hwRound(Gear^.X), hwRound(Gear^.Y)) then
             FollowGear^.State:= FollowGear^.State or gstSubmersible;
         StopSoundChan(Gear^.SoundChannel, 4000);
@@ -2708,7 +2708,7 @@ begin
         end;
 
     Gear^.Y := int2hwFloat(topY-300);
-    Gear^.dX := int2hwFloat(Gear^.Target.X - 5 * Gear^.Tag * 15);
+    Gear^.dX := int2hwFloat(Gear^.Target.X) - int2hwFloat(Gear^.Tag * Gear^.Health * Gear^.Damage) / 2;
 
     // calcs for Napalm Strike, so that it will hit the target (without wind at least :P)
     if (Gear^.State = 2) then
