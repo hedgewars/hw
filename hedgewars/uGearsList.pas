@@ -466,7 +466,8 @@ case Kind of
                 gear^.Tag:= Y
                 end;
    gtAirAttack: begin
-                gear^.Health:= 6;
+                gear^.Health:= 12;
+                gear^.Damage:= 30;
                 gear^.Z:= cHHZ+2;
                 gear^.Tint:= gear^.Hedgehog^.Team^.Clan^.Color shl 8 or $FF
                 end;
