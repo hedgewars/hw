@@ -1922,6 +1922,8 @@
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
@@ -1929,17 +1931,21 @@
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
 		1D6058950D05DD3E006BFB54 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -2026,11 +2032,14 @@
 		61022D7D12305A2800B08935 /* Distro AppStore */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = "Distro AppStore";
 		};
@@ -2120,6 +2129,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
@@ -2140,11 +2151,14 @@
 		6137064C117B1CB3004EE44A /* Distro Adhoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Hedgewars_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				PRODUCT_NAME = Hedgewars;
+				PROVISIONING_PROFILE = "";
 			};
 			name = "Distro Adhoc";
 		};
@@ -2279,6 +2293,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
@@ -2359,6 +2375,8 @@
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-Wl,-no_order_inits",
+					"-framework",
+					MessageUI,
 				);
 				PREBINDING = NO;
 				PROVISIONING_PROFILE = "";
