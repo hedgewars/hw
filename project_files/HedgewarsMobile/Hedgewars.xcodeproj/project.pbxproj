@@ -252,6 +252,7 @@
 		F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */; };
 		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
 		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
+		F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BA38451BA7A834005D16EA /* GameLogViewController.m */; };
 		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
 		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
 		F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */; };
@@ -720,6 +721,8 @@
 		F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Resources/Icons/Icon-60@2x.png"; sourceTree = "<group>"; };
 		F65E1DBD1B9B95A400A78ADF /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Resources/Icons/Icon-76.png"; sourceTree = "<group>"; };
 		F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Resources/Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
+		F6BA38441BA7A834005D16EA /* GameLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogViewController.h; sourceTree = "<group>"; };
+		F6BA38451BA7A834005D16EA /* GameLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogViewController.m; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenPerlin.pas; path = ../../hedgewars/uLandGenPerlin.pas; sourceTree = "<group>"; };
 		F6D7E0C01B768F19004F3BCF /* uLandGenTemplateBased.pas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.pascal; name = uLandGenTemplateBased.pas; path = ../../hedgewars/uLandGenTemplateBased.pas; sourceTree = "<group>"; };
@@ -893,6 +896,8 @@
 				61F2E7CB1205EDE0005734F7 /* AboutViewController.h */,
 				61F2E7CC1205EDE0005734F7 /* AboutViewController.m */,
 				61F2E7CD1205EDE0005734F7 /* AboutViewController.xib */,
+				F6BA38441BA7A834005D16EA /* GameLogViewController.h */,
+				F6BA38451BA7A834005D16EA /* GameLogViewController.m */,
 				6167A6731391514600AA6D07 /* RestoreViewController.h */,
 				6167A6741391514600AA6D07 /* RestoreViewController.m */,
 				6167A6751391514600AA6D07 /* RestoreViewController-iPhone.xib */,
@@ -1692,6 +1697,7 @@
 				61798820114AA34C00BA94A9 /* uAIActions.pas in Sources */,
 				61798821114AA34C00BA94A9 /* uAIAmmoTests.pas in Sources */,
 				61798822114AA34C00BA94A9 /* uAIMisc.pas in Sources */,
+				F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */,
 				61798823114AA34C00BA94A9 /* uAmmos.pas in Sources */,
 				61798824114AA34C00BA94A9 /* uChat.pas in Sources */,
 				61798825114AA34C00BA94A9 /* uCollisions.pas in Sources */,

@@ -29,6 +29,10 @@
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
 
+#ifdef DEBUG
+#import "GameLogViewController.h"
+#endif
+
 @interface MainMenuViewController ()
 @property (retain, nonatomic) IBOutlet UIButton *simpleGameButton;
 @property (retain, nonatomic) IBOutlet UIButton *missionsButton;
@@ -104,7 +108,6 @@
     UIButton *button = (UIButton *)sender;
     UIAlertView *alert;
     NSString *xib = nil;
-    NSString *debugStr = nil;
 
     [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
@@ -130,40 +133,15 @@
             break;
         case 3:
 #ifdef DEBUG
-            if ([[NSFileManager defaultManager] fileExistsAtPath:DEBUG_FILE()])
-                debugStr = [[NSString alloc] initWithContentsOfFile:DEBUG_FILE()];
-            else
-                debugStr = [[NSString alloc] initWithString:@"Here be log"];
-            UITextView *scroll = [[UITextView alloc] initWithFrame:self.view.frame];
-            scroll.text = debugStr;
-            [debugStr release];
-            scroll.editable = NO;
-            scroll.alpha = 0;
-
-            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [btn addTarget:scroll action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            [btn addTarget:btn action:@selector(removeFromSuperview) forControlEvents:UIControlEventTouchUpInside];
-            btn.frame = CGRectMake(self.view.frame.size.width-58, -6, 64, 64);
-            btn.backgroundColor = [UIColor blackColor];
-            btn.titleLabel.textColor = [UIColor whiteColor];
-            btn.titleLabel.textAlignment = UITextAlignmentCenter;
-            btn.titleLabel.font = [UIFont boldSystemFontOfSize:[UIFont systemFontSize]];
-            [btn setTitle:@"Close" forState:UIControlStateNormal];
-            btn.alpha = 0;
-            [btn.layer setCornerRadius:10.0f];
-            [btn.layer setMasksToBounds:YES];
-
-            [self.view addSubview:scroll];
-            [self.view addSubview:btn];
-
-            [UIView beginAnimations:@"fadein" context:NULL];
-            [UIView setAnimationDuration:0.25f];
-            btn.alpha = 1;
-            scroll.alpha = 1;
-            [UIView commitAnimations];
-            [scroll release];
+            {
+                GameLogViewController *gameLogVC = [[GameLogViewController alloc] init];
+                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:gameLogVC];
+                [gameLogVC release];
+                
+                [self presentViewController:navController animated:YES completion:nil];
+                [navController release];
+            }
 #else
-            debugStr = debugStr; // prevent compiler warning
             if (nil == self.aboutViewController) {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
