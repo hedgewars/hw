@@ -2888,6 +2888,12 @@ end;
 
 procedure GetGlobals;
 begin
+// TODO
+// Use setters instead, because globals should be read-only!
+// Otherwise globals might be changed by Lua, but then unexpectatly overwritten by engine when a ScriptCall is triggered by whatever Lua is doing!
+// Sure, one could work around that in engine (e.g. by setting writable globals in SetGlobals only when their engine-side value has actually changed since SetGlobals was called the last time...), but things just get messier and messier then.
+// It is inconsistent anyway to have some globals be read-only and others not with no indication whatsoever.
+// -- sheepluva
 TurnTimeLeft:= ScriptGetInteger('TurnTimeLeft');
 end;
 
