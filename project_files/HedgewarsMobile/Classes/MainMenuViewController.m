@@ -39,8 +39,6 @@
 @end
 
 @implementation MainMenuViewController
-@synthesize gameConfigViewController, settingsViewController, aboutViewController, savedGamesViewController,
-            restoreViewController, missionsViewController;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -73,17 +71,17 @@
 
     // prompt for restoring any previous game
     NSString *saveString = [userDefaults objectForKey:@"savedGamePath"];
-    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue]) {
-        if (self.restoreViewController == nil) {
-            NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
-            RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
-            if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
-                restored.modalPresentationStyle = UIModalPresentationFormSheet;
-            self.restoreViewController = restored;
-            [restored release];
-        }
-        [self performSelector:@selector(presentViewController:) withObject:self.restoreViewController afterDelay:0.25];
-    } else {
+    if (saveString != nil && [saveString isEqualToString:@""] == NO && [[userDefaults objectForKey:@"saveIsValid"] boolValue])
+    {
+        NSString *xibName = [@"RestoreViewController-" stringByAppendingString:(IS_IPAD() ? @"iPad" : @"iPhone")];
+        RestoreViewController *restored = [[RestoreViewController alloc] initWithNibName:xibName bundle:nil];
+        if ([restored respondsToSelector:@selector(setModalPresentationStyle:)])
+            restored.modalPresentationStyle = UIModalPresentationFormSheet;
+
+        [self performSelector:@selector(presentViewController:) withObject:restored afterDelay:0.25];
+    }
+    else
+    {
         // let's not prompt for rating when app crashed >_>
         [Appirater appLaunched];
     }
@@ -96,6 +94,7 @@
 - (void) presentViewController:(UIViewController *)vc
 {
     [self presentViewController:vc animated:NO completion:nil];
+    [vc release];
 }
 
 -(void) viewWillAppear:(BOOL)animated {
@@ -112,24 +111,22 @@
     [[AudioManagerController mainManager] playClickSound];
     switch (button.tag) {
         case 0:
-            if (nil == self.gameConfigViewController) {
-                xib = IS_IPAD() ? @"GameConfigViewController-iPad" : @"GameConfigViewController-iPhone";
+            xib = IS_IPAD() ? @"GameConfigViewController-iPad" : @"GameConfigViewController-iPhone";
 
-                GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
-                gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-                self.gameConfigViewController = gcvc;
-                [gcvc release];
-            }
-            [self presentViewController:self.gameConfigViewController animated:YES completion:nil];
+            GameConfigViewController *gcvc = [[GameConfigViewController alloc] initWithNibName:xib bundle:nil];
+            gcvc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+
+            [self presentViewController:gcvc animated:YES completion:nil];
+            [gcvc release];
             break;
         case 2:
-            if (nil == self.settingsViewController) {
+            {
                 SettingsContainerViewController *svrc = [[SettingsContainerViewController alloc] initWithNibName:nil bundle:nil];
                 svrc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-                self.settingsViewController = svrc;
+
+                [self presentViewController:svrc animated:YES completion:nil];
                 [svrc release];
             }
-            [self presentViewController:self.settingsViewController animated:YES completion:nil];
             break;
         case 3:
 #ifdef DEBUG
@@ -142,39 +139,39 @@
                 [navController release];
             }
 #else
-            if (nil == self.aboutViewController) {
+            {
                 AboutViewController *about = [[AboutViewController alloc] initWithNibName:@"AboutViewController" bundle:nil];
                 about.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 if ([about respondsToSelector:@selector(setModalPresentationStyle:)])
                      about.modalPresentationStyle = UIModalPresentationFormSheet;
-                self.aboutViewController = about;
+                
+                [self presentViewController:about animated:YES completion:nil];
                 [about release];
             }
-            [self presentViewController:self.aboutViewController animated:YES completion:nil];
 #endif
             break;
         case 4:
-            if (nil == self.savedGamesViewController) {
+            {
                 SavedGamesViewController *savedgames = [[SavedGamesViewController alloc] initWithNibName:@"SavedGamesViewController" bundle:nil];
                 savedgames.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
                 if ([savedgames respondsToSelector:@selector(setModalPresentationStyle:)])
                     savedgames.modalPresentationStyle = UIModalPresentationPageSheet;
-                self.savedGamesViewController = savedgames;
+                
+                [self presentViewController:savedgames animated:YES completion:nil];
                 [savedgames release];
             }
-            [self presentViewController:self.savedGamesViewController animated:YES completion:nil];
             break;
         case 5:
-            if (nil == self.missionsViewController) {
+            {
                 xib = IS_IPAD() ? @"MissionTrainingViewController-iPad" : @"MissionTrainingViewController-iPhone";
                 MissionTrainingViewController *missions = [[MissionTrainingViewController alloc] initWithNibName:xib bundle:nil];
                 missions.modalTransitionStyle = IS_IPAD() ? UIModalTransitionStyleCoverVertical : UIModalTransitionStyleCrossDissolve;
                 if ([missions respondsToSelector:@selector(setModalPresentationStyle:)])
                     missions.modalPresentationStyle = UIModalPresentationPageSheet;
-                self.missionsViewController = missions;
+                
+                [self presentViewController:missions animated:YES completion:nil];
                 [missions release];
             }
-            [self presentViewController:self.missionsViewController animated:YES completion:nil];
             break;
         case 6:
             [GameInterfaceBridge registerCallingController:self];
@@ -194,40 +191,16 @@
 
 #pragma mark -
 -(void) viewDidUnload {
-    self.gameConfigViewController = nil;
-    self.settingsViewController = nil;
-    self.aboutViewController = nil;
-    self.savedGamesViewController = nil;
-    self.restoreViewController = nil;
-    self.missionsViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 -(void) didReceiveMemoryWarning {
-    if (self.settingsViewController.view.superview == nil)
-        self.settingsViewController = nil;
-    if (self.gameConfigViewController.view.superview == nil)
-        self.gameConfigViewController = nil;
-    if (self.aboutViewController.view.superview == nil)
-        self.aboutViewController = nil;
-    if (self.savedGamesViewController.view.superview == nil)
-        self.savedGamesViewController = nil;
-    if (self.restoreViewController.view.superview == nil)
-        self.restoreViewController = nil;
-    if (self.missionsViewController.view.superview == nil)
-        self.missionsViewController = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) dealloc {
-    releaseAndNil(settingsViewController);
-    releaseAndNil(gameConfigViewController);
-    releaseAndNil(aboutViewController);
-    releaseAndNil(savedGamesViewController);
-    releaseAndNil(restoreViewController);
-    releaseAndNil(missionsViewController);
     [_simpleGameButton release];
     [_missionsButton release];
     [super dealloc];
