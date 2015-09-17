@@ -78,7 +78,8 @@ function killHog()
         SetHealth(CurrentHedgehog, 0)
         SetEffect(CurrentHedgehog, heInvulnerable, 0)
         x, y = GetGearPosition(CurrentHedgehog)
-        AddGear(x, y, gtShell, 0, 0, 0, 0)
+        AddGear(x, y-2, gtGrenade, 0, 0, 0, 2)
+        SetGearVelocity(CurrentHedgehog, 0, 0)
         worsttime = 99999
         worsthog = nil
         lasthog = nil
