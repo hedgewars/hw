@@ -21,7 +21,7 @@
 
 
 @implementation HogHatViewController
-@synthesize teamDictionary, hatArray, normalHogSprite, lastIndexPath, selectedHog;
+@synthesize teamDictionary, hatArray, normalHogSprite, selectedHog;
 
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
@@ -77,8 +77,8 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
-    NSString *hat = [hatArray objectAtIndex:[indexPath row]];
+    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog];
+    NSString *hat = [self.hatArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [hat stringByDeletingPathExtension];
 
     NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
@@ -87,9 +87,8 @@
     cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
     [hatSprite release];
 
-    if ([hat isEqualToString:[hog objectForKey:@"hat"]]) {
+    if ([[hat stringByDeletingPathExtension] isEqualToString:[hog objectForKey:@"hat"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        self.lastIndexPath = indexPath;
     } else {
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
@@ -100,31 +99,21 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSInteger newRow = [indexPath row];
-    NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
+-(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSInteger selectedRow = [indexPath row];
+    
+    // update data on the hog dictionary
+    NSDictionary *oldHog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog];
 
-    if (newRow != oldRow) {
-        // if the two selected rows differ update data on the hog dictionary and reload table content
-        // TODO: maybe this section could be cleaned up
-        NSDictionary *oldHog = [[teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:selectedHog];
+    NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary:oldHog];
+    [newHog setObject:[[self.hatArray objectAtIndex:selectedRow] stringByDeletingPathExtension] forKey:@"hat"];
+    [[self.teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:self.selectedHog withObject:newHog];
+    [newHog release];
 
-        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary: oldHog];
-        [newHog setObject:[[hatArray objectAtIndex:newRow] stringByDeletingPathExtension] forKey:@"hat"];
-        [[teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:selectedHog withObject:newHog];
-        [newHog release];
-
-        // tell our boss to write this new stuff on disk
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
-
-        UITableViewCell *newCell = [aTableView cellForRowAtIndexPath:indexPath];
-        newCell.accessoryType = UITableViewCellAccessoryCheckmark;
-        UITableViewCell *oldCell = [aTableView cellForRowAtIndexPath:lastIndexPath];
-        oldCell.accessoryType = UITableViewCellAccessoryNone;
-        self.lastIndexPath = indexPath;
-        [aTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-    }
-    [aTableView deselectRowAtIndexPath:indexPath animated:YES];
+    // tell our boss to write this new stuff on disk
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -132,13 +121,11 @@
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
-    self.lastIndexPath = nil;
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
 -(void) viewDidUnload {
-    self.lastIndexPath = nil;
     self.normalHogSprite = nil;
     self.teamDictionary = nil;
     self.hatArray = nil;
@@ -150,7 +137,6 @@
     releaseAndNil(hatArray);
     releaseAndNil(teamDictionary);
     releaseAndNil(normalHogSprite);
-    releaseAndNil(lastIndexPath);
     [super dealloc];
 }
 
