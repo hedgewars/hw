@@ -77,7 +77,6 @@
     if (cell == nil)
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
 
-    NSDictionary *hog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog];
     NSString *hat = [self.hatArray objectAtIndex:[indexPath row]];
     cell.textLabel.text = [hat stringByDeletingPathExtension];
 
@@ -87,6 +86,7 @@
     cell.imageView.image = [self.normalHogSprite mergeWith:hatSprite atPoint:CGPointMake(0, 5)];
     [hatSprite release];
 
+    NSDictionary *hog = (self.selectedHog != -1) ? [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog] : nil;
     if ([[hat stringByDeletingPathExtension] isEqualToString:[hog objectForKey:@"hat"]]) {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     } else {
@@ -102,14 +102,21 @@
 -(void) tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger selectedRow = [indexPath row];
+    NSString *newHat = [[self.hatArray objectAtIndex:selectedRow] stringByDeletingPathExtension];
     
-    // update data on the hog dictionary
-    NSDictionary *oldHog = [[self.teamDictionary objectForKey:@"hedgehogs"] objectAtIndex:self.selectedHog];
-
-    NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary:oldHog];
-    [newHog setObject:[[self.hatArray objectAtIndex:selectedRow] stringByDeletingPathExtension] forKey:@"hat"];
-    [[self.teamDictionary objectForKey:@"hedgehogs"] replaceObjectAtIndex:self.selectedHog withObject:newHog];
-    [newHog release];
+    // update data on the hogs dictionary
+    if (self.selectedHog != -1)
+    {
+        // update only selected hog with new hat
+        [self updateTeamDictionaryWithNewHat:newHat forStartHogIndex:self.selectedHog toEndHogIndex:self.selectedHog];
+    }
+    else
+    {
+        // update all hogs with new hat
+        NSInteger startIndex = 0;
+        NSInteger endIndex = [[self.teamDictionary objectForKey:@"hedgehogs"] count] - 1;
+        [self updateTeamDictionaryWithNewHat:newHat forStartHogIndex:startIndex toEndHogIndex:endIndex];
+    }
 
     // tell our boss to write this new stuff on disk
     [[NSNotificationCenter defaultCenter] postNotificationName:@"setWriteNeedTeams" object:nil];
@@ -117,6 +124,19 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)updateTeamDictionaryWithNewHat:(NSString *)newHat forStartHogIndex:(NSInteger)startIndex toEndHogIndex:(NSInteger)endIndex
+{
+    NSMutableArray *hogsArray = [self.teamDictionary objectForKey:@"hedgehogs"];
+    
+    for (NSInteger i=startIndex; i <= endIndex; i++)
+    {
+        NSDictionary *oldHog = [hogsArray objectAtIndex:i];
+        NSMutableDictionary *newHog = [[NSMutableDictionary alloc] initWithDictionary:oldHog];
+        [newHog setObject:newHat forKey:@"hat"];
+        [hogsArray replaceObjectAtIndex:i withObject:newHog];
+        [newHog release];
+    }
+}
 
 #pragma mark -
 #pragma mark Memory management

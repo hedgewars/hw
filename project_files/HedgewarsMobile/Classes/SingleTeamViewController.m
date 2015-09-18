@@ -146,7 +146,7 @@
             rows = 1;
             break;
         case 1: // team members
-            rows = HW_getMaxNumberOfHogs();
+            rows = HW_getMaxNumberOfHogs() + 1; // one for 'Select one hat for all hogs' cell
             break;
         case 2: // team details
             rows = [self.secondaryItems count];
@@ -180,6 +180,7 @@
     static NSString *CellIdentifier0 = @"Cell0";
     static NSString *CellIdentifier1 = @"Cell1";
     static NSString *CellIdentifier2 = @"Cell2";
+    static NSString *CellIdentifierDefault = @"CellDefault";
 
     NSArray *hogArray;
     UITableViewCell *cell = nil;
@@ -204,6 +205,21 @@
             cell = editableCell;
             break;
         case 1:
+            if ([indexPath row] == HW_getMaxNumberOfHogs())
+            {
+                cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifierDefault];
+                if (cell == nil)
+                {
+                    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                   reuseIdentifier:CellIdentifierDefault] autorelease];
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                }
+                
+                cell.textLabel.text = NSLocalizedString(@"Select one hat for all hogs", nil);
+                
+                break;
+            }
+            
             editableCell = (EditableCellView *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier1];
             if (editableCell == nil) {
                 editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
@@ -332,29 +348,38 @@
                 break;
         }
     } else {
-        EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
-        [cell replyKeyboard];
-        [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+        if (section == 1 && row == HW_getMaxNumberOfHogs()) {
+            // 'Select one hat for all hogs' selected
+            [self showHogHatViewControllerForHogIndex:-1];
+        } else {
+            EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
+            [cell replyKeyboard];
+            [aTableView deselectRowAtIndexPath:indexPath animated:NO];
+        }
     }
 
 }
 
 // action to perform when you want to change a hog hat
 -(void) tableView:(UITableView *)aTableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath {
-    if (nil == hogHatViewController)
-        hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-    // cache the dictionary file of the team, so that other controllers can modify it
-    hogHatViewController.teamDictionary = self.teamDictionary;
-    hogHatViewController.selectedHog = [indexPath row];
-
     // if we are editing the field undo any change before proceeding
     EditableCellView *cell = (EditableCellView *)[aTableView cellForRowAtIndexPath:indexPath];
     [cell cancel:nil];
-
-    [self.navigationController pushViewController:hogHatViewController animated:YES];
+    
+    [self showHogHatViewControllerForHogIndex:[indexPath row]];
 }
 
+- (void)showHogHatViewControllerForHogIndex:(NSInteger)hogIndex
+{
+    if (nil == hogHatViewController)
+        hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    
+    // cache the dictionary file of the team, so that other controllers can modify it
+    hogHatViewController.teamDictionary = self.teamDictionary;
+    hogHatViewController.selectedHog = hogIndex;
+    
+    [self.navigationController pushViewController:hogHatViewController animated:YES];
+}
 
 #pragma mark -
 #pragma mark Memory management
