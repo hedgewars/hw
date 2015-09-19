@@ -11,7 +11,7 @@
     <tip>You're bored of default gameplay? Try one of the missions — they'll offer different gameplay depending on the one you picked.</tip>
     <tip>By default the game will always record the last game played as a demo. Select “Local Game” and pick the “Demos” button on the lower right corner to play or manage them.</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time. If you’ve got problems, ask on our forums or visit our IRC room!</tip>
-    <tip>Hedgewars is free software (Open Source) we create in our spare time. If you like it, help us with a small donation or contribute your own work!</tip>
+    <tip>Hedgewars is free software (Open Source) we create in our spare time. If you like it, feel free to help us with a small donation or contribute your own work!</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time. Share it with your family and friends as you like!</tip>
     <tip>Hedgewars is free software (Open Source) we create in our spare time, just for fun! Meet the devs in <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
     <tip>From time to time there will be official tournaments. Upcoming events will be announced at <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> some days in advance.</tip>
@@ -19,14 +19,13 @@
     <tip>Hedgewars can be run on lots of different operating systems including Microsoft Windows, Mac OS X and GNU/Linux.</tip>
     <tip>Always remember you’re able to set up your own games in local and network/online play. You’re not restricted to the “Simple Game” option.</tip>
     <tip>Connect one or more gamepads before starting the game to be able to assign their controls to your teams.</tip>
-    <tip>Create an account on <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> to keep others from using your most favourite nickname while playing on the official server.</tip>
-    <tip>While playing you should give yourself a short break at least once an hour.</tip>
+    <tip>Consider giving yourself a short break at least once an hour to guard against strain from playing.</tip>
     <tip>If your graphics card isn’t able to provide hardware accelerated OpenGL, try to enable the low quality mode to improve performance.</tip>
     <tip>If your graphics card isn’t able to provide hardware accelerated OpenGL, try to update the associated drivers.</tip>
     <tip>We’re open to suggestions and constructive feedback. If you don’t like something or got a great idea, let us know!</tip>
-    <tip>Especially while playing online be polite and always remember there might be some minors playing with or against you as well!</tip>
+    <tip>For your own benefit we'd like you to be polite and friendly while playing on our server. Also please keep in mind that some players are minors!</tip>
     <tip>Special game modes such as “Vampirism” or “Karma” allow you to develop completely new tactics. Try them in a custom game!</tip>
-    <tip>You should never install Hedgewars on computers you don’t own (school, university, work, etc.). Please ask the responsible person instead!</tip>
+    <tip>Please don't install Hedgewars on computers you don’t own (school, university, work, etc.) unless you got permission. We don't want you to get into any trouble.</tip>
     <tip>Hedgewars can be perfect for short games during breaks. Just ensure you don’t add too many hedgehogs or use an huge map. Reducing time and health might help as well.</tip>
     <tip>No hedgehogs were harmed in making this game.</tip>
     <tip>There are three different jumps available. Tap [high jump] twice to do a very high/backwards jump.</tip>
