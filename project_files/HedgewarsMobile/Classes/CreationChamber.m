@@ -65,7 +65,7 @@
 
     // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
     NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Thinking with Portals",nil];
+                            @"Minefield",@"Thinking with Portals",@"One of Everything",nil];
     index = 0;
     for (NSString *name in weaponNames)
         [self createWeaponNamed:name ofType:index++];
@@ -240,6 +240,12 @@
             prob = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
             delay = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
             crate = [[NSString alloc] initWithBytes:AMMOLINE_PORTALS_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
+        case 7:  //one of everything
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_ONEEVERY_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
     }
 
