@@ -65,7 +65,7 @@
 
     // WEAPONS - always overwrite as merge is not needed (missing weaps are 0ed automatically)
     NSArray *weaponNames = [[NSArray alloc] initWithObjects:@"Default",@"Crazy",@"Pro Mode",@"Shoppa",@"Clean Slate",
-                            @"Minefield",@"Thinking with Portals",@"One of Everything",@"Highlander",@"Construction Mode",nil];
+                            @"Minefield",@"Thinking with Portals",@"One of Everything",@"Highlander",@"Construction Mode",@"Shoppa Pro",nil];
     index = 0;
     for (NSString *name in weaponNames)
         [self createWeaponNamed:name ofType:index++];
@@ -258,6 +258,12 @@
             prob = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
             delay = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
             crate = [[NSString alloc] initWithBytes:AMMOLINE_CONSTRUCTION_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
+            break;
+        case 10:  //shoppa pro
+            qt = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_QT length:ammolineSize encoding:NSUTF8StringEncoding];
+            prob = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_PROB length:ammolineSize encoding:NSUTF8StringEncoding];
+            delay = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_DELAY length:ammolineSize encoding:NSUTF8StringEncoding];
+            crate = [[NSString alloc] initWithBytes:AMMOLINE_SHOPPAPRO_CRATE length:ammolineSize encoding:NSUTF8StringEncoding];
             break;
     }
 
