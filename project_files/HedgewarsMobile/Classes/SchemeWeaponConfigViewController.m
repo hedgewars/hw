@@ -331,7 +331,8 @@
             {
                 if (![scheme isEqualToString:@"*"])
                 {
-                    self.selectedScheme = [NSString stringWithFormat:@"%@.plist",scheme];
+                    NSString *correctScheme = [scheme stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    self.selectedScheme = [NSString stringWithFormat:@"%@.plist", correctScheme];
                 }
                 [self.topControl setEnabled:YES forSegmentAtIndex:0];
             }
@@ -346,7 +347,8 @@
             {
                 if (![weapon isEqualToString:@"*"])
                 {
-                    self.selectedWeapon = [NSString stringWithFormat:@"%@.plist",weapon];
+                    NSString *correctWeapon = [weapon stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                    self.selectedWeapon = [NSString stringWithFormat:@"%@.plist", correctWeapon];
                 }
                 [self.topControl setEnabled:YES forSegmentAtIndex:1];
             }
