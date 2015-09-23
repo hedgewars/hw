@@ -5791,9 +5791,16 @@ For now we assume a "ray" like a deagle projected out from the gun.
 All these effects assume the ray's angle is not changed and that the target type was unchanged over a number of ticks.  This is a simplifying assumption for "gun was applying freezing effect to the same target".
   * When fired at water a layer of ice textured land is added above the water.
   * When fired at non-ice land (land and lfLandMask and not lfIce) the land is overlaid with a thin layer of ice textured land around that point (say, 1 or 2px into land, 1px above). For attractiveness, a slope would probably be needed.
-  * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.  As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.  If the effect is interrupted before reaching the top, the freezing state is cleared.
-A frozen hog will animate differently.  To be decided, but possibly in a similar fashion to a grave when it comes to explosions.  The hog might (possibly) not be damaged by explosions.  This might make freezing potentially useful for friendlies in a bad position.  It might be better to allow damage though.
-A frozen hog stays frozen for a certain number of turns. Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
+  * When fired at a hog (land and $00FF <> 0), while the hog is targetted, the hog's state is set to frozen.
+    As long as the gun is on the hog, a frozen hog sprite creeps up from the feet to the head.
+    If the effect is interrupted before reaching the top, the freezing state is cleared.
+A frozen hog will animate differently.
+    To be decided, but possibly in a similar fashion to a grave when it comes to explosions.
+    The hog might (possibly) not be damaged by explosions.
+    This might make freezing potentially useful for friendlies in a bad position.
+    It might be better to allow damage though.
+A frozen hog stays frozen for a certain number of turns.
+    Each turn the frozen overlay becomes fainter, until it fades and the hog animates normally again.
 *)
 
 
