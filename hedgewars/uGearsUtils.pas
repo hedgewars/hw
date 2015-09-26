@@ -852,7 +852,6 @@ while tryAgain do
     repeat
         x:= Left + max(LAND_WIDTH div 2048, LongInt(GetRandom(Delta)));
         repeat
-            inc(x, Delta);
             cnt:= 0;
             y:= min(1024, topY) - Gear^.Radius shl 1;
             while y < cWaterLine do
@@ -902,8 +901,9 @@ while tryAgain do
                     ar2[cnt2].y:= y;
                     inc(cnt2)
                     end
-                end
-        until (x + Delta > Right);
+                end;
+            inc(x, Delta)
+        until (x > Right);
 
         dec(Delta, 60)
     until (cnt2 > 0) or (Delta < 70);
