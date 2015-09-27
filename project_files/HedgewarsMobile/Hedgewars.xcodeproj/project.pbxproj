@@ -262,6 +262,7 @@
 		F6F07BDE1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6F07BDA1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib */; };
 		F6F07BDF1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */; };
 		F6F07BE01B7E72D40010E48F /* HelpPageLobbyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */; };
+		F6FF25A21BB8AEE300124053 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6FF25A11BB8AEE300124053 /* GameController.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -733,6 +734,7 @@
 		F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "HelpPageLobbyViewController-iPhone.xib"; sourceTree = "<group>"; };
 		F6F07BDC1B7E72D40010E48F /* HelpPageLobbyViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpPageLobbyViewController.h; sourceTree = "<group>"; };
 		F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpPageLobbyViewController.m; sourceTree = "<group>"; };
+		F6FF25A11BB8AEE300124053 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -740,6 +742,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6FF25A21BB8AEE300124053 /* GameController.framework in Frameworks */,
 				F6D7E0C81B7698BF004F3BCF /* libstdc++.dylib in Frameworks */,
 				F6D7E0C61B769819004F3BCF /* CoreMotion.framework in Frameworks */,
 				617D791E16D933060091D4D6 /* libPhysfs.a in Frameworks */,
@@ -855,6 +858,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F6FF25A11BB8AEE300124053 /* GameController.framework */,
 				617D78D816D932310091D4D6 /* Physfs.xcodeproj */,
 				617D794316D933B00091D4D6 /* Physlayer.xcodeproj */,
 				6195993F1364C82B00B429B6 /* Lua.xcodeproj */,
