@@ -1964,6 +1964,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
@@ -2083,6 +2084,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
@@ -2247,6 +2249,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
@@ -2328,6 +2331,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FPC_COMMON_OPTIONS = "-l- -dIPHONEOS -Cs2000000 -B  -vwi -Sgix -Fi${PROJECT_DIR}";
 				FPC_COMPILER_BINARY_DIR = /usr/local/lib/fpc/3.1.1;
