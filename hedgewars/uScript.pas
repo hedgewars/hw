@@ -628,7 +628,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         HealthCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
