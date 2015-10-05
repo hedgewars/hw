@@ -99,7 +99,11 @@ static UIViewController *callingController;
     CGFloat width, height;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt",[[NSLocale preferredLanguages] objectAtIndex:0]];
+    
+    NSString *firstLanguage = [[NSLocale preferredLanguages] firstObject];
+    NSString *language = [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", language];
+    
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
     CGRect screenBounds = [[UIScreen mainScreen] safeBounds];
