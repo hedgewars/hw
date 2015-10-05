@@ -37,7 +37,9 @@
     [super viewDidLoad];
 
     self.trPath = [NSString stringWithFormat:@"%@", LOCALE_DIRECTORY()];
-    self.trFileName = [NSString stringWithFormat:@"%@.txt", [[NSLocale preferredLanguages] firstObject]];
+    NSString *firstLanguage = [[NSLocale preferredLanguages] firstObject];
+    NSString *language = [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
+    self.trFileName = [NSString stringWithFormat:@"%@.txt", language];
     // fill the data structure that we are going to read
     LoadLocaleWrapper([self.trPath UTF8String], [self.trFileName UTF8String]);
 

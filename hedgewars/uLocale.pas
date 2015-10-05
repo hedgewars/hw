@@ -138,11 +138,13 @@ begin
     PathPrefix := Strpas(path);
  
     uUtils.initModule(false);
+    uVariables.initModule;
     uPhysFSLayer.initModule;
  
     LoadLocale(Strpas(filename));
  
     uPhysFSLayer.freeModule;
+    uVariables.freeModule;
     uUtils.freeModule;
 end;
 {$ENDIF}
