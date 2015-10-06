@@ -6,52 +6,73 @@
     <tip>Scegli lo stesso colore di un amico per giocare in squadra. Ciascuno controllerà i propri ricci ma la vittoria o la sconfitta saranno comuni.</tip>
     <tip>Alcune armi potrebbero fare pochi danni ma possono essere devastanti se usate al momento giusto. Prova ad esempio ad utilizzare la Desert Eagle per spingere più ricci in acqua.</tip>
     <tip>Se non sai cosa fare e non vuoi sprecare munizioni, salta il turno. Ma non farlo troppe volte perché c'è il Sudden Death!</tip>
+    <tip>Vuoi utilizzare più a lungo la corda? Rilascia la corda a mezz'aria e spara di nuovo. Finché non tocchi il terreno potrai riusare la corda senza sprecare munizioni!</tip>
     <tip>Se vuoi evitare che altri possano impersonarti, utilizzando il tuo nickname, sul server ufficiale, registrati su http://www.hedgewars.org/.</tip>
     <tip>Sei stanco delle partite preimpostate? Prova una missione - le missioni offrono interessanti modalità differenti di partite in base alle tue scelte.</tip>
     <tip>Il gioco salverà sempre l'ultima partita giocata come demo. Seleziona 'Gioco locale' e clicca il bottone 'Demos' nell'angolo in basso a destra per gestirle.</tip>
-    <tip>Hedgewars è un programma Open Source e gratuito che noi creiamo nel nostro tempo libero. Se hai problemi, chiedi nei nostri forum ma, per favore, non aspettarti un supporto 24/7!</tip>
+    <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Se hai problemi, chiedi nei nostri forum oppure visita il nostro canale IRC!</tip>
     <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Se ti piace, aiutaci con una piccola donazione o contribuisci con il tuo lavoro!</tip>
-    <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Condividilo con tutta la famiglia e e con gli amici come più ti piace!</tip>
-    <tip>Di tanto in tanto ci saranno tornei ufficiali. Gli eventi saranno annunciati su http://www.hedgewars.org/ con qualche giorno di anticipo.</tip>
+    <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Condividilo con tutta la famiglia e con gli amici come più ti piace!</tip>
+    <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Incontra gli sviluppatori sul canale <a href="irc://irc.freenode.net/hedgewars">#hedgewars</a>!</tip>
+    <tip>Di tanto in tanto ci saranno tornei ufficiali. Gli eventi saranno annunciati su <a href="http://www.hedgewars.org/">http://www.hedgewars.org/</a> con qualche giorno di anticipo.</tip>
     <tip>Hedgewars è disponibile in molte lingue. Se la traduzione nella tua lingua sembra mancante o non aggiornata, sentiti libero di contattaci!</tip>
-    <tip>Hedgewars può essere usato su molti sistemi operativi differenti come Microsoft Windows - XP, Vista, 7 -, Mac OS X e Linux.</tip>
+    <tip>Hedgewars può essere usato su molti sistemi operativi differenti come Microsoft Windows, Mac OS X e GNU/Linux.</tip>
     <tip>Ricordati che sei sempre in grado di configurare partire personalizzate in locale e online. Non devi sentirti limitato alle opzioni predefinite!</tip>
-    <tip>Durante il gioco dovresti fare una breve pausa almeno ogni ora. In caso di partite più lunghe, sospendi l'attività per almeno 30 minuti al termine del gioco!</tip>
+    <tip>Collega uno o più gamepad prima di iniziare il gioco per poterli assegnare alle tue squadra.</tip>
+    <tip>Durante il gioco dovresti fare una breve pausa almeno ogni ora per evitare la stanchezza da gioco eccessivo.</tip>
     <tip>Se la tua scheda grafica non è in grado di fornire OpenGL con accelerazione hardware, prova ad abilitare la modalità a bassa qualità per migliorare le prestazioni.</tip>
+    <tip>Se la tua scheda grafica non è in grado di fornire OpenGL con accelerazione hardware, prova ad aggiornarne i driver.</tip>
     <tip>Siamo aperti a suggerimenti e consigli costruttivi. Se non ti piace qualcosa o hai una buona idea, comunicacelo!</tip>
     <tip>In particolare quando giochi online sii educato e ricorda che potrebbero esserci dei minorenni che stanno giocando con te o contro di te!</tip>
-    <tip>Le modalità di gioco speciali, come 'Vampirismo' o 'Karma' ti permettono di sviluppare nuove tattiche. Provale in una partita personalizzata!</tip>
+    <tip>Le modalità di gioco speciali, come “Vampirismo” o “Karma” ti permettono di sviluppare nuove tattiche. Provale in una partita personalizzata!</tip>
     <tip>Non dovresti mai installare Hedgewars su computer che non possiedi (scuola, università, lavoro, ecc.). Per favore, chiedi ai responsabili!</tip>
     <tip>Hedgewars può essere perfetto per brevi partite durante le pause. Assicurati solamente di non aver aggiunto troppi ricci o di usare una mappa troppo grande. Ridurre tempo e vita può aiutare allo stesso modo.</tip>
     <tip>Nessun riccio è stato maltrattato durante lo sviluppo di questo gioco.</tip>
-    <tip>Hedgewars è un programma Open Source e gratuito che creiamo nel nostro tempo libero. Se qualcuno ti ha venduto il gioco, dovresti chiedere un rimborso!</tip>
-    <tip>Collega uno o più gamepad prima di iniziare il gioco per poterli assegnare alle tue squadra.</tip>
-    <tip>Crea un account su %1 per evitare che altri possano usare il tuo nickname preferito mentre giochi sul server ufficiale.</tip>
-    <tip>Se la tua scheda grafica non è in grado di fornire OpenGL con accelerazione hardware, prova ad aggiornarne i driver.</tip>
-    <tip>Ci sono tre salti disponibili. Premi [salto in alto] due volte per eseguire un salto in alto all'indietro.</tip>
+    <tip>Ci sono tre tipi di salto disponibili. Premi [salto in alto] due volte per eseguire un salto in alto all'indietro.</tip>
     <tip>Paura di cadere da un dirupo? Premi [mirino di precisione] per girare a [sinistra] o a [destra] senza muoverti.</tip>
     <tip>Alcune armi richiedono strategie particolari o semplicemente molto allenamento, quindi non arrenderti nell'utilizzo di un'arma specifica se manchi il nemico una volta.</tip>
     <tip>Molte armi non funzionano quando toccano l'acqua. L'Ape a Ricerca così come la Torta sono delle eccezioni.</tip>
     <tip>Il vecchio Limburger causa solo una piccola esplosione. Tuttavia il vento influisce sulla nuvola puzzolente e può avvelenare più ricci contemporaneamente.</tip>
-    <tip>L'Ultima Sonata è l'attacco aereo più dannoso. Perderai il tuo riccio, eseguendolo, quindi ci sono anche delle grosse controindicazioni.</tip>
-    <tip>Le Mine Adesive sono lo strumento perfetto per creare piccole reazioni a catena e spingere i ricci nemici in situazioni difficili... o in acqua.</tip>
+    <tip>L'Ultima Sonata è l'attacco aereo più dannoso. Perderai il tuo riccio, eseguendolo, quindi c'è anche una grossa controindicazione.</tip>
+    <tip>L'Ape a Ricerca può essere difficile da usare. Il suo raggio di curvatura dipende dalla sua velocità, quindi cerca di non usarla a piena potenza.</tip>
+    <tip>Le Mine Adesive sono lo strumento perfetto per creare piccole reazioni a catena e spingere i ricci nemici in situazioni difficili … o in acqua.</tip>
     <tip>Il Martello è più efficate se usato su ponti o travi. Colpire i ricci li farà sprofondare attraverso il terreno.</tip>
     <tip>Se sei bloccato dietro un riccio nemico, usa il Martello per liberarti senza essere danneggiato da un'esplosione.</tip>
     <tip>La distanza massima di cammino della Torta dipende dal terreno che deve attraversare. Usa [attacca] per farla esplodere prima.</tip>
     <tip>Il Lanciafiamme è un'arma che può essere usata anche per scavare gallerie.</tip>
+    <tip>Usa la Bomba Molotov o il Lanciafiamme per impedire temporaneamente ai ricci di attraversare terreni pianeggianti, tunnel o collinette.</tip>
     <tip>Vuoi sapere chi c'è dietro il gioco? Clicca sul logo Hedgewars nel menu principale per vederne gli autori e sviluppatori.</tip>
-    <tip>Ti piace Hedgewars? Diventa fan su %1 o seguici su %2!</tip>
-    <tip>Sentiti libero di disegnare tombe, cappelli, bandiere o anche mappe e temi personalizzati - lo puoi fare con TheGIMP! Ma nota che dovrai condividerli in qualche modo per usarli online.</tip>
-    <tip>Vuoi proprio un cappello specifico? Facci una piccola donazione e riceverai un cappello esclusivo a tua scelta!</tip>
+    <tip>Ti piace Hedgewars? Diventa fan su <a href="http://www.facebook.com/Hedgewars">Facebook</a> oppure seguici su <a href="http://twitter.com/hedgewars">Twitter</a></tip>
+    <tip>Sentiti libero di disegnare tombe, cappelli, bandiere o anche mappe e temi personalizzati! Ma nota che dovrai condividerli in qualche modo per usarli online.</tip>
     <tip>Mantieni aggiornati i driver della tua scheda video, per evitare problemi durante il gioco.</tip>
-    <tip>Puoi trovare i file di configurazione del gioco in "Documenti\Hedgewars". Crea delle copie di sicurezza o prendi i file con te, ma non modificarli manualmente!</tip>
-    <tip>Puoi associare i file relativi a Hedgewars (partite salvate e registrazioni demo) al gioco, in modo da lanciarli direttamente dal tuo gestore file o browser Internet.</tip>
-    <tip>Vuoi utilizzare più a lungo la corda? Rilascia la corda a mezz'aria e spara di nuovo. Finché non tocchi il terreno potrai riusare la corda senza sprecare munizioni!</tip>
-    <tip>Puoi trovare i file di configurazione del gioco in "Library/Application Support/Hedgewars" nella tua cartella utente. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
-    <tip>Puoi trovare i file di configurazione del gioco in ".hedgewars" nella tua cartella home. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
-    <tip>Usa la Bomba Molotov o il Lanciafiamme per impedire temporaneamente ai ricci di attraversari terreni pianeggianti, tunnel o collinette.</tip>
-    <tip>L'Ape a Ricerca può essere difficile da usare. Il suo raggio di curvatura dipende dalla sua velocità, quindi cerca di non usarla a piena potenza.</tip>
+    <tip>Testa o croce? Scrivi “/rnd” nella schermata LOBBY e lo scoprirai. Funziona anche “/rnd carta sasso forbice”!</tip>
+    <tip>Puoi associare i file relativi a Hedgewars (partite salvate e registrazioni demo) al gioco, in modo da lanciarli direttamente dal tuo gestore file o browser web.</tip>
+    <tip>Le mine Dud non sono innocue: Anche se il loro timer è rotto, possono ancora esplodere se vengono abusate troppo!</tip>
+    <tip>L'amore è caldo! Utilizza Seduzione per scongelare ricci congelati.</Tip>
+    <tip>Il fumo proveniente da un barile è un indicatore che è basso di “salute” e che anche piccole quantità di danno potrebbe farlo scoppiare.</tip>
+    <tip>I barili iniziano con 60 salute e subiscono danni come ricci, quindi hanno bisogno di un po' di danno per esplodere</tip>
+    <tip>Hai bisogno di più forza di rimbalzo? Modifica la forza di rimbalzo di granate, bombe a grappolo, vecchi limburgers e mine tenendo premuto [mirino di precisione] e premendo uno dei tasti del timer.</tip>
+    <tip>Hai dimenticato gli obiettivi o modificatori di gioco mentre stai giocando? Premi il pulsante pausa o esci per rivederli di nuovo!</tip>
+    <tip>Puoi prendere a pugni, frustare, e martellare anche altre cose e non solo ricci. Colpiscili tutti!</tip>
+    <tip> Se non menzionato altrimenti, le mine normalmente esplodono dopo 3 secondi.</tip>
+    <tip>In modalità Re, il tuo re partirà più sano, più forte e più resistente ai danni e colpi rispetto ai servi.</tip>
+    <tip>In modalità Re, il re si danneggerà in ogni turno quando non ci saranno più servi nella sua squadra.</tip>
+    <tip>La frusta colpisce anche i ricci e gli oggetti anche dietro una parete sottile.</tip>
+    <tip>La mannaia aumenta il danno con l'aumentare della velocità.</tip>
+    <tip>Puoi far cadere torte dalle scogliere, ma per farlo bisogna stare molto vicino al bordo, quindi stai attento.</tip>
+    <tip>Usa la tua corda per allontanare altri ricci ad esempio facendola scorrere sul terreno. Questa tecnica è nota come “rope-knocking”.</tip>
+    <tip>Non fermarti su un pendio ghiacciato, o scivolerai via. In alternativa, è possibile tenere premuto [mirino di precisione].</tip>
+    <tip>Nelle terre innevate Natalizie, i mucchi di neve aumentano nel corso del tempo, a meno che la terra non sia indistruttibile.</tip>
+    <tip>Fai attenzione nelle terre innevate e Natalizie, perché le travi sono fatte di ghiaccio scivoloso.</tip>
+    <tip>Il tempo di fuga dipende dall'arma che hai usato. Fai attenzione, alcune armi non hanno un tempo di fuga e finiscono subito il tuo turno!</tip>
     <windows-only>
-        <tip>La versione Windows di Hedgewars supporta Xfire. Assicurati di aggiungere Hedgewars alla sua lista giochi, così i tuoi amici potranno vederti giocare.</tip>
+        <tip>Questa versione di Hedgewars supporta <a href="http://www.xfire.com">Xfire</a>. Assicurati di aggiungere Hedgewars alla sua lista giochi, cosi i tuoi amici potranno vederti giocare.</tip>
+        <tip>Puoi trovare i file di configurazione di Hedgewars in “My Documents\Hedgewars”. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
     </windows-only>
+    <mac-only>
+        <tip>Puoi trovare i file di configurazione di Hedgewars in “Library/Application Support/Hedgewars” nella tua cartella utente. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>Puoi trovare i file di configurazione di Hedgewars in “.hedgewars” nella tua cartella utente. Crea una copia di sicurezza o porta i file con te, ma non modificarli mai manualmente.</tip>
+    </linux-only>
 </tips>
