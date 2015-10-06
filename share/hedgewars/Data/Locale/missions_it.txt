@@ -43,5 +43,41 @@ User_Mission_-_The_Great_Escape.desc="Pensi ancora di potermi imprigionare!?"
 User_Mission_-_Rope_Knock_Challenge.name=Sfida: a colpi di corda
 User_Mission_-_Rope_Knock_Challenge.desc="Guarda sempre dietro di te!"
 
+User_Mission_-_Nobody_Laugh.name=Missione: Nessuno ride
+User_Mission_-_Nobody_Laugh.desc="Questo non è un gioco."
+
 User_Mission_-_RCPlane_Challenge.name=Sfida: aereo radiocomandato
 User_Mission_-_RCPlane_Challenge.desc="Ti senti abbastanza sicuro, eh, aviatore?"
+
+portal.name=Missione: Sfida il portale della mente
+portal.desc="Usa il portale per muoverti velocemente e lontano, usalo per uccidere, ma usalo con cauzione!"
+
+Target_Practice_-_Bazooka_easy.name=Tiro al Bersaglio: Bazooka (facile)
+Target_Practice_-_Bazooka_easy.desc="Ok, soldati, fate saltare questi bersagli più in fretta che potete!"
+
+Target_Practice_-_Bazooka_hard.name=Tiro al Bersaglio: Bazooka (difficile)
+Target_Practice_-_Bazooka_hard.desc="Puoi colpire i bersagli anche quando sono molto lontani?"
+
+Target_Practice_-_Cluster_Bomb.name=Tiro al Bersaglio: Bomba Cluster
+Target_Practice_-_Cluster_Bomb.desc="A qualcuno serve una doccia calda!"
+
+Target_Practice_-_Shotgun.name=Tiro al Bersaglio: Shotgun
+Target_Practice_-_Shotgun.desc="Prima spara, poi fai le domande!"
+
+Target_Practice_-_Homing_Bee.name=Tiro al Bersaglio: Ape a ricerca
+Target_Practice_-_Homing_Bee.desc="Usare l'ape a ricerca è più complicato di quello che sembra."
+
+Target_Practice_-_Grenade_easy.name=Tiro al Bersagio: Granata (facile)
+Target_Practice_-_Grenade_easy.desc="Un training di riscaldamento per aspiranti granatieri."
+
+Target_Practice_-_Grenade_hard.name=Tiro al Bersagio: Granata (difficile)
+Target_Practice_-_Grenade_hard.desc="Questo non è per novellini! Piazzeremo i bersagli in posti veramente difficili."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Sfida: Amo Shoppa
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Fai vedere il tuo amore e colleziona alcune casse in una mappa piccola."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Sfida: Funi e Casse
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Prendi la tua fune e colleziona tutte le casse in questa mappa media."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Sfida: Il Cliente è il Re
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Fai vedere che sei degno di un vero re e colleziona tutte le casse più in fretta che puoi in questa mappa grande."
