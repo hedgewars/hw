@@ -5430,6 +5430,7 @@ begin
             if graves.ar^[i]^.Health > 0 then
                 begin
                 resgear := AddGear(hwRound(graves.ar^[i]^.X), hwRound(graves.ar^[i]^.Y), gtHedgehog, gstWait, _0, _0, 0);
+                resgear^.uid:= graves.ar^[i]^.Pos;
                 resgear^.Hedgehog := graves.ar^[i]^.Hedgehog;
                 resgear^.Health := graves.ar^[i]^.Health;
                 PHedgehog(graves.ar^[i]^.Hedgehog)^.Gear := resgear;
