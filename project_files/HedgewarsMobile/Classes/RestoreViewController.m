@@ -20,6 +20,11 @@
 #import "RestoreViewController.h"
 #import "GameInterfaceBridge.h"
 
+@interface RestoreViewController ()
+@property (retain, nonatomic) IBOutlet UIButton *restoreButton;
+@property (retain, nonatomic) IBOutlet UIButton *dismissButton;
+@end
+
 @implementation RestoreViewController
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -44,6 +49,9 @@
 
 -(void) viewDidLoad {
     [super viewDidLoad];
+    
+    [self.restoreButton applyDarkBlueQuickStyle];
+    [self.dismissButton applyDarkBlueQuickStyle];
 }
 
 -(void) didReceiveMemoryWarning {
@@ -55,6 +63,8 @@
 }
 
 -(void) dealloc {
+    [_restoreButton release];
+    [_dismissButton release];
     [super dealloc];
 }
 
