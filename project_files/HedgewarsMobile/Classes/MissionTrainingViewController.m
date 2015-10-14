@@ -54,7 +54,7 @@
 }
 
 -(void) viewWillAppear:(BOOL)animated {
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:random()%[self.listOfMissions count] inSection:0];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:arc4random_uniform((int)[self.listOfMissions count]) inSection:0];
     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
     [self tableView:self.tableView didSelectRowAtIndexPath:indexPath];
     [super viewWillAppear:animated];

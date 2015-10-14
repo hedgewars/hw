@@ -31,7 +31,6 @@
 #pragma mark View lifecycle
 -(void) viewDidLoad {
     [super viewDidLoad];
-    srandom(time(NULL));
 
     NSArray *array = [[NSArray alloc] initWithObjects:
                       NSLocalizedString(@"Brutal",@""),
@@ -133,7 +132,7 @@
     if (theSwitch.on) {
         numberOfSections = 2;
         [self.tableView insertSections:sections withRowAnimation:UITableViewRowAnimationFade];
-        level = 1 + (random() % ([levelArray count] - 1));
+        level = 1 + arc4random_uniform((int)[levelArray count] - 1);
     } else {
         numberOfSections = 1;
         [self.tableView deleteSections:sections withRowAnimation:UITableViewRowAnimationFade];
