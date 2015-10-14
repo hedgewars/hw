@@ -103,14 +103,13 @@ static TGameStatus gameStatus = gsNone;
 +(NSInteger) randomPort {
     // set a new feed only at initialization time and forbid connecting to the server port
     if (activePorts == nil) {
-        srandom(time(NULL));
         activePorts = [[NSMutableArray arrayWithObject:[NSNumber numberWithInt:NETGAME_DEFAULT_PORT]] retain];
     }
 
     // pick a random number from the free ports list
     NSInteger res = 0;
     do {
-        res = (random() % 64511) + 1024;
+        res = (arc4random_uniform(64511)) + 1024;
     } while ([activePorts containsObject:[NSNumber numberWithInteger:res]]);
 
     // add this number to the forbdding list

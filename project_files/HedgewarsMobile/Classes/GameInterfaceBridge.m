@@ -252,8 +252,6 @@ static UIViewController *callingController;
 }
 
 +(void) startSimpleGame {
-    srand(time(0));
-
     // generate a seed
     CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
     NSString *seed = (NSString *)CFUUIDCreateString(kCFAllocatorDefault, uuid);
@@ -263,7 +261,7 @@ static UIViewController *callingController;
 
     // pick a random static map
     NSArray *listOfMaps = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:MAPS_DIRECTORY() error:NULL];
-    NSString *mapName = [listOfMaps objectAtIndex:random()%[listOfMaps count]];
+    NSString *mapName = [listOfMaps objectAtIndex:arc4random_uniform((int)[listOfMaps count])];
     NSString *fileCfg = [[NSString alloc] initWithFormat:@"%@/%@/map.cfg",MAPS_DIRECTORY(),mapName];
     NSString *contents = [[NSString alloc] initWithContentsOfFile:fileCfg encoding:NSUTF8StringEncoding error:NULL];
     [fileCfg release];
@@ -276,8 +274,8 @@ static UIViewController *callingController;
     NSArray *colorArray = [HWUtils teamColors];
     NSInteger firstColorIndex, secondColorIndex;
     do {
-        firstColorIndex = random()%[colorArray count];
-        secondColorIndex = random()%[colorArray count];
+        firstColorIndex = arc4random_uniform((int)[colorArray count]);
+        secondColorIndex = arc4random_uniform((int)[colorArray count]);
     } while (firstColorIndex == secondColorIndex);
     unsigned int firstColor = [[colorArray objectAtIndex:firstColorIndex] intValue];
     unsigned int secondColor = [[colorArray objectAtIndex:secondColorIndex] intValue];

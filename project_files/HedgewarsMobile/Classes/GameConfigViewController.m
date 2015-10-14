@@ -232,7 +232,6 @@
 -(void) loadNiceHogs {
     @autoreleasepool {
     
-    srand(time(NULL));
     NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
     UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
     [filePath release];
@@ -245,10 +244,10 @@
         [self.imgContainer removeFromSuperview];
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    NSInteger numberOfHogs = 1 + random() % 20;
+    NSInteger numberOfHogs = 1 + arc4random_uniform(20);
     DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
     for (int i = 0; i < numberOfHogs; i++) {
-        NSString *hat = [hatArray objectAtIndex:random()%numberOfHats];
+        NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
 
         NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
         UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
@@ -269,9 +268,9 @@
         hog.animationDuration = 3;
         [animation release];
 
-        int x = 20*i+random()%128;
+        int x = 20*i+arc4random_uniform(128);
         if (x > 320 - 32)
-            x = i*random()%32;
+            x = i*arc4random_uniform(32);
         hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
         [self.imgContainer addSubview:hog];
         [hog startAnimating];
