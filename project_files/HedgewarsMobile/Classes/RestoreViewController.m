@@ -38,7 +38,14 @@
     if (theButton.tag != 0) {
         [[AudioManagerController mainManager] playClickSound];
         [GameInterfaceBridge registerCallingController:self.presentingViewController];
-        [GameInterfaceBridge startSaveGame:[[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"]];
+        
+        // Since iOS 8, the file system layout of app containers has changed.
+        // So, we must rely now on saved game filename, not full path.
+        NSString *oldSavedGamePath = [[NSUserDefaults standardUserDefaults] objectForKey:@"savedGamePath"];
+        NSString *savedGameFile = [oldSavedGamePath lastPathComponent];
+        NSString *newSavedGamePath = [NSString stringWithFormat:@"%@%@", SAVES_DIRECTORY(), savedGameFile];
+        
+        [GameInterfaceBridge startSaveGame:newSavedGamePath];
     } else {
         [[AudioManagerController mainManager] playBackSound];
         [defaults setObject:@"" forKey:@"savedGamePath"];
