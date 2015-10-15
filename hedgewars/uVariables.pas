@@ -1363,7 +1363,7 @@ const
             NameTex: nil;
             Probability: 100;
             NumberInCase: 4;
-            Ammo: (Propz: 0;
+            Ammo: (Propz: ammoprop_NeedUpDown;
                 Count: 4;
                 NumPerTurn: 0;
                 Timer: 0;
@@ -2154,6 +2154,7 @@ const
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_Power or
                           ammoprop_AltUse or
+                          ammoprop_NeedUpDown or
                           ammoprop_NoRoundEnd;
                 Count: 2;
                 NumPerTurn: 0;
@@ -2235,6 +2236,7 @@ const
             Probability: 20;
             NumberInCase: 1;
             Ammo: (Propz: ammoprop_NoRoundEnd or
+                          ammoprop_NeedUpDown or
                           ammoprop_Utility;
                 Count: 1;
                 NumPerTurn: 0;
