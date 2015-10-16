@@ -67,8 +67,7 @@
 
         if (nil == generalSettingsViewController) {
             generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            generalSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:0];
-            generalSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/TargetBee.png",GRAPHICS_DIRECTORY()]];
+            generalSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:0] imageName:@"flower" selectedImageName:@"flower_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
             generalSettingsViewController.navigationItem.backBarButtonItem = doneButton;
             generalSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
@@ -78,8 +77,7 @@
         }
         if (nil == teamSettingsViewController) {
             teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            teamSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:1];
-            teamSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Egg.png",GRAPHICS_DIRECTORY()]];
+            teamSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:1] imageName:@"teams" selectedImageName:@"teams_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
             teamSettingsViewController.navigationItem.backBarButtonItem = doneButton;
             teamSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
@@ -88,8 +86,7 @@
         }
         if (nil == weaponSettingsViewController) {
             weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            weaponSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:2];
-            weaponSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/cheese.png",GRAPHICS_DIRECTORY()]];
+            weaponSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:2] imageName:@"bullet" selectedImageName:@"bullet_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
             weaponSettingsViewController.navigationItem.backBarButtonItem = doneButton;
             weaponSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
@@ -98,8 +95,7 @@
         }
         if (nil == schemeSettingsViewController) {
             schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            schemeSettingsViewController.tabBarItem.title = [self.controllerNames objectAtIndex:3];
-            schemeSettingsViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Targetp.png",GRAPHICS_DIRECTORY()]];
+            schemeSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:3] imageName:@"target" selectedImageName:@"target_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
             schemeSettingsViewController.navigationItem.backBarButtonItem = doneButton;
             schemeSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
@@ -108,8 +104,7 @@
         }
         if (nil == supportViewController) {
             supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            supportViewController.tabBarItem.title = [self.controllerNames objectAtIndex:4];
-            supportViewController.tabBarItem.image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Seduction.png",GRAPHICS_DIRECTORY()]];
+            supportViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:4] imageName:@"heart" selectedImageName:@"heart_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
             supportViewController.navigationItem.backBarButtonItem = doneButton;
             supportViewController.navigationItem.leftBarButtonItem = doneButton;
@@ -125,6 +120,15 @@
     }
     [doneButton release];
     [super viewDidLoad];
+}
+
+- (UITabBarItem *)tabBarItemWithTitle: (NSString *)title
+                            imageName: (NSString *)imageName
+                    selectedImageName: (NSString *)selectedImageName
+{
+    return [[[UITabBarItem alloc] initWithTitle:title
+                                          image:[UIImage imageNamed:imageName]
+                                  selectedImage:[UIImage imageNamed:selectedImageName]] autorelease];
 }
 
 -(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
