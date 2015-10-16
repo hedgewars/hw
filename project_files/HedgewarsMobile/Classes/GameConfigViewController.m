@@ -328,8 +328,6 @@
 
     [self updateiPadUIForInterfaceOrientation:toInterfaceOrientation];
 
-    [self.schemeWeaponConfigViewController willAnimateRotationToInterfaceOrientation:toInterfaceOrientation
-                                                                            duration:duration];
     if (self.helpPage)
     {
         self.helpPage.view.frame = self.view.frame;
@@ -372,6 +370,18 @@
     }
 
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    if (IS_IPAD())
+    {
+        // need to call this again in order to fix layout on iOS 9 when going back from rotated stats page
+        UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [self updateiPadUIForInterfaceOrientation:currentOrientation];
+    }
 }
 
 -(void) didReceiveMemoryWarning {
