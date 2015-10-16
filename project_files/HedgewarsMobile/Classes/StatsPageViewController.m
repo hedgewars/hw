@@ -29,6 +29,7 @@
 
 -(void) viewDidLoad {
     UITableView *aTableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStyleGrouped];
+    aTableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [aTableView setBackgroundColorForAnyTable:[UIColor clearColor]];
 
     NSString *imgName = (IS_IPAD()) ? @"mediumBackground~ipad.png" : @"smallerBackground~iphone.png";
@@ -118,7 +119,7 @@
 }
 
 -(CGFloat) tableView:(UITableView *)aTableView heightForHeaderInSection:(NSInteger)section {
-    return 160;
+    return (section == 0) ? 160 : 40;
 }
 
 -(UIView *)tableView:(UITableView *)aTableView viewForHeaderInSection:(NSInteger)section {
