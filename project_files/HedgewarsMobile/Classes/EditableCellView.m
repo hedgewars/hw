@@ -148,8 +148,8 @@
 
     // restores default behaviour on caller
     ((UITableView*)[self superview]).scrollEnabled = YES;
-    [(UITableViewController *)delegate navigationItem].rightBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
-    [(UITableViewController *)delegate navigationItem].leftBarButtonItem = nil;
+    [(UITableViewController *)delegate navigationItem].leftBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
+    [(UITableViewController *)delegate navigationItem].rightBarButtonItem = nil;
 }
 
 #pragma mark -
