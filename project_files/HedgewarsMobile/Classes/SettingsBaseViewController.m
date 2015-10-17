@@ -45,9 +45,6 @@
     self.controllerNames = array;
     [array release];
 
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                                                                target:self
-                                                                                action:@selector(dismissSplitView)];
     if (IS_IPAD()) {
         // this class gets loaded twice, we tell the difference by looking at targetController
         if (self.targetController != nil) {
@@ -58,7 +55,7 @@
             [self.view addSubview:tableView];
             [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
             [tableView release];
-            self.navigationItem.leftBarButtonItem = doneButton;
+            self.navigationItem.leftBarButtonItem = [self doneButton];
         }
     } else {
         // this class just loads all controllers and set up tabbar and navigation controllers
@@ -69,8 +66,9 @@
             generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             generalSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:0] imageName:@"flower" selectedImageName:@"flower_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
-            generalSettingsViewController.navigationItem.backBarButtonItem = doneButton;
-            generalSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            UIBarButtonItem *generalSettingsDoneButton = [self doneButton];
+            generalSettingsViewController.navigationItem.backBarButtonItem = generalSettingsDoneButton;
+            generalSettingsViewController.navigationItem.leftBarButtonItem = generalSettingsDoneButton;
             [generalSettingsViewController release];
             [tabBarNavigationControllers addObject:navController];
             releaseAndNil(navController);
@@ -79,8 +77,9 @@
             teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             teamSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:1] imageName:@"teams" selectedImageName:@"teams_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
-            teamSettingsViewController.navigationItem.backBarButtonItem = doneButton;
-            teamSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            UIBarButtonItem *teamSettingsDoneButton = [self doneButton];
+            teamSettingsViewController.navigationItem.backBarButtonItem = teamSettingsDoneButton;
+            teamSettingsViewController.navigationItem.leftBarButtonItem = teamSettingsDoneButton;
             [tabBarNavigationControllers addObject:navController];
             releaseAndNil(navController);
         }
@@ -88,8 +87,9 @@
             weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             weaponSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:2] imageName:@"bullet" selectedImageName:@"bullet_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
-            weaponSettingsViewController.navigationItem.backBarButtonItem = doneButton;
-            weaponSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            UIBarButtonItem *weaponSettingsDoneButton = [self doneButton];
+            weaponSettingsViewController.navigationItem.backBarButtonItem = weaponSettingsDoneButton;
+            weaponSettingsViewController.navigationItem.leftBarButtonItem = weaponSettingsDoneButton;
             [tabBarNavigationControllers addObject:navController];
             releaseAndNil(navController);
         }
@@ -97,8 +97,9 @@
             schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             schemeSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:3] imageName:@"target" selectedImageName:@"target_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
-            schemeSettingsViewController.navigationItem.backBarButtonItem = doneButton;
-            schemeSettingsViewController.navigationItem.leftBarButtonItem = doneButton;
+            UIBarButtonItem *schemeSettingsDoneButton = [self doneButton];
+            schemeSettingsViewController.navigationItem.backBarButtonItem = schemeSettingsDoneButton;
+            schemeSettingsViewController.navigationItem.leftBarButtonItem = schemeSettingsDoneButton;
             [tabBarNavigationControllers addObject:navController];
             releaseAndNil(navController);
         }
@@ -106,8 +107,9 @@
             supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
             supportViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:4] imageName:@"heart" selectedImageName:@"heart_filled"];
             navController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
-            supportViewController.navigationItem.backBarButtonItem = doneButton;
-            supportViewController.navigationItem.leftBarButtonItem = doneButton;
+            UIBarButtonItem *supportViewDoneButton = [self doneButton];
+            supportViewController.navigationItem.backBarButtonItem = supportViewDoneButton;
+            supportViewController.navigationItem.leftBarButtonItem = supportViewDoneButton;
             [tabBarNavigationControllers addObject:navController];
             releaseAndNil(navController);
         }
@@ -118,8 +120,15 @@
 
         [self.view addSubview:self.tabController.view];
     }
-    [doneButton release];
+
     [super viewDidLoad];
+}
+
+- (UIBarButtonItem *)doneButton
+{
+    return [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                         target:self
+                                                         action:@selector(dismissSplitView)] autorelease];
 }
 
 - (UITabBarItem *)tabBarItemWithTitle: (NSString *)title
