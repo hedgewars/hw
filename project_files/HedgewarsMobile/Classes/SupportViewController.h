@@ -18,9 +18,9 @@
 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerWithDoneButton.h"
 
-
-@interface SupportViewController : UITableViewController {
+@interface SupportViewController : TableViewControllerWithDoneButton {
     NSArray *waysToSupport;
 }
 

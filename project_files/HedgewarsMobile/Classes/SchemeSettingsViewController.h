@@ -18,13 +18,10 @@
 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerWithDoneButton.h"
 
-
-@class SingleSchemeViewController;
-
-@interface SchemeSettingsViewController : UITableViewController {
+@interface SchemeSettingsViewController : TableViewControllerWithDoneButton {
     NSMutableArray *listOfSchemes;
-    SingleSchemeViewController *childController;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfSchemes;

@@ -19,29 +19,16 @@
 
 #import <UIKit/UIKit.h>
 
-
-@class GeneralSettingsViewController;
-@class TeamSettingsViewController;
-@class WeaponSettingsViewController;
-@class SchemeSettingsViewController;
-@class SupportViewController;
-
 @interface SettingsBaseViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate> {
     UIViewController *targetController;
     NSArray *controllerNames;
     NSIndexPath *lastIndexPath;
     UITabBarController *tabController;
-    GeneralSettingsViewController *generalSettingsViewController;
-    TeamSettingsViewController *teamSettingsViewController;
-    WeaponSettingsViewController *weaponSettingsViewController;
-    SchemeSettingsViewController *schemeSettingsViewController;
-    SupportViewController *supportViewController;
 }
 
 @property (nonatomic, retain) UIViewController *targetController;
 @property (nonatomic, retain) NSArray *controllerNames;
 @property (nonatomic, retain) NSIndexPath *lastIndexPath;
-@property (nonatomic, retain) UITabBarController *tabController;
 
 -(void) dismissSplitView;
 

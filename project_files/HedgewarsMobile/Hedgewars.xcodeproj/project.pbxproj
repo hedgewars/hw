@@ -74,9 +74,9 @@
 		615AD9EB1207654E00F2FF04 /* helpButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 615AD9EA1207654E00F2FF04 /* helpButton.png */; };
 		615BE3D4155C5DDF003CA34D /* uInputHandler.pas in Sources */ = {isa = PBXBuildFile; fileRef = 615BE3D3155C5DDF003CA34D /* uInputHandler.pas */; };
 		615E755A14E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E755914E41E8C00FBA131 /* MXAudioPlayerFadeOperation.m */; };
-		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; };
-		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; };
-		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; };
+		615E76BC14E4421200FBA131 /* MGSplitCornersView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B714E4421200FBA131 /* MGSplitCornersView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		615E76BD14E4421200FBA131 /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76B914E4421200FBA131 /* MGSplitDividerView.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		615E76BE14E4421200FBA131 /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 615E76BB14E4421200FBA131 /* MGSplitViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		615FEAE212A2A6640098EE92 /* localplayButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEADF12A2A6640098EE92 /* localplayButton~ipad.png */; };
 		615FEAE312A2A6640098EE92 /* localplayButton~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 615FEAE012A2A6640098EE92 /* localplayButton~iphone.png */; };
 		616065A8159A71FD00CFAEF4 /* hwclassic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 616065A7159A71FD00CFAEF4 /* hwclassic.mp3 */; };
@@ -96,7 +96,6 @@
 		6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FD11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m */; };
 		6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */; };
 		6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920111CA9BA200D6E256 /* SingleTeamViewController.m */; };
-		6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */; };
 		6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920511CA9BA200D6E256 /* TeamConfigViewController.m */; };
 		6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920711CA9BA200D6E256 /* TeamSettingsViewController.m */; };
 		6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6165920911CA9BA200D6E256 /* VoicesViewController.m */; };
@@ -264,6 +263,7 @@
 		F60D04881BD137B5003ACB00 /* teams_filled@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04741BD137B5003ACB00 /* teams_filled@2x.png */; settings = {ASSET_TAGS = (); }; };
 		F60D04891BD137B5003ACB00 /* teams.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04751BD137B5003ACB00 /* teams.png */; settings = {ASSET_TAGS = (); }; };
 		F60D048A1BD137B5003ACB00 /* teams@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F60D04761BD137B5003ACB00 /* teams@2x.png */; settings = {ASSET_TAGS = (); }; };
+		F6448CE31BD2E00500C31C8C /* TableViewControllerWithDoneButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */; settings = {ASSET_TAGS = (); }; };
 		F65724FD1B7E784700A86262 /* helpabove.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F81B7E784700A86262 /* helpabove.png */; };
 		F65724FE1B7E784700A86262 /* helpbottom.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724F91B7E784700A86262 /* helpbottom.png */; };
 		F65724FF1B7E784700A86262 /* helpleft.png in Resources */ = {isa = PBXBuildFile; fileRef = F65724FA1B7E784700A86262 /* helpleft.png */; };
@@ -529,8 +529,6 @@
 		616591FF11CA9BA200D6E256 /* SingleSchemeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleSchemeViewController.m; sourceTree = "<group>"; };
 		6165920011CA9BA200D6E256 /* SingleTeamViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleTeamViewController.h; sourceTree = "<group>"; };
 		6165920111CA9BA200D6E256 /* SingleTeamViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleTeamViewController.m; sourceTree = "<group>"; };
-		6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsContainerViewController.h; sourceTree = "<group>"; };
-		6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsContainerViewController.m; sourceTree = "<group>"; };
 		6165920411CA9BA200D6E256 /* TeamConfigViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamConfigViewController.h; sourceTree = "<group>"; };
 		6165920511CA9BA200D6E256 /* TeamConfigViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TeamConfigViewController.m; sourceTree = "<group>"; };
 		6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TeamSettingsViewController.h; sourceTree = "<group>"; };
@@ -751,6 +749,8 @@
 		F60D04741BD137B5003ACB00 /* teams_filled@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams_filled@2x.png"; path = "Resources/Icons/teams_filled@2x.png"; sourceTree = "<group>"; };
 		F60D04751BD137B5003ACB00 /* teams.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = teams.png; path = Resources/Icons/teams.png; sourceTree = "<group>"; };
 		F60D04761BD137B5003ACB00 /* teams@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "teams@2x.png"; path = "Resources/Icons/teams@2x.png"; sourceTree = "<group>"; };
+		F6448CE11BD2E00500C31C8C /* TableViewControllerWithDoneButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewControllerWithDoneButton.h; sourceTree = "<group>"; };
+		F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewControllerWithDoneButton.m; sourceTree = "<group>"; };
 		F65724F81B7E784700A86262 /* helpabove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpabove.png; sourceTree = "<group>"; };
 		F65724F91B7E784700A86262 /* helpbottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpbottom.png; sourceTree = "<group>"; };
 		F65724FA1B7E784700A86262 /* helpleft.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = helpleft.png; sourceTree = "<group>"; };
@@ -987,8 +987,6 @@
 		6163EE4C11CC2478001C0453 /* Settings Page */ = {
 			isa = PBXGroup;
 			children = (
-				6165920211CA9BA200D6E256 /* SettingsContainerViewController.h */,
-				6165920311CA9BA200D6E256 /* SettingsContainerViewController.m */,
 				616591F411CA9BA200D6E256 /* SettingsBaseViewController.h */,
 				616591F511CA9BA200D6E256 /* SettingsBaseViewController.m */,
 				6163EE4E11CC248D001C0453 /* First Level */,
@@ -1024,6 +1022,8 @@
 		6163EE4E11CC248D001C0453 /* First Level */ = {
 			isa = PBXGroup;
 			children = (
+				F6448CE11BD2E00500C31C8C /* TableViewControllerWithDoneButton.h */,
+				F6448CE21BD2E00500C31C8C /* TableViewControllerWithDoneButton.m */,
 				616591E811CA9BA200D6E256 /* GeneralSettingsViewController.h */,
 				616591E911CA9BA200D6E256 /* GeneralSettingsViewController.m */,
 				6165920611CA9BA200D6E256 /* TeamSettingsViewController.h */,
@@ -1830,7 +1830,6 @@
 				6165921B11CA9BA200D6E256 /* SchemeWeaponConfigViewController.m in Sources */,
 				6165921C11CA9BA200D6E256 /* SingleSchemeViewController.m in Sources */,
 				6165921D11CA9BA200D6E256 /* SingleTeamViewController.m in Sources */,
-				6165921E11CA9BA200D6E256 /* SettingsContainerViewController.m in Sources */,
 				6165921F11CA9BA200D6E256 /* TeamConfigViewController.m in Sources */,
 				6165922011CA9BA200D6E256 /* TeamSettingsViewController.m in Sources */,
 				6165922111CA9BA200D6E256 /* VoicesViewController.m in Sources */,
@@ -1853,6 +1852,7 @@
 				61006F95128DE31F00EBA7F7 /* CreationChamber.m in Sources */,
 				61A4A39412A5CCC2004D81E6 /* uCommandHandlers.pas in Sources */,
 				61A4A39512A5CCC2004D81E6 /* uCommands.pas in Sources */,
+				F6448CE31BD2E00500C31C8C /* TableViewControllerWithDoneButton.m in Sources */,
 				61A4A39612A5CCC2004D81E6 /* uDebug.pas in Sources */,
 				61A4A39712A5CCC2004D81E6 /* uGearsRender.pas in Sources */,
 				61A4A39812A5CCC2004D81E6 /* uRender.pas in Sources */,

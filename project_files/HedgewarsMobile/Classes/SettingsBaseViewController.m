@@ -26,7 +26,7 @@
 
 
 @implementation SettingsBaseViewController
-@synthesize tabController, targetController, controllerNames, lastIndexPath;
+@synthesize targetController, controllerNames, lastIndexPath;
 
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation) interfaceOrientation {
     return rotationManager(interfaceOrientation);
@@ -45,10 +45,13 @@
     self.controllerNames = array;
     [array release];
 
-    if (IS_IPAD()) {
+    if (IS_IPAD())
+    {
         // this class gets loaded twice, we tell the difference by looking at targetController
-        if (self.targetController != nil) {
+        if (self.targetController != nil)
+        {
             UITableView *tableView = [[UITableView alloc] initWithFrame:self.view.frame style:UITableViewStylePlain];
+            tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             tableView.delegate = self;
             tableView.dataSource = self;
             [tableView reloadData];
@@ -57,68 +60,10 @@
             [tableView release];
             self.navigationItem.leftBarButtonItem = [self doneButton];
         }
-    } else {
-        // this class just loads all controllers and set up tabbar and navigation controllers
-        NSMutableArray *tabBarNavigationControllers = [[NSMutableArray alloc] initWithCapacity:5];
-        UINavigationController *navController = nil;
-
-        if (nil == generalSettingsViewController) {
-            generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            generalSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:0] imageName:@"flower" selectedImageName:@"flower_filled"];
-            navController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
-            UIBarButtonItem *generalSettingsDoneButton = [self doneButton];
-            generalSettingsViewController.navigationItem.backBarButtonItem = generalSettingsDoneButton;
-            generalSettingsViewController.navigationItem.leftBarButtonItem = generalSettingsDoneButton;
-            [generalSettingsViewController release];
-            [tabBarNavigationControllers addObject:navController];
-            releaseAndNil(navController);
-        }
-        if (nil == teamSettingsViewController) {
-            teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            teamSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:1] imageName:@"teams" selectedImageName:@"teams_filled"];
-            navController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
-            UIBarButtonItem *teamSettingsDoneButton = [self doneButton];
-            teamSettingsViewController.navigationItem.backBarButtonItem = teamSettingsDoneButton;
-            teamSettingsViewController.navigationItem.leftBarButtonItem = teamSettingsDoneButton;
-            [tabBarNavigationControllers addObject:navController];
-            releaseAndNil(navController);
-        }
-        if (nil == weaponSettingsViewController) {
-            weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            weaponSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:2] imageName:@"bullet" selectedImageName:@"bullet_filled"];
-            navController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
-            UIBarButtonItem *weaponSettingsDoneButton = [self doneButton];
-            weaponSettingsViewController.navigationItem.backBarButtonItem = weaponSettingsDoneButton;
-            weaponSettingsViewController.navigationItem.leftBarButtonItem = weaponSettingsDoneButton;
-            [tabBarNavigationControllers addObject:navController];
-            releaseAndNil(navController);
-        }
-        if (nil == schemeSettingsViewController) {
-            schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            schemeSettingsViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:3] imageName:@"target" selectedImageName:@"target_filled"];
-            navController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
-            UIBarButtonItem *schemeSettingsDoneButton = [self doneButton];
-            schemeSettingsViewController.navigationItem.backBarButtonItem = schemeSettingsDoneButton;
-            schemeSettingsViewController.navigationItem.leftBarButtonItem = schemeSettingsDoneButton;
-            [tabBarNavigationControllers addObject:navController];
-            releaseAndNil(navController);
-        }
-        if (nil == supportViewController) {
-            supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            supportViewController.tabBarItem = [self tabBarItemWithTitle:[self.controllerNames objectAtIndex:4] imageName:@"heart" selectedImageName:@"heart_filled"];
-            navController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
-            UIBarButtonItem *supportViewDoneButton = [self doneButton];
-            supportViewController.navigationItem.backBarButtonItem = supportViewDoneButton;
-            supportViewController.navigationItem.leftBarButtonItem = supportViewDoneButton;
-            [tabBarNavigationControllers addObject:navController];
-            releaseAndNil(navController);
-        }
-
-        self.tabController = [[UITabBarController alloc] init];
-        self.tabController.viewControllers = tabBarNavigationControllers;
-        self.tabController.delegate = self;
-
-        [self.view addSubview:self.tabController.view];
+    }
+    else
+    {
+        //iPhone part moved to MainMenuViewController
     }
 
     [super viewDidLoad];
@@ -131,32 +76,9 @@
                                                          action:@selector(dismissSplitView)] autorelease];
 }
 
-- (UITabBarItem *)tabBarItemWithTitle: (NSString *)title
-                            imageName: (NSString *)imageName
-                    selectedImageName: (NSString *)selectedImageName
-{
-    return [[[UITabBarItem alloc] initWithTitle:title
-                                          image:[UIImage imageNamed:imageName]
-                                  selectedImage:[UIImage imageNamed:selectedImageName]] autorelease];
-}
-
--(void) tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
-    [viewController viewWillAppear:NO];
-}
-
 -(void) dismissSplitView {
     [[AudioManagerController mainManager] playBackSound];
     [[[HedgewarsAppDelegate sharedAppDelegate] mainViewController] dismissViewControllerAnimated:YES completion:nil];
-}
-
--(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    if (IS_IPAD() == NO)
-        return;
-
-    if (self.targetController != nil) {
-        CGRect screenRect = [[UIScreen mainScreen] safeBounds];
-        self.view.frame = CGRectMake(0, 0, 320, screenRect.size.height);
-    }
 }
 
 #pragma mark -
@@ -210,40 +132,33 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSInteger newRow = [indexPath row];
     NSInteger oldRow = (lastIndexPath != nil) ? [lastIndexPath row] : -1;
     UIViewController *nextController = nil;
 
-    if (newRow != oldRow) {
+    if (newRow != oldRow)
+    {
         [tableView deselectRowAtIndexPath:lastIndexPath animated:YES];
         [targetController.navigationController popToRootViewControllerAnimated:NO];
 
-        switch (newRow) {
+        switch (newRow)
+        {
             case 0:
-                if (nil == generalSettingsViewController)
-                    generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                nextController = generalSettingsViewController;
+                nextController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];;
                 break;
             case 1:
-                if (nil == teamSettingsViewController)
-                    teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                nextController = teamSettingsViewController;
+                nextController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 break;
             case 2:
-                if (nil == weaponSettingsViewController)
-                    weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                nextController = weaponSettingsViewController;
+                nextController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 break;
             case 3:
-                if (nil == schemeSettingsViewController)
-                    schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                nextController = schemeSettingsViewController;
+                nextController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 break;
             case 4:
-                if (nil == supportViewController)
-                    supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
-                nextController = supportViewController;
+                nextController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 break;
         }
 
@@ -253,6 +168,8 @@
         nextController.navigationItem.hidesBackButton = YES;
         [nextController viewWillAppear:NO];
         [targetController.navigationController pushViewController:nextController animated:NO];
+        [nextController release];
+        
         [[AudioManagerController mainManager] playClickSound];
     }
 }
@@ -260,61 +177,27 @@
 
 #pragma mark -
 #pragma mark Memory management
--(void) didReceiveMemoryWarning {
-    if (generalSettingsViewController.view.superview == nil)
-        generalSettingsViewController = nil;
-    if (teamSettingsViewController.view.superview == nil)
-        teamSettingsViewController = nil;
-    if (weaponSettingsViewController.view.superview == nil)
-        weaponSettingsViewController = nil;
-    if (schemeSettingsViewController.view.superview == nil)
-        schemeSettingsViewController = nil;
-    if (supportViewController.view.superview == nil)
-        supportViewController = nil;
-    if (tabController.view.superview == nil)
-        tabController = nil;
+-(void) didReceiveMemoryWarning
+{
     MSG_MEMCLEAN();
     [super didReceiveMemoryWarning];
 }
 
--(void) viewDidUnload {
+-(void) viewDidUnload
+{
     self.controllerNames = nil;
     self.lastIndexPath = nil;
     self.targetController = nil;
-    self.tabController = nil;
-    generalSettingsViewController = nil;
-    teamSettingsViewController = nil;
-    weaponSettingsViewController = nil;
-    schemeSettingsViewController = nil;
-    supportViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
--(void) dealloc {
+-(void) dealloc
+{
     releaseAndNil(targetController);
     releaseAndNil(controllerNames);
     releaseAndNil(lastIndexPath);
-    releaseAndNil(tabController);
-    releaseAndNil(generalSettingsViewController);
-    releaseAndNil(teamSettingsViewController);
-    releaseAndNil(weaponSettingsViewController);
-    releaseAndNil(schemeSettingsViewController);
-    releaseAndNil(supportViewController);
     [super dealloc];
-}
-
-
--(void) viewWillDisappear:(BOOL)animated {
-    // this will send -viewWillDisappear: only the active view
-    [self.tabController viewWillDisappear:animated];
-    // let's send that to every page, even though only GeneralSettingsViewController needs it
-    [generalSettingsViewController viewWillDisappear:animated];
-    [teamSettingsViewController viewWillDisappear:animated];
-    [weaponSettingsViewController viewWillDisappear:animated];
-    [schemeSettingsViewController viewWillDisappear:animated];
-    [supportViewController viewWillDisappear:animated];
-    [super viewWillDisappear:animated];
 }
 
 @end
