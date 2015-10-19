@@ -18,13 +18,10 @@
 
 
 #import <UIKit/UIKit.h>
+#import "TableViewControllerWithDoneButton.h"
 
-
-@class SingleTeamViewController;
-
-@interface TeamSettingsViewController : UITableViewController {
+@interface TeamSettingsViewController : TableViewControllerWithDoneButton {
     NSMutableArray *listOfTeams;
-    SingleTeamViewController *childController;
 }
 
 @property (nonatomic, retain) NSMutableArray *listOfTeams;

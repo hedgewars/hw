@@ -306,43 +306,55 @@
     NSInteger row = [indexPath row];
     NSInteger section = [indexPath section];
 
-    if (2 == section) {
-        switch (row) {
+    if (2 == section)
+    {
+        switch (row)
+        {
             case 0: // grave
-                if (nil == gravesViewController)
-                    gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                GravesViewController *gravesViewController = [[GravesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [gravesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:gravesViewController animated:YES];
+                [gravesViewController release];
                 break;
+            }
             case 1: // voice
-                if (nil == voicesViewController)
-                    voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                VoicesViewController *voicesViewController = [[VoicesViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [voicesViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:voicesViewController animated:YES];
+                [voicesViewController release];
                 break;
+            }
             case 2: // fort
-                if (nil == fortsViewController)
-                    fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                FortsViewController *fortsViewController = [[FortsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [fortsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:fortsViewController animated:YES];
+                [fortsViewController release];
                 break;
+            }
             case 3: // flag
-                if (nil == flagsViewController)
-                    flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                FlagsViewController *flagsViewController = [[FlagsViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [flagsViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:flagsViewController animated:YES];
+                [flagsViewController release];
                 break;
+            }
             case 4: // level
-                if (nil == levelViewController)
-                    levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            {
+                LevelViewController *levelViewController = [[LevelViewController alloc] initWithStyle:UITableViewStyleGrouped];
 
                 [levelViewController setTeamDictionary:teamDictionary];
                 [self.navigationController pushViewController:levelViewController animated:YES];
+                [levelViewController release];
                 break;
+            }
             default:
                 DLog(@"Nope");
                 break;
@@ -371,32 +383,20 @@
 
 - (void)showHogHatViewControllerForHogIndex:(NSInteger)hogIndex
 {
-    if (nil == hogHatViewController)
-        hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    HogHatViewController *hogHatViewController = [[HogHatViewController alloc] initWithStyle:UITableViewStyleGrouped];
     
     // cache the dictionary file of the team, so that other controllers can modify it
     hogHatViewController.teamDictionary = self.teamDictionary;
     hogHatViewController.selectedHog = hogIndex;
     
     [self.navigationController pushViewController:hogHatViewController animated:YES];
+    [hogHatViewController release];
 }
 
 #pragma mark -
 #pragma mark Memory management
 -(void) didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    if (hogHatViewController.view.superview == nil)
-        hogHatViewController = nil;
-    if (gravesViewController.view.superview == nil)
-        gravesViewController = nil;
-    if (voicesViewController.view.superview == nil)
-        voicesViewController = nil;
-    if (fortsViewController.view.superview == nil)
-        fortsViewController = nil;
-    if (flagsViewController.view.superview == nil)
-        flagsViewController = nil;
-    if (levelViewController.view.superview == nil)
-        levelViewController = nil;
     MSG_MEMCLEAN();
 }
 
@@ -407,12 +407,6 @@
     self.normalHogSprite = nil;
     self.secondaryItems = nil;
     self.moreSecondaryItems = nil;
-    hogHatViewController = nil;
-    gravesViewController = nil;
-    voicesViewController = nil;
-    flagsViewController = nil;
-    fortsViewController = nil;
-    levelViewController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
@@ -423,12 +417,6 @@
     releaseAndNil(normalHogSprite);
     releaseAndNil(secondaryItems);
     releaseAndNil(moreSecondaryItems);
-    releaseAndNil(hogHatViewController);
-    releaseAndNil(gravesViewController);
-    releaseAndNil(fortsViewController);
-    releaseAndNil(voicesViewController);
-    releaseAndNil(flagsViewController);
-    releaseAndNil(levelViewController);
     [super dealloc];
 }
 

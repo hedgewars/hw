@@ -1,6 +1,6 @@
 /*
  * Hedgewars-iOS, a Hedgewars port for iOS devices
- * Copyright (c) 2009-2012 Vittorio Giovara <vittorio.giovara@gmail.com>
+ * Copyright (c) 2015 Anton Malmygin <antonc27@mail.ru>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA.
  */
 
-
 #import <UIKit/UIKit.h>
 
-
-@class SettingsBaseViewController;
-@class MGSplitViewController;
-
-@interface SettingsContainerViewController : UIViewController {
-    SettingsBaseViewController *baseController;
-    MGSplitViewController *splitViewRootController;
-}
-
-@property (nonatomic,retain) SettingsBaseViewController *baseController;
-@property (nonatomic,retain) MGSplitViewController *splitViewRootController;
+@interface TableViewControllerWithDoneButton : UITableViewController
 
 @end

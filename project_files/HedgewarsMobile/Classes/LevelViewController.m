@@ -58,10 +58,6 @@
     [self.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 }
 
--(void) viewWillDisappear:(BOOL)animated {
- // stuff like checking that at least 1 field was selected
-}
-
 #pragma mark -
 #pragma mark Table view data source
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView {

@@ -20,7 +20,8 @@
 #import "MainMenuViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "GameConfigViewController.h"
-#import "SettingsContainerViewController.h"
+#import "MGSplitViewController.h"
+#import "SettingsBaseViewController.h"
 #import "AboutViewController.h"
 #import "SavedGamesViewController.h"
 #import "RestoreViewController.h"
@@ -28,6 +29,13 @@
 #import "Appirater.h"
 #import "ServerProtocolNetwork.h"
 #import "GameInterfaceBridge.h"
+
+#import "SettingsBaseViewController.h"
+#import "GeneralSettingsViewController.h"
+#import "TeamSettingsViewController.h"
+#import "WeaponSettingsViewController.h"
+#import "SchemeSettingsViewController.h"
+#import "SupportViewController.h"
 
 #ifdef DEBUG
 #import "GameLogViewController.h"
@@ -120,12 +128,75 @@
             [gcvc release];
             break;
         case 2:
+            if (IS_IPAD())
             {
-                SettingsContainerViewController *svrc = [[SettingsContainerViewController alloc] initWithNibName:nil bundle:nil];
-                svrc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+                // the contents on the right of the splitview, setting targetController to nil to avoid creating the table
+                SettingsBaseViewController *rightController = [[SettingsBaseViewController alloc] init];
+                rightController.targetController = nil;
+                UINavigationController *rightNavController = [[UINavigationController alloc] initWithRootViewController:rightController];
+                [rightController release];
+                
+                // the contens on the left of the splitview, setting targetController that will receive push/pop actions
+                SettingsBaseViewController *leftController = [[SettingsBaseViewController alloc] init];
+                leftController.targetController = rightNavController.topViewController;
+                UINavigationController *leftNavController = [[UINavigationController alloc] initWithRootViewController:leftController];
+                [leftController release];
+                
+                MGSplitViewController *splitViewRootController = [[MGSplitViewController alloc] init];
+                splitViewRootController.delegate = nil;
+                splitViewRootController.showsMasterInPortrait = YES;
+                splitViewRootController.viewControllers = [NSArray arrayWithObjects:leftNavController, rightNavController, nil];
+                [leftNavController release];
+                [rightNavController release];
 
-                [self presentViewController:svrc animated:YES completion:nil];
-                [svrc release];
+                [self presentViewController:splitViewRootController animated:YES completion:nil];
+                [splitViewRootController release];
+            }
+            else
+            {
+                NSMutableArray *tabBarNavigationControllers = [[NSMutableArray alloc] initWithCapacity:5];
+                
+                UIViewController *generalSettingsViewController = [[GeneralSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                generalSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"General",@"") imageName:@"flower" selectedImageName:@"flower_filled"];
+                UINavigationController *generalNavController = [[UINavigationController alloc] initWithRootViewController:generalSettingsViewController];
+                [generalSettingsViewController release];
+                [tabBarNavigationControllers addObject:generalNavController];
+                [generalNavController release];
+                
+                UIViewController *teamSettingsViewController = [[TeamSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                teamSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Teams",@"") imageName:@"teams" selectedImageName:@"teams_filled"];
+                UINavigationController *teamNavController = [[UINavigationController alloc] initWithRootViewController:teamSettingsViewController];
+                [teamSettingsViewController release];
+                [tabBarNavigationControllers addObject:teamNavController];
+                [teamNavController release];
+                
+                UIViewController *weaponSettingsViewController = [[WeaponSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                weaponSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Weapons",@"") imageName:@"bullet" selectedImageName:@"bullet_filled"];
+                UINavigationController *weaponNavController = [[UINavigationController alloc] initWithRootViewController:weaponSettingsViewController];
+                [weaponSettingsViewController release];
+                [tabBarNavigationControllers addObject:weaponNavController];
+                [weaponNavController release];
+                
+                UIViewController *schemeSettingsViewController = [[SchemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                schemeSettingsViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Schemes",@"") imageName:@"target" selectedImageName:@"target_filled"];
+                UINavigationController *schemeNavController = [[UINavigationController alloc] initWithRootViewController:schemeSettingsViewController];
+                [schemeSettingsViewController release];
+                [tabBarNavigationControllers addObject:schemeNavController];
+                [schemeNavController release];
+                
+                UIViewController *supportViewController = [[SupportViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                supportViewController.tabBarItem = [self tabBarItemWithTitle:NSLocalizedString(@"Support",@"") imageName:@"heart" selectedImageName:@"heart_filled"];
+                UINavigationController *supportNavController = [[UINavigationController alloc] initWithRootViewController:supportViewController];
+                [supportViewController release];
+                [tabBarNavigationControllers addObject:supportNavController];
+                [supportNavController release];
+                
+                UITabBarController *settingsTabController = [[UITabBarController alloc] init];
+                settingsTabController.viewControllers = tabBarNavigationControllers;
+                [tabBarNavigationControllers release];
+                
+                [self presentViewController:settingsTabController animated:YES completion:nil];
+                [settingsTabController release];
             }
             break;
         case 3:
@@ -187,6 +258,15 @@
             [alert release];
             break;
     }
+}
+
+- (UITabBarItem *)tabBarItemWithTitle: (NSString *)title
+                            imageName: (NSString *)imageName
+                    selectedImageName: (NSString *)selectedImageName
+{
+    return [[[UITabBarItem alloc] initWithTitle:title
+                                          image:[UIImage imageNamed:imageName]
+                                  selectedImage:[UIImage imageNamed:selectedImageName]] autorelease];
 }
 
 #pragma mark -

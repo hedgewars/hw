@@ -131,43 +131,43 @@
 
 #pragma mark -
 #pragma mark Table view delegate
--(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (childController == nil) {
-        childController = [[SingleSchemeViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    }
-
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    SingleSchemeViewController *singleSchemeViewController = [[SingleSchemeViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    
     NSInteger row = [indexPath row];
     NSString *selectedSchemeFile = [self.listOfSchemes objectAtIndex:row];
 
     // this must be set so childController can load the correct plist
-    childController.schemeName = [selectedSchemeFile stringByDeletingPathExtension];
-    [childController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
+    singleSchemeViewController.schemeName = [selectedSchemeFile stringByDeletingPathExtension];
+    [singleSchemeViewController.tableView setContentOffset:CGPointMake(0,0) animated:NO];
 
-    [self.navigationController pushViewController:childController animated:YES];
+    [self.navigationController pushViewController:singleSchemeViewController animated:YES];
+    [singleSchemeViewController release];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
--(void)didReceiveMemoryWarning {
+-(void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
-    if (childController.view.superview == nil )
-        childController = nil;
     MSG_MEMCLEAN();
 }
 
--(void) viewDidUnload {
+-(void) viewDidUnload
+{
     self.listOfSchemes = nil;
-    childController = nil;
     MSG_DIDUNLOAD();
     [super viewDidUnload];
 }
 
 
--(void) dealloc {
+-(void) dealloc
+{
     releaseAndNil(listOfSchemes);
-    releaseAndNil(childController);
     [super dealloc];
 }
 
