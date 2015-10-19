@@ -148,6 +148,12 @@
     cell.detailTextLabel.numberOfLines = ([cell.detailTextLabel.text length] % 40);
     cell.detailTextLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
 
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor colorWithRed:(85.0/255.0) green:(15.0/255.0) blue:(106.0/255.0) alpha:1.0];
+    bgColorView.layer.masksToBounds = YES;
+    cell.selectedBackgroundView = bgColorView;
+    [bgColorView release];
+    
     cell.backgroundColor = [UIColor blackColorTransparent];
     return cell;
 }
