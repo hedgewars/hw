@@ -155,6 +155,12 @@ static TGameStatus gameStatus = gsNone;
     return ((isReachable && !needsConnection) || nonWiFi) ? testResult : NO;
 }
 
++ (NSString *)languageID
+{
+    NSString *language = [[NSLocale preferredLanguages] firstObject];
+    return [[language componentsSeparatedByString:@"-"] firstObject];
+}
+
 /*
 +(UIView *)mainSDLViewInstance {
     SDL_Window *window = HW_getSDLWindow();

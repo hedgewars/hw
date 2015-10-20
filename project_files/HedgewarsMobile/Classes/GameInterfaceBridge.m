@@ -100,9 +100,7 @@ static UIViewController *callingController;
     CGFloat screenScale = [[UIScreen mainScreen] safeScale];
     NSString *ipcString = [[NSString alloc] initWithFormat:@"%d",self.port];
     
-    NSString *firstLanguage = [[NSLocale preferredLanguages] firstObject];
-    NSString *language = [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
-    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", language];
+    NSString *localeString = [[NSString alloc] initWithFormat:@"%@.txt", [HWUtils languageID]];
     
     NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
 
