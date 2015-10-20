@@ -20,18 +20,12 @@
 #import <UIKit/UIKit.h>
 
 
-@interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
-    NSArray *listOfMissions;
-    NSArray *listOfDescriptions;
-    NSString *missionName;
-    UIImageView *previewImage;
-    UITableView *tableView;
-    UILabel *descriptionLabel;
-}
+@interface MissionTrainingViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, retain) NSArray *listOfMissions;
-@property (nonatomic, retain) NSArray *listOfDescriptions;
+@property (nonatomic, retain) NSArray *listOfMissionIDs;
+@property (nonatomic, retain) NSDictionary *dictOfMissions;
 @property (nonatomic, retain) NSString *missionName;
+
 @property (nonatomic, retain) IBOutlet UIImageView *previewImage;
 @property (nonatomic, retain) IBOutlet UITableView *tableView;
 @property (nonatomic, retain) IBOutlet UILabel *descriptionLabel;
