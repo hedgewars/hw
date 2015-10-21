@@ -57,6 +57,9 @@
     self.view.frame = [[UIScreen mainScreen] safeBounds];
     [super viewDidLoad];
     
+    [self.simpleGameButton setTitle:NSLocalizedString(@"Simple", nil) forState:UIControlStateNormal];
+    [self.missionsButton setTitle:NSLocalizedString(@"Missions", nil) forState:UIControlStateNormal];
+    
     [self.simpleGameButton applyDarkBlueQuickStyle];
     [self.missionsButton applyDarkBlueQuickStyle];
     
