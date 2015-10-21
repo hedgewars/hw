@@ -238,13 +238,13 @@
 
     NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
     NSUInteger numberOfHats = [hatArray count];
-    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 18 : 1;
+    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 16 : 1;
 
     if (self.imgContainer != nil)
         [self.imgContainer removeFromSuperview];
 
     self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    NSInteger numberOfHogs = 1 + arc4random_uniform(20);
+    NSInteger numberOfHogs = 1 + arc4random_uniform(15);
     DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
     for (int i = 0; i < numberOfHogs; i++) {
         NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
@@ -269,8 +269,9 @@
         [animation release];
 
         int x = 20*i+arc4random_uniform(128);
-        if (x > 320 - 32)
+        while (x > 320 - 32)
             x = i*arc4random_uniform(32);
+        
         hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
         [self.imgContainer addSubview:hog];
         [hog startAnimating];
@@ -358,9 +359,12 @@
     }
 }
 
--(void) viewWillAppear:(BOOL)animated {
-//    if (IS_IPAD())
-//        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (IS_IPAD())
+        [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
     
     if (IS_IPAD())
     {
@@ -384,7 +388,9 @@
     }
 }
 
--(void) didReceiveMemoryWarning {
+-(void) didReceiveMemoryWarning
+{
+    [self.imgContainer removeFromSuperview];
     self.imgContainer = nil;
 
     if (self.titleImage.superview == nil)
