@@ -36,7 +36,8 @@
     HelpPageLobbyViewController *helpPage;
 }
 
-@property (retain) UIView *imgContainer;
+@property (atomic) BOOL isDrawingNiceHogs;
+@property (nonatomic,retain) UIView *imgContainer;
 @property (nonatomic,retain) UILabel * sliderBackground;
 @property (nonatomic,retain) IBOutlet UIImageView *titleImage;
 @property (nonatomic,retain) IBOutlet SchemeWeaponConfigViewController *schemeWeaponConfigViewController;
