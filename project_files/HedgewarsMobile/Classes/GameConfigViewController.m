@@ -55,12 +55,7 @@
             if ([self isEverythingSet] == NO)
                 return;
             theButton.enabled = NO;
-            for (UIView *oneView in self.imgContainer.subviews) {
-                if ([oneView isMemberOfClass:[UIImageView class]]) {
-                    UIImageView *anImageView = (UIImageView *)oneView;
-                    [anImageView removeFromSuperview];
-                }
-            }
+            [self clearImgContainer];
             [self startGame:theButton];
 
             break;
@@ -229,64 +224,82 @@
     [gameDictionary release];
 }
 
--(void) loadNiceHogs {
-    @autoreleasepool {
+-(void) loadNiceHogs
+{
+    @autoreleasepool
+    {
     
-    NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
-    UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
-    [filePath release];
+        NSString *filePath = [[NSString alloc] initWithFormat:@"%@/Hedgehog/Idle.png",GRAPHICS_DIRECTORY()];
+        UIImage *hogSprite = [[UIImage alloc] initWithContentsOfFile:filePath];
+        [filePath release];
 
-    NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
-    NSUInteger numberOfHats = [hatArray count];
-    int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 16 : 1;
+        NSArray *hatArray = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:HATS_DIRECTORY() error:NULL];
+        NSUInteger numberOfHats = [hatArray count];
+        int animationFrames = IS_VERY_POWERFUL([HWUtils modelType]) ? 16 : 1;
+        
+        self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
+        NSInteger numberOfHogs = 1 + arc4random_uniform(15);
+        DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
+        for (int i = 0; i < numberOfHogs; i++) {
+            NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
 
-    if (self.imgContainer != nil)
-        [self.imgContainer removeFromSuperview];
+            NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
+            UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
+            NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
+            for (int j = 0; j < animationFrames; j++) {
+                int x = ((j*32)/(int)hatSprite.size.height)*32;
+                int y = (j*32)%(int)hatSprite.size.height;
+                UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
+                UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
+                UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
+                [animation addObject:hogWithHat];
+            }
+            [hatSprite release];
+            [hatFile release];
 
-    self.imgContainer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
-    NSInteger numberOfHogs = 1 + arc4random_uniform(15);
-    DLog(@"Drawing %ld nice hedgehogs", (long)numberOfHogs);
-    for (int i = 0; i < numberOfHogs; i++) {
-        NSString *hat = [hatArray objectAtIndex:arc4random_uniform((int)numberOfHats)];
+            UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
+            hog.animationImages = animation;
+            hog.animationDuration = 3;
+            [animation release];
 
-        NSString *hatFile = [[NSString alloc] initWithFormat:@"%@/%@", HATS_DIRECTORY(), hat];
-        UIImage *hatSprite = [[UIImage alloc] initWithContentsOfFile:hatFile];
-        NSMutableArray *animation = [[NSMutableArray alloc] initWithCapacity:animationFrames];
-        for (int j = 0; j < animationFrames; j++) {
-            int x = ((j*32)/(int)hatSprite.size.height)*32;
-            int y = (j*32)%(int)hatSprite.size.height;
-            UIImage *hatSpriteFrame = [hatSprite cutAt:CGRectMake(x, y, 32, 32)];
-            UIImage *hogSpriteFrame = [hogSprite cutAt:CGRectMake(x, y, 32, 32)];
-            UIImage *hogWithHat = [hogSpriteFrame mergeWith:hatSpriteFrame atPoint:CGPointMake(0, 5)];
-            [animation addObject:hogWithHat];
+            int x = 20*i+arc4random_uniform(128);
+            while (x > 320 - 32)
+                x = i*arc4random_uniform(32);
+            
+            hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
+            [self.imgContainer addSubview:hog];
+            [hog startAnimating];
+            [hog release];
         }
-        [hatSprite release];
-        [hatFile release];
-
-        UIImageView *hog = [[UIImageView alloc] initWithImage:[animation objectAtIndex:0]];
-        hog.animationImages = animation;
-        hog.animationDuration = 3;
-        [animation release];
-
-        int x = 20*i+arc4random_uniform(128);
-        while (x > 320 - 32)
-            x = i*arc4random_uniform(32);
+        [hogSprite release];
         
-        hog.frame = CGRectMake(x, 25, hog.frame.size.width, hog.frame.size.height);
-        [self.imgContainer addSubview:hog];
-        [hog startAnimating];
-        [hog release];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self.view addSubview:self.imgContainer];
+            
+            // don't place the nice hogs if there is no space for them
+            if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
+                 self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
+                self.imgContainer.alpha = 0;
+            
+            self.isDrawingNiceHogs = NO;
+        });
     }
+}
 
-    // don't place the nice hogs if there is no space for them
-    if ((self.interfaceOrientation == UIInterfaceOrientationPortrait ||
-         self.interfaceOrientation == UIInterfaceOrientationPortraitUpsideDown))
-        self.imgContainer.alpha = 0;
-
-    [self.view addSubview:self.imgContainer];
-    [hogSprite release];
-        
+- (void)clearImgContainer
+{
+    for (UIView *oneView in [self.imgContainer subviews])
+    {
+        if ([oneView isMemberOfClass:[UIImageView class]])
+        {
+            UIImageView *anImageView = (UIImageView *)oneView;
+            [anImageView removeFromSuperview];
+        }
     }
+    
+    [self.imgContainer removeFromSuperview];
+    self.imgContainer = nil;
 }
 
 -(void) viewDidLoad {
@@ -361,10 +374,13 @@
 
 -(void) viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
     
-    if (IS_IPAD())
+    if (IS_IPAD() && !self.imgContainer && !self.isDrawingNiceHogs)
+    {
+        self.isDrawingNiceHogs = YES;
         [NSThread detachNewThreadSelector:@selector(loadNiceHogs) toTarget:self withObject:nil];
+    }
     
     if (IS_IPAD())
     {
@@ -372,8 +388,6 @@
         UIInterfaceOrientation currentOrientation = [[UIApplication sharedApplication] statusBarOrientation];
         [self updateiPadUIForInterfaceOrientation:currentOrientation];
     }
-
-    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -390,8 +404,7 @@
 
 -(void) didReceiveMemoryWarning
 {
-    [self.imgContainer removeFromSuperview];
-    self.imgContainer = nil;
+    [self clearImgContainer];
 
     if (self.titleImage.superview == nil)
         self.titleImage = nil;
