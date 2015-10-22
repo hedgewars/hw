@@ -272,6 +272,7 @@
 		F65E1DBF1B9B95A400A78ADF /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */; };
 		F65E1DC01B9B95A400A78ADF /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBD1B9B95A400A78ADF /* Icon-76.png */; };
 		F65E1DC11B9B95A400A78ADF /* Icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */; };
+		F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */ = {isa = PBXBuildFile; fileRef = F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */; settings = {ASSET_TAGS = (); }; };
 		F6BA38461BA7A834005D16EA /* GameLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6BA38451BA7A834005D16EA /* GameLogViewController.m */; };
 		F6D7E09F1B76884E004F3BCF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */; };
 		F6D7E0C21B768F19004F3BCF /* uLandGenPerlin.pas in Sources */ = {isa = PBXBuildFile; fileRef = F6D7E0BF1B768F19004F3BCF /* uLandGenPerlin.pas */; };
@@ -762,6 +763,8 @@
 		F65E1DBC1B9B95A400A78ADF /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-60@2x.png"; path = "Resources/Icons/Icon-60@2x.png"; sourceTree = "<group>"; };
 		F65E1DBD1B9B95A400A78ADF /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76.png"; path = "Resources/Icons/Icon-76.png"; sourceTree = "<group>"; };
 		F65E1DBE1B9B95A400A78ADF /* Icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-76@2x.png"; path = "Resources/Icons/Icon-76@2x.png"; sourceTree = "<group>"; };
+		F6756D7E1BD8550500B6AB6B /* LabelWithIBLocalization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LabelWithIBLocalization.h; sourceTree = "<group>"; };
+		F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LabelWithIBLocalization.m; sourceTree = "<group>"; };
 		F6BA38441BA7A834005D16EA /* GameLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameLogViewController.h; sourceTree = "<group>"; };
 		F6BA38451BA7A834005D16EA /* GameLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameLogViewController.m; sourceTree = "<group>"; };
 		F6D7E09E1B76884E004F3BCF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -1015,6 +1018,8 @@
 				F6F07BDD1B7E72D40010E48F /* HelpPageLobbyViewController.m */,
 				F6F07BDA1B7E72D40010E48F /* HelpPageLobbyViewController-iPad.xib */,
 				F6F07BDB1B7E72D40010E48F /* HelpPageLobbyViewController-iPhone.xib */,
+				F6756D7E1BD8550500B6AB6B /* LabelWithIBLocalization.h */,
+				F6756D7F1BD8550500B6AB6B /* LabelWithIBLocalization.m */,
 			);
 			name = "Game Configuration";
 			sourceTree = "<group>";
@@ -1802,6 +1807,7 @@
 				6179882D114AA34C00BA94A9 /* uLand.pas in Sources */,
 				6179882E114AA34C00BA94A9 /* uLandGraphics.pas in Sources */,
 				6179882F114AA34C00BA94A9 /* uLandObjects.pas in Sources */,
+				F6756D801BD8550500B6AB6B /* LabelWithIBLocalization.m in Sources */,
 				61798830114AA34C00BA94A9 /* uLandTemplates.pas in Sources */,
 				F6D7E0C31B768F19004F3BCF /* uLandGenTemplateBased.pas in Sources */,
 				61798831114AA34C00BA94A9 /* uLandTexture.pas in Sources */,
