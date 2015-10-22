@@ -41,7 +41,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
-    self.navigationItem.title = @"List of teams";
+    self.navigationItem.title = NSLocalizedString(@"List of teams", nil);
 }
 
 // load the list of teams in the teams directory

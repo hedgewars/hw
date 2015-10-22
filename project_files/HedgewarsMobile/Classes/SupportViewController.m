@@ -154,7 +154,7 @@
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 20)];
         label.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
         label.textAlignment = UITextAlignmentCenter;
-        label.text = @" ♥ THANK YOU ♥ ";
+        label.text = NSLocalizedString(@" ♥ THANK YOU ♥ ", nil);
         label.backgroundColor = [UIColor clearColor];
         label.center = CGPointMake(self.tableView.frame.size.width/2, 250);
         [footer addSubview:label];

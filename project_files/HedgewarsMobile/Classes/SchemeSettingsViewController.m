@@ -40,7 +40,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
-    self.navigationItem.title = @"List of schemes";
+    self.navigationItem.title = NSLocalizedString(@"List of schemes", nil);
 }
 
 -(void) viewWillAppear:(BOOL) animated {

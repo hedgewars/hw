@@ -40,7 +40,7 @@
     self.navigationItem.rightBarButtonItem = editButton;
     [editButton release];
 
-    self.navigationItem.title = @"List of weapons";
+    self.navigationItem.title = NSLocalizedString(@"List of weapons", nil);
 }
 
 -(void) viewWillAppear:(BOOL) animated {
