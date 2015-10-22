@@ -24,6 +24,13 @@
 #import "GameInterfaceBridge.h"
 #import "HelpPageLobbyViewController.h"
 
+@interface GameConfigViewController ()
+@property (nonatomic, retain) IBOutlet UISegmentedControl *tabsSegmentedControl; //iPhone only
+
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *backButton; //iPhone only
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *startButton; //iPhone only
+@end
+
 @implementation GameConfigViewController
 @synthesize imgContainer, titleImage, sliderBackground, helpPage,
             mapConfigViewController, teamConfigViewController, schemeWeaponConfigViewController;
@@ -31,6 +38,8 @@
 -(BOOL) shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     return rotationManager(interfaceOrientation);
 }
+
+#pragma mark - Buttons
 
 -(IBAction) buttonPressed:(id) sender {
     UIButton *theButton = (UIButton *)sender;
@@ -76,6 +85,17 @@
     }
 }
 
+#pragma mark - Tabs Segmented Control
+
+- (void)localizeTabsSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.tabsSegmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.tabsSegmentedControl titleForSegmentAtIndex:i];
+        [self.tabsSegmentedControl setTitle:NSLocalizedString(oldTitle, nil) forSegmentAtIndex:i];
+    }
+}
+
 -(IBAction) segmentPressed:(id) sender {
 
     UISegmentedControl *theSegment = (UISegmentedControl *)sender;
@@ -115,6 +135,8 @@
     }
 
 }
+
+#pragma mark -
 
 -(BOOL) isEverythingSet {
     // don't start playing if the preview is in progress
@@ -302,13 +324,17 @@
     self.imgContainer = nil;
 }
 
--(void) viewDidLoad {
+-(void) viewDidLoad
+{
+    [super viewDidLoad];
+    
     self.view.backgroundColor = [UIColor blackColor];
 
     CGRect screenRect = [[UIScreen mainScreen] safeBounds];
     self.view.frame = screenRect;
 
-    if (IS_IPAD()) {
+    if (IS_IPAD())
+    {
         // the label for the filter slider
         UILabel *backLabel = [[UILabel alloc] initWithFrame:CGRectMake(116, 714, 310, 40)
                                                    andTitle:nil
@@ -327,13 +353,19 @@
         [self.view addSubview:maxLabel];
         self.mapConfigViewController.maxLabel = maxLabel;
         [maxLabel release];
-    } else {
+    }
+    else
+    {
+        [self localizeTabsSegmentedControl];
+        
+        [self.backButton setTitle:NSLocalizedString(@"Back", nil)];
+        [self.startButton setTitle:NSLocalizedString(@"Start", nil)];
+        
         self.mapConfigViewController.view.frame = CGRectMake(0, 0, screenRect.size.width, screenRect.size.height-44);
     }
+    
     [self.view addSubview:self.mapConfigViewController.view];
     [self.view bringSubviewToFront:self.mapConfigViewController.slider];
-
-    [super viewDidLoad];
 }
 
 -(void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval) duration {
@@ -436,6 +468,9 @@
 }
 
 -(void) dealloc {
+    releaseAndNil(_tabsSegmentedControl);
+    releaseAndNil(_backButton);
+    releaseAndNil(_startButton);
     releaseAndNil(imgContainer);
     releaseAndNil(titleImage);
     releaseAndNil(sliderBackground);
