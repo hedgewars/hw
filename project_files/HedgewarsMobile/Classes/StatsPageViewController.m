@@ -107,7 +107,7 @@
                                                    green:((color >> 8) & 0xFF)/255.0f
                                                     blue:(color & 0xFF)/255.0f
                                                    alpha:1.0f];
-        cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ kills)", row+1, [self teamNameFromInfo:info], [info objectAtIndex:1]];
+        cell.textLabel.text = [NSString stringWithFormat:@"%d. %@ (%@ %@)", row+1, [self teamNameFromInfo:info], [info objectAtIndex:1], NSLocalizedString(@"kills", nil)];
         imgName = [NSString stringWithFormat:@"StatsMedal%d",row+1];
     } else if (section == 2) {  // general info
         imgName = @"iconDamage";
