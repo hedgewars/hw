@@ -347,13 +347,13 @@
                         [statsArray insertObject:[NSString stringWithUTF8String:&buffer[2]] atIndex:1];
                         break;
                     case 'D':           // best shot
-                        [statsArray addObject:[NSString stringWithFormat:@"The best shot award won by %s (with %@ points)", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"The best shot award won by %s (with %@ points)", nil), &buffer[index], arg]];
                         break;
                     case 'k':           // best hedgehog
-                        [statsArray addObject:[NSString stringWithFormat:@"The best killer is %s with %@ kill(s) in a turn", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"The best killer is %s with %@ kill(s) in a turn", nil), &buffer[index], arg]];
                         break;
                     case 'K':           // number of hogs killed
-                        [statsArray addObject:[NSString stringWithFormat:@"%@ hedgehog(s) were killed during this round", arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%@ hedgehog(s) were killed during this round", nil), arg]];
                         break;
                     case 'H':           // team health/graph
                         break;
@@ -364,13 +364,13 @@
                         [[statsArray objectAtIndex:0] addObject:tempStr];
                         break;
                     case 's':           // self damage
-                        [statsArray addObject:[NSString stringWithFormat:@"%s thought it's good to shoot his own hedgehogs with %@ points", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%s thought it's good to shoot his own hedgehogs with %@ points", nil), &buffer[index], arg]];
                         break;
                     case 'S':           // friendly fire
-                        [statsArray addObject:[NSString stringWithFormat:@"%s killed %@ of his own hedgehogs", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%s killed %@ of his own hedgehogs", nil), &buffer[index], arg]];
                         break;
                     case 'B':           // turn skipped
-                        [statsArray addObject:[NSString stringWithFormat:@"%s was scared and skipped turn %@ times", &buffer[index], arg]];
+                        [statsArray addObject:[NSString stringWithFormat:NSLocalizedString(@"%s was scared and skipped turn %@ times", nil), &buffer[index], arg]];
                         break;
                     default:
                         DLog(@"Unhandled stat message, see statsPage.cpp");
