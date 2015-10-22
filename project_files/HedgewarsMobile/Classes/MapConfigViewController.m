@@ -352,6 +352,15 @@
     oldPage = newPage;
 }
 
+- (void)localizeSegmentedControl
+{
+    for (NSUInteger i = 0; i < self.segmentedControl.numberOfSegments; i++)
+    {
+        NSString *oldTitle = [self.segmentedControl titleForSegmentAtIndex:i];
+        [self.segmentedControl setTitle:NSLocalizedString(oldTitle, nil) forSegmentAtIndex:i];
+    }
+}
+
 #pragma mark -
 #pragma mark view management
 -(NSArray *) dataSourceArray {
@@ -403,7 +412,9 @@
 
 -(void) viewDidLoad {
     [super viewDidLoad];
-
+    
+    [self localizeSegmentedControl];
+    
     // initialize some "default" values
     self.slider.value = 0.05f;
     self.slider.enabled = NO;
