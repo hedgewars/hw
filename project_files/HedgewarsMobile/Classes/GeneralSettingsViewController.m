@@ -179,7 +179,7 @@
 
             switchContent = (UISwitch *)cell.accessoryView;
             if (row == 0) {
-                cell.textLabel.text = NSLocalizedString(@"Sound Effects", @"from the settings table");
+                cell.textLabel.text = NSLocalizedString(@"Sound", @"from the settings table");
                 switchContent.on = [[settings objectForKey:@"sound"] boolValue];
                 switchContent.tag = 10;
             } else {
