@@ -57,6 +57,9 @@
 -(void) viewDidLoad {
     [super viewDidLoad];
     
+    [self.restoreButton setTitle:NSLocalizedString(@"Restore", nil) forState:UIControlStateNormal];
+    [self.dismissButton setTitle:NSLocalizedString(@"Dismiss", nil) forState:UIControlStateNormal];
+    
     [self.restoreButton applyDarkBlueQuickStyle];
     [self.dismissButton applyDarkBlueQuickStyle];
 }
