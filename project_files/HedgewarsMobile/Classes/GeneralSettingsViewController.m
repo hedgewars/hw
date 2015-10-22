@@ -30,7 +30,7 @@
 #pragma mark -
 #pragma mark View Lifecycle
 -(void) viewDidLoad {
-    self.navigationItem.title = @"Edit game options";
+    self.navigationItem.title = NSLocalizedString(@"Edit game options", nil);
     [super viewDidLoad];
 }
 
