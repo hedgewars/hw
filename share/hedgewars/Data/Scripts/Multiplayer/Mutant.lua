@@ -302,7 +302,7 @@ function updateScore()
         if teams[i]~= nil then
 
             local curr_score = getTeamValue(teams[i], "Score")
-            showScore = showScore .. teams[i] .. ": " .. curr_score .. " (deaths: " .. getTeamValue(teams[i], "DeadHogs") .. ") " .. "|"
+            showScore = showScore .. teams[i] .. ": " .. curr_score .. " (" .. loc("deaths") .. ": " .. getTeamValue(teams[i], "DeadHogs") .. ") " .. "|"
 
         end
     end
@@ -329,7 +329,7 @@ local only_low_score = true
 
             runOnHogsInTeam(removeFeeder, teams[i])
 
-            showScore = showScore .. teams[i] ..": " .. curr_score .. " (deaths: " .. getTeamValue(teams[i], "DeadHogs") .. ") " .. "|"
+            showScore = showScore .. teams[i] ..": " .. curr_score .. " (" .. loc("deaths") .. ": " .. getTeamValue(teams[i], "DeadHogs") .. ") " .. "|"
 
             if curr_score >= winScore then
                 gameOver = true
@@ -421,7 +421,7 @@ end
 
 function setFeeder(gear)
     if gear~= mutant and gear~= nil then
-        SetHogName(gear,"BOTTOM FEEDER")
+        SetHogName(gear, loc("BOTTOM FEEDER"))
         SetHogHat(gear, 'poke_slowpoke')
         setGearValue(gear,"Feeder", true)
     end
@@ -430,7 +430,7 @@ end
 function setMutantStuff(gear)
     mutant = gear
 
-    SetHogName(gear,"MUTANT")
+    SetHogName(gear, loc("MUTANT"))
     SetHogHat(gear,'WhySoSerious')
     SetHealth(gear, ( mutant_base_health + numhhs*25) )
     SetEffect(gear, hePoisoned, 1)
