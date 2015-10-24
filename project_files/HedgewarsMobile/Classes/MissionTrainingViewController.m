@@ -135,6 +135,13 @@
             NSUInteger firstDotLocation = [line rangeOfString:@"."].location;
             
             NSString *missionID = [line substringToIndex:firstDotLocation];
+            
+            NSString *missionFullPath = [NSString stringWithFormat:@"%@%@.lua", TRAININGS_DIRECTORY(), missionID];
+            if (![[NSFileManager defaultManager] fileExistsAtPath:missionFullPath])
+            {
+                continue;
+            }
+            
             NSString *nameOrDesc = [line substringFromIndex:firstDotLocation+1];
             
             NSString *missionParsedName = ([nameOrDesc hasPrefix:@"name="]) ? [nameOrDesc stringByReplacingOccurrencesOfString:@"name=" withString:@""] : nil;
