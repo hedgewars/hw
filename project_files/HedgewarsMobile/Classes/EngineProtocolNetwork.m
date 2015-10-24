@@ -197,7 +197,7 @@
 
 // wrapper that computes the length of the message and then sends the command string, saving the command on a file
 -(int) sendToEngine:(NSString *)string {
-    uint8_t length = [string length];
+    uint8_t length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
     [self dumpRawData:[string UTF8String] ofSize:length];
     SDLNet_TCP_Send(csd, &length, 1);
@@ -206,7 +206,7 @@
 
 // wrapper that computes the length of the message and then sends the command string, skipping file writing
 -(int) sendToEngineNoSave:(NSString *)string {
-    uint8_t length = [string length];
+    uint8_t length = [string lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 
     SDLNet_TCP_Send(csd, &length, 1);
     return SDLNet_TCP_Send(csd, [string UTF8String], length);
