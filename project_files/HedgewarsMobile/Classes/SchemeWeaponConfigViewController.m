@@ -329,7 +329,7 @@
             }
             else
             {
-                if (![scheme isEqualToString:@"*"])
+                if (scheme && ![scheme isEqualToString:@"*"])
                 {
                     NSString *correctScheme = [scheme stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     self.selectedScheme = [NSString stringWithFormat:@"%@.plist", correctScheme];
@@ -345,7 +345,7 @@
             }
             else
             {
-                if (![weapon isEqualToString:@"*"])
+                if (weapon && ![weapon isEqualToString:@"*"])
                 {
                     NSString *correctWeapon = [weapon stringByReplacingOccurrencesOfString:@"_" withString:@" "];
                     self.selectedWeapon = [NSString stringWithFormat:@"%@.plist", correctWeapon];
