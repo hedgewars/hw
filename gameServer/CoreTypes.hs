@@ -119,7 +119,8 @@ data CheckInfo =
     CheckInfo
     {
         recordFileName :: String,
-        recordTeams :: [TeamInfo]
+        recordTeams :: [TeamInfo],
+        recordScript :: B.ByteString
     }
 
 data ClientInfo =
@@ -345,7 +346,7 @@ data DBQuery =
     CheckAccount ClientIndex Int B.ByteString B.ByteString
     | ClearCache
     | SendStats Int Int
-    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] [B.ByteString]
+    | StoreAchievements Word16 B.ByteString [(B.ByteString, B.ByteString)] B.ByteString [B.ByteString]
     | GetReplayName ClientIndex Int B.ByteString
     deriving (Show, Read)
 

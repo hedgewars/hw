@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  \-}
 
-{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 module OfficialServer.GameReplayStore where
 
 import Data.Time
@@ -70,11 +70,12 @@ loadReplay p blackList = E.handle (\(e :: SomeException) -> warningM "REPLAYS" "
     where
         loadFile :: String -> IO (Maybe CheckInfo, [B.ByteString])
         loadFile fileName = E.handle (\(e :: SomeException) ->
-                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [], [])) $ do
+                    warningM "REPLAYS" ("Problems reading " ++ fileName ++ ": " ++ show e) >> return (Just $ CheckInfo fileName [] "", [])) $ do
             (teams, params1, params2, roundMsgs) <- liftM read $ readFile fileName
-            return $ (
-                Just (CheckInfo fileName teams)
-                , let d = replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs) in d `deepseq` d
+            let d = replayToDemo teams (Map.fromList params1) (Map.fromList params2) (reverse roundMsgs)
+            d `deepseq` return $ (
+                Just (CheckInfo fileName teams (head $ fst d))
+                , snd d
                 )
 
 moveFailedRecord :: String -> IO ()

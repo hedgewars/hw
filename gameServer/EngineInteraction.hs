@@ -100,8 +100,8 @@ replayToDemo :: [TeamInfo]
         -> Map.Map B.ByteString B.ByteString
         -> Map.Map B.ByteString [B.ByteString]
         -> [B.ByteString]
-        -> [B.ByteString]
-replayToDemo ti mParams prms msgs = if not sane then [] else concat [
+        -> ([B.ByteString], [B.ByteString])
+replayToDemo ti mParams prms msgs = if not sane then ([], []) else ([scriptName], concat [
         [em "TD"]
         , maybeScript
         , maybeMap
@@ -117,7 +117,7 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
         , concatMap teamSetup ti
         , msgs
         , [em "!"]
-        ]
+        ])
     where
         keys1, keys2 :: Set.Set B.ByteString
         keys1 = Set.fromList ["FEATURE_SIZE", "MAP", "MAPGEN", "MAZE_SIZE", "SEED", "TEMPLATE"]
@@ -127,7 +127,8 @@ replayToDemo ti mParams prms msgs = if not sane then [] else concat [
             && (not . null . drop 41 $ scheme)
             && (not . null . tail $ prms Map.! "AMMO")
         mapGenTypes = ["+rnd+", "+maze+", "+drawn+", "+perlin+"]
-        maybeScript = let s = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
+        scriptName = head . fromMaybe ["Normal"] $ Map.lookup "SCRIPT" prms
+        maybeScript = let s = scriptName in if s == "Normal" then [] else [eml ["escript Scripts/Multiplayer/", s, ".lua"]]
         maybeMap = let m = mParams Map.! "MAP" in if m `elem` mapGenTypes then [] else [eml ["emap ", m]]
         scheme = tail $ prms Map.! "SCHEME"
         mapgen = mParams Map.! "MAPGEN"
