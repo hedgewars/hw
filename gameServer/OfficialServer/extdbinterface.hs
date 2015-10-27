@@ -50,6 +50,9 @@ dbQueryAchievement =
     \ VALUES (?, (SELECT id FROM achievement_types WHERE name = ?), (SELECT uid FROM users WHERE name = ?), \
     \ ?, ?, ?, ?)"
 
+dbQueryGamesHistory =
+    "? ? ?"
+
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
 
@@ -83,8 +86,8 @@ dbInteractionLoop dbConn = forever $ do
 
         SendStats clients rooms ->
                 void $ execute dbConn dbQueryStats (clients, rooms)
-        StoreAchievements p fileName teams info ->
-            mapM_ (execute dbConn dbQueryAchievement) $ (parseStats p fileName teams) info
+        StoreAchievements p fileName teams script info ->
+            mapM_ (uncurry (execute dbConn)) $ parseStats p fileName teams script info
 
 
 --readTime = read . B.unpack . B.take 19 . B.drop 8
@@ -94,15 +97,16 @@ parseStats ::
     Word16 
     -> B.ByteString 
     -> [(B.ByteString, B.ByteString)] 
-    -> [B.ByteString] 
-    -> [(B.ByteString, B.ByteString, B.ByteString, Int, B.ByteString, B.ByteString, Int)]
-parseStats p fileName teams = ps
+    -> B.ByteString
+    -> [B.ByteString]
+    -> [(Query, (B.ByteString, B.ByteString, B.ByteString, Int, B.ByteString, B.ByteString, Int))]
+parseStats p fileName teams script = ps
     where
     time = readTime fileName
     ps [] = []
     ps ("DRAW" : bs) = ps bs
     ps ("WINNERS" : n : bs) = ps $ drop (readInt_ n) bs
-    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) =
+    ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = (dbQueryAchievement, 
         ( time
         , typ
         , fromMaybe "" (lookup teamname teams)
@@ -110,7 +114,7 @@ parseStats p fileName teams = ps
         , fileName
         , location
         , fromIntegral p
-        ) : ps bs
+        )) : ps bs
     ps (b:bs) = ps bs
 
 
