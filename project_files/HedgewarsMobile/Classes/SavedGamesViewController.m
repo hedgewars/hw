@@ -127,6 +127,7 @@
         editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
         editableCell.delegate = self;
     }
+    editableCell.tag = [indexPath row];
     editableCell.respectEditing = YES;
     editableCell.textField.text = [[self.listOfSavegames objectAtIndex:[indexPath row]] stringByDeletingPathExtension];
     editableCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -157,7 +158,8 @@
 }
 
 -(void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [(EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath] save:nil];
+    [((EditableCellView *)[self.tableView cellForRowAtIndexPath:indexPath]).textField resignFirstResponder];
+    
     self.numberOfItems--;
     [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationLeft];
 
