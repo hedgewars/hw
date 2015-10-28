@@ -644,7 +644,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         AmmoCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -658,7 +660,9 @@ begin
         begin
         gear := SpawnFakeCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2),
         UtilityCrate, lua_toboolean(L, 3), lua_toboolean(L, 4));
-        lua_pushinteger(L, gear^.uid);
+        if gear <> nil then
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L)
         end
     else
         lua_pushnil(L);
@@ -677,9 +681,8 @@ begin
             health:= cHealthCaseAmount;
         gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), HealthCrate, health, 0);
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end
     else
         lua_pushnil(L);
@@ -696,9 +699,8 @@ begin
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), AmmoCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
         end
     else
         lua_pushnil(L);
@@ -715,9 +717,8 @@ begin
              gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), 0)
         else gear := SpawnCustomCrateAt(lua_tointeger(L, 1), lua_tointeger(L, 2), UtilityCrate, lua_tointeger(L, 3), lua_tointeger(L, 4));
         if gear <> nil then
-            lua_pushinteger(L, gear^.uid)
-        else
-            lua_pushnil(L);
+             lua_pushinteger(L, gear^.uid)
+        else lua_pushnil(L);
        end
     else
         lua_pushnil(L);
