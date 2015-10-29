@@ -24,12 +24,10 @@
                                                         EditableCellViewDelegate, UIActionSheetDelegate>  {
     UITableView *tableView;
     NSMutableArray *listOfSavegames;
-    NSInteger numberOfItems;
 }
 
 @property (nonatomic,retain) IBOutlet UITableView *tableView;
 @property (nonatomic,retain) NSMutableArray *listOfSavegames;
-@property (assign) NSInteger numberOfItems;
 
 -(IBAction) buttonPressed:(id) sender;
 
