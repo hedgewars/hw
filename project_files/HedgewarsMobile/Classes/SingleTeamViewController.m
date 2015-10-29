@@ -225,8 +225,8 @@
                 editableCell = [[[EditableCellView alloc] initWithStyle:UITableViewCellStyleDefault
                                                reuseIdentifier:CellIdentifier1] autorelease];
                 editableCell.delegate = self;
-                editableCell.tag = [indexPath row];
             }
+            editableCell.tag = [indexPath row];
 
             hogArray = [self.teamDictionary objectForKey:@"hedgehogs"];
 
