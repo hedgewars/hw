@@ -18,7 +18,7 @@
 
 
 #import "EditableCellView.h"
-
+#import "UITableViewCell+FindTable.h"
 
 @implementation EditableCellView
 @synthesize delegate, textField, titleLabel, minimumCharacters, maximumCharacters, respectEditing, oldValue;
@@ -103,13 +103,13 @@
 -(BOOL) textFieldShouldBeginEditing:(UITextField *)aTextField {
     return (delegate != nil) &&
            [delegate respondsToSelector:@selector(saveTextFieldValue:withTag:)] &&
-           (respectEditing) ? ((UITableView*)[self superview]).editing : YES;
+           (respectEditing) ? [self findTable].editing : YES;
 }
 
 // the textfield is being modified, update the navigation controller
 -(void) textFieldDidBeginEditing:(UITextField *)aTextField{
     // don't interact with table below
-    ((UITableView*)[self superview]).scrollEnabled = NO;
+    [self findTable].scrollEnabled = NO;
 
     self.oldValue = self.textField.text;
 
@@ -147,7 +147,7 @@
         [self save:aTextField];
 
     // restores default behaviour on caller
-    ((UITableView*)[self superview]).scrollEnabled = YES;
+    [self findTable].scrollEnabled = YES;
     [(UITableViewController *)delegate navigationItem].leftBarButtonItem = [(UITableViewController *)delegate navigationItem].backBarButtonItem;
     [(UITableViewController *)delegate navigationItem].rightBarButtonItem = nil;
 }
