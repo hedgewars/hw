@@ -40,13 +40,13 @@ User_Mission_-_Newton_and_the_Hammock.desc="Ежата, запомните: Ск
 User_Mission_-_The_Great_Escape.name=Миссия: Великий Побег
 User_Mission_-_The_Great_Escape.desc="Вы думаете, клетка меня остановит!?"
 
-User_Mission_-_Rope_Knock_Challenge.name=Вызов: Толчок Верёвкой
+User_Mission_-_Rope_Knock_Challenge.name=Испытание: Толчок Верёвкой
 User_Mission_-_Rope_Knock_Challenge.desc="Оглянись!"
 
-User_Mission_-_Nobody_Laugh.name=Mission: Никто не смеётся
+User_Mission_-_Nobody_Laugh.name=Миссия: Никто не смеётся
 User_Mission_-_Nobody_Laugh.desc="Это не шутка ли."
 
-User_Mission_-_RCPlane_Challenge.name=Вызов: Радиоуправляемый самолёт
+User_Mission_-_RCPlane_Challenge.name=Испытание: Радиоуправляемый самолёт
 User_Mission_-_RCPlane_Challenge.desc="Чувствешь себя довольно уверенно, а, пилотишко?"
 
 portal.name=Миссия: Портальная головоломка
@@ -73,11 +73,11 @@ Target_Practice_-_Grenade_easy.desc="Разминочная тренировка
 Target_Practice_-_Grenade_hard.name=Учебная Стрельба: Граната (сложно)
 Target_Practice_-_Grenade_hard.desc="Это точно не для молокососов! Мы поместили цели в действительно труднодоступные места."
 
-Challenge_-_Speed_Shoppa_-_Hedgelove.name=Вызов: Shoppa Love
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Испытание: Shoppa Love
 Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Покажите вашу любовь к верёвке и соберите несколько ящиков на маленькой карте."
 
-Challenge_-_Speed_Shoppa_-_Ropes.name=Вызов: Верёвки и Ящики
+Challenge_-_Speed_Shoppa_-_Ropes.name=Испытание: Верёвки и Ящики
 Challenge_-_Speed_Shoppa_-_Ropes.desc="Возьмите вашу верёвку и соберите все ящики на этой средних размеров карте."
 
-Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Вызов: Покупатель это Король
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Испытание: Покупатель это Король
 Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Докажите, что вы настоящий король и соберите все ящики на этой огромной карте так быстро, как сможете."
