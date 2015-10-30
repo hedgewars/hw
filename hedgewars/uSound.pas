@@ -301,7 +301,7 @@ begin
 end;
 
 procedure InitSound;
-const channels: LongInt = {$IFDEF MOBILE}1{$ELSE}2{$ENDIF};
+const channels: LongInt = 2;
 var success: boolean;
 begin
     if not (isSoundEnabled or isMusicEnabled) then
