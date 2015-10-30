@@ -3,7 +3,7 @@ HedgewarsScriptLoad("/Scripts/TargetPractice.lua")
 local params = {
 	ammoType = amBazooka,
 	gearType = gtShell,
-	missionTitle = "Target Practice: Bazooka (hard)",
+	missionTitle = loc("Target Practice: Bazooka (hard)"),
 	wind = 20,
 	solidLand = true,
 	artillery = true,

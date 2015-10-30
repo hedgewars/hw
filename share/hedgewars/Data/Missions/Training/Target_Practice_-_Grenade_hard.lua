@@ -3,7 +3,7 @@ HedgewarsScriptLoad("/Scripts/TargetPractice.lua")
 local params = {
 	ammoType = amGrenade,
 	gearType = gtGrenade,
-	missionTitle = "Target Practice: Grenade (hard)",
+	missionTitle = loc("Target Practice: Grenade (hard)"),
 	solidLand = true,
 	artillery = true,
 	map = "SB_Crystal",
