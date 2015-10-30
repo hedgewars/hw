@@ -42,7 +42,8 @@ begin
         OutError('ERROR: doStepRopeAfterAttack called while HHGear = nil', IsNilHHFatal);
         DeleteGear(Gear);
         exit()
-        end;
+        end
+    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     tX:= HHGear^.X;
     if WorldWrap(HHGear) and (WorldEdge = weWrap) and
@@ -137,7 +138,8 @@ begin
         OutError('ERROR: doStepRopeWork called while HHGear = nil', IsNilHHFatal);
         DeleteGear(Gear);
         exit()
-        end;
+        end
+    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     if ((HHGear^.State and gstHHDriven) = 0) or
         (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
@@ -425,6 +427,7 @@ var
     HHGear: PGear;
     tx, ty, tt: hwFloat;
 begin
+    
     Gear^.X := Gear^.X - Gear^.dX;
     Gear^.Y := Gear^.Y - Gear^.dY;
     Gear^.Elasticity := Gear^.Elasticity + _1;
@@ -435,7 +438,8 @@ begin
         OutError('ERROR: doStepRopeAttach called while HHGear = nil', IsNilHHFatal);
         DeleteGear(Gear);
         exit()
-        end;
+        end
+    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
 
     DeleteCI(HHGear);
 
