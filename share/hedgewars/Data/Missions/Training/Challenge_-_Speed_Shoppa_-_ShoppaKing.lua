@@ -1,7 +1,7 @@
 HedgewarsScriptLoad("/Scripts/SpeedShoppa.lua")
 
 local params = {}
-params.missionTitle = loc("The Customor is King")
+params.missionTitle = loc("The Customer is King")
 params.teamName = loc("Shoppa Union")
 params.hogName = loc("King Customer")
 params.teamFlag = "cm_shoppa"
