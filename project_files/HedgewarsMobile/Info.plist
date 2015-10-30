@@ -40,6 +40,8 @@
 	<string>Default-ipad</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIStatusBarHidden</key>
 	<true/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
