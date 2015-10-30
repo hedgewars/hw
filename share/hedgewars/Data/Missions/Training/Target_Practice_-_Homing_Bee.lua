@@ -3,7 +3,7 @@ HedgewarsScriptLoad("/Scripts/TargetPractice.lua")
 local params = {
 	ammoType = amBee,
 	gearType = gtBee,
-	missionTitle = "Target Practice: Homing Bee",
+	missionTitle = loc("Target Practice: Homing Bee"),
 	solidLand = true,
 	map = "Hedgewars",
 	theme = "Nature",
