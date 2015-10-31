@@ -16,7 +16,7 @@ Basic_Training_-_Sniper_Rifle.desc="БАХ, в яблочко!"
 Basic_Training_-_Rope.name=Базовое упражнение с верёвкой
 Basic_Training_-_Rope.desc="Раскачивайся и цепляйся!"
 
-User_Mission_-_Dangerous_Ducklings.name=Миссия: Dangerous Ducklings
+User_Mission_-_Dangerous_Ducklings.name=Миссия: Опасные Утята
 User_Mission_-_Dangerous_Ducklings.desc="Ну что, новобранцы! Пора на практике проверить, чему вы научились на базовых упражнениях!"
 
 User_Mission_-_Diver.name=Миссия: Ныряльщик
@@ -28,10 +28,10 @@ User_Mission_-_Teamwork.desc="Иногда любовь ранит."
 User_Mission_-_Spooky_Tree.name=Миссия: Зловещее дерево
 User_Mission_-_Spooky_Tree.desc="Здесь много ящиков. Конечно, я уверен, что эта птица не голодна."
 
-User_Mission_-_Bamboo_Thicket.name=Миссия: Bamboo Thicket
+User_Mission_-_Bamboo_Thicket.name=Миссия: Заросли Бамбука
 User_Mission_-_Bamboo_Thicket.desc="Смерть приходит сверху."
 
-User_Mission_-_That_Sinking_Feeling.name=Миссия: That Sinking Feeling
+User_Mission_-_That_Sinking_Feeling.name=Миссия: Дед Мазай и Ёжики
 User_Mission_-_That_Sinking_Feeling.desc="Вода быстро поднимается, а время ограничено. Многие пытались без успеха. Сможешь ли ты спасти всех?"
 
 User_Mission_-_Newton_and_the_Hammock.name=Миссия: Ньютон и гамак
