@@ -20,7 +20,7 @@ function onGameInit()
 	player = AddHog(loc("Good Dude"), 0, 80, "NoHat") --NoHat
 
 	AddTeam(loc("Bad Team"), 	1175851, "Simple", "Island", "Default", "Hedgewars")
-	enemy = AddHog("Bad Guy", 1, 40, "NoHat")
+	enemy = AddHog(loc("Bad Guy"), 1, 40, "NoHat")
 
 end
 
