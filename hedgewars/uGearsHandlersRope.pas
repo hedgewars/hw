@@ -43,7 +43,7 @@ begin
         DeleteGear(Gear);
         exit()
         end
-    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
     tX:= HHGear^.X;
     if WorldWrap(HHGear) and (WorldEdge = weWrap) and
@@ -139,7 +139,7 @@ begin
         DeleteGear(Gear);
         exit()
         end
-    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
     if ((HHGear^.State and gstHHDriven) = 0) or
         (CheckGearDrowning(HHGear)) or (Gear^.PortalCounter <> 0) then
@@ -439,7 +439,7 @@ begin
         DeleteGear(Gear);
         exit()
         end
-    else if not CurrentTeam^.ExtDriven then FollowGear := HHGear;
+    else if not CurrentTeam^.ExtDriven and (FollowGear <> nil) then FollowGear := HHGear;
 
     DeleteCI(HHGear);
 
