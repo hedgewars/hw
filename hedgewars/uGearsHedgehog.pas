@@ -910,6 +910,7 @@ if isFalling then
         end;
     Gear^.State:= Gear^.State or gstMoving;
     if (Gear^.State and gstHHDriven <> 0) and
+       (FollowGear <> nil) and
        (not CurrentTeam^.ExtDriven) and (hwSqr(Gear^.dX) + hwSqr(Gear^.dY) > _0_003) then
         begin
         // TODO: why so aggressive at setting FollowGear when falling?
