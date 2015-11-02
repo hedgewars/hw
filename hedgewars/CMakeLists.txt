@@ -137,7 +137,7 @@ if(APPLE AND (NOT BUILD_ENGINE_LIBRARY))
     if(${sdl_framework} GREATER -1)
         add_flag_append(CMAKE_Pascal_FLAGS "-k-lsdl -k-lsdl_image -k-lsdl_mixer -k-lsdl_ttf -k-lsdl_net")
     else()
-        add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kSDL -k-framework -kSDL_image -k-framework -k SDL_mixer -k-framework -k SDL_net -k-framework -kSDL_net")
+        add_flag_append(CMAKE_Pascal_FLAGS "-k-framework -kSDL -k-framework -kSDL_image -k-framework -kSDL_mixer -k-framework -kSDL_net -k-framework -kSDL_net -k-framework -kSDL_ttf")
     endif()
 endif()
 
