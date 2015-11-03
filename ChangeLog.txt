@@ -4,6 +4,7 @@
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
  + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
+ + HedgeEditor - create missions/etc. in-game! see http://hedgewars.org/HedgeEditor
  + Map previews can now take script parameters into account and preview waypoints in TechRacer
  + Added a couple new flags
  + Various tweaks to the interface and in-game chat
