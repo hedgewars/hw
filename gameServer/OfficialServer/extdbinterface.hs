@@ -55,8 +55,10 @@ dbQueryGamesHistory =
     "INSERT INTO rating_games (script, protocol, filename, time) \
     \ VALUES (?, ?, ?, ?)"
 
+dbQueryGameId = "SELECT LAST_INSERT_ID()"
+
 dbQueryGamesHistoryPlaces = "INSERT INTO rating_players (userid, gameid, place) \
-    \ VALUES ((SELECT uid FROM users WHERE name = ?), LAST_INSERT_ID(), ?)"
+    \ VALUES ((SELECT uid FROM users WHERE name = ?), ?, ?)"
 
 dbQueryReplayFilename = "SELECT filename FROM achievements WHERE id = ?"
 
@@ -112,10 +114,10 @@ parseStats dbConn p fileName teams script = ps
     ps :: [B.ByteString] -> [IO Int64]
     ps [] = []
     ps ("DRAW" : bs) = execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
-        : executeMany dbConn dbQueryGamesHistoryPlaces (map drawParams teams)
+        : places (map drawParams teams)
         : ps bs
     ps ("WINNERS" : n : bs) = let winNum = readInt_ n in execute dbConn dbQueryGamesHistory (script, (fromIntegral p) :: Int, fileName, time)
-        : executeMany dbConn dbQueryGamesHistoryPlaces (map (placeParams (take winNum bs)) teams)
+        : places (map (placeParams (take winNum bs)) teams)
         : ps (drop winNum bs)
     ps ("ACHIEVEMENT" : typ : teamname : location : value : bs) = execute dbConn dbQueryAchievement
         ( time
@@ -129,6 +131,16 @@ parseStats dbConn p fileName teams script = ps
     ps (b:bs) = ps bs
     drawParams t = (snd t, 0 :: Int)
     placeParams winners t = (snd t, if (fst t) `elem` winners then 1 else 2 :: Int)
+    places :: [(B.ByteString, Int)] -> IO Int64
+    places params = do
+        res <- query_ dbConn dbQueryGameId
+        let gameId = case res of
+                [Only a] -> a
+                _ -> 0
+        mapM_ (execute dbConn dbQueryGamesHistoryPlaces . midInsert gameId) params
+        return 0
+    midInsert :: Int -> (a, b) -> (a, Int, b)
+    midInsert g (a, b) = (a, g, b)
 
 dbConnectionLoop mySQLConnectionInfo =
     Control.Exception.handle (\(e :: SomeException) -> hPutStrLn stderr $ show e) $
