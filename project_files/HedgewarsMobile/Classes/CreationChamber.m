@@ -327,6 +327,7 @@
             [basicArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithInt:25]];
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:0]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:0]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:8]];
             [gamemodArray replaceObjectAtIndex:1 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
@@ -366,6 +367,7 @@
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:12 withObject:[NSNumber numberWithInt:10]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:10]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:4]];
             [gamemodArray replaceObjectAtIndex:2 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:14 withObject:[NSNumber numberWithBool:YES]];
@@ -397,6 +399,7 @@
             [basicArray replaceObjectAtIndex:10 withObject:[NSNumber numberWithInt:4]];
             [basicArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithInt:5]];
             [basicArray replaceObjectAtIndex:13 withObject:[NSNumber numberWithInt:5]];
+            [basicArray replaceObjectAtIndex:15 withObject:[NSNumber numberWithInt:4]];
             [gamemodArray replaceObjectAtIndex:9 withObject:[NSNumber numberWithBool:YES]];
             [gamemodArray replaceObjectAtIndex:11 withObject:[NSNumber numberWithBool:YES]];
             break;
