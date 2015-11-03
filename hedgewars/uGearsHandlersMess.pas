@@ -5255,13 +5255,12 @@ while i > 0 do
                         d:= 2
                     else
                         d:= 3;
-                    // always round up
-                    if dmg mod d > 0 then
-                        dmg:= dmg div d + 1
-                    else
-                        dmg:= dmg div d;
 
-                    ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
+                    // always rounding down
+                    dmg:= dmg div d;
+
+                    if dmg > 0 then
+                        ApplyDamage(tmp, CurrentHedgehog, dmg, dsUnknown);
                     end;
                 end;
 

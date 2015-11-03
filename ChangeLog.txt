@@ -1,6 +1,9 @@
 + features
 * bugfixes
 
+0.9.22 -> 0.9.23
+ * Hammer damage is now rounded down. This means it will cause NO DAMAGE to a hedgehog with less than 3 hp.
+
 0.9.21 -> 0.9.22
  + New Weapon / Map object: AirMine (floating mine that will follow nearby hedgehogs)
  + Extensive changes to TechRacer: Variable terrain types, enhanced parameters, hwmap interpreter, fuel limiter, etc. 
