@@ -280,10 +280,10 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     // grab the associated labels
     UILabel *detailLabel = (UILabel *)cell.detailTextLabel;
-    UILabel *cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     // modify it
 
-    checkValueString(detailLabel.text,cellLabel.text,theSlider);
+    NSString *basicSettingTitleKey = [[self.basicSettingList objectAtIndex:[indexPath row]] objectForKey:@"title"];
+    checkValueString(detailLabel.text,basicSettingTitleKey,theSlider);
 
     // save changes in the main array
     NSMutableArray *array = [self.schemeDictionary objectForKey:@"basic"];
